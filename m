@@ -2,151 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972CF6E9714
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B286E9717
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjDTO3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S231702AbjDTOaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjDTO3h (ORCPT
+        with ESMTP id S229709AbjDTOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:29:37 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FD730E8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:29:36 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id dx24so6724630ejb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682000974; x=1684592974;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rfCcV16gTVHrk1jOSyJnGJ7kV2rgJwjcCd2ItLoWL/M=;
-        b=ln0ji5CjVFHiN0s10aJtxtCVE0gJXh9xSx6glw2SV0KeDMAmrYkg3vlTipK0Rzav0a
-         uyR6sUC02/T0cZldCXhGyq8io+0wU6rhBzYnH13rfXaJUErYa1ZAZAfoGcxUc7jiA+W0
-         zRnek2TbzgLJdeRBAlB2UavkRp5nbNJBevcfAf2tlvFfeCp+Ty1CW3H8ZkAZC9B6ve8Y
-         jc839qPh9FhKUXNB/MElVO0gu85LyPGf/IOnNcK8LuzmepW0e7BSq4cXBQXzm7pil8bX
-         WiHUm9g8bnoPyG6XZIB4wMknnBVq7HPZBzrvS6Zjd9FmcqwGLb3Ex0eJgXW2bJaVTt+W
-         e6qA==
+        Thu, 20 Apr 2023 10:30:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD06830FD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682000971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6BdrM5PAXOTQN54lsRvoJTmZEachvXpdp/asoBdEKLk=;
+        b=ATAdzKu/ZbAH7kJx9DuqLNRRx6gvQVegndN7564obIdLfl3i9Mq/f9RLCqTBNK+phC1J21
+        T5/mGysDtRKxxNutjjiS7v0mu5WAQhFkSpip9LP+Xr6xM0FeHnKOojH+s1KUu2JW0aoeTK
+        IzvEHnJlGF+X9r23VjyY98MkWWn35ew=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-459-DX99mwMRN-yn_fXWdHWrSA-1; Thu, 20 Apr 2023 10:29:30 -0400
+X-MC-Unique: DX99mwMRN-yn_fXWdHWrSA-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-5ef4bfeacc4so10681826d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:29:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682000974; x=1684592974;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rfCcV16gTVHrk1jOSyJnGJ7kV2rgJwjcCd2ItLoWL/M=;
-        b=ay/wmvZj/kmcWB3GlN80ozHqpzCNZfOd8tw43hr8s/FnT1O9Jg33OTHUoc8Y/JonRp
-         A6WLLwn7tXboslSdSU0Vxt8fHefWW/oL/jVxO8fsH+49vbkYLAW8jAtuFPoz8wa4+Zcx
-         yVBqLOwqB8PiydY3IEEIm40SDL8a96mhDftDgnAgW11vc3FW582VimEoZvKV8XeSOitj
-         ZBrqtKlf774PykiMTTy64UkXc9vt6LUV4oVf4Gu7fJ0Crurwzqb5nojkKM3UgqWlnuuY
-         Sa//HBgVwccTUj/MwCWwMW52fg7yvdf8UImGYD/nbr7Hp+JpnZO7SlwFK71I6mKYQ64R
-         2Ruw==
-X-Gm-Message-State: AAQBX9ef6WsSKBzJwyGTl/8mTkj0PFE/TSGdmWlZES5miBqnHNd7kgnJ
-        qQAjWc2kf6RyDqYg1hniErE=
-X-Google-Smtp-Source: AKy350Ym6VgN7iFnbtZa++HNCUYXdDwB/7v+x/C6nG13kWRrpr1UrmkkQYzzcab6+6MgFC2goaPR1Q==
-X-Received: by 2002:a17:906:b088:b0:94f:8aff:c8b3 with SMTP id x8-20020a170906b08800b0094f8affc8b3mr1781982ejy.28.1682000974374;
-        Thu, 20 Apr 2023 07:29:34 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id g10-20020a170906594a00b008cecb8f374asm814617ejr.0.2023.04.20.07.29.33
+        d=1e100.net; s=20221208; t=1682000969; x=1684592969;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6BdrM5PAXOTQN54lsRvoJTmZEachvXpdp/asoBdEKLk=;
+        b=L8YuMskGoFCeZjAb9dEKEgSNiZ4UHWiaPedgmH4j3oERD2rbN0GM6UTZn8u3HXxdMN
+         D+rOvkxbdesX59rlK9tr7OcBqt/lECH316toIEg/JJoqXK0coJDn3goPxGeYAS9CBgHb
+         H/nfPqZ1fTSWvuUq6UXvbQ3TpMJvDnINU3CJ/6ndCeNF8G5KQPN9Zd8mFCJsezmO8C6X
+         sIy6k/FO5RtoOo4rrAgp5erM8rp8GgLKYA0vq6xV1IfRA/LbyU/qThzjc4xhTDRKRciv
+         G+xjoSjX/KPhi401WfcPXqShuFvAKQSxJgYtXM0o7Y2p3vp9w6YnHArLoY5I1ZZM8lrS
+         E4pA==
+X-Gm-Message-State: AAQBX9ePTxPjihKbpoPit0C1JqqmuwNJm6xcHiUTeqVZLp9lgPt+EFd5
+        M6XuSrc39Z0GUXz/mF6GGAL4LExC1p8auj41j2iPWk5gacH0HGuT2A18tUuRD0MuvOiqzoB8SAf
+        rgi9CK61jaAI9TekoMAm9aJvU
+X-Received: by 2002:a05:6214:301e:b0:56e:b557:2d4e with SMTP id ke30-20020a056214301e00b0056eb5572d4emr2242305qvb.6.1682000968825;
+        Thu, 20 Apr 2023 07:29:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bh4jP9BRcxAXAQBGpztEZgR2c1DlH5MA0cabHVDBgEfStN28QcPkDWcM8pWXDcVwsX39FA5w==
+X-Received: by 2002:a05:6214:301e:b0:56e:b557:2d4e with SMTP id ke30-20020a056214301e00b0056eb5572d4emr2242276qvb.6.1682000968521;
+        Thu, 20 Apr 2023 07:29:28 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id b27-20020a0cb3db000000b005e750d07153sm420904qvf.135.2023.04.20.07.29.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 07:29:33 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     mazziesaccount@gmail.com
-Cc:     DLG-Adam.Ward.opensource@dm.renesas.com, bbara93@gmail.com,
-        benjamin.bara@skidata.com, broonie@kernel.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, support.opensource@diasemi.com
-Subject: Re: [PATCH RFC 1/2] regulator: introduce regulator monitoring constraints
-Date:   Thu, 20 Apr 2023 16:29:24 +0200
-Message-Id: <20230420142924.541206-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ad59933d-714f-6444-b835-ecd9791934aa@gmail.com>
-References: <ad59933d-714f-6444-b835-ecd9791934aa@gmail.com>
+        Thu, 20 Apr 2023 07:29:28 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, le.ma@amd.com, Jack.Xiao@amd.com,
+        YiPeng.Chai@amd.com, Lang.Yu@amd.com, Likun.Gao@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, andrealmeid@igalia.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdgpu: remove unused variable j
+Date:   Thu, 20 Apr 2023 10:29:25 -0400
+Message-Id: <20230420142925.3890505-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the feedback!
+gcc with W=1 reports
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c: In function
+  ‘amdgpu_gfx_mqd_sw_fini’:
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:451:16: error: variable
+  ‘j’ set but not used [-Werror=unused-but-set-variable]
+  451 |         int i, j;
+      |                ^
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c: In function
+  ‘amdgpu_gfx_disable_kcq’:
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:486:13: error: variable
+  ‘j’ set but not used [-Werror=unused-but-set-variable]
+  486 |         int j;
+      |             ^
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c: In function
+  ‘amdgpu_gfx_enable_kcq’:
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:529:19: error: variable
+  ‘j’ set but not used [-Werror=unused-but-set-variable]
+  529 |         int r, i, j;
+      |                   ^
 
-On Thu, 20 Apr 2023 at 13:33, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> Hm. Is there a reason why we need to perform these checks for each of
-> the calls?
+These variables are not used, so remove them.
 
-No, I guess there might be a more efficient way to set a bit somewhere
-during registration instead. But I thought it might be "clearer" to have
-it all in one function to clarify what is required that something
-actually happens.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
+index 7f5c60381103..ac6fd8620279 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
+@@ -448,7 +448,7 @@ int amdgpu_gfx_mqd_sw_init(struct amdgpu_device *adev,
+ void amdgpu_gfx_mqd_sw_fini(struct amdgpu_device *adev, int xcc_id)
+ {
+ 	struct amdgpu_ring *ring = NULL;
+-	int i, j;
++	int i;
+ 	struct amdgpu_kiq *kiq = &adev->gfx.kiq[xcc_id];
+ 
+ 	if (adev->asic_type >= CHIP_NAVI10 && amdgpu_async_gfx_ring) {
+@@ -462,7 +462,6 @@ void amdgpu_gfx_mqd_sw_fini(struct amdgpu_device *adev, int xcc_id)
+ 	}
+ 
+ 	for (i = 0; i < adev->gfx.num_compute_rings; i++) {
+-		j = i + xcc_id * adev->gfx.num_compute_rings;
+ 		ring = &adev->gfx.compute_ring[i];
+ 		kfree(adev->gfx.mec.mqd_backup[i]);
+ 		amdgpu_bo_free_kernel(&ring->mqd_obj,
+@@ -483,7 +482,6 @@ int amdgpu_gfx_disable_kcq(struct amdgpu_device *adev, int xcc_id)
+ 	struct amdgpu_kiq *kiq = &adev->gfx.kiq[xcc_id];
+ 	struct amdgpu_ring *kiq_ring = &kiq->ring;
+ 	int i, r = 0;
+-	int j;
+ 
+ 	if (!kiq->pmf || !kiq->pmf->kiq_unmap_queues)
+ 		return -EINVAL;
+@@ -495,11 +493,9 @@ int amdgpu_gfx_disable_kcq(struct amdgpu_device *adev, int xcc_id)
+ 		return -ENOMEM;
+ 	}
+ 
+-	for (i = 0; i < adev->gfx.num_compute_rings; i++) {
+-		j = i + xcc_id * adev->gfx.num_compute_rings;
++	for (i = 0; i < adev->gfx.num_compute_rings; i++)
+ 		kiq->pmf->kiq_unmap_queues(kiq_ring, &adev->gfx.compute_ring[i],
+ 					   RESET_QUEUES, 0, 0);
+-	}
+ 
+ 	if (adev->gfx.kiq[0].ring.sched.ready && !adev->job_hang)
+ 		r = amdgpu_ring_test_helper(kiq_ring);
+@@ -526,7 +522,7 @@ int amdgpu_gfx_enable_kcq(struct amdgpu_device *adev, int xcc_id)
+ 	struct amdgpu_kiq *kiq = &adev->gfx.kiq[xcc_id];
+ 	struct amdgpu_ring *kiq_ring = &kiq->ring;
+ 	uint64_t queue_mask = 0;
+-	int r, i, j;
++	int r, i;
+ 
+ 	if (!kiq->pmf || !kiq->pmf->kiq_map_queues || !kiq->pmf->kiq_set_resources)
+ 		return -EINVAL;
+@@ -562,10 +558,8 @@ int amdgpu_gfx_enable_kcq(struct amdgpu_device *adev, int xcc_id)
+ 		queue_mask = ~0ULL;
+ 
+ 	kiq->pmf->kiq_set_resources(kiq_ring, queue_mask);
+-	for (i = 0; i < adev->gfx.num_compute_rings; i++) {
+-		j = i + xcc_id * adev->gfx.num_compute_rings;
++	for (i = 0; i < adev->gfx.num_compute_rings; i++)
+ 		kiq->pmf->kiq_map_queues(kiq_ring, &adev->gfx.compute_ring[i]);
+-	}
+ 
+ 	r = amdgpu_ring_test_helper(kiq_ring);
+ 	spin_unlock(&kiq->ring_lock);
+-- 
+2.27.0
 
-> Also, could we just directly have function pointers to monitoring 
-> disabling which would be populated by the driver.
-> So, could we perhaps have function pointers for these in the ops
-> instead of flags? Core could then call these if set? Do you think that
-> would work?
-
-One goal was to reuse the existing set_{under,over}_voltage_protection()
-methods for voltage monitoring. For me, disabling is basically the same
-as setting the limit to REGULATOR_NOTIF_LIMIT_DISABLE. Of course, we
-could also introduce new "disable_monitor_on_*()" ops, but I think it
-should do the same job as set_*_protection(disable_limits), and
-therefore only leads to duplicated code in every driver that wants to
-use "dynamic monitoring". Also, I think we might need at least 6 new ops
-methods to cover the different state changes, except if we do some kind
-of "old state -> new state" function to identify if turning off or on
-the monitor is required (which is basically now done in the core).
-I am not sure if it improves things, but I could modify the approach to
-be more "driver-centric". What do you think?
-
-
-> Or, do you think it would be worth making this a tiny bit more generic
-> by just doing some 'pre_enable' and 'post _disable' callbacks which
-> driver can populate? 
-
-To be honest, I am not sure. For the da9063, it might not be worth it.
-For others, it might simplify the usage of voltage monitoring and move
-the "mental complexity" of handling all the possible cases, where the
-voltage monitoring must be turned off, to the core.
-The driver must just set the monitoring constraints to "please turn off
-while the regulator is turned off, turn off while the voltage is changed
-and while the regulator is in STANDBY mode".
-
-For me, it would also be fine to let the core turn off voltage monitoring on
-all defined cases (while regulator is off, while voltage is changed, while in
-IDLE, STANDBY mode). The constraints would just let the driver decide more
-specifically when it is really necessary and skip the other cases.
-
-
-> I think that some PMICs I've seen had separate 'disable/enable all
-> monitors' bit which needed to be used when monitoring was
-> disabled/enabled due to an operation [voltage change/disable/enable].
-
-I think this case could be handled by my "possible next step" in a very
-simple way.
-
-
-> If we allowed driver to populate the disabling callbacks, then this
-> would support also those ICs which need to disable multiple monitors
-> for the duration of an operation (or do some other strange stuff)
-
-I think that these should also be handled in the case of
-set_*_protection(), but I am not 100% sure here.
-
-
-> It would also allow drivers to add delays to the function(s)
-> re-enabling of monitors when needed - at least the bd718x7 had to wait
-> for new voltage to stabilize prior re-enabling the monitors.
-
-Also not 100% sure about this one, but I think these cases could be
-covered by a mandatory regulator-*-ramp-delay, when necessary?
-
-I can provide a RFC v2 with the stuff handled from the driver instead.
-
-Thanks and best regards,
-Benjamin
