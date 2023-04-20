@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977CA6E9727
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163306E972A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjDTOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S231789AbjDTOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjDTOci (ORCPT
+        with ESMTP id S231690AbjDTOco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:32:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC914203;
-        Thu, 20 Apr 2023 07:32:32 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E063E6603265;
-        Thu, 20 Apr 2023 15:32:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682001151;
-        bh=+TVWRubMAjRGPp7QPq7BCPc3y2bv7sKk2mvQp0XR9e4=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=DwKLq+3Ti4XpC+rjzkMoBCLlra80K/O3SeBpLyKMv9BjhtKOQI/v3FpKbuBdArkUV
-         cEcJB9MxeHYiFZB/N2BxWCjYo0MxFw8mmnYCJ7B8rZbZ1VXlh/9ltVWT8ogR6rDkWb
-         idFuTKbS8PxEY9IVyrYxYjTp9Mj+5jCulTz2arWXFIczoaUJMYqAH7Y4akXMXSG1P+
-         Buz6Vtq2FgEYcZ5ChfS62icntVGqOTI4OXNVjbnR7P6/K08VPPycXhAVUWeYtNrs+y
-         hT5c8SoYM6lMxwNdcnTqlrdAT9mNhF1SiSOaN8pGHNvKzphLgfiubSUDUKh7yhKkQy
-         7kK1Og/YmAM2g==
-Message-ID: <99c2ec7c-bff2-fa50-f267-d5ca383bd5ca@collabora.com>
-Date:   Thu, 20 Apr 2023 16:32:27 +0200
+        Thu, 20 Apr 2023 10:32:44 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121B046A2;
+        Thu, 20 Apr 2023 07:32:38 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id vc20so6768648ejc.10;
+        Thu, 20 Apr 2023 07:32:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682001156; x=1684593156;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4BzOx6++HBX7ZigSvnuC48ImXTD2NnsgoKKAOBGKgzo=;
+        b=N3KF6WZtB5Gz0f85pp7xeV1/u+Hw7t+ryYQ4wgm51aek9PbNozPg/4pO3zpkRIQy/s
+         OxEHfWX8zMlO7E54j/onlmOSqOE3RbEP1qSfnx7P/zFXlz4hD2yjN1HqEiSjOKclUMbK
+         GoDz0bTE2uAS6zhQy4OGBJ0Yl7ZIIX0f2MuR54QleaJrvrT8o7p8vE9LljDyx+bMMZW9
+         PWHM8tMNU6KraWtbiTuWlPwpTWQqlD/QnI6L36NBbbUN6HJ0YOW+ljHKDgd/7tvyf21S
+         1y28ZgAp58Ir07DVt+Gn4PwK0yq6DV9GrHW9nEHaQXJPL9/m168FGG4PW0KqaY1qvwpo
+         wUXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682001156; x=1684593156;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4BzOx6++HBX7ZigSvnuC48ImXTD2NnsgoKKAOBGKgzo=;
+        b=kt6vQtm5dMfuJgan/12/JZjelYq6wNKE+Ip8zeh9amvaTRozD3dx8sB6chOiLNCsgx
+         wItzbNT5qcH2DwRZXwCF170uus7kR9VQ3FKGmMB666HJ+XAOeiHFvF7TMWOqaNQ+6nDq
+         E75IUnfQOE8VYNJSmUQmL2sAgvYuAprZ0ZyIf0DTDQqcQfipzyLQgY9MuLP1jAeMz89o
+         MnDX1QINQfyAYV0o9Nb685M0fRQCYKN+UY2hPHyEUTqRP0CLnuBvfZAfe5eCkTI6GnUZ
+         ZV2Y5uWIQ2Bp2aeDtlVZpTdibbIcCVZASsQw8/blEmyWSuH9MX9Cf/DDwZym34up7RzK
+         yj0A==
+X-Gm-Message-State: AAQBX9f5aKi7rKhQYyAUaqmliqM/jv5/Yjk9bHFxKjyDb4EKxn/iAmuD
+        vBBsGNWW5MaRBCc1dLmj0ouBWJtcxCw0NBc5
+X-Google-Smtp-Source: AKy350YW6KyCShN/KBSTBQV6SxvPNuRoMYkOF2Ebgt5nZ1ewg07568dpzitDHUtDUOcCBro65cEKpw==
+X-Received: by 2002:a17:906:b0e:b0:94f:2840:14c9 with SMTP id u14-20020a1709060b0e00b0094f284014c9mr1960741ejg.62.1682001156300;
+        Thu, 20 Apr 2023 07:32:36 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id gt11-20020a1709072d8b00b0094f07545d40sm783866ejc.220.2023.04.20.07.32.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 07:32:36 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     lee@kernel.org
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com,
+        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, peterz@infradead.org,
+        rafael.j.wysocki@intel.com, richard.leitner@linux.dev,
+        treding@nvidia.com, wsa@kernel.org
+Subject: Re: [PATCH v5 6/6] mfd: tps6586x: register restart handler
+Date:   Thu, 20 Apr 2023 16:32:29 +0200
+Message-Id: <20230420143229.541283-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230420140406.GH996918@google.com>
+References: <20230420140406.GH996918@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] pwm: mediatek: Add support for MT7981
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-pwm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>
-References: <cover.1681992038.git.daniel@makrotopia.org>
- <7c6e31c844642c199f223f4229a04a37b57a34f3.1681992038.git.daniel@makrotopia.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <7c6e31c844642c199f223f4229a04a37b57a34f3.1681992038.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/04/23 14:36, Daniel Golle ha scritto:
-> The PWM unit on MT7981 uses different register offsets than previous
-> MediaTek PWM units. Add support for these new offsets and add support
-> for PWM on MT7981 which has 3 PWM channels, one of them is typically
-> used for a temperature controlled fan.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Thanks for the feedback!
 
-The implementation is good now; there's only one nitpick: you're reordering
-the platform data entries and I agree about doing that, as they should be
-alphabetically sorted, but you didn't mention that in the commit message.
+On Thu, 20 Apr 2023 at 16:04, Lee Jones <lee@kernel.org> wrote:
+> Why 20 here and 50 in the other patch?
 
-Please send a v3 that mentions that you're also reordering.
+The data sheet states:
+The device will enter the SLEEP or HARD REBOOT state 10ms after the
+SLEEP REQUEST or REBOOT REQUEST is initiated.
 
-"...while at it, also reorder..."
+Also:
+When the reboot request state is set an internal timer TWAIT (10ms typ)
+is started (...). The reboot request ends when t > TWAIT.
 
-After which:
+But in the electrical characteristics, TWAIT is given as min 18, typ 20,
+max 22.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In my observations, reboot took like typ 15ms and sleep typ 25ms, but
+this might be very board-specific. I can set both to 50ms to be "on the
+safe side" and have a common value?
+
+Thanks and best regards,
+Benjamin
