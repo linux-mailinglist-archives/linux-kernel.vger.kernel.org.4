@@ -2,130 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B4B6E8FBB
+	by mail.lfdr.de (Postfix) with ESMTP id BD7D56E8FBD
 	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbjDTKOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S234665AbjDTKN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbjDTKNW (ORCPT
+        with ESMTP id S234159AbjDTKNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:13:22 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCF446A1;
-        Thu, 20 Apr 2023 03:11:08 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1ppRF8-000YMk-Qu; Thu, 20 Apr 2023 18:10:25 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 20 Apr 2023 18:10:23 +0800
-Date:   Thu, 20 Apr 2023 18:10:23 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jia Jie Ho <jiajie.ho@starfivetech.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 4/4] crypto: starfive - Add hash and HMAC support
-Message-ID: <ZEEPjzLIlZW6HaAM@gondor.apana.org.au>
-References: <20230411081424.131912-1-jiajie.ho@starfivetech.com>
- <20230411081424.131912-5-jiajie.ho@starfivetech.com>
+        Thu, 20 Apr 2023 06:13:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F403F2703;
+        Thu, 20 Apr 2023 03:10:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 906FB60A5B;
+        Thu, 20 Apr 2023 10:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38B2DC433EF;
+        Thu, 20 Apr 2023 10:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681985452;
+        bh=7gcE5M0N0YugjmEq67FIL22xQIXPMMXaSduK+QcmS40=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gf2sgwDOuKf/lqficly6iQeQKq54OItkDUkGnCTaFHXn2FQbD93NhVEVL7RAP/6r0
+         7mQ5HGcSBzIPvIEjIiU0MFv3nsqdVRnLD3PpT6N5C7kNu0Zm9HUloe94+yDtSb+uZ7
+         ttB1nbz8c5qdRE527cie+C1KXJKsuqBHTUWON8W68TqjI12X9oXJG4R76axtdq90Ax
+         fZRC5RWtjYtXkZV7jkPdp96NXIJ0rwOB6wkrviZSglFdZKBHj45icFo842oabj3dQf
+         RRdsIzsjdt1mVsiJwToYV7DwdRL8IUH9YqrjDdmbTEbb/3gTBdRhTcGj6CK/Fpyy6G
+         PWtrdj5BQHYVA==
+Date:   Thu, 20 Apr 2023 11:10:46 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] leds: rgb: leds-qcom-lpg: Add support for PMK8550
+ PWM
+Message-ID: <20230420101046.GF9904@google.com>
+References: <20230407223849.17623-1-quic_amelende@quicinc.com>
+ <20230407223849.17623-4-quic_amelende@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230411081424.131912-5-jiajie.ho@starfivetech.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230407223849.17623-4-quic_amelende@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:14:24PM +0800, Jia Jie Ho wrote:
->
-> +static int starfive_hash_export(struct ahash_request *req, void *out)
-> +{
-> +	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-> +	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-> +	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-> +
-> +	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-> +	ahash_request_set_callback(&rctx->ahash_fbk_req,
-> +				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-> +				   req->base.complete, req->base.data);
-> +
-> +	ahash_request_set_crypt(&rctx->ahash_fbk_req, req->src,
-> +				req->result, req->nbytes);
-> +
-> +	return crypto_ahash_export(&rctx->ahash_fbk_req, out);
-> +}
+On Fri, 07 Apr 2023, Anjelique Melendez wrote:
 
-You can't export a freshly created request.  The fallback
-request needs to have been created by the usual init/update
-calls.
+> Add support for pmk8550 compatible and lpg_data.
+> 
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+>  drivers/leds/rgb/leds-qcom-lpg.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
-The export function should simply invoke export.
+Applied, thanks
 
-> +static int starfive_hash_cra_init_algs(struct crypto_tfm *tfm,
-> +				       const char *algs_hmac_name,
-> +				       unsigned int mode,
-> +				       const char *alg_name)
-> +{
-> +	struct starfive_cryp_ctx *ctx = crypto_tfm_ctx(tfm);
-> +	struct crypto_ahash *ahash = __crypto_ahash_cast(tfm);
-> +
-> +	ctx->cryp = starfive_cryp_find_dev(ctx);
-> +
-> +	if (!ctx->cryp)
-> +		return -ENODEV;
-> +
-> +	ctx->ahash_fbk = crypto_alloc_ahash(alg_name, 0,
-> +					    CRYPTO_ALG_NEED_FALLBACK);
-> +
-> +	if (IS_ERR(ctx->ahash_fbk))
-> +		return dev_err_probe(ctx->cryp->dev, PTR_ERR(ctx->ahash_fbk),
-> +				     "starfive_hash: Could not load fallback driver.\n");
-> +
-> +	crypto_hash_alg_common(ahash)->statesize = crypto_ahash_statesize(ctx->ahash_fbk);
-
-I've just posted a patch to linux-crypto to do this properly:
-
-https://lore.kernel.org/linux-crypto/ZEEOXIHwqKblKfBJ@gondor.apana.org.au/T/#u
-
-Please switch to using the helper that I added.
-
-> +static int starfive_hash256_setkey(struct crypto_ahash *tfm,
-> +				   const u8 *key, unsigned int keylen)
-> +{
-> +	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-> +	unsigned int digestsize = crypto_ahash_digestsize(tfm);
-> +	unsigned int blocksize;
-> +	int ret = 0;
-> +
-> +	blocksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-
-Please use crypto_ahash_blocksize.  We should never use crypto_ahash_tfm
-in new code.
-
-> +static int starfive_hash_cra_sha224_init(struct crypto_tfm *tfm)
-> +{
-> +	return starfive_hash_cra_init_algs(tfm, NULL,
-> +					   STARFIVE_HASH_SHA224,
-> +					   "sha224-generic");
-> +}
-
-Please switch to the new API and use init_tfm/exit_tfm instead of
-cra_init/cra_exit.
-
-Thanks,
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Lee Jones [李琼斯]
