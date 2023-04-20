@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFC06E99ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B7F6E99F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDTQvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
+        id S229838AbjDTQwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjDTQvj (ORCPT
+        with ESMTP id S229568AbjDTQwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:51:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2831B269E;
-        Thu, 20 Apr 2023 09:51:38 -0700 (PDT)
+        Thu, 20 Apr 2023 12:52:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B3DD2;
+        Thu, 20 Apr 2023 09:52:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA02E64AB8;
-        Thu, 20 Apr 2023 16:51:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1979C433EF;
-        Thu, 20 Apr 2023 16:51:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 077A1641AF;
+        Thu, 20 Apr 2023 16:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AFDC433EF;
+        Thu, 20 Apr 2023 16:52:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682009497;
-        bh=gHK+hdAcuU5ofvzwMj41uJvVD9wpUSxv26wdE+c3IuU=;
-        h=From:Date:Subject:To:Cc:From;
-        b=GO5P+rmHlfogAbiSBl3cKO8jDfIt5axbZnaMRRSO4ab0xkSfhyRNhPp9tEnbHuz/O
-         mnLadyGrasIuaUbVUEIbmroW4i36UP3sA5VmDs29X4WDhwBo2gi4oqKmgyS5xHmFlE
-         oyrRQcwlcFs9MWJ5kAhNC/MixlG+wsqW9m+GRg1DP7rBsuTl/LDYLCaBDl+LSJzVdh
-         8nn/B5U/nfDjhukSTZ5Ze05NBuK2ufeTCK/DZxcdR/Qdn0UkDkxwCrv/UV/4Izpi2Y
-         GOB9N0+2WyngOimR0of44o2Fi0z6QuBEOrAjih982Oy+tA/BfTmuvUOMgo79q+qp97
-         ZRPtpZjlz4TNg==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Thu, 20 Apr 2023 09:51:24 -0700
-Subject: [PATCH] ext4: Fix unused iterator variable warnings
+        s=k20201202; t=1682009549;
+        bh=U/Ed3Bf5iQDyeXK4sTAagfDBTCyOzfvKX4J+dgDoT2M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MpUFunmkElXXI23HUs5s8c9qlu4z0uxsz8ZICJUQLo44UcO0tFwwejDMMwAJAqahg
+         f7pm5eVCz8UnNTuTFC0WlSnj6Doxxc1yYzHDf5YZLlnm0lGbZRkx1Jz9yGTqRJtWIW
+         pwdy1IfEQ1exI/Su4rCgVt8Kqm99RBDprvbHkmU9l25M1WMRXCRzyrA2PQcJbtOQye
+         7YQIOkw2znTEK6iKnrgj871XC/dI645BXONXY6VO3daDLJR9gf3Mvtsd4AvWoIaLM3
+         P/inYFJI5lRDwa5of98v5gBG3ovdbMQTrFr2hT36HygI8XHhDRZyb0xjqVBZyF/xQr
+         jo0mWM/he4XSg==
+Date:   Thu, 20 Apr 2023 17:52:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Okan Sahin <okan.sahin@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <09eb8e4c-3e73-41f0-bf42-8ddf3c4254ec@sirena.org.uk>
+References: <20230412111256.40013-1-okan.sahin@analog.com>
+ <20230412111256.40013-6-okan.sahin@analog.com>
+ <20230420103438.GI9904@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAIttQWQC/x2N0QqDMAwAf0XyvECtCtt+ZewhbbMZ2DpJrAjiv
- 1v3eBzcbWCswgb3ZgPlRUx+uUJ7aSCOlN+MkiqDd75zvXfI69xjycU44UIqFD5saGVixYiRQqJ
- huKZb10JtBDLGoJTjeFa+ZDPrKSbll6z/8eO57wezizuTiAAAAA==
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     yanaijie@huawei.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2345; i=nathan@kernel.org;
- h=from:subject:message-id; bh=gHK+hdAcuU5ofvzwMj41uJvVD9wpUSxv26wdE+c3IuU=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCmOuTOCVX+4fv8vFsNXdagsOFJug8aEY98i1sns/7XXY
- UHzsUvHO0pZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEpK8y/OG/evHBis/HeMKk
- FwvZbdpTe/niX/OIRbUJknmly3QkmV8z/C/58COjZZKdSuVzUTXFpZESu65xJQQ2MUufMeb+JdZ
- 5mRsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="enmX+yyvaFeCf0/m"
+Content-Disposition: inline
+In-Reply-To: <20230420103438.GI9904@google.com>
+X-Cookie: Above all else -- sky.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,73 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_QUOTA is disabled, there are warnings around unused iterator
-variables:
 
-  fs/ext4/super.c: In function 'ext4_put_super':
-  fs/ext4/super.c:1262:13: error: unused variable 'i' [-Werror=unused-variable]
-   1262 |         int i, err;
-        |             ^
-  fs/ext4/super.c: In function '__ext4_fill_super':
-  fs/ext4/super.c:5200:22: error: unused variable 'i' [-Werror=unused-variable]
-   5200 |         unsigned int i;
-        |                      ^
-  cc1: all warnings being treated as errors
+--enmX+yyvaFeCf0/m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The kernel has updated to gnu11, allowing the variables to be declared
-within the for loop. Do so to clear up the warnings.
+On Thu, Apr 20, 2023 at 11:34:38AM +0100, Lee Jones wrote:
 
-Fixes: dcbf87589d90 ("ext4: factor out ext4_flex_groups_free()")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- fs/ext4/super.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> Once the regulator driver has been reviewed, I can take the set.
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 403cc0e6cd65..f16492b8c98d 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1259,7 +1259,7 @@ static void ext4_put_super(struct super_block *sb)
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	struct ext4_super_block *es = sbi->s_es;
- 	int aborted = 0;
--	int i, err;
-+	int err;
- 
- 	/*
- 	 * Unregister sysfs before destroying jbd2 journal.
-@@ -1311,7 +1311,7 @@ static void ext4_put_super(struct super_block *sb)
- 	ext4_flex_groups_free(sbi);
- 	ext4_percpu_param_destroy(sbi);
- #ifdef CONFIG_QUOTA
--	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-+	for (int i = 0; i < EXT4_MAXQUOTAS; i++)
- 		kfree(get_qf_name(sb, sbi, i));
- #endif
- 
-@@ -5197,7 +5197,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 	ext4_fsblk_t logical_sb_block;
- 	struct inode *root;
- 	int ret = -ENOMEM;
--	unsigned int i;
- 	int needs_recovery;
- 	int err = 0;
- 	ext4_group_t first_not_zeroed;
-@@ -5628,7 +5627,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- #endif
- 
- #ifdef CONFIG_QUOTA
--	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-+	for (unsigned int i = 0; i < EXT4_MAXQUOTAS; i++)
- 		kfree(get_qf_name(sb, sbi, i));
- #endif
- 	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
+> Please apply this if you have to resubmit:
 
----
-base-commit: 519fe1bae7e20fc4e7f179d50b6102b49980e85d
-change-id: 20230420-ext4-unused-variables-super-c-cabda558d931
+> For my own reference (apply this as-is to your sign-off block):
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 
+For situations like this where there's a depends on to the MFD it'd be
+great if you could just apply the MFD rather than waiting, the
+individual drivers can either get applied on top or just go via the
+subsystem and have everything sort itself out in the merge window.  It'd
+help things move along faster and be less confusing.
+
+These serieses tend to get so many resends that I'm often just not
+looking at them, previously I'd have just applied the function driver
+when it's ready but with the complaints when the core ends up missing
+the merge window but function drivers are going in I stopped.  In the=20
+past I've ended up missing things because either there's multiple
+serieses for similarly named devices out at once or (less often) some
+change results in a repeat review being needed so it's easier to just
+wait for things to settle down.
+
+--enmX+yyvaFeCf0/m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRBbcQACgkQJNaLcl1U
+h9AEGwf/cZ5jz601ThWLKn8DrgHpVkT4V1DcOQlZnAAuvef8R6TLj17mP5voXh4d
+6H1KXgNljwwO755+9o8YBPLWo0MKybFlD/L+vElU5SU9Z4nhBirPvFhMOP+7VY2n
+IEn0TnMW7+ELbwuhlp2uYw38CX8AztWvR6tWCKko6uyMm/nCBfFpON+rlEkZ63+4
+abvINbrTEggEly0giW4MnlmNMuF9d5yqZMq2A9+3K2RFRVwa3KOCOcIkyPStqxqD
+JimllAVHjijGGkgk1Xe4zwma4omY389whj17TAANkgFdEIAL4hL1+PQG/XwjBeth
+E+4lngNuk7ooRmgKkS7hHzTwfNFaPA==
+=RCMr
+-----END PGP SIGNATURE-----
+
+--enmX+yyvaFeCf0/m--
