@@ -2,86 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA136E9C52
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2F56E9C56
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjDTTOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S231901AbjDTTPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDTTOC (ORCPT
+        with ESMTP id S229468AbjDTTPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:14:02 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF792705
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:14:01 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so1792777b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:14:01 -0700 (PDT)
+        Thu, 20 Apr 2023 15:15:14 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59C26B2;
+        Thu, 20 Apr 2023 12:15:12 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so1261715a12.0;
+        Thu, 20 Apr 2023 12:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682018040; x=1684610040;
+        d=gmail.com; s=20221208; t=1682018112; x=1684610112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hiGazBo7fqmmG21SdxdzgEwUnvE1CYshJ5DRTxFcvcU=;
-        b=VPpNbcz8lUmn6XqbAF8ZKpyYp3zV26MHR66QP3yKRqpcmVdPoHTXLEyF6Tm6HEp4sd
-         I6BqSMDCI5vFX0NE5D1q7CokCl4/RoKvxQk1G13HaFvjs53+GMT1wsINZIEansmPZtBE
-         1k8Rd9FGcvKrprRZvlKXZGn5l88bbi1KjmY6066siYhLq8wcQ8X6Jf6SnA5UoPM85uEo
-         7diQrnMp6doro6jk8uOyyRDOWi4bDJDokTvU+c4NBYe1TsSjguNSflNmfNIhkY1Df2B0
-         kI05B/Wzga0pxbf0UynU69HDnh053SHp7yyj+UPOsBKA2vPkT5VaxUle0IyaTxscv/pO
-         Av8w==
+        bh=TB42OP/0chsseE66LQ/QUwQPHdlFt1RecluHsLuAJY4=;
+        b=PkfTz/PmrkjzTlyyAkJGB3k8eVlOC59C1SVPbdq6Edf6RyUTVqNYNlMvpRVkFgFDrv
+         kch/3YnkgSp/yFqqSvhjw4/cyHFxsplXn9Ejlp6TV19kGl3/u6+m5181gAh57LAgvPqG
+         zPGEtmrM3C0y0S5R2AEC31TfEFnRKGqmoe/zb34OPWQ09nIDUGoCNiNxnDstgDRSAtVl
+         vrOmezSnSQV6wZq6Q0MMmoKn8M/a21t6uUaQp4WKMrVohxugniTDoERgncztowWyX0I+
+         iDrmLrTd/R2snVC2C+deJLxzSWCLs+TTb/8hwTVdhTd5ZhmmwEODUk1Xzc2jvc/jEvC1
+         E/iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682018040; x=1684610040;
+        d=1e100.net; s=20221208; t=1682018112; x=1684610112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hiGazBo7fqmmG21SdxdzgEwUnvE1CYshJ5DRTxFcvcU=;
-        b=EwMeQa4i6SJMu0887PMegZ6IuAOKrdAi3QZsAsOSDUjGbTKR03EmQ/0Lv3mg/XI4OV
-         v/hNa366lM3kCxzVJL9WzNseOUyUg3s+4RMM901vsYac8kRxRSUxec1zNZ6xRFayd17o
-         RnUq+tr+Nz+VCxivT37Y5uEaxbOa2+NqFHE1xTwEPwxno6IeUeYvbTBe1HuH7EdLZSTU
-         BhXNBeQbkWJUFeFcxKRvOWPJLj4orTm9cdLlKaMvNEQoQSnxxzuVQAPoGsxBE9mYjZqs
-         9R6OyNRc5RhYqsJ7CHKDmt4yRPvydU4eZ9rRJBej2ahoGRi5/N0oC95uCeIogBD1RuMP
-         6vww==
-X-Gm-Message-State: AAQBX9cs1Ox/kRsC3wnhO60+z8C1tK4riD2iO6Sf0+IGIlRmAi88wdjd
-        PI0J5SfVKXdZss0fsmmKpapfNEplCp4dOLrm6dSM4g==
-X-Google-Smtp-Source: AKy350aRQ0rM7CLx1DwjTywqrVN0WjdwG2lvnHksOXDIHfuaqZi7DwTJ1XnW9z+QtTwIqGEYzeTP15HNnlsEvUBFY24=
-X-Received: by 2002:a17:90a:744c:b0:23f:962e:826b with SMTP id
- o12-20020a17090a744c00b0023f962e826bmr2608127pjk.15.1682018040457; Thu, 20
- Apr 2023 12:14:00 -0700 (PDT)
+        bh=TB42OP/0chsseE66LQ/QUwQPHdlFt1RecluHsLuAJY4=;
+        b=kS808qgzrIHD8Y/xhcDlzNZWe/9JU7CMXexDNXWIGJIDU+q+TSdXO8R7oFgZ7rtLZF
+         MHTfYug430NwJcmhywgOIUUtCZy7EsrJGSDXnIvc/wEBiIGP2s1ttJ9FVfTlMtPbpT2g
+         cGGqH2fTk5OKpkOQthzff4/2yn/RiECzHuD6uKKcQfFcKK5itIoax/N+o4LfXLNz11Br
+         sEJXsQXbJwkBAkt81hR4v+X9RfjbdBwPnb/7LpZUrfrdSDxopoKWJ7Akq6Nsnwub3lgi
+         Pt+qqZcueWgfy5CnU7u8lJu2pZVcpWVlYkgbkjJ0jsbO2uE2+DDhIPDq+WRgoc3ZEgnB
+         MHMQ==
+X-Gm-Message-State: AAQBX9cV8ATqskpxyorGnNKSGZxQ0/7sEqOdEFNJ9ur80R52VLmMjxoR
+        4VR9hKT7dTJ0dVe+kycX+a5BQXG7pHJHa4s2hMQ=
+X-Google-Smtp-Source: AKy350YVTmd97fwntq23PuJ/Ty5yPWRWuBjTNLojg7FftZa0smSn5bHtfBllr8HEG9WbWSpf91gSn4y34LDBr9UYvf4=
+X-Received: by 2002:a17:90a:4dc5:b0:247:90d8:41fd with SMTP id
+ r5-20020a17090a4dc500b0024790d841fdmr2650658pjl.26.1682018111804; Thu, 20 Apr
+ 2023 12:15:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230419221716.3603068-1-atishp@rivosinc.com> <ZEFopfs5Ij/AIkee@google.com>
-In-Reply-To: <ZEFopfs5Ij/AIkee@google.com>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Fri, 21 Apr 2023 00:43:49 +0530
-Message-ID: <CAHBxVyE+SkQ-jpbupmJU4fpuiXY_GufnANDBUuO5bMHDsudeYg@mail.gmail.com>
-Subject: Re: [RFC 00/48] RISC-V CoVE support
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Uladzislau Rezki <urezki@gmail.com>
+References: <20230415104104.5537-1-aford173@gmail.com> <414febc4-aab1-95ec-ac2e-e82a3f881d01@denx.de>
+ <CAHCN7xKsvT-TL4xdP=CKDzTJoFq1PGqmFmTohdRF9JaWaxWemw@mail.gmail.com>
+ <5667233.DvuYhMxLoT@steina-w> <CAHCN7xK0Dban7ueB_ASrTOjqWK0++ujOoQ_RZpz=FR2Fktzy0g@mail.gmail.com>
+In-Reply-To: <CAHCN7xK0Dban7ueB_ASrTOjqWK0++ujOoQ_RZpz=FR2Fktzy0g@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 20 Apr 2023 14:15:00 -0500
+Message-ID: <CAHCN7xJx46zSOt5KLvJCo3NomFmjEzcirTnB9YdLWdR0aqOWew@mail.gmail.com>
+Subject: Re: [PATCH 2/6] drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Marek Vasut <marex@denx.de>, dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        m.szyprowski@samsung.com, Robert Foss <rfoss@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,204 +87,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 10:00=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
+On Tue, Apr 18, 2023 at 6:53=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
+e:
 >
-> On Wed, Apr 19, 2023, Atish Patra wrote:
-> > 2. Lazy gstage page allocation vs upfront allocation with page pool.
-> > Currently, all gstage mappings happen at runtime during the fault. This=
- is expensive
-> > as we need to convert that page to confidential memory as well. A page =
-pool framework
-> > may be a better choice which can hold all the confidential pages which =
-can be
-> > pre-allocated upfront. A generic page pool infrastructure may benefit o=
-ther CC solutions ?
->
-> I'm sorry, what?  Do y'all really not pay any attention to what is happen=
-ing
-> outside of the RISC-V world?
->
-> We, where "we" is KVM x86 and ARM, with folks contributing from 5+ compan=
-ines,
-> have been working on this problem for going on three *years*.  And that's=
- just
-> from the first public posting[1], there have been discussions about how t=
-o approach
-> this for even longer.  There have been multiple related presentations at =
-KVM Forum,
-> something like 4 or 5 just at KVM Forum 2022 alone.
->
-
-Yes. We are following the restrictedmem effort and was reviewing the
-v10 this week.
-I did mention about that in the 1st item in the TODO list. We are
-planning to use the restrictedmen
-feature once it is closer to upstream (which seems to be the case
-looking at v10).
-Another reason is that this initial series is based on kvmtool only.
-We are working on qemu-kvm
-right now but have some RISC-V specific dependencies(interrupt
-controller stuff) which are not there yet.
-As the restrictedmem patches are already available in qemu-kvm too,
-our plan was to support CoVE
-in qemu-kvm first and work on restrictedmem after that.
-
-This item was just based on this RFC implementation which uses a lazy
-gstage page allocation.
-The idea was to check if there is any interest at all in this
-approach. I should have mentioned about
-restrictedmem plan in this section as well. Sorry for the confusion.
-
-Thanks for your suggestion. It seems we should just directly move to
-restrictedmem asap.
-
-> Patch 1 says "This patch is based on pkvm patches", so clearly you are at=
- least
-> aware that there is other work going on in this space.
->
-
-Yes. We have been following pkvm, tdx & CCA patches. The MMIO section
-has more details
-on TDX/pkvm related aspects.
-
-> At a very quick glance, this series is suffers from all of the same flaws=
- that SNP,
-> TDX, and pKVM have encountered.  E.g. assuming guest memory is backed by =
-struct page
-> memory, relying on pinning to solve all problems (hint, it doesn't), and =
-so on and
-> so forth.
->
-> And to make things worse, this series is riddled with bugs.  E.g. patch 1=
-9 alone
-> manages to squeeze in multiple fatal bugs in five new lines of code: dead=
-lock due
-> to not releasing mmap_lock on failure, failure to correcty handle MOVE, f=
-ailure to
-
-That's an oversight. Apologies for that. Thanks for pointing it out.
-
-> handle DELETE at all, failure to honor (or reject) READONLY, and probably=
- several
-> others.
->
-It should be rejected for READONLY as our APIs don't have any
-permission flags yet.
-I think we should add that to enable CoVE APIs to support as well ?
-
-Same goes for DELETE ops as we don't have an API to delete any
-confidential memory region
-yet. I was not very sure about the use case for MOVE though (migration
-possibly ?)
-
-kvm_riscv_cove_vm_add_memreg should have been invoked only for CREATE
-& reject others for now.
-I will revise the patch accordingly and leave a TODO comment for the
-future about API updates.
-
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 4b0f09e..63889d9 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -499,6 +499,11 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
->
->         mmap_read_lock(current->mm);
->
-> +       if (is_cove_vm(kvm)) {
-> +               ret =3D kvm_riscv_cove_vm_add_memreg(kvm, base_gpa, size)=
-;
-> +               if (ret)
-> +                       return ret;
-> +       }
->         /*
->          * A memory region could potentially cover multiple VMAs, and
->          * any holes between them, so iterate over all of them to find
->
-> I get that this is an RFC, but for a series of this size, operating in an=
- area that
-> is under heavy development by multiple other architectures, to have a dif=
-fstat that
-> shows _zero_ changes to common KVM is simply unacceptable.
->
-
-Thanks for the valuable feedback. This is pretty much pre-RFC as the
-spec is very much
-in draft state. We want to share with the larger linux community to
-gather feedback sooner
-than later so that we can incorporate that feedback into the spec if any.
-
-> Please, go look at restrictedmem[2] and work on building CoVE support on =
-top of
-> that.  If the current proposal doesn't fit CoVE's needs, then we need to =
-know _before_
-> all of that code gets merged.
->
-
-Absolutely. That has always been the plan.
-
-> [1] https://lore.kernel.org/linux-mm/20200522125214.31348-1-kirill.shutem=
-ov@linux.intel.com
-> [2] https://lkml.kernel.org/r/20221202061347.1070246-1-chao.p.peng%40linu=
-x.intel.com
->
-> > arch/riscv/Kbuild                       |    2 +
-> > arch/riscv/Kconfig                      |   27 +
-> > arch/riscv/cove/Makefile                |    2 +
-> > arch/riscv/cove/core.c                  |   40 +
-> > arch/riscv/cove/cove_guest_sbi.c        |  109 +++
-> > arch/riscv/include/asm/cove.h           |   27 +
-> > arch/riscv/include/asm/covg_sbi.h       |   38 +
-> > arch/riscv/include/asm/csr.h            |    2 +
-> > arch/riscv/include/asm/kvm_cove.h       |  206 +++++
-> > arch/riscv/include/asm/kvm_cove_sbi.h   |  101 +++
-> > arch/riscv/include/asm/kvm_host.h       |   10 +-
-> > arch/riscv/include/asm/kvm_vcpu_sbi.h   |    3 +
-> > arch/riscv/include/asm/mem_encrypt.h    |   26 +
-> > arch/riscv/include/asm/sbi.h            |  107 +++
-> > arch/riscv/include/uapi/asm/kvm.h       |   17 +
-> > arch/riscv/kernel/irq.c                 |   12 +
-> > arch/riscv/kernel/setup.c               |    2 +
-> > arch/riscv/kvm/Makefile                 |    1 +
-> > arch/riscv/kvm/aia.c                    |  101 ++-
-> > arch/riscv/kvm/aia_device.c             |   41 +-
-> > arch/riscv/kvm/aia_imsic.c              |  127 ++-
-> > arch/riscv/kvm/cove.c                   | 1005 +++++++++++++++++++++++
-> > arch/riscv/kvm/cove_sbi.c               |  490 +++++++++++
-> > arch/riscv/kvm/main.c                   |   30 +-
-> > arch/riscv/kvm/mmu.c                    |   45 +-
-> > arch/riscv/kvm/tlb.c                    |   11 +-
-> > arch/riscv/kvm/vcpu.c                   |   69 +-
-> > arch/riscv/kvm/vcpu_exit.c              |   34 +-
-> > arch/riscv/kvm/vcpu_insn.c              |  115 ++-
-> > arch/riscv/kvm/vcpu_sbi.c               |   16 +
-> > arch/riscv/kvm/vcpu_sbi_covg.c          |  232 ++++++
-> > arch/riscv/kvm/vcpu_timer.c             |   26 +-
-> > arch/riscv/kvm/vm.c                     |   34 +-
-> > arch/riscv/kvm/vmid.c                   |   17 +-
-> > arch/riscv/mm/Makefile                  |    3 +
-> > arch/riscv/mm/init.c                    |   17 +-
-> > arch/riscv/mm/ioremap.c                 |   45 +
-> > arch/riscv/mm/mem_encrypt.c             |   61 ++
-> > drivers/tty/hvc/hvc_riscv_sbi.c         |    5 +
-> > drivers/tty/serial/earlycon-riscv-sbi.c |   51 +-
-> > include/uapi/linux/kvm.h                |    8 +
-> > mm/vmalloc.c                            |   16 +
-> > 42 files changed, 3222 insertions(+), 109 deletions(-)
-> > create mode 100644 arch/riscv/cove/Makefile
-> > create mode 100644 arch/riscv/cove/core.c
-> > create mode 100644 arch/riscv/cove/cove_guest_sbi.c
-> > create mode 100644 arch/riscv/include/asm/cove.h
-> > create mode 100644 arch/riscv/include/asm/covg_sbi.h
-> > create mode 100644 arch/riscv/include/asm/kvm_cove.h
-> > create mode 100644 arch/riscv/include/asm/kvm_cove_sbi.h
-> > create mode 100644 arch/riscv/include/asm/mem_encrypt.h
-> > create mode 100644 arch/riscv/kvm/cove.c
-> > create mode 100644 arch/riscv/kvm/cove_sbi.c
-> > create mode 100644 arch/riscv/kvm/vcpu_sbi_covg.c
-> > create mode 100644 arch/riscv/mm/ioremap.c
-> > create mode 100644 arch/riscv/mm/mem_encrypt.c
+> On Mon, Apr 17, 2023 at 2:00=E2=80=AFAM Alexander Stein
+> <alexander.stein@ew.tq-group.com> wrote:
 > >
+> > Hi,
+> >
+> > Am Montag, 17. April 2023, 00:31:24 CEST schrieb Adam Ford:
+> > > On Sun, Apr 16, 2023 at 5:07=E2=80=AFPM Marek Vasut <marex@denx.de> w=
+rote:
+> > > > On 4/15/23 12:40, Adam Ford wrote:
+> > > > > According to Table 13-45 of the i.MX8M Mini Reference Manual, the=
+ min
+> > > > > and max values for M and  the frequency range for the VCO_out
+> > > > > calculator were incorrect.  This also appears to be the case for =
+the
+> > > > > imx8mn and imx8mp.
+> > > > >
+> > > > > To fix this, make new variables to hold the min and max values of=
+ m
+> > > > > and the minimum value of VCO_out, and update the PMS calculator t=
+o
+> > > > > use these new variables instead of using hard-coded values to kee=
+p
+> > > > > the backwards compatibility with other parts using this driver.
+> > > >
+> > > > [...]
+> > > >
+> > > > >   static const struct samsung_dsim_driver_data imx8mm_dsi_driver_=
+data =3D
+> > > > >   {
+> > > > >
+> > > > > @@ -470,6 +485,9 @@ static const struct samsung_dsim_driver_data
+> > > > > imx8mm_dsi_driver_data =3D {> >
+> > > > >        */
+> > > > >
+> > > > >       .pll_p_offset =3D 14,
+> > > > >       .reg_values =3D imx8mm_dsim_reg_values,
+> > > > >
+> > > > > +     .m_min =3D 64,
+> > > > > +     .m_max =3D 1023,
+> > > > > +     .vco_min =3D 1050,
+> > > >
+> > > > You might want to call this 'min_freq' since there is a 'max_freq' =
+which
+> > > > seems to indicate what VCO max frequency is.
+> > > >
+> > > > Note that the same datasheet contains the following information:
+> > > > "
+> > > > MIPI_DPHY_M_PLLPMS field descriptions
+> > > >
+> > > > 12=E2=80=934 PMS_M
+> > > > Specifies the PLL PMS value for the M divider
+> > > > NOTE: The programmable divider range should be within 25 to 125 to
+> > > > ensure PLL stability.
+> > >
+> > > I was confused by this because this statement is not consistent with
+> > > the link they reference jumps me to the table where it reads M is
+> > > between 64 and 1023.
+> > >
+> > > > NOTE: The M and P divider values should be considered together to e=
+nsure
+> > > > VCO ouput frequency
+> > > > (VCO_out) range is between 350 MHz to 750 MHz.
+> > > > Please refer to the topic DPHY PLL for more information.
+> > >
+> > > I was confused by this too, because the NXP documentation reads the
+> > > 350 - 750MHz that you state, but  "Table 13-45: DPHY PLL Parameters"
+> > > which immediately follows that sentence  on page 4158 shows VCO_out i=
+s
+> > > between 1050-2100 MHz.
+
+I reached out to my NXP rep asking if the VCO_out is 350-750 or if it
+should be 1050-2100, and received the following statement:
+
+" Yes it is definitely wrong, the one that is part of the NOTE in
+MIPI_DPHY_M_PLLPMS register table against PMS_P, PMS_M and PMS_S is
+not correct. I will report this to Doc team, the one customer should
+be take into account is the Table 13-40 DPHY PLL Parameters and the
+Note above."
+
+Table 13-40 (for the Nano) reads the VCO_out is 1050-2100, despite
+other text stating 350-750MHz, so I believe this patch is appropriate.
+I'll add the above statement to the commit message as confirmation
+when I submit a V2 of this series.
+
+adam
+> > >
+> > > I compared the PMS values for a variety of frequencies to those that
+> > > were set in the downstream NXP code, and the PMS values matched.
+> > > Maybe someone from NXP can explain the discrepancy.
+> >
+> > Also note that, according to Table 13-28 in RM (Rev 2 07/2022) for i.MX=
+8M
+> > Nano, VCO_out and Fout has a maximum of 1500MHz only. Although the note=
+ above
+> > mentions a range  of 1050-2100MHz...
+>
+> I looked up the limits in NXP's downstream kernel [1] , and I believe
+> these values match the table in the reference manual instead of the
+> conflicting sentence.  I am guessing this is why the PMS values I get
+> match those of the NXP downstream kernel.
+>
+> adam
+>
+> [1] - https://github.com/nxp-imx/linux-imx/blob/lf-6.1.y/drivers/gpu/drm/=
+imx/sec_mipi_pll_1432x.h#L38
+>
+> >
+> > Best regards,
+> > Alexander
 > > --
-> > 2.25.1
+> > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, =
+Germany
+> > Amtsgericht M=C3=BCnchen, HRB 105018
+> > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan=
+ Schneider
+> > http://www.tq-group.com/
+> >
 > >
