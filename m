@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F43D6E92CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B8D6E92C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjDTLcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S234047AbjDTLcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbjDTLbo (ORCPT
+        with ESMTP id S234162AbjDTLbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:31:44 -0400
+        Thu, 20 Apr 2023 07:31:45 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACF630D6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D333592;
         Thu, 20 Apr 2023 04:31:21 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q2Fpp5KjSz4f3yb9;
-        Thu, 20 Apr 2023 19:31:14 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q2Fpq23yfz4f3tps;
+        Thu, 20 Apr 2023 19:31:15 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgCnD7OAIkFkVY8hHw--.17021S9;
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7OAIkFkVY8hHw--.17021S10;
         Thu, 20 Apr 2023 19:31:16 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     song@kernel.org, neilb@suse.de, akpm@osdl.org
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH -next 5/8] md/raid1-10: submit write io directly if bitmap is not enabled
-Date:   Thu, 20 Apr 2023 19:29:43 +0800
-Message-Id: <20230420112946.2869956-6-yukuai1@huaweicloud.com>
+Subject: [PATCH -next 6/8] md/md-bitmap: support to unplug bitmap asynchrously
+Date:   Thu, 20 Apr 2023 19:29:44 +0800
+Message-Id: <20230420112946.2869956-7-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
 References: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCnD7OAIkFkVY8hHw--.17021S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF15JFyrGw47Ww45AF1DJrb_yoW5ZFyfpa
-        yDGa4Ykr15JFW3X3ZxAa4DAFyFy3s3tr9rKryfC398uFy3XFsxGr4rGay5t3ZrCrnxGF43
-        Xr1YkryUCr18XrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: gCh0CgCnD7OAIkFkVY8hHw--.17021S10
+X-Coremail-Antispam: 1UD129KBjvJXoW3JF17try8KF4UGr1xGFyfWFg_yoWxJrWfpr
+        Z8t3s0kr45JFW3Xw1fAry7CF1Fv3Wvqr9rJryfC3s8uFy3XF9xXF48GFWjyw1DCrsxGF43
+        Zw1Yyr98Gr1fXF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUU9K14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
         kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -64,97 +64,182 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-Commit 6cce3b23f6f8 ("[PATCH] md: write intent bitmap support for raid10")
-add bitmap support, and it changed that write io is submitted through demon
-thread because bitmap need to be updated before write io. And later, plug
-is used to fix performance regression because all the write io will go to
-demon thread, which means io can't be issued concurrently.
+If bitmap is enabled, bitmap must update before submiting write io, this
+is why unplug callback must move these io to 'conf->pending_io_list' if
+'current->bio_list' is not empty, which will suffer performance
+degeration.
 
-However, if bitmap is not enabled, the write io should not go to demon
-thread in the first place, and plug is not needed as well.
+This patch add a new helper md_bitmap_unplug_async() to submit bitmap io
+in a kworker, so that submit bitmap io in raid10_unplug() doesn't require
+that 'current->bio_list' is empty.
 
-Fixes: 6cce3b23f6f8 ("[PATCH] md: write intent bitmap support for raid10")
+This patch prepare to limit the number of plugged bio.
+
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/md-bitmap.c |  4 +---
- drivers/md/md-bitmap.h |  7 +++++++
- drivers/md/raid1-10.h  | 15 +++++++++++++--
- 3 files changed, 21 insertions(+), 5 deletions(-)
+ drivers/md/md-bitmap.c | 59 +++++++++++++++++++++++++++++++++++++++---
+ drivers/md/md-bitmap.h |  3 +++
+ drivers/md/raid1.c     |  3 ++-
+ drivers/md/raid10.c    |  2 +-
+ 4 files changed, 62 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index ab27f66dbb1f..4bd980b272ef 100644
+index 4bd980b272ef..da8ad2e95e88 100644
 --- a/drivers/md/md-bitmap.c
 +++ b/drivers/md/md-bitmap.c
-@@ -1000,7 +1000,6 @@ static int md_bitmap_file_test_bit(struct bitmap *bitmap, sector_t block)
+@@ -1000,10 +1000,18 @@ static int md_bitmap_file_test_bit(struct bitmap *bitmap, sector_t block)
  	return set;
  }
  
--
- /* this gets called when the md device is ready to unplug its underlying
-  * (slave) device queues -- before we let any writes go down, we need to
-  * sync the dirty pages of the bitmap file to disk */
-@@ -1010,8 +1009,7 @@ void md_bitmap_unplug(struct bitmap *bitmap)
- 	int dirty, need_write;
- 	int writing = 0;
- 
--	if (!bitmap || !bitmap->storage.filemap ||
--	    test_bit(BITMAP_STALE, &bitmap->flags))
-+	if (!md_bitmap_enabled(bitmap))
- 		return;
- 
- 	/* look at each page to see if there are any set bits that need to be
-diff --git a/drivers/md/md-bitmap.h b/drivers/md/md-bitmap.h
-index cfd7395de8fd..3a4750952b3a 100644
---- a/drivers/md/md-bitmap.h
-+++ b/drivers/md/md-bitmap.h
-@@ -273,6 +273,13 @@ int md_bitmap_copy_from_slot(struct mddev *mddev, int slot,
- 			     sector_t *lo, sector_t *hi, bool clear_bits);
- void md_bitmap_free(struct bitmap *bitmap);
- void md_bitmap_wait_behind_writes(struct mddev *mddev);
+-/* this gets called when the md device is ready to unplug its underlying
++struct bitmap_unplug_work {
++	struct work_struct work;
++	struct bitmap *bitmap;
++	struct completion *done;
++};
 +
-+static inline bool md_bitmap_enabled(struct bitmap *bitmap)
++/*
++ * This gets called when the md device is ready to unplug its underlying
+  * (slave) device queues -- before we let any writes go down, we need to
+- * sync the dirty pages of the bitmap file to disk */
+-void md_bitmap_unplug(struct bitmap *bitmap)
++ * sync the dirty pages of the bitmap file to disk.
++ */
++static void md_do_bitmap_unplug(struct bitmap *bitmap)
+ {
+ 	unsigned long i;
+ 	int dirty, need_write;
+@@ -1035,9 +1043,45 @@ void md_bitmap_unplug(struct bitmap *bitmap)
+ 
+ 	if (test_bit(BITMAP_WRITE_ERROR, &bitmap->flags))
+ 		md_bitmap_file_kick(bitmap);
++
++}
++static void md_bitmap_unplug_fn(struct work_struct *work)
 +{
-+	return bitmap && bitmap->storage.filemap &&
-+	       !test_bit(BITMAP_STALE, &bitmap->flags);
++	struct bitmap_unplug_work *unplug_work =
++		container_of(work, struct bitmap_unplug_work, work);
++
++	md_do_bitmap_unplug(unplug_work->bitmap);
++	complete(unplug_work->done);
 +}
 +
- #endif
- 
- #endif
-diff --git a/drivers/md/raid1-10.h b/drivers/md/raid1-10.h
-index 9dc53d8a8129..95b2fb4dd9aa 100644
---- a/drivers/md/raid1-10.h
-+++ b/drivers/md/raid1-10.h
-@@ -2,6 +2,8 @@
- #ifndef _RAID1_10_H
- #define _RAID1_10_H
- 
-+#include "md-bitmap.h"
++static void __md_bitmap_unplug(struct bitmap *bitmap, bool async)
++{
++	DECLARE_COMPLETION_ONSTACK(done);
++	struct bitmap_unplug_work unplug_work;
 +
- /* Maximum size of each resync request */
- #define RESYNC_BLOCK_SIZE (64*1024)
- #define RESYNC_PAGES ((RESYNC_BLOCK_SIZE + PAGE_SIZE-1) / PAGE_SIZE)
-@@ -133,9 +135,18 @@ static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
- 				      blk_plug_cb_fn unplug)
- {
- 	struct raid1_plug_cb *plug = NULL;
--	struct blk_plug_cb *cb = blk_check_plugged(unplug, mddev,
--						   sizeof(*plug));
-+	struct blk_plug_cb *cb;
++	if (!async)
++		return md_do_bitmap_unplug(bitmap);
 +
-+	/*
-+	 * If bitmap is not enabled, it's safe to submit the io directly, and
-+	 * this can get optimal performance.
-+	 */
-+	if (!md_bitmap_enabled(mddev->bitmap)) {
-+		md_submit_write(bio);
-+		return true;
++	INIT_WORK(&unplug_work.work, md_bitmap_unplug_fn);
++	unplug_work.bitmap = bitmap;
++	unplug_work.done = &done;
++
++	queue_work(bitmap->unplug_wq, &unplug_work.work);
++	wait_for_completion(&done);
++}
++
++void md_bitmap_unplug(struct bitmap *bitmap)
++{
++	return __md_bitmap_unplug(bitmap, false);
+ }
+ EXPORT_SYMBOL(md_bitmap_unplug);
+ 
++void md_bitmap_unplug_async(struct bitmap *bitmap)
++{
++	return __md_bitmap_unplug(bitmap, true);
++}
++EXPORT_SYMBOL(md_bitmap_unplug_async);
++
+ static void md_bitmap_set_memory_bits(struct bitmap *bitmap, sector_t offset, int needed);
+ /* * bitmap_init_from_disk -- called at bitmap_create time to initialize
+  * the in-memory bitmap from the on-disk bitmap -- also, sets up the
+@@ -1753,6 +1797,9 @@ void md_bitmap_free(struct bitmap *bitmap)
+ 	if (!bitmap) /* there was no bitmap */
+ 		return;
+ 
++	if (bitmap->unplug_wq)
++		destroy_workqueue(bitmap->unplug_wq);
++
+ 	if (bitmap->sysfs_can_clear)
+ 		sysfs_put(bitmap->sysfs_can_clear);
+ 
+@@ -1843,6 +1890,12 @@ struct bitmap *md_bitmap_create(struct mddev *mddev, int slot)
+ 	if (!bitmap)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	bitmap->unplug_wq = create_workqueue("md_bitmap");
++	if (!bitmap->unplug_wq) {
++		err  = -ENOMEM;
++		goto error;
 +	}
++
+ 	spin_lock_init(&bitmap->counts.lock);
+ 	atomic_set(&bitmap->pending_writes, 0);
+ 	init_waitqueue_head(&bitmap->write_wait);
+diff --git a/drivers/md/md-bitmap.h b/drivers/md/md-bitmap.h
+index 3a4750952b3a..55531669db24 100644
+--- a/drivers/md/md-bitmap.h
++++ b/drivers/md/md-bitmap.h
+@@ -231,6 +231,8 @@ struct bitmap {
  
-+	cb = blk_check_plugged(unplug, mddev, sizeof(*plug));
- 	if (!cb)
- 		return false;
+ 	struct kernfs_node *sysfs_can_clear;
+ 	int cluster_slot;		/* Slot offset for clustered env */
++
++	struct workqueue_struct *unplug_wq;
+ };
  
+ /* the bitmap API */
+@@ -264,6 +266,7 @@ void md_bitmap_sync_with_cluster(struct mddev *mddev,
+ 				 sector_t new_lo, sector_t new_hi);
+ 
+ void md_bitmap_unplug(struct bitmap *bitmap);
++void md_bitmap_unplug_async(struct bitmap *bitmap);
+ void md_bitmap_daemon_work(struct mddev *mddev);
+ 
+ int md_bitmap_resize(struct bitmap *bitmap, sector_t blocks,
+diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+index c068ed3e6c96..7389e599f34e 100644
+--- a/drivers/md/raid1.c
++++ b/drivers/md/raid1.c
+@@ -792,7 +792,6 @@ static int read_balance(struct r1conf *conf, struct r1bio *r1_bio, int *max_sect
+ static void flush_bio_list(struct r1conf *conf, struct bio *bio)
+ {
+ 	/* flush any pending bitmap writes to disk before proceeding w/ I/O */
+-	md_bitmap_unplug(conf->mddev->bitmap);
+ 	wake_up(&conf->wait_barrier);
+ 
+ 	while (bio) { /* submit pending writes */
+@@ -829,6 +828,7 @@ static void flush_pending_writes(struct r1conf *conf)
+ 		 */
+ 		__set_current_state(TASK_RUNNING);
+ 		blk_start_plug(&plug);
++		md_bitmap_unplug(conf->mddev->bitmap);
+ 		flush_bio_list(conf, bio);
+ 		blk_finish_plug(&plug);
+ 	} else
+@@ -1176,6 +1176,7 @@ static void raid1_unplug(struct blk_plug_cb *cb, bool from_schedule)
+ 
+ 	/* we aren't scheduling, so we can do the write-out directly. */
+ 	bio = bio_list_get(&plug->pending);
++	md_bitmap_unplug_async(conf->mddev->bitmap);
+ 	flush_bio_list(conf, bio);
+ 	kfree(plug);
+ }
+diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+index fd625026c97b..9f307ff5d4f6 100644
+--- a/drivers/md/raid10.c
++++ b/drivers/md/raid10.c
+@@ -1113,7 +1113,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
+ 
+ 	/* we aren't scheduling, so we can do the write-out directly. */
+ 	bio = bio_list_get(&plug->pending);
+-	md_bitmap_unplug(mddev->bitmap);
++	md_bitmap_unplug_async(mddev->bitmap);
+ 	wake_up(&conf->wait_barrier);
+ 
+ 	while (bio) { /* submit pending writes */
 -- 
 2.39.2
 
