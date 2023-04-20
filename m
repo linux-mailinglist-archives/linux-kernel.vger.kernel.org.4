@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F170F6E911C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79DC6E9118
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbjDTKyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S235104AbjDTKyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbjDTKyE (ORCPT
+        with ESMTP id S235074AbjDTKx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:54:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5EAA258;
-        Thu, 20 Apr 2023 03:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681987901; x=1713523901;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VQeRmgq2CDJ+tcP+P+IQ5uUOrFT2lqNUDOdu5qsJP4E=;
-  b=LrtED/zGjIvk9DTZ53uy/EslWznC5+HS0JbU1IENwVf6Y22aMSWyb2xp
-   0cE7m9W9vWcYh4haFOKwAOYHTXsz0Ni3K0h7TDDECy3h/aY3L7xsOek4C
-   PZ2nLyjFY9BVZK1XuCA8NfFndmQTY+/9BPh8aTFd7j08o6avwfBB8kzDr
-   6kuz8g8TZ4CifFKYcK3YohDe4AXAxDCYAExO+vg1nLzIvyJHh37YkMDnn
-   lqv3y+Z12vxCm7Yn8dLpXEv9INj0AQw82LRB7SMDNmLv4yi40KnZ6gY1z
-   xFxTRy1YJkKRFdEzWo9Mp+bVNlCcets7vrQ+Vj/+kaAdYQ+BXx6z+32EZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="373596454"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="373596454"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 03:51:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756465504"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="756465504"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2023 03:51:00 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 51AAE21E7; Thu, 20 Apr 2023 13:51:05 +0300 (EEST)
-Date:   Thu, 20 Apr 2023 13:51:05 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, koba.ko@canonical.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] PCI/DPC: Disable DPC interrupt during suspend
-Message-ID: <20230420105105.GO66750@black.fi.intel.com>
-References: <20230420015830.309845-1-kai.heng.feng@canonical.com>
- <20230420015830.309845-4-kai.heng.feng@canonical.com>
+        Thu, 20 Apr 2023 06:53:59 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3F1719
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:51:33 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2a8c51ba511so3870211fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681987876; x=1684579876;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5EIxJH2yrLBRrFwXgWbwZYnw9Goigez16D5eZr76hWs=;
+        b=WuRVK8evm0fEryO9tqGyYRLjGFn7Olze/Cz2LbtDVh1N6K32SZMUc8k3HPz3U5eRyI
+         G/tpDvTjtF8OhFfo07be4CUd6O0dgWnNSs4m7dpJU3NhiwB9/UBCWHcqEkFT0kU6mgq/
+         QObw2Z61Wj0lmUFhSI3VLfRW8RR4lLxZPAn6JKYZNGJmE+lVxJ9lGQvoJomuzQLJacg/
+         mVMa9xjanSVyAxdS0FwCeOTNW7PC79b/K49aaloI/2e+G+puDpX9iIeRAKrAdyAqzZtV
+         HIb8EVzZ2x9mqvMtN6BuftOGpHH18DBxKBUHWtM+LpJN454VfyG0hDsKms0PnYKjBjpR
+         l4RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681987876; x=1684579876;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5EIxJH2yrLBRrFwXgWbwZYnw9Goigez16D5eZr76hWs=;
+        b=fwkmhv8hzrD95aiHMzYnQfBO4R/f6JbRJ80IT6UsUg2N/OWq8KbGf0Vbu7vJpFH7UB
+         Y8UjmzMxL2dcnkdQagpveCS//c8CYr4tasFDx1GeD4o5Y/H3f0y8IYd1UfIOI9yAhpL/
+         9oXOFY/YzFSR0BU8skOVFWrlv/pilu6BTiCtkjHM4ADizCTNTki4Nw6Ub9mW2LJd1WUn
+         8AEOEhspueZij9G1N/YUwsgmewH4nDa6h/gNQkhC+Vr+OqlGweyMddtCtG3otPQVfIvz
+         1kOq+d4L1Bx/LyDTYMzl2SgIFY0F0rHZ3rZBx2wflSHvgTR/uG0cbZzMo1t4jhF0Rkiq
+         hKdA==
+X-Gm-Message-State: AAQBX9eDjG4z/WSLE0KDPrXzFqkMYpqGJlGgOZhIvIBf8v+5pmHnZI3m
+        wDpK6abHVcayoMtGmi4iWtdJEKJTnVnMgBFHtfg=
+X-Google-Smtp-Source: AKy350YoN/3dzemidDrvN0eNtWUZw1nWFrfv1fLiYAAidH5xw4/qgloWCgQgMhKs7N9BTE54tqzwvQ==
+X-Received: by 2002:a05:6512:11d2:b0:4e8:5e39:6238 with SMTP id h18-20020a05651211d200b004e85e396238mr355519lfr.42.1681987876564;
+        Thu, 20 Apr 2023 03:51:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id x6-20020a19f606000000b004eaf41933a4sm177831lfe.59.2023.04.20.03.51.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:51:16 -0700 (PDT)
+Message-ID: <ee727e03-4cfc-e4b5-7909-07b579dd5dc0@linaro.org>
+Date:   Thu, 20 Apr 2023 12:51:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230420015830.309845-4-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/18] arm64: dts: qcom: ipq6018: correct qrng unit
+ address
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Molly Sophia <mollysophia379@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 09:58:30AM +0800, Kai-Heng Feng wrote:
-> PCIe service that shares IRQ with PME may cause spurious wakeup on
-> system suspend.
-> 
-> Since AER is conditionally disabled in previous patch, also apply the
-> same logic to disable DPC which depends on AER to work.
-> 
-> PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
-> that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
-> (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
-> much here to disable DPC during system suspend.
-> 
-> This is very similar to previous attempts to suspend AER and DPC [1],
-> but with a different reason.
-> 
-> [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216295
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+On 19.04.2023 23:18, Krzysztof Kozlowski wrote:
+> Match unit-address to reg entry to fix dtbs W=1 warnings:
+> 
+>   Warning (simple_bus_reg): /soc/qrng@e1000: simple-bus unit address format error, expected "e3000"
+> 
+> Fixes: 5bf635621245 ("arm64: dts: ipq6018: Add a few device nodes")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> index 54af7cb3c7a8..992e8ed64617 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> @@ -302,7 +302,7 @@ mdio: mdio@90000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		prng: qrng@e1000 {
+> +		prng: qrng@e3000 {
+>  			compatible = "qcom,prng-ee";
+>  			reg = <0x0 0x000e3000 0x0 0x1000>;
+>  			clocks = <&gcc GCC_PRNG_AHB_CLK>;
