@@ -2,128 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4CD6E86F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 02:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAA36E86FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 02:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjDTAu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 20:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S230376AbjDTAvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 20:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjDTAuM (ORCPT
+        with ESMTP id S230385AbjDTAuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 20:50:12 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767A05FE9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:49:34 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id h4so1013284ljb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:49:34 -0700 (PDT)
+        Wed, 19 Apr 2023 20:50:32 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E816A42
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:50:07 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f8e31155bso11339697b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:50:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681951771; x=1684543771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nBTNgbwSnEqrTM/8Zo3F3tUjXoH2/yS/Mjd7eOQXnxA=;
-        b=d4mVL2ra6uk1DxPznvuIlP+NohLtEcADu43dZmKn68AbF9I1zDQUZtYdsL9Ka0fhK3
-         yBoz6Y7I3MnVwjpbhFc9Th4t+ZXspnyWt7Lc6y12HI5yaJ6oqi4MJEWpl1d7uYP8stbM
-         LNKY3VIrY9nuQjCTDZIOnB5RGi61FRnWR7cQ4mUK/Zf7IQ/ucseIb93BUhbJqZoJKQ/m
-         z7tRSVl+KOi6Rk5qzuPo+pDa1Dr99MX2uMLjhsgfGnfHbDtTrro1EULq4qpm9VahfKvA
-         VpcozY7D8YtZNPLSSDC+bUNOOjPLdDTCgCy4RrCInmG9axwD2Gd/JZj5qr3K9X17LUen
-         jbhg==
+        d=google.com; s=20221208; t=1681951797; x=1684543797;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WElRL1S1A/l6yYWkPjKb60TbLP43vB7Va3vAhnMHy4o=;
+        b=0KQvDXHLR89BVxU2oI9O1ZusFid2YKHOcipULiVP6+PSDHwriZYqd2A06zVvzb+5zg
+         +1pAM1zXlSNPZvINL7u8jaguPJCIxfMpOP+rF/bo3e7YipW5A5h9Z1uQ5Ne2aQDNcW6c
+         EcQXFII0XVCoUfr19ADWbM/w1kzMojqRNFL4dpL0bA9tYUhTVMdjBXnH0ldjTdoS4rfS
+         B4qULmS58/9Ub/zlvy0EPJx+IEG/RXiTWy5ry2WStJSaH5TR16lXIzvnkE2V+5Qqr+ic
+         KCotEARF8eci5Ax95+I+ZNzK3NrfAcOPUHTnTLXEbEOQev6PRHk+rxhdkpcXFMAn0sKn
+         YqLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681951771; x=1684543771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBTNgbwSnEqrTM/8Zo3F3tUjXoH2/yS/Mjd7eOQXnxA=;
-        b=OcRMczysmgOKmZPQn2t/AiV8J/UEaFNt3P+T0EF3sFr6u7RkgC81RBrb4yMZSAp2im
-         A/ulMD0qRaQSS2L0xYJ8jZqvAHcxVFP8pv1eqYA5mJkrzWlcR1eWFZUMIo0YD7+X6BUz
-         F65wGEVcr8mRYwKqWLh9nRgoDJAQKjtGM2wMEV3wWUo3aZNnbhF+Ijc+hBAq/Mo4M/bd
-         3A61HqrRL1CmJ8dvZIGDz8Ohia3owp7zQS/9SyiZ+Ydy1DVez1xlKyG9cgQ4zJjvyoh3
-         ZNISEK/0hZdYExTKnJVKtRzfdvyN/dqHZ7+qIqa7HRlSwv2BNIZY15tROtMnYtoK2tXZ
-         G2dA==
-X-Gm-Message-State: AAQBX9cBuPEx2VrywZ2WKDNwH8tCbK3f5wTw4JQTRmF+2HB73DymkMxu
-        0UaGloW9RGonkMCA9M/zxx0Wfg==
-X-Google-Smtp-Source: AKy350a58zmn+YohNF/dZT6zaO4ejf273w1HbL0Zriw2gCHMn/70LvEy/Q0m9ouzpmYgb6kSJCE2QA==
-X-Received: by 2002:a2e:6e0f:0:b0:2a8:bd3a:d418 with SMTP id j15-20020a2e6e0f000000b002a8bd3ad418mr2264178ljc.52.1681951771044;
-        Wed, 19 Apr 2023 17:49:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id w4-20020a2e9584000000b002a8bae7f9e8sm17599ljh.129.2023.04.19.17.49.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 17:49:30 -0700 (PDT)
-Message-ID: <c4344301-2c89-3b8b-2a5c-e6523f078fd9@linaro.org>
-Date:   Thu, 20 Apr 2023 03:49:29 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 09/17] drm/msm/dpu: Move autorefresh disable from CMD
- encoder to pingpong
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Chandan Uddaraju <chandanu@codeaurora.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-9-ef76c877eb97@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230411-dpu-intf-te-v2-9-ef76c877eb97@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681951797; x=1684543797;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WElRL1S1A/l6yYWkPjKb60TbLP43vB7Va3vAhnMHy4o=;
+        b=GmOznnow95NCf70Z+NU1FtnpkhV3808PFBQCLY2u1d8uFrdPg5fLFpLd0+BK40F36L
+         CXMIonMTfy0Nk2Sy+cAJMYjE3yBRy2aoKZSk5WIdycMuiHz6JkjbQoMLc4Db5rBENyNQ
+         GLYNvwjjZnhZqCv5GLqaYhLNT+ZZs4AghgI3/1xCuD2mX81eVQk72lOAGIrywKRtCcv0
+         WJUEE9G8j7TqIC+dBKp0SFEWg9B3I7BLkt1mRwTogCSzDeuf1foxbPo7r5JQXge/bg/Y
+         PeyXa7IHx62UVlHClBrErrFy3MBUQOh9ua9CxF2SMqVCr+Lj9pIRj8sAKTgV2owIdgbT
+         Rxiw==
+X-Gm-Message-State: AAQBX9c7xptSVYs8GVyvFZ5puxlv/BRDVwwjxLgZTm0csJd6X78zmoUl
+        G/rJRFgems4KX7c0VXVtmxKkUA9et38=
+X-Google-Smtp-Source: AKy350ZW3QSDcu1b4uay718+0UKdCoR5698g0B4gA8e9kbzHBPJ0H7w91zco9M9KgDo6hSqXOcwRuk93omk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:d24c:0:b0:b95:460c:1776 with SMTP id
+ j73-20020a25d24c000000b00b95460c1776mr766347ybg.13.1681951797267; Wed, 19 Apr
+ 2023 17:49:57 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:49:55 -0700
+In-Reply-To: <20230418-anfallen-irdisch-6993a61be10b@brauner>
+Mime-Version: 1.0
+References: <20220818132421.6xmjqduempmxnnu2@box> <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com> <20230413-anlegen-ergibt-cbefffe0b3de@brauner>
+ <ZDiCG/7OgDI0SwMR@google.com> <20230418-anfallen-irdisch-6993a61be10b@brauner>
+Message-ID: <ZECMM9bjgGRdyXRy@google.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        linux-arch@vger.kernel.org, arnd@arndb.de, linmiaohe@huawei.com,
+        naoya.horiguchi@nec.com, tabba@google.com, wei.w.wang@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 23:21, Marijn Suijten wrote:
-> This autorefresh disable logic in the physical command-mode encoder
-> consumes three callbacks to the pingpong block, and will explode in
-> unnecessary complexity when the same callbacks need to be called on the
-> interface block instead to accommodate INTF TE support.  To clean this
-> up, move the logic into the pingpong block under a disable_autorefresh
-> callback, replacing the aforementioned three get_autorefresh,
-> setup_autorefresh and get_vsync_info callbacks.
+On Wed, Apr 19, 2023, Christian Brauner wrote:
+> On Thu, Apr 13, 2023 at 03:28:43PM -0700, Sean Christopherson wrote:
+> > > But if you want to preserve the inode number and device number of the
+> > > relevant tmpfs instance but still report memfd restricted as your
+> > > filesystem type
+> > 
+> > Unless I missed something along the way, reporting memfd_restricted as a distinct
+> > filesystem is very much a non-goal.  AFAIK it's purely a side effect of the
+> > proposed implementation.
 > 
-> The same logic will have to be replicated to the interface block when it
-> receives INTF TE support, but it is less complex than constantly
-> switching on a "has_intf_te" boolean to choose a callback.
+> In the current implementation you would have to put in effort to fake
+> this. For example, you would need to also implement ->statfs
+> super_operation where you'd need to fill in the details of the tmpfs
+> instance. At that point all that memfd_restricted fs code that you've
+> written is nothing but deadweight, I would reckon.
+
+After digging a bit, I suspect the main reason Kirill implemented an overlay to
+inode_operations was to prevent modifying the file size via ->setattr().  Relying
+on shmem_setattr() to unmap entries in KVM's MMU wouldn't work because, by design,
+the memory can't be mmap()'d into host userspace. 
+
+	if (attr->ia_valid & ATTR_SIZE) {
+		if (memfd->f_inode->i_size)
+			return -EPERM;
+
+		if (!PAGE_ALIGNED(attr->ia_size))
+			return -EINVAL;	
+	}
+
+But I think we can solve this particular problem by using F_SEAL_{GROW,SHRINK} or
+SHMEM_LONGPIN.  For a variety of reasons, I'm leaning more and more toward making
+this a KVM ioctl() instead of a dedicated syscall, at which point we can be both
+more flexible and more draconian, e.g. let userspace provide the file size at the
+time of creation, but make the size immutable, at least by default.
+
+> > After giving myself a bit of a crash course in file systems, would something like
+> > the below have any chance of (a) working, (b) getting merged, and (c) being
+> > maintainable?
+> > 
+> > The idea is similar to a stacking filesystem, but instead of stacking, restrictedmem
+> > hijacks a f_ops and a_ops to create a lightweight shim around tmpfs.  There are
+> > undoubtedly issues and edge cases, I'm just looking for a quick "yes, this might
+> > be doable" or a "no, that's absolutely bonkers, don't try it".
 > 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   | 60 ++--------------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    | 47 +++++++++++++++--
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    | 25 ++-------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |  4 ++
->   4 files changed, 57 insertions(+), 79 deletions(-)
+> Maybe, but I think it's weird.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Yeah, agreed.
 
--- 
-With best wishes
-Dmitry
+> _Replacing_ f_ops isn't something that's unprecedented. It happens everytime
+> a character device is opened (see fs/char_dev.c:chrdev_open()). And debugfs
+> does a similar (much more involved) thing where it replaces it's proxy f_ops
+> with the relevant subsystem's f_ops. The difference is that in both cases the
+> replace happens at ->open() time; and the replace is done once. Afterwards
+> only the newly added f_ops are relevant.
+> 
+> In your case you'd be keeping two sets of {f,a}_ops; one usable by
+> userspace and another only usable by in-kernel consumers. And there are
+> some concerns (non-exhaustive list), I think:
+> 
+> * {f,a}_ops weren't designed for this. IOW, one set of {f,a}_ops is
+>   authoritative per @file and it is left to the individual subsystems to
+>   maintain driver specific ops (see the sunrpc stuff or sockets).
+> * lifetime management for the two sets of {f,a}_ops: If the ops belong
+>   to a module then you need to make sure that the module can't get
+>   unloaded while you're using the fops. Might not be a concern in this
+>   case.
 
+Ah, whereas I assume the owner of inode_operations is pinned by ??? (dentry?)
+holding a reference to the inode?
+
+> * brittleness: Not all f_ops for example deal with userspace
+>   functionality some deal with cleanup when the file is closed like
+>   ->release(). So it's delicate to override that functionality with
+>   custom f_ops. Restricted memfds could easily forget to cleanup
+>   resources.
+> * Potential for confusion why there's two sets of {f,a}_ops.
+> * f_ops specifically are generic across a vast amount of consumers and
+>   are subject to change. If memfd_restricted() has specific requirements
+>   because of this weird double-use they won't be taken into account.
+> 
+> I find this hard to navigate tbh and it feels like taking a shortcut to
+> avoid building a proper api.
+
+Agreed.  At the very least, it would be better to take an explicit dependency on
+whatever APIs are being used instead of somewhat blindly bouncing through ->fallocate().
+I think that gives us a clearer path to getting something merged too, as we'll
+need Acks on making specific functions visible, i.e. will give MM maintainers
+something concrete to react too.
+
+> If you only care about a specific set of operations specific to memfd
+> restricte that needs to be available to in-kernel consumers, I wonder if you
+> shouldn't just go one step further then your proposal below and build a
+> dedicated minimal ops api.
+
+This is actually very doable for shmem.  Unless I'm missing something, because
+our use case doesn't allow mmap(), swap, or migration, a good chunk of
+shmem_fallocate() is simply irrelevant.  The result is only ~100 lines of code,
+and quite straightforward.
+
+My biggest concern, outside of missing a detail in shmem, is adding support for
+HugeTLBFS, which is likely going to be requested/needed sooner than later.  At a
+glance, hugetlbfs_fallocate() is quite a bit more complex, i.e. not something I'm
+keen to duplicate.  But that's also a future problem to some extent, as it's
+purely kernel internals; the uAPI side of things doesn't seem like it'll be messy
+at all.
+
+Thanks again!
