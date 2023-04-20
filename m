@@ -2,187 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA0F6E9C98
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526A56E9CA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjDTTmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S232103AbjDTTsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDTTmr (ORCPT
+        with ESMTP id S230086AbjDTTsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:42:47 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E9244BA;
-        Thu, 20 Apr 2023 12:42:45 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f17fdb520dso9511895e9.3;
-        Thu, 20 Apr 2023 12:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682019764; x=1684611764;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pfv2B7nnglGPY5lKeYYJGgG41JxY4YTi9gYldIZZ2FA=;
-        b=MYgjyypqswmQG6YtHr/gj3invlgUzYkrg/aPTuFdvQHZPL/YO5i4PF32XnyH1ZTGQz
-         b734vWMYMbVsbbO/M9Wal3nSfPgVsr/VlA1Dm+srAgGFmF6Lp0bnhVphG5TcywnqlxEN
-         otaG9qzSCRigVoIglNcR4SbSXcfghPUb5gc1+7NJi53TmMDnoeaSS5N3K/ZZKyvKhMOv
-         my1Eafov4Ugs+psmIfSzuTUTr7xCxd+xW3qLejMV+2Hr7Qjwm/CzXTt6GkSmEByoLwgT
-         dJD5ky+Ow1cBOXG8ZlV7MdBSFET0Faa917sHxhy0dYFJroREl5QPGJjugg/sG4kskK5K
-         ewTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682019764; x=1684611764;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pfv2B7nnglGPY5lKeYYJGgG41JxY4YTi9gYldIZZ2FA=;
-        b=Npo0KEOQCoEnwE3SDwCBtmG5piRswqWvgtMhOPpm7euyhVQC4LhklMB1yUaApUVwjJ
-         2BtZierjRNqrojUguWyVSXvXfIqYEtoYauLQl+JFnLJDqNzvd6J7YTAoIIQ/1s0XACOa
-         FgyPz/T+8E5l/L0jD4Z1j/gQJCltG0PMkdV0qNdFnYn53BB82r76u2e875eOeGG5iY4E
-         uWZJDtRdUyt7riZnEahN1ORokgufXojDZ/pDy3Io4gyDHr+9yST9yRCHXpii9lY4kJpp
-         wUbizt1u+xyKLtcMTjIZ+MviPu9Ehznd/ww1wC3CXYSlKJLTjd0UBMbc/zSE2aNswIwv
-         BIrw==
-X-Gm-Message-State: AAQBX9d73hK/sxvXns9RAutivFvvQNQc70hzbe6KazddYqiY2nEUFvhX
-        /bDV+5rJyBmNzDgJw0E7YKU=
-X-Google-Smtp-Source: AKy350avq0CExGtf4fiebF3FQzRiPIJEHCbJzrk50zC+WfWDQsglBM9pgQzdlXh/LaLmbuvNYNl/2A==
-X-Received: by 2002:a7b:ca43:0:b0:3eb:3945:d405 with SMTP id m3-20020a7bca43000000b003eb3945d405mr34247wml.38.1682019764130;
-        Thu, 20 Apr 2023 12:42:44 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id j32-20020a05600c1c2000b003f173987ec2sm6257438wms.22.2023.04.20.12.42.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 12:42:43 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 20:42:42 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Subject: Re: [RFC 01/48] mm/vmalloc: Introduce arch hooks to notify
- ioremap/unmap changes
-Message-ID: <b58eadb7-c80c-42fe-b803-09f2f466c0bd@lucifer.local>
-References: <20230419221716.3603068-1-atishp@rivosinc.com>
- <20230419221716.3603068-2-atishp@rivosinc.com>
+        Thu, 20 Apr 2023 15:48:02 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA6D40F0;
+        Thu, 20 Apr 2023 12:48:00 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KJPLMe003383;
+        Thu, 20 Apr 2023 19:47:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mlnc+kqm8lHe3JiGho4uw6t7nr2+BJu0rsJCPtSJX6Q=;
+ b=ZFHHWfbHP8MC6wsr6CPZDUhxS94ImLRxbrI3NsAfyRWCm7N2RBD2FtErYvaCq5Tfdq/2
+ IQcpUM1Dk5x9BX8PKWQwvS1ykSJJ/1zTvIh236T66Xj9ZsvoRqRk4ICTyC62QxqB2ezI
+ TKOAwFKeXLAnNP6xPZ5i3YUhqrkSCKvJOO4LX6lgOMQqVfjufFfIgiYVSIrVq02VhDDX
+ xdfZ1dYwYbTcK/AqOa/rweMSsVdEY83k3GXWbEm9FEMvoynkURDXoikRJ+ZXZXdzIwSl
+ hbzahFFx2Beths0KAxfp+2OdN3yU1i2fF18DNF18NBr059spSGdsoagq3z/it8tT+n/I Ng== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2hd9kwvx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 19:47:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33KJlqGJ018923
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 19:47:52 GMT
+Received: from [10.110.74.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 20 Apr
+ 2023 12:47:51 -0700
+Message-ID: <b134d09c-55fa-7879-80ff-900e39c20c3d@quicinc.com>
+Date:   Thu, 20 Apr 2023 12:47:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419221716.3603068-2-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 0/2] DPU1 GC1.8 wiring-up
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230420-topic-dpu_gc-v1-0-d9d1a5e40917@linaro.org>
+ <5b133c55-e4f5-bfd2-b542-a7d44313c038@linaro.org>
+ <c0e0a55a-cc37-fe8a-8d8a-5fe257f99b9a@linaro.org>
+ <3f3b3637-ed85-09a1-22b7-3ccd4bc929bb@quicinc.com>
+ <2dff9d62-cffe-c66f-9e50-3ecd64e44d37@linaro.org>
+ <6a335df7-ff0b-098a-feec-45714159df04@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <6a335df7-ff0b-098a-feec-45714159df04@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: r6S6Rnba1kohL_UaH_-EEfb1DHFzt7S_
+X-Proofpoint-ORIG-GUID: r6S6Rnba1kohL_UaH_-EEfb1DHFzt7S_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_15,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 clxscore=1015
+ mlxscore=0 mlxlogscore=768 phishscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304200165
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm a vmalloc reviewer too now -next/mm-unstable get_maintainer.pl should say
-so, but forgivable because perhaps you ran against another tree but FYI for
-future I'd appreciate a cc- :)
 
-On Wed, Apr 19, 2023 at 03:16:29PM -0700, Atish Patra wrote:
-> From: Rajnesh Kanwal <rkanwal@rivosinc.com>
->
-> In virtualization, the guest may need notify the host about the ioremap
-> regions. This is a common usecase in confidential computing where the
-> host only provides MMIO emulation for the regions specified by the guest.
->
-> Add a pair if arch specific callbacks to track the ioremapped regions.
 
-Nit: typo if -> of.
+On 4/20/2023 11:01 AM, Dmitry Baryshkov wrote:
+> On 20/04/2023 04:36, Konrad Dybcio wrote:
+>>
+>>
+>> On 20.04.2023 03:28, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 4/19/2023 6:26 PM, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 20.04.2023 03:25, Dmitry Baryshkov wrote:
+>>>>> On 20/04/2023 04:14, Konrad Dybcio wrote:
+>>>>>> Almost all SoCs from SDM845 to SM8550 inclusive feature a GC1.8
+>>>>>> dspp sub-block in addition to PCCv4. The other block differ a bit
+>>>>>> more, but none of them are supported upstream.
+>>>>>>
+>>>>>> This series adds configures the GCv1.8 on all the relevant SoCs.
+>>>>>
+>>>>> Does this mean that we will see gamma_lut support soon?
+>>>> No promises, my plate is not even full, it's beyond overflowing! :P
+>>>>
+>>>> Konrad
+>>>
+>>> So I think I wrote about this before during the catalog rework/fixes 
+>>> that the gc registers are not written to / programmed.
+>>>
+>>> If thats not done, is there any benefit to this series?
+>> Completeness and preparation for the code itself, if nothing else?
+> 
+> The usual problem is that if something is not put to use, it quickly 
+> rots or becomes misused for newer platforms. We have seen this with the 
+> some of DPU features.
+> 
+> In case of GC (and the freshly defined DPU_DSPP_IGC, but not used) we 
+> have three options:
+> - drop the unused GC from msm8998_sblk.
+> - keep things as is, single unused GC entry
+> - fill all the sblk with the correct information in hope that it stays 
+> correct
+> 
+> Each of these options has its own drawbacks. I have slight bias towards 
+> the last option, to have the information in place (as long as it is 
+> accurate).
+> 
 
->
-> This patch is based on pkvm patches. A generic arch config can be added
-> similar to pkvm if this is going to be the final solution. The device
-> authorization/filtering approach is very different from this and we
-> may prefer that one as it provides more flexibility in terms of which
-> devices are allowed for the confidential guests.
+My vote is for (1) . Today, GC is unused and from the discussion here, 
+there is no concrete plan to add it. If we keep extending an unused 
+bitmask for all the chipsets including the ones which will get added in 
+the future in the hope that someday the feature comes, it doesnt sound 
+like a good idea.
 
-So it's an RFC that assumes existing patches are already applied or do you mean
-something else here? What do I need to do to get to a vmalloc.c with your patch
-applied?
+I would rather do (1), if someone has time. OR lets stay at (2) till 
+someone does (1).
 
-I guess this is pretty nitty since your changes are small here but be good to
-know!
+When someone implements GC, we can re-use this patch and that time keep 
+konrad's author rights or co-developed by.
 
->
-> Signed-off-by: Rajnesh Kanwal <rkanwal@rivosinc.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  mm/vmalloc.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index bef6cf2..023630e 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -304,6 +304,14 @@ static int vmap_range_noflush(unsigned long addr, unsigned long end,
->  	return err;
->  }
->
-> +__weak void ioremap_phys_range_hook(phys_addr_t phys_addr, size_t size, pgprot_t prot)
-> +{
-> +}
-> +
-> +__weak void iounmap_phys_range_hook(phys_addr_t phys_addr, size_t size)
-> +{
-> +}
-> +
 
-I'm not sure if this is for efficiency by using a weak reference, however, and
-perhaps a nit, but I'd prefer an arch_*() that's defined in a header somewhere,
-as it does hide the call paths quite effectively.
-
->  int ioremap_page_range(unsigned long addr, unsigned long end,
->  		phys_addr_t phys_addr, pgprot_t prot)
->  {
-> @@ -315,6 +323,10 @@ int ioremap_page_range(unsigned long addr, unsigned long end,
->  	if (!err)
->  		kmsan_ioremap_page_range(addr, end, phys_addr, prot,
->  					 ioremap_max_page_shift);
-> +
-> +	if (!err)
-> +		ioremap_phys_range_hook(phys_addr, end - addr, prot);
-> +
->  	return err;
->  }
->
-> @@ -2772,6 +2784,10 @@ void vunmap(const void *addr)
->  				addr);
->  		return;
->  	}
-> +
-> +	if (vm->flags & VM_IOREMAP)
-> +		iounmap_phys_range_hook(vm->phys_addr, get_vm_area_size(vm));
-> +
-
-There are places other than ioremap_page_range() that can set VM_IOREMAP,
-e.g. vmap_pfn(), so this may trigger with addresses other than those specified
-in the original hook. Is this intended?
-
->  	kfree(vm);
->  }
->  EXPORT_SYMBOL(vunmap);
-> --
-> 2.25.1
->
