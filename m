@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C3E6E9A26
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763CD6E9A2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjDTRA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S230527AbjDTRAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDTRAT (ORCPT
+        with ESMTP id S230398AbjDTRAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:00:19 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E0A4EE8;
-        Thu, 20 Apr 2023 09:59:58 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id l1-20020a4acf01000000b005472eb23b30so852303oos.1;
-        Thu, 20 Apr 2023 09:59:58 -0700 (PDT)
+        Thu, 20 Apr 2023 13:00:33 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9328107;
+        Thu, 20 Apr 2023 10:00:14 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1879fc89f5eso434162fac.0;
+        Thu, 20 Apr 2023 10:00:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682009978; x=1684601978;
+        d=1e100.net; s=20221208; t=1682010014; x=1684602014;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AQjtV9NB28V3LmK6dJUu6sjUOfdt/1VooQe/0CCGd8U=;
-        b=fIfBZ4zt65FWRdgqteWfeGfQiNWwJJtyPwZykVb0a/ZW3fsaEVEJbFUNSjDyMjzCCg
-         GH65i48e3HQHsrKrAjutyaUKW/JpA2N6xyOVnKgmkv+2geEHniuyFzZ06rh1wy/cG+Xd
-         G0eT4sumn7xd7CVOYsmgIZqJwPSn1kcfWTfmEt+c3TLRcUmalnpOA6WgxwJrvT4r2iNy
-         lQQpEmR5tjhq6OB0F873vaoxInLmz1CSpWk12GdAm0kAJtAddCxCPHbvv+Nb7kxOm7ah
-         9HnLFqS8Ek8VBtdsm4YyMxBh3qpXhj4ZZ92F1sbk7TY64piG5iIqdCV4wgAF5vUdofeo
-         FrFA==
-X-Gm-Message-State: AAQBX9fBgLXz+BhUeADumXotpv2i/FA8Rr752P9DQPcqhV75GsucfP+X
-        vrgNzVXtkFEmouGgIiS63g==
-X-Google-Smtp-Source: AKy350ajRi0Dr2GcMCYAxgauZp8jskHLMpNAKhE4wWw3toeDBnVAUGu2G0hk44QXhGaq3YcGVMyPwA==
-X-Received: by 2002:a4a:ad04:0:b0:544:dc2c:9f78 with SMTP id r4-20020a4aad04000000b00544dc2c9f78mr1108037oon.6.1682009978108;
-        Thu, 20 Apr 2023 09:59:38 -0700 (PDT)
+        bh=eC1knULcd6KabTMiS4cXiXXe6gVupFzizQt47kvZr1Q=;
+        b=dF1FwIJ0ou0d3ayYVplx992dWBMKLoq4Tvt/QlVT0RCutuwKfSNFygxfBj+GssEop1
+         SnxMYQO4EncJqYyd4pHDSJt1I0cRBW5g5ZTx+7PivlrMork/InSPfmFmZKzS9qen+wdY
+         KDsGGepgKgicw9JnLrVgs0i6EgpK/UuNgX/N1yxUFYuUU/c8Tj4iMx/pz3wbd8N/hTtw
+         v2w2JKlJlezAxL9LzwhIDmf/EbXcQeQaJmJPkuJ5OrToIrEWlF198Au/YtkCzjagGZQr
+         TYVGIXcORZRkMGXyYrsK2CFHiLTKRVXiQefZ55N/75YpUfi0Qkn3COOBZXHTNGJhzgZT
+         p8Lw==
+X-Gm-Message-State: AAQBX9fnD1iR00FC9MOHGNlA9XZkPJMSAZhp4QUfVv65aexL0U0+sYL2
+        Eec2nQYv0XKv0ChQMP3mxA==
+X-Google-Smtp-Source: AKy350Zkid3K7ZYXAj8/cAuJgUzeJWjBOQsOyR+U1IzfGcxYXk7UsPEh6YBKe1O+NLZ/IWAzO5RuQQ==
+X-Received: by 2002:a05:6871:297:b0:187:7b68:2521 with SMTP id i23-20020a056871029700b001877b682521mr1930680oae.36.1682010013960;
+        Thu, 20 Apr 2023 10:00:13 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e131-20020acab589000000b00383d9700294sm746146oif.40.2023.04.20.09.59.37
+        by smtp.gmail.com with ESMTPSA id c19-20020a05687093d300b0018b12e3a392sm892173oal.42.2023.04.20.10.00.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 09:59:37 -0700 (PDT)
-Received: (nullmailer pid 3015138 invoked by uid 1000);
-        Thu, 20 Apr 2023 16:59:36 -0000
-Date:   Thu, 20 Apr 2023 11:59:36 -0500
+        Thu, 20 Apr 2023 10:00:13 -0700 (PDT)
+Received: (nullmailer pid 3015906 invoked by uid 1000);
+        Thu, 20 Apr 2023 17:00:12 -0000
+Date:   Thu, 20 Apr 2023 12:00:12 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Todor Tomov <todor.too@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Del Regno <angelogioacchino.delregno@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: correct unit address
-Message-ID: <168200997627.3015083.10232502258112260692.robh@kernel.org>
-References: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
+        Robert Foss <rfoss@kernel.org>
+Subject: Re: [PATCH] media: dt-bindings: qcom: camss: correct unit address
+Message-ID: <168201000524.3015737.5862969014939069811.robh@kernel.org>
+References: <20230420072442.36308-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420072442.36308-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,13 +74,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 20 Apr 2023 09:24:29 +0200, Krzysztof Kozlowski wrote:
+On Thu, 20 Apr 2023 09:24:42 +0200, Krzysztof Kozlowski wrote:
 > Match unit-address to first reg entry.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml | 2 +-
+>  Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml | 2 +-
+>  Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml  | 2 +-
+>  Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml  | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
