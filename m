@@ -2,145 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACCF6E8C9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFA26E8CA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbjDTIWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S234194AbjDTIXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbjDTIWh (ORCPT
+        with ESMTP id S234440AbjDTIXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:22:37 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403A730E9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:22:34 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b51fd2972so648607b3a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1681978954; x=1684570954;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4DMeRQEVjnGvjTdMi1WDO2hzeB7OEvrm9xDgZ4E+Odo=;
-        b=QsRx8DNEii1hHTwSRfTSltb2l0lXFk0fCbxNCvZISBIq4XBmSA7sjqnLDT4TA64nOo
-         UKTDF4H9mkYwEHsMrO7V7z9BsqqFg1yIOa6Nytq8FbIicP6QIILbOiPHslcqmwe+KqVI
-         iO4yxMkWXD4mbVcGfk+MLYRSPkD+ux4z5oUgr4A+j016QJ9JeX87mwRf20WWczPa2Ca7
-         EDTFqYcfYAkDxxJHRgUN7ut5KPblRJ5QCBwkVanjaap/PPrm9JZutQnItT/6n4cFCgcW
-         xDdgFajk0Ad2Uw/DiCJtT3FPplUIbO+z9GuJPNymyj+41I6M+5Ptlt41v4CjVxjLm6Lt
-         AekA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681978954; x=1684570954;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4DMeRQEVjnGvjTdMi1WDO2hzeB7OEvrm9xDgZ4E+Odo=;
-        b=IpAkmFO8ApOm4jSdXfHM49XGkIuOt7EMwTfD1Z2kz3H5ASstQ3ysHjDsZsXbPXQdUK
-         i0oAVtPCUR+Hvf2TeITN2+atTa6fKRX/FFlc3rnDQ8fTlqe3JUYFYtjVWhy/tO7Iw8DD
-         pwUcpdqpStb2LQ02+zlx6f0ziFWJ5QIbzzue4ibr6w5E4VR3x1XJeqK7A/hIXlyH+Drh
-         Jl3UK34AuViyT2pRMKdFrYCtlCXRXP6g1x6PwMkRL4+eslITgxzDdy3nWcxuWvhoTOO8
-         fB9Nx/pNdByUx2PfhG5N6hLGrXTUMD5HFNMzs7aW3YFP/QSiFP4+zxzcArV869Sjwaoy
-         6ZUQ==
-X-Gm-Message-State: AAQBX9dXBvY0qdKt8bdLuS9bQ8p2c9EZiw9PgJKhT0sf+qFtya8gs1Oo
-        XpsdprhPbNsLbaqIPv8P6JuM1A==
-X-Google-Smtp-Source: AKy350anJUB02TZaTTaDOpXkS2MoMiQXMYqeZve3utmSFoK5bryH/5VMg+DIE9xO6tLGwF/vrZcZsA==
-X-Received: by 2002:a17:902:c40d:b0:1a9:2823:dac2 with SMTP id k13-20020a170902c40d00b001a92823dac2mr1138514plk.57.1681978953690;
-        Thu, 20 Apr 2023 01:22:33 -0700 (PDT)
-Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902c71200b001a240f053aasm669738plp.180.2023.04.20.01.22.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 01:22:33 -0700 (PDT)
-Message-ID: <9f425205-c395-648a-3f42-a776c7580a8f@9elements.com>
-Date:   Thu, 20 Apr 2023 13:52:30 +0530
+        Thu, 20 Apr 2023 04:23:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BD4C3A;
+        Thu, 20 Apr 2023 01:23:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E442C61435;
+        Thu, 20 Apr 2023 08:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D19C433EF;
+        Thu, 20 Apr 2023 08:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681978985;
+        bh=Ab68JqQLfY+jSqDEDD3C5HmCaqo0RsufHI6L372P1gM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Rbm+N3RnJJevpEOSi49wnJA0CEF/1wW9Z9RjYvx5Do52m/c7wazbxQFIif7SoKsii
+         qmeP65bmlV0cgvftyZaFCszAkwoVtUVXKNeANuJuJKjsbowN9sx7tovJnRpE8t1o7P
+         vjHswVMRsSxvOkDXysDMjbievi9eCSLK8XLptOwvMk2BdHyO3KMahhDUS+7zGxIhTx
+         YvmYXMWM/WBuXVapHG4C1D19lyhskkBIUG5N+hPZhWnfzzL4ckBBHCW2QGT++2HLtQ
+         KqdKh/j28c+DMIiHBsd7ZLvbCu/Ly/z8TT6Le+2DxhIqkX9QDD1msyIRBuEkfy/ADp
+         TZQ1uYkAWdDaA==
+Message-ID: <3b711d73-ac46-7a37-e835-f9dadeb96dd3@kernel.org>
+Date:   Thu, 20 Apr 2023 17:23:02 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add dt property
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230418145051.4192963-1-Naresh.Solanki@9elements.com>
- <0da2b301-8780-48c0-a5dc-326474011e8d@hatter.bewilderbeest.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] PCI: vmd: Fix two issues reported by Smatch
 Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <0da2b301-8780-48c0-a5dc-326474011e8d@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     korantwork@gmail.com, helgaas@kernel.org,
+        nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>,
+        Dan Carpenter <error27@gmail.com>
+References: <20230420081957.1440423-1-korantwork@gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230420081957.1440423-1-korantwork@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zev,
+On 4/20/23 17:19, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+> 
+> There is one uninitialized symbol error reported by smatch:
+> "drivers/pci/controller/vmd.c:931 vmd_enable_domain()
+> error: uninitialized symbol 'ret'."
+> 
+> Fix it by assigning ret with pci_reset_bus return.
 
-On 20-04-2023 05:31 am, Zev Weiss wrote:
-> On Tue, Apr 18, 2023 at 07:50:50AM PDT, Naresh Solanki wrote:
->> Add DT property regulator-supplies.
->> This enables us to couple one or more regulator output to gether. This
->> is use in case of Single connector having 2 or more supplies.
->>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->> .../bindings/regulator/regulator-output.yaml         | 12 +++++++++---
->> 1 file changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/regulator/regulator-output.yaml 
->> b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
->> index 078b37a1a71a..17f683d3c1f3 100644
->> --- a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
->> +++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
->> @@ -21,13 +21,19 @@ properties:
->>   compatible:
->>     const: regulator-output
->>
->> -  vout-supply:
->> +  regulator-supplies:
->>     description:
->> -      Phandle of the regulator supplying the output.
->> +      Specifies the name of the output supply provided by the regulator.
->> +      Defaults to "vout".
->> +    default: "vout"
->> +
+This is a bug so clearly needs a fixes tag.
+
 > 
-> Was this meant to be specified as a string-array to allow providing 
-> multiple names?
-Yes. This is string-array.
+> And one inconsistent indenting warning:
+> "drivers/pci/controller/vmd.c:1058 vmd_resume()
+> warn: inconsistent indenting"
 > 
->> +patternProperties:
->> +  ".*-supply":
->> +    description:
->> +      Specified the phandle for various supplies
->>
->> required:
->>   - compatible
->> -  - vout-supply
->>
->> additionalProperties: false
->>
->>
+> Fix it by formating its indenting.
+
+But this is cosmetic and does not need backporting/fixes tag in my opinion. So
+better split this into 2 different patches.
+
 > 
-> I think it would be nice to also update the examples to show what a 
-> multi-supply instance would look like.
-Ack. Will do that.
+> Fixes: 0a584655ef89 ("PCI: vmd: Fix secondary bus reset for Intel bridges")
+> Fixes: d899aa668498 ("PCI: vmd: Disable MSI remapping after suspend")
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
+> ---
+>  drivers/pci/controller/vmd.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
-> A slightly more descriptive subject line would also be good -- "Add dt 
-> property" is a bit vague.
-Suggestion ?
-How about like 'Allow multiple supplies' or 'Add support for multiple 
-supplies'
-> 
->> base-commit: c55470f8b0616b0adb758077dbae9b19c5aac005
->> -- 
->> 2.39.1
->>
-Regards,
-Naresh
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 7e1fd959e00d..0a7c1fdfeec0 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -943,7 +943,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  		if (!list_empty(&child->devices)) {
+>  			dev = list_first_entry(&child->devices,
+>  					       struct pci_dev, bus_list);
+> -			if (pci_reset_bus(dev))
+> +			ret = pci_reset_bus(dev);
+> +			if (ret)
+>  				pci_warn(dev, "can't reset device: %d\n", ret);
+>  
+>  			break;
+> @@ -1084,10 +1085,10 @@ static int vmd_resume(struct device *dev)
+>  	struct vmd_dev *vmd = pci_get_drvdata(pdev);
+>  	int err, i;
+>  
+> -       if (vmd->irq_domain)
+> -               vmd_set_msi_remapping(vmd, true);
+> -       else
+> -               vmd_set_msi_remapping(vmd, false);
+> +	if (vmd->irq_domain)
+> +		vmd_set_msi_remapping(vmd, true);
+> +	else
+> +		vmd_set_msi_remapping(vmd, false);
+>  
+>  	for (i = 0; i < vmd->msix_count; i++) {
+>  		err = devm_request_irq(dev, vmd->irqs[i].virq,
+
