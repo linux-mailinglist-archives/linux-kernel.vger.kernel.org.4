@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390E76E8A65
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50496E8A69
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbjDTG3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 02:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S233912AbjDTGbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 02:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbjDTG3d (ORCPT
+        with ESMTP id S232606AbjDTGbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 02:29:33 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F5546A6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681972172; x=1713508172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IyOzyJAd/6ABxtofxBPj1J0sAalEL4tioDUX48t0eqQ=;
-  b=OVMACydnUpKkMgigcsHtkNy4Pdc+CW2LCde0dNc8HqsTY/7kURxghnMJ
-   InAYXpYfNjnMO6TiMVvryCvBw1BSXFEaEvtsaN8mk/+5TgZZ+xYBhbPcj
-   SKfdwGxU0s/cQO8rAE9w/Jz8fL+ce6qP3gacv/6sfI1k68VpVssxY6esw
-   lWJjOPX9vvqKIRLxU7SX0QC3Z3l76EnKSkJssXltN0JjSpDNdw0F0V+3J
-   fIQEIuKRyjM5fUxDM/q533u6syXF+rG4F5dUqJ4+whoXZFm3PTl+Uaq+j
-   garI7ctQgcTeJd8GQ+p65aGhL5QPP8vM6hwsKpVKfLHWphbUDTVqq4MzB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="408558519"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="408558519"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 23:29:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937931937"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="937931937"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 23:29:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppNnN-000fYG-0e;
-        Thu, 20 Apr 2023 06:29:29 +0000
-Date:   Thu, 20 Apr 2023 14:29:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Sharma <anupnewsmail@gmail.com>, zbr@ioremap.net
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: w1: slaves: Drop unnecessary explicit casting
-Message-ID: <202304201411.fS7y0KJP-lkp@intel.com>
-References: <ZECFjQMLwnoYPMeL@yoga>
+        Thu, 20 Apr 2023 02:31:11 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74064220
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:31:09 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54fbee98814so27628187b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681972269; x=1684564269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z+lZScYJNTxSdjIaFO6rSua9y6ktROp8kre5Iy1sq1M=;
+        b=AIL/goR1vxia3BkgH87QaIgNuz8aY874MBCR4sprrb3JlaecP3ZCOIUedcluZ4q6ol
+         hAVr1O6IwUQD4XvlA0p6cgNxcnHVq9lVZbrN/Rzxv6865n/kt/cpcQUtpPS1XrCgNtoT
+         sZnv2jHUedRMv7kQ+7aEl+/zywy0hGTnpHOcog1NxexB8WgbZSaG8bP83j3xUXeNcWSy
+         Olne1CsPV8SXA/L8/eDwlHH6fDPQzH9Kt4aW8eM0Fi6LLJgxVvVG7/66OuE4jJ7rBrHe
+         JMA/3yQSSqbdUDF8Ouym09E77VRQG5KNlaAXyEigkC8kqI2FvcTb9s8X5FW4TRdQRwO7
+         UixA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681972269; x=1684564269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z+lZScYJNTxSdjIaFO6rSua9y6ktROp8kre5Iy1sq1M=;
+        b=ir0yKQWeUtAB3OHfGnCGE4LUUu4eyLTtqy1r77F0FcB58Y9dqv4uk+puBojG9mX7an
+         QKZz4ODY3vDxG9SnkuHUUnsrAHblB7lNEBloSKQpfLK7/0Epo+Wrjy5UmaZ8/ueu3WhM
+         jnVKbyyuie+KxN5goJlBTg3KzCKWoqJdszTeN4w/1lyj2NvJ1TsQhVvIxuzl+RLkHFaJ
+         IBfFVELuQV6Y3Hm6RN2OL+8PbIc0xnHubfND78DGFXqDiuPFyZiAnsMA3em3lVDS/3am
+         MdvPrvocz1NMrYaNlpI5xCyfFdvihSJj1BPBDu7ZiAhUiVIfPexTF5C10VoBhGzNOBdr
+         c1Uw==
+X-Gm-Message-State: AAQBX9cf/TFGZdy3GFwe0TkD3TfHHirLU20hb5SQfe0RgXMt2vjypLrY
+        tyUZVljXz3Dl+jlOe3KxVutHZc+GmZ11k6yg/zUkYA==
+X-Google-Smtp-Source: AKy350b+vMIPlAyo+7flFGO0A3Bkr8psntWRPhZsGGRxl1LHBIkbyQqzaS+DY2fvB3i5aLPBLluu8XWs+nfMjTxSDI8=
+X-Received: by 2002:a0d:d146:0:b0:54f:d7f7:9d61 with SMTP id
+ t67-20020a0dd146000000b0054fd7f79d61mr75910ywd.14.1681972269116; Wed, 19 Apr
+ 2023 23:31:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZECFjQMLwnoYPMeL@yoga>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
+ <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
+ <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
+ <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
+ <CAJedcCzm3MqYe3QGT7V4sMmDsVHbjVSnEc2NXWPMGVZL=a_cBA@mail.gmail.com>
+ <2023041308-nerd-dry-98a6@gregkh> <CAJedcCyeM2a79i0=ffKwdKfnQayo7svhTTEth2ka6K9np0Ztiw@mail.gmail.com>
+ <2023041308-unvisited-slinky-a56f@gregkh> <CAJedcCxzGbUSj0nh4xYp8P2zhYSM31CGi2fGE+9VJt7mkg6h4g@mail.gmail.com>
+ <CAMSo37V3vgjzgM_3Toy2HGwVuFcTw9DfVKDnVNaD-j4UJtOPvg@mail.gmail.com> <CAJedcCwow9sTEzZpiqmmcEDZ0XFLauA_tVBTJf5MfpadC1M+cQ@mail.gmail.com>
+In-Reply-To: <CAJedcCwow9sTEzZpiqmmcEDZ0XFLauA_tVBTJf5MfpadC1M+cQ@mail.gmail.com>
+From:   Yongqin Liu <yongqin.liu@linaro.org>
+Date:   Thu, 20 Apr 2023 14:30:57 +0800
+Message-ID: <CAMSo37VxLfqg7UGY8CYAYz8nqoJ12T2mERbKNn67e_+yOD3cXQ@mail.gmail.com>
+Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
+ hisi_hikey_usb_remove due to race condition
+To:     Zheng Hacker <hackerzheng666@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        John Stultz <jstultz@google.com>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,118 +81,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
+Hi, Zheng
 
-kernel test robot noticed the following build warnings:
+BTW, I just see cancel_delayed_work_sync is used in
+the drivers/usb/common/usb-conn-gpio.c usb_conn_remove function.
+    https://android.googlesource.com/kernel/common/+/refs/heads/android-mai=
+nline/drivers/usb/common/usb-conn-gpio.c#274
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc7 next-20230419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I know nothing about the cancel_delayed_work_sync and cancel_work_sync
+functions,
+just for your information in case cancel_delayed_work_sync might be
+better to be used here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anup-Sharma/drivers-w1-slaves-Drop-unnecessary-explicit-casting/20230420-082340
-patch link:    https://lore.kernel.org/r/ZECFjQMLwnoYPMeL%40yoga
-patch subject: [PATCH] drivers: w1: slaves: Drop unnecessary explicit casting
-config: x86_64-randconfig-a015-20230417 (https://download.01.org/0day-ci/archive/20230420/202304201411.fS7y0KJP-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/211461ea088a31e3a084fd539e243c9d32db3cb6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anup-Sharma/drivers-w1-slaves-Drop-unnecessary-explicit-casting/20230420-082340
-        git checkout 211461ea088a31e3a084fd539e243c9d32db3cb6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/w1/slaves/
+Thanks,
+Yongqin Liu
+On Tue, 18 Apr 2023 at 21:18, Zheng Hacker <hackerzheng666@gmail.com> wrote=
+:
+>
+> Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8818=
+=E6=97=A5=E5=91=A8=E4=BA=8C 01:31=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > Hi, Zheng
+> >
+> > Sorry for the late reply.
+> >
+> > I tested this change with Android build based on the ACK
+> > android-mainline branch.
+> > The hisi_hikey_usb module could not be removed with error like this:
+> >     console:/ # rmmod -f hisi_hikey_usb
+> >     rmmod: failed to unload hisi_hikey_usb: Try again
+> >     1|console:/ #
+> > Sorry I am not able to reproduce any problem without this commit,
+> > but I do not see any problem with this change applied either.
+> >
+> > If there is any specific things you want to check, please feel free let=
+ me know
+> >
+>
+> Hi Yongqin,
+>
+> Thanks for your testing. I have no more questions about the issue.
+>
+> Best regards,
+> Zheng
+>
+> > Thanks,
+> > Yongqin Liu
+> >
+> >
+> > On Fri, 14 Apr 2023 at 00:46, Zheng Hacker <hackerzheng666@gmail.com> w=
+rote:
+> > >
+> > > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=88=
+13=E6=97=A5=E5=91=A8=E5=9B=9B 23:56=E5=86=99=E9=81=93=EF=BC=9A
+> > > >
+> > > > On Thu, Apr 13, 2023 at 11:35:17PM +0800, Zheng Hacker wrote:
+> > > > > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=
+=9C=8813=E6=97=A5=E5=91=A8=E5=9B=9B 20:48=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > >
+> > > > > > On Thu, Apr 13, 2023 at 07:12:07PM +0800, Zheng Hacker wrote:
+> > > > > > > Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=
+=E6=9C=8813=E6=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > > > >
+> > > > > > > > Hi, Zheng
+> > > > > > > >
+> > > > > > > > On Thu, 13 Apr 2023 at 16:08, Zheng Hacker <hackerzheng666@=
+gmail.com> wrote:
+> > > > > > > > >
+> > > > > > > > > Friendly ping about the bug.
+> > > > > > > >
+> > > > > > > > Sorry, wasn't aware of this message before,
+> > > > > > > >
+> > > > > > > > Could you please help share the instructions to reproduce t=
+he problem
+> > > > > > > > this change fixes?
+> > > > > > > >
+> > > > > > >
+> > > > > > > Hi Yongqin,
+> > > > > > >
+> > > > > > > Thanks for your reply. This bug is found by static analysis. =
+There is no PoC.
+> > > > > > >
+> > > > > > > >From my personal experience, triggering race condition bugs =
+stably in
+> > > > > > > the kernel needs some tricks.
+> > > > > > > For example, you can insert some sleep-time code to slow down=
+ the
+> > > > > > > thread until the related object is freed.
+> > > > > > > Besides, you can use gdb to control the time window. Also, th=
+ere are
+> > > > > > > some other tricks as [1] said.
+> > > > > > >
+> > > > > > > As for the reproduction, this attack vector requires that the=
+ attacker
+> > > > > > > can physically access the device.
+> > > > > > > When he/she unplugs the usb, the remove function is triggered=
+, and if
+> > > > > > > the set callback is invoked, there might be a race condition.
+> > > > > >
+> > > > > > How does the removal of the USB device trigger a platform devic=
+e
+> > > > > > removal?
+> > > > >
+> > > > > Sorry I made a mistake. The USB device usually calls disconnect
+> > > > > callback when it's unpluged.
+> > > >
+> > > > Yes, but you are changing the platform device disconnect, not the U=
+SB
+> > > > device disconnect.
+> > > >
+> > > > > What I want to express here is When the driver-related device(her=
+e
+> > > > > it's USB GPIO Hub) was removed, the remove function is triggered.
+> > > >
+> > > > And is this a patform device on a USB device?  If so, that's a bigg=
+er
+> > > > problem that we need to fix as that is not allowed.
+> > >
+> > > No this is not a platform  device on a USB device.
+> > >
+> > > >
+> > > > But in looking at the code, it does not seem to be that at all, thi=
+s is
+> > > > just a "normal" platform device.  So how can it ever be removed fro=
+m the
+> > > > system?  (and no, unloading the driver doesn't count, that can neve=
+r
+> > > > happen on a normal machine.)
+> > > >
+> > >
+> > > Yes, I finally figured out your meaning. I know it's hard to unplug
+> > > the platform device
+> > > directly. All I want to express is that it's a theoretical method
+> > > except  rmmod. I think it's better to fix the bug. But if the
+> > > developers think it's practically impossible, I think there's no need
+> > > to take further action.
+> > >
+> > > Sorry for wasting your time and thanks for your explanation.
+> > >
+> > > Best regards,
+> > > Zheng
+> > >
+> > > > thanks,
+> > > >
+> > > > greg k-h
+> >
+> >
+> >
+> > --
+> > Best Regards,
+> > Yongqin Liu
+> > ---------------------------------------------------------------
+> > #mailing list
+> > linaro-android@lists.linaro.org
+> > http://lists.linaro.org/mailman/listinfo/linaro-android
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304201411.fS7y0KJP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/w1/slaves/w1_ds28e04.c:238:5: warning: format specifies type 'void *' but the argument has type 'loff_t' (aka 'long long') [-Wformat]
-                                   off, count);
-                                   ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/w1/slaves/w1_ds28e04.c:247:6: warning: format specifies type 'void *' but the argument has type 'loff_t' (aka 'long long') [-Wformat]
-                                           off);
-                                           ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   2 warnings generated.
 
 
-vim +238 drivers/w1/slaves/w1_ds28e04.c
-
-   221	
-   222	static ssize_t eeprom_write(struct file *filp, struct kobject *kobj,
-   223				    struct bin_attribute *bin_attr, char *buf,
-   224				    loff_t off, size_t count)
-   225	
-   226	{
-   227		struct w1_slave *sl = kobj_to_w1_slave(kobj);
-   228		int addr, len, idx;
-   229	
-   230		count = w1_f1C_fix_count(off, count, W1_EEPROM_SIZE);
-   231		if (count == 0)
-   232			return 0;
-   233	
-   234		if (w1_enable_crccheck) {
-   235			/* can only write full blocks in cached mode */
-   236			if ((off & W1_PAGE_MASK) || (count & W1_PAGE_MASK)) {
-   237				dev_err(&sl->dev, "invalid offset/count off=%pe cnt=%zd\n",
- > 238					off, count);
-   239				return -EINVAL;
-   240			}
-   241	
-   242			/* make sure the block CRCs are valid */
-   243			for (idx = 0; idx < count; idx += W1_PAGE_SIZE) {
-   244				if (crc16(CRC16_INIT, &buf[idx], W1_PAGE_SIZE)
-   245					!= CRC16_VALID) {
-   246					dev_err(&sl->dev, "bad CRC at offset %pe\n",
-   247						off);
-   248					return -EINVAL;
-   249				}
-   250			}
-   251		}
-   252	
-   253		mutex_lock(&sl->master->mutex);
-   254	
-   255		/* Can only write data to one page at a time */
-   256		idx = 0;
-   257		while (idx < count) {
-   258			addr = off + idx;
-   259			len = W1_PAGE_SIZE - (addr & W1_PAGE_MASK);
-   260			if (len > (count - idx))
-   261				len = count - idx;
-   262	
-   263			if (w1_f1C_write(sl, addr, len, &buf[idx]) < 0) {
-   264				count = -EIO;
-   265				goto out_up;
-   266			}
-   267			idx += len;
-   268		}
-   269	
-   270	out_up:
-   271		mutex_unlock(&sl->master->mutex);
-   272	
-   273		return count;
-   274	}
-   275	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
