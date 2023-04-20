@@ -2,172 +2,726 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46EA6E8FA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4396E8FB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbjDTKNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S234634AbjDTKNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234551AbjDTKNJ (ORCPT
+        with ESMTP id S234472AbjDTKNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:13:09 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BF725FEA;
-        Thu, 20 Apr 2023 03:09:53 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:33082.432946535
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 7ACB010023C;
-        Thu, 20 Apr 2023 18:09:49 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id ed7479d50c7f4249afd79f87783beb1f for geert@linux-m68k.org;
-        Thu, 20 Apr 2023 18:09:52 CST
-X-Transaction-ID: ed7479d50c7f4249afd79f87783beb1f
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <d2ccf320-6a95-ff75-8656-fb0448fab2d3@189.cn>
-Date:   Thu, 20 Apr 2023 18:09:49 +0800
+        Thu, 20 Apr 2023 06:13:18 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EAF65AB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:10:13 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id h2so2088093ljh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681985411; x=1684577411;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UshHJmrBvOjOe+kFqRZqWcq1WGUK4b0DL+yogHh/OJ8=;
+        b=fFNqK2kpnL8nMjB/6frDOPJGu+iaEXv1ou8942gBzAYcPAWD2EFA65xFsBQigFfyoZ
+         ubP5USdRWNSSBVuB3LC5MXtkUn2NTKf7QRkOxyaa2a52KTSsGEuRzPnlwaI1N9exqZAv
+         AIMjC9uIroKP+urHqzqsOySqwBYkjDFytrGDmWz8sE8LEBGGppdGk60ygxUvVfrEExZ4
+         7U7bkJGRMpMmxZaNnPYiSjya0vzdArYiCXG9buyLpVQxQgH5mcUCYHs02izxlfQZWKx3
+         ATnKHtTYrPP7QRt9lQyNso6PDIN1pwYAkyQAAoN1NAj+0FGuQe7LXbETxo/rNS5wqJPi
+         IHwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681985411; x=1684577411;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UshHJmrBvOjOe+kFqRZqWcq1WGUK4b0DL+yogHh/OJ8=;
+        b=DA1HXPCNhdRS7Z5vfMCcCojt6i1ohzuRMVy8BhX2TxJQSuPkVY3ffSuoInNtesehXJ
+         p/ZvrBU6jEeNTuC0WlDKI/l9w+pBDm1ojrllfP1rS5hssRTSel7444kCkTdHK/o2phWq
+         bTeDUAvBuXgCv6CE0qTD8JSnLAXYSbihbf384VM6HGaKKuH0vPBr/dJQJcKYTHS5GrtS
+         hm201qodcIDHxABsIr5oQMIld0BtNXNDiFPGvJH0R6T89aVrYg3J2U89e3q3YtFKfyZK
+         zRHF7DjMj565hsOXPwJrTplzvg9+UP8e4ZO3TFiAnYUavNgO/T9XYAuzJp8cl+imYnCV
+         pZDw==
+X-Gm-Message-State: AAQBX9dvV4UUUkNgeziwz3LrTbo39XmwwYpDQktsCqfVkvpYNiSgSi4t
+        yx9vquQTXxbLpNUEbpsgLgDZbw==
+X-Google-Smtp-Source: AKy350ayoHSDO6XCkJCedmXKKvjN3YgFQS01jqetVZKLilov5d6fEnq36O6QaD/lfJcWaWQnYPqnzg==
+X-Received: by 2002:a2e:9d50:0:b0:2a7:6b40:7ea2 with SMTP id y16-20020a2e9d50000000b002a76b407ea2mr324755ljj.14.1681985411250;
+        Thu, 20 Apr 2023 03:10:11 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id j2-20020a2e8242000000b002a8d01905f7sm177536ljh.101.2023.04.20.03.10.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:10:10 -0700 (PDT)
+Message-ID: <af5435c3-b3a4-af46-444e-023d6ee2304a@linaro.org>
+Date:   Thu, 20 Apr 2023 13:10:10 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] drm/fbdev-generic: prohibit potential out-of-bounds
- access
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230420030500.1578756-1-suijingfeng@loongson.cn>
- <CAMuHMdUZoBZEM73fo8-PitSae8wgv-m6sez3nA8J3RFMAtOyOQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CAMuHMdUZoBZEM73fo8-PitSae8wgv-m6sez3nA8J3RFMAtOyOQ@mail.gmail.com>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/4] clk: qcom: Add GCC driver support for SDX75
+Content-Language: en-GB
+To:     Taniya Das <quic_tdas@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     quic_skakitap@quicinc.com, Imran Shaik <quic_imrashai@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohiagar@quicinc.com, netdev@vger.kernel.org
+References: <20230419133013.2563-1-quic_tdas@quicinc.com>
+ <20230419133013.2563-5-quic_tdas@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230419133013.2563-5-quic_tdas@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 19/04/2023 16:30, Taniya Das wrote:
+> From: Imran Shaik <quic_imrashai@quicinc.com>
+> 
+> Add Global Clock Controller (GCC) support for SDX75 platform.
+> 
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>   drivers/clk/qcom/Kconfig     |    8 +
+>   drivers/clk/qcom/Makefile    |    1 +
+>   drivers/clk/qcom/gcc-sdx75.c | 2990 ++++++++++++++++++++++++++++++++++
+>   3 files changed, 2999 insertions(+)
+>   create mode 100644 drivers/clk/qcom/gcc-sdx75.c
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 5ab4b7dfe3c2..4df48b02bb0c 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -644,6 +644,14 @@ config SDX_GCC_65
+>   	  Say Y if you want to use peripheral devices such as UART,
+>   	  SPI, I2C, USB, SD/UFS, PCIe etc.
+>   
+> +config SDX_GCC_75
+> +	tristate "SDX75 Global Clock Controller"
+> +	select QCOM_GDSC
+> +	help
+> +	  Support for the global clock controller on SDX75 devices.
+> +	  Say Y if you want to use peripheral devices such as UART,
+> +	  SPI, I2C, USB, SD/eMMC, PCIe etc.
+> +
+>   config SM_CAMCC_6350
+>   	tristate "SM6350 Camera Clock Controller"
+>   	select SM_GCC_6350
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index c743805a9cbb..0964be5ed4c2 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -93,6 +93,7 @@ obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
+>   obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
+>   obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
+>   obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
+> +obj-$(CONFIG_SDX_GCC_75) += gcc-sdx75.o
+>   obj-$(CONFIG_SM_CAMCC_6350) += camcc-sm6350.o
+>   obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+>   obj-$(CONFIG_SM_CAMCC_8450) += camcc-sm8450.o
+> diff --git a/drivers/clk/qcom/gcc-sdx75.c b/drivers/clk/qcom/gcc-sdx75.c
+> new file mode 100644
+> index 000000000000..25f7e5b81683
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gcc-sdx75.c
+> @@ -0,0 +1,2990 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,gcc-sdx75.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "clk-regmap-divider.h"
+> +#include "clk-regmap-mux.h"
+> +#include "gdsc.h"
+> +#include "reset.h"
+> +
+> +enum {
+> +	DT_BI_TCXO,
+> +	DT_SLEEP_CLK,
+> +};
+> +
+> +enum {
+> +	P_BI_TCXO,
+> +	P_EMAC0_SGMIIPHY_MAC_RCLK,
+> +	P_EMAC0_SGMIIPHY_MAC_TCLK,
+> +	P_EMAC0_SGMIIPHY_RCLK,
+> +	P_EMAC0_SGMIIPHY_TCLK,
+> +	P_EMAC1_SGMIIPHY_MAC_RCLK,
+> +	P_EMAC1_SGMIIPHY_MAC_TCLK,
+> +	P_EMAC1_SGMIIPHY_RCLK,
+> +	P_EMAC1_SGMIIPHY_TCLK,
+> +	P_GPLL0_OUT_EVEN,
+> +	P_GPLL0_OUT_MAIN,
+> +	P_GPLL4_OUT_MAIN,
+> +	P_GPLL5_OUT_MAIN,
+> +	P_GPLL6_OUT_MAIN,
+> +	P_GPLL8_OUT_MAIN,
+> +	P_PCIE20_PHY_AUX_CLK,
+> +	P_PCIE_1_PIPE_CLK,
+> +	P_PCIE_2_PIPE_CLK,
+> +	P_PCIE_PIPE_CLK,
+> +	P_SLEEP_CLK,
+> +	P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK,
+> +};
+> +
+> +static struct clk_alpha_pll gpll0 = {
+> +	.offset = 0x0,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +	.clkr = {
+> +		.enable_reg = 0x7d000,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gpll0",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_fixed_lucid_ole_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static const struct clk_div_table post_div_table_gpll0_out_even[] = {
+> +	{ 0x1, 2 },
+> +	{ }
+> +};
+> +
+> +static struct clk_alpha_pll_postdiv gpll0_out_even = {
+> +	.offset = 0x0,
+> +	.post_div_shift = 10,
+> +	.post_div_table = post_div_table_gpll0_out_even,
+> +	.num_post_div = ARRAY_SIZE(post_div_table_gpll0_out_even),
+> +	.width = 4,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +	.clkr.hw.init = &(const struct clk_init_data) {
+> +		.name = "gpll0_out_even",
+> +		.parent_hws = (const struct clk_hw*[]) {
+> +			&gpll0.clkr.hw,
+> +		},
+> +		.num_parents = 1,
+> +		.ops = &clk_alpha_pll_postdiv_lucid_ole_ops,
+> +	},
+> +};
+> +
+> +static struct clk_alpha_pll gpll4 = {
+> +	.offset = 0x4000,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +	.clkr = {
+> +		.enable_reg = 0x7d000,
+> +		.enable_mask = BIT(4),
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gpll4",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_fixed_lucid_ole_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_alpha_pll gpll5 = {
+> +	.offset = 0x5000,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +	.clkr = {
+> +		.enable_reg = 0x7d000,
+> +		.enable_mask = BIT(5),
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gpll5",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_fixed_lucid_ole_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_alpha_pll gpll6 = {
+> +	.offset = 0x6000,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +	.clkr = {
+> +		.enable_reg = 0x7d000,
+> +		.enable_mask = BIT(6),
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gpll6",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_fixed_lucid_ole_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_alpha_pll gpll8 = {
+> +	.offset = 0x8000,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +	.clkr = {
+> +		.enable_reg = 0x7d000,
+> +		.enable_mask = BIT(8),
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gpll8",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_fixed_lucid_ole_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_0[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 1 },
+> +	{ P_GPLL0_OUT_EVEN, 6 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_0[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpll0.clkr.hw },
+> +	{ .hw = &gpll0_out_even.clkr.hw },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_1[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 1 },
+> +	{ P_GPLL4_OUT_MAIN, 2 },
+> +	{ P_GPLL5_OUT_MAIN, 5 },
+> +	{ P_GPLL0_OUT_EVEN, 6 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_1[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpll0.clkr.hw },
+> +	{ .hw = &gpll4.clkr.hw },
+> +	{ .hw = &gpll5.clkr.hw },
+> +	{ .hw = &gpll0_out_even.clkr.hw },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_2[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 1 },
+> +	{ P_SLEEP_CLK, 5 },
+> +	{ P_GPLL0_OUT_EVEN, 6 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_2[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpll0.clkr.hw },
+> +	{ .index = DT_SLEEP_CLK },
+> +	{ .hw = &gpll0_out_even.clkr.hw },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_3[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_SLEEP_CLK, 5 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_3[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .index = DT_SLEEP_CLK },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_4[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 1 },
+> +	{ P_SLEEP_CLK, 5 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_4[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpll0.clkr.hw },
+> +	{ .index = DT_SLEEP_CLK },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_5[] = {
+> +	{ P_EMAC0_SGMIIPHY_RCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_5[] = {
+> +	{ .fw_name = "emac0_sgmiiphy_rclk" },
 
-On 2023/4/20 17:04, Geert Uytterhoeven wrote:
-> Hi Sui,
->
-> On Thu, Apr 20, 2023 at 5:09 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->> The fbdev test of IGT may write after EOF, which lead to out-of-bound
->> access for drm drivers hire fbdev-generic. For example, run fbdev test
->> on a x86+ast2400 platform, with 1680x1050 resolution, will cause the
->> linux kernel hang with the following call trace:
->>
->>    Oops: 0000 [#1] PREEMPT SMP PTI
->>    [IGT] fbdev: starting subtest eof
->>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>    [IGT] fbdev: starting subtest nullptr
->>
->>    RIP: 0010:memcpy_erms+0xa/0x20
->>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
->>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>    Call Trace:
->>     <TASK>
->>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>     process_one_work+0x21f/0x430
->>     worker_thread+0x4e/0x3c0
->>     ? __pfx_worker_thread+0x10/0x10
->>     kthread+0xf4/0x120
->>     ? __pfx_kthread+0x10/0x10
->>     ret_from_fork+0x2c/0x50
->>     </TASK>
->>    CR2: ffffa17d40e0b000
->>    ---[ end trace 0000000000000000 ]---
->>
->> The is because damage rectangles computed by
->> drm_fb_helper_memory_range_to_clip() function does not guaranteed to be
->> bound in the screen's active display area. Possible reasons are:
->>
->> 1) Buffers are allocated in the granularity of page size, for mmap system
->>     call support. The shadow screen buffer consumed by fbdev emulation may
->>     also choosed be page size aligned.
->>
->> 2) The DIV_ROUND_UP() used in drm_fb_helper_memory_range_to_clip()
->>     will introduce off-by-one error.
->>
->> For example, on a 16KB page size system, in order to store a 1920x1080
->> XRGB framebuffer, we need allocate 507 pages. Unfortunately, the size
->> 1920*1080*4 can not be divided exactly by 16KB.
->>
->>   1920 * 1080 * 4 = 8294400 bytes
->>   506 * 16 * 1024 = 8290304 bytes
->>   507 * 16 * 1024 = 8306688 bytes
->>
->>   line_length = 1920*4 = 7680 bytes
->>
->>   507 * 16 * 1024 / 7680 = 1081.6
->>
->>   off / line_length = 507 * 16 * 1024 / 7680 = 1081
->>   DIV_ROUND_UP(507 * 16 * 1024, 7680) will yeild 1082
->>
->> memcpy_toio() typically issue the copy line by line, when copy the last
->> line, out-of-bound access will be happen. Because:
->>
->>   1082 * line_length = 1082 * 7680 = 8309760, and 8309760 > 8306688
->>
->> Note that userspace may stil write to the invisiable area if a larger
->> buffer than width x stride is exposed. But it is not a big issue as
->> long as there still have memory resolve the access if not drafting so
->> far.
->>
->>   - Also limit the y1 (Daniel)
->>   - keep fix patch it to minimal (Daniel)
->>   - screen_size is page size aligned because of it need mmap (Thomas)
->>   - Adding fixes tag (Thomas)
->>
->> Fixes: aa15c677cc34 ("drm/fb-helper: Fix vertical damage clipping")
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Thanks for the update!  This v5 is completely different from the v3
-> I tested before, so keeping my Tested-by is not really appropriate...
+So, this looks like a mixture of fw_name and index clocks. Please 
+migrate all of fw_names to the .index usage.
 
-Thanks for testing. I'm a bit of confident that it will works.
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_6[] = {
+> +	{ P_EMAC0_SGMIIPHY_TCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_6[] = {
+> +	{ .fw_name = "emac0_sgmiiphy_tclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_7[] = {
+> +	{ P_EMAC0_SGMIIPHY_MAC_RCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_7[] = {
+> +	{ .fw_name = "emac0_sgmiiphy_mac_rclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_8[] = {
+> +	{ P_EMAC0_SGMIIPHY_MAC_TCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_8[] = {
+> +	{ .fw_name = "emac0_sgmiiphy_mac_tclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_9[] = {
+> +	{ P_EMAC1_SGMIIPHY_RCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_9[] = {
+> +	{ .fw_name = "emac1_sgmiiphy_rclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_10[] = {
+> +	{ P_EMAC1_SGMIIPHY_TCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_10[] = {
+> +	{ .fw_name = "emac1_sgmiiphy_tclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_11[] = {
+> +	{ P_EMAC1_SGMIIPHY_MAC_RCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_11[] = {
+> +	{ .fw_name = "emac1_sgmiiphy_mac_rclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_12[] = {
+> +	{ P_EMAC1_SGMIIPHY_MAC_TCLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_12[] = {
+> +	{ .fw_name = "emac1_sgmiiphy_mac_tclk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_13[] = {
+> +	{ P_PCIE_1_PIPE_CLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_13[] = {
+> +	{ .fw_name = "pcie_1_pipe_clk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_14[] = {
+> +	{ P_PCIE_2_PIPE_CLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_14[] = {
+> +	{ .fw_name = "pcie_2_pipe_clk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_15[] = {
+> +	{ P_PCIE20_PHY_AUX_CLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_15[] = {
+> +	{ .fw_name = "pcie20_phy_aux_clk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_16[] = {
+> +	{ P_PCIE_PIPE_CLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_16[] = {
+> +	{ .fw_name = "pcie_pipe_clk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_17[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 1 },
+> +	{ P_GPLL6_OUT_MAIN, 2 },
+> +	{ P_GPLL0_OUT_EVEN, 6 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_17[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpll0.clkr.hw },
+> +	{ .hw = &gpll6.clkr.hw },
+> +	{ .hw = &gpll0_out_even.clkr.hw },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_18[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 1 },
+> +	{ P_GPLL8_OUT_MAIN, 2 },
+> +	{ P_GPLL0_OUT_EVEN, 6 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_18[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpll0.clkr.hw },
+> +	{ .hw = &gpll8.clkr.hw },
+> +	{ .hw = &gpll0_out_even.clkr.hw },
+> +};
+> +
+> +static const struct parent_map gcc_parent_map_19[] = {
+> +	{ P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK, 0 },
+> +	{ P_BI_TCXO, 2 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_parent_data_19[] = {
+> +	{ .fw_name = "usb3_phy_wrapper_gcc_usb30_pipe_clk" },
+> +	{ .index = DT_BI_TCXO },
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac0_cc_sgmiiphy_rx_clk_src = {
+> +	.reg = 0x71060,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_5,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac0_cc_sgmiiphy_rx_clk_src",
+> +			.parent_data = gcc_parent_data_5,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_5),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac0_cc_sgmiiphy_tx_clk_src = {
+> +	.reg = 0x71058,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_6,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac0_cc_sgmiiphy_tx_clk_src",
+> +			.parent_data = gcc_parent_data_6,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_6),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac0_sgmiiphy_mac_rclk_src = {
+> +	.reg = 0x71098,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_7,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac0_sgmiiphy_mac_rclk_src",
+> +			.parent_data = gcc_parent_data_7,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_7),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac0_sgmiiphy_mac_tclk_src = {
+> +	.reg = 0x71094,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_8,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac0_sgmiiphy_mac_tclk_src",
+> +			.parent_data = gcc_parent_data_8,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_8),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac1_cc_sgmiiphy_rx_clk_src = {
+> +	.reg = 0x72060,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_9,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac1_cc_sgmiiphy_rx_clk_src",
+> +			.parent_data = gcc_parent_data_9,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_9),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac1_cc_sgmiiphy_tx_clk_src = {
+> +	.reg = 0x72058,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_10,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac1_cc_sgmiiphy_tx_clk_src",
+> +			.parent_data = gcc_parent_data_10,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_10),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac1_sgmiiphy_mac_rclk_src = {
+> +	.reg = 0x72098,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_11,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac1_sgmiiphy_mac_rclk_src",
+> +			.parent_data = gcc_parent_data_11,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_11),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_emac1_sgmiiphy_mac_tclk_src = {
+> +	.reg = 0x72094,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_12,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_emac1_sgmiiphy_mac_tclk_src",
+> +			.parent_data = gcc_parent_data_12,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_12),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_pcie_1_pipe_clk_src = {
+> +	.reg = 0x67084,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_13,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_pcie_1_pipe_clk_src",
+> +			.parent_data = gcc_parent_data_13,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_13),
+> +			.ops = &clk_regmap_mux_closest_ops,
 
-Your tested-by is valuable, really don't want drop this. So I keep it.
+Are these clocks a clk_regmap_mux_closest_ops in reality 
+clk_regmap_phy_mux_ops?
 
-> I have retested fbtest with shmob-drm on Armadillo-800-EVA
-> (800x480@RG16, i.e. 187.5 pages), and fortunately this version still
-> works fine, so
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Gr{oetje,eeting}s,
->
->                          Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_pcie_2_pipe_clk_src = {
+> +	.reg = 0x68050,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_14,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_pcie_2_pipe_clk_src",
+> +			.parent_data = gcc_parent_data_14,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_14),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_pcie_aux_clk_src = {
+> +	.reg = 0x53074,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_15,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_pcie_aux_clk_src",
+> +			.parent_data = gcc_parent_data_15,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_15),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_pcie_pipe_clk_src = {
+> +	.reg = 0x53058,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_16,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_pcie_pipe_clk_src",
+> +			.parent_data = gcc_parent_data_16,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_16),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_regmap_mux gcc_usb3_phy_pipe_clk_src = {
+> +	.reg = 0x27070,
+> +	.shift = 0,
+> +	.width = 2,
+> +	.parent_map = gcc_parent_map_19,
+> +	.clkr = {
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_usb3_phy_pipe_clk_src",
+> +			.parent_data = gcc_parent_data_19,
+> +			.num_parents = ARRAY_SIZE(gcc_parent_data_19),
+> +			.ops = &clk_regmap_mux_closest_ops,
+> +		},
+> +	},
+> +};
+> +
+
+skipped the rest, looks good to me.
+
+-- 
+With best wishes
+Dmitry
+
