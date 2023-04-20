@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5CC6E9261
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A676E887F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbjDTLY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S233034AbjDTDPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 23:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbjDTLYh (ORCPT
+        with ESMTP id S232367AbjDTDOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:24:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450434EF6;
-        Thu, 20 Apr 2023 04:23:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA7A660EE2;
-        Thu, 20 Apr 2023 11:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FBDC433D2;
-        Thu, 20 Apr 2023 11:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681989210;
-        bh=83TzyHp1mq1Rphu2Mp/8bCtIaYRo7x0Qx9nQXv5k8Mo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mesjctjmh4x2MfVshQziiYcP9VPUja+3n03zFKwjFShgQ5Cuj1r8B9x2Mkyvh7mmI
-         yWiQWgHLUGHeOfjEoPQYvX1xAiIFXzYS7kpdu9J1MhagXRDm7Z+9JxA962vSj2DclJ
-         kCT5d3rC2cWqMzwbIGNqoP5S4VIyuw5CXn8e+aKEQKgbGku8jQmQn1gGGg/KIe83qe
-         kNXANOU+kPd1O/gFoWBhpVwTfV6AW6MeYVWRRTJX7xMSr81paNJOWn7r4hNFP2H+g5
-         IqKnuFhBk4W10zfGrGHAHfYJO25bLApSZEj5TCwgcw5rjUm1uIaSgGnJiGPLb1TM3X
-         K+XR5jRKXGpug==
-Date:   Thu, 20 Apr 2023 12:13:24 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
- handshake registers
-Message-ID: <20230420111324.GA970483@google.com>
-References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
- <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
- <ZEFjQtOCQCvQJ1k/@yilunxu-OptiPlex-7050>
+        Wed, 19 Apr 2023 23:14:51 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9182103
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 20:14:49 -0700 (PDT)
+X-ASG-Debug-ID: 1681960486-1eb14e63872b340001-xx1T2L
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id KWBNUDq3hfWgjigh (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 11:14:46 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 11:14:46 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 11:14:46 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH] =?UTF-8?q?UHCI=EF=BC=9Aadjust=20zhaoxin=20UHCI=20controll?= =?UTF-8?q?ers=20OverCurrent=20bit=20value?=
+Date:   Thu, 20 Apr 2023 19:14:45 +0800
+X-ASG-Orig-Subj: [PATCH] =?UTF-8?q?UHCI=EF=BC=9Aadjust=20zhaoxin=20UHCI=20controll?= =?UTF-8?q?ers=20OverCurrent=20bit=20value?=
+Message-ID: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZEFjQtOCQCvQJ1k/@yilunxu-OptiPlex-7050>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1681960486
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1007
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0103 1.0000 -1.9535
+X-Barracuda-Spam-Score: 1.16
+X-Barracuda-Spam-Status: No, SCORE=1.16 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107661
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,36 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023, Xu Yilun wrote:
+Over Current condition is not standardized in the UHCI spec.
+Zhaoxin UHCI controllers report OverCurrent bit active off.
+Intel controllers report it active on, so we'll adjust the bit value.
 
-> On 2023-04-17 at 12:26:53 +0300, Ilpo Järvinen wrote:
-> > On some MAX 10 cards, the BMC firmware is not available to service
-> > handshake registers during secure update erase and write phases at
-> > normal speeds. This problem affects at least hwmon driver. When the MAX
-> > 10 hwmon driver tries to read the sensor values during a secure update,
-> > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
-> > which is magnitudes worse than the normal <0.02s).
-> > 
-> > Manage access to the handshake registers using a rw semaphore and a FW
-> > state variable to prevent accesses during those secure update phases
-> > and return -EBUSY instead.
-> > 
-> > If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
-> > used. This avoids the locking cost.
-> > 
-> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> 
-> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> 
-> Hi Lee:
-> 
-> Could the fpga part also been applied to mfd tree when everyone is good?
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+---
+ drivers/usb/host/uhci-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Yes, with an Acked-by it can.
-
+diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+index 3592f757fe05..177e3c2aa287 100644
+--- a/drivers/usb/host/uhci-pci.c
++++ b/drivers/usb/host/uhci-pci.c
+@@ -126,6 +126,10 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+ 	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
+ 		uhci->oc_low = 1;
+ 
++	/* ZHAOXIN controllers report OverCurrent bit active off. */
++	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
++		uhci->oc_low = 1;
++
+ 	/* HP's server management chip requires a longer port reset delay. */
+ 	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_HP)
+ 		uhci->wait_for_hp = 1;
 -- 
-Lee Jones [李琼斯]
+2.32.0
+
