@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8C56E88FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E39A6E8902
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjDTEKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 00:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S231127AbjDTEMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 00:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDTEKV (ORCPT
+        with ESMTP id S232403AbjDTEMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:10:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0009E5F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:10:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CD2643D4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 04:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 949EFC433EF;
-        Thu, 20 Apr 2023 04:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681963819;
-        bh=W35thcLsxSdb5IFXl2LRqkqSPXmH7NiM5RBfp7QRbug=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LjuYn6maOgxEamvS0m/rZ1+/iogaopA12NdQbCAx7BVKrZB0ZJuuDlSY00USEPflf
-         dWAkY4fGEdNMyFo69VjOjYKEXRrGXB6vwpuQKhmGsfOij/yALrftn6bXIKBsyghqq1
-         c3vYzLTXh/1KxXqhkjPpR/Od+jtuk7Sx6Pn7WVRpNdKr0Uo/s8k23RefuVc0gsqE9m
-         swmUcDArbkfFsFmrwLOVFXkzsbDKKxFl1Ouat66ZjSikHG5ypfBtl5+f+5d9Yf9Q2r
-         8PDH7QuLRH2p/D+mZL4FClsRVNzmPIboMpl8S+kBIUlo/dGO1lyHfo6zxOhXMzAT4c
-         wpfR/ywTVoe8g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B670E3309F;
-        Thu, 20 Apr 2023 04:10:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 20 Apr 2023 00:12:41 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64101FCD;
+        Wed, 19 Apr 2023 21:12:39 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b60366047so523403b3a.1;
+        Wed, 19 Apr 2023 21:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681963959; x=1684555959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCOQnQggN0JOswFzdNPgIIbMyyc4QibhYHQ91Y21has=;
+        b=Lp7y+Skr6D3DxztdWnM/dDFZYun5ivSMHFcfpeWAZht3ov15BMhC4H4fwJcLmeBXxD
+         peeMpYeMLs+3u9PqZV5o3QhNt1jvKr2rJLWq7igUf8bu6uC8UAhagj5CluiPtQprcS84
+         znAKEw5JnXQ1FLSQGRdHtk2QMc/3vMWC66OPUJFlCFcHwCXnd62UOA8c1WC9GH9N8cFR
+         Sej1wIGUQyQg8zNoYwq6FaiZTI6Kjnc7209aaptcSqk4qlYPJhboGj2KhDA99gMwZUWT
+         SLtQ9W8tIxvcPWYRKwJSXz0un4Xc0+DtnaUTsF+Kg2wXDfiwsc5W1N4gg0+DFhJJzLlw
+         aYEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681963959; x=1684555959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kCOQnQggN0JOswFzdNPgIIbMyyc4QibhYHQ91Y21has=;
+        b=c3p8rf3wBCl7EJNpDOfWmLSigZ3wnB+dlVbjBT219DPolcvyitAPKS1pUfpvxnDvzm
+         BVwKYLpqq+tCy6xmzqnYVLZutaONvZ5Rl8UEJ0gcKBZss6JAi6k2gCuHZEeEDJJ2Wqmp
+         RPZF8ods0k3qoErIzsZQbzPh0LKFK0gnxOo5o63+VTXaU+sey9dRruxpdaPiGPK5NymV
+         CitFLREDAsc6j82rbW/DaZO+rAmnVc97aK0KrR1lG5akr38rgTMfM/Qfrjt4C0N4NXnc
+         11F5Bj+Edcb/ngGcIoPB88nL1NWJbT+71JnoGWGUyiADG266miBAr+qrObQGFEPx2W8B
+         xycA==
+X-Gm-Message-State: AAQBX9dj2gHDbplAUw/qIRm21eHwdzHTvilmTsDJw9coDznI/5wI7tu3
+        RhkzlmnD8VM7C+1lKeEoTjc=
+X-Google-Smtp-Source: AKy350aPwhS7nuGapUUqTFmjGK1V7DZIhYWqCr6e+hPvjCq9TyEzamNgOaCSMkcsxgtbHedE2p4itw==
+X-Received: by 2002:a05:6a00:1409:b0:626:2ce1:263c with SMTP id l9-20020a056a00140900b006262ce1263cmr6849744pfu.5.1681963959349;
+        Wed, 19 Apr 2023 21:12:39 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
+        by smtp.gmail.com with ESMTPSA id w35-20020a631623000000b0051f15c575fesm166684pgl.87.2023.04.19.21.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 21:12:38 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 849A310685E; Thu, 20 Apr 2023 11:12:35 +0700 (WIB)
+Date:   Thu, 20 Apr 2023 11:12:35 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/84] 5.15.108-rc4 review
+Message-ID: <ZEC7s9nStY5nwAKr@debian.me>
+References: <20230419132034.475843587@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform: chrome: wilco_ec: remove return value check of
- debugfs_create_dir()
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <168196381950.11566.18059888806263127590.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Apr 2023 04:10:19 +0000
-References: <20230419100303.343379-1-zkhuang@hust.edu.cn>
-In-Reply-To: <20230419100303.343379-1-zkhuang@hust.edu.cn>
-To:     Zhengkang Huang <zkhuang@hust.edu.cn>
-Cc:     bleung@chromium.org, dzm91@hust.edu.cn,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RmCqRgRkBpcHdJPQ"
+Content-Disposition: inline
+In-Reply-To: <20230419132034.475843587@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+--RmCqRgRkBpcHdJPQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 19 Apr 2023 18:03:03 +0800 you wrote:
-> Smatch complains that:
-> wilco_ec_debugfs_probe() warn: 'debug_info->dir' is an error
-> pointer or valid
-> 
-> Debugfs checks are generally not supposed to be checked
-> for errors and it is not necessary here.
-> 
-> [...]
+On Wed, Apr 19, 2023 at 03:22:09PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.108 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Here is the summary with links:
-  - platform: chrome: wilco_ec: remove return value check of debugfs_create_dir()
-    https://git.kernel.org/chrome-platform/c/0ad5ce8407db
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--RmCqRgRkBpcHdJPQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZEC7rgAKCRD2uYlJVVFO
+o2zQAQCSz+DUgH0E/Wtcs9PCN9esaY0dxEghl/v1Q+mVbXriBAD/e1Wc3H1iKMO6
+oaFh6wYRSpEyjzZX/wpnOcOK3D7JIAk=
+=NG0U
+-----END PGP SIGNATURE-----
+
+--RmCqRgRkBpcHdJPQ--
