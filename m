@@ -2,84 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0EE6E9736
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167616E973D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjDTOeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S231396AbjDTOfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjDTOeM (ORCPT
+        with ESMTP id S230350AbjDTOfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:34:12 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F4A7DB4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:33:56 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8c28158e2so5553801fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682001235; x=1684593235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ofr40ek0G9BZfkBPDY70rNqEWnYDL1CgRLdFieoxIVY=;
-        b=HYlmKc71wctRPq+LnqBHZDTdPLQxNak+gf4Z3CQg+nrr7Enfl+wK3NGELZIRMEADQm
-         RawxDawGU8X+/+fQWqFG7cLDeWsNGxWAKLCUwZRPe5xGhy8bGAgJ7Hwzu1EF0Nrf/ci2
-         B8QCh9uvlnvV8/neIeQT553iVGTFWGdfb+DO5RCKrLU+G4xNpaypDYHv4fKMzboen+LA
-         0VIue93TzAVMS4oi/D9sIpLB23bPLEEKpyrf9E8Etz2am/z74+9nrxq3YEhQBhAmJ3ia
-         /TixsC2+Lp0UutrMjZ1bc1HAJRwHrnL8f2pNF3VLF625ud+qnCzSZPOtL5t498Y2Nu7Y
-         YXkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682001235; x=1684593235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ofr40ek0G9BZfkBPDY70rNqEWnYDL1CgRLdFieoxIVY=;
-        b=d5xHvx92dg0EFZZD+ElGjfJ1GlC8QPiZcPz7N8PQEammd2RMU9gUQQNSIHuKeBRGcl
-         GeRTFGeRRnguA+slQ+cnPE0mJqCFoe8eKOKI4Jwxyag26S03nkoBqUG/IYqbHwCEKJhW
-         Ed76nU5fg6wmenzHNLXnqZ0pUEqlAeSwB/4TpDHhOI6WVDUdAdmDlts4St+XjDhN5iI2
-         9Rkc+Y2oiHU3tNR66RBgteq61rDB4Mb4yBhJA104G6n1/Af6tWyuAUTAzEWvqtJnhhoF
-         7CK+1prfskSdXXFOUYvFvvmItNJmhahy0EIx2FWrai8nVdTV07EHdMG3hiDhZwnpUjy5
-         DGgA==
-X-Gm-Message-State: AAQBX9fSwbIlAnEIP86tHhVfaV45kvQOVjwC2IZh9GrNI0NovcHyydNA
-        HNTmk487ChlC/b5ObKN0XsiveA==
-X-Google-Smtp-Source: AKy350a1RnFHhnCb4nDHDUFDZEK3G1dY2NlIYfiSjSWKmf67vTEDnztfUAcirZhbgAH7loNvBK2aGw==
-X-Received: by 2002:a19:ae0a:0:b0:4d7:44c9:9f4b with SMTP id f10-20020a19ae0a000000b004d744c99f4bmr451467lfc.1.1682001235170;
-        Thu, 20 Apr 2023 07:33:55 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id v3-20020a197403000000b004dda87ecae3sm233446lfe.246.2023.04.20.07.33.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 07:33:54 -0700 (PDT)
-Message-ID: <7ad86cd9-4b30-e7f1-780f-2c1c7093087e@linaro.org>
-Date:   Thu, 20 Apr 2023 17:33:54 +0300
+        Thu, 20 Apr 2023 10:35:16 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5D7A7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1682001314;
+        bh=8ZBBaOgr088FiPgbci74Z2Eqlr+yLhPX+q+5IIPuxmQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=en46sEw5h1ERF/w8DtSig2fQcFc1QwYdUjMOgUX6NsXqtwAhSQaip4ebQChQ3P8OC
+         jR77as3j3esp+zd/TeqyN/Bfm+VAzkvR9fYJCs52GAxb4swk+TjeWlAiaTzZbuHoC5
+         ggqgxyb2ypiYUGmJfIIdAraPEsaYNsaESIOdHrqG0HtJMKSrRiDL0J5u8jn3OrQJyZ
+         vR7g0TWfLfJX9S3hkHe6bl/4y8z+arbdo/Lj4h/0iTOqTRWEmsendAoBqGVXYkOsO7
+         WxPz6GldJlP2LA0S4ZCg2AQjah8NcSJtymzoG2Uv+kxjL4quzHjwbvwvXxg8U9ickC
+         8zcsno7VZkEHA==
+Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q2Kv62NmZzwPh;
+        Thu, 20 Apr 2023 10:35:14 -0400 (EDT)
+Message-ID: <d96164a6-c522-1bfc-8b37-333726cdc573@efficios.com>
+Date:   Thu, 20 Apr 2023 10:35:15 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/3] drm/msm/dpu: Drop unused members from HW structs
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230418-dpu-drop-useless-for-lookup-v1-0-b9897ceb6f3e@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v1-1-b9897ceb6f3e@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230418-dpu-drop-useless-for-lookup-v1-1-b9897ceb6f3e@somainline.org>
+Subject: Re: [RFC PATCH v9 2/2] sched: Fix performance regression introduced
+ by mm_cid
+Content-Language: en-US
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
+        michael.christie@oracle.com
+References: <20230419155012.63901-1-mathieu.desnoyers@efficios.com>
+ <20230419155012.63901-2-mathieu.desnoyers@efficios.com>
+ <20230420095610.GA153295@ziqianlu-desk2>
+ <c01ddfc5-9410-14e1-55f7-c24f44447f8a@efficios.com>
+ <20230420125048.GA154262@ziqianlu-desk2>
+ <721f4b8b-c238-53b1-9085-a9dae6a961e1@efficios.com>
+ <20230420133519.GA154479@ziqianlu-desk2>
+ <7a0c1db1-103d-d518-ed96-1584a28fbf32@efficios.com>
+In-Reply-To: <7a0c1db1-103d-d518-ed96-1584a28fbf32@efficios.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,129 +62,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2023 02:14, Marijn Suijten wrote:
-> Some of these members were initialized while never read, while others
-> were not even assigned any value at all.  Drop them to save some space,
-> and above all confusion when looking at these members.
+On 2023-04-20 09:54, Mathieu Desnoyers wrote:
+> On 2023-04-20 09:35, Aaron Lu wrote:
+> [...]
+>>>>>
+>>>>> Then we clearly have another member of mm_struct on the same cache 
+>>>>> line as
+>>>>> pcpu_cid which is bouncing all over the place and causing 
+>>>>> false-sharing. Any
+>>>>> idea which field(s) are causing this ?
+>>>>
+>>>> That's my first reaction too but as I said in an earlier reply:
+>>>> https://lore.kernel.org/lkml/20230419080606.GA4247@ziqianlu-desk2/
+>>>> I've tried to place pcpu_cid into a dedicate cacheline with no other
+>>>> fields sharing a cacheline with it in mm_struct but it didn't help...
+>>>
+>>> I see two possible culprits there:
+>>>
+>>> 1) The mm_struct pcpu_cid field is suffering from false-sharing. I 
+>>> would be
+>>>     interested to look at your attempt to move it to a separate cache 
+>>> line to
+>>>     try to figure out what is going on.
+>>
+>> Brain damaged...my mistake, I only made sure its following fields not
+>> share the same cacheline but forgot to exclude its preceding fields and
+>> turned out it's one(some?) of the preceeding fields that caused false
+>> sharing. When I did:
+>>
+>> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+>> index 5eab61156f0e..a6f9d815991c 100644
+>> --- a/include/linux/mm_types.h
+>> +++ b/include/linux/mm_types.h
+>> @@ -606,6 +606,7 @@ struct mm_struct {
+>>                   */
+>>                  atomic_t mm_count;
+>>   #ifdef CONFIG_SCHED_MM_CID
+>> +               CACHELINE_PADDING(_pad1_);
+>>                  /**
+>>                   * @pcpu_cid: Per-cpu current cid.
+>>                   *
+>> mm_cid_get() dropped to 0.0x% when running hackbench :-)
 > 
-> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-> Fixes: 84a33d0fd921 ("drm/msm/dpu: add dpu_hw_wb abstraction for writeback blocks")
-
-The fixes headers are slightly questionable, as unused fields are not a 
-bug. Nevertheless:
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 1 -
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h | 1 -
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c | 1 -
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h | 2 --
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c   | 1 -
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h   | 5 -----
->   6 files changed, 11 deletions(-)
+> Now we are talking! :)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> index 84ee2efa9c66..a9c90249a6ac 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> @@ -374,7 +374,6 @@ struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
->   	 */
->   	c->idx = idx;
->   	c->cap = cfg;
-> -	c->mdss = m;
->   	_setup_intf_ops(&c->ops, c->cap->features);
->   
->   	return c;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> index 643dd10bc030..e07b2e33af3e 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> @@ -90,7 +90,6 @@ struct dpu_hw_intf {
->   	/* intf */
->   	enum dpu_intf idx;
->   	const struct dpu_intf_cfg *cap;
-> -	const struct dpu_mdss_cfg *mdss;
->   
->   	/* ops */
->   	struct dpu_hw_intf_ops ops;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c
-> index cf70a9bd1034..bb3ddec5c7d7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c
-> @@ -812,7 +812,6 @@ struct dpu_hw_sspp *dpu_hw_sspp_init(enum dpu_sspp idx,
->   	}
->   
->   	/* Assign ops */
-> -	hw_pipe->catalog = catalog;
->   	hw_pipe->ubwc = catalog->ubwc;
->   	hw_pipe->idx = idx;
->   	hw_pipe->cap = cfg;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h
-> index 74b98b6b3bc3..5004a02fd61e 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h
-> @@ -341,7 +341,6 @@ struct dpu_hw_sspp_ops {
->    * struct dpu_hw_sspp - pipe description
->    * @base: hardware block base structure
->    * @hw: block hardware details
-> - * @catalog: back pointer to catalog
->    * @ubwc: ubwc configuration data
->    * @idx: pipe index
->    * @cap: pointer to layer_cfg
-> @@ -350,7 +349,6 @@ struct dpu_hw_sspp_ops {
->   struct dpu_hw_sspp {
->   	struct dpu_hw_blk base;
->   	struct dpu_hw_blk_reg_map hw;
-> -	const struct dpu_mdss_cfg *catalog;
->   	const struct dpu_ubwc_cfg *ubwc;
->   
->   	/* Pipe */
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c
-> index 2d28afdf860e..db5e6040017f 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c
-> @@ -262,7 +262,6 @@ struct dpu_hw_wb *dpu_hw_wb_init(enum dpu_wb idx,
->   	}
->   
->   	/* Assign ops */
-> -	c->mdp = &m->mdp[0];
->   	c->idx = idx;
->   	c->caps = cfg;
->   	_setup_wb_ops(&c->ops, c->caps->features);
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h
-> index 3ff5a48541e2..b91923f879f1 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h
-> @@ -76,15 +76,12 @@ struct dpu_hw_wb_ops {
->   /**
->    * struct dpu_hw_wb : WB driver object
->    * @hw: block hardware details
-> - * @mdp: pointer to associated mdp portion of the catalog
->    * @idx: hardware index number within type
->    * @wb_hw_caps: hardware capabilities
->    * @ops: function pointers
-> - * @hw_mdp: MDP top level hardware block
->    */
->   struct dpu_hw_wb {
->   	struct dpu_hw_blk_reg_map hw;
-> -	const struct dpu_mdp_cfg *mdp;
->   
->   	/* wb path */
->   	int idx;
-> @@ -92,8 +89,6 @@ struct dpu_hw_wb {
->   
->   	/* ops */
->   	struct dpu_hw_wb_ops ops;
-> -
-> -	struct dpu_hw_mdp *hw_mdp;
->   };
->   
->   /**
+>>
+>> sched_mm_cid_migrate_to() is about 4% with most cycles spent on
+>> accessing mm->mm_users:
+>>
+>>         │     dst_cid = READ_ONCE(dst_pcpu_cid->cid);
+>>    0.03 │       mov     0x8(%r12),%r15d
+>>         │     if (!mm_cid_is_unset(dst_cid) &&
+>>    0.07 │       cmp     $0xffffffff,%r15d
+>>         │     ↓ je      87
+>>         │     arch_atomic_read():
+>>         │     {
+>>         │     /*
+>>         │     * Note for KASAN: we deliberately don't use 
+>> READ_ONCE_NOCHECK() here,
+>>         │     * it's non-inlined function that increases binary size 
+>> and stack usage.
+>>         │     */
+>>         │     return __READ_ONCE((v)->counter);
+>>   76.13 │       mov     0x54(%r13),%eax
+>>         │     sched_mm_cid_migrate_to():
+>>         │       cmp     %eax,0x410(%rdx)
+>>   21.71 │     ↓ jle     1d8
+>>         │     atomic_read(&mm->mm_users) >= t->nr_cpus_allowed)
+>>
+>> With this info, it should be mm_users that caused false sharing for
+>> pcpu_cid previously. Looks like mm_users is bouncing.
 > 
+> I suspect that the culprit here is mm_count rather than mm_users. 
+> mm_users just happens to share the same cache line as mm_count.
+> 
+> mm_count is incremented/decremented with mmgrab()/mmdrop() during
+> context switch.
+> 
+> This is likely causing other issues, for instance, the
+> membarrier_state field is AFAIR read-mostly, used for 
+> membarrier_mm_sync_core_before_usermode() to issue core
+> sync before every return to usermode if needed.
+> 
+> Other things like mm_struct pgd pointer appear to be likely
+> read-mostly variables.
+> 
+> I suspect it's mm_count which should be moved to its own cache line
+> to eliminate false-sharing with all the other read-mostly fields
+> of mm_struct.
+
+I have prepared a patch which moves the mm_count field into its own
+cache line, but after a quick discussion with Peter Zijlstra, it appears
+that the work on lazy-tlb refcounting currently in
+
+https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=x86/lazy
+
+will take care of this by entirely removing the reference counting for lazy TLB.
+
+So with this, I suspect we are as good as we can be in terms of near-zero
+footprint for the mm_cid feature, right ?
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index a57e6ae78e65..f740fa447df1 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -553,6 +553,21 @@ struct vm_area_struct {
+  struct kioctx_table;
+  struct mm_struct {
+  	struct {
++		/*
++		 * Fields which are often written to are placed in a separate
++		 * cache line.
++		 */
++		struct {
++			/**
++			 * @mm_count: The number of references to &struct mm_struct
++			 * (@mm_users count as 1).
++			 *
++			 * Use mmgrab()/mmdrop() to modify. When this drops to 0, the
++			 * &struct mm_struct is freed.
++			 */
++			atomic_t mm_count;
++		} ____cacheline_aligned_in_smp;
++
+  		struct maple_tree mm_mt;
+  #ifdef CONFIG_MMU
+  		unsigned long (*get_unmapped_area) (struct file *filp,
+@@ -590,14 +605,6 @@ struct mm_struct {
+  		 */
+  		atomic_t mm_users;
+  
+-		/**
+-		 * @mm_count: The number of references to &struct mm_struct
+-		 * (@mm_users count as 1).
+-		 *
+-		 * Use mmgrab()/mmdrop() to modify. When this drops to 0, the
+-		 * &struct mm_struct is freed.
+-		 */
+-		atomic_t mm_count;
+  #ifdef CONFIG_SCHED_MM_CID
+  		/**
+  		 * @cid_lock: Protect cid bitmap updates vs lookups.
+  
+
+
 
 -- 
-With best wishes
-Dmitry
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
