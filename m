@@ -2,106 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99056E8842
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D746E8846
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjDTCrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 22:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S232762AbjDTCt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 22:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbjDTCri (ORCPT
+        with ESMTP id S230326AbjDTCtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 22:47:38 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E930B4C05
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:47:02 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a686260adcso7196605ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681958822; x=1684550822;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ONGcsQhQe5EvPEMRGVWXOw89umdmRiF62BqlC5adKeI=;
-        b=doyqjWx+2bTIsT9FbRCU0F581ywpOcsJmoTejK2QuOP6Owg0kPKux89cd2wp/LQVF0
-         3mTPmTC6/peMzHNY+2spKZjC46AXrjhckyWYLQgCfesJBcvteL/dmg/GcKibc2/zmD+e
-         xbScjemnl1cw7HSGj+7F1N7EqZQBKBU9EZQF74Y2APqGsKgIa3AN2ZhrNfygbkr30S7d
-         G14hinuZt7Vtd7kdQ0NmWI0ZCSSSJesV0BrpVHsVSP1Fg+48oFyFAW1gwwwATuZHBT48
-         Af97GHaGEmaW9tzwwDa6wQS63i1n3sl5YdiQU+YhC1/25FrY6O0CiZmfy8hwJIOLTZuV
-         zKTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681958822; x=1684550822;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ONGcsQhQe5EvPEMRGVWXOw89umdmRiF62BqlC5adKeI=;
-        b=WaTlUaaQwCiCgaCvGJXGHTnCHxSmN9MS7ECFMvFlh4r2YUGK8W7zXjdQHbcV4DHwDX
-         3nO/d2VdylxelnIprHdby72LvFC+/sHRBJniUfUmf74PDzHtGa7VmpuVkglM2tGfOH0s
-         xEZiFYkk9MP4DnyKX+A/lrSlnEr9mz1+dVbItvHDrGozxWUfqnhVJFOLk2rkSCiUPYVI
-         p4+fxrGvnMzsK2U+cu3F8tJSVZ4a7DJzEuwy+84rMpaI9qULdU0tXEi46eIp7gPP+MDV
-         mR+jsEmYIrUewXqhIu6Y77zp0qLNV4jGueB9ggml9W+vvRRgQtppf/n+2RMlF9t9dAf3
-         rqpA==
-X-Gm-Message-State: AAQBX9cHxP0jxl7bnqyiSci/4pL/Y8uy5eoZC3R/aKxzkThzSNW8JNwe
-        lpS0mEB2Od1+60ib7mr7Z8yNyA==
-X-Google-Smtp-Source: AKy350bDwyoIChbds7xq1ecwfOCztzTynvx7cLW+ChaUaqWIqLPh7uhf6YD22ulu7zYqyDP6h2ZDOA==
-X-Received: by 2002:a17:903:18f:b0:19a:b427:230a with SMTP id z15-20020a170903018f00b0019ab427230amr8253487plg.63.1681958822010;
-        Wed, 19 Apr 2023 19:47:02 -0700 (PDT)
-Received: from [10.200.10.217] ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902b70400b001a681d123a0sm114401pls.297.2023.04.19.19.46.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 19:47:01 -0700 (PDT)
-Message-ID: <6a24bc86-0c19-b8c9-2e27-86282ee07171@bytedance.com>
-Date:   Thu, 20 Apr 2023 10:46:56 +0800
+        Wed, 19 Apr 2023 22:49:25 -0400
+Received: from out-17.mta1.migadu.com (out-17.mta1.migadu.com [95.215.58.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93C510E0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:49:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH] maple_tree: Fix allocation in mas_sparse_area()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Liam.Howlett@oracle.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-References: <20230419093625.99201-1-zhangpeng.00@bytedance.com>
- <20230419124902.7cb9b5c54afa37736e7b0e3a@linux-foundation.org>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230419124902.7cb9b5c54afa37736e7b0e3a@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681958955;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WA6UVK8dj8ldPfIV6BLeh8Vlm+ePhRuqvYfYMkiPMtU=;
+        b=IJoj2c66qQk0/sYbblqDvvKQuDn9sR4DCai/lySCGbLZPoWyGmiFefLjWtkd4FWX0OI+Go
+        byo2+QMSBf3x1U/JVWt4W2AvD6Cyf01dieW0MaAKseWf+6YxvZtI/uU4Pvd3tjJc4rYTm1
+        VwCF8nSZwi/8K7M7IprGNu/YopYtdLg=
+Date:   Thu, 20 Apr 2023 02:49:12 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <38876115ff2bd4756eca5d8d8f93a48e@linux.dev>
+Subject: Re: [PATCH] net: sched: print jiffies when transmit queue time
+ out
+To:     "Eric Dumazet" <edumazet@google.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <CANn89iJeiEk_Rcoh0odfjK2ocP23HQfOPDhJJ7p_=Q--A2jHJg@mail.gmail.com>
+References: <CANn89iJeiEk_Rcoh0odfjK2ocP23HQfOPDhJJ7p_=Q--A2jHJg@mail.gmail.com>
+ <20230419115632.738730-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/4/20 03:49, Andrew Morton 写道:
-> On Wed, 19 Apr 2023 17:36:25 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
->
->> In the case of reverse allocation, mas->index and mas->last do not point
->> to the correct allocation range, which will cause users to get incorrect
->> allocation results, so fix it. If the user does not use it in a specific
->> way, this bug will not be triggered.
-> Please describe the user-visible effects of the bug.  I assume "none",
-> because there are presently no callers which can trigger it?
->
->> Also re-checks whether the size is still satisfied after the lower bound
->> was increased, which is a corner case and is incorrect in previous versions.
-> Again, what are the user-visible effects of the bug?
->
->
-This is indeed a bug, but only VMA uses it now, the way VMA is used
-now will not trigger it. There is a possibility that a user will
-trigger it in the future. As a general-purpose data structure library,
-Maple tree is treated as an opaque box by its users. I think that
-as long as users use the API provided by Maple tree correctly,
-there should be no errors in maple tree. Just like other data structure
-libraries (such as rbtree). So I fixed it. It's easy to write test
-cases to trigger this bug, but I haven't written test code yet.
-
-Sorry I didn't describe it in detail. In the future I will describe
-user-visible effects in detail.
-
-Thanks.
-
+April 19, 2023 8:02 PM, "Eric Dumazet" <edumazet@google.com> wrote:=0A=0A=
+> On Wed, Apr 19, 2023 at 1:56 PM Yajun Deng <yajun.deng@linux.dev> wrote=
+:=0A> =0A>> Although there is watchdog_timeo to let users know when the t=
+ransmit queue=0A>> begin stall, but dev_watchdog() is called with an inte=
+rval. The jiffies=0A>> will always be greater than watchdog_timeo.=0A>> =
+=0A>> To let users know the exact time the stall started, print jiffies w=
+hen=0A>> the transmit queue time out.=0A>> =0A>> Signed-off-by: Yajun Den=
+g <yajun.deng@linux.dev>=0A>> ---=0A>> =0A>> atomic_long_inc(&txq->trans_=
+timeout);=0A>> break;=0A>> }=0A>> @@ -522,8 +522,9 @@ static void dev_wat=
+chdog(struct timer_list *t)=0A>> =0A>> if (unlikely(some_queue_timedout))=
+ {=0A>> trace_net_dev_xmit_timeout(dev, i);=0A>> - WARN_ONCE(1, KERN_INFO=
+ "NETDEV WATCHDOG: %s (%s): transmit queue %u timed out\n",=0A>> - dev->n=
+ame, netdev_drivername(dev), i);=0A>> + WARN_ONCE(1, KERN_INFO "NETDEV WA=
+TCHDOG: %s (%s): \=0A>> + transmit queue %u timed out %lu jiffies\n",=0A>=
+> + dev->name, netdev_drivername(dev), i, some_queue_timedout);=0A> =0A> =
+If we really want this, I suggest we export a time in ms units, using=0A>=
+ jiffies_to_msecs()=0A=0AOK.
