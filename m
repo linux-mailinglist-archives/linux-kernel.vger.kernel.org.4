@@ -2,140 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417C26E8CF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997766E8CF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234476AbjDTIjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S234474AbjDTIjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjDTIjM (ORCPT
+        with ESMTP id S233830AbjDTIjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:39:12 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCA94221
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:39:11 -0700 (PDT)
+        Thu, 20 Apr 2023 04:39:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9C140C7;
+        Thu, 20 Apr 2023 01:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681979951; x=1713515951;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=wVsnGwgAugAJ2fpRYz24Pugal7xVqOqt6LioUkpqN9k=;
-  b=a3XzXK3MO8A/nAXk+bjttV/B4xXyw7GxvekH/spqjFauvsF8IGPYrmiu
-   aErrqOqgWGffdT+pp1g3P/RSOVezDqvSvUM+4R4x2sE4YIKc9ZkNcfMu3
-   XLmJ7iDcXn1vFFBhkInIGEF8e3Jh9OW9kFnOhhytlIXTYqx2jexWsCvG0
-   7D9Pp6VKDWdEmXiqoj5NJWfdFSXGNDizXq+eoQK5EFJtnmla92awUfrZI
-   iJdoODDiaiA7Cd8H8iJa9qENdmokBTj9/qICAhLfsKAj13Be+lzhDHhBj
-   802NUpggac5G1ws4+N6R/R2asLOW/3dhPquXOt4egiENWdMN65lTBFvHE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="408587383"
+  t=1681979948; x=1713515948;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4VPKHoRggY1IUF6tvOUimijOTqeaqrgEirRfDRYdkX4=;
+  b=ENpSpNiiaKrxZ8/CL53kH9kQd7/4n2qJ7P6GDinCF0T2XhGoM4tnwjV+
+   V0SjEnb7gIue16PUwKCLc8d/svXr0DQ5XAor0D0gIDck8BzZ73Zwat38y
+   JPCGEKQoAbUNr8TvxsiQyg6pcBhETuKDwN19CEwvo8MciUCqSGYakNw2U
+   wupdVZcWGdjb8t1PooOcJs5UqkC2C6Hp1ZNwuDEegnQsiyAAN/pVsBedF
+   EPt99PWEIRmyyK97eiB0zU5QWMfZNfGVf75X1hMqubmb64Mz6KrFL7kxx
+   zGkBGRbsrjQrr37DcEW1TtdN9mCNuvw/NDhXYR8dd2x96OFjAYSxVJULv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="410912719"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="408587383"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:39:10 -0700
+   d="scan'208";a="410912719"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:39:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="803270633"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835635411"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="803270633"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:39:08 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     haoxin <xhao@linux.alibaba.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-References: <20230410075224.827740-1-ying.huang@intel.com>
-        <97e79078-69e8-e387-9e77-a4d741eace4e@linux.alibaba.com>
-Date:   Thu, 20 Apr 2023 16:38:03 +0800
-In-Reply-To: <97e79078-69e8-e387-9e77-a4d741eace4e@linux.alibaba.com>
-        (haoxin's message of "Thu, 20 Apr 2023 15:44:03 +0800")
-Message-ID: <878rent0d0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="835635411"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 20 Apr 2023 01:39:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 20 Apr 2023 11:39:04 +0300
+Date:   Thu, 20 Apr 2023 11:39:04 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] usb: typec: fix potential NULL dereference
+Message-ID: <ZED6KBl6HNT8D0ae@kuha.fi.intel.com>
+References: <20230417195003.19504-1-korotkov.maxim.s@gmail.com>
+ <ZD41tLi3sMB71Xf2@kroah.com>
+ <22a5bd86-8d41-14e2-bb5a-968d15618adf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22a5bd86-8d41-14e2-bb5a-968d15618adf@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-haoxin <xhao@linux.alibaba.com> writes:
+On Tue, Apr 18, 2023 at 09:56:51AM +0300, Maxim Korotkov wrote:
+> On 18.04.2023 09:16, Greg Kroah-Hartman wrote:
+> > On Mon, Apr 17, 2023 at 10:50:03PM +0300, Maxim Korotkov wrote:
+> > > The pointer 'adev' was being dereferenced before being checked for NULL
+> > > in the 'type_alt mode_enter()' and 'type_alt mode_exit()' functions.
+> > > Although this is a hypothetical issue, it's better to move the pointer
+> > > assignment after the NULL check to avoid any potential problems.
+> > > 
+> > > Found by Linux Verification Center with Svace static analyzer.
+> > > 
+> > > Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+> > > Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+> > > ---
+> > >   drivers/usb/typec/bus.c | 13 +++++++++----
+> > >   1 file changed, 9 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+> > > index 098f0efaa58d..ae0aca8f33db 100644
+> > > --- a/drivers/usb/typec/bus.c
+> > > +++ b/drivers/usb/typec/bus.c
+> > > @@ -125,13 +125,16 @@ EXPORT_SYMBOL_GPL(typec_altmode_notify);
+> > >    */
+> > >   int typec_altmode_enter(struct typec_altmode *adev, u32 *vdo)
+> > >   {
+> > > -	struct altmode *partner = to_altmode(adev)->partner;
+> > > -	struct typec_altmode *pdev = &partner->adev;
+> > > +	struct altmode *partner;
+> > > +	struct typec_altmode *pdev;
+> > >   	int ret;
+> > >   	if (!adev || adev->active)
+> > >   		return 0;
+> > > +	partner = to_altmode(adev)->partner;
+> > > +	pdev = &partner->adev;
+> > 
+> > As you point out, the original code is still fine here, we check before
+> > we actually use these values.
+> > 
+> > Also, can adev every actually be NULL?  In looking at the code paths, I
+> > can't see how that could happen.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> I agree that the adev will most likely never be NULL, but usually this
+> pointer is checked before usage (for example in typec_altmode_notify() or
+> typec_altmode_vdm()). It is a little odd that in these functions it utilized
+> before check. Is it just extra check that can be removed?
 
-> ( 2023/4/10 H3:52, Huang Ying S:
->> 0Day/LKP reported a performance regression for commit
->> 7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, the
->> TLB flushing during page migration is batched.  So, in
->> try_to_migrate_one(), ptep_clear_flush() is replaced with
->> set_tlb_ubc_flush_pending().  In further investigation, it is found
->> that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
->> is inaccessible.  In fact, we can optimize in similar way for the
->> batched TLB flushing too to improve the performance.
->>
->> So in this patch, we check pte_accessible() before
->> set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests show
->> that the benchmark score of the anon-cow-rand-mt test case of
->> vm-scalability test suite can improve up to 2.1% with the patch on a
->> Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
->>
->> Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie.liu@intel.com
->> Link: https://lore.kernel.org/oe-lkp/ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com/
->> Fixes: 7e12beb8ca2a ("migrate_pages: batch flushing TLB")
->> Reported-by: kernel test robot <yujie.liu@intel.com>
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Cc: Nadav Amit <namit@vmware.com>
->> Cc: Mel Gorman <mgorman@techsingularity.net>
->> Cc: Hugh Dickins <hughd@google.com>
->> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
->> Cc: David Hildenbrand <david@redhat.com>
->> ---
->>   mm/rmap.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index 8632e02661ac..3c7c43642d7c 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1582,7 +1582,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->>   				 */
->>   				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
->>   -				set_tlb_ubc_flush_pending(mm,
->> pte_dirty(pteval));
->> +				if (pte_accessible(mm, pteval))
->> +					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
->>   			} else {
->>   				pteval = ptep_clear_flush(vma, address, pvmw.pte);
->>   			}
->> @@ -1963,7 +1964,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->>   				 */
->>   				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
->>   -				set_tlb_ubc_flush_pending(mm,
->> pte_dirty(pteval));
->> +				if (pte_accessible(mm, pteval))
->> +					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
->
-> Just a advice, can you put pte_accessible() into
-> set_tlb_ubc_flush_pendin(), just like ptep_clear_flush(); so that we
-> no need to add if (pte_accessible()) in per place
->
-> where call set_tlb_ubc_flush_pending();
+Please go ahead and remove it.
 
-Sounds reasonable for me, will do that in the next version.  Thanks for
-suggestion.
+thanks,
 
-Best Regards,
-Huang, Ying
-
->>   			} else {
->>   				pteval = ptep_clear_flush(vma, address, pvmw.pte);
->>   			}
+-- 
+heikki
