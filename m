@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33616E9C8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B990C6E9C8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbjDTTic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S231891AbjDTTjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjDTTi3 (ORCPT
+        with ESMTP id S229796AbjDTTjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:38:29 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576E42137
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:38:28 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3e0965f70ecso905771cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:38:28 -0700 (PDT)
+        Thu, 20 Apr 2023 15:39:41 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579662137
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:39:39 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5052caa1e32so1306346a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682019507; x=1684611507;
+        d=linux-foundation.org; s=google; t=1682019577; x=1684611577;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mbkXWBpwVxhf9T5z1cj4mwmJl7+Xdft765BvQGmNJoc=;
-        b=Ciz/t1cEtCUCOm5soArFZ936T3/SUb8VLB6c5P8LGdbu6vVDAjL9VlEeJbi2ziuhxy
-         C3vmNugZAc+x8atgpej6AYWTbg/CH71jBJ0GUVSsktziCLpabOw7/zqEc+skmTFrOO+i
-         ZotbQR6QLIGThfZYmTQOsHIcM4IBzEj1DPNrJDhEruo8QA3xEDRWU0solT/rU2BAY/yV
-         85SiFvDILk1jQ3JOtF5iesWxvT/b7C3s8OyqovZ33BteZR/RTUJDUejNm5BY5J1b+QCh
-         LqVHQd2X9sSBfcuCGaWZZ5VX5RmRRr6etLFaH8HToHo6sDWVSQ8xu7PDiyXLRdFEokvw
-         TciA==
+        bh=HILdVpnxn60sz/1+sruxM2PcPSxjEhfqFGF21BfXJgw=;
+        b=Z0Lfl9rFznZK4+XC+YnJ7OGtVVP93xBVIgp8L5wPabiyMHayvEMcGTYqR1eg349HZ8
+         m/QouQ721ax/Eo9Xrn038i8idFWh6bm/Q1FKDYnjfWbxh+J4nB015gI0zdPunVznSNzb
+         LhsuFG6RmoMIpiTDav3CJhrMXYmFkjdfKh0ho=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682019507; x=1684611507;
+        d=1e100.net; s=20221208; t=1682019577; x=1684611577;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mbkXWBpwVxhf9T5z1cj4mwmJl7+Xdft765BvQGmNJoc=;
-        b=gwHO36ioFllCeapLPQkEl/ppvpMTOztCIHhJzsszVZYK2H/OmZGz+JAm83iiV/jVM5
-         kzZhrgRI1WKm+KoCv22yeJdGXAauASmlamOo8o5lxsWwBPS6AKh71zB9JW+OKXH/6CK1
-         1MrcDKzSQ5jnvuHVTbV8BxBlDEzKMqUFcqQ160viUpVLp55BglNfYXsBFwosOCk8zD9b
-         R2lSgkvSo3MfBphZDfxWAmWIfqpocKfNQeJR8+t7qbWYMyiZnNIYqZYHey7rB8aJvMq3
-         A9BskdD4ZFfTeqRml11x0mwMb4tlALa0LRWftD4tkU+rMNsv5S6OnzDy9EAjwBvUpK2X
-         TRhA==
-X-Gm-Message-State: AAQBX9eSw00AdwL+UGguqp5nZ9C/+ykVy3L+37gZo4qe4O/IIb+vSKTt
-        RRq241dX4RG+y1PArk1prPjIJ4YOgT6LJdL//07+Xg==
-X-Google-Smtp-Source: AKy350abRG/tf4z4pattUwmk/F2Ixto8fxjoWPcUpuCUwzt1ET28kNEYXAvB43l6rGnhhp3YHPvNlcprP6JiHQXpUXM=
-X-Received: by 2002:a05:622a:1102:b0:3bf:e4e0:26a0 with SMTP id
- e2-20020a05622a110200b003bfe4e026a0mr56484qty.14.1682019507455; Thu, 20 Apr
- 2023 12:38:27 -0700 (PDT)
+        bh=HILdVpnxn60sz/1+sruxM2PcPSxjEhfqFGF21BfXJgw=;
+        b=PN+EA1qIjtWNfvAeVrILof2H0NrmhVdFklW1uKl+0hULRgLUtvqemotASL1JYos5vK
+         7OZ4mw+HsE8keaXADJ+WewjqdkcRMGXaTsDg6rmVOQsvcHbrzIwDQDw+2OPR4BytB1P5
+         X0dBjXryZtcR5e8ASZJXsftKSF8yplHrA+CEZNtpatqp+KYgyc03DWkXTuRrA7qXftkj
+         kF3eeX3nv6xJGoXN3ipb0YO4eKnN5xbeWaaZeY3J1p6rMfhZZUXU6wVBsJce4ZqLUQHz
+         KsKxgqCo8jJewyBJJzvjGwZGKg0tJGPaP7dNoc4ga4VplJXqfZ8nqutTmAtVr2re5Z3N
+         9rzw==
+X-Gm-Message-State: AAQBX9ffWBLNHmy7zlDuQjXgIFipJWk14OJtaXuYUNrY2KrOZVgiZaLh
+        KLK+kD94oe8j+MTaKozTO6l8547P7c69de2zmrnqWQ==
+X-Google-Smtp-Source: AKy350afi4aFBxyMtQOgWwHow6Ol4+6IZk/DK+Ze5VtVGEwVOIFz/BORiM7ijJ6CpHltbMwULSBNFg==
+X-Received: by 2002:a17:907:1c86:b0:94f:81c:725e with SMTP id nb6-20020a1709071c8600b0094f081c725emr38080ejc.59.1682019577092;
+        Thu, 20 Apr 2023 12:39:37 -0700 (PDT)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
+        by smtp.gmail.com with ESMTPSA id e6-20020a1709061e8600b0094776b4ef04sm1115577ejj.10.2023.04.20.12.39.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 12:39:36 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso1314916a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:39:36 -0700 (PDT)
+X-Received: by 2002:aa7:cc98:0:b0:506:b120:8df2 with SMTP id
+ p24-20020aa7cc98000000b00506b1208df2mr2667877edt.12.1682019575666; Thu, 20
+ Apr 2023 12:39:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230403220337.443510-1-yosryahmed@google.com> <20230403220337.443510-5-yosryahmed@google.com>
-In-Reply-To: <20230403220337.443510-5-yosryahmed@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 20 Apr 2023 12:38:16 -0700
-Message-ID: <CALvZod6wiCzpbCOtR06vGXy+gb6adC8RCkXfsRjC-N8yJorGWg@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable RFC 4/5] memcg: remove mem_cgroup_flush_stats_atomic()
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
+References: <168166781352.1843526.278570500979918184@leemhuis.info>
+ <CAHk-=wjQaxmXTR68VnEJvLgB=H2agMTrrF4EXkXT4Hbdf2ZuMQ@mail.gmail.com>
+ <20230418182036.GS19619@suse.cz> <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
+ <20230420190239.GX19619@suse.cz>
+In-Reply-To: <20230420190239.GX19619@suse.cz>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 20 Apr 2023 12:39:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgwWaoeL-PGSWbfAHipORoiiQN0CJEehQyTt8NB+WRKgg@mail.gmail.com>
+Message-ID: <CAHk-=wgwWaoeL-PGSWbfAHipORoiiQN0CJEehQyTt8NB+WRKgg@mail.gmail.com>
+Subject: Re: Linux regressions report for mainline [2023-04-16]
+To:     dsterba@suse.cz
+Cc:     "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>, Rafael Wysocki <rafael@kernel.org>,
+        David Sterba <dsterba@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com> =
-wrote:
+On Thu, Apr 20, 2023 at 12:02=E2=80=AFPM David Sterba <dsterba@suse.cz> wro=
+te:
 >
-> Previous patches removed all callers of mem_cgroup_flush_stats_atomic().
-> Remove the function and simplify the code.
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> No, the main concern is if discard works without destroying data,
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+I actually ended up googling it, and I'm a lot less worried now,
+because at least according to my limited searching it seems like
+Windows enables trim by default at least since Win10.
+
+Of course, I also found some conflicting statements claiming that USB
+drives aren't considered SSDs, so who knows. But it does seem like
+probably new hardware ends up getting tested for trim, and the bad
+situation is likely really limited to only the bad old days.
+
+So together with Fedora having apparently enabled timed auto-trimming
+for some time, I guess I will just have to believe that the world has
+turned into a less dark and scary place than I thought it was.
+
+Knock wood.
+
+            Linus
