@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AFF6E8BE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C0C6E8BE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbjDTHzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S234203AbjDTH4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234342AbjDTHzG (ORCPT
+        with ESMTP id S234191AbjDTH4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:55:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689F626A1;
-        Thu, 20 Apr 2023 00:54:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 20 Apr 2023 03:56:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD49F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:55:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E162E64597;
-        Thu, 20 Apr 2023 07:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B675C4339E;
-        Thu, 20 Apr 2023 07:54:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681977294;
-        bh=3dYxAbM0w2YLQKaBeIxofMwdEi0b0oi41zlv3iCrZs0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n9uvuF+GTTIknFp9X9VVJT1nxenZWRM267yHoad/8l0gFlj8Ud9BaiM785y/xK1Go
-         brC6b3chkMeqoVjzkQHFB3Y3vpzz0yIsj9b0dD+3BSwlojO6UObKTc3Yrt65H/DTyn
-         Qf6LbxRWb8OImxpNIbUhr7P+rVIOAN3AXla0+1uPYuLxZvquOTUkhj8E0VKx4NCP1e
-         8TXwkkbDbedfnQYre/N0sg60fn9U2M1tMuUGRjjQuH9/S2M3hsP9Cj8lCQfG3nTkcp
-         v50QvHCXmM1H9zA/GjjaxfuzRRYkdLgmXpU7ngYDI3ONY6EK05b47F3zUTF7qcTKm5
-         isaM6u1y8AOFQ==
-Received: by mail-lj1-f172.google.com with SMTP id h2so1735316ljh.13;
-        Thu, 20 Apr 2023 00:54:54 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ebofRu6YnROtbcp2KPVMwovls2SFRyUH5xqpMKxD+It0SBflxM
-        GgjE6XenM2TvQ0jTDE9a/HxnJWF4A+xrD2hOUus=
-X-Google-Smtp-Source: AKy350Yf4xK1Q1jI+9d+7IlGT/7hCmLTr54srLNZb/aWfb5zgO4m8vL/5+Bsd6JED/03vQSAhtNns4ZyVVgdOl10xtk=
-X-Received: by 2002:a05:651c:21c:b0:2a7:6f60:34f2 with SMTP id
- y28-20020a05651c021c00b002a76f6034f2mr160131ljn.33.1681977292253; Thu, 20 Apr
- 2023 00:54:52 -0700 (PDT)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BB62B219DB;
+        Thu, 20 Apr 2023 07:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681977341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1SC0XXh8aaIBVsT5La85YQEUgHVR6YINUs0uzF8+7gE=;
+        b=FTkjr+r4F5kCZcHxv+uUdshNK5PVu179W3/fCSSHyoCpXjpH1bJEM/Y5v1T+zh3KMVYHbH
+        mTMabm+TUvZ5ny+vuH7uGro+T9xkBe9B4wzQ78fW+DMCWuBLqKAfatQbh4YJ+vlbrPYyqy
+        foGZE9O2o+hxdGIFWhrbzo/eEJ3530k=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99FD413584;
+        Thu, 20 Apr 2023 07:55:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Wuh4I/3vQGRGXAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 20 Apr 2023 07:55:41 +0000
+Date:   Thu, 20 Apr 2023 09:55:40 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Theurer <atheurer@redhat.com>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
+Message-ID: <ZEDv/O30XLZfw/GX@dhcp22.suse.cz>
+References: <20230320180332.102837832@redhat.com>
+ <20230418150200.027528c155853fea8e4f58b2@linux-foundation.org>
+ <ZD/NAaa5TVcL7Mxm@tpad>
+ <ZD/NbAU8gHILW/6w@tpad>
+ <98E08059-6607-43FF-84E3-BFF3FF193D09@redhat.com>
 MIME-Version: 1.0
-References: <20230416120729.2470762-1-ardb@kernel.org> <jwvybt4sro56aiqvddn6jxdjpdelasdhl747c25kzv4vbjr7ph@fbtheokrtxce>
- <CAMj1kXE4xF9RJbaR0H6uuFxxroUJxQFo8WThb=SUa7H0OpDxUg@mail.gmail.com> <3zm36sbx4enlqaumxxz2gp3f6etwzhlfotqrqxsus2r6xulwvm@saqniauxenmi>
-In-Reply-To: <3zm36sbx4enlqaumxxz2gp3f6etwzhlfotqrqxsus2r6xulwvm@saqniauxenmi>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 20 Apr 2023 09:54:40 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF1eaORsUPk=8Mam8OCQbfcMEBca=Lr2tdN=nihiDqb=Q@mail.gmail.com>
-Message-ID: <CAMj1kXF1eaORsUPk=8Mam8OCQbfcMEBca=Lr2tdN=nihiDqb=Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/3] efi: Implement generic zboot support
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98E08059-6607-43FF-84E3-BFF3FF193D09@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 at 08:07, Gerd Hoffmann <kraxel@redhat.com> wrote:
->
->   Hi,
->
-> > > Realistically, the second option is unlikely to ever be used on x86,
-> > >
-> > > What would be needed to do so?  Teach kexec-tools and grub2 parse and
-> > > load zboot kernels I guess?
-> >
-> > I already implemented this for mach-virt here, so we can load Fedora
-> > kernels without firmware:
-> >
-> > https://gitlab.com/qemu-project/qemu/-/commit/ff11422804cd03494cc98691eecd3909ea09ab6f
-> >
-> > On arm64, this is probably more straight-forward, as the bare metal
-> > image is already intended to be booted directly like that. However,
-> > the x86 uncompressed image requires surprisingly little from all the
-> > boot_params/setup_header cruft to actually boot, so perhaps there it
-> > is easy too.
->
-> For existing boot loaders like grub I'd expect it being easy
-> to code up, all the setup header code exists already, grub also
-> has support for uncompressing stuff, so it should really be only
-> zboot header parsing and some plumbing to get things going (i.e.
-> have grub boot efi zboot kernels in bios mode).
->
-> Disclaimer: didn't actually check grub source code.
->
+On Wed 19-04-23 08:44:23, Andrew Theurer wrote:
+> > On Apr 19, 2023, at 6:15 AM, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> >> Andrew Theurer, can you please explain what problem is the vmstat_work
+> >> interruption causing in your testing?
+> > 
+> > +CC Andrew.
+> 
+> Nearly every telco we work with for 5G RAN is demanding <20 usec CPU
+> latency as measured by cyclictest & oslat.  We cannot achieve under 20
+> usec with the vmstats interruption.
 
-I have :-(
-
-> I suspect the bigger problem wrt. grub is that getting patches merged
-> upstream is extremely slow and every distro carries a huge stack of
-> patches ...
->
-
-Yeah, Daniel has been asking me about LoadFile2 initrd loading support
-for x86, so I think getting things merged is not going to be a problem
-(although it will still take some time) - I can just implement it and
-send it out at the same time.
-
-But hacking/building/running GRUB is a rather painful experience, so I
-have been kicking this can down the road.
+Are you able to get those latency requirements with PREEMPT_RT?
+-- 
+Michal Hocko
+SUSE Labs
