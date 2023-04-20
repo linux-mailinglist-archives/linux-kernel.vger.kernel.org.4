@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037816E9CCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECEE6E9CCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjDTUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S232212AbjDTUCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjDTUBn (ORCPT
+        with ESMTP id S231663AbjDTUCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:01:43 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D925FCD;
-        Thu, 20 Apr 2023 13:01:35 -0700 (PDT)
-Received: from localhost ([185.104.138.31]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MJn8J-1pZyUK3Zij-00KBW7; Thu, 20 Apr 2023 22:01:14 +0200
-Date:   Thu, 20 Apr 2023 22:01:11 +0200
-From:   Andreas Klinger <ak@it-klinger.de>
-To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] MAINTAINERS: Add Honeywell mprls0025pa sensor
-Message-ID: <ZEGaB7giQt5eoIpV@arbad>
+        Thu, 20 Apr 2023 16:02:01 -0400
+Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0433E59EF;
+        Thu, 20 Apr 2023 13:01:50 -0700 (PDT)
+Received: by soltyk.jannau.net (Postfix, from userid 1000)
+        id 1096426FC6D; Thu, 20 Apr 2023 22:01:49 +0200 (CEST)
+Date:   Thu, 20 Apr 2023 22:01:49 +0200
+From:   Janne Grunau <j@jannau.net>
+To:     Zongmin Zhou <zhouzongmin@kylinos.cn>
+Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        neil.armstrong@linaro.org, tony.luck@intel.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
+        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
+        dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
+ drm_kms_helper_poll_disable during suspend
+Message-ID: <20230420200148.GD3280@jannau.net>
+References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEGZYiS0znC2/fZC@arbad>
-X-Provags-ID: V03:K1:4POYiiMygpm3hHLWPppWuZwx2MtHDx0BLAP76vXTnZBCUN2ayUv
- xLJ9xM+bxDOjghy9JZ15RpcmDoXmXuG0Yclle+s5Az+59EZNgN4/45MPSRpXdEa4vEQXN+J
- vx7k1vuZDK+xXPnPaT6raFNAu2nLX9eIeu35NejOiKGel9jJu5kJow0T3LhLiXrkT7GvULj
- 0ZlLOk3x//ZAe8tDbHg6A==
-UI-OutboundReport: notjunk:1;M01:P0:XAmakBmbzsA=;d9g+1FVnKmNn+jk8GveAKlYEuv2
- PGswmCESj29qpgoNNcGGGhJOw7YudhlfHqW8cDg/olGzuPm4FdeZRueamjQ5rsSpXMpo6ki/Z
- vgMDkuWR6Qfp0MdXDMX47MSJoTm89k5uyFmRkub60KMTZnQlD2wcdzpHysvBdYef4fq4cZ2qu
- 7xZ9wzqMqXN3+8gdUy0a/6mKxhr7fY0WSJYVkW+J0sIGnnF/8r7sN68c/sdVC6f/m6HbV4wQC
- 1rWVrDIjzh1cZmSrIghIwJzuAxUvaNRhb49OBp8A/5ftZ6VLxJrxcq/LidY4AgwzUCROdoufB
- 9CFe3WcPeq2XctQzhnUaqiyTkUaVpqCH8PdwoLdxfo+WiErQ23Or49Vxec4vBUxxe3Sx2kRoE
- WrCTO4oSRKXZyTqBd9hfmZtzEvH4M8sDBcOqqmZmEa29lsDlNaA2j0ovJnyDw6v0l5N/VcYKT
- gTJkPDv70NaiUwDr08Gg9+N6aFK92eSqARv5UFic5pz6nqCuG5cKrstp4Q8P6uh/mD3vZyhlS
- JCI+4NvOPIlKZwUjIKI4C6t+OxaZ0NpbHZ15IlAdhnrGSTCRKbFB1nOwgXwW+4NnyxWPyGtDv
- 6m/3a9Pf+FGRueIo8zYEmia00Tfl/1GGDNpLSEufyAVQxSjPxE2S/7njlggjInBi8FrHOJhcI
- ISv/rLH32wogLGnVPwnfrhdgFErN/xyjNi5D6teMLA==
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as a maintainer for Honeywell mprls0025pa sensor.
+On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
+> When drivers call drm_kms_helper_poll_disable from
+> their device suspend implementation without enabled output polling before,
+> following warning will be reported,due to work->func not be initialized:
 
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f77188f30210..0f42f88f8959 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9475,6 +9475,13 @@ F:	lib/test_hmm*
- F:	mm/hmm*
- F:	tools/testing/selftests/vm/*hmm*
+we see the same warning with the wpork in progress kms driver for apple 
+silicon SoCs. The connectors do not need to polled so the driver never 
+calls drm_kms_helper_poll_init().
  
-+HONEYWELL MPRLS0025PA PRESSURE SENSOR SERIES IIO DRIVER
-+M:	Andreas Klinger <ak@it-klinger.de>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
-+F:	drivers/iio/pressure/mprls0025pa.c
-+
- HOST AP DRIVER
- M:	Jouni Malinen <j@w1.fi>
- L:	linux-wireless@vger.kernel.org
--- 
-2.30.2
+> [   55.141361] WARNING: CPU: 3 PID: 372 at kernel/workqueue.c:3066 __flush_work+0x22f/0x240
+> [   55.141382] Modules linked in: nls_iso8859_1 snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3 aesni_intel drm_kms_helper joydev input_leds syscopyarea crypto_simd snd cryptd sysfillrect sysimgblt mac_hid serio_raw soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp parport drm ramoops reed_solomon pstore_blk pstore_zone efi_pstore virtio_rng ip_tables x_tables autofs4 hid_generic usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover virtio_blk xhci_pci_renesas failover
+> [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted 6.2.0-rc6+ #16
+> [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+> [   55.141435] Workqueue: events_unbound async_run_entry_fn
+> [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
+> [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54 d8 00 66 90 90 90 90 90 90
+> [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
+> [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff9b72bcbe
+> [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI: ff3ea01e4265e330
+> [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09: 8080808080808080
+> [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12: ff3ea01e4265e330
+> [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15: 0000000000000001
+> [   55.141455] FS:  0000000000000000(0000) GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
+> [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4: 0000000000771ee0
+> [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   55.141466] PKRU: 55555554
+> [   55.141467] Call Trace:
+> [   55.141469]  <TASK>
+> [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
+> [   55.141478]  ? mptcp_seq_show+0xe0/0x180
+> [   55.141484]  __cancel_work_timer+0x124/0x1b0
+> [   55.141487]  cancel_delayed_work_sync+0x17/0x20
+> [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40 [drm_kms_helper]
+> [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90 [drm_kms_helper]
+> [   55.141531]  ? __pm_runtime_resume+0x64/0x90
+> [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
+> [   55.141540]  pci_pm_suspend+0x8b/0x1b0
+> [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
+> [   55.141547]  dpm_run_callback+0x4c/0x160
+> [   55.141550]  __device_suspend+0x14c/0x4c0
+> [   55.141553]  async_suspend+0x24/0xa0
+> [   55.141555]  async_run_entry_fn+0x34/0x120
+> [   55.141557]  process_one_work+0x21a/0x3f0
+> [   55.141560]  worker_thread+0x4e/0x3c0
+> [   55.141563]  ? __pfx_worker_thread+0x10/0x10
+> [   55.141565]  kthread+0xf2/0x120
+> [   55.141568]  ? __pfx_kthread+0x10/0x10
+> [   55.141570]  ret_from_fork+0x29/0x50
+> [   55.141575]  </TASK>
+> [   55.141575] ---[ end trace 0000000000000000 ]---
+> 
+> Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running vs poll_enabled")
+> Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+> ---
+>  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+> index 8127be134c39..ac72b18e2257 100644
+> --- a/drivers/gpu/drm/drm_probe_helper.c
+> +++ b/drivers/gpu/drm/drm_probe_helper.c
+> @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct drm_device *dev)
+>  	if (dev->mode_config.poll_running)
+>  		drm_kms_helper_disable_hpd(dev);
+>  
+> -	cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
+> +	if (dev->mode_config.poll_enabled)
+> +		cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
+
+Checking for dev->mode_config.poll_enabled at the start of the function 
+and return early if it is not true looks more in style with the rest of 
+drm_probe_helper.c.
+
+No difference functionally of course. Tested with the apple kms driver.
+
+Reviewed-by: Janne Grunau <j@jannau.net>
+
+ciao
+Janne
