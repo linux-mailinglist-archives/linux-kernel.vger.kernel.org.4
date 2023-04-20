@@ -2,160 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2C26E8D5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02866E8D5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbjDTI4Q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 04:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S234482AbjDTI5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbjDTIyp (ORCPT
+        with ESMTP id S234055AbjDTI4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:54:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91BD74C2B;
-        Thu, 20 Apr 2023 01:53:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E80F3106F;
-        Thu, 20 Apr 2023 01:54:02 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A73643F5A1;
-        Thu, 20 Apr 2023 01:53:17 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 09:53:15 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ludwig Kormann <ludwig.kormann@in-circuit.de>, samuel@sholland.org,
-        jernej.skrabec@gmail.com, wens@csie.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] arm: dts: sunxi: Add ICnova A20 ADB4006 board
- support
-Message-ID: <20230420095315.5aaab9eb@donnerap.cambridge.arm.com>
-In-Reply-To: <b84537c0-cb58-621a-2b6d-3bbaac5091de@linaro.org>
-References: <20230419121229.1384024-1-ludwig.kormann@in-circuit.de>
-        <b84537c0-cb58-621a-2b6d-3bbaac5091de@linaro.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Thu, 20 Apr 2023 04:56:38 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFBC5B9A;
+        Thu, 20 Apr 2023 01:54:40 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id l31-20020a05600c1d1f00b003f1718d89b2so2729256wms.0;
+        Thu, 20 Apr 2023 01:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681980879; x=1684572879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/1nmSJoHao2Xv1R5LLZFmg+3N6nON3bsre5f7/ykalM=;
+        b=ljIHPQzFFyGCCB+FF8NH25LiqxPEUydxxqg1xk+LKKlyGT4Ud2+0oMPplY5MeneGsk
+         f5OezBCDawk+vMjooGD9xhaT6nRmOkckJ5JvF0kzGrgAF0TCrCNdORM8bcNXbTBAjVcZ
+         vPo9cOulmWmC5CX01K3EXm4JLtj0SFYaiWvV3dVb6ddJrM6kCmnJHu/4x1c3VvXl/SEm
+         WMdCMl/VnDL8pNxY8t6UC8QCqZCJKqzDx2YdFXpSGcbCBAdGHf2zgDWSyqvO8SYLId9u
+         Hnc0FIa0dUKQACQitFKjDEg8F7SLsnL9CtLR4pDOoMy1tXUTrzu/I05hjCf30jLC8QVt
+         ClaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681980879; x=1684572879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/1nmSJoHao2Xv1R5LLZFmg+3N6nON3bsre5f7/ykalM=;
+        b=Z8sJCC+Gbj7cK2Gewrl6sIjyKGBiTzdS5BLiYNHR8Y1/s4JI+n1Ngu3dJvKsMgaj1J
+         YI5H7iU7qpntf7xeo/HvmySbdU7mVZ7b30Jgk4FfE5Q2QV//e7rDN7KKOoBZ33BQHvyg
+         7SdbdzZZfZzKlHsi/NSNj8Pi7+19/3PM+zKajOc0/pmS5WYbBTqn4Urcl5i2bhViJK5I
+         MXOUWzaIXdJo9ukTzudiQJ6xY6IEsEFntdFAcQWl3AmjVoSGzctMRtGQznyjczQCAqGo
+         IxGASXDH3bOFp90I/MbVKgjKApZafVvSHjau3Lxk3c2S4656VkpKUT3S3FuQP0EFxMrp
+         Mvvw==
+X-Gm-Message-State: AAQBX9e9jh9IU0UdcMshtsR+ZtiRQzcGlP4cnq42R+7vJjbdjTCJDCCa
+        YpCNE9lfgG8i7QyoMu46624=
+X-Google-Smtp-Source: AKy350ZV27kPTUXFD0SUn95Kojy7v+U1CO3Ru4rd5bSoHUPQF0mBJTsTaFjwtiB4bcjKWdbqooEcEw==
+X-Received: by 2002:a05:600c:ac6:b0:3f0:9cc6:daf0 with SMTP id c6-20020a05600c0ac600b003f09cc6daf0mr763257wmr.27.1681980878656;
+        Thu, 20 Apr 2023 01:54:38 -0700 (PDT)
+Received: from [192.168.0.103] ([77.124.103.108])
+        by smtp.gmail.com with ESMTPSA id g10-20020a7bc4ca000000b003f171234a08sm1360668wmk.20.2023.04.20.01.54.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 01:54:38 -0700 (PDT)
+Message-ID: <a42a2dc4-bcbc-7a19-b036-8722606a5eaf@gmail.com>
+Date:   Thu, 20 Apr 2023 11:54:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/3] kbuild: do not create intermediate *.tar for tar
+ packages
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, dalevi@nvidia.com,
+        Gal Pressman <gal@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+References: <20230407101629.1298051-1-masahiroy@kernel.org>
+ <20230407101629.1298051-3-masahiroy@kernel.org>
+ <20230407181223.GD1018455@dev-arch.thelio-3990X>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20230407181223.GD1018455@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 15:05:17 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> On 19/04/2023 14:12, Ludwig Kormann wrote:
-> > Add board support for ICnova A20 SomPi compute module on
-> > ICnova ADB4006 development board.
-> > 
-> > Specification:
-> > SoM
-> > - Processor: Allwinner A20 Cortex-A7 Dual Core at 1GHz
-> > - 512MB DDR3 RAM
-> > - Fast Ethernet (Phy: Realtek RTL8201CP)
-> > ADB4006
-> > - I2C
-> > - 2x USB 2.0
-> > - 1x Fast Ethernet port
-> > - 1x SATA
-> > - 2x buttons (PWRON, Boot)
-> > - 2x LEDS
-> > - serial console
-> > - HDMI
-> > - µSD-Card slot
-> > - Audio Line-In / Line-Out
-> > - GPIO pinheaders
-> > 
-> > https://wiki.in-circuit.de/index.php5?title=ICnova_ADB4006
-> > https://wiki.in-circuit.de/index.php5?title=ICnova_A20_SODIMM
-> > 
-> > ---
-> > 
-> > changes in v2:
-> > - use short licensing header
-> > - remove deprecated elements from led nodes
-> > - disable csi power supply
-> > - add missing pins in usbphy node
-> > - split dts into SoM dtsi and carrier board dts
-> > 
-> > v1 of this patch was sent to the uboot mailing list [1].
-> > 
-> > [1] https://lists.denx.de/pipermail/u-boot/2023-April/514605.html
-> > 
-> > Signed-off-by: Ludwig Kormann <ludwig.kormann@in-circuit.de>
-> > ---
-> >  .../devicetree/bindings/arm/sunxi.yaml        |   6 +  
+
+On 07/04/2023 21:12, Nathan Chancellor wrote:
+> On Fri, Apr 07, 2023 at 07:16:29PM +0900, Masahiro Yamada wrote:
+>> Commit 05e96e96a315 ("kbuild: use git-archive for source package
+>> creation") split the compression as a separate step to factor out
+>> the common build rules.
+>>
+>> With the previous commit, we got back to the situation where
+>> compressed source tarballs are created by a single rule.
+>> There is no reason to keep the separate compression rules.
+>>
+>> Generate the comressed tar packages directly.
+>>
+>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > 
-> Bindings are always separate patches. checkpatch did not complain?
-> 
-> >  arch/arm/boot/dts/Makefile                    |   1 +
-> >  .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
-> >  arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  63 ++++++++
-> >  4 files changed, 207 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> >  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> > index 013821f4a7b8..12f0c236f17b 100644
-> > --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> > @@ -305,6 +305,12 @@ properties:
-> >            - const: allwinner,i12-tvbox
-> >            - const: allwinner,sun7i-a20
-> >  
-> > +      - description: ICNova A20 ADB4006
-> > +        items:
-> > +          - const: incircuit,icnova-a20-adb4006
-> > +          - const: incircuit,icnova-a20
-> > +          - const: allwinner,sun7i-a20
-> > +
-> >        - description: ICNova A20 SWAC
-> >          items:
-> >            - const: incircuit,icnova-a20-swac
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index 3cc32722c394..b6b408417261 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -1321,6 +1321,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
-> >  	sun7i-a20-hummingbird.dtb \
-> >  	sun7i-a20-itead-ibox.dtb \
-> >  	sun7i-a20-i12-tvbox.dtb \
-> > +	sun7i-a20-icnova-a20-adb4006.dtb \
-> >  	sun7i-a20-icnova-swac.dtb \
-> >  	sun7i-a20-lamobo-r1.dtb \
-> >  	sun7i-a20-linutronix-testbox-v2.dtb \
-> > diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> > new file mode 100644
-> > index 000000000000..c1606c085e4e
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> > @@ -0,0 +1,137 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)  
-> 
-> Unusual license. Are you sure you are ok with GPLv5.0?
-
-Is it really unusual? This is literally the most commonly used dual license
-for DTs, grep counts 252 users in arm and 573 users in arm64.
-
-Or is it that it's deprecated and we recommend (GPL-2.0 OR MIT) for new
-files?
-
-Cheers,
-Andre
-
-
-> 
-> Also, at the end of your files - drop stray blank lines.
-> 
-> Best regards,
-> Krzysztof
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > 
 
+Hi,
+
+We started seeing the failure below in rc7.
+We narrowed it down to your patches:
+
+3c65a2704cdd kbuild: do not create intermediate *.tar for tar packages
+f8d94++c4e403c kbuild: do not create intermediate *.tar for source tarballs
+f6d8283549bc kbuild: merge cmd_archive_linux and cmd_archive_perf
+aa7d233f45b4 kbuild: give up untracked files for source package builds
+
+Can you please take a look and advise?
+
+Regards,
+Tariq
+
+[root@c-237-113-200-203 linux]# make -j24 rpm-pkg
+sh ./scripts/package/mkspec >./kernel.spec
+rpmbuild  --target x86_64-linux -bs kernel.spec \
+--define='_smp_mflags %{nil}' --define='_sourcedir rpmbuild/SOURCES' 
+--define='_srcrpmdir .'
+Building target platforms: x86_64-linux
+Building for target x86_64-linux
+Wrote: ./kernel-6.3.0_rc7+-1.src.rpm
+rpmbuild  --target x86_64-linux -rb kernel-6.3.0_rc7+-1.src.rpm \
+--define='_smp_mflags %{nil}'
+Installing kernel-6.3.0_rc7+-1.src.rpm
+Building target platforms: x86_64-linux
+Building for target x86_64-linux
+Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.yDFEga
++ umask 022
++ cd /root/rpmbuild/BUILD
++ cd /root/rpmbuild/BUILD
++ rm -rf linux
++ /usr/bin/gzip -dc /root/rpmbuild/SOURCES/linux.tar.gz
++ /usr/bin/tar -xof -
++ STATUS=0
++ '[' 0 -ne 0 ']'
++ cd linux
+/var/tmp/rpm-tmp.yDFEga: line 37: cd: linux: No such file or directory
+error: Bad exit status from /var/tmp/rpm-tmp.yDFEga (%prep)
+
+
+RPM build errors:
+     Bad exit status from /var/tmp/rpm-tmp.yDFEga (%prep)
+make[1]: *** [scripts/Makefile.package:69: rpm-pkg] Error 1
+make: *** [Makefile:1656: rpm-pkg] Error 2
