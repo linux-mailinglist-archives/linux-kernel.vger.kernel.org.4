@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2676E9BE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44EA6E9C1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjDTSti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S231655AbjDTSyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjDTSth (ORCPT
+        with ESMTP id S231638AbjDTSyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:49:37 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DE1268A;
-        Thu, 20 Apr 2023 11:49:35 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so1237020a12.0;
-        Thu, 20 Apr 2023 11:49:35 -0700 (PDT)
+        Thu, 20 Apr 2023 14:54:03 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CB155AF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:53:33 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef34c49cb9so893121cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682016575; x=1684608575;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FJJOeT8ibD8iyZ5GUD24l83wUeVOqbznkJco2Atseh0=;
-        b=n/vcoDimgaMEp2z2kZkP2MIcN844TzzESZTRSnlrKXpYerPJ33WE0ZYXP9GnrIg0Yl
-         KDC4stSBEv5aDKgLWp+jlnXYmGRKb1xNNNqqHgRjOWCdw5ROVyBtDKoX6AKRv6dXhu30
-         uzaiOROHSIwweFxdZe4RqDMXJQ1yaedK5K497UydEv1IH3aOiqdk+9oc5eRHL9gEWEZX
-         JcI692HsrA5Ty8I6gye3Y55lU9UHcyEqKEL+Kgqpv9LBtY86oSy+tRSbbwrSZtmR615U
-         z4Sku0pcYP8xDpR1ZKrNCWvvZXeEXLVJt2VzYD5pF6XH2XU72xT9dgMdzeMGUTHCjNM5
-         tn/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682016575; x=1684608575;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1682016812; x=1684608812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FJJOeT8ibD8iyZ5GUD24l83wUeVOqbznkJco2Atseh0=;
-        b=HhPT/d6ZvB5aVF4tUtZ7dS9yuXeL1i8CBGjPr1fgErrPZBuqhet+qtPAAbPLz85B3p
-         cVQpkm9sdRhw3+OHmZDBgIV/O1OejJJTd4qnoAmen5NPPmnlxFBLctmSkPQD5FYA6KaO
-         b3I0MlszukuxtpV6ESEhmW+hKGjhDlCxT5V87aNWzPRa/RxZ0lXFsg5t8+zS/0Z6X3HK
-         6txL1bpbC5XtV0HSSR9vAWpiqvYm16EkUiBPXHGytP8gb2sOqsJkJDBKDvb6Qv3HPXu8
-         56C6iHS8Clx8S04bosv07LyWt82kLS4f0Z3BRzDTHsa5qO7RBonsccX0coD6EpUaxlLd
-         KLSg==
-X-Gm-Message-State: AAQBX9eCYrjZoVKyiiYqLWeJNOtYkB2nI4mAcBNgwtwl4wPk4kTUNR0s
-        4iBWx93+1YhB9AuX2UVy6IU9mpGPH+A=
-X-Google-Smtp-Source: AKy350YTeB0qGP2vkm4k9QkfXw2nkCtEgcin24AWXmNiFgubN4bzizaUbG1Q3L0l/2HAU3bD5NyYHw==
-X-Received: by 2002:a17:902:d2cb:b0:19d:611:2815 with SMTP id n11-20020a170902d2cb00b0019d06112815mr2802582plc.42.1682016575109;
-        Thu, 20 Apr 2023 11:49:35 -0700 (PDT)
-Received: from MacBook-Pro-6.local ([2620:10d:c090:500::5:cf1d])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902a50d00b001a64ce7b18dsm1456565plq.165.2023.04.20.11.49.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 11:49:34 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 11:49:32 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v5 2/9] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-ID: <20230420184932.pgv5wiqqt4fzswdk@MacBook-Pro-6.local>
-References: <168198993129.1795549.8306571027057356176.stgit@mhiramat.roam.corp.google.com>
- <168198995084.1795549.16754963116067902376.stgit@mhiramat.roam.corp.google.com>
+        bh=4sYlJSAfMy5ZKFxBnqgIBVbqBgUxlBgjbZy6mx61ZB0=;
+        b=wPs26Moc03UYXJfZwMIlURgsn2RCjMAbb7a+Kr6qiZim9sSPBSM+ZdRg4TYPr4vYxC
+         QmCGtQFf+XPuri/obaV1duh6RAYA1qF/ZHAWZew0TZE7gE7UZb675H1CuZBgHJZA9Ze3
+         JQDW57Ph2p1gegrBk5yb+/Cugi0waHR4zf/tF/KJuRI6aDUUzOySpS2PNB/mXKSyqIaj
+         D6omDunMmwh7KE2tnbKxW3RSmLqgYQtibyeHI+ZrrYfdfCGk4cwgkrE06btrC9PAEVdR
+         Ph0y7LUZGeuxMPJOCKnLmZqnjGOPUXbAkl8GvlEHQuAkYggnt45ueFJhkm469/iP9wO1
+         wwEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682016812; x=1684608812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4sYlJSAfMy5ZKFxBnqgIBVbqBgUxlBgjbZy6mx61ZB0=;
+        b=NL1leC+875nsf5Kg3h6Go6QBBBXLLmSbsAxFw3WMyyJzogg1HjtAHirYfyepsRktqn
+         xw78XG5xJemdK8/AYyQt4Pbgh8TPK21b0dlmgIz7t5vZ0ZQ12VjNQ2kXIvs7oBVfwze9
+         AXcqpC/1GO7REXGfOrX0G/E52VNi5dd8rddvTodZJHqV09Ysbo2sNEMJRKCYhyk3EF/e
+         TBbee6BLqnVmPFEhXjwN90yH+5CNAn4rM+59SZiDobFXDAMzjvrIgbAqYsAMdzrOUMn6
+         oT2omPsJyczrDSsJida5Koa/JZK/NPbryj8pMTO30SR0oSZRP2h/XcqBUNDTD4xveZAR
+         2paA==
+X-Gm-Message-State: AAQBX9fe+2DOl5pK4gscBIK9vwZ/jJN7bBTTOYy3U3d7vOEOlROZ/YOP
+        1F/pSB/cQmlxKCoBbFUE2KwjPnH47fXuHVpFC2svPA==
+X-Google-Smtp-Source: AKy350ZUv2Xw4EFjMQ3KO6rvuBHNKuGSX7X3hNqVdy6HeEhjaawEFI6dET+AMFaOtrBZGB3lve7sVEWIENM6k4qSjCs=
+X-Received: by 2002:ac8:5b10:0:b0:3ef:343b:fe7e with SMTP id
+ m16-20020ac85b10000000b003ef343bfe7emr59146qtw.2.1682016812108; Thu, 20 Apr
+ 2023 11:53:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168198995084.1795549.16754963116067902376.stgit@mhiramat.roam.corp.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230403220337.443510-1-yosryahmed@google.com> <20230403220337.443510-2-yosryahmed@google.com>
+In-Reply-To: <20230403220337.443510-2-yosryahmed@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 20 Apr 2023 11:53:21 -0700
+Message-ID: <CALvZod5h5G9YNu8d9fAOL5eXie5iM3urw9QgD=vucBdCMAQnxA@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh()
+ call outside lock section
+To:     Yosry Ahmed <yosryahmed@google.com>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,72 +79,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 08:25:50PM +0900, Masami Hiramatsu (Google) wrote:
-> +static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> +			    struct pt_regs *regs)
-> +{
-> +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> +	struct fentry_trace_entry_head *entry;
-> +	struct hlist_head *head;
-> +	int size, __size, dsize;
-> +	int rctx;
-> +
-> +	if (bpf_prog_array_valid(call)) {
-> +		unsigned long orig_ip = instruction_pointer(regs);
-> +		int ret;
-> +
-> +		ret = trace_call_bpf(call, regs);
++Jens & Jan
 
-Please do not call bpf from fprobe.
-There is no use case for it.
+The patch looks good but it would be nice to pass this patch through
+the eyes of experts of this area.
 
+On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com> =
+wrote:
+>
+> wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
+> flush, which can be expensive on large systems. Currently,
+> wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
+> have to make the rstat flush atomically. On systems with a lot of
+> cpus/cgroups, this can cause us to disable irqs for a long time,
+> potentially causing problems.
+>
+> Move the call to wb_over_bg_thresh() outside the lock section in
+> preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic.
+> The list_empty(&wb->work_list) should be okay outside the lock section
+> of wb->list_lock as it is protected by a separate lock (wb->work_lock),
+> and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_*
+> lists the wb->list_lock is protecting. Also, the loop seems to be
+> already releasing and reacquring the lock, so this refactoring looks
+> safe.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  fs/fs-writeback.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> index 195dc23e0d831..012357bc8daa3 100644
+> --- a/fs/fs-writeback.c
+> +++ b/fs/fs-writeback.c
+> @@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb,
+>         struct blk_plug plug;
+>
+>         blk_start_plug(&plug);
+> -       spin_lock(&wb->list_lock);
+>         for (;;) {
+>                 /*
+>                  * Stop writeback when nr_pages has been consumed
+> @@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb,
+>                 if (work->for_background && !wb_over_bg_thresh(wb))
+>                         break;
+>
 > +
-> +		/*
-> +		 * We need to check and see if we modified the pc of the
-> +		 * pt_regs, and if so return 1 so that we don't do the
-> +		 * single stepping.
-> +		 */
-> +		if (orig_ip != instruction_pointer(regs))
-> +			return 1;
-> +		if (!ret)
-> +			return 0;
-> +	}
+> +               spin_lock(&wb->list_lock);
 > +
-> +	head = this_cpu_ptr(call->perf_events);
-> +	if (hlist_empty(head))
-> +		return 0;
+>                 /*
+>                  * Kupdate and background works are special and we want t=
+o
+>                  * include all inodes that need writing. Livelock avoidan=
+ce is
+> @@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *wb=
+,
+>                  * mean the overall work is done. So we keep looping as l=
+ong
+>                  * as made some progress on cleaning pages or inodes.
+>                  */
+> -               if (progress)
+> +               if (progress) {
+> +                       spin_unlock(&wb->list_lock);
+>                         continue;
+> +               }
 > +
-> +	dsize = __get_data_size(&tf->tp, regs);
-> +	__size = sizeof(*entry) + tf->tp.size + dsize;
-> +	size = ALIGN(__size + sizeof(u32), sizeof(u64));
-> +	size -= sizeof(u32);
+>                 /*
+>                  * No more inodes for IO, bail
+>                  */
+> -               if (list_empty(&wb->b_more_io))
+> +               if (list_empty(&wb->b_more_io)) {
+> +                       spin_unlock(&wb->list_lock);
+>                         break;
+> +               }
 > +
-> +	entry = perf_trace_buf_alloc(size, NULL, &rctx);
-> +	if (!entry)
-> +		return 0;
-> +
-> +	entry->ip = entry_ip;
-> +	memset(&entry[1], 0, dsize);
-> +	store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> +	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
-> +			      head, NULL);
-> +	return 0;
-> +}
-> +NOKPROBE_SYMBOL(fentry_perf_func);
-> +
-> +static void
-> +fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> +		unsigned long ret_ip, struct pt_regs *regs)
-> +{
-> +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> +	struct fexit_trace_entry_head *entry;
-> +	struct hlist_head *head;
-> +	int size, __size, dsize;
-> +	int rctx;
-> +
-> +	if (bpf_prog_array_valid(call) && !trace_call_bpf(call, regs))
-> +		return;
-
-Same here.
-These two parts look like copy-paste from kprobes.
-I suspect this code wasn't tested at all.
+>                 /*
+>                  * Nothing written. Wait for some inode to
+>                  * become available for writeback. Otherwise
+> @@ -2093,9 +2101,7 @@ static long wb_writeback(struct bdi_writeback *wb,
+>                 spin_unlock(&wb->list_lock);
+>                 /* This function drops i_lock... */
+>                 inode_sleep_on_writeback(inode);
+> -               spin_lock(&wb->list_lock);
+>         }
+> -       spin_unlock(&wb->list_lock);
+>         blk_finish_plug(&plug);
+>
+>         return nr_pages - work->nr_pages;
+> --
+> 2.40.0.348.gf938b09366-goog
+>
