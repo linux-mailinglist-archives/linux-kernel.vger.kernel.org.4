@@ -2,112 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E236E964B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10186E9654
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjDTNuh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 09:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S231679AbjDTNvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjDTNu2 (ORCPT
+        with ESMTP id S230342AbjDTNvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:50:28 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFC8728D;
-        Thu, 20 Apr 2023 06:50:19 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id n193so2132176ybf.12;
-        Thu, 20 Apr 2023 06:50:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681998618; x=1684590618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YQjI0+XJTWPgzTnyACSUbI+nXJQlQt/RnE/NaV2CVFc=;
-        b=K53lXnPCZiiHJxxi8Gbj7ROjrUgqE4uQxFTywRDb0bkbl7Q/H6vhJBlV47Y4aIxIGH
-         J5ImUJQBFq6nG+poF/g4wemrnKHacscr4xJ8jXMLm/jcQeiBI5T6lYfobCpkyBdiaB04
-         5mR1o9u9skcGlQsowrF24onzObGUIRoOPioHC9sPdlmK0WKbMPTGihT8r2QhoA6FUDWo
-         YXAJlITuqeoUFtsMWaWPUrh+hfeMbT/3p7BJyA7e3j8G6qrawgEW0yQktwLUWqLOX5iM
-         HwSl+zb3bj/PiTumkUYC+3AckR1G0Ud778AOO3a9ZrVzR4QKfcfP+k3GKIrMQY3GBOIo
-         I7oA==
-X-Gm-Message-State: AAQBX9d8dp9oRbvqI7Xh0b71dvh86Ccg1z3HPP9OS3BuuQowBWn0kOzM
-        l3NLVoZDQuLTf7QrLPAmLcAfAOsFn8vDboRW
-X-Google-Smtp-Source: AKy350Z+FeqPST2nyp4gS8L8dPlD/jGOSURjvJEf4IMiGGY3lSLFDDFMo15BF/gh+5zOsWTYP08DQQ==
-X-Received: by 2002:a05:6902:1887:b0:b8f:1d7f:f537 with SMTP id cj7-20020a056902188700b00b8f1d7ff537mr1642898ybb.62.1681998618281;
-        Thu, 20 Apr 2023 06:50:18 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id p13-20020a056902014d00b00b8bcaf1e660sm32682ybh.4.2023.04.20.06.50.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 06:50:17 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-552ae3e2cbeso41003247b3.13;
-        Thu, 20 Apr 2023 06:50:17 -0700 (PDT)
-X-Received: by 2002:a0d:c2c1:0:b0:555:be69:a805 with SMTP id
- e184-20020a0dc2c1000000b00555be69a805mr758092ywd.51.1681998617250; Thu, 20
- Apr 2023 06:50:17 -0700 (PDT)
+        Thu, 20 Apr 2023 09:51:15 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C135B98;
+        Thu, 20 Apr 2023 06:51:11 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 9C5582AE;
+        Thu, 20 Apr 2023 13:51:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9C5582AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1681998670; bh=/HYRZYBMpyNaQ4v0vpG/OhEOPSI9xHRsqndtnAocw4E=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bhC8AhpYrKjnmG0JnaW5RjTdER8iwG3G9nb9BVcOk0OWAqZvcmFSN+uKIUl12S50F
+         9laIZQSjgAjxGM/PVJLj+W/FrOvzr3BH5VVoX87cvtjl4C/vHvyPZrP0HbZvCw90Jp
+         WAcl4prNQZpTyHiOsaNNz+mkN6YzzVK6vUYj7wvmFk/NKnKrCnLTe6Slza7Ps8LEZo
+         xl2lJ8YHebgy4ADc2T7yNAimxczjySSTobX4BbeTMCtB0F8Jxy3g1HN+ZXgbSQHzgo
+         GQuh9SmuyoAesda/zFn2MvfWTvaNk8M1m1C1I5Vfj2Rhthd6wxZIf9AUWsz/XMHVMh
+         By7WDlZJoyZxg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Zipeng Zhang <zhangzipeng0@foxmail.com>
+Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        masahiroy@kernel.org, codeagain@codeagain.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+        Zipeng Zhang <zhangzipeng0@foxmail.com>
+Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
+ Sphinx output
+In-Reply-To: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
+References: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
+Date:   Thu, 20 Apr 2023 07:51:09 -0600
+Message-ID: <87sfcuu0fm.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20230412185608.64628-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230412185608.64628-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdU9qrSaJqNL_PsrvbyrBAEB17yVMmLPon8AbvE3kjbTUQ@mail.gmail.com>
- <CA+V-a8sVjK7jm6m=7XC9B8JBeUqL+aL_wvFjM-e=-p+4xWuszQ@mail.gmail.com> <CAMuHMdX1kkxaKfRJ+HbJA6nxX8x9KRsszo+Kq0g87Rf3eo0v7A@mail.gmail.com>
-In-Reply-To: <CAMuHMdX1kkxaKfRJ+HbJA6nxX8x9KRsszo+Kq0g87Rf3eo0v7A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Apr 2023 15:50:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVj6_Z4i23Zoiv1PcGYfXOsdPuy8vRZUm--rLHLRuNyKw@mail.gmail.com>
-Message-ID: <CAMuHMdVj6_Z4i23Zoiv1PcGYfXOsdPuy8vRZUm--rLHLRuNyKw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: renesas: rzv2l-smarc: Enable CRU, CSI support
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 1:37 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Mon, Apr 17, 2023 at 1:05 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Mon, Apr 17, 2023 at 9:57 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Wed, Apr 12, 2023 at 8:56 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Enable CRU, CSI on RZ/V2L SMARC EVK and tie the CSI to the OV5645 sensor
-> > > > using Device Tree overlay. RZ/G2L SMARC EVK and RZ/V2L SMARC EVK have the
-> > > > same connections for connecting the CSI to OV5645 sensor so just reuse
-> > > > the existing r9a07g044l2-smarc-cru-csi-ov5645.dtso and create a symbolic
-> > > > link to this file for RZ/V2L SMARC EVK.
-> > >
-> > > Perhaps it makes more sense to rename r9a07g044l2-smarc-cru-csi-ov5645.dtso
-> > > to rzg2l-smarc-cru-csi-ov5645.dtso instead?
-> > >
-> > ok, and then for g2lc [0] I add rzg2lc-smarc-cru-csi-ov5645.dtso ?
-> >
-> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230413114016.16068-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+Zipeng Zhang <zhangzipeng0@foxmail.com> writes:
+
+> Add an escape character to resolve the problem of
+> "--version" being displayed as "=E2=80=93version".
 >
-> Oh wait... had missed that one. Let me catch up and get a better
-> view on the big picture first... ;-)
+> Without such escaping, -- is rendered as =E2=80=93 (en dash).
+>
+> Signed-off-by: Zipeng Zhang <zhangzipeng0@foxmail.com>
+> ---
+>  Documentation/process/changes.rst | 38 +++++++++++++++----------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
 
-Let's keep it for now...
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.5.
+Thanks for working on improving the documentation!
 
-Gr{oetje,eeting}s,
+I understand where you are coming from, but this may be one of those
+cases where the readability of the plain-text documentation has to win
+out.  Those backslashes are ugly and seem unlikely to be maintained
+going forward.
 
-                        Geert
+The right solution, if it is possible, is to convince Sphinx to stop
+messing with "--" altogether.  Substituting em-dashes is of limited
+cosmetic value and, I think, is something we could do without.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thanks,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+jon
