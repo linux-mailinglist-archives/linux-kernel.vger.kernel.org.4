@@ -2,213 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB8D6E96BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF316E96CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjDTONx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S232089AbjDTOQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjDTONu (ORCPT
+        with ESMTP id S232002AbjDTOQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:13:50 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF2535BE;
-        Thu, 20 Apr 2023 07:13:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682000029; x=1713536029;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JzV9UVrh3z0+38+XT/wGu5bBMfjLAZvZNkPN2oIaVAA=;
-  b=i3DeW/Ezw/VNgUnw4Duq4XehkiOVrGyRTCcPjItoEgGVX4qN6V/JRhiw
-   q3GJaj/3gbzPeXbuDgOS/jkwa3c7ZsO2dvbx9rU4U3LBZuZHEW+f/BNJd
-   LWquAHAG/ryTfKXP9uxPW13Fr1n03p3gxzV5/dYmA1hnxPzzjDrPHP3cn
-   poFxQ84xJEV4HQFQf2Eue+nyvG/Exd8A9rWc1Te6gjKHmPvdd1qVbU1WN
-   BBM+bW8Tmpa+HKk8uFtYPvsGv58DhP/RJF0WDNqJ+M2us9lzjQkDFPABN
-   y4SGN+Zlb6r02GpaZtVCS6Gm3rpgUsityaIMTM+NtO+TPGPbUeKDbT7IF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325349807"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="325349807"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 07:13:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="694523902"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="694523902"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Apr 2023 07:13:43 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppV2c-000fsJ-1r;
-        Thu, 20 Apr 2023 14:13:42 +0000
-Date:   Thu, 20 Apr 2023 22:13:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nylon Chen <nylon.chen@sifive.com>, aou@eecs.berkeley.edu,
-        conor@kernel.org, emil.renner.berthing@canonical.com,
-        geert+renesas@glider.be, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, nylon.chen@sifive.com,
-        nylon7717@gmail.com, zong.li@sifive.com, greentime.hu@sifive.com,
-        vincent.chen@sifive.com, Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v3 2/2] pwm: sifive: change the PWM controlled LED
- algorithm
-Message-ID: <202304202141.JYCKBVOQ-lkp@intel.com>
-References: <20230420093457.18936-3-nylon.chen@sifive.com>
+        Thu, 20 Apr 2023 10:16:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294033C33
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682000141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AM2iS5p+M5vdfcO5gATf9U1kgTLr8hfoHFhkOm5c9I4=;
+        b=bTpVacGhvEuoJASEa3RtOMrfr+dkuSRuRNT0MwWJ6WvLwu7qt8UcNbtHV7m21wVp/ENBPE
+        4RyD46qxBiB3bN0jLnN0J7AO2qGfRTmyHn/gtqy6zJikh902FTvlj9WR6b7Wza9FiodOqe
+        9yrpZ70e/BJzuSf3qk3WAnVNMPAjl2o=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-612-ou3wF1RDO7SRRGZg73c14g-1; Thu, 20 Apr 2023 10:15:38 -0400
+X-MC-Unique: ou3wF1RDO7SRRGZg73c14g-1
+Received: by mail-wr1-f70.google.com with SMTP id d30-20020adfa35e000000b002f53b0a3377so108009wrb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:15:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682000137; x=1684592137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AM2iS5p+M5vdfcO5gATf9U1kgTLr8hfoHFhkOm5c9I4=;
+        b=IVQMBpMRXm04jOG3MqOiFDZuFRRpGj4Qc97luvcCPGaSu/cwzHut8uwPR35UYlU/eT
+         aTfs8G5/wAptkcwwzrYxODhyMf9Hk98w1RI9hRH8P2G65t8oX7LcjvwvSHEpO0bMRLwx
+         a5gw0zNkf+ZB5VtguYcBy1Pznhud2j9dgNzP5kk+ycF+MDsv7Hid+09SxTBhxz6h/2eZ
+         Qt5HPaJlP0OyDssA7en/9qyd2kPbsGFgZBwwbAq2f7woKeCadhQqwPGaWOixMea4SlSq
+         IiAAoxnwFY5tYR7ZZvOxmAdRlGsYoOirNRd7wVkw0jKDRYL0ZAOJlZuObPROVlnjGTYE
+         SFrw==
+X-Gm-Message-State: AAQBX9f8yPKInst1k9tsv5GXa7i3DkfV4KgpU2qHJU7y7wMD7zHB104A
+        cW8BMFMRMAFMuvqQegw3sCeFADqi6JOPc3XczuA04Flj0pnExPbHFVwBGPxVb+15SQXWypEU3oS
+        gVL+1Gs5Ma8TYOSQC9aJeFdpb
+X-Received: by 2002:a1c:7718:0:b0:3f0:9564:f4f6 with SMTP id t24-20020a1c7718000000b003f09564f4f6mr1454715wmi.1.1682000137304;
+        Thu, 20 Apr 2023 07:15:37 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bexWh9GsofWlY2L7rzUG6HZt1GpBCHEqybhfhvg9zt9iYQCWxHqXR1i3tXmNAfY1fMzB+3ow==
+X-Received: by 2002:a1c:7718:0:b0:3f0:9564:f4f6 with SMTP id t24-20020a1c7718000000b003f09564f4f6mr1454680wmi.1.1682000136897;
+        Thu, 20 Apr 2023 07:15:36 -0700 (PDT)
+Received: from localhost.localdomain ([176.206.13.250])
+        by smtp.gmail.com with ESMTPSA id k18-20020a05600c0b5200b003edf2dc7ca3sm2111619wmr.34.2023.04.20.07.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 07:15:36 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 16:15:33 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Qais Yousef <qyousef@layalina.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
+ restoration
+Message-ID: <ZEFJBXrXWXKH0xlc@localhost.localdomain>
+References: <20230329125558.255239-1-juri.lelli@redhat.com>
+ <20230418141127.zbvsf7lwk27zvipt@airbuntu>
+ <eda74c03-bde2-bb51-2b0d-df2097215696@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420093457.18936-3-nylon.chen@sifive.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <eda74c03-bde2-bb51-2b0d-df2097215696@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nylon,
+On 18/04/23 10:31, Waiman Long wrote:
+> On 4/18/23 10:11, Qais Yousef wrote:
+> > On 03/29/23 14:55, Juri Lelli wrote:
+> > > Qais reported [1] that iterating over all tasks when rebuilding root
+> > > domains for finding out which ones are DEADLINE and need their bandwidth
+> > > correctly restored on such root domains can be a costly operation (10+
+> > > ms delays on suspend-resume). He proposed we skip rebuilding root
+> > > domains for certain operations, but that approach seemed arch specific
+> > > and possibly prone to errors, as paths that ultimately trigger a rebuild
+> > > might be quite convoluted (thanks Qais for spending time on this!).
+> > > 
+> > > To fix the problem
+> > > 
+> > >   01/06 - Rename functions deadline with DEADLINE accounting (cleanup
+> > >           suggested by Qais) - no functional change
+> > >   02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
+> > >           from scheduler operations - and we also fix some problems
+> > >           associated to percpu_cpuset_rwsem)
+> > >   03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
+> > >   04/06 - Create DL BW alloc, free & check overflow interface for bulk
+> > >           bandwidth allocation/removal - no functional change
+> > >   05/06 - Fix bandwidth allocation handling for cgroup operation
+> > >           involving multiple tasks
+> > >   06/06 - Use this information to only perform the costly iteration if
+> > >           DEADLINE tasks are actually present in the cpuset for which a
+> > >           corresponding root domain is being rebuilt
+> > > 
+> > > With respect to the RFC posting [2]
+> > > 
+> > >   1 - rename DEADLINE bandwidth accounting functions - Qais
+> > >   2 - call inc/dec_dl_tasks_cs from switched_{to,from}_dl - Qais
+> > >   3 - fix DEADLINE bandwidth allocation with multiple tasks - Waiman,
+> > >       contributed by Dietmar
+> > > 
+> > > This set is also available from
+> > > 
+> > > https://github.com/jlelli/linux.git deadline/rework-cpusets
+> > Is this just waiting to be picked up or still there's something to be addressed
+> > still?
+> 
+> There are some changes to cpuset code recently and so I believe that this
+> patch series may need to be refreshed to reconcile the changes.
 
-kernel test robot noticed the following build warnings:
+Yeah, will soon take a look.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on thierry-reding-pwm/for-next rockchip/for-next linus/master v6.3-rc7 next-20230419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks!
+Juri
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20230420-173619
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230420093457.18936-3-nylon.chen%40sifive.com
-patch subject: [PATCH v3 2/2] pwm: sifive: change the PWM controlled LED algorithm
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230420/202304202141.JYCKBVOQ-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f2d706bf61190a45a8f90f1f455bc943d4ac7b6e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20230420-173619
-        git checkout f2d706bf61190a45a8f90f1f455bc943d4ac7b6e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304202141.JYCKBVOQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/kernel.h:26,
-                    from include/linux/clk.h:13,
-                    from drivers/pwm/pwm-sifive.c:14:
-   drivers/pwm/pwm-sifive.c: In function 'pwm_sifive_apply':
-   include/linux/minmax.h:20:35: warning: comparison of distinct pointer types lacks a cast
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                                   ^~
-   include/linux/minmax.h:26:18: note: in expansion of macro '__typecheck'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~
-   include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~
-   include/linux/minmax.h:74:25: note: in expansion of macro '__careful_cmp'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^~~~~~~~~~~~~
-   drivers/pwm/pwm-sifive.c:157:18: note: in expansion of macro 'max'
-     157 |         period = max(state->period, ddata->approx_period);
-         |                  ^~~
->> drivers/pwm/pwm-sifive.c:135:34: warning: variable 'period' set but not used [-Wunused-but-set-variable]
-     135 |         unsigned int duty_cycle, period;
-         |                                  ^~~~~~
-
-
-vim +/period +135 drivers/pwm/pwm-sifive.c
-
-   129	
-   130	static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-   131				    const struct pwm_state *state)
-   132	{
-   133		struct pwm_sifive_ddata *ddata = pwm_sifive_chip_to_ddata(chip);
-   134		struct pwm_state cur_state;
- > 135		unsigned int duty_cycle, period;
-   136		unsigned long long num;
-   137		bool enabled;
-   138		int ret = 0;
-   139		u32 frac;
-   140	
-   141		if (state->polarity != PWM_POLARITY_NORMAL && state->polarity != PWM_POLARITY_INVERSED)
-   142			return -EINVAL;
-   143	
-   144		cur_state = pwm->state;
-   145		enabled = cur_state.enabled;
-   146	
-   147		duty_cycle = state->duty_cycle;
-   148		if (!state->enabled)
-   149			duty_cycle = 0;
-   150	
-   151		/*
-   152		 * The problem of output producing mixed setting as mentioned at top,
-   153		 * occurs here. To minimize the window for this problem, we are
-   154		 * calculating the register values first and then writing them
-   155		 * consecutively
-   156		 */
-   157		period = max(state->period, ddata->approx_period);
-   158		num = (u64)duty_cycle * (1U << PWM_SIFIVE_CMPWIDTH);
-   159		frac = DIV64_U64_ROUND_CLOSEST(num, state->period);
-   160		frac = min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
-   161		/* The hardware cannot generate a 100% duty cycle */
-   162		frac = (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
-   163	
-   164	
-   165		mutex_lock(&ddata->lock);
-   166		if (state->period != ddata->approx_period) {
-   167			/*
-   168			 * Don't let a 2nd user change the period underneath the 1st user.
-   169			 * However if ddate->approx_period == 0 this is the first time we set
-   170			 * any period, so let whoever gets here first set the period so other
-   171			 * users who agree on the period won't fail.
-   172			 */
-   173			if (ddata->user_count != 1 && ddata->approx_period) {
-   174				mutex_unlock(&ddata->lock);
-   175				return -EBUSY;
-   176			}
-   177			ddata->approx_period = state->period;
-   178			pwm_sifive_update_clock(ddata, clk_get_rate(ddata->clk));
-   179		}
-   180		mutex_unlock(&ddata->lock);
-   181	
-   182		/*
-   183		 * If the PWM is enabled the clk is already on. So only enable it
-   184		 * conditionally to have it on exactly once afterwards independent of
-   185		 * the PWM state.
-   186		 */
-   187		if (!enabled) {
-   188			ret = clk_enable(ddata->clk);
-   189			if (ret) {
-   190				dev_err(ddata->chip.dev, "Enable clk failed\n");
-   191				return ret;
-   192			}
-   193		}
-   194	
-   195		writel(frac, ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm));
-   196	
-   197		if (!state->enabled)
-   198			clk_disable(ddata->clk);
-   199	
-   200		return 0;
-   201	}
-   202	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
