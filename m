@@ -2,92 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C0C6E9C69
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE73D6E9C6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjDTTVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S231478AbjDTTWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjDTTVF (ORCPT
+        with ESMTP id S230190AbjDTTWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:21:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A0E2717
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682018420;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NFDxpoy2DcBE5wK3y+F/p+EUL+YVKW5BxO5v43iU+ZQ=;
-        b=bPsJPQGY1ZuqNuzVrgNf956mymdMKKgLrBNS2fYrpKmJ9uv7lqMNs9k9xzeNyMgk03vc5L
-        /P3fTJXEMe/p/swE6wJnrlAPHClNzBWJ/ueMYf2WG4XWN//rZ1sjjcFM+ToYUT6VhwzlFu
-        6qDFT5Oy5udn87+e4GpE4xmHrcHvoew=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-vtxokf2dPLKiumP7Y_Wsyg-1; Thu, 20 Apr 2023 15:20:16 -0400
-X-MC-Unique: vtxokf2dPLKiumP7Y_Wsyg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 20 Apr 2023 15:22:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E907C2717
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:22:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B24BB3C025B0;
-        Thu, 20 Apr 2023 19:20:15 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CAEA82166B33;
-        Thu, 20 Apr 2023 19:20:14 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: [PATCH] iommu: amd: Fix up merge conflict resolution
-Date:   Thu, 20 Apr 2023 12:20:13 -0700
-Message-Id: <20230420192013.733331-1-jsnitsel@redhat.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9640E1FD8C;
+        Thu, 20 Apr 2023 19:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682018526;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uXvwYIgNLC4kcwKmk7HnoSn3oEer+G5mDmxEmWneBn8=;
+        b=NofC3OAKDsapbnWFT97w6GFfNFBBogeivP4UrZDNo+ASjTZh3P5dZ5BO2M7CYO87dQiEtJ
+        4ywulR9IOgro+SjulychlFc2rjOqe7eJ6jrQd4oK9EoWWS+kQLJzV2+af6wieocxgXgIHh
+        Gp6AwSxP/tFuZwn6g77UiJnu42Vksk8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682018526;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uXvwYIgNLC4kcwKmk7HnoSn3oEer+G5mDmxEmWneBn8=;
+        b=7DBBR4Gyj3MSmXT9HgUEqgBINI8PRilBS2GN4wJCQJIiZlSzw9iHvG/KpFAdr3FNq8FJ4c
+        LYnJKAQfsJZbS2CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 637641333C;
+        Thu, 20 Apr 2023 19:22:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7oyIF96QQWRySwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 20 Apr 2023 19:22:06 +0000
+Date:   Thu, 20 Apr 2023 21:21:56 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Neal Gompa <neal@gompa.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org,
+        Rafael Wysocki <rafael@kernel.org>, Chris Mason <clm@meta.com>,
+        Boris Burkov <boris@bur.io>
+Subject: Re: Linux regressions report for mainline [2023-04-16]
+Message-ID: <20230420192156.GY19619@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
+ <20230418213228.1273218-1-neal@gompa.dev>
+ <d1b7b62d-bec8-e290-d12c-0b641ab382dd@leemhuis.info>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1b7b62d-bec8-e290-d12c-0b641ab382dd@leemhuis.info>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merge commit e17c6debd4b2 ("Merge branches 'arm/mediatek', 'arm/msm', 'arm/renesas', 'arm/rockchip', 'arm/smmu', 'x86/vt-d' and 'x86/amd' into next")
-added amd_iommu_init_devices, amd_iommu_uninit_devices,
-and amd_iommu_init_notifier back to drivers/iommu/amd/amd_iommu.h.
-The only references to them are here, so clean them up.
+On Wed, Apr 19, 2023 at 07:03:31AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 18.04.23 23:32, Neal Gompa wrote:
+> > 
+> > I'm the guy that sort of kickstarted this whole thing a year ago.
+> >>From my perspective in Fedora-land, we've been running automatic
+> > weekly fstrim on every Fedora system for three years now[1] and
+> > have not received any complaints about SSDs pushing daises from
+> > that.
+> > 
+> > When we started discussing btrfs discard=async within Fedora
+> > two years ago[2], I started soliciting feedback and information
+> > from the Btrfs developers I was regularly working with at the time.
+> > 
+> > Last year, I had a face-to-face with Chris Mason and we discussed
+> > the idea in depth and decided to go for this, based on both Fedora's
+> > data with consumer disks and Facebook's data with their datacenters.
+> > 
+> > The only real surprise we had was the so-called "discard storm",
+> > which Boris Burkov made adjustments to resolve a couple weeks ago[3].
+> > [...]
+> > [3]: https://lore.kernel.org/linux-btrfs/cover.1680723651.git.boris@bur.io/T/#t
+> 
+> Wait, what? Argh. Sorry, if I had seen that patch, I wouldn't have
+> brought this up in my report at all. I missed it, as I wasn't CCed; and
+> regzbot missed it, because the patch uses a odd format for the lore link
+> (but not totally uncommon, will change regzbot to ensure that doesn't
+> happen again).
 
-Fixes: e17c6debd4b2 ("Merge branches 'arm/mediatek', 'arm/msm', 'arm/renesas', 'arm/rockchip', 'arm/smmu', 'x86/vt-d' and 'x86/amd' into next")
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/iommu/amd/amd_iommu.h | 3 ---
- 1 file changed, 3 deletions(-)
+I'd need pay more attention when the regression tracking process is
+involved in case there are more patch versions floating around. People
+usually don't "CC enough" so that you have the regzbot in place helps
+to track the state.
 
-diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
-index c160a332ce33..ec139f540c08 100644
---- a/drivers/iommu/amd/amd_iommu.h
-+++ b/drivers/iommu/amd/amd_iommu.h
-@@ -15,9 +15,6 @@ extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
- extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
- extern void amd_iommu_apply_erratum_63(struct amd_iommu *iommu, u16 devid);
- extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
--extern int amd_iommu_init_devices(void);
--extern void amd_iommu_uninit_devices(void);
--extern void amd_iommu_init_notifier(void);
- extern void amd_iommu_set_rlookup_table(struct amd_iommu *iommu, u16 devid);
- 
- #ifdef CONFIG_AMD_IOMMU_DEBUGFS
--- 
-2.38.1
+> Ciao, Thorsten
+> 
+> P.S.: /me meanwhile yet again wonders if we should tell people to add a
+> "CC: <regressions@lists.linux.dev>" on patches fixing regressions. Then
+> in this case I would have become aware of the patch. And it makes it
+> obvious for anybody handling patches that the patch is fixing a
+> regression. But whatever, might not be worth it.
 
+I'm not sure if it would fit how regzbot workflow works, but syzbot
+provides links with the reports and then changes the state when the
+patch is committed containing the links. I don't see anything similar in
+the process/handling-regression document. If the "Link: <report>" is
+sufficient then it should work already but there's no guarantee that the
+submitted patches would contain that. I add links to the committed
+versions but then you'd need to scan at least linux-next. In any case
+with the regzbot it's fixable.
