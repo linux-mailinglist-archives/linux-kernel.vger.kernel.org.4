@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0C56E92AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146DA6E92CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjDTL37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
+        id S234414AbjDTLb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbjDTL3s (ORCPT
+        with ESMTP id S233789AbjDTLbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:29:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625CF10CB;
-        Thu, 20 Apr 2023 04:29:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8113761DF9;
-        Thu, 20 Apr 2023 11:28:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4083C433D2;
-        Thu, 20 Apr 2023 11:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681990108;
-        bh=eWhB8HSrvOlHeakDXxHfQTUBLdrNhqVzjEsUT9awTjs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rvu+c1qCqp2647lvh4zyhPkQLkAKeL4B1B/Xe73jUYQr/xOkzPjo3iPcKCgrhBU6A
-         TQWAIWQzx3gQp7wOIjncNMJlgzyM4sKvcZxK6th/r41TM6fgSBZaaDG3s4sABI6SSS
-         MBtas7SQ7OOgm13RPDFD9d05EXmzvNbVHK6dVSzoy85VrWVQOhvglDmaVmDofCNZGN
-         pztSIpeUUM9ZavbACQqs4nOZPyM3mJR/angk24lT2iheBNYC8kaTlipqUfRidyl+CC
-         Ur+lWr/7f1oTmyMYLuILyv0N1f2FTmYncQm9Wnz1RJvXhsHKR9EW4QLoZZptBZlu3d
-         jEbT1RfF2kS1g==
-Date:   Thu, 20 Apr 2023 12:28:23 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Wadim Egorov <w.egorov@phytec.de>
-Cc:     upstream@lists.phytec.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        riku.voipio@iki.fi, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, pavel@ucw.cz
-Subject: Re: [PATCH v3] dt-bindings: leds: Convert PCA9532 to dtschema
-Message-ID: <20230420112823.GB970483@google.com>
-References: <20230412140552.451527-1-w.egorov@phytec.de>
+        Thu, 20 Apr 2023 07:31:43 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FBA26AD;
+        Thu, 20 Apr 2023 04:31:20 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q2Fpm5XYBz4f3l90;
+        Thu, 20 Apr 2023 19:31:12 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7OAIkFkVY8hHw--.17021S4;
+        Thu, 20 Apr 2023 19:31:14 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     song@kernel.org, neilb@suse.de, akpm@osdl.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next 0/8] md/raid1-10: limit the number of plugged bio
+Date:   Thu, 20 Apr 2023 19:29:38 +0800
+Message-Id: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230412140552.451527-1-w.egorov@phytec.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgCnD7OAIkFkVY8hHw--.17021S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr43Cr18WFW3Kr1UAr4Utwb_yoWkGrbEva
+        4vqF98trWUXFy2yay7Wr17ArWUJr4qg3WDJa4DKrWrZFy3ur1jkr4v9r48Wa1fXFyUZw15
+        Xry0gF1rAryDZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbz8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023, Wadim Egorov wrote:
+From: Yu Kuai <yukuai3@huawei.com>
 
-> Convert the PCA9532 LED Dimmer to dtschema.
-> While at it, update the example to match recommended node names and
-> the link to the product datasheet. Also add GPIO properties since
-> the driver allows to use unused pins as GPIOs.
-> 
-> Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
-> ---
-> v3:
->   - Add gpio-controller & gpio-cells property, fixes
->     arch/arm/boot/dts/lpc3250-ea3250.dtb: pca9532@60: '#gpio-cells', 'gpio-controller'
->     do not match any of the regexes: '^led-[0-9a-z]+$', 'pinctrl-[0-9]+'
-> 
-> v2:
->   - Rename yaml file to match compatibles, nxp,pca953x.yaml
->   - Remove Jacek Anaszewski from maintainers list
->   - Remove color labels in example
->   - Restore labels/default-states from original example
->   - Drop reg description
->   - Add unevaluatedProperties to patternProperties scope
->   - Update description of type property & set default to 0
->   - Fix indentation in example
-> ---
->  .../devicetree/bindings/leds/leds-pca9532.txt | 49 ----------
->  .../devicetree/bindings/leds/nxp,pca953x.yaml | 90 +++++++++++++++++++
->  2 files changed, 90 insertions(+), 49 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/leds/leds-pca9532.txt
->  create mode 100644 Documentation/devicetree/bindings/leds/nxp,pca953x.yaml
+This patchset tries to limit the number of plugged bio for raid1 and
+raid10, which is done in the last patch, other patches are some refactor
+and optimizations.
 
-Applied, thanks
+Yu Kuai (8):
+  md/raid10: prevent soft lockup while flush writes
+  md/raid1-10: rename raid1-10.c to raid1-10.h
+  md/raid1-10: factor out a helper to add bio to plug
+  md/raid1-10: factor out a helper to submit normal write
+  md/raid1-10: submit write io directly if bitmap is not enabled
+  md/md-bitmap: support to unplug bitmap asynchrously
+  md/raid1{,0}: Revert "md/raid1{,0}: fix deadlock in bitmap_unplug."
+  md/raid1-10: limit the number of plugged bio
+
+ drivers/md/md-bitmap.c                | 61 ++++++++++++++++++++++++---
+ drivers/md/md-bitmap.h                | 10 +++++
+ drivers/md/{raid1-10.c => raid1-10.h} | 61 +++++++++++++++++++++++++--
+ drivers/md/raid1.c                    | 32 +++-----------
+ drivers/md/raid1.h                    |  2 +
+ drivers/md/raid10.c                   | 45 ++++----------------
+ drivers/md/raid10.h                   |  2 +
+ 7 files changed, 143 insertions(+), 70 deletions(-)
+ rename drivers/md/{raid1-10.c => raid1-10.h} (64%)
 
 -- 
-Lee Jones [李琼斯]
+2.39.2
+
