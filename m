@@ -2,106 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004AB6E8AA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149D76E8AA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbjDTGu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 02:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S233902AbjDTGvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 02:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbjDTGu4 (ORCPT
+        with ESMTP id S231426AbjDTGvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 02:50:56 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609D21FE4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:50:55 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id dx24so3928540ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681973454; x=1684565454;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BZBSMQktnT3sOUJ8njJfewAafajqx7+l0kvMw5MkbYc=;
-        b=RMcG5R9F0ItlJ2Yrczy/iqBbaS7ytas5ZRJiSKNtI4UK6iwyRLAn0or2Q0pP6C2CNl
-         ln3RBOH7cZEvk7Pw6R28HEyxmkCbiozpSGCm9onw3qNuKpcsHPe+0OA1cCCaqIqnxsSJ
-         d3YXZMS1gIHJX+FZP50Y7AjaEgYa2FOix869bNkLGaQJPuCNomaoIl9Rj95El9kEH9Iv
-         7TCqNlEmrkSRXfhY3Q0Vf1yGfn7blmeG/oFfpRDQ03o5A3XRvFWqBP/LM94Q4znn8TQi
-         kGU6vd43n8wdFdavuEASTVuLLDJsQWcyu2Iv2hwa3kD/hMyXoyHr1RwfMAnjacMzdjbw
-         OpcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681973454; x=1684565454;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BZBSMQktnT3sOUJ8njJfewAafajqx7+l0kvMw5MkbYc=;
-        b=OKhj3rNJfbEvT/NL5aBfy/6udEOoBs277WTlPifGWQ5eqOQ5vM0zDD9E2nyyiEfseS
-         j9LU6WJczTfa21+fZSa5EeQ5lUm0LOaOiBriyKIxBHCiRsY3JGoI0vAc6W/zsIKodyh5
-         1ftFz/nFeVN4DiVg1EBnQJOtx/C/PAsmrhr0YZN4jAZ+8WF8zFMlwFQq7GZiyY1tlx0p
-         5jc/0j5Hsg2ZM2UfJrvZDGxNuFGkJZT3+sWOr6hFKJHnpb8qfuOBR/2soQjZf7ZiZxSy
-         x7HwAKJrnb7+zjU2zJ7Q84M6YGM7zutCE7TTKc0JAAeBJucRv0KvE0DJHYNVayzOHdLR
-         TY2A==
-X-Gm-Message-State: AAQBX9eiO4d4S1olSA0CL6g67bHvRFBizOEEPDfGD5be4HAGAWy7xwbx
-        dD8JsOXz+t/SAR97CtEjrevn8w==
-X-Google-Smtp-Source: AKy350aUCP1fGimAyu+iszpo1b0WXJNidAqhDBXkSrvxhoJ10XZCYH/yQsD7vyt04SPPV+9V+qCh/A==
-X-Received: by 2002:a17:906:57c9:b0:93d:ae74:fa9e with SMTP id u9-20020a17090657c900b0093dae74fa9emr498351ejr.7.1681973453837;
-        Wed, 19 Apr 2023 23:50:53 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id lh21-20020a170906f8d500b0094eeab34ad5sm360048ejb.124.2023.04.19.23.50.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 23:50:53 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 20 Apr 2023 02:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D76D1FE4;
+        Wed, 19 Apr 2023 23:51:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFE4564557;
+        Thu, 20 Apr 2023 06:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B12DEC433EF;
+        Thu, 20 Apr 2023 06:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681973510;
+        bh=8aUhQHxP2OH7rnWWvgHTSZOrsTIfsKF0J85Hymzdvbc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ahsFN66RabqGD8NhT4bISSgI0WVrH74WIIBgAJpxHOL7xIWiYJv3qAfExi2FcxgTJ
+         vWPMnkgO5gPyOtDECtV8ULkCDSZV53ubCLlC7PiQSwY/K6f9AmHKIU6euTOR6ZpT8D
+         7afMFNSaRzfjibny86M6OXTP3hEpWxupk0TP1loKA3wjPaXLgidWsEcIDpQAHv2wk8
+         5oIOsr9pVoIVSqftO/ccouK+sasRu1koFpnfVsGUm5MKBEggjH8nzn52bNctovFKP+
+         DNXUVKO1MsM0SZPpFfx5VOLG0IY+MuC1nUAEKdKYD4nXGhcgjo3gSSMolEghXKrRy5
+         anN4afMjjRxhA==
+Date:   Thu, 20 Apr 2023 15:51:46 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org,
+        bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: usb: ci-hdrc-usb2: allow multiple PHYs
-Date:   Thu, 20 Apr 2023 08:50:51 +0200
-Message-Id: <20230420065051.22994-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next 2/6] tracing: Add generic
+ test_recursion_try_acquire()
+Message-Id: <20230420155146.56099afbc6c73fc2e1065c62@kernel.org>
+In-Reply-To: <20230417154737.12740-3-laoar.shao@gmail.com>
+References: <20230417154737.12740-1-laoar.shao@gmail.com>
+        <20230417154737.12740-3-laoar.shao@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm MSM8974 comes with USB HS phy in two variants, although final
-DTS chooses only one.  Allow such combination in the ChipIdea USB2
-bindings and also disallow any other properties in the ulpi node.
+On Mon, 17 Apr 2023 15:47:33 +0000
+Yafang Shao <laoar.shao@gmail.com> wrote:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The ftrace_test_recursion_trylock() also disables preemption. This is not
+> required, but was a clean up as every place that called it also disabled
+> preemption, and making the two tightly coupled appeared to make the code
+> simpler.
+> 
+> But the recursion protection can be used for other purposes that do not
+> require disabling preemption. As the recursion bits are attached to the
+> task_struct, it follows the task, so there's no need for preemption being
+> disabled.
+> 
+> Add test_recursion_try_acquire/release() functions to be used generically,
+> and separate it from being associated with ftrace. It also removes the
+> "lock" name, as there is no lock happening. Keeping the "lock" for the
+> ftrace version is better, as it at least differentiates that preemption is
+> being disabled (hence, "locking the CPU").
+> 
+> Link: https://lore.kernel.org/linux-trace-kernel/20230321020103.13494-1-laoar.shao@gmail.com/
+> 
+> Acked-by: Yafang Shao <laoar.shao@gmail.com>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 
----
+This looks good to me.
 
-DTS will be fixed separately.
----
- Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-index e5e4dbc5a7a0..b26d26c2b023 100644
---- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-+++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-@@ -322,8 +322,9 @@ properties:
- 
-   ulpi:
-     type: object
--    properties:
--      phy:
-+    additionalProperties: false
-+    patternProperties:
-+      "^phy(-[0-9])?$":
-         description: The phy child node for Qcom chips.
-         type: object
-         $ref: /schemas/phy/qcom,usb-hs-phy.yaml
+> ---
+>  include/linux/trace_recursion.h | 47 ++++++++++++++++++++++++++++++-----------
+>  kernel/trace/ftrace.c           |  2 ++
+>  2 files changed, 37 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
+> index d48cd92..80de2ee 100644
+> --- a/include/linux/trace_recursion.h
+> +++ b/include/linux/trace_recursion.h
+> @@ -150,9 +150,6 @@ static __always_inline int trace_get_context_bit(void)
+>  # define trace_warn_on_no_rcu(ip)	false
+>  #endif
+>  
+> -/*
+> - * Preemption is promised to be disabled when return bit >= 0.
+> - */
+>  static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsigned long pip,
+>  							int start)
+>  {
+> @@ -182,18 +179,11 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
+>  	val |= 1 << bit;
+>  	current->trace_recursion = val;
+>  	barrier();
+> -
+> -	preempt_disable_notrace();
+> -
+>  	return bit;
+>  }
+>  
+> -/*
+> - * Preemption will be enabled (if it was previously enabled).
+> - */
+>  static __always_inline void trace_clear_recursion(int bit)
+>  {
+> -	preempt_enable_notrace();
+>  	barrier();
+>  	trace_recursion_clear(bit);
+>  }
+> @@ -205,12 +195,18 @@ static __always_inline void trace_clear_recursion(int bit)
+>   * tracing recursed in the same context (normal vs interrupt),
+>   *
+>   * Returns: -1 if a recursion happened.
+> - *           >= 0 if no recursion.
+> + *           >= 0 if no recursion and preemption will be disabled.
+>   */
+>  static __always_inline int ftrace_test_recursion_trylock(unsigned long ip,
+>  							 unsigned long parent_ip)
+>  {
+> -	return trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START);
+> +	int bit;
+> +
+> +	bit = trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START);
+> +	if (unlikely(bit < 0))
+> +		return bit;
+> +	preempt_disable_notrace();
+> +	return bit;
+>  }
+>  
+>  /**
+> @@ -221,6 +217,33 @@ static __always_inline int ftrace_test_recursion_trylock(unsigned long ip,
+>   */
+>  static __always_inline void ftrace_test_recursion_unlock(int bit)
+>  {
+> +	preempt_enable_notrace();
+> +	trace_clear_recursion(bit);
+> +}
+> +
+> +/**
+> + * test_recursion_try_acquire - tests for recursion in same context
+> + *
+> + * This will detect recursion of a function.
+> + *
+> + * Returns: -1 if a recursion happened.
+> + *           >= 0 if no recursion
+> + */
+> +static __always_inline int test_recursion_try_acquire(unsigned long ip,
+> +						      unsigned long parent_ip)
+> +{
+> +	return trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START);
+> +}
+> +
+> +/**
+> + * test_recursion_release - called after a success of test_recursion_try_acquire()
+> + * @bit: The return of a successful test_recursion_try_acquire()
+> + *
+> + * This releases the recursion lock taken by a non-negative return call
+> + * by test_recursion_try_acquire().
+> + */
+> +static __always_inline void test_recursion_release(int bit)
+> +{
+>  	trace_clear_recursion(bit);
+>  }
+>  
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index c67bcc8..8ad3ab4 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -7647,6 +7647,7 @@ void ftrace_reset_array_ops(struct trace_array *tr)
+>  	if (bit < 0)
+>  		return;
+>  
+> +	preempt_disable();
+>  	do_for_each_ftrace_op(op, ftrace_ops_list) {
+>  		/* Stub functions don't need to be called nor tested */
+>  		if (op->flags & FTRACE_OPS_FL_STUB)
+> @@ -7668,6 +7669,7 @@ void ftrace_reset_array_ops(struct trace_array *tr)
+>  		}
+>  	} while_for_each_ftrace_op(op);
+>  out:
+> +	preempt_enable();
+>  	trace_clear_recursion(bit);
+>  }
+>  
+> -- 
+> 1.8.3.1
+> 
+
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
