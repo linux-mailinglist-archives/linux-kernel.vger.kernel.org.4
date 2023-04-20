@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B1A6E9363
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611D76E9366
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbjDTLvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
+        id S234103AbjDTLva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbjDTLvE (ORCPT
+        with ESMTP id S231759AbjDTLv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:51:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2432B40F5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 04:51:00 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-3-VYKQSiZZMzCrXX5nBd03kw-1; Thu, 20 Apr 2023 12:50:58 +0100
-X-MC-Unique: VYKQSiZZMzCrXX5nBd03kw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 20 Apr
- 2023 12:50:57 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 20 Apr 2023 12:50:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Fangrui Song' <maskray@google.com>,
-        Florent Revest <revest@google.com>
-CC:     Nick Desaulniers <ndesaulniers@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>
-Subject: RE: clangd cannot handle tree_nocb.h
-Thread-Topic: clangd cannot handle tree_nocb.h
-Thread-Index: AQHZcvnZ+BIUvq3YZUeAuVWwOlp7wa80FdDw
-Date:   Thu, 20 Apr 2023 11:50:57 +0000
-Message-ID: <e6c8e08dfc8a4895aca44571d26fa445@AcuMS.aculab.com>
-References: <20230414005309.GA2198310@google.com>
- <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
- <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
- <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-In-Reply-To: <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 20 Apr 2023 07:51:27 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7A659C4;
+        Thu, 20 Apr 2023 04:51:18 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33KBp0cK016925;
+        Thu, 20 Apr 2023 06:51:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681991460;
+        bh=Ifm/hGtRjfMGMo3Gan5UQZ3I8wk/lzg8q+bcE2TWbz8=;
+        h=From:To:CC:Subject:In-Reply-To:References:Date;
+        b=IOT5qG3y7JFVOxjp4FwCLMYawGv2DyrT3UwGJ6E34ZlgJq9T+cZuXOMIhmENt0Iue
+         XSdOCr6pGe2DCp/SF+AUpR2mM4Q5I9WCnalu+gHxl77RIFnOM5s25Od2Qtj071bLo/
+         L/UHDvZIzlQtOnxGmDZHp2iMXKsU74mjYhTVdSx8=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33KBp0wn032323
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Apr 2023 06:51:00 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
+ Apr 2023 06:50:59 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 20 Apr 2023 06:50:59 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33KBoxcW064533;
+        Thu, 20 Apr 2023 06:50:59 -0500
+From:   Kamlesh Gurudasani <kamlesh@ti.com>
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [PATCH 0/7] arm64: dts: ti: k3-am65: Cleanups and minor additions
+In-Reply-To: <20230419225913.663448-1-nm@ti.com>
+References: <20230419225913.663448-1-nm@ti.com>
+Date:   Thu, 20 Apr 2023 17:20:58 +0530
+Message-ID: <87wn26ydp9.fsf@kamlesh.i-did-not-set--mail-host-address--so-tickle-me>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,22 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRmFuZ3J1aSBTb25nDQo+IFNlbnQ6IDE5IEFwcmlsIDIwMjMgMjE6MDINCi4uLi4NCj4g
-U29tZSBpbmZvcm1hdGlvbiBhYm91dCBDbGFuZyBiYXNlZCBsYW5ndWFnZSBzZXJ2ZXJzDQo+IA0K
-PiBJdCdzIGdvb2QgcHJhY3RpY2UgdG8gZW5zdXJlIHRoYXQgYSBoZWFkZXIgZmlsZSBpcyBzZWxm
-LWNvbnRhaW5lZC4gSWYNCj4gbm90LCBmb3IgZXhhbXBsZSwgaWYgYS5jIGluY2x1ZGVzIGEuaCwg
-d2hpY2ggaXMgbm90IHNlbGYtY29udGFpbmVkLA0KPiBhLmggaXMgZ2VuZXJhbGx5IGNvbXBpbGVk
-IG9uIGl0cyBvd24gKGFzIGlmIHVzaW5nIGNsYW5nIFtvcHRpb25zXSBhLmgpDQo+IHRvIGNvbmZp
-bmUgZGlhZ25vc3RpY3MvY29tcGxldGlvbiByZXN1bHRzIHRvIGEuaCBhbmQgbm90IHRvIG90aGVy
-DQo+IGhlYWRlcnMgaW5jbHVkZWQgYnkgYS5jLg0KPiANCj4gSG93ZXZlciwgdGhpcyBkZXNpZ24g
-Y2hvaWNlIG1heSBjYXVzZSBsYW5ndWFnZSBzZXJ2ZXJzIHRvIGVtaXQNCj4gZGlhZ25vc3RpY3Mg
-dGhhdCB5b3UgZG9uJ3Qgc2VlIHdoZW4gYnVpbGRpbmcgdGhlIHByb2plY3QuDQoNClRoYXQgcmVh
-bGx5IGRvZXNuJ3Qgd29yayBmb3IgLmggZmlsZXMgdGhhdCBjb250YWluIHByb2dyYW0NCmdlbmVy
-YXRlZCBkYXRhIHVzZWQgdG8gaW5pdGlhbGlzZSBhcnJheXMuDQoNClRoZXkgbWF5IG5vdCBldmVu
-IGNvbnRhaW4gbnVtYmVycywganVzdCByZWZlcmVuY2VzIHRvDQojZGVmaW5lcyB0aGF0IHRoYXQg
-aW5jbHVkaW5nIGZpbGUgaXMgZXhwZWN0ZWQgdG8gZGVmaW5lLg0KDQpTbyB0aGVyZSB3aWxsIGFs
-d2F5cyBiZSAuaCBmaWxlcyB0aGF0IGFyZSBub3QgY29tcGlsYWJsZS4NCg0KCURhdmlkDQoNCi0N
-ClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBN
-aWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxl
-cykNCg==
+Nishanth Menon <nm@ti.com> writes:
 
+> Hi,
+>
+> This is a result of looking to cleanup u-boot and realizing there are
+> pieces missing in kernel that need to be pushed out.
+>
+> So, minor cleanups and adding a few missing pieces.
+>
+> Bootlog: https://gist.github.com/nmenon/f4dc43aef616dfcb3d38701cc074ff6d
+>
+> Nishanth Menon (7):
+>   arm64: dts: ti: k3-am654-base-board: Add missing pinmux wkup_uart,
+>     mcu_uart and mcu_i2c
+>   arm64: dts: ti: k3-am654-base-board: Rename regulator node name
+>   arm64: dts: ti: k3-am654-base-board: Add VTT GPIO regulator for DDR
+>   arm64: dts: ti: k3-am654-base-board: Add missing PMIC
+>   arm64: dts: ti: k3-am654-base-board: Add board detect eeprom
+>   arm64: dts: ti: k3-am654-base-board: Add aliases
+>   arm64: dts: ti: k3-am65: Drop aliases
+>
+>  arch/arm64/boot/dts/ti/k3-am65.dtsi           | 17 ----
+>  .../arm64/boot/dts/ti/k3-am654-base-board.dts | 93 ++++++++++++++++++-
+>  2 files changed, 88 insertions(+), 22 deletions(-)
+>
+> -- 
+> 2.40.0
+All patches look good to me.
+
+Reviewed-by: Kamlesh Gurudasani <kamlesh@ti.com>
