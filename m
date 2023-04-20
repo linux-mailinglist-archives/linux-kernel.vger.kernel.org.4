@@ -2,105 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9D06E894D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABEB6E8723
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjDTEvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 00:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S231265AbjDTBDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjDTEvU (ORCPT
+        with ESMTP id S229547AbjDTBDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:51:20 -0400
-X-Greylist: delayed 11177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 21:51:18 PDT
-Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9174225;
-        Wed, 19 Apr 2023 21:51:18 -0700 (PDT)
-Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
-        (Authenticated sender: lmateisz@heimpalkorhaz.hu)
-        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id B8B56384A3B54E;
-        Thu, 20 Apr 2023 03:03:25 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu B8B56384A3B54E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
-        s=default; t=1681952606;
-        bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=;
-        h=Date:From:To:Subject:Reply-To:From;
-        b=e+YYeoSi9gFuUUsYVTgqCtsuWLbjx/MgxaBQ06G7vUbL+5B9Kn5pzlk31uPlW67Ur
-         jGo++8aCl2duaFvkpzG753JU737w/FapzbKklpE8qixd9APLiynQqsdlgSlNa0KhQA
-         jHhj11L5Oht8IDe9Tme+8B8mKKjuCm/5M/h4cNI4x7TNw5ReFaGtgj2xgxcaDHIYTr
-         PQwtbdDj44s8AWZkVY0yDPPSBGM0ZgJd76AwWvSxpUQB8p+27cToklJ+3C6Wnw4N2M
-         KDGj9xm3xEyVWUKxz2wd+G82CvnHDqTI0CCCo/nN3v1Vqch1+VofVQJiV9Q2GMEQjL
-         fZ658WACXn5Hw==
+        Wed, 19 Apr 2023 21:03:36 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E040FE
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:03:34 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x34so1050098ljq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681952613; x=1684544613;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7aCv74B3cNb0viwbpKPsfEJjDZJ94Wj3iKPoHbjjBlk=;
+        b=UzmUMX4lufzGlw94H22bMOnEzQ+Pc4HpyME05BOZlH6z0yg0L7dHDCB33ukzrv+yHf
+         ztPiXygnvXfHCFqaVVlbXFbFeCdViuqasKHsry9GTgYDARwexN8iotOpnRx8dKLCnlD8
+         +qnVMaLLVgvKNvNKWmQ2z86Oj67NqhkE2J3ofdloiEiGwx1Oaopj89c5naKTFXzkbZ5I
+         hmMEVuyCWtC4wVESySB37cDmIWR/nXZ15LJM4ZerM9S7ribRkY8qtHBLV5PmGtBAwsut
+         288x3kWPZ2tuU+BNHa9xJX6roujSTUevOYbeJUcxmipV5B17wI4NGW/ly6i8PB8SByy6
+         rNdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681952613; x=1684544613;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7aCv74B3cNb0viwbpKPsfEJjDZJ94Wj3iKPoHbjjBlk=;
+        b=LmKkNT75uS1DAjuMvGDWS5pBIoOqznlvCXf4f5fDAz9ooPE9Uuqey105uZCLZnzyaf
+         7dogodnN6QhgM7M7rR+qtyn5WnN0XeOM+DnhiYsjuEEiFVCTwaSvG1L76a+EPaOwK5dS
+         YWhe/3DDcIhm3/hdkgSnP1HAxvi/isXW822LuH3nnEIAXfYIB+6mOtShvW8aoM5XAoXC
+         /YKpAMtDMe67v9bjHEgBwCM1eJc4gmZm+Acm9KdnECS70NUROwQYP/cPAKR438hI6DXu
+         i+XjJOejZpV5YPueQbf+lcF6/SICgLK9KtAagZlbVPmM4bYwnzr8CkyuXU9r2qcQkpDS
+         3qfA==
+X-Gm-Message-State: AAQBX9fytJSe4aobUzfYgFZhxB324tsl4izfPbJCmr6BuspKe6E9K8zB
+        Ml2zZpy23+TvKk4pBroqArzACg==
+X-Google-Smtp-Source: AKy350ad9OwjYHZIaWMY5CqNO/tmTJ7XReuKP+O7HWWbCmvE4uFFufK+aOnI2I3ZQbq3z8wMRYwfPw==
+X-Received: by 2002:a2e:3c0b:0:b0:2a9:e6fd:e39 with SMTP id j11-20020a2e3c0b000000b002a9e6fd0e39mr1217428lja.26.1681952612682;
+        Wed, 19 Apr 2023 18:03:32 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id c15-20020a2e680f000000b00295a583a20bsm24714lja.74.2023.04.19.18.03.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 18:03:32 -0700 (PDT)
+Message-ID: <3d1b08f0-adf9-8815-46f7-c31b54a7140c@linaro.org>
+Date:   Thu, 20 Apr 2023 04:03:31 +0300
 MIME-Version: 1.0
-Date:   Thu, 20 Apr 2023 03:03:25 +0200
-From:   MK <mk@heimpalkorhaz.hu>
-To:     undisclosed-recipients:;
-Subject: ***SPAM*** Hello sunshine, how are you?
-Reply-To: marion.k07081@gmail.com
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <466fbbf6cecf3c08d86265114eddc4e0@heimpalkorhaz.hu>
-X-Sender: mk@heimpalkorhaz.hu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [15.83 / 20.00];
-        FUZZY_DENIED(10.51)[1:edab46d5f3:1.00:txt];
-        R_UNDISC_RCPT(3.00)[];
-        FORGED_RECIPIENTS(2.00)[m:,s:acmccue@unc.edu,s:kara.hume@unc.edu,s:miriam.grenon@unc.edu.ar,s:silvia.lopezdeblanc@unc.edu.ar,s:sherry.liu@uncbusiness.net,s:lwilson-jones@uncfsu.edu,s:pliu@unch.unc.edu,s:maria.bullis@unchealth.unc.edu,s:jessi.nicola@UND.edu,s:adelarosav@undac.edu.pe,s:ndf@undershorts.org,s:aefnuc.cub@undp.org,s:violeta.zuna@undp.org,s:amotta@uneb.br,s:skaringi@uneca.org,s:nancy.yung@unemat.br,s:nilcem@unemat.br,s:rabelo@unemat.br,s:y.zhou@unesco-ihe.org,s:n.gul@unesco.org,s:celso.rocha@unesp.br,s:claudio.oliveira@unesp.br,s:e.deffune@unesp.br,s:roxana.herrera@unesp.br,s:aneta@unet.com.mk,s:vetinst@unet.com.mk,s:jguerre@unet.edu.ve,s:vgil@unex.es,s:jariberth@unf.se,s:alessels@unfccc.int,s:rpittman@unfoundation.org,s:melnour@unfpa.org,s:maja.heller@ungaornar.se,s:Nathan.Jorgensen@unh.edu,s:reybetd@unhcr.org,s:fisnik.morina@unhz.eu,s:ibish.mazreku@unhz.eu,s:olaf.kruse@uni-bielefeld.de,s:bodemer@uni-due.de,s:walter.buzina@uni-graz.at,s:bernd.witzigmann@uni-kassel.de,s:an
- ja.mueller@uni-leipzig.de,s:miriam.hamburger@uni-leipzig.de,s:al.pastorini@uni-med.net,s:p.romano@uni-med.net,s:alexander.ahrens@uni-tuebingen.de,s:dominik.dier@uni-ulm.de,s:stella.maerz@uni-vechta.de,s:abinakhm@uni.coventry.ac.uk,s:S2109357@uni.cumbria.ac.uk,s:Jayowin@uni.edu,s:nurguel.dursun@uni.li,s:anna.kowalcze@uni.lodz.pl,s:pawel.glodek@uni.lodz.pl,s:bchoros@uni.opole.pl,s:kbadora@uni.opole.pl,s:klinikaprawa@uni.opole.pl,s:sylwia.frach@uni.opole.pl,s:gmb14153@uni.strath.ac.uk,s:Magdalena.Valsikova@uniag.sk,s:Valsikova@uniag.sk,s:aj.lopez@uniandes.edu.co,s:anders.larsson@uniarts.se,s:andreas.erhardt@unibas.ch,s:m.kaeser@unibas.ch,s:nadia.pinardi@unibo.it,s:lachowicz@unica.it,s:terenzio.congiu@unica.it,s:christian.ballot@unicaen.fr,s:a.reitano@unical.it,s:acorrer@unicamp.br,s:pvelho@unicamp.br,s:Francesca.Fantini@unicatt.it,s:richardmp@unicauca.edu.co,s:ahoundeganme@unicef.org,s:pnepal@unicef.org,s:snkwenkeufils@unicef.org,s:cinzia.tutino@unict.it,s:nlaneri@unict.it,s:cpsmith@un
- idosporutuado.org,s:eda.cela@uniel.edu.al,s:milena.vidotto@unifesp.br,s:nathalia.kozikas@unifesp.br,s:simone.orlandini@unifi.it,s:umberto.allegretti@unifi.it,s:ora.hazak@unifr.ch,s:Herb.Reid@Unify.com,s:DeLaHarpe@unige.ch,s:emmanuel.rayner@unige.ch,s:julia.koerholz@uniklinikum-dresden.de,s:marinete@unilavras.edu.br,s:mahamoodmr@unilorin.edu.ng,s:ldiaz@unimagdalena.edu.co,s:smondello@unime.it,s:stefano.agosta@unime.it,s:wilfred.brimblecombe@unimelb.edu.au,s:elena.dozio@unimi.it,s:giovanni.montini@unimi.it,s:francesca.lanfranconi@unimib.it];
-        SUBJECT_ENDS_QUESTION(1.00)[];
-        GENERIC_REPUTATION(-0.59)[-0.58788261292158];
-        MIME_GOOD(-0.10)[text/plain];
-        BAYES_SPAM(0.00)[25.79%];
-        RCVD_COUNT_ZERO(0.00)[0];
-        FROM_EQ_ENVFROM(0.00)[];
-        MIME_TRACE(0.00)[0:+];
-        RCPT_COUNT_ONE(0.00)[1];
-        MID_RHS_MATCH_FROM(0.00)[];
-        FROM_HAS_DN(0.00)[];
-        TO_DN_ALL(0.00)[];
-        FREEMAIL_ENVRCPT(0.00)[uol.com.br,upcmail.nl,usa.com,usa.net,verizon.net,VERIZON.NET,versatel.nl,videotron.ca,vip.126.com,vip.163.com,vip.onet.pl,vip.sina.com,virgilio.it];
-        FREEMAIL_REPLYTO(0.00)[gmail.com];
-        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-        HAS_REPLYTO(0.00)[marion.k07081@gmail.com]
-X-Rspamd-Queue-Id: B8B56384A3B54E
-X-Rspamd-Server: mail.heimpalkorhaz.hu
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 11/17] drm/msm/dpu: Disable MDP vsync source selection
+ on DPU 5.0.0 and above
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-11-ef76c877eb97@somainline.org>
+ <20fab838-e05b-163d-aa72-bd8235df9f2c@linaro.org>
+ <38030486-f08a-33e6-f8d1-3f4de379a75b@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <38030486-f08a-33e6-f8d1-3f4de379a75b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am sorry to bother you and intrude your privacy. I am single,
-  lonely and in need of a caring, loving and romantic companion.
+On 20/04/2023 04:01, Konrad Dybcio wrote:
+> 
+> 
+> On 20.04.2023 03:00, Dmitry Baryshkov wrote:
+>> On 17/04/2023 23:21, Marijn Suijten wrote:
+>>> Since hardware revision 5.0.0 the TE configuration moved out of the
+>>> PINGPONG block into the INTF block, including vsync source selection
+>>> that was previously part of MDP top.  Writing to the MDP_VSYNC_SEL
+>>> register has no effect anymore and is omitted downstream via the
+>>> DPU/SDE_MDP_VSYNC_SEL feature flag.  This flag is only added to INTF
+>>> blocks used by hardware prior to 5.0.0.
+>>>
+>>> The code that writes to these registers in the INTF block will follow in
+>>> subsequent patches.
+>>>
+>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> ---
+>>>    .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  2 +-
+>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  2 +-
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  3 ++
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c         | 52 +++++++++++++++-------
+>>>    4 files changed, 41 insertions(+), 18 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>>> index b7845591c384..6906f8046b9e 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>>> @@ -30,7 +30,7 @@ static const struct dpu_mdp_cfg msm8998_mdp[] = {
+>>>        {
+>>>        .name = "top_0", .id = MDP_TOP,
+>>>        .base = 0x0, .len = 0x458,
+>>> -    .features = 0,
+>>> +    .features = BIT(DPU_MDP_VSYNC_SEL),
+>>>        .clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+>>>        .clk_ctrls[DPU_CLK_CTRL_VIG1] = { .reg_off = 0x2b4, .bit_off = 0 },
+>>>        .clk_ctrls[DPU_CLK_CTRL_VIG2] = { .reg_off = 0x2bc, .bit_off = 0 },
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>>> index 5b9b3b99f1b5..14ce397800d5 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>>> @@ -30,7 +30,7 @@ static const struct dpu_mdp_cfg sdm845_mdp[] = {
+>>>        {
+>>>        .name = "top_0", .id = MDP_TOP,
+>>>        .base = 0x0, .len = 0x45c,
+>>> -    .features = BIT(DPU_MDP_AUDIO_SELECT),
+>>> +    .features = BIT(DPU_MDP_AUDIO_SELECT) | BIT(DPU_MDP_VSYNC_SEL),
+>>>        .clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+>>>        .clk_ctrls[DPU_CLK_CTRL_VIG1] = { .reg_off = 0x2b4, .bit_off = 0 },
+>>>        .clk_ctrls[DPU_CLK_CTRL_VIG2] = { .reg_off = 0x2bc, .bit_off = 0 },
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> index 71584cd56fd7..599e177b89dd 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> @@ -48,6 +48,8 @@ enum {
+>>>     * @DPU_MDP_UBWC_1_5,      Universal Bandwidth compression version 1.5
+>>>     * @DPU_MDP_PERIPH_0_REMOVED Indicates that access to periph top0 block results
+>>>     *               in a failure
+>>> + * @DPU_MDP_VSYNC_SEL      Enables vsync source selection via MDP_VSYNC_SEL register
+>>> + *                         (moved into INTF block since DPU 5.0.0)
+>>>     * @DPU_MDP_MAX            Maximum value
+>>>       */
+>>> @@ -59,6 +61,7 @@ enum {
+>>>        DPU_MDP_UBWC_1_5,
+>>>        DPU_MDP_AUDIO_SELECT,
+>>>        DPU_MDP_PERIPH_0_REMOVED,
+>>> +    DPU_MDP_VSYNC_SEL,
+>>>        DPU_MDP_MAX
+>>>    };
+>>>    diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
+>>> index 2bb02e17ee52..9ea15a647a66 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
+>>> @@ -126,28 +126,16 @@ static void dpu_hw_get_danger_status(struct dpu_hw_mdp *mdp,
+>>>        status->sspp[SSPP_CURSOR1] = (value >> 26) & 0x3;
+>>>    }
+>>>    -static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
+>>> +static void dpu_hw_setup_vsync_source_v1(struct dpu_hw_mdp *mdp,
+>>>            struct dpu_vsync_source_cfg *cfg)
+>>
+>> In my opinion _v1 is not really descriptive here. Could you please rename it to dpu_hw_setup_vsync_source_no_vsync_sel() ?
+> v1 refers to the CTL rev 100 a.k.a 1.0.0 a.k.a 1, but that's not
+> yet very well formulated upstream.. if we even need it..
 
-I am a secret admirer and would like to explore the opportunity to
-learn more about each other. I know it is strange to contact you
-this way and I hope you can forgive me. I am a shy person and
-this is the only way I know I could get your attention. I just want
-to know what you think and my intention is not to offend you.
-I hope we can be friends if that is what you want, although I wish
-to be more than just a friend. I know you have a few questions to
-ask and I hope I can satisfy some of your curiosity with a few
-answers.
+Yeah, but this mdp_top, not the ctl. And for CTL I'd probably rename _v1 
+to _active to follow actual feature name.
 
-I believe in the saying that 'to the world you are just one person,
-but to someone special you are the world'. All I want is love,
-romantic care and attention from a special companion which I am
-hoping would be you.
+> 
+> Konrad
+>>
+>> Or maybe rename dpu_hw_setup_vsync_source() to dpu_hw_setup_vsync_source_vsync_sel() and drop _v1 from this function.
+>>
+>> Up to you.
+>>
+>>
+>>>    {
+>>>        struct dpu_hw_blk_reg_map *c;
+>>> -    u32 reg, wd_load_value, wd_ctl, wd_ctl2, i;
+>>> -    static const u32 pp_offset[PINGPONG_MAX] = {0xC, 0x8, 0x4, 0x13, 0x18};
+>>> +    u32 reg, wd_load_value, wd_ctl, wd_ctl2;
+>>>    -    if (!mdp || !cfg || (cfg->pp_count > ARRAY_SIZE(cfg->ppnumber)))
+>>> +    if (!mdp || !cfg)
+>>>            return;
+>>>          c = &mdp->hw;
+>>> -    reg = DPU_REG_READ(c, MDP_VSYNC_SEL);
+>>> -    for (i = 0; i < cfg->pp_count; i++) {
+>>> -        int pp_idx = cfg->ppnumber[i] - PINGPONG_0;
+>>> -
+>>> -        if (pp_idx >= ARRAY_SIZE(pp_offset))
+>>> -            continue;
+>>> -
+>>> -        reg &= ~(0xf << pp_offset[pp_idx]);
+>>> -        reg |= (cfg->vsync_source & 0xf) << pp_offset[pp_idx];
+>>> -    }
+>>> -    DPU_REG_WRITE(c, MDP_VSYNC_SEL, reg);
+>>>          if (cfg->vsync_source >= DPU_VSYNC_SOURCE_WD_TIMER_4 &&
+>>>                cfg->vsync_source <= DPU_VSYNC_SOURCE_WD_TIMER_0) {
+>>> @@ -194,6 +182,33 @@ static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
+>>>        }
+>>>    }
+>>>    +static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
+>>> +        struct dpu_vsync_source_cfg *cfg)
+>>> +{
+>>> +    struct dpu_hw_blk_reg_map *c;
+>>> +    u32 reg, i;
+>>> +    static const u32 pp_offset[PINGPONG_MAX] = {0xC, 0x8, 0x4, 0x13, 0x18};
+>>> +
+>>> +    if (!mdp || !cfg || (cfg->pp_count > ARRAY_SIZE(cfg->ppnumber)))
+>>> +        return;
+>>> +
+>>> +    c = &mdp->hw;
+>>> +
+>>> +    reg = DPU_REG_READ(c, MDP_VSYNC_SEL);
+>>> +    for (i = 0; i < cfg->pp_count; i++) {
+>>> +        int pp_idx = cfg->ppnumber[i] - PINGPONG_0;
+>>> +
+>>> +        if (pp_idx >= ARRAY_SIZE(pp_offset))
+>>> +            continue;
+>>> +
+>>> +        reg &= ~(0xf << pp_offset[pp_idx]);
+>>> +        reg |= (cfg->vsync_source & 0xf) << pp_offset[pp_idx];
+>>> +    }
+>>> +    DPU_REG_WRITE(c, MDP_VSYNC_SEL, reg);
+>>> +
+>>> +    dpu_hw_setup_vsync_source_v1(mdp, cfg);
+>>> +}
+>>> +
+>>>    static void dpu_hw_get_safe_status(struct dpu_hw_mdp *mdp,
+>>>            struct dpu_danger_safe_status *status)
+>>>    {
+>>> @@ -241,7 +256,12 @@ static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
+>>>        ops->setup_split_pipe = dpu_hw_setup_split_pipe;
+>>>        ops->setup_clk_force_ctrl = dpu_hw_setup_clk_force_ctrl;
+>>>        ops->get_danger_status = dpu_hw_get_danger_status;
+>>> -    ops->setup_vsync_source = dpu_hw_setup_vsync_source;
+>>> +
+>>> +    if (cap & BIT(DPU_MDP_VSYNC_SEL))
+>>> +        ops->setup_vsync_source = dpu_hw_setup_vsync_source;
+>>> +    else
+>>> +        ops->setup_vsync_source = dpu_hw_setup_vsync_source_v1;
+>>> +
+>>>        ops->get_safe_status = dpu_hw_get_safe_status;
+>>>          if (cap & BIT(DPU_MDP_AUDIO_SELECT))
+>>>
+>>
 
-I hope this message will be the beginning of a long term
-communication between us, simply send a reply to this message, it
-will make me happy.
+-- 
+With best wishes
+Dmitry
 
-
-Hugs and kisses,
-
-Marion.
