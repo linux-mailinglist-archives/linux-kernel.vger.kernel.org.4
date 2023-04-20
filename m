@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAE46E8E2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB276E8E2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234243AbjDTJfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S234310AbjDTJfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234354AbjDTJfU (ORCPT
+        with ESMTP id S231921AbjDTJff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:35:20 -0400
+        Thu, 20 Apr 2023 05:35:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F5AFC;
-        Thu, 20 Apr 2023 02:35:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E42FC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:35:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1571C645ED;
-        Thu, 20 Apr 2023 09:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF62C433EF;
-        Thu, 20 Apr 2023 09:35:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DEB9612BF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:35:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9DAC433D2;
+        Thu, 20 Apr 2023 09:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681983318;
-        bh=7QGfrx5Lylgu2pycxL1l/ScFu4JMnrN+XPP1ENGhSDw=;
+        s=k20201202; t=1681983333;
+        bh=HdXdYZQym10kC00W6v8aqZexsVRWoeV8afyKO+dOT+A=;
         h=From:To:Cc:Subject:Date:From;
-        b=REFT8W24+2Tc29e1ywKO6xQLvkg81mp7G5smDtXy3TJxJk0WiU1vAP6jOCCx3oG8R
-         6xshBT3V43i/4PGKK96DD6yCD/tRGfU9E7f2ZS1DdLn9QeYeByUMClq3k1NKLN3WJ2
-         jnOQ6zh4riRYIwt4PoV8py2I169xzsfehB8FGM1wOHEK42OrmAXVlEKxH0qXSuQCob
-         s4HSawuxYufAoh1SIXnnTgQqM7CIX08j5feV/MMBh2FjcjyoUj4AhPqOiUrYuBSe2m
-         Qq5NIFfti8w+Fk9ZDlIZUfBxKLEtOBkqeyjOYkHldWWRIiTo50KkbWiDvBecGhO6Sb
-         zEMEDV14Nn5Gw==
+        b=shh3XgWtjmfw19L2I93GmoLp8nqi24i/kDwt76X0fh5Si7fetgh5XTk3cNt2r+jC2
+         nyMIKL6DLKe/kzAA+YRrN4Vj63Zk4ZobAgc3DSwqW79nru26z6p6Q6fBKQZ06L30Z4
+         bYB0ZSBpU1sUgbnjXZVNvUz3l2283aFA0OaLyImc3BpHtj38HPOLgRl42DWHjBxnQD
+         ku4htZPvO0Op871FJsHDNxrMoZsKAioMzH5wgXfCGlSVCra53pgiysgh6yxfkFGNkz
+         UwyM7rK1jGfJNe09a0KE8EAeFOgHNy0syqNGSY1V868lXD1Zb+Vnn6qbs8iXXMH7Pp
+         piVDNYiob5M8g==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH] tty: serial: simplify qcom_geni_serial_send_chunk_fifo()
-Date:   Thu, 20 Apr 2023 11:35:14 +0200
-Message-Id: <20230420093514.13055-1-jirislaby@kernel.org>
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH] tty: synclink_gt: don't allocate and pass dummy flags
+Date:   Thu, 20 Apr 2023 11:35:30 +0200
+Message-Id: <20230420093530.13133-1-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,50 +52,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* use memcpy() instead of the loop (removes c variable)
-* use remaining parameter directly (removes chunk variable)
+In synclinc_gt, the flag_buf is allocated, zeroed and passed to ldisc's
+receive_buf(). It is never written to, so it serves as a dummy buffer.
+That's unneeded because all ldiscs accept NULL as flags. That NULL
+resolves to the TTY_NORMAL flag.
 
-The code is simpler and easier to follow.
+So drop all this nonsense.
 
 Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
 ---
- drivers/tty/serial/qcom_geni_serial.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/tty/synclink_gt.c | 18 +++++-------------
+ 1 file changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 1881dd5b3c4d..08dc3e2a729c 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -854,21 +854,19 @@ static void qcom_geni_serial_stop_tx(struct uart_port *uport)
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 543b3224dce9..16e469e581ec 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -287,7 +287,6 @@ struct slgt_info {
+ 	unsigned char *tx_buf;
+ 	int tx_count;
+ 
+-	char *flag_buf;
+ 	bool drop_rts_on_tx_done;
+ 	struct	_input_signal_events	input_signal_events;
+ 
+@@ -3244,13 +3243,7 @@ static int alloc_tmp_rbuf(struct slgt_info *info)
+ 	info->tmp_rbuf = kmalloc(info->max_frame_size + 5, GFP_KERNEL);
+ 	if (info->tmp_rbuf == NULL)
+ 		return -ENOMEM;
+-	/* unused flag buffer to satisfy receive_buf calling interface */
+-	info->flag_buf = kzalloc(info->max_frame_size + 5, GFP_KERNEL);
+-	if (!info->flag_buf) {
+-		kfree(info->tmp_rbuf);
+-		info->tmp_rbuf = NULL;
+-		return -ENOMEM;
+-	}
++
+ 	return 0;
  }
  
- static void qcom_geni_serial_send_chunk_fifo(struct uart_port *uport,
--					     unsigned int chunk)
-+					     unsigned int remaining)
+@@ -3258,8 +3251,6 @@ static void free_tmp_rbuf(struct slgt_info *info)
  {
- 	struct qcom_geni_serial_port *port = to_dev_port(uport);
- 	struct circ_buf *xmit = &uport->state->xmit;
--	unsigned int tx_bytes, c, remaining = chunk;
-+	unsigned int tx_bytes;
- 	u8 buf[BYTES_PER_FIFO_WORD];
+ 	kfree(info->tmp_rbuf);
+ 	info->tmp_rbuf = NULL;
+-	kfree(info->flag_buf);
+-	info->flag_buf = NULL;
+ }
  
- 	while (remaining) {
- 		memset(buf, 0, sizeof(buf));
- 		tx_bytes = min(remaining, BYTES_PER_FIFO_WORD);
- 
--		for (c = 0; c < tx_bytes ; c++) {
--			buf[c] = xmit->buf[xmit->tail];
--			uart_xmit_advance(uport, 1);
--		}
-+		memcpy(buf, &xmit->buf[xmit->tail], tx_bytes);
-+		uart_xmit_advance(uport, tx_bytes);
- 
- 		iowrite32_rep(uport->membase + SE_GENI_TX_FIFOn, buf, 1);
- 
+ /*
+@@ -4657,7 +4648,8 @@ static bool rx_get_frame(struct slgt_info *info)
+ 				hdlcdev_rx(info,info->tmp_rbuf, framesize);
+ 			else
+ #endif
+-				ldisc_receive_buf(tty, info->tmp_rbuf, info->flag_buf, framesize);
++				ldisc_receive_buf(tty, info->tmp_rbuf, NULL,
++						  framesize);
+ 		}
+ 	}
+ 	free_rbufs(info, start, end);
+@@ -4691,8 +4683,8 @@ static bool rx_get_buf(struct slgt_info *info)
+ 	DBGDATA(info, info->rbufs[i].buf, count, "rx");
+ 	DBGINFO(("rx_get_buf size=%d\n", count));
+ 	if (count)
+-		ldisc_receive_buf(info->port.tty, info->rbufs[i].buf,
+-				  info->flag_buf, count);
++		ldisc_receive_buf(info->port.tty, info->rbufs[i].buf, NULL,
++				  count);
+ 	free_rbufs(info, i, i);
+ 	return true;
+ }
 -- 
 2.40.0
 
