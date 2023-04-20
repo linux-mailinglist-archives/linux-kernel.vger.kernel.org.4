@@ -2,232 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E696E8D22
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759946E8D32
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbjDTItB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S232009AbjDTIvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbjDTIsH (ORCPT
+        with ESMTP id S234179AbjDTIuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:48:07 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB11D4695
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:47:52 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id j15so1642447ybl.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681980472; x=1684572472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T5oAqCslyeZbhwZTq6RFTTQ4PQFGAxsJkatHKOyp9J0=;
-        b=bxyEIQuckrZovTT6ZFDvK22g7vQcjK9MDIwUGnHTk7f1r03inGlP8Hg9uKZa89pY2F
-         B3CdN9Si8aiLyM5WkeIVd0OS07FeUt/8E9sp7wOC4wSLOOgSLMRu620yYy+6ouQkBHHU
-         OrRntp7qLe1qDjiVgICBWJqoGb24YPjPlc4oXe6bqvwmnzFg63ZMtNQDai3YN0ouObvz
-         DtgFueQzO3xaAVO8HU5DHmuGly+qIhBGxBt8k6nddjhT4RXBfuAErQ07j5zQuzK/w1Pr
-         eyw7x9OYffXFfglyZ1E3bla8PnYZVQpnFyc/5NbE27VDNtomqydwHgJ7tFs+QXm7X/EA
-         m4aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681980472; x=1684572472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T5oAqCslyeZbhwZTq6RFTTQ4PQFGAxsJkatHKOyp9J0=;
-        b=VUap/YwHFaV9H5+C+44EL1Wz5C44Fsj8aGQO0434+mY4T6el6yR+wcjJQEBKrgnjQN
-         W4MydeFOGBNIPoI4i+1ows+ueHRMLijhqWCTMy+tj3ak3x1Uqd7jtEo/PvKSSey7me6M
-         sC2VioEz1DW5WZiF/c9jRBK2+YG61f0GPXmAXhfD9b9RIQBPwjy1Srh2sx+7cuBDGWr9
-         dYzWB2XO5zctjck57qulioUm5VPtw8Bgh9kzYOH0vpsNfiSJmuVxhelSQOsz8HthKYmC
-         dH0T4uMjfaEhM1mzenhB1WHV+sdUW3ngVuZez6ZgrjTsVux9COxQjPeybskhAggvAYw4
-         R4rA==
-X-Gm-Message-State: AAQBX9c83bhqpQ0xrX48rA0TlaLpPUhhcm+VfmvhPq55iqyxODn0li1I
-        3Sw5gnyA+a3UCzODm+39Z+rVnPFwftaHmtOWUgTC+A==
-X-Google-Smtp-Source: AKy350Yj07sfBe+SClXcBzSUONtgncb/id4YtuYg1fsL8LaTx7utG5puu9AQK1O//i8VSR4O9bit6lJq4Bxk2wl2vpY=
-X-Received: by 2002:a25:d181:0:b0:b79:6c89:86c0 with SMTP id
- i123-20020a25d181000000b00b796c8986c0mr662624ybg.42.1681980471793; Thu, 20
- Apr 2023 01:47:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
- <20230419-dpu-tweaks-v1-7-d1bac46db075@freebox.fr> <405ff057-e4da-3f2f-b860-ce2eeacaab94@linaro.org>
- <CAG9NU68aLLZ0KGNmsirzm5RtGw6CC_i=+kTwyfhy+bjSkRTO4Q@mail.gmail.com>
-In-Reply-To: <CAG9NU68aLLZ0KGNmsirzm5RtGw6CC_i=+kTwyfhy+bjSkRTO4Q@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 20 Apr 2023 11:47:40 +0300
-Message-ID: <CAA8EJppa86WWE0tkUaFG4JpfKwr9husvgHWkCVjRbWiF=Ei7aQ@mail.gmail.com>
-Subject: Re: [PATCH 07/11] drm/msm/dpu: add sspp cursor blocks to msm8998 hw catalog
-To:     Arnaud Vrac <avrac@freebox.fr>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+        Thu, 20 Apr 2023 04:50:54 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4F34C18;
+        Thu, 20 Apr 2023 01:49:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q2B0T5nZ7z9v7Gw;
+        Thu, 20 Apr 2023 16:39:21 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAXxTtK_EBkfX87Ag--.1933S2;
+        Thu, 20 Apr 2023 09:48:24 +0100 (CET)
+Message-ID: <2f90828cc8e9e1ab369790a3da687790c4348b0f.camel@huaweicloud.com>
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
+ provide xattrs for inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mengchi Cheng <mengcc@amazon.com>
+Cc:     bpf@vger.kernel.org, casey@schaufler-ca.com,
+        dmitry.kasatkin@gmail.com, eparis@parisplace.org,
+        jmorris@namei.org, kamatam@amazon.com, keescook@chromium.org,
+        kpsingh@kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        nicolas.bouchinet@clip-os.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        selinux@vger.kernel.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, yoonjaeh@amazon.com,
+        zohar@linux.ibm.com
+Date:   Thu, 20 Apr 2023 10:48:06 +0200
+In-Reply-To: <20230419192516.757220-1-mengcc@amazon.com>
+References: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
+         <20230419192516.757220-1-mengcc@amazon.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAXxTtK_EBkfX87Ag--.1933S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw18ur43Cw13Kr48AF4ktFb_yoW7Aw4xpF
+        Z8Ga43Krs5Jw17CayvvF47AF4F9rWkGa15XFnFgry7AF13Kr1Igr98Xr12kryxJrsY93Wq
+        vF4jvr9xZr4Uu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj4hE8wAAsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 at 10:06, Arnaud Vrac <avrac@freebox.fr> wrote:
->
-> Le jeu. 20 avr. 2023 =C3=A0 01:10, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> a =C3=A9crit :
-> >
-> > On 19/04/2023 17:41, Arnaud Vrac wrote:
-> > > Now that cursor sspp blocks can be used for cursor planes, enable the=
-m
-> > > on msm8998. The dma sspp blocks that were assigned to cursor planes c=
-an
-> > > now be used for overlay planes instead.
-> >
-> > While the change is correct, there is more about it. Composers, using
-> > universal planes, will see this plane too. They have no obligations to
-> > use it only for the cursor. At the minimum could you please extend the
-> > plane_atomic_check to check for the plane dimensions for the CURSOR pip=
-es?
->
-> Hum, I had assumed the generic atomic checks would already do this,
+On Wed, 2023-04-19 at 12:25 -0700, Mengchi Cheng wrote:
+> > I got some errors during xattr removal, so not sure if my patch was
+> > working properly or not (it happened also without it, didn't
+> > investigate more).
+> > 
+> > However, I saw another discussion related to transmute:
+> > 
+> > https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+> > 
+> > I add the people in CC.
+> > 
+> > The steps described were so easy to understand and executed, I tried
+> > without and with overlayfs.
+> > 
+> > Without:
+> > 
+> > # echo "_ system rwxatl" > /sys/fs/smackfs/load2
+> > # mkdir /data
+> > # chsmack -a "system" /data
+> > # chsmack -t /data
+> > # mkdir -p /data/dir1/dir2
+> > # chsmack /data/dir1
+> > /data/dir1 access="system" transmute="TRUE"
+> > # chsmack /data/dir1/dir2
+> > /data/dir1/dir2 access="system" transmute="TRUE"
+> > 
+> > It seems to work, right?
+> > 
+> > With overlay fs it didn't work, same result as the one Mengchi
+> > reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
+> > want to get rid of it, I thought to investigate more.
+> > 
+> > Looking at smack_dentry_create_files_as(), I see that the label of the
+> > process is overwritten with the label of the transmuting directory.
+> > 
+> > That causes smack_inode_init_security() to lookup the transmuting rule
+> > on the overridden credential, and not on the original one.
+> > 
+> > In the example above, it means that, when overlayfs is creating the new
+> > inode, the label of the process is system, not _. So no transmute
+> > permission, and also the xattr will not be added, as observed by
+> > Mengchi.
+> > 
+> > Hopefully I undertood the code, so in this particular case we would not
+> > need to override the label of the process in smack_dentry_create_files_
+> > as().
+> > 
+> > If you see smack_inode_init_security():
+> > 
+> > 	struct smack_known *skp = smk_of_current();
+> > 	struct smack_known *isp = smk_of_inode(inode);
+> > 	struct smack_known *dsp = smk_of_inode(dir);
+> > 
+> > [...]
+> > 
+> > 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+> > 		    smk_inode_transmutable(dir)) {
+> > 			isp = dsp;
+> > [...]
+> > 
+> > 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> > 
+> > This code is telling, if there is a transmute rule, and the directory
+> > is transmuting, set the label of the new inode to the label of the
+> > directory. That should be already the result that we wanted to obtain.
+> > 
+> > The current code should have been doing it by overriding the label of
+> > the process in smack_dentry_create_files_as() with the label of the
+> > parent directory, and letting the inode being created with the
+> > overridden label of the process. The transmute xattr is not set due to
+> > the problem described above.
+> > 
+> > So, as a quick test, I kept this patch with the change to xattr2->name, 
+> > and skipped the label override in smack_dentry_create_files_as(). It
+> > worked, I get the same result as without overlayfs. Wondering if the
+> > process label override is necessary in other cases.
+> 
+> If I understand correctly, removing the if block below is what you suggested.
 
-Atomic will have these checks for the legacy cursor API (using the
-mode_config.cursor_width/cursor_height that you have added). But I
-don't think there is a generic API for telling the core 'this plane is
-slightly limited'.
+Yes, more or less is what I did.
 
-Fortunately, once the virtual planes land and are taught about the
-SSPP_CURSOR peculiarities, it should not matter, since the driver will
-know that it should not select these pipes in the inappropriate cases.
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index cfcbb748da25..a867288e9de9 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+>                  * providing access is transmuting use the containing
+>                  * directory label instead of the process label.
+>                  */
+> -               if (may > 0 && (may & MAY_TRANSMUTE))
+> -                       ntsp->smk_task = isp->smk_inode;
+> +//             if (may > 0 && (may & MAY_TRANSMUTE))
+> +//                     ntsp->smk_task = isp->smk_inode;
+>         }
+>         return 0;
+>  }
+> 
+> This way will have issue in the following situation on the vanila kernel.
+> data in the lowerdir has "_" label before overlay and dir1 is already
+> created in the lowerdir.
+> # chsmack /data
+> /data access="_"
+> # chsmack /data/dir1
+> /data/dir1 access="system" transmute="TRUE"
+> Apply overlay on data directory and set the smack rule in the same way.
+> data has the same smack label.
+> # chsmack /data
+> /data access="system" transmute="TRUE"
 
-> but it's not the case. I'll add the check when the pipe is of type
-> SSPP_CURSOR in another patch coming before, thanks.
->
-> >
-> > For this change:
-> >
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >
-> > >
-> > > Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
-> > > ---
-> > >   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  8 +++--
-> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 34 +++++++++++=
-+++++++++++
-> > >   2 files changed, 40 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h =
-b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> > > index b07e8a9941f79..7de393b0f91d7 100644
-> > > --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> > > @@ -90,10 +90,14 @@ static const struct dpu_sspp_cfg msm8998_sspp[] =
-=3D {
-> > >               sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0)=
-,
-> > >       SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1ac, DMA_MSM8998_MASK,
-> > >               sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1)=
-,
-> > > -     SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1ac, DMA_CURSOR_MSM89=
-98_MASK,
-> > > +     SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1ac, DMA_MSM8998_MASK=
-,
-> > >               sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA2)=
-,
-> > > -     SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000, 0x1ac, DMA_CURSOR_MSM89=
-98_MASK,
-> > > +     SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000, 0x1ac, DMA_MSM8998_MASK=
-,
-> > >               sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA3=
-),
-> > > +     SSPP_BLK("sspp_12", SSPP_CURSOR0, 0x34000, 0x1ac, DMA_CURSOR_MS=
-M8998_MASK,
-> > > +             msm8998_cursor_sblk_0, 2, SSPP_TYPE_CURSOR, DPU_CLK_CTR=
-L_CURSOR0),
-> > > +     SSPP_BLK("sspp_13", SSPP_CURSOR1, 0x36000, 0x1ac, DMA_CURSOR_MS=
-M8998_MASK,
-> > > +             msm8998_cursor_sblk_1, 10, SSPP_TYPE_CURSOR, DPU_CLK_CT=
-RL_CURSOR1),
-> > >   };
-> > >
-> > >   static const struct dpu_lm_cfg msm8998_lm[] =3D {
-> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers=
-/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> > > index 8d5d782a43398..f34fa704936bc 100644
-> > > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> > > @@ -242,6 +242,22 @@ static const uint32_t wb2_formats[] =3D {
-> > >       DRM_FORMAT_XBGR4444,
-> > >   };
-> > >
-> > > +static const uint32_t cursor_formats[] =3D {
-> > > +     DRM_FORMAT_ARGB8888,
-> > > +     DRM_FORMAT_ABGR8888,
-> > > +     DRM_FORMAT_RGBA8888,
-> > > +     DRM_FORMAT_BGRA8888,
-> > > +     DRM_FORMAT_XRGB8888,
-> > > +     DRM_FORMAT_ARGB1555,
-> > > +     DRM_FORMAT_ABGR1555,
-> > > +     DRM_FORMAT_RGBA5551,
-> > > +     DRM_FORMAT_BGRA5551,
-> > > +     DRM_FORMAT_ARGB4444,
-> > > +     DRM_FORMAT_ABGR4444,
-> > > +     DRM_FORMAT_RGBA4444,
-> > > +     DRM_FORMAT_BGRA4444,
-> > > +};
-> > > +
-> > >   /*************************************************************
-> > >    * SSPP sub blocks config
-> > >    *************************************************************/
-> > > @@ -300,6 +316,19 @@ static const uint32_t wb2_formats[] =3D {
-> > >       .virt_num_formats =3D ARRAY_SIZE(plane_formats), \
-> > >       }
-> > >
-> > > +#define _CURSOR_SBLK(num) \
-> > > +     { \
-> > > +     .maxdwnscale =3D SSPP_UNITY_SCALE, \
-> > > +     .maxupscale =3D SSPP_UNITY_SCALE, \
-> > > +     .smart_dma_priority =3D 0, \
-> > > +     .src_blk =3D {.name =3D STRCAT("sspp_src_", num), \
-> > > +             .id =3D DPU_SSPP_SRC, .base =3D 0x00, .len =3D 0x150,},=
- \
-> > > +     .format_list =3D cursor_formats, \
-> > > +     .num_formats =3D ARRAY_SIZE(cursor_formats), \
-> > > +     .virt_format_list =3D cursor_formats, \
-> > > +     .virt_num_formats =3D ARRAY_SIZE(cursor_formats), \
-> > > +     }
-> > > +
-> > >   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =3D
-> > >                               _VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED=
-3);
-> > >   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =3D
-> > > @@ -309,6 +338,11 @@ static const struct dpu_sspp_sub_blks msm8998_vi=
-g_sblk_2 =3D
-> > >   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =3D
-> > >                               _VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED=
-3);
-> > >
-> > > +static const struct dpu_sspp_sub_blks msm8998_cursor_sblk_0 =3D
-> > > +                             _CURSOR_SBLK("12");
-> > > +static const struct dpu_sspp_sub_blks msm8998_cursor_sblk_1 =3D
-> > > +                             _CURSOR_SBLK("13");
-> > > +
-> > >   static const struct dpu_rotation_cfg dpu_rot_sc7280_cfg_v2 =3D {
-> > >       .rot_maxheight =3D 1088,
-> > >       .rot_num_formats =3D ARRAY_SIZE(rotation_v2_formats),
-> > >
-> >
-> > --
-> > With best wishes
-> > Dmitry
-> >
+I'm using an older kernel, but I get _ instead of system.
+
+> After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
+> label.
+> # rm -r /data/dir1
+> # mkdir -p /data/dir1
+> # chsmack /data/dir1
+> /data/dir1 access="_"
+
+Unfortunately, it cannot work:
+
+Thread 3 hit Breakpoint 1, smack_inode_init_security (...) at security/smack/smack_lsm.c:959
+959	{
+(gdb) p dir->i_ino
+$12 = 9169116
+(gdb) p dsp
+$13 = (struct smack_known *) 0xffffffff831fc0a0 <smack_known_floor>
 
 
+ls -i /home/root/data_work/
+9169116 work
 
---=20
-With best wishes
-Dmitry
+So, transmuting is decided on the working directory.
+
+If I do:
+
+# chsmack -a system -t /home/root/data_work/work/
+# mkdir /data/dir1
+# chsmack /data/dir1
+/data/dir1 access="system" transmute="TRUE"
+
+I obtain the expected result. However, this problem is due to how overlayfs works:
+
+static int ovl_create_over_whiteout(struct dentry *dentry, struct inode *inode,
+				    struct ovl_cattr *cattr)
+{
+
+[...]
+
+	newdentry = ovl_create_temp(ofs, workdir, cattr);
+	err = PTR_ERR(newdentry);
+	if (IS_ERR(newdentry))
+		goto out_dput;
+
+
+The good news seems to be that, once you set the label to the correct
+directory, transmuting works with the changes I proposed.
+
+Roberto
+
+> Since I am not very familiar your change. Could you help check with your
+> patch will this issue also happen? 
+> 
+> 
+> Best,
+> Mengchi
+> 
+> >  
+> > Roberto
+
