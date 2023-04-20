@@ -2,359 +2,484 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D716E9E8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962516E9E90
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjDTWFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 18:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S232903AbjDTWFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 18:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjDTWFB (ORCPT
+        with ESMTP id S232842AbjDTWFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 18:05:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE4DEB;
-        Thu, 20 Apr 2023 15:04:59 -0700 (PDT)
+        Thu, 20 Apr 2023 18:05:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD22D42;
+        Thu, 20 Apr 2023 15:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682028299; x=1713564299;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QLTm7S7Qy0Ej6mfl0KwCOlaAKC/xPF/JLj0bt0xnj1E=;
-  b=Gb7ueCvr88+Ru5BpHfXeRXWo/XOzBdsZW0ysuiM+WOkl4gFiitfcMPea
-   4tTr+p7fplGzCyWmi7nd36VnklbrmJ3fSrtUVrYunN5/llPNliq7CkF3v
-   WOrs/rNB087l+JfO3n1XM0dNIj7YMG+DDnCW+1wG7TFdI8dD8++YQdvsA
-   vmwr3W2v9JrHZ0nCzeqmYI9SQAP+a9SVeCnzKbjzCUOZsJfzhdd8LJURo
-   iBCeCgOprk9n94xuhRFVYr550MfQD5ilUIZk6doCrMiVXy5oespfOC6+G
-   4LfPZrfZmt+F+iKINQ0lGZSoNDTNGEJEVI/dsNET+I3aOAQ/ghYA8/Y0D
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="344614348"
+  t=1682028317; x=1713564317;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cz97TlRXHcd6CjzRTaPrtfoSsZaXO8R9vSddM3MS470=;
+  b=gJbjUaW5ToA1b/fUb/5IrEZopzJ2chUBFS7IrvS3Ck9sGPv+5aDZfAzF
+   p3F9IcBHp57OY8qKDwxNnJZ4NnCqYrTTQByenDtkIK/edfmuPYaC6Asav
+   tbAi/M2Av5E/XVNco12o8hhhrYqMC3VroCtYjKYroXBMxCGNvf1+ynyj8
+   15qkPGlLz+pIF3ndOKBN6chV19GQBhlZI03bMAi1HPH6l0x0jJ6G3a4t9
+   RAtp1oz6wd/Abhm/hwPHlk9Y4kQgUJZ1V0HGykjCRo5OitC1vPeX5plH8
+   NnsLQGxjzp0RB8cSJcV1po9wvY9290McLclzSJHegmzxhfl8rzbtdVGJI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="345877815"
 X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="344614348"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:04:59 -0700
+   d="scan'208";a="345877815"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:05:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="685523795"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="938248848"
 X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="685523795"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2023 15:04:56 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppcOd-000g8W-1Y;
-        Thu, 20 Apr 2023 22:04:55 +0000
-Date:   Fri, 21 Apr 2023 06:04:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] iio: pressure: Honeywell mprls0025pa pressure
- sensor
-Message-ID: <202304210512.5qdqDRgd-lkp@intel.com>
-References: <ZEGZ7VMrqaPNzhwj@arbad>
+   d="scan'208";a="938248848"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Apr 2023 15:05:16 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ilpo.jarvinen@linux.intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wendy Wang <wendy.wang@intel.com>
+Subject: [UPDATE][PATCH v2 1/3] platform/x86/intel-uncore-freq: Uncore frequency control via TPMI
+Date:   Thu, 20 Apr 2023 15:05:14 -0700
+Message-Id: <20230420220514.747573-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEGZ7VMrqaPNzhwj@arbad>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andreas,
+Implement support of uncore frequency control via TPMI (Topology Aware
+Register and PM Capsule Interface). This driver provides the similar
+functionality as the current uncore frequency driver using MSRs.
 
-kernel test robot noticed the following build warnings:
+The hardware interface to read/write is basically substitution of MSR
+0x620 and 0x621. There are specific MMIO offset and bits to get/set
+minimum and maximum uncore ratio, similar to MSRs.
 
-[auto build test WARNING on e0ee50101346ca9cef52da75e3fb4380c27c042a]
+The scope of the uncore MSRs is package/die. But new generation of CPUs
+have more granular control at a cluster level. Each package/die can have
+multiple power domains, which further can have multiple clusters. The
+TPMI interface allows control at cluster level.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Klinger/dt-bindings-iio-pressure-Support-Honeywell-mprls0025pa-sensor/20230421-040254
-base:   e0ee50101346ca9cef52da75e3fb4380c27c042a
-patch link:    https://lore.kernel.org/r/ZEGZ7VMrqaPNzhwj%40arbad
-patch subject: [PATCH v3 2/3] iio: pressure: Honeywell mprls0025pa pressure sensor
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230421/202304210512.5qdqDRgd-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3d6a7eae49611392fb6f7563dcb71b74f12a0a78
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andreas-Klinger/dt-bindings-iio-pressure-Support-Honeywell-mprls0025pa-sensor/20230421-040254
-        git checkout 3d6a7eae49611392fb6f7563dcb71b74f12a0a78
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/iio/pressure/
+The primary use case for uncore sysfs is to set maximum and minimum
+uncore frequency to reduce power consumption or latency. The current
+uncore sysfs control is per package/die. This is enough for the majority
+of users as workload will move to different power domains as it moves
+between different CPUs.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304210512.5qdqDRgd-lkp@intel.com/
+The current uncore sysfs provides controls at package/die level. When
+user sets maximum/minimum limits, the driver sets the same limits to
+each cluster.
 
-All warnings (new ones prefixed by >>):
+Here number of power domains = number of resources in this aux device.
+There are offsets and bits to discover number of clusters and offset for
+each cluster level controls.
 
-   In file included from include/linux/device.h:15,
-                    from include/linux/acpi.h:15,
-                    from include/linux/i2c.h:13,
-                    from drivers/iio/pressure/mprls0025pa.c:17:
-   drivers/iio/pressure/mprls0025pa.c: In function 'mpr_read_pressure':
->> drivers/iio/pressure/mprls0025pa.c:169:30: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
-     169 |                 dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(wdata));
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/iio/pressure/mprls0025pa.c:169:17: note: in expansion of macro 'dev_err'
-     169 |                 dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(wdata));
-         |                 ^~~~~~~
-   drivers/iio/pressure/mprls0025pa.c:169:70: note: format string is defined here
-     169 |                 dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(wdata));
-         |                                                                     ~^
-         |                                                                      |
-         |                                                                      int
-         |                                                                     %ld
-   drivers/iio/pressure/mprls0025pa.c:208:30: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
-     208 |                 dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(buf));
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/iio/pressure/mprls0025pa.c:208:17: note: in expansion of macro 'dev_err'
-     208 |                 dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(buf));
-         |                 ^~~~~~~
-   drivers/iio/pressure/mprls0025pa.c:208:70: note: format string is defined here
-     208 |                 dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(buf));
-         |                                                                     ~^
-         |                                                                      |
-         |                                                                      int
-         |                                                                     %ld
+The TPMI documentation can be downloaded from:
+https://github.com/intel/tpmi_power_management
 
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+Tested-by: Wendy Wang <wendy.wang@intel.com>
+---
+v2 update
+- Implement suggetions from Ilpo
+Later will fold to v3 if there are other changes in this patchset.
 
-vim +169 drivers/iio/pressure/mprls0025pa.c
+v2
+- Changed mmio to u8* (Hans)
+- Not setting pd_info->uncore_base to NULL (Hans)
+- Handling failure of devm_kcalloc() (Hans)
+- Merged init/remove to probe/remove functions (Rui)
+- Log when platform is NULL (Rui)
 
-  > 17	#include <linux/i2c.h>
-    18	#include <linux/module.h>
-    19	#include <linux/mod_devicetable.h>
-    20	#include <linux/device.h>
-    21	#include <linux/gpio/consumer.h>
-    22	#include <linux/regulator/consumer.h>
-    23	#include <linux/math64.h>
-    24	
-    25	#include <asm/unaligned.h>
-    26	
-    27	#include <linux/iio/iio.h>
-    28	#include <linux/iio/buffer.h>
-    29	#include <linux/iio/triggered_buffer.h>
-    30	#include <linux/iio/trigger_consumer.h>
-    31	
-    32	/* bits in i2c status byte */
-    33	#define MPR_I2C_POWER	BIT(6)	/* device is powered */
-    34	#define MPR_I2C_BUSY	BIT(5)	/* device is busy */
-    35	#define MPR_I2C_MEMORY	BIT(2)	/* integrity test passed */
-    36	#define MPR_I2C_MATH	BIT(0)	/* internal math saturation */
-    37	
-    38	#define MPR_NANO_PART	1000000000LL
-    39	
-    40	/*
-    41	 * _INPUT interface:
-    42	 * Calculation formular from the datasheet:
-    43	 * pressure = (press_cnt - outputmin) * scale + pmin
-    44	 * with:
-    45	 * * pressure	- measured pressure in Pascal
-    46	 * * press_cnt	- raw value read from sensor
-    47	 * * pmin	- minimum pressure range value of sensor (data->pmin)
-    48	 * * pmax	- maximum pressure range value of sensor (data->pmax)
-    49	 * * outputmin	- minimum numerical range raw value delivered by sensor (MPR_OUT_MIN)
-    50	 * * outputmax	- maximum numerical range raw value delivered by sensor (MPR_OUT_MAX)
-    51	 * * scale	- (pmax - pmin) / (outputmax - outputmin)
-    52	 *
-    53	 * _RAW interface:
-    54	 * pressure = (raw + offset) * scale
-    55	 * --> need to adjust offset for fitting into _RAW interface
-    56	 * Values for _RAW interface:
-    57	 * * raw	- press_cnt
-    58	 * * scale	- (pmax - pmin) / (outputmax - outputmin)
-    59	 * * offset	- (-1 * outputmin) - pmin / scale
-    60	 *                note: With all sensors from the datasheet pmin = 0 which reduces the offset to
-    61	 *                (-1 * outputmin)
-    62	 */
-    63	
-    64	/*
-    65	 * transfer function A: 10%   to 90%   of 2^24
-    66	 * transfer function B:  2.5% to 22.5% of 2^24
-    67	 * transfer function C: 20%   to 80%   of 2^24
-    68	 */
-    69	enum mpr_func_id {
-    70		MPR_FUNCTION_A,
-    71		MPR_FUNCTION_B,
-    72		MPR_FUNCTION_C,
-    73	};
-    74	
-    75	struct mpr_func_spec {
-    76		u32			output_min;
-    77		u32			output_max;
-    78	};
-    79	
-    80	static const struct mpr_func_spec mpr_func_spec[] = {
-    81		[MPR_FUNCTION_A] = {.output_min = 1677722, .output_max = 15099494},
-    82		[MPR_FUNCTION_B] = {.output_min =  419430, .output_max =  3774874},
-    83		[MPR_FUNCTION_C] = {.output_min = 3355443, .output_max = 13421773},
-    84	};
-    85	
-    86	struct mpr_chan {
-    87		s32			pres;		/* pressure value */
-    88		s64			ts;		/* timestamp */
-    89	};
-    90	
-    91	struct mpr_data {
-    92		struct i2c_client	*client;
-    93		struct mutex		lock;		/* i2c transactions */
-    94		u32			pmin;		/* minimal pressure in pascal */
-    95		u32			pmax;		/* maximal pressure in pascal */
-    96		u32			function;	/* transfer function */
-    97		u32			outmin;		/* minimal numerical range raw value from sensor */
-    98		u32			outmax;		/* maximal numerical range raw value from sensor */
-    99		int                     scale;          /* int part of scale */
-   100		int                     scale2;         /* nano part of scale */
-   101		int                     offset;         /* int part of offset */
-   102		int                     offset2;        /* nano part of offset */
-   103		struct gpio_desc	*gpiod_reset;	/* reset */
-   104		int			irq;		/* end of conversion interrupt */
-   105		struct completion	completion;	/* handshake from irq to read */
-   106		struct mpr_chan		chan;		/* channel values for buffered mode */
-   107		struct regulator	*vdd;		/* optional external voltage regulator */
-   108	};
-   109	
-   110	static const struct iio_chan_spec mpr_channels[] = {
-   111		{
-   112			.type = IIO_PRESSURE,
-   113			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-   114						BIT(IIO_CHAN_INFO_SCALE) |
-   115						BIT(IIO_CHAN_INFO_OFFSET),
-   116			.scan_index = 0,
-   117			.scan_type = {
-   118				.sign = 's',
-   119				.realbits = 32,
-   120				.storagebits = 32,
-   121				.endianness = IIO_CPU,
-   122			},
-   123		},
-   124		IIO_CHAN_SOFT_TIMESTAMP(1),
-   125	};
-   126	
-   127	static void mpr_reset(struct mpr_data *data)
-   128	{
-   129		if (data->gpiod_reset) {
-   130			gpiod_set_value(data->gpiod_reset, 0);
-   131			udelay(10);
-   132			gpiod_set_value(data->gpiod_reset, 1);
-   133		}
-   134	}
-   135	
-   136	/**
-   137	 * mpr_read_pressure() - Read pressure value from sensor via I2C
-   138	 * @data: Pointer to private data struct.
-   139	 * @press: Output value read from sensor.
-   140	 *
-   141	 * Reading from the sensor by sending and receiving I2C telegrams.
-   142	 *
-   143	 * If there is an end of conversion (EOC) interrupt registered the function waits for a maximum of
-   144	 * one second for the interrupt.
-   145	 *
-   146	 * Context: The function can sleep and data->lock should be held when calling it.
-   147	 * Return:
-   148	 * * 0		- OK, the pressure value could be read
-   149	 * * -ETIMEDOUT	- Timeout while waiting for the EOC interrupt or busy flag is still set after nloops
-   150	 *		  attempts of reading
-   151	 */
-   152	static int mpr_read_pressure(struct mpr_data *data, s32 *press)
-   153	{
-   154		struct device *dev = &data->client->dev;
-   155		int ret, i;
-   156		u8 wdata[] = {0xAA, 0x00, 0x00};
-   157		s32 status;
-   158		int nloops = 10;
-   159		u8 buf[5];
-   160	
-   161		reinit_completion(&data->completion);
-   162	
-   163		ret = i2c_master_send(data->client, wdata, sizeof(wdata));
-   164		if (ret < 0) {
-   165			dev_err(dev, "error while writing ret: %d\n", ret);
-   166			return ret;
-   167		}
-   168		if (ret != sizeof(wdata)) {
- > 169			dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(wdata));
-   170			return -EIO;
-   171		}
-   172	
-   173		if (data->irq > 0) {
-   174			ret = wait_for_completion_timeout(&data->completion, HZ);
-   175			if (!ret) {
-   176				dev_err(dev, "timeout while waiting for eoc interrupt\n");
-   177				return -ETIMEDOUT;
-   178			}
-   179		} else {
-   180			/* wait until status indicates data is ready */
-   181			for (i = 0; i < nloops; i++) {
-   182				/*
-   183				 * datasheet only says to wait at least 5 ms for the data but leave the
-   184				 * maximum response time open
-   185				 * --> let's try it nloops (10) times which seems to be quite long
-   186				 */
-   187				usleep_range(5000, 10000);
-   188				status = i2c_smbus_read_byte(data->client);
-   189				if (status < 0) {
-   190					dev_err(dev, "error while reading, status: %d\n", status);
-   191					return status;
-   192				}
-   193				if (!(status & MPR_I2C_BUSY))
-   194					break;
-   195			}
-   196			if (i == nloops) {
-   197				dev_err(dev, "timeout while reading\n");
-   198				return -ETIMEDOUT;
-   199			}
-   200		}
-   201	
-   202		ret = i2c_master_recv(data->client, buf, sizeof(buf));
-   203		if (ret < 0) {
-   204			dev_err(dev, "error in i2c_master_recv ret: %d\n", ret);
-   205			return ret;
-   206		}
-   207		if (ret != sizeof(buf)) {
-   208			dev_err(dev, "received size doesn't fit - ret: %d / %d\n", ret, sizeof(buf));
-   209			return -EIO;
-   210		}
-   211	
-   212		if (buf[0] & MPR_I2C_BUSY) {
-   213			/* it should never be the case that status still indicates business */
-   214			dev_err(dev, "data still not ready: %08x\n", buf[0]);
-   215			return -ETIMEDOUT;
-   216		}
-   217	
-   218		*press = get_unaligned_be24(&buf[1]);
-   219	
-   220		dev_dbg(dev, "received: %*ph cnt: %d\n", ret, buf, *press);
-   221	
-   222		return 0;
-   223	}
-   224	
+ .../x86/intel/uncore-frequency/Kconfig        |   4 +
+ .../x86/intel/uncore-frequency/Makefile       |   2 +
+ .../uncore-frequency/uncore-frequency-tpmi.c  | 333 ++++++++++++++++++
+ 3 files changed, 339 insertions(+)
+ create mode 100644 drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
 
+diff --git a/drivers/platform/x86/intel/uncore-frequency/Kconfig b/drivers/platform/x86/intel/uncore-frequency/Kconfig
+index 21b209124916..a56d55056927 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/Kconfig
++++ b/drivers/platform/x86/intel/uncore-frequency/Kconfig
+@@ -6,9 +6,13 @@
+ menu "Intel Uncore Frequency Control"
+ 	depends on X86_64 || COMPILE_TEST
+ 
++config INTEL_UNCORE_FREQ_CONTROL_TPMI
++	tristate
++
+ config INTEL_UNCORE_FREQ_CONTROL
+ 	tristate "Intel Uncore frequency control driver"
+ 	depends on X86_64
++	select INTEL_UNCORE_FREQ_CONTROL_TPMI if INTEL_TPMI
+ 	help
+ 	  This driver allows control of Uncore frequency limits on
+ 	  supported server platforms.
+diff --git a/drivers/platform/x86/intel/uncore-frequency/Makefile b/drivers/platform/x86/intel/uncore-frequency/Makefile
+index e0f7968e8285..08ff57492b28 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/Makefile
++++ b/drivers/platform/x86/intel/uncore-frequency/Makefile
+@@ -7,3 +7,5 @@ obj-$(CONFIG_INTEL_UNCORE_FREQ_CONTROL)	+= intel-uncore-frequency.o
+ intel-uncore-frequency-y		:= uncore-frequency.o
+ obj-$(CONFIG_INTEL_UNCORE_FREQ_CONTROL)	+= intel-uncore-frequency-common.o
+ intel-uncore-frequency-common-y		:= uncore-frequency-common.o
++obj-$(CONFIG_INTEL_UNCORE_FREQ_CONTROL_TPMI)	+= intel-uncore-frequency-tpmi.o
++intel-uncore-frequency-tpmi-y		:= uncore-frequency-tpmi.o
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
+new file mode 100644
+index 000000000000..cad7b79bedbb
+--- /dev/null
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
+@@ -0,0 +1,333 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * uncore-frquency-tpmi: Uncore frequency scaling using TPMI
++ *
++ * Copyright (c) 2023, Intel Corporation.
++ * All Rights Reserved.
++ *
++ * The hardware interface to read/write is basically substitution of
++ * MSR 0x620 and 0x621.
++ * There are specific MMIO offset and bits to get/set minimum and
++ * maximum uncore ratio, similar to MSRs.
++ * The scope of the uncore MSRs was package scope. But TPMI allows
++ * new gen CPUs to have multiple uncore controls at uncore-cluster
++ * level. Each package can have multiple power domains which further
++ * can have multiple clusters.
++ * Here number of power domains = number of resources in this aux
++ * device. There are offsets and bits to discover number of clusters
++ * and offset for each cluster level controls.
++ *
++ */
++
++#include <linux/auxiliary_bus.h>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/intel_tpmi.h>
++
++#include "uncore-frequency-common.h"
++
++#define	UNCORE_HEADER_VERSION		1
++#define UNCORE_HEADER_INDEX		0
++#define UNCORE_FABRIC_CLUSTER_OFFSET	8
++
++/* status + control + adv_ctl1 + adv_ctl2 */
++#define UNCORE_FABRIC_CLUSTER_SIZE	(4 * 8)
++
++#define UNCORE_STATUS_INDEX		0
++#define UNCORE_CONTROL_INDEX		8
++
++#define UNCORE_FREQ_KHZ_MULTIPLIER	100000
++
++struct tpmi_uncore_struct;
++
++/* Information for each cluster */
++struct tpmi_uncore_cluster_info {
++	u8 __iomem *cluster_base;
++	struct uncore_data uncore_data;
++	struct tpmi_uncore_struct *uncore_root;
++};
++
++/* Information for each power domain */
++struct tpmi_uncore_power_domain_info {
++	u8 __iomem *uncore_base;
++	int ufs_header_ver;
++	int cluster_count;
++	struct tpmi_uncore_cluster_info *cluster_infos;
++};
++
++/* Information for all power domains in a package */
++struct tpmi_uncore_struct {
++	int power_domain_count;
++	struct tpmi_uncore_power_domain_info *pd_info;
++	struct tpmi_uncore_cluster_info root_cluster;
++};
++
++#define UNCORE_GENMASK_MIN_RATIO	GENMASK_ULL(21, 15)
++#define UNCORE_GENMASK_MAX_RATIO	GENMASK_ULL(14, 8)
++
++/* Helper function to read MMIO offset for max/min control frequency */
++static void read_control_freq(struct tpmi_uncore_cluster_info *cluster_info,
++			     unsigned int *min, unsigned int *max)
++{
++	u64 control;
++
++	control = readq(cluster_info->cluster_base + UNCORE_CONTROL_INDEX);
++	*max = FIELD_GET(UNCORE_GENMASK_MAX_RATIO, control) * UNCORE_FREQ_KHZ_MULTIPLIER;
++	*min = FIELD_GET(UNCORE_GENMASK_MIN_RATIO, control) * UNCORE_FREQ_KHZ_MULTIPLIER;
++}
++
++#define UNCORE_MAX_RATIO	FIELD_MAX(UNCORE_GENMASK_MAX_RATIO)
++
++/* Callback for sysfs read for max/min frequencies. Called under mutex locks */
++static int uncore_read_control_freq(struct uncore_data *data, unsigned int *min,
++				    unsigned int *max)
++{
++	struct tpmi_uncore_cluster_info *cluster_info;
++	struct tpmi_uncore_struct *uncore_root;
++	int i, _min = 0, _max = 0;
++
++	cluster_info = container_of(data, struct tpmi_uncore_cluster_info, uncore_data);
++	uncore_root = cluster_info->uncore_root;
++
++	*min = UNCORE_MAX_RATIO * UNCORE_FREQ_KHZ_MULTIPLIER;
++	*max = 0;
++
++	/*
++	 * Get the max/min by looking at each cluster. Get the lowest
++	 * min and highest max.
++	 */
++	for (i = 0; i < uncore_root->power_domain_count; ++i) {
++		int j;
++
++		for (j = 0; j < uncore_root->pd_info[i].cluster_count; ++j) {
++			read_control_freq(&uncore_root->pd_info[i].cluster_infos[j],
++					  &_min, &_max);
++			if (*min > _min)
++				*min = _min;
++			if (*max < _max)
++				*max = _max;
++		}
++	}
++
++	return 0;
++}
++
++/* Helper function to write MMIO offset for max/min control frequency */
++static void write_control_freq(struct tpmi_uncore_cluster_info *cluster_info, unsigned int input,
++			      unsigned int min_max)
++{
++	u64 control;
++
++	control = readq(cluster_info->cluster_base + UNCORE_CONTROL_INDEX);
++
++	if (min_max) {
++		control &= ~UNCORE_GENMASK_MAX_RATIO;
++		control |= FIELD_PREP(UNCORE_GENMASK_MAX_RATIO, input);
++	} else {
++		control &= ~UNCORE_GENMASK_MIN_RATIO;
++		control |= FIELD_PREP(UNCORE_GENMASK_MIN_RATIO, input);
++	}
++
++	writeq(control, (cluster_info->cluster_base + UNCORE_CONTROL_INDEX));
++}
++
++/* Callback for sysfs write for max/min frequencies. Called under mutex locks */
++static int uncore_write_control_freq(struct uncore_data *data, unsigned int input,
++				     unsigned int min_max)
++{
++	struct tpmi_uncore_cluster_info *cluster_info;
++	struct tpmi_uncore_struct *uncore_root;
++	int i;
++
++	input /= UNCORE_FREQ_KHZ_MULTIPLIER;
++	if (!input || input > UNCORE_MAX_RATIO)
++		return -EINVAL;
++
++	cluster_info = container_of(data, struct tpmi_uncore_cluster_info, uncore_data);
++	uncore_root = cluster_info->uncore_root;
++
++	/* Update each cluster in a package */
++	for (i = 0; i < uncore_root->power_domain_count; ++i) {
++		int j;
++
++		for (j = 0; j < uncore_root->pd_info[i].cluster_count; ++j)
++			write_control_freq(&uncore_root->pd_info[i].cluster_infos[j],
++					   input, min_max);
++	}
++
++	return 0;
++}
++
++/* Callback for sysfs read for the current uncore frequency. Called under mutex locks */
++static int uncore_read_freq(struct uncore_data *data, unsigned int *freq)
++{
++	return -ENODATA;
++}
++
++#define UNCORE_VERSION_MASK			GENMASK_ULL(7, 0)
++#define UNCORE_LOCAL_FABRIC_CLUSTER_ID_MASK	GENMASK_ULL(15, 8)
++#define UNCORE_CLUSTER_OFF_MASK			GENMASK_ULL(7, 0)
++#define UNCORE_MAX_CLUSTER_PER_DOMAIN		8
++
++static int uncore_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
++{
++	struct intel_tpmi_plat_info *plat_info;
++	struct tpmi_uncore_struct *tpmi_uncore;
++	int ret, i, pkg = 0;
++	int num_resources;
++
++	/* Get number of power domains, which is equal to number of resources */
++	num_resources = tpmi_get_resource_count(auxdev);
++	if (!num_resources)
++		return -EINVAL;
++
++	/* Register callbacks to uncore core */
++	ret = uncore_freq_common_init(uncore_read_control_freq, uncore_write_control_freq,
++				      uncore_read_freq);
++	if (ret)
++		return ret;
++
++	/* Allocate uncore instance per package */
++	tpmi_uncore = devm_kzalloc(&auxdev->dev, sizeof(*tpmi_uncore), GFP_KERNEL);
++	if (!tpmi_uncore) {
++		ret = -ENOMEM;
++		goto err_rem_common;
++	}
++
++	/* Allocate memory for all power domains in a package */
++	tpmi_uncore->pd_info = devm_kcalloc(&auxdev->dev, num_resources,
++					    sizeof(*tpmi_uncore->pd_info),
++					    GFP_KERNEL);
++	if (!tpmi_uncore->pd_info) {
++		ret = -ENOMEM;
++		goto err_rem_common;
++	}
++
++	tpmi_uncore->power_domain_count = num_resources;
++
++	/* Get the package ID from the TPMI core */
++	plat_info = tpmi_get_platform_data(auxdev);
++	if (plat_info)
++		pkg = plat_info->package_id;
++	else
++		dev_info(&auxdev->dev, "Platform information is NULL\n");
++
++	for (i = 0; i < num_resources; ++i) {
++		struct tpmi_uncore_power_domain_info *pd_info;
++		struct resource *res;
++		u64 cluster_offset;
++		u8 cluster_mask;
++		int mask, j;
++		u64 header;
++
++		res = tpmi_get_resource_at_index(auxdev, i);
++		if (!res)
++			continue;
++
++		pd_info = &tpmi_uncore->pd_info[i];
++
++		pd_info->uncore_base = devm_ioremap_resource(&auxdev->dev, res);
++		if (IS_ERR(pd_info->uncore_base)) {
++			ret = PTR_ERR(pd_info->uncore_base);
++			goto err_rem_common;
++		}
++
++		/* Check for version and skip this resource if there is mismatch */
++		header = readq(pd_info->uncore_base);
++		pd_info->ufs_header_ver = header & UNCORE_VERSION_MASK;
++		if (pd_info->ufs_header_ver != UNCORE_HEADER_VERSION) {
++			dev_info(&auxdev->dev, "Uncore: Unsupported version:%d\n",
++				pd_info->ufs_header_ver);
++			continue;
++		}
++
++		/* Get Cluster ID Mask */
++		cluster_mask = FIELD_GET(UNCORE_LOCAL_FABRIC_CLUSTER_ID_MASK, header);
++		if (!cluster_mask) {
++			dev_info(&auxdev->dev, "Uncore: Invalid cluster mask:%x\n", cluster_mask);
++			continue;
++		}
++
++		/* Find out number of clusters in this resource */
++		pd_info->cluster_count = hweight8(cluster_mask);
++
++		pd_info->cluster_infos = devm_kcalloc(&auxdev->dev, pd_info->cluster_count,
++						      sizeof(struct tpmi_uncore_cluster_info),
++						      GFP_KERNEL);
++		if (!pd_info->cluster_infos) {
++			ret = -ENOMEM;
++			goto err_rem_common;
++		}
++		/*
++		 * Each byte in the register point to status and control
++		 * registers belonging to cluster id 0-8.
++		 */
++		cluster_offset = readq(pd_info->uncore_base +
++					UNCORE_FABRIC_CLUSTER_OFFSET);
++
++		for (j = 0; j < pd_info->cluster_count; ++j) {
++			struct tpmi_uncore_cluster_info *cluster_info;
++
++			/* Get the offset for this cluster */
++			mask = (cluster_offset & UNCORE_CLUSTER_OFF_MASK);
++			/* Offset in QWORD, so change to bytes */
++			mask <<= 3;
++
++			cluster_info = &pd_info->cluster_infos[j];
++
++			cluster_info->cluster_base = pd_info->uncore_base + mask;
++
++			cluster_info->uncore_data.package_id = pkg;
++			/* There are no dies like Cascade Lake */
++			cluster_info->uncore_data.die_id = 0;
++
++			/* Point to next cluster offset */
++			cluster_offset >>= UNCORE_MAX_CLUSTER_PER_DOMAIN;
++		}
++	}
++
++	auxiliary_set_drvdata(auxdev, tpmi_uncore);
++
++	tpmi_uncore->root_cluster.uncore_root = tpmi_uncore;
++	tpmi_uncore->root_cluster.uncore_data.package_id = pkg;
++	ret = uncore_freq_add_entry(&tpmi_uncore->root_cluster.uncore_data, 0);
++	if (ret)
++		goto err_rem_common;
++
++	return 0;
++
++err_rem_common:
++	uncore_freq_common_exit();
++
++	return ret;
++}
++
++static void uncore_remove(struct auxiliary_device *auxdev)
++{
++	struct tpmi_uncore_struct *tpmi_uncore = auxiliary_get_drvdata(auxdev);
++
++	uncore_freq_remove_die_entry(&tpmi_uncore->root_cluster.uncore_data);
++
++	uncore_freq_common_exit();
++}
++
++static const struct auxiliary_device_id intel_uncore_id_table[] = {
++	{ .name = "intel_vsec.tpmi-uncore" },
++	{}
++};
++MODULE_DEVICE_TABLE(auxiliary, intel_uncore_id_table);
++
++static struct auxiliary_driver intel_uncore_aux_driver = {
++	.id_table       = intel_uncore_id_table,
++	.remove         = uncore_remove,
++	.probe          = uncore_probe,
++};
++
++module_auxiliary_driver(intel_uncore_aux_driver);
++
++MODULE_IMPORT_NS(INTEL_TPMI);
++MODULE_IMPORT_NS(INTEL_UNCORE_FREQUENCY);
++MODULE_DESCRIPTION("Intel TPMI UFS Driver");
++MODULE_LICENSE("GPL");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.38.1
+
