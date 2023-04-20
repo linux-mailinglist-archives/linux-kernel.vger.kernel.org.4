@@ -2,161 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F240B6E8AF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F836E8AF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbjDTHJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S233979AbjDTHKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbjDTHJr (ORCPT
+        with ESMTP id S233986AbjDTHKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:09:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A9940DF;
-        Thu, 20 Apr 2023 00:09:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A754921A02;
-        Thu, 20 Apr 2023 07:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681974561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g7PEASouucR8lmJyIoRFJDXMLm7lyANi4CRdrHkuzLU=;
-        b=TvbKm/78kC/GPD5SPCtfKG4/kINB4iClfVNCBpPkdHz0LkmsRFpo2A4Mgl1bRXkHq1iNgT
-        PVHivTmlQeqa9uFON13PJW1KWdf8tjTXTqxgryFX+wFsVt2OcgIDkk/iGJGb3nPf60nHj+
-        tKMbZ7l933rKhsqnZf2YG0MhAWzL92Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681974561;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g7PEASouucR8lmJyIoRFJDXMLm7lyANi4CRdrHkuzLU=;
-        b=1a2dOGXMGpaL8/Nw/4cA7ISuvdAnUgObcmI1+PHG0jfA3+wbaefmPa+sItFbY76ZIkukr+
-        iKf1p70TKYbQgwDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E36113584;
-        Thu, 20 Apr 2023 07:09:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id e8bqHSHlQGSGQAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 20 Apr 2023 07:09:21 +0000
-Message-ID: <e716d245-8aae-5ecc-1304-e8f753b16c55@suse.de>
-Date:   Thu, 20 Apr 2023 09:09:21 +0200
+        Thu, 20 Apr 2023 03:10:40 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA0E26B3;
+        Thu, 20 Apr 2023 00:10:36 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K2rtba028337;
+        Thu, 20 Apr 2023 09:10:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=53KGJ1211Er3xybNs3kQiclgKJZtxeoNmmsAg952A9k=;
+ b=ZEa03B/Y4eDcCU8+qI7ELgbfcDKfELizrn2fOkk/mpE/+qElmn7MH0FBJtwd/WxUmt0Q
+ oKkARdjp9fUebJVl4UY1Xy+5H3lD+v9unsp00b2DHhWLXcKUhcJGYIXPxQr11P3k7Jv3
+ aC988Emvo/hSGrTG1aNFAc4i6NiRnYCYm5PyDvdW2jWObQvQgOjG4W9gOPjX/qbUP0HV
+ uwN4cGYF25C6UwywUzKawifQOtPK/t7IIUU4p3Qw9O2GpXybGAUtkXE1cALJsNeeCwK9
+ aHSc+W45qGLN54LKRtbGxUOcG+NHMyoLAVsfg6oiIq4oBoXv718q38UopJdaTEE8G9rR Iw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q2dyeeu8j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 09:10:31 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6EEAF10002A;
+        Thu, 20 Apr 2023 09:10:27 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6692821160D;
+        Thu, 20 Apr 2023 09:10:27 +0200 (CEST)
+Received: from [10.201.21.178] (10.201.21.178) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 20 Apr
+ 2023 09:10:24 +0200
+Message-ID: <e6ef7616-d64d-9ad7-753a-6a7ab2e0b817@foss.st.com>
+Date:   Thu, 20 Apr 2023 09:10:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] PCI: Add ASPEED vendor ID
+Subject: Re: [PATCH V6 0/3] rpmsg signaling/flowcontrol patches
 Content-Language: en-US
-To:     Patrick McLean <chutzpah@gentoo.org>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:DRM DRIVER FOR AST SERVER GRAPHICS CHIPS" 
-        <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
-References: <20230418225757.1361301-1-chutzpah@gentoo.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230418225757.1361301-1-chutzpah@gentoo.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------wHqiJap4Z9oPBUe6Q3BcuFku"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Sarannya S <quic_sarannya@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>
+References: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.178]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_04,2023-04-18_01,2023-02-09_01
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------wHqiJap4Z9oPBUe6Q3BcuFku
-Content-Type: multipart/mixed; boundary="------------cO3tBNtltCyOuuw8mP0oWYbC";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Patrick McLean <chutzpah@gentoo.org>, Dave Airlie <airlied@redhat.com>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Bjorn Helgaas <bhelgaas@google.com>,
- "open list:DRM DRIVER FOR AST SERVER GRAPHICS CHIPS"
- <dri-devel@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
-Message-ID: <e716d245-8aae-5ecc-1304-e8f753b16c55@suse.de>
-Subject: Re: [PATCH] PCI: Add ASPEED vendor ID
-References: <20230418225757.1361301-1-chutzpah@gentoo.org>
-In-Reply-To: <20230418225757.1361301-1-chutzpah@gentoo.org>
+Hello Sarannya,
 
---------------cO3tBNtltCyOuuw8mP0oWYbC
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 4/20/23 08:21, Sarannya S wrote:
+> Added new IOCTLS- RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
+> to get/set the rpmsg char device's flow control signal.
+> Updated the cmd name 'RPM_CMD_SIGNALS' to 'GLINK_CMD_SIGNALS'.
+> Changed 'remote_flow' to bool type, and updated it's evaluation.
+> Updated evaluation of 'set' in rpmsg_char as 'set = !!arg'.
+> Add destination address of endpoint as parameter in rpmsg_set_flow_control.
+> Addressed review comments to change variable names/descriptions.
+> 
+> Chris Lew (2):
+>   rpmsg: glink: Add support to handle signals command
+>   rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL support
+> 
+> Deepak Kumar Singh (1):
+>   rpmsg: core: Add signal API support
 
-DQoNCkFtIDE5LjA0LjIzIHVtIDAwOjU3IHNjaHJpZWIgUGF0cmljayBNY0xlYW46DQo+IEN1
-cnJlbnRseSB0aGUgQVNQRUVEIFBDSSB2ZW5kb3IgSUQgaXMgZGVmaW5lZCBpbg0KPiBkcml2
-ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYuYywgbW92ZSB0aGF0IHRvIGluY2x1ZGUvbGludXgv
-cGNpX2lkcy5oDQo+IHdpdGggYWxsIHRoZSByZXN0IG9mIHRoZSBQQ0kgdmVuZG9yIElEIGRl
-ZmluaXRpb25zLiBSZW5hbWUgdGhlIGRlZmluaXRpb24NCj4gdG8gZm9sbG93IHRoZSBmb3Jt
-YXQgdGhhdCB0aGUgb3RoZXIgZGVmaW5pdGlvbnMgZm9sbG93Lg0KPiANCj4gU2lnbmVkLW9m
-Zi1ieTogUGF0cmljayBNY0xlYW4gPGNodXR6cGFoQGdlbnRvby5vcmc+DQoNClJldmlld2Vk
-LWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0N
-Cj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYuYyB8IDQgKy0tLQ0KPiAgIGluY2x1
-ZGUvbGludXgvcGNpX2lkcy5oICAgICAgIHwgMiArKw0KPiAgIDIgZmlsZXMgY2hhbmdlZCwg
-MyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3Rf
-ZHJ2LmMNCj4gaW5kZXggZDc4ODUyYzdjZjViLi4yMzJlNzk3NzkzYjYgMTAwNjQ0DQo+IC0t
-LSBhL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1
-L2RybS9hc3QvYXN0X2Rydi5jDQo+IEBAIC03MCwxMiArNzAsMTAgQEAgc3RhdGljIGNvbnN0
-IHN0cnVjdCBkcm1fZHJpdmVyIGFzdF9kcml2ZXIgPSB7DQo+ICAgICogUENJIGRyaXZlcg0K
-PiAgICAqLw0KPiAgIA0KPiAtI2RlZmluZSBQQ0lfVkVORE9SX0FTUEVFRCAweDFhMDMNCj4g
-LQ0KPiAgICNkZWZpbmUgQVNUX1ZHQV9ERVZJQ0UoaWQsIGluZm8pIHsJCVwNCj4gICAJLmNs
-YXNzID0gUENJX0JBU0VfQ0xBU1NfRElTUExBWSA8PCAxNiwJXA0KPiAgIAkuY2xhc3NfbWFz
-ayA9IDB4ZmYwMDAwLAkJCVwNCj4gLQkudmVuZG9yID0gUENJX1ZFTkRPUl9BU1BFRUQsCQkJ
-XA0KPiArCS52ZW5kb3IgPSBQQ0lfVkVORE9SX0lEX0FTUEVFRCwJCQlcDQo+ICAgCS5kZXZp
-Y2UgPSBpZCwJCQkJXA0KPiAgIAkuc3VidmVuZG9yID0gUENJX0FOWV9JRCwJCVwNCj4gICAJ
-LnN1YmRldmljZSA9IFBDSV9BTllfSUQsCQlcDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
-bnV4L3BjaV9pZHMuaCBiL2luY2x1ZGUvbGludXgvcGNpX2lkcy5oDQo+IGluZGV4IDQ1YzNk
-NjJlNjE2ZC4uNDBlMDRlODhjYTVhIDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L3Bj
-aV9pZHMuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L3BjaV9pZHMuaA0KPiBAQCAtMjU1Myw2
-ICsyNTUzLDggQEANCj4gICAjZGVmaW5lIFBDSV9ERVZJQ0VfSURfTkVUUk9OT01FX05GUDM4
-MDBfVkYJMHgzODAzDQo+ICAgI2RlZmluZSBQQ0lfREVWSUNFX0lEX05FVFJPTk9NRV9ORlA2
-MDAwX1ZGCTB4NjAwMw0KPiAgIA0KPiArI2RlZmluZSBQQ0lfVkVORE9SX0lEX0FTUEVFRAkJ
-MHgxYTAzDQo+ICsNCj4gICAjZGVmaW5lIFBDSV9WRU5ET1JfSURfUU1JCQkweDFhMzINCj4g
-ICANCj4gICAjZGVmaW5lIFBDSV9WRU5ET1JfSURfQVpXQVZFCQkweDFhM2INCg0KLS0gDQpU
-aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
-d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYx
-IE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRy
-ZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcp
-DQo=
+Please increase the version each time you push an update, otherwise it is very
+difficult to track the update.
+So this one should be V7
 
---------------cO3tBNtltCyOuuw8mP0oWYbC--
+It is also helpful for reviewers and maintainers to include in your cover-letter
+ a summary of the changes from the previous version.
 
---------------wHqiJap4Z9oPBUe6Q3BcuFku
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Regards,
+Arnaud
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRA5SEFAwAAAAAACgkQlh/E3EQov+Bs
-LQ//UxYth6q5sg0WbbQlG2RdG7PCp9c5q0RiYTghI10qc/OKdz/N85mDUYckfD+tEcsaH5XPQVXY
-kZLLFfDFaiU/2m0PQClkEKnTcMRJZNahmZOgwaBuP0kmmkTDsbwzpILpjDLXX/D0JfanlOgmZ9az
-J+uEx37nHr0jK+ee7ELvcC06CsLRMsdG9ux7YFyubbFOnp54VUrMErU8Uth/G4C6o/ALufl+Mb3Z
-ly27DD5fnvkJ18+zz9uGU1jkb7Lb43XsEDF7nADUMmZTeCd49zmTKtCzghk+2hzfl4e3Pr4GKI36
-Se+xuhfbM8zGw3pHwqsWoSGl4Cb16qnOa8WDTKLaToQrmviDRKPvwPsvusHDVvp37y799U7Y7dTI
-mWZVf0wsZnSo7nw4qNrQqohd0e/vbw/ZifsNd7CAYUrTtKqBPsnlS4ALB2Mx+nmQCG1zvzDjW0u/
-EWtcCfMuGsvzmnc0qpscecr9OS1kEauwJpO3uAs4TeMfZ7ECAWcp+y7wTFW0a2fHxoVyxRuCNsyI
-d9ln7CZp8ELiFSkHh8xhQSIuLL/mEsmraPbasCJrUIEECaYJMkYb77vc6100UdiWTG715GJrDNC6
-ewUMWs6VfxfX8eebNq/Xg3+fgqAq2/WyTO7BR3qsIRLvk3XnOIzUHCoMXM1/PQIIDEToBSTbPS7l
-EF8=
-=RQjA
------END PGP SIGNATURE-----
-
---------------wHqiJap4Z9oPBUe6Q3BcuFku--
+> 
+>  drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_char.c        | 49 ++++++++++++++++++++++++++----
+>  drivers/rpmsg/rpmsg_core.c        | 21 +++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h    |  2 ++
+>  include/linux/rpmsg.h             | 15 +++++++++
+>  include/uapi/linux/rpmsg.h        | 11 ++++++-
+>  6 files changed, 155 insertions(+), 7 deletions(-)
+> 
