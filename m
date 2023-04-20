@@ -2,150 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DAB6E94B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF836E94B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjDTMjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S229704AbjDTMjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbjDTMiy (ORCPT
+        with ESMTP id S232560AbjDTMjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:38:54 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A6A4221
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681994327;
-        bh=Tb2lmmehqfarpNiwJjg5fLRXiWjGvaWeqi3pLJHnzD4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OAb07enpAgQ0C9UMe/0FwHN+Claghh/fvHxCNq946mFEjB5od5f6mjvUUNTL/heAK
-         QH3lETQ7JC2qpbYy5wzhvt309cH19U0ZePShgNWdJnyfaFpwK1Ui5Lj0x94ZDgvfhP
-         MoRrUQHjOP7MSYenDXAduY6i2wnlUreSc7Z2+YSnDHaRSaAyT9csCwEQcBQ3amdPEZ
-         Ce220ox18hZGg9MwwcOKfX2axD0x2bh4ZgYjO6ef6jC0E3MrOvCB6D6QsWIsxgzT6b
-         QYdZrI3NdGipOh3dW3DC1/66tM2rFC4jE4Ivm2nAWWwnjh3LuTjGUwcshjPr0aA8sw
-         dXxwqSgyJEmDA==
-Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q2HJk6cDKzwMt;
-        Thu, 20 Apr 2023 08:38:46 -0400 (EDT)
-Message-ID: <6b6569e2-895c-69a8-0c15-838bbe1d3233@efficios.com>
-Date:   Thu, 20 Apr 2023 08:38:48 -0400
+        Thu, 20 Apr 2023 08:39:36 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31393659C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:39:20 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id xd13so6093997ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681994358; x=1684586358;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=frO9xA4qGK3Raq8henddER4Gj7fo5Lq3c6EyPmzA39U=;
+        b=fZuH5/hhYDl86HJZlXgWEAdKy2Wjj+YkTxAJWzXAxlVaW20zc/QIbLhxvG7FguXpji
+         j3jQo2H6JIIS3vfjtTD1LQCEFuw1F7fA+RPYkLR8upP1HzWFo69xMN16ojn8VHZvcN7c
+         iPMsHojPU6fjNazNFkf5fb8WeSN/FJc1oW20XxS4AmUgdX4cm1gA9vcIm7Lx9RaFk/a7
+         jFmDgFM+9MtCJnA8dcLqFdbM2+JrZtq7PrEe+2pEHABehxt/r3XEBpGLpRza769JogAG
+         37YlkV6IsSQo7iCplci3XENs4Qk7kmXk4UQYAGI033ehf28WxSN796KDfZxHVRzwmCIA
+         z+vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681994358; x=1684586358;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=frO9xA4qGK3Raq8henddER4Gj7fo5Lq3c6EyPmzA39U=;
+        b=HBE1+UIWxNgxDIFVDwatQjXCUe3rYxLwcTYtb/Zu6RO678It53hinzAsJMwOW6//EO
+         Qi57AzRtnFyqDa5efi7mEFr5yhQNrMhNAbUCqeY79iDzOA47PelOzbpfe6/zngpKCZKL
+         +/w6XHikw3DK66n4rXoMKrofVWK6L1kS8IJAh3GYCOfkPgHWHD7Gv1Mn/kcNfl2PsGHY
+         SGWTHgl4j1QgxY+yIUGq8TFrOGSuV6kxa/qH6NWyF6iOEDYYnc4S1EhVoemFKh0Q20us
+         8rU/t03NGaq7afVQ9DfTbA52ED9oTWj4I9TjwKNH87PdxcfZ5B0sOlLsjdmZ0HiR6TDX
+         l56Q==
+X-Gm-Message-State: AAQBX9c+/DO/zDWEQlQfFasdM9o5KDUGFOj4wk/0ImE28aUiLmAtcOHh
+        +z3aIHuhx+L81OrOLAUh6NUSMA==
+X-Google-Smtp-Source: AKy350Z8LjQ8yEXBqV1QNKNQSYXwoxzmB7xhaYEUEDq6AZRkT+w7troCaBLcm+1WAcJyPN8xGEfDeA==
+X-Received: by 2002:a17:906:115a:b0:94e:8431:4767 with SMTP id i26-20020a170906115a00b0094e84314767mr1528797eja.38.1681994358651;
+        Thu, 20 Apr 2023 05:39:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id fh22-20020a1709073a9600b0094efc389980sm689608ejc.58.2023.04.20.05.39.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 05:39:18 -0700 (PDT)
+Message-ID: <a28766ff-39aa-7e10-394a-6f4db524fff9@linaro.org>
+Date:   Thu, 20 Apr 2023 14:39:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v8] sched: Fix performance regression introduced by
- mm_cid
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 1/2] arm64: amlogic: add new ARCH_AMLIPC for IPC SoC
 Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
-        michael.christie@oracle.com
-References: <20230417150831.264780-1-mathieu.desnoyers@efficios.com>
- <20230420060004.GA52173@ziqianlu-desk2>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230420060004.GA52173@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230419073834.972273-1-xianwei.zhao@amlogic.com>
+ <20230419073834.972273-2-xianwei.zhao@amlogic.com>
+ <20230419131416.cns3xvkbzjeyrnux@CAB-WSD-L081021>
+ <661cea17-a4dd-75d1-6a7e-16efa5aea52b@linaro.org>
+ <20230419160405.d7qfir3nv6tlxx2a@CAB-WSD-L081021>
+ <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
+ <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
+ <1c7322c9-8d2d-1cd1-95dc-dd9ec861981f@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1c7322c9-8d2d-1cd1-95dc-dd9ec861981f@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 02:00, Aaron Lu wrote:
-> On Mon, Apr 17, 2023 at 11:08:31AM -0400, Mathieu Desnoyers wrote:
-> 
->> +/*
->> + * Save a snapshot of the current runqueue time of this cpu
->> + * with the per-cpu cid value, allowing to estimate how recently it was used.
->> + */
->> +static inline void mm_cid_snapshot_time(struct mm_struct *mm)
->>   {
->> -	lockdep_assert_irqs_disabled();
->> -	if (cid < 0)
->> -		return;
->> -	raw_spin_lock(&mm->cid_lock);
->> -	__cpumask_clear_cpu(cid, mm_cidmask(mm));
->> -	raw_spin_unlock(&mm->cid_lock);
->> +	struct rq *rq = this_rq();
->> +	struct mm_cid *pcpu_cid;
->> +
->> +	lockdep_assert_rq_held(rq);
-> 
-> On wake up path when src_cid is migrated to dst_cid, this rq is the waker
-> rq and is not locked, the wakee's dst_rq is locked.
+On 20/04/2023 10:43, Kelvin Zhang wrote:
+>>>>>>> +config ARCH_AMLIPC
+>>>>>> Do we really need a different ARCH for Amlogic IPC?
+>>>>>> I can imagine that it's not the Meson architecture at all.
+>>>>>> But maybe a better solution is just to rename ARCH_MESON to ARCH_AMLOGIC?
+>>>>> It should be changed treewide, and is it worth it ?
+>>>> As far as I understand, the A1 and S4 families are not fully compatible
+>>>> with the Meson architecture, and we haven't provided additional ARCH_*
+>>>> for them.
+>>> The GXBB, GXL/GXM, G12A, G12B & SM1 are also not fully compatible,
+>>> but they lie under the "MESON" umbrella which covers SoC since the
+>>> Meson6 architecture. It's a facility to include/exclude Amlogic
+>>> drivers/DT, nothing else.
+> GXBB, GXL/GXM, G12A, G12B , SM1 and S4 belong to media box.
+> So, "MESON" represents the media box series.
+> Up to now, "MESON" works well for all existing chips except A1 and AXG.
+>>> If you compare it to BCM or NXP, it's different situation, the
+>>> different ARCH_* actually targets totally different SoCs from
+>>> completely different Business Units or from companies acquisitions.
+> Firstly, the new C series is totally different from previous MESON series.
+>  From the perspective of application, the new C series is designed for 
+> smart IP camera applications,
+> while MESON series is designed for hybrid OTT/ IP Set Top Box  and 
+> high-end media box applications.
+>  From the perspective of architecture, the new C series integrates the 
+> sensor interface, image signal processing unit, Dewarp, video encoder, 
+> neural networking processing unit,
+> which MESON series does not and will never have.
+> Secondly, there are C1 and C2 besides C3.
+> Moreover, more other series are on the way, such as T series.
+> If we always stick to "MESON", people will get more and more confused.
+> Therefore, I think it is the right time to add ARCH_AMLIPC.
 
-Doh, yes, good catch thanks! This one was puzzling me.
+Your DTS uses compatibles from meson, so I would argue that it is still
+part of the same architecture.
 
-I'll fix this in my next version.
+Anyway, this is just config symbol, so it does not matter. There will be
+no confusion and no problem of keeping it ARCH_MESON.
 
-Thanks,
 
-Mathieu
+>>> We should have named it ARCH_AMLOGIC since the beginning, but we
+>>> can't change history.
+> Shouldn't we deserve a chance to make it right?
+>>>> In my opinion, it's a good time to split the Meson architecture into
+>>>> proper subsets, or rename it treewide (maybe only config option
+>>>> ARCH_MESON => ARCH_AMLOGIC).
+>>> MESON is only a codename to differentiate from other SoC vendors
+>>> because Amlogic used it as a codename for a long time.
+>>> Compare this to Allwinner's "sunxi" or Qualcomm's "msm".
+>>>
+>>> This config has no functional mean, it's only a config namespace.
+>>>
+>>> Renaming it would need renaming it in all subsystems Kconfig/Makefiles
+>>> and will certainly break builds with custom kernel configs
+>>> in various publicly used builds like Armbian, meta-meson, LibreELEC,
+>>> Debian, Suse, ...
+> Let's get back to ARCH_AMLIPC.
+> We just need to add ARCH_AMLIPC in the necessary subsystems 
+> Kconfig/Makefile.
+> This change will keep the existing MESON related code,  and will neither 
+> involve renaming nor break any builds.
 
-> 
-> I got below warning on a VM boot with v8:
-> 
-> [    2.496964] ------------[ cut here ]------------
-> [    2.497499] WARNING: CPU: 13 PID: 99 at kernel/sched/sched.h:1357 sched_mm_cid_migrate_to+0x2ce/0x330
-> [    2.498478] Modules linked in:
-> [    2.498481] CPU: 13 PID: 99 Comm: kworker/u32:5 Tainted: G        W 6.3.0-rc7-00002-gb8012ce004f4 #32
-> [    2.498484] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.1-2.fc36 04/01/2014
-> [    2.498485] Workqueue: events_unbound flush_to_ldisc
-> [    2.501094] RIP: 0010:sched_mm_cid_migrate_to+0x2ce/0x330
-> [    2.501099] Code: 45 89 74 24 08 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e 41 5f c3 cc cc cc cc 48 8d 7b 18 be ff ff ff ff7
-> [    2.503101] RSP: 0018:ffffc900003d7ac0 EFLAGS: 00010046
-> [    2.503608] RAX: 0000000000000000 RBX: ffff88842f3fe700 RCX: 0000000000000001
-> [    2.504313] RDX: 0000000000000000 RSI: ffffffff823ccffd RDI: ffffffff8244e8fe
-> [    2.505000] RBP: ffffe8ffff20c268 R08: 00000000954b8e6a R09: 00000000950aa3ff
-> [    2.505680] R10: 00000000f950aa3f R11: ffff88810005e900 R12: ffffe8fffe60c268
-> [    2.506406] R13: ffff88810005e900 R14: 0000000000000000 R15: 00000000ffffffff
-> [    2.506935] FS:  0000000000000000(0000) GS:ffff88842f200000(0000) knlGS:0000000000000000
-> [    2.507375] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    2.507678] CR2: 00007f0aadff6db8 CR3: 0000000106ba2002 CR4: 0000000000770ee0
-> [    2.508050] PKRU: 55555554
-> [    2.508209] Call Trace:
-> [    2.508342]  <TASK>
-> [    2.508492]  ttwu_do_activate+0x129/0x300
-> [    2.508727]  try_to_wake_up+0x2b7/0x8a0
-> [    2.508963]  ep_autoremove_wake_function+0x11/0x50
-> [    2.509259]  __wake_up_common+0x83/0x1a0
-> [    2.509481]  __wake_up_common_lock+0x81/0xd0
-> [    2.509738]  ep_poll_callback+0x147/0x310
-> [    2.509965]  __wake_up_common+0x83/0x1a0
-> [    2.510185]  __wake_up_common_lock+0x81/0xd0
-> [    2.510463]  n_tty_receive_buf_common+0x235/0x6a0
-> [    2.510728]  tty_port_default_receive_buf+0x3d/0x70
-> [    2.510987]  flush_to_ldisc+0x9b/0x1a0
-> [    2.511191]  process_one_work+0x27a/0x560
-> [    2.511420]  worker_thread+0x4f/0x3b0
-> [    2.511657]  ? __pfx_worker_thread+0x10/0x10
-> [    2.511930]  kthread+0xf2/0x120
-> [    2.512108]  ? __pfx_kthread+0x10/0x10
-> [    2.512340]  ret_from_fork+0x29/0x50
-> [    2.512552]  </TASK>
-> [    2.512679] ---[ end trace 0000000000000000 ]---
-> 
-> $ ./scripts/faddr2line ../guest_debug/vmlinux sched_mm_cid_migrate_to+0x2ce
-> sched_mm_cid_migrate_to+0x2ce/0x330:
-> lockdep_assert_rq_held at kernel/sched/sched.h:1357
-> (inlined by) mm_cid_snapshot_time at kernel/sched/sched.h:3355
-> (inlined by) sched_mm_cid_migrate_to at kernel/sched/core.c:11666
-> 
->> +	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
->> +	WRITE_ONCE(pcpu_cid->time, rq->clock);
->> +}
->> +
-> 
-> Thanks,
-> Aaron
+It is also not necessary and not justified. We do not have multiple
+top-level subarchs for one architecture. We had such talks already and
+there was no consensus to change it.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Best regards,
+Krzysztof
 
