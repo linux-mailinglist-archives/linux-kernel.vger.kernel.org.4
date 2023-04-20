@@ -2,128 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1474E6E9432
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FF26E9435
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbjDTMXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S234899AbjDTMZd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 08:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234887AbjDTMXq (ORCPT
+        with ESMTP id S233945AbjDTMZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:23:46 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F731BF4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:23:44 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 132-20020a250c8a000000b00b8f4e12dd57so1981912ybm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681993424; x=1684585424;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VyYkUgfpkn7wH0j2BAe1UVwheOGlOiDjxtv8agVE+bw=;
-        b=TbQn/Mbd2r9XbgqECjXDNQ1qXc11e+lRv5zVbY5g0fUxU/wBDgi0LWdBvJ5EzfN2vS
-         nbC0c3At6RoNmHTkHR7olw8UwMzG78HCLxLcPErHiS/OjPLCaKqfWb4ihfJFtRDkOInk
-         5/xJJwjjSRtVs4SvIGI+ija/vJ+OpKQJP/bI64FBBytS2a+frulCCNNKSlQxPdJXjueo
-         OwIo0PzvJTH+t14FcAXUSmdH6RsQ1BaU10JvbGZXM8W7dzClnZ0sGZ8dBdbQz3d3oRVB
-         idGJUnyeoIQuTUE3Pqa5RYfI3fvc6B1omoFTq6C4av/3vsyTbzJzisxdMsKBZF95I7fQ
-         Vvrw==
+        Thu, 20 Apr 2023 08:25:31 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C4A8F;
+        Thu, 20 Apr 2023 05:25:29 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id a11so2083236ybm.3;
+        Thu, 20 Apr 2023 05:25:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681993424; x=1684585424;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VyYkUgfpkn7wH0j2BAe1UVwheOGlOiDjxtv8agVE+bw=;
-        b=dPWYrgugBJ/032NvwgBit3/JjEaJxK4Dkj6YrgJ5CUV3Ta0b6u8+ABddUluUkBbBmY
-         HH8g/Ck/2Uz4K7DnoZ0LippqSX83uRLYwYbJ0yOIj+2MljMrIfyYI95BXkhbO4mER+6z
-         i/nVbmWLILiXcQ5LBRxMqdIltwVbMLFtAkppwCz6sTaKqGvpQkj3704ddZcEvQiZuM4s
-         9qsSRbD5BR3jjH+Of8rycC8bru55I7L2hK8yGuWhlyWx3cBEWtiim66yRlFFQHMM/uc2
-         j4h8ADILKz8h18czfPjamKHz9OJPsH8WG8cnXgbw0qRsjOhNWT0A5kA/iBeUvEc6GIzC
-         IHiA==
-X-Gm-Message-State: AAQBX9cWHm2Jou0ZgJu+9LllER4evrjEe0K/5mnG6sSvjqOdFyU9qUtt
-        /eWBaMOhrnRrHdawTvBUWxCBqqyKKzm1
-X-Google-Smtp-Source: AKy350abez9O9onkkWOz4907E7Tm2r2pMZdIYnuyIOpOSJjrHP1NRWsW0B4RvmPmbW4IZX2IfF9GAKPclgfj
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:f314:6a1b:5ed1:38f4])
- (user=apusaka job=sendgmr) by 2002:a25:d796:0:b0:b92:5112:3f53 with SMTP id
- o144-20020a25d796000000b00b9251123f53mr673809ybg.2.1681993424038; Thu, 20 Apr
- 2023 05:23:44 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 20:23:36 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230420202312.1.I53bc906a716045c7474a77d3038bfcb6909094e2@changeid>
-Subject: [PATCH] Bluetooth: Cancel sync command before suspend and power off
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Ying Hsu <yinghsu@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+        d=1e100.net; s=20221208; t=1681993529; x=1684585529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gXInmwaqBbfh6VGdRfeo5HdvJy20M73WF7/BcwOEW+c=;
+        b=EdUCnQscPSboIGILIq2tKhbETz1HKNgnjL0hwA4jDTqD/YXSCrUYUmHlmt25ED5546
+         upL4UnPt1frbp83O/V6hsqLKOaDxCBsQIUrRXL3DY6QzWz2Rogkw2UerayfuoQ65VNg1
+         fK6VZMMdMIIxNQePVe2B6suJknqDYMv2dDQgvE+TQ3HtZMjB3XGrEUfDNclvkWI6aqFy
+         19wVHqdx4bPDb949xpNWOCFEdskRzip/oggqCZz6a6iJwvlgmLcGT4hxcQSfGXAFEx/o
+         aPfXsVf2GF1cyJuMJtMLornW6pQ9ZQyf/8hj9+sM/VOnogRPCaoFL+7MinAi8XaJ46iG
+         oi7Q==
+X-Gm-Message-State: AAQBX9easeFVuawVXedMQEe/tKn3A3QyJTrj2mKXIZvYmEe6uYwaLQHo
+        2r1gqOl/sjmhIc2L+holm28EE8qBGoL01hi3
+X-Google-Smtp-Source: AKy350YABQHgHqkbP+96QBb4a+NxXfG21E6i/be8k8IWUeJ3Yr+y+4jHRMG0DKeUToy9ljG8uH23Dw==
+X-Received: by 2002:a25:5091:0:b0:b92:6588:b07e with SMTP id e139-20020a255091000000b00b926588b07emr1219468ybb.19.1681993528848;
+        Thu, 20 Apr 2023 05:25:28 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id u73-20020a0deb4c000000b0054605c23114sm302234ywe.66.2023.04.20.05.25.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 05:25:28 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-555e170df98so37655757b3.10;
+        Thu, 20 Apr 2023 05:25:27 -0700 (PDT)
+X-Received: by 2002:a0d:eb41:0:b0:555:d531:fdf3 with SMTP id
+ u62-20020a0deb41000000b00555d531fdf3mr634121ywe.32.1681993527822; Thu, 20 Apr
+ 2023 05:25:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230420030500.1578756-1-suijingfeng@loongson.cn>
+ <8ec3734b-4bc2-ad8f-fc17-3002f22d1fc9@suse.de> <12c8efaa-7266-5436-dc53-009a0d23b53f@suse.de>
+ <4a0fdbe0-cd4f-9c87-f73a-6d27f5c497bb@189.cn> <f541018f-bb7f-ac58-bbb8-797069e49c3f@suse.de>
+In-Reply-To: <f541018f-bb7f-ac58-bbb8-797069e49c3f@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 20 Apr 2023 14:25:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVGtvgcQuTR9bfMh1cM86TYXSByxJzW5eJtF9A0ZLRF3w@mail.gmail.com>
+Message-ID: <CAMuHMdVGtvgcQuTR9bfMh1cM86TYXSByxJzW5eJtF9A0ZLRF3w@mail.gmail.com>
+Subject: Re: [PATCH v5] drm/fbdev-generic: prohibit potential out-of-bounds access
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        loongson-kernel@lists.loongnix.cn, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+Hi Thomas,
 
-Some of the sync commands might take a long time to complete, e.g.
-LE Create Connection when the peer device isn't responding might take
-20 seconds before it times out. If suspend command is issued during
-this time, it will need to wait for completion since both commands are
-using the same sync lock.
+On Thu, Apr 20, 2023 at 1:10 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Am 20.04.23 um 12:04 schrieb Sui Jingfeng:
+> > What will happen if the 'screen_size' is not page_size aligned and mmap
+> > will mapping in the granularity of pages ?
+>
+> You need to map at page granularity. If screen_size is not page-size
+> aligned, there's this trailing buffer that is accessible, but cannot be
+> displayed. But userspace has no direct way of knowing that, so let's
+> ignore that problem for now.
 
-This patch cancel any running sync commands before attempting to
-suspend or adapter power off.
+Userspace can know, if fb_fix_screeninfo.smem_{start,len} match
+the actual offset and size.
 
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Ying Hsu <yinghsu@chromium.org>
+Gr{oetje,eeting}s,
 
----
+                        Geert
 
- net/bluetooth/hci_core.c | 3 +++
- net/bluetooth/mgmt.c     | 4 ++++
- 2 files changed, 7 insertions(+)
-
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 393b317ae68f6..a856b1051d355 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -2803,6 +2803,9 @@ int hci_suspend_dev(struct hci_dev *hdev)
- 	if (mgmt_powering_down(hdev))
- 		return 0;
- 
-+	/* Cancel potentially blocking sync operation before suspend */
-+	__hci_cmd_sync_cancel(hdev, -EHOSTDOWN);
-+
- 	hci_req_sync_lock(hdev);
- 	ret = hci_suspend_sync(hdev);
- 	hci_req_sync_unlock(hdev);
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 5f8c144c84b88..13c745876b390 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -1399,6 +1399,10 @@ static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
- 		goto failed;
- 	}
- 
-+	/* Cancel potentially blocking sync operation before power off */
-+	if (cp->val == 0x00)
-+		__hci_cmd_sync_cancel(hdev, -EHOSTDOWN);
-+
- 	err = hci_cmd_sync_queue(hdev, set_powered_sync, cmd,
- 				 mgmt_set_powered_complete);
- 
 -- 
-2.40.0.634.g4ca3ef3211-goog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
