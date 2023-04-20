@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD866E9C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C0C6E9C69
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjDTTTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        id S230224AbjDTTVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjDTTTZ (ORCPT
+        with ESMTP id S229811AbjDTTVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:19:25 -0400
-Received: from smtp.smtpout.orange.fr (smtp-11.smtpout.orange.fr [80.12.242.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8B755B8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:19:08 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id pZo7pjZIVLbpDpZo8pVyl8; Thu, 20 Apr 2023 21:19:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682018345;
-        bh=xEO8CI9H9WDO+PWu0PIXBsB8fTZqe2/3Shi9OjFKgUE=;
-        h=From:To:Cc:Subject:Date;
-        b=d7DupFV1mk554xgT7ZmeBZ2PilYiuqaqFgfYq0DWlJN6USgDG1I1rM+fUGT1I363i
-         O6Rw+b7pIRwd+G7hHsbBPvD9a0gZyfvMFh5utXc3AgnRd6snMLZXdBEl3SAZ9jH1N/
-         PTCrhMoNKF1fojEC6NgjF+l/Y+meLDIoemkomHDNCrAPIpYYnyV0SZFyHm7w4KDV/S
-         ZBzejECVQ4bEAMlYRl6Yc5LKHSUvXbvYUiEzsKf+WSk8t8W8XPosEqA0iSLF9xAqn+
-         IkSAonHcDssNK8l5dglnOu4/0H6AJnvH7OyGZYElA122UtSW2eSe/CrrSE+rUgEbFB
-         tb5Hu+LNwIv+w==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 20 Apr 2023 21:19:05 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-sh@vger.kernel.org
-Subject: [PATCH v2] sh: sq: Use the bitmap API when applicable
-Date:   Thu, 20 Apr 2023 21:19:03 +0200
-Message-Id: <a51e9f32c19a007f4922943282cb12c89064440d.1681671848.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Thu, 20 Apr 2023 15:21:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A0E2717
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682018420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NFDxpoy2DcBE5wK3y+F/p+EUL+YVKW5BxO5v43iU+ZQ=;
+        b=bPsJPQGY1ZuqNuzVrgNf956mymdMKKgLrBNS2fYrpKmJ9uv7lqMNs9k9xzeNyMgk03vc5L
+        /P3fTJXEMe/p/swE6wJnrlAPHClNzBWJ/ueMYf2WG4XWN//rZ1sjjcFM+ToYUT6VhwzlFu
+        6qDFT5Oy5udn87+e4GpE4xmHrcHvoew=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-vtxokf2dPLKiumP7Y_Wsyg-1; Thu, 20 Apr 2023 15:20:16 -0400
+X-MC-Unique: vtxokf2dPLKiumP7Y_Wsyg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B24BB3C025B0;
+        Thu, 20 Apr 2023 19:20:15 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CAEA82166B33;
+        Thu, 20 Apr 2023 19:20:14 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: [PATCH] iommu: amd: Fix up merge conflict resolution
+Date:   Thu, 20 Apr 2023 12:20:13 -0700
+Message-Id: <20230420192013.733331-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the bitmap API is less verbose than hand writing it.
-It also improves the semantic.
+Merge commit e17c6debd4b2 ("Merge branches 'arm/mediatek', 'arm/msm', 'arm/renesas', 'arm/rockchip', 'arm/smmu', 'x86/vt-d' and 'x86/amd' into next")
+added amd_iommu_init_devices, amd_iommu_uninit_devices,
+and amd_iommu_init_notifier back to drivers/iommu/amd/amd_iommu.h.
+The only references to them are here, so clean them up.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Fixes: e17c6debd4b2 ("Merge branches 'arm/mediatek', 'arm/msm', 'arm/renesas', 'arm/rockchip', 'arm/smmu', 'x86/vt-d' and 'x86/amd' into next")
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
 ---
-v2:
-   - synch with latest linux-next because of 80f746e2bd0e which fixes a bug
----
- arch/sh/kernel/cpu/sh4/sq.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/iommu/amd/amd_iommu.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
-index 27f2e3da5aa2..d289e99dc118 100644
---- a/arch/sh/kernel/cpu/sh4/sq.c
-+++ b/arch/sh/kernel/cpu/sh4/sq.c
-@@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
- static int __init sq_api_init(void)
- {
- 	unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
--	unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
- 	int ret = -ENOMEM;
+diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
+index c160a332ce33..ec139f540c08 100644
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -15,9 +15,6 @@ extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
+ extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
+ extern void amd_iommu_apply_erratum_63(struct amd_iommu *iommu, u16 devid);
+ extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
+-extern int amd_iommu_init_devices(void);
+-extern void amd_iommu_uninit_devices(void);
+-extern void amd_iommu_init_notifier(void);
+ extern void amd_iommu_set_rlookup_table(struct amd_iommu *iommu, u16 devid);
  
- 	printk(KERN_NOTICE "sq: Registering store queue API.\n");
-@@ -382,7 +381,7 @@ static int __init sq_api_init(void)
- 	if (unlikely(!sq_cache))
- 		return ret;
- 
--	sq_bitmap = kcalloc(size, sizeof(long), GFP_KERNEL);
-+	sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
- 	if (unlikely(!sq_bitmap))
- 		goto out;
- 
-@@ -393,7 +392,7 @@ static int __init sq_api_init(void)
- 	return 0;
- 
- out:
--	kfree(sq_bitmap);
-+	bitmap_free(sq_bitmap);
- 	kmem_cache_destroy(sq_cache);
- 
- 	return ret;
-@@ -402,7 +401,7 @@ static int __init sq_api_init(void)
- static void __exit sq_api_exit(void)
- {
- 	subsys_interface_unregister(&sq_interface);
--	kfree(sq_bitmap);
-+	bitmap_free(sq_bitmap);
- 	kmem_cache_destroy(sq_cache);
- }
- 
+ #ifdef CONFIG_AMD_IOMMU_DEBUGFS
 -- 
-2.34.1
+2.38.1
 
