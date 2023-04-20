@@ -2,84 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2F56E9C56
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1636E9C5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbjDTTPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S231932AbjDTTRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDTTPO (ORCPT
+        with ESMTP id S229468AbjDTTRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:15:14 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59C26B2;
-        Thu, 20 Apr 2023 12:15:12 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so1261715a12.0;
-        Thu, 20 Apr 2023 12:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682018112; x=1684610112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TB42OP/0chsseE66LQ/QUwQPHdlFt1RecluHsLuAJY4=;
-        b=PkfTz/PmrkjzTlyyAkJGB3k8eVlOC59C1SVPbdq6Edf6RyUTVqNYNlMvpRVkFgFDrv
-         kch/3YnkgSp/yFqqSvhjw4/cyHFxsplXn9Ejlp6TV19kGl3/u6+m5181gAh57LAgvPqG
-         zPGEtmrM3C0y0S5R2AEC31TfEFnRKGqmoe/zb34OPWQ09nIDUGoCNiNxnDstgDRSAtVl
-         vrOmezSnSQV6wZq6Q0MMmoKn8M/a21t6uUaQp4WKMrVohxugniTDoERgncztowWyX0I+
-         iDrmLrTd/R2snVC2C+deJLxzSWCLs+TTb/8hwTVdhTd5ZhmmwEODUk1Xzc2jvc/jEvC1
-         E/iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682018112; x=1684610112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TB42OP/0chsseE66LQ/QUwQPHdlFt1RecluHsLuAJY4=;
-        b=kS808qgzrIHD8Y/xhcDlzNZWe/9JU7CMXexDNXWIGJIDU+q+TSdXO8R7oFgZ7rtLZF
-         MHTfYug430NwJcmhywgOIUUtCZy7EsrJGSDXnIvc/wEBiIGP2s1ttJ9FVfTlMtPbpT2g
-         cGGqH2fTk5OKpkOQthzff4/2yn/RiECzHuD6uKKcQfFcKK5itIoax/N+o4LfXLNz11Br
-         sEJXsQXbJwkBAkt81hR4v+X9RfjbdBwPnb/7LpZUrfrdSDxopoKWJ7Akq6Nsnwub3lgi
-         Pt+qqZcueWgfy5CnU7u8lJu2pZVcpWVlYkgbkjJ0jsbO2uE2+DDhIPDq+WRgoc3ZEgnB
-         MHMQ==
-X-Gm-Message-State: AAQBX9cV8ATqskpxyorGnNKSGZxQ0/7sEqOdEFNJ9ur80R52VLmMjxoR
-        4VR9hKT7dTJ0dVe+kycX+a5BQXG7pHJHa4s2hMQ=
-X-Google-Smtp-Source: AKy350YVTmd97fwntq23PuJ/Ty5yPWRWuBjTNLojg7FftZa0smSn5bHtfBllr8HEG9WbWSpf91gSn4y34LDBr9UYvf4=
-X-Received: by 2002:a17:90a:4dc5:b0:247:90d8:41fd with SMTP id
- r5-20020a17090a4dc500b0024790d841fdmr2650658pjl.26.1682018111804; Thu, 20 Apr
- 2023 12:15:11 -0700 (PDT)
+        Thu, 20 Apr 2023 15:17:16 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27674103;
+        Thu, 20 Apr 2023 12:17:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bmi35y5xQi2OwHvHrvJ7IjegvoS2IgyC8xJayxTHYyAFTIFgNKNX2Z0rWjo3itcq2uC+54VY2k/UlV3UptaMVmEWCvpX3sIFZXwahyGIcM1JGi2DnF5isg4wbkX0qTA7WuLYJBFHa9q2RAXzXjzOy58GJ5WTMq7eMxstOuhh6Io1JFq7GC83kf392Jl9zTdS6OEbpB+wej831nRLK7TsB8g2D7YhmwY/QHszH4M3W3D6oRjU/D1MzEfs8wLCkNwvfPOwTYS9i51mN10Up5yXn4HRitkvaTdLh+PY0JiQ0nPte7zutRBC/Pn1K2BMzmuhWeNTlJA3oo/qUp7eLKM0Eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7Q2Yb/b9wn8pnrZAmTupTzd+Bi0gUhNvhdkRj5poiNQ=;
+ b=YlkoavgWvZfQ0YeaBZ19wREDd5bQMnFAIhG2V/K2vLq0SF5bFPKLYn5y6mH1rIp3U54Sdt4OHYOuRTVE9XQkJEp17Y/uhQKgU/LW+U8wo36UwfTFs4CDQxZ4bFOf/iOlLL9emYijbR7cQNw3xKG2yM9WbIfZamVGjh2hCYSpd6dg9pG+g4bLaVBiylmWTQu7HTnkkFO1NDBq4Rc3Ryc4G0NoHwR9VBL9FRAiyUJUKFblMlMTYxdDnW//JS3E7rLIZceAdTjJimPs5UrjXyMf7UvAjK8BcNt2Q5uNt5y+/qghmtHvWNkWAnRsTRIDDbhsyyrhTYxDWStOdbmnftaVtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7Q2Yb/b9wn8pnrZAmTupTzd+Bi0gUhNvhdkRj5poiNQ=;
+ b=qIt8gckrADSejnnd/T5HyXWnQyHMJMOgI7/m+RBtAP+1Z46SiSlnyZlmEqHErTG7d8PBK9e4b6gBlNLTjavPnFAyTU5D3vChG/tw3VK6fKXGDk9kyhgFho+br684ViyzspYl3uuu5Sdm4qOCdS15TkTWaGfD3XOK4Lg5tcUdod8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by LV2PR12MB5919.namprd12.prod.outlook.com (2603:10b6:408:173::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Thu, 20 Apr
+ 2023 19:17:10 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 19:17:09 +0000
+Message-ID: <2a296473-3abb-a1d0-93c6-42b074ca9f7f@amd.com>
+Date:   Thu, 20 Apr 2023 14:17:06 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 02/10] crypto: ccp: Add support for displaying PSP
+ firmware versions
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20230420163140.14940-1-mario.limonciello@amd.com>
+ <20230420163140.14940-3-mario.limonciello@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230420163140.14940-3-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1P222CA0121.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c5::9) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-References: <20230415104104.5537-1-aford173@gmail.com> <414febc4-aab1-95ec-ac2e-e82a3f881d01@denx.de>
- <CAHCN7xKsvT-TL4xdP=CKDzTJoFq1PGqmFmTohdRF9JaWaxWemw@mail.gmail.com>
- <5667233.DvuYhMxLoT@steina-w> <CAHCN7xK0Dban7ueB_ASrTOjqWK0++ujOoQ_RZpz=FR2Fktzy0g@mail.gmail.com>
-In-Reply-To: <CAHCN7xK0Dban7ueB_ASrTOjqWK0++ujOoQ_RZpz=FR2Fktzy0g@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 20 Apr 2023 14:15:00 -0500
-Message-ID: <CAHCN7xJx46zSOt5KLvJCo3NomFmjEzcirTnB9YdLWdR0aqOWew@mail.gmail.com>
-Subject: Re: [PATCH 2/6] drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Marek Vasut <marex@denx.de>, dri-devel@lists.freedesktop.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        aford@beaconembedded.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        m.szyprowski@samsung.com, Robert Foss <rfoss@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|LV2PR12MB5919:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d7e86e8-1b8e-4196-2a49-08db41d3d677
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V3vXEjPftjTQz0SujCOho6onQ9hA42pnc36iZ2yn2hnh2hfp4hrxsFtNtR88RqoQvqyLvuTFm+NvyLzaJz9g7p36CWH12wUmXhbVrXE0t9qaLUIVJo6TU2NIEVJ6Y/FwO7L5WhfLTK/VGSZYKBUVYkrOL4/60YjBQoVruMX8SxXnO4Ln9nTypx/5te3jf3uc4CJaEnJuk/17Glx2VxV0+LLXt7Ughb1TkXYaww17JwnNDT0U3Jmp3uGYZAPQvmi4DhxU7ybTVbwsnLT1ETFPDbZLP7KpMZEax3H5UgOCxGyOKtb1/6xwK46DLH0NdAjk/CSR+qqrRwU/QaBEEMAA6HIJmb2/AASF7ya8wNbw5A2vYv6+JJ9vduHUIzTGwpzPlJetIgUDM9tPfxyFdacILIMPXmyuIGEaTIN+MBr0aNJ9LkQI9mfysWR4qOh7ZPjGFqTCAfGuKeJ/GqEd9e6Ah4hh894eV5XSotRkt3aMXrcRe/0v43MFG25GA4x214jx2Liex6AF5esz26HUP5EMw4JQvZM9QVTdLl0BB1WFFsILsrvawjjsPFJgO9Hur7/06ZjjI53Mtlr/3MU67TDJbmMvd2KQrJFvqnNoW9U2aNPj4eiMDUVrb5exrihh18OwEFYdSeQWqm4VOcjd933nQQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(346002)(376002)(396003)(451199021)(38100700002)(8936002)(8676002)(41300700001)(5660300002)(4326008)(31686004)(6636002)(316002)(66476007)(66556008)(110136005)(83380400001)(66946007)(2616005)(2906002)(36756003)(186003)(6486002)(6666004)(478600001)(26005)(86362001)(53546011)(31696002)(6506007)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVdKRGRzaFNyZUcreXpFTVIydk1QQ1lJcXczK3J3Q1BVU3NBYXJEdi9lVnh4?=
+ =?utf-8?B?MFltMWpxaVM2Wk45KzA4Yi9Ud1Z1bStjSDZLVWpURHFnMXJqRkVDQzI5blpF?=
+ =?utf-8?B?TTdiOFp4ZlFoUUtXOGJmY0VVV3JWdVpaT214WUVSUDlHMVRzbXFEZUdNVmZJ?=
+ =?utf-8?B?UytyMWlPcTBHckFDMzhVcWsrTDFRRGRYNXJ2NTJxeEJsRXMzUERjdmtzeCsw?=
+ =?utf-8?B?SVFFc3VjQTg1Zzh2QU1Vc3RvS3NDVVFyNWpMR0dLUmlxNjlPT0o0NTlmdGxP?=
+ =?utf-8?B?WXcxUXA5YzBvOWEzY0pPbnh4TDBLWVRDU2UvSDdISWloRTVhUXhHeVZYdkZP?=
+ =?utf-8?B?b1hOSFlUS2Fodzd2THVBYjVzRVA4djJCRUJPL2pQWlhtQ3JZQnR6dFB4VFJq?=
+ =?utf-8?B?dlNFbnZidnJhM0RaRWxmb1E1MzM1TEw0c205Y1pBZ0RiaUFBMDI2ald2STM2?=
+ =?utf-8?B?TTZ0WUVyQnJVc3pzRDVoc3FqSERKMzVBY2poZk5OUmxpeXo4dVVpR1RyYlFB?=
+ =?utf-8?B?bTdjeGQzRjdYSGhNWDdjcXE2YnRzbmtRdTB5aDVGSGlRdTZOODUzblVrMVVx?=
+ =?utf-8?B?cTA2RzNhZ1lVa2R5alc4OE9zVmFWbXYwNDVzV1NLcEhERW5odzhQZGxJWnFU?=
+ =?utf-8?B?c0M1cnhwWFB3MTNER09sVEMrNjNKSWxreUI3QmNoMk80WC9keERySHhwZkR4?=
+ =?utf-8?B?R0FIS0lrMndHbmxPclM2ZlRQeVVHTnhLeHNxVjlOenFwTDA4UkFoRHVLYXQz?=
+ =?utf-8?B?Y0pKUU9XR1lvYmtyV3NpdFJTcnpTNHQ2QlU4MDduOGhvWEtWd2gwdk96c2Ev?=
+ =?utf-8?B?TXFtdWVWTEF2VG40V3VRS0NLQ0FGd2p5S2VKTEUyN0lMZFpwSjd6bWNSV3Fy?=
+ =?utf-8?B?aFRlaHMwQm1JcGxmK3JXdGZ4cmpTLy80Z2dXQWp1RWpndGc4dHpaN0krKzZI?=
+ =?utf-8?B?b0x2MmpSZFZaWmpUeUMvWUFyemErcVMyQ3RoUDk2Q2g0eUhmaTFjdHpGR0RG?=
+ =?utf-8?B?cnhWWnMzMUhyb29HdlFYRVI0K1RsWkRzdWZrVVFrYkdYRms4VDg2WkduZy9J?=
+ =?utf-8?B?Z3NsTWQ4Vitidkt0K2dlT2M0ZCsvaGN1ODJWdVBvTWJ2OUJMcDBNN2pQRUZ5?=
+ =?utf-8?B?ZVpkdk9XMUJ1MkZZK3o3YTN2MEVVWVJwSXNYeVpJK3BPQThWeTV4Yi9pRnRN?=
+ =?utf-8?B?SzNyT3UvVVBvYzRXQkdPRkdpMTRWZkJPc0lJL3EyTC94V1JIRitWUzZUNTRj?=
+ =?utf-8?B?Q2Y3M05OK2syNEVXNE9QYzBvdllVUE1sa09kN29Kenhock02MkErdzh5SkEx?=
+ =?utf-8?B?aVB2eVQ1VkdVQ1c2ZUNpeG1JQVlyZGkySXh6aVAzU24vU0UzN0xzUWdYVmRu?=
+ =?utf-8?B?VVp1blp4Z2JYQVU5Z1Boc2IrUjhsZWVJcFI2VEt4VlNBcEs3SFBpdE5MVXEx?=
+ =?utf-8?B?ZUM2ZjdIU0VUa0FWQmtES3BOMUdHc004NWJEamEreGpOVjlHczhSZTBzNmkw?=
+ =?utf-8?B?eWc0UFR3V0YzWFdpU2ZsQ3RDaE5QTjJ6dVp2Mk9EaDl2R2Z1SWZYUTFhTzNt?=
+ =?utf-8?B?WkRNc1JTc2lyVit4Uk4rbjRqV1pwNm8wNTFhcUVyaC95WkZIQlk2Z2FnUHVB?=
+ =?utf-8?B?anBxMTczYldCT0NzK3pucmFMNzJnV1N6NndFWERobFRpeVMyMitDSGIxMW1N?=
+ =?utf-8?B?Z0JYaTF2Y2lnbGJCKzIxL2RqRXVkY3dQRVZpVE9QSVE1THFlb04yS1NMcnJ6?=
+ =?utf-8?B?c3FFMkFQUENNQlRQeEludXNJeGZmYVNMUDYxQmN4UkpzUTlkM0VyT0QxN1Jr?=
+ =?utf-8?B?MDYxUFczN0N4dzNORUFOUHVIdHBFSERra3BCODF5clNxYlViRTZ4TE5MdE54?=
+ =?utf-8?B?M21JWWt6RzdrcFpOeSsvV1BJZC9LQm9zT1Npd1ZDcVJrNUJLV2dQeVgwOFk3?=
+ =?utf-8?B?UlJwYjM1S1REbzROSWpyb0tCRE1FVW9PcUdiT3pxV3lqazBkcXpmU0lRSU5u?=
+ =?utf-8?B?d3VZYmw3NldaSTNDLzZHRWg4UjJSelhaUDlwREhPVzBWbUQ3U3VBUEhBNnB4?=
+ =?utf-8?B?MXZmdzZlQkZYYyszV2x3bHR6UENHam5VODZraDArUzR6cEpmR2YwZVBQQ2Ja?=
+ =?utf-8?Q?9xEAYuYuyBshq7j9iWZ2DoBNl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d7e86e8-1b8e-4196-2a49-08db41d3d677
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 19:17:09.7334
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vQNkkMY7/vm6lLhMvSxIGHDUsjQqRXOD7eQjl3hCTKSvB/roEDNRGaB9TvACOAbn6ljmsHan6JzNjVSi3yKqAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5919
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,124 +128,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 6:53=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
-e:
->
-> On Mon, Apr 17, 2023 at 2:00=E2=80=AFAM Alexander Stein
-> <alexander.stein@ew.tq-group.com> wrote:
-> >
-> > Hi,
-> >
-> > Am Montag, 17. April 2023, 00:31:24 CEST schrieb Adam Ford:
-> > > On Sun, Apr 16, 2023 at 5:07=E2=80=AFPM Marek Vasut <marex@denx.de> w=
-rote:
-> > > > On 4/15/23 12:40, Adam Ford wrote:
-> > > > > According to Table 13-45 of the i.MX8M Mini Reference Manual, the=
- min
-> > > > > and max values for M and  the frequency range for the VCO_out
-> > > > > calculator were incorrect.  This also appears to be the case for =
-the
-> > > > > imx8mn and imx8mp.
-> > > > >
-> > > > > To fix this, make new variables to hold the min and max values of=
- m
-> > > > > and the minimum value of VCO_out, and update the PMS calculator t=
-o
-> > > > > use these new variables instead of using hard-coded values to kee=
-p
-> > > > > the backwards compatibility with other parts using this driver.
-> > > >
-> > > > [...]
-> > > >
-> > > > >   static const struct samsung_dsim_driver_data imx8mm_dsi_driver_=
-data =3D
-> > > > >   {
-> > > > >
-> > > > > @@ -470,6 +485,9 @@ static const struct samsung_dsim_driver_data
-> > > > > imx8mm_dsi_driver_data =3D {> >
-> > > > >        */
-> > > > >
-> > > > >       .pll_p_offset =3D 14,
-> > > > >       .reg_values =3D imx8mm_dsim_reg_values,
-> > > > >
-> > > > > +     .m_min =3D 64,
-> > > > > +     .m_max =3D 1023,
-> > > > > +     .vco_min =3D 1050,
-> > > >
-> > > > You might want to call this 'min_freq' since there is a 'max_freq' =
-which
-> > > > seems to indicate what VCO max frequency is.
-> > > >
-> > > > Note that the same datasheet contains the following information:
-> > > > "
-> > > > MIPI_DPHY_M_PLLPMS field descriptions
-> > > >
-> > > > 12=E2=80=934 PMS_M
-> > > > Specifies the PLL PMS value for the M divider
-> > > > NOTE: The programmable divider range should be within 25 to 125 to
-> > > > ensure PLL stability.
-> > >
-> > > I was confused by this because this statement is not consistent with
-> > > the link they reference jumps me to the table where it reads M is
-> > > between 64 and 1023.
-> > >
-> > > > NOTE: The M and P divider values should be considered together to e=
-nsure
-> > > > VCO ouput frequency
-> > > > (VCO_out) range is between 350 MHz to 750 MHz.
-> > > > Please refer to the topic DPHY PLL for more information.
-> > >
-> > > I was confused by this too, because the NXP documentation reads the
-> > > 350 - 750MHz that you state, but  "Table 13-45: DPHY PLL Parameters"
-> > > which immediately follows that sentence  on page 4158 shows VCO_out i=
-s
-> > > between 1050-2100 MHz.
+On 4/20/23 11:31, Mario Limonciello wrote:
+> As it's not always obvious what PSP bootloader or TEE version are
+> present in OEM systems, add the ability to get this information from
+> sysfs for supported platforms.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>   Documentation/ABI/testing/sysfs-driver-ccp | 18 +++++++
+>   drivers/crypto/ccp/sp-dev.h                |  2 +
+>   drivers/crypto/ccp/sp-pci.c                | 58 ++++++++++++++++++++++
+>   3 files changed, 78 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-ccp b/Documentation/ABI/testing/sysfs-driver-ccp
+> index 7aded9b75553..ee6b787eee7a 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-ccp
+> +++ b/Documentation/ABI/testing/sysfs-driver-ccp
+> @@ -85,3 +85,21 @@ Description:
+>   		Possible values:
+>   		0: Not enforced
+>   		1: Enforced
+> +
+> +What:		/sys/bus/pci/devices/<BDF>/bootloader_version
+> +Date:		June 2023
+> +KernelVersion:	6.4
+> +Contact:	mario.limonciello@amd.com
+> +Description:
+> +		The /sys/bus/pci/devices/<BDF>/bootloader_version
+> +		file reports the firmware version of the AMD AGESA
+> +		bootloader.
+> +
+> +What:		/sys/bus/pci/devices/<BDF>/tee_version
+> +Date:		June 2023
+> +KernelVersion:	6.4
+> +Contact:	mario.limonciello@amd.com
+> +Description:
+> +		The /sys/bus/pci/devices/<BDF>/tee_version
+> +		file reports the firmware version of the AMD Trusted
+> +		Execution Environment (TEE).
+> diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
+> index 1253a0217985..76c32ee6bd65 100644
+> --- a/drivers/crypto/ccp/sp-dev.h
+> +++ b/drivers/crypto/ccp/sp-dev.h
+> @@ -51,6 +51,7 @@ struct tee_vdata {
+>   	const unsigned int cmdbuff_addr_hi_reg;
+>   	const unsigned int ring_wptr_reg;
+>   	const unsigned int ring_rptr_reg;
+> +	const unsigned int info_reg;
+>   };
+>   
+>   struct platform_access_vdata {
+> @@ -69,6 +70,7 @@ struct psp_vdata {
+>   	const unsigned int feature_reg;
+>   	const unsigned int inten_reg;
+>   	const unsigned int intsts_reg;
+> +	const unsigned int bootloader_info_reg;
+>   };
+>   
+>   /* Structure to hold SP device data */
+> diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
+> index 85e3dc8853e2..4d729aa1b260 100644
+> --- a/drivers/crypto/ccp/sp-pci.c
+> +++ b/drivers/crypto/ccp/sp-pci.c
+> @@ -8,6 +8,7 @@
+>    * Author: Gary R Hook <gary.hook@amd.com>
+>    */
+>   
+> +#include <linux/bitfield.h>
+>   #include <linux/module.h>
+>   #include <linux/kernel.h>
+>   #include <linux/device.h>
+> @@ -88,8 +89,65 @@ static struct attribute_group psp_security_attr_group = {
+>   	.is_visible = psp_security_is_visible,
+>   };
+>   
+> +#define version_attribute_show(name, _offset)					\
+> +static ssize_t name##_show(struct device *d, struct device_attribute *attr,	\
+> +			   char *buf)						\
+> +{										\
+> +	struct sp_device *sp = dev_get_drvdata(d);				\
+> +	struct psp_device *psp = sp->psp_data;					\
+> +	unsigned int val = ioread32(psp->io_regs + _offset);			\
+> +	return sysfs_emit(buf, "%02lx.%02lx.%02lx.%02lx\n",			\
+> +			  FIELD_GET(GENMASK(31, 24), val),			\
+> +			  FIELD_GET(GENMASK(23, 16), val),			\
+> +			  FIELD_GET(GENMASK(15, 8), val),			\
+> +			  FIELD_GET(GENMASK(7, 0), val));			\
+> +}
+> +
+> +version_attribute_show(bootloader_version, psp->vdata->bootloader_info_reg)
+> +static DEVICE_ATTR_RO(bootloader_version);
+> +version_attribute_show(tee_version, psp->vdata->tee->info_reg)
+> +static DEVICE_ATTR_RO(tee_version);
+> +
+> +static struct attribute *psp_firmware_attrs[] = {
+> +	&dev_attr_bootloader_version.attr,
+> +	&dev_attr_tee_version.attr,
+> +	NULL,
+> +};
+> +
+> +static umode_t psp_firmware_is_visible(struct kobject *kobj, struct attribute *attr, int idx)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct sp_device *sp = dev_get_drvdata(dev);
+> +	struct psp_device *psp = sp->psp_data;
+> +	unsigned int val = 0xffffffff;
+> +
+> +	if (!psp)
+> +		return 0;
+> +
+> +	if (attr == &dev_attr_bootloader_version.attr &&
+> +	    psp->vdata->bootloader_info_reg)
+> +		val = ioread32(psp->io_regs + psp->vdata->bootloader_info_reg);
+> +
+> +	if (attr == &dev_attr_tee_version.attr &&
+> +	    psp->capability & PSP_CAPABILITY_TEE &&
+> +	    psp->vdata->tee->info_reg)
+> +		val = ioread32(psp->io_regs + psp->vdata->tee->info_reg);
+> +
+> +
 
-I reached out to my NXP rep asking if the VCO_out is 350-750 or if it
-should be 1050-2100, and received the following statement:
+Extra blank line.
 
-" Yes it is definitely wrong, the one that is part of the NOTE in
-MIPI_DPHY_M_PLLPMS register table against PMS_P, PMS_M and PMS_S is
-not correct. I will report this to Doc team, the one customer should
-be take into account is the Table 13-40 DPHY PLL Parameters and the
-Note above."
+Also, add a comment about how the PSP security policy might block access 
+to these areas resulting in reading all f's, so this hides the sysfs 
+attribute in that case.
 
-Table 13-40 (for the Nano) reads the VCO_out is 1050-2100, despite
-other text stating 350-750MHz, so I believe this patch is appropriate.
-I'll add the above statement to the commit message as confirmation
-when I submit a V2 of this series.
+Thanks,
+Tom
 
-adam
-> > >
-> > > I compared the PMS values for a variety of frequencies to those that
-> > > were set in the downstream NXP code, and the PMS values matched.
-> > > Maybe someone from NXP can explain the discrepancy.
-> >
-> > Also note that, according to Table 13-28 in RM (Rev 2 07/2022) for i.MX=
-8M
-> > Nano, VCO_out and Fout has a maximum of 1500MHz only. Although the note=
- above
-> > mentions a range  of 1050-2100MHz...
->
-> I looked up the limits in NXP's downstream kernel [1] , and I believe
-> these values match the table in the reference manual instead of the
-> conflicting sentence.  I am guessing this is why the PMS values I get
-> match those of the NXP downstream kernel.
->
-> adam
->
-> [1] - https://github.com/nxp-imx/linux-imx/blob/lf-6.1.y/drivers/gpu/drm/=
-imx/sec_mipi_pll_1432x.h#L38
->
-> >
-> > Best regards,
-> > Alexander
-> > --
-> > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, =
-Germany
-> > Amtsgericht M=C3=BCnchen, HRB 105018
-> > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan=
- Schneider
-> > http://www.tq-group.com/
-> >
-> >
+> +	if (val != 0xffffffff)
+> +		return 0444;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct attribute_group psp_firmware_attr_group = {
+> +	.attrs = psp_firmware_attrs,
+> +	.is_visible = psp_firmware_is_visible,
+> +};
+> +
+>   static const struct attribute_group *psp_groups[] = {
+>   	&psp_security_attr_group,
+> +	&psp_firmware_attr_group,
+>   	NULL,
+>   };
+>   
