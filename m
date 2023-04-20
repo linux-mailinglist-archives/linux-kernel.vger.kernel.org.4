@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AA26E9DC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA38A6E9DC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjDTVRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S232460AbjDTVR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbjDTVRr (ORCPT
+        with ESMTP id S231944AbjDTVRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:17:47 -0400
+        Thu, 20 Apr 2023 17:17:48 -0400
 Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F49524B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:17:45 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ec94eb6dcaso894244e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:17:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064345584
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:17:47 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ec8ce03818so894511e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682025464; x=1684617464;
+        d=linaro.org; s=google; t=1682025465; x=1684617465;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=38MnDmLtcYQkY2PJ8DXc4HeYBW4VWVTJbBajwrKtUQY=;
-        b=DZSO51QCviT1QjP1WhwzVKdJLh/f8M7hz/T60icFEz6grRPhQrz81Ec/tH9YA9UWQK
-         UHdBqh4mHTxVoNfIuFU34aLTAqSIaijFl9/Ui9JvGUaxQ8XEXNmfciK0sMTr10ArBdrc
-         ocaoF1OoyMYiELB3azBngOdBdA9tUc3PiR9DZJ3N0KbVx+Gb1uGYcTooebsdzLfSpo0s
-         35pONWIjFl6qmUF3phWTbl+syZ358CGfaxHiDThcR+LpwrIGtHfnRTnjJ8ExGbJ8IjWc
-         NmXJSMPTrq/cp8iFUxLCXtvrUURK4RAPQ/86YqxlA3WSqfCy3xkPxa72r/Qas5y5Jxqb
-         c7Gg==
+        bh=KqyMIYrZenERD+yF3K/aoB3sZGcu4giDZSstYVu8C3I=;
+        b=A1iTL73a01GVqC7lJ31QCFZkwN5U4aipeB3kURuPpCA6gdg4c/4A8D7K9CcyIBzINt
+         ASoyvHcAuS4F/9CmNfIfFzCQmwtDjDx0N+9JoAk6dzFFGvtTV2JTX9EjN0GK5W6h2lL2
+         5hgxtF+trm9cWn4MeLlDo53vIjb1XI3ELYuIAUoynEIZJacl9mYCuRXW9ThKw0OlheEF
+         6Z+vIyxmNxh4O8NgjUPU42bkLw3uKUmR+jB7I2G8g+/Q6xXCB6UdI8FHGgm7GnE98ooL
+         8jXXiu1NVFMf4v39cBD/Wj16KnAg+pOWPFz9BfBPgAI6GMe2DtEQjZERGkdVmNzFbLI7
+         LvOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682025464; x=1684617464;
+        d=1e100.net; s=20221208; t=1682025465; x=1684617465;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=38MnDmLtcYQkY2PJ8DXc4HeYBW4VWVTJbBajwrKtUQY=;
-        b=hri15wf8U0yXrkGzLVEIlPVrTYQNjCHC4T6IoT2RvAiM+xcZQLCtFAWjUzHM61JWME
-         DfHzUqvfnp0lhbWMusl1HyUfp1FJwCl2tBYd/368k1J0IL+rN8GKSXdFJujegst4fS+O
-         4Oj+q3TE+Fq06A8QjY8PMWPo2rT6JeNq8Ba23N2aA7SxhYjHZ0vFKVXDJEH1Zte76u8o
-         z/KvuZFNVL6iTp0cpUjUcbcUvBuCfrLddM7dT5mrOVkksh9jw9JoNRlUCMi7/Om0eflH
-         aiEA14qHqLWNYwTUNOke9UrIR1Qc4NEBcTQZA4pVKikzWMO8s4tcs+1XguTJNNxb/kb9
-         L4Zg==
-X-Gm-Message-State: AAQBX9d3iddrB757alJjivFMqKjt8VdnPTQPv30gKRcRYN2J6xZzZ3pn
-        VBo/y/0HMNGTmHoV7vncuA3wXQ==
-X-Google-Smtp-Source: AKy350buOLCRnCD7f4c26vJuo+rS5/OSb0XJjewaHwuXto/FhtCR4Qkm7wExv2koM83rC7elA+FWaQ==
-X-Received: by 2002:ac2:532c:0:b0:4d5:8306:4e9a with SMTP id f12-20020ac2532c000000b004d583064e9amr779212lfh.46.1682025464375;
-        Thu, 20 Apr 2023 14:17:44 -0700 (PDT)
+        bh=KqyMIYrZenERD+yF3K/aoB3sZGcu4giDZSstYVu8C3I=;
+        b=gR9y3gzZaaX/FfCT7XNF0nCJ05hH6setZS/O5UcVCmF7PRbslOeFkboNfs7vEAHP1e
+         mif5H5cNNK6sdLZkpCKle6y1cnFfEVzzDXJAo/+zkPX8ht6Hi8nAL3/x0xoiZvELEugI
+         7b5DsaZdTDXyUAihM84QbOXGLEdShY5ujvMgjJiWYEAZLxQ4qTqoVTOx4QAGAIvRd2cE
+         64HyhjOaYtV1CUb0fCEle3aCglpqvwJi4tpyNeEp2fZmK2AOElsVaeoovdan2zpQ14Uo
+         aK8B/kANnFRmxoWJa6/T5J8yCRtuvH9KLdKu/0ukoJANnLpA8ZwKTJCm845EAcOBRpNX
+         ImTw==
+X-Gm-Message-State: AAQBX9dTRo0PyooP2+gK+Q+Bf9ohSgHJUR2of2hc/QE7d8cw3zBcoJs/
+        uYvC5mo/jAV6MF9liIKpixjkDQ==
+X-Google-Smtp-Source: AKy350aa2d/vdkUV7yYKQIAaLjVceOkfBQAWRliCxTVlaTzps/o86XD2fxhJutxHQvf5PqL1Pz/RJg==
+X-Received: by 2002:a05:6512:3d0:b0:4e9:bf83:11a4 with SMTP id w16-20020a05651203d000b004e9bf8311a4mr740684lfp.7.1682025465234;
+        Thu, 20 Apr 2023 14:17:45 -0700 (PDT)
 Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id g12-20020a19ee0c000000b004edd3f011cfsm332985lfb.43.2023.04.20.14.17.43
+        by smtp.gmail.com with ESMTPSA id g12-20020a19ee0c000000b004edd3f011cfsm332985lfb.43.2023.04.20.14.17.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 20 Apr 2023 14:17:44 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 20 Apr 2023 23:17:34 +0200
-Subject: [PATCH v2 1/2] dt-bindings: sram: Add compatible for ST-Ericsson
- U8500 eSRAM
+Date:   Thu, 20 Apr 2023 23:17:35 +0200
+Subject: [PATCH v2 2/2] misc: sram: Generate unique names for subpools
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-ux500-sram-v2-1-6e62ad551faa@linaro.org>
+Message-Id: <20230417-ux500-sram-v2-2-6e62ad551faa@linaro.org>
 References: <20230417-ux500-sram-v2-0-6e62ad551faa@linaro.org>
 In-Reply-To: <20230417-ux500-sram-v2-0-6e62ad551faa@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -78,27 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds an SoC-specific binding for the banks of eSRAM
-available in the ST-Ericsson U8500.
+The current code will, if we do not specify unique labels
+for the SRAM subnodes, fail to register several nodes named
+the same.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Example:
+
+sram@40020000 {
+  (...)
+  sram@0 {
+    (...)
+  };
+  sram@1000 {
+    (...)
+  };
+};
+
+Since the child->name in both cases will be "sram" the
+gen_pool_create() will fail because the name is not unique.
+
+Use dev_name() for the device as this will have bus ID
+set to the fully translated address for the node, and that
+will always be unique.
+
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- Documentation/devicetree/bindings/sram/sram.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ChangeLog v1->v2:
+- Stop complicating things and just use dev_name()
+---
+ drivers/misc/sram.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/sram/sram.yaml b/Documentation/devicetree/bindings/sram/sram.yaml
-index 993430be355b..0922d1f71ba8 100644
---- a/Documentation/devicetree/bindings/sram/sram.yaml
-+++ b/Documentation/devicetree/bindings/sram/sram.yaml
-@@ -94,6 +94,7 @@ patternProperties:
-             - samsung,exynos4210-sysram
-             - samsung,exynos4210-sysram-ns
-             - socionext,milbeaut-smp-sram
-+            - stericsson,u8500-esram
- 
-       reg:
-         description:
+diff --git a/drivers/misc/sram.c b/drivers/misc/sram.c
+index f0e7f02605eb..f80c3adddf0b 100644
+--- a/drivers/misc/sram.c
++++ b/drivers/misc/sram.c
+@@ -240,10 +240,11 @@ static int sram_reserve_regions(struct sram_dev *sram, struct resource *res)
+ 				goto err_chunks;
+ 			}
+ 			if (!label)
+-				label = child->name;
+-
+-			block->label = devm_kstrdup(sram->dev,
+-						    label, GFP_KERNEL);
++				block->label = devm_kasprintf(sram->dev, GFP_KERNEL,
++							      "%s", dev_name(sram->dev));
++			else
++				block->label = devm_kstrdup(sram->dev,
++							    label, GFP_KERNEL);
+ 			if (!block->label) {
+ 				ret = -ENOMEM;
+ 				goto err_chunks;
 
 -- 
 2.40.0
