@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6716E9470
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BD96E947F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbjDTMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
+        id S234990AbjDTMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjDTMcv (ORCPT
+        with ESMTP id S234936AbjDTMdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:32:51 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA21810CE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:32:35 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so3849316a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681993954; x=1684585954;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=53J0OnnwTTvP3fEiCKzAu0mdWJJtadmQyC8IMtn5GfY=;
-        b=OIoKuGGijqyWw4bJYWhYgr9uuEf0oWAOGkW7aBrODsmZWuHO3V4uchC7+TTQhxL9uj
-         N+o6GX3yZomqIWPoVU8xl8+n1NvsLN/XY0EduU22cTeIyY9U4KIlz1O+SAjfHUVU1cfL
-         XETLDBe9ZqrMvaxfS3NQjXRf5Xetme2B4n9g5ykRxhShiVEI5L2hf7a7oqpmx+cUNnT8
-         uKlL9aYYxwjyFpsGvtiiLfOdk6Ubc9vqfOaVkSxyPSgZPxQpZYnjX/lW4ZE/Sbli7nia
-         ulLNs1kuN/aGCTIWfNiiklBsGOuFOrzcaopqLIaBOAHLq6hwM2L/xP7aAoY1AUaSLIL6
-         INNA==
+        Thu, 20 Apr 2023 08:33:16 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732E83C30;
+        Thu, 20 Apr 2023 05:32:58 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-18665c1776dso615787fac.2;
+        Thu, 20 Apr 2023 05:32:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681993954; x=1684585954;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=53J0OnnwTTvP3fEiCKzAu0mdWJJtadmQyC8IMtn5GfY=;
-        b=aINCC4nShoQ2TeUqOmoxUlzfVpKTTVTAWP7DZSP5nmSE9+MH7gwQN/vtG/At63zEMR
-         Y/OXvCwxzqPvLpHr37cdVBt7WHHZZGzZyZ6rqPxqqJHtAWAiTWifdrchrR+7wwIUYSw5
-         Xkm6DqgrThIGtpkI2YTXIorHFXL+w3jY+GVOHcf7zwRtjgyOgEbDFsUsmJikNI6cLAwY
-         gta0KYQLbotV2Buzb10hbMLuTh4EyiGqEBC7aMDe/K8DcanXSy+C5bFt/rnYLWnPu+ue
-         LicN2IZJ1QDkJA/KSvfedyC6EKTwFYSC0T43azDJw4hOFJ9l5DeXZjB3kXkyhJ829Hat
-         RGRw==
-X-Gm-Message-State: AAQBX9ds7qmRMsF6X8hH4tHoXiNi+m4qmNzWJY6fsphlcgEQ6ueuy6RP
-        sO68d4di+rooz2hUMEvr51cEBw==
-X-Google-Smtp-Source: AKy350bv1wfr1ZJ4XXmpodBIBbP1QCVtJLNuvfULoIwjZ8rzdQgW4efe5Z2wJ9xDI4AyZKxIj8vLsA==
-X-Received: by 2002:a05:6402:d1:b0:506:c238:4067 with SMTP id i17-20020a05640200d100b00506c2384067mr1451932edu.8.1681993954366;
-        Thu, 20 Apr 2023 05:32:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id p19-20020a05640210d300b005067d089aafsm707694edu.11.2023.04.20.05.32.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 05:32:34 -0700 (PDT)
-Message-ID: <090a1baf-ba2e-669f-7e31-cd97d1d5a970@linaro.org>
-Date:   Thu, 20 Apr 2023 14:32:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/6] ASoC: wcd938x: switch to using gpiod API
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Patrick Lai <quic_plai@quicinc.com>
-References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
- <20230420101617.142225-2-krzysztof.kozlowski@linaro.org>
- <6b355201-a957-4fca-a513-d5fa0742fb40@sirena.org.uk>
- <fe6202ee-2552-8b5c-c2d5-f2f7042b901d@linaro.org>
-In-Reply-To: <fe6202ee-2552-8b5c-c2d5-f2f7042b901d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        d=1e100.net; s=20221208; t=1681993977; x=1684585977;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=n7z0JmwHaex/uFH0ZYyDvToigtvE+3W/gbf5o0Is7Ho=;
+        b=OBkMo2LkzLoVM5h8kQpDEMcnrNY7rC2mn3o58ExbDs9bg55LcP6Pef7/HOnmjZ3AcD
+         BkbbQ62RF3hfEbaTI7iTo/rKh6rlRZDFZkWVBlx7ppw0Ar255LmUZO/JWC7rwmzH/zeF
+         9/qFWhNaixRJIQIM1NwZVicrTLR5R8wHn5MZMqMBfPr8AKWZiFfHUm3BtlcNYpnPCS/s
+         SYhyj66KETnJE9Powihy6xmsavVkx0FSOuJtyarZVYMLKB9bRDSRXw9sTQjhgO4hjI6J
+         FGuusluvyG54NbCOKNR9Ltov8RjYURSC5KKT6r/YoqOSqa92mfYUX8gTZ7fe30JKLzv9
+         hfhA==
+X-Gm-Message-State: AAQBX9cov7AAV7QllXKJFkO56Y2eDFUM/fzIeHwaNusuNPJnK5TtaT8W
+        8fg06uUe2bgGQzoazJITDziaWzfO5g==
+X-Google-Smtp-Source: AKy350Y107Wu1RAl2s+KH7dc+aZ13lz9F0Ey0F68DyRy1iyrsdRSN2Bux4WCxJa0ZbDCN1BlqkUgiw==
+X-Received: by 2002:a05:6871:707:b0:188:5:bc87 with SMTP id f7-20020a056871070700b001880005bc87mr1163265oap.6.1681993977566;
+        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e21-20020a056830201500b0069f8ff38bcbsm662919otp.16.2023.04.20.05.32.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
+Received: (nullmailer pid 2632253 invoked by uid 1000);
+        Thu, 20 Apr 2023 12:32:54 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Peter Chen <peter.chen@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+In-Reply-To: <20230420110052.3182-6-minda.chen@starfivetech.com>
+References: <20230420110052.3182-1-minda.chen@starfivetech.com>
+ <20230420110052.3182-6-minda.chen@starfivetech.com>
+Message-Id: <168199392033.2631023.325205203535545069.robh@kernel.org>
+Subject: Re: [PATCH v5 5/7] dt-bindings: usb: Add StarFive JH7110 USB
+ controller
+Date:   Thu, 20 Apr 2023 07:32:54 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,37 +80,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 14:30, Krzysztof Kozlowski wrote:
-> On 20/04/2023 13:58, Mark Brown wrote:
->> On Thu, Apr 20, 2023 at 12:16:12PM +0200, Krzysztof Kozlowski wrote:
->>
->>> -	gpio_direction_output(wcd938x->reset_gpio, 0);
->>> -	/* 20us sleep required after pulling the reset gpio to LOW */
->>> +	gpiod_set_value_cansleep(wcd938x->reset_gpio, 1);
->>> +	/* 20us sleep required after asserting the reset gpio */
->>
->> This is inverting the sense of the GPIO in the API from active low to
->> active high which will mean we're introducing a new reliance on having
->> the signal described as active low in DT.  That's an ABI concern.
-> 
-> It's bringing it to the correct level. Old code was not respecting the
-> DTS thus if such DTS came with inverted design, the driver would not work.
-> 
-> We were already fixing the upstream DTS users and I thought all of them
-> are fixed since long time (half a year) or even correct from the
-> beginning. Now I found one more case with incorrect level, which I will fix.
 
-No, my bad - all upstream DTSes are corrected since half year.
-
+On Thu, 20 Apr 2023 19:00:50 +0800, Minda Chen wrote:
+> StarFive JH7110 platforms USB have a wrapper module around
+> the Cadence USBSS-DRD controller. Add binding information doc
+> for that.
 > 
->>
->> I remain deeply unconvinced that remapping active low outputs like this
->> in the GPIO API is helping.
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  .../bindings/usb/starfive,jh7110-usb.yaml     | 131 ++++++++++++++++++
+>  1 file changed, 131 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
 > 
-> The code is mapping them to correct state. The previous state was
-> incorrect and did not allow to handle active high (which can happen).
-> This is the effort to make code correct - driver and DTS.
 
-Best regards,
-Krzysztof
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml:73:9: [warning] too many spaces after hyphen (hyphens)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230420110052.3182-6-minda.chen@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
