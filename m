@@ -2,251 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C657F6E88BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90206E88C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbjDTD26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 23:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S231241AbjDTDbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 23:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbjDTD2e (ORCPT
+        with ESMTP id S232704AbjDTDa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 23:28:34 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C60422B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 20:28:04 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b60366047so503773b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 20:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681961284; x=1684553284;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YDyVsaH4pVJocXiNYxHqnYnlvV9ip3excIUFff8vOpo=;
-        b=bSRgqMnlr0Mkn8uDnOHS9EVNtawNiErGgQ8TMPPeH3fNCfqjgdmHSLBqacH5y2+hjl
-         7+7qYJvFpWiExSjMuHWir+g63IEG3q0vtMbm/Brd3hsIEV93D+pTwjwUgMiyiEASJn8X
-         XdJGYRhLqIGkdcJNy0zEooO+XjsjfV6sD3VDB3WVIBV9H9asO9MaG6KeizaAw6YTl6WR
-         w3aTQQBPA+H5ymbOt9kxjgP33DKA494k0JDkwHoHBp1EN3pitGRKQLCa+BLQRBD85ERj
-         ub6ZsNcBIvLYRZ9gQDBFayBe21LVOlOyYDK/QnoH7rxxetvcRds3Y5FKw3P8bKXWpyAv
-         4dzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681961284; x=1684553284;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YDyVsaH4pVJocXiNYxHqnYnlvV9ip3excIUFff8vOpo=;
-        b=R5akik2C9rcY6HexobzYaDG4jaT5op7NrrWniJ4fHmoBsq6kcTLzYOPnikT6csmlIq
-         yHCC0Fsvse9FhgXQSby6Abjg6R9I5UpVOzQE8PhSN8O9kg1hyCz0bcCpYBw1mNXxscD2
-         BT0hLlBF73/6Nfoy+NOFqty9sLhlR/E2KtlOpMpC+H3tMZRfa/xPUKQ4vQtQBTahZJP6
-         QwFpKTTxTIXquXc/p2Nc2zwlmfeZ050/lGrVhlgPNG/6O/ptbd/N6kaT07rhHf5uE/LO
-         vjLwMji0L6p0V2nupGU+QGIaaq3yPZT7ec4mOor6JBoQQh5okkh4l9Yc9xsSL4O2HmLG
-         JOmw==
-X-Gm-Message-State: AAQBX9fqK87mjEBA0AchffY8p9huaolQ5MgQ7XFen7HArGNNJJa77FrM
-        nO+DA+RTvw89Dj8bBZiSnwOSRg==
-X-Google-Smtp-Source: AKy350ao8p06O+vO1ADPVqJeEMwwoZVuG0RI8jQ8abMA7rOJTOIumxZ2VImkDhIbEssKZPr6IgfoPw==
-X-Received: by 2002:a05:6a20:8f0d:b0:ef:5f:3c15 with SMTP id b13-20020a056a208f0d00b000ef005f3c15mr143865pzk.47.1681961284422;
-        Wed, 19 Apr 2023 20:28:04 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id z15-20020a655a4f000000b00517abaac366sm115231pgs.74.2023.04.19.20.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 20:28:04 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to access integer type of variable array
-Date:   Thu, 20 Apr 2023 11:27:35 +0800
-Message-Id: <20230420032735.27760-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
-References: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
-MIME-Version: 1.0
+        Wed, 19 Apr 2023 23:30:58 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2136.outbound.protection.outlook.com [40.107.255.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3223B40D4;
+        Wed, 19 Apr 2023 20:30:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UxtxF8NhqURvH+Gv5gheFrmACihD7F65LLF4cQOBKJ2iqLD4wswp86b01dvK7vMJKzLANY9MTiV+lDIIsYWuPrvkaOTnGI/HLCiqn3gTK+prpX6dKXOfnTOe+eIrvvKov/oPvwrPm8oBnG2wrd0P6HzanLghLlJV3nQRHZTRgR99EMatDuIHCnfr/4fJFneK0lr2eD1ErkE9SjFMGBcY2KgpNAShBuzQk221w21eylLq2BJ6usDUoG13YrbeqyELTbCOVraE3IZS7f3f7OYdFonrTygMqzBPKtoa5sFkl2qEjXqHyfHwKLQI4TImJ63hZKyHK4fuwnnWJwH6SFvtRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ge4u8fViut+57+bPtIgPk2Hv4Bx456A3lFV5JQ/cGPM=;
+ b=XbWuNYLJVQU2atkvuKVJfjUrP/6c912YsaKQOuJk+fg6lrDTc/YdHvFH1jCt00TRUFoeSq4QIaLOT1Voq4HZVYauw/3gOaZR7HykkVz/aqyJYTHBSLPZ6aKU2L0xndRr6+UEoOiezMOfX+8ivu9YNjQnONsycU1C0VKAup8YcNALj2Fhwvz3mAw5yr0C2bXxaQ6J5jSluRStZeCbV0cP1g/HEEaquDlq9aT2zY1Jc7fZqhm/SfjEXSc9/t6xY8P5YM2ZvckBQEYlGV+GnNpfm2xY41llVckSaIHxIk3RkfCuGbNo3ogO1IirMjDRzgWcULaWbeE7OPpfhDXuVO+B7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ge4u8fViut+57+bPtIgPk2Hv4Bx456A3lFV5JQ/cGPM=;
+ b=nouAvdeEdHC0y1UOsKNigogNxrmOPzc1Ejb685c0ugh5ogcAeLdc90yrNi62eIpXuzGHZZcdiWHtc6wp94p6CHlxabelOraiKGI6miaxeDMkD+pbZHmqHPKDJDg03wRowUqzW4kPq4vZ30S3Sw+Mtu+pH+M9aU3DglYZGuh2P4KCOV3Aze15sm4nxAaODOmKZOOOUcT4cFk686ZwY3dUlDSaD90IfjAImz5zYXQASnSqEGtkzMJnX7I91sbGIn4bSm4lsC06r3JL4vne9TgjK/Z9PIFWfU+QYVme4GTDgrj5e5TfQWLX30vY6JK1rVNOQN4cdgncjNgSHY7NPNwlJA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4139.apcprd06.prod.outlook.com (2603:1096:4:fb::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 03:30:49 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%7]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 03:30:49 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org
+Cc:     chao@kernel.org, frank.li@vivo.com,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        mhiramat@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v4 1/2] f2fs: refactor struct iostat_lat_info
+Date:   Thu, 20 Apr 2023 11:30:39 +0800
+Message-Id: <20230420033039.72746-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <ZEBPwz4fJATKs22g@google.com>
+References: <ZEBPwz4fJATKs22g@google.com>
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0031.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::11) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4139:EE_
+X-MS-Office365-Filtering-Correlation-Id: a06ceded-6131-4005-e21e-08db414fa24c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uc8w/6wAfxpwYT9y7yuO7qOon/aSZJMBVi2hqKMHlVLI2pQBXB1khTB12Mfpq/BfCc5AxiUbl0HCUS/zqPqmuzhgjgYeZuZdyAtD0gYsRSInkgdapnhBwKILCUtN69ZyOJpTnw4l2UIM/YUQPe/4JxkaDKMV8A1g9cDFp6EJLtCKc7s6uFBx6GX7EWgDMwQ6efMCmXOfNSy/2fPglqPxuN5gyBcQ40vyci7pZjhZGjiQJENI69fa3Abr5ZWgXVB05lZStNzTKd3cNDuk3j8+eanjg3S4Rl5wftxzHOsMjzSVnFHsVmNjO+EpLU4g4qYk4N0TcsKjJM2JWTHst3/kWmQZUt9fMueTXDWxXN3O4/XXcla3+4lNz46moe1GzGnidzttoHBb+wAePoqw2PI9MlDI5Br5Mx7+EkZSPINJME0xo5LqtxZLS0+YBdnRcWQpK2hB3VQ6l91oGWgpPfE+QIHB2/9su1SkB6LhVR2Wjps5L7v7UbQqiHqnlfa6a3RCxtpQJg1+viWIQ/cS/UxrZ3KoqxgG3xKfWkvbNrZhC1hcjWSZcmqeZTUcolyhppAeO7pKnCxtfQMYPpbHcoq6BpRVKOOGwvGWfRKxY4jmnelkX6aAk0EyinuPIPsmrcD5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199021)(4744005)(86362001)(36756003)(2906002)(6486002)(52116002)(6666004)(186003)(2616005)(1076003)(26005)(6506007)(6512007)(478600001)(66476007)(6916009)(4326008)(66556008)(66946007)(41300700001)(38100700002)(38350700002)(316002)(8676002)(8936002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gUkyuIDFl2niyfCQUzx25bHPxB1EqfB8JeDSGuGgIGCxUO6NWyrnk9d4lgrz?=
+ =?us-ascii?Q?l3975q6xEYJCkKEVIXHrApz9g2ErXLmIMyhjimaLs8wOzkHlai7ENifTdSNE?=
+ =?us-ascii?Q?QgKcb9nP7rFRRu8bewMgBMlL1OWD0SDnfJeIoVRHtqRMVpMmnEJBu2jWVaA1?=
+ =?us-ascii?Q?+Jw4yYDhfRG99/sYKQ7it5SDhSv9ro6W4tyBqc3w4XsqjMPvU6Uenb8btz98?=
+ =?us-ascii?Q?FmsfMY8X2jWwGdp6Hs2onnhU0GAPAnZRZLFrOI7MX/3l8uoIq66mPyziDsOW?=
+ =?us-ascii?Q?vDgSx3QzlIsKixllmyuxJiStvptrNcPFZFxgoPeh1sRrR09TdyDwcDNP+Um/?=
+ =?us-ascii?Q?VVRasDY/soaZroGbGUx3qCde3A9SzgDMncHbWFkEK8w7IUYDuJ6qvRDOGtuy?=
+ =?us-ascii?Q?3RT73Ur/pivmSCmuB+ZcZiNFIt9wkdACDTiEuJwizaLEa26SB5f8kZGpe3if?=
+ =?us-ascii?Q?VQbzWTblP8BRMsXMpzvuTok1emLERLY+xYOjrW43xgMwRXz7cK7NcnA5hNMS?=
+ =?us-ascii?Q?B6TmesEfU/OpaoDgN3z982EKZS7XyvvVofLg1e0USu3OVZQf+R3DvY4jSxDd?=
+ =?us-ascii?Q?XZSl95hwcw+PRYFIsePdcafZ1xRqUe+5C25YdYoUnChP8vkaB5tKMmHmwPIj?=
+ =?us-ascii?Q?KEFxpIfpLzE/2E+RgHCtmbK10QxWDtChT679cS1tzUu2G0QW5olZACzt+0ui?=
+ =?us-ascii?Q?5wsE2glBldeSxscv2KB1JJQ0IRaT4FcyXMY+8oOdLlNJ/45Z3W9cyWksgekA?=
+ =?us-ascii?Q?Go6NVdr0lfd4SFf5efz71My1YSmgwrY0Ry1VX/ojQtu+M9o0mtX7yb+c2deY?=
+ =?us-ascii?Q?QCN697e+ms8xDWm3D8MNy674YPLm7ICA8V4TTEsOhB0loivgHxKOE3jxWTkO?=
+ =?us-ascii?Q?Gg655jo6wzTT3vLPblgUUyZ6xJCzhvPe3Rw/RaUGtI+1DJzcUUdnCX/4L5iw?=
+ =?us-ascii?Q?VxXfIzbDsrn+0enWDWA54OCwU38f8K201RRIyx3LYHiH0GopG30Wh2PwHR2d?=
+ =?us-ascii?Q?VUUOIoPCzNOvXYxVVAQ390+SPVzywOorwr0Ba8gTl6UaH+xTAl0Mf7siqRQH?=
+ =?us-ascii?Q?F5qXMQ7aPrUckUs//H04NLOT4nnH9946Nw2/HbXqOObU5V4YKYlKWhSySpdO?=
+ =?us-ascii?Q?TUUU6F8UkqLf7NrNvIxy7l/kPkE+0XECmd2ANegSQBPAu77zXCyo4Pvbdeo2?=
+ =?us-ascii?Q?Ns/9MG3GeKBNLJmFGKkRvU02I1KkVuTHefKIODpwdh4w4lXHwzSAV4O7WF/J?=
+ =?us-ascii?Q?bz7fCVeMw1um31Q8uGxFrsESQMzPOlPBr8jnp3A/VU/B7522XjOIJzFsB74w?=
+ =?us-ascii?Q?TVmStyYgYf1jt0sKZdNaqXXSgPCjnjEAMePsFO15hWA3RmUA+FxH8CJ9r/Qi?=
+ =?us-ascii?Q?aFUX4ehDxaBEIL94rK5aYi2c4mquyXSBJH6mczKB5HFVMG2k+Mz+vE0xMSA1?=
+ =?us-ascii?Q?O4hbGNblCX4c4Gikz+7VQKJ99tDvBwogvMiy/b2MOoo+vyhSFTcdL7x5iZfp?=
+ =?us-ascii?Q?XC2Xb4kYuWBCKXZ5dfu8+tBnDU4PpIOZkdqBdLNu1PwODu8MvFkZ29K6eUzm?=
+ =?us-ascii?Q?UQ3j9n676yGn9PzjxMPFE+CtwCMBHEpPPk3G2MGc?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a06ceded-6131-4005-e21e-08db414fa24c
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 03:30:48.6700
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BYyjqd2JmhRfD/tpBl+NERMhpz/f6oWTOmS2hHZco6fRXfu5yj0u3Zj2GlA5seztZtrmPG4kwSc8zLZXR3d3Dw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4139
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+> > +		ctx = iostat_get_bio_private(bio);
+>
+> This ctx is not used for iostat.
 
-Add prog test for accessing integer type of variable array in tracing
-program.
-In addition, hook load_balance function to access sd->span[0], only
-to confirm whether the load is successful. Because there is no direct
-way to trigger load_balance call.
+Considering that the next patch needs to store the discard_cmd pointer
+in bio_iostat_ctx, there is no need to add a new variable.
+We just need to rename post_read_ctx to data.
+Change bio_iostat_ctx->post_read_ctx to bio_iostat_ctx->data?
 
-Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 20 +++++++++++++++++++
- .../bpf/prog_tests/access_variable_array.c    | 16 +++++++++++++++
- .../selftests/bpf/prog_tests/tracing_struct.c |  2 ++
- .../bpf/progs/test_access_variable_array.c    | 19 ++++++++++++++++++
- .../selftests/bpf/progs/tracing_struct.c      | 13 ++++++++++++
- 5 files changed, 70 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/access_variable_array.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_access_variable_array.c
+Following the above logic, should get_post_read_ctx be changed to iostat_get_bio_data?
+Since the function is located in the iostat file, we added the iostat prefix.
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index fe847ebfb731..52785ba671e6 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -28,6 +28,11 @@ struct bpf_testmod_struct_arg_2 {
- 	long b;
- };
- 
-+struct bpf_testmod_struct_arg_3 {
-+	int a;
-+	int b[];
-+};
-+
- __diag_push();
- __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global functions as their definitions will be in bpf_testmod.ko BTF");
-@@ -63,6 +68,12 @@ bpf_testmod_test_struct_arg_5(void) {
- 	return bpf_testmod_test_struct_arg_result;
- }
- 
-+noinline int
-+bpf_testmod_test_struct_arg_6(struct bpf_testmod_struct_arg_3 *a) {
-+	bpf_testmod_test_struct_arg_result = a->b[0];
-+	return bpf_testmod_test_struct_arg_result;
-+}
-+
- __bpf_kfunc void
- bpf_testmod_test_mod_kfunc(int i)
- {
-@@ -195,6 +206,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	};
- 	struct bpf_testmod_struct_arg_1 struct_arg1 = {10};
- 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
-+	struct bpf_testmod_struct_arg_3 *struct_arg3;
- 	int i = 1;
- 
- 	while (bpf_testmod_return_ptr(i))
-@@ -206,6 +218,14 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	(void)bpf_testmod_test_struct_arg_4(struct_arg1, 1, 2, 3, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_5();
- 
-+	struct_arg3 = kmalloc((sizeof(struct bpf_testmod_struct_arg_3) +
-+				sizeof(int)), GFP_KERNEL);
-+	if (struct_arg3 != NULL) {
-+		struct_arg3->b[0] = 1;
-+		(void)bpf_testmod_test_struct_arg_6(struct_arg3);
-+		kfree(struct_arg3);
-+	}
-+
- 	/* This is always true. Use the check to make sure the compiler
- 	 * doesn't remove bpf_testmod_loop_test.
- 	 */
-diff --git a/tools/testing/selftests/bpf/prog_tests/access_variable_array.c b/tools/testing/selftests/bpf/prog_tests/access_variable_array.c
-new file mode 100644
-index 000000000000..08131782437c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/access_variable_array.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include <test_progs.h>
-+#include "test_access_variable_array.skel.h"
-+
-+void test_access_variable_array(void)
-+{
-+	struct test_access_variable_array *skel;
-+
-+	skel = test_access_variable_array__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_access_variable_array__open_and_load"))
-+		return;
-+
-+	test_access_variable_array__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 48dc9472e160..1c75a32186d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -53,6 +53,8 @@ static void test_fentry(void)
- 
- 	ASSERT_EQ(skel->bss->t5_ret, 1, "t5 ret");
- 
-+	ASSERT_EQ(skel->bss->t6, 1, "t6 ret");
-+
- 	tracing_struct__detach(skel);
- destroy_skel:
- 	tracing_struct__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_access_variable_array.c b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
-new file mode 100644
-index 000000000000..808c49b79889
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+unsigned long span = 0;
-+
-+SEC("fentry/load_balance")
-+int BPF_PROG(fentry_fentry, int this_cpu, struct rq *this_rq,
-+		struct sched_domain *sd)
-+{
-+	span = sd->span[0];
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-index e718f0ebee7d..c435a3a8328a 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-@@ -13,12 +13,18 @@ struct bpf_testmod_struct_arg_2 {
- 	long b;
- };
- 
-+struct bpf_testmod_struct_arg_3 {
-+	int a;
-+	int b[];
-+};
-+
- long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
- __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
- long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
- long t3_a, t3_b, t3_c_a, t3_c_b, t3_ret;
- long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
- long t5_ret;
-+int t6;
- 
- SEC("fentry/bpf_testmod_test_struct_arg_1")
- int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int, b, int, c)
-@@ -117,4 +123,11 @@ int BPF_PROG2(test_struct_arg_10, int, ret)
- 	return 0;
- }
- 
-+SEC("fentry/bpf_testmod_test_struct_arg_6")
-+int BPF_PROG2(test_struct_arg_11, struct bpf_testmod_struct_arg_3 *, a)
-+{
-+	t6 = a->b[0];
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.20.1
-
+Thx,
+Yangtao
