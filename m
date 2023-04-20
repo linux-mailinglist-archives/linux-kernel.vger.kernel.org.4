@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2196E941A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9579C6E941C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234852AbjDTMSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S234541AbjDTMTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbjDTMSp (ORCPT
+        with ESMTP id S229497AbjDTMTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:18:45 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C2A5B85
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:18:40 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f1763eea08so6582935e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:18:40 -0700 (PDT)
+        Thu, 20 Apr 2023 08:19:30 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95A95251
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:19:28 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b50a02bffso848039b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681993119; x=1684585119;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=V6W51aK7dtxbbEU35T6tokn9AAiBsIBkywYQixWbs7k=;
-        b=iTtiiG9BKoyTchdjjOZneyQjqTMORk610b8n4BxXsaAVPl7Gre4AdWZ/IZNDNikc0I
-         9oVvjGHvZF41a9aQZorUJ56/ayYdp2eb0S2ddGConjzfSKA77/+rl/OihAq2PPmibGz+
-         3MJ3YOqGm7W4S33UuqNz+ygwbVE75moawpJPeZtWIZX9xc0ZwDyQ9TAvIVZOwbLDZ73o
-         MzsNhmVeCjjzkg5C/2v32Up3CEjAnSjUcAvmv/g2ITv085Zm/Maye9fot1GHMz2rUQGh
-         ST4Ruw1sylm07dH9PtQmotS1+fDktwg9bD7iKezrkV+6UH8p/ngg6+ZdTHgtJG66cL00
-         ja9A==
+        d=9elements.com; s=google; t=1681993168; x=1684585168;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lmK7RRzrnjcZL4M0GJYjxUOojydiNJpe2Xc0Ee40inM=;
+        b=GBEM9NvW35nxV8WSrjU9tDx0qNgnBB4D/jLTe1J3oVItJXxwmuDQtD5Dso4rcqZ70C
+         2SVRYBmJx2mBOmhAH9p1k/YJTUsmbmy5wJhb23LWVQuN6TpbinzzVAhkHDrY9mPgJi/W
+         F1YVj3pI7Lcp3RPuQwnC6vQBsjawtsFHeU3wVPqDNFheVqWdmQ3neS/Hz8bz9eVEbsZ7
+         Y5+KEapDhjFq41o8ayffg619vyKMWVQVzmxbLcGVZHoq5LT4rqA17BU8sDisbKlK1Ds2
+         aZUWDVUTM0yNAzP2Tem3iBrNKhYNG+73K+CwegITJsduisDXPPSTKpCSl6cvXCsc4DHx
+         bv0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681993119; x=1684585119;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V6W51aK7dtxbbEU35T6tokn9AAiBsIBkywYQixWbs7k=;
-        b=lmDULUKHgASnjiE/voBhqDU6ZUZtFz86jtyAO5k9vs+YCd6bXJr7xVaxdxnxIcZdsE
-         r/seMNBQOx3jKpAlPsX48jpOnsx7VtjXsGA3+W/l+Uwo8LyeKOq1L6LFa4tJC/G02Sns
-         NfxW3d9Mfv9icj8UW17WVlEusRklN7vzJIhaMkMVBNWFpRPA/XVr83mk3qjE0XRMfXd9
-         jsgC665rB375Ec/efDVfufedjRiEUsTx+fkpR7eAO8eNwpio4f9QTe6kIvqi6wNV4gwQ
-         4WW6T4hoggdRVXf3jPRmcdEgIssdBgmTYooshyptB2T5wrpMf3dF1axQYQRKUQwsq/wX
-         ooug==
-X-Gm-Message-State: AAQBX9fzFddzIdWmZy9d9sEWUUfSzWKi2IG9sXSsGs6XiRH/DnzNYR9w
-        EwkF7afVrV4du/9wBJP5U1Sbbg==
-X-Google-Smtp-Source: AKy350ajYdesVgaKLsZF97mzYar7CBydA7JI6X215xO0mHTy3oZBXgMqc9PddsNj6bpO8qap5q6p8g==
-X-Received: by 2002:adf:f58d:0:b0:2f9:61b5:7796 with SMTP id f13-20020adff58d000000b002f961b57796mr1262812wro.29.1681993119207;
-        Thu, 20 Apr 2023 05:18:39 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:455d:d09b:3d7d:bb7d? ([2a01:e0a:982:cbb0:455d:d09b:3d7d:bb7d])
-        by smtp.gmail.com with ESMTPSA id c13-20020adfe70d000000b002fbaef32231sm1865638wrm.22.2023.04.20.05.18.38
+        d=1e100.net; s=20221208; t=1681993168; x=1684585168;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmK7RRzrnjcZL4M0GJYjxUOojydiNJpe2Xc0Ee40inM=;
+        b=RJyeSlypdOGgBXoi482EZDiKoxvbV4xhIMgLMUNSPSDKa/Tg+cV4xNOASF65loGkif
+         yo7xXhws0Y9q/pmmvQCw6r+tnQt0uVip/Gr0ljPdtLTP+zZB/FuC9YbWpWhNtIa1PAMY
+         waggAjtIa7W67OGERFcjdKOP3zhS1MGnD3qnGcU5j+lWrQl1eUS1v7c5yXPOoXG4EvYQ
+         cfvd4o/hYGw+kvRgy3WTZyPshUquQIZeFkLiBkh+vzuLPuauPjE/bAM1/R8mtlItQ8Y2
+         rPgvFK4vv+WKX62GRAk/0i7Uuav+bwXVbABhxezmZ2u4U6dCzVlyvky3ojmt4gU8VHLq
+         t81g==
+X-Gm-Message-State: AAQBX9eVP5DAo7ak+Xfrb4E82FpCvbJR8KoTiA/wHP17ZYjkZAO4phTy
+        fQelZYDlj9EZsOvHrpjt1cCPgQ==
+X-Google-Smtp-Source: AKy350YkyI76cBt+CLuOWpqVgwm/lLVOFuA/mF4q9QFwaF66DeDvFJpUlk6GzDVOUvhGLhKie56ZjQ==
+X-Received: by 2002:a05:6a20:7345:b0:f0:f610:2e0 with SMTP id v5-20020a056a20734500b000f0f61002e0mr2133216pzc.1.1681993168123;
+        Thu, 20 Apr 2023 05:19:28 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
+        by smtp.gmail.com with ESMTPSA id r78-20020a632b51000000b00520f316ebe3sm1037001pgr.62.2023.04.20.05.19.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 05:18:38 -0700 (PDT)
-Message-ID: <9037aa40-c441-b610-ed7b-2c9840dff751@linaro.org>
-Date:   Thu, 20 Apr 2023 14:18:37 +0200
+        Thu, 20 Apr 2023 05:19:27 -0700 (PDT)
+Message-ID: <079eca63-54f5-7a4b-3b1c-e2515ceae9cc@9elements.com>
+Date:   Thu, 20 Apr 2023 17:49:24 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [RFC PATCH 1/2] arm64: amlogic: add new ARCH_AMLIPC for IPC SoC
+Subject: Re: [PATCH v5] leds: max597x: Add support for max597x
 Content-Language: en-US
-To:     Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230419073834.972273-1-xianwei.zhao@amlogic.com>
- <20230419073834.972273-2-xianwei.zhao@amlogic.com>
- <20230419131416.cns3xvkbzjeyrnux@CAB-WSD-L081021>
- <661cea17-a4dd-75d1-6a7e-16efa5aea52b@linaro.org>
- <20230419160405.d7qfir3nv6tlxx2a@CAB-WSD-L081021>
- <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
- <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
- <1c7322c9-8d2d-1cd1-95dc-dd9ec861981f@amlogic.com>
-Organization: Linaro Developer Services
-In-Reply-To: <1c7322c9-8d2d-1cd1-95dc-dd9ec861981f@amlogic.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+References: <20230417094035.998965-1-Naresh.Solanki@9elements.com>
+ <20230420115035.GE970483@google.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20230420115035.GE970483@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -92,153 +77,265 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kelvin,
+Hi Lee,
 
-On 20/04/2023 10:43, Kelvin Zhang wrote:
-> On 2023/4/20 01:00, Dmitry Rokosov wrote:
->> [ EXTERNAL EMAIL ]
+On 20-04-2023 05:20 pm, Lee Jones wrote:
+> On Mon, 17 Apr 2023, Naresh Solanki wrote:
+> 
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 >>
->> On Wed, Apr 19, 2023 at 06:25:07PM +0200, Neil Armstrong wrote:
->>> On 19/04/2023 18:04, Dmitry Rokosov wrote:
->>>> On Wed, Apr 19, 2023 at 03:43:12PM +0200, Neil Armstrong wrote:
->>>>> On 19/04/2023 15:14, Dmitry Rokosov wrote:
->>>>>> On Wed, Apr 19, 2023 at 03:38:33PM +0800, =Xianwei Zhao wrote:
->>>>>>> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
->>>>>>>
->>>>>>> The C series SoCs are designed for smart IP camera
->>>>>>> applications, which does not belong to Meson series.
->>>>>>> So, Add ARCH_AMLIPC for the new series.
->>>>>>>
->>>>>>> There are now multiple amlogic SoC seies supported, so group them under
->>>>>>> their own menu. we can easily add new platforms there in the future.
->>>>>>> Introduce ARCH_AMLOGIC to cover all Amlogic SoC series.
->>>>>>>
->>>>>>> No functional changes introduced.
->>>>>>>
->>>>>>> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
->>>>>>> ---
->>>>>>>     arch/arm64/Kconfig.platforms | 12 ++++++++++++
->>>>>>>     arch/arm64/configs/defconfig |  2 ++
->>>>>>>     2 files changed, 14 insertions(+)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->>>>>>> index 89a0b13b058d..bfbc817eef8f 100644
->>>>>>> --- a/arch/arm64/Kconfig.platforms
->>>>>>> +++ b/arch/arm64/Kconfig.platforms
->>>>>>> @@ -162,12 +162,24 @@ config ARCH_MEDIATEK
->>>>>>>          This enables support for MediaTek MT27xx, MT65xx, MT76xx
->>>>>>>          & MT81xx ARMv8 SoCs
->>>>>>> +menuconfig ARCH_AMLOGIC
->>>>>>> +     bool "NXP SoC support"
->>>>>> NXP? Did you mean "Amlogic"?
->>>>>>
->>>>>>> +
->>>>>>> +if ARCH_AMLOGIC
->>>>>>> +
->>>>>>>     config ARCH_MESON
->>>>>>>        bool "Amlogic Platforms"
->>>>>>>        help
->>>>>>>          This enables support for the arm64 based Amlogic SoCs
->>>>>>>          such as the s905, S905X/D, S912, A113X/D or S905X/D2
->>>>>>> +config ARCH_AMLIPC
->>>>>> Do we really need a different ARCH for Amlogic IPC?
->>>>>> I can imagine that it's not the Meson architecture at all.
->>>>>> But maybe a better solution is just to rename ARCH_MESON to ARCH_AMLOGIC?
->>>>> It should be changed treewide, and is it worth it ?
->>>> As far as I understand, the A1 and S4 families are not fully compatible
->>>> with the Meson architecture, and we haven't provided additional ARCH_*
->>>> for them.
->>> The GXBB, GXL/GXM, G12A, G12B & SM1 are also not fully compatible,
->>> but they lie under the "MESON" umbrella which covers SoC since the
->>> Meson6 architecture. It's a facility to include/exclude Amlogic
->>> drivers/DT, nothing else.
-> GXBB, GXL/GXM, G12A, G12B , SM1 and S4 belong to media box.
-> So, "MESON" represents the media box series.
-> Up to now, "MESON" works well for all existing chips except A1 and AXG.
->>> If you compare it to BCM or NXP, it's different situation, the
->>> different ARCH_* actually targets totally different SoCs from
->>> completely different Business Units or from companies acquisitions.
-> Firstly, the new C series is totally different from previous MESON series.
->  From the perspective of application, the new C series is designed for smart IP camera applications,
-> while MESON series is designed for hybrid OTT/ IP Set Top Box  and high-end media box applications.
->  From the perspective of architecture, the new C series integrates the sensor interface, image signal processing unit, Dewarp, video encoder, neural networking processing unit,
-> which MESON series does not and will never have.
-> Secondly, there are C1 and C2 besides C3.
-> Moreover, more other series are on the way, such as T series.
-> If we always stick to "MESON", people will get more and more confused.
-> Therefore, I think it is the right time to add ARCH_AMLIPC.
-
-Thanks for sharing such details, we are all happy to see Amlogic's
-commitment to upstream of these SoC families.
-
-But as I explained, this ARCH_MESON doesn't define the SoC type
-but badly defines the Amlogic SoCs support.
-
->>> We should have named it ARCH_AMLOGIC since the beginning, but we
->>> can't change history.
-> Shouldn't we deserve a chance to make it right?
-
-Yes, so the right thing to do is to move to ARCH_AMLOGIC
-
->>>> In my opinion, it's a good time to split the Meson architecture into
->>>> proper subsets, or rename it treewide (maybe only config option
->>>> ARCH_MESON => ARCH_AMLOGIC).
->>> MESON is only a codename to differentiate from other SoC vendors
->>> because Amlogic used it as a codename for a long time.
->>> Compare this to Allwinner's "sunxi" or Qualcomm's "msm".
->>>
->>> This config has no functional mean, it's only a config namespace.
->>>
->>> Renaming it would need renaming it in all subsystems Kconfig/Makefiles
->>> and will certainly break builds with custom kernel configs
->>> in various publicly used builds like Armbian, meta-meson, LibreELEC,
->>> Debian, Suse, ...
-> Let's get back to ARCH_AMLIPC.
-> We just need to add ARCH_AMLIPC in the necessary subsystems Kconfig/Makefile.
-> This change will keep the existing MESON related code,  and will neither involve renaming nor break any builds.
-
-The goal of mainline Linux is to build as much as possible and
-be modular at runtime, the only supported configuration is arch/arm64/configs/defconfig
-and adding a new config to differentiate an Application type
-doesn't make sense.
-
->>> So it's pointless to change, and even add a different one since
->>> it's not a family differentiator since the Kernel is modular
->>> and works around DT to determine which drivers to probe.
-> Proper names play an important role in understanding the code, right?
-
-Yes, but stable config names also play an important role for the
-users for mainline, and there's a big number of users relying
-on the stable naming for all SoCs starting from Meson6.
-
-So if you really want to get rid of the ARCH_MESON, migrating to
-ARCH_AMLOGIC is the right thing to do, but it involves doing
-a treewide migration and there's no easy way to do this and make
-sure the users still manages to build for other Amlogic platforms.
-
-So as the Amlogic ARM/ARM64 SoC support maintainer I must make sure
-breakage don't happens, and so far I don't see how achieve that.
-
-Now, you can post a RFC so we can discuss on something.
-
-Neil
-
->>> Neil
->>>
->> Thank you for the detailed explanation; it makes sense!
->> Actually, I disagree with creating a separate ARCH without first reworking
->> all of its subsets - that's why I started this discussion.
->> Now, I see that you share my perspective and believe that C3
->> should be added to the ARCH_MESON subset, so I have no objections.
+>> max597x is hot swap controller with indicator LED support.
+>> This driver uses DT property to configure led during boot time &
+>> also provide the LED control in sysfs.
 >>
->> [...]
+>> DTS example:
+>>      i2c {
+>>          #address-cells = <1>;
+>>          #size-cells = <0>;
+>>          regulator@3a {
+>>              compatible = "maxim,max5978";
+>>              reg = <0x3a>;
+>>              vss1-supply = <&p3v3>;
 >>
+>>              regulators {
+>>                  sw0_ref_0: sw0 {
+>>                      shunt-resistor-micro-ohms = <12000>;
+>>                  };
+>>              };
+>>
+>>              leds {
+>>                  #address-cells = <1>;
+>>                  #size-cells = <0>;
+>>                  led@0 {
+>>                      reg = <0>;
+>>                      label = "ssd0:green";
+>>                      default-state = "on";
+>>                  };
+>>                  led@1 {
+>>                      reg = <1>;
+>>                      label = "ssd1:green";
+>>                      default-state = "on";
+>>                  };
+>>              };
+>>          };
+>>      };
+> 
+> Where is the DT binding document for this?
+> 
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ...
+>> Changes in V5:
+>> - Update commit message
+>> - Fix comments
+>> - Add necessary new line
+>> Changes in V4:
+>> - Remove unwanted preinitialise
+>> - Remove unneeded line breaks
+>> - Fix variable name to avoid confusion
+>> - Update module description to mention LED driver.
+>> Changes in V3:
+>> - Remove of_node_put as its handled by for loop
+>> - Print error if an LED fails to register.
+>> - Update driver name in Kconfig description
+>> - Remove unneeded variable assignment
+>> - Use devm_led_classdev_register to reget led
+>> Changes in V2:
+>> - Fix regmap update
+>> - Remove devm_kfree
+>> - Remove default-state
+>> - Add example dts in commit message
+>> - Fix whitespace in Kconfig
+>> - Fix comment
+>> ---
+>>   drivers/leds/Kconfig        |  11 ++++
+>>   drivers/leds/Makefile       |   1 +
+>>   drivers/leds/leds-max597x.c | 115 ++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 127 insertions(+)
+>>   create mode 100644 drivers/leds/leds-max597x.c
+>>
+>> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+>> index 9dbce09eabac..60004cb8c257 100644
+>> --- a/drivers/leds/Kconfig
+>> +++ b/drivers/leds/Kconfig
+>> @@ -590,6 +590,17 @@ config LEDS_ADP5520
+>>   	  To compile this driver as a module, choose M here: the module will
+>>   	  be called leds-adp5520.
+>>   
+>> +config LEDS_MAX597X
+>> +	tristate "LED Support for Maxim 597x"
+>> +	depends on LEDS_CLASS
+>> +	depends on MFD_MAX597X
+>> +	help
+>> +	  This option enables support for the Maxim MAX5970 & MAX5978 smart
+>> +	  switch indication LEDs via the I2C bus.
+>> +
+>> +	  To compile this driver as a module, choose M here: the module will
+>> +	  be called leds-max597x.
+>> +
+>>   config LEDS_MC13783
+>>   	tristate "LED Support for MC13XXX PMIC"
+>>   	depends on LEDS_CLASS
+>> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+>> index d30395d11fd8..da1192e40268 100644
+>> --- a/drivers/leds/Makefile
+>> +++ b/drivers/leds/Makefile
+>> @@ -53,6 +53,7 @@ obj-$(CONFIG_LEDS_LP8501)		+= leds-lp8501.o
+>>   obj-$(CONFIG_LEDS_LP8788)		+= leds-lp8788.o
+>>   obj-$(CONFIG_LEDS_LP8860)		+= leds-lp8860.o
+>>   obj-$(CONFIG_LEDS_LT3593)		+= leds-lt3593.o
+>> +obj-$(CONFIG_LEDS_MAX597X)		+= leds-max597x.o
+>>   obj-$(CONFIG_LEDS_MAX77650)		+= leds-max77650.o
+>>   obj-$(CONFIG_LEDS_MAX8997)		+= leds-max8997.o
+>>   obj-$(CONFIG_LEDS_MC13783)		+= leds-mc13783.o
+>> diff --git a/drivers/leds/leds-max597x.c b/drivers/leds/leds-max597x.c
+>> new file mode 100644
+>> index 000000000000..edbd43018822
+>> --- /dev/null
+>> +++ b/drivers/leds/leds-max597x.c
+>> @@ -0,0 +1,115 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Device driver for leds in MAX5970 and MAX5978 IC
+> 
+> "MAX5970 and MAX5978 IC LED support"
+> 
+>> + * Copyright (c) 2022 9elements GmbH
+>> + *
+>> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> + */
+>> +
+>> +#include <linux/leds.h>
+>> +#include <linux/mfd/max597x.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +#define ldev_to_maxled(c)       container_of(c, struct max597x_led, cdev)
+>> +
+>> +struct max597x_led {
+>> +	struct regmap *regmap;
+>> +	struct led_classdev cdev;
+>> +	unsigned int index;
+>> +};
+>> +
+>> +static int max597x_led_set_brightness(struct led_classdev *cdev,
+>> +				      enum led_brightness brightness)
+>> +{
+>> +	struct max597x_led *ddata = ldev_to_maxled(cdev);
+>> +	int ret, val;
+>> +
+>> +	if (!ddata->regmap)
+>> +		return -ENODEV;
+>> +
+>> +	/* Set/clear corresponding bit for given led index */
+>> +	val = !brightness ? BIT(ddata->index) : 0;
+>> +
+>> +	ret = regmap_update_bits(ddata->regmap, MAX5970_REG_LED_FLASH, BIT(ddata->index), val);
+>> +	if (ret < 0)
+>> +		dev_err(cdev->dev, "failed to set brightness %d", ret);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int max597x_setup_led(struct device *dev, struct regmap *regmap, struct device_node *nc,
+>> +			     u32 reg)
+>> +{
+>> +	struct max597x_led *ddata;
+>> +	int ret;
+>> +
+>> +	ddata = devm_kzalloc(dev, sizeof(struct max597x_led), GFP_KERNEL);
+>> +	if (!ddata)
+>> +		return -ENOMEM;
+>> +
+>> +	if (of_property_read_string(nc, "label", &ddata->cdev.name))
+>> +		ddata->cdev.name = nc->name;
+>> +
+>> +	ddata->cdev.max_brightness = 1;
+>> +	ddata->cdev.brightness_set_blocking = max597x_led_set_brightness;
+>> +	ddata->cdev.default_trigger = "none";
+>> +	ddata->index = reg;
+>> +	ddata->regmap = regmap;
+>> +
+>> +	ret = devm_led_classdev_register(dev, &ddata->cdev);
+>> +	if (ret)
+>> +		dev_err(dev, "Error initializing LED %s", ddata->cdev.name);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int max597x_led_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device_node *np = dev_of_node(pdev->dev.parent);
+> 
+> My previous question about having its own compatible string was ignored.
+As previously stated, the MFD driver for max597x already has a 
+compatible string that serves its purpose, so I opted not to include a 
+separate compatible string for the leaf driver.
+Prior to implementing this approach, I reviewed other implementations 
+within the MFD driver, such as the sy7636 which uses the similar 
+approach in leaf driver.
+
+> 
+>> +	struct regmap *regmap;
+>> +	struct device_node *led_node;
+>> +	struct device_node *child;
+>> +	int ret = 0;
+>> +
+>> +	regmap = dev_get_regmap(pdev->dev.parent, NULL);
+>> +	if (!regmap)
+>> +		return -EPROBE_DEFER;
+>> +
+>> +	led_node = of_get_child_by_name(np, "leds");
+>> +	if (!led_node)
+>> +		return -ENODEV;
+>> +
+>> +	for_each_available_child_of_node(led_node, child) {
+>> +		u32 reg;
+>> +
+>> +		if (of_property_read_u32(child, "reg", &reg))
+>> +			continue;
+>> +
+>> +		if (reg >= MAX597X_NUM_LEDS) {
+>> +			dev_err(&pdev->dev, "invalid LED (%u >= %d)\n", reg,
+>> +				MAX597X_NUM_LEDS);
+>> +			continue;
+>> +		}
+>> +
+>> +		ret = max597x_setup_led(&pdev->dev, regmap, child, reg);
+>> +		if (ret < 0)
+>> +			dev_err(&pdev->dev, "Failed to initialize LED %u\n", reg);
+> 
+> You've ignored my previous review.
+I would like to clarify that I did not intend to overlook your previous 
+review comment. Rather, I have taken it into consideration and evaluated 
+it in the context of the current approach, which is derived from the 
+code in other LED drivers.
+To eliminate any potential confusion, it may be best to adopt a 
+consistent approach that all LED drivers should adhere to in similar 
+circumstances.
+> 
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static struct platform_driver max597x_led_driver = {
+>> +	.driver = {
+>> +		.name = "max597x-led",
+>> +	},
+>> +	.probe = max597x_led_probe,
+>> +};
+>> +
+>> +module_platform_driver(max597x_led_driver);
+>> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+>> +MODULE_DESCRIPTION("MAX5970_hot-swap controller LED driver");
+>> +MODULE_LICENSE("GPL");
+>>
+>> base-commit: 9d8d0d98885abba451d7ffc4885236d14ead3c9a
 >> -- 
->> Thank you,
->> Dmitry
+>> 2.39.1
 >>
->> _______________________________________________
->> linux-amlogic mailing list
->> linux-amlogic@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-amlogic
-
+> 
+Regards,
+Naresh
