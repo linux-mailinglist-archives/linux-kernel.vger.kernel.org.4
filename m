@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D706E9B7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920876E9B85
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjDTSVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        id S230102AbjDTSWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjDTSVN (ORCPT
+        with ESMTP id S229468AbjDTSWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:21:13 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552EB2736
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:21:12 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6a60460a23dso1072676a34.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1682014871; x=1684606871;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l8aVj5sgReWVnhyaJ2DUsoH6IQ6uZim3OtgpbE5sEkw=;
-        b=BWwDVjWMd2BipQFjAhTnRYDBN6FvvvN8guK4EtPUMIOijijbNcRlW/2YAnFzhHRIx1
-         dylrJi4rqfKLIY/8BlpTj/ch7gaWj32/Ah9q5j+mrKpc75cznRoPMqkEJBQe+LwpinPH
-         ypN6BtUIPbXfS+n6+ctmzjh/5UXbhcvK8q5Ve3XDbqIjGPFIyPyXxQYwQWUdZcTkFdmS
-         I2lPCqO1Gy3JLmPvRv79rn/3FOb6mUtb83g/80cZSFFvZhB+/Q3QBbY/eUhuWn7b0UfG
-         kVzeTjy3fxX6fIaG6OvSKOQZ3vsn1Bx1IJBtA92DOIozsAPjGKNaSg7un/YRrd8XuSW9
-         RLuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682014871; x=1684606871;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l8aVj5sgReWVnhyaJ2DUsoH6IQ6uZim3OtgpbE5sEkw=;
-        b=HHSwIHtPhQN3yYmDfUUxXLPo21Suha2NjfHMLvrq2yyEsegX/Ic9wpXKvEuL1mh+ux
-         4kYKCj6MnRDPKoO51h7RDWtxzhiXvgE+3d2OxrzmkGh4mDgcKyJ36nqfBK6hIv9u8PFr
-         XvehiMNgzhWpaRQeQXBCOUHRSljaJ5oLwfBUoDMsLfWKVL8VUG1XtbC3/MwbeUgP/Y4u
-         V6HmfxYSlBLftWlYxQaqGZXs99ippzVAzzsD3NeGivr5nKyI3ZE7d47tYGzf35QYrzA+
-         qJYeonK6M2KS2XzjTuXu8usqnJRpmI4iB3WyxVmp7tER5ucuj3vVGHFEN2lmuwkEvkxf
-         l4pw==
-X-Gm-Message-State: AAQBX9cH8TNqS0xW8SBeFIIBBZQaxBlNt88An3TPfxg6p1FDCC6rv0bp
-        +aLpZLG+YdioVediL2fzxpp2tg==
-X-Google-Smtp-Source: AKy350a4fxn4lwi7pJPT7kHlmDB/6gMxEkSsVX78x89Y3lGiQGmuWjbSnKwTDM0NLHsZSFOvm8E4fQ==
-X-Received: by 2002:a9d:798a:0:b0:6a5:faad:b812 with SMTP id h10-20020a9d798a000000b006a5faadb812mr1299608otm.7.1682014871696;
-        Thu, 20 Apr 2023 11:21:11 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:44fb:7668:3bb3:e9e3:6d75? ([2804:14d:5c5e:44fb:7668:3bb3:e9e3:6d75])
-        by smtp.gmail.com with ESMTPSA id s7-20020a056830148700b006a44d90de05sm939837otq.69.2023.04.20.11.21.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 11:21:11 -0700 (PDT)
-Message-ID: <77920a21-96ab-54e5-db3d-5083a11d5691@mojatatu.com>
-Date:   Thu, 20 Apr 2023 15:21:06 -0300
+        Thu, 20 Apr 2023 14:22:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3B72736;
+        Thu, 20 Apr 2023 11:22:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AA8764B33;
+        Thu, 20 Apr 2023 18:22:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF48C433EF;
+        Thu, 20 Apr 2023 18:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682014962;
+        bh=MC9bIJY5eEXpsBB/snWTb+aONBCQciptukUfqls2Dqs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j0wtJUTbUJ9YsEcniesi3hoBs2Z4jnPDhAgHt6Ibdq8pHeCL4c9ZReNQAZE4DSLmD
+         2t7U1iHmlzBlrm+5haAFX3eoviviORlWRXMls+XSUIUPvm5dvVb1pY5/Qg0VEoY9fi
+         kzFoG8v6wEmuqZG739tXKgncuJjOijRBnZwjrFI3xR/PztHKhqHg0UeJZOnV0I5B2b
+         cQHfIY52eWYlGTGHJ7ZXVXI06KJWqlrTwvk0GxJosCLBnlR3vj/j9N/5pW3dA1L+1T
+         GIFGp0HwUrI4jDWNKXmo5uwm55/foTX+cpzglHMpNJCJhwKeGi2b+i7hrFKwB470LZ
+         u6E3JqOvq9RaA==
+Date:   Thu, 20 Apr 2023 19:22:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Patrick Lai <quic_plai@quicinc.com>
+Subject: Re: [PATCH 3/6] ASoC: codecs: wcd938x: Check for enumeration before
+ using TX device
+Message-ID: <3fa4060d-919e-4e25-8afc-09d3abd13575@sirena.org.uk>
+References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
+ <20230420101617.142225-4-krzysztof.kozlowski@linaro.org>
+ <dfe88b94-215b-a86f-60b4-25d2f9ea0e5f@linux.intel.com>
+ <41daab8e-e116-83b3-234f-ece43817a0f5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net] net/sched: cls_api: Initialize miss_cookie_node when
- action miss is not used
-Content-Language: en-US
-To:     Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Paul Blakey <paulb@nvidia.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230420175952.1114302-1-ivecera@redhat.com>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <20230420175952.1114302-1-ivecera@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SQnoPQeFBM8vzH9P"
+Content-Disposition: inline
+In-Reply-To: <41daab8e-e116-83b3-234f-ece43817a0f5@linaro.org>
+X-Cookie: Above all else -- sky.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 14:59, Ivan Vecera wrote:
-> Function tcf_exts_init_ex() sets exts->miss_cookie_node ptr only
-> when use_action_miss is true so it assumes in other case that
-> the field is set to NULL by the caller. If not then the field
-> contains garbage and subsequent tcf_exts_destroy() call results
-> in a crash.
-> Initialize .miss_cookie_node pointer to NULL when use_action_miss
-> parameter is false to avoid this potential scenario.
-> 
-> Fixes: 80cd22c35c90 ("net/sched: cls_api: Support hardware miss to tc action")
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> ---
->   net/sched/cls_api.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-> index 35785a36c80298..8bc5b9d6a2916e 100644
-> --- a/net/sched/cls_api.c
-> +++ b/net/sched/cls_api.c
-> @@ -3224,8 +3224,12 @@ int tcf_exts_init_ex(struct tcf_exts *exts, struct net *net, int action,
->   	exts->action = action;
->   	exts->police = police;
->   
-> -	if (!use_action_miss)
-> +	if (!use_action_miss) {
-> +#ifdef CONFIG_NET_CLS_ACT
-> +		exts->miss_cookie_node = NULL;
-> +#endif
->   		return 0;
-> +	}
->   
->   	err = tcf_exts_miss_cookie_base_alloc(exts, tp, handle);
->   	if (err)
 
-The problem described here also happens in the case some error happens 
-if the action array allocation fails and before the 'miss_cookie_node' 
-assignment inside 'tcf_exts_miss_cookie_base_alloc()'.
+--SQnoPQeFBM8vzH9P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Seems like a better way to solve this issue is to just:
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 35785a36c802..3c3629c9e7b6 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -3211,6 +3211,7 @@ int tcf_exts_init_ex(struct tcf_exts *exts, struct 
-net *net, int action,
-  #ifdef CONFIG_NET_CLS_ACT
-         exts->type = 0;
-         exts->nr_actions = 0;
-+       exts->miss_cookie_node = NULL;
-         /* Note: we do not own yet a reference on net.
-          * This reference might be taken later from tcf_exts_get_net().
-          */
+On Thu, Apr 20, 2023 at 07:57:11PM +0200, Krzysztof Kozlowski wrote:
+> On 20/04/2023 16:18, Pierre-Louis Bossart wrote:
 
+> > the alternative is to move regmap to be cache-only in the probe and
+> > remove the cache-only property when the device is enumerated.
+
+> The driver wants already to use the regmap in RW just few lines below in
+> wcd938x_set_micbias_data().
+
+> I guess I could move this entire piece of code to other place...
+
+The register map is fully writeable (modulo any volatile registers of
+course) in cache only mode, it's just that hardware access is
+suppressed.  The driver needs to resync the cache when transitioning out
+of cache only mode (often in a runtime PM resume or something), this
+will ensure any pending changes make it to the hardware.
+
+--SQnoPQeFBM8vzH9P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRBgusACgkQJNaLcl1U
+h9D0RAf/cROt/EeqDKM/NmkHJJDxGDcNFwm4k6RUHi9dOYZHqRhsCfzoDktJPj/z
+wIEQ4EinB1hj8064fLv0H3lwO4R9neyrRKWn7dPxL3wVIGPN1bzsau1QGwxkCvec
+33tnNePJcfiGFNRU1/ibgl4pYack71zaiJgNHA92iS+1Efhn5aaN1DbwCXgP6Acg
+LMnIBYG5IMJaw/iXuQEs3lfKeF4y7WZicAt1TTVFuIYbmVTh79gS01oaW4xeSr7K
+SGXuN5MgxfrlS2vzl82LshVuHRiyXKtBf//XvEDGHyJ+5NsIURh6XLOZbSMex3mE
+Efb5MyFOTtq7X99b1Qhisc0TUyp4Aw==
+=WZyC
+-----END PGP SIGNATURE-----
+
+--SQnoPQeFBM8vzH9P--
