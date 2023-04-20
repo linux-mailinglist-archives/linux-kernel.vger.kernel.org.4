@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC2D6E9002
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802646E9003
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbjDTKWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S234597AbjDTKWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbjDTKVg (ORCPT
+        with ESMTP id S234792AbjDTKVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:21:36 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDF21FC4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:20:43 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id h8so2221046ljf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681986042; x=1684578042;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K4p+Jwfh4f6O4EpesT7nZbdGy3tVSOOPuyRDN6YS6gs=;
-        b=EAwDI9yyVDLLbl6cAmcIwJbwcp8ZpDiZ7blcuGT4r1FqsctbdaZ4XrGUljVnifY3Zn
-         Gndd3JpvtkoUpNJkkB37SgCfPDPh3+TTL6sH3TGYYmTp99MHNg1Q5KxI+eItbzsIWlRv
-         UDveXKcjkTTPp4ZqP0Hx+0XrHpoNUfoJDi/J2NinFWQ1GW19KdEjHhm80L9X4DW/rc1j
-         eFWJVxxL9lI1ylb4JevgcquIYmeSA+0qUBd/wWCniICejXyZTJVK4RLwiUlHvueh+dUa
-         W/ST1rGntxJ+10N1r1mCsoT4xsmxNi34U/nXKOmhH6O6HRePbYTO9OLzUdPrQjc+Oq84
-         5BCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681986042; x=1684578042;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4p+Jwfh4f6O4EpesT7nZbdGy3tVSOOPuyRDN6YS6gs=;
-        b=NH6j2Ymid6Lznp3MXLG/qu7SFxJImLjUjDtSERFOAgPPV/15tBX18AOM9baaKyTbRA
-         XZv274T5OUM2cmii8RJy3RTYvKu53vvm4XcFeagGium/8aT+HfHt982M08NPrGnm/E7d
-         Mjm6lhXFggu7zeL1qEo9SxSfcqDUhmAJq9UM93UBhsk26Ei8NHiTpLUtKC6ztWEggxyr
-         8xQo3SnNJCTkt12rDyLQ9/MB6G8xopvDYLb26EoZVeUKwciOywBfQ1GEI+a4zfxukWSw
-         ZNyNdbb9+8MWoHN0VRogCZ3bJUB0fn6dqJPQm1l7ESjbuMdngS6MpVPYR8YWV7Bku/MP
-         u2Ow==
-X-Gm-Message-State: AAQBX9c6zr2YJdKAu/vjAoJRxL6/777o7i5kzJzPYBvv0UyBHG9Naz6D
-        n4uozDpjsE1uowcOk9ZEEZRyEg==
-X-Google-Smtp-Source: AKy350YWnFordrnmpiF7wIFWOYpQ/eTVAH3HUoCFwHRfS6GXxx1v6PZoYzAu8N/3JQL6nqKGub3QJA==
-X-Received: by 2002:a2e:9895:0:b0:2a8:bc05:1d7a with SMTP id b21-20020a2e9895000000b002a8bc051d7amr258934ljj.30.1681986042057;
-        Thu, 20 Apr 2023 03:20:42 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id n3-20020a2e8783000000b002a8e4678da4sm186778lji.139.2023.04.20.03.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:20:41 -0700 (PDT)
-Message-ID: <b9b6e799-c8a2-7d8c-4d87-56d899048454@linaro.org>
-Date:   Thu, 20 Apr 2023 12:20:39 +0200
+        Thu, 20 Apr 2023 06:21:40 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2D12D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:21:01 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K6k6i2003201;
+        Thu, 20 Apr 2023 05:20:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=nJJCPXtIl/C6W952avjlhhnaG4LWw3Zy1vAZkrF7DVE=;
+ b=posfeQSJ45pfCwFvSdJO495aeRAHsRvhhONuUrgs56ra9NjF+/SC7KpdF2MDCQCIfZhq
+ N5pPTsvthNpeUFJMT1s/SVo9e6wcPIofB2rcDLyMWjLH5ScfQnGdbovx/bIKbZEl34vJ
+ IPQvj5RxNneMEjqDo7ppC1WlZvbwArUcpG8W5TAYHvzWHwpO3KtcfU/qk+5QNwIa1hUe
+ ph2Sb071UaArcF6/optPj7jIEE9xy8NpAJiut5zYULC+6B33fFhCu2ums9ILDhQRiqPH
+ abGdt+nnHQyCTvlPmFOiiSTD0CB7ytrJteKDGbpJ2rfBRl+AdBHfZ+pC/QpyBPja4L6z hA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pysb50sp2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 05:20:45 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 20 Apr
+ 2023 05:20:43 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Thu, 20 Apr 2023 05:20:43 -0500
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 79A3BB06;
+        Thu, 20 Apr 2023 10:20:43 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] ASoC: cs35l56: Remove duplicate mbox log messages
+Date:   Thu, 20 Apr 2023 11:20:43 +0100
+Message-ID: <20230420102043.1151830-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH RFT v2 00/14] SMD RPMCC sleep preparations
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
- <66c41caf-bf21-61af-c6e4-52b34b69c1ce@linaro.org>
- <ZEDwLB3RwT6mHIu4@gerhold.net>
- <6175f709-8c88-6ec3-4c31-cac9f2440b52@linaro.org>
- <ZEEOJ7VhccqCNTbj@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZEEOJ7VhccqCNTbj@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 6pTqnTm8T_0HTfbl5ajo1im30LO2lRZF
+X-Proofpoint-GUID: 6pTqnTm8T_0HTfbl5ajo1im30LO2lRZF
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Simon Trimmer <simont@opensource.cirrus.com>
 
+cs35l56_mbox_send() logs a warning when sending a mbox command fails so
+the callers can be simplified.
 
-On 20.04.2023 12:04, Stephan Gerhold wrote:
-> On Thu, Apr 20, 2023 at 11:36:24AM +0200, Konrad Dybcio wrote:
->> On 20.04.2023 09:56, Stephan Gerhold wrote:
->>> On Thu, Apr 20, 2023 at 03:50:16AM +0200, Konrad Dybcio wrote:
->>>> On 8.03.2023 22:35, Konrad Dybcio wrote:
->>>>> Keepalive clocks for other platforms were gathered by digging in old
->>>>> downstream kernels, please give them a test.
->>>> I have an implementation of rpmcc-within-icc ready(ish) locally. Turns out
->>>> some SoCs need a keepalive (19.2MHz, active-only) vote on clocks that
->>>> are NOT governed by interconnect.. So before we can disable clocks,
->>>> both will need to be implemented.. ugh... I was hoping we could avoid
->>>> having it in rpmcc..
->>> Can you give an example? Which clocks are affected on which SoC?
->> msm8998/sdm660 and PNoC
-> 
-> I don't see a PNoC for 8998/660, do you mean the "cnoc_periph_clk"
-It's the same, but Qualcomm kept changing the name every kernel
-release, so that's why we have 50 defines for the same thing
-upstream :(
+Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ sound/soc/codecs/cs35l56.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
+diff --git a/sound/soc/codecs/cs35l56.c b/sound/soc/codecs/cs35l56.c
+index c0a857cfb8cb..46762f7f1449 100644
+--- a/sound/soc/codecs/cs35l56.c
++++ b/sound/soc/codecs/cs35l56.c
+@@ -859,10 +859,8 @@ static void cs35l56_dsp_work(struct work_struct *work)
+ 	}
+ 
+ 	ret = cs35l56_mbox_send(cs35l56, CS35L56_MBOX_CMD_SHUTDOWN);
+-	if (ret) {
+-		dev_dbg(cs35l56->dev, "%s: CS35L56_MBOX_CMD_SHUTDOWN ret %d\n", __func__, ret);
++	if (ret)
+ 		goto err;
+-	}
+ 
+ 	if (cs35l56->rev < CS35L56_REVID_B0)
+ 		reg = CS35L56_DSP1_PM_CUR_STATE_A1;
+@@ -1033,9 +1031,7 @@ int cs35l56_runtime_suspend(struct device *dev)
+ 	 * Enable auto-hibernate. If it is woken by some other wake source
+ 	 * it will automatically return to hibernate.
+ 	 */
+-	ret = cs35l56_mbox_send(cs35l56, CS35L56_MBOX_CMD_ALLOW_AUTO_HIBERNATE);
+-	if (ret)
+-		dev_warn(cs35l56->dev, "ALLOW_HIBERNATE failed: %d\n", ret);
++	cs35l56_mbox_send(cs35l56, CS35L56_MBOX_CMD_ALLOW_AUTO_HIBERNATE);
+ 
+ 	/*
+ 	 * Must enter cache-only first so there can't be any more register
+-- 
+2.30.2
 
-> downstream? Like the other NoCs it seems to be a RPM_BUS_CLK_TYPE, which
-> means it does fit best into interconnect in my opinion. From a quick
-> grep I don't see any usage of it in msm-4.4 downstream other than the
-> active-only keepalive vote. So maybe you could just send that vote once
-> in icc_rpm_smd and then ignore that clock (don't expose it at all)?
-Hm, perhaps that does sound like a good idea! As far as I understand,
-it's governed internally.. Older SoCs had a separate PNoC fabric
-exposed.
-
-Konrad
-
-> 
-> Thanks,
-> Stephan
