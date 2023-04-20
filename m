@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF52A6E9E32
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E3B6E9E35
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbjDTVze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S231707AbjDTV7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjDTVza (ORCPT
+        with ESMTP id S229833AbjDTV7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:55:30 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEA565AE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:55:07 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id D3CCC2049B;
-        Thu, 20 Apr 2023 23:55:04 +0200 (CEST)
-Date:   Thu, 20 Apr 2023 23:55:03 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-Subject: Re: [PATCH v2 14/17] drm/msm/dpu: Document and enable TEAR
- interrupts on DSI interfaces
-Message-ID: <sbb4cbejalo5dpq3zceizmiwwfcnqvnfijok636exkwuiampja@qzjljebk6pyy>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-14-ef76c877eb97@somainline.org>
- <e16ef4f6-bf58-0c85-75ed-f8384c7fd7ef@linaro.org>
+        Thu, 20 Apr 2023 17:59:21 -0400
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE24D1FE9;
+        Thu, 20 Apr 2023 14:59:20 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1a6862e47b1so17775835ad.0;
+        Thu, 20 Apr 2023 14:59:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682027960; x=1684619960;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I3t/4IKujL+j6Bbyb2zCnzo5/T/IxEaCiO/CbGvMAvI=;
+        b=jRIOKU5clFCN+xBvRGC/Xbfwc0xBK/B4AcK0OZEzCh3q5xNw2CgnaJqQ5Dw4P+xEEC
+         VIncwiXg9mgjHKpCl/r/uNfyViA5UdZbHMB4KzMgNX1Pzww4IL0nlHMFOTowQRowqWbO
+         HbC89UfIaN2wBVD+sNXSC1TwclwIWP5hcjn7TfzbCEz3yJ7StF1P1YhoNBXTGuXpPZHQ
+         Mt8QNT5iqxljSUbFJagoopnJaS15rCyEHYzswP9dbiPwBCt8EAWhjJNAd0GXGb/5HzA3
+         HiDcAm8CYloTRO34pqKtSZljU3RAeTyZlZNz7X3hz5qq0L5MIUxEBR8HM/Hm5Lr3Vs+E
+         opTg==
+X-Gm-Message-State: AAQBX9eAFM6ealFRGo9fSDn+WNx5R7UrP/xswmvD7+/grRJg3gwPMjhZ
+        4gP5vd7xF3v/j3X6IWQPLMTENOzByhQ=
+X-Google-Smtp-Source: AKy350Y8e609v04FznrKe1zOu3l4meBGPy5nQT9t4Wn72HHp8y2nGkquf2NZWDEN2DJUTpGOOsFV6w==
+X-Received: by 2002:a17:902:ab92:b0:1a6:8ed5:428a with SMTP id f18-20020a170902ab9200b001a68ed5428amr3092913plr.22.1682027960379;
+        Thu, 20 Apr 2023 14:59:20 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id m3-20020a170902c44300b0019abd4ddbf2sm1558006plm.179.2023.04.20.14.59.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 14:59:19 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 21:59:18 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Suhui <suhui@nfschina.com>
+Cc:     "K . Y . Srinivasa" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Drivers: hv: vmbus: Remove unnecessary (void*)
+ conversions
+Message-ID: <ZEG1tjvoqTxLxYvl@liuwe-devbox-debian-v2>
+References: <20230419080331.505798-1-suhui@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e16ef4f6-bf58-0c85-75ed-f8384c7fd7ef@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230419080331.505798-1-suhui@nfschina.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,36 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 04:11:29, Dmitry Baryshkov wrote:
-> On 17/04/2023 23:21, Marijn Suijten wrote:
-> > All SoCs since DPU 5.0.0 have the tear interrupt registers moved out of
-> > the PINGPONG block and into the INTF block.  Wire up these interrupts
-> > and IRQ masks on all supported hardware.
-> > 
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > ---
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 12 ++++++----
-> >   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 12 ++++++----
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 12 ++++++----
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  8 ++++---
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  8 ++++---
-> >   .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  8 ++++---
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 12 ++++++----
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  6 +++--
-> >   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 12 ++++++----
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 12 ++++++----
-> >   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 12 ++++++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 15 ++++++++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  6 +++--
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c  | 27 ++++++++++++++++++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h  |  4 ++++
-> >   15 files changed, 125 insertions(+), 41 deletions(-)
+On Wed, Apr 19, 2023 at 04:03:31PM +0800, Suhui wrote:
+> No need cast (void*) to (struct hv_ring_buffer *).
 > 
-> If there is v3 for some reason, please split this into two patches: 
-> core/interrups and SoC catalog changes.
+> Signed-off-by: Suhui <suhui@nfschina.com>
 
-I think you want a v3 for the vsync_sel _active_ rename in dpu_hw_top,
-all other patches are r-b'd if I scanned through it all correctly.  I
-can definitely accommodate to that.
+Unfortunately due to recent changes this patch no longer applies to
+hyperv-next.
 
-- Marijn
+> ---
+>  drivers/hv/ring_buffer.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
+> index c6692fd5ab15..5471321169e9 100644
+> --- a/drivers/hv/ring_buffer.c
+> +++ b/drivers/hv/ring_buffer.c
+> @@ -209,9 +209,8 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
+>  		for (i = 0; i < 2 * (page_cnt - 1); i++)
+>  			pfns_wraparound[i + 1] = pfn + i % (page_cnt - 1) + 1;
+>  
+> -		ring_info->ring_buffer = (struct hv_ring_buffer *)
+> -			vmap_pfn(pfns_wraparound, page_cnt * 2 - 1,
+> -				 PAGE_KERNEL);
+> +		ring_info->ring_buffer = vmap_pfn(pfns_wraparound, page_cnt * 2 - 1,
+> +						  PAGE_KERNEL);
+>  		kfree(pfns_wraparound);
+>  
+>  		if (!ring_info->ring_buffer)
+> @@ -231,9 +230,8 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
+>  			pages_wraparound[i + 1] =
+>  				&pages[i % (page_cnt - 1) + 1];
+>  
+> -		ring_info->ring_buffer = (struct hv_ring_buffer *)
+> -			vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
+> -				PAGE_KERNEL);
+> +		ring_info->ring_buffer = vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
+> +					      PAGE_KERNEL);
+>  
+>  		kfree(pages_wraparound);
+>  		if (!ring_info->ring_buffer)
+> -- 
+> 2.34.1
+> 
