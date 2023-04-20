@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C3C6E9FB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 01:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA3F6E9FBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 01:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbjDTXMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 19:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S232033AbjDTXSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 19:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbjDTXMl (ORCPT
+        with ESMTP id S231454AbjDTXSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 19:12:41 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3B526B3;
-        Thu, 20 Apr 2023 16:12:38 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a7ac89b82dso9530751fa.1;
-        Thu, 20 Apr 2023 16:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682032357; x=1684624357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RmDHFgakKQi6ueQUrVtV/dN3UoSrMFu5Fj3nKq50Hpo=;
-        b=OfTy4ZBAjoNcBaLsrNa3jc0/yN7VVZjw4FCZLkmuiEtrkm6c2agsgvMj/LQcLZjCpD
-         BO0IoDNtwj8ACLon7bQGedf8gwovmWyBfWyT2IGg0WBrK4rLOQ8AG3F8+KMfR2jOuqOC
-         rivKrkY02EvRlzR+KjRY4Jjq9Ti1FxGABuMwxB10OEA60YmtpHOTw4Z3vKk83eaZf0f0
-         1iEM0QqTuBoKidsUkYlUfcUZ6jOSg67GYIcsCgOJtch0hKV4y+mJMskNroUkdMK3Vny4
-         TSUcnXNRxDL7KNxBa2SsZkrPQw3mAX8g/ksT6Jo9pxZ1H81G5QLmJwNzpscq5PwJV7If
-         Twrg==
+        Thu, 20 Apr 2023 19:18:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168F744AF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 16:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682032645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nWq43n/Da2gDjYcqkmyxMMwjV9A2SxZm8Xmzf5b2hX4=;
+        b=fNwmExpNVOyY8ltYqQ0LeALCMw5/BjNoC1f4m7yNvfgXR5nEkrzgujLsU7DR4k26bf/YGz
+        Ox2pxuagWamP7TWgyy69gNJBWkYra7hEmewGwNtj6evQDnLHzxV9ZhwCKt/XxMgLrqrUUJ
+        xRs9MSH5D912Hzgc2iGGUwNhSJ2zlgQ=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-114-x961mjqkNUGC5b2kKOo8tQ-1; Thu, 20 Apr 2023 19:17:24 -0400
+X-MC-Unique: x961mjqkNUGC5b2kKOo8tQ-1
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-32b532ee15bso53701705ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 16:17:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682032357; x=1684624357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682032644; x=1684624644;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RmDHFgakKQi6ueQUrVtV/dN3UoSrMFu5Fj3nKq50Hpo=;
-        b=kFxJlnvkYGKsuN2LVIeOwoo810wP/K/Nh3kooh9Fsgze6403DRGwwCs0UOcHeL+Y1U
-         llqqXZL9HOqLbQ5QuakUYMaUJ18gxKXf30fs/vAggupOYF/lk5GWlpLeZ4K11TefnGH5
-         BZf1sc8T+18YgoY6Lx/TqQmtMG/P4v9FodN41o3ia3tjQNWm4vxCjhOQg+ZSVgCb6j2X
-         eigTpgFQ+F/Xz9mb/VaWjU2QyudUV+l3dYh64OF0y+cX5fnjR5kooVoKKwv8qmIgcVPI
-         k9NrqJetdv1GTFYakMesCnUq+FXIcztnzQ8fOyOiYqjr1DbbIyTDZLyzWBKvrcMSm5J/
-         1+sg==
-X-Gm-Message-State: AAQBX9eWrYA+M/AvmlI86wMjbZGu/GiqxVY0ikNQ5hc6wKSGbeJnHJUc
-        QyhpI2LsNCNCSLCSloXyGadvUTSA5gajet1SZLE=
-X-Google-Smtp-Source: AKy350Zl10tvLDk1J0YLQIUU8jTJFHLOf7gcO67GskX6nLiP9N6Q5bFYb6HYCo1z5EigfgwF39WqpuGXd/KrlyZIA5Y=
-X-Received: by 2002:a2e:b0ec:0:b0:2a7:a691:f5f2 with SMTP id
- h12-20020a2eb0ec000000b002a7a691f5f2mr174802ljl.8.1682032356404; Thu, 20 Apr
- 2023 16:12:36 -0700 (PDT)
+        bh=nWq43n/Da2gDjYcqkmyxMMwjV9A2SxZm8Xmzf5b2hX4=;
+        b=MRZl6kHtBhy3VsyKj9NjhzEFJ4BH56oJ3PT3IydvtJyzlFnzjMGwpCIPrKnbOTYN+1
+         Do0AZEwUXR338yRaksCulVIUcAmYCZ6kaeAwl1wjF2I14szGeVvBqN8boDppfjU0VTJU
+         xwAGvn/A7FaEy09HbmHEsGEQpj5g7JQS2KniRkD5kP3zP7lNWxBUUoIcrR4/JdIxwc1R
+         /UfReNDvq8QShFzaVXxobJTMNtC7GJY/28JI23dRWvQLhpF8fXElezEleMPhLHwHr4c9
+         dF6niGnCUHkHwlxrymssrK0pjUkZM8UjEtzjba78yh4bx7MFFJ7pyaTyi1JMdr0MfoQM
+         n/tQ==
+X-Gm-Message-State: AAQBX9foglcPuiqMfKPaQdkqjRRM3CGDd7W6VWmfKG+Xfr2joJCLhTl/
+        PTRzjg0PspxywUXBKGds6CrzCMIJ/UjAROahL9OVAr2J3yRWrrdPQRVhlo4XhQPu4k73cLDRJme
+        fdrEURZBgkxqXdhyjIQsBRvuz
+X-Received: by 2002:a5d:9d92:0:b0:760:dffa:f13d with SMTP id ay18-20020a5d9d92000000b00760dffaf13dmr4398096iob.3.1682032643707;
+        Thu, 20 Apr 2023 16:17:23 -0700 (PDT)
+X-Google-Smtp-Source: AKy350amVwGiYMTY3p5zmho3rzvdRwjWSqQzQr1MaD8LbIOjso2j2g0mYPQ8jeU8cCPGfVr2kwLkSg==
+X-Received: by 2002:a5d:9d92:0:b0:760:dffa:f13d with SMTP id ay18-20020a5d9d92000000b00760dffaf13dmr4398083iob.3.1682032643322;
+        Thu, 20 Apr 2023 16:17:23 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a6-20020a029406000000b0040bbb88f308sm843720jai.17.2023.04.20.16.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 16:17:22 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 17:17:20 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     <ankita@nvidia.com>
+Cc:     <jgg@nvidia.com>, <aniketa@nvidia.com>, <cjia@nvidia.com>,
+        <kwankhede@nvidia.com>, <targupta@nvidia.com>, <vsethi@nvidia.com>,
+        <acurrid@nvidia.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] vfio/nvgpu: Add vfio pci variant module for
+ grace hopper device
+Message-ID: <20230420171720.418a3c0d.alex.williamson@redhat.com>
+In-Reply-To: <20230419222836.24714-1-ankita@nvidia.com>
+References: <20230419222836.24714-1-ankita@nvidia.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230420105343.2014-1-hildawu@realtek.com>
-In-Reply-To: <20230420105343.2014-1-hildawu@realtek.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Thu, 20 Apr 2023 16:12:24 -0700
-Message-ID: <CABBYNZJ5q1BJ3LFLgcevEM-NZMiqXy24qpUbOvbYskEBuR+dug@mail.gmail.com>
-Subject: Re: [PATCH v3] Bluetooth: btrtl: Add Realtek devcoredump support
-To:     hildawu@realtek.com
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mmandlik@google.com, apusaka@chromium.org, yinghsu@chromium.org,
-        alex_lu@realsil.com.cn, max.chou@realtek.com, kidman@realtek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,579 +82,425 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 19 Apr 2023 15:28:36 -0700
+<ankita@nvidia.com> wrote:
 
-On Thu, Apr 20, 2023 at 3:53=E2=80=AFAM <hildawu@realtek.com> wrote:
->
-> From: Hilda Wu <hildawu@realtek.com>
->
-> Catch debug exception from controller and driver, and trigger a
-> devcoredump using hci devcoredump APIs. The debug exception data
-> will be parsed in userspace.
->
-> Signed-off-by: Alex Lu <alex_lu@realsil.com.cn>
-> Signed-off-by: Hilda Wu <hildawu@realtek.com>
+> From: Ankit Agrawal <ankita@nvidia.com>
+> 
+> NVIDIA's upcoming Grace Hopper Superchip provides a PCI-like device
+> for the on-chip GPU that is the logical OS representation of the
+> internal propritary cache coherent interconnect.
+> 
+> This representation has a number of limitations compared to a real PCI
+> device, in particular, it does not model the coherent GPU memory
+> aperture as a PCI config space BAR, and PCI doesn't know anything
+> about cacheable memory types.
+> 
+> Provide a VFIO PCI variant driver that adapts the unique PCI
+> representation into a more standard PCI representation facing
+> userspace. The GPU memory aperture is obtained from ACPI using
+> device_property_read_u64(), according to the FW specification,
+> and exported to userspace as the VFIO_REGION that covers the first
+> PCI BAR. qemu will naturally generate a PCI device in the VM where the
+> cacheable aperture is reported in BAR1.
+> 
+> Since this memory region is actually cache coherent with the CPU, the
+> VFIO variant driver will mmap it into VMA using a cacheable mapping. The
+> mapping is done using remap_pfn_range().
+> 
+> This goes along with a qemu series to provides the necessary
+> implementation of the Grace Hopper Superchip firmware specification so
+> that the guest operating system can see the correct ACPI modeling for
+> the coherent GPU device.
+> https://github.com/qemu/qemu/compare/master...ankita-nv:qemu:dev-ankit/cohmem-0330
+> 
+> This patch is split from a patch series being pursued separately:
+> https://lore.kernel.org/lkml/20230405180134.16932-2-ankita@nvidia.com/
+> 
+> Applied and tested over v6.3-rc4.
+> 
+> Signed-off-by: Ankit Agrawal <ankita@nvidia.com>
 > ---
-> Changes in v3:
->  - Rebase, fixed merge confilt
->
-> Changes in v2:
->  - According to devcoredump API revision, modified related part.
-> ---
-> ---
->  drivers/bluetooth/btrtl.c | 145 +++++++++++++++++++++++++++++++-------
->  drivers/bluetooth/btrtl.h |   6 ++
->  drivers/bluetooth/btusb.c |  74 +++++++++++++++++++
->  3 files changed, 198 insertions(+), 27 deletions(-)
->
-> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-> index 2915c82d719d..ffb94d6481e2 100644
-> --- a/drivers/bluetooth/btrtl.c
-> +++ b/drivers/bluetooth/btrtl.c
-> @@ -32,6 +32,8 @@
->  #define RTL_ROM_LMP_8851B      0x8851
->  #define RTL_CONFIG_MAGIC       0x8723ab55
->
-> +#define RTL_VSC_OP_COREDUMP    0xfcff
+>  MAINTAINERS                     |   6 +
+>  drivers/vfio/pci/Kconfig        |   2 +
+>  drivers/vfio/pci/Makefile       |   2 +
+>  drivers/vfio/pci/nvgpu/Kconfig  |  10 ++
+>  drivers/vfio/pci/nvgpu/Makefile |   3 +
+>  drivers/vfio/pci/nvgpu/main.c   | 255 ++++++++++++++++++++++++++++++++
+>  6 files changed, 278 insertions(+)
+>  create mode 100644 drivers/vfio/pci/nvgpu/Kconfig
+>  create mode 100644 drivers/vfio/pci/nvgpu/Makefile
+>  create mode 100644 drivers/vfio/pci/nvgpu/main.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1dc8bd26b6cf..6b48756c30d3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21954,6 +21954,12 @@ L:	kvm@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/vfio/pci/mlx5/
+>  
+> +VFIO NVIDIA PCI DRIVER
+> +M:	Ankit Agrawal <ankita@nvidia.com>
+> +L:	kvm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/vfio/pci/nvgpu/
 > +
->  #define IC_MATCH_FL_LMPSUBV    (1 << 0)
->  #define IC_MATCH_FL_HCIREV     (1 << 1)
->  #define IC_MATCH_FL_HCIVER     (1 << 2)
-> @@ -81,6 +83,7 @@ struct id_table {
->         bool has_msft_ext;
->         char *fw_name;
->         char *cfg_name;
-> +       char *hw_info;
->  };
->
->  struct btrtl_device_info {
-> @@ -102,21 +105,24 @@ static const struct id_table ic_id_table[] =3D {
->           .config_needed =3D false,
->           .has_rom_version =3D false,
->           .fw_name =3D "rtl_bt/rtl8723a_fw.bin",
-> -         .cfg_name =3D NULL },
-> +         .cfg_name =3D NULL,
-> +         .hw_info =3D "rtl8723au" },
->
->         /* 8723BS */
->         { IC_INFO(RTL_ROM_LMP_8723B, 0xb, 0x6, HCI_UART),
->           .config_needed =3D true,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723bs_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723bs_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723bs_config",
-> +         .hw_info  =3D "rtl8723bs" },
->
->         /* 8723B */
->         { IC_INFO(RTL_ROM_LMP_8723B, 0xb, 0x6, HCI_USB),
->           .config_needed =3D false,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723b_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723b_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723b_config",
-> +         .hw_info  =3D "rtl8723bu" },
->
->         /* 8723CS-CG */
->         { .match_flags =3D IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-> @@ -127,7 +133,8 @@ static const struct id_table ic_id_table[] =3D {
->           .config_needed =3D true,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723cs_cg_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723cs_cg_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723cs_cg_config",
-> +         .hw_info  =3D "rtl8723cs-cg" },
->
->         /* 8723CS-VF */
->         { .match_flags =3D IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-> @@ -138,7 +145,8 @@ static const struct id_table ic_id_table[] =3D {
->           .config_needed =3D true,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723cs_vf_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723cs_vf_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723cs_vf_config",
-> +         .hw_info  =3D "rtl8723cs-vf" },
->
->         /* 8723CS-XX */
->         { .match_flags =3D IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-> @@ -149,28 +157,32 @@ static const struct id_table ic_id_table[] =3D {
->           .config_needed =3D true,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723cs_xx_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723cs_xx_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723cs_xx_config",
-> +         .hw_info  =3D "rtl8723cs" },
->
->         /* 8723D */
->         { IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
->           .config_needed =3D true,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723d_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723d_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723d_config",
-> +         .hw_info  =3D "rtl8723du" },
->
->         /* 8723DS */
->         { IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_UART),
->           .config_needed =3D true,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8723ds_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8723ds_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8723ds_config",
-> +         .hw_info  =3D "rtl8723ds" },
->
->         /* 8821A */
->         { IC_INFO(RTL_ROM_LMP_8821A, 0xa, 0x6, HCI_USB),
->           .config_needed =3D false,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8821a_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8821a_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8821a_config",
-> +         .hw_info  =3D "rtl8821au" },
->
->         /* 8821C */
->         { IC_INFO(RTL_ROM_LMP_8821A, 0xc, 0x8, HCI_USB),
-> @@ -178,7 +190,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8821c_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8821c_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8821c_config",
-> +         .hw_info  =3D "rtl8821cu" },
->
->         /* 8821CS */
->         { IC_INFO(RTL_ROM_LMP_8821A, 0xc, 0x8, HCI_UART),
-> @@ -186,14 +199,16 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8821cs_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8821cs_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8821cs_config",
-> +         .hw_info  =3D "rtl8821cs" },
->
->         /* 8761A */
->         { IC_INFO(RTL_ROM_LMP_8761A, 0xa, 0x6, HCI_USB),
->           .config_needed =3D false,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8761a_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8761a_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8761a_config",
-> +         .hw_info  =3D "rtl8761au" },
->
->         /* 8761B */
->         { IC_INFO(RTL_ROM_LMP_8761A, 0xb, 0xa, HCI_UART),
-> @@ -201,14 +216,16 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8761b_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8761b_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8761b_config",
-> +         .hw_info  =3D "rtl8761btv" },
->
->         /* 8761BU */
->         { IC_INFO(RTL_ROM_LMP_8761A, 0xb, 0xa, HCI_USB),
->           .config_needed =3D false,
->           .has_rom_version =3D true,
->           .fw_name  =3D "rtl_bt/rtl8761bu_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8761bu_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8761bu_config",
-> +         .hw_info  =3D "rtl8761bu" },
->
->         /* 8822C with UART interface */
->         { IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
-> @@ -216,7 +233,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8822cs_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8822cs_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8822cs_config",
-> +         .hw_info  =3D "rtl8822cs" },
->
->         /* 8822C with UART interface */
->         { IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_UART),
-> @@ -224,7 +242,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8822cs_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8822cs_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8822cs_config",
-> +         .hw_info  =3D "rtl8822cs" },
->
->         /* 8822C with USB interface */
->         { IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_USB),
-> @@ -232,7 +251,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8822cu_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8822cu_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8822cu_config",
-> +         .hw_info  =3D "rtl8822cu" },
->
->         /* 8822B */
->         { IC_INFO(RTL_ROM_LMP_8822B, 0xb, 0x7, HCI_USB),
-> @@ -240,7 +260,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8822b_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8822b_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8822b_config",
-> +         .hw_info  =3D "rtl8822bu" },
->
->         /* 8852A */
->         { IC_INFO(RTL_ROM_LMP_8852A, 0xa, 0xb, HCI_USB),
-> @@ -248,7 +269,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8852au_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8852au_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8852au_config",
-> +         .hw_info  =3D "rtl8852au" },
->
->         /* 8852B with UART interface */
->         { IC_INFO(RTL_ROM_LMP_8852A, 0xb, 0xb, HCI_UART),
-> @@ -256,7 +278,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8852bs_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8852bs_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8852bs_config",
-> +         .hw_info  =3D "rtl8852bs" },
->
->         /* 8852B */
->         { IC_INFO(RTL_ROM_LMP_8852A, 0xb, 0xb, HCI_USB),
-> @@ -264,7 +287,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8852bu_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8852bu_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8852bu_config",
-> +         .hw_info  =3D "rtl8852bu" },
->
->         /* 8852C */
->         { IC_INFO(RTL_ROM_LMP_8852A, 0xc, 0xc, HCI_USB),
-> @@ -272,7 +296,8 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D true,
->           .fw_name  =3D "rtl_bt/rtl8852cu_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8852cu_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8852cu_config",
-> +         .hw_info  =3D "rtl8852cu" },
->
->         /* 8851B */
->         { IC_INFO(RTL_ROM_LMP_8851B, 0xb, 0xc, HCI_USB),
-> @@ -280,9 +305,16 @@ static const struct id_table ic_id_table[] =3D {
->           .has_rom_version =3D true,
->           .has_msft_ext =3D false,
->           .fw_name  =3D "rtl_bt/rtl8851bu_fw.bin",
-> -         .cfg_name =3D "rtl_bt/rtl8851bu_config" },
-> +         .cfg_name =3D "rtl_bt/rtl8851bu_config",
-> +         .hw_info  =3D "rtl8851bu" },
->         };
->
-> +static struct {
-> +       const char *driver_name;
-> +       char *controller;
-> +       u32  fw_version;
-> +} coredump_info;
+>  VGA_SWITCHEROO
+>  R:	Lukas Wunner <lukas@wunner.de>
+>  S:	Maintained
+> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+> index f9d0c908e738..ade18b0ffb7b 100644
+> --- a/drivers/vfio/pci/Kconfig
+> +++ b/drivers/vfio/pci/Kconfig
+> @@ -59,4 +59,6 @@ source "drivers/vfio/pci/mlx5/Kconfig"
+>  
+>  source "drivers/vfio/pci/hisilicon/Kconfig"
+>  
+> +source "drivers/vfio/pci/nvgpu/Kconfig"
 > +
->  static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev=
-,
->                                              u8 hci_ver, u8 hci_bus,
->                                              u8 chip_type)
-> @@ -707,6 +739,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
->         num_patches =3D le16_to_cpu(epatch_info->num_patches);
->         BT_DBG("fw_version=3D%x, num_patches=3D%d",
->                le32_to_cpu(epatch_info->fw_version), num_patches);
-> +       coredump_info.fw_version =3D le32_to_cpu(epatch_info->fw_version)=
-;
->
->         /* After the rtl_epatch_header there is a funky patch metadata se=
-ction.
->          * Assuming 2 patches, the layout is:
-> @@ -903,6 +936,50 @@ static int btrtl_setup_rtl8723b(struct hci_dev *hdev=
-,
->         return ret;
->  }
->
-> +static void btrtl_coredump(struct hci_dev *hdev)
+>  endif
+> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
+> index 24c524224da5..0c93d452d0da 100644
+> --- a/drivers/vfio/pci/Makefile
+> +++ b/drivers/vfio/pci/Makefile
+> @@ -11,3 +11,5 @@ obj-$(CONFIG_VFIO_PCI) += vfio-pci.o
+>  obj-$(CONFIG_MLX5_VFIO_PCI)           += mlx5/
+>  
+>  obj-$(CONFIG_HISI_ACC_VFIO_PCI) += hisilicon/
+> +
+> +obj-$(CONFIG_NVGPU_VFIO_PCI) += nvgpu/
+> diff --git a/drivers/vfio/pci/nvgpu/Kconfig b/drivers/vfio/pci/nvgpu/Kconfig
+> new file mode 100644
+> index 000000000000..066f764f7c5f
+> --- /dev/null
+> +++ b/drivers/vfio/pci/nvgpu/Kconfig
+> @@ -0,0 +1,10 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config NVGPU_VFIO_PCI
+> +	tristate "VFIO support for the GPU in the NVIDIA Grace Hopper Superchip"
+> +	depends on ARM64 || (COMPILE_TEST && 64BIT)
+> +	select VFIO_PCI_CORE
+> +	help
+> +	  VFIO support for the GPU in the NVIDIA Grace Hopper Superchip is
+> +	  required to assign the GPU device to a VM using KVM/qemu/etc.
+> +
+> +	  If you don't know what to do here, say N.
+> diff --git a/drivers/vfio/pci/nvgpu/Makefile b/drivers/vfio/pci/nvgpu/Makefile
+> new file mode 100644
+> index 000000000000..00fd3a078218
+> --- /dev/null
+> +++ b/drivers/vfio/pci/nvgpu/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_NVGPU_VFIO_PCI) += nvgpu-vfio-pci.o
+> +nvgpu-vfio-pci-y := main.o
+> diff --git a/drivers/vfio/pci/nvgpu/main.c b/drivers/vfio/pci/nvgpu/main.c
+> new file mode 100644
+> index 000000000000..9e08e8cf4606
+> --- /dev/null
+> +++ b/drivers/vfio/pci/nvgpu/main.c
+> @@ -0,0 +1,255 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved
+> + */
+> +
+> +#include <linux/pci.h>
+> +#include <linux/vfio_pci_core.h>
+> +
+> +#define DUMMY_PFN \
+> +	(((nvdev->mem_prop.hpa + nvdev->mem_prop.mem_length) >> PAGE_SHIFT) - 1)
+> +
+> +struct dev_mem_properties {
+> +	uint64_t hpa;
+> +	uint64_t mem_length;
+> +	int bar1_start_offset;
+> +};
+> +
+> +struct nvgpu_vfio_pci_core_device {
+> +	struct vfio_pci_core_device core_device;
+> +	struct dev_mem_properties mem_prop;
+> +};
+> +
+> +static int vfio_get_bar1_start_offset(struct vfio_pci_core_device *vdev)
 > +{
-> +       static const u8 param[] =3D { 0x00, 0x00 };
+> +	u8 val = 0;
 > +
-> +       __hci_cmd_send(hdev, RTL_VSC_OP_COREDUMP, sizeof(param), param);
+> +	pci_read_config_byte(vdev->pdev, 0x10, &val);
+> +	/*
+> +	 * The BAR1 start offset in the PCI config space depends on the BAR0size.
+> +	 * Check if the BAR0 is 64b and return the approproiate BAR1 offset.
+> +	 */
+> +	if (val & PCI_BASE_ADDRESS_MEM_TYPE_64)
+> +		return VFIO_PCI_BAR2_REGION_INDEX;
+> +
+> +	return VFIO_PCI_BAR1_REGION_INDEX;
+> +}
+
+This is really confusing offsets vs indexes, it's clearly returning a
+region index, not offset.  Also we already have resources setup for
+BAR0, so rather than working on the raw BAR value, how about:
+
+	return pci_resource_flags(vdev->pdev, 0) & IORESOURCE_MEM_64 ?
+			VFIO_PCI_BAR2_REGION_INDEX : VFIO_PCI_BAR1_REGION_INDEX;
+
+OTOH, why are we trying to pack the BARs, couldn't we always put it at
+BAR2?
+
+> +
+> +static int nvgpu_vfio_pci_open_device(struct vfio_device *core_vdev)
+> +{
+> +	struct nvgpu_vfio_pci_core_device *nvdev = container_of(
+> +		core_vdev, struct nvgpu_vfio_pci_core_device, core_device.vdev);
+> +	struct vfio_pci_core_device *vdev =
+> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
+> +	int ret;
+> +
+> +	ret = vfio_pci_core_enable(vdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vfio_pci_core_finish_enable(vdev);
+> +
+> +	nvdev->mem_prop.bar1_start_offset = vfio_get_bar1_start_offset(vdev);
+> +
+> +	return ret;
 > +}
 > +
-> +static void btrtl_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb)
+> +static int nvgpu_vfio_pci_mmap(struct vfio_device *core_vdev,
+> +			struct vm_area_struct *vma)
 > +{
-> +       char buf[80];
+> +	struct nvgpu_vfio_pci_core_device *nvdev = container_of(
+> +		core_vdev, struct nvgpu_vfio_pci_core_device, core_device.vdev);
 > +
-> +       if (coredump_info.controller)
-> +               snprintf(buf, sizeof(buf), "Controller Name: %s\n",
-> +                        coredump_info.controller);
-> +       else
-> +               snprintf(buf, sizeof(buf), "Controller Name: Unknown\n");
-> +       skb_put_data(skb, buf, strlen(buf));
+> +	unsigned long start_pfn;
+> +	unsigned int index;
+> +	u64 req_len, pgoff;
+> +	int ret = 0;
 > +
-> +       snprintf(buf, sizeof(buf), "Firmware Version: 0x%X\n",
-> +                coredump_info.fw_version);
-> +       skb_put_data(skb, buf, strlen(buf));
+> +	index = vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
+> +	if (index != nvdev->mem_prop.bar1_start_offset)
+
+offset vs index...
+
+> +		return vfio_pci_core_mmap(core_vdev, vma);
 > +
-> +       snprintf(buf, sizeof(buf), "Driver: %s\n", coredump_info.driver_n=
-ame);
-> +       skb_put_data(skb, buf, strlen(buf));
+> +	/*
+> +	 * Request to mmap the BAR1. Map to the CPU accessible memory on the
+
+But it might be BAR2...
+
+> +	 * GPU using the memory information gathered from the system ACPI
+> +	 * tables.
+> +	 */
+> +	start_pfn = nvdev->mem_prop.hpa >> PAGE_SHIFT;
+> +	req_len = vma->vm_end - vma->vm_start;
+> +	pgoff = vma->vm_pgoff &
+> +		((1U << (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
+> +	if (pgoff >= (nvdev->mem_prop.mem_length >> PAGE_SHIFT))
+> +		return -EINVAL;
 > +
-> +       snprintf(buf, sizeof(buf), "Vendor: Realtek\n");
-> +       skb_put_data(skb, buf, strlen(buf));
+> +	/*
+> +	 * Perform a PFN map to the memory. The device BAR1 is backed by the
+> +	 * GPU memory now. Check that the mapping does not overflow out of
+> +	 * the GPU memory size.
+> +	 */
+> +	ret = remap_pfn_range(vma, vma->vm_start, start_pfn + pgoff,
+> +			      min(req_len, nvdev->mem_prop.mem_length - pgoff),
+> +			      vma->vm_page_prot);
+
+What's the behavior of this "BAR" relative to things like
+PCI_COMMAND_MEMORY or reset?  If the user generates a secondary bus
+reset on the parent bridge in one thread, while accessing the device in
+another thread, isn't that susceptible to platform error handling just
+like any other PCI device?  This is why vfio-pci-core has all the
+zapping and faulting of mmaps to real BARs.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	vma->vm_pgoff = start_pfn + pgoff;
+> +
+> +	return 0;
 > +}
 > +
-> +static int btrtl_register_devcoredump_support(struct hci_dev *hdev)
+> +static long nvgpu_vfio_pci_ioctl(struct vfio_device *core_vdev,
+> +			unsigned int cmd, unsigned long arg)
 > +{
-> +       int err;
+> +	struct nvgpu_vfio_pci_core_device *nvdev = container_of(
+> +		core_vdev, struct nvgpu_vfio_pci_core_device, core_device.vdev);
 > +
-> +       err =3D hci_devcd_register(hdev, btrtl_coredump, btrtl_dmp_hdr, N=
-ULL);
+> +	unsigned long minsz = offsetofend(struct vfio_region_info, offset);
+> +	struct vfio_region_info info;
 > +
-> +       return err;
+> +	switch (cmd) {
+> +	case VFIO_DEVICE_GET_REGION_INFO:
+> +		if (copy_from_user(&info, (void __user *)arg, minsz))
+> +			return -EFAULT;
+> +
+> +		if (info.argsz < minsz)
+> +			return -EINVAL;
+> +
+> +		if (info.index == nvdev->mem_prop.bar1_start_offset) {
+
+index vs offset...
+
+> +			/*
+> +			 * Request to determine the BAR1 region information. Send the
+> +			 * GPU memory information.
+> +			 */
+> +			info.offset = VFIO_PCI_INDEX_TO_OFFSET(info.index);
+> +			info.size = nvdev->mem_prop.mem_length;
+> +			info.flags = VFIO_REGION_INFO_FLAG_READ |
+> +				     VFIO_REGION_INFO_FLAG_WRITE |
+> +				     VFIO_REGION_INFO_FLAG_MMAP;
+> +			return copy_to_user((void __user *)arg, &info, minsz) ?
+> +				       -EFAULT : 0;
+> +		}
+> +
+> +		if (info.index == nvdev->mem_prop.bar1_start_offset + 1) {
+> +			/*
+> +			 * The BAR1 region is 64b. Ignore this access.
+> +			 */
+> +			info.offset = VFIO_PCI_INDEX_TO_OFFSET(info.index);
+> +			info.size = 0;
+> +			info.flags = 0;
+> +			return copy_to_user((void __user *)arg, &info, minsz) ?
+> +				-EFAULT : 0;
+> +		}
+
+Not sure why the core code doesn't handle BAR+1
+
+> +
+> +		return vfio_pci_core_ioctl(core_vdev, cmd, arg);
+> +
+> +	default:
+> +		return vfio_pci_core_ioctl(core_vdev, cmd, arg);
+> +	}
+
+This might work better as simply:
+
+	if (cmd == VFIO_DEVICE_GET_REGION_INFO) {
+		/* virtual BAR returns... */
+	}
+
+	return vfio_pci_core_ioctl(...);
+
+It at least avoids the duplication.
+
 > +}
 > +
-> +void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name=
-)
+> +static const struct vfio_device_ops nvgpu_vfio_pci_ops = {
+> +	.name = "nvgpu-vfio-pci",
+> +	.init = vfio_pci_core_init_dev,
+> +	.release = vfio_pci_core_release_dev,
+> +	.open_device = nvgpu_vfio_pci_open_device,
+> +	.close_device = vfio_pci_core_close_device,
+> +	.ioctl = nvgpu_vfio_pci_ioctl,
+> +	.read = vfio_pci_core_read,
+> +	.write = vfio_pci_core_write,
+> +	.mmap = nvgpu_vfio_pci_mmap,
+> +	.request = vfio_pci_core_request,
+> +	.match = vfio_pci_core_match,
+> +	.bind_iommufd = vfio_iommufd_physical_bind,
+> +	.unbind_iommufd = vfio_iommufd_physical_unbind,
+> +	.attach_ioas = vfio_iommufd_physical_attach_ioas,
+> +};
+> +
+> +static struct nvgpu_vfio_pci_core_device *nvgpu_drvdata(struct pci_dev *pdev)
 > +{
-> +       coredump_info.driver_name =3D driver_name;
-> +}
-> +EXPORT_SYMBOL_GPL(btrtl_set_driver_name);
-
-If there are multiple drivers calling the above they will likely
-overwrite driver_name.
-
+> +	struct vfio_pci_core_device *core_device = dev_get_drvdata(&pdev->dev);
 > +
->  static bool rtl_has_chip_type(u16 lmp_subver)
->  {
->         switch (lmp_subver) {
-> @@ -1113,6 +1190,9 @@ struct btrtl_device_info *btrtl_initialize(struct h=
-ci_dev *hdev,
->         if (btrtl_dev->ic_info->has_msft_ext)
->                 hci_set_msft_opcode(hdev, 0xFCF0);
->
-> +       if (btrtl_dev->ic_info)
-> +               coredump_info.controller =3D btrtl_dev->ic_info->hw_info;
-
-Ditto, coredump_info needs to be stored on a per hdev basis, probably
-inside btrtl_device_info.
-
-> +
->         return btrtl_dev;
->
->  err_free:
-> @@ -1125,6 +1205,8 @@ EXPORT_SYMBOL_GPL(btrtl_initialize);
->  int btrtl_download_firmware(struct hci_dev *hdev,
->                             struct btrtl_device_info *btrtl_dev)
->  {
-> +       int err =3D 0;
-> +
->         /* Match a set of subver values that correspond to stock firmware=
-,
->          * which is not compatible with standard btusb.
->          * If matched, upload an alternative firmware that does conform t=
-o
-> @@ -1133,12 +1215,14 @@ int btrtl_download_firmware(struct hci_dev *hdev,
->          */
->         if (!btrtl_dev->ic_info) {
->                 rtl_dev_info(hdev, "assuming no firmware upload needed");
-> -               return 0;
-> +               err =3D 0;
-> +               goto done;
->         }
->
->         switch (btrtl_dev->ic_info->lmp_subver) {
->         case RTL_ROM_LMP_8723A:
-> -               return btrtl_setup_rtl8723a(hdev, btrtl_dev);
-> +               err =3D btrtl_setup_rtl8723a(hdev, btrtl_dev);
-> +               break;
->         case RTL_ROM_LMP_8723B:
->         case RTL_ROM_LMP_8821A:
->         case RTL_ROM_LMP_8761A:
-> @@ -1146,11 +1230,18 @@ int btrtl_download_firmware(struct hci_dev *hdev,
->         case RTL_ROM_LMP_8852A:
->         case RTL_ROM_LMP_8703B:
->         case RTL_ROM_LMP_8851B:
-> -               return btrtl_setup_rtl8723b(hdev, btrtl_dev);
-> +               err =3D btrtl_setup_rtl8723b(hdev, btrtl_dev);
-> +               break;
->         default:
->                 rtl_dev_info(hdev, "assuming no firmware upload needed");
-> -               return 0;
-> +               break;
->         }
-> +
-> +done:
-> +       if (!err)
-> +               err =3D btrtl_register_devcoredump_support(hdev);
-> +
-> +       return err;
->  }
->  EXPORT_SYMBOL_GPL(btrtl_download_firmware);
->
-> diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
-> index adb4c2c9abc5..fe2888c2d175 100644
-> --- a/drivers/bluetooth/btrtl.h
-> +++ b/drivers/bluetooth/btrtl.h
-> @@ -139,6 +139,7 @@ int btrtl_get_uart_settings(struct hci_dev *hdev,
->                             struct btrtl_device_info *btrtl_dev,
->                             unsigned int *controller_baudrate,
->                             u32 *device_baudrate, bool *flow_control);
-> +void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name=
-);
->
->  #else
->
-> @@ -182,4 +183,9 @@ static inline int btrtl_get_uart_settings(struct hci_=
-dev *hdev,
->         return -ENOENT;
->  }
->
-> +static inline void btrtl_set_driver_name(struct hci_dev *hdev, const cha=
-r *driver_name)
-> +{
-> +       return -EOPNOTSUPP;
+> +	return container_of(core_device, struct nvgpu_vfio_pci_core_device,
+> +			    core_device);
 > +}
 > +
->  #endif
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 3aa189b1986d..5fa90347a4e1 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -869,10 +869,49 @@ static void btusb_intel_cmd_timeout(struct hci_dev =
-*hdev)
->         gpiod_set_value_cansleep(reset_gpio, 0);
->  }
->
-> +#define RTK_DEVCOREDUMP_CODE_MEMDUMP           0x01
-> +#define RTK_DEVCOREDUMP_CODE_HW_ERR            0x02
-> +#define RTK_DEVCOREDUMP_CODE_CMD_TIMEOUT       0x03
-> +
-> +#define RTK_SUB_EVENT_CODE_COREDUMP            0x34
-> +
-> +struct rtk_dev_coredump_hdr {
-> +       u8 type;
-> +       u8 code;
-> +       u8 reserved[2];
-> +} __packed;
-> +
-> +static inline void btusb_rtl_alloc_devcoredump(struct hci_dev *hdev,
-> +               struct rtk_dev_coredump_hdr *hdr, u8 *buf, u32 len)
+> +static int
+> +nvgpu_vfio_pci_fetch_memory_property(struct pci_dev *pdev,
+> +				     struct nvgpu_vfio_pci_core_device *nvdev)
 > +{
-> +       struct sk_buff *skb;
+> +	int ret = 0;
+
+Unnecessary initialization.  Thanks,
+
+Alex
+
 > +
-> +       skb =3D alloc_skb(len + sizeof(*hdr), GFP_ATOMIC);
-> +       if (!skb)
-> +               return;
+> +	/*
+> +	 * The memory information is present in the system ACPI tables as DSD
+> +	 * properties nvidia,gpu-mem-base-pa and nvidia,gpu-mem-size.
+> +	 */
+> +	ret = device_property_read_u64(&(pdev->dev), "nvidia,gpu-mem-base-pa",
+> +				       &(nvdev->mem_prop.hpa));
+> +	if (ret)
+> +		return ret;
 > +
-> +       skb_put_data(skb, hdr, sizeof(*hdr));
-> +       if (len)
-> +               skb_put_data(skb, buf, len);
-> +
-> +       if (!hci_devcd_init(hdev, skb->len)) {
-> +               hci_devcd_append(hdev, skb);
-> +               hci_devcd_complete(hdev);
-> +       } else {
-> +               bt_dev_err(hdev, "RTL: Failed to generate devcoredump");
-> +               kfree_skb(skb);
-> +       }
+> +	ret = device_property_read_u64(&(pdev->dev), "nvidia,gpu-mem-size",
+> +				       &(nvdev->mem_prop.mem_length));
+> +	return ret;
 > +}
 > +
->  static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
->  {
->         struct btusb_data *data =3D hci_get_drvdata(hdev);
->         struct gpio_desc *reset_gpio =3D data->reset_gpio;
-> +       struct rtk_dev_coredump_hdr hdr =3D {
-> +               .type =3D RTK_DEVCOREDUMP_CODE_CMD_TIMEOUT,
-> +       };
-> +
-> +       btusb_rtl_alloc_devcoredump(hdev, &hdr, NULL, 0);
->
->         if (++data->cmd_timeout_cnt < 5)
->                 return;
-> @@ -899,6 +938,18 @@ static void btusb_rtl_cmd_timeout(struct hci_dev *hd=
-ev)
->         gpiod_set_value_cansleep(reset_gpio, 0);
->  }
->
-> +static void btusb_rtl_hw_error(struct hci_dev *hdev, u8 code)
+> +static int nvgpu_vfio_pci_probe(struct pci_dev *pdev,
+> +				const struct pci_device_id *id)
 > +{
-> +       struct rtk_dev_coredump_hdr hdr =3D {
-> +               .type =3D RTK_DEVCOREDUMP_CODE_HW_ERR,
-> +               .code =3D code,
-> +       };
+> +	struct nvgpu_vfio_pci_core_device *nvdev;
+> +	int ret;
 > +
-> +       bt_dev_info(hdev, "RTL: hw err, trigger devcoredump");
-
-This probably should be printed as an error with bt_dev_err and print
-the code as well.
-
-> +       btusb_rtl_alloc_devcoredump(hdev, &hdr, NULL, 0);
+> +	nvdev = vfio_alloc_device(nvgpu_vfio_pci_core_device, core_device.vdev,
+> +				  &pdev->dev, &nvgpu_vfio_pci_ops);
+> +	if (IS_ERR(nvdev))
+> +		return PTR_ERR(nvdev);
+> +
+> +	dev_set_drvdata(&pdev->dev, nvdev);
+> +
+> +	ret = nvgpu_vfio_pci_fetch_memory_property(pdev, nvdev);
+> +	if (ret)
+> +		goto out_put_vdev;
+> +
+> +	ret = vfio_pci_core_register_device(&nvdev->core_device);
+> +	if (ret)
+> +		goto out_put_vdev;
+> +
+> +	return ret;
+> +
+> +out_put_vdev:
+> +	vfio_put_device(&nvdev->core_device.vdev);
+> +	return ret;
 > +}
 > +
->  static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
->  {
->         struct btusb_data *data =3D hci_get_drvdata(hdev);
-> @@ -2539,6 +2590,25 @@ static int btusb_setup_realtek(struct hci_dev *hde=
-v)
->         return ret;
->  }
->
-> +static int btusb_recv_event_realtek(struct hci_dev *hdev, struct sk_buff=
- *skb)
+> +static void nvgpu_vfio_pci_remove(struct pci_dev *pdev)
 > +{
-> +       if (skb->data[0] =3D=3D HCI_VENDOR_PKT && skb->data[2] =3D=3D RTK=
-_SUB_EVENT_CODE_COREDUMP) {
-> +               struct rtk_dev_coredump_hdr hdr =3D {
-> +                       .code =3D RTK_DEVCOREDUMP_CODE_MEMDUMP,
-> +               };
+> +	struct nvgpu_vfio_pci_core_device *nvdev = nvgpu_drvdata(pdev);
+> +	struct vfio_pci_core_device *vdev = &nvdev->core_device;
 > +
-> +               bt_dev_info(hdev, "RTL: received coredump vendor evt, len=
- %u",
-> +                       skb->len);
-
-The above should probably be using bt_dev_dbg instead bt_dev_info.
-
-> +               btusb_rtl_alloc_devcoredump(hdev, &hdr, skb->data, skb->l=
-en);
-> +               kfree_skb(skb);
-> +
-> +               return 0;
-> +       }
-> +
-> +       return hci_recv_frame(hdev, skb);
+> +	vfio_pci_core_unregister_device(vdev);
+> +	vfio_put_device(&vdev->vdev);
 > +}
 > +
->  /* UHW CR mapping */
->  #define MTK_BT_MISC            0x70002510
->  #define MTK_BT_SUBSYS_RST      0x70002610
-> @@ -3978,6 +4048,8 @@ static int btusb_probe(struct usb_interface *intf,
->         } else if (id->driver_info & BTUSB_REALTEK) {
->                 /* Allocate extra space for Realtek device */
->                 priv_size +=3D sizeof(struct btrealtek_data);
+> +static const struct pci_device_id nvgpu_vfio_pci_table[] = {
+> +	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_NVIDIA, 0x2342) },
+> +	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_NVIDIA, 0x2343) },
+> +	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_NVIDIA, 0x2345) },
+> +	{}
+> +};
 > +
-> +               data->recv_event =3D btusb_recv_event_realtek;
->         }
->
->         data->recv_acl =3D hci_recv_frame;
-> @@ -4136,9 +4208,11 @@ static int btusb_probe(struct usb_interface *intf,
->
->         if (IS_ENABLED(CONFIG_BT_HCIBTUSB_RTL) &&
->             (id->driver_info & BTUSB_REALTEK)) {
-> +               btrtl_set_driver_name(hdev, btusb_driver.name);
->                 hdev->setup =3D btusb_setup_realtek;
->                 hdev->shutdown =3D btrtl_shutdown_realtek;
->                 hdev->cmd_timeout =3D btusb_rtl_cmd_timeout;
-> +               hdev->hw_error =3D btusb_rtl_hw_error;
->
->                 /* Realtek devices need to set remote wakeup on auto-susp=
-end */
->                 set_bit(BTUSB_WAKEUP_AUTOSUSPEND, &data->flags);
-> --
-> 2.17.1
->
+> +MODULE_DEVICE_TABLE(pci, nvgpu_vfio_pci_table);
+> +
+> +static struct pci_driver nvgpu_vfio_pci_driver = {
+> +	.name = KBUILD_MODNAME,
+> +	.id_table = nvgpu_vfio_pci_table,
+> +	.probe = nvgpu_vfio_pci_probe,
+> +	.remove = nvgpu_vfio_pci_remove,
+> +	.err_handler = &vfio_pci_core_err_handlers,
+> +	.driver_managed_dma = true,
+> +};
+> +
+> +module_pci_driver(nvgpu_vfio_pci_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Ankit Agrawal <ankita@nvidia.com>");
+> +MODULE_AUTHOR("Aniket Agashe <aniketa@nvidia.com>");
+> +MODULE_DESCRIPTION(
+> +	"VFIO NVGPU PF - User Level driver for NVIDIA devices with CPU coherently accessible device memory");
 
-
---=20
-Luiz Augusto von Dentz
