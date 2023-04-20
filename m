@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDD56E8E3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44B86E8795
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234515AbjDTJhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
+        id S229659AbjDTBrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbjDTJgZ (ORCPT
+        with ESMTP id S229580AbjDTBrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:36:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E806D3C05
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71F5E61243
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE4AC433EF;
-        Thu, 20 Apr 2023 09:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681983365;
-        bh=zxxQxxfZMAX2tSIR37Rb1lSFTjLRW4QpM+kVnrL9Y8s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N9zP9VthsK89QwIljInnAIyQMj7niZ+oNxv6sDDU+CANoYWhoUSJQ4/9ahX/92bsR
-         F71JG7u0/jy0CPD9k2hCW1WrQL1njl/QFQydv3dbKHAhdCTbonwLANvlUzQBbLI/t0
-         Xs8yo6kVqPWWaDSprmTfegQyKYXpp2aFGlEK1/UMh15zZbHGJemGX9S3pK1WnD53nQ
-         2gBHZIX+cmzlTFR1Z+e+xNJDG6cM2KBO4m8GIf050Z5XDCOIJlAwoTEvHjaapVVZeO
-         T6bLh8h6Ym0Y9O7jgwKgVY2yXQ4lV83L+XubxvINX4uxNMeJ1cKzl9NDCGZCSmO3yV
-         +3HPB2TgAlKxg==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH 4/4] tty: vt: drop checks for undefined VT_SINGLE_DRIVER
-Date:   Thu, 20 Apr 2023 11:35:59 +0200
-Message-Id: <20230420093559.13200-4-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230420093559.13200-1-jirislaby@kernel.org>
-References: <20230420093559.13200-1-jirislaby@kernel.org>
+        Wed, 19 Apr 2023 21:47:02 -0400
+X-Greylist: delayed 653 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 18:47:00 PDT
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0F75591
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:47:00 -0700 (PDT)
+X-ASG-Debug-ID: 1681954564-1eb14e63892a7b0001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id lcfoYTgH1z6X2Wio (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 09:36:04 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 09:36:03 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 09:36:03 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH] xhci:fix issue with resume from system Sx state in zhaoxin platform
+Date:   Thu, 20 Apr 2023 17:36:03 +0800
+X-ASG-Orig-Subj: [PATCH] xhci:fix issue with resume from system Sx state in zhaoxin platform
+Message-ID: <20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1681954564
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 979
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0019 1.0000 -2.0084
+X-Barracuda-Spam-Score: 1.10
+X-Barracuda-Spam-Status: No, SCORE=1.10 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107658
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,59 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VT_SINGLE_DRIVER is defined nowhere. Remove its checks. These were added
-long time ago and never used.
+On Zhaoxin ZX-100 project, xHCI can't work normally after resume
+from system Sx state. To fix this issue, when resume from system
+Sx state, reinitialize xHCI instead of restore.
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
- drivers/tty/vt/vt.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/usb/host/xhci-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index c4d333277ef7..1e8e57b45688 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -137,9 +137,7 @@ const struct consw *conswitchp;
- struct vc vc_cons [MAX_NR_CONSOLES];
- EXPORT_SYMBOL(vc_cons);
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 6db07ca419c3..b0f0ed088f81 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -334,6 +334,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	     pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
+ 		xhci->quirks |= XHCI_NO_SOFT_RETRY;
  
--#ifndef VT_SINGLE_DRIVER
- static const struct consw *con_driver_map[MAX_NR_CONSOLES];
--#endif
- 
- static int con_open(struct tty_struct *, struct file *);
- static void vc_init(struct vc_data *vc, unsigned int rows,
-@@ -1008,10 +1006,10 @@ static void visual_init(struct vc_data *vc, int num, int init)
- 	if (vc->vc_sw)
- 		module_put(vc->vc_sw->owner);
- 	vc->vc_sw = conswitchp;
--#ifndef VT_SINGLE_DRIVER
++	if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN && pdev->device == 0x9202)
++		xhci->quirks |= XHCI_RESET_ON_RESUME;
 +
- 	if (con_driver_map[num])
- 		vc->vc_sw = con_driver_map[num];
--#endif
-+
- 	__module_get(vc->vc_sw->owner);
- 	vc->vc_num = num;
- 	vc->vc_display_fg = &master_display_fg;
-@@ -3575,8 +3573,6 @@ int __init vty_init(const struct file_operations *console_fops)
- 	return 0;
- }
- 
--#ifndef VT_SINGLE_DRIVER
--
- static struct class *vtconsole_class;
- 
- static int do_bind_con_driver(const struct consw *csw, int first, int last,
-@@ -4278,8 +4274,6 @@ static int __init vtconsole_class_init(void)
- }
- postcore_initcall(vtconsole_class_init);
- 
--#endif
--
- /*
-  *	Screen blanking
-  */
+ 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+ 	if (xhci->hci_version >= 0x120)
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
 -- 
-2.40.0
+2.32.0
 
