@@ -2,154 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C706E9693
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55BA6E9695
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjDTOET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S231866AbjDTOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjDTOES (ORCPT
+        with ESMTP id S231894AbjDTOE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:04:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B478E211C;
-        Thu, 20 Apr 2023 07:04:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F181618A0;
-        Thu, 20 Apr 2023 14:04:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E96C433D2;
-        Thu, 20 Apr 2023 14:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681999451;
-        bh=DKXKKNzEalaFBkkihjSMZq+RvsASzGcDEcH47uE9AYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oBmM9k13zDUPAdsg//VtLRSGpfj0tQr2v3AlXFCbQGggXl/DkSOT6J7rVERFRk/Tm
-         FAZm65zkPjhESgz9Wt0sYCVmyi+CHn90SLjbmFX6hRWvFryL5Vum6ak2piaYIsPECT
-         9gOBstmPrUZxPTeP5vSrtmdNadUXhEvuQQiDDu5zZubUAMzC5jHNUMp2QuOw/3FT1Q
-         Uscg8X7RCiT6FaijaLTqLy+JMAXmvCHMnZ9wmw8pfaNCn8FwcnvLepr4ndPlci74Co
-         tN85M0v7ldp2EZ+sPI5yVo7zwD0w+4fqBCHWEeeZj9rGJkmHmNfUN9ImTeFRTexU1Z
-         7IIigbC+cdBMA==
-Date:   Thu, 20 Apr 2023 15:04:06 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, rafael.j.wysocki@intel.com,
-        dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Subject: Re: [PATCH v5 6/6] mfd: tps6586x: register restart handler
-Message-ID: <20230420140406.GH996918@google.com>
-References: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
- <20230327-tegra-pmic-reboot-v5-6-ab090e03284d@skidata.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Thu, 20 Apr 2023 10:04:28 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2104.outbound.protection.outlook.com [40.107.94.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CEE211C;
+        Thu, 20 Apr 2023 07:04:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YAQfcAJefXDzZ6yqbDKfQZWVPV/MdaOdgyslpQPNTm2xaHP8ZMy9b1Sspxzkf0r2aj9ehAQksBJA1xR/RzKBxYaU/ZjGvwkqhGHfzqEAccAOMs9+QyYz3la/gQL5cHZ/7oWCMYfUY0B/yQfNzNJHgRQs7nLSO/mO/1SLmrS3nKM9TXWMBkOkCNzd0Kpxv4NbHoAvzc5lrCT6+sD0gsZlt+aHDdEyhLANSdwyQf3fLSh11Yz2QlbCTPjIlgrY3t9qrVTUH2W5r4t/ML2nXB4G1VqH9k/FhOsldbpHM8FpEkEBqOzkIgGT0LTYtBzdHPIKUOX85yWzgzQfBaehvQ5e0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jY/SDGCpXtlD1vs7nPm+ueQ+Mg9JgCSz56hAObbyr0s=;
+ b=Chm1pwE7q5D6jsyMZ5xC2WuLo8lEkIoXEUhHBMReoyPX2CnYaUgVvHMosxhWEgLpeIEbW4bMyr2bMf/g4PmNspdn3lXbv+vz92bZ1eALSRkfbc9jzAoIBxGKl/jiQ8aRVJ/gU3C94WDjKrsAKwrCJOAnEoS5ldtIy+YjfPLTPLQeiUQZkF4yrZXtSV0BQUKbpzx5Nq6QDb8hKBUHOyVIc4kYFqH7ZJLoEiHvl1fTS9qg4c47QriObTD/LbnU6O7st0byXGhAPWcKBd8ha2jt6mwT1pVi+XU6loUHbpbQrZ2xXeNN/JoGrmapzwSF3w95dOyjlXdb1paPDRQ70NAmBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jY/SDGCpXtlD1vs7nPm+ueQ+Mg9JgCSz56hAObbyr0s=;
+ b=RS5iVIorYxE8CSXz7ynUXwgl/u07nc4XmMOb3RDqxTcI6uLZkx4fD2BBv/HGpXsySoapCsXwVSYETrqlDJlBPAcgaPBaJK5C+dXoOBsaiIR7/GZ+wOfNBPioyAkMC8rysIFvQ94P3KKLHzvwJRFOhFYuy68yANTxUyQGGKsNG8Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ2PR13MB6071.namprd13.prod.outlook.com (2603:10b6:a03:4f4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Thu, 20 Apr
+ 2023 14:04:22 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 14:04:22 +0000
+Date:   Thu, 20 Apr 2023 16:04:14 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
+        Wen Gong <quic_wgong@quicinc.com>,
+        Baochen Qiang <quic_bqiang@quicinc.com>,
+        Sowmiya Sree Elavalagan <quic_ssreeela@quicinc.com>,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ath12k@lists.infradead.org
+Subject: Re: [PATCH] wireless: ath: work around false-positive
+ stringop-overread warning
+Message-ID: <ZEFGXruk/Onq92IW@corigine.com>
+References: <20230417205447.1800912-1-arnd@kernel.org>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230327-tegra-pmic-reboot-v5-6-ab090e03284d@skidata.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230417205447.1800912-1-arnd@kernel.org>
+X-ClientProxiedBy: AM0PR10CA0126.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:e6::43) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6071:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd21cd40-274c-4fd8-67a0-08db41a823f8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e45VBvl9cwrcDG3KJAFJttOc0oynwxI11EtTiEMBPQMcw/BzIIz85oSokgWsYBg7rnD7riHgfbx8/AZZbw/0v37HThDuht2PnyjzyGaHQD4JUyOecgK9vZHs/u1I1VcXnvnoRNxwkxvTwtsXgrRNyc6dhESLbs3mU9fek7Pu8rblfM18+4YF5Lw0YXwUZuje7xPMkUM/ilMHbFuTFAdlFCMIxcVBXVaCxfDA99vdcNDtuJRiJh/SlH09pkGRIZ9ZkRfbrTRsOVasjWT0/HQPWSMhSi+ESSu29rOgXo45V9C2NoPNZrtjKZB46Ee96CqNGi0J58gLYSPSz8qQbzgEwejsJchhOyN5SFNJGXEx5MMxkukgdQevFfBO+5lXMrWbvoEjoeVLieQ4z3iBUFchgy0GrXbFB5L2VWF5Naj7UvDKs28YvnK2iP58oQc2jmRxhR2dewdN/5sFerDoVEplX6GJthyfCkC7TUo+F31R8ApMvum7ZVXgi2yKk0IPzbb8g3TbZO7owsspM8TPaLhMoi71V4OvKLVa/ZDMz/+uqs4CucmsSw8jT1YuFFnOyKe1S+Z7WBUhiza8v1pRUXR/M0+vwHSg0FrK/CFug/SikqE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(39840400004)(396003)(451199021)(8936002)(8676002)(6666004)(7416002)(36756003)(2616005)(6486002)(5660300002)(6506007)(6512007)(41300700001)(186003)(44832011)(83380400001)(2906002)(4744005)(38100700002)(54906003)(66946007)(66556008)(66476007)(4326008)(6916009)(316002)(478600001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jv1KCjHfP8D0CLOzr74PShLBXndU2j4C1z+M3JOe1Oh1T8oXD7lszrSiDQHM?=
+ =?us-ascii?Q?im6IYWb3qnIh8T8rIenXxRdkzt1MDcuKndRvYbJB93tY8s3EN4wl99umiDQ9?=
+ =?us-ascii?Q?P3UHr1eDVEBwFFCGwhDsh+h5Ls8fTjeX0y/1hRDoukSqln2ygAHsyBGDS75k?=
+ =?us-ascii?Q?RV9nyZMEJAj5d/eTdFmzUx5sfpIyErMD6CkJzwGGpsScw9Xf94lIeo9Gy6BL?=
+ =?us-ascii?Q?crFMVpzwTCMczZNtycQXqs863gybNyhwNNVz57EPeOedW5+tPbUkFQsWDxj4?=
+ =?us-ascii?Q?AP30+YG7miMXtiO/Y3CXyz9zcBs5YrFG+vXnzZSYTV8VIh2Al8XiZeg56HBM?=
+ =?us-ascii?Q?/on/RI36b6eOdqIC38spnmkMfiBlp5G6CyLOoBX4J7qqyOJyHV2mNYeq4xFJ?=
+ =?us-ascii?Q?u/reKKhYj8gJhY4zfEjRHiQv+9eQcIbo1BrLqIK0iKoNrzi/AUc863GKOzv3?=
+ =?us-ascii?Q?l5SKMDgog7dgvtiwDmJ8n3snWNF5tATjMdYrqP3Ti2hAPRKVOHnQkboTy/Pc?=
+ =?us-ascii?Q?+2/xCfrkuLcQFYmz55Tk7FmFzRzC9b/zA/LInt7HTcbfBIZ++YDnGiQnZuTM?=
+ =?us-ascii?Q?GmX4t+dTX8wv5ZYjP6ROFhSXjDOw8R3y6xLyUfIH03LtnxaTACdwHoOF3+Du?=
+ =?us-ascii?Q?dYty8bfspnNSRe+UXPiIY1Gko3ZH7wOrzEWzQWM+6s20JzNFv9E8FbHBELIH?=
+ =?us-ascii?Q?mwJb8ZvjO8sq60l14/QerM5paqbrQkmc3h7ZpL/X66JQXPNiPclpcEPH8iQP?=
+ =?us-ascii?Q?H5Pt5Y0PoAaqpFPeJSzc//CNlZSLdxwao+UsPzq/DIKwdCl08ZUPAKBo0y50?=
+ =?us-ascii?Q?IbTkzoyekZZ3bH4KBXTvunSzkkZAhUUKfpKB7n0lBkPq21B51TvTCHUZzEge?=
+ =?us-ascii?Q?VDtekEo0dmuNvMG2gSxZJZrc+eamwgz4vtrCd6E7V1/SzzCLaxvgyzpr/Mg7?=
+ =?us-ascii?Q?S6NHI8IDpskBqAqEEr2aPqxTaps+PcDhYimy90TnB2l0/TE0vfZIX82b9fZa?=
+ =?us-ascii?Q?gAzWKSk/AJJM2G9s+rWN+x242Jt0qIdD+ZsHngkHHQQ1v6lw4QZ9pSLPJ7wQ?=
+ =?us-ascii?Q?KnZ0t/iTWC+wwr65FLRHleXxO0aXVCUN+NG7E95dWv0uSY6p1q3HViUpuRF1?=
+ =?us-ascii?Q?b06Wvs8t1M92a8wDmkuxdsF3m0Py+8phtKrvI/FEK642xAr7GxEBES3lCG7B?=
+ =?us-ascii?Q?BTVrNT3CWS11rOnkp2T+4mUlAK24VvRANwg5Hv7SFgKj3w6HfsJmU2kj2rLa?=
+ =?us-ascii?Q?uLwuuvuhP/IO6hTI31AICnm8MUhNvdrQ29Z+dELh5Y/mM0ypjaXzOCKQDgf+?=
+ =?us-ascii?Q?xdkIX2hUs4FxLln/FjJ5dVMlSKMUtIb+ALAh+MCr9uu45SWsw0NtybpRKlTL?=
+ =?us-ascii?Q?Km0vMcGElWIqmIcjm73FJIg4M937/I4OdBzvkE3RkByIMT3l/IxqCJx5avzM?=
+ =?us-ascii?Q?cjqsubXZm2VtgzRr7rqAtwJLTPlLK2+FBaAGN/RWzHoFnR6i0cPiuGNvjGKE?=
+ =?us-ascii?Q?yKOsySZK7r4t++ggqUDPNY2FqrJK1D2gYfVxhaJ0EGhpSGKren/cCP2O+cq7?=
+ =?us-ascii?Q?jn5nt4PHNuSssa/Ou40iKCIhDcQ/zyvoLmgDyK2qv0amkj1U6oDaIjTA8gTg?=
+ =?us-ascii?Q?cNjxTHT9PLqH7OI8j+Snap75RNt9bnleWsH5N27rbDN5FKbSrlcyzKtR1GqT?=
+ =?us-ascii?Q?oj0Waw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd21cd40-274c-4fd8-67a0-08db41a823f8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 14:04:21.9045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A06hm64zU5cor6diqG4/6VH/x0DXienby69zdgG49M8JHUH0vXQnIa5MQeYCvR146ztAg3qequ49Bahoo90u9trvMC9lGJxe32xcMj0fgr4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6071
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023, Benjamin Bara wrote:
-
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Mon, Apr 17, 2023 at 10:54:20PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> There are a couple of boards which use a tps6586x as
-> "ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
-> For these, the only registered restart handler is the warm reboot via
-> tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
-> be ensured that VDE is enabled (which is the case after a cold reboot).
-> For the "normal reboot", this is basically the case since 8f0c714ad9be.
-> However, this workaround is not executed in case of an emergency restart.
-> In case of an emergency restart, the system now simply hangs in the
-> bootloader, as VDE is not enabled (because it is not used).
+> In a rare arm64 randconfig build, I got multiple warnings for ath11k
+> and ath12k:
 > 
-> The TPS658629-Q1 (unfortunately the only TPS6586x with public data sheet)
-> provides a SOFT RST bit in the SUPPLYENE reg to request a (cold) reboot,
-> which takes at least 10ms (as the data sheet states).
-> This avoids the hang-up.
+> In function 'ath11k_peer_assoc_h_ht',
+>     inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2665:2:
+> drivers/net/wireless/ath/ath11k/mac.c:1709:13: error: 'ath11k_peer_assoc_h_ht_masked' reading 10 bytes from a region of size 0 [-Werror=stringop-overread]
+>  1709 |         if (ath11k_peer_assoc_h_ht_masked(ht_mcs_mask))
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Tested on a TPS658640.
+> This happens whenever gcc-13 fails to inline one of the functions
+> that take a fixed-length array argument but gets passed a pointer.
 > 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->  drivers/mfd/tps6586x.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+> Change these functions to all take a regular pointer argument
+> instead.
 > 
-> diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-> index 226e856e34e0..f7665b368071 100644
-> --- a/drivers/mfd/tps6586x.c
-> +++ b/drivers/mfd/tps6586x.c
-> @@ -30,6 +30,7 @@
->  #include <linux/mfd/tps6586x.h>
->  
->  #define TPS6586X_SUPPLYENE	0x14
-> +#define SOFT_RST_BIT		BIT(0)
->  #define EXITSLREQ_BIT		BIT(1)
->  #define SLEEP_MODE_BIT		BIT(3)
->  
-> @@ -475,6 +476,24 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
->  	return notifier_from_errno(-ETIME);
->  }
->  
-> +static int tps6586x_restart_handler(struct sys_off_data *data)
-> +{
-> +	int ret;
-> +
-> +	/* tps6586x only provides a hard/cold reboot, skip others. */
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-TPS6586x
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-> +	if (data->mode != REBOOT_UNDEFINED && data->mode != REBOOT_COLD &&
-> +	    data->mode != REBOOT_HARD)
-> +		return NOTIFY_DONE;
-> +
-> +	/* bring pmic into HARD REBOOT state. this takes at least 10ms. */
-
-Same as the other patch.
-
-> +	ret = tps6586x_set_bits(data->dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
-> +	if (ret)
-> +		return notifier_from_errno(ret);
-> +
-> +	mdelay(20);
-
-Why 20 here and 50 in the other patch?
-
-> +	return notifier_from_errno(-ETIME);
-> +}
-> +
->  static void tps6586x_print_version(struct i2c_client *client, int version)
->  {
->  	const char *name;
-> @@ -575,6 +594,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
->  			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
->  			goto err_add_devs;
->  		}
-> +
-> +		ret = devm_register_restart_handler(&client->dev, &tps6586x_restart_handler,
-> +						    NULL);
-> +		if (ret) {
-> +			dev_err(&client->dev, "register restart handler failed: %d\n", ret);
-> +			goto err_add_devs;
-> +		}
->  	}
->  
->  	return 0;
-> 
-> -- 
-> 2.34.1
-> 
-
--- 
-Lee Jones [李琼斯]
+Note: I was not able to reproduce the problem described above.
