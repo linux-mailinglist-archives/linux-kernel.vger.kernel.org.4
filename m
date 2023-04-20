@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9E36E98B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42236E98B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjDTPrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S232377AbjDTPrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjDTPrB (ORCPT
+        with ESMTP id S232421AbjDTPrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:47:01 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47689E2;
-        Thu, 20 Apr 2023 08:47:00 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KDTEqQ015541;
-        Thu, 20 Apr 2023 15:46:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=G/BEQmLkKBZqaQzlVPSxWqkEccIQJ/cOoKEm1YfSmuU=;
- b=O5y0USRroxJIu7g8/T1RJWpdKiDqRsh8W9AYRZcB4Uz/eh5ibkX5eDQZHhf6oDytaySu
- 6Rs9SIcoORgePoirb7VfLfeM9ddn/rULa/Sfwvay9vKsiXetkhVaxb4fAFhkrMVVefno
- Q1kNDXvDNmy5Fu7EzWHe4lc72AnmIjvseJkLqdc9Ggtdsy7us8902p9VFytzJCrzs41a
- KEzNstUycik4/mf08dMBqChyZZlO13JYyEzG+sDZA7e/4bPznwV+L9tdJOQEtUaM9Axx
- Lh8tQzBxd7938AiFme8nbdUPzF6TWY9H7RstHjFQ65oeHB1R22Q7w4rKp1dI2L5q5Zmx Iw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2uh3hvsg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 15:46:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33KFkmoV012845
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 15:46:48 GMT
-Received: from [10.110.74.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 20 Apr
- 2023 08:46:47 -0700
-Message-ID: <cd308be9-5420-6d75-da23-e844107ec275@quicinc.com>
-Date:   Thu, 20 Apr 2023 08:46:46 -0700
+        Thu, 20 Apr 2023 11:47:52 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC8CE53
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:47:51 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id vc20so7336449ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682005669; x=1684597669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii0rJDmD6wGcfR9R86o46jWR7Sx2THT0mFJ55bpx/lc=;
+        b=XK4cAxcm9V+tmT5sYaMjsisB8fWSfvuQ3Whf7RuncKhI7VhoZ4bCjDetHGvfTfIm5f
+         TvT4iDeOzqgdC7mdtXMmOezBUtCgt6BrOOlodawLenZ6trC1ZceJ6OfZV9CV5NpBxRXx
+         k3+pXE/yBt55rJ7IGr13BDleUvH2P3i8F4cIhwVd30YHPkfVKjEIFZIj39cl8zk+9AVx
+         XvhwAiQr9lz0VL+itTJCDEoEofnBo2a7IfNvV/DD6vNAodHU9yIR4vyU7Gldv8cCwxdm
+         aRH8ewKOrL/gfzSc7kCFKR3paTDTKNOG2/Hwho1K/uFh38sH3Lv7q1roYKsx54I3RTP0
+         r5sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682005669; x=1684597669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii0rJDmD6wGcfR9R86o46jWR7Sx2THT0mFJ55bpx/lc=;
+        b=Uq+2a5dwLQFwctPyV/bPvh8GRcTt2NY4wRIHoGBl/uQ59b4TjT8wL3b6o/gmjZTHFJ
+         sRgGfEBhV3R7i7VD/99aH2D0mrHfi/WFAWKa3VMJ0OgXoPLWisj8uqUyRfU0HRxE9+B8
+         smDAbngxU5ajPlX/fdh4BjD/PiIPuU+ifl71TukpXQzw1qiOWM+/Mn9Q7L/sCNROQuu0
+         16s/u9JAQr27NWnUSEFuh6FgvA3+zMWQjv8rndZN19ubnaofM49fpha3jfkcCDbuCJUG
+         y2NQ4clTVUCqCGMVNuB/D0SW/qb/jMxYxZUROtGVSFaY2AnF/ZsqTrA4QndC7v976ihi
+         xurw==
+X-Gm-Message-State: AAQBX9dvayoa4WvAFdt+MCdaFmqixtS8lbDRrihSuWcoHrfUG4+56MCz
+        GTj+R/wG7iupfULJf24mzUHuVQ==
+X-Google-Smtp-Source: AKy350bigdojBVAu1yf8DpxqzPZ+1OFcdgyfRolFxaaBBS3Mmcpps74+3jkoTtBj2wvJL7j/Sn3gIQ==
+X-Received: by 2002:a17:906:7215:b0:94f:61b2:c990 with SMTP id m21-20020a170906721500b0094f61b2c990mr2092604ejk.25.1682005669571;
+        Thu, 20 Apr 2023 08:47:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id a8-20020a1709063e8800b0094e4684e5c0sm867274ejj.25.2023.04.20.08.47.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 08:47:49 -0700 (PDT)
+Message-ID: <c7be28da-45f0-c743-9bd9-cfac2114f167@linaro.org>
+Date:   Thu, 20 Apr 2023 17:47:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH 1/3] drm/msm/dpu: Drop unused members from HW
- structs
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/4] dt-bindings: net: can: Make interrupt attributes
+ optional for MCAN
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Jami Kettunen <jami.kettunen@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20230418-dpu-drop-useless-for-lookup-v1-0-b9897ceb6f3e@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v1-1-b9897ceb6f3e@somainline.org>
- <7ad86cd9-4b30-e7f1-780f-2c1c7093087e@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <7ad86cd9-4b30-e7f1-780f-2c1c7093087e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qBUkv7MXVcxsAiY8z6huigdyztysqsiF
-X-Proofpoint-GUID: qBUkv7MXVcxsAiY8z6huigdyztysqsiF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_11,2023-04-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 spamscore=0 mlxscore=0 malwarescore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304200129
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230419223323.20384-1-jm@ti.com>
+ <20230419223323.20384-3-jm@ti.com>
+ <20230420-zoom-demystify-c31d6bf25295-mkl@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420-zoom-demystify-c31d6bf25295-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,136 +91,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/20/2023 7:33 AM, Dmitry Baryshkov wrote:
-> On 18/04/2023 02:14, Marijn Suijten wrote:
->> Some of these members were initialized while never read, while others
->> were not even assigned any value at all.  Drop them to save some space,
->> and above all confusion when looking at these members.
+On 20/04/2023 12:01, Marc Kleine-Budde wrote:
+> On 19.04.2023 17:33:21, Judith Mendez wrote:
+>> For MCAN, remove interrupt and interrupt names from the required
+>> section.
 >>
->> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
->> Fixes: 84a33d0fd921 ("drm/msm/dpu: add dpu_hw_wb abstraction for 
->> writeback blocks")
-> 
-> The fixes headers are slightly questionable, as unused fields are not a 
-> bug. Nevertheless:
-> 
-
-Yes, I would also not treat this as a "fix" but just cleanup.
-
-I think if this series is slightly re-ordered to keep the second patch 
-before this one, I can pick that one up for -fixes and then this one and 
-the third can be left for 6.5
-
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
->> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 1 -
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h | 1 -
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c | 1 -
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h | 2 --
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c   | 1 -
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h   | 5 -----
->>   6 files changed, 11 deletions(-)
+>> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+>> routed to A53 Linux, instead they will use software interrupt
+>> by hrtimer. Make interrupt attributes optional in MCAN node
+>> by removing from required section.
 >>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->> index 84ee2efa9c66..a9c90249a6ac 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->> @@ -374,7 +374,6 @@ struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf 
->> idx,
->>        */
->>       c->idx = idx;
->>       c->cap = cfg;
->> -    c->mdss = m;
->>       _setup_intf_ops(&c->ops, c->cap->features);
->>       return c;
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->> index 643dd10bc030..e07b2e33af3e 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->> @@ -90,7 +90,6 @@ struct dpu_hw_intf {
->>       /* intf */
->>       enum dpu_intf idx;
->>       const struct dpu_intf_cfg *cap;
->> -    const struct dpu_mdss_cfg *mdss;
->>       /* ops */
->>       struct dpu_hw_intf_ops ops;
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c
->> index cf70a9bd1034..bb3ddec5c7d7 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c
->> @@ -812,7 +812,6 @@ struct dpu_hw_sspp *dpu_hw_sspp_init(enum dpu_sspp 
->> idx,
->>       }
->>       /* Assign ops */
->> -    hw_pipe->catalog = catalog;
->>       hw_pipe->ubwc = catalog->ubwc;
->>       hw_pipe->idx = idx;
->>       hw_pipe->cap = cfg;
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h
->> index 74b98b6b3bc3..5004a02fd61e 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h
->> @@ -341,7 +341,6 @@ struct dpu_hw_sspp_ops {
->>    * struct dpu_hw_sspp - pipe description
->>    * @base: hardware block base structure
->>    * @hw: block hardware details
->> - * @catalog: back pointer to catalog
->>    * @ubwc: ubwc configuration data
->>    * @idx: pipe index
->>    * @cap: pointer to layer_cfg
->> @@ -350,7 +349,6 @@ struct dpu_hw_sspp_ops {
->>   struct dpu_hw_sspp {
->>       struct dpu_hw_blk base;
->>       struct dpu_hw_blk_reg_map hw;
->> -    const struct dpu_mdss_cfg *catalog;
->>       const struct dpu_ubwc_cfg *ubwc;
->>       /* Pipe */
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c
->> index 2d28afdf860e..db5e6040017f 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c
->> @@ -262,7 +262,6 @@ struct dpu_hw_wb *dpu_hw_wb_init(enum dpu_wb idx,
->>       }
->>       /* Assign ops */
->> -    c->mdp = &m->mdp[0];
->>       c->idx = idx;
->>       c->caps = cfg;
->>       _setup_wb_ops(&c->ops, c->caps->features);
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h
->> index 3ff5a48541e2..b91923f879f1 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h
->> @@ -76,15 +76,12 @@ struct dpu_hw_wb_ops {
->>   /**
->>    * struct dpu_hw_wb : WB driver object
->>    * @hw: block hardware details
->> - * @mdp: pointer to associated mdp portion of the catalog
->>    * @idx: hardware index number within type
->>    * @wb_hw_caps: hardware capabilities
->>    * @ops: function pointers
->> - * @hw_mdp: MDP top level hardware block
->>    */
->>   struct dpu_hw_wb {
->>       struct dpu_hw_blk_reg_map hw;
->> -    const struct dpu_mdp_cfg *mdp;
->>       /* wb path */
->>       int idx;
->> @@ -92,8 +89,6 @@ struct dpu_hw_wb {
->>       /* ops */
->>       struct dpu_hw_wb_ops ops;
->> -
->> -    struct dpu_hw_mdp *hw_mdp;
->>   };
->>   /**
->>
+>> Signed-off-by: Judith Mendez <jm@ti.com>
 > 
+> This series basically adds polling support to the driver, which is
+> needed due to HW limitations.
+> 
+> The proposed logic in the driver is to use polling if
+> platform_get_irq_byname() fails (due to whatever reason) use polling
+> with a hard-coded interval.
+> 
+> In the kernel I've found the following properties that describe the
+> polling interval:
+> 
+> bindings/input/input.yaml:
+> 
+> |   poll-interval:
+> |     description: Poll interval time in milliseconds.
+> |     $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> 
+> bindings/thermal/thermal-zones.yaml:
+> 
+> |       polling-delay:
+> |         $ref: /schemas/types.yaml#/definitions/uint32
+> |         description:
+> |           The maximum number of milliseconds to wait between polls when
+> |           checking this thermal zone. Setting this to 0 disables the polling
+> |           timers setup by the thermal framework and assumes that the thermal
+> |           sensors in this zone support interrupts.
+> 
+> bindings/regulator/dlg,da9121.yaml
+> 
+> |   dlg,irq-polling-delay-passive-ms:
+> |     minimum: 1000
+> |     maximum: 10000
+> |     description: |
+> |       Specify the polling period, measured in milliseconds, between interrupt status
+> |       update checks. Range 1000-10000 ms.
+> 
+> From my point of view the poll-interval from the input subsystem looks
+> good. Any objections to use it to specify the polling interval for
+> IRQ-less devices, too?
+
+Better to skip it, if delay can be figured out by driver based on
+something else (e.g. clocks).
+
+Best regards,
+Krzysztof
+
