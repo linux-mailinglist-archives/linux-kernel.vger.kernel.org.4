@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9956E94B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226CA6E94BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbjDTMjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
+        id S233876AbjDTMjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbjDTMjg (ORCPT
+        with ESMTP id S231532AbjDTMji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:39:36 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA96A4B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:39:27 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f173af665fso4173675e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:39:26 -0700 (PDT)
+        Thu, 20 Apr 2023 08:39:38 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBF76E9F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:39:31 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f1833c5991so4278095e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1681994365; x=1684586365;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dYfVS08kxs8OVYC1ESyMcBXOaimmmrC9jvQr/qzMgk8=;
-        b=PzR6A+qJwzOHwbO/ndc6BCDxt1YCgfwxoBqIX9FyPYw/PffXIftTq85+tWAOdo8AFe
-         dPELGqjWron5vvqTZQJYSRohzqQvFVjYEDHjJFEPsbwJnGpcuxDrOERpLx2iaNNDEHmb
-         8mVrXjMxsxNNYoKHFw3zOtDqTk/mwkDxiySCE=
+        d=chrisdown.name; s=google; t=1681994369; x=1684586369;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8YAv08zAu835VyLUIxerX7wJ0A3J2jIaNEGE7AcNdfA=;
+        b=fPQBJcqa3wSJD4o0SaCFjHJsOWzBcpmYweDaFGA8KWYpku/0ocbDo+D7Kgy8f/r57k
+         4Vvzvel1/+U5dcEed3vGPlgBnhcupAnzIP2QTpzXlTKKOriCArh4rcVC/d4QbERRFaHp
+         hIsZ3KJsTk73n1EN025aTi61n5WkA14dtm+S0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681994365; x=1684586365;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dYfVS08kxs8OVYC1ESyMcBXOaimmmrC9jvQr/qzMgk8=;
-        b=AO9Wt2Cznq2hFp/U9HzDeRmTwXKQaSBsRLklu0qKb0zyN3vbk8oEUEWiNYeobt1poZ
-         YktNISFWe4s3ab+18y7FuZ18CMAq2lL5pFb1J8LM3mykt3Dfhc7kYQFdPCEXowRRQCyn
-         ap4opmrVxa9VK9qJURP9tmPBbVkKt8kTamkinxbk74ABzpNiEWrEGHL7PgaFQ4RPri7A
-         e001BnzcvNAp3rEamipGcLrbFL5J5a6v09E+bQlyxLqfkuco54K2DBsMT+a5OaQfLq7O
-         MfJhE4nylVIDCKTRIORaDfxxZte0MnDZ2nzDDfrMV49jPuhAQsCg6E5iAcRKQjDP9nBm
-         xtPQ==
-X-Gm-Message-State: AAQBX9fHCR847m+GAOB8ArCdsWZENzrSxByM50MaNqFx7uGNJCMLszNw
-        R0lvfyCAcEJpmP6ybRM4ZIhR4LN47phflU2hE4s=
-X-Google-Smtp-Source: AKy350bx/ZtlYgyoOQMwj1P+53wFjA/u+HwJcSrxovcJbghEiCi0mC5XhMUWQ5A8uUIgDq9neQe0DQ==
-X-Received: by 2002:adf:e381:0:b0:2f9:a75:b854 with SMTP id e1-20020adfe381000000b002f90a75b854mr1331572wrm.59.1681994364998;
-        Thu, 20 Apr 2023 05:39:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681994369; x=1684586369;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8YAv08zAu835VyLUIxerX7wJ0A3J2jIaNEGE7AcNdfA=;
+        b=TRsDXzyp7bXqxyXHWKxTE2abSRZyqkx0wNsklc36FNzITzX5uvHDVe0s4hxqRwiNE3
+         sbhoXjg5GtiA2mD4NaNsF/b+fzE8i/NivnS3NWksXrLkZ6SfcX39RhjcwoqNR020UNFV
+         I0l6nRtygVnYMaFCpd/TcltHfik/crj08JdesLOOA2bZfDcG1lANg2wAjvGIeGMZ328n
+         4u8oUsKzgBpEzbxxw47+c5rDXN8E9Ro9cdWl6vjaJZwnL6VHXGkm+qP1kxfg/LVCH5WX
+         Isa4zqSxyN+FJdruX3+CnlpXSX3z6w16pmAqiK5J3D1hQGqh8qv6Dd3w+jtdbeqEdbFC
+         OBtg==
+X-Gm-Message-State: AAQBX9fvjrjOL5ST8KsJzbN/VYQwGaF+hW1bEU5WMx+RVEMBV3ycnGUd
+        1wrMcz2iikrDOhmyLMMvFOedz5li7Csrrd8kHt8=
+X-Google-Smtp-Source: AKy350Zm+L57Etv6+ORsSBHzod4yA1UD2qVE2sMoJBNBj8QR9HaH9mrjPPWE38M1Zf1XZoSluhihoA==
+X-Received: by 2002:adf:f48c:0:b0:2fb:2a43:4aa1 with SMTP id l12-20020adff48c000000b002fb2a434aa1mr1254562wro.42.1681994369494;
+        Thu, 20 Apr 2023 05:39:29 -0700 (PDT)
 Received: from localhost ([2a01:4b00:8432:8600:5ee4:2aff:fe50:f48d])
-        by smtp.gmail.com with ESMTPSA id z17-20020adfdf91000000b002d97529b3bbsm1840877wrl.96.2023.04.20.05.39.24
+        by smtp.gmail.com with ESMTPSA id k13-20020a5d6e8d000000b002fae2a08089sm1882662wrz.70.2023.04.20.05.39.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:39:24 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 13:39:23 +0100
+        Thu, 20 Apr 2023 05:39:28 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 13:39:28 +0100
 From:   Chris Down <chris@chrisdown.name>
 To:     linux-kernel@vger.kernel.org
 Cc:     Petr Mladek <pmladek@suse.com>,
@@ -55,11 +56,14 @@ Cc:     Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         John Ogness <john.ogness@linutronix.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: [PATCH v4 0/2] printk: console: Per-console loglevels
-Message-ID: <cover.1681994220.git.chris@chrisdown.name>
+Subject: [PATCH v4 1/2] printk: Do not delay messages which aren't solicited
+ by any console
+Message-ID: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+References: <cover.1681994220.git.chris@chrisdown.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1681994220.git.chris@chrisdown.name>
 User-Agent: Mutt/2.2.10 (2023-03-25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,73 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v4:
+Boot-delayed printk messages already have this checked up front, and
+it's odd that we don't do the same check for global printk delays, since
+there's no reason to delay if we are not going to emit anything.
 
-- Change base to Linus' master
-- Use SRCU iterators for console walks
-- Override per-console loglevels on magic sysrq
-- Fix htmldocs
-- Fix mistaken __user annotation in sysctl callbacks
-- Consistently use indexed names (eg. ttyS0 instead of ttyS)
-- Remove "The loglevel for a console can be set in many places" comment
-- Remove CON_LOGLEVEL flag and infer based on >0
-- Open code our dev_get_drvdata console stashing
-- Split out console_effective_loglevel functions per Petr's suggestion
-- Make boot_delay_msec/printk_delay check if it would be emitted
-- Simplify warning on SYSLOG_ACTION_CONSOLE_LEVEL
-- Save/restore ignore_per_console_loglevel on SYSLOG_ACTION_CONSOLE_{ON,OFF}
-- Unify min/max level checks across sysfs/proc/syslog
-- Add find_and_remove_console_option to avoid affecting io/mmio options
+Signed-off-by: Chris Down <chris@chrisdown.name>
+---
+ kernel/printk/printk.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-v3:
-
-- Update to work with John's kthread patches
-- Remove force_console_loglevel, now we only have global and local levels
-- Remove minimum_console_loglevel control and document how to change it
-- The minimum loglevel is now only honoured on setting global/local level
-- Add ignore_per_console_loglevel
-- Return -EINVAL if trying to set below minimum console level
-- Add parser for named console= options
-- Fix docs around ignore_loglevel: it can be changed at runtime
-- Fix ordering in "in order of authority" docs
-- Remove duplicated default_console_loglevel doc
-- Only warn once on syslog() use
-
-v2:
-
-- Dynamically allocate struct device*
-- Document sysfs attributes in Documentation/ABI/
-- Use sysfs_emit() instead of sprintf() in dev sysfs files
-- Remove WARN_ON() for device_add/IS_ERR(console_class)
-- Remove "soon" comment for kernel.printk
-- Fix !CONFIG_PRINTK build
-- Fix device_unregister() NULL dereference if called before class setup
-- Add new documentation to MAINTAINERS
-
-Chris Down (2):
-  printk: Do not delay messages which aren't solicited by any console
-  printk: console: Support console-specific loglevels
-
- Documentation/ABI/testing/sysfs-class-console |  47 ++
- Documentation/admin-guide/index.rst           |   1 +
- .../admin-guide/kernel-parameters.txt         |  28 +-
- .../admin-guide/per-console-loglevel.rst      |  92 ++++
- Documentation/admin-guide/serial-console.rst  |  17 +-
- Documentation/core-api/printk-basics.rst      |  35 +-
- Documentation/networking/netconsole.rst       |  17 +
- MAINTAINERS                                   |   3 +
- drivers/tty/sysrq.c                           |  15 +
- include/linux/console.h                       |   3 +
- include/linux/printk.h                        |   9 +
- kernel/printk/console_cmdline.h               |   2 +
- kernel/printk/printk.c                        | 415 +++++++++++++++++-
- kernel/printk/sysctl.c                        |  57 ++-
- 14 files changed, 691 insertions(+), 50 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-class-console
- create mode 100644 Documentation/admin-guide/per-console-loglevel.rst
-
-
-base-commit: cb0856346a60fe3eb837ba5e73588a41f81ac05f
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index fd0c9f913940..06f16a5f1516 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -1289,15 +1289,13 @@ static int __init boot_delay_setup(char *str)
+ }
+ early_param("boot_delay", boot_delay_setup);
+ 
+-static void boot_delay_msec(int level)
++static void boot_delay_msec(void)
+ {
+ 	unsigned long long k;
+ 	unsigned long timeout;
+ 
+ 	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
+-		|| suppress_message_printing(level)) {
+ 		return;
+-	}
+ 
+ 	k = (unsigned long long)loops_per_msec * boot_delay;
+ 
+@@ -1316,7 +1314,7 @@ static void boot_delay_msec(int level)
+ 	}
+ }
+ #else
+-static inline void boot_delay_msec(int level)
++static inline void boot_delay_msec(void)
+ {
+ }
+ #endif
+@@ -2064,7 +2062,10 @@ int printk_delay_msec __read_mostly;
+ 
+ static inline void printk_delay(int level)
+ {
+-	boot_delay_msec(level);
++	if (suppress_message_printing(level))
++		return;
++
++	boot_delay_msec();
+ 
+ 	if (unlikely(printk_delay_msec)) {
+ 		int m = printk_delay_msec;
 -- 
 2.40.0
 
