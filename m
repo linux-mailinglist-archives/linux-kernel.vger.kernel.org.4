@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795706E8B5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3616E8B6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233821AbjDTH0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S234065AbjDTH2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbjDTH0i (ORCPT
+        with ESMTP id S234082AbjDTH15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:26:38 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2CDC6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:26:37 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a5so4219393ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:26:37 -0700 (PDT)
+        Thu, 20 Apr 2023 03:27:57 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504C135AF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:11 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a6bc48aec8so6580905ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681975596; x=1684567596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LaCVvuCh0ifaod/8Osz9wRqo6LYk9iFhMUaDZ5ywzU4=;
-        b=HSxwHGoFkt1pfTNx3P/aMn78Qft/H5J/iUpd5Dtt67Q3lLbJ2cqELZ280B8RVP9ZI6
-         3YEMJHi59bhftwaSq+SH/3AXJhaP72uPkdWkxKcscMJxNwhsArxyCQV7s5V83hTyicNF
-         nfjlFpvVTHCEdsqLwdIe8aEJFzXtSrtI/GvaNr8cKS6z9VHGyaaq4Dns5byfIuQr3B/g
-         QY46hQIq0uY417faOyPO4xbA9sv6kwLDQzVR6AVEpIOMOkDjU2X38NFzBnTFtIBRCzsn
-         J8DeyanOx0w8Wa8rRbKW0DbN7Z7jtmPwVRGE8siIG3mhgk7dzNOISL3OOSA5cpmjtj3d
-         ZFMw==
+        d=bytedance.com; s=google; t=1681975631; x=1684567631;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hg5G5o39i/mOMMBB9sZHDlNqgHJXvtHyvxUr2dJ6THE=;
+        b=kH4OTVJnseH6q7Pe1OOos6zPSHDAj2tZ3qazT0bYMqWKsaGrGzoVXAs3l/JAw+j1uX
+         BXCMEQb6ZcsuZ3SVhgAScqbhp0DJlBdJO8HBkB0E+llRcaSBO0Os/+DSrtH3J0oUSNcY
+         hae3WB91GwxFXIIvhDunREC36+rEKUAaCp36mnpohuHY1u+KW2U9FzpIXSs5wXp39BQ1
+         6TA0plyxWwwY0ADUdpTefB6sKA2APq+b1MZxAwbklNl2gWCQUlOtlgz3V7B0Yx4iJNGl
+         pjWTq1UvjsNAsXD66F9eEMQPuhP7xgOsZ6wiF+iSqJrg+wxvZ6hvVOPvUMqmc8gdoqZl
+         ++cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681975596; x=1684567596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LaCVvuCh0ifaod/8Osz9wRqo6LYk9iFhMUaDZ5ywzU4=;
-        b=IP0azk2DStbn26poagxni3v841/eTYnDBuhyz5ILGnDNnp4OYGQN25k/aUHZbRXofv
-         N01SjvkXFKzgTZR6tnwHUjiDFhLRpn5WklAyPzOIwqpIK0zomi4xiiRxen4nTaeIy0AI
-         HC+Nujl5w7umEmVXwXES3X9dqmRDqQ19lpeWwgGeCbP4X9goY2llHeCj5vr9F2o3VB93
-         ujwtSkpmHHHjZk5AdUZzxjkuNNIt5oCSTlxBvsZ3TXdle9a7mVl0fS/i5qauwMnsFInp
-         iwcaym4Dgl7wC9gOPmirqbG+bMkDVyfJ+ZFTKcvRjm6NjL3TORq4+T/iXonACfx7vDwr
-         4xPQ==
-X-Gm-Message-State: AAQBX9fWyKfUamxclX3iJGf4tMlhz83YLb0xCqp0M2yn9sV2htmWVdbk
-        G369sEqb9mXpzesqZRmDSpaX2WMhI/HvGHexJFGW
-X-Google-Smtp-Source: AKy350b+6jWk+FNIWk6cavQH152CzIc90gdPX+pCwubbVAUdMA3XRND8Zrw5SaaDEkP1wAvzR+tWGB6OxqTQhZLcC8g=
-X-Received: by 2002:a17:906:4b17:b0:94a:4c68:c1aa with SMTP id
- y23-20020a1709064b1700b0094a4c68c1aamr241124eju.7.1681975595637; Thu, 20 Apr
- 2023 00:26:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681975631; x=1684567631;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hg5G5o39i/mOMMBB9sZHDlNqgHJXvtHyvxUr2dJ6THE=;
+        b=HgNRpWYIOtYjuGBO7iVUnS5I9SlLTHHQ8Nsxz8u8KsD8EXKJrG2L3G0lE1GqFEDTbi
+         v5dmViH9A+VCs2XoqGoHYzRZN7DnSJ4o71xyllf6WtG+V7EvbIo1rVI9LDN/zYbJN1Oa
+         ScDR/wrZNTknimLxDAUlEtryaMn/o+ZwofiFB17V+BnboRKyLPoGri8YJKrkVjjrh/hq
+         cjeXIR+PrtKlKm2e5xHRGKOngUpz8LimIdlhRFU1yVcd7kwsdL+Vr9qMpIw/9b/pWLlP
+         iMCRF8ZsUA0TxMaqHCWpydLSTq3GHpj49uSZ21ZwCrnHLuAZqXFeTY0WqPXlbGs2mBrM
+         4mmQ==
+X-Gm-Message-State: AAQBX9fdGzdk2CQ0uw+OUIiABDP2oQNluwaQoGMlyfe3KUlTbL75RII1
+        GQ5B/MgJO/gTTQi3cKtgCVWCfg==
+X-Google-Smtp-Source: AKy350ZJIw4S2jRf7AWkGYprd3RLjOgFmimEdu2sssZcSsBy7YV14EYvdTzo91BU7GQ4xQK0LTxMDg==
+X-Received: by 2002:a17:903:2444:b0:19e:6cb9:4c8f with SMTP id l4-20020a170903244400b0019e6cb94c8fmr814495pls.41.1681975630719;
+        Thu, 20 Apr 2023 00:27:10 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id y18-20020a17090ad71200b0023440af7aafsm612160pju.9.2023.04.20.00.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 00:27:10 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next 0/2] Introduce a new bpf helper of bpf_task_under_cgroup
+Date:   Thu, 20 Apr 2023 15:26:55 +0800
+Message-Id: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
- <20230419-dpu-tweaks-v1-4-d1bac46db075@freebox.fr> <74c59560-8a79-150f-0c1e-13f22eb35cb2@linaro.org>
-In-Reply-To: <74c59560-8a79-150f-0c1e-13f22eb35cb2@linaro.org>
-From:   Arnaud Vrac <avrac@freebox.fr>
-Date:   Thu, 20 Apr 2023 09:26:24 +0200
-Message-ID: <CAG9NU6_Ua_XLa+c=_93fs5chzQTyPf11W4F87UYbny1k-feoJw@mail.gmail.com>
-Subject: Re: [PATCH 04/11] drm/msm/dpu: allow using lm mixer base stage
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeu. 20 avr. 2023 =C3=A0 00:43, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> a =C3=A9crit :
->
-> On 19/04/2023 17:41, Arnaud Vrac wrote:
-> > The dpu backend already handles applying alpha to the base stage, so we
-> > can use it to render the bottom plane in all cases. This allows mixing
-> > one additional plane with the hardware mixer.
-> >
-> > Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
->
-> This might require additional changes. First, for the STAGE_BASE pipe
-> in the source split mode (iow using two LMs) should programmed with
-> respect to the right LM's x offset (rather than usual left top-left LM).
-> See  mdss_mdp_pipe_position_update().
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Ok, I did test with 2 LMs and it seems to be working, I'll investigate.
+Trace sched related functions, such as enqueue_task_fair, it is necessary to
+specify a task instead of the current task which within a given cgroup to a map.
 
->
-> Also this might need some interaction with CTL_MIXER_BORDER_OUT being
-> set or not. If I remember correctly, if there bottom plane is not
-> fullscreen or if there are no planes at all, we should set
-> CTL_MIXER_BORDER_OUT (which takes STAGE_BASE) and start assigning them
-> from STAGE0. If not, we can use STAGE_BASE.
+Feng Zhou (2):
+  bpf: Add bpf_task_under_cgroup helper
+  selftests/bpf: Add testcase for bpf_task_under_cgroup
 
-I also tested with both fullscreen and non-fullscreen primary plane,
-and no plane. I'll check this.
+ include/uapi/linux/bpf.h                      | 13 +++++
+ kernel/bpf/verifier.c                         |  4 +-
+ kernel/trace/bpf_trace.c                      | 31 ++++++++++++
+ tools/include/uapi/linux/bpf.h                | 13 +++++
+ .../bpf/prog_tests/task_under_cgroup.c        | 49 +++++++++++++++++++
+ .../bpf/progs/test_task_under_cgroup.c        | 31 ++++++++++++
+ 6 files changed, 140 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
 
->
-> > ---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/dr=
-m/msm/disp/dpu1/dpu_plane.c
-> > index 14b5cfe306113..148921ed62f85 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > @@ -881,7 +881,7 @@ static int dpu_plane_atomic_check(struct drm_plane =
-*plane,
-> >       r_pipe->multirect_mode =3D DPU_SSPP_MULTIRECT_NONE;
-> >       r_pipe->sspp =3D NULL;
-> >
-> > -     pstate->stage =3D DPU_STAGE_0 + pstate->base.normalized_zpos;
-> > +     pstate->stage =3D DPU_STAGE_BASE + pstate->base.normalized_zpos;
-> >       if (pstate->stage >=3D pdpu->catalog->caps->max_mixer_blendstages=
-) {
-> >               DPU_ERROR("> %d plane stages assigned\n",
-> >                         pdpu->catalog->caps->max_mixer_blendstages - DP=
-U_STAGE_0);
-> >
->
-> --
-> With best wishes
-> Dmitry
->
+-- 
+2.20.1
+
