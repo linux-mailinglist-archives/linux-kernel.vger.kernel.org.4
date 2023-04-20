@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AD56E9AA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E416E9AA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbjDTRZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S231479AbjDTRYp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 13:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbjDTRZC (ORCPT
+        with ESMTP id S229507AbjDTRYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:25:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BB74EC0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682011447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=THiSF9/cQ+9P0jAFh1XrgO39jM++pc1oXx0FF5X3CLI=;
-        b=HXBCnQELkhOp5IhCkdYLWIuM2MM0UpRqGnteMyPJgEShr3rZqMpbuR/GbhAG0hrzWf26cw
-        GbCSQGgEy48L+PRcMTzHEZo9OtGiXdEGloP1vh+6t1jUhe1+FtJSjRWF4hkutjqcCXU3gO
-        sO1M+s/Mm9mXkHP4pvsUgq/AcJCqfrU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-266-gqP5s0ypO7CwwaGiLJd0Cg-1; Thu, 20 Apr 2023 13:24:05 -0400
-X-MC-Unique: gqP5s0ypO7CwwaGiLJd0Cg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f18fa08032so101915e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:24:05 -0700 (PDT)
+        Thu, 20 Apr 2023 13:24:43 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D1D173A;
+        Thu, 20 Apr 2023 10:24:41 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-94a34c299d8so28787066b.1;
+        Thu, 20 Apr 2023 10:24:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682011445; x=1684603445;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=THiSF9/cQ+9P0jAFh1XrgO39jM++pc1oXx0FF5X3CLI=;
-        b=k/JivMJqCBDzQouczjWHFzQv8g9Lzua6+NBVrqAPVEX3dkkponL7Wltz58jRQoJ4oQ
-         BxFN4PyH44TLhSP986a/8LYXIICUbU3/Z3kCTfrF9SWJboJZlWvh3UdmeymXVAWJDMGs
-         aTQAyfQE4/NVPwRYbJvPynG740TmryhtOzhx7DCzR26xs93aaQ6zYe539W2wW4C5KvxQ
-         vtULDohyKCpK6KP0bxRxXgMIA/eV+gZN1vwWeGaPqdYM0oB2tJChpk/rv2Uf8COVMsae
-         D9A9Lkrd/EypbmWfiKw9rgSC4UwES2ylLciMY963yi6ExZwN4tCqx47VV98YYEYU8zLI
-         zKqw==
-X-Gm-Message-State: AAQBX9cDxvPZ5snLNp4o31qg4+ye3eqvQELBeKoQjA6pCIHBPc2vb5Zd
-        hZ0/ugXyQsGcjmv7GGJr4ksaVv7x/3DgiwA1jwusYvGpXHylRGjxRJYfsddAoaeGIXr3esHDUPQ
-        gkesV0hlFTMwtaw81ajXW5E3r
-X-Received: by 2002:adf:fc0b:0:b0:302:1af8:3cc8 with SMTP id i11-20020adffc0b000000b003021af83cc8mr1491597wrr.0.1682011444801;
-        Thu, 20 Apr 2023 10:24:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YP3NWx6sNH3gg4ANitVJj16Mr6SDRP08iIYDyBVWJhyjhq9t9YIOEFVRvEQdiBCyXgbeD2Lg==
-X-Received: by 2002:adf:fc0b:0:b0:302:1af8:3cc8 with SMTP id i11-20020adffc0b000000b003021af83cc8mr1491579wrr.0.1682011444377;
-        Thu, 20 Apr 2023 10:24:04 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-230-117.dyn.eolo.it. [146.241.230.117])
-        by smtp.gmail.com with ESMTPSA id z17-20020adfdf91000000b002d97529b3bbsm2415725wrl.96.2023.04.20.10.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 10:24:03 -0700 (PDT)
-Message-ID: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
-Subject: Re: [PATCH 0/3] softirq: uncontroversial change
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org,
-        tglx@linutronix.de
-Cc:     jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 20 Apr 2023 19:24:02 +0200
-In-Reply-To: <20221222221244.1290833-1-kuba@kernel.org>
-References: <20221222221244.1290833-1-kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        d=1e100.net; s=20221208; t=1682011480; x=1684603480;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7iIIpr3W3RWkrIppsbMQbHuNurNbmAo22mJOSut58cc=;
+        b=Mwadu2LZiWrC0BDLO1Z479kkkVPdGMd8YDcYwMmI/BNmQdBSad0vXEMV4Q4p51Znyu
+         DL5ivtVMInrfSdT9dV2oGS9akWT+Y7Db4iKPQSoPuU2ApO8F3lnW/uuSRuxj9oGoix6l
+         R9tJ5eN7Lkx/Sp2WUqPODEyW+DBm1qi5C9ydNG8vepJDAs0/DiX8/aDMJ/uwkmblr1Sg
+         eQiVorZgT/0aoa/BXasiBWidmxF3Ilgg+5+xIgrP9iE2+fap5w+qBh+MkDqzMyPBi+V5
+         YlyQaYYztsT5RFaxQmyireVVjSDphmRnhk2byibskbue/H+NKSCCxTpplwYp0UsHeBVD
+         7l9A==
+X-Gm-Message-State: AAQBX9deB3lepldijj08thB1iwUnrpH2NPq1/ApDP4BDE5WTAKi3BkFG
+        4dJg2gpQbSZ4IKh1h8im6nSJ9blAmkyUoiqCJ/I/jV+Cwa4=
+X-Google-Smtp-Source: AKy350bUWcXmfpU6WhYxjKYRrXtUdge10MBFsWbeSl3sbcBFnG6JErF08gOeB2mA4yjowjFmzrfcmZJde8ykKuE65vw=
+X-Received: by 2002:a17:906:82c1:b0:92f:27c2:13c0 with SMTP id
+ a1-20020a17090682c100b0092f27c213c0mr2306018ejy.6.1682011480013; Thu, 20 Apr
+ 2023 10:24:40 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419083343.505780-1-daniel.lezcano@linaro.org> <20230419083343.505780-7-daniel.lezcano@linaro.org>
+In-Reply-To: <20230419083343.505780-7-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Apr 2023 19:24:28 +0200
+Message-ID: <CAJZ5v0gi4j=kJBnXCotQ8_+t39CzOFSBie9Yc6x8BV=TYxsjPQ@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] thermal/drivers/intel_menlow: Make additionnal
+ sysfs information optional
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-On Thu, 2022-12-22 at 14:12 -0800, Jakub Kicinski wrote:
-> Catching up on LWN I run across the article about softirq
-> changes, and then I noticed fresh patches in Peter's tree.
-> So probably wise for me to throw these out there.
->=20
-> My (can I say Meta's?) problem is the opposite to what the RT
-> sensitive people complain about. In the current scheme once
-> ksoftirqd is woken no network processing happens until it runs.
->=20
-> When networking gets overloaded - that's probably fair, the problem
-> is that we confuse latency tweaks with overload protection. We have
-> a needs_resched() in the loop condition (which is a latency tweak)
-> Most often we defer to ksoftirqd because we're trying to be nice
-> and let user space respond quickly, not because there is an
-> overload. But the user space may not be nice, and sit on the CPU
-> for 10ms+. Also the sirq's "work allowance" is 2ms, which is
-> uncomfortably close to the timer tick, but that's another story.
->=20
-> We have a sirq latency tracker in our prod kernel which catches
-> 8ms+ stalls of net Tx (packets queued to the NIC but there is
-> no NAPI cleanup within 8ms) and with these patches applied
-> on 5.19 fully loaded web machine sees a drop in stalls from
-> 1.8 stalls/sec to 0.16/sec. I also see a 50% drop in outgoing
-> TCP retransmissions and ~10% drop in non-TLP incoming ones.
-> This is not a network-heavy workload so most of the rtx are
-> due to scheduling artifacts.
->=20
-> The network latency in a datacenter is somewhere around neat
-> 1000x lower than scheduling granularity (around 10us).
->=20
-> These patches (patch 2 is "the meat") change what we recognize
-> as overload. Instead of just checking if "ksoftirqd is woken"
-> it also caps how long we consider ourselves to be in overload,
-> a time limit which is different based on whether we yield due
-> to real resource exhaustion vs just hitting that needs_resched().
->=20
-> I hope the core concept is not entirely idiotic. It'd be great
-> if we could get this in or fold an equivalent concept into ongoing
-> work from others, because due to various "scheduler improvements"
-> every time we upgrade the production kernel this problem is getting
-> worse :(
+On Wed, Apr 19, 2023 at 10:33 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The Menlon thermal driver creates auxiliary trip points in the thermal
+> zone sysfs directory. It is specific to Menlon. Actually these trip
+> points could be generalized with the generic trip points in the future.
+>
+> Let's make the code optional and disable it by default so we have a
+> consistency with the attributes in the thermal zone sysfs
+> directories. If that hurts we will enable by default this option
+> instead of disabling it.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/intel/Kconfig        | 11 +++++++++++
+>  drivers/thermal/intel/intel_menlow.c |  9 +++++++++
+>  2 files changed, 20 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+> index cb7e7697cf1e..ef7ffe6b56a0 100644
+> --- a/drivers/thermal/intel/Kconfig
+> +++ b/drivers/thermal/intel/Kconfig
+> @@ -112,6 +112,17 @@ config INTEL_MENLOW
+>
+>           If unsure, say N.
+>
+> +config INTEL_MENLOW_SYSFS_ADDON
+> +       bool "Enable extra sysfs attributes in the thermal zone"
+> +       depends on INTEL_MENLOW
+> +       def_bool n
+> +       help
+> +        Create auxiliary trip points in the thermal zone sysfs
+> +        directory. This is specific to this driver. By default those
+> +        are disabled and are candidate for removal, if you need these
+> +        information anyway, enable the option or upgrade the
+> +        userspace program using them.
+> +
+>  config INTEL_HFI_THERMAL
+>         bool "Intel Hardware Feedback Interface"
+>         depends on NET
+> diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+> index d720add918ff..605983be516c 100644
+> --- a/drivers/thermal/intel/intel_menlow.c
+> +++ b/drivers/thermal/intel/intel_menlow.c
+> @@ -367,6 +367,7 @@ static ssize_t bios_enabled_show(struct device *dev,
+>         return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
+>  }
+>
+> +#ifdef CONFIG_INTEL_MENLOW_SYSFS_ADDON
+>  static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+>                                           void *store, struct device *dev,
+>                                           acpi_handle handle)
+> @@ -398,6 +399,14 @@ static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+>
+>         return 0;
+>  }
+> +#else
+> +static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+> +                                         void *store, struct device *dev,
+> +                                         acpi_handle handle)
+> +{
+> +       return 0;
+> +}
 
-Please allow me to revive this old thread.
+After looking at it once more, I think that this driver isn't really
+functional without the additional sysfs attributes, so if
+CONFIG_INTEL_MENLOW_SYSFS_ADDON is set, the driver effectively becomes
+dead code.
 
-My understanding is that we want to avoid adding more heuristics here,
-preferring a consistent refactor.
+That's rather unfortunate and I'm not sure how to deal with it ATM.
 
-I would like to propose a revert of:
+I can queue up the rest of the series for 6.4-rc1 (in which case it
+will be pushed in the second half of the merge window), but this
+particular patch requires more thought IMV.
 
-4cd13c21b207 softirq: Let ksoftirqd do its job
-
-the its follow-ups:
-
-3c53776e29f8 Mark HI and TASKLET softirq synchronous
-0f50524789fc softirq: Don't skip softirq execution when softirq thread is p=
-arking
-
-The problem originally addressed by 4cd13c21b207 can now be tackled
-with the threaded napi, available since:
-
-29863d41bb6e net: implement threaded-able napi poll loop support
-
-Reverting the mentioned commit should address the latency issues
-mentioned by Jakub - I verified it solves a somewhat related problem in
-my setup - and reduces the layering of heuristics in this area.
-
-A refactor introducing uniform overload detection and proper resource
-control will be better, but I admit it's beyond me and anyway it could
-still land afterwards.
-
-Any opinion more then welcome!
-
-Thanks,
-
-Paolo
-
+> +#endif
+>
+>  static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+>                                                 void *context, void **rv)
+> --
