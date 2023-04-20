@@ -2,86 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D08E6E8C8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6B06E8C91
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234393AbjDTIUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S234401AbjDTIVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbjDTIU3 (ORCPT
+        with ESMTP id S233947AbjDTIVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:20:29 -0400
-Received: from forwardcorp1c.mail.yandex.net (forwardcorp1c.mail.yandex.net [178.154.239.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B791635BB;
-        Thu, 20 Apr 2023 01:20:26 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:3612:0:640:a8a8:0])
-        by forwardcorp1c.mail.yandex.net (Yandex) with ESMTP id 3AB675FA6A;
-        Thu, 20 Apr 2023 11:20:22 +0300 (MSK)
-Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:b409::1:14])
-        by mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id GKZned0OrSw0-ZMtL3jQ8;
-        Thu, 20 Apr 2023 11:20:21 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1681978821; bh=9mp+pNldrwYKUsap4NBAwMn7ODY5PLISjDiGq37dX08=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=p+8OjW/Pwu2PIc8vaB50z4dLDff5X4bJ9YWx+S/Hjm711tgn+trXbY+HJlz7JU9Cg
-         o8PzFCM3KY5rPAft0+3aELGcw8lmuNvEgDFIixh0+gCVVTIVM0ztQOyiiqq2aI1eLB
-         4g0XxHDpCXk2kT/4eAepg1G5ZnrbOJfBK8Fithak=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-To:     Ariel Elior <aelior@marvell.com>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] qed/qed_sriov: propagate errors from qed_init_run in enable_vf_access
-Date:   Thu, 20 Apr 2023 11:20:16 +0300
-Message-Id: <20230420082016.335314-1-d-tatianin@yandex-team.ru>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Apr 2023 04:21:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3688B35B1;
+        Thu, 20 Apr 2023 01:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681978868; x=1713514868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4/conQ/6kczdzx/+dtomCs4WTfQIoGhLLwAeEZdDT40=;
+  b=dP/zgW+STXui9fGDf9uXbiFD/3l77t4lwM5fhkIzGghIzsRDRev2ZOz+
+   MDbxLHgUGiy/R+HA939WdIwsj7XUpOe1+alCgcYSZtYTRF64QJBA6lecM
+   +OpsCPeUeO1qUA4GmkxuPHdeDfAknn9U8Hk53wQ4rgSkhRFVo3FFVVyhF
+   dQGukaKCkKsK0zDgiBFJfyZD2jNeqT8EQ3TcU1TssE+A71HyT0nvUrCvY
+   7qHekXNSvJYqbgd9O0g6VdffMcE427a2FwLlL+QWHnvvA6lT1kLVxnqX5
+   Cnt/mxzKpy0xdVlYDtl4/OI7GyjgTe0e+oWSVkB2BZ4JPMCna09umEWeB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="344425647"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="344425647"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:21:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835631405"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="835631405"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 20 Apr 2023 01:21:00 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 20 Apr 2023 11:20:58 +0300
+Date:   Thu, 20 Apr 2023 11:20:58 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Frank Wang <frank.wang@rock-chips.com>, linux@roeck-us.net,
+        heiko@sntech.de, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        huangtao@rock-chips.com, william.wu@rock-chips.com,
+        jianwei.zheng@rock-chips.com, yubing.zhang@rock-chips.com,
+        wmc@rock-chips.com
+Subject: Re: [PATCH v2] usb: typec: tcpm: fix multiple times discover svids
+ error
+Message-ID: <ZED16m8B1K+7sdJK@kuha.fi.intel.com>
+References: <20230316081149.24519-1-frank.wang@rock-chips.com>
+ <ZBROkdOFAP4GPPU6@kuha.fi.intel.com>
+ <ZEDzGydXbbpekeaB@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEDzGydXbbpekeaB@kroah.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value was silently ignored, and not propagated to the caller.
+On Thu, Apr 20, 2023 at 10:08:59AM +0200, Greg KH wrote:
+> On Fri, Mar 17, 2023 at 01:27:13PM +0200, Heikki Krogerus wrote:
+> > On Thu, Mar 16, 2023 at 04:11:49PM +0800, Frank Wang wrote:
+> > > PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
+> > > the Discover SVIDs Command Shall be executed multiple times until a
+> > > Discover SVIDs VDO is returned ending either with a SVID value of
+> > > 0x0000 in the last part of the last VDO or with a VDO containing two
+> > > SVIDs with values of 0x0000.
+> > > 
+> > > In the current implementation, if the last VDO does not find that the
+> > > Discover SVIDs Command would be executed multiple times even if the
+> > > Responder SVIDs are less than 12, and we found some odd dockers just
+> > > meet this case. So fix it.
+> > > 
+> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
+> > >  1 file changed, 15 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > index 66de02a56f512..a3ae2c79f3540 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
+> > >  		pmdata->svids[pmdata->nsvids++] = svid;
+> > >  		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
+> > >  	}
+> > > -	return true;
+> > > +
+> > > +	/*
+> > > +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
+> > > +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
+> > > +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
+> > > +	 * SVIDs Command Shall be executed multiple times until a Discover
+> > > +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
+> > > +	 * the last part of the last VDO or with a VDO containing two SVIDs
+> > > +	 * with values of 0x0000.
+> > > +	 *
+> > > +	 * However, some odd dockers support SVIDs less than 12 but without
+> > > +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
+> > > +	 * request and return false here.
+> > > +	 */
+> > > +	return cnt == 7;
+> > >  abort:
+> > >  	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
+> > >  	return false;
+> > 
+> > This is OK by men, but let's wait for Guenter.
+> 
+> What ever happened to this patch?
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE
-static analysis tool.
+I wanted to wait for Guenter's review, but FWIW:
 
-Fixes: 1408cc1fa48c ("qed: Introduce VFs")
-Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
----
-I'm not familiar enough with the code to know if there's anything we
-have to undo here in case qed_init_run returns an error. Any additional
-comments are appreciated.
----
- drivers/net/ethernet/qlogic/qed/qed_sriov.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-index fa167b1aa019..5244d7208eb4 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-@@ -814,7 +814,7 @@ static int qed_iov_enable_vf_access(struct qed_hwfn *p_hwfn,
- 	SET_FIELD(igu_vf_conf, IGU_VF_CONF_PARENT, p_hwfn->rel_pf_id);
- 	STORE_RT_REG(p_hwfn, IGU_REG_VF_CONFIGURATION_RT_OFFSET, igu_vf_conf);
- 
--	qed_init_run(p_hwfn, p_ptt, PHASE_VF, vf->abs_vf_id,
-+	rc = qed_init_run(p_hwfn, p_ptt, PHASE_VF, vf->abs_vf_id,
- 		     p_hwfn->hw_info.hw_mode);
- 
- 	/* unpretend */
+thanks,
+
 -- 
-2.25.1
-
+heikki
