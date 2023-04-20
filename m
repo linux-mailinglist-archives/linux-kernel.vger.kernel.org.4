@@ -2,154 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9006E8EA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0935E6E8EB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjDTJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S234154AbjDTJz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234219AbjDTJyH (ORCPT
+        with ESMTP id S229612AbjDTJzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:54:07 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCCB26B3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:54:01 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so436395e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681984440; x=1684576440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mGGvYz0vqZ33n+fo0Tr5AwZsVe0Xqlv0TtcIG/mEdRM=;
-        b=FOLFkVdZ0v44OL6a8anDA51YEWjj1ueQkF6fXUjxy9/2GrffrqyIQV4jqMAU1uWkRr
-         IWmpPCKlgCSgBGZMOJk6lL+d19uqtXDYozyUl9ylDc0qsVqkyUc8vgPHwgBhis+sblZr
-         6CYCqqz9RHKsO8DpEvpLTEilZK5we08WkBhros9yXgygNmPXxqYgjjCmolN1dxR7GvcJ
-         Lh8WHR6ozwt7UrrvN5dPMdMc+JRM7zwSWRJkrbmE1ZQT2D+UvPnfylsDYrlF/kJMe7Da
-         AYtlBZ9czPCkn8xBazSzW6BKVro0eq8UvzoZOy5DTGeA2gHGeTsVxt9tua8feP17iUUP
-         TBLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681984440; x=1684576440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mGGvYz0vqZ33n+fo0Tr5AwZsVe0Xqlv0TtcIG/mEdRM=;
-        b=PPC7EU5Z3DnUu1nBoBk7OVdsQhGoZ63ALs8zWsErSwF81jFRaDe4PIudOTil28Zn7W
-         z3tdEYCWmPlWmtMK4LhZ7dLE/yC7nVZ+8OoIrOqQv9PB5MFG4kWOFesJRTp2eYbbat8c
-         CL3w4WpUSZCSuXQFxGjl4JK5e0AtIBayadXrfknnmyoOsZAKQ9evOGlEGOcXWjomS0hv
-         hDYeYTDGN0fqZYEJpZYC547nOg8lfAwtLFHZSJREAW1RyMeU6nqDXu2aKQelG9Fcy/UP
-         rFTSOHlgqXLBd75By+BXD4KcYRCqf8a1rIBuMBuJ/izGprDRGDDV6U/IEflom/K5vOxa
-         BzYA==
-X-Gm-Message-State: AAQBX9denlNPl+M2TqlygVomAss7rcxSetdJYLBuHNbhB1l7AAYa31SE
-        NsQmky2pTj2tQNZOkehTIxZaNg==
-X-Google-Smtp-Source: AKy350Y7UIxnxGPQnkZd6F1ty5wN9QW7ABmp+6yZagCX0dwlMCfwws+fXNS7jbCUDatA5h7CGh55LA==
-X-Received: by 2002:ac2:4a8c:0:b0:4ee:e0c7:435f with SMTP id l12-20020ac24a8c000000b004eee0c7435fmr116894lfp.61.1681984440112;
-        Thu, 20 Apr 2023 02:54:00 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id v28-20020ac2559c000000b004edc608d86bsm162230lfg.104.2023.04.20.02.53.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 02:53:59 -0700 (PDT)
-Message-ID: <bcbda796-908a-43d5-0744-c03656fda47b@linaro.org>
-Date:   Thu, 20 Apr 2023 12:53:58 +0300
+        Thu, 20 Apr 2023 05:55:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB63C0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:55:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 44BD31FDB5;
+        Thu, 20 Apr 2023 09:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681984552; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0vvHoGcNxYy0uIVHhiSfdEl7TfKiCZrxl8XwTzdSqxg=;
+        b=Klvs/oD/Xxbv5Dk4ihNbe5aX94iEM0KhBhW57Vx5yjpfjNDOwP0N2S8nTBdNc9KpvYZsOM
+        J3AbL+E+/k2oD9K4KLSzFklRO7EUM0J5JvY/F7LFJzMmgolUGy0yHODAcozx/M8EoXmeDK
+        AggEjEttonMMdKIGg8w67Qm0104AaEU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DA0532C141;
+        Thu, 20 Apr 2023 09:55:51 +0000 (UTC)
+Date:   Thu, 20 Apr 2023 11:55:51 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: port lock: was: Re: [PATCH printk v1 11/18] printk: nobkl:
+ Introduce printer threads
+Message-ID: <ZEEMJxobFe_UZ8gV@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-12-john.ogness@linutronix.de>
+ <ZC6U/CZCNmgnTpI4@alley>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 04/11] drm/msm/dpu: allow using lm mixer base stage
-Content-Language: en-GB
-To:     Arnaud Vrac <avrac@freebox.fr>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
- <20230419-dpu-tweaks-v1-4-d1bac46db075@freebox.fr>
- <74c59560-8a79-150f-0c1e-13f22eb35cb2@linaro.org>
- <CAG9NU6_Ua_XLa+c=_93fs5chzQTyPf11W4F87UYbny1k-feoJw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAG9NU6_Ua_XLa+c=_93fs5chzQTyPf11W4F87UYbny1k-feoJw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZC6U/CZCNmgnTpI4@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 10:26, Arnaud Vrac wrote:
-> Le jeu. 20 avr. 2023 à 00:43, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> a écrit :
->>
->> On 19/04/2023 17:41, Arnaud Vrac wrote:
->>> The dpu backend already handles applying alpha to the base stage, so we
->>> can use it to render the bottom plane in all cases. This allows mixing
->>> one additional plane with the hardware mixer.
->>>
->>> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
->>
->> This might require additional changes. First, for the STAGE_BASE pipe
->> in the source split mode (iow using two LMs) should programmed with
->> respect to the right LM's x offset (rather than usual left top-left LM).
->> See  mdss_mdp_pipe_position_update().
+On Thu 2023-04-06 11:46:37, Petr Mladek wrote:
+> On Thu 2023-03-02 21:02:11, John Ogness wrote:
+> > From: Thomas Gleixner <tglx@linutronix.de>
+> > 
+> > Add the infrastructure to create a printer thread per console along
+> > with the required thread function, which is takeover/handover aware.
 > 
-> Ok, I did test with 2 LMs and it seems to be working, I'll investigate.
-
-The only reference I have here is the fbdev driver, see [1]. The newer 
-SDE driver doesn't handle STAGE_BASE vs STAGE0 (and DPU inherited that 
-design). Maybe this got fixed in hw at some point.
-
-[1] 
-https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LE.UM.4.4.1.r2-17500-QRB5165.0/drivers/video/fbdev/msm/mdss_mdp_pipe.c#L1789
-
-I think, it only concerns the src_split + multirect cases, where the 
-rectangle base point is on the right LM.
-
+> > --- a/kernel/printk/printk_nobkl.c
+> > +++ b/kernel/printk/printk_nobkl.c
+> > +/**
+> > + * cons_kthread_func - The printk thread function
+> > + * @__console:	Console to operate on
+> > + */
+> > +static int cons_kthread_func(void *__console)
+> > +{
+> > +	struct console *con = __console;
+> > +	struct cons_write_context wctxt = {
+> > +		.ctxt.console	= con,
+> > +		.ctxt.prio	= CONS_PRIO_NORMAL,
+> > +		.ctxt.thread	= 1,
+> > +	};
+> > +	struct cons_context *ctxt = &ACCESS_PRIVATE(&wctxt, ctxt);
+> > +	unsigned long flags;
+> > +	short con_flags;
+> > +	bool backlog;
+> > +	int cookie;
+> > +	int ret;
+> > +
+> > +	for (;;) {
+> > +		atomic_inc(&con->kthread_waiting);
+> > +
+> > +		/*
+> > +		 * Provides a full memory barrier vs. cons_kthread_wake().
+> > +		 */
+> > +		ret = rcuwait_wait_event(&con->rcuwait,
+> > +					 cons_kthread_should_wakeup(con, ctxt),
+> > +					 TASK_INTERRUPTIBLE);
+> > +
+> > +		atomic_dec(&con->kthread_waiting);
+> > +
+> > +		if (kthread_should_stop())
+> > +			break;
+> > +
+> > +		/* Wait was interrupted by a spurious signal, go back to sleep */
+> > +		if (ret)
+> > +			continue;
+> > +
+> > +		for (;;) {
+> > +			cookie = console_srcu_read_lock();
+> > +
+> > +			/*
+> > +			 * Ensure this stays on the CPU to make handover and
+> > +			 * takeover possible.
+> > +			 */
+> > +			if (con->port_lock)
+> > +				con->port_lock(con, true, &flags);
 > 
->>
->> Also this might need some interaction with CTL_MIXER_BORDER_OUT being
->> set or not. If I remember correctly, if there bottom plane is not
->> fullscreen or if there are no planes at all, we should set
->> CTL_MIXER_BORDER_OUT (which takes STAGE_BASE) and start assigning them
->> from STAGE0. If not, we can use STAGE_BASE.
+> IMHO, we should use a more generic name. This should be a lock that
+> provides full synchronization between con->write() and other
+> operations on the device used by the console.
 > 
-> I also tested with both fullscreen and non-fullscreen primary plane,
-> and no plane. I'll check this.
-
-Yes, the DPU driver always enables the MIXER_BORDER_OUT.
-
+> "port_lock" is specific for the serial consoles. IMHO, other consoles
+> might use another lock. IMHO, tty uses "console_lock" internally for
+> this purpose. netconsole seems to has "target_list_lock" that might
+> possible have this purpose, s390 consoles are using sclp_con_lock,
+> sclp_vt220_lock, or get_ccwdev_lock(raw->cdev).
 > 
->>
->>> ---
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->>> index 14b5cfe306113..148921ed62f85 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->>> @@ -881,7 +881,7 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
->>>        r_pipe->multirect_mode = DPU_SSPP_MULTIRECT_NONE;
->>>        r_pipe->sspp = NULL;
->>>
->>> -     pstate->stage = DPU_STAGE_0 + pstate->base.normalized_zpos;
->>> +     pstate->stage = DPU_STAGE_BASE + pstate->base.normalized_zpos;
->>>        if (pstate->stage >= pdpu->catalog->caps->max_mixer_blendstages) {
->>>                DPU_ERROR("> %d plane stages assigned\n",
->>>                          pdpu->catalog->caps->max_mixer_blendstages - DPU_STAGE_0);
->>>
->>
->> --
->> With best wishes
->> Dmitry
->>
+> 
+> Honestly, I expected that we could replace these locks by
+> cons_acquire_lock(). I know that the new lock is special: sleeping,
+> timeouting, allows hand-over by priorities.
+> 
+> But I think that we might implement cons_acquire_lock() that would always
+> busy wait without any timeout. And use some "priority" that would
+> never handover the lock a voluntary way at least not with a voluntary
+> one. The only difference would be that it is sleeping. But it might
+> be acceptable in many cases.
+> 
+> Using the new lock instead of port->lock would allow to remove
+> the tricks with using spin_trylock() when oops_in_progress is set.
+> 
+> That said, I am not sure if this is possible without major changes.
+> For example, in case of serial consoles, it would require touching
+> the layer using port->lock.
+> 
+> Also it would requere 1:1 relation between struct console and the output
+> device lock. I am not sure if it is always the case. On the other
+> hand, adding some infrastructure for this 1:1 relationship would
+> help to solve smooth transition from the boot to the real console
+> driver.
+> 
+> 
+> OK, let's first define what the two locks are supposed to synchronize.
+> My understanding is that this patchset uses them the following way:
+> 
+>     + The new lock (atomic_state) is used to serialize emiting
+>       messages between different write contexts. It replaces
+>       the functionality of console_lock.
+> 
+>       It is a per-console sleeping lock, allows voluntary and hars
+>       hand-over using priorities and spinning with a timeout.
+> 
+> 
+>     + The port_lock is used to synchronize various operations
+>       of the console driver/device, like probe, init, exit,
+>       configuration update.
+> 
+>       It is typically a per-console driver/device spin lock.
+> 
+> 
+> I guess that we would want to keep both locks:
+> 
+>     + it might help to do the rework manageable
+> 
+>     + the sleeping lock might complicate some operations;
+>       raw_spin_lock might be necessary at least on
+>       non-RT system.
 
--- 
-With best wishes
-Dmitry
+I forgot to check how these two locks are supposed to be used
+in write_atomic().
 
+It seems that cons_atomic_flush_con() takes only the new lock
+(atomic_state) and ignores the port_lock(). It should be safe
+against write_kthread(). But it is not safe against other
+operations with the console device that are synchronized
+only by the port_lock().
+
+This looks like a potential source of problems and regressions.
+
+Do I miss something, please?
+Is there any plan how to deal with this?
+
+Best Regards,
+Petr
