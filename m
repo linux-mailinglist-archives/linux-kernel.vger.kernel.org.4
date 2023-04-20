@@ -2,85 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2546E9F94
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 01:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42FE6E9F99
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 01:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjDTXFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 19:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S231761AbjDTXFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 19:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbjDTXEz (ORCPT
+        with ESMTP id S229887AbjDTXFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 19:04:55 -0400
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9A1BD8;
-        Thu, 20 Apr 2023 16:04:54 -0700 (PDT)
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-63b4a64c72bso1406815b3a.0;
-        Thu, 20 Apr 2023 16:04:54 -0700 (PDT)
+        Thu, 20 Apr 2023 19:05:12 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81773C3A
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 16:05:09 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4edcdfa8638so984249e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 16:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682031908; x=1684623908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vqd+EzF+urhH7274oBdY5LeIrEsmRsb7t4mEa/XIYp0=;
+        b=S7zDyEf5tCKQLqvuPV5ndaSog2rzyXIjoV4QCmjb6xgWweA6A7KLQPYIbZiIujDGRs
+         v+jDXH/ln08L5oWKwUHqa7RUbbHj5zJdicidd1MbvoGbLzWJN2jEoRdOD/fRp/fGe6Bh
+         0bo/MM6UcrYXPged8PYlB+WCl2oeEJheV+qAK9YgetNDkRmjPZag0Cguuo24kMOMPVYS
+         YiFeYnXJ18W2/KatirKERn5tsLYm6jXRHNnEbZ0vqJJoqIkz9peaih4NehsDh5IEJ0ro
+         PDCm+iurHkBDlgMQB2J3wAGFph/dkN9MvEWylSjqbuJBTs2T0fiB9AzZQq/JHMweFUx+
+         CFQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682031894; x=1684623894;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ghkMkAHQhgF1SwqPMsGPve5tHwg5WqiPTIsxzwL3I2c=;
-        b=XdICJWMsq11rlLygrsWlN84NjUb3lJEZjWtLrmzILj9h/S2Ui8Uh3RkdVh/WyzNUfA
-         qg2JEqFnWvROLWZkVqzAFoc4ddkkzpX/jF0U9VAXqk+Yve1iO6fUy+jtjcCuDKVT2F0d
-         bAvOKRv2ByShSfokfK+HB9wXhkkiGwncseFRyEVuF894Ik9ye4ZJ6gMKyf6D0I6nxrzO
-         klHQz2sG/KSmC7fzKBPZvmlimqbWq2b7G2pw6/lqJtRKZoC1Ti45SEET0LdtRhkXZXdR
-         QmN+UVNjbyeYllkcemiK+j1oBTF51GQKvcrvYtiGbPulS2rTRS3jg/omaScZiHJ2WutM
-         ii9Q==
-X-Gm-Message-State: AAQBX9cikfLQwDkoQM1JN5u4cgORplDseH4nfH/tKRYUhVx6sGqfijcQ
-        mXL9Do6/Xwc4yjt9G7GH+aQ=
-X-Google-Smtp-Source: AKy350biaSJO+8Jw7M71HcF81e70JHBgVdp2pEeW9yMcWLBIdjnsqB4upRiWHcLQkhaHPppO/a4Ifw==
-X-Received: by 2002:a05:6a20:a5a8:b0:d3:89a1:76d1 with SMTP id bc40-20020a056a20a5a800b000d389a176d1mr3463522pzb.11.1682031894248;
-        Thu, 20 Apr 2023 16:04:54 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id t3-20020a056a00138300b006338e0a9728sm1731215pfg.109.2023.04.20.16.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 16:04:53 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 23:04:52 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     longli@linuxonhyperv.com
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Long Li <longli@microsoft.com>
-Subject: Re: [PATCH v4] Drivers: hv: move panic report code from vmbus to hv
- early init code
-Message-ID: <ZEHFFKMtxfLSq1fN@liuwe-devbox-debian-v2>
-References: <1682030946-6372-1-git-send-email-longli@linuxonhyperv.com>
+        d=1e100.net; s=20221208; t=1682031908; x=1684623908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vqd+EzF+urhH7274oBdY5LeIrEsmRsb7t4mEa/XIYp0=;
+        b=BTF9P+3VhcAcuaMe/YsP4mTOIUzHTmVNGlAwMkIF1NPhw24eVf0CZAiEc7QkJiuppA
+         WTfWod8bY/ZDJGNXDBd64X/SIYEu1pSsDV/zr+I/UVt+mu/NW7Q2Qm7sfiFWTDGR6kBk
+         k1og45ry9bh0OyRrr/vHpr65G5ejyQbSOdBNfcTfPg9p96SkqquCxcvZgefI+oYSwNPP
+         hwSNpOsP+gYbx9xaXv40YSiF4EbAyuWGWeZ07K0ZeD62+It7ESzUlVDjl/+G5dXFHZnx
+         wbNJ8pyYZgloZ1+C7jBJ0palIJb1X3XZHcRex5sbCSRv0t5HufAyERvjWXeQ0iYMdkBr
+         gMgQ==
+X-Gm-Message-State: AAQBX9eVFQjpwF2K8qrVC/K+DM/uESZnlPd+aKy2cKK1RgIDOuQN9xPg
+        wvadpVpuIHq8jk7Vt+CAY5IkTA==
+X-Google-Smtp-Source: AKy350ZHc2Xi6EPcoQf0P4AaMLxpmSmhZfjLaOk3eFSroDuI7EfjamGYtrWg1XBq+nfojw2H8m5eJQ==
+X-Received: by 2002:a19:ac0a:0:b0:4ed:c64c:37b with SMTP id g10-20020a19ac0a000000b004edc64c037bmr808138lfc.62.1682031908053;
+        Thu, 20 Apr 2023 16:05:08 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id v6-20020ac25586000000b004eafa77e435sm357347lfg.146.2023.04.20.16.05.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 16:05:07 -0700 (PDT)
+Message-ID: <4da9bd19-9403-812e-4554-847b18df78c9@linaro.org>
+Date:   Fri, 21 Apr 2023 01:05:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1682030946-6372-1-git-send-email-longli@linuxonhyperv.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 07/13] drm/msm/dpu: Add SM6350 support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v2-7-5def73f50980@linaro.org>
+ <fd2f43eb-aa10-eaf4-62f8-945a3152a28a@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <fd2f43eb-aa10-eaf4-62f8-945a3152a28a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 03:49:06PM -0700, longli@linuxonhyperv.com wrote:
-> From: Long Li <longli@microsoft.com>
-> 
-> The panic reporting code was added in commit 81b18bce48af
-> ("Drivers: HV: Send one page worth of kmsg dump over Hyper-V during panic")
-> 
-> It was added to the vmbus driver. The panic reporting has no dependence
-> on vmbus, and can be enabled at an earlier boot time when Hyper-V is
-> initialized.
-> 
-> This patch moves the panic reporting code out of vmbus. There is no
-> functionality changes. During moving, also refactored some cleanup
-> functions into hv_kmsg_dump_unregister().
-> 
-> Signed-off-by: Long Li <longli@microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-Thanks. Queued up for hyperv-next.
+
+On 21.04.2023 00:41, Dmitry Baryshkov wrote:
+> On 21/04/2023 01:31, Konrad Dybcio wrote:
+>> Add SM6350 support to the DPU1 driver to enable display output.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+[...]
+
+>> +
+>> +static const struct dpu_sspp_cfg sm6350_sspp[] = {
+>> +    SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+>> +         sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+>> +    SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+>> +         sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+>> +    SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+>> +         sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> 
+> DPU_CLK_CTRL_DMA0
+> 
+>> +    SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+>> +         sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> 
+> DPU_CLK_CTRL_DMA2
+_DMA1?
+
+
+> 
+> 
+>> +};
+>> +
+
+>> +static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
+>> +    {.fl = 0, .lut = 0x0011223344556677 },
+>> +    {.fl = 0, .lut = 0x0011223445566777 },
+> 
+> Do we need two equal entries here?
+Hmm.. looks like the SDE driver dropped the fill level
+logic in 4.19 times and that might have thrown me off
+when porting this Since the [0] entry has what looks
+like a lower LUT value, should I give it .fl=1?
+
+
+> 
+> Also please push the qos to the dpu_hw_catalog.c, I want to take another look at these structures and it is easier if all of them are beneath one's eyes.
+Will do.
+
+> 
+>> +};
+>> +
+>> +static const struct dpu_perf_cfg sm6350_perf_data = {
+>> +    .max_bw_low = 4200000,
+>> +    .max_bw_high = 5100000,
+>> +    .min_core_ib = 2500000,
+>> +    .min_llcc_ib = 0,
+>> +    .min_dram_ib = 1600000,
+>> +    .min_prefill_lines = 35,
+>> +    /* TODO: confirm danger_lut_tbl */
+>> +    .danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
+[...]
+
+
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> @@ -320,6 +320,8 @@ enum dpu_qos_lut_usage {
+>>       DPU_QOS_LUT_USAGE_LINEAR,
+>>       DPU_QOS_LUT_USAGE_MACROTILE,
+>>       DPU_QOS_LUT_USAGE_NRT,
+>> +    DPU_QOS_LUT_USAGE_CWB,
+>> +    DPU_QOS_LUT_USAGE_MACROTILE_QSEED,
+> 
+> This should probably be removed. It would be nice to clean these things up, but not as a part of sm6350.
+Well, I won't be able to fill in the danger LUT table otherwise!
+
+Konrad
+> 
+>>       DPU_QOS_LUT_USAGE_MAX,
+>>   };
+>>   @@ -880,6 +882,7 @@ extern const struct dpu_mdss_cfg dpu_sc8180x_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm8250_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+>> +extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> index 0e7a68714e9e..46be7ad8d615 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> @@ -1286,6 +1286,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>>       { .compatible = "qcom,sc8180x-dpu", .data = &dpu_sc8180x_cfg, },
+>>       { .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+>>       { .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+>> +    { .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+>>       { .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+>>       { .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
+>>       { .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+>>
+> 
