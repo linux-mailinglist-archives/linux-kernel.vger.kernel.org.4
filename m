@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54B16E9C23
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D646E9C24
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjDTS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S231722AbjDTS4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjDTSzy (ORCPT
+        with ESMTP id S231962AbjDTS40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:55:54 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94352705
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:55:52 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3e0965f70ecso895951cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:55:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682016952; x=1684608952;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hbCxu47aXqOZFjOgElAuAaCkhQzE3b3RJfWYjmehSCc=;
-        b=oa5zJsQrq+PRcAacYKvPmJFEiT892k3KGbGwJQk5suWva6mPaVh1qqAA8IzY+Jj/hD
-         VFBYO4okZJxeVSzysh4ToRnXR/6o5DYUVATkBJfNde9WKEOtWJJ8yy7sY1xXBfZGEY3q
-         xOZ0jkjwyMWdnarfIh0L8R4nUzdGSyWIKSazjknGk1r11LI/2RO684ecfw7UrQTVXs/M
-         GzaTUPkrFcjqNquKq6y2UAqISLWfsxVd028RdcSxBegIpsM6e0JAtRgxUzO7FY9aKxf+
-         Lt1hLlXFBFqgRdkJ2/8j3ivRECJ5MYEvxha3Z2O262UcpC3xjQwUKeyV2yCazEbahUJf
-         4cIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682016952; x=1684608952;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hbCxu47aXqOZFjOgElAuAaCkhQzE3b3RJfWYjmehSCc=;
-        b=G6lSAAY9710jtuFB3f/pPuAYxs26gaUT8DRTngaZJNve39Q2XlFrVD03HweE4E+dWa
-         cpvHLUI2hRUvGR0ppjz1xNtQYo/5AUMAN/+MAsS2jqSucdnX4BpR9raJScMsKPI/WPDf
-         71zJBRIYEKyhZWDeKXyia1Dc8hqsgNoYAecrm9jKIyens1vzdp9HLG41JFHFTiUaDBQm
-         YZLxiIUYRK3C/B5LvFoKtCH9n6oE1AXzQayLgHlJk77NcjtzRc7gzWJZ3O+2sJaiC1ey
-         0MOJp71lRcPrwd9NBnzoNK9tHEHW6hwTZleZBJBZ+4TjNoEMcNQzSMjwjOYVRi4V39Rz
-         Fe8A==
-X-Gm-Message-State: AAQBX9efP+D4jgDU86ABUKTlFsxaB5pM+QEXM1X0/BHwrkGZEgo+6v6I
-        +TKX8O8q0PntLjxq+/8l+55+J5+GxoMfJE7uYStOyw==
-X-Google-Smtp-Source: AKy350YQ85co+lRTcuWRO1Vltk6Lkvqveeyi1jPBPoTaqbL7736XRkZW9Hessn4M1C1JBov0tCRU8RrPiXoZoB3KNYs=
-X-Received: by 2002:ac8:5b10:0:b0:3ef:343b:fe7e with SMTP id
- m16-20020ac85b10000000b003ef343bfe7emr60397qtw.2.1682016952049; Thu, 20 Apr
- 2023 11:55:52 -0700 (PDT)
+        Thu, 20 Apr 2023 14:56:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3FF273B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NFkQyXyMWyB02eAcI8GMAq5pUeEMVa46lIHf0EI/tyk=; b=S6YYnMYHJrGyUJih/xpnXrwa/8
+        y1BeIB/oAPAFPl2SylHVSlzEeMKMLMAOIRl7hbysr5mTPBuWiBIJl+JMVbvtl2sUTBTfsubPq9oEs
+        Awbla2MmuKL1wRIGvENfSP5l7tnz+DNzuObM3w2fJ950LPfcskyXDx/cBK4A8fWDbaeQ1WWr/FuN4
+        hXyet6rqfkekWMuaxRd1taqB8yQ5rgToiyV+PSLFOlPU/7GAUc94Yk+jr7elAGdK4W+uuBSlo2jK0
+        pWPKDbXvJ/y9DmY37XOnE5olCL4wwYTx2wkgG8pfRMifQDjrT2gdLAK2ZN7zm1IoPci+m5lxFg01V
+        BkQD7f5w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1ppZRw-003rfV-1p;
+        Thu, 20 Apr 2023 18:56:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E571C30015F;
+        Thu, 20 Apr 2023 20:56:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C6DCB24177E4D; Thu, 20 Apr 2023 20:56:06 +0200 (CEST)
+Date:   Thu, 20 Apr 2023 20:56:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chris Mason <clm@meta.com>
+Cc:     David Vernet <void@manifault.com>, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        gautham.shenoy@amd.com
+Subject: Re: schbench v1.0
+Message-ID: <20230420185606.GA1148774@hirez.programming.kicks-ass.net>
+References: <bc85a40c-1ea0-9b57-6ba3-b920c436a02c@meta.com>
+ <20230420150537.GC4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230403220337.443510-1-yosryahmed@google.com> <20230403220337.443510-3-yosryahmed@google.com>
-In-Reply-To: <20230403220337.443510-3-yosryahmed@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 20 Apr 2023 11:55:40 -0700
-Message-ID: <CALvZod5mxE8RAtCEZkaq2fce-Od5MZtyPppn-ns0XzXHMcFm9g@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable RFC 2/5] memcg: flush stats non-atomically in mem_cgroup_wb_stats()
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420150537.GC4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com> =
-wrote:
->
-> The previous patch moved the wb_over_bg_thresh()->mem_cgroup_wb_stats()
-> code path in wb_writeback() outside the lock section. We no longer need
-> to flush the stats atomically. Flush the stats non-atomically.
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+On Thu, Apr 20, 2023 at 05:05:37PM +0200, Peter Zijlstra wrote:
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+> EEVDF base_slice = 3000[us] (default)
+> 
+> schbench -m2 -F128 -n10	-r90	OTHER	BATCH
+> Wakeup  (usec): 99.0th:		3820	6968
+> Request (usec): 99.0th:		30496	24608
+> RPS    (count): 50.0th:		3836	5496
+> 
+> EEVDF base_slice = 6440[us] (per the calibrate run)
+> 
+> schbench -m2 -F128 -n10	-r90	OTHER	BATCH
+> Wakeup  (usec): 99.0th:		9136	6232
+> Request (usec): 99.0th:		21984	12944
+> RPS    (count): 50.0th:		4968	6184
+> 
+> 
+> With base_slice >= request and BATCH (disables wakeup preemption), the
+> EEVDF thing should turn into FIFO-queue, which is close to ideal for
+> your workload.
+> 
+> For giggles:
+> 
+> echo 6440000 > /debug/sched/base_slice_ns
+> echo NO_PLACE_LAG > /debug/sched/features
+> chrt -b 0 ./schbench -m2 -F128 -n10 -r90
+
+FWIW a similar request size can be achieved through using latency-nice-5
+
+  latency-nice-4 gives 3000*1024/526 ~ 5840[us], while
+  latency-nice-5 gives 3000*1024/423 ~ 7262[us].
+
+Which of course raises the question if we should instead of latency-nice
+expose sched_attr::slice (with some suitable bounds).
+
+The immediate problem of course being that while latency-nice is nice
+(harhar, teh pun) and vague, sched_attr::slice is fairly well defined.
+OTOH as per this example, it might be easier for software to request a
+specific slice length (based on prior runs etc..) than it is to guess at
+a nice value.
+
+The direct correlation between smaller slice and latency might not be
+immediately obvious either, nor might it be a given for any given
+scheduling policy.
+
+Also, cgroups :/
