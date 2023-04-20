@@ -2,44 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8079F6E8D71
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5F46E8D72
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbjDTJDe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 05:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S234383AbjDTJDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbjDTJCv (ORCPT
+        with ESMTP id S234219AbjDTJC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:02:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1AAB9EFD;
-        Thu, 20 Apr 2023 01:57:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD829C14;
-        Thu, 20 Apr 2023 01:58:22 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 999A53F5A1;
-        Thu, 20 Apr 2023 01:57:37 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 09:57:35 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Ludwig Kormann <ludwig.kormann@in-circuit.de>
-Cc:     samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] arm: dts: sunxi: Add ICnova A20 ADB4006 board
- support
-Message-ID: <20230420095735.00cbf365@donnerap.cambridge.arm.com>
-In-Reply-To: <20230419121229.1384024-1-ludwig.kormann@in-circuit.de>
-References: <20230419121229.1384024-1-ludwig.kormann@in-circuit.de>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Thu, 20 Apr 2023 05:02:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6F365BF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:57:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B235F1FDB3;
+        Thu, 20 Apr 2023 08:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681981060; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kc+idYJYpxh1ZMa1V5YjWqbC7KDsYG40oEExYHDrWNE=;
+        b=iRGABP1FQvtKD37NoylsYr11L7RTy1s2zoPXD9mRqQEh6qEM/goUCtLksAlucf5zjV+GWs
+        4PUDn1uNBc8Ghaf6kdVDf+8HZd3WLdmHDxbsnGEc7jqXyr0Usdo8W5Mqd91NR4Acr0WwU2
+        d0CC2oKCltOxTssLeZhNzF5OmEICNVU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681981060;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kc+idYJYpxh1ZMa1V5YjWqbC7KDsYG40oEExYHDrWNE=;
+        b=eVdVPn+6HePaNKr/G0+TXnZjXOvUKUbvJgcYd8XenZ/LBfcKg8L/Og1Dw1nQBd1UX61ti0
+        OJMC3rUmxGb2QdDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90DBB13584;
+        Thu, 20 Apr 2023 08:57:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4RJiIoT+QGQzfwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 20 Apr 2023 08:57:40 +0000
+Message-ID: <61edb9d3-11f5-42de-633d-6e6253ce021f@suse.de>
+Date:   Thu, 20 Apr 2023 10:57:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] drm/ast: Fix ARM compatibility
+Content-Language: en-US
+To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------S9VScJM8Q7xs00Ki6xKISzXB"
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,310 +73,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 14:12:29 +0200
-Ludwig Kormann <ludwig.kormann@in-circuit.de> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------S9VScJM8Q7xs00Ki6xKISzXB
+Content-Type: multipart/mixed; boundary="------------fv9yA3eZgk43qsZFOFTijQYs";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
+Cc: airlied@gmail.com, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <61edb9d3-11f5-42de-633d-6e6253ce021f@suse.de>
+Subject: Re: [PATCH v2] drm/ast: Fix ARM compatibility
+References: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
+In-Reply-To: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
 
-Hi Ludwig,
+--------------fv9yA3eZgk43qsZFOFTijQYs
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-thanks for posting this!
+SGkNCg0KQW0gMjAuMDQuMjMgdW0gMTA6MDkgc2NocmllYiBKYW1teSBIdWFuZzoNCj4gQVJN
+IGFyY2hpdGVjdHVyZSBvbmx5IGhhcyAnbWVtb3J5Jywgc28gYWxsIGRldmljZXMgYXJlIGFj
+Y2Vzc2VkIGJ5DQo+IE1NSU8gaWYgcG9zc2libGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBK
+YW1teSBIdWFuZyA8amFtbXlfaHVhbmdAYXNwZWVkdGVjaC5jb20+DQo+IC0tLQ0KPiAgIHYy
+IGNoYW5nZXM6DQo+ICAgIC0gVXNlIE1NSU8gYWZ0ZXIgQVNUMjUwMCB3aGljaCBlbmFibGUg
+TU1JTyBieSBkZWZhdWx0Lg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9t
+YWluLmMgfCA5ICsrKysrLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMo
+KyksIDQgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
+L2FzdC9hc3RfbWFpbi5jIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5jDQo+IGlu
+ZGV4IGY4M2NlNzcxMjdjYi4uZDM4NGU4MTBmYTRkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
+L2dwdS9kcm0vYXN0L2FzdF9tYWluLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9h
+c3RfbWFpbi5jDQo+IEBAIC00MjUsMTEgKzQyNSwxMiBAQCBzdHJ1Y3QgYXN0X3ByaXZhdGUg
+KmFzdF9kZXZpY2VfY3JlYXRlKGNvbnN0IHN0cnVjdCBkcm1fZHJpdmVyICpkcnYsDQo+ICAg
+CQlyZXR1cm4gRVJSX1BUUigtRUlPKTsNCj4gICANCj4gICAJLyoNCj4gLQkgKiBJZiB3ZSBk
+b24ndCBoYXZlIElPIHNwYWNlIGF0IGFsbCwgdXNlIE1NSU8gbm93IGFuZA0KPiAtCSAqIGFz
+c3VtZSB0aGUgY2hpcCBoYXMgTU1JTyBlbmFibGVkIGJ5IGRlZmF1bHQgKHJldiAweDIwDQo+
+IC0JICogYW5kIGhpZ2hlcikuDQo+ICsJICogQWZ0ZXIgQVNUMjUwMCwgTU1JTyBpcyBlbmFi
+bGVkIGJ5IGRlZmF1bHQsIGFuZCBpdCBzaG91bGQgYmUgYWRhcHRlZA0KDQpCeSAnYWRhcHRl
+ZCcsIHlvdSBtZWFuICdhZG9wdGVkJz8NCg0KQXBhcnQgZnJvbSB0aGF0Og0KDQpSZXZpZXdl
+ZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkkgYWxz
+byByYW4gdGhpcyBwYXRjaCBvbiBhbiBBU1QyMTAwLCB3aGljaCBzdGlsbCB3b3JrcyBhcyBi
+ZWZvcmUuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gKwkgKiB0byBiZSBjb21wYXRp
+YmxlIHdpdGggQXJtLg0KPiAgIAkgKi8NCj4gLQlpZiAoIShwY2lfcmVzb3VyY2VfZmxhZ3Mo
+cGRldiwgMikgJiBJT1JFU09VUkNFX0lPKSkgew0KPiArCWlmIChwZGV2LT5yZXZpc2lvbiA+
+PSAweDQwKSB7DQo+ICsJCWFzdC0+aW9yZWdzID0gYXN0LT5yZWdzICsgQVNUX0lPX01NX09G
+RlNFVDsNCj4gKwl9IGVsc2UgaWYgKCEocGNpX3Jlc291cmNlX2ZsYWdzKHBkZXYsIDIpICYg
+SU9SRVNPVVJDRV9JTykpIHsNCj4gICAJCWRybV9pbmZvKGRldiwgInBsYXRmb3JtIGhhcyBu
+byBJTyBzcGFjZSwgdHJ5aW5nIE1NSU9cbiIpOw0KPiAgIAkJYXN0LT5pb3JlZ3MgPSBhc3Qt
+PnJlZ3MgKyBBU1RfSU9fTU1fT0ZGU0VUOw0KPiAgIAl9DQo+IA0KPiBiYXNlLWNvbW1pdDog
+ZTYyMjUyYmM1NWI2ZDRlZGRjNmMyYmRiZjk1YTQ0ODE4MGQ2YTA4ZA0KDQotLSANClRob21h
+cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
+IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVl
+cm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBN
+Y0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-> Add board support for ICnova A20 SomPi compute module on
-> ICnova ADB4006 development board.
-> 
-> Specification:
-> SoM
-> - Processor: Allwinner A20 Cortex-A7 Dual Core at 1GHz
-> - 512MB DDR3 RAM
-> - Fast Ethernet (Phy: Realtek RTL8201CP)
-> ADB4006
-> - I2C
-> - 2x USB 2.0
-> - 1x Fast Ethernet port
-> - 1x SATA
-> - 2x buttons (PWRON, Boot)
-> - 2x LEDS
-> - serial console
-> - HDMI
-> - µSD-Card slot
-> - Audio Line-In / Line-Out
-> - GPIO pinheaders
-> 
-> https://wiki.in-circuit.de/index.php5?title=ICnova_ADB4006
-> https://wiki.in-circuit.de/index.php5?title=ICnova_A20_SODIMM
-> 
-> ---
-> 
-> changes in v2:
-> - use short licensing header
-> - remove deprecated elements from led nodes
-> - disable csi power supply
-> - add missing pins in usbphy node
-> - split dts into SoM dtsi and carrier board dts
-> 
-> v1 of this patch was sent to the uboot mailing list [1].
-> 
-> [1] https://lists.denx.de/pipermail/u-boot/2023-April/514605.html
-> 
-> Signed-off-by: Ludwig Kormann <ludwig.kormann@in-circuit.de>
 
-So apart from what Krzysztof already mentioned (separate binding patch and
-stray line), this looks good to me, and passed dt-validate. Also you
-addressed all the comments I had on the U-Boot post (thanks for that), so
-with those nits above fixed:
+--------------fv9yA3eZgk43qsZFOFTijQYs--
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+--------------S9VScJM8Q7xs00Ki6xKISzXB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Cheers,
-Andre
+-----BEGIN PGP SIGNATURE-----
 
-> ---
->  .../devicetree/bindings/arm/sunxi.yaml        |   6 +
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
->  arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  63 ++++++++
->  4 files changed, 207 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
->  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> index 013821f4a7b8..12f0c236f17b 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> @@ -305,6 +305,12 @@ properties:
->            - const: allwinner,i12-tvbox
->            - const: allwinner,sun7i-a20
->  
-> +      - description: ICNova A20 ADB4006
-> +        items:
-> +          - const: incircuit,icnova-a20-adb4006
-> +          - const: incircuit,icnova-a20
-> +          - const: allwinner,sun7i-a20
-> +
->        - description: ICNova A20 SWAC
->          items:
->            - const: incircuit,icnova-a20-swac
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 3cc32722c394..b6b408417261 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1321,6 +1321,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
->  	sun7i-a20-hummingbird.dtb \
->  	sun7i-a20-itead-ibox.dtb \
->  	sun7i-a20-i12-tvbox.dtb \
-> +	sun7i-a20-icnova-a20-adb4006.dtb \
->  	sun7i-a20-icnova-swac.dtb \
->  	sun7i-a20-lamobo-r1.dtb \
->  	sun7i-a20-linutronix-testbox-v2.dtb \
-> diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> new file mode 100644
-> index 000000000000..c1606c085e4e
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> @@ -0,0 +1,137 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +// Copyright (C) 2023 In-Circuit GmbH
-> +
-> +/dts-v1/;
-> +
-> +#include "sun7i-a20-icnova-a20.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "In-Circuit ICnova A20 ADB4006";
-> +	compatible = "incircuit,icnova-a20-adb4006", "incircuit,icnova-a20",
-> +		     "allwinner,sun7i-a20";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	hdmi-connector {
-> +		compatible = "hdmi-connector";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_con_in: endpoint {
-> +				remote-endpoint = <&hdmi_out_con>;
-> +			};
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-0 {
-> +			function = LED_FUNCTION_POWER;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>; /* PH21 */
-> +			default-state = "on";
-> +		};
-> +
-> +		led-1 {
-> +			function = LED_FUNCTION_HEARTBEAT;
-> +			color = <LED_COLOR_ID_RED>;
-> +			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>; /* PH20 */
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +};
-> +
-> +&ahci {
-> +	target-supply = <&reg_ahci_5v>;
-> +	status = "okay";
-> +};
-> +
-> +&codec {
-> +	status = "okay";
-> +};
-> +
-> +&de {
-> +	status = "okay";
-> +};
-> +
-> +&ehci0 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci1 {
-> +	status = "okay";
-> +};
-> +
-> +&hdmi {
-> +	status = "okay";
-> +};
-> +
-> +&hdmi_out {
-> +	hdmi_out_con: endpoint {
-> +		remote-endpoint = <&hdmi_con_in>;
-> +	};
-> +};
-> +
-> +&mmc0 {
-> +	vmmc-supply = <&reg_vcc3v3>;
-> +	bus-width = <4>;
-> +	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-> +	status = "okay";
-> +};
-> +
-> +&ohci0 {
-> +	status = "okay";
-> +};
-> +
-> +&ohci1 {
-> +	status = "okay";
-> +};
-> +
-> +&otg_sram {
-> +	status = "okay";
-> +};
-> +
-> +&reg_ahci_5v {
-> +	status = "okay";
-> +};
-> +
-> +&ac_power_supply {
-> +	status = "okay";
-> +};
-> +
-> +&reg_usb1_vbus {
-> +	status = "okay";
-> +};
-> +
-> +&reg_usb2_vbus {
-> +	status = "okay";
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_pb_pins>;
-> +	status = "okay";
-> +};
-> +
-> +&usb_otg {
-> +	dr_mode = "otg";
-> +	status = "okay";
-> +};
-> +
-> +&usbphy {
-> +	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
-> +	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
-> +	usb1_vbus-supply = <&reg_usb1_vbus>;
-> +	usb2_vbus-supply = <&reg_usb2_vbus>;
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi b/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-> new file mode 100644
-> index 000000000000..f1142bda5cd7
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +// Copyright (C) 2023 In-Circuit GmbH
-> +
-> +#include "sun7i-a20.dtsi"
-> +#include "sunxi-common-regulators.dtsi"
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc2>;
-> +};
-> +
-> +&gmac {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&gmac_mii_pins>;
-> +	phy-handle = <&phy1>;
-> +	phy-mode = "mii";
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +
-> +	axp209: pmic@34 {
-> +		reg = <0x34>;
-> +		interrupt-parent = <&nmi_intc>;
-> +		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +};
-> +
-> +&gmac_mdio {
-> +	phy1: ethernet-phy@1 {
-> +		reg = <1>;
-> +	};
-> +};
-> +
-> +#include "axp209.dtsi"
-> +
-> +&reg_dcdc2 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <1000000>;
-> +	regulator-max-microvolt = <1400000>;
-> +	regulator-name = "vdd-cpu";
-> +};
-> +
-> +&reg_dcdc3 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <1000000>;
-> +	regulator-max-microvolt = <1400000>;
-> +	regulator-name = "vdd-int-dll";
-> +};
-> +
-> +&reg_ldo1 {
-> +	regulator-name = "vdd-rtc";
-> +};
-> +
-> +&reg_ldo2 {
-> +	regulator-always-on;
-> +	regulator-min-microvolt = <3000000>;
-> +	regulator-max-microvolt = <3000000>;
-> +	regulator-name = "avcc";
-> +};
-> +
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRA/oQFAwAAAAAACgkQlh/E3EQov+Aa
+2BAAzyUjiH1jxWXsdgutB91vAJgJAdM+6GojPBWVEDud6kGZKhUrN1mCAdeyW8pByqpOQUDQGkWR
+SR3GAqeQfIYqcCyCHQ4+KJMKAlaUgVmuDWZr9ZSeqhhNfbZlfuHzNggRpSlhBBV4VEDt2r01nbah
+K4u05H47FtltsYApQgtLsiyRDtb+0HkOMvfHU97r4U/GB3amFSrQnZ9jW99bx56BlhdCkiawTmkP
+1P17dMJRXHC7WW99V/xOANDrLrWYcukAbtpWcvTXtr5exfT2DOOovCQQDAzOhDTy7ctaCiXIVSHz
+FKlIljjrA7Z52pMntkFKWLKrT0NJhDbF9Oxz8hBt9mLcH9BJM78TnvXZ3f+NBSPzfIUJQK6ttwzF
+6KHjeALPEiDNWDhGqjDHSBGcJReFB+DaPYl7axSqslXK8VnmN4FCqJyoyGmekrZZjBUyVs5AKGWq
+wpVmwrzkAC+zCDauQaO0dclvob17keovTgfQkRRJL1j1TvHK43eTWyzH1n0b8E7eJV5SpLJ9MiM6
+1AK1Z0vcGmmSXVxH7SAkivAoLnQDydBalE8WP5+WyDmcUGZp04juUzUj+3fkoeKTI+hnyljosWBk
+H1K4UNkEipd6CwOLxDZE8D+z3BrbwMhdjAHMMCWzHN3Uj/OfeqeFZhReEXjZ/6G8PdrLxJQBtJ1w
+s3c=
+=Ze+j
+-----END PGP SIGNATURE-----
 
+--------------S9VScJM8Q7xs00Ki6xKISzXB--
