@@ -2,156 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DB56E915F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F43F6E9164
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235206AbjDTLAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S234840AbjDTLBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbjDTLAW (ORCPT
+        with ESMTP id S235257AbjDTLAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:00:22 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A051A27B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:57:48 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-172-149.tukw.qwest.net [174.21.172.149])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 21341218;
-        Thu, 20 Apr 2023 03:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1681988263;
-        bh=wsomWTcCMu3ALXnRMg6XVHMmUqvddNPX7XTHuapB+3g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=irovzlIm/EwzV1wbS+yJcrt9Eu/8UNPSf+2vFkDGpzoNQOso/RqWKaweqgGbLVoli
-         nSa1l/hmm09HsSmwXi2siUEnIhAEXAtw/YVuLzAM7iSnNjUh9w99NXabf8vIbr2fK9
-         Po3WP7zMGYesFiSK/BEBxhvkuf6SyHZlywKsQIoY=
-Date:   Thu, 20 Apr 2023 03:57:41 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] regulator: userspace-consumer: Multiple regulators
-Message-ID: <0e8f4068-70c2-4609-961e-34b5ef9d0113@hatter.bewilderbeest.net>
-References: <20230418145051.4192963-1-Naresh.Solanki@9elements.com>
- <20230418145051.4192963-2-Naresh.Solanki@9elements.com>
- <afdd0170-8b14-451f-96a7-2b5656fa0dd7@hatter.bewilderbeest.net>
- <ba8663c2-b9e6-e999-9324-af8499179464@9elements.com>
+        Thu, 20 Apr 2023 07:00:53 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FC0A5E4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:58:30 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id p12so1805546uak.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681988287; x=1684580287;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OlkpqVPsMGBCHCwPiGXeltlqZgDhFYvIj0YwaJwjXcY=;
+        b=SV6NOe5HXGojj8j858toAmnSCAUSPE+WaKKDGb4VN2CvbQQri0Qft/DJ2/u6BcgzIJ
+         FP9KTi9YL+RDIsLWGjjdaTD+mwNxmS81RD6Kv75eL8QiZqvJ5D/5HnBNXxAXTWpzmD5c
+         ByPMIyHMuAyJ2PH12t3+7r60A68vWdORNBRVkrNLSL1KjQ+L2dlt8PJyFucLhPNQ8EWe
+         tL49nbKGktraXetVBfH1pqPCuS3fH/RauI+qN7JXAzO9XPUTml6aFgFtHD3g0hwqhatJ
+         dvV4v0hO76lzr9KdIbk6DYwHAn2C52Ms8rtGrYA0V4HoCzc5ZL4rLxX9rgRVERyISyUq
+         /CKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681988287; x=1684580287;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OlkpqVPsMGBCHCwPiGXeltlqZgDhFYvIj0YwaJwjXcY=;
+        b=OOaAZmpTCbEdC/6NMROTeth4fky5vVxkmmNGt33ktAYJe17ZgTHODG1NCKfMjHjcG7
+         vxDcDd0VSpouJr9nastfZk/Myga+HvSP7zQlR3F2wqQgUmGD68ZMzzIqluZttV5WYsvD
+         XJ5TqXALjynRWnO+4twOmjT+PCJITgKvTd4bM5mFW8z1XaWArj0uQ9zSdDSAeFfLHJMc
+         LhwSXrxPBpq7Gi2PxVfH8IgeO0qC5+oL57sXuM81ZVnB4On7Y210d14TG8cKLRXI5yFt
+         RBzQ//xG/csvurZ7VLS+3vzQWKRxPa2vrLW/Wy9gulUKHS0VfUFyMq09GnYmPI4DBFsv
+         nwAg==
+X-Gm-Message-State: AAQBX9cvJaYkG3diWUdIj6zNidX8Ijyyhjhhe/CZU6QekBBVDo6fDU3T
+        lSFo+yrjbeG1FyRGEzBLDQqD8svTifbo7VUlDk1P/Q==
+X-Google-Smtp-Source: AKy350b7fx0YW1+BNZLLBmYhRSGLKi7LfzgDknAEsvAl3PAP80GeDmOlnQyMN2RGFNnwI0N5D1wvi1oRdNQ/BUlwORQ=
+X-Received: by 2002:a1f:4114:0:b0:443:e263:2dff with SMTP id
+ o20-20020a1f4114000000b00443e2632dffmr377711vka.7.1681988287392; Thu, 20 Apr
+ 2023 03:58:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba8663c2-b9e6-e999-9324-af8499179464@9elements.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 20 Apr 2023 16:27:56 +0530
+Message-ID: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
+Subject: next: powerpc: gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
+To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        ajd@linux.ibm.com, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 01:46:14AM PDT, Naresh Solanki wrote:
->Hi Zev,
->
->On 20-04-2023 05:32 am, Zev Weiss wrote:
->>On Tue, Apr 18, 2023 at 07:50:51AM PDT, Naresh Solanki wrote:
->>>Use property regulator-supplies to determine all regulator
->>>supplies.
->>>This is useful in case of a connector having 2 or more supplies.
->>>Example: PCIe connector on mainboard can be powered by 12V & 3.3V
->>>suplies.
->>>
->>>Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>>---
->>>drivers/regulator/userspace-consumer.c | 19 +++++++++++++++----
->>>1 file changed, 15 insertions(+), 4 deletions(-)
->>>
->>>diff --git a/drivers/regulator/userspace-consumer.c 
->>>b/drivers/regulator/userspace-consumer.c
->>>index 97f075ed68c9..0bb49547b926 100644
->>>--- a/drivers/regulator/userspace-consumer.c
->>>+++ b/drivers/regulator/userspace-consumer.c
->>>@@ -120,7 +120,10 @@ static int 
->>>regulator_userspace_consumer_probe(struct platform_device *pdev)
->>>    struct regulator_userspace_consumer_data tmpdata;
->>>    struct regulator_userspace_consumer_data *pdata;
->>>    struct userspace_consumer_data *drvdata;
->>>-    int ret;
->>>+    struct device_node *np = pdev->dev.of_node;
->>>+    struct property *prop;
->>>+    const char *supply;
->>>+    int ret, count = 0;
->>>
->>>    pdata = dev_get_platdata(&pdev->dev);
->>>    if (!pdata) {
->>>@@ -131,11 +134,19 @@ static int 
->>>regulator_userspace_consumer_probe(struct platform_device *pdev)
->>>        memset(pdata, 0, sizeof(*pdata));
->>>
->>>        pdata->no_autoswitch = true;
->>>-        pdata->num_supplies = 1;
->>>-        pdata->supplies = devm_kzalloc(&pdev->dev, 
->>>sizeof(*pdata->supplies), GFP_KERNEL);
->>>+        pdata->num_supplies = of_property_count_strings(np, 
->>>"regulator-supplies");
->>>+        if (pdata->num_supplies < 0) {
->>>+            dev_err(&pdev->dev, "could not parse property 
->>>regulator-supplies");
->>>+            return -EINVAL;
->>>+        }
->>>+        pdata->supplies = devm_kzalloc(&pdev->dev,
->>>+                           sizeof(*pdata->supplies) * 
->>>pdata->num_supplies,
->>>+                           GFP_KERNEL);
->>
->>AFAICT this doesn't appear to implement the "vout" default specified 
->>in the dt-binding patch?
->The "regulator-supplies" property will hold the default value of 
->"vout" unless specified otherwise. As a result, the string enumeration 
->retrieves the value of "vout" by default, and the "vout-supply" 
->property is utilized for the regulator.
->
+Following build failures noticed on Linux next-20230419 for powerpc.
 
-With the disclaimer that I'm not a DT expert, that's not my 
-understanding of how DT works.  I don't think the 'default' value 
-specified in the binding forces the fdt to always include that value if 
-it's not present in the dts (since I'm pretty sure dtc doesn't even look 
-at the binding to know that a default exists when compiling the dts); 
-rather, it's information meant to be used by the software implementing 
-support for that device (e.g. a driver for it) about what value to 
-assume if the property isn't present in the fdt.
+Regressions found on powerpc:
+ - build/gcc-8-defconfig
+ - build/clang-16-defconfig
+ - build/gcc-12-defconfig
+ - build/clang-nightly-defconfig
 
->>
->>Also, since the core of the userspace-consumer driver itself already 
->>supports multiple regulators, it might be nice for the subject line 
->>to mention DT supplies or something a bit more specifically.
->Sure. How about 'Support multiple supplies' ?
 
-I meant that it should explicitly mention "DT" (or perhaps "OF").  The 
-driver's structure has supported multiple supplies since it was first 
-introduced in 2009, so "Support multiple supplies" sounds like this 
-commit is adding functionality that was already there.  What this patch 
-is doing is connecting that existing support to the OF support logic so 
-that it can be used in a device-tree context.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
->>
->>>        if (!pdata->supplies)
->>>            return -ENOMEM;
->>>-        pdata->supplies[0].supply = "vout";
->>>+
->>>+        of_property_for_each_string(np, "regulator-supplies", 
->>>prop, supply)
->>>+            pdata->supplies[count++].supply = supply;
->>>    }
->>>
->>>    if (pdata->num_supplies < 1) {
->>>-- 
->>>2.39.1
->>>
->>>
->Regards,
->Naresh
+Build log:
+--------
+powerpc64le-linux-gnu-ld: arch/powerpc/platforms/pasemi/gpio_mdio.o:
+in function `gpio_mdio_probe':
+gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
+powerpc64le-linux-gnu-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
+phy_device.c:(.text+0x56ac): undefined reference to
+`devm_led_classdev_register_ext'
+powerpc64le-linux-gnu-ld: drivers/net/ethernet/pasemi/pasemi_mac.o: in
+function `pasemi_mac_open':
+pasemi_mac.c:(.text+0x19ac): undefined reference to `of_phy_connect'
+make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+
+Build details:
+---------
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16369015/suite/build/test/gcc-12-defconfig/details/
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16369015/suite/build/test/gcc-12-defconfig/log
+
+
+Steps to reproduce:
+------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch powerpc --toolchain gcc-12
+--kconfig defconfig
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
