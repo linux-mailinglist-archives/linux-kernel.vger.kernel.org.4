@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A866E9893
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36546E989E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjDTPmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S231786AbjDTPo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjDTPmG (ORCPT
+        with ESMTP id S230089AbjDTPoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:42:06 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6565FD8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:42:03 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id fy21so7305331ejb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682005322; x=1684597322;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KnJpp8n/D0kUuMw5srBtiHxWnY5agaKj5jAEcqN8M30=;
-        b=d7l1XYePBoWBNgg+K9TiUXnEeE1sNHrY5RlzHQid8iJYdL41erTXfy7aPeIm4TeOFX
-         9RkBJBANWPmKeZXEJLBg22JkFYJPaK2qH+GnUQ9KUKjHJ2TJ1IkVkIZ21Tn6lb7Hz0vB
-         HhtpVKng1rKja4iFnwW7odp1E5EHbCV47OLlPiTmNLHMRrbLzepCvMgM1ETRgmvqdZpU
-         fNV/PuLVsgBerGE6ikKNNXeCBrxwuu+MLin13ualf7pm82WlE5pJWO9ggd850PQohLcg
-         wZI9SAHcXop2U2VXX5C9CDNsquagEwYH+zZ5yrNyh2nVC0XTnut3uvHr2sGgkwNL/+a9
-         bNgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682005322; x=1684597322;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KnJpp8n/D0kUuMw5srBtiHxWnY5agaKj5jAEcqN8M30=;
-        b=XhqxsIEEQ9vc5D2F6Qsquvl6WOdlInG66dRWfbIS9kMpAordOEYrMbvdlKl3trzt5A
-         r4ZKO2AONUQOMEu1g/0xsmfOaGFxRizMGjsnV2ogEdjvoVVbRWwfTxKE+Lt4+mOt2hQa
-         5U7j5qqLEMuu8bSW5L02+kFjYDitmwcJA0a6rq8PlXlMSk5trpXP4iJ+IOKSiMt2x+PR
-         M/r9T9EVDPHFQL7CCKK9uwRwwE381Ci9NFE1rIHh7wJo9ByIHuCfNA/MqzCXBtMOCdAU
-         v4EYR8kXGYX3DaCwM9UCLv/ShYCwoqG2P1304kjUlRpAMPZbKns5aZkytATzfYVrnmQR
-         0AJQ==
-X-Gm-Message-State: AAQBX9eLAKkxgqIixe92h64jWQ/Us/cH1CVM/bESWUtxS89ymbJkw4TW
-        I+AnAbvVCmlIpzAvHkZO+g6I2g==
-X-Google-Smtp-Source: AKy350aUUUuiHPcRVrmXlKjxRMAKQP2h9+Dfv/GAZvKgaHmZyTTXiJnohkiGrcI/uqV5UoEmIm3qzQ==
-X-Received: by 2002:a17:906:5281:b0:956:f636:cc93 with SMTP id c1-20020a170906528100b00956f636cc93mr878092ejm.15.1682005322054;
-        Thu, 20 Apr 2023 08:42:02 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170906805000b00953285b937asm842463ejw.189.2023.04.20.08.42.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 08:42:01 -0700 (PDT)
-Message-ID: <0d096ba8-1bb2-249e-153f-eb430a9f5e8e@linaro.org>
-Date:   Thu, 20 Apr 2023 17:42:00 +0200
+        Thu, 20 Apr 2023 11:44:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25933E6A
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:44:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85F5E1480;
+        Thu, 20 Apr 2023 08:45:07 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D8F83F6C4;
+        Thu, 20 Apr 2023 08:44:22 -0700 (PDT)
+Message-ID: <53132776-c998-a24f-a811-d8fb2e5e6535@arm.com>
+Date:   Thu, 20 Apr 2023 16:44:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: sunxi: add ICnova A20 ADB4006
- binding
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] perf cs-etm: Add support for coresight trace for any
+ range of CPUs
 Content-Language: en-US
-To:     Ludwig Kormann <ludwig.kormann@in-circuit.de>, samuel@sholland.org,
-        jernej.skrabec@gmail.com, wens@csie.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
- <20230420102409.1394618-2-ludwig.kormann@in-circuit.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230420102409.1394618-2-ludwig.kormann@in-circuit.de>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Cc:     mathieu.poirier@linaro.org, acme@kernel.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
+        scclevenger@os.amperecomputing.com, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        mike.leach@linaro.org
+References: <20230419172101.78638-1-gankulkarni@os.amperecomputing.com>
+ <d758c5e2-aa32-d829-35ee-a685bdb56f75@arm.com>
+ <84eb3363-2ef8-d3f1-4613-805959dbf334@os.amperecomputing.com>
+ <91ba66e7-737f-6526-a703-a755e114f9d4@arm.com>
+ <dea08376-e66b-bacc-7673-c79fe2a8f889@os.amperecomputing.com>
+ <902dea0e-456b-d763-fdb5-a520ea3d7536@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <902dea0e-456b-d763-fdb5-a520ea3d7536@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 12:24, Ludwig Kormann wrote:
-> Document board compatible names for In-Circuit ICnova A20 ADB4006
-> development board.
+
+
+On 20/04/2023 14:03, Suzuki K Poulose wrote:
+> On 20/04/2023 13:37, Ganapatrao Kulkarni wrote:
+>>
+>>
+>> On 20-04-2023 06:00 pm, James Clark wrote:
+>>>
+>>>
+>>> On 20/04/2023 12:47, Ganapatrao Kulkarni wrote:
+>>>>
 > 
-> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-> Signed-off-by: Ludwig Kormann <ludwig.kormann@in-circuit.de>
-> ---
+> ...
+> 
+>>>> My patch is rebased on 6.3-RC7 codebase with Mike's 3 perf patches
+>>>> related to dynamic id [1] support(queued for 6.4).
+>>>>
+>>>> "perf report -D" works for me.
+>>>
+>>> I was referring to sparse CPU lists, which I think you mentioned above
+>>> doesn't work even with this patch.
+>>>
+>>>>
+>>>> [1] https://www.spinics.net/lists/linux-perf-users/msg27452.html
+>>>>
+>>>
+>>> It should be based on the next branch here:
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
+>>
+>> OK.
+> 
+> It need not be. Since this patch is purely perf tools patch and has
+> nothing to do with the kernel drivers, it should be beased on whatever
+> the tip of the perf tool tree is. Otherwise we risk rebasing to that
+> eventually.
+> 
+> Cheers
+> Suzuki
+> 
 
+Good point, sorry for the confusion!
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I wonder if we could have some kind of new staging branch that has both
+up to date perf and coresight changes at the same time? Either that
+would make things like this easier, or more complicated. I'm not sure.
 
-Best regards,
-Krzysztof
+I suppose I can DIY it quite easily but then everyone would have to as well.
 
+James
