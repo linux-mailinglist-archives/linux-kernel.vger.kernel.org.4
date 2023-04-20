@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0F86E8844
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DEB6E90FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjDTCtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 22:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
+        id S234963AbjDTKvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjDTCtK (ORCPT
+        with ESMTP id S234740AbjDTKur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 22:49:10 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F2B65BF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:48:31 -0700 (PDT)
-X-ASG-Debug-ID: 1681958908-1eb14e63892afd0001-xx1T2L
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 7E5f0aIabXyZq2Dy (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 10:48:28 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 10:48:27 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 10:48:26 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
-Subject: [PATCH] xhci: fix issue of cross page boundary in TRB prefetch
-Date:   Thu, 20 Apr 2023 18:48:26 +0800
-X-ASG-Orig-Subj: [PATCH] xhci: fix issue of cross page boundary in TRB prefetch
-Message-ID: <20230420104826.4727-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 20 Apr 2023 06:50:47 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F096B7682
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:48:39 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4ec81773cf7so455621e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681987716; x=1684579716;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zD279to/6+TWBjoIw2UrrbMEO+Ablbs2o2Hy3tbTBkU=;
+        b=mMrqFoBNZuSiQTHDl6RiYeOcsEwVDcJfjwzaboiWvmgOt+9p5li6YIWwS5uR+n4pPn
+         WmGY9LGOfKQNGtWrXGAngiXl+SOQuXzWNuYkK4UACYMUJGLrr8f4wokicHnzixv/eZ7Y
+         7a3xUjOGpBA2qYRqrNYv4AtVI19nssn2qfOmP6RCe3WMK1kjr9QpmaSpnZ/Umbe1Cppg
+         HLCOKwOZSPKangyDezrABfIVNdL+BKsgz/8vgcZJnIkFJpayyc0sMtTwGnUjkRyNhubX
+         /+LHHPtZMgOSob+l2TdsA1t3TMFp1u7LAiJ5QfurdDOpmv2i4Gg/FsgpLBJF/xyMh4N8
+         ReKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681987716; x=1684579716;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zD279to/6+TWBjoIw2UrrbMEO+Ablbs2o2Hy3tbTBkU=;
+        b=G8R7VgO+wuMYos7u4FcQZ17Mw8p0Lg8Xob09N1JsuiszTcyz7jmFGtH2WSSPP2jjT1
+         olC7y8csDWMznquLdTnVR6PT15xz1RvMZ8VtXg3exsuyRWTNH3ZgSROQziK2ymzv847D
+         BgO21vDbpgSc0bC8IaTfcu8SvzvheP5xHkYphLzxgj1Bu9W1I1Q7zf3hbePS/hSGDKGk
+         1ejeRHLmQoJU9a3523LNfiWwZ+T1R9lUFbHef3hsZ69faO1P+jc1bD2lynNAXY1qIA0A
+         nLcXQoMauKdCWTAu8JLrdCzkQy3qjLUjSi4n1+BY65LMa1LjbanJEX42LEf4de1AdY2c
+         0wcw==
+X-Gm-Message-State: AAQBX9cQKA7MtW7rn539kaj+MYbszTahWBTclsdoIPiBzgA6WEH+lPAc
+        2peJhM74p0/ed7Ntbx3TpTUkLA==
+X-Google-Smtp-Source: AKy350aYVhOqGSVtBNCUjrt2Wb+KoklVOmlz2MrxgriDUwHxa3b2uAyhI8S5/FzTyVfeD5juU5G1kg==
+X-Received: by 2002:a05:6512:401:b0:4dd:9b6b:6b5b with SMTP id u1-20020a056512040100b004dd9b6b6b5bmr370391lfk.16.1681987716564;
+        Thu, 20 Apr 2023 03:48:36 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id a5-20020a056512374500b004db3d57c3a8sm178161lfs.96.2023.04.20.03.48.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:48:36 -0700 (PDT)
+Message-ID: <ec3b44cd-470d-adc0-bdc8-2fcca228d694@linaro.org>
+Date:   Thu, 20 Apr 2023 12:48:35 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1681958908
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2546
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0209
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107661
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 06/10] ARM: dts: qcom: ipq8064: correct LED node names
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230420075053.41976-1-krzysztof.kozlowski@linaro.org>
+ <20230420075053.41976-6-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230420075053.41976-6-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +80,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some Zhaoxin platforms, xHCI will prefetch TRB for performance
-improvement. However this TRB prefetch mechanism may cross page boundary,
-which may access memory not allocated by xHCI driver. In order to fix
-this issue, two pages was allocated for TRB and only the first
-page will be used.
 
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
- drivers/usb/host/xhci-mem.c | 6 +++++-
- drivers/usb/host/xhci-pci.c | 5 +++++
- drivers/usb/host/xhci.h     | 1 +
- 3 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index d0a9467aa5fc..69f8d44d2c9f 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2369,7 +2369,11 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	 * and our use of dma addresses in the trb_address_map radix tree needs
- 	 * TRB_SEGMENT_SIZE alignment, so we pick the greater alignment need.
- 	 */
--	xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
-+	if (xhci->quirks & XHCI_ZHAOXIN_TRB_FETCH) {
-+		xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
-+			TRB_SEGMENT_SIZE * 2, TRB_SEGMENT_SIZE * 2, xhci->page_size * 2);
-+	} else
-+		xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
- 			TRB_SEGMENT_SIZE, TRB_SEGMENT_SIZE, xhci->page_size);
- 
- 	/* See Table 46 and Note on Figure 55 */
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 6db07ca419c3..3b3bff36def3 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -334,6 +334,11 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
- 		xhci->quirks |= XHCI_NO_SOFT_RETRY;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN &&
-+			(pdev->device == 0x9202 ||
-+			pdev->device == 0x9203))
-+		xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
-+
- 	/* xHC spec requires PCI devices to support D3hot and D3cold */
- 	if (xhci->hci_version >= 0x120)
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 786002bb35db..ed1f2f894af6 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1905,6 +1905,7 @@ struct xhci_hcd {
- #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
- #define XHCI_SUSPEND_RESUME_CLKS	BIT_ULL(43)
- #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
-+#define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
--- 
-2.32.0
+On 20.04.2023 09:50, Krzysztof Kozlowski wrote:
+> GPIO LEDs is not a bus, so drop unit-address and also start suffix
+> numbering from 0:
+> 
+>   Warning (unit_address_vs_reg): /soc/leds/led@7: node has a unit name, but no reg or ranges property
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts |  2 +-
+>  arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi  | 10 +++++-----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> index 47a5d1849c72..52eadefd2fb4 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> @@ -203,7 +203,7 @@ leds {
+>  			pinctrl-0 = <&leds_pins>;
+>  			pinctrl-names = "default";
+>  
+> -			led@7 {
+> +			led-0 {
+>  				label = "rb3011:green:user";
+>  				color = <LED_COLOR_ID_GREEN>;
+>  				gpios = <&qcom_pinmux 33 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+> index 411c8d63c38e..c5abe7151f14 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+> @@ -92,34 +92,34 @@ leds {
+>  			pinctrl-0 = <&leds_pins>;
+>  			pinctrl-names = "default";
+>  
+> -			led@7 {
+> +			led-0 {
+>  				label = "led_usb1";
+>  				gpios = <&qcom_pinmux 7 GPIO_ACTIVE_HIGH>;
+>  				linux,default-trigger = "usbdev";
+>  				default-state = "off";
+>  			};
+>  
+> -			led@8 {
+> +			led-1 {
+>  				label = "led_usb3";
+>  				gpios = <&qcom_pinmux 8 GPIO_ACTIVE_HIGH>;
+>  				linux,default-trigger = "usbdev";
+>  				default-state = "off";
+>  			};
+>  
+> -			led@9 {
+> +			led-2 {
+>  				label = "status_led_fail";
+>  				function = LED_FUNCTION_STATUS;
+>  				gpios = <&qcom_pinmux 9 GPIO_ACTIVE_HIGH>;
+>  				default-state = "off";
+>  			};
+>  
+> -			led@26 {
+> +			led-3 {
+>  				label = "sata_led";
+>  				gpios = <&qcom_pinmux 26 GPIO_ACTIVE_HIGH>;
+>  				default-state = "off";
+>  			};
+>  
+> -			led@53 {
+> +			led-4 {
+>  				label = "status_led_pass";
+>  				function = LED_FUNCTION_STATUS;
+>  				gpios = <&qcom_pinmux 53 GPIO_ACTIVE_HIGH>;
