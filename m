@@ -2,318 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E206E901E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB736E9021
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbjDTK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S234705AbjDTK0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbjDTKZl (ORCPT
+        with ESMTP id S234696AbjDTKZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:25:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AE010E;
-        Thu, 20 Apr 2023 03:24:50 -0700 (PDT)
-Received: from debian-test.local.in-circuit.de ([84.160.205.173]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MkHd3-1qZXrS352n-00kjbY; Thu, 20 Apr 2023 12:24:23 +0200
-From:   Ludwig Kormann <ludwig.kormann@in-circuit.de>
-To:     samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andre.przywara@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] arm: dts: sunxi: Add ICnova A20 ADB4006 board
-Date:   Thu, 20 Apr 2023 12:24:09 +0200
-Message-Id: <20230420102409.1394618-3-ludwig.kormann@in-circuit.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
-References: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
+        Thu, 20 Apr 2023 06:25:46 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9912107
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:24:55 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id ch24so1844948uab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681986294; x=1684578294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GzdmchMAmUCfWvR6UnZ1ij7PF5b4pmFq49R9wQoZK0E=;
+        b=NVuhAygbPAMKwQGaKhEmFttmln1l2kICCz7DulpI9iwNcDtSsl7kytCZVTbApJkgHV
+         xk/Aog3KGrLh6qBeW2kPBf2y5NgjfHTUGCZIe4HX7pDoLJ8Aj7ZTP7o5wzccCTRE4xT1
+         aEHPqAhWnT54k4l/Yr88AxiNYNjcwgEaOM3+QvY4mgi9Cu3Bx9Tbw9nS9hT6+vIuKSd9
+         oQV1lYpJN32nRGAUxveeVUEeKo7WAY7qnwgVr4zr9z3se0XesWXlMTV7JeTmv4PgmFHU
+         wrHUkWF78/oxi3Ar5Zwq47NOfubI8YBFRiHT7sXkrYfHjkBqxlc6L+budz96QrBRI60e
+         O6Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681986294; x=1684578294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GzdmchMAmUCfWvR6UnZ1ij7PF5b4pmFq49R9wQoZK0E=;
+        b=Y3KKQxwL3dNcWSXLtcNIXWXOahYn83/s+vqF5CnO9JXdO20FwO8doecajybVaEOzai
+         jqAdC1CmQLSPBhkkqItJOURfLVV9PBTi9R3bBONWyxxXRgY50v/zkQLneJjm3X8JDEC8
+         KmZxD7kJqFuw5hWBMK2RZA9tCyYrNkBQx3gKiHk9BghuFGmkn9i+MXfLvMlhbkutm29x
+         jI86ZWwrgXNAHubfxKmfcOcATPdaQJ8PQdldhlSI7MNcKcWu++vRe9MlizHitAQHnjPS
+         MaUzdNhXMkktCeSMYUL8Hrg9FKFxP+ikoFrHGY2EyDhaU4vuWKhYCG9WMoCMEUw3b8Ds
+         Q1IQ==
+X-Gm-Message-State: AAQBX9d2PmAG9e55OZO/4KHEFjet6OdxfJXlQeftjSvKSXzo8QkIQb2J
+        0zU6b6fk0oDQQgP634PAu9hdAfMgmFUI+5/usLJBLQ==
+X-Google-Smtp-Source: AKy350ZnZnOqHxwdjE1uf8YLd9gJ9XZsKq6ApM1hVHtmaiZLc9Tmxs5NPBGNHFhRL/om6aohTMEAvA+sLlsUEwscqU4=
+X-Received: by 2002:a1f:4146:0:b0:43f:cadf:9ef3 with SMTP id
+ o67-20020a1f4146000000b0043fcadf9ef3mr432859vka.8.1681986293204; Thu, 20 Apr
+ 2023 03:24:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:JbOfNKJY/XEtp6xkqjP477VwoJD1Qd9/OAA6HP5NHPxfW9FyPkG
- SCU38rRyPfux0sEwYxcfMDBjKKYiUAD0r4BA4il1i9vhUfijqGBADEbzsCvDQ2rmqCG3H8+
- cQbuZvQmAK5GFW4q6eRPgpMVfAQ2aKE1vWDzJvYQ5uLnPtXkUxW7s0kEKn2c6Xhi7LgM1VX
- BHOA5ryj/1sDCo9msAMSw==
-UI-OutboundReport: notjunk:1;M01:P0:AVn3Uaprw/4=;j3zIXB8WhXc/d/QsB7681u99fpJ
- nbQ0YeJXJYQZcdkBRklk/nQaV2dR+qY65HzmF4VVcZF1XarM1uqHrvv6l+GKu5Wvm7nQHW1DE
- J9zb2rDUWiUHiMamot6kPS3jhwqcWueB5nYKGZRDwxcNMT041PRdOd+s5cyBeZxVPAxS3MF8a
- oroSCv3M2tVjrD98qAAlM7a8WJPliFP2o2BFM2Z4DMZe5JJmdzx5RduXO96YIqCxyXyLHwnoQ
- 8138yTvCb/4CK5YXXbYlCbki4x4Q59r6FgyHrQugtWA/1G4XA9Oc3c209kU85N6GZhTNKjc88
- fRQ+gB+qUAstFJPzakvs3TQzX+7113F4EuE/YU2Fy7YrxmXzWht+smApvhIowvmVXeocJFR05
- ZnPAbD00HI7i60v3rylbhc4CBMXBLnOn6/Pj8DArjUkB+Ul58aCgjyPnxN4/u0JU9CV81QlDl
- wrmfjnhFm7GhR+irWoSzE2QbVXJd2vRfC3nLAFQDmeiwMO3GX6q1JFRlUxWVkZrgTDB1Exsf4
- KaraBHnR/AWP5VUKWCn8BFVfQtRUZMt5jRn2F2dLdHOfs7KIQBgjLxor5JhM2s2kp1fXWiL5t
- lDVBhZw6RTUmmDn80onzL6xS0G2jRUE62On/fBghB3y5XZ5NrKAawt26azHVWKq+6DNnqisq6
- xoTOA4KUO4QR5EGeKmyuPlA2/xesIlNyQ5NrMewnBA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419132048.193275637@linuxfoundation.org>
+In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 20 Apr 2023 15:54:41 +0530
+Message-ID: <CA+G9fYvPWssNwsfAM=o6VgwT9=mN9ySMXZBfdZaVUNfnvNvusw@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add board support for ICnova A20 SomPi compute module on
-ICnova ADB4006 development board.
+On Wed, 19 Apr 2023 at 18:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.25 release.
+> There are 129 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.25-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Specification:
-SoM
-- Processor: Allwinner A20 Cortex-A7 Dual Core at 1GHz
-- 512MB DDR3 RAM
-- Fast Ethernet (Phy: Realtek RTL8201CP)
-ADB4006
-- I2C
-- 2x USB 2.0
-- 1x Fast Ethernet port
-- 1x SATA
-- 2x buttons (PWRON, Boot)
-- 2x LEDS
-- serial console
-- HDMI
-- µSD-Card slot
-- Audio Line-In / Line-Out
-- GPIO pinheaders
 
-https://wiki.in-circuit.de/index.php5?title=ICnova_ADB4006
-https://wiki.in-circuit.de/index.php5?title=ICnova_A20_SODIMM
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Ludwig Kormann <ludwig.kormann@in-circuit.de>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
- arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  62 ++++++++
- 3 files changed, 200 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
- create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 3cc32722c394..b6b408417261 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1321,6 +1321,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
- 	sun7i-a20-hummingbird.dtb \
- 	sun7i-a20-itead-ibox.dtb \
- 	sun7i-a20-i12-tvbox.dtb \
-+	sun7i-a20-icnova-a20-adb4006.dtb \
- 	sun7i-a20-icnova-swac.dtb \
- 	sun7i-a20-lamobo-r1.dtb \
- 	sun7i-a20-linutronix-testbox-v2.dtb \
-diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-new file mode 100644
-index 000000000000..577ead1d02a0
---- /dev/null
-+++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// Copyright (C) 2023 In-Circuit GmbH
-+
-+/dts-v1/;
-+
-+#include "sun7i-a20-icnova-a20.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "In-Circuit ICnova A20 ADB4006";
-+	compatible = "incircuit,icnova-a20-adb4006", "incircuit,icnova-a20",
-+		     "allwinner,sun7i-a20";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_con_in: endpoint {
-+				remote-endpoint = <&hdmi_out_con>;
-+			};
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>; /* PH21 */
-+			default-state = "on";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_HEARTBEAT;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>; /* PH20 */
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+};
-+
-+&ahci {
-+	target-supply = <&reg_ahci_5v>;
-+	status = "okay";
-+};
-+
-+&codec {
-+	status = "okay";
-+};
-+
-+&de {
-+	status = "okay";
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&hdmi {
-+	status = "okay";
-+};
-+
-+&hdmi_out {
-+	hdmi_out_con: endpoint {
-+		remote-endpoint = <&hdmi_con_in>;
-+	};
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_vcc3v3>;
-+	bus-width = <4>;
-+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-+	status = "okay";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&otg_sram {
-+	status = "okay";
-+};
-+
-+&reg_ahci_5v {
-+	status = "okay";
-+};
-+
-+&ac_power_supply {
-+	status = "okay";
-+};
-+
-+&reg_usb1_vbus {
-+	status = "okay";
-+};
-+
-+&reg_usb2_vbus {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	dr_mode = "otg";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
-+	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
-+	usb1_vbus-supply = <&reg_usb1_vbus>;
-+	usb2_vbus-supply = <&reg_usb2_vbus>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi b/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-new file mode 100644
-index 000000000000..46616c6bc899
---- /dev/null
-+++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// Copyright (C) 2023 In-Circuit GmbH
-+
-+#include "sun7i-a20.dtsi"
-+#include "sunxi-common-regulators.dtsi"
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&cpu0 {
-+	cpu-supply = <&reg_dcdc2>;
-+};
-+
-+&gmac {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&gmac_mii_pins>;
-+	phy-handle = <&phy1>;
-+	phy-mode = "mii";
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	axp209: pmic@34 {
-+		reg = <0x34>;
-+		interrupt-parent = <&nmi_intc>;
-+		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+&gmac_mdio {
-+	phy1: ethernet-phy@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+#include "axp209.dtsi"
-+
-+&reg_dcdc2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1000000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpu";
-+};
-+
-+&reg_dcdc3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1000000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-int-dll";
-+};
-+
-+&reg_ldo1 {
-+	regulator-name = "vdd-rtc";
-+};
-+
-+&reg_ldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "avcc";
-+};
--- 
-2.30.2
+## Build
+* kernel: 6.1.25-rc3
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 45df5d9a8cbd69338c2516c670817aef975185c8
+* git describe: v6.1.22-475-g45df5d9a8cbd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
+2-475-g45df5d9a8cbd
 
+## Test Regressions (compared to v6.1.22-344-g3ffd355e5e57)
+
+## Metric Regressions (compared to v6.1.22-344-g3ffd355e5e57)
+
+## Test Fixes (compared to v6.1.22-344-g3ffd355e5e57)
+
+## Metric Fixes (compared to v6.1.22-344-g3ffd355e5e57)
+
+## Test result summary
+total: 165987, pass: 140306, fail: 3995, skip: 21354, xfail: 332
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 52 total, 51 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
