@@ -2,139 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E6F6E9502
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472876E9507
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbjDTMrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
+        id S232049AbjDTMtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbjDTMro (ORCPT
+        with ESMTP id S229671AbjDTMtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:47:44 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74138A7;
-        Thu, 20 Apr 2023 05:47:35 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q2HVp62pnz4f42Yv;
-        Thu, 20 Apr 2023 20:47:30 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCH77JiNEFkbCQlHw--.15266S3;
-        Thu, 20 Apr 2023 20:47:32 +0800 (CST)
-Subject: Re: [PATCH-next] nbd: fix incomplete validation of ioctl arg
-To:     Zhong Jinghua <zhongjinghua@huawei.com>, josef@toxicpanda.com,
-        axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        houtao1@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230206145805.2645671-1-zhongjinghua@huawei.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <f9e28d45-ddea-6056-7954-f28661975c1f@huaweicloud.com>
-Date:   Thu, 20 Apr 2023 20:47:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 20 Apr 2023 08:49:02 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F7A7;
+        Thu, 20 Apr 2023 05:49:01 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-38e12d973bfso534127b6e.0;
+        Thu, 20 Apr 2023 05:49:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681994940; x=1684586940;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EEUOOi7Fz+VazakHzsq9RZGvdzOdQ6E4gugoOE3P2nw=;
+        b=InBQMckw8D/MwC+lsyg/dukc3SRlMLJhj1J4qrqpCGrvmlDKyDKX7wBiegdwugkL4/
+         yunw3a5YtGZ3G/QMl3eZZesS7muuI47GepWYDq9pq/XBi8xQ2oF45h6Web0+sGse8+wY
+         L+hIAuIKc0T1yty46CdF8Owg2XJ2W9Q9URnHrCaYWfI5Jje6ZTbj6D6Y+efHOhGJpm3R
+         tHDlCfmviDEMdMQ4+zzzLgFc3k6fUiIgcemzqp1bdIMgZp5NxT79vC5FoEaMxOdC7FsS
+         Dx+a1ftv3G+geOV/tvv/lo/0tA7kExUpEAe7z6wNHHuccoiRRp8jeUc84QrFE5xU4vsH
+         68jg==
+X-Gm-Message-State: AAQBX9ci5Z/67vngx+Zkmi4Aya+uA8P++ju2EvStbnw+tlgObpTrsmx6
+        byoloM1QkiWIlIJgz1oW2Q==
+X-Google-Smtp-Source: AKy350bWxrvtN/1/bQ50uazmYuUpvfPgWUTslz3PKt1Rtz9FumSlaqHN7alJxrCzhHswsY+F5q7tBg==
+X-Received: by 2002:aca:be55:0:b0:38e:295e:82ef with SMTP id o82-20020acabe55000000b0038e295e82efmr691968oif.17.1681994940297;
+        Thu, 20 Apr 2023 05:49:00 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n9-20020acabd09000000b0038c06ae307asm518381oif.52.2023.04.20.05.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 05:48:59 -0700 (PDT)
+Received: (nullmailer pid 2649879 invoked by uid 1000);
+        Thu, 20 Apr 2023 12:48:58 -0000
+Date:   Thu, 20 Apr 2023 07:48:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     David Yang <mmyangfl@gmail.com>
+Cc:     linux-crypto@vger.kernel.org, Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] crypto: hisilicon/trng - add support for HiSTB TRNG
+Message-ID: <20230420124858.GA2645094-robh@kernel.org>
+References: <20230401164448.1393336-1-mmyangfl@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230206145805.2645671-1-zhongjinghua@huawei.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH77JiNEFkbCQlHw--.15266S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZry5Xr4kGw1UAw45tF48Xrb_yoW5WF1DpF
-        WjkF4UCryjyF17ua9Fya9ruFy5Xa1ftrW3KFy7CFy8ZFn2ka4I9FW8KryFqw1UtrWUW398
-        XFW5GFyvkw1jq3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230401164448.1393336-1-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2023/02/06 22:58, Zhong Jinghua Ð´µÀ:
-> We tested and found an alarm caused by nbd_ioctl arg without verification.
-> The UBSAN warning calltrace like below:
+On Sun, Apr 02, 2023 at 12:44:40AM +0800, David Yang wrote:
+> HiSTB TRNG are found on some HiSilicon STB SoCs.
 > 
-> UBSAN: Undefined behaviour in fs/buffer.c:1709:35
-> signed integer overflow:
-> -9223372036854775808 - 1 cannot be represented in type 'long long int'
-> CPU: 3 PID: 2523 Comm: syz-executor.0 Not tainted 4.19.90 #1
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->   dump_backtrace+0x0/0x3f0 arch/arm64/kernel/time.c:78
->   show_stack+0x28/0x38 arch/arm64/kernel/traps.c:158
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0x170/0x1dc lib/dump_stack.c:118
->   ubsan_epilogue+0x18/0xb4 lib/ubsan.c:161
->   handle_overflow+0x188/0x1dc lib/ubsan.c:192
->   __ubsan_handle_sub_overflow+0x34/0x44 lib/ubsan.c:206
->   __block_write_full_page+0x94c/0xa20 fs/buffer.c:1709
->   block_write_full_page+0x1f0/0x280 fs/buffer.c:2934
->   blkdev_writepage+0x34/0x40 fs/block_dev.c:607
->   __writepage+0x68/0xe8 mm/page-writeback.c:2305
->   write_cache_pages+0x44c/0xc70 mm/page-writeback.c:2240
->   generic_writepages+0xdc/0x148 mm/page-writeback.c:2329
->   blkdev_writepages+0x2c/0x38 fs/block_dev.c:2114
->   do_writepages+0xd4/0x250 mm/page-writeback.c:2344
-> 
-> The reason for triggering this warning is __block_write_full_page()
-> -> i_size_read(inode) - 1 overflow.
-> inode->i_size is assigned in __nbd_ioctl() -> nbd_set_size() -> bytesize.
-> We think it is necessary to limit the size of arg to prevent errors.
-> 
-> Moreover, __nbd_ioctl() -> nbd_add_socket(), arg will be cast to int.
-> Assuming the value of arg is 0x80000000000000001) (on a 64-bit machine),
-> it will become 1 after the coercion, which will return unexpected results.
-> 
-> Fix it by adding checks to prevent passing in too large numbers.
-
-Looks good to me, feel free to add:
-
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+> Signed-off-by: David Yang <mmyangfl@gmail.com>
 > ---
->   drivers/block/nbd.c | 6 ++++++
->   1 file changed, 6 insertions(+)
+> v2: fix typo
+> v3: add option for post process depth, adjust timeout
+> v4: do not case to __iomem, as requested
+> v5: do not use rng->priv at all
+>  drivers/crypto/hisilicon/Kconfig         |   7 +
+>  drivers/crypto/hisilicon/Makefile        |   2 +-
+>  drivers/crypto/hisilicon/trng/Makefile   |   3 +
+>  drivers/crypto/hisilicon/trng/trng-stb.c | 176 +++++++++++++++++++++++
+>  4 files changed, 187 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/crypto/hisilicon/trng/trng-stb.c
 > 
-> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-> index 592cfa8b765a..e1c954094b6c 100644
-> --- a/drivers/block/nbd.c
-> +++ b/drivers/block/nbd.c
-> @@ -325,6 +325,9 @@ static int nbd_set_size(struct nbd_device *nbd, loff_t bytesize,
->   	if (blk_validate_block_size(blksize))
->   		return -EINVAL;
->   
-> +	if (bytesize < 0)
-> +		return -EINVAL;
+> diff --git a/drivers/crypto/hisilicon/Kconfig b/drivers/crypto/hisilicon/Kconfig
+> index 4137a8bf131f..e8690c223584 100644
+> --- a/drivers/crypto/hisilicon/Kconfig
+> +++ b/drivers/crypto/hisilicon/Kconfig
+> @@ -82,3 +82,10 @@ config CRYPTO_DEV_HISI_TRNG
+>  	select CRYPTO_RNG
+>  	help
+>  	  Support for HiSilicon TRNG Driver.
 > +
->   	nbd->config->bytesize = bytesize;
->   	nbd->config->blksize_bits = __ffs(blksize);
->   
-> @@ -1111,6 +1114,9 @@ static int nbd_add_socket(struct nbd_device *nbd, unsigned long arg,
->   	struct nbd_sock *nsock;
->   	int err;
->   
-> +	/* Arg will be cast to int, check it to avoid overflow */
-> +	if (arg > INT_MAX)
-> +		return -EINVAL;
->   	sock = nbd_get_socket(nbd, arg, &err);
->   	if (!sock)
->   		return err;
-> 
+> +config CRYPTO_DEV_HISTB_TRNG
+> +	tristate "Support for HiSTB TRNG Driver"
+> +	depends on ARCH_HISI || COMPILE_TEST
+> +	select HW_RANDOM
+> +	help
+> +	  Support for HiSTB TRNG Driver.
+> diff --git a/drivers/crypto/hisilicon/Makefile b/drivers/crypto/hisilicon/Makefile
+> index 8595a5a5d228..fc51e0edec69 100644
+> --- a/drivers/crypto/hisilicon/Makefile
+> +++ b/drivers/crypto/hisilicon/Makefile
+> @@ -5,4 +5,4 @@ obj-$(CONFIG_CRYPTO_DEV_HISI_SEC2) += sec2/
+>  obj-$(CONFIG_CRYPTO_DEV_HISI_QM) += hisi_qm.o
+>  hisi_qm-objs = qm.o sgl.o debugfs.o
+>  obj-$(CONFIG_CRYPTO_DEV_HISI_ZIP) += zip/
+> -obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += trng/
+> +obj-y += trng/
+> diff --git a/drivers/crypto/hisilicon/trng/Makefile b/drivers/crypto/hisilicon/trng/Makefile
+> index d909079f351c..cf20b057c66b 100644
+> --- a/drivers/crypto/hisilicon/trng/Makefile
+> +++ b/drivers/crypto/hisilicon/trng/Makefile
+> @@ -1,2 +1,5 @@
+>  obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += hisi-trng-v2.o
+>  hisi-trng-v2-objs = trng.o
+> +
+> +obj-$(CONFIG_CRYPTO_DEV_HISTB_TRNG) += histb-trng.o
+> +histb-trng-objs += trng-stb.o
+> diff --git a/drivers/crypto/hisilicon/trng/trng-stb.c b/drivers/crypto/hisilicon/trng/trng-stb.c
+> new file mode 100644
+> index 000000000000..29200a7d3d81
+> --- /dev/null
+> +++ b/drivers/crypto/hisilicon/trng/trng-stb.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Device driver for True RNG in HiSTB SoCs
+> + *
+> + * Copyright (c) 2023 David Yang
+> + */
+> +
+> +#include <crypto/internal/rng.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/hw_random.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of_device.h>
 
+You don't need anything from this header...
+
+You need platform_device.h and mod_devicetable.h
+
+[...]
+
+
+> +static const struct of_device_id histb_trng_of_match[] = {
+> +	{ .compatible = "hisilicon,histb-trng", },
+
+This binding isn't documented. Please submit a schema.
+
+Rob
