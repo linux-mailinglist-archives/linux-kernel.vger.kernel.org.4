@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883886E8FB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62566E8FBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbjDTKOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S234720AbjDTKOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjDTKNU (ORCPT
+        with ESMTP id S234469AbjDTKNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:13:20 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749DA35B5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:10:59 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4ec816d64afso2047160e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681985458; x=1684577458;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rY35EhclsMROjwuBAZmDHq3kUGUzlcs2VX7rJH/Byds=;
-        b=F10Pkm6HPnFCpyDMc0Rj1/CFS/6mqE4ElPA/1l4Iq2bRDdwCr/9bAITnnUAROu8TUz
-         9YpjMumkRF2PINueIfUmSSXzJMxBq9WF+ZYnUXiMFbbYoH7jeuwPzsX0zIXkd53G7LdC
-         wr0jqsgC3desNNCZEIW/ShkYfWe2laDMRvBmIWBUeMu/uAJfgSl1333vq8dpAChxUfsA
-         xWvPzHpcBoxqwgnNsYbrWlsB9t4xXETonlzIfBoFtzLuZe73wU+uIE7/ljoiUmAUCOhw
-         R5cMsYrtNH2XX6EvIETomIPz0GNSaiPT95ymLJRGW88tU8xFoyvhoENoFUd6ZeAhQyP1
-         cSug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681985458; x=1684577458;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rY35EhclsMROjwuBAZmDHq3kUGUzlcs2VX7rJH/Byds=;
-        b=gNecx8fg91JKCabhv3qEdEWKy/ZFLTvqHdqvYO5DMqwb5W4gIuiRap73AUbFaYQtj8
-         4A69FSGTNBSHnB5jydth2LaBAPw2ItTX6A3Etamuy3LvZXAdha/nDqovOHSy5tVemK6n
-         jxbZAxBRaQJLEyCIMkUtiqeE9R+FNhWETJTNIAeOmR8QHdl+HxW9jSZxO3HE+5Dw/U7E
-         ZzzAPIusZ8ervcJ/qNZOtMNyzdU17aBFZ1AUiywc/cBLUX/BJsKIZI0Mxnt0DpQ5Q0Ye
-         4gJi5y0sRtRwz9GobnUv6UYqBJJONFhoWS1KjPO5hL2a52OBzMvXwPOH/fNHmzLU8rgv
-         QnXQ==
-X-Gm-Message-State: AAQBX9d5ENOAVsjCU7GFJ0lWFJzen95of/HQUh65HU6qHb5HsnbehH+b
-        fag2oniC1oSIdJRKRcxLuSQhfQ==
-X-Google-Smtp-Source: AKy350awpAl9fizn8EEiwEoAcMf9paK+Kz1W56MpuKmmLZrVM5CSSmE4q1VkZxyDJbktHzppK48jEQ==
-X-Received: by 2002:ac2:484f:0:b0:4ec:7973:1ac with SMTP id 15-20020ac2484f000000b004ec797301acmr358749lfy.22.1681985457710;
-        Thu, 20 Apr 2023 03:10:57 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac259c6000000b004db1a7e6decsm165806lfn.205.2023.04.20.03.10.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:10:57 -0700 (PDT)
-Message-ID: <d406aa6b-18af-8181-d001-e48aef5c5812@linaro.org>
-Date:   Thu, 20 Apr 2023 13:10:56 +0300
+        Thu, 20 Apr 2023 06:13:49 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5132730EE;
+        Thu, 20 Apr 2023 03:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1681985506; x=1713521506;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IqX1KGc2zqXc+B1++YmyPlNP2lpj621/TtGNfPcNhxc=;
+  b=JPhVkVGuwPX+vXRa39++itG3XazcHzzTsEjUiM2eNxmwXZJRDWcvZpna
+   7e78BZU6faZ5uYTSgS9Z9NMmFJJ1oZcIB+Y81g2BKd7utaM33z6qOnEv2
+   c+f+xGVl51XvWTukHibZ/SDt7ymWA0yBRALYiyRmwwsAfqVDrXD6vhexB
+   zysv75miOd+uDbe5Dki0o99KoOjPap4ZwVeR/SgsttUK3DhfKajhfOdxn
+   b36gN1KTP97ROvOi2Dg8SBXx4Nzh3cFpYSCrU0DRkGlSNkiTpeeo8U9Mx
+   q5ckui+wnB8eU2r/Hh3QCUvHj69qC+uAF5hQ19SnNJWkT1qYgPa/VI1qd
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,212,1677513600"; 
+   d="scan'208";a="227179734"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 20 Apr 2023 18:11:45 +0800
+IronPort-SDR: rdE0lWEq9+TofNrozWjk06ulUBQ8VgH6Jg0K2Ekbeom1b9UFskhNm1kpxbmVLLOKdw8aCXqNoD
+ fFh3Znqn0Xi5x45TYRRj5fkQi7sq6i51K9mSoyJOQJUAl05ULWLw32j2ouqPHvhQHGLUcx/M5V
+ 3tjCo1WICe8dP0YSZjJwFC0VHXn+FJjNvzImO9jpfKBGcWQtsnLM37D+MZc+G8qKoEm0aMFXL/
+ NX5MoHHq0bkWsjC30u5rrAviiOiSkm9fBJehvu/4VfqvvGDbJ15Rwwy2OAI7sIzZ83VjjdQaU6
+ 9K8=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Apr 2023 02:21:47 -0700
+IronPort-SDR: ORsds7CtjxmB5wYxkvbO2BbKRBatGs09seFBUNJYG1SyomkUvbUDcKdrEjOtxAATob/67q+1Ww
+ 5kB1UgCufxRzQa8oDELgTy7DFmlpP+LWlQSRB6XzPFj5bm43lMxtFchbeZ7xDsT06ifPwT9xaK
+ EffgDeF727Wi38xD++31niqoaO/IupmJe7nqsyEAT88DTmqJu7hiH6OAr2P/sa6ljxbzhWukBr
+ UR6i9MtV8T+MsTbFdk8Enelh/yFFuCt8ZKYGkVZpENznXa/C/HH9Cs53QILh2sl/cQGeJkJamE
+ XDM=
+WDCIronportException: Internal
+Received: from bxygm33.ad.shared ([10.45.31.229])
+  by uls-op-cesaip02.wdc.com with ESMTP; 20 Apr 2023 03:11:43 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [PATCH v3] scsi: ufs: mcq: Limit the amount of inflight requests
+Date:   Thu, 20 Apr 2023 13:11:16 +0300
+Message-Id: <20230420101116.173-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: correct unit address
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 10:24, Krzysztof Kozlowski wrote:
-> Match unit-address to first reg entry.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+in UFS, each request is designated via the triplet <iid, lun, task tag>.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In UFS4.0 the Initiator ID field is 8 bits wide, comprised of the
+EXT_IID and IID fields. Together with the task tag (single byte), they
+limit the driver's hw queues capacity.
 
+The purpose of this patch is to document the ufs spec restrictions.
+practically, it impose no functional change because a) the current hw
+supports much less (merely 64 requests), and b) since shost->host_tagset
+is set - then the number of inflight IOs is limited by just the HW queue
+depth.
+
+---
+v2 -> v3:
+fix smatch warnings (Dan Carpenter)
+elaborate commit log (John Garry)
+
+v1 -> v2:
+Attend Johannes's and Bart's comments
+
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
+---
+ drivers/ufs/core/ufshcd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 03c47f9a2750..9cebec6be35c 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -8468,6 +8468,12 @@ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
+ 	if (ret)
+ 		goto err;
+ 
++	if (hba->nutrs * hba->nr_hw_queues > SZ_64K - 1) {
++		dev_info(hba->dev, "there can be at most 64K inflight requests\n");
++		ret = -EINVAL;
++		goto err;
++	}
++
+ 	/*
+ 	 * Previously allocated memory for nutrs may not be enough in MCQ mode.
+ 	 * Number of supported tags in MCQ mode may be larger than SDB mode.
 -- 
-With best wishes
-Dmitry
+2.17.1
 
