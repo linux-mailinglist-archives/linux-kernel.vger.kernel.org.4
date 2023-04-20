@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA396E9CD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64BD6E9CDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjDTUHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S231997AbjDTUJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjDTUHP (ORCPT
+        with ESMTP id S229599AbjDTUJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:07:15 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71C71713
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:07:13 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b95c3b869dcso1124115276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:07:13 -0700 (PDT)
+        Thu, 20 Apr 2023 16:09:18 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224D2170C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:09:16 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4eed764a10cso850679e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682021233; x=1684613233;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IACsV0gExguY8/2Pgj3Sb0dr0rjM7AsQYNMIn+w1H04=;
-        b=JwBcNTcm+7BtgOFwLpG07k4XFC+bEC41BxlSGvxtDbN6/OPtNdDkwLToCcd0XkOgn0
-         slHxjReThBC3v6v4G67EF7bL5zEgMbhOeCeR2/eZbl2TvrTvET+RvacHEihxFeDsp0fL
-         jR0I7AiJSbeYA6Gg7SYTL8lnRz2jTCebPar3ktVOJOYrAcIfPnblTL9DOZCh0laECDlB
-         sFAJAx214QST22uqUT1617en+lvdz2bgHyQJHIgFGIoj6v8b1HefQd6sMst8yU6JqJF+
-         YhqnEXFKWNKGypSs3lq0AaPJOZPVb12VpCNi0/EMbsQwKOyFe67KjbmifEPFRmtc+bp7
-         y7vg==
+        d=linaro.org; s=google; t=1682021354; x=1684613354;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M3Y9Il1oqwyiPf5dbbjjrGSxVhkcdbFOHAXUkuBeIj4=;
+        b=zxnUBz/XDQ02FR4wGa8lMypLEZQCrNT0gmPf4maNMnbuMNfuSFaPqvxs9d4PUfa7vN
+         Bj3V1ZrWP17FJrRl6FDueGniOvbu267cwf6v2e3pJuEPctgNdy6gahF6PuqZoRi4MQKO
+         SSposQliOyvlNLX4LPx8ZSBxLjwN+i4pPe6yc3H3vv3lEKNRlwS4NR6g4aV+qppSXPfP
+         rKs/iwDmzkhrHb6CWALpgVhQtqWZKZJA2pKpHr5ehUVj1dmdb7mIsp7ZxGiAw8GZnrJi
+         qIDZaNPWczBRC+yYJABQAIyYHK5pmcMcXorn9ohRbAcvuDQuhe8YyFf6ro6hTcpBV/vr
+         zKWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682021233; x=1684613233;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IACsV0gExguY8/2Pgj3Sb0dr0rjM7AsQYNMIn+w1H04=;
-        b=SvEivAzy4vXAD8n9lj/SEiJzqWrYUOCvbj1YL8M70BzMXDVt757UUzqi1XYAjlMupd
-         RDYcHAaL+v8fPpNdnx8cxc1SB2xdrqy+VYuD4KWa4mjV77rxbHftx6zWthtSRofnIMuJ
-         OzHkf7R1jlnZmYmVY/YRX0sR4GrSgphlYfn5jb05JEmfeh+sFOFGimDcd6T9e/ArlGPS
-         sqyRC4FcJ74VXijTXIb1pB7XKMMw429UmpjXQvNF3hhD5INsVIX2cTV1Z9M08IW62xcz
-         fl3MaxjAWpKVBpvECGV7PvbN9IcO7VUjix0Jgg5O4j2yi1PzFhlAqLBpLAv0mTiEoMyM
-         kiSg==
-X-Gm-Message-State: AAQBX9frZcRnn9Y7eFPzD8CFTjR8kSU9V4KZyKKqdgMSzhb2thX4GttD
-        LhdSAu5V3LLepB0dQkDOMSe5ep61Rg4GkjMaRLjZUw==
-X-Google-Smtp-Source: AKy350bId68KPX8WnQ0ACIaWkUt4S/ZlHcBBGxSomhg9MfKRSYQ/EwwK8HzwMzIOsWSORu7B1EnJazR/ZuGp1pdifGA=
-X-Received: by 2002:a81:ed5:0:b0:54f:6f2e:b3f5 with SMTP id
- 204-20020a810ed5000000b0054f6f2eb3f5mr122533ywo.13.1682021232326; Thu, 20 Apr
- 2023 13:07:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682021354; x=1684613354;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3Y9Il1oqwyiPf5dbbjjrGSxVhkcdbFOHAXUkuBeIj4=;
+        b=d6uJP0+Kf91lRDqKNvWZwLUhygcGtLfUSarI13j36cu7CWQtDeUuxH8rV5lz0+RBCN
+         85JCGpBBGe1e8kRL4tcOp/pyZqK3O9YK+/BIlcY2ncDkPesihryT9Yrw2NWhHfS1P1bv
+         A2f9sm6VHliJNcfwHHIHM2cAOoJX244SS7z6AB7YOQNKEzVedZ/qptLVDSBGgqO9rF+g
+         TEM3nsV2p3GIKLF6ktKKLXjlNyeUC8OOMPeQXu4uyEqwoRwy52QX18KOjApP0vpysyXb
+         J+Jf1ROm9vHHzCg1RLl6jcyP4vwQX1r9QbNlEHuk1WOD60q8tUW+VBQIZ8oCeCMnKswR
+         5W/Q==
+X-Gm-Message-State: AAQBX9fF73ZSR6+OTlMWfUk0ByEfO03MunOf+rNhfq6RoNkZ1/lA8CZp
+        r6Rc32cIODTs6NBGDxKHk15Lcg==
+X-Google-Smtp-Source: AKy350anF3iZ+VdWnOCjhqu7EDNHAFUSTDeDIECpJaTV9PMZ9UMJUEOYkat++z42gxxU67nMXSQZDA==
+X-Received: by 2002:ac2:4219:0:b0:4db:3e56:55c8 with SMTP id y25-20020ac24219000000b004db3e5655c8mr665153lfh.59.1682021354370;
+        Thu, 20 Apr 2023 13:09:14 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id s6-20020a19ad46000000b004db51387ad6sm318181lfd.129.2023.04.20.13.09.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 13:09:13 -0700 (PDT)
+Message-ID: <47d32e5e-49ad-3ffa-2862-26b78c9c6a98@linaro.org>
+Date:   Thu, 20 Apr 2023 23:09:13 +0300
 MIME-Version: 1.0
-References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn> <20230420200148.GD3280@jannau.net>
-In-Reply-To: <20230420200148.GD3280@jannau.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/2] DPU1 GC1.8 wiring-up
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230420-topic-dpu_gc-v1-0-d9d1a5e40917@linaro.org>
+ <5b133c55-e4f5-bfd2-b542-a7d44313c038@linaro.org>
+ <c0e0a55a-cc37-fe8a-8d8a-5fe257f99b9a@linaro.org>
+ <3f3b3637-ed85-09a1-22b7-3ccd4bc929bb@quicinc.com>
+ <2dff9d62-cffe-c66f-9e50-3ecd64e44d37@linaro.org>
+ <6a335df7-ff0b-098a-feec-45714159df04@linaro.org>
+ <b134d09c-55fa-7879-80ff-900e39c20c3d@quicinc.com>
+ <0f469b3c-5f0f-e027-8a9f-d1233169c04a@linaro.org>
+ <951c7bbd-c239-336d-1914-af76f79a69d6@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 20 Apr 2023 23:07:01 +0300
-Message-ID: <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
-Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
- drm_kms_helper_poll_disable during suspend
-To:     Janne Grunau <j@jannau.net>
-Cc:     Zongmin Zhou <zhouzongmin@kylinos.cn>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        neil.armstrong@linaro.org, tony.luck@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <951c7bbd-c239-336d-1914-af76f79a69d6@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,130 +88,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net> wrote:
->
-> On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
-> > When drivers call drm_kms_helper_poll_disable from
-> > their device suspend implementation without enabled output polling befo=
-re,
-> > following warning will be reported,due to work->func not be initialized=
-:
->
-> we see the same warning with the wpork in progress kms driver for apple
-> silicon SoCs. The connectors do not need to polled so the driver never
-> calls drm_kms_helper_poll_init().
->
-> > [   55.141361] WARNING: CPU: 3 PID: 372 at kernel/workqueue.c:3066 __fl=
-ush_work+0x22f/0x240
-> > [   55.141382] Modules linked in: nls_iso8859_1 snd_hda_codec_generic l=
-edtrig_audio snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_code=
-c snd_hda_core snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmid=
-i snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper drm_ttm_he=
-lper snd_seq_device nfit ttm crct10dif_pclmul snd_timer ghash_clmulni_intel=
- binfmt_misc sha512_ssse3 aesni_intel drm_kms_helper joydev input_leds sysc=
-opyarea crypto_simd snd cryptd sysfillrect sysimgblt mac_hid serio_raw soun=
-dcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp parport drm ramoops =
-reed_solomon pstore_blk pstore_zone efi_pstore virtio_rng ip_tables x_table=
-s autofs4 hid_generic usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmo=
-use virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover virtio_blk =
-xhci_pci_renesas failover
-> > [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted 6.2.0-rc=
-6+ #16
-> > [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
- rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-> > [   55.141435] Workqueue: events_unbound async_run_entry_fn
-> > [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
-> > [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff 4c 89 f7=
- e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff 0f 0b e9 0a ff ff ff=
- <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54 d8 00 66 90 90 90 90 90 90
-> > [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
-> > [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX: fffffff=
-f9b72bcbe
-> > [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI: ff3ea01=
-e4265e330
-> > [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09: 8080808=
-080808080
-> > [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12: ff3ea01=
-e4265e330
-> > [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15: 0000000=
-000000001
-> > [   55.141455] FS:  0000000000000000(0000) GS:ff3ea01fb7cc0000(0000) kn=
-lGS:0000000000000000
-> > [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4: 0000000=
-000771ee0
-> > [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
-000000000
-> > [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000=
-000000400
-> > [   55.141466] PKRU: 55555554
-> > [   55.141467] Call Trace:
-> > [   55.141469]  <TASK>
-> > [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
-> > [   55.141478]  ? mptcp_seq_show+0xe0/0x180
-> > [   55.141484]  __cancel_work_timer+0x124/0x1b0
-> > [   55.141487]  cancel_delayed_work_sync+0x17/0x20
-> > [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40 [drm_kms_helper]
-> > [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90 [drm_kms_helpe=
-r]
-> > [   55.141531]  ? __pm_runtime_resume+0x64/0x90
-> > [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
-> > [   55.141540]  pci_pm_suspend+0x8b/0x1b0
-> > [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
-> > [   55.141547]  dpm_run_callback+0x4c/0x160
-> > [   55.141550]  __device_suspend+0x14c/0x4c0
-> > [   55.141553]  async_suspend+0x24/0xa0
-> > [   55.141555]  async_run_entry_fn+0x34/0x120
-> > [   55.141557]  process_one_work+0x21a/0x3f0
-> > [   55.141560]  worker_thread+0x4e/0x3c0
-> > [   55.141563]  ? __pfx_worker_thread+0x10/0x10
-> > [   55.141565]  kthread+0xf2/0x120
-> > [   55.141568]  ? __pfx_kthread+0x10/0x10
-> > [   55.141570]  ret_from_fork+0x29/0x50
-> > [   55.141575]  </TASK>
-> > [   55.141575] ---[ end trace 0000000000000000 ]---
-> >
-> > Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running vs poll_e=
-nabled")
-> > Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
-> > ---
-> >  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_p=
-robe_helper.c
-> > index 8127be134c39..ac72b18e2257 100644
-> > --- a/drivers/gpu/drm/drm_probe_helper.c
-> > +++ b/drivers/gpu/drm/drm_probe_helper.c
-> > @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct drm_device =
-*dev)
-> >       if (dev->mode_config.poll_running)
-> >               drm_kms_helper_disable_hpd(dev);
-> >
-> > -     cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
-> > +     if (dev->mode_config.poll_enabled)
-> > +             cancel_delayed_work_sync(&dev->mode_config.output_poll_wo=
-rk);
->
-> Checking for dev->mode_config.poll_enabled at the start of the function
-> and return early if it is not true looks more in style with the rest of
-> drm_probe_helper.c.
+On 20/04/2023 22:53, Abhinav Kumar wrote:
+> 
+> 
+> On 4/20/2023 12:51 PM, Dmitry Baryshkov wrote:
+>> On 20/04/2023 22:47, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 4/20/2023 11:01 AM, Dmitry Baryshkov wrote:
+>>>> On 20/04/2023 04:36, Konrad Dybcio wrote:
+>>>>>
+>>>>>
+>>>>> On 20.04.2023 03:28, Abhinav Kumar wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 4/19/2023 6:26 PM, Konrad Dybcio wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 20.04.2023 03:25, Dmitry Baryshkov wrote:
+>>>>>>>> On 20/04/2023 04:14, Konrad Dybcio wrote:
+>>>>>>>>> Almost all SoCs from SDM845 to SM8550 inclusive feature a GC1.8
+>>>>>>>>> dspp sub-block in addition to PCCv4. The other block differ a bit
+>>>>>>>>> more, but none of them are supported upstream.
+>>>>>>>>>
+>>>>>>>>> This series adds configures the GCv1.8 on all the relevant SoCs.
+>>>>>>>>
+>>>>>>>> Does this mean that we will see gamma_lut support soon?
+>>>>>>> No promises, my plate is not even full, it's beyond overflowing! :P
+>>>>>>>
+>>>>>>> Konrad
+>>>>>>
+>>>>>> So I think I wrote about this before during the catalog 
+>>>>>> rework/fixes that the gc registers are not written to / programmed.
+>>>>>>
+>>>>>> If thats not done, is there any benefit to this series?
+>>>>> Completeness and preparation for the code itself, if nothing else?
+>>>>
+>>>> The usual problem is that if something is not put to use, it quickly 
+>>>> rots or becomes misused for newer platforms. We have seen this with 
+>>>> the some of DPU features.
+>>>>
+>>>> In case of GC (and the freshly defined DPU_DSPP_IGC, but not used) 
+>>>> we have three options:
+>>>> - drop the unused GC from msm8998_sblk.
+>>>> - keep things as is, single unused GC entry
+>>>> - fill all the sblk with the correct information in hope that it 
+>>>> stays correct
+>>>>
+>>>> Each of these options has its own drawbacks. I have slight bias 
+>>>> towards the last option, to have the information in place (as long 
+>>>> as it is accurate).
+>>>>
+>>>
+>>> My vote is for (1) . Today, GC is unused and from the discussion 
+>>> here, there is no concrete plan to add it. If we keep extending an 
+>>> unused bitmask for all the chipsets including the ones which will get 
+>>> added in the future in the hope that someday the feature comes, it 
+>>> doesnt sound like a good idea.
+>>>
+>>> I would rather do (1), if someone has time.
+>>
+>> Agree, this was the second item on my preference list. Could you 
+>> please send this oneliner?
+>>
+> 
+> Sure, i will send this by tomorrow, but its not a oneliner. Need to get 
+> rid of below too:
+> 
+> 470 struct dpu_dspp_sub_blks {
+> 471     struct dpu_pp_blk gc;
 
-I think it is an error to call drm_kms_helper_poll_disable() if
-polling was not initialized. So, in my opinion the fix should go to
-the drm_mode_config_helper_suspend() / _resume() instead. Please add a
-guard there using dev->mode_config.poll_enabled.
+Agree.
 
+> 
+>>> OR lets stay at (2) till someone does (1).
+>>>
+>>> When someone implements GC, we can re-use this patch and that time 
+>>> keep konrad's author rights or co-developed by.
+>>>
+>>>
+>>
 
-> No difference functionally of course. Tested with the apple kms driver.
->
-> Reviewed-by: Janne Grunau <j@jannau.net>
->
-> ciao
-> Janne
-
-
-
---=20
+-- 
 With best wishes
 Dmitry
+
