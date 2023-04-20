@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522366E9240
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5CC6E9261
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbjDTLRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
+        id S233832AbjDTLY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbjDTLQx (ORCPT
+        with ESMTP id S234097AbjDTLYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:16:53 -0400
+        Thu, 20 Apr 2023 07:24:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE579005;
-        Thu, 20 Apr 2023 04:13:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450434EF6;
+        Thu, 20 Apr 2023 04:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EF86182A;
-        Thu, 20 Apr 2023 11:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64A0CC433D2;
-        Thu, 20 Apr 2023 11:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681989121;
-        bh=ki1I+acTvaNeCF2/hcBCCeIphdRJsZPU6VtB7/o13sQ=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA7A660EE2;
+        Thu, 20 Apr 2023 11:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FBDC433D2;
+        Thu, 20 Apr 2023 11:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681989210;
+        bh=83TzyHp1mq1Rphu2Mp/8bCtIaYRo7x0Qx9nQXv5k8Mo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1Y+ThRgyj9oNFM7XcwX4qEiVBh/iUA4zdKXG5Osv5F6q1GkDp75gGerbiwrQ6a1BG
-         /ZrlyORFuPCuu4VZ4BfII7t8DjSYd5MbxNhWMEvaZRWuPkea5lW9y16Ls2TT8FCaLm
-         wiktB+MYHQzrHVcVqMy081RW9IivXslxPx2UkB2w=
-Date:   Thu, 20 Apr 2023 13:11:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     "D. Starke" <daniel.starke@siemens.com>,
-        linux-serial@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] tty: n_gsm: add missing description to gsm_config
-Message-ID: <ZEEd_oOvJYranmzN@kroah.com>
-References: <20230420085017.7314-1-daniel.starke@siemens.com>
- <20230420085017.7314-3-daniel.starke@siemens.com>
- <2f2b20e4-34cd-a154-022f-c76c1b0e06c5@kernel.org>
+        b=mesjctjmh4x2MfVshQziiYcP9VPUja+3n03zFKwjFShgQ5Cuj1r8B9x2Mkyvh7mmI
+         yWiQWgHLUGHeOfjEoPQYvX1xAiIFXzYS7kpdu9J1MhagXRDm7Z+9JxA962vSj2DclJ
+         kCT5d3rC2cWqMzwbIGNqoP5S4VIyuw5CXn8e+aKEQKgbGku8jQmQn1gGGg/KIe83qe
+         kNXANOU+kPd1O/gFoWBhpVwTfV6AW6MeYVWRRTJX7xMSr81paNJOWn7r4hNFP2H+g5
+         IqKnuFhBk4W10zfGrGHAHfYJO25bLApSZEj5TCwgcw5rjUm1uIaSgGnJiGPLb1TM3X
+         K+XR5jRKXGpug==
+Date:   Thu, 20 Apr 2023 12:13:24 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+Message-ID: <20230420111324.GA970483@google.com>
+References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
+ <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
+ <ZEFjQtOCQCvQJ1k/@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2f2b20e4-34cd-a154-022f-c76c1b0e06c5@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZEFjQtOCQCvQJ1k/@yilunxu-OptiPlex-7050>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,24 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:08:32AM +0200, Jiri Slaby wrote:
-> On 20. 04. 23, 10:50, D. Starke wrote:
-> > From: Daniel Starke <daniel.starke@siemens.com>
+On Fri, 21 Apr 2023, Xu Yilun wrote:
+
+> On 2023-04-17 at 12:26:53 +0300, Ilpo Järvinen wrote:
+> > On some MAX 10 cards, the BMC firmware is not available to service
+> > handshake registers during secure update erase and write phases at
+> > normal speeds. This problem affects at least hwmon driver. When the MAX
+> > 10 hwmon driver tries to read the sensor values during a secure update,
+> > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> > which is magnitudes worse than the normal <0.02s).
 > > 
-> > Currently, all available structure fields in gsmmux.h except those
-> > for gsm_config are commented.
+> > Manage access to the handshake registers using a rw semaphore and a FW
+> > state variable to prevent accesses during those secure update phases
+> > and return -EBUSY instead.
 > > 
-> > Fix this by adding appropriate comments to the not commented fields.
-> > Note that 'mru' and 'mtu' refer to the size without basic/advanced option
-> > mode header and byte stuffing as defined in the standard in chapter 5.7.2.
+> > If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
+> > used. This avoids the locking cost.
+> > 
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > 
-> Maybe you can start documenting them using kernel-doc? And convert the
-> others and expose them all to Documentation and finally to:
-> https://www.kernel.org/doc/html/latest/
-> ?
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> 
+> Hi Lee:
+> 
+> Could the fpga part also been applied to mfd tree when everyone is good?
 
-I agree, this should be done in kerneldoc format please.
+Yes, with an Acked-by it can.
 
-thanks,
-
-greg k-h
+-- 
+Lee Jones [李琼斯]
