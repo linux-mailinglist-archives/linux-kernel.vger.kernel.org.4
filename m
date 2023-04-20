@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5706E9264
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DCD6E9275
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234333AbjDTLZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S234168AbjDTL0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbjDTLZL (ORCPT
+        with ESMTP id S234119AbjDTL0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:25:11 -0400
+        Thu, 20 Apr 2023 07:26:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDFD7EE2;
-        Thu, 20 Apr 2023 04:24:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAA91FF9;
+        Thu, 20 Apr 2023 04:25:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A9F4615C8;
-        Thu, 20 Apr 2023 11:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EEEC433D2;
-        Thu, 20 Apr 2023 11:23:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 759B4617F4;
+        Thu, 20 Apr 2023 11:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88365C433EF;
+        Thu, 20 Apr 2023 11:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681989827;
-        bh=jXACc+L1gNDsC8WHEpEt3sv4ju+THNheaCP19iu7+kc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VDfaP9sMJBv4XZlDvCF+L3NIL8S0vLhEDyxGW5wPDHc4W4FtG39RQiMN+ueGJm/aX
-         Z8vtacFBJgR/bIjS/WNirtwYl8Pt/bz03XnLbEBnoepIxn9mg0uIVXSWSj0cdwlqtx
-         S1Dw4FCIgN94ybquFSoEs4pnncjfvmZO2eHnK6ojBpjNbOmmA+jCqQq4enF/GjoqDZ
-         P1I4jsW+SZced8lVKZ7RiXBbCZ2pU2RzWyEDc0jjORk2UQ9eq8y+i4YEjNL58urSFs
-         AQaoa3UbwIvijNgRGgOWRyl8YGBbpLLPLE9eeeaX+8hPjfrYC3Pi61s1YfrO2AOsE/
-         OoIDI/efGgEbw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D6D99403B5; Thu, 20 Apr 2023 08:23:44 -0300 (-03)
-Date:   Thu, 20 Apr 2023 08:23:44 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        s=k20201202; t=1681989936;
+        bh=TB7j0KwDnAm0k2wPYr3mSy3J/1Abax6W0iRp8ay6JNM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DoEidhVOQjKJN4MyDOIuWH/ojO3qAWFNDU8nFcxQeiB5SkZEkmL63TmAcEjcDCzsL
+         WcIdjfO2fs7rKez+9Lr17kjHZXQeCeqjf2dLrHHtObOH4IRmbG0eRFzGWPr9cxGz5z
+         EELgYqVvZzFbsxzfwV6fBGypathB4estsmr/9DA5Q9/3oYRFbis3gLt7U7rVxEkweN
+         f6m9eSyK4b9l3RxKoY8msMfeFhnNIVSd7eLCDIOV4sVsADMzNe4TpT3KISHQ5C5TCb
+         WoZ2X9u8GPkhqXbFfgY8LexdNeIPfOLc39eNTZMsvRMhJBKsgycH+7ltaOkI3T4bBf
+         bT4HwbJqJ8B9w==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] perf test: Fix maps use after put
-Message-ID: <ZEEgwKYMaA9iTgFA@kernel.org>
-References: <20230420030430.489243-1-irogers@google.com>
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: [PATCH v5 0/9] tracing: Add fprobe events
+Date:   Thu, 20 Apr 2023 20:25:31 +0900
+Message-ID:  <168198993129.1795549.8306571027057356176.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420030430.489243-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,69 +58,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Apr 19, 2023 at 08:04:30PM -0700, Ian Rogers escreveu:
-> Fix a use after put reference count issue. maps is copied from leader,
-> but the leader is put on line 79 and then maps is used to read the
-> reference count below - so a use after put, with the put of maps
-> happening within thread__put. Fix by reversing the order of puts so
-> that the leader is put last.
-> 
-> To explain the reference count checker, I wrote this up as a little
-> example here:
-> https://perf.wiki.kernel.org/index.php/Reference_Count_Checking
-> 
-> Note, the bug was introduced by the committer and wasn't present in
-> the original reference count patch set.
+Hi,
 
-Yes, the bug predated your patch and is detected by the reference count
-checking you contributed. 
+Here is the 5th version of improve fprobe and add a basic fprobe event
+support for ftrace (tracefs) and perf. Here is the previous version.
 
-This was just part of splitting up your series into smaller chunks, in
-this case either we fix the problem detected while developing this
-reference counting infrastructure or fix it later after the merged
-infrastructure, when built with EXTRA_CFLAGS="-DREFCNT_CHECKING=1"
-detects it when running 'perf test'.
+https://lore.kernel.org/all/168035963900.397811.6647648816464443553.stgit@mhiramat.roam.corp.google.com/
 
-Thanks for providing the separate patch fixing it.
+I updated the first 3 patches and added 6 additional patches to support
+tracepoint probe (fprobe on tracepoint) and BTF support for function
+entry and tracepoint. This allows us to trace function entries with
+parameter names (if BTF is available).
 
-Applied.
+With this fprobe events, we can continue to trace function entry/exit
+even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+it is not available if the architecture only supports
+CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+events can not probe function entry/exit effectively on such architecture.
+But this problem can be solved if the dynamic events supports fprobe events
+because fprobe events doesn't use kprobe but ftrace via fprobe.
 
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/thread-maps-share.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/tests/thread-maps-share.c b/tools/perf/tests/thread-maps-share.c
-> index 75ce8aedfc78..858e725318a9 100644
-> --- a/tools/perf/tests/thread-maps-share.c
-> +++ b/tools/perf/tests/thread-maps-share.c
-> @@ -76,16 +76,16 @@ static int test__thread_maps_share(struct test_suite *test __maybe_unused, int s
->  	TEST_ASSERT_VAL("maps don't match", RC_CHK_ACCESS(other_maps) == RC_CHK_ACCESS(other_leader->maps));
->  
->  	/* release thread group */
-> -	thread__put(leader);
-> +	thread__put(t3);
->  	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(maps__refcnt(maps)), 3);
->  
-> -	thread__put(t1);
-> +	thread__put(t2);
->  	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(maps__refcnt(maps)), 2);
->  
-> -	thread__put(t2);
-> +	thread__put(t1);
->  	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(maps__refcnt(maps)), 1);
->  
-> -	thread__put(t3);
-> +	thread__put(leader);
->  
->  	/* release other group  */
->  	thread__put(other_leader);
-> -- 
-> 2.40.0.634.g4ca3ef3211-goog
-> 
+Fprobe events allows user to add new events on the entry and exit of kernel
+functions (which can be ftraced). Unlike kprobe events, the fprobe events
+can only probe the function entry and exit, the IP address will have some
+offsets from the symbol address. And it can only trace the function args,
+return value, and stacks. (no registers)
+For probing function body, users can continue to use the kprobe events.
 
--- 
+The tracepoint probe events (tprobe events) also allows user to add new
+events dynamically on the tracepoint. Most of the tracepoint already has
+trace-events, so this feature is useful if you only want to know a
+specific parameter, or trace the tracepoints which has no trace-events
+(e.g. sched_*_tp tracepoints only exposes the tracepoints.)
 
-- Arnaldo
+The fprobe events syntax is;
+
+ f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+ f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+
+And tracepoint probe events syntax is;
+
+ t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+
+This series also includes BTF argument support for fprobe/tracepoint events,
+and kprobe events. This allows us to fetch a specific function parameter
+by name, and all parameters by '$$args'.
+Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
+
+E.g.
+
+ # echo 't kfree ptr' >> dynamic_events
+ # echo 'f kfree object' >> dynamic_events
+ # cat dynamic_events 
+t:tracepoints/kfree kfree ptr=ptr
+f:fprobes/kfree__entry kfree object=object
+ # echo 1 > events/fprobes/enable
+ # echo 1 > events/tracepoints/enable
+ # echo > trace
+ # head -n 20 trace | tail
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+            tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+            tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+            tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+            tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+            tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+            tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+            tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+            tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (9):
+      fprobe: Pass return address to the handlers
+      tracing/probes: Add fprobe events for tracing function entry and exit.
+      selftests/ftrace: Add fprobe related testcases
+      tracing/probes: Add tracepoint support on fprobe_event
+      tracing/probes: Move event parameter fetching code to common parser
+      tracing/probes: Support function parameters if BTF is available
+      tracing/probes: Add $$args meta argument for all function args
+      selftests/ftrace: Add tracepoint probe test case
+      selftests/ftrace: Add BTF arguments test cases
+
+
+ include/linux/fprobe.h                             |   11 
+ include/linux/rethook.h                            |    2 
+ include/linux/trace_events.h                       |    3 
+ include/linux/tracepoint-defs.h                    |    1 
+ include/linux/tracepoint.h                         |    5 
+ kernel/kprobes.c                                   |    1 
+ kernel/trace/Kconfig                               |   25 
+ kernel/trace/Makefile                              |    1 
+ kernel/trace/bpf_trace.c                           |    6 
+ kernel/trace/fprobe.c                              |   17 
+ kernel/trace/rethook.c                             |    3 
+ kernel/trace/trace.c                               |   13 
+ kernel/trace/trace.h                               |   11 
+ kernel/trace/trace_eprobe.c                        |   44 -
+ kernel/trace/trace_fprobe.c                        | 1214 ++++++++++++++++++++
+ kernel/trace/trace_kprobe.c                        |   33 -
+ kernel/trace/trace_probe.c                         |  448 ++++++-
+ kernel/trace/trace_probe.h                         |   42 +
+ kernel/trace/trace_uprobe.c                        |    8 
+ lib/test_fprobe.c                                  |   10 
+ samples/fprobe/fprobe_example.c                    |    6 
+ .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   54 +
+ .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
+ .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   98 ++
+ .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 +
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   12 
+ 27 files changed, 2064 insertions(+), 139 deletions(-)
+ create mode 100644 kernel/trace/trace_fprobe.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
