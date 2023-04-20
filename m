@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013926E9D45
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63246E9D46
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjDTUej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S231742AbjDTUet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjDTUeY (ORCPT
+        with ESMTP id S229833AbjDTUer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:34:24 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC285259
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:34:23 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3ef31924c64so927801cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:34:23 -0700 (PDT)
+        Thu, 20 Apr 2023 16:34:47 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E612D5B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:34:46 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63d4595d60fso9947474b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:34:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682022863; x=1684614863;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H7ELBBlYAp9rO9Iscqt7fxZUAahtXtENLaXXiWtioDA=;
-        b=DKqDAwfBAn+vBoeYYY3K6MIAC02Z/W+xygtPJmTVD4lphx+jPOW/A83SXIPmZm5emZ
-         oAb1jzqCRSoMOTW0dR5dOC9nWvYWrmS6dqqQuGZCBmFot1anSABZnPrdALANUEpy9qQT
-         4BCCLeft3xxjBTMMrivGgh/fQ4RNMiZgxP/XzWaW+Sffi+E0D93c/o4biJGAm8gUzPdH
-         yLoEDVQ9Kv4gXWrfJnsSenEbM9f8NhVFx1ZmjtaJ/Mjnv6cM7hmNjxKwxgFdGnl4CEcB
-         BNRqhoW/dhvLAeXDdhRMm1/oeTngNpY8gVk4Hv5PU1JBWFHkuodkAONZCcshuSZtmN6d
-         Bxew==
+        d=google.com; s=20221208; t=1682022886; x=1684614886;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iBKSlGmTPj0SpwuhNR71Xgy9umtibtA7xDNMtVxgSZo=;
+        b=Q0csoKghi+ruQlPyX1y/gcn7KGo2Sb6HcZ1kR3OStBCci/uXSBawC0zCV6+KEIjFju
+         DXbaWF/3UPtHsgF7LMNYJSSKyAJho75bVOzpS80vy31G25q6aAvn9clgT3SNad88fOEN
+         OzZcTmBimupR7ShXRNRpkdSCRC8u5WaXSfiSxoUnYrvTIzfBydGWg4iYmygjkayFyjUa
+         IikTsu4roxtYas+jAjvylrBoLfKSfA4nkvMNbURR6pnwQchimvQFjEHSSPVeGi4uHUTs
+         Ta7oNclQsnOZM07cG4TZTx62AVfkx+gbWzONzVpRJNWmQmjKCTMQ4sBezodLvV+5O8m8
+         DOGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682022863; x=1684614863;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H7ELBBlYAp9rO9Iscqt7fxZUAahtXtENLaXXiWtioDA=;
-        b=d08rvlpdz/A6T7LQl4ZOf0xuKBlOyob07onZxqFQUZGZH760p3xBUnSDkfpBx3vJnP
-         PEvOoNdHp/MymP9fd8wzQrCLJ+71ljbt2mdEfI6uJE3SABJ4tYHXfXZPTs5s5jjXtTaX
-         N2wvj05Sm8E0iBr7uhlHikdq+b92QiqUsstbsf+g2HhOVSXxsWHJTKZgk31fuCs2uP49
-         oKC1oiHF5ebvCrkGgrt+td/QEks/xsuv1PUHhjM/n9uNKxxVm8NiJCksCC8wVQ7jB4/H
-         RNOCENRV8Wj7ZUw8OVsF6d4zzn09sECK4HAH2oTfLwxNGDR+N6Zae5ziBNkMfRnkwhza
-         6myw==
-X-Gm-Message-State: AAQBX9fy8Ztjk2pVlfxWt0a0adyVblZ2UOzp1jFazsppcfpwO/AjJCBy
-        MzaPw2El7l+Wp+pRxa71DuXKSwnZfTTxN9D0vailpA==
-X-Google-Smtp-Source: AKy350ZsIlfHd/IyYWDH6tgwdU06vkJ9Kjd5yBJB27Q69fc62PrktN7viBn61LSieyMWO4LC94wvoPKzHVdH9Gwvft4=
-X-Received: by 2002:a05:622a:d5:b0:3e0:c2dd:fd29 with SMTP id
- p21-20020a05622a00d500b003e0c2ddfd29mr117317qtw.4.1682022862609; Thu, 20 Apr
- 2023 13:34:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682022886; x=1684614886;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iBKSlGmTPj0SpwuhNR71Xgy9umtibtA7xDNMtVxgSZo=;
+        b=hy4eiiSGZ6vwdzFfKh9Mn9H3e0/AAdMdxXPVvmn5iUVf4+zDRbQMqVBoEBDBnG5mQL
+         pJVhIn7Hv7NdNTAJdjqzVrpRyNLZUekIV+7mQtoeem9DCpRO1VxWjN4Da4vi85xG8ewP
+         KUYlODXQHwu8B5AEvH2+AS5nO5+FBn1iWbOgfWBYA/PDMDVK0XMgK29PmuCZwc49Ysfr
+         +xTbZ0234YgMKFqVYyU0DMiH8bcrKI1BkXaHKHtvAUcVezASk3Wh36qEqGfU4IRbmKwW
+         7I7sGMRP0grC+Z0IUJEHos5gKMx1ScH4jysgDLKbZuTN+gEsXHpXw+K2hK5024+m4nv9
+         vFvQ==
+X-Gm-Message-State: AAQBX9elqQ9CuxaLaU/QlGtFZCCgWnrCgPefvGZLj9vRhRAoGrWFuNTC
+        g0bvKJ/ciy9iWoMb1nBQwZzamGUeS+F+QM/NcyvBXg==
+X-Google-Smtp-Source: AKy350Z5gXN5upUeBRT71FK0ExW+0W0up3cDxLpY2o4m0aVRkyyxYgT0FlYgCfa0ekh0BujRfWooMA==
+X-Received: by 2002:a05:6a20:3ca4:b0:ee:444a:ce1a with SMTP id b36-20020a056a203ca400b000ee444ace1amr2719266pzj.30.1682022886197;
+        Thu, 20 Apr 2023 13:34:46 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id w4-20020a627b04000000b0062cf75a9e6bsm1619660pfc.131.2023.04.20.13.34.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 13:34:45 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 20:34:42 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     linux-mm@kvack.org, surenb@google.com, tkjos@google.com
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Using page-fault handler in binder
+Message-ID: <ZEGh4mliGHvyWIvo@google.com>
 MIME-Version: 1.0
-References: <20230417122943.2155502-1-anders.roxell@linaro.org>
- <2023041848-basil-plop-145c@gregkh> <CADYN=9L40BxnPiMAnCr=Ha4PPt2dWDO+anE9ev0sQPjbJyvBSQ@mail.gmail.com>
-In-Reply-To: <CADYN=9L40BxnPiMAnCr=Ha4PPt2dWDO+anE9ev0sQPjbJyvBSQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 20 Apr 2023 13:34:08 -0700
-Message-ID: <CAP-5=fVDQWshLtjXkqogOkhJT2z9aEFcpjY32pjQ6DbFrMy88Q@mail.gmail.com>
-Subject: Re: [backport PATCH 0/2] stable v5.15, v5.10 and v5.4: fix perf build errors
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-        acme@redhat.com, andres@anarazel.de, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,91 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:24=E2=80=AFAM Anders Roxell <anders.roxell@linar=
-o.org> wrote:
->
-> On Tue, 18 Apr 2023 at 11:04, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Apr 17, 2023 at 02:29:41PM +0200, Anders Roxell wrote:
-> > > Hi,
-> > >
-> > > I would like to see these patches backported. They are needed so perf
-> > > can be cross compiled with gcc on v5.15, v5.10 and v5.4.
-> > > I built it with tuxmake [1] here are two example commandlines:
-> > > tuxmake --runtime podman --target-arch arm64 --toolchain gcc-12 --kco=
-nfig defconfig perf
-> > > tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-12 --kc=
-onfig defconfig perf
-> > >
-> > > Tried to build perf with both gcc-11 and gcc-12.
-> > >
-> > > Patch 'tools perf: Fix compilation error with new binutils'
-> > > and 'tools build: Add feature test for init_disassemble_info API chan=
-ges'
-> > > didn't apply cleanly, thats why I send these in a patchset.
-> > >
-> > > When apply 'tools build: Add feature test for
-> > > init_disassemble_info API changes' to 5.4 it will be a minor merge
-> > > conflict, do you want me to send this patch in two separate patches o=
-ne
-> > > for 5.4 and another for v5.10?
-> > >
-> > > The sha for these two patches in mainline are.
-> > > cfd59ca91467 tools build: Add feature test for init_disassemble_info =
-API changes
-> > > 83aa0120487e tools perf: Fix compilation error with new binutils
-> > >
-> > > The above patches solves these:
-> > > util/annotate.c: In function 'symbol__disassemble_bpf':
-> > > util/annotate.c:1729:9: error: too few arguments to function 'init_di=
-sassemble_info'
-> > >  1729 |         init_disassemble_info(&info, s,
-> > >       |         ^~~~~~~~~~~~~~~~~~~~~
-> > >
-> > >
-> > > Please apply these to v5.10 and v5.4
-> > > a45b3d692623 tools include: add dis-asm-compat.h to handle version di=
-fferences
-> > > d08c84e01afa perf sched: Cast PTHREAD_STACK_MIN to int as it may turn=
- into sysconf(__SC_THREAD_STACK>
-> > >
-> > > The above patches solves these:
-> > > /home/anders/src/kernel/stable-5.10/tools/include/linux/kernel.h:43:2=
-4: error: comparison of distinct pointer types lacks a cast [-Werror]
-> > >    43 |         (void) (&_max1 =3D=3D &_max2);              \
-> > >       |                        ^~
-> > > builtin-sched.c:673:34: note: in expansion of macro 'max'
-> > >   673 |                         (size_t) max(16 * 1024, PTHREAD_STACK=
-_MIN));
-> > >       |                                  ^~~
-> > >
-> > >
-> > > Please apply these to v5.15, v5.10 and v5.4
-> > > 8e8bf60a6754 perf build: Fixup disabling of -Wdeprecated-declarations=
- for the python scripting engine
-> > > 4ee3c4da8b1b perf scripting python: Do not build fail on deprecation =
-warnings
-> > > 63a4354ae75c perf scripting perl: Ignore some warnings to keep buildi=
-ng with perl headers
-> >
-> > Can you please provide patch series of these upstream commits backporte=
-d
-> > to the relevant branchs that you wish to see them in?  You have 2
-> > patches in this series without git commit ids, and I have no idea where
-> > to apply them, or not apply them...
->
-> Yes, apologies, I will get that fixed up.
->
-> >
-> > Or better yet, just use the latest version of perf as was pointed out,
-> > on these old kernel releases.
->
-> Makes sense, we can do this. Is this the preferred way going forward?
+Hi,
 
-Fwiw, it definitely has my vote.
+I'm trying to remove the current page handling in binder and switch to
+using ->fault() and other mm/ infrastructure. See, we currently allocate
+and insert pages manually into vmas, so dropping this boilerplate code
+seems like a great idea to me. Before starting on this though, I could
+use some pointers on some of the implementation details.
 
-Thanks,
-Ian
+In binder the messages are not buffered. What happens is that a server
+task mmaps a region and then allows clients to write their user data
+directly into this _remote_ vma. This is currently achieved by caching
+pointers to every page allocated in the server's region.
 
-> Cheers,
-> Anders
+Instead of caching page pointers, I believe binder could make use of
+get_user_pages_remote() and trigger a page fault as needed. Basically,
+implement something similar to access_remote_vm() but that instead does
+a copy_from_user(). However, I don't see many in-tree users of these
+routines, so I wonder if I'm overlooking something in this approach?
+
+One more reason for the page caching in binder is being able to free
+pages from the shrinker's callback. Unused pages are added to an LRU
+list and we manually zap/free them when they are reclaimed. It is not
+evident to me how can binder mark a range within the vma region as
+reclaimable?
+
+Any pointers are appreciated!
+
+--
+Carlos Llamas
