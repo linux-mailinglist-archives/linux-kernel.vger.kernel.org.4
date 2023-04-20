@@ -2,152 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67336E9AFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05306E9B09
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjDTRmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S231670AbjDTRmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjDTRmM (ORCPT
+        with ESMTP id S231667AbjDTRmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:42:12 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5619CE58
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:42:09 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-760bba6404cso38309339f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:42:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682012528; x=1684604528;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wWI/KrkBx1ruAw1fs2tCw7jtIGLbpWu/3dIfHT/7yPY=;
-        b=dG/12FU273yJIqrgVgIy0hpaDniYZteZdc0q5qUnK/tUBY0lYC/cwnLUJb2RA7Tx4t
-         pWHp9T6wiMZ8VED3rwPBOlXY4idM6rPkEjdzIoQTD0arlH8NDBko1kX08GzKfzVxvR1M
-         GtusXvkMxv8spvgxIs1F0Yxn34fSLI0oNPEkxEFjsOScIAq+kWxob0rgcWyMSVR/NmCm
-         u/9hjGzCP0XJUR2C2j+0i/seC8P+AzraizAsLWYHtHiFBhesBGtaC23O9XfGQAkBQBRv
-         ms/IZoEYCVGB1sAoIe2S82A+Hzb0Y7oeBXyNp62fNDp8cbhft7elBgddKFhZNu1xpbF1
-         cErA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682012528; x=1684604528;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wWI/KrkBx1ruAw1fs2tCw7jtIGLbpWu/3dIfHT/7yPY=;
-        b=BGXrszH3PdQiQ5DTcBF1g3nnyd8z/0zyAXGPyYgjYlvSpXth72qMr4Nz8Wh+WjYRe1
-         vQBlZtDWx55ti59dohBOHAzMyOgRuushAPpcIvZq/yg4D8+91PyUiXP3uB2P46PQNiPJ
-         e/Q+KXVHrqaZ2gyAqLLMXmlAKuagJ5csWRMDqbOVH36dRv5fXa0HN6IP41FuDGmlWYft
-         O0WAs5qwjh4EV527TxUQRgdTass8Cygq4mXo1J7RcIarygxjLyFJfKegXZ3Q99SYHfkP
-         pSuC7NU/BAyPwHYL/5TSMzhNGbeJiSPwti3AFDXvSvhcTUzncylIxtpW5o/+fRhoOVTd
-         Yg8w==
-X-Gm-Message-State: AAQBX9eTW15Vzi2M3EKp0u7dZ21SXcMa21EalKAXbQfip/kzDBVBlCol
-        dGn8ANNVhzwVRCBFO8TMgb8v6B7UhDn9yQ9ex/wsFg==
-X-Google-Smtp-Source: AKy350ab9Bpn/wPH20efhl8mO92kdynFUNaFK18r9azbn9xAWSjeRVd7V3GFinVkzOtsE+MoWCmddGfBkWvj0NN34co=
-X-Received: by 2002:a92:c908:0:b0:329:42d1:6e2d with SMTP id
- t8-20020a92c908000000b0032942d16e2dmr1162376ilp.6.1682012528360; Thu, 20 Apr
- 2023 10:42:08 -0700 (PDT)
+        Thu, 20 Apr 2023 13:42:53 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2064.outbound.protection.outlook.com [40.107.92.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2762108;
+        Thu, 20 Apr 2023 10:42:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ggl/AKrgdY5Q5lgFeHdGY1vWB+12eZe0teqjbtt2ALlB1GMdFetGyOEMfn2uCerbq+ywkzdFJ7bjUw8RTiwlReHQ7t7e9jrCn+euotdRVqUBJNk7DFMGTo2Ub0lj86KH+cUaH1dnsh/qWbdNJ7z6R6kHScrpBWE0P8ZJOPnbp5be5LEjofM/ZW6yrx0nCQFb+jCi9XS34td4YDN6ztukOuKSk5Jx7CIKxtbGQfirKrsHrb/1OfQTfMEzZgBchRT+Z+zfay3JTHkh0ib4PdzH0FO+jMVuXFbe+UAFHtNoSUtBvRPqJljAuOz71n1qbM3Apb6VRhBGoDgjuHezK/j+ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JnnrAGZogwoJoiQuAQAosRAP05xBVUfb1c7z93jX8mg=;
+ b=EL1sxgThyvu3KiYJzWiPvmyb+dMf6zML9Sr7hJlwbvtx7dw3wAE0j5a53778mo6o5GeENHB/gtu0XKnAFdOYjtmq0eoa4pBqHdTXPDRVNIlrSHIxjb3uiDIAsmXkQZ85wA+bg6tcX9DBmvfv8NtAwkK9d04j6c9SW21giIYviUqRIIHWl9uRHFytt/85U7LxLp7nFC4TbAe1gJG5vYMGJ9G9R6diOrrphjfmqO5shxqDa1vCqdkOX5Iw4e91Vb203tDkU5RHnGRohlQqlWdKrzOE9Vi7ZmI5nwER+KjXUgvBi1cBpqAk2R0YbOgRXFFSEA3sDQx73wFyXLTBn6joBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JnnrAGZogwoJoiQuAQAosRAP05xBVUfb1c7z93jX8mg=;
+ b=NbgvtZp4aI1umsJbOWFXa4GnXNBJr5I8uobLpiu7WOPb9p1cFhLuSPA91ulzyeSuSdGxCYJjtGmZiqnJtTPODHtbuPqj7jklzg9ooiIULmke8O/tHLoBZz1PXHxtx1xxcLAOmqTvSjSJJSN2A57C7RkV/0RLUt5aWRr0qfRVZl8=
+Received: from DS7PR06CA0026.namprd06.prod.outlook.com (2603:10b6:8:54::16) by
+ BL3PR12MB6643.namprd12.prod.outlook.com (2603:10b6:208:38f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 17:42:45 +0000
+Received: from DS1PEPF0000E649.namprd02.prod.outlook.com
+ (2603:10b6:8:54:cafe::57) by DS7PR06CA0026.outlook.office365.com
+ (2603:10b6:8:54::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.25 via Frontend
+ Transport; Thu, 20 Apr 2023 17:42:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DS1PEPF0000E649.mail.protection.outlook.com (10.167.18.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.16 via Frontend Transport; Thu, 20 Apr 2023 17:42:45 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 20 Apr
+ 2023 12:42:45 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 20 Apr
+ 2023 10:42:45 -0700
+Received: from ethanolx1adehost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 20 Apr 2023 12:42:44 -0500
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <ray.huang@amd.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH] cpufreq: amd-pstate: Update copyright notice
+Date:   Thu, 20 Apr 2023 17:42:44 +0000
+Message-ID: <20230420174244.3100866-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221222221244.1290833-1-kuba@kernel.org> <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
-In-Reply-To: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 20 Apr 2023 19:41:57 +0200
-Message-ID: <CANn89iKQ2KR23Ln9FU5RCKH89KWCNcu9QWuVLB4CcEqgoH+iRQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] softirq: uncontroversial change
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org,
-        tglx@linutronix.de, jstultz@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E649:EE_|BL3PR12MB6643:EE_
+X-MS-Office365-Filtering-Correlation-Id: 59c99ee7-d5f0-4288-6ca6-08db41c6a691
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e2OSt6XFJwVBzXFVPOuq2vVvkpB9gyEezE4LjA6ZGsoYPxYIVNL0PANfEtWaDSlrjij8YlqArzrrzFEeXCuoOP22vWm2eRLOiOQ74WeM4S2TIXBuFaopas3vdHEtw51r54EkSwucNc+q+6T+IPiOkljbAq9SpqmBZypSEemYeCTtMju0jdAYCjyzbw9GqeZ8LsuT8vvKYGYUnT2NDdJ37OXHZBDoOuvkXf05L3IrBytbYIdpdJt73aVO3wkYJUMDQFnYdhSm4Njswx7tp36aYQ0PEHmMVdPmpAOJX9c+FOkG5VecPo5cBR0fgE5/wUGTMrxJFWCV2ee90oDcRD+gPWfyENzxTRlCWLbbt1wJ0ncS3MuYQlvfXxuKR9TMMGAX8d/lAp1fGItXQkfXfjjSOB1eR/ly++8IqNRvRCdmiksPF2jiFQKY5iq7gBJNsXd/YufPLbA+eZnPpOS5OAlR5JWo/ZgjdlUolW4YEOA1r+lcG+hSyUKCLnkXXi56kYB3FZ1tH2EW+/8kIiPR8fJCKGf+ATLiuJIRVA3Juta2MiDkfy4SN4ET8ZzxtUTA+7IcfOqcJA6sM3GGwyrynfMe77VkkCZQvly1msCK9kkqObxtcw0koKra+Rkvpvu00q+9Gk9iudahP+diiTaqe7XuI2PL4dXKfM0vhvYA/RiH8G3oNZ7hk0MQRGLw33s1hH3TQ9iVKKp15Pmz1GrPa0XJl/7vnU/NisbjOq753Ey8kpw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(15650500001)(2906002)(8936002)(40460700003)(4744005)(8676002)(44832011)(5660300002)(82310400005)(36756003)(86362001)(40480700001)(7696005)(26005)(1076003)(110136005)(478600001)(2616005)(36860700001)(83380400001)(47076005)(336012)(426003)(186003)(316002)(82740400003)(4326008)(450100002)(70206006)(70586007)(356005)(41300700001)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 17:42:45.6154
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59c99ee7-d5f0-4288-6ca6-08db41c6a691
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E649.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6643
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 7:24=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> Hi all,
-> On Thu, 2022-12-22 at 14:12 -0800, Jakub Kicinski wrote:
-> > Catching up on LWN I run across the article about softirq
-> > changes, and then I noticed fresh patches in Peter's tree.
-> > So probably wise for me to throw these out there.
-> >
-> > My (can I say Meta's?) problem is the opposite to what the RT
-> > sensitive people complain about. In the current scheme once
-> > ksoftirqd is woken no network processing happens until it runs.
-> >
-> > When networking gets overloaded - that's probably fair, the problem
-> > is that we confuse latency tweaks with overload protection. We have
-> > a needs_resched() in the loop condition (which is a latency tweak)
-> > Most often we defer to ksoftirqd because we're trying to be nice
-> > and let user space respond quickly, not because there is an
-> > overload. But the user space may not be nice, and sit on the CPU
-> > for 10ms+. Also the sirq's "work allowance" is 2ms, which is
-> > uncomfortably close to the timer tick, but that's another story.
-> >
-> > We have a sirq latency tracker in our prod kernel which catches
-> > 8ms+ stalls of net Tx (packets queued to the NIC but there is
-> > no NAPI cleanup within 8ms) and with these patches applied
-> > on 5.19 fully loaded web machine sees a drop in stalls from
-> > 1.8 stalls/sec to 0.16/sec. I also see a 50% drop in outgoing
-> > TCP retransmissions and ~10% drop in non-TLP incoming ones.
-> > This is not a network-heavy workload so most of the rtx are
-> > due to scheduling artifacts.
-> >
-> > The network latency in a datacenter is somewhere around neat
-> > 1000x lower than scheduling granularity (around 10us).
-> >
-> > These patches (patch 2 is "the meat") change what we recognize
-> > as overload. Instead of just checking if "ksoftirqd is woken"
-> > it also caps how long we consider ourselves to be in overload,
-> > a time limit which is different based on whether we yield due
-> > to real resource exhaustion vs just hitting that needs_resched().
-> >
-> > I hope the core concept is not entirely idiotic. It'd be great
-> > if we could get this in or fold an equivalent concept into ongoing
-> > work from others, because due to various "scheduler improvements"
-> > every time we upgrade the production kernel this problem is getting
-> > worse :(
->
-> Please allow me to revive this old thread.
->
-> My understanding is that we want to avoid adding more heuristics here,
-> preferring a consistent refactor.
->
-> I would like to propose a revert of:
->
-> 4cd13c21b207 softirq: Let ksoftirqd do its job
->
-> the its follow-ups:
->
-> 3c53776e29f8 Mark HI and TASKLET softirq synchronous
-> 0f50524789fc softirq: Don't skip softirq execution when softirq thread is=
- parking
->
-> The problem originally addressed by 4cd13c21b207 can now be tackled
-> with the threaded napi, available since:
->
-> 29863d41bb6e net: implement threaded-able napi poll loop support
->
-> Reverting the mentioned commit should address the latency issues
-> mentioned by Jakub - I verified it solves a somewhat related problem in
-> my setup - and reduces the layering of heuristics in this area.
->
-> A refactor introducing uniform overload detection and proper resource
-> control will be better, but I admit it's beyond me and anyway it could
-> still land afterwards.
->
-> Any opinion more then welcome!
+The most recent changes to amd_pstate, such as guided autonomous mode,
+date to the year 2023. Update copyright statement accordingly.
 
-Seems fine, but I think few things need to be fixed first in
-napi_threaded_poll()
-to enable some important features that are currently  in net_rx_action() on=
-ly.
+Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+---
+ include/linux/amd-pstate.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
+index 1c4b8659f171..7bbb39c4752b 100644
+--- a/include/linux/amd-pstate.h
++++ b/include/linux/amd-pstate.h
+@@ -2,7 +2,7 @@
+ /*
+  * linux/include/linux/amd-pstate.h
+  *
+- * Copyright (C) 2022 Advanced Micro Devices, Inc.
++ * Copyright (C) 2022, 2023 Advanced Micro Devices, Inc.
+  *
+  * Author: Meng Li <li.meng@amd.com>
+  */
+-- 
+2.34.1
+
