@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146DA6E92CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A580B6E92BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234414AbjDTLb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S234439AbjDTLbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbjDTLbn (ORCPT
+        with ESMTP id S231936AbjDTLbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Apr 2023 07:31:43 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FBA26AD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C788D4C08;
         Thu, 20 Apr 2023 04:31:20 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q2Fpm5XYBz4f3l90;
-        Thu, 20 Apr 2023 19:31:12 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q2Fpn2K5hz4f3tpt;
+        Thu, 20 Apr 2023 19:31:13 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgCnD7OAIkFkVY8hHw--.17021S4;
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7OAIkFkVY8hHw--.17021S5;
         Thu, 20 Apr 2023 19:31:14 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     song@kernel.org, neilb@suse.de, akpm@osdl.org
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH -next 0/8] md/raid1-10: limit the number of plugged bio
-Date:   Thu, 20 Apr 2023 19:29:38 +0800
-Message-Id: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
+Subject: [PATCH -next 1/8] md/raid10: prevent soft lockup while flush writes
+Date:   Thu, 20 Apr 2023 19:29:39 +0800
+Message-Id: <20230420112946.2869956-2-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
+References: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCnD7OAIkFkVY8hHw--.17021S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr43Cr18WFW3Kr1UAr4Utwb_yoWkGrbEva
-        4vqF98trWUXFy2yay7Wr17ArWUJr4qg3WDJa4DKrWrZFy3ur1jkr4v9r48Wa1fXFyUZw15
-        Xry0gF1rAryDZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbz8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-TRANSID: gCh0CgCnD7OAIkFkVY8hHw--.17021S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyxGw43ZryUArW3Jw1rXrb_yoW8ZrW3p3
+        90gFWYyw1UCw13AwsIyF4xKFyrZa90q3y7AFWkAw17XF13XFyUGa1DJryjgrWDuryfGrWU
+        CF1vkrZ7Xw15taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqAp5UUUUU=
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -61,30 +64,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-This patchset tries to limit the number of plugged bio for raid1 and
-raid10, which is done in the last patch, other patches are some refactor
-and optimizations.
+Currently, there is no limit for raid1/raid10 plugged bio. While flushing
+writes, raid1 has cond_resched() while raid10 doesn't, and too many
+writes can cause soft lockup.
 
-Yu Kuai (8):
-  md/raid10: prevent soft lockup while flush writes
-  md/raid1-10: rename raid1-10.c to raid1-10.h
-  md/raid1-10: factor out a helper to add bio to plug
-  md/raid1-10: factor out a helper to submit normal write
-  md/raid1-10: submit write io directly if bitmap is not enabled
-  md/md-bitmap: support to unplug bitmap asynchrously
-  md/raid1{,0}: Revert "md/raid1{,0}: fix deadlock in bitmap_unplug."
-  md/raid1-10: limit the number of plugged bio
+Follow up soft lockup can be triggered easily with writeback test for
+raid10 with ramdisks:
 
- drivers/md/md-bitmap.c                | 61 ++++++++++++++++++++++++---
- drivers/md/md-bitmap.h                | 10 +++++
- drivers/md/{raid1-10.c => raid1-10.h} | 61 +++++++++++++++++++++++++--
- drivers/md/raid1.c                    | 32 +++-----------
- drivers/md/raid1.h                    |  2 +
- drivers/md/raid10.c                   | 45 ++++----------------
- drivers/md/raid10.h                   |  2 +
- 7 files changed, 143 insertions(+), 70 deletions(-)
- rename drivers/md/{raid1-10.c => raid1-10.h} (64%)
+watchdog: BUG: soft lockup - CPU#10 stuck for 27s! [md0_raid10:1293]
+Call Trace:
+ <TASK>
+ call_rcu+0x16/0x20
+ put_object+0x41/0x80
+ __delete_object+0x50/0x90
+ delete_object_full+0x2b/0x40
+ kmemleak_free+0x46/0xa0
+ slab_free_freelist_hook.constprop.0+0xed/0x1a0
+ kmem_cache_free+0xfd/0x300
+ mempool_free_slab+0x1f/0x30
+ mempool_free+0x3a/0x100
+ bio_free+0x59/0x80
+ bio_put+0xcf/0x2c0
+ free_r10bio+0xbf/0xf0
+ raid_end_bio_io+0x78/0xb0
+ one_write_done+0x8a/0xa0
+ raid10_end_write_request+0x1b4/0x430
+ bio_endio+0x175/0x320
+ brd_submit_bio+0x3b9/0x9b7 [brd]
+ __submit_bio+0x69/0xe0
+ submit_bio_noacct_nocheck+0x1e6/0x5a0
+ submit_bio_noacct+0x38c/0x7e0
+ flush_pending_writes+0xf0/0x240
+ raid10d+0xac/0x1ed0
 
+This patch fix the problem by adding cond_resched() to raid10 like what
+raid1 did.
+
+Note that unlimited plugged bio still need to be optimized because in
+the case of writeback lots of dirty pages, this will take lots of memory
+and io latecy is quite bad.
+
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ drivers/md/raid10.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+index 6590aa49598c..a116b7c9d9f3 100644
+--- a/drivers/md/raid10.c
++++ b/drivers/md/raid10.c
+@@ -921,6 +921,7 @@ static void flush_pending_writes(struct r10conf *conf)
+ 			else
+ 				submit_bio_noacct(bio);
+ 			bio = next;
++			cond_resched();
+ 		}
+ 		blk_finish_plug(&plug);
+ 	} else
+@@ -1140,6 +1141,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
+ 		else
+ 			submit_bio_noacct(bio);
+ 		bio = next;
++		cond_resched();
+ 	}
+ 	kfree(plug);
+ }
 -- 
 2.39.2
 
