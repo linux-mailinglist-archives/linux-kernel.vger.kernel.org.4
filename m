@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794656E9D2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1C36E9D2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbjDTU2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S231913AbjDTU2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbjDTU1p (ORCPT
+        with ESMTP id S232373AbjDTU1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Apr 2023 16:27:45 -0400
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE27930C6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:27:31 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id pasJp7IVs9ZjUpasKpiGJf; Thu, 20 Apr 2023 22:27:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682022449;
-        bh=NZgNRLRGgwI0RD4dEiOi7Nq+A1YJQOKy4LiUQwQNZ04=;
-        h=From:To:Cc:Subject:Date;
-        b=phEO4bKNTjMTviP2M/Dnkp5BsIUVZJvI10h7l5Xo8d8S/ebsHDy8CbubLApUT6T7w
-         cp9Gy02sbzQtWHubZULa55OqtJzASBN2tpiKE3tDrshyN4TyqteOy6NFhz9tcYinEh
-         xFRFpm29/N2t/JWzILkoQhDpDgDK4e1K9jA7rPCnjdjvwwvetmfk3ttmOOqhOJ4kA4
-         oOf1ADkRQ50JCk0YHIiBa0nrGqkPjjihtiRYs2xxvvCMIfg3o8FkCJ1Z2TOtIJeVQW
-         Z4AXGPeDlYdjwREaQNCOoQn4oF3eB7svDAZ70/6S1tlH5tBX0PsAnRotPsUBJ9EScS
-         o1zf+nqiAKqOQ==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 20 Apr 2023 22:27:29 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] perf/arm-cci: Slightly optimize cci_pmu_sync_counters()
-Date:   Thu, 20 Apr 2023 22:27:24 +0200
-Message-Id: <88d4e20d595f771396e9d558c1587eb4494057db.1682022422.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADF33A8E;
+        Thu, 20 Apr 2023 13:27:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E280F64BBB;
+        Thu, 20 Apr 2023 20:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1607BC4339B;
+        Thu, 20 Apr 2023 20:27:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682022454;
+        bh=cph4jY4sNf3bdO6jFfmDqQd5XkvrtKpUasG+G/EXRBA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kRRaKYUGeVj6HNsF9JdXDvoy5RNm8Tm1AnuCsNbsJX2EsoX0mbaxFsQBoSdwUO7D/
+         t9CsxVVd8Pd2cSsR7Vsbt8VgGtI2D7d0/2CcJeCzhuSmAfY5JHOG90agI67BJ5cDD0
+         jYTwxVjxFsQ9KP13z4FLd3rSK0oVewSlpzTCspGCWIw6TeIrkS6V7ICEfyeS2/Wnlc
+         o5ibvpal0B4OlsXhlNpIBWPOjG+ecvXtefjS8j+qYVcO3yVjoYqmKLFMNnPGfcBO/n
+         OZgmIXQD08POLhNtwblVgqb91uidKGTPadCI7zgmr77nIyMQYaQYb6ASUjWRxqxuAL
+         h9nKdWL8Gauzw==
+Date:   Thu, 20 Apr 2023 15:27:32 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Donald Hunter <donald.hunter@gmail.com>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [GIT PULL] PCI fixes for v6.3
+Message-ID: <20230420202732.GA322005@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the 'mask' bitmap is cleared, it is better to use its full maximum
-size instead of only the needed size.
-This lets the compiler optimize it because the size is now known at compile
-time. HW_CNTRS_MAX is small (i.e. currently 9), so a call to memset() is
-saved.
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-Also, as 'mask' is local to the function, the non-atomic __set_bit() can
-also safely be used here.
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/perf/arm-cci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/perf/arm-cci.c b/drivers/perf/arm-cci.c
-index 03b1309875ae..998259f1d973 100644
---- a/drivers/perf/arm-cci.c
-+++ b/drivers/perf/arm-cci.c
-@@ -645,7 +645,7 @@ static void cci_pmu_sync_counters(struct cci_pmu *cci_pmu)
- 	struct cci_pmu_hw_events *cci_hw = &cci_pmu->hw_events;
- 	DECLARE_BITMAP(mask, HW_CNTRS_MAX);
- 
--	bitmap_zero(mask, cci_pmu->num_cntrs);
-+	bitmap_zero(mask, HW_CNTRS_MAX);
- 	for_each_set_bit(i, cci_pmu->hw_events.used_mask, cci_pmu->num_cntrs) {
- 		struct perf_event *event = cci_hw->events[i];
- 
-@@ -656,7 +656,7 @@ static void cci_pmu_sync_counters(struct cci_pmu *cci_pmu)
- 		if (event->hw.state & PERF_HES_STOPPED)
- 			continue;
- 		if (event->hw.state & PERF_HES_ARCH) {
--			set_bit(i, mask);
-+			__set_bit(i, mask);
- 			event->hw.state &= ~PERF_HES_ARCH;
- 		}
- 	}
--- 
-2.34.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.3-fixes-3
 
+for you to fetch changes up to 0d21e71a91debc87e88437a2cf9c6f34f8bf012f:
+
+  PCI: Restrict device disabled status check to DT (2023-04-20 13:30:14 -0500)
+
+This has only been in -next one day, but it fixes an important regression.
+It appeared in next-20230420 as a0814a0e8b5b, and I subsequently edited the
+commit log to add testing reports from Donald and Vitaly.
+
+----------------------------------------------------------------
+- Previously we ignored PCI devices if the DT "status" property or the ACPI
+  _STA method said it was not present.  Per spec, _STA cannot be used for
+  that purpose, and using it that way caused regressions, so skip the _STA
+  check (Rob Herring)
+
+----------------------------------------------------------------
+Rob Herring (1):
+      PCI: Restrict device disabled status check to DT
+
+ drivers/pci/of.c    | 30 ++++++++++++++++++++++++------
+ drivers/pci/pci.h   |  4 ++--
+ drivers/pci/probe.c |  8 ++++----
+ 3 files changed, 30 insertions(+), 12 deletions(-)
