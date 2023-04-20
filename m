@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776C46E93AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCAB6E93A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbjDTMGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S234095AbjDTMEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbjDTMGO (ORCPT
+        with ESMTP id S229520AbjDTMEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:06:14 -0400
-X-Greylist: delayed 105 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Apr 2023 05:06:11 PDT
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD0A19AF;
-        Thu, 20 Apr 2023 05:06:10 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:7f29:0:640:9a2b:0])
-        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 4AFA56082B;
-        Thu, 20 Apr 2023 15:04:23 +0300 (MSK)
-Received: from vsementsov-nix.yandex.net (unknown [2a02:6b8:b081:b58f::1:1d])
-        by mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id C4dVdH1Or4Y0-LN2mPFV8;
-        Thu, 20 Apr 2023 15:04:22 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1681992262; bh=+Up1ucyvwcaXiWbgdfd9BwoNS2gW3y73aYKQDaLXdUM=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=sSrVGXUTVayl51clBd2Sjz72jObckMVdj0XrzZxAuNIxFN6h0cThC+qs0g85A/PMk
-         N12Mam6BMTYc8avDLPkibyYQtcKyNHYfo07zAjY+eUa5qs2d75K2At7XDU6I/DNSLi
-         Pv0bKfWdZ7LH+QmO9nOOVQS6A6R5CakFMPZ5Rrn0=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Vladimir Sementsov-Ogievskiy <vsementsov@yandex-team.ru>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     vsementsov@yandex-team.ru, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fs/coredump: open coredump file in O_WRONLY instead of O_RDWR
-Date:   Thu, 20 Apr 2023 15:04:09 +0300
-Message-Id: <20230420120409.602576-1-vsementsov@yandex-team.ru>
-X-Mailer: git-send-email 2.34.1
+        Thu, 20 Apr 2023 08:04:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92F530DF;
+        Thu, 20 Apr 2023 05:04:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DEA64776;
+        Thu, 20 Apr 2023 12:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55188C433EF;
+        Thu, 20 Apr 2023 12:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681992288;
+        bh=Eq90CI4WN6vboOUFC74i6leDtzHtPyCNTordr31Nh5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fiKlQOsw4F4vu42KLc/ZfMNSl8Od8i4py8ZDfpWqtAq8dnzttU1JaITIf7m5ITzfe
+         lT7Q4v8RPIwR/85AVtgoN4sXH2sUp/jU2sfl0IOXn3uEobrOvDZmesPYzKJ5EthERu
+         NaHgYdv4TtS/llPUZdhNaYpmHvxzqaR2CCFVcTrA=
+Date:   Thu, 20 Apr 2023 14:04:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kumaravel.Thiagarajan@microchip.com
+Cc:     Y_Ashley@163.com, arnd@arndb.de, dzm91@hust.edu.cn,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] misc: mchp_pci1xxxx: mchp_pci1xxxx_gp: add unwind goto
+Message-ID: <ZEEqXqu2JoPlR8ig@kroah.com>
+References: <20230409124816.36137-1-Y_Ashley@163.com>
+ <BN8PR11MB3668BB25DB6028404F423086E9989@BN8PR11MB3668.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN8PR11MB3668BB25DB6028404F423086E9989@BN8PR11MB3668.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,27 +52,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes it possible to make stricter apparmor profile and don't
-allow the program to read any coredump in the system.
+On Thu, Apr 13, 2023 at 04:43:10AM +0000, Kumaravel.Thiagarajan@microchip.com wrote:
+> > -----Original Message-----
+> > From: Xinyi Hou <Y_Ashley@163.com>
+> > Sent: Sunday, April 9, 2023 6:18 PM
+> > To: Kumaravel Thiagarajan - I21417
+> > <Kumaravel.Thiagarajan@microchip.com>; Arnd Bergmann
+> > <arnd@arndb.de>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 
+> > Smatch reported:
+> > 
+> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:73 gp_aux_bus_probe()
+> > warn:
+> > missing unwind goto?
+> > 
+> > In gp_aux_bus_probe(), when the allocation of aux_bus-
+> > >aux_device_wrapper[1] fails, it needs to clean up the allocated resources.
+> > 
+> > Fix this by revising the return statement to a goto statement.
+> > 
+> > Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver for
+> > the PIO function in the multi-function endpoint of pci1xxxx device.")
+> > Signed-off-by: Xinyi Hou <Y_Ashley@163.com>
+> > Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Reviewed-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> > ---
+> > The issue is found by static analysis, and the patch remains untest.
 
-Signed-off-by: Vladimir Sementsov-Ogievskiy <vsementsov@yandex-team.ru>
----
- fs/coredump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Despite all the reviewers, this patch is incorrect :(
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 5df1e6e1eb2b..8f263a389175 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -646,7 +646,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
- 	} else {
- 		struct mnt_idmap *idmap;
- 		struct inode *inode;
--		int open_flags = O_CREAT | O_RDWR | O_NOFOLLOW |
-+		int open_flags = O_CREAT | O_WRONLY | O_NOFOLLOW |
- 				 O_LARGEFILE | O_EXCL;
- 
- 		if (cprm.limit < binfmt->min_coredump)
--- 
-2.34.1
+Please test patches, or better yet, restructure the code to not need to
+bail out in such a "deep" call path so that errors like this are not an
+issue.
 
+thanks,
+
+greg k-h
