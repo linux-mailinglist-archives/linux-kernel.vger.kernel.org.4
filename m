@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B95D6E94C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC476E94C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbjDTMlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S234224AbjDTMlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjDTMl0 (ORCPT
+        with ESMTP id S232770AbjDTMl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:41:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD7D5BA3;
-        Thu, 20 Apr 2023 05:40:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87B016492A;
-        Thu, 20 Apr 2023 12:40:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76537C433D2;
-        Thu, 20 Apr 2023 12:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681994455;
-        bh=jYk7Zd9ctQtmoQ9oVpNoBw40AOamcXM7JQPw3Wg6BqA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kyTv2Hp4EPxCfJmhEgrX3y9dPJoiFV38Ms7OHMzP8zShPevpZAgjUEZLvWlEZBrz3
-         70QIWTOuWjfiH/bZZuqDvnff7eDIoh7kwk5Ty5a/Hz08qZJiz0TlkOGjmNCMYacToh
-         DaA2Qx1vuFmHzHJFf/iPYcZSY49e5GqRUwP30WQI21frEy016+78eJS3f2dhdkyNc+
-         S2DPCcLA6wKQHLslYGqgNg0aKf7qsyS+pzCZMC+LuONzrh8be0lzVNuRoM90HzyDSD
-         /K8AlqcoQr+on4PNNwhq/GvUK8iqTtcoSQtC/vbelOFcGGNmQAoQRhtJJCporWVjpK
-         nfePBVcjY1Ijw==
-From:   broonie@kernel.org
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: linux-next: manual merge of the risc-v tree with the risc-v-fixes tree
-Date:   Thu, 20 Apr 2023 13:40:48 +0100
-Message-Id: <20230420124048.65232-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 20 Apr 2023 08:41:28 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F57461B4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1681994464;
+        bh=CFhS3Ksa+9qxFtaXWWkLkLlUyHN4H12BVfLXvB/9zRc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VyvLyTvIE/P4FQ4zp+Iaf+VyRwSRkWfg2/Lsr/KriU1wzvbRuyks3Gx5olp1kjPwL
+         YPHS+VYsdfUnEZy8cTE8LPpAKfIvqJt0INivYodbLl5QdBK/xUWQroIlZCwEgxZK+O
+         DyN7BSlN2Oflin0Y3rNQ9YBTf1FB8BqQ8FaVPs+HnvltRVDSbCG6vmhU8TnEDbMb/Y
+         xXvc0vbgBpHQG2aKl5laC/BhaEAcdy4EzW5NGAO3vHQcFUcVVmffttpFCJvyfaHw6+
+         71YfiT4Pvq3lJZVdd5kwJM1JPLNeZo3R79RM4C1cY03h2krwvUo3HPxbLt/HNWthBR
+         bZO3FCa+BUkRQ==
+Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q2HMN3Ks1zw7T;
+        Thu, 20 Apr 2023 08:41:04 -0400 (EDT)
+Message-ID: <c01ddfc5-9410-14e1-55f7-c24f44447f8a@efficios.com>
+Date:   Thu, 20 Apr 2023 08:41:05 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v9 2/2] sched: Fix performance regression introduced
+ by mm_cid
+Content-Language: en-US
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
+        michael.christie@oracle.com
+References: <20230419155012.63901-1-mathieu.desnoyers@efficios.com>
+ <20230419155012.63901-2-mathieu.desnoyers@efficios.com>
+ <20230420095610.GA153295@ziqianlu-desk2>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230420095610.GA153295@ziqianlu-desk2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,86 +57,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 2023-04-20 05:56, Aaron Lu wrote:
+> On Wed, Apr 19, 2023 at 11:50:12AM -0400, Mathieu Desnoyers wrote:
+>> Introduce per-mm/cpu current concurrency id (mm_cid) to fix a PostgreSQL
+>> sysbench regression reported by Aaron Lu.
+> 
+> mm_cid_get() dropped to 5.x% after I disable CONFIG_DEBUG_PREEMPT, using
+> __this_cpu_X() doesn't help, I suppose that is because __this_cpu_X()
+> still needs to fetch mm->pcpu_cid.
+> 
+> Annotate mm_cid_get():
+> 
+>         │     static inline int mm_cid_get(struct mm_struct *mm)
+>         │     {
+>    0.05 │       push   %rbp
+>    0.02 │       mov    %rsp,%rbp
+>         │       push   %r15
+>         │       push   %r14
+>         │       push   %r13
+>         │       push   %r12
+>         │       push   %rbx
+>    0.02 │       sub    $0x10,%rsp
+>         │     struct mm_cid __percpu *pcpu_cid = mm->pcpu_cid;
+>   71.30 │       mov    0x60(%rdi),%r12
+>         │     struct cpumask *cpumask;
+>         │     int cid;
+>         │
+>         │     lockdep_assert_rq_held(rq);
+>         │     cpumask = mm_cidmask(mm);
+>         │     cid = __this_cpu_read(pcpu_cid->cid);
+>   28.44 │       mov    %gs:0x8(%r12),%edx
+>         │     if (mm_cid_is_valid(cid)) {
+> 
+> 
+> sched_mm_cid_migrate_to() is 4.x% and its annotation :
+> 
+>         │     dst_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(dst_rq));
+>         │       mov     -0x30(%rbp),%rax
+>   54.53 │       mov     0x60(%r13),%rbx
+>   19.61 │       movslq  0xaf0(%rax),%r15
+> 
+> The reason why accessing mm->pcpu_cid is so costly is still a myth to
+> me...
 
-Today's linux-next merge of the risc-v tree got a conflict in:
+Then we clearly have another member of mm_struct on the same cache line 
+as pcpu_cid which is bouncing all over the place and causing 
+false-sharing. Any idea which field(s) are causing this ?
 
-  arch/riscv/mm/init.c
 
-between commit:
+> 
+> BTW, I used below diff to mitigate the incorrect rq lock issue I
+> described in my reply to v8:
 
-  ef69d2559fe91 ("riscv: Move early dtb mapping into the fixmap region")
+Yes, I'll do something similar in my next version, thanks ! I'll also 
+drop my patch 1/2 from my patchset because clearly I was looking in the 
+wrong place.
 
-from the risc-v-fixes tree and commits:
+Thanks,
 
-  8589e346bbb67 ("riscv: Move the linear mapping creation in its own function")
-  3335068f87217 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+Mathieu
 
-from the risc-v tree.
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index c6e2dd8f4ee3..f16418731866 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -11662,7 +11662,7 @@ void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t)
+>   		return;
+>   	}
+>   	/* Move src_cid to dst cpu. */
+> -	mm_cid_snapshot_time(mm);
+> +	mm_cid_snapshot_time(mm, cpu_of(dst_rq));
+>   	WRITE_ONCE(dst_pcpu_cid->cid, src_cid);
+>   }
+>   
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index d1d470441422..8b6a0c8ed3d1 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -3348,12 +3348,13 @@ static inline int __mm_cid_try_get(struct mm_struct *mm)
+>    * Save a snapshot of the current runqueue time of this cpu
+>    * with the per-cpu cid value, allowing to estimate how recently it was used.
+>    */
+> -static inline void mm_cid_snapshot_time(struct mm_struct *mm)
+> +static inline void mm_cid_snapshot_time(struct mm_struct *mm, int cpu)
+>   {
+> -	struct rq *rq = this_rq();
+> +	struct mm_cid *pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu);
+> +	struct rq *rq = cpu_rq(cpu);
+>   
+>   	lockdep_assert_rq_held(rq);
+> -	__this_cpu_write(mm->pcpu_cid->time, rq->clock);
+> +	WRITE_ONCE(pcpu_cid->time, rq->clock);
+>   }
+>   
+>   static inline int __mm_cid_get(struct mm_struct *mm)
+> @@ -3404,7 +3405,7 @@ static inline int __mm_cid_get(struct mm_struct *mm)
+>   unlock:
+>   	raw_spin_unlock(&cid_lock);
+>   end:
+> -	mm_cid_snapshot_time(mm);
+> +	mm_cid_snapshot_time(mm, raw_smp_processor_id());
+>   	return cid;
+>   }
+>   
+> @@ -3419,7 +3420,7 @@ static inline int mm_cid_get(struct mm_struct *mm)
+>   	cpumask = mm_cidmask(mm);
+>   	cid = __this_cpu_read(pcpu_cid->cid);
+>   	if (mm_cid_is_valid(cid)) {
+> -		mm_cid_snapshot_time(mm);
+> +		mm_cid_snapshot_time(mm, raw_smp_processor_id());
+>   		return cid;
+>   	}
+>   	if (mm_cid_is_lazy_put(cid)) {
+> @@ -3467,7 +3468,7 @@ static inline void switch_mm_cid(struct task_struct *prev,
+>   		 */
+>   	}
+>   	if (prev->mm_cid_active) {
+> -		mm_cid_snapshot_time(prev->mm);
+> +		mm_cid_snapshot_time(prev->mm, raw_smp_processor_id());
+>   		mm_cid_put_lazy(prev);
+>   		prev->mm_cid = -1;
+>   	}
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
-diff --cc arch/riscv/mm/init.c
-index 0f14f4a8d179a,7bd66795165da..0000000000000
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@@ -1070,26 -1112,36 +1092,47 @@@ asmlinkage void __init setup_vm(uintptr
-  	pt_ops_set_fixmap();
-  }
-  
-- static void __init setup_vm_final(void)
-+ static void __init create_linear_mapping_range(phys_addr_t start,
-+ 					       phys_addr_t end)
-  {
-+ 	phys_addr_t pa;
-  	uintptr_t va, map_size;
-- 	phys_addr_t pa, start, end;
-- 	u64 i;
-  
-- 	/* Setup swapper PGD for fixmap */
- +#if !defined(CONFIG_64BIT)
- +	/*
- +	 * In 32-bit, the device tree lies in a pgd entry, so it must be copied
- +	 * directly in swapper_pg_dir in addition to the pgd entry that points
- +	 * to fixmap_pte.
- +	 */
- +	unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
- +
- +	set_pgd(&swapper_pg_dir[idx], early_pg_dir[idx]);
- +#endif
-- 	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
-- 			   __pa_symbol(fixmap_pgd_next),
-- 			   PGDIR_SIZE, PAGE_TABLE);
-++
-+ 	for (pa = start; pa < end; pa += map_size) {
-+ 		va = (uintptr_t)__va(pa);
-+ 		map_size = best_map_size(pa, end - pa);
-+ 
-+ 		create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
-+ 				   pgprot_from_va(va));
-+ 	}
-+ }
-+ 
-+ static void __init create_linear_mapping_page_table(void)
-+ {
-+ 	phys_addr_t start, end;
-+ 	u64 i;
-+ 
-+ #ifdef CONFIG_STRICT_KERNEL_RWX
-+ 	phys_addr_t ktext_start = __pa_symbol(_start);
-+ 	phys_addr_t ktext_size = __init_data_begin - _start;
-+ 	phys_addr_t krodata_start = __pa_symbol(__start_rodata);
-+ 	phys_addr_t krodata_size = _data - __start_rodata;
-+ 
-+ 	/* Isolate kernel text and rodata so they don't get mapped with a PUD */
-+ 	memblock_mark_nomap(ktext_start,  ktext_size);
-+ 	memblock_mark_nomap(krodata_start, krodata_size);
-+ #endif
-  
-  	/* Map all memory banks in the linear mapping */
-  	for_each_mem_range(i, &start, &end) {
