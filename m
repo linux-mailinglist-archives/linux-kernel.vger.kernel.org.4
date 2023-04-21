@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6110A6EAB1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600DB6EAA94
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbjDUM4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S231851AbjDUMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjDUM4n (ORCPT
+        with ESMTP id S230468AbjDUMmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:56:43 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E3974D;
-        Fri, 21 Apr 2023 05:56:34 -0700 (PDT)
-Received: from [194.95.143.137] (helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ppq3R-0002eq-SZ; Fri, 21 Apr 2023 14:39:57 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
+        Fri, 21 Apr 2023 08:42:16 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70915B80;
+        Fri, 21 Apr 2023 05:41:36 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 9F26140006;
+        Fri, 21 Apr 2023 12:41:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682080894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wPUr6k3hoHACmnMjvKMllT2pYnYBLSNWQbpWAPrti6c=;
+        b=ZY1kyb2J62UJI4c0SfVLqsVPO1m7nV0B93j0DP4ZGCaAOzE1CbG/rfJQcX37ZRFoVehfhh
+        upR/4/e72nslwE2fTICG1qEMN8ng6UgnW/um2dvgBFTXvUlNqWoB3igr2a4t1uuY/7Lkro
+        Q/JhPYuDi5GxZpU0fQy2OP38mAcOcXNchUoMIQqo7M40VyXV+qkS7V+ez7cPrUcQq/dwQJ
+        7RiV6UZ0It/tQHwGbleMlub0joaN3sIPkqhES+YpLHAMaqCugaNyCLSPE7nBv6bFDncT8L
+        wVATcJ86n+Yo+oKKILY2rhK1ZNkc/tVbJZfasc01RiuXZTPB9ryuz3nqDHFcZQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: fix nEXTRST on SOQuartz
-Date:   Fri, 21 Apr 2023 14:39:56 +0200
-Message-ID: <6259690.irdbgypaU6@phil>
-In-Reply-To: <12191318.O9o76ZdvQC@archbox>
-References: <20230419171731.28641-1-frattaroli.nicolas@gmail.com>
- <8914603.GXAFRqVoOG@phil> <12191318.O9o76ZdvQC@archbox>
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH 0/4] Add support for IIO devices in ASoC
+Date:   Fri, 21 Apr 2023 14:41:18 +0200
+Message-Id: <20230421124122.324820-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,49 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 21. April 2023, 14:38:48 CEST schrieb Nicolas Frattaroli:
-> Hello,
-> 
-> On Friday, 21 April 2023 13:58:58 CEST Heiko Stuebner wrote:
-> > Hi,
-> > 
-> > Am Mittwoch, 19. April 2023, 19:17:31 CEST schrieb Nicolas Frattaroli:
-> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-> > > b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi index
-> > > ce7165d7f1a1..f589a4fdaccb 100644
-> > > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-> > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-> > > @@ -65,6 +65,17 @@ led_work: led-work {
-> > > 
-> > >  		};
-> > >  	
-> > >  	};
-> > > 
-> > > +	nextrst_pin: nextrst-pin-regulator {
-> > > +		compatible = "regulator-fixed";
-> > > +		enable-active-high;
-> > > +		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
-> > > +		pinctrl-names = "default";
-> > > +		pinctrl-0 = <&nextrst_h>;
-> > > +		regulator-always-on;
-> > > +		regulator-boot-on;
-> > > +		regulator-name = "nextrst";
-> > > +	};
-> > > +
-> > 
-> > I agree with the sentiment and of course the rationale of the change,
-> > but not necessarily with the implementation ;-) .
-> > 
-> > Why is this done as a regulator?
-> > 
-> > If you want the nextrst line to be high, you could just use a gpio-hog
-> > for the line instead of doing a (fake?-)regulator.
-> 
-> Simply put: because I didn't know gpio hogs were a thing. I'll send a V2
-> to correct this. Thanks for pointing it out!
+Several weeks ago, I sent a series [1] for adding a potentiometer as an
+auxiliary device in ASoC. The feedback was that the potentiometer should
+be directly handled in IIO (as other potentiometers) and something more
+generic should be present in ASoC in order to have a binding to import
+some IIO devices into sound cards.
 
-great, thanks :-)
+The series related to the IIO potentiometer device is already under
+review [2].
 
-Heiko
+This series introduces simple-iio-aux. Its goal is to offer the binding
+between IIO and ASoC.
+It exposes attached IIO devices as ASoC auxiliary devices and allows to
+control them through mixer controls.
 
+On my system, the IIO device is a potentiometer and it is present in an
+amplifier design present in the audio path.
+
+Best regards,
+Hervé
+
+[1] https://lore.kernel.org/linux-kernel/20230203111422.142479-1-herve.codina@bootlin.com/
+[2] https://lore.kernel.org/linux-kernel/20230421085245.302169-1-herve.codina@bootlin.com/
+
+Herve Codina (4):
+  dt-bindings: sound: Add simple-iio-aux
+  iio: inkern: Add a helper to query an available minimum raw value
+  ASoC: soc-dapm.h: Add a helper to build a DAPM widget dynamically
+  ASoC: codecs: Add support for the generic IIO auxiliary devices
+
+ .../bindings/sound/simple-iio-aux.yaml        |  65 ++++
+ drivers/iio/inkern.c                          |  67 ++++
+ include/linux/iio/consumer.h                  |  11 +
+ include/sound/soc-dapm.h                      |  12 +-
+ sound/soc/codecs/Kconfig                      |  12 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/simple-iio-aux.c             | 307 ++++++++++++++++++
+ 7 files changed, 475 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/simple-iio-aux.yaml
+ create mode 100644 sound/soc/codecs/simple-iio-aux.c
+
+-- 
+2.39.2
 
