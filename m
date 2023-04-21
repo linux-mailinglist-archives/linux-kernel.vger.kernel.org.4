@@ -2,170 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8228D6EADC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716166EADCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjDUPLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S232697AbjDUPLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 11:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbjDUPLS (ORCPT
+        with ESMTP id S230472AbjDUPLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:11:18 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30543D32A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:11:03 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-518d325b8a2so2279129a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682089862; x=1684681862;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V6FaXoYkKJvHqik7V6/lHszSapOB8DXJHGCFiR9DavU=;
-        b=MY4dMcKPtmfefWBSJwFWazfdvvF90KDinQ9nmY1Q8uwOjsr0eyWsv7dRFcTtNOKhie
-         /F74SLFHoXkmGe2ljsQiGBYNOXxisfk2szEmRc7IPcFJhFvsm1AljpiagJvlYPNfo7Yb
-         z9DN/4tl2GFtD0Kmf02wqFw98YzVaW65ti8jpyPfegGr7igzJEd5Nu6BhcsQHWItT2kG
-         zVflS859lRQyk+8y6YpsIF4cHBUrcGO0+EMWeuANUoo001Y2EEx/fHwT2CL482Vog+dC
-         KLMTW+NtLcsVl68L6vVJoMywB8g1oVNdjyDYltncfBRr+no5wEEikDenXCU2Y5TJa1LL
-         Vnyw==
+        Fri, 21 Apr 2023 11:11:44 -0400
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD9125A9;
+        Fri, 21 Apr 2023 08:11:35 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3f178da219bso18928115e9.1;
+        Fri, 21 Apr 2023 08:11:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682089862; x=1684681862;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V6FaXoYkKJvHqik7V6/lHszSapOB8DXJHGCFiR9DavU=;
-        b=gwmehkP+N5evc7EWlW/NdeXXl0UxsLRr6l1BIUTkJnhf6fpM7drThUfHRvtlCAtPLt
-         7tl5w3OPDfy1Jwntzxb8Xy0rdd79EfG9ZttmhD61MRtZPee1ywuS5z+GsQICpXXAlnAc
-         d5yqT6SO0qeNJnw78ZKuWi0CxOTglUNIbui1XTvJNhu2tkGHrW3ryp8EZAW3mgrK2XXR
-         0WwWCZ0CXaGXBsTwBJuSOlWIXBphp1bKWr+xmImvfEEFauN1CsYK2WQ+sYpz7zykNCtp
-         0sJf9SEBeATz/0twFyVRjwyazJdYc/aWrj+jOMyuEHUR1sk+YmN4R2As8/DH8R/xe2zb
-         xtSA==
-X-Gm-Message-State: AAQBX9dXZjn8X4dJn8IsiH8Mjrr3J3bTqaLcUCBA3PfjSOAkaLBmH8Iq
-        fWUscmpZUhpRcu6PnlAPZxHMP0C+aOcuSgEuFYsgdA==
-X-Google-Smtp-Source: AKy350ZeHOdgTFbV9bRp9hOfo9A6H5eKIZwRoj8/gMFvoMUuwXkKiCLwWI7n1GE8VMq6MLsPCQmh4HmKyLMoXJHA9RM=
-X-Received: by 2002:a17:90b:4f47:b0:236:73d5:82cf with SMTP id
- pj7-20020a17090b4f4700b0023673d582cfmr5168643pjb.9.1682089862559; Fri, 21 Apr
- 2023 08:11:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682089894; x=1684681894;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/1bU+3yxMOBZJYn8hiebgLUc19mnJbyR5cgTJ3rOoE=;
+        b=JqQ0U0B62sc1MttFb74RoR1NEOA/uQT/JGtPmDFOhqZaA4BiEmvBpUn0uWZhxC60q+
+         HGbSL5T33VFVfuoQlKhbEER6d0cadcxi7ZZ6sT79sl8a8BwPBLevsFk5dmwPwbvJIJJ7
+         R3Y5vGXbBzsA/EmgvP2YUF6M8x+navM/pu0XvCBWywU8ww1CSzQ7SOxGAgC+ySvvqkTR
+         2F+XcmSqAh8FxGV7d4Bw667xL0gLjw0u4lL/PAe7R+bMVV/9M/uMQ2ewiHp3MDLtG9ag
+         FgIZ14+aG14ctdlsrHYmMtda5U5+Dwr/acJW3QRMw5i6d8Tw5bov/BLzhU5gHzSk2/EC
+         duwA==
+X-Gm-Message-State: AAQBX9dMcTZazM21+BMI2+FTi4xTWUaWrbG80layV2s8lcFjz6SGpuJV
+        nIR61M3qiKAEl87qH7xUChw=
+X-Google-Smtp-Source: AKy350YDSzZrIvT5JL0AAWk8219k6NeLFDVD+qfQEpr4w7Xa0eQOblolNTj8eRXWplZdeZgdYRBmEg==
+X-Received: by 2002:a1c:c906:0:b0:3f1:6ec5:3105 with SMTP id f6-20020a1cc906000000b003f16ec53105mr2233609wmb.20.1682089893877;
+        Fri, 21 Apr 2023 08:11:33 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-011.fbsv.net. [2a03:2880:31ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f17300c7dcsm4990006wml.48.2023.04.21.08.11.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 08:11:33 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 08:11:31 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        sagi@grimberg.me, kbusch@kernel.org, ming.lei@redhat.com
+Subject: Re: [PATCH 1/2] io_uring: Pass whole sqe to commands
+Message-ID: <ZEKno++WWPauufw0@gmail.com>
+References: <20230419102930.2979231-1-leitao@debian.org>
+ <20230419102930.2979231-2-leitao@debian.org>
+ <20230420045712.GA4239@lst.de>
 MIME-Version: 1.0
-References: <20230416213406.2966521-1-davidai@google.com> <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
- <CABN1KC+_HDi_i2zzpZVbqiUP5-QB9YrE5wzLqr==_wOemaCXzA@mail.gmail.com>
- <bf8f21be-7249-fc27-9704-211d0f5a12b1@arm.com> <CAKfTPtAgkyE1xntn-4u9o8DFhH9iGq54c-QXYr0cE+zvoPx9Gw@mail.gmail.com>
- <CAGETcx-suryHeB3wpaTSZBiw6+VwA7pe=GnrbtizSVj+C9Smtg@mail.gmail.com>
-In-Reply-To: <CAGETcx-suryHeB3wpaTSZBiw6+VwA7pe=GnrbtizSVj+C9Smtg@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 21 Apr 2023 17:10:51 +0200
-Message-ID: <CAKfTPtAfLqzwbCdd25HCFykBDhBQs9g7Mr6=X56nKYOOPnEdNQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce SCHED_FLAG_RESET_UCLAMP_ON_FORK
- flag
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Qais Yousef <qyousef@google.com>,
-        Quentin Perret <qperret@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230420045712.GA4239@lst.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 at 18:26, Saravana Kannan <saravanak@google.com> wrote:
->
-> On Thu, Apr 20, 2023 at 6:44=E2=80=AFAM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > On Thu, 20 Apr 2023 at 11:37, Dietmar Eggemann <dietmar.eggemann@arm.co=
-m> wrote:
-> > >
-> > > On 20/04/2023 03:11, David Dai wrote:
-> > > > On Tue, Apr 18, 2023 at 10:18=E2=80=AFPM Dietmar Eggemann
-> > > > <dietmar.eggemann@arm.com> wrote:
-> > > >>
-> > > >
-> > > > Hi Dietmar, thanks for your time,
-> > > >
-> > > >> On 16/04/2023 23:34, David Dai wrote:
-> > > >>> A userspace service may manage uclamp dynamically for individual =
-tasks and
-> > > >>> a child task will unintentionally inherit a pesudo-random uclamp =
-setting.
-> > > >>> This could result in the child task being stuck with a static ucl=
-amp value
-> > > >>
-> > > >> Could you explain this with a little bit more detail? Why isn't th=
-e
-> > > >> child task also managed by the userspace service?
-> > > >
-> > > > See Qais=E2=80=99 reply that contains more detail on how it=E2=80=
-=99s being used in
-> > > > Android. In general, if a dynamic userspace service will adjust ucl=
-amp
-> > > > on the fly for a given task, but has no knowledge or control over i=
-f
-> > > > or when a task forks. Depending on the timing of the fork, a child
-> > > > task may inherit a very large or a small uclamp_min or uclamp_max
-> > > > value. The intent of this patch is to provide more flexibility to t=
-he
-> > > > uclamp APIs such that child tasks do not get stuck with a poor ucla=
-mp
-> > > > value when spawned while retaining other sched attributes. When
-> > > > RESET_ON_FORK is set on the parent task, it will reset uclamp value=
-s
-> > > > for the child but also reset other sched attributes as well.
-> > >
-> > > OK, in this case, why not just change behavior and always reset the
-> > > uclamp values at fork?
-> > >
-> > > Do we anticipate a use-case in which uclamp inheritance would be requ=
-ired?
-> > >
-> > > Let's not over-complicate the sched_[sg]etattr() unnecessarily.
-> >
-> > I was about to ask the same question and I'm aligned with Dietmar.
-> > Use RESET_ON_FORK and set all attributes
->
-> That's racy though. If we have an external service (that's only
-> responsible for setting uclamp) setting all the attributes, the forked
-> thread could also be trying to set some of the attributes. Also, how
-> is this external service going to keep track of all the threads being
-> forked and set the right attributes for all of them?
+On Thu, Apr 20, 2023 at 06:57:12AM +0200, Christoph Hellwig wrote:
+> On Wed, Apr 19, 2023 at 03:29:29AM -0700, Breno Leitao wrote:
+> >  	struct nvme_uring_cmd_pdu *pdu = nvme_uring_cmd_pdu(ioucmd);
+> > -	const struct nvme_uring_cmd *cmd = ioucmd->cmd;
+> > +	const struct nvme_uring_cmd *cmd = (struct nvme_uring_cmd *)ioucmd->sqe->cmd;
+> 
+> Please don't add the pointless cast.  And in general avoid the overly
+> long lines.
 
-My assumption was that you didn't use RESET_ON_FORK because there were
-other attributes that you wanted to keep from parent but it doesn't
-seem to be the case so use RESET_ON_FORK and if needed the forked
-thread will set its other attributes
+If I don't add this cast, the compiler complains with the follow error:
 
->
-> If it's not considered a UAPI breakage, I'd rather we never inherit uclam=
-p.
->
-> -Saravana
->
-> >
-> > >
-> > > [...]
-> > >
-> > > >> Does this issue happen with uclamp mainline or only with Android's
-> > > >> slightly different version (max- vs. sum aggregation)?
-> > > >
-> > > > I=E2=80=99m using the version of uclamp that=E2=80=99s in Linus=E2=
-=80=99 tree. How uclamp is
-> > > > aggregated is unrelated to the problem I=E2=80=99m trying to solve =
-with this
-> > > > patch. Which is to extend the uclamp APIs to have finer control for
-> > > > the uclamp inheritance of child tasks.
-> > >
-> > > OK, I see.
+	drivers/nvme/host/ioctl.c: In function ‘nvme_uring_cmd_io’:
+	drivers/nvme/host/ioctl.c:555:37: error: initialization of ‘const struct nvme_uring_cmd *’ from incompatible pointer type ‘const __u8 *’ {aka ‘const unsigned char *’} [-Werror=incompatible-pointer-types]
+	  const struct nvme_uring_cmd *cmd = ioucmd->sqe->cmd;
