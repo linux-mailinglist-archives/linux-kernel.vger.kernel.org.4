@@ -2,81 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01196EB183
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9EE6EB180
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbjDUSVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S232628AbjDUSVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbjDUSVg (ORCPT
+        with ESMTP id S232608AbjDUSVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:21:36 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18BAE5C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:21:31 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33LIKDJ5012294
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 14:20:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1682101217; bh=iEkJZNbbn2+rcQzyVVWhPqOsJjmE4U6M5Uh3JgWMgHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=OQxiIb5vjQ7L+dJq6P+Y8UrvnG49NnZ7b2UJ11crvw/DX36cgH6S5v0OU4swRrLtI
-         oXh96dMteXUJaHkQYMHkiD7gcBdE2yoT53pDj9TzTltUvr8eRqml1piRKEHedSYb74
-         eOCrkpZ+RDUqoeG9RPqVATJvRKQfVJDr2BDqoonZA8r2euA1A9XdrpIkvLqNtHxsv5
-         DnP8g/oNJPx4PlahRzuosmmDXWvcyJw+WKXd0OwE4rBfrl1eVw9NbJsY4MWIrX7Ajw
-         bannYGoP/UZtEdY/gZLuBHw5a6jk6JDVpwhjg0KmNg0k664AuszCdosgl2yehkqaM5
-         c6kB2DSVI0JSA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 23FCA15C3448; Fri, 21 Apr 2023 14:20:13 -0400 (EDT)
-Date:   Fri, 21 Apr 2023 14:20:13 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
-        bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
-Message-ID: <20230421182013.GA19035@mit.edu>
-References: <000000000000b9915d05f9d98bdd@google.com>
- <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
- <ZEKko6U2MxfkXgs5@casper.infradead.org>
- <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
+        Fri, 21 Apr 2023 14:21:23 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCCF2737;
+        Fri, 21 Apr 2023 11:21:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682101240; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=k0bJ8Xx/Gm+nNVRnhuPQm9C5+CrsbRHg+eXpYk2MmRD0gO9iNab8B7NolroNQkd3itfNYdCBP6zxNRZqVbw/EI51kKyyXUpy1yVITCeIt1NNUvYApOlJdZOG+JmaADt9198lpF5HlxodVV0PRfPzQFSM0WRCuD4OeT/Rsl5YhF4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682101240; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=7QiiPLMA6EN1qebA4TseZQrKhExhrqS7aCZXKTasAII=; 
+        b=fnel47tvWC8l2c9JvGqXJLH9USAeXQ1ykLYIHdfHl0ryPjRjjHMbpnHhUv5qsFFMvTXi4x9cwdaqpmfRIYdiv8OIRp0s/lg5jWrUBcOdyBIA04nnUPn8mf4U3+F5vVgcZam+vhmrlgpajrH54TMtpkk/T4B/Cv87O9dvaiO0+KQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682101240;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=7QiiPLMA6EN1qebA4TseZQrKhExhrqS7aCZXKTasAII=;
+        b=c+o+Ci0lBuGyktLuyGSqFnK/U2Zm9GsMWUP80v3P+BwtvkwlkhpEofYTVQI0p/9g
+        QwXWPs5mBCEccxOI1skKkKZSlmMa/OKjRPM3FTsBU1ort/49+g8SnTgt4PDxdU9Q6fQ
+        IMj8b5e0EGt6P+vCpNhyzYSK5oq/DKTZi/zu5MzA=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1682101239384601.8860784088002; Fri, 21 Apr 2023 11:20:39 -0700 (PDT)
+Message-ID: <f1c38c13-a1f6-93d8-90ae-4ea3f7e06dc2@arinc9.com>
+Date:   Fri, 21 Apr 2023 21:20:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH net-next 08/22] net: dsa: mt7530: change
+ p{5,6}_interface to p{5,6}_configured
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230421143648.87889-1-arinc.unal@arinc9.com>
+ <20230421143648.87889-9-arinc.unal@arinc9.com>
+ <ZELH2RlYLPjJGx6Y@makrotopia.org>
+ <810aa47b-7007-7d53-9a23-c2d17d43d8a8@arinc9.com>
+In-Reply-To: <810aa47b-7007-7d53-9a23-c2d17d43d8a8@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 12:40:45PM -0500, Mike Christie wrote:
+On 21.04.2023 21:17, Arınç ÜNAL wrote:
+> On 21.04.2023 20:28, Daniel Golle wrote:
+>> On Fri, Apr 21, 2023 at 05:36:34PM +0300, arinc9.unal@gmail.com wrote:
+>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>
+>>> The idea of p5_interface and p6_interface pointers is to prevent
+>>> mt753x_mac_config() from running twice for MT7531, as it's already 
+>>> run with
+>>> mt753x_cpu_port_enable() from mt7531_setup_common(), if the port is 
+>>> used as
+>>> a CPU port.
+>>>
+>>> Change p5_interface and p6_interface to p5_configured and p6_configured.
+>>> Make them boolean.
+>>>
+>>> Do not set them for any other reason.
+>>>
+>>> The priv->p5_intf_sel check is useless as in this code path, it will 
+>>> always
+>>> be P5_INTF_SEL_GMAC5.
+>>>
+>>> There was also no need to set priv->p5_interface and 
+>>> priv->p6_interface to
+>>> PHY_INTERFACE_MODE_NA on mt7530_setup() and mt7531_setup() as they would
+>>> already be set to that when "priv" is allocated. The pointers were of 
+>>> the
+>>> phy_interface_t enumeration type, and the first element of the enum is
+>>> PHY_INTERFACE_MODE_NA. There was nothing in between that would change 
+>>> this
+>>> beforehand.
+>>>
+>>> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> NACK. This assumes that a user port is configured exactly once.
+>> However, interface mode may change because of mode-changing PHYs (e.g.
+>> often using Cisco SGMII for 10M/100M/1000M but using 2500Base-X for
+>> 2500M, ie. depending on actual link speed).
+>>
+>> Also when using SFP modules (which can be hotplugged) the interface
+>> mode may change after initially setting up the driver, e.g. when SFP
+>> driver is loaded or a module is plugged or replaced.
 > 
-> I didn't see the beginning of this thread and I think the part of the
-> sysbot report that lists the patches/trees being used got cut off so
-> I'm not 100% sure what's in the kernel.
+> I'm not sure I understand. pX_configured would be set to true only when 
+> the port is used as a CPU port. mt753x_mac_config() should run for user 
+> or DSA ports more than once, if needed.
 
-Syzbot reported this on commit 76f598ba7d8e which is upstream after v6.3-rc6.
+Looking at this again, once pX_interface is true, the check will prevent 
+even user or DSA ports to be configured again. What about setting 
+pX_interface to false after mt753x_mac_config() is run?
 
-Cheers,
-
-						- Ted
+Arınç
