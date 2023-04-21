@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376E86EB4C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED066EB4C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbjDUWbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S233721AbjDUWbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjDUWbl (ORCPT
+        with ESMTP id S233465AbjDUWbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:31:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867601BF5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:40 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-953343581a4so311229966b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:40 -0700 (PDT)
+        Fri, 21 Apr 2023 18:31:43 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C281BF0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:42 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9505214c47fso375015166b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682116299; x=1684708299;
+        d=linaro.org; s=google; t=1682116300; x=1684708300;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tHsoXDxz1/UTx6EBnwD4GozBhAQVv+WOC5RetDWcnZ4=;
-        b=uHsMB7x0Xp2Q+ayCfEMDyPvNll3SI8+ipJ52v+0W/l6PZk6dTdooXFXz7/uSwn+gb7
-         TGmOk+N5FQpWWnnVTFtrERp3aAELYIt5pO3/N8z0/qInvjfEW9+LXKZO1zATX1NTBK8K
-         /w0m3FMltIhO7NGnlMFqDxTCO+G0J5FG+tjnvkS/+PXn/+nZd03zVwOpxUSdcEnOS1Pg
-         c5zi5Kn2WvByRHRNogglHMlDIaBv0XY0+G3T2ZNmSO870iiGBPw3+/4oclcjlGgoigYk
-         YxYcwFKCBzKnt9ULlO4qV/C8KhFfA9/ZfmPejU/H6ih4OFMYLYp77zCn3nYTUb/eZabQ
-         JYIA==
+        bh=C2g3U63nRIt+0pZO4KBKXppHA/6UeQmjuddRYWTRF7E=;
+        b=F6upLZwIvvNvwwzJXLj+OvRpi6fNfxlbXVIpY81r7ZwWu/nf/ydLHW87vk+kwodkSm
+         lZKObOzLcmWD/TEax62R60QIqt23aunSUl2/aiNAYAscyLTXDH1flZSO8sLSfyf4yp8M
+         9q0YJZPCGyj5lcHLWzTdPlP1QfGCMrZfGvmjXL0Obazfr8CKEY9xrqxIj2lPlzVXBS/V
+         e3VRs6a0Pf4csuYVRrZQ4HIcBWPaWAUDmuyA5iFG0wPlpdHkbVP9ScxPQXYa0I2EnfkD
+         I0nbm6PcD1n7YnHSG1h7mowsTtdvf2eEJNSr2vUTD5WQtT1IfJNQkRqPB9CsWyKNLAnl
+         PWwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682116299; x=1684708299;
+        d=1e100.net; s=20221208; t=1682116300; x=1684708300;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tHsoXDxz1/UTx6EBnwD4GozBhAQVv+WOC5RetDWcnZ4=;
-        b=assXL7bd3emeA94ts9m7MGVutGh60cv7MEEMbZr4boCzDSMLsQTgqwaieyNgIDdhGr
-         HNEuE4evYmPouQV3r2ImtwFsYck36BLrN2C3rL9eyk166LBgG+RQPJ9kWs/UBIjI/8k4
-         ZjATzVNyumL8sKGAD2SkX36VfWJ8ysH+rEtNg5HJMw3KDOYiaQteQAVn1sj7oEf7SQpo
-         WKI1wbJFNw9bcFpEwZp8TxHiD+K+3gVVN4G+ZzcI0CoTDxJBNMjEhgaNH28Af6ClVEYG
-         Fi+pNgU+19tLknk1nkoXp4XLw5+H1H9gtDrXVLuxeryNBwSjl2rhXT8DqvhO/aa+LTOL
-         WhUw==
-X-Gm-Message-State: AAQBX9cm35VN77jUDVSgR3EZ0d94b9gmHljmH3TuS7RqF4qlLnG9wuLA
-        GBQ0QCw6SQFMuHNO+BhM4yygJA==
-X-Google-Smtp-Source: AKy350Y2WtdIrB8KUkVxhNUfP+cw41JryLuepwl1MmDWr8r7jE/LiFDauoeJJ2LjhOQ/r86bda7hjg==
-X-Received: by 2002:a17:906:b147:b0:933:868:413a with SMTP id bt7-20020a170906b14700b009330868413amr3914177ejb.15.1682116299030;
-        Fri, 21 Apr 2023 15:31:39 -0700 (PDT)
+        bh=C2g3U63nRIt+0pZO4KBKXppHA/6UeQmjuddRYWTRF7E=;
+        b=KFDUI6LD0hwKII6Lq6gOzBnMUX3SuCNhLPJKWtTa+lGEOWk0Ii39GUPVYbPQL7cLIB
+         F5zX74iXdL4Qu3w4UzlSnSBAygpRO8AbD5BDQaOjaMCbdwNCgQFNyMPjPOZWuCbB7sry
+         3/nGCMmbSdk8m41jdykfkVNV7X7nT+FZk0VtrR2XK1op64g6YW1jS5C3u7U4jxyMAN/c
+         ddH7IOwGFnxfqyYxV4ZmjgKcu3sH60AmqT/ibKzAztInalQh9HpXbUtK9T8rUHJLAYVW
+         RAM9yyP9AS/W374orbWkFp7BqljuXp9kOGmeyAVlRryY8hM+y9NjrCRVrZ6P2YaiUaVD
+         obhg==
+X-Gm-Message-State: AAQBX9eDahAl8LoYQVGS/UOxpNf8nwFUlpgrek2+RLr+2qP6peMtQZNp
+        43qvwbhiT0CmdG9X93LXyfBUrg==
+X-Google-Smtp-Source: AKy350YX4OiqSAW2vhECCVWVlHSJArUAJhNXSTm+C+pQdqSci6dlw9nXkZA9D9scqFJHk8F1NLEYcg==
+X-Received: by 2002:a17:907:d29:b0:94a:6953:602d with SMTP id gn41-20020a1709070d2900b0094a6953602dmr3911628ejc.37.1682116300670;
+        Fri, 21 Apr 2023 15:31:40 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
-        by smtp.gmail.com with ESMTPSA id sd22-20020a1709076e1600b009572bd99281sm1077677ejc.224.2023.04.21.15.31.37
+        by smtp.gmail.com with ESMTPSA id x4-20020a1709064a8400b0094ecf61289esm2576710eju.152.2023.04.21.15.31.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 15:31:38 -0700 (PDT)
+        Fri, 21 Apr 2023 15:31:40 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+To:     Khuong Dinh <khuong@os.amperecomputing.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: allwinner: a64: add missing cache properties
-Date:   Sat, 22 Apr 2023 00:31:37 +0200
-Message-Id: <20230421223137.115015-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: apm: add missing cache properties
+Date:   Sat, 22 Apr 2023 00:31:39 +0200
+Message-Id: <20230421223139.115044-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,9 +72,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 As all level 2 and level 3 caches are unified, add required
-cache-unified property to fix warnings like:
+cache-unified and cache-level properties to fix warnings like:
 
-  sun50i-a64-pine64-lts.dtb: l2-cache: 'cache-unified' is a required property
+  apm-mustang.dtb: l2-cache-0: 'cache-level' is a required property
+  apm-mustang.dtb: l2-cache-0: 'cache-unified' is a required property
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
@@ -85,17 +83,62 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Please take the patch via sub-arch SoC tree.
 ---
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 8 ++++++++
+ arch/arm64/boot/dts/apm/apm-storm.dtsi     | 8 ++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-index 62f45f71ec65..a9c7f82c2c66 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-@@ -93,6 +93,7 @@ cpu3: cpu@3 {
- 		L2: l2-cache {
+diff --git a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+index 70a10bcafcff..377660d705d1 100644
+--- a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+@@ -97,15 +97,23 @@ cpu@301 {
+ 		};
+ 		xgene_L2_0: l2-cache-0 {
  			compatible = "cache";
- 			cache-level = <2>;
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 		xgene_L2_1: l2-cache-1 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 		xgene_L2_2: l2-cache-2 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 		xgene_L2_3: l2-cache-3 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+index d73e809fe41a..efa79209f4b2 100644
+--- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+@@ -81,15 +81,23 @@ cpu@301 {
+ 		};
+ 		xgene_L2_0: l2-cache-0 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 		xgene_L2_1: l2-cache-1 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 		xgene_L2_2: l2-cache-2 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
+ 		};
+ 		xgene_L2_3: l2-cache-3 {
+ 			compatible = "cache";
++			cache-level = <2>;
 +			cache-unified;
  		};
  	};
