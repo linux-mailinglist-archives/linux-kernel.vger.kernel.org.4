@@ -2,179 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7E76EB48D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4420C6EB491
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjDUWQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S233775AbjDUWQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjDUWQn (ORCPT
+        with ESMTP id S233706AbjDUWQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:16:43 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66330172A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:16:42 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-504efe702d5so3156640a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:16:42 -0700 (PDT)
+        Fri, 21 Apr 2023 18:16:51 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9776B2706
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:16:48 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4ec816d64afso9686934e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682115401; x=1684707401;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G1jVNptPN3rB+wt6qDz/5duS77+OHrnKVNsYYbyonc4=;
-        b=JVSDj8NElTBQ4qKlgbF9PNjReZsDCBWQ4c3ypje+x+1Prxsz2dEBI66BU56GbcWuiY
-         Gq3X/WREC7l8Y9J9xn1KQAXzdvGtOAZnr6UBA6z8o2DU5Ea7awmU3r8Gqy2sympr0+HL
-         N6n1Ejy7gQ2IVayuMOiieA3Qj2D8wJyewpbaW+jebzLSeJFlhPGJZxnwHoVkAKe2ERUM
-         lR+Ar/7BL59+wjXsf9Bj147BVDZcJECjqM1GP+cyS839Nr97sox8ENIWLkcTqwo0Gzkk
-         yX7ZE/L5sSs92VBu/owTCdSmlnzZIrtlj/+pSngvPmdg6wWCrf8nYp9LnFYj9u3TvCzO
-         I45g==
+        d=linaro.org; s=google; t=1682115407; x=1684707407;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8G5FObVVgsm9tbM7LACwT4TVgM1XACF53tzcjkM3Wi0=;
+        b=hNElGow2W1/eEsGSqDa+AteEZ0tihNCulnenG2EeOoB870QdO/oNqo1u8BCoFhQtKA
+         AhXlKqswhQveIae6wY5kih5XRkg9o61GWmYPBbwntYNQGb3eCveRwCIn6dTIrTMDwiOF
+         PLkmtYJ98X622ghmaUf05AiFZ3ruEegyLuJk7pb4vEVq0Jd5D1dFwCbhHUQ+91JmAE+k
+         R+taLJWVrinNGxeoFw6pjNmFGtjBbXFOe8qj6HLmMQFUSi9i1W3qANLNCssV6GiS0J81
+         AszyBu+onfntFJTi63d2PVzXNLDCHp0HUZ5iODASRwuS386Kn5zEk/2M/4m7DM19C4Yp
+         24Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682115401; x=1684707401;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G1jVNptPN3rB+wt6qDz/5duS77+OHrnKVNsYYbyonc4=;
-        b=NNHQmsY4kSMiPZ6RH6grUFna6/yo70Ig5puWwk9JysJ7ceCEkNkKo49LeBlN+fY52p
-         lGQQN8XRM6Nk4ThVf0d0I/9yU1hmYSxR3WCmMMGd/8CUPM0sKj6Poxin5ZKjy8mrh/WV
-         RBLxCche9tBYK7XRnjg2o23w7aO4BS+sumr/87BMeceAI5aHUOzLd0+WbG+oH+XJeX+6
-         ZDL4eKppXDFtPePEW3I+ra0NF0uZKbXJRNBWoD3EiKaNVeUp5IucimwUZ7Dsrs3Hf1Lw
-         zny/C/FSwqxQkgVWueSGnXnXQpZiiyVlXdxRd8zANqOvTP8avvxWdM9tB7ZEVOUtD+/+
-         heqw==
-X-Gm-Message-State: AAQBX9dc4GdqTPFCQLj/4npmYQVXtKkeE+Z0N613G9hpCHrchsAbEfCj
-        dL3vh5kBqZmdaTtoinp7MU6rMav4zYJCnUnQhjcxbQ==
-X-Google-Smtp-Source: AKy350bpBiMOLI1NQijcFjuvgCreZEmwVpjET7RbozpVgWAdtHlid4hL1py+/tnoNp1HVYYOGdi9kwCnJ02yWoobEqk=
-X-Received: by 2002:a05:6402:211:b0:504:8929:71ca with SMTP id
- t17-20020a056402021100b00504892971camr5475692edv.6.1682115400657; Fri, 21 Apr
- 2023 15:16:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682115407; x=1684707407;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8G5FObVVgsm9tbM7LACwT4TVgM1XACF53tzcjkM3Wi0=;
+        b=CYg7/QUsvOGdWpUwZ5dsv7GDdqqqCoeoD/0ZwerGnmh97184cEP5wik0ND71lutuAS
+         k6ekgpxEvxQhMmYq5ijGSASSNeCdvAdJgdh/rX7UDNXoTi+UvYiCgBGk6fgANwAI5Gbl
+         lF44Gud8xpcOJIlIkendXh+rszVcDfayb3A2mEq5gFzVpA+0aM94iy/6MaJGk8wzHhg5
+         owhPwfpMgk1e84E8USx8UwJSxYMCp5mnUsjeZN+Ypod3/abb+cglwu7Hq+1OTAjQJXiF
+         ZGnvyg2wcZ+TExMv6GR3m/Dc6GTDyz8ehamQSqJnCpaxAWbnRo6TevxJSg4QN/EpsVkZ
+         uqlQ==
+X-Gm-Message-State: AAQBX9c+4wv32OHrt/QeoKhvbLaXG0+ovwnZQSwJhz187x3Tr7dDTI3e
+        NGIA17SIsxye1+1Fk8xBnCPdyg==
+X-Google-Smtp-Source: AKy350bgz9l0F7rcrV3qoc9NrfgW1k8ZSg2ViohrJBy+z1PJkEHlFgNtCRcoJVY5NCtjMQdHlEYzkQ==
+X-Received: by 2002:a05:651c:104f:b0:2a8:ea9e:29b6 with SMTP id x15-20020a05651c104f00b002a8ea9e29b6mr956269ljm.11.1682115406797;
+        Fri, 21 Apr 2023 15:16:46 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a28-20020a2eb17c000000b0029c96178425sm747894ljm.19.2023.04.21.15.16.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 15:16:46 -0700 (PDT)
+Message-ID: <7b493d85-0691-8797-367e-1d71ea87c826@linaro.org>
+Date:   Sat, 22 Apr 2023 01:16:45 +0300
 MIME-Version: 1.0
-References: <00000000000058b63f05f9d98811@google.com> <20230421174054.3434533-1-roman.gushchin@linux.dev>
-In-Reply-To: <20230421174054.3434533-1-roman.gushchin@linux.dev>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 21 Apr 2023 15:16:02 -0700
-Message-ID: <CAJD7tkZRLsubybPesf65t1ATEksTtif8uztAFZ-gVmYCnjw0Bg@mail.gmail.com>
-Subject: Re: [PATCH] mm: kmem: fix a NULL pointer dereference in obj_stock_flush_required()
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
+ chipsets
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
+ <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
+ <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
+ <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:41=E2=80=AFAM Roman Gushchin
-<roman.gushchin@linux.dev> wrote:
->
-> KCSAN found an issue in obj_stock_flush_required():
-> stock->cached_objcg can be reset between the check and dereference:
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
->
-> write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
->  drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
->  refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
->  obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
->  memcg_slab_free_hook mm/slab.h:587 [inline]
->  __cache_free mm/slab.c:3373 [inline]
->  __do_kmem_cache_free mm/slab.c:3577 [inline]
->  kmem_cache_free+0x105/0x280 mm/slab.c:3602
->  __d_free fs/dcache.c:298 [inline]
->  dentry_free fs/dcache.c:375 [inline]
->  __dentry_kill+0x422/0x4a0 fs/dcache.c:621
->  dentry_kill+0x8d/0x1e0
->  dput+0x118/0x1f0 fs/dcache.c:913
->  __fput+0x3bf/0x570 fs/file_table.c:329
->  ____fput+0x15/0x20 fs/file_table.c:349
->  task_work_run+0x123/0x160 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
->  exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
->  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
->  obj_stock_flush_required mm/memcontrol.c:3319 [inline]
->  drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
->  try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
->  try_charge mm/memcontrol.c:2837 [inline]
->  mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
->  sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
->  sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
->  udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
->  udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
->  sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
->  __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
->  __do_sys_setsockopt net/socket.c:2282 [inline]
->  __se_sys_setsockopt net/socket.c:2279 [inline]
->  __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> value changed: 0xffff8881382d52c0 -> 0xffff888138893740
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller-00=
-387-g534293368afa #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 03/02/2023
->
-> Fix it by reading the cached_objcg with READ_ONCE().
+On 22/04/2023 01:05, Kuogee Hsieh wrote:
+> 
+> On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
+>> On 21/04/2023 02:25, Kuogee Hsieh wrote:
+>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>>
+>>> Add DSC 1.2 hardware blocks to the catalog with necessary
+>>> sub-block and feature flag information.
+>>> Each display compression engine (DCE) contains dual hard
+>>> slice DSC encoders so both share same base address but with
+>>> its own different sub block address.
+>>
+>> Please correct line wrapping. 72-75 is usually the preferred width
+>>
+>>>
+>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>> ---
+>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h  | 19 
+>>> +++++++++++++++++++
+>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h  | 11 +++++++++++
+>>>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h    | 21 
+>>> +++++++++++++++++++++
+>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h  | 19 
+>>> +++++++++++++++++++
+>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h  | 19 
+>>> +++++++++++++++++++
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c      | 12 ++++++++++--
+>>>   6 files changed, 99 insertions(+), 2 deletions(-)
+>>>
+>>
+>>
+>> [I commented on sm8550, it applies to all the rest of platforms]
+>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>>> index 9e40303..72a7bcf 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>>> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
+>>> sm8550_merge_3d[] = {
+>>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+>>>   };
+>>>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
+>>> +    .enc = {.base = 0x100, .len = 0x100},
+>>> +    .ctl = {.base = 0xF00, .len = 0x10},
+>>> +};
+>>> +
+>>> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
+>>> +    .enc = {.base = 0x200, .len = 0x100},
+>>> +    .ctl = {.base = 0xF80, .len = 0x10},
+>>> +};
+>>
+>> Please keep sblk in dpu_hw_catalog for now.
+>>
+>>> +
+>>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
+>>> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, sm8550_dsc_sblk_0),
+>>> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, sm8550_dsc_sblk_1),
+>>
+>> Is there a reason why index in "dsc_N" doesn't match the DSC_n which 
+>> comes next to it?
+> 
+> usually each DCE (display compression engine) contains two hard slice 
+> encoders.
+> 
+> DSC_0 and DSC_1 (index) is belong to dsc_0.
+> 
+> If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
 
-IIUC reading an outdated objcg is fine here, and the real problem is a
-potential NULL dereference, which isn't shown by this report. Is this
-correct?
+Ah, I see now. So, the block register space is the following:
+DCEi ->
+   common
+   dsc0_enc
+   dsc1_enc
+   dsc0_ctl
+   dsc1_ctl
 
->
-> Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
-> Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
-> Reported-by: Dmitry Vyukov <dvyukov@google.com>
-> Link: https://lore.kernel.org/linux-mm/CACT4Y+ZfucZhM60YPphWiCLJr6+SGFhT+=
-jjm8k1P-a_8Kkxsjg@mail.gmail.com/T/#t
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  mm/memcontrol.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 5abffe6f8389..9426a1ddc190 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -3314,10 +3314,11 @@ static struct obj_cgroup *drain_obj_stock(struct =
-memcg_stock_pcp *stock)
->  static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
->                                      struct mem_cgroup *root_memcg)
->  {
-> +       struct obj_cgroup *objcg =3D READ_ONCE(stock->cached_objcg);
->         struct mem_cgroup *memcg;
->
-> -       if (stock->cached_objcg) {
-> -               memcg =3D obj_cgroup_memcg(stock->cached_objcg);
-> +       if (objcg) {
-> +               memcg =3D obj_cgroup_memcg(objcg);
->                 if (memcg && mem_cgroup_is_descendant(memcg, root_memcg))
->                         return true;
->         }
-> --
-> 2.40.0
->
->
+Instead of declaring a single DCE unit with two DSC blocks, we declare 
+two distinct DSC blocks. This raises a question, how independent are 
+these two parts of a single DCE block? For example, can we use them to 
+perform compression with different parameters? Or use one of them for 
+the DP DSC and another one for DSI DSC? Can we have the following 
+configuration:
+
+DSC_0 => DP DSC
+DSC_1, DSC_2 => DSI DSC in DSC_MERGE topology?
+
+> 
+>>
+>>> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
+>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
+>>> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
+>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
+>>> +};
+>>> +
+>>>   static const struct dpu_intf_cfg sm8550_intf[] = {
+>>>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
+>>> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>>>       /* TODO TE sub-blocks for intf1 & intf2 */
+>>> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+>>>       .dspp = sm8550_dspp,
+>>>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
+>>>       .pingpong = sm8550_pp,
+>>> +    .dsc = sm8550_dsc,
+>>> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
+>>>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+>>>       .merge_3d = sm8550_merge_3d,
+>>>       .intf_count = ARRAY_SIZE(sm8550_intf),
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> index 03f162a..be08158 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> @@ -1,6 +1,6 @@
+>>>   // SPDX-License-Identifier: GPL-2.0-only
+>>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+>>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights 
+>>> reserved.
+>>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All 
+>>> rights reserved.
+>>>    */
+>>>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
+>>> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
+>>> sc7280_pp_sblk = {
+>>>       {\
+>>>       .name = _name, .id = _id, \
+>>>       .base = _base, .len = 0x140, \
+>>> -    .features = _features, \
+>>> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
+>>> +    }
+>>> +
+>>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
+>>> +    {\
+>>> +    .name = _name, .id = _id, \
+>>> +    .base = _base, .len = _len, \
+>>> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
+>>> +    .sblk = &_sblk, \
+>>>       }
+>>> /*************************************************************
+>>
+
+-- 
+With best wishes
+Dmitry
+
