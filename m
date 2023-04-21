@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BA16EB198
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8010B6EB19A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbjDUS01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S232967AbjDUS1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDUS0Z (ORCPT
+        with ESMTP id S229578AbjDUS1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:26:25 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC4819A;
-        Fri, 21 Apr 2023 11:26:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1682101549; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ds5/t7tB/NXM7HvrlG/DEhVQjQSPN9lS2QcmvahcM/5pTa0KmZEjjAFxJiH4WvXUICPoFmLKgF3CHbdT+f8KaQN+G6y+ekdhd4lXd2uN9mmGnuz7ozKbcRvlUGADaddw6/uALn41InwJ6T+1gVIIqXaDIbCZELLkKNu12ljBTxQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1682101549; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=gAERKVRg6pqZtkYAZeOg+BzUO9hWZqA/1cyFdbAA+mw=; 
-        b=WN1nZ0Ht8kq0jdrxnnF+EQwbQ/VnQnIWuGNlQNFLE6kyal2Nyqjye0EUT5TyOOlW1+dRR3GWlHwiTpXhbsYvgvaC4ClC2iOnDpIPAmRHGMil2tN6zX75QQOjckKY1kgxN+p3rT1Auxk/K0sCzWdQ7NdBc07+zFU7F4Eg1yJ+irk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682101549;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=gAERKVRg6pqZtkYAZeOg+BzUO9hWZqA/1cyFdbAA+mw=;
-        b=Zo4JC4PDTjErNWz6V6pNir51eG6T2A5En1K4G2Ghzj7dUp/oWkZTk+LE+8PsE5vz
-        tSbQ+zxFcKtclizo4FdjOz8SSOIAwgVSmzoajW/ep7HHo7MX7kkGHrQoQ8CRsL94sCA
-        J2qwKMo3AZ2jZfCRi492/xpMwejx2Ew2D3ebxGcg=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1682101548505326.82901676703693; Fri, 21 Apr 2023 11:25:48 -0700 (PDT)
-Message-ID: <235c80fc-3f1b-a9c9-6364-6f50ee45b21b@arinc9.com>
-Date:   Fri, 21 Apr 2023 21:25:39 +0300
+        Fri, 21 Apr 2023 14:27:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A24210F2;
+        Fri, 21 Apr 2023 11:27:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA2C365251;
+        Fri, 21 Apr 2023 18:27:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAB3C433A1;
+        Fri, 21 Apr 2023 18:27:15 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cy2E2wei"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1682101630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3FB3B43eYjyBAM7IDYJSH0nqffg9h/A3cKDOQDAa8U0=;
+        b=cy2E2weiOUbZb+vT2a6PJMO6rkRoCYHmSZl2wIfSUJmlXrwKWVGMFXPRwuTqCkTIW1IymQ
+        0a4Lu7ZypmvfhJKzoPoNB3A1Nb/yLBX1S6MwO7GnrA+M/TOza15aqV92kszkfZrEWMcSDs
+        D5t3QmLEKXiaZGRM+vj3dzLDLV97Pqs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 37ed0a3f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 21 Apr 2023 18:27:09 +0000 (UTC)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-771d9ec5aa5so8282189241.0;
+        Fri, 21 Apr 2023 11:27:09 -0700 (PDT)
+X-Gm-Message-State: AAQBX9faTkOKB2wo0j/t++ZmoVG40czCD8XxW0N2L0WgizI0+RDwSl3v
+        FSXG+QHk/lIWFeV1pY0dBvhz5OvVgaG8PR4bGjI=
+X-Google-Smtp-Source: AKy350Zha+rMVky/6DSggH+0NpteQqjJJloUu7qVQUIBSeFSBoua6JVr0i++DO9cdKalbSrUG3+c2kWyp7o5GrZMfqw=
+X-Received: by 2002:a05:6102:1629:b0:430:b1f:56dc with SMTP id
+ cu41-20020a056102162900b004300b1f56dcmr3773848vsb.1.1682101627919; Fri, 21
+ Apr 2023 11:27:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH net-next 08/22] net: dsa: mt7530: change
- p{5,6}_interface to p{5,6}_configured
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230421143648.87889-1-arinc.unal@arinc9.com>
- <20230421143648.87889-9-arinc.unal@arinc9.com>
- <ZELH2RlYLPjJGx6Y@makrotopia.org>
- <810aa47b-7007-7d53-9a23-c2d17d43d8a8@arinc9.com>
- <f1c38c13-a1f6-93d8-90ae-4ea3f7e06dc2@arinc9.com>
-In-Reply-To: <f1c38c13-a1f6-93d8-90ae-4ea3f7e06dc2@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Received: by 2002:ab0:6196:0:b0:75c:e750:ab with HTTP; Fri, 21 Apr 2023
+ 11:27:07 -0700 (PDT)
+In-Reply-To: <ZEKlzaQhjd8sbE7I@kernel.org>
+References: <Y60RoP77HnwaukEA@zx2c4.com> <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+ <Y7w74EBYP3+FHlkw@zx2c4.com> <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
+ <ZBBmVhwsTf/URoqs@kernel.org> <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
+ <ZBBxMl5rVjY9FGS9@kernel.org> <ZBBxxftnXHVOjm92@kernel.org>
+ <ZBB8R9H3CyQnNfCt@zx2c4.com> <ZBCDeleGG/fFlkt+@kernel.org> <ZEKlzaQhjd8sbE7I@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 21 Apr 2023 20:27:07 +0200
+X-Gmail-Original-Message-ID: <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
+Message-ID: <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Altmanninger <aclopte@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,63 +80,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 21.04.2023 21:20, Arınç ÜNAL wrote:
-> On 21.04.2023 21:17, Arınç ÜNAL wrote:
->> On 21.04.2023 20:28, Daniel Golle wrote:
->>> On Fri, Apr 21, 2023 at 05:36:34PM +0300, arinc9.unal@gmail.com wrote:
->>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>
->>>> The idea of p5_interface and p6_interface pointers is to prevent
->>>> mt753x_mac_config() from running twice for MT7531, as it's already 
->>>> run with
->>>> mt753x_cpu_port_enable() from mt7531_setup_common(), if the port is 
->>>> used as
->>>> a CPU port.
->>>>
->>>> Change p5_interface and p6_interface to p5_configured and 
->>>> p6_configured.
->>>> Make them boolean.
->>>>
->>>> Do not set them for any other reason.
->>>>
->>>> The priv->p5_intf_sel check is useless as in this code path, it will 
->>>> always
->>>> be P5_INTF_SEL_GMAC5.
->>>>
->>>> There was also no need to set priv->p5_interface and 
->>>> priv->p6_interface to
->>>> PHY_INTERFACE_MODE_NA on mt7530_setup() and mt7531_setup() as they 
->>>> would
->>>> already be set to that when "priv" is allocated. The pointers were 
->>>> of the
->>>> phy_interface_t enumeration type, and the first element of the enum is
->>>> PHY_INTERFACE_MODE_NA. There was nothing in between that would 
->>>> change this
->>>> beforehand.
->>>>
->>>> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> NACK. This assumes that a user port is configured exactly once.
->>> However, interface mode may change because of mode-changing PHYs (e.g.
->>> often using Cisco SGMII for 10M/100M/1000M but using 2500Base-X for
->>> 2500M, ie. depending on actual link speed).
->>>
->>> Also when using SFP modules (which can be hotplugged) the interface
->>> mode may change after initially setting up the driver, e.g. when SFP
->>> driver is loaded or a module is plugged or replaced.
->>
->> I'm not sure I understand. pX_configured would be set to true only 
->> when the port is used as a CPU port. mt753x_mac_config() should run 
->> for user or DSA ports more than once, if needed.
-> 
-> Looking at this again, once pX_interface is true, the check will prevent 
-> even user or DSA ports to be configured again. What about setting 
-> pX_interface to false after mt753x_mac_config() is run?
-
-On a third thought, pX_interface will never be true for the port if it's 
-a user or DSA port so this should not be a problem at all.
-
-Arınç
+Did you use the patch I sent you and suspend and resume according to
+the instructions I gave you? If not, I don't have much to add.
