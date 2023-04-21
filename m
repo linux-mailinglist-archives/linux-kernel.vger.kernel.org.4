@@ -2,75 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1D76EA775
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEBF6EA78B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjDUJqS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Apr 2023 05:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S232054AbjDUJse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbjDUJqQ (ORCPT
+        with ESMTP id S232230AbjDUJsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:46:16 -0400
-X-Greylist: delayed 379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 02:45:31 PDT
-Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B620EA5FF
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:45:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 0B098234CC6F;
-        Fri, 21 Apr 2023 04:42:07 -0500 (-05)
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id vqUlO_Abv0dd; Fri, 21 Apr 2023 04:42:06 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 8E8F52346D8E;
-        Fri, 21 Apr 2023 04:42:06 -0500 (-05)
-X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4zY-wlwEvGKO; Fri, 21 Apr 2023 04:42:06 -0500 (-05)
-Received: from [23.172.112.93] (unknown [23.172.112.93])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id CC3FC234CC6F;
-        Fri, 21 Apr 2023 04:42:01 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 21 Apr 2023 05:48:16 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380A7BB8E;
+        Fri, 21 Apr 2023 02:47:36 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94f3df30043so199997566b.2;
+        Fri, 21 Apr 2023 02:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682070454; x=1684662454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rU5p1zdFMqZLS41bYP5l22CkO5wCPiORJGO73i7qeyY=;
+        b=nxZdoXWBFsDTkdaf3cAvWhJCG/a8ZJj/Iq25a4Qg/PwEhh/4+5i45pmSn+p4dCi1lm
+         1indztO/EIuyVY++u8AfiO9iYpppZ7Wo/VabLQVSGA4ld0hLiZw4qqnZ4V/FNWTfVeD7
+         Pi4l5f0UeQcpUUlwflNZDaN396ft54C24Au9EXUOv5dVxwhclAoj7vkPw76DcGCtAvCe
+         qfEg9/6inR1w99wPL6Zkq2J9Hxh9X/g0T5O6yG6nMKUAZI07aIWVyysFZMwNmCtOdnbj
+         2YtICbfh/808DnbdniOdOelRQOaMI2SILPxiGFsJ7Fqq0zPD/cfUTLI5KEDFJMq3chAX
+         YXNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682070454; x=1684662454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rU5p1zdFMqZLS41bYP5l22CkO5wCPiORJGO73i7qeyY=;
+        b=bmZsW/i8rTy7CklX4j09YEP5jfblZdeSrwJxAuB4lBCzXCxXoIdg32DWq0/u1NJNdm
+         EZivlhlnX+f246IPB/bzF2fj82p/Z3BnnPkBuLzP8BprAS3b9QbuXUKXCq/y9/LN8FYp
+         6jIh6B6PnXHGV2M0dFRaU9WWpHmte2PX4wwOGoviKTcvZeqngf4t5/lvtDZlx4rnHKVN
+         ekSprYD3Sz/7ydUS99S7w25NWioWgprRuqkTNytYkCn6WI0webKohdSTpyVEtIDiwZZ3
+         S2vqEyaqF9LprWg6Z6UUAI0BxhRpPmDpInOl6DaWF5tsQ2jLbXf7gWTGWkjq+wWMCrPV
+         p/NA==
+X-Gm-Message-State: AAQBX9d9hZRib5QYAJ2y4wq4sxUqjt0HSEu0UfEPdWpKn6cF+gfl1oyD
+        5OPWFGjeXrYtVaq0FQH3340aP82A/6mmbuwyKUc=
+X-Google-Smtp-Source: AKy350ZTt3rp6V5n3+1YCtgNwmgh4Y8lWaZgSxb9sAk7cAZZZAUdHylhj0fRtPP1V197166ZwpCVJ8ij+ytAeQEMy1E=
+X-Received: by 2002:a17:906:a1d8:b0:950:1e0e:2037 with SMTP id
+ bx24-20020a170906a1d800b009501e0e2037mr1963767ejb.17.1682070454433; Fri, 21
+ Apr 2023 02:47:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Atenci=C3=B3n_usuario_de_cuenta_de_correo_electr=C3=B3nico?=
-To:     Recipients <yankur.glenda@saludzona6.gob.ec>
-From:   "Administrador" <yankur.glenda@saludzona6.gob.ec>
-Date:   Fri, 21 Apr 2023 02:44:33 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230421094201.CC3FC234CC6F@mail.saludzona6.gob.ec>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221222221244.1290833-1-kuba@kernel.org> <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
+ <CAL+tcoBU+UD_8aXkJy95zNzFeOBMQvQE6jj9syiKvOh_wcLrcw@mail.gmail.com> <140f61e2e1fcb8cf53619709046e312e343b53ca.camel@redhat.com>
+In-Reply-To: <140f61e2e1fcb8cf53619709046e312e343b53ca.camel@redhat.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Fri, 21 Apr 2023 17:46:58 +0800
+Message-ID: <CAL+tcoDZxssH-s08_LO2_=HqYJ77w_N-avOmEWQ4AiiprHFmXw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] softirq: uncontroversial change
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org,
+        tglx@linutronix.de, jstultz@google.com, edumazet@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Atención usuario de cuenta de correo electrónico,
+On Fri, Apr 21, 2023 at 5:33=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
+te:
+>
+> On Fri, 2023-04-21 at 10:48 +0800, Jason Xing wrote:
+> >
+> > > My understanding is that we want to avoid adding more heuristics here=
+,
+> > > preferring a consistent refactor.
+> > >
+> > > I would like to propose a revert of:
+> > >
+> > > 4cd13c21b207 softirq: Let ksoftirqd do its job
+> > >
+> > > the its follow-ups:
+> > >
+> > > 3c53776e29f8 Mark HI and TASKLET softirq synchronous
+> > > 0f50524789fc softirq: Don't skip softirq execution when softirq threa=
+d is parking
+> >
+> > More than this, I list some related patches mentioned in the above
+> > commit 3c53776e29f8:
+> > 1ff688209e2e ("watchdog: core: make sure the watchdog_worker is not def=
+erred")
+> > 8d5755b3f77b ("watchdog: softdog: fire watchdog even if softirqs do
+> > not get to run")
+> > 217f69743681 ("net: busy-poll: allow preemption in sk_busy_loop()")
+>
+[...]
+> The first 2 changes replace plain timers with HR ones, could possibly
+> be reverted, too, but it should not be a big deal either way.
+>
+> I think instead we want to keep the third commit above, as it should be
+> useful when napi threaded is enabled.
+>
+> Generally speaking I would keep the initial revert to the bare minimum.
 
-Este mensaje proviene de su Centro de administración de cuentas Webmail y red. Estamos en el proceso de actualizar todos nuestros servidores de correo electrónico como parte de nuestros esfuerzos en curso para proporcionar el mejor servicio de correo web posible. También eliminamos todas las cuentas no utilizadas para crear más espacio para registros de cuentas nuevas.
+I agree with you :)
 
-Para asegurarse de que no experimenta interrupciones del servicio o posible desactivación de su cuenta de correo electrónico, debe responder a este mensaje confirmando inmediatamente los detalles de su cuenta de correo electrónico a continuación para confirmación e identificación.
+>
+> > > The problem originally addressed by 4cd13c21b207 can now be tackled
+> > > with the threaded napi, available since:
+> > >
+> > > 29863d41bb6e net: implement threaded-able napi poll loop support
+> > >
+> > > Reverting the mentioned commit should address the latency issues
+> > > mentioned by Jakub - I verified it solves a somewhat related problem =
+in
+> > > my setup - and reduces the layering of heuristics in this area.
+> >
+> > Sure, it is. I also can verify its usefulness in the real workload.
+> > Some days ago I also sent a heuristics patch [1] that can bypass the
+> > ksoftirqd if the user chooses to mask some type of softirq. Let the
+> > user decide it.
+> >
+> > But I observed that if we mask some softirqs, or we can say,
+> > completely revert the commit 4cd13c21b207, the load would go higher
+> > and the kernel itself may occupy/consume more time than before. They
+> > were tested under the similar workload launched by our applications.
+> >
+> > [1]: https://lore.kernel.org/all/20230410023041.49857-1-kerneljasonxing=
+@gmail.com/
+>
+> Thanks for the reference, I would have missed that patch otherwise.
+>
+> My understanding is that adding more knobs here is in the opposite
+> direction of what Thomas is suggesting, and IMHO the 'now mask' should
+> not be exposed to user-space.
 
-Confirme los detalles de su cuenta a continuación.
-_____________________________________
-1. Nombre y apellido:
-2. Email completo de acceso:
-3. Nombre de usuario:
-4. Contraseña:
-5. Vuelva a escribir la contraseña:
-_____________________________________
+Could you please share the link about what Thomas is suggesting? I
+missed it. At the beginning, I didn't have the guts to revert the
+commit directly. Instead I wrote a compromised patch that is not that
+elegant as you said. Anyway, the idea is common, but reverting the
+whole commit may involve more work. I will spend some time digging
+into this part.
 
-De lo contrario, su cuenta de correo electrónico puede desactivarse automáticamente de nuestro servidor de correo electrónico / base de datos de correo electrónico. Para poder actualizar su cuenta de correo electrónico, responda a este mensaje.
+More suggestions are also welcome :)
 
-Gracias por su comprensión, le deseamos un día agradable por delante.
+Thanks,
+Jason
 
-
-Administrador,
-Webmail y Centro de administración de cuentas de red.
+>
+> >
+> Thanks for the feedback,
+>
+> Paolo
+>
