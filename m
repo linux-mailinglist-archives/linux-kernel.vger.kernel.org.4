@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3D36EAF3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D336EAF41
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbjDUQfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S233151AbjDUQgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjDUQfy (ORCPT
+        with ESMTP id S232972AbjDUQf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:35:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CEE1FFE
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:35:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3DC861090
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:35:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF72C433EF;
-        Fri, 21 Apr 2023 16:35:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682094952;
-        bh=nnUrL2/uCxS1kaZARBS1+/ZTmFCyuJT0YgKCTa+rc1g=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Oa81Pmy3R2FzPb3k/KG/nWj6IlSwMJ7NpIjZdt1utIKibjgjnTzUHUV1gAKlxmQL/
-         CgQ6IJwt3sxQdUMkz7dW++gGosGQQ1I6igW/9R98B2jPLDZ7sJnL+AdfryeANEZWE3
-         hDDvrLh35ESpbmSn5xof/ETumu3bZpxSlBTESGw9UiIox/bjDZf8JIkg2VZcx5n3xk
-         bRyV2I3HivhYPjDFCRS7TwrOXBLGn9Obban7QRufTu3DM9JCvf7nCp5zVjAfSX7nJK
-         u7DBg69vu6uTlkfJlJAEt0ych7FmnUfi6cm6eyIM8ZvPrMt76F3wvbo7xao2BCiUvq
-         9K/kjvZzIQMIw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 21 Apr 2023 17:35:46 +0100
-Subject: [PATCH] ASoC: rt715: Use maple tree register cache
+        Fri, 21 Apr 2023 12:35:59 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D35515444
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:35:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-504dfc87927so3136177a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682094957; x=1684686957;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B3xXYf8TTlU2/1ojoFhSjIL55VCuhyAcA1eyWc0djEo=;
+        b=Sor67hOA1/JULAkvGJjP+cDue/xFOhnaoY7aiqCjAPBgbRT1GNh0cKKYbMhF5M4XyE
+         LfSrbGuEhHHdBgzvuMdEMLvFuTyeDjT0YFf6JbkqnsN4a9oFjSnvOwvJwicU9Z0X+OJ1
+         vwC4Fq0U1F+0T/okj1wlboZFVddCtNyk4Ch7LsgXx36Ap7ACQYN3jPQUBpE6z6GtFNiw
+         u0JyXneZmaMcs5JROQiZw5EPfUMWgdTSJrfsv1k4hbBSSyJoZbqDQSwcy4K2yOC+K7MD
+         k/ULY3OkHyXcE8d/64BAXNAA7dG6yTf5tvv5qeQnDE5lTHpPPHRWRwwnIvqzAGQle1gG
+         K+Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682094957; x=1684686957;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B3xXYf8TTlU2/1ojoFhSjIL55VCuhyAcA1eyWc0djEo=;
+        b=SebQaa90sWcsHNNcjzREoC0ImmR0VaWztSAosE/rr3DOLB2DGcMj09nXcX6bVDzutb
+         uDzAqa+20YmB7GiXMGccWBqMKj7Sfca96/FfCaOn7IbCciQlhUlUG66TFsZ+b4xB6mbV
+         yZYz+qtDPL/FOm+NZTok/0xzBSC/aCznDXNPNCg7zxaahF08nWMEYrkUFj1ZkTbLaef1
+         OUQbBH9LdWphEPR9JJTHOSf6sFyldJ5X98gSyCvCobTh2Sq8UGNsfWGOzBC4IdaI0e4V
+         IYeWF9KgHqI5OZ1oA4ly1VQAUK6jVAaGE2uovYWBHwuB7fJ3T2wovLQp24/li2e3lmZJ
+         76kQ==
+X-Gm-Message-State: AAQBX9dBYc+Y8ciPqwCjGeERMm2UFsP1KJzWZuflm+mPiyUOEYT5cX//
+        Q2i/d/vDt3oUWiZ8p5u+ezsW5Q==
+X-Google-Smtp-Source: AKy350boQF7CjGbGArouyeaz2RM7OfQUMW7bsH6kjiwVj9BdnlvnjW2wn3qWocJsMuzqFUF8Kjdsqg==
+X-Received: by 2002:aa7:da41:0:b0:506:8660:77a3 with SMTP id w1-20020aa7da41000000b00506866077a3mr5948346eds.37.1682094956706;
+        Fri, 21 Apr 2023 09:35:56 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id w22-20020aa7d296000000b004fa99a22c3bsm1957151edq.61.2023.04.21.09.35.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:35:56 -0700 (PDT)
+Message-ID: <bc454390-3658-f16b-aa48-58bdeef52d22@linaro.org>
+Date:   Fri, 21 Apr 2023 18:35:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: net: mediatek: add WED RX binding for
+ MT7981 eth driver
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <cover.1681994362.git.daniel@makrotopia.org>
+ <b355493ed3d56396af91492b86f77f613485272a.1681994362.git.daniel@makrotopia.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b355493ed3d56396af91492b86f77f613485272a.1681994362.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230412-asoc-rt715-maple-v1-1-200a84835fde@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGG7QmQC/x2NQQrCMBAAv1L27EKSNq34FfGwjRsb1KTsihZK/
- 97U4wwMs4KyJFa4NCsIf5OmkivYUwNhovxgTPfK4IxrTWcdkpaA8hmsxzfNL0Z79rH3g+nb2EH
- NRlLGUSiH6Qh/RZ6HnoVjWv6n623bdks+sW95AAAA
-To:     Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-00e42
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1913; i=broonie@kernel.org;
- h=from:subject:message-id; bh=nnUrL2/uCxS1kaZARBS1+/ZTmFCyuJT0YgKCTa+rc1g=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkQrtltH1fl6yvBPtXjhXRlZ1zgP5vCxhZcVu6cD56
- RfcmX/SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZEK7ZQAKCRAk1otyXVSH0KlrB/
- 49Gq1y9hogSCIsLazNSRxQbxeJYozgzfG7fANMEvvEEfGwvVjVnmwPBmtCp6++gdwCgKM37WesTggA
- Va3K2bbARKdoiMg3RAfbn7vryLJ77BsgTz+7S+wQTmHhCOpSvE8h8bmngxWmgrjZxMhGyRjulKyglX
- IHwD/woeBOy0Ca3n8HsBbhlpDIowhkPP+spxtB2uYJmKwjb+/4j5B3SqxJKK0+2gR3FmRq1QnLQKlH
- nwzagIYK9LGkEenmK3cT4qoM86f5/QbFZFFQkC1ABxDuHqfa4p3JnvtsxCkUkL1EbEGVaR8Fi7030s
- 0HuPbvvvECWiU+5sjLkNjyUr1YhYj4
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-regmap has introduced a maple tree based register cache which makes use of
-this more advanced data structure which has been added to the kernel
-recently. Maple trees are much flatter than rbtrees, meaning that they do
-not grow to such depths when the register map is sparse which makes access
-a bit more efficient. The maple tree cache type is still a bit of a work
-in progress but should be effective for some devices already.
+On 20/04/2023 18:04, Daniel Golle wrote:
+> Add compatible string for mediatek,mt7981-wed as MT7981 also supports
+> RX WED just like MT7986, but needs a different firmware file.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
 
-RT715 seems like a good candidate for maple tree. It is a SoundWire MBQ
-device and therefore supports only single register read/write operations
-which do not use raw I/O and will therefore save the cost of converting
-to and from device native format when accessing the cache while not having
-a negative impact from the current lack of bulk operations in maple tree
-cache sync. It has a moderately large and quite sparse register map which
-is a good fit for storing in a maple tree.
-
-Convert to use maple tree. There should be little if any visible difference
-at runtime.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- sound/soc/codecs/rt715-sdw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/codecs/rt715-sdw.c b/sound/soc/codecs/rt715-sdw.c
-index 4e61e16470ed..5ffe9a00dfd8 100644
---- a/sound/soc/codecs/rt715-sdw.c
-+++ b/sound/soc/codecs/rt715-sdw.c
-@@ -354,7 +354,7 @@ static const struct regmap_config rt715_regmap = {
- 	.max_register = 0x752039, /* Maximum number of register */
- 	.reg_defaults = rt715_reg_defaults, /* Defaults */
- 	.num_reg_defaults = ARRAY_SIZE(rt715_reg_defaults),
--	.cache_type = REGCACHE_RBTREE,
-+	.cache_type = REGCACHE_MAPLE,
- 	.use_single_read = true,
- 	.use_single_write = true,
- 	.reg_read = rt715_sdw_read,
-
----
-base-commit: f033c26de5a5734625d2dd1dc196745fae186f1b
-change-id: 20230412-asoc-rt715-maple-185f657063f4
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+Krzysztof
 
