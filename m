@@ -2,141 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8433D6EA28C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796D16EA2A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbjDUEDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 00:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S230260AbjDUEVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 00:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbjDUECk (ORCPT
+        with ESMTP id S229451AbjDUEVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:02:40 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB42E524B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:02:38 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8f566ea5e6so3701161276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:02:38 -0700 (PDT)
+        Fri, 21 Apr 2023 00:21:04 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3094F525C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:21:03 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a6862e47b1so20393115ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682049758; x=1684641758;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHcf3TtAxqYUDjiNAmiyf7rcYOiQRzr3HgI4M/rAcaU=;
-        b=vhOy+/6XGUNImozjW6uXE3awKrpBeiSgUUKudpv9mylXFGdVs6orwkvboBIKJ+gUSI
-         fYZxsGRNlFm42JgTEFcUFLD1/1BFY8psdjXBoP38wBHcHbK+wyMHxCGzN+w61d7gytkU
-         vu9cmM7aNMUhG0WLCVGBj+xxPFj9ebAu54bdHCIxwewn0vAO1Cqhp29CDwt7vEBNgg9Q
-         jrC7EJhVkPl+hArDZNM17DQB7/02YtPjoh48F2mhv8wHzWaUCan39/Vnac6KexCLRV0V
-         hXowYu8GYiC8PFpOmN/hmhw7rl1DR50qb8sDWApZ6QcE+iUGe+OnLapi388bUTfWh++g
-         r0YQ==
+        d=gmail.com; s=20221208; t=1682050862; x=1684642862;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TxBdc/PRX4p+DsSRUiF0vdFJbl++QpQEOpL7JwVgYcY=;
+        b=SWEaEBksyKx7gxjES2P61dY4k5teoEKck/LRwNV5ftXraREO8rSvwesqV9XWR4+wJP
+         URo3XJOWIvpBLHjgpGBf8lNj4DNY7VDshFi6+xlR3mvaKfa+y+1e3pzWl1BaqQvR53Bw
+         MtB1Vr+Ohi2VDK7hjq/IJMMCVUg6ZMPWxQa/f366pNKbBezK4T00swhEN3VWohQhDb+9
+         PBnMjxwDayWa+qXIGd9D3T9B7MXjdiXnWrdtNfitjvdjM8NvPPDhV994RxWq0E7bVsh6
+         hXH0EFymiMoQz2iAL5L09PEtywy5Qn+8EqIIgLP4dA4EsL0gXHDvxqmZ3DoLr4bvbcUL
+         uu/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682049758; x=1684641758;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHcf3TtAxqYUDjiNAmiyf7rcYOiQRzr3HgI4M/rAcaU=;
-        b=IbPBEW7Mtu1F/fyGtDDG2ngqweLkraf9f3WFnh7rBEXdjeChRQhcwyGBg0T9MR609p
-         A1LlQDHZ3O2upyt4iAbRQWE4URMD1rFLDAtR9jrzuWDluCgW07tbfvHSJpMYSV8fRvbB
-         a1NWesYw1Ehzt4PdFMULLCp+BaXGv9v/IAw8UEGpNlrlANhFm0GvcYPWVQbFXCFDGTLM
-         fUWWh16N4ySaYw0mT4pWqBu0XvrFu8U9jj7wh91Xeqo5FllIWTG/dID3nG3F4t5763qh
-         9+DUBWhVa9w1RipZ5p86mSJeTQy0k43wp03tGsQ6DjMjWlNwqMrsuGu7VjMpOSoZuJlx
-         69gg==
-X-Gm-Message-State: AAQBX9dkZjH2SbnOhJHHpdCluYLBNaN+DOqtLmdLK2a4oxyw5GwBvbpv
-        iy9expqJPO4PC2lqFGM2UmfI7IzwF25lmg==
-X-Google-Smtp-Source: AKy350Y54kiwT82AuAuLomhBMXGh6hDiOxSmVnuqZHCRGMCYguaPXyqmvOXzegJ/z1hHhEwjXIqd/8eSj0tc5g==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with SMTP
- id en8-20020a05690c2b8800b0054c15ad11e4mr897255ywb.0.1682049758080; Thu, 20
- Apr 2023 21:02:38 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 12:02:18 +0800
-In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230421040218.2156548-1-davidgow@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421040218.2156548-4-davidgow@google.com>
-Subject: [PATCH v3 4/4] kunit: example: Provide example exit functions
-From:   David Gow <davidgow@google.com>
-To:     Benjamin Berg <benjamin@sipsolutions.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, maxime@cerno.tech,
-        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682050862; x=1684642862;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TxBdc/PRX4p+DsSRUiF0vdFJbl++QpQEOpL7JwVgYcY=;
+        b=Honq+Q7Oh8KqmovBPYpX606mwbDjseaj7o1D61BJtuW9kED/JwwcFyWW9cWvWvRO8w
+         qM+egljBuUsct6vfm0ZAE+25UbpDUuUwYBJ3yMTGW7MgkQWxmmjw50FQw3NnuuJqLBgU
+         SFtL8HeDUKZJ9p9DYqOEpT+2pMDDgnzg7f8vd74fXqb3D20ri5I+1QQ7XLEaFeu7J56u
+         6KesyjC7d76vr53NRZHrpXCEVs69GMOtWARw8lFkglvv/4tvOfCgLx9To6EBZvfiLDiA
+         bU5UR3cCm+OzC6+adTEHtZKKVEGWAuumacnNSAU6wSR8opF7j42qa0USUude9Uvty6Av
+         6C2A==
+X-Gm-Message-State: AAQBX9fFn13FGnrWb99dAdVbu6fMpdX8QTSi3v8lSFP0GmoLa6qn20KL
+        X4wYY4KMN6dD/WFSY5cKnyQ=
+X-Google-Smtp-Source: AKy350bFHFTuoEpUJBX0H3NG2lSHihuB7T5W/Dp6+XyRJYjQpepGO9CALNTod8G2AwN9d/MAN0g90g==
+X-Received: by 2002:a17:902:c78a:b0:19c:d309:4612 with SMTP id w10-20020a170902c78a00b0019cd3094612mr3354823pla.6.1682050862500;
+        Thu, 20 Apr 2023 21:21:02 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-78.three.co.id. [180.214.232.78])
+        by smtp.gmail.com with ESMTPSA id g4-20020a1709026b4400b0019a6cce2060sm1831511plt.57.2023.04.20.21.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 21:21:01 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id F05E21067D5; Fri, 21 Apr 2023 11:20:58 +0700 (WIB)
+Date:   Fri, 21 Apr 2023 11:20:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     =?utf-8?B?QW5kcsOp?= Coelho <andrealbergaria@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: strings
+Message-ID: <ZEIPKhKNz7LnhM/q@debian.me>
+References: <8de1912e-8009-3c85-ece5-7ca7f03be42a@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6RTX+Scp426zjo9r"
+Content-Disposition: inline
+In-Reply-To: <8de1912e-8009-3c85-ece5-7ca7f03be42a@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an example .exit and .suite_exit function to the KUnit example
-suite. Given exit functions are a bit more subtle than init functions
-(due to running in a different kthread, and running even after tests or
-test init functions fail), providing an easy place to experiment with
-them is useful.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+--6RTX+Scp426zjo9r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch was introduced in v3.
+On Thu, Apr 20, 2023 at 03:58:47AM +0100, Andr=C3=A9 Coelho wrote:
+> greeting...if youre interessed in string algorihtm check
+>=20
+> https://andrealbergaria.github.io/
+>=20
 
----
- lib/kunit/kunit-example-test.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Looks like above link is about hex arithmetic implemented using strings,
+right?
 
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index cd8b7e51d02b..24315c882b31 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -41,6 +41,16 @@ static int example_test_init(struct kunit *test)
- 	return 0;
- }
- 
-+/*
-+ * This is run once after each test case, see the comment on
-+ * example_test_suite for more information.
-+ */
-+static void example_test_exit(struct kunit *test)
-+{
-+	kunit_info(test, "cleaning up\n");
-+}
-+
-+
- /*
-  * This is run once before all test cases in the suite.
-  * See the comment on example_test_suite for more information.
-@@ -52,6 +62,16 @@ static int example_test_init_suite(struct kunit_suite *suite)
- 	return 0;
- }
- 
-+/*
-+ * This is run once after all test cases in the suite.
-+ * See the comment on example_test_suite for more information.
-+ */
-+static void example_test_exit_suite(struct kunit_suite *suite)
-+{
-+	kunit_info(suite, "exiting suite\n");
-+}
-+
-+
- /*
-  * This test should always be skipped.
-  */
-@@ -211,7 +231,9 @@ static struct kunit_case example_test_cases[] = {
- static struct kunit_suite example_test_suite = {
- 	.name = "example",
- 	.init = example_test_init,
-+	.exit = example_test_exit,
- 	.suite_init = example_test_init_suite,
-+	.suite_exit = example_test_exit_suite,
- 	.test_cases = example_test_cases,
- };
- 
--- 
-2.40.0.634.g4ca3ef3211-goog
+And the licensing is similar to Qt: it is opensource (GPLed), but there is
+a commercial offering for proprietary projects.
 
+Also, on what use cases can your idea fit the kernel context? Or doesn't the
+kernel already have the implementation yet? Perhaps better implement as
+userspace library? If it is the case, I'd like to see actual patch series
+implementing your idea (see Documentation/process/submitting-patches.rst for
+how to submit your patch).
+
+Thanks!
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--6RTX+Scp426zjo9r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZEIPJAAKCRD2uYlJVVFO
+o8uRAP9T0kSMR+HnUlNw9lXuk5ShNttkExe7Pi87sqddcYmUUwEAippazfiDhPKu
+2aQJLNVsEbK3kqsriZmoCvBNPOzqUwk=
+=qYS2
+-----END PGP SIGNATURE-----
+
+--6RTX+Scp426zjo9r--
