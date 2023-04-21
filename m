@@ -2,46 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5223C6EA95B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2AA6EA970
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjDULjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S231861AbjDULjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjDULjC (ORCPT
+        with ESMTP id S231846AbjDULjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:39:02 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2470C155;
-        Fri, 21 Apr 2023 04:38:18 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 3BA001C0E01; Fri, 21 Apr 2023 13:37:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1682077056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2XdBu+av0qZxGuaP1nMetGj4D3Yj20NmV5LLc6errWE=;
-        b=aNse9vV4/YdI8p2PwrhG7v1PhLBPhn46Zi7YAOIkphiD1ARS846CLid8RVs34xQBi4rSv3
-        0nOH+W3ZcETf0P+jnPeOGZ4D+94zHF4eAzrIzUK6FOi3WJANanxAnWGQ3o4wVYjHjn5qwv
-        12IiJgnJeQ6ET1zaLk2StdOafSpkKOA=
-Date:   Fri, 21 Apr 2023 13:37:35 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v10 02/14] HP BIOSCFG driver  - biosattr-interface
-Message-ID: <ZEJ1f7vOL1zCyNyR@duo.ucw.cz>
-References: <20230419151321.6167-1-jorge.lopez2@hp.com>
- <20230419151321.6167-3-jorge.lopez2@hp.com>
+        Fri, 21 Apr 2023 07:39:33 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF301024B;
+        Fri, 21 Apr 2023 04:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682077149; x=1713613149;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N6OimIKQ3i6ehsTOK+r+zS/LiCq1sp3AESutKH+CGnc=;
+  b=iNmgpNESzs7LRNQ0FHakpAAcGzsZzFYx5PMiyWWWKpSU8Lw/FKVFM0+M
+   iUSJWCGfOsgcf26blbrTFCMtdE1rkB2SeITh/QSCbq1OgRW0AGbLYK5/K
+   Ae0Z+DO7V7QP7oLfClSrAgM0wrFO7G5dV8/YQHcsJiajvEqYGUFaQ7KP5
+   t/0Kf1Mov73fhCaDIMJSOJNFwMBWQsN3DeTAUiaPWWnjlE+86jSU/nt48
+   zz5udh92FrRzSAO3r1LyVyZdSAwuDSJE5n21SN942aZvMpHEWKwQDFaxe
+   /qygijKfzShrkvjhQcE7JYQtR+Hj2DEFqC1CHPpcb+Fn7W12+d7lm+kL6
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,214,1677567600"; 
+   d="scan'208";a="210581661"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2023 04:38:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 21 Apr 2023 04:38:34 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 21 Apr 2023 04:38:32 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <richardcochran@gmail.com>, <nicolas.ferre@microchip.com>,
+        <claudiu.beznea@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH] ARM: dts: lan966x: Add support for SMA connectors
+Date:   Fri, 21 Apr 2023 13:37:58 +0200
+Message-ID: <20230421113758.3465678-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="X09ELK96AjtUktk9"
-Content-Disposition: inline
-In-Reply-To: <20230419151321.6167-3-jorge.lopez2@hp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,49 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pcb8309 has 2 SMA connectors which are connected to the lan966x
+chip. The lan966x can generate 1PPS output on one of them and it can
+receive 1PPS input on the other one.
 
---X09ELK96AjtUktk9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ arch/arm/boot/dts/lan966x-pcb8309.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Hi!
+diff --git a/arch/arm/boot/dts/lan966x-pcb8309.dts b/arch/arm/boot/dts/lan966x-pcb8309.dts
+index c436cd20d4b4c..0cb505f79ba1a 100644
+--- a/arch/arm/boot/dts/lan966x-pcb8309.dts
++++ b/arch/arm/boot/dts/lan966x-pcb8309.dts
+@@ -144,6 +144,18 @@ fc4_b_pins: fc4-b-pins {
+ 		function = "fc4_b";
+ 	};
+ 
++	pps_out_pins: pps-out-pins {
++		/* 1pps output */
++		pins = "GPIO_38";
++		function = "ptpsync_3";
++	};
++
++	ptp_ext_pins: ptp-ext-pins {
++		/* 1pps input */
++		pins = "GPIO_39";
++		function = "ptpsync_4";
++	};
++
+ 	sgpio_a_pins: sgpio-a-pins {
+ 		/* SCK, D0, D1, LD */
+ 		pins = "GPIO_32", "GPIO_33", "GPIO_34", "GPIO_35";
+@@ -212,5 +224,7 @@ gpio@1 {
+ };
+ 
+ &switch {
++	pinctrl-0 = <&pps_out_pins>, <&ptp_ext_pins>;
++	pinctrl-names = "default";
+ 	status = "okay";
+ };
+-- 
+2.38.0
 
-> Linux Security components are under development and not published yet.
-> The only linux component is the driver (hp bioscfg) at this time.
-> Other published security components are under Windows.
->=20
-> Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-
-> +/*
-> + * ascii_to_utf16_unicode -  Convert ascii string to UTF-16 unicode
-> + *
-> + * BIOS supports UTF-16 characters that are 2 bytes long.  No variable
-> + * multi-byte language supported.
-> + *
-> + * @p:   Unicode buffer address
-> + * @str: string to convert to unicode
-> + *
-> + * Returns a void pointer to the buffer containing unicode string
-> + */
-> +void *ascii_to_utf16_unicode(u16 *p, const u8 *str)
-> +{
-
-Does this need to go to library somewhere?
-
-BR,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---X09ELK96AjtUktk9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZEJ1fwAKCRAw5/Bqldv6
-8vJfAJ9GV17J1jjrrXapJv4Y1ULKh0TKogCgnx32XNgfDS28gAnlJLciuHSUfPI=
-=LREm
------END PGP SIGNATURE-----
-
---X09ELK96AjtUktk9--
