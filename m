@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05386EA66E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17416EA670
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjDUJB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S231142AbjDUJBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjDUJBN (ORCPT
+        with ESMTP id S230075AbjDUJBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:01:13 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC86181
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:01:12 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24781e23c27so1725944a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682067672; x=1684659672;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=htXlbzqp63+STkQngEOa7IRTrX4+CKs8+lkcj1zjuBA=;
-        b=WfWdCg53KnsPK1wGGliG8omXQxaWB0yffD0IKbIUZr89Kh9g+sJUR9QNxKxpzh4Sxx
-         NubArbgxzPail9qsXDWSJMp11b1PFdAGvMwlalYJ5F1VMYK/567ihse6IAYzMMrFYnNn
-         3T1WWiQnaYf33fOHMrfZUvo8XGRmJjIWp4sc1FQJi2BZiENf0j3NuV7WreH4GlI19/sq
-         mALaXwZGfg4ndD5ESt4gBtyq0ORk4HaEyn5ANmj1yfbYoA6uonLAN4k49dwlyevKvtJh
-         WFmjK4nOwD5uviu3Nhen82d4CkLIYKZqei94ZHkKX7hYQJ/bhaU5VCbZZc3c+6OTa2y4
-         AlfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682067672; x=1684659672;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=htXlbzqp63+STkQngEOa7IRTrX4+CKs8+lkcj1zjuBA=;
-        b=fXmph0tnkdC0DDW4l0tVTfnGws/gfPOVj4xzWcrEPPTvdQ5CaG8ua2moRAwU/P8PKO
-         Corlom9VFXC6me3acrpNlC8faGofd9WH1xhP/+5PgUIXJF/3UZl85d9gJ6alQt4WZnY/
-         K2NDYUANBOJy5oEt7qPrK1hWikRkZFlZpnnjJbtqzRe82VChbUY/1MGgnQtyq9ErVKOX
-         TaJ/xtTwsMk3zi/I4Vr15mVRKLXx5FctZleG1P0kAkOL1du3GlqZ4XSLa93nTNR/67sX
-         R+qbuVypyIH1Qka6mWandRBFqW0f4eKHhQUJjAU5RS0ARBKg+nZp1PLq1G8l8NwJPLrV
-         l1zw==
-X-Gm-Message-State: AAQBX9eXhLTpNr51Jlmxzwgy+6plaVdtfW8IRTj2SL2nPAsuo1aKiE40
-        3XNCVhjwNTqaxgxiugPcsypBjJS3ujXrEAWHyoU=
-X-Google-Smtp-Source: AKy350bGHA4FJDPyqC/ylZM3xcKwUdvmSKfc+X34Lqu/SYkkQ9amRFAm50zKcAuICkw4FO8kYf7ZJT92jgJDQTkClJE=
-X-Received: by 2002:a17:90b:3912:b0:246:a599:1ccd with SMTP id
- ob18-20020a17090b391200b00246a5991ccdmr4491661pjb.16.1682067671850; Fri, 21
- Apr 2023 02:01:11 -0700 (PDT)
+        Fri, 21 Apr 2023 05:01:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35066181;
+        Fri, 21 Apr 2023 02:01:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 87037210E6;
+        Fri, 21 Apr 2023 09:01:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682067687; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNmeuisUtJOS0e4JRe3RCvMm6EO6FFE/WKAiRaEal/E=;
+        b=K+/pMMgMT/1YH1mt+8+9/w2LZ2UD4mCFUAQ1YFU30rAC7mqVOevf8rGc8o17oPSFYr4vdz
+        /i6m2+R4gGR/YhkSLr2womU1tMZhHX1apPj2dTsaT98wpMv/Tpfx/jxqba3JRUendTqmL1
+        Q2R2IT3h05b0AtMLSTKtVzNiu+44O28=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682067687;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNmeuisUtJOS0e4JRe3RCvMm6EO6FFE/WKAiRaEal/E=;
+        b=IT9nCn+/Ipnkil5UxQDEd2Gknx3JGzCc+mmfcxUbFGvdAp0ttwT4QpaKfbQuUdv3uX/EAQ
+        lpd2Nhg/eOGnTYBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F64413456;
+        Fri, 21 Apr 2023 09:01:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EjYjG+dQQmQrQQAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 21 Apr 2023 09:01:27 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CD5DAA0729; Fri, 21 Apr 2023 11:01:26 +0200 (CEST)
+Date:   Fri, 21 Apr 2023 11:01:26 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>
+Subject: Re: [RFC PATCH 0/3] permit write-sealed memfd read-only shared
+ mappings
+Message-ID: <20230421090126.tmem27kfqamkdaxo@quack3>
+References: <cover.1680560277.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:f947:b0:474:921b:34cc with HTTP; Fri, 21 Apr 2023
- 02:01:11 -0700 (PDT)
-Reply-To: carse2020@aol.com
-From:   Peter Boniface <kabocynthia1@gmail.com>
-Date:   Fri, 21 Apr 2023 09:01:11 +0000
-Message-ID: <CAG5ayEi=v28fPBZBWeBEj-10=PFaqY1ixcvGQNgWuj_hw7mDNg@mail.gmail.com>
-Subject: Inquiry.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_00,DEAR_SOMETHING,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680560277.git.lstoakes@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1034 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kabocynthia1[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kabocynthia1[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [carse2020[at]aol.com]
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  3.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sir,
+Hi!
 
-              I'm Peter Boniface, in my region. we specialised in
-cultivation and producing pure honey, cashew nut, groundnut, coconut,
-cocoa nut, shea nut, shea butter, coconut oil, coffee nut, coconut
-meat, palm kernel oil, palm oil, groundnut oil, cashew oil, garcinia,
-kola nut. ginger here in Ivory Coast, West Africa.
+On Mon 03-04-23 23:28:29, Lorenzo Stoakes wrote:
+> This patch series is in two parts:-
+> 
+> 1. Currently there are a number of places in the kernel where we assume
+>    VM_SHARED implies that a mapping is writable. Let's be slightly less
+>    strict and relax this restriction in the case that VM_MAYWRITE is not
+>    set.
+> 
+>    This should have no noticeable impact as the lack of VM_MAYWRITE implies
+>    that the mapping can not be made writable via mprotect() or any other
+>    means.
+> 
+> 2. Align the behaviour of F_SEAL_WRITE and F_SEAL_FUTURE_WRITE on mmap().
+>    The latter already clears the VM_MAYWRITE flag for a sealed read-only
+>    mapping, we simply extend this to F_SEAL_WRITE too.
+> 
+>    For this to have effect, we must also invoke call_mmap() before
+>    mapping_map_writable().
+> 
+> As this is quite a fundamental change on the assumptions around VM_SHARED
+> and since this causes a visible change to userland (in permitting read-only
+> shared mappings on F_SEAL_WRITE mappings), I am putting forward as an RFC
+> to see if there is anything terribly wrong with it.
 
-However, I got your address during the searching for an international
-buyer, and I decided to inform you that the above mentioned products
-are available for sale, with attractive prices.If you're interested,
-contact me for further information.
+So what I miss in this series is what the motivation is. Is it that you need
+to map F_SEAL_WRITE read-only? Why?
 
-Best regards,
-Peter Boniface.
-Cel: +2250152163893.
-Email: carse2020@aol.com
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
