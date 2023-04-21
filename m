@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2136F6EB4BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376E86EB4C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbjDUWa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S233591AbjDUWbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDUWaY (ORCPT
+        with ESMTP id S232770AbjDUWbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:30:24 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8261A1BF0;
-        Fri, 21 Apr 2023 15:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=HB77AFqGG2aBz+Earrmv/XakHzRKihV+YVKN5AMto9w=; b=4FAhsMmpd9R2NNkxWh/EOySpZr
-        3xMTf/cJ0+PNnJ2jbCGrZ6Gm69S6q3oAJkQ5yxUgkzhcpqqnYZvVCHMRG8Q44ftomMGgGmtsv/8/X
-        hLnbhCDJuUrYaDwBuiiHWOQXrGjbspvupGp/eN9bsdk3b24WwsY/XkPvVT5hwOMnBBpGjaVdxENjr
-        JoSB/n2YtzxQjl7qJQXY3ceKtXXJY4bChFW37Up6awJh/gBfz/LWtS/CSRHQfrPbEyn5NMMZ8oBKk
-        1goaCU9P4Fulz/XxFCHiY4WPfQQd0fy3A/4pu1F6QjPYE6VPjaXVeuxuTCdmZo1zkvy/1rmg6rqcb
-        /nt47FEw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ppzGj-00BxAj-0p;
-        Fri, 21 Apr 2023 22:30:17 +0000
-Date:   Fri, 21 Apr 2023 15:30:17 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Matthew Wilcox <willy@infradead.org>, agk@redhat.com,
-        snitzer@kernel.org, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
-        hch@infradead.org, djwong@kernel.org, minchan@kernel.org,
-        senozhatsky@chromium.org, patches@lists.linux.dev,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org, hare@suse.de, p.raghav@samsung.com,
-        da.gomez@samsung.com, kbusch@kernel.org
-Subject: Re: [PATCH 3/5] iomap: simplify iomap_init() with PAGE_SECTORS
-Message-ID: <ZEMOeb9Bt60jxV+d@bombadil.infradead.org>
-References: <20230421195807.2804512-1-mcgrof@kernel.org>
- <20230421195807.2804512-4-mcgrof@kernel.org>
- <ZELuiBNNHTk4EdxH@casper.infradead.org>
- <ZEMH9h/cd9Cp1t+X@bombadil.infradead.org>
- <47688c1d-9cf1-3e08-1f1d-a051b25d010e@kernel.dk>
+        Fri, 21 Apr 2023 18:31:41 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867601BF5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:40 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-953343581a4so311229966b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682116299; x=1684708299;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tHsoXDxz1/UTx6EBnwD4GozBhAQVv+WOC5RetDWcnZ4=;
+        b=uHsMB7x0Xp2Q+ayCfEMDyPvNll3SI8+ipJ52v+0W/l6PZk6dTdooXFXz7/uSwn+gb7
+         TGmOk+N5FQpWWnnVTFtrERp3aAELYIt5pO3/N8z0/qInvjfEW9+LXKZO1zATX1NTBK8K
+         /w0m3FMltIhO7NGnlMFqDxTCO+G0J5FG+tjnvkS/+PXn/+nZd03zVwOpxUSdcEnOS1Pg
+         c5zi5Kn2WvByRHRNogglHMlDIaBv0XY0+G3T2ZNmSO870iiGBPw3+/4oclcjlGgoigYk
+         YxYcwFKCBzKnt9ULlO4qV/C8KhFfA9/ZfmPejU/H6ih4OFMYLYp77zCn3nYTUb/eZabQ
+         JYIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682116299; x=1684708299;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tHsoXDxz1/UTx6EBnwD4GozBhAQVv+WOC5RetDWcnZ4=;
+        b=assXL7bd3emeA94ts9m7MGVutGh60cv7MEEMbZr4boCzDSMLsQTgqwaieyNgIDdhGr
+         HNEuE4evYmPouQV3r2ImtwFsYck36BLrN2C3rL9eyk166LBgG+RQPJ9kWs/UBIjI/8k4
+         ZjATzVNyumL8sKGAD2SkX36VfWJ8ysH+rEtNg5HJMw3KDOYiaQteQAVn1sj7oEf7SQpo
+         WKI1wbJFNw9bcFpEwZp8TxHiD+K+3gVVN4G+ZzcI0CoTDxJBNMjEhgaNH28Af6ClVEYG
+         Fi+pNgU+19tLknk1nkoXp4XLw5+H1H9gtDrXVLuxeryNBwSjl2rhXT8DqvhO/aa+LTOL
+         WhUw==
+X-Gm-Message-State: AAQBX9cm35VN77jUDVSgR3EZ0d94b9gmHljmH3TuS7RqF4qlLnG9wuLA
+        GBQ0QCw6SQFMuHNO+BhM4yygJA==
+X-Google-Smtp-Source: AKy350Y2WtdIrB8KUkVxhNUfP+cw41JryLuepwl1MmDWr8r7jE/LiFDauoeJJ2LjhOQ/r86bda7hjg==
+X-Received: by 2002:a17:906:b147:b0:933:868:413a with SMTP id bt7-20020a170906b14700b009330868413amr3914177ejb.15.1682116299030;
+        Fri, 21 Apr 2023 15:31:39 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id sd22-20020a1709076e1600b009572bd99281sm1077677ejc.224.2023.04.21.15.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 15:31:38 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: allwinner: a64: add missing cache properties
+Date:   Sat, 22 Apr 2023 00:31:37 +0200
+Message-Id: <20230421223137.115015-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <47688c1d-9cf1-3e08-1f1d-a051b25d010e@kernel.dk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 04:24:57PM -0600, Jens Axboe wrote:
-> On 4/21/23 4:02 PM, Luis Chamberlain wrote:
-> > On Fri, Apr 21, 2023 at 09:14:00PM +0100, Matthew Wilcox wrote:
-> >> On Fri, Apr 21, 2023 at 12:58:05PM -0700, Luis Chamberlain wrote:
-> >>> Just use the PAGE_SECTORS generic define. This produces no functional
-> >>> changes. While at it use left shift to simplify this even further.
-> >>
-> >> How is FOO << 2 simpler than FOO * 4?
-> >>
-> >>> -	return bioset_init(&iomap_ioend_bioset, 4 * (PAGE_SIZE / SECTOR_SIZE),
-> >>> +	return bioset_init(&iomap_ioend_bioset, PAGE_SECTORS << 2,
-> > 
-> > We could just do:
-> > 
-> > 
-> > -	return bioset_init(&iomap_ioend_bioset, 4 * (PAGE_SIZE / SECTOR_SIZE),
-> > +	return bioset_init(&iomap_ioend_bioset, 4 * PAGE_SECTORS,
-> > 
-> > The shift just seemed optimal if we're just going to change it.
-> 
-> It's going to generate the same code, but the multiplication is arguably
-> easier to read (or harder to misread).
+As all level 2 and level 3 caches are unified, add required
+cache-unified property to fix warnings like:
 
-Then let's stick with the 4 * PAGE_SECTORS. Let me know if you need another
-patch.
+  sun50i-a64-pine64-lts.dtb: l2-cache: 'cache-unified' is a required property
 
-  Luis
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Please take the patch via sub-arch SoC tree.
+---
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
+index 62f45f71ec65..a9c7f82c2c66 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
+@@ -93,6 +93,7 @@ cpu3: cpu@3 {
+ 		L2: l2-cache {
+ 			compatible = "cache";
+ 			cache-level = <2>;
++			cache-unified;
+ 		};
+ 	};
+ 
+-- 
+2.34.1
+
