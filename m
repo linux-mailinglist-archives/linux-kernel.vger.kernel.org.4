@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42656EAF46
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88666EAF4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbjDUQgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S232157AbjDUQhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbjDUQgP (ORCPT
+        with ESMTP id S233184AbjDUQh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:36:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21291544C;
-        Fri, 21 Apr 2023 09:36:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682094973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AMzOR95vay5pg0WrO+uJUGs+TLmecn0h01ht4y+YBW4=;
-        b=o/TkSlykoJbZmwaCartOT04EgN5C+kODI7gZukI9DsIFy2Dgj3RH1WuWvwMvvYXkyiHIQk
-        oxshpYHuRgHC8o/JYqoEGQ0sMgPeCIrVwZGLDjjKa0oD47tebLMPcc0kwKmrYNmhibL69p
-        CuPI7WXBesGu+IQZaD33O9Vh8aqxpxbvEKmf8Inm6RIaaj7YSGPtkcXqQaDLBztSRLFiTD
-        jAl7P2Gr2fqg2KdBtxFZJUc3m5xmd9qgJZ7OLjPxBmIrUzXSJ1uWPWJLXceKreW9vWpPl+
-        SmWK7o2t1K1ok1OKIOZ0yX0u1SEvxXShW0sf3Kg6kxQp0c93gSDpceB1rVFESQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682094973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AMzOR95vay5pg0WrO+uJUGs+TLmecn0h01ht4y+YBW4=;
-        b=44dX9VJX+TMEmkgFv0MNfddpnQu4SMuQ4SBx4WdfdKvH1kS+zbYESmYQqIpwSH+YghznlV
-        s1xiQKd/rkmpEKCg==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <87sfcu2wup.ffs@tglx>
-References: <87r0sh4m7a.ffs@tglx>
- <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
- <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
- <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
- <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
- <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
- <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
- <56e59a4d-a47f-4bfe-7db5-5f921062ad69@molgen.mpg.de> <87sfcu2wup.ffs@tglx>
-Date:   Fri, 21 Apr 2023 18:36:12 +0200
-Message-ID: <87bkjh2nwj.ffs@tglx>
+        Fri, 21 Apr 2023 12:37:29 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC7C15464
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:37:09 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so3148395a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682095027; x=1684687027;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qwm7nC58x6Qg4M4BLeXeY+IRBzBS+KjdazE+g1goFZk=;
+        b=cUGizRfjIXcfg5P+5cJVp+JcsumxnDw52sCla7aQOesNv3HWTeGTTUu+clkj3SO+Jt
+         UkF8A4atIopljeZlvVBVZdeU5Ou0dmG8E6IPK+E1zwSjNSreqwOalmCVtFltT1SUawKF
+         LIl0BKKYc9AE7QvABQHHlZVoXPPDBGb3cWkbSyQPWHZgatjXZVCjRQ9P1BrqGCVZGVyI
+         uYQEdPxPBIBb4ja+UdS+qctfV2wGQPV4zOqpyCRmohvt5J+t0SU0R5z8z6o60umlZf9e
+         S/hQSXUIqbelyvbSUwVkBtqqbqT5e7VHXu0owa5LQ1q9Z5vWa2OxOTekB/FwGHKcpEua
+         GNhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682095027; x=1684687027;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qwm7nC58x6Qg4M4BLeXeY+IRBzBS+KjdazE+g1goFZk=;
+        b=YeAaBd1HzwH7VBnu6g+dySNwGzMx+B8hWU0Unvuxnh2HSLBKaZIdl1b+W0nvDOeNG9
+         EAzZpsfOFFwnRWAs796jIi7JnCizbEWUIsZlqouWa0zDx8ubXi/SHNeMvzl1uGKuvV4l
+         L1WOTUwH5OdU90qqD9kgUZbm/XTk6bRcphx+zAsg5KOdc+fKtujYQxNbIS98X22twGZM
+         R+48HxnzaDi5W4WB/ptf03WB0G+AYKKmDuPBUzSMpjXd0nLrnzvwJpJuujIzTypn3zPh
+         Ng0PST0tSsKq/ETnM8IrxWeZvfqnv0GvRoeXS+DWl/16H5wKN3dls9kyJU10zyXIOgkv
+         qNEw==
+X-Gm-Message-State: AAQBX9cTqjGptBrLd/2t4rJXrkEO4DNAJJiMZTy5uZshfy22KjA9H6QO
+        b7s6VNZSeXX4voQn2YjkErEGNg==
+X-Google-Smtp-Source: AKy350atdmkxUyilew1Q6xsOtvyIiqhC+U/ckBLAq7AQ8Q8Vu+X6Eirq+VWhTiX9BrshfXr7DPPUEQ==
+X-Received: by 2002:a17:906:fcd9:b0:94a:56ec:7f12 with SMTP id qx25-20020a170906fcd900b0094a56ec7f12mr2820823ejb.30.1682095027250;
+        Fri, 21 Apr 2023 09:37:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id op4-20020a170906bce400b0094f39379230sm2254990ejb.163.2023.04.21.09.37.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:37:06 -0700 (PDT)
+Message-ID: <6747425a-fff7-c873-bf7e-05786d67cc7e@linaro.org>
+Date:   Fri, 21 Apr 2023 18:37:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: sound: Add TDM for StarFive JH7110
+Content-Language: en-US
+To:     Walker Chen <walker.chen@starfivetech.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20230420024118.22677-1-walker.chen@starfivetech.com>
+ <20230420024118.22677-2-walker.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420024118.22677-2-walker.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20 2023 at 21:10, Thomas Gleixner wrote:
-> On Thu, Apr 20 2023 at 18:47, Paul Menzel wrote:
->> Am 20.04.23 um 17:57 schrieb Thomas Gleixner:
->> I quickly applied it on top of your branch, but I am getting:
->
-> As I said it was untested. I was traveling and did not have access to a
-> machine to even build it completely. Fixed up and tested version below.
+On 20/04/2023 04:41, Walker Chen wrote:
+> Add bindings to describe the TDM driver for the StarFive JH7110 SoC.
+> 
+> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+> ---
+>  .../bindings/sound/starfive,jh7110-tdm.yaml   | 98 +++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+> 
 
-I've updated
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-for your conveniance.
 
-Thanks,
+Best regards,
+Krzysztof
 
-        tglx
