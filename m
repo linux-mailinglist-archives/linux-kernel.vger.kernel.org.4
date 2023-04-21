@@ -2,105 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC8D6EA3D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218826EA3D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDUG3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 02:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S229933AbjDUG33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 02:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjDUG3A (ORCPT
+        with ESMTP id S229878AbjDUG30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 02:29:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E035420B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 23:28:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 21 Apr 2023 02:29:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2044233;
+        Thu, 20 Apr 2023 23:29:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE67F64E06
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:28:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A3AC433EF;
-        Fri, 21 Apr 2023 06:28:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682058535;
-        bh=fDzyTwqwYy1p3E1HPlBerUNEVhCJC25uaFNzEjHZIpo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SGjhVfixPmGjuaAJVvku0cH3xNGa38Gx0ysu7qeDMkzf7dJ1rGglsr0vKFF2BpHqT
-         GPgAZwgmY6v6+sekGp8RoiP5A5IZQgTg68avEKyX06/daqD+xvRmRHV9SANnXofIbg
-         XLKgHXj8z4HiPXKw4t11dg7XWgRwMXph6ER1SmqEGPS76CNgYV39aapQZntVbMJSpv
-         1pqRqcrQzR2tm4EsOigXsoOIpUk1aVQi1+0YjG17t949/efhcVUHLtuW788Hwo2tjE
-         h+FVTzbVyS1DitCtuTXnLvkfm82ugcNhO29085r18rC7vGkNr3ORCUcn3z52CzOJd7
-         +iOcbApRk332w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ppkGc-000659-JO; Fri, 21 Apr 2023 08:29:11 +0200
-Date:   Fri, 21 Apr 2023 08:29:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org
-Subject: Re: [PATCH 02/22] greybus: Use alloc_ordered_workqueue() to create
- ordered workqueues
-Message-ID: <ZEItNlmuw5MHDBXH@hovoldconsulting.com>
-References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-3-tj@kernel.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 090FA1FDDD;
+        Fri, 21 Apr 2023 06:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682058564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8LMGs8OgZhTiQIL7If/TwogM3aMQ0ZAQ/vhVCy32mQY=;
+        b=0inpvk1NXaNGsFqI8R/9/QqQkeZZEbDsL9KIr++c78m4EuQ7tD6emwfIYogouqsqqHwOSZ
+        NKz61VnyEgMrGsV/unZt4UPyQSGellfBsYod2flI/r/VVzMbAPUFntR9ulS0H0FC0DICVz
+        TIAF5wILUW8QAp5GqumcIgBMr1KnNHA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682058564;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8LMGs8OgZhTiQIL7If/TwogM3aMQ0ZAQ/vhVCy32mQY=;
+        b=EfWmB8SfH3AIi4iI+n1CZoyVVOUXfMb7WAZeu0Lpv6l2M8enbwqPTSDkrU9jYajhPYl+hS
+        ZNjfhzlMstLZtADg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D960B1390E;
+        Fri, 21 Apr 2023 06:29:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EF8hNEMtQmREcQAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 21 Apr 2023 06:29:23 +0000
+Message-ID: <72ecc5fc-0ff4-5592-3293-f4204633fc8e@suse.de>
+Date:   Fri, 21 Apr 2023 08:29:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421025046.4008499-3-tj@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH REPOST blktests v2 4/9] nvme: Use runtime fio background
+ jobs
+Content-Language: en-US
+To:     Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
+References: <20230421060505.10132-1-dwagner@suse.de>
+ <20230421060505.10132-5-dwagner@suse.de>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230421060505.10132-5-dwagner@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 04:50:26PM -1000, Tejun Heo wrote:
-> BACKGROUND
-> ==========
+On 4/21/23 08:05, Daniel Wagner wrote:
+> The fio jobs are supposed to run long in background during the test.
+> Instead relying on a job size use explicit runtime for this.
 > 
-> When multiple work items are queued to a workqueue, their execution order
-> doesn't match the queueing order. They may get executed in any order and
-> simultaneously. When fully serialized execution - one by one in the queueing
-> order - is needed, an ordered workqueue should be used which can be created
-> with alloc_ordered_workqueue().
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+>   tests/nvme/032 | 2 +-
+>   tests/nvme/040 | 3 ++-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tests/nvme/032 b/tests/nvme/032
+> index 017d4a339971..81e074cc11bc 100755
+> --- a/tests/nvme/032
+> +++ b/tests/nvme/032
+> @@ -39,7 +39,7 @@ test_device() {
+>   
+>   	# start fio job
+>   	_run_fio_rand_io --filename="$TEST_DEV" --size=1g \
+> -		--group_reporting  &> /dev/null &
+> +		--group_reporting --time_based --runtime=1m &> /dev/null &
+>   
+>   	sleep 5
+>   
+> diff --git a/tests/nvme/040 b/tests/nvme/040
+> index 04bd726cd309..8d29f905adb5 100755
+> --- a/tests/nvme/040
+> +++ b/tests/nvme/040
+> @@ -38,7 +38,8 @@ test() {
+>   	# start fio job
+>   	echo "starting background fio"
+>   	_run_fio_rand_io --filename="/dev/${nvmedev}n1" --size=1g \
+> -		--group_reporting --ramp_time=5  &> /dev/null &
+> +		--group_reporting --ramp_time=5 \
+> +		--time_based --runtime=1m &> /dev/null &
+>   	sleep 5
+>   
+>   	# do reset/remove operation
 
-> This patch series audits all callsites that create an UNBOUND workqueue w/
-> @max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
-> 
-> WHAT TO LOOK FOR
-> ================
-> 
-> The conversions are from
-> 
->   alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
-> 
-> to
-> 
->   alloc_ordered_workqueue(flags, args...)
-> 
-> which don't cause any functional changes. If you know that fully ordered
-> execution is not ncessary, please let me know. I'll drop the conversion and
-> instead add a comment noting the fact to reduce confusion while conversion
-> is in progress.
-> 
-> If you aren't fully sure, it's completely fine to let the conversion
-> through. The behavior will stay exactly the same and we can always
-> reconsider later.
-> 
-> As there are follow-up workqueue core changes, I'd really appreciate if the
-> patch can be routed through the workqueue tree w/ your acks. Thanks.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: greybus-dev@lists.linaro.org
+Wouldn't it be better to let _run_fio_rand_io pick the correct size?
 
-Acked-by: Johan Hovold <johan@kernel.org>
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
