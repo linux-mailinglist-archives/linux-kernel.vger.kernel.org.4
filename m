@@ -2,118 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DBC6EAA68
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519F56EAA5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjDUMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S231664AbjDUM1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjDUMeO (ORCPT
+        with ESMTP id S229464AbjDUM1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:34:14 -0400
-X-Greylist: delayed 203 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 05:34:12 PDT
-Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666391AE;
-        Fri, 21 Apr 2023 05:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682080450;
-        bh=E5ogk5vGgouYtZylPwN/B6rVm8IFTTc1usoLg+OEchk=;
-        h=From:To:Cc:Subject:Date;
-        b=p+PSrKxtxClZK+y6YlMT46HV8RUuouo/kBdbdDZfph68+lKCcc+8iyVnCw8YIuLqL
-         eg6Yy3t8KJgXUbTPi/mFhlhvTFc2vf3hnDdlZiih3VwK+hg8WLXyZ2FI12ove4TBY4
-         s6RFHYNAKjoqUaw3B/v/mKPoJclNDe5XBmxt67C0=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id 6A93EC29; Fri, 21 Apr 2023 20:26:41 +0800
-X-QQ-mid: xmsmtpt1682080001tyjygpl3a
-Message-ID: <tencent_7654045EAF47B511E90DE4848CB2342E7509@qq.com>
-X-QQ-XMAILINFO: Mee1Vp/QiDAWXMQ6xzehAwpwdutSjxTnc1irddOHDbiCsu/oUI2GYLkOoNwLet
-         i7HyvtvvuTcleQgwXv4AnQzPlLQxl14muN4BkkjsRw6OF1HZJUWTGB6IyT6dDOhQaAzzUCWUh5SB
-         oYLAgZtiQABcu7XR/O/Sq40hOPiGeBUstVIuvEHX9VzsRWZ9jrvG8V8TO8NSsml28tQOVehylz+j
-         qVyfUge0kfb+7KZzxHnVn6JdzjpW5Fvpq8C8cIqJYQVTpQtSf43HuAlrdMEL/OpBjTrUVXWjoDG1
-         AfjFf7tTGZbZic3A6PxL2dSCSm94lDI2DP5zb8ooox64SbdCgA5vMEmnRseZEy5NrbkWhJ+VTAnx
-         e1NNjFyhMRgObLpv45m97RKqXqgXU95n0QxdaXzGCQ/jrLJvG1rMSIoAd3HQSVlAHV9Xqd0+Tp2a
-         msaiPfIBsfcOptxQk8pz/ZP2/BjaRmq5IIjhuoyEkIH+el+lP1mtEeVdLrpCmh3mSxAODEynHMvT
-         RLYsDNMHiGSepaDhtHKRzYz6a2aUJtO7SZMB/hzMsBZt+hbx3sAGyUdrjwWOQTIEecjZFxOdM2nt
-         EgcN905INWq/gCmb9/lNYHGdpn5t/VA3C5S1c3Hb1+/tQRgivPW6/Hv5HLi03kM3VvXD/ikxokZm
-         wyGZw4PfQ8UHlgHRdb58jwZOMOwi9xTzi8uOU+VvuMTbEDGCT9lNgHr/k8TGA1Vqz7BsJz33KaYe
-         a0DuIOBPp7lBdLgc9yeYi3QL6PiOEZzUCl9Sj8jhY3n5x2JPf7Y7QE2PrWvJXDI9qI3JF7SGZcoo
-         M1i6N1UGoj+4+hrfmeP+9gS5Ai4oJ7peq/mW05y5bmFm0HdVLC1FBYX6UZpQP0ZRAl7h4VdZhn06
-         qnk8SgCWE2In/lH/DyOzXC/QRzQOCVjT4o0KhEyJxB659GJN2schXfFD3mVp8rb5z+4XXxNr/l0m
-         91mfS0pI31ggS/3IwzTen/poBuA6X9/iuH+mHaDGhvwKczn2ZnmRdSHB65rkP51ak7aCEWe0HMB9
-         h23D81Qw==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     axboe@kernel.dk
-Cc:     Rong Tao <rongtao@cestc.cn>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org (open list:IO_URING),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tools/io_uring/io_uring-cp: Fix two compile warings
-Date:   Fri, 21 Apr 2023 20:26:35 +0800
-X-OQ-MSGID: <20230421122635.242293-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 21 Apr 2023 08:27:22 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10331A5E4;
+        Fri, 21 Apr 2023 05:27:21 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b9941f4a652so3864276.0;
+        Fri, 21 Apr 2023 05:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682080040; x=1684672040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DQV0FUHVgTyr3sKGhtOpetQjh4FYMTAof8GhJk2jFzo=;
+        b=DOYBnsZ3Ca1fTcTjwnJpiKRKP+0seId83JMiXybBYOkYX6s22WKaqA2/pFO0hFjGkG
+         c5j+2GyaLyJIXVsQYWVfCjdS5Z/Gh+9QORCu6Lh3gGe9bpOSYt52d+NbmSIy9oaWlkz5
+         nOpRp47Cba4YCaLgAVUdZQIunKyNYuXFqSqi7ip1mukEXxmtFLLajuuLUrZ6yWU3ODx6
+         hnG/5kLYX/DHExgOF7dJUHcmy4hwNB3pU75eL3UggpVNXP2VL5lCjtiykwZlNae4IlSh
+         pe/T0fPWWVuZTYD3yiP1iAo+Vj7xokm+B2bFl/kNXq7+PFMWDlPk5znStfgBBrHr5SSW
+         eF7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682080040; x=1684672040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DQV0FUHVgTyr3sKGhtOpetQjh4FYMTAof8GhJk2jFzo=;
+        b=OLMIWRYs42MBnXe4SkZNx9RUaePZb1eN1xNehe2K5Uo7FWLZ+PdL3WdS9OnPd0GohE
+         hO9WKmaXjh6oTyRwcadSD2qOLc/lj9EJB9qJ37DwfLtT54RqdCcDdVxdQm2ddZRvzoju
+         gre/haKli4KG6s+DjlsIhyMr7bleMsYKfUappkFQOIgjj062y3xGEGLTLMjkejxMSt+g
+         BSWbeMr8uLlKMCK5bNMte29qVyv/ZUlEdZiO8hcGwvXS5hjIxtL3gEjxSzVnrBQ8zAmJ
+         9w2EjbBWHa2uZXpYVVd0bHcoIo4BTpHcZxuItYRK2OlQOB4hxs1xp02ORlwZxc33uHYL
+         qrqw==
+X-Gm-Message-State: AAQBX9cFqSju7LaAnaIrCgtKUe+/ZGn1b2PSLh8eM18fN7o5OgPCicJX
+        n0gq+1bUp4CXdXLTby3vCx8V3x7OZU3YB9dhr7w=
+X-Google-Smtp-Source: AKy350ZoWJQiG1Y6sTZgVbEjMaUShUqiByyAL19aUrMuFWuJVKNYrgeKYH/X5MY56flB1H8dU3jAtgpD1omjKMpzrN4=
+X-Received: by 2002:a81:1a0b:0:b0:54f:a9e4:e79 with SMTP id
+ a11-20020a811a0b000000b0054fa9e40e79mr2819066ywa.2.1682080040176; Fri, 21 Apr
+ 2023 05:27:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20230406130205.49996-2-kal.conley@dectris.com>
+ <87sfdckgaa.fsf@toke.dk> <ZDBEng1KEEG5lOA6@boxer> <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
+ <875ya12phx.fsf@toke.dk> <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
+ <87ile011kz.fsf@toke.dk> <CAHApi-=ODe-WtJ=m6bycQhKoQxb+kk2Yk9Fx5SgBsWUuWT_u-A@mail.gmail.com>
+ <874jpdwl45.fsf@toke.dk> <CAHApi-kcaMRPj4mEPs87_4Z6iO5qEpzOOcbVza7vxURqCtpz=Q@mail.gmail.com>
+ <ZEJZYa8WT6A9VpOJ@boxer> <87r0sdsgpf.fsf@toke.dk>
+In-Reply-To: <87r0sdsgpf.fsf@toke.dk>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Fri, 21 Apr 2023 14:27:09 +0200
+Message-ID: <CAJ8uoz3WTCtqtU+EwHqDaKZfBrn=bVbNDhYYqNWahCo24ZHYZg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Kal Cutter Conley <kal.conley@dectris.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On Fri, 21 Apr 2023 at 12:01, Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat=
+.com> wrote:
+>
+> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+>
+> > On Tue, Apr 18, 2023 at 01:12:00PM +0200, Kal Cutter Conley wrote:
+> >
+> > Hi there,
+> >
+> >> > >> In addition, presumably when using this mode, the other XDP actio=
+ns
+> >> > >> (XDP_PASS, XDP_REDIRECT to other targets) would stop working unle=
+ss we
+> >> > >> add special handling for that in the kernel? We'll definitely nee=
+d to
+> >> > >> handle that somehow...
+> >> > >
+> >> > > I am not familiar with all the details here. Do you know a reason =
+why
+> >> > > these cases would stop working / why special handling would be nee=
+ded?
+> >> > > For example, if I have a UMEM that uses hugepages and XDP_PASS is
+> >> > > returned, then the data is just copied into an SKB right? SKBs can
+> >> > > also be created directly from hugepages AFAIK. So I don't understa=
+nd
+> >> > > what the issue would be. Can someone explain this concern?
+> >> >
+> >> > Well, I was asking :) It may well be that the SKB path just works; d=
+id
+> >> > you test this? Pretty sure XDP_REDIRECT to another device won't, tho=
+ugh?
+> >
+> > for XDP_PASS we have to allocate a new buffer and copy the contents fro=
+m
+> > current xdp_buff that was backed by xsk_buff_pool and give the current =
+one
+> > back to pool. I am not sure if __napi_alloc_skb() is always capable of
+> > handling len > PAGE_SIZE - i believe there might a particular combinati=
+on
+> > of settings that allows it, but if not we should have a fallback path t=
+hat
+> > would iterate over data and copy this to a certain (linear + frags) par=
+ts.
+> > This implies non-zero effort that is needed for jumbo frames ZC support=
+.
+> >
+> > I can certainly test this out and play with it - maybe this just works,=
+ I
+> > didn't check yet. Even if it does, then we need some kind of temporary
+> > mechanism that will forbid loading ZC jumbo frames due to what Toke
+> > brought up.
+>
+> Yeah, this was exactly the kind of thing I was worried about (same for
+> XDP_REDIRECT). Thanks for fleshing it out a bit :)
+>
+> >> >
+> >>
+> >> I was also asking :-)
+> >>
+> >> I tested that the SKB path is usable today with this patch.
+> >> Specifically, sending and receiving large jumbo packets with AF_XDP
+> >> and that a non-multi-buffer XDP program could access the whole packet.
+> >> I have not specifically tested XDP_REDIRECT to another device or
+> >> anything with ZC since that is not possible without driver support.
+> >>
+> >> My feeling is, there wouldn't be non-trivial issues here since this
+> >> patchset changes nothing except allowing the maximum chunk size to be
+> >> larger. The driver either supports larger MTUs with XDP enabled or it
+> >> doesn't. If it doesn't, the frames are dropped anyway. Also, chunk
+> >> size mismatches between two XSKs (e.g. with XDP_REDIRECT) would be
+> >> something supported or not supported irrespective of this patchset.
+> >
+> > Here is the comparison between multi-buffer and jumbo frames that I did
+> > for ZC ice driver. Configured MTU was 8192 as this is the frame size fo=
+r
+> > aligned mode when working with huge pages. I am presenting plain number=
+s
+> > over here from xdpsock.
+> >
+> > Mbuf, packet size =3D 8192 - XDP_PACKET_HEADROOM
+> > 885,705pps - rxdrop frame_size=3D4096
+> > 806,307pps - l2fwd frame_size=3D4096
+> > 877,989pps - rxdrop frame_size=3D2048
+> > 773,331pps - l2fwd frame_size=3D2048
+> >
+> > Jumbo, packet size =3D 8192 - XDP_PACKET_HEADROOM
+> > 893,530pps - rxdrop frame_size=3D8192
+> > 841,860pps - l2fwd frame_size=3D8192
+> >
+> > Kal might say that multi-buffer numbers are imaginary as these patches
+> > were never shown to the public ;) but now that we have extensive test
+> > suite I am fixing some last issues that stand out, so we are asking for
+> > some more patience over here... overall i was expecting that they will =
+be
+> > much worse when compared to jumbo frames, but then again i believe this
+> > implementation is not ideal and can be improved. Nevertheless, jumbo
+> > frames support has its value.
+>
+> Thank you for doing these! Okay, so that's between 1-4% improvement (vs
+> the 4k frags). I dunno, I wouldn't consider that a slam dunk; would
+> depend on the additional complexity if it is worth it to do both, IMO...
 
-Resolve compilation warnings:
+If we are using 4K frags, the worst case is that we have to use 3
+frags to cover a 9K packet. Interpolating between the results above
+would mean somewhere in the 1 - 6% range of improvement with jumbo
+frames. Something that is not covered by these tests at all is the
+overhead of an abstraction layer for dealing with multiple buffers. I
+believe many applications would choose to have one to hide the fact
+that there are multiple buffers. So I think these improvement numbers
+are on the lower side.
 
-    $ make
-    ...
-    cc -Wall -Wextra -g -D_GNU_SOURCE -o io_uring-cp io_uring-cp.c \
-        setup.o syscall.o queue.o
-    io_uring-cp.c: In function ‘copy_file’:
-    io_uring-cp.c:158:31: warning: comparison of integer expressions of
-    different signedness: ‘int’ and ‘long unsigned int’ [-Wsign-compare]
-    158 |                 if (had_reads != reads) {
-        |                               ^~
-    io_uring-cp.c:201:45: warning: comparison of integer expressions of
-    different signedness: ‘__s32’ {aka ‘int’} and ‘size_t’ {aka ‘long
-    unsigned int’} [-Wsign-compare]
-    201 |                    } else if (cqe->res != data->iov.iov_len) {
-        |                                        ^~
+But agree that we should factor in the complexity of covering the
+cases you have brought up and see if it is worth it.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/io_uring/io_uring-cp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/io_uring/io_uring-cp.c b/tools/io_uring/io_uring-cp.c
-index d9bd6f5f8f46..8a0ecaf78bda 100644
---- a/tools/io_uring/io_uring-cp.c
-+++ b/tools/io_uring/io_uring-cp.c
-@@ -131,7 +131,8 @@ static int copy_file(struct io_uring *ring, off_t insize)
- 	writes = reads = offset = 0;
- 
- 	while (insize || write_left) {
--		int had_reads, got_comp;
-+		unsigned long had_reads;
-+		int got_comp;
- 
- 		/*
- 		 * Queue up as many reads as we can
-@@ -198,7 +199,7 @@ static int copy_file(struct io_uring *ring, off_t insize)
- 				fprintf(stderr, "cqe failed: %s\n",
- 						strerror(-cqe->res));
- 				return 1;
--			} else if (cqe->res != data->iov.iov_len) {
-+			} else if ((size_t)cqe->res != data->iov.iov_len) {
- 				/* Short read/write, adjust and requeue */
- 				data->iov.iov_base += cqe->res;
- 				data->iov.iov_len -= cqe->res;
--- 
-2.39.1
-
+> -Toke
+>
