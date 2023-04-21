@@ -2,144 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE546EA6A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F169A6EA6B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjDUJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S230033AbjDUJOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDUJNU (ORCPT
+        with ESMTP id S229877AbjDUJOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:13:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8171E119
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:19 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f7a0818aeso184430066b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682068398; x=1684660398;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GDGviXm56iw0H7024sVpY4RPcdWW661P1mE6dj5J4M=;
-        b=e2wH4ZLNbzuwfwD2s6evo30QlJoE3zm41aiOGGQpV1Gw8KK2hfnVJAYFE6r9GQqI0p
-         tNkupzQuvbQ9D1my7s6PCwOvlOsMnct+HZaw6tsJba/NDdk8iBBFuPHss1t1UvqsZRyR
-         mMu6TAE8MKPgzeg+HexYkKFZxlJD2GuPVlIy84DRhpgJ1PzbrNN1lVFbDGiePqOjw7ov
-         xxSJk4adEej07B79rHrFCcbMFZ4agPy1sFQYCZIpeoY+tJnQldMFhr1RdhhTh4S7Zr01
-         3FTVG+WjJapdQpo7Xom3THwDGQ8cNJ/EfriE3CdXYxSBVC8PrMd6jbdJD50LwJEzBZeN
-         j0Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682068398; x=1684660398;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0GDGviXm56iw0H7024sVpY4RPcdWW661P1mE6dj5J4M=;
-        b=lTaZn1sBZUhCjlj7kJ7BogZxwiHJCqwSSJ+Ukz0MwXJbmIkRPSh6l7ADTAk/vq9IBp
-         kf6IdtY9bJjC417HjpCKfvap3PTJ3skfxmNKuIEpuaAPSzE6HLHFujEoicods7dwuBAq
-         JPEqzlHwG5JtNrPfg9qgnRKDntBw7jW4cZbT9eKep9xcl1SccZtRsBFzxP/zJy/wAhcM
-         /YmtEAiQplixr13iV7CXUeVVxaf2D3G+vjJ1AkCFTz8+ls8wMRcJUkQPPj8z7C8Q0Vw0
-         8ptvxpX0WqygRV8gElH7O5v21InxDnLIMx+5X86lvNt5EKRj/H8fCk5XnPzGk30PHxzS
-         Wytg==
-X-Gm-Message-State: AAQBX9cAB/3CDAYvw0dEHaMJ+4c/O6KFb5moMGwde694PmCfh7xIi0R6
-        LHHeePZnvMBMdCHrAdhDA97KgimzFa0m+ouT
-X-Google-Smtp-Source: AKy350buCLnS7EQtpHhcjIi/BvVY6ZbSHpOlHHT3R9Dlih0LQ1HIIXJ2L3sbEsDwXZFJTJbajME83w==
-X-Received: by 2002:a17:906:b2d7:b0:94a:5a9e:9da0 with SMTP id cf23-20020a170906b2d700b0094a5a9e9da0mr1383067ejb.77.1682068397567;
-        Fri, 21 Apr 2023 02:13:17 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id lc21-20020a170906dff500b0094ef10eceb3sm1766775ejc.185.2023.04.21.02.13.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 02:13:17 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Subject: [PATCH RFC v2 0/2] regulator: dynamic voltage monitoring support
-Date:   Fri, 21 Apr 2023 11:13:05 +0200
-Message-Id: <20230419-dynamic-vmon-v2-0-c303bcc75ebc@skidata.com>
+        Fri, 21 Apr 2023 05:14:01 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA8FB459;
+        Fri, 21 Apr 2023 02:13:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YpkX8iUw2vPd7+i6QIS5s1simCpzxoGmSNCNHcRhm67b0G6Z3fgoYoL0MgnoN4FTyHSp86uYds327tRFfdboEYkEWR42TLSgE7e8yxyuLVWMUrobPT8OVzvKZ9d9tOjAURYZ8AxotA/GqjYX3gLoi7ChcTY/UqZrxm03i/JumowtHELRHYtwNFOzKkkFP3R9V2mZy6iRLIoZCfeQMNmyhI0bpnbZWJx0CMoBpZBqK5XsRtAIAox8TQFNbamHD5QHk4S8KdMezyZEZ9EvTOF+G2QBs0ga9dg5a918RzlLvLRJzVnzNK8vrnOxaXA+JeebTzbCKzK7HocEUWAhiEFkJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KBymlZELQ1LwIUGIMOnDuoWy9yoiLRYT/iqSZYI/H1k=;
+ b=IV8dAYKrubT6cUSTjtKj2LF2tOPyvUW8H4zPP3hJFtk7brY3gHuWaYBuNF+IGorhNQGKZekG54G2BgUDIuYNnyIQsJaKuGIcWCzt5suplKEPcgF/IMzi9q3VfzZdk2+QOiJIr2a51mF0WBy0JlyjuOSEcsi4w39DQBLQ0xsREjay1j6x5qfyqXvGIjqX0c1qdTIHlFuYy8yUiAU6ZAI+aqJ/V/iD5wNL3XtWYIufuyxe0xfoXmNUPxHPCkF4kVIko8eYmRhBrjNE1lKFFMtVcxZBLOLwq9GZ+5V45uCl0o2z3UOK2FoJTa20TUdP7H9rf3/s4ocVweDHYtfikeu+vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KBymlZELQ1LwIUGIMOnDuoWy9yoiLRYT/iqSZYI/H1k=;
+ b=Z+95gq1Up2wzRAywaGddBcIM0GKzFtnLGHdbN3khLh/nmgcKBF+b/U+8lOR//1iNExzAHlj3lzQppsS4r+qnroC3Th2F1PYvEnC5iCRNsDsS0K1VlXijyjAWHZ8E+3re9EFrN4qy/BwptGLzFCezWxFt5lK113hDe5B9DuE49dvdK0jqxVLC1EXXXJpHFuR4yqG7ptfmLPX7k0S6UOj0exUQVbLws26jqy9jhwJbH9i0365D/ELDWp3hnUxOmSWffkPjM/3C2BDfX84hpG2TsdXQhZcH9+UizdY+wH4XYllRtFtBqrXl1Ew/I0vQWxUGGcF1uYniFipBgQGUZSXOeQ==
+Received: from BN9P222CA0023.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::28)
+ by PH7PR12MB7307.namprd12.prod.outlook.com (2603:10b6:510:20b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
+ 2023 09:13:42 +0000
+Received: from BL02EPF000145B9.namprd05.prod.outlook.com
+ (2603:10b6:408:10c:cafe::94) by BN9P222CA0023.outlook.office365.com
+ (2603:10b6:408:10c::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.24 via Frontend
+ Transport; Fri, 21 Apr 2023 09:13:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BL02EPF000145B9.mail.protection.outlook.com (10.167.241.209) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.16 via Frontend Transport; Fri, 21 Apr 2023 09:13:41 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 21 Apr 2023
+ 02:13:29 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Fri, 21 Apr 2023 02:13:28 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Fri, 21 Apr 2023 02:13:24 -0700
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <jsnitsel@redhat.com>, <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <jarkko@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [Patch V10 0/3] Tegra TPM driver with HW flow control
+Date:   Fri, 21 Apr 2023 14:43:06 +0530
+Message-ID: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKFTQmQC/22NQQqDMBBFryKzbkqigrGrQqEH6La4GJOxDsWkJ
- BIq4t0bXXf5/ufxVogUmCJcihUCJY7sXYbyVIAZ0b1IsM0MpSwrWatW2MXhxEakyTtBUltEiaZ
- BC1npMZLoAzoz7tKEcaawH59AA3+PzhMe9xt0eRw5zj4sRzup4/qfSUpIMdS6b+pKk27VNb7Z4
- oxn4yfotm37AfGte6HIAAAA
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, support.opensource@diasemi.com
-Cc:     DLG-Adam.Ward.opensource@dm.renesas.com,
-        linux-kernel@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145B9:EE_|PH7PR12MB7307:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4c616ae-6b1e-4086-1a9d-08db4248b35f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zMwC7T4t9G89tWPDHCYOCnpYbK/v/DP4AK7LtXzLT9EEVIz7lM/3KhCqof03g+KsOH4qgMdb+oNKFSZY8KwCMkaPcipZuo6IUsgE+Maekd76yI/4kFxhCTbUm3vMELygrdnMzRCXkkeiHtUk8aex/bX9WpyXmeGVaqlTEMXaKi0ViL4gUKSQmNEHE75ZywPRRAmaUmRE8Fr+k7fGLFcSjYmIEB6EUB9muK+tXHE/n1PJKmHt9rD4xiSPx0rhE53Sz3xeZf6uxEbOoxolAblcJsro4XvMx+0FKq/QqEmaX3AGr0g3Otq5cuplkOTc2biJMJ2w2z3zpx/RD7KbmlPQnryYIZkmvUA+0fQuRWg5Cpcdtn/FLZFIvyX8Y+gn6bCoavUf2zo67KZ4yFWb9eX18d22371sv66A3SRNONurkrZ0VnKVk7T+fo1Mw8/LVl9RHm1AdDHd4DfTxsV+ZoYnm6b1a4cfklG+AyEMBFpKWXtLJpoS8QuV9B/n9WetJpJdkmrQnMEInVg8paYVK45+qJjlPd8n7191si+ETq/LY3pBcfwFrba/SGHK8ggSPuG+2k0ysAjwjos9ZnuU8EIy07QNkPFE/TGLVPvDw9M0pCeAbuAOhuAQudwOwhilPi4WCF8zUzjEh0CD5jDMMIYT3ICyzmtMALL5LuLKcuxCnRT2XDvtapJeeIGoBRcEbU4+jySVuQPWjNbc3OeQuc+fVi7hX2BFlUe2iZRjJ8eTTEwHqLMobOClhEYhscHn4p/ZOax6vMeiGGRqASBuAtUMN0EJv03PybHg2AAvDBw0EWs+61m6cxYBFae8vzRCNs/T
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199021)(40470700004)(46966006)(36840700001)(186003)(86362001)(336012)(426003)(41300700001)(921005)(7636003)(356005)(107886003)(1076003)(316002)(40480700001)(82740400003)(4326008)(26005)(6666004)(7696005)(83380400001)(47076005)(82310400005)(2616005)(36860700001)(478600001)(40460700003)(110136005)(36756003)(8676002)(8936002)(5660300002)(70586007)(70206006)(2906002)(54906003)(7416002)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 09:13:41.5458
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4c616ae-6b1e-4086-1a9d-08db4248b35f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7307
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+TPM devices may insert wait state on last clock cycle of ADDR phase.
+For SPI controllers that support full-duplex transfers, this can be
+detected using software by reading the MISO line. For SPI controllers
+that only support half-duplex transfers, such as the Tegra QSPI, it is
+not possible to detect the wait signal from software. The QSPI
+controller in Tegra234 and Tegra241 implement hardware detection of the
+wait signal which can be enabled in the controller for TPM devices.
 
-This series targets the "automatic" state handling of voltage monitors
-when the state of the monitored regulator is changed. This is e.g.
-necessary for the da9063, which reaches an invalid state (!PWR_OK) if
-the voltage monitor is not disabled before the regulator is disabled.
-The problem could also be tackled inside of the driver's "state change
-ops" (.enable(), .disable(), ...) but I thought it might be a good idea
-to have a "common framework" independent of the driver's implementation.
+Add HW flow control in TIS driver and a flag in SPI data to indicate
+wait detection is required in HW. SPI controller driver determines if
+this is supported. Add HW detection in Tegra QSPI controller.
 
-For now, 1/2 adds "disable monitor properties" to the regulator's desc,
-which indicate on which actions the monitors should be disabled.
-2/2 depends on [1], which implements (static) voltage monitoring for the
-da9063. It disables the monitors while the regulator is disabled.
+Updates in this patch set 
+ - Tegra QSPI identifies itself as half duplex.
+ - TPM TIS SPI driver skips flow control for half duplex and send
+   transfers in single message for controller to handle it.
+ - TPM device identifies as TPM device for controller to detect and
+   enable HW TPM wait poll feature.
 
-The monitors are only enabled after the ramp-delay, to ensure that the
-regulator is already in a valid state.
+Verified with a TPM device on Tegra241 ref board using TPM2 tools.
 
-Possible next step:
-"regulators-{uv,ov}-{warn,error,protection}-enable" dt property on chip
-level, with either 1 or 0, to en-/disable the dynamic voltage monitoring
-for every regulator of the chip. This would require the regulator's
-set_{over,under}_voltage_protection() to work with limit = 1.
+V10
+ - use spi_sync in place of spi_sync_locked
+V9
+ - renamed tpm spi transfer functions
+V8:
+ - fix compile warning.
+V7:
+ - updated patch description.
+ - TPM flag set in probe.
+ - minor comments.
+V6:
+ - Fix typo in chip name Tegra234.
+ - Debug logs change skipped to be sent later.
+ - Consistent usage of soc flag.
+V5:
+ - No SPI bus locking.
+V4:
+ - Split api change to different patch.
+ - Describe TPM HW flow control.
+V3:
+ - Use SPI device mode flag and SPI controller flags.
+ - Drop usage of device tree flags.
+ - Generic TPM half duplex controller handling.
+ - HW & SW flow control for TPM. Drop additional driver.
+V2:
+ - Fix dt schema errors.
 
-I added some TODOs (basically about error handling) and still have to do
-some testing, but I wanted to share the "direction" of this series,
-therefore the v2. Thank you, Mark and Matti, for the input!
+Krishna Yarlagadda (3):
+  spi: Add TPM HW flow flag
+  tpm_tis-spi: Add hardware wait polling
+  spi: tegra210-quad: Enable TPM wait polling
 
-Thanks & best regards,
-Benjamin
+ drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
+ drivers/spi/spi-tegra210-quad.c     | 14 +++++
+ include/linux/spi/spi.h             | 16 ++++-
+ 3 files changed, 116 insertions(+), 5 deletions(-)
 
-[1] https://lore.kernel.org/all/20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com/
-
----
-Changes in v2:
-1/2:
-- move from board-specific (machine.h) to driver-specific (driver.h)
-- move from own struct to fields/properties in regulator_desc
-- handle modes as one "unsupported modes" field
-- factor out new monitors_set_state() to handle all (activated) monitors
-- move re-enabling of monitor after ramp-delay
-- add TODOs for error handling when the action fails (return error from
-  actual action instead, return state of monitoring to pre-action).
-- reword commit message
-2/2:
-- adapting change to the properties approach
-
-Link to v1: https://lore.kernel.org/r/20230419-dynamic-vmon-v1-0-f48b7438e891@skidata.com
-
----
-Benjamin Bara (2):
-      regulator: add properties to disable monitoring on actions
-      regulator: da9063: disable monitoring while regulator is off
-
- drivers/regulator/core.c             | 64 ++++++++++++++++++++++++++++++++----
- drivers/regulator/da9063-regulator.c |  2 ++
- include/linux/regulator/driver.h     | 10 ++++++
- 3 files changed, 70 insertions(+), 6 deletions(-)
----
-base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-change-id: 20230419-dynamic-vmon-e08daa0ac7ad
-
-Best regards,
 -- 
-Benjamin Bara <benjamin.bara@skidata.com>
+2.17.1
 
