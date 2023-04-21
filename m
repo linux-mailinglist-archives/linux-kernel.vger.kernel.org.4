@@ -2,98 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D136EAD50
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE4A6EAD52
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjDUOnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S232879AbjDUOne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbjDUOmx (ORCPT
+        with ESMTP id S232862AbjDUOnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:42:53 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E178AD324
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:42:23 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 960845C00EF;
-        Fri, 21 Apr 2023 10:41:20 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Apr 2023 10:41:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1682088080; x=1682174480; bh=cq
-        rMn8PsCijMPIlumhaZUxmJD7Z0ZbjGhB78P+4Vmns=; b=akb4FBXOUltQS9C51W
-        CAlL5PsoRAwGkhiHte9fOEElovSGT9cbvRFp3vnXtWH6toqNPKegFa+DL4ae6xc7
-        de4ceYIUYA9KoiAOmbC3o87Mh7yalbrMrbL/ZpRjzChbbrowalzd+DNh5OntyEml
-        lP/cm4Sk7AlX7jbJPoy8thnkm9qtGaQHxBNWS0CK7vAE76M1y7tLkiCDiX++oOja
-        Z4QIq+P1kzvG/BzKVvl+0JtYTL+tJhdnDvrMqS8nynDJMRDhsEpt66sNIDwNClH8
-        r1e373iYsd0DdrnLle+5dpGLgR43H3Lk0n1PVj+2KfvFRJEs/zhr3c2ig+Zi5vSh
-        0oLA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682088080; x=1682174480; bh=cqrMn8PsCijMP
-        IlumhaZUxmJD7Z0ZbjGhB78P+4Vmns=; b=G6XCCAdLgtdkZkw7orITZX0IzE9GZ
-        WcH8E1cj85JZpv5HyffbFT1ON/uxV6PMvapLE40KV+r/6SB0w9qFMff6V6fVBbqu
-        KiXoyWcK/+Fvrisn79tl1/ufzgk5wWE8XR71LCH/5swWZ22IaqLD77BO2HILlb7+
-        AMKrz+GuwKUF/ae1doH722b5YaqQmQ14WKKKEoBNFQxlB9Ju8686KTzGH/lkrQfy
-        /M3fheBSMdjikXG1FtmlAI/PiEU8gGmE9qGY2w4/DF/H2fm1hZciRnlg3sgRw4l5
-        QIk1KGGqowWiyLOmOmhImVI2gCRKTagrDXlprRd8SxllwkgMUyZwkhY5Q==
-X-ME-Sender: <xms:j6BCZOsa_vcrg-klHnDAS24LMkOJfstwHLKUZp5Sc_0WnM_v21c1FA>
-    <xme:j6BCZDe0-sURzRSMs48FAYJt2IMmBl-YlgX4Im-OI4Ly7y83mjtVjmWa9PUK-a_ct
-    NhuS95AYe8cWs87Qi0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:j6BCZJx9vFXii8uwxjpIhySx1T1hEPzDeM13BkBZwYOQu-2Nhv0y2w>
-    <xmx:j6BCZJMPzzIOwy5n8y9avjpJjDd33ArN_5qThyCmZXTtmAR0mLULnw>
-    <xmx:j6BCZO9377vt3-2-ZWeBVDc_O37hp3A3OSEMu6Lu6ZWeu_tEQoiNdg>
-    <xmx:kKBCZB14XANXgKyXbeDmBwaEYhqwP0lAxDk4H8OAgRXMzQm8F8PoPQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C7BB7B60086; Fri, 21 Apr 2023 10:41:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <e033ac24-0301-4c7f-8928-b940454c0a2b@app.fastmail.com>
-In-Reply-To: <CANpmjNMRQiPPqifLbzob6OjOX9O+bWhGrQunZY+TY6gj9HwGug@mail.gmail.com>
-References: <20230421082026.2115712-1-arnd@kernel.org>
- <CANpmjNMRQiPPqifLbzob6OjOX9O+bWhGrQunZY+TY6gj9HwGug@mail.gmail.com>
-Date:   Fri, 21 Apr 2023 16:40:33 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Marco Elver" <elver@google.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Alexander Potapenko" <glider@google.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org
-Subject: Re: [PATCH] kasan: use internal prototypes matching gcc-13 builtins
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Fri, 21 Apr 2023 10:43:17 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F011446D;
+        Fri, 21 Apr 2023 07:42:50 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b733fd00bso1965021b3a.0;
+        Fri, 21 Apr 2023 07:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682088121; x=1684680121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A77N0RoQju0/+WBmbiYrDl9vGswgrIXZW0NW2bQRQcY=;
+        b=EuI9Ezxqbz2cDGEmyUiWu4U5AjOatkeSkb9piDGzZLt9HE396LAHKTgtLlr7l6wki9
+         7VRqNyLKpu9JepX7OV3pIUblo9k7Dy6e51Aw8/vr1dqwqO4WVIlpH+L6ytnJ8b0dgzuJ
+         wXudwvtnRpnMcAuN7Q7wSgWtTZyvrm3PKMWQtg1X+MDzSAXAfLhrrf2oES+pa9RAiYfG
+         ggwWX8rvnuNhkyPD2SSkqUiKhLFQU+uoISx1++a31Ez+nrlrhjsqYFJ/7FvWBmYP3+Bl
+         /fSpytHZ3fUBoyCxbHiZxyECSUVIRDWAYAFIEGc3hO2pRBUtzK2z5M4HT8/SxRaxxVQp
+         DIew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682088121; x=1684680121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A77N0RoQju0/+WBmbiYrDl9vGswgrIXZW0NW2bQRQcY=;
+        b=KYlKMEidx77BJs+wVBA8yYy1j7Dc8cTRSeN1hCcwgNpTeefhr/PtBxnnjDMedDiFW0
+         JvPAsyQlhmimDLrwu4OEvJNf5SzyJTZdjkS5IDvnzIvHUrp0Xv4CtWabjwA7CqHT7znT
+         56NbIWpSDLPmreN5aoqyOurpW+17MYy5bnm0Q0TcNBe7It6aEtsSiTRbrKw6h6DEaO7H
+         Djf2CoJs2bmW9AlgG9kCd9yi/o3ppE55Gj/be9/sSbJAo+CdDX6T7TJo6LKKRFm50hx7
+         hBMsRMiv04H/yij6jIF+Y51mvmV1rqfyVsOalxxH1HR+usCI4AZS+IFxYrjONlffzu+t
+         6hcQ==
+X-Gm-Message-State: AAQBX9e3zPpQ5hKoNgrNxqQfctBhnk4WEEhncA3cLj4yI46RMKWJy6CD
+        cNpZCthqvlwc8G5ckWTwZ4I=
+X-Google-Smtp-Source: AKy350aiNN3o64moz/Be6GjsiYzFMxsPgfZDCO3H4dtjDs3rjnfhsml0eUV+gi9fnJf4SwsQ+PnDkA==
+X-Received: by 2002:a05:6a00:2da4:b0:623:5880:98cd with SMTP id fb36-20020a056a002da400b00623588098cdmr7311455pfb.5.1682088120459;
+        Fri, 21 Apr 2023 07:42:00 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id a22-20020a056a000c9600b00628e9871c24sm3083776pfv.183.2023.04.21.07.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 07:42:00 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 21 Apr 2023 04:41:58 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     "Saleem, Shiraz" <shiraz.saleem@intel.com>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-team@fb.com" <kernel-team@fb.com>
+Subject: Re: [PATCH] RDMA/irdma: Drop spurious WQ_UNBOUND from
+ alloc_ordered_workqueue() call
+Message-ID: <ZEKgtoJaozAHFjV1@slm.duckdns.org>
+References: <ZEGW-IcFReR1juVM@slm.duckdns.org>
+ <MWHPR11MB0029F5F9C9AC249F2BC3E981E9609@MWHPR11MB0029.namprd11.prod.outlook.com>
+ <ZEKgHNlykqw7LmKm@ziepe.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEKgHNlykqw7LmKm@ziepe.ca>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,31 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023, at 11:19, Marco Elver wrote:
->
-> Does it work with Clang?
+Hello,
 
-I tested successfully with clang-16, but did not try other versions so far.
+On Fri, Apr 21, 2023 at 11:39:24AM -0300, Jason Gunthorpe wrote:
+> On Fri, Apr 21, 2023 at 02:29:06PM +0000, Saleem, Shiraz wrote:
+> > > Subject: [PATCH] RDMA/irdma: Drop spurious WQ_UNBOUND from
+> > > alloc_ordered_workqueue() call
+> > > 
+> > > Workqueue is in the process of cleaning up the distinction between unbound
+> > > workqueues w/ @nr_active==1 and ordered workqueues. Explicit
+> > > WQ_UNBOUND isn't needed for alloc_ordered_workqueue() and will trigger a
+> > > warning in the future. Let's remove it. This doesn't cause any functional
+> > > changes.
+> > > 
+> > > Signed-off-by: Tejun Heo <tj@kernel.org>
+> > > ---
+> > >  drivers/infiniband/hw/irdma/hw.c |    4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > --- a/drivers/infiniband/hw/irdma/hw.c
+> > > +++ b/drivers/infiniband/hw/irdma/hw.c
+> > > @@ -1901,8 +1901,8 @@ int irdma_ctrl_init_hw(struct irdma_pci_
+> > >  			break;
+> > >  		rf->init_state = CEQ0_CREATED;
+> > >  		/* Handles processing of CQP completions */
+> > > -		rf->cqp_cmpl_wq = alloc_ordered_workqueue("cqp_cmpl_wq",
+> > > -						WQ_HIGHPRI |
+> > > WQ_UNBOUND);
+> > > +		rf->cqp_cmpl_wq =
+> > > +			alloc_ordered_workqueue("cqp_cmpl_wq",
+> > > WQ_HIGHPRI);
+> > >  		if (!rf->cqp_cmpl_wq) {
+> > >  			status = -ENOMEM;
+> > >  			break;
+> > 
+> > Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
+> 
+> Tejun, do you want this in your tree too?
 
-> I don't mind either way, but the custom kasan_size_t change seems to
-> just be needed to workaround the subtle inconsistency in type
-> definition, but in reality there should never be a problem. I'd rather
-> the KASAN code just uses normal kernel types and we just make the
-> compiler be quiet about it.
+This one doesn't create any dependency and can go through any tree. So, I
+guess routing through RDMA is better?
 
-Let me double-check, I think I may have made a mistake here, and
-using the normal ssize_t (but not size_t) just works right. It looks
-like I confused the size_t definition with something else, so this
-hack may not be needed after all. I've changed it again now and will
-give it another overnight test run on the randconfig setup.
+Thanks.
 
-> To do that, another option is -Wno-builtin-declaration-mismatch for
-> mm/kasan/ which just shuts up the compiler, and allows us to keep the
-> code as-is. Does it have any downsides?
-
-I think the warning is useful in principle, at least it makes it
-more likely to catch bugs if the prototypes ever change, and to
-validate that things like __asan_allocas_unpoison() that I mentioned
-are actually intentional.
-
-      Arnd
+-- 
+tejun
