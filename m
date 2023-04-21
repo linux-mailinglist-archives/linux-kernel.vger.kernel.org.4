@@ -2,120 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF666EA6F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30586EA6F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjDUJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S231863AbjDUJaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDUJ3q (ORCPT
+        with ESMTP id S231865AbjDUJaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:29:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0669213D;
-        Fri, 21 Apr 2023 02:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682069384; x=1713605384;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zp2e5dMArkvPTnl7T3iiTEMKwSfJ7vHlEh8MtJDUXIE=;
-  b=iPpUjYTmmI2XATz7gO5jetgpcEdIXJWFrNwwg/Uc9IwFj+VryYjtVQls
-   fePhUTm+VnuYiaBAZZtbcAwLRRb0ji3ATJUGWkVhoowVFKNkbdynRmmVk
-   i+pGp4iFyTUJCmQnuCybm4OsNsnW9P0qVXKnOrMyuqbqQ9raiGY8OX5LW
-   eYysslAu36jtjAZlsNAQrnk8D8Ewo2d4gcK1kRcB3d+O6irupWYleftij
-   NRO38mK4zB8Rsjj3cR/4AQ8ESYu3ILoHG49qUL2uIswwe9wutrmz8iRKS
-   KPCzGGVtdmNYGIL6HbBKjUTiuWzlCevwHWCXQ3iFsQmLF7F5PT3jl5jXh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="343442494"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="343442494"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:29:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="938419536"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="938419536"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Apr 2023 02:29:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 294F5C06; Fri, 21 Apr 2023 12:29:47 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] PCI: of: Propagate firmware node by calling device_set_node()
-Date:   Fri, 21 Apr 2023 12:29:45 +0300
-Message-Id: <20230421092945.66176-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Fri, 21 Apr 2023 05:30:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E94CC9ED9;
+        Fri, 21 Apr 2023 02:30:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 889A31480;
+        Fri, 21 Apr 2023 02:31:02 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D65B3F5A1;
+        Fri, 21 Apr 2023 02:30:17 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 10:30:12 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     Peng Fan <peng.fan@oss.nxp.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "michal.simek@amd.com" <michal.simek@amd.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "souvik.chakravarty@arm.com" <souvik.chakravarty@arm.com>
+Subject: Re: [RFC v1 1/2] scmi: Introduce pinctrl SCMI protocol driver
+Message-ID: <ZEJXpCdf9pWgoXL6@e120937-lin>
+References: <cover.1680793130.git.oleksii_moisieiev@epam.com>
+ <54119b2cb43e29f69c5858a5320d3a58f23fed21.1680793130.git.oleksii_moisieiev@epam.com>
+ <ZDcqx9JVMvqr2WYu@e120937-lin>
+ <6dc456ff-7fc6-3b73-3727-dd048e9a9629@oss.nxp.com>
+ <f73f39e2-81dd-4204-a3be-c5e7f5e54c1b@epam.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f73f39e2-81dd-4204-a3be-c5e7f5e54c1b@epam.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Insulate pci_set_of_node() and pci_set_bus_of_node() from possible
-changes to fwnode_handle implementation by using device_set_node()
-instead of open-coding dev->dev.fwnode assignments.
+On Fri, Apr 21, 2023 at 08:40:47AM +0000, Oleksii Moisieiev wrote:
+> Hi Peng Fan,
+> 
+> On 17.04.23 05:55, Peng Fan wrote:
+> >
+> >
+> > On 4/13/2023 6:04 AM, Cristian Marussi wrote:
+> >> On Fri, Apr 07, 2023 at 10:18:27AM +0000, Oleksii Moisieiev wrote:
+> >>> Implementation of the SCMI client driver, which implements
+> >>> PINCTRL_PROTOCOL. This protocol has ID 19 and is described
+> >>> in the latest DEN0056 document.
+> >>
+> >> Hi,
+> >>
+> >>> This protocol is part of the feature that was designed to
+> >>> separate the pinctrl subsystem from the SCP firmware.
+> >>> The idea is to separate communication of the pin control
+> >>> subsystem with the hardware to SCP firmware
+> >>> (or a similar system, such as ATF), which provides an interface
+> >>> to give the OS ability to control the hardware through SCMI protocol.
+> >>> This is a generic driver that implements SCMI protocol,
+> >>> independent of the platform type.
+> >>>
+> >>> DEN0056 document:
+> >>> https://urldefense.com/v3/__https://developer.arm.com/documentation/den0056/latest__;!!GF_29dbcQIUBPA!y2hR3PEGGxiPjVeXBcgGyV03DPDhzgUKR0uHvsTpiafKgBar8Egc6oOOs-IkFIquhSf-qBzltqEMyzRZHq8eC4g$ 
+> >>> [developer[.]arm[.]com]
+> >>>
+> >>
+> >> No need to specify all of this in the commit message, just a note that
+> >> you are adding a new SCMIv3.2 Pincontrol protocol, highlighting anything
+> >> that has been left out in this patch (if any) will be enough.
+> >
+> > Is it possible to extend the spec to support multilple uint32_t for PIN
+> > CONFIG SET?
+> >
+> > With only one uint32_t could not satisfy i.MX requirement.
+> >
+> > Thanks,
+> > Peng.
+> >
+> IIUC you are expecting to have an ability to set some kind of array of 
+> uint32_t config values to some specific ConfigType?
+> 
+> I'm not sure if it's supported by pintctrl subsystem right now. I was 
+> unable to find an example in the existing device-tree pinctrl bindings. 
+> This makes me think that this kind of binding is OEM specific.
+> 
+> Maybe it can be implemented by adding new IDs to OEM specific range 
+> (192-255) which is reserved for OEM specific units (See Table 23 of 
+> DEN0056E).
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: rewritten commit message as suggested (Bjorn), rebased on the latest code
- drivers/pci/of.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+If I understood correctly the aim of Peng multi-valued request, I think
+that even if Linux does not support using this kind of multiple valued
+requests (as of now), if it is useful or required by some of the possibly
+supported hardware, it should be described and allowed by the specification
+and supported by the core SCMI protocol support at least, while the pinctrl
+SCMI driver can ignore this and keep using a one-sized array protocol_ops
+call internally (since it cannot do any different anyway as of now)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 4c2ef2e28fb5..2679d6e6da30 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -39,16 +39,14 @@ int pci_set_of_node(struct pci_dev *dev)
- 		return -ENODEV;
- 	}
- 
--	dev->dev.of_node = node;
--	dev->dev.fwnode = &node->fwnode;
-+	device_set_node(&dev->dev, node);
- 	return 0;
- }
- 
- void pci_release_of_node(struct pci_dev *dev)
- {
- 	of_node_put(dev->dev.of_node);
--	dev->dev.of_node = NULL;
--	dev->dev.fwnode = NULL;
-+	device_set_node(&dev->dev, NULL);
- }
- 
- void pci_set_bus_of_node(struct pci_bus *bus)
-@@ -63,17 +61,13 @@ void pci_set_bus_of_node(struct pci_bus *bus)
- 			bus->self->external_facing = true;
- 	}
- 
--	bus->dev.of_node = node;
--
--	if (bus->dev.of_node)
--		bus->dev.fwnode = &bus->dev.of_node->fwnode;
-+	device_set_node(&bus->dev, of_fwnode_handle(node));
- }
- 
- void pci_release_bus_of_node(struct pci_bus *bus)
- {
- 	of_node_put(bus->dev.of_node);
--	bus->dev.of_node = NULL;
--	bus->dev.fwnode = NULL;
-+	device_set_node(&bus->dev, NULL);
- }
- 
- struct device_node * __weak pcibios_get_phb_of_node(struct pci_bus *bus)
--- 
-2.40.0.1.gaa8946217a0b
+IOW I dont think we should model too strictly the SCMI spec against only
+what the Linux pinctrl subsystem support today, since Linux it is just
+really only one of the possible SCMI agents and Linux implementation itself
+can possibly change: it is better to model the spec on the HW requirements
+or the possible usage patterns across all the possibly participating agents.
+
+As an example, for similar reasons, when the SCMI Voltage protocol was added
+to the spec, at the very last minute, a change was made to the spec to allow
+for negative voltages, even though the Linux regulator subsystem was not
+and still is not supporting at all negative voltages as of now; so basically
+the SCMI voltage protocol API now exposes a per-domain flag (negative_volts_allowed),
+that allows any kind of voltage domain to be enumerated and handled at the SCMI
+spec and core layer but that also allows any SCMI driver user, like the SCMI
+Regulator driver, to decide on his own if negative voltages domains can be
+supported: indeed the scmi-regulator driver just skips the initialization of
+any voltage domain that is found to be describing negative voltages.
+
+Here is a bit different, it is more of an optimization in the call path
+than an HW difference, but I would follow the same approach: with the
+SCMI spec and the core SCMI stack (the protocol) that supports a multi-uint32
+call as a general case, if useful for some scenarios, and instead the SCMI
+pinctrl driver that just ignores this possibility and keep using a single-value
+array anyway....then, it will be up to the guys leveraging this multi-valued
+call to come up with a way to use it on their systems, possibly maybe contributing
+back to upstream any needed modification if general enough
+(not sure about the details of how this multi-vals operation should be...we'll have
+to discuss that about the spec all together I think.)
+
+In any case, I would definitely NOT relegate such possibility to vendor space,
+since it is something generic and, especially being just (as it seems to me) an
+optimization on the call path at the end, it will just lead to uneeded duplication
+of functionalities in the vendor implementation of stuff that it is already
+very slightly differently supported by the standard.
+
+...just my opinion anyway, I'll happily let other guys in this thread discuss and
+decide about this :P
+
+Thanks,
+Cristian
 
