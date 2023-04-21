@@ -2,228 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873F66EB05A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC5C6EB05D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjDURMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S232896AbjDURNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjDURMT (ORCPT
+        with ESMTP id S229641AbjDURNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:12:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CA815A16
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682097083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HWRo2mphM3DxKyp/++X+gPOFeElhZDx6hgzjY51IZDg=;
-        b=heB4QSodS1u8nIQkKI0KrMYKqFRhpI/Ao+NFY1WCSemxF7T1zD7h610RWCJ7P9HRQ7i2Y6
-        IcGwy4R6eF7t4mcy8eNrkzEO8H6kfl4O45fOjzMki1SEuvr90mDYld3kAS9q3/4cholcnu
-        fYAt8IaCIs8Zj1Gt4/u4W8G9mzWGKIg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-556-UcS97dzlP0OsqZB2VB2sYg-1; Fri, 21 Apr 2023 13:11:22 -0400
-X-MC-Unique: UcS97dzlP0OsqZB2VB2sYg-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-2f6632b85fcso634194f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:11:22 -0700 (PDT)
+        Fri, 21 Apr 2023 13:13:23 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A968E79;
+        Fri, 21 Apr 2023 10:13:22 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b733fd00bso2099273b3a.0;
+        Fri, 21 Apr 2023 10:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682097201; x=1684689201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wtv/plYjg6t5+KIhqn4HLpoeS3qH6YTzNA/OWZvr4S0=;
+        b=FjEVhsbuInMEEPWXdLhRhcGP7c0Mf3zoia/8MpkI3FFi8bXXeWe4n6ptt+1a4zdrg5
+         FNqYWJH1xCmVEZhstLN2AY9j/okpz1gYfJeSgdtNavogVsNgAQ5R8ZrEmOeH9LRu9LZ8
+         FkvW9GQk6BZqdH44lftdYbIwBPC3Z4QCmMjJg12Yt7CJ2UvD21aHSDyI6cqr0NPtz2Od
+         xglJwazptN44LPeHcJJjTDu2mrW5MEeUfV5ul8U1vlx9SIjIlN0N5LeTPodvIpPNG7HS
+         NY6kGx+cCheUAowDO9nGtRHddThNXORJLc8DkvNUmRM7XeJCoOhtQsFLA2muTX8IIU0T
+         IFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682097081; x=1684689081;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HWRo2mphM3DxKyp/++X+gPOFeElhZDx6hgzjY51IZDg=;
-        b=FcQAQantEn11RxT1+xtiVIQwJn0wnknLyAyudJnddHqGGwHCpnGi7W45iMplznXT0N
-         OpptUzgO0yJWR7/eW9D++7GbEmXMrlaA1Bn7zR3tKVGIGjAW5GgXgxRzoXU6SGiZvq4p
-         ISjzsDxPhleOwmpMikXOIsB/K6Go7EV4/jMuIGeMcF6cLFg50j4eKds9rAtjVwAvkhiX
-         NwOVP0HKyLZWcoJYeFoSzKOvPvI6/JoiT8HINnqSUpNmDDasTzGI08ABUiWn83mro+PH
-         rKTgZhxKDdRkFFPRkyiP1I7Bt2R+xxSXUp+LMGj0x6TGfw35GZ32BD/V0pVLIwjxuN8x
-         QGkw==
-X-Gm-Message-State: AAQBX9e+E+yRAVYAZmzREYMgtRSvMmTcX0rlv+3HnVyiDPgq4fOltGzm
-        9r3gzep4VkUAfe8nJabl6aAHjvCM4enBT3flATC7Nvi+fp2Yz+vrVok/FZSzTlg9W0TIepZ/Uph
-        ifW63Zct0Xacx1y+x6cGsckmoyDuGVlhV
-X-Received: by 2002:adf:e803:0:b0:2f7:a333:8cab with SMTP id o3-20020adfe803000000b002f7a3338cabmr4492296wrm.71.1682097081560;
-        Fri, 21 Apr 2023 10:11:21 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bsq8+YPeUjrndub6ownOF/tiFFET/YGjPbfOV6Mb70hmtCtimUhpMYaW36xci21zDFE8HHmg==
-X-Received: by 2002:adf:e803:0:b0:2f7:a333:8cab with SMTP id o3-20020adfe803000000b002f7a3338cabmr4492269wrm.71.1682097081087;
-        Fri, 21 Apr 2023 10:11:21 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c717:6a00:e38f:c852:dc11:9146? (p200300cbc7176a00e38fc852dc119146.dip0.t-ipconnect.de. [2003:cb:c717:6a00:e38f:c852:dc11:9146])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f191c9c4b0sm2323556wmc.11.2023.04.21.10.11.18
+        d=1e100.net; s=20221208; t=1682097201; x=1684689201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wtv/plYjg6t5+KIhqn4HLpoeS3qH6YTzNA/OWZvr4S0=;
+        b=H2KVl4tz8/8w2stM+fbx9KxKAqSMNrfSyfmmTtjh6Nj0FsegR/+1rKQayTecX1GVsy
+         NouaPcaaL7rEJEecTQUmK3JVGSvNUd0HE8+Q8Zc262dF7ZiacGpDTJA8mciskbV7dF8O
+         dJABDmin8b62Y8bytgy/0av3tsi01xDdT7FYY/t8SYLHVUNs8oefH6kUHHSi5x5SV6Bf
+         WDKbRJ5LHUgpJY0p11Tdlc5aUGNn2TxR61vlTJekNb2bEUkxDKnVrHanNqsSxRQJ32q3
+         0SmoonUPe6zwlREpV30+wsrRn+jvg00mg0eNy1Z/bBgi70bJmUaFWq+G5+BQFv/bVg1j
+         kkgA==
+X-Gm-Message-State: AAQBX9f3l5NnFYFoaMvRc+KgKS064OA5ps126k/v3T8d6SImXzqRfVdO
+        jCzKiagrx50MuuU/IP/+Obc=
+X-Google-Smtp-Source: AKy350aW0P/FC8UFKP2uDVDZSV2ognzE+Ons42k3+QvxKksi2a70BP+43x0RqhleMO7/CgeLtZL1Fw==
+X-Received: by 2002:a17:90a:9708:b0:22c:59c3:8694 with SMTP id x8-20020a17090a970800b0022c59c38694mr5906384pjo.44.1682097201450;
+        Fri, 21 Apr 2023 10:13:21 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y18-20020a17090aa41200b00244991b3f7asm5549150pjp.1.2023.04.21.10.13.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 10:11:19 -0700 (PDT)
-Message-ID: <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
-Date:   Fri, 21 Apr 2023 19:11:18 +0200
+        Fri, 21 Apr 2023 10:13:20 -0700 (PDT)
+Message-ID: <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
+Date:   Fri, 21 Apr 2023 10:13:12 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
+ compilation
 Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-2-david@redhat.com>
- <qvqwr0sei6sl.fsf@devbig1114.prn1.facebook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 1/3] mm/ksm: unmerge and clear VM_MERGEABLE when
- setting PR_SET_MEMORY_MERGE=0
-In-Reply-To: <qvqwr0sei6sl.fsf@devbig1114.prn1.facebook.com>
+To:     Dhruva Gole <d-gole@ti.com>, Mark Brown <broonie@kernel.org>
+Cc:     Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
+References: <20230420121615.967487-1-d-gole@ti.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230420121615.967487-1-d-gole@ti.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
->>
-> nit:
-> can we do:
+On 4/20/23 05:16, Dhruva Gole wrote:
+> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
+> it may introduce build issues with certain configs where it maybe disabled
+> This is because if above config is not enabled the suspend-resume
+> functions are never part of the code but the bcm63xx_spi_pm_ops struct
+> still inits them to non-existent suspend-resume functions.
 > 
->      if (arg2)
->     	error = ksm_enable_merge_any(me->mm);
-> 	else
->     	error = ksm_disable_merge_any(me->mm);
-> 	mmap_write_unlock(me->mm);
-> 	break;
-
-Indeed, thanks.
-
+> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
 > 
->> diff --git a/mm/ksm.c b/mm/ksm.c
->> index a959e8925413..813f7fbc1832 100644
->> --- a/mm/ksm.c
->> +++ b/mm/ksm.c
->> @@ -2520,6 +2520,22 @@ static void __ksm_add_vma(struct vm_area_struct *vma)
->>   		vm_flags_set(vma, VM_MERGEABLE);
->>   }
->>
->> +static int __ksm_del_vma(struct vm_area_struct *vma)
->> +{
->> +	int err;
->> +
->> +	if (!(vma->vm_flags & VM_MERGEABLE))
->> +		return 0;
->> +
->> +	if (vma->anon_vma) {
->> +		err = unmerge_ksm_pages(vma, vma->vm_start, vma->vm_end);
->> +		if (err)
->> +			return err;
->> +	}
->> +
->> +	vm_flags_clear(vma, VM_MERGEABLE);
->> +	return 0;
->> +}
->>   /**
->>    * ksm_add_vma - Mark vma as mergeable if compatible
->>    *
->> @@ -2542,6 +2558,20 @@ static void ksm_add_vmas(struct mm_struct *mm)
->>   		__ksm_add_vma(vma);
->>   }
->>
->> +static int ksm_del_vmas(struct mm_struct *mm)
->> +{
->> +	struct vm_area_struct *vma;
->> +	int err;
->> +
->> +	VMA_ITERATOR(vmi, mm, 0);
->> +	for_each_vma(vmi, vma) {
->> +		err = __ksm_del_vma(vma);
->> +		if (err)
->> +			return err;
->> +	}
->> +	return 0;
->> +}
->> +
->>   /**
->>    * ksm_enable_merge_any - Add mm to mm ksm list and enable merging on all
->>    *                        compatible VMA's
->> @@ -2569,6 +2599,23 @@ int ksm_enable_merge_any(struct mm_struct *mm)
->>   	return 0;
->>   }
->>
->> +int ksm_disable_merge_any(struct mm_struct *mm)
->>
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>   drivers/spi/spi-bcm63xx.c | 2 --
+>   1 file changed, 2 deletions(-)
 > 
-> I understand we want to keep the name "symmetric" with
-> ksm_enable_merge_any, but it also unmerges the ksm pages. Do we want to
-> reflect that in the function name?
+> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+> index 96633a0051b1..99395932074c 100644
+> --- a/drivers/spi/spi-bcm63xx.c
+> +++ b/drivers/spi/spi-bcm63xx.c
+> @@ -617,7 +617,6 @@ static void bcm63xx_spi_remove(struct platform_device *pdev)
+>   	clk_disable_unprepare(bs->clk);
+>   }
+>   
+> -#ifdef CONFIG_PM_SLEEP
+>   static int bcm63xx_spi_suspend(struct device *dev)
 
-ksm_disable_merge_any_umerge() is suboptimal.
-
-As ksm_disable_merge_any() now reverts what ksm_enable_merge_any() ended 
-up doing, I think it's just fine.
-
-(it would be a different story if we'd be using "set" / "clear" 
-terminology instead of "enable" / "disable").
-
-We can describe that in the comment.
-
-> 
-> Can we add a comment for the function?
-
-Can do for symmetry with ksm_enable_merge_any().
-
-But note that I don't think documentation for functions is of any help 
-when it takes longer to read the documentation than to read+understand 
-the actual code.
-
-> 
->> +{
->> +	int err;
->> +
->> +	if (!test_bit(MMF_VM_MERGE_ANY, &mm->flags))
->> +		return 0;
->> +
->> +	err = ksm_del_vmas(mm);
->> +	if (err) {
->> +		ksm_add_vmas(mm);
->> +		return err;
->> +	}
->> +
->> +	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
->>
-> 
-> We only clear the MMF_VM_MERGE_ANY flag if there are no errors. Is this
-
-I think this is the behavior we want. We tried to disable KSM for the 
-process (previously enabled via the prctl), but cannot disable KSM. So 
-we rollback our changes and return an error.
-
-This is similar to trying to set MADV_UNMERGEABLE but failing. We leave 
-the bit set.
-
-> what we want? This means that if the process creates new memory regions
-> they would still be marked as mergeable.
-
-Yes, we failed the operation so we keep everything unchanged.
-
+Don't we need a __maybe_unused here?
 -- 
-Thanks,
-
-David / dhildenb
+Florian
 
