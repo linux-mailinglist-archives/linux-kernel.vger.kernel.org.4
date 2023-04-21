@@ -2,350 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803F26EADA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744416EAD8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbjDUPAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S233052AbjDUO5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbjDUPAr (ORCPT
+        with ESMTP id S232212AbjDUO5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:00:47 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978126584
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:00:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A7FC960129;
-        Fri, 21 Apr 2023 17:00:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682089240; bh=AdV3O7KiwN7j21d+V+A5xL08XlBgHT/p7NwH96/b7Vk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Q3OUKDIPJlgg1Q2vtcTw5G2bbO8EFdsb/EcnyltyAHYeMqwRnBmya4hwVg/fY2nWo
-         vqEPOn5HMN8YRMnU3k0xpfs6L5BtSUmIsWNMAqILduuftpZHrk/yw6+2Q21SlyRsjq
-         /169kIlRmMO3VCMP8irIXIHZmpKGXUT2b4MBV3YhLnwuYs/sdvlvi/hblbFdOQjzgg
-         sNRHlwVfrFKCic7SgodrNWJf9WSrj9SLria+q1OYm6lEmU1OlCMb3GZPmYQmCJCT5J
-         S/3IgTyPq3KXHqL23Ae/9CPq6Tg2yNfUqIU4qNACAedVHb4jL0nIhTOye2lAs4ZWEq
-         TqNTDwSwVb4Dw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NMxl2fA2PsiM; Fri, 21 Apr 2023 17:00:37 +0200 (CEST)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id 36A9460126; Fri, 21 Apr 2023 17:00:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682089237; bh=AdV3O7KiwN7j21d+V+A5xL08XlBgHT/p7NwH96/b7Vk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WlES1e5YEg4G7SQXZfk1U1+qQXWKb6StKBpwoNO2lnwsZaG+XaPYbvnEKJc2gjwfz
-         D6GIEJBx41zfmQOet/lRRlxpCBY9QO5HHST60gj88o/v51rfqLPx/hIfC+lP+Ng2CA
-         SyvFP96Yedg0uMf0AW/DRl5U/B/5xaTr89uPIjJ+Qkgl3ANjGp+semz27+ttQ72bbc
-         yndVlKDbYMQ6GKy9ck+pUPjOt6XYRKdRGjvSrm2NDgYl1aDtpeUA3fGrkVFxOUDagm
-         8iZRVdlK1iBVJnQCP8v2aSLzNbkH4QIhaSqMk1c9wYHc4vQjnfnYhNB2TQSDTm2W95
-         CCitji9yKujAg==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH v4 1/1] test_firmware: fix some memory leaks and racing conditions
-Date:   Fri, 21 Apr 2023 16:57:01 +0200
-Message-Id: <20230421145700.20931-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.30.2
+        Fri, 21 Apr 2023 10:57:47 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09639EED
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:57:35 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5055141a8fdso2518203a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1682089054; x=1684681054;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2tGOts3QoCJkBrTh/elI0w5gRAXfGN6PXECZof4lKmE=;
+        b=WYm/u6je/yQrVcdxaM21rxEZ0+GXTk8XaxTEQOkETzAnYXRJnQgamFUHVTTAMyw+w1
+         3+rbI16Nbl7j0JK/T/VYMCfo1xsFJxbxyBEsS7Z7Li9VJv9YNQTCFzykz8UP200xICu8
+         8ja7sQj9zZZ4b8tbUrtpD/NA9+e5aM9ZE3RqSYihq4tPCJtf4oPf+o4n5X6wE7X/XJVD
+         qh41TZI1OXMriBxEiTxTI0FpFwFGTz2WtrmkcpSLA9co23FWI0R8YWUmrLp2OrkpzIeo
+         3nfcR3CRqre9dJ5ci8wSoEvzZzEb/VS0v6gHSga7GIk59vh/KSr8e/SHphyLG0tc+fap
+         Fayw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682089054; x=1684681054;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2tGOts3QoCJkBrTh/elI0w5gRAXfGN6PXECZof4lKmE=;
+        b=UyO962P6olWl4Ofy/aXbMET2xXlfi2N9zU25UWEvLITZHC905AdwIQyK5qxgPbkLhY
+         l394aB3hrI9HdhX4GhgCcbHpU+HSsOfI21oT1Duh/MtlBmCtxBPKUflFYwKm+m3K6GZk
+         8aXsb+KsfxoPjtVc2rBM6X5K7k5FoEGQL1Xv9mfxRaobCIJ8s0wFSSgC0Z6I9PxofiOJ
+         lX9JXk/2KqKJrzZfHEdC9bGjzOFfGIoWmIjqt3HZALBpeIXgGgoInbPz7npJH0HjizCu
+         j+M3ORQiPOKGb+3Uqv/0iAFXQFL9Cc1xqBxcHdhQybQc/Nk8BrdXwGUCYfvi9QLz3ndX
+         vjKA==
+X-Gm-Message-State: AAQBX9ejbQ+yPwF/lrpC7708Poi4pG9mpSWqJcdfikCdqNN/2BtAN7K1
+        TH2zvi8TF/w1Gl8zsB6/L7f/B7faZEhztUvBZ4VF1Q==
+X-Google-Smtp-Source: AKy350YOqjCAd20DbcXBhENwSsKheuT7lUuo2ljQofZhsNS/wOOp3VDL8h65sMreevD+PCzHnCnp1uqIlwwd4A0NSNg=
+X-Received: by 2002:a17:907:86ac:b0:94f:3804:5cd6 with SMTP id
+ qa44-20020a17090786ac00b0094f38045cd6mr2991499ejc.66.1682089054218; Fri, 21
+ Apr 2023 07:57:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230411082248.1020719-1-yizhou.tang@shopee.com> <20230411112130.7zswqnyifgjhshif@quack3>
+In-Reply-To: <20230411112130.7zswqnyifgjhshif@quack3>
+From:   Tang Yizhou <yizhou.tang@shopee.com>
+Date:   Fri, 21 Apr 2023 22:57:22 +0800
+Message-ID: <CACuPKx=+g_bhLKH1d9M4WOUVyRRKGj+sP0q4td1gRE9ghtVYog@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: Fix memcg writeback for rt tasks
+To:     Jan Kara <jack@suse.cz>
+Cc:     neilb@suse.com, tj@kernel.org, wufengguang@huawei.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, hch@lst.de,
+        mhocko@suse.com, tangyeechou@gmail.com, chunguang.xu@shopee.com,
+        yue.zhao@shopee.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some functions were called both from locked and unlocked context, so
-the lock was dropped prematurely, introducing a race condition when
-deadlock was avoided.
+CC Christoph Hellwig and Michal Hocko.
 
-Having two locks wouldn't assure a race-proof mutual exclusion.
 
-__test_dev_config_update_bool(), __test_dev_config_update_u8() and
-__test_dev_config_update_size_t() unlocked versions of the functions
-were introduced to be called from the locked contexts as a workaround
-without releasing the main driver's lock and causing a race condition.
-
-This should guarantee mutual exclusion and prevent any race conditions.
-
-Locked versions simply allow for mutual exclusion and call the unlocked
-counterparts, to avoid duplication of code.
-
-trigger_batched_requests_store() and trigger_batched_requests_async_store()
-now return -EBUSY if called with test_fw_config->reqs already allocated,
-so the memory leak is prevented.
-
-The same functions now keep track of the allocated buf for firmware in
-req->fw_buf as release_firmware() will not deallocate this storage for us.
-
-Additionally, in __test_release_all_firmware(), req->fw_buf is released
-before calling release_firmware(reqs->fw) foreach test_fw_config->regs[i].
-
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
-Cc: Luis Chamberlain <mcgrof@kernel.org> 
-Cc: Russ Weight <russell.h.weight@intel.com> 
-Cc: Tianfei zhang <tianfei.zhang@intel.com> 
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr> 
-Cc: Zhengchao Shao <shaozhengchao@huawei.com> 
-Cc: Colin Ian King <colin.i.king@gmail.com> 
-Cc: linux-kernel@vger.kernel.org 
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- lib/test_firmware.c | 81 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 63 insertions(+), 18 deletions(-)
-
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 05ed84c2fc4c..1d7d480b8eeb 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -45,6 +45,7 @@ struct test_batched_req {
- 	bool sent;
- 	const struct firmware *fw;
- 	const char *name;
-+	const char *fw_buf;
- 	struct completion completion;
- 	struct task_struct *task;
- 	struct device *dev;
-@@ -175,8 +176,14 @@ static void __test_release_all_firmware(void)
- 
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
--		if (req->fw)
-+		if (req->fw) {
-+			if (req->fw_buf) {
-+				kfree_const(req->fw_buf);
-+				req->fw_buf = NULL;
-+			}
- 			release_firmware(req->fw);
-+			req->fw = NULL;
-+		}
- 	}
- 
- 	vfree(test_fw_config->reqs);
-@@ -353,16 +360,26 @@ static ssize_t config_test_show_str(char *dst,
- 	return len;
- }
- 
--static int test_dev_config_update_bool(const char *buf, size_t size,
-+static inline int __test_dev_config_update_bool(const char *buf, size_t size,
- 				       bool *cfg)
- {
- 	int ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	if (kstrtobool(buf, cfg) < 0)
- 		ret = -EINVAL;
- 	else
- 		ret = size;
-+
-+	return ret;
-+}
-+
-+static int test_dev_config_update_bool(const char *buf, size_t size,
-+				       bool *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_bool(buf, size, cfg);
- 	mutex_unlock(&test_fw_mutex);
- 
- 	return ret;
-@@ -373,7 +390,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_size_t(const char *buf,
-+static int __test_dev_config_update_size_t(
-+					 const char *buf,
- 					 size_t size,
- 					 size_t *cfg)
- {
-@@ -384,9 +402,7 @@ static int test_dev_config_update_size_t(const char *buf,
- 	if (ret)
- 		return ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(size_t *)cfg = new;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
-@@ -402,7 +418,7 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+static int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
- 	u8 val;
- 	int ret;
-@@ -411,14 +427,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- 	if (ret)
- 		return ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(u8 *)cfg = val;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
- }
- 
-+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_u8(buf, size, cfg);
-+	mutex_unlock(&test_fw_mutex);
-+
-+	return ret;
-+}
-+
- static ssize_t test_dev_config_show_u8(char *buf, u8 val)
- {
- 	return snprintf(buf, PAGE_SIZE, "%u\n", val);
-@@ -471,10 +496,10 @@ static ssize_t config_num_requests_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_u8(buf, count,
--				       &test_fw_config->num_requests);
-+	rc = __test_dev_config_update_u8(buf, count,
-+					 &test_fw_config->num_requests);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-@@ -518,10 +543,10 @@ static ssize_t config_buf_size_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_size_t(buf, count,
--					   &test_fw_config->buf_size);
-+	rc = __test_dev_config_update_size_t(buf, count,
-+					     &test_fw_config->buf_size);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-@@ -548,10 +573,10 @@ static ssize_t config_file_offset_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_size_t(buf, count,
--					   &test_fw_config->file_offset);
-+	rc = __test_dev_config_update_size_t(buf, count,
-+					     &test_fw_config->file_offset);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-@@ -652,6 +677,8 @@ static ssize_t trigger_request_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware(&test_firmware, name, dev);
- 	if (rc) {
-@@ -752,6 +779,8 @@ static ssize_t trigger_async_request_store(struct device *dev,
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
- 	test_firmware = NULL;
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
- 				     NULL, trigger_async_request_cb);
- 	if (rc) {
-@@ -794,6 +823,8 @@ static ssize_t trigger_custom_fallback_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
- 				     dev, GFP_KERNEL, NULL,
-@@ -856,6 +887,8 @@ static int test_fw_run_batch_request(void *data)
- 						 test_fw_config->buf_size);
- 		if (!req->fw)
- 			kfree(test_buf);
-+		else
-+			req->fw_buf = test_buf;
- 	} else {
- 		req->rc = test_fw_config->req_firmware(&req->fw,
- 						       req->name,
-@@ -895,6 +928,11 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 
-+	if (test_fw_config->reqs) {
-+		rc = -EBUSY;
-+		goto out_bail;
-+	}
-+
- 	test_fw_config->reqs =
- 		vzalloc(array3_size(sizeof(struct test_batched_req),
- 				    test_fw_config->num_requests, 2));
-@@ -911,6 +949,7 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 		req->fw = NULL;
- 		req->idx = i;
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->dev = dev;
- 		init_completion(&req->completion);
- 		req->task = kthread_run(test_fw_run_batch_request, req,
-@@ -993,6 +1032,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 
-+	if (test_fw_config->reqs) {
-+		rc = -EBUSY;
-+		goto out_bail;
-+	}
-+
- 	test_fw_config->reqs =
- 		vzalloc(array3_size(sizeof(struct test_batched_req),
- 				    test_fw_config->num_requests, 2));
-@@ -1010,6 +1054,7 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->fw = NULL;
- 		req->idx = i;
- 		init_completion(&req->completion);
--- 
-2.30.2
-
+On Tue, Apr 11, 2023 at 7:21=E2=80=AFPM Jan Kara <jack@suse.cz> wrote:
+>
+> On Tue 11-04-23 16:22:48, yizhou.tang@shopee.com wrote:
+> > From: Tang Yizhou <yizhou.tang@shopee.com>
+> >
+> > In domain_dirty_limits(), the calculation of the thresh and bg_thresh
+> > variable needs to consider whether it's for global dirtypage writeback
+> > or memcg dirtypage writeback. However, in the rt_task branch, the
+> > accumulation of both variables only considers the global_wb_domain,
+> > which seems strange to me.
+> >
+> > I find the accumulation was introduced in the commit a53eaff8c119 ("MM:
+> > increase safety margin provided by PF_LESS_THROTTLE"). IMHO, realtime
+> > tasks are given a higher page cache limit because they require higher
+> > responsiveness, but we also need to consider whether the writeback of
+> > realtime tasks occurs in the global dirtypage writeback or in the memcg
+> > dirtypage writeback scenario.
+> >
+> > Later Neil said he didn't know what was wanted for realtime in the
+> > commit message of commit a37b0715ddf3 ("mm/writeback: replace
+> > PF_LESS_THROTTLE with PF_LOCAL_THROTTLE"). I guess he made this small
+> > mistake since the commit a53eaff8c119 ("MM: increase safety margin
+> > provided by PF_LESS_THROTTLE").
+> >
+> > Fixes: a53eaff8c119 ("MM: increase safety margin provided by PF_LESS_TH=
+ROTTLE")
+> > CC: NeilBrown <neilb@suse.com>
+> > CC: Tejun Heo <tj@kernel.org>
+> > CC: Fengguang Wu <wufengguang@huawei.com>
+> > Signed-off-by: Tang Yizhou <yizhou.tang@shopee.com>
+>
+> Thanks for the patch! Was this found just by code inspection or is there
+> any practical problem you are trying to fix with this patch?
+>
+> > diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+> > index 516b1aa247e8..7d92de73360e 100644
+> > --- a/mm/page-writeback.c
+> > +++ b/mm/page-writeback.c
+> > @@ -419,8 +419,8 @@ static void domain_dirty_limits(struct dirty_thrott=
+le_control *dtc)
+> >               bg_thresh =3D thresh / 2;
+> >       tsk =3D current;
+> >       if (rt_task(tsk)) {
+> > -             bg_thresh +=3D bg_thresh / 4 + global_wb_domain.dirty_lim=
+it / 32;
+> > -             thresh +=3D thresh / 4 + global_wb_domain.dirty_limit / 3=
+2;
+> > +             bg_thresh +=3D bg_thresh / 4 + dtc_dom(dtc)->dirty_limit =
+/ 32;
+> > +             thresh +=3D thresh / 4 + dtc_dom(dtc)->dirty_limit / 32;
+>
+> This makes sense but I'm not 100% sure this does not reintroduce the
+> problem a53eaff8c119 was trying to fix. Reading the changelog, it seems t=
+he
+> extra term you are fixing is there specifically to deal with ratelimiting=
+,
+> which is global (and not per-memcg), of calls to balance_dirty_pages() an=
+d
+> hence using global_wb_domain.dirty_limit is indeed correct. Neil?
+>
+>                                                                 Honza
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
