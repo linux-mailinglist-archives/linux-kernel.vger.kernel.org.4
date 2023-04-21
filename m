@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F326EA5D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505C66EA5F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjDUI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S231556AbjDUIe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDUI20 (ORCPT
+        with ESMTP id S231461AbjDUIev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:28:26 -0400
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12124E3;
-        Fri, 21 Apr 2023 01:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=UvG09/bWiSWNE+FsalNqF2CIFPzlOov2h8jwZ/B2Hkk=; b=b1lqPxG56Gk4PK2AN3q/ZFM5MK
-        b371yhL6dx9Zhzr3uXxyMkYkNdY0a2wR8vn7lSeb1ApFm26B4jGFql1MoRigZsSZ0rFGw7Xi8JtOP
-        TJ4EOFBVZ+OiOQE439t0C7LqPQZXhHPKZh2CGIiT3CFkSSZjWjGT5UrFAScg0kxyEGG9TOzQBcqxj
-        rz+nPKu2Il2cOER1R0BLqvClrWohQJiQ4d1yUTLtxF4/gdL/QMpgLmG4fhNNvH6Rz8z0+C/xLLmIl
-        cEk1wH3WQWa0Vail651RFg2G+T4WCwyVZjmiKn0y7P5wbc0/ZlooFUUYrw+6i66ZmWWRAYEBaJPZe
-        IE+IzjtA==;
-Received: from noodles by the.earth.li with local (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1ppm7k-0033d1-Rz; Fri, 21 Apr 2023 09:28:08 +0100
-Date:   Fri, 21 Apr 2023 09:28:08 +0100
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] ARM: dts: sun5i: chip: Enable bluetooth
-Message-ID: <ZEJJGGeIu8QW44mh@earth.li>
-References: <cover.1681580558.git.noodles@earth.li>
- <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
- <20230416012421.255bfd19@slackpad.lan>
- <ZEGOk1isRhaekk3h@earth.li>
- <CAGETcx-UnEK3CPC38Ef3gmHcq46nXSJbA9QAwEsF+Xt2bDKEWA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGETcx-UnEK3CPC38Ef3gmHcq46nXSJbA9QAwEsF+Xt2bDKEWA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Fri, 21 Apr 2023 04:34:51 -0400
+X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 01:34:48 PDT
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629475B8F;
+        Fri, 21 Apr 2023 01:34:48 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.98.24])
+        by mail-app4 (Coremail) with SMTP id cS_KCgCn+bFfSUJkjtmAAA--.53646S2;
+        Fri, 21 Apr 2023 16:29:28 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
+        dmitry.torokhov@gmail.com, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] Input: cyttsp4_core - change del_timer_sync() to timer_shutdown_sync()
+Date:   Fri, 21 Apr 2023 16:29:19 +0800
+Message-Id: <20230421082919.8471-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgCn+bFfSUJkjtmAAA--.53646S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17CF43AF13Ar13Kr1kAFb_yoW8tr18p3
+        y3Cr13Jw48GFWUtr17J3s7ZF95Cw15KFyUKF47Gws5Zrn3AryrAF1FyrWfGFW3JFZ8ZFn3
+        Jr4Fv3y5GF9Ykr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
+        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUIzuXUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwIMAWRBVNslyAAasR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,139 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 06:43:06PM -0700, Saravana Kannan wrote:
-> On Thu, Apr 20, 2023 at 12:12 PM Jonathan McDowell <noodles@earth.li> wrote:
-> > On Sun, Apr 16, 2023 at 01:24:21AM +0100, Andre Przywara wrote:
-> > > On Sat, 15 Apr 2023 18:46:03 +0100
-> > > Jonathan McDowell <noodles@earth.li> wrote:
-> > >
-> > > > The C.H.I.P has an rtl8723bs device with the bluetooth interface hooked
-> > > > up on UART3. Support for this didn't exist in mainline when the DTS was
-> > > > initially added, but it does now, so enable it.
-> > > >
-> > > > Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> > > > ---
-> > > >  arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > >
-> > > > diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > > index fd37bd1f3920..4d72a181d8aa 100644
-> > > > --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > > +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > > @@ -255,6 +255,10 @@ &uart3 {
-> > > >     pinctrl-0 = <&uart3_pg_pins>,
-> > > >                 <&uart3_cts_rts_pg_pins>;
-> > > >     status = "okay";
-> > > > +
-> > > > +   bluetooth {
-> > > > +           compatible = "realtek,rtl8723bs-bt";
-> > > > +   }
-> > >
-> > > As the kernel test robot already pointed out, there is a semicolon
-> > > missing here.
-> > > Otherwise looks good (dt-validate passes), but don't know if there are
-> > > any wakeup GPIOs connected (can't seem to find a schematic?).
-> >
-> > So there are wakeups, but if I add:
-> >
-> >         device-wake-gpios = <&axp_gpio 3 GPIO_ACTIVE_LOW>;
-> >         host-wake-gpios = <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
-> >
-> > then some odd sort of dependency issue happens where the serial port
-> > load is deferred waiting for the GPIO to appear, and then the device
-> > doesn't work.
-> 
-> When you say your device doesn't work, are you saying it never probes?
+The watchdog_timer can schedule tx_timeout_task and watchdog_work
+can also arm watchdog_timer. The process is shown below:
 
-The bluetooth device (realtek,rtl8723bs-bt) never appears, apparently
-because the UART it's attached to never loads - it doesn't even try to
-load the firmware.
+----------- timer schedules work ------------
+cyttsp4_watchdog_timer() //timer handler
+  schedule_work(&cd->watchdog_work)
 
-> <debugfs>/devices_deferred should tell you what devices have deferred and why.
+----------- work arms timer ------------
+cyttsp4_watchdog_work() //workqueue callback function
+  cyttsp4_start_wd_timer()
+    mod_timer(&cd->watchdog_timer, ...)
 
-root@chip:~# cat /sys/kernel/debug/devices_deferred
-serial0-0
+Although del_timer_sync() and cancel_work_sync() are called in
+cyttsp4_remove(), the timer and workqueue could still be rearmed.
+As a result, the possible use after free bugs could happen. The
+process is shown below:
 
-> > Error in dmesg is:
-> >
-> > serial serial0-0: deferred probe pending
-> >
-> > on 6.3-rc and on 6.1 I get:
-> >
-> > dw-apb-uart 1c28c00.serial: Failed to create device link (0x180) with axp20x-gpio
-> 
-> This error message doesn't block anything. So I don't think this is
-> the cause of your blocking issue. But I still want to understand why
-> this error message is showing up.
-> 
-> > I'm not clear why it's trying to link the serial port to the GPIO; it
-> > seems that it should be the bluetooth device that depends on both the
-> > UART and the GPIO,
-> 
-> A fix for the device link error message went in on v6.3-rc3. Is that
-> the 6.3 version you tested this on?
+  (cleanup routine)           |  (timer and workqueue routine)
+cyttsp4_remove()              | cyttsp4_watchdog_timer() //timer
+  cyttsp4_stop_wd_timer()     |   schedule_work()
+    del_timer_sync()          |
+                              | cyttsp4_watchdog_work() //worker
+                              |   cyttsp4_start_wd_timer()
+                              |     mod_timer()
+    cancel_work_sync()        |
+                              | cyttsp4_watchdog_timer() //timer
+                              |   schedule_work()
+    del_timer_sync()          |
+  kfree(cd) //FREE            |
+                              | cyttsp4_watchdog_work() // reschedule!
+                              |   cd-> //USE
 
-I originally tried on 6.1.21, which is where I got the "Failed to create
-device link" message. I then moved to 6.3-rc7 as I saw there had been
-further changes recently. There I just get the:
+This patch changes del_timer_sync() to timer_shutdown_sync(),
+which could prevent rearming of the timer from the workqueue.
 
-serial serial0-0: deferred probe pending
+Fixes: 17fb1563d69b ("Input: cyttsp4 - add core driver for Cypress TMA4XX touchscreen devices")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/input/touchscreen/cyttsp4_core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-message.
-
-> Also, I tried looking into the UART driver
-> (drivers/tty/serial/8250/8250_dw.c) but it wasn't clear how it ends up
-> populating the bluetooth serial device. If you can point that out,
-> that'd be helpful (assuming 6.3-rc3 still shows that error message).
-
-I have the following in my device tree:
-
-&uart3 {
-        pinctrl-names = "default";
-        pinctrl-0 = <&uart3_pg_pins>,
-                    <&uart3_cts_rts_pg_pins>;
-        status = "okay";
-
-        bluetooth {
-                compatible = "realtek,rtl8723bs-bt";
-                device-wake-gpios = <&axp_gpio 3 GPIO_ACTIVE_LOW>;
-                host-wake-gpios = <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
-        };
-};
-
-uart3 is a snps,dw-apb-uart, defined in arch/arm/boot/dts/sun5i.dtsi
-
-The UART and AXP209 device drivers are compiled into the kernel:
-
-CONFIG_PINCTRL_AXP209=y
-CONFIG_SERIAL_8250=y
-CONFIG_SERIAL_8250_DW=y
-
-The bluetooth bits are modules (btrtl, hci_uart).
-
-If I remove the device-wake-gpios line then the Bluetooth device works
-fine, and /sys/kernel/debug/devices_deferred is empty.
-
-Somehow it seems like the GPIO is being parsed as a dependency for the
-serial port, even though the serial port + GPIO are both dependencies
-for the bluetooth device. Even with that, given both are built-in I
-don't understand why the serial port never completes setup.
-
-> > and that the GPIO is actually optional so shouldn't
-> > hold up loading, but I can't see how that should be represented.
-> 
-> Optional dependencies should get ignored after the default
-> deferred_probe_timeout runs out and the supplier driver hasn't been
-> loaded yet.
-
-When I say it's optional I mean if it's not listed everything works
-fine, but I don't believe there's anyway to express that in the DTS.
-It's certainly not required for the serial port, just the bluetooth
-device.
-
-J.
-
+diff --git a/drivers/input/touchscreen/cyttsp4_core.c b/drivers/input/touchscreen/cyttsp4_core.c
+index 0cd6f626ade..7cb26929dc7 100644
+--- a/drivers/input/touchscreen/cyttsp4_core.c
++++ b/drivers/input/touchscreen/cyttsp4_core.c
+@@ -1263,9 +1263,8 @@ static void cyttsp4_stop_wd_timer(struct cyttsp4 *cd)
+ 	 * Ensure we wait until the watchdog timer
+ 	 * running on a different CPU finishes
+ 	 */
+-	del_timer_sync(&cd->watchdog_timer);
++	timer_shutdown_sync(&cd->watchdog_timer);
+ 	cancel_work_sync(&cd->watchdog_work);
+-	del_timer_sync(&cd->watchdog_timer);
+ }
+ 
+ static void cyttsp4_watchdog_timer(struct timer_list *t)
 -- 
-Web [                     Don't be a stranger.                     ]
-site: https:// [                                          ]      Made by
-www.earth.li/~noodles/  [                      ]         HuggieTag 0.0.24
+2.17.1
+
