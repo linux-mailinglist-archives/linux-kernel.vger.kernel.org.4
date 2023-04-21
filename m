@@ -2,116 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8234C6EA5CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01966EA5D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjDUI03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S230334AbjDUI1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjDUI01 (ORCPT
+        with ESMTP id S231229AbjDUI05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:26:27 -0400
-Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [95.215.58.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030361FCD
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:26:25 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682065582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SHe/jzCqewm2DDzl3v2vI3vnMZWQOaTgzDjtGP1hSHE=;
-        b=KC+8xr4DqFayZ9uHezyBxBEJRGhGyHjWU0OIUIuzxlBD+1em15tVTQ39Moa4Ow837/YDR7
-        f5DdKiZiL4S8ASSZTLXT9RZjW5duqYpTvKtqPJ7N//SZiQe9/iiWwY50u0W4AJgccc4sKZ
-        gKAeURTkRp03G56RuSy9CVsqq2MYvDY=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] net: sched: Print msecs when transmit queue time out
-Date:   Fri, 21 Apr 2023 16:26:06 +0800
-Message-Id: <20230421082606.551411-1-yajun.deng@linux.dev>
+        Fri, 21 Apr 2023 04:26:57 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949098A6C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:26:55 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b992ed878ebso1200120276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682065614; x=1684657614;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lAuTtwnqd4lYOEj0afl/oqM3QX+uTDaG/z7kPpmXMgE=;
+        b=FnAG5n9T3CD6MkdDL3/tPICCqZcLHI/s4UBGK7V7gpdZvmEqzDQGicUK9q9/3S3+Xb
+         nRCokJZNgnJYEtFgUY45U+1/ZPKdE3FghOazEEoYcSL8o/BU6yUqJeZMnlJVI8VSrnTq
+         3j+yfjW10H5AajWw1gYYA/SdMdSOeyKigcAFySQ4Os3JD1v07pg27apxg+EWC0Xjyi7h
+         wg1ZZokiPn5Tmw88ZXN4MfHOm4yNQDlIGgwp3Ui3YzZ4X9I9bX7H+9J2V47HK65xN9sF
+         gorzPCtNRDANru/Auc4m9nQ7vB0vnQ13COO0+tBNk5isKTUQ5U9GdAYiqmIvupvmaOfm
+         XY4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682065615; x=1684657615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lAuTtwnqd4lYOEj0afl/oqM3QX+uTDaG/z7kPpmXMgE=;
+        b=BBI94KoRYtc8Wc75C3wksjD9uZPuN1HJwniqPh9UOTUBDDfFS/GUs/juzb4r6jjg3X
+         sqjBhXTbzLFIO5BbztpABOTVJW5Prs9oiusGVTfSnzYCCRLqzGAGr0z4a0wm4n2kbtqz
+         vw8UkX2poUxOtLoXC/tF/SJSCpBxHL1p4s8WVlye89HNOiDf5OW6mhDDPhrll/Z+XBqg
+         wx3kl4kwLmwssh0hYXoiJYiKmYRLDEqLaE5kI9JTDF9J0WrdXI9Ji7KDVGTjkFvXQUzx
+         s2eJ0rT/bDYZjKa0MCFW51Z0IaUxrBD1IXXv6CpeT8v4opYEERi8iiketHUoLqiIQamo
+         TL1A==
+X-Gm-Message-State: AAQBX9ffbb2U86vKPJHgvzl7TlEPYVk2nNXpKxforMjfVgZGOBIkV8ew
+        k7CpOpef2lApizVtPY7QVo6+ZuQOzRjBABGdFc0lwA==
+X-Google-Smtp-Source: AKy350Z8XcyFNX2JboNAaFrt3oSnc7DS4Jc7Id9gYXDPevkIo3K9uThotJdC51FnQkL/TPRP4jQP8FzcMgBbAAn2v24=
+X-Received: by 2002:a81:12d3:0:b0:54f:54c5:70d with SMTP id
+ 202-20020a8112d3000000b0054f54c5070dmr1414029yws.20.1682065614765; Fri, 21
+ Apr 2023 01:26:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz> <20230414-pmi632-v1-2-fe94dc414832@z3ntu.xyz>
+In-Reply-To: <20230414-pmi632-v1-2-fe94dc414832@z3ntu.xyz>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 21 Apr 2023 10:26:43 +0200
+Message-ID: <CACRpkdb0oncz5UB8vtu3csvBQXojvdxxfDMPrnGeH3qRBr6=AQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] pinctrl: qcom: spmi-gpio: Add PMI632 support
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel will print several warnings in a short period of time
-when it stalls. Like this:
+On Fri, Apr 14, 2023 at 1:18=E2=80=AFAM Luca Weiss <luca@z3ntu.xyz> wrote:
 
-First warning:
-[ 7100.097547] ------------[ cut here ]------------
-[ 7100.097550] NETDEV WATCHDOG: eno2 (xxx): transmit queue 8 timed out
-[ 7100.097571] WARNING: CPU: 8 PID: 0 at net/sched/sch_generic.c:467
-                       dev_watchdog+0x260/0x270
-...
+> Add support for the 8 GPIOs found on PMI632.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-Second warning:
-[ 7147.756952] rcu: INFO: rcu_preempt self-detected stall on CPU
-[ 7147.756958] rcu:   24-....: (59999 ticks this GP) idle=546/1/0x400000000000000
-                      softirq=367      3137/3673146 fqs=13844
-[ 7147.756960]        (t=60001 jiffies g=4322709 q=133381)
-[ 7147.756962] NMI backtrace for cpu 24
-...
+This patch (2/8) applied as uncontroversial.
 
-We calculate that the transmit queue start stall should occur before
-7095s according to watchdog_timeo, the rcu start stall at 7087s.
-These two times are close together, it is difficult to confirm which
-happened first.
-
-To let users know the exact time the stall started, print msecs when
-the transmit queue time out.
-
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- net/sched/sch_generic.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index a9aadc4e6858..37e41f972f69 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -502,7 +502,7 @@ static void dev_watchdog(struct timer_list *t)
- 		if (netif_device_present(dev) &&
- 		    netif_running(dev) &&
- 		    netif_carrier_ok(dev)) {
--			int some_queue_timedout = 0;
-+			unsigned int timedout_ms = 0;
- 			unsigned int i;
- 			unsigned long trans_start;
- 
-@@ -514,16 +514,16 @@ static void dev_watchdog(struct timer_list *t)
- 				if (netif_xmit_stopped(txq) &&
- 				    time_after(jiffies, (trans_start +
- 							 dev->watchdog_timeo))) {
--					some_queue_timedout = 1;
-+					timedout_ms = jiffies_to_msecs(jiffies - trans_start);
- 					atomic_long_inc(&txq->trans_timeout);
- 					break;
- 				}
- 			}
- 
--			if (unlikely(some_queue_timedout)) {
-+			if (unlikely(timedout_ms)) {
- 				trace_net_dev_xmit_timeout(dev, i);
--				WARN_ONCE(1, KERN_INFO "NETDEV WATCHDOG: %s (%s): transmit queue %u timed out\n",
--				       dev->name, netdev_drivername(dev), i);
-+				WARN_ONCE(1, "NETDEV WATCHDOG: %s (%s): transmit queue %u timed out %u ms\n",
-+					  dev->name, netdev_drivername(dev), i, timedout_ms);
- 				netif_freeze_queues(dev);
- 				dev->netdev_ops->ndo_tx_timeout(dev, i);
- 				netif_unfreeze_queues(dev);
--- 
-2.25.1
-
+Yours,
+Linus Walleij
