@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934F16EAEEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718A26EAEED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbjDUQRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S229922AbjDUQUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbjDUQRI (ORCPT
+        with ESMTP id S229623AbjDUQUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:17:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1CF72A8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682093782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=0tp+aaiy/E7Hvy2jvzMO8gNdfxuSH7jfOPj7r1Xv8Nw=;
-        b=Iu3GlUWKO28Nf0y/XenGCuhwZEqJY0/T2cNSm+mmFDxQwibMN3IKtU1S9fqFNmGT0vjVYj
-        2YuWftuiuOEKUDDF9RNXV08Ua65N3Zuveaw/DjqEBGATpTjjGZLnzSlJlpxUBjXq0XjtFt
-        b7ZKAW9zbZyWOR/iWqGF1z/2MumVDXo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-q_03Udd4PZKnyXWr3yhMzw-1; Fri, 21 Apr 2023 12:16:19 -0400
-X-MC-Unique: q_03Udd4PZKnyXWr3yhMzw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C66713C1179E;
-        Fri, 21 Apr 2023 16:16:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C46DE140EBF4;
-        Fri, 21 Apr 2023 16:16:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] rxrpc: Fix error when reading rxrpc tokens
+        Fri, 21 Apr 2023 12:20:46 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D253D2111
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:20:44 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7606d6bbc60so171599039f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:20:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682094044; x=1684686044;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AGnzK40NDwWKAf2P8qQGz+Q1vBUuoeUsc6vFTLahuv8=;
+        b=E2XElfFDJa6918OoFPfOVN91ETPqiJHZIKCOZlm+BrxfbdXQwO0ljCzcXS4b1F1jaf
+         WZrIoeEOb3p8aJXhcxcL79e4EDBslQyY/4AANB0B3cHZ1kI0H8cTKg0MwP8J99DRIWMh
+         aeJobx5pfFYnIKfeDGKqOQ1/Pja13ulGF4cBBXWmbJ9xmVXr+davF6tZbo5gZ8Y//Pal
+         1aoI3sOqnEFwXXqqWPY0bzCkXgtIxRxlMLA1XLVjQK5SBO8uhPlWHuo33jpL7FEd9IDx
+         DNqnwYopGw8KRe3E9XlaEGYPwmzLfDzIbru9WOnkWGtlRnGAQ1p3M/SVNEToTSHhkhet
+         MYjA==
+X-Gm-Message-State: AAQBX9dYapGU24PMBVhHcnXfD4YFW7XmMiuCsMF72+Ra6MBSy3xA9rMP
+        T77OAj4crpPSu9wH6vqmoSHRED9qHCQ9JpffGP7W/HXizOVhplb69w==
+X-Google-Smtp-Source: AKy350b+cuV/JkUBy1fggl7DCgKug3fDDRvUs7kpgXTGa2HQw/jy8vjuxXjnGR59xawE48yT+5CM0DWynxVEgFioeohKAzxAWtmE
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <212124.1682093777.1@warthog.procyon.org.uk>
-Date:   Fri, 21 Apr 2023 17:16:17 +0100
-Message-ID: <212125.1682093777@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:9547:0:b0:406:29c8:2d7c with SMTP id
+ y65-20020a029547000000b0040629c82d7cmr2665412jah.5.1682094044171; Fri, 21 Apr
+ 2023 09:20:44 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 09:20:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fb562705f9db0909@google.com>
+Subject: [syzbot] [kernel?] kernel BUG in commit_creds (2)
+From:   syzbot <syzbot+57f29dd5bfc4c89532f9@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Dionne <marc.dionne@auristor.com>
+Hello,
 
-When converting from ASSERTCMP to WARN_ON, the tested condition must
-be inverted, which was missed for this case.
+syzbot found the following issue on:
 
-This would cause an EIO error when trying to read an rxrpc token, for
-instance when trying to display tokens with AuriStor's "tokens" command.
+HEAD commit:    6a8f57ae2eb0 Linux 6.3-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=122152afc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4afb87f3ec27b7fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=57f29dd5bfc4c89532f9
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Fixes: 84924aac08a4 ("rxrpc: Fix checker warning")
-Signed-off-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: linux-afs@lists.infradead.org
-cc: netdev@vger.kernel.org
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/da19cc95d265/disk-6a8f57ae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/508e5ccb6948/vmlinux-6a8f57ae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/aa14910af715/bzImage-6a8f57ae.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+57f29dd5bfc4c89532f9@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at kernel/cred.c:456!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 7314 Comm: iou-wrk-7310 Not tainted 6.3.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:commit_creds+0x11fc/0x1210 kernel/cred.c:456
+Code: f9 ff ff 48 8b 4c 24 18 80 e1 07 80 c1 03 38 c1 0f 8c 99 f9 ff ff 48 8b 7c 24 18 e8 4e 60 83 00 e9 8a f9 ff ff e8 b4 9f 2d 00 <0f> 0b e8 ad 9f 2d 00 0f 0b e8 a6 9f 2d 00 0f 0b 0f 1f 40 00 f3 0f
+RSP: 0018:ffffc90014fdf758 EFLAGS: 00010293
+RAX: ffffffff815cd70c RBX: ffff88807e7cd7c0 RCX: ffff88807e7cd7c0
+RDX: 0000000000000000 RSI: ffffffff8aea7d00 RDI: ffff888021df9500
+RBP: ffff88807e7cdfb8 R08: dffffc0000000000 R09: fffffbfff1ca6946
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807e7cdfb0
+R13: dffffc0000000000 R14: ffff88801e3fdd00 R15: 1ffff11004dc6098
+FS:  00007feb6d00b700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f795b584558 CR3: 000000001f493000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ smk_write_relabel_self+0x4d7/0x540 security/smack/smackfs.c:2798
+ loop_rw_iter+0x35c/0x590
+ io_write+0xebf/0x1340 io_uring/rw.c:923
+ io_issue_sqe+0x2f0/0xb20 io_uring/io_uring.c:1907
+ io_wq_submit_work+0x41a/0x800 io_uring/io_uring.c:1983
+ io_worker_handle_work+0x817/0xd90 io_uring/io-wq.c:587
+ io_wqe_worker+0x3d1/0xe00 io_uring/io-wq.c:632
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:commit_creds+0x11fc/0x1210 kernel/cred.c:456
+Code: f9 ff ff 48 8b 4c 24 18 80 e1 07 80 c1 03 38 c1 0f 8c 99 f9 ff ff 48 8b 7c 24 18 e8 4e 60 83 00 e9 8a f9 ff ff e8 b4 9f 2d 00 <0f> 0b e8 ad 9f 2d 00 0f 0b e8 a6 9f 2d 00 0f 0b 0f 1f 40 00 f3 0f
+RSP: 0018:ffffc90014fdf758 EFLAGS: 00010293
+RAX: ffffffff815cd70c RBX: ffff88807e7cd7c0 RCX: ffff88807e7cd7c0
+RDX: 0000000000000000 RSI: ffffffff8aea7d00 RDI: ffff888021df9500
+RBP: ffff88807e7cdfb8 R08: dffffc0000000000 R09: fffffbfff1ca6946
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807e7cdfb0
+R13: dffffc0000000000 R14: ffff88801e3fdd00 R15: 1ffff11004dc6098
+FS:  00007feb6d00b700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b31d21000 CR3: 000000001f493000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
- net/rxrpc/key.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/net/rxrpc/key.c b/net/rxrpc/key.c
-index 8d53aded09c4..33e8302a79e3 100644
---- a/net/rxrpc/key.c
-+++ b/net/rxrpc/key.c
-@@ -680,7 +680,7 @@ static long rxrpc_read(const struct key *key,
- 			return -ENOPKG;
- 		}
- 
--		if (WARN_ON((unsigned long)xdr - (unsigned long)oldxdr ==
-+		if (WARN_ON((unsigned long)xdr - (unsigned long)oldxdr !=
- 			    toksize))
- 			return -EIO;
- 	}
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
