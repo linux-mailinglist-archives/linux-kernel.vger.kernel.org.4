@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B856EB393
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2093E6EB39A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjDUVYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 17:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
+        id S229601AbjDUVZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 17:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbjDUVX5 (ORCPT
+        with ESMTP id S232925AbjDUVZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 17:23:57 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E6E26AF;
-        Fri, 21 Apr 2023 14:23:55 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5424b046c6bso764691eaf.1;
-        Fri, 21 Apr 2023 14:23:55 -0700 (PDT)
+        Fri, 21 Apr 2023 17:25:51 -0400
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EFA2114;
+        Fri, 21 Apr 2023 14:25:50 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-63d4595d60fso17011513b3a.0;
+        Fri, 21 Apr 2023 14:25:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682112235; x=1684704235;
+        d=1e100.net; s=20221208; t=1682112350; x=1684704350;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IbaXCpUXe4iUKhx65n7G15ksj7GhXIVMeVUGx6UoeCY=;
-        b=In6hZNOab0GghfXCBOxQF56pTX2Jmm5XdpCn8LYHDbhjeBoSP9PQvqQvip9cG9wfHQ
-         yeU1g2oc+C92Uwq3Qw7VTKcsgE8MuwH2avldG4NZ/3HvA2v2p+AiplGPvSVqGDq7RfKR
-         sJfwmuF3o7qkO8OV+3waHgAXlRgEIfpsFKyi6lhwo4irZ4Kqx3v1A/Pl0JH4BPqI8r6L
-         PxgcajL66m2L7DG7yNy1u9Bsk4F60hpJmglSbSdsx4Jy0Fcw8wFkx32keSrZBnpZXVhh
-         jnwqY2qsx0P9bQABbe5PN399/k0ONk3buHFV6bIfy8D3CRoFhno3bhXElGGeKCyUpgbZ
-         1hAw==
-X-Gm-Message-State: AAQBX9f4uAl0FHckPRXNs0PwhjKt03FDQOqaYy8u1uzw8ibk4t30DsIs
-        bihuLpFUUIshvzoGBpih1A==
-X-Google-Smtp-Source: AKy350bHXXS6OurY5nmMtPS/MaZh5XGH97e5KRD0bzQucEfG8t+AZTkCzTlqn5WIELiRv7gofzvDNA==
-X-Received: by 2002:a4a:cb1a:0:b0:547:6879:e9aa with SMTP id r26-20020a4acb1a000000b005476879e9aamr549944ooq.5.1682112234455;
-        Fri, 21 Apr 2023 14:23:54 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q123-20020a4a4b81000000b00546daaf33cfsm2156853ooa.14.2023.04.21.14.23.53
+        bh=zJedWDsXF2ePbB+lpNfK2XfHgdkLTIbTwwWaJkjgNsg=;
+        b=Hp3DZdXx5oZkK0SM62FeZHoFOXMtJUjq4HPcQ62gp2qIHNAHH7Iuu3hPqP7sSdXIcu
+         vuqiYWleENmapCflnsau5kqytyean+6kvxV6eWe85gn7rM5LA+n9WULYNQNy+sIehziw
+         GNEsW/2q8OS7CL17OLQ8FecefSGEepm/tA6JCYF2szNvhqxs4ow2KGO0SoRFVw7/tkM/
+         AM3YQXjXJVzbSQ3Lnkrj1ooVKdKGvulte/eCda57cPjPtADlMrAlDycLLTzzlv5CRWNC
+         Odw0CYwid0nzwVi/p2fhcrZoui4YXaa1cP/+Vgwl4efVjnsiqkRotO8btsu8fhl/xu8w
+         TQIQ==
+X-Gm-Message-State: AAQBX9fPBO6l7M66YxrG4jAXJuC45zyRGuZpRh5m5h2QtYvuXYcZGnOx
+        TW8X9Poo8mUtYoyIlyD20xc=
+X-Google-Smtp-Source: AKy350ZyV6LAptqS0cWu/ZM4PDGtVYhbk1ei0PqnURQ/YhiAFHsz7Eptwna7wObXwOOzFJpT4LAIjg==
+X-Received: by 2002:a17:902:e80d:b0:1a6:46d7:77f0 with SMTP id u13-20020a170902e80d00b001a646d777f0mr13620766plg.0.1682112349602;
+        Fri, 21 Apr 2023 14:25:49 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id r21-20020a170902ea5500b001a281063ab4sm3090772plg.233.2023.04.21.14.25.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 14:23:54 -0700 (PDT)
-Received: (nullmailer pid 1785271 invoked by uid 1000);
-        Fri, 21 Apr 2023 21:23:53 -0000
-Date:   Fri, 21 Apr 2023 16:23:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        devicetree@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/7] dt-bindings: phy: Add StarFive JH7110 PCIe PHY
-Message-ID: <168211223285.1785232.7377797349982243568.robh@kernel.org>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-3-minda.chen@starfivetech.com>
+        Fri, 21 Apr 2023 14:25:49 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 21:25:47 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Dexuan Cui <decui@microsoft.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: hv: Replace retarget_msi_interrupt_params with
+ hyperv_pcpu_input_arg
+Message-ID: <ZEL/W59LHx+5o4r4@liuwe-devbox-debian-v2>
+References: <20230421013025.17152-1-decui@microsoft.com>
+ <ZEJdSXv6IwSxPp9r@lpieralisi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420110052.3182-3-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZEJdSXv6IwSxPp9r@lpieralisi>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 20 Apr 2023 19:00:47 +0800, Minda Chen wrote:
-> Add StarFive JH7110 SoC PCIe 2.0 PHY dt-binding.
-> PCIe PHY0 (phy@10210000) can be used as USB 3.0 PHY.
+On Fri, Apr 21, 2023 at 11:54:17AM +0200, Lorenzo Pieralisi wrote:
+> On Thu, Apr 20, 2023 at 06:30:25PM -0700, Dexuan Cui wrote:
+> > 4 commits are involved here:
+> > A (2016): commit 0de8ce3ee8e3 ("PCI: hv: Allocate physically contiguous hypercall params buffer")
+> > B (2017): commit be66b6736591 ("PCI: hv: Use page allocation for hbus structure")
+> > C (2019): commit 877b911a5ba0 ("PCI: hv: Avoid a kmemleak false positive caused by the hbus buffer")
+> > D (2018): commit 68bb7bfb7985 ("X86/Hyper-V: Enable IPI enlightenments")
+> > 
+> > Patch D introduced the per-CPU hypercall input page "hyperv_pcpu_input_arg"
+> > in 2018. With patch D, we no longer need the per-Hyper-V-PCI-bus hypercall
+> > input page "hbus->retarget_msi_interrupt_params" that was added in patch A,
+> > and the issue addressed by patch B is no longer an issue, and we can also
+> > get rid of patch C.
+> > 
+> > The change here is required for PCI device assignment to work for
+> > Confidential VMs (CVMs) running without a paravisor, because otherwise we
+> > would have to call set_memory_decrypted() for
+> > "hbus->retarget_msi_interrupt_params" before calling the hypercall
+> > HVCALL_RETARGET_INTERRUPT.
+> > 
+> > Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> > ---
+> > 
+> > Changes in v2:
+> >   Fixed the inaccuracy in the commit message (Thanks Michael):
+> >     "Confidential VMs (CVMs)" -> "Confidential VMs (CVMs) running without a paravisor".
+> > 
+> >   Added Michael's Reviewed-by.
+> > 
+> >  drivers/pci/controller/pci-hyperv.c | 48 +++++------------------------
+> >  1 file changed, 7 insertions(+), 41 deletions(-)
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  .../phy/starfive,jh7110-pcie-phy.yaml         | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-pcie-phy.yaml
+> Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+Applied to hyperv-next. Thanks.
