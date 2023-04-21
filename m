@@ -2,202 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AA86EACA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20E36EAC98
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjDUOSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S232109AbjDUORW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbjDUORq (ORCPT
+        with ESMTP id S230094AbjDUORU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:46 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133B9C677
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b92309d84c1so6367219276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:20 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8DB93DE
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:17 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3ef38864360so20415591cf.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086663; x=1684678663;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
-        b=ns5H+QuUh8mZPsqMyCzdWVAI4JV7KSMOsX/PkKfi+KNM578zeMJZglKgjpr9UxuRnA
-         wi25x9VT/iovSYgHd+ve7v7cd+FGEBPpntXYK5n0ggGm32KLQWoAmoG1zm5YzGbgtbrq
-         RgTiawh3lkrVdmd0R3kDNubrRwYA0ZgP70oIVMckT5bHQVK56Xdft2ji0Wnav1ky6YhF
-         nniaUNEowlFAQLCk2RUV86VHg09+JUS0zqM05SVxhgO6+lK/se36eKCwGMRdVYXqX4nx
-         8uLc5IBLZvH0koSjHV6sUtsZWbHv1v1y0x+sKRLknFsVO04HECC7IZBwaOVCeLtP7eYM
-         qOAw==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682086637; x=1684678637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ijNYMVjlbJrZCaV78UXYGLc3DOZur5hhO7MmLiMh8Og=;
+        b=1MoarXjdhobUU86WqZanZo18cI5xugUCVCqCEndho+J97fcXVGnhQG4rpqItWwBKRE
+         pnu+PQ1Q+g5aCGhrqqbN5imC4WEXG17/s9M9M1lNc9awQfYxSMpHDXHoj9hCKtfITqpY
+         E8RzhCarbtSuTtlLFKq54rQmN+WoH2JcWT3Ys7slP0oU4QXGXYvCMTTsmlXH/reFlB4Y
+         S7IR/cWPx9kH+LvSEeM6TfB/5lq2Ep+r02xYaxh4H5g6mTmSBmlfg5KpOt1ql8xpyAYy
+         Pq6HQhvtSGzjNcjlGkkQhm5MjHI0Ik8kd/LO8Wo5fdGOm1SPO0R/ZKjEhr98JR8g9uFa
+         0nCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086663; x=1684678663;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
-        b=Yv2v6h80XkCKI4lCXtJh0aMqBTmp+6HjxgSoL4V2cTiCQo7Lc9Szd2hug5yIQyUYLC
-         BLv/4b2i48XZ5+AExyePJIKaC74bZ9I72NCRf//6BEXl+DBzxQW8d3r15ESRZfoUU/1H
-         NfhCYK3xpQ9gtO0epENkC/ACedxbQ1PNhVS4aHcZoYLIKAMDuG2N4DHekHR2RQBpMLwM
-         JWzA2kL2QZYa+jfnWiNaQOgUGRCmCXcba/oam4uREJQL+EmfZAhhLIQFJ+J38uyhiCvu
-         zg0OuoDIkzJhYP/JBejEAP71waZmEvUDmRDt/IuI3hMH2Aqp5TQNcbAV7BRUiLidsYR5
-         Pifg==
-X-Gm-Message-State: AAQBX9f01d2VjhnHYHbqKrnGuwtqk+k6Qt33waCBE63CEfTVb2ggqHhT
-        SvBncvXJ42ovMfTk1EcyWHkF1jYrwaUOi296GQ==
-X-Google-Smtp-Source: AKy350ZG7u2gePkwhYPhvuDsxGloMw0UJdMM4BeAyPegJQdDxY8uNtCzr8KodyMKn0yqhT8McYTYsD6j34k8q2wqkQ==
-X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with
- SMTP id en8-20020a05690c2b8800b0054c15ad11e4mr1865952ywb.0.1682086663349;
- Fri, 21 Apr 2023 07:17:43 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:14 +0200
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-1-peternewman@google.com>
-Subject: [PATCH v1 0/9] x86/resctrl: Use soft RMIDs for reliable MBM on AMD
-From:   Peter Newman <peternewman@google.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Newman <peternewman@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682086637; x=1684678637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ijNYMVjlbJrZCaV78UXYGLc3DOZur5hhO7MmLiMh8Og=;
+        b=aN1zJzTzc970+fSqoljV+lsll+YTQ3nZ9GPKkSxd422d9oQsW9PqkwWMcBaQF8GxEu
+         +74sd8DKGypXJFv2oE5EP4Jd3ksdj8Epy+8NPwKBiClrJOcjHk4uh5c6Fzuf8x3IBCUS
+         IVJV+M9Za5lQnYX7AYD9H5bRoqKCOsn3mgW8w+5cTRgwY7OBlPCjXCuzWXLb7aQJwztB
+         OpmXRE+3FOYuBux3WO84B6ioZV5g1lVie+tWVanvuNrGzFz63cX8oX6p2QCAPb7jVwny
+         Ws5wyGQ8v3pk6NwjkvbuOdm7JDKPp95uLhTR0guImJyBUUvgsRIW+QfGU+1TG3bRQVVm
+         DgDw==
+X-Gm-Message-State: AAQBX9dzFp0IIaMadJD3wiNnmWC+/tPj25UWcD+LX5xXGq1LdMJGRJyk
+        C7zxi7B4sXJ7eqYa36zf9GmWyA==
+X-Google-Smtp-Source: AKy350YR+XIBm2Qr27pDAHIa3M+HB+PNKY0FDb8TOcQDtECfUzFoFsx0E+crk5sbOnQvyLyT3L1deg==
+X-Received: by 2002:ac8:5a15:0:b0:3e1:90e4:c20 with SMTP id n21-20020ac85a15000000b003e190e40c20mr9052657qta.66.1682086636949;
+        Fri, 21 Apr 2023 07:17:16 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:6f0d])
+        by smtp.gmail.com with ESMTPSA id l13-20020a05622a050d00b003ef38277445sm1354605qtx.16.2023.04.21.07.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 07:17:16 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 10:17:15 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 02/26] mm: compaction: avoid GFP_NOFS deadlocks
+Message-ID: <20230421141715.GA320347@cmpxchg.org>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-3-hannes@cmpxchg.org>
+ <20230421122743.d7xfvzyhiunbphh3@techsingularity.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421122743.d7xfvzyhiunbphh3@techsingularity.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette, Fenghua,
+On Fri, Apr 21, 2023 at 01:27:43PM +0100, Mel Gorman wrote:
+> On Tue, Apr 18, 2023 at 03:12:49PM -0400, Johannes Weiner wrote:
+> > During stress testing, two deadlock scenarios were observed:
+> > 
+> > 1. One GFP_NOFS allocation was sleeping on too_many_isolated(), and
+> >    all CPUs were busy with compactors that appeared to be spinning on
+> >    buffer locks.
+> > 
+> >    Give GFP_NOFS compactors additional isolation headroom, the same
+> >    way we do during reclaim, to eliminate this deadlock scenario.
+> > 
+> > 2. In a more pernicious scenario, the GFP_NOFS allocation was
+> >    busy-spinning in compaction, but seemingly never making
+> >    progress. Upon closer inspection, memory was dominated by file
+> >    pages, which the fs compactor isn't allowed to touch. The remaining
+> >    anon pages didn't have the contiguity to satisfy the request.
+> > 
+> >    Allow GFP_NOFS allocations to bypass watermarks when compaction
+> >    failed at the highest priority.
+> > 
+> > While these deadlocks were encountered only in tests with the
+> > subsequent patches (which put a lot more demand on compaction), in
+> > theory these problems already exist in the code today. Fix them now.
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> 
+> Definitely needs to be split out.
 
-This series introduces a new mount option enabling an alternate mode for
-MBM to work around an issue on present AMD implementations and any other
-resctrl implementation where there are more RMIDs (or equivalent) than
-hardware counters.
+Will do.
 
-The L3 External Bandwidth Monitoring feature of the AMD PQoS
-extension[1] only guarantees that RMIDs currently assigned to a
-processor will be tracked by hardware. The counters of any other RMIDs
-which are no longer being tracked will be reset to zero. The MBM event
-counters return "Unavailable" to indicate when this has happened.
+> >  mm/compaction.c | 15 +++++++++++++--
+> >  mm/page_alloc.c | 10 +++++++++-
+> >  2 files changed, 22 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/mm/compaction.c b/mm/compaction.c
+> > index 8238e83385a7..84db84e8fd3a 100644
+> > --- a/mm/compaction.c
+> > +++ b/mm/compaction.c
+> > @@ -745,8 +745,9 @@ isolate_freepages_range(struct compact_control *cc,
+> >  }
+> >  
+> >  /* Similar to reclaim, but different enough that they don't share logic */
+> > -static bool too_many_isolated(pg_data_t *pgdat)
+> > +static bool too_many_isolated(struct compact_control *cc)
+> >  {
+> > +	pg_data_t *pgdat = cc->zone->zone_pgdat;
+> >  	bool too_many;
+> >  
+> >  	unsigned long active, inactive, isolated;
+> > @@ -758,6 +759,16 @@ static bool too_many_isolated(pg_data_t *pgdat)
+> >  	isolated = node_page_state(pgdat, NR_ISOLATED_FILE) +
+> >  			node_page_state(pgdat, NR_ISOLATED_ANON);
+> >  
+> > +	/*
+> > +	 * GFP_NOFS callers are allowed to isolate more pages, so they
+> > +	 * won't get blocked by normal direct-reclaimers, forming a
+> > +	 * circular deadlock. GFP_NOIO won't get here.
+> > +	 */
+> > +	if (cc->gfp_mask & __GFP_FS) {
+> > +		inactive >>= 3;
+> > +		active >>= 3;
+> > +	}
+> > +
+> 
+> This comment needs to explain why GFP_NOFS gets special treatment
+> explaning that a GFP_NOFS context may not be able to migrate pages and
+> why.
 
-An interval for effectively measuring memory bandwidth typically needs
-to be multiple seconds long. In Google's workloads, it is not feasible
-to bound the number of jobs with different RMIDs which will run in a
-cache domain over any period of time.  Consequently, on a
-fully-committed system where all RMIDs are allocated, few groups'
-counters return non-zero values.
+Fair point, I'll expand on that.
 
-To demonstrate the underlying issue, the first patch provides a test
-case in tools/testing/selftests/resctrl/test_rmids.sh.
+> As a follow-up, if GFP_NOFS cannot deal with the majority of the
+> migration contexts then it should bail out of compaction entirely. The
+> changelog doesn't say why but maybe SYNC_LIGHT is the issue?
 
-On an AMD EPYC 7B12 64-Core Processor with the default behavior:
+It's this condition in isolate_migratepages_block():
 
- # ./test_rmids.sh
- Created 255 monitoring groups.
- g1: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g2: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g3: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
-[..]
- g238: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g239: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g240: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g241: mbm_total_bytes: Unavailable -> 660497472
- g242: mbm_total_bytes: Unavailable -> 660793344
- g243: mbm_total_bytes: Unavailable -> 660477312
- g244: mbm_total_bytes: Unavailable -> 660495360
- g245: mbm_total_bytes: Unavailable -> 660775360
- g246: mbm_total_bytes: Unavailable -> 660645504
- g247: mbm_total_bytes: Unavailable -> 660696128
- g248: mbm_total_bytes: Unavailable -> 660605248
- g249: mbm_total_bytes: Unavailable -> 660681280
- g250: mbm_total_bytes: Unavailable -> 660834240
- g251: mbm_total_bytes: Unavailable -> 660440064
- g252: mbm_total_bytes: Unavailable -> 660501504
- g253: mbm_total_bytes: Unavailable -> 660590720
- g254: mbm_total_bytes: Unavailable -> 660548352
- g255: mbm_total_bytes: Unavailable -> 660607296
- 255 groups, 0 returned counts in first pass, 15 in second
- successfully measured bandwidth from 15/255 groups
+		/*
+		 * Only allow to migrate anonymous pages in GFP_NOFS context
+		 * because those do not depend on fs locks.
+		 */
+		if (!(cc->gfp_mask & __GFP_FS) && mapping)
+			goto isolate_fail_put;
 
-To compare, here is the output from an Intel(R) Xeon(R) Platinum 8173M
-CPU:
+In terms of bailing even earlier: We do have per-zone file and anon
+counts that could be consulted. However, the real problem is
+interleaving of anon and file. Even if only 10% of the zone is anon,
+it could still be worth trying to compact if they're relatively
+contiguous. OTOH 50% anon could be uncompactable if every block also
+contains at least one file. We don't know until we actually scan. I'm
+hesitant to give allocations premature access to the last reserves.
 
- # ./test_rmids.sh
- Created 223 monitoring groups.
- g1: mbm_total_bytes: 0 -> 606126080
- g2: mbm_total_bytes: 0 -> 613236736
- g3: mbm_total_bytes: 0 -> 610254848
-[..]
- g221: mbm_total_bytes: 0 -> 584679424
- g222: mbm_total_bytes: 0 -> 588808192
- g223: mbm_total_bytes: 0 -> 587317248
- 223 groups, 223 returned counts in first pass, 223 in second
- successfully measured bandwidth from 223/223 groups
-
-To make better use of the hardware in such a use case, this patchset
-introduces a "soft" RMID implementation, where each CPU is permanently
-assigned a "hard" RMID. On context switches which change the current
-soft RMID, the difference between each CPU's current event counts and
-most recent counts is added to the totals for the current or outgoing
-soft RMID.
-
-This technique does not work for cache occupancy counters, so this patch
-series disables cache occupancy events when soft RMIDs are enabled.
-
-This series adds the "mbm_soft_rmid" mount option to allow users to
-opt-in to the functionaltiy when they deem it helpful.
-
-When the same system from the earlier AMD example enables the
-mbm_soft_rmid mount option:
-
- # ./test_rmids.sh
- Created 255 monitoring groups.
- g1: mbm_total_bytes: 0 -> 686560576
- g2: mbm_total_bytes: 0 -> 668204416
-[..]
- g252: mbm_total_bytes: 0 -> 672651200
- g253: mbm_total_bytes: 0 -> 666956800
- g254: mbm_total_bytes: 0 -> 665917056
- g255: mbm_total_bytes: 0 -> 671049600
- 255 groups, 255 returned counts in first pass, 255 in second
- successfully measured bandwidth from 255/255 groups
-
-(patches are based on tip/master)
-
-[1] https://www.amd.com/system/files/TechDocs/56375_1.03_PUB.pdf
-
-Peter Newman (8):
-  selftests/resctrl: Verify all RMIDs count together
-  x86/resctrl: Add resctrl_mbm_flush_cpu() to collect CPUs' MBM events
-  x86/resctrl: Flush MBM event counts on soft RMID change
-  x86/resctrl: Call mon_event_count() directly for soft RMIDs
-  x86/resctrl: Create soft RMID version of __mon_event_count()
-  x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
-  x86/resctrl: Use mbm_update() to push soft RMID counts
-  x86/resctrl: Add mount option to enable soft RMID
-
-Stephane Eranian (1):
-  x86/resctrl: Hold a spinlock in __rmid_read() on AMD
-
- arch/x86/include/asm/resctrl.h                |  29 +++-
- arch/x86/kernel/cpu/resctrl/core.c            |  80 ++++++++-
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |   9 +-
- arch/x86/kernel/cpu/resctrl/internal.h        |  19 ++-
- arch/x86/kernel/cpu/resctrl/monitor.c         | 158 +++++++++++++++++-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c        |  52 ++++++
- tools/testing/selftests/resctrl/test_rmids.sh |  93 +++++++++++
- 7 files changed, 425 insertions(+), 15 deletions(-)
- create mode 100755 tools/testing/selftests/resctrl/test_rmids.sh
-
-
-base-commit: dd806e2f030e57dd5bac973372aa252b6c175b73
--- 
-2.40.0.634.g4ca3ef3211-goog
-
+What might work is for NOFS contexts to test if anon is low up front
+and shortcutting directly to the highest priority (SYNC_FULL). One
+good faith scan attempt at least before touching the reserves.
