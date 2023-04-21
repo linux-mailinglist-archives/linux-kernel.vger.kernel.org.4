@@ -2,90 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAC06EB1E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8A26EB1E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjDUSyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S233367AbjDUS7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjDUSym (ORCPT
+        with ESMTP id S232311AbjDUS7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:54:42 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2F21FE3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:54:40 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so19904735e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682103278; x=1684695278;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nffel26x+322FTsNOxdHjAkwK0bLjcBonRh64qTy50Q=;
-        b=enmoIEoTxV6A6xpxbkvcC8RbrkD7FQvZEf8I/bghiFol5wMO1FZ1wrwG0KNCYJRMI+
-         axMV3oFQNcipu/u2PclkV3xGpd4l22v7Vv7EFS8SVwST5i9j2odLayWpZU7qqqOe6xdH
-         m7VaCMVpULjHSTja/g1cJw/8NYoBZ6RfgFFIWU3lKkNRYCfyati136UxpaRo4kTH8bFw
-         hCEhMdIMUIIbINZC5FFmyygD61hKkw01XtlrJm8w0raNLKFV8T0d0GpCNrJiEKgDHrCw
-         auV42qIBCf65efFj+U+U9M2d/HIzJ3gz84h5MazzP5/vZmmMH9Y/Q1LvX2N/1auMmFmW
-         v1Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682103278; x=1684695278;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nffel26x+322FTsNOxdHjAkwK0bLjcBonRh64qTy50Q=;
-        b=N5ljzIALvwct4zzf6dAPyVrj/Y5AOUuBCVArQR5EZUfiKv0hbeQGbn/6mTxD3ILEMo
-         5fGMkjy1rwbGd9zUCguZvJHrqUudHRuKtvc5dXomM0rii2vijlKYhtYfhnttC0djhsUJ
-         SpBVPeT0fxCb4XFLgrtHzSnrHDDGUV54hvN9wwbkRw6b2OiXjLJgwT/5Ha/RBMEsM9kc
-         Y4YghKZfq5emWGLVY7S/61pFQfDRkUa+epfn95FRg5aQDgKRdF+Toy6/pKxd3x/NVP3I
-         C11zVS6AsxCVsvnW9B4cRiiX5VFyREJL0boW8Bva4hkxGptSvYla+qD8k7iStQjU2CoU
-         S/5Q==
-X-Gm-Message-State: AAQBX9f/zQQ3dQUFn7+B7dTZVW9hsOi4bVr5l8fR8igRcCjlXsO7H87s
-        19AUPQiz8v+fSocI4n/X4jnl2r5r2w==
-X-Google-Smtp-Source: AKy350YGm9UlNIBBs4wWfm7zxqSa4vcoO8Z2C6nvcm7/4Olys9+3+D03xYufmyeBoiy4fZhUpqIw8w==
-X-Received: by 2002:adf:ed50:0:b0:2fb:92c7:b169 with SMTP id u16-20020adfed50000000b002fb92c7b169mr8776906wro.10.1682103278517;
-        Fri, 21 Apr 2023 11:54:38 -0700 (PDT)
-Received: from p183 ([46.53.252.188])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfe44f000000b002f00793bd7asm4987868wrm.27.2023.04.21.11.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 11:54:37 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 21:54:36 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] ELF: use __builtin_mul_overflow() more
-Message-ID: <dd85c092-379e-4d14-88f0-8f3910de9f7f@p183>
+        Fri, 21 Apr 2023 14:59:12 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7BB2D4B;
+        Fri, 21 Apr 2023 11:59:11 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ppvy8-0002kb-09;
+        Fri, 21 Apr 2023 20:58:52 +0200
+Date:   Fri, 21 Apr 2023 19:58:48 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [RFC PATCH net-next 21/22] net: dsa: mt7530: get rid of useless
+ error returns on phylink code path
+Message-ID: <ZELc6MjOicjsPGGb@makrotopia.org>
+References: <20230421143648.87889-1-arinc.unal@arinc9.com>
+ <20230421143648.87889-22-arinc.unal@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230421143648.87889-22-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__builtin_mul_overflow() can do multiplication and overflow check
-in one line.
+On Fri, Apr 21, 2023 at 05:36:47PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Remove error returns on the cases where they are already handled with the
+> function the mac_port_get_caps member points to.
+> 
+> mt7531_mac_config() is also called from mt7531_cpu_port_config() outside of
+> phylink but the port and interface modes are already handled there.
+> 
+> Change the functions and the mac_port_config function pointer to void now
+> that there're no error returns anymore.
+> 
+> Remove mt753x_is_mac_port() that used to help the said error returns.
+> 
+> On mt7531_mac_config(), switch to if statements to simplify the code.
+> 
+> Remove internal phy cases from mt753x_phylink_mac_config() as there is no
+> configuration to be done for them. There's also no need to check the
+> interface mode as that's already handled with the function the
+> mac_port_get_caps member points to.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
+Acked-by: Daniel Golle <daniel@makrotopia.org>
+Tested-by: Daniel Golle <daniel@makrotopia.org>
+(on BPi-R3 MT7986A+MT7531AE, BPi-R64 MT7622+MT7531BE and MT7988A rfb)
 
- fs/binfmt_elf.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1651,9 +1651,8 @@ static int fill_files_note(struct memelfnote *note, struct coredump_params *cprm
- 
- 	/* *Estimated* file count and total data size needed */
- 	count = cprm->vma_count;
--	if (count > UINT_MAX / 64)
-+	if (__builtin_mul_overflow(count, 64, &size))
- 		return -EINVAL;
--	size = count * 64;
- 
- 	names_ofs = (2 + 3 * count) * sizeof(data[0]);
-  alloc:
+> ---
+>  drivers/net/dsa/mt7530.c | 81 ++++++++--------------------------------
+>  drivers/net/dsa/mt7530.h |  2 +-
+>  2 files changed, 17 insertions(+), 66 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 8ece3d0d820c..3d19e06061cb 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2556,7 +2556,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
+>  	}
+>  }
+>  
+> -static int
+> +static void
+>  mt7530_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  		  phy_interface_t interface)
+>  {
+> @@ -2567,22 +2567,14 @@ mt7530_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  	} else if (port == 6) {
+>  		mt7530_setup_port6(priv->ds, interface);
+>  	}
+> -
+> -	return 0;
+>  }
+>  
+> -static int mt7531_rgmii_setup(struct mt7530_priv *priv, u32 port,
+> -			      phy_interface_t interface,
+> -			      struct phy_device *phydev)
+> +static void mt7531_rgmii_setup(struct mt7530_priv *priv, u32 port,
+> +			       phy_interface_t interface,
+> +			       struct phy_device *phydev)
+>  {
+>  	u32 val;
+>  
+> -	if (priv->p5_sgmii) {
+> -		dev_err(priv->dev, "RGMII mode is not available for port %d\n",
+> -			port);
+> -		return -EINVAL;
+> -	}
+> -
+>  	val = mt7530_read(priv, MT7531_CLKGEN_CTRL);
+>  	val |= GP_CLK_EN;
+>  	val &= ~GP_MODE_MASK;
+> @@ -2610,20 +2602,14 @@ static int mt7531_rgmii_setup(struct mt7530_priv *priv, u32 port,
+>  		case PHY_INTERFACE_MODE_RGMII_ID:
+>  			break;
+>  		default:
+> -			return -EINVAL;
+> +			break;
+>  		}
+>  	}
+> -	mt7530_write(priv, MT7531_CLKGEN_CTRL, val);
+>  
+> -	return 0;
+> -}
+> -
+> -static bool mt753x_is_mac_port(u32 port)
+> -{
+> -	return (port == 5 || port == 6);
+> +	mt7530_write(priv, MT7531_CLKGEN_CTRL, val);
+>  }
+>  
+> -static int
+> +static void
+>  mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  		  phy_interface_t interface)
+>  {
+> @@ -2631,42 +2617,21 @@ mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  	struct phy_device *phydev;
+>  	struct dsa_port *dp;
+>  
+> -	if (!mt753x_is_mac_port(port)) {
+> -		dev_err(priv->dev, "port %d is not a MAC port\n", port);
+> -		return -EINVAL;
+> -	}
+> -
+> -	switch (interface) {
+> -	case PHY_INTERFACE_MODE_RGMII:
+> -	case PHY_INTERFACE_MODE_RGMII_ID:
+> -	case PHY_INTERFACE_MODE_RGMII_RXID:
+> -	case PHY_INTERFACE_MODE_RGMII_TXID:
+> +	if (phy_interface_mode_is_rgmii(interface)) {
+>  		dp = dsa_to_port(ds, port);
+>  		phydev = dp->slave->phydev;
+> -		return mt7531_rgmii_setup(priv, port, interface, phydev);
+> -	case PHY_INTERFACE_MODE_SGMII:
+> -	case PHY_INTERFACE_MODE_NA:
+> -	case PHY_INTERFACE_MODE_1000BASEX:
+> -	case PHY_INTERFACE_MODE_2500BASEX:
+> -		/* handled in SGMII PCS driver */
+> -		return 0;
+> -	default:
+> -		return -EINVAL;
+> +		mt7531_rgmii_setup(priv, port, interface, phydev);
+>  	}
+> -
+> -	return -EINVAL;
+>  }
+>  
+> -static int
+> +static void
+>  mt753x_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  		  const struct phylink_link_state *state)
+>  {
+>  	struct mt7530_priv *priv = ds->priv;
+>  
+> -	if (!priv->info->mac_port_config)
+> -		return 0;
+> -
+> -	return priv->info->mac_port_config(ds, port, mode, state->interface);
+> +	if (priv->info->mac_port_config)
+> +		priv->info->mac_port_config(ds, port, mode, state->interface);
+>  }
+>  
+>  static struct phylink_pcs *
+> @@ -2695,30 +2660,18 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  	u32 mcr_cur, mcr_new;
+>  
+>  	switch (port) {
+> -	case 0 ... 4: /* Internal phy */
+> -		if (state->interface != PHY_INTERFACE_MODE_GMII &&
+> -		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
+> -			goto unsupported;
+> -		break;
+>  	case 5: /* Port 5, can be used as a CPU port. */
+>  		if (priv->p5_configured)
+>  			break;
+>  
+> -		if (mt753x_mac_config(ds, port, mode, state) < 0)
+> -			goto unsupported;
+> +		mt753x_mac_config(ds, port, mode, state);
+>  		break;
+>  	case 6: /* Port 6, can be used as a CPU port. */
+>  		if (priv->p6_configured)
+>  			break;
+>  
+> -		if (mt753x_mac_config(ds, port, mode, state) < 0)
+> -			goto unsupported;
+> +		mt753x_mac_config(ds, port, mode, state);
+>  		break;
+> -	default:
+> -unsupported:
+> -		dev_err(ds->dev, "%s: unsupported %s port: %i\n",
+> -			__func__, phy_modes(state->interface), port);
+> -		return;
+>  	}
+>  
+>  	mcr_cur = mt7530_read(priv, MT7530_PMCR_P(port));
+> @@ -2811,7 +2764,6 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
+>  	struct mt7530_priv *priv = ds->priv;
+>  	phy_interface_t interface;
+>  	int speed;
+> -	int ret;
+>  
+>  	switch (port) {
+>  	case 5:
+> @@ -2836,9 +2788,8 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
+>  	else
+>  		speed = SPEED_1000;
+>  
+> -	ret = mt7531_mac_config(ds, port, MLO_AN_FIXED, interface);
+> -	if (ret)
+> -		return ret;
+> +	mt7531_mac_config(ds, port, MLO_AN_FIXED, interface);
+> +
+>  	mt7530_write(priv, MT7530_PMCR_P(port),
+>  		     PMCR_CPU_PORT_SETTING(priv->id));
+>  	mt753x_phylink_pcs_link_up(&priv->pcs[port].pcs, MLO_AN_FIXED,
+> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
+> index cad9115de22b..ee2b3d2d6258 100644
+> --- a/drivers/net/dsa/mt7530.h
+> +++ b/drivers/net/dsa/mt7530.h
+> @@ -722,7 +722,7 @@ struct mt753x_info {
+>  	void (*mac_port_validate)(struct dsa_switch *ds, int port,
+>  				  phy_interface_t interface,
+>  				  unsigned long *supported);
+> -	int (*mac_port_config)(struct dsa_switch *ds, int port,
+> +	void (*mac_port_config)(struct dsa_switch *ds, int port,
+>  			       unsigned int mode,
+>  			       phy_interface_t interface);
+>  };
+> -- 
+> 2.37.2
+> 
