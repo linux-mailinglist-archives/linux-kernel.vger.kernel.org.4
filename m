@@ -2,166 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537046EB19E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E356EB1A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbjDUS2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S233097AbjDUS2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbjDUS2C (ORCPT
+        with ESMTP id S232989AbjDUS2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:28:02 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C519A1;
-        Fri, 21 Apr 2023 11:28:00 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id A18465C00CA;
-        Fri, 21 Apr 2023 14:27:56 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 21 Apr 2023 14:27:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1682101676; x=1682188076; bh=1x
-        lLdlOEPewjSa9H68FV8Q5PO9B90Oygi7b4UAbYuQc=; b=P0wYN+pJ1GfvlJDlIK
-        3HaP8g8yxh54ko7FtDNoDaJ2UbAHZEH6f/Q++W6+apsYdWGtFEWE+VFQXClEsVG0
-        cNC/sNVd7/oMjY/xFtIAWOJvmZ7uXQ3mbJVWBHrrjEx3NEiwyXlrYfFrx4cv6pDx
-        VHBa48YtKHzwfxpnI4JwohAAQtDQDSVVXx3QUmBAY7B+68+wZhG/dLvNn0OnsREa
-        qjko2RCCZp7nO9MKyb0UCfHlnuT0PwJTFQfwhCSCs45y7Jxi3w6bnMbx8tbwVJ+3
-        //HYMjrxXN9VmmIBgsf8diCnZkCyjN3KiEiba50EMyFCX6mLalVggfzcTxbFQiYz
-        Lytw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682101676; x=1682188076; bh=1xlLdlOEPewjS
-        a9H68FV8Q5PO9B90Oygi7b4UAbYuQc=; b=YTbnAZJ3qUMiRj76RGU6xiJMr7F8Z
-        AkF4d4qdl55apNKQF1ibg7v+FTxNs6LEJ9T/CbhXqMm/CMr0JUPsGdGAWF/cq1n4
-        hdoa6M0lt7boS8FLRptsOOIxImYCjFW8X9zq0pzlUlPuvbO8jWhlu7IAumUoDL66
-        qPBnyF2O0qu3+eKvQDofPbKIcJxXx7Vd0ivDUBvs9vBJAhlWOK1cWnup0gDjoYZS
-        h8IXrSxl6vOW0PEIz+/bZERGinxio39/2lX8YmfR8N9mQat+4+V3G24GUH/f4JCM
-        ZhJu46SbqRu3jmGtCF3l1bDmHnLHOFm9RUaS0AiHZtwdl0+ofXuNUEK5A==
-X-ME-Sender: <xms:q9VCZCFDX2nqX67ccz6mq1jOzR_AMacb5lcdq5NNHqkuLc3FbSfYSw>
-    <xme:q9VCZDVXQTxIZCG0loGHeTRP5Q4y_FCfIYkj1kRq-oMsIjPR5cLqZLWopyE52ma_Y
-    RAwezAEAyhyTkOKUxo>
-X-ME-Received: <xmr:q9VCZMIXaK428S5JbttqSvA3CLOiVtzsGyu9Uq5cGBDezl-8UN-jCAiqdY1pNdbsbZ8Qw0SvXWigkQe0O6tdGCfnSg9YPtHNSQ61RVgkTrQ0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
-    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
-    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
-    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:rNVCZMHVZS-4pncHd9-02mz0hAwf0CGUjbWL3hNW6AshGaj9kybLCg>
-    <xmx:rNVCZIUtl1QWh3zeGrKmIctWOfETI1j93FF58B4EwRfQ2D1V_xxXcA>
-    <xmx:rNVCZPN7xqRHXuvJcK01DNR4CQUHk5_viNRdAndV--AkHsVzceDCkw>
-    <xmx:rNVCZJuMXQ7scwPUwjssuOK1J9USlnK-U41WGOH4io698Rs2VCTkrQ>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 21 Apr 2023 14:27:54 -0400 (EDT)
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-4-david@redhat.com>
- <qvqwildqi62z.fsf@devbig1114.prn1.facebook.com>
- <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code
- to KSM code
-Date:   Fri, 21 Apr 2023 11:27:23 -0700
-In-reply-to: <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
-Message-ID: <qvqw1qkdt7iw.fsf@devbig1114.prn1.facebook.com>
+        Fri, 21 Apr 2023 14:28:37 -0400
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223111BD5;
+        Fri, 21 Apr 2023 11:28:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682101673; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SaSBoPob1vx8UxWGw/1V+TbNRkGJAsK90tRye9/VlpgU8VwLnDSHghVoWUYgAjhPjoRrCWPMCItu6Twjq/fMouX8cle3IP85FsAzQ+fuTOMJmV5hyfaI60KAaEpIB/vcn4xbhatpIi6wyGmnthH1/wbL4H8s7U2zI4yryNVrGJw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682101673; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=HhtGCpgs8VG3ou8855pH8L7tkz77AnXTHtobCoUAuVM=; 
+        b=jDUZmxX2h5DWOd56WLqqY9Owk6FnqPIR/pjpPBoRhXGffhpEG2g6jacEeok7CPfMWcXKqXOzA3fnFRfr7ixvriIPCROSr12kBjLl+wwxcdmvK4iU4832VvBUlD6ZpN+GV/UISRD/tKMd2OnKwmjglhADyikmXLq165b5dpL6p0U=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682101673;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=HhtGCpgs8VG3ou8855pH8L7tkz77AnXTHtobCoUAuVM=;
+        b=Y4ageSokWBom/G2ZCmFb/b81B/hbHdFJvx36UnHpALK+9EHjrIBm1URAAg1Ra1hW
+        zPny3BfiOWOHfbi26F2qoXjgHI4nSL9KeR0quy6dEeAEPYHP63eaiDKdgtiimB8c9Tv
+        gRdrOTcPG0Ix59uu3nHkY8IwbIQc9FTHmFcxDIAc=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1682101672038904.708571478262; Fri, 21 Apr 2023 11:27:52 -0700 (PDT)
+Message-ID: <6493c52f-247c-c9c0-8352-4b312b7e67e4@arinc9.com>
+Date:   Fri, 21 Apr 2023 21:27:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH net-next 02/22] net: dsa: mt7530: use
+ p5_interface_select as data type for p5_intf_sel
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230421143648.87889-1-arinc.unal@arinc9.com>
+ <20230421143648.87889-3-arinc.unal@arinc9.com>
+ <ZEK4gVx-WQv0j2cR@makrotopia.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZEK4gVx-WQv0j2cR@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-David Hildenbrand <david@redhat.com> writes:
-
-> [...]
->
->>> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
->>> index 0949811761e6..dfe905c7bd8e 100644
->>> --- a/arch/s390/mm/gmap.c
->>> +++ b/arch/s390/mm/gmap.c
->>> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
->>>
->>>   int gmap_mark_unmergeable(void)
->>>   {
->>> -	struct mm_struct *mm = current->mm;
->>> -	struct vm_area_struct *vma;
->>> -	unsigned long vm_flags;
->>> -	int ret;
->>> -	VMA_ITERATOR(vmi, mm, 0);
->>> -
->>>   	/*
->>>   	 * Make sure to disable KSM (if enabled for the whole process or
->>>   	 * individual VMAs). Note that nothing currently hinders user space
->>>   	 * from re-enabling it.
->>>   	 */
->>> -	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
->>> -
->>> -	for_each_vma(vmi, vma) {
->>> -		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
->>> -		vm_flags = vma->vm_flags;
->>> -		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
->>> -				  MADV_UNMERGEABLE, &vm_flags);
->>> -		if (ret)
->>> -			return ret;
->>> -		vm_flags_reset(vma, vm_flags);
->>> -	}
->>> -	mm->def_flags &= ~VM_MERGEABLE;
->>>
+On 21.04.2023 19:23, Daniel Golle wrote:
+> On Fri, Apr 21, 2023 at 05:36:28PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 >>
->
-> Hi Stefan,
->
->> This clears the def_flags struct member, however, in ksm_disable() we
->> clear the __flags struct member. Is this a problem?
->
-> The patch description contains a comment regarding def_flags: "The existing
-> "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
-> because def_flags should never include VM_MERGEABLE."
->
-> We keep clearing the MADV_UNMERGEABLE flag from MADV_UNMERGEABLE. In the old
-> code, ksm_madvise() would have cleared it from local vm_flags and
-> vm_flags_reset() would have modified vma->vm_flags. Now we clear it directly via
-> vm_flags_clear(vma, VM_MERGEABLE);
->
->
-> Long story short, the mm->def_flags code as wrong and most probably copied from
-> thp_split_mm() where we do:
-> 	mm->def_flags |= VM_NOHUGEPAGE;
-> Which makes more sense.
->
-> Thanks!
+>> Use the p5_interface_select enumeration as the data type for the
+>> p5_intf_sel field. This ensures p5_intf_sel can only take the values
+>> defined in the p5_interface_select enumeration.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   drivers/net/dsa/mt7530.h | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
+>> index 845f5dd16d83..703f8a528317 100644
+>> --- a/drivers/net/dsa/mt7530.h
+>> +++ b/drivers/net/dsa/mt7530.h
+>> @@ -674,13 +674,13 @@ struct mt7530_port {
+>>   };
+>>   
+>>   /* Port 5 interface select definitions */
+>> -enum p5_interface_select {
+>> -	P5_DISABLED = 0,
+>> +typedef enum {
+> 
+> We usually avoid adding typedef in kernel code. If the purpose is
+> just to be more verbose in the struct definition, you can as well
+> also just use 'enum p5_interface_select as type in the struct.
+> 
+>> +	P5_DISABLED,
+>>   	P5_INTF_SEL_PHY_P0,
+>>   	P5_INTF_SEL_PHY_P4,
+>>   	P5_INTF_SEL_GMAC5,
+>>   	P5_INTF_SEL_GMAC5_SGMII,
+>> -};
+>> +} p5_interface_select;
+>>   
+>>   struct mt7530_priv;
+>>   
+>> @@ -768,7 +768,7 @@ struct mt7530_priv {
+>>   	bool			mcm;
+>>   	phy_interface_t		p6_interface;
+>>   	phy_interface_t		p5_interface;
+>> -	unsigned int		p5_intf_sel;
+>> +	p5_interface_select	p5_intf_sel;
+> 
+> enum p5_interface_select	p5_intf_sel;
 
-Thanks for the explanation.
+Will do, thanks.
 
-Acked-by: Stefan Roesch <shr@devkernel.io>
+Arınç
