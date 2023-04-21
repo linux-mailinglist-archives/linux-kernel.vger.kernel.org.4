@@ -2,271 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41EE6EA444
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EC86EA447
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDUHGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S229677AbjDUHHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDUHGC (ORCPT
+        with ESMTP id S229572AbjDUHHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:06:02 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C12106
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:06:00 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5067736607fso2218674a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1682060759; x=1684652759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x6YRJ4Pqo2etpRODwwn3zLnwFzxlFB/dGfOqJw+A8Sg=;
-        b=dc1GCcQy3i4v8A2vy1cJ1GY82u1abasiNC9WlPOI+7gS1PehjHlO6nTOwDK6hwZ2hT
-         ihLoshQOkLK9Jp2ZEfa1+iUNfknI1rqCy+z1Rt4tjE9Wu6xWYbAeMcwXl1YTHCFE8RUB
-         OU9w8Ax4zZdsvET8CKLb7so5fIKed/Y1DwTpx/oPbaDyxysuDraZiGfav3vG3+qVws4O
-         /0yPlplNxGb02QW2uv9JZVmE/64JVTeq2yk2PLdrHedU6GG//NiqBK0u0dvR/zwiZkJC
-         EUYbOSpHIuKvkhfoc80hd822sCh8w1g8QYmW5uEQmV99Y4KDgJ/LQtyWlI0yzXf/97qY
-         tPSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682060759; x=1684652759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x6YRJ4Pqo2etpRODwwn3zLnwFzxlFB/dGfOqJw+A8Sg=;
-        b=CmbXyBaVJTv55s48ZCeC5LPhhnt9RkkfwjuBnHdD3J/djEbwV9w35X3DXpG12Femcx
-         9rFMw/R/2oz6/hkrsT8PKoM8AajX1DU/QksuFlJunqZyPkDNcwamuc7zGiVW3n1Y6M4C
-         Im3aAAsmaQaBpmEz6FyKbw8Vw6lIG6eqcaowmu615Wa7d786VkPnKWiqQAFVLWx8ORWn
-         zt2k28wEx7U+0i7JU1wnCG7crw8x+z4taTGVovybkXI+jk7IamSIo3eX3RBWng7XezHi
-         DvJNuZCdrKDujBTKkfU4cy/EcWUmMVmp6Jf3FuUDCzMFt3ztJfF/8D/r4Ki5NtubMPCs
-         YRzg==
-X-Gm-Message-State: AAQBX9cNkcW/y3d2W0JyH784FqdkNw8bJDq2kBq5DrAW1yvdLBbU3BXK
-        X25HliHRebuDuOYlzgNg8C6far0CvhbHWipnuzdklA==
-X-Google-Smtp-Source: AKy350b/JDpso5+xBxvv0rNwDbMfwJumU/jwkE26ITnDc1EmrxPwo7SuX3xuLk/SkUJae0rZup7izjlZ78gSR7C1IsQ=
-X-Received: by 2002:a17:907:6e12:b0:947:80a4:5cce with SMTP id
- sd18-20020a1709076e1200b0094780a45ccemr1699804ejc.65.1682060759122; Fri, 21
- Apr 2023 00:05:59 -0700 (PDT)
+        Fri, 21 Apr 2023 03:07:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430C911A;
+        Fri, 21 Apr 2023 00:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682060831; x=1713596831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OZUQs/csUJg3zppeTrY4QrFxyRUcxl5Pm/V/42YW00U=;
+  b=CPyYDO9ok3VLVPXzRPMIVIuUvmtW/62f2T61czH5qFDFkvEQhPOE2oai
+   bVhNScY/4sGNtqv4TzJ947Q5LthhrULAkn1ahPEEvOGojCM/RJR7viSjn
+   pdSVfAivURJokVh+S2GOjYLe6r+MdhdtCEuENeVb/umwSN0MQgfHy2DDq
+   5UgpkgxP+Z6UsWpdXjkyqyijNmXa+c7efpiPhv9Pw4K4JYwC9YY9Er+WV
+   ctZhLoidV1J7igdkWx2Vo4q80mTZ1C1MKum8QAtnBP0U0ND3SwVIUewRD
+   sYr8EbxLV+TmzEzE6O4KDQZAYsCpLCU+oZx4kls2ZhRGR48HplXiuNxeO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="373855789"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="373855789"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 00:07:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021828552"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="1021828552"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Apr 2023 00:07:06 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppkrK-000gPQ-01;
+        Fri, 21 Apr 2023 07:07:06 +0000
+Date:   Fri, 21 Apr 2023 15:06:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     oe-kbuild-all@lists.linux.dev, David Gow <davidgow@google.com>,
+        maxime@cerno.tech, Stephen Boyd <sboyd@kernel.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sadiya Kazi <sadiyakazi@google.com>
+Subject: Re: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+Message-ID: <202304211445.r8UQGW3F-lkp@intel.com>
+References: <20230421040218.2156548-1-davidgow@google.com>
 MIME-Version: 1.0
-References: <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
- <20230411122651.GV182481@unreal> <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
- <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev> <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
- <20230413132418.GR17993@unreal> <4d1cacbf-f9b2-07c7-75bf-61f34abc1841@linux.dev>
- <7656e04c-1adc-6621-0e45-e2b282e6c143@fujitsu.com> <20230417180452.GG15386@unreal>
- <0985e0a9-fe19-1c07-0da7-48ec88eb77c6@fujitsu.com> <20230418075706.GB9740@unreal>
- <65860af3-7d48-5a26-f916-50450633a893@fujitsu.com> <CAMGffEkyNnSXDfwuzCQ_ERZ-53OnoJ7gOF4eL1MAPYc74V43iQ@mail.gmail.com>
- <51b9e74d-70e0-3d76-ade9-93d960074ef9@fujitsu.com> <00202749-1b0d-91c8-9a52-cf8a66d8d340@fujitsu.com>
-In-Reply-To: <00202749-1b0d-91c8-9a52-cf8a66d8d340@fujitsu.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Fri, 21 Apr 2023 09:05:47 +0200
-Message-ID: <CAMGffEmqp+hcszxDDU-1jpZDFmGM9_FTmyifPLT+0T4FQo10FA@mail.gmail.com>
-Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
-To:     "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Zhu Yanjun <yanjun.zhu@linux.dev>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 3:38=E2=80=AFAM Zhijian Li (Fujitsu)
-<lizhijian@fujitsu.com> wrote:
->
-> Jinpu
->
-> I updated the changes as below, and tested for thousand rounds.
->
->  From d441c0e2496c1795b5af2b6b8ae4672203d6af3c Mon Sep 17 00:00:00 2001
-> From: Li Zhijian <lizhijian@fujitsu.com>
-> Date: Thu, 20 Apr 2023 17:28:28 +0800
-> Subject: [PATCH] RDMA/rtrs: Fix rxe_dealloc_pd warning
->
-> In current design:
-> 1. PD and clt_path->s.dev are shared among connections.
-> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
-> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), and
->     when clt_path->s.dev become zero, it will destroy PD.
-> 4. when con[1] failed to create, con[1] will not take clt_path->s.dev,
->     but it try to decreased clt_path->s.dev
->
-> So, in case create_cm(con[0]) succeeds but create_cm(con[1])
-> fails, destroy_con_cq_qp(con[1]) will be called first which will destory
-> the PD while this PD is still taken by con[0].
->
-> Here, we refactor the error path of create_cm() and init_conns(), so that
-> we do the cleanup in the order they are created.
->
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->   drivers/infiniband/ulp/rtrs/rtrs-clt.c | 47 +++++++++++---------------
->   1 file changed, 19 insertions(+), 28 deletions(-)
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/=
-ulp/rtrs/rtrs-clt.c
-> index 80abf45a197a..5faf0ecb726b 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -2040,6 +2040,7 @@ static int rtrs_clt_rdma_cm_handler(struct rdma_cm_=
-id *cm_id,
->         return 0;
->   }
->
-> +/* The caller should the do the cleanup in case of error */
->   static int create_cm(struct rtrs_clt_con *con)
->   {
->         struct rtrs_path *s =3D con->c.path;
-> @@ -2062,14 +2063,14 @@ static int create_cm(struct rtrs_clt_con *con)
->         err =3D rdma_set_reuseaddr(cm_id, 1);
->         if (err !=3D 0) {
->                 rtrs_err(s, "Set address reuse failed, err: %d\n", err);
-> -               goto destroy_cm;
-> +               return err;
->         }
->         err =3D rdma_resolve_addr(cm_id, (struct sockaddr *)&clt_path->s.=
-src_addr,
->                                 (struct sockaddr *)&clt_path->s.dst_addr,
->                                 RTRS_CONNECT_TIMEOUT_MS);
->         if (err) {
->                 rtrs_err(s, "Failed to resolve address, err: %d\n", err);
-> -               goto destroy_cm;
-> +               return err;
->         }
->         /*
->          * Combine connection status and session events. This is needed
-> @@ -2084,29 +2085,17 @@ static int create_cm(struct rtrs_clt_con *con)
->                 if (err =3D=3D 0)
->                         err =3D -ETIMEDOUT;
->                 /* Timedout or interrupted */
-> -               goto errr;
-> +               return err;
->         }
->         if (con->cm_err < 0) {
-> -               err =3D con->cm_err;
-> -               goto errr;
-> +               return con->cm_err;
->         }
-The bracket can be removed too
->         if (READ_ONCE(clt_path->state) !=3D RTRS_CLT_CONNECTING) {
->                 /* Device removal */
-> -               err =3D -ECONNABORTED;
-> -               goto errr;
-> +               return -ECONNABORTED;
->         }
-same here.
->
->         return 0;
-> -
-> -errr:
-> -       stop_cm(con);
-> -       mutex_lock(&con->con_mutex);
-> -       destroy_con_cq_qp(con);
-> -       mutex_unlock(&con->con_mutex);
-> -destroy_cm:
-> -       destroy_cm(con);
-> -
-> -       return err;
->   }
->
->   static void rtrs_clt_path_up(struct rtrs_clt_path *clt_path)
-> @@ -2334,7 +2323,7 @@ static void rtrs_clt_close_work(struct work_struct =
-*work)
->   static int init_conns(struct rtrs_clt_path *clt_path)
->   {
->         unsigned int cid;
-> -       int err;
-> +       int err, i;
->
->         /*
->          * On every new session connections increase reconnect counter
-> @@ -2350,10 +2339,8 @@ static int init_conns(struct rtrs_clt_path *clt_pa=
-th)
->                         goto destroy;
->
->                 err =3D create_cm(to_clt_con(clt_path->s.con[cid]));
-> -               if (err) {
-> -                       destroy_con(to_clt_con(clt_path->s.con[cid]));
-> +               if (err)
->                         goto destroy;
-> -               }
->         }
->         err =3D alloc_path_reqs(clt_path);
->         if (err)
-> @@ -2364,15 +2351,19 @@ static int init_conns(struct rtrs_clt_path *clt_p=
-ath)
->         return 0;
->
->   destroy:
-> -       while (cid--) {
-> +       /* Make sure we do the cleanup in the order they are created */
-> +       for (i =3D 0; i <=3D cid; i++) {
->                 struct rtrs_clt_con *con =3D to_clt_con(clt_path->s.con[c=
-id]);
-Yes, this line has to be adapted.
-                   struct rtrs_clt_con *con =3D to_clt_con(clt_path->s.con[=
-i]);
->
-> -               stop_cm(con);
-> -
-> -               mutex_lock(&con->con_mutex);
-> -               destroy_con_cq_qp(con);
-> -               mutex_unlock(&con->con_mutex);
-> -               destroy_cm(con);
-> +               if (!con)
-> +                       break;
-> +               if (con->c.cm_id) {
-> +                       stop_cm(con);
-> +                       mutex_lock(&con->con_mutex);
-> +                       destroy_con_cq_qp(con);
-> +                       mutex_unlock(&con->con_mutex);
-> +                       destroy_cm(con);
-> +               }
->                 destroy_con(con);
->         }
->         /*
-> --
-> 2.29.2
->
-This version looks fine. I will run some tests.
+Hi David,
 
-Thx!
->
->
-> On 20/04/2023 10:00, Li Zhijian wrote:
-> > On 19/04/2023 21:20, Jinpu Wang wrote:
-> >> On Wed, Apr 19, 2023 at 11:53=E2=80=AFAM Zhijian Li (Fujitsu)
-> >> <lizhijian@fujitsu.com> wrote:
-> >>>
-> >>> Leon, Guoqing
-> >>>
-> >>>
-> >>> On 18/04/2023 15:57, Leon Romanovsky wrote:
-> >>>>>>> Currently, without this patch:
-> >>>>>>> 1. PD and clt_path->s.dev are shared among connections.
-> >>>>>>> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
-> >>>>>>> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(=
-), and when
-> >>>>>>>        clt_path->s.dev become zero, it will destroy PD.
-> >>>>>>> 4. when con[1] failed to create, con[1] will not take clt_path->s=
-.dev, but it try to decreased clt_path->s.dev <<< it's wrong to do that.
-> >>>>>> So please fix it by making sure that failure to create con[1] will
-> >>>>>> release resources which were allocated. If con[1] didn't increase
-> >>>>>> s.dev_ref, it shouldn't decrease it either.
-> >>>>> You are right, the current patch did exactly that.
-> >>>>> It introduced a con owning flag 'has_dev' to indicate whether this =
-con has taken s.dev.
-> >>>>> so that its cleanup phase will only decrease its s.dev properly.
-> >>>> The has_dev is a workaround and not a solution. In proper error unwi=
-nd
-> >>>> sequence, you won't need extra flag.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc7 next-20230420]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Documentation-kunit-Note-that-assertions-should-not-be-used-in-cleanup/20230421-120437
+patch link:    https://lore.kernel.org/r/20230421040218.2156548-1-davidgow%40google.com
+patch subject: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230421/202304211445.r8UQGW3F-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/e6f2b343739c4656e2090449ad7eac10db57dde9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/Documentation-kunit-Note-that-assertions-should-not-be-used-in-cleanup/20230421-120437
+        git checkout e6f2b343739c4656e2090449ad7eac10db57dde9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash lib/kunit/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304211445.r8UQGW3F-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   lib/kunit/test.c: In function 'kunit_catch_run_case':
+>> lib/kunit/test.c:440:29: warning: unused variable 'suite' [-Wunused-variable]
+     440 |         struct kunit_suite *suite = ctx->suite;
+         |                             ^~~~~
+
+
+vim +/suite +440 lib/kunit/test.c
+
+e6f2b343739c46 David Gow       2023-04-21  434  
+e6f2b343739c46 David Gow       2023-04-21  435  
+5f3e06208920ee Brendan Higgins 2019-09-23  436  static void kunit_catch_run_case(void *data)
+5f3e06208920ee Brendan Higgins 2019-09-23  437  {
+5f3e06208920ee Brendan Higgins 2019-09-23  438  	struct kunit_try_catch_context *ctx = data;
+5f3e06208920ee Brendan Higgins 2019-09-23  439  	struct kunit *test = ctx->test;
+5f3e06208920ee Brendan Higgins 2019-09-23 @440  	struct kunit_suite *suite = ctx->suite;
+5f3e06208920ee Brendan Higgins 2019-09-23  441  	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
+5f3e06208920ee Brendan Higgins 2019-09-23  442  
+5f3e06208920ee Brendan Higgins 2019-09-23  443  	if (try_exit_code) {
+5f3e06208920ee Brendan Higgins 2019-09-23  444  		kunit_set_failure(test);
+5f3e06208920ee Brendan Higgins 2019-09-23  445  		/*
+5f3e06208920ee Brendan Higgins 2019-09-23  446  		 * Test case could not finish, we have no idea what state it is
+5f3e06208920ee Brendan Higgins 2019-09-23  447  		 * in, so don't do clean up.
+5f3e06208920ee Brendan Higgins 2019-09-23  448  		 */
+5f3e06208920ee Brendan Higgins 2019-09-23  449  		if (try_exit_code == -ETIMEDOUT) {
+5f3e06208920ee Brendan Higgins 2019-09-23  450  			kunit_err(test, "test case timed out\n");
+5f3e06208920ee Brendan Higgins 2019-09-23  451  		/*
+5f3e06208920ee Brendan Higgins 2019-09-23  452  		 * Unknown internal error occurred preventing test case from
+5f3e06208920ee Brendan Higgins 2019-09-23  453  		 * running, so there is nothing to clean up.
+5f3e06208920ee Brendan Higgins 2019-09-23  454  		 */
+5f3e06208920ee Brendan Higgins 2019-09-23  455  		} else {
+5f3e06208920ee Brendan Higgins 2019-09-23  456  			kunit_err(test, "internal error occurred preventing test case from running: %d\n",
+5f3e06208920ee Brendan Higgins 2019-09-23  457  				  try_exit_code);
+5f3e06208920ee Brendan Higgins 2019-09-23  458  		}
+5f3e06208920ee Brendan Higgins 2019-09-23  459  		return;
+5f3e06208920ee Brendan Higgins 2019-09-23  460  	}
+5f3e06208920ee Brendan Higgins 2019-09-23  461  }
+5f3e06208920ee Brendan Higgins 2019-09-23  462  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
