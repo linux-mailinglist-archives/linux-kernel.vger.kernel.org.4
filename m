@@ -2,88 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3011E6EA62C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB626EA62D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjDUIpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S231752AbjDUIpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjDUIoW (ORCPT
+        with ESMTP id S231782AbjDUIoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:44:22 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE57EAD3A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:43:48 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fb4c97d55so4661457b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682066628; x=1684658628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aB7OczqlU5GlOy2Zd9Rj3EOn0m2+6oU/DJ3XuT+77QE=;
-        b=OXxmlnhFGlBUHNcmd+OkPmbb9r/taSkf+vrVB+i1O0PVlopkmHODWY18HgOWPt6ATq
-         xWPpEEQgelEDU0l30b8lhpkE3OVCpcAnji+iG/0dXp7XEOwWg2eXoAnTRWFMuMU260dw
-         VtUHwow/hj3KIcM1h+cs2oXVhYoR3o8S7ebPPiIpdSYfetwbwei0ThU653b1OMshM3eB
-         Oyo0iqnOvnYwHfzXTKfCOAYGOKV61mq5B+2g9SGqDD9IcMV2i02uEvRwgFiqnlhJutbT
-         b3HZpLH6fJ00az+cuhprxokwGl1bFzggbv1Eubn+VWuTyVvPQg0rdt8fZxyyJYCLKJfd
-         Ix6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682066628; x=1684658628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aB7OczqlU5GlOy2Zd9Rj3EOn0m2+6oU/DJ3XuT+77QE=;
-        b=K9UdOURJiexHDKWCKNwLC4mfnPTsKYGyYpQ2Eus6h7YFTgA1z8BhEY0PQ49wyXfDWX
-         nteOf3rbx4MYLLJsqdzPhT5mBlXGdyI69uPe+RMGIeviP63pkSPGJ79EfHHMbBK849OJ
-         orO/9Of5zP+DQpElCegmhc1xHNAIOkILNGMqBfVDcbm/7gBzCglAi+jdqawSY5/037IG
-         nPWdFqsUqncnB11sZllRoFVrkCtQTEJlzIP+i3D0pY1/O2LpnZe27fiUrgqwT4yB89FV
-         m3PcRCCnH7ThF7FAucFoM9rWFJDuALyv86P8qmyhUr0hPC4OshMC5zm9naDR7MMt9EZt
-         9f7Q==
-X-Gm-Message-State: AAQBX9egnPFplZ65eVrGA96cdlMO3wRJCdu15j/cqaRusjjNlVpYKheY
-        Aq/KTr90mmRCrAuUQC6KkXkXqSsvgWEuLLNb3T11iQ==
-X-Google-Smtp-Source: AKy350bpPZ0S/XO6upKWqUoG5fpVD9ioAg/A0YRm/02f/LCUie/ZnJMKTyUgcbE6/nIhxLdF5BrdASq+GnAR1HP9tSk=
-X-Received: by 2002:a0d:ea0d:0:b0:552:a2e2:684e with SMTP id
- t13-20020a0dea0d000000b00552a2e2684emr1188907ywe.52.1682066627835; Fri, 21
- Apr 2023 01:43:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230415231130.115094-1-mail@mariushoch.de> <20230415231130.115094-6-mail@mariushoch.de>
-In-Reply-To: <20230415231130.115094-6-mail@mariushoch.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 21 Apr 2023 10:43:36 +0200
-Message-ID: <CACRpkdbyB8FagXey1-huiirHPasJs47pMGKx9TZ0+X0tC=0R1Q@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] iio: Comment that the LSM303D also has the
- Magnetometer DRDY
-To:     Marius Hoch <mail@mariushoch.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Denis Ciocca <denis.ciocca@st.com>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 21 Apr 2023 04:44:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33055AD1B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:43:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E7EF21A39;
+        Fri, 21 Apr 2023 08:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682066627; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=f/5jk2+b1fnNip0aTWmUDkNeszCEWI23lfeJ4Fk1A+c=;
+        b=wQluwF2GybSdll2UEVYlD6B0L3WJo5zo7chB64FWgoLVvTtEEKTd+FEI7mkN1djdx1+5cu
+        sAUpG/DBXUWZlexf9u5RzqlP9vH0WKgrZbVIZcCvxtPhDDz3qZkUWmvvBLcUpcKJm/gEbc
+        YQYCaFu+oiKR0YyuIlY6MyO17+b4GYE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682066627;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=f/5jk2+b1fnNip0aTWmUDkNeszCEWI23lfeJ4Fk1A+c=;
+        b=aKOh5ofI6Jh8Xp8vFGJcxeuyjZllNBxmR1SMi0KN4RWHh41VY+W3iKuwJkhIhtq7fG+xri
+        +Fir4z4y9PrVmsAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF6421390E;
+        Fri, 21 Apr 2023 08:43:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UvQPOcJMQmQJOAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 21 Apr 2023 08:43:46 +0000
+Date:   Fri, 21 Apr 2023 10:43:46 +0200
+Message-ID: <87pm7xsjzx.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.3
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 1:12=E2=80=AFAM Marius Hoch <mail@mariushoch.de> wr=
-ote:
+Linus,
 
-> Per its datasheet, the LSM303D also features that
-> pin.
->
-> Signed-off-by: Marius Hoch <mail@mariushoch.de>
+please pull sound fixes for v6.3 from:
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.3
 
-Yours,
-Linus Walleij
+The topmost commit is 2ae147d643d326f74d93ba4f72a405f25f2677ea
+
+----------------------------------------------------------------
+
+sound fixes for 6.3-final
+
+Just a few fixes: all small and device-specific (ASoC FSL, SOF, and
+HD-audio quirks), should be safe to apply at the last minute.
+
+----------------------------------------------------------------
+
+Andy Chi (1):
+      ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
+
+Chancel Liu (1):
+      ASoC: fsl_sai: Fix pins setting for i.MX8QM platform
+
+Daniel Baluta (1):
+      ASoC: SOF: pm: Tear down pipelines only if DSP was active
+
+Jaroslav Kysela (1):
+      ALSA: hda/realtek: Remove specific patch for Dell Precision 3260
+
+Long Wang (1):
+      ASoC: max98373: change power down sequence for smart amp
+
+Nikita Zhandarovich (1):
+      ASoC: fsl_asrc_dma: fix potential null-ptr-deref
+
+Peter Ujfalusi (1):
+      ASoC: SOF: ipc4-topology: Clarify bind failure caused by missing fw_module
+
+---
+ sound/pci/hda/patch_realtek.c |  2 +-
+ sound/soc/codecs/max98373.c   |  4 ++--
+ sound/soc/fsl/fsl_asrc_dma.c  | 11 ++++++++---
+ sound/soc/fsl/fsl_sai.c       |  2 +-
+ sound/soc/sof/ipc4-topology.c | 10 ++++++----
+ sound/soc/sof/pm.c            |  8 +++++++-
+ 6 files changed, 25 insertions(+), 12 deletions(-)
+
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 3b9f077a227f..f70d6a33421d 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9288,7 +9288,6 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1028, 0x0a62, "Dell Precision 5560", ALC289_FIXUP_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1028, 0x0a9d, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x0a9e, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
+-	SND_PCI_QUIRK(0x1028, 0x0ac9, "Dell Precision 3260", ALC283_FIXUP_CHROME_BOOK),
+ 	SND_PCI_QUIRK(0x1028, 0x0b19, "Dell XPS 15 9520", ALC289_FIXUP_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1028, 0x0b1a, "Dell Precision 5570", ALC289_FIXUP_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1028, 0x0b37, "Dell Inspiron 16 Plus 7620 2-in-1", ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS),
+@@ -9469,6 +9468,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
++	SND_PCI_QUIRK(0x103c, 0x8b65, "HP ProBook 455 15.6 inch G10 Notebook PC", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b66, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7d, "HP", ALC236_FIXUP_HP_GPIO_LED),
+diff --git a/sound/soc/codecs/max98373.c b/sound/soc/codecs/max98373.c
+index f90a6a7ba83b..fde055c6c894 100644
+--- a/sound/soc/codecs/max98373.c
++++ b/sound/soc/codecs/max98373.c
+@@ -31,7 +31,7 @@ static int max98373_dac_event(struct snd_soc_dapm_widget *w,
+ 			MAX98373_GLOBAL_EN_MASK, 1);
+ 		usleep_range(30000, 31000);
+ 		break;
+-	case SND_SOC_DAPM_POST_PMD:
++	case SND_SOC_DAPM_PRE_PMD:
+ 		regmap_update_bits(max98373->regmap,
+ 			MAX98373_R20FF_GLOBAL_SHDN,
+ 			MAX98373_GLOBAL_EN_MASK, 0);
+@@ -64,7 +64,7 @@ static const struct snd_kcontrol_new max98373_spkfb_control =
+ static const struct snd_soc_dapm_widget max98373_dapm_widgets[] = {
+ SND_SOC_DAPM_DAC_E("Amp Enable", "HiFi Playback",
+ 	MAX98373_R202B_PCM_RX_EN, 0, 0, max98373_dac_event,
+-	SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_POST_PMD),
++	SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD),
+ SND_SOC_DAPM_MUX("DAI Sel Mux", SND_SOC_NOPM, 0, 0,
+ 	&max98373_dai_controls),
+ SND_SOC_DAPM_OUTPUT("BE_OUT"),
+diff --git a/sound/soc/fsl/fsl_asrc_dma.c b/sound/soc/fsl/fsl_asrc_dma.c
+index 3b81a465814a..05a7d1588d20 100644
+--- a/sound/soc/fsl/fsl_asrc_dma.c
++++ b/sound/soc/fsl/fsl_asrc_dma.c
+@@ -209,14 +209,19 @@ static int fsl_asrc_dma_hw_params(struct snd_soc_component *component,
+ 		be_chan = soc_component_to_pcm(component_be)->chan[substream->stream];
+ 		tmp_chan = be_chan;
+ 	}
+-	if (!tmp_chan)
+-		tmp_chan = dma_request_slave_channel(dev_be, tx ? "tx" : "rx");
++	if (!tmp_chan) {
++		tmp_chan = dma_request_chan(dev_be, tx ? "tx" : "rx");
++		if (IS_ERR(tmp_chan)) {
++			dev_err(dev, "failed to request DMA channel for Back-End\n");
++			return -EINVAL;
++		}
++	}
+ 
+ 	/*
+ 	 * An EDMA DEV_TO_DEV channel is fixed and bound with DMA event of each
+ 	 * peripheral, unlike SDMA channel that is allocated dynamically. So no
+ 	 * need to configure dma_request and dma_request2, but get dma_chan of
+-	 * Back-End device directly via dma_request_slave_channel.
++	 * Back-End device directly via dma_request_chan.
+ 	 */
+ 	if (!asrc->use_edma) {
+ 		/* Get DMA request of Back-End */
+diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+index 1b197478b3d9..990bba0be1fb 100644
+--- a/sound/soc/fsl/fsl_sai.c
++++ b/sound/soc/fsl/fsl_sai.c
+@@ -1546,7 +1546,7 @@ static const struct fsl_sai_soc_data fsl_sai_imx8qm_data = {
+ 	.use_imx_pcm = true,
+ 	.use_edma = true,
+ 	.fifo_depth = 64,
+-	.pins = 1,
++	.pins = 4,
+ 	.reg_offset = 0,
+ 	.mclk0_is_mclk1 = false,
+ 	.flags = 0,
+diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
+index 669b99a4f76e..3a5394c3dd83 100644
+--- a/sound/soc/sof/ipc4-topology.c
++++ b/sound/soc/sof/ipc4-topology.c
+@@ -1806,10 +1806,12 @@ static int sof_ipc4_route_setup(struct snd_sof_dev *sdev, struct snd_sof_route *
+ 	int ret;
+ 
+ 	if (!src_fw_module || !sink_fw_module) {
+-		/* The NULL module will print as "(efault)" */
+-		dev_err(sdev->dev, "source %s or sink %s widget weren't set up properly\n",
+-			src_fw_module->man4_module_entry.name,
+-			sink_fw_module->man4_module_entry.name);
++		dev_err(sdev->dev,
++			"cannot bind %s -> %s, no firmware module for: %s%s\n",
++			src_widget->widget->name, sink_widget->widget->name,
++			src_fw_module ? "" : " source",
++			sink_fw_module ? "" : " sink");
++
+ 		return -ENODEV;
+ 	}
+ 
+diff --git a/sound/soc/sof/pm.c b/sound/soc/sof/pm.c
+index 8d3383085d12..85412aeb1ca1 100644
+--- a/sound/soc/sof/pm.c
++++ b/sound/soc/sof/pm.c
+@@ -183,6 +183,7 @@ static int sof_suspend(struct device *dev, bool runtime_suspend)
+ 	const struct sof_ipc_tplg_ops *tplg_ops = sof_ipc_get_ops(sdev, tplg);
+ 	pm_message_t pm_state;
+ 	u32 target_state = snd_sof_dsp_power_target(sdev);
++	u32 old_state = sdev->dsp_power_state.state;
+ 	int ret;
+ 
+ 	/* do nothing if dsp suspend callback is not set */
+@@ -192,7 +193,12 @@ static int sof_suspend(struct device *dev, bool runtime_suspend)
+ 	if (runtime_suspend && !sof_ops(sdev)->runtime_suspend)
+ 		return 0;
+ 
+-	if (tplg_ops && tplg_ops->tear_down_all_pipelines)
++	/* we need to tear down pipelines only if the DSP hardware is
++	 * active, which happens for PCI devices. if the device is
++	 * suspended, it is brought back to full power and then
++	 * suspended again
++	 */
++	if (tplg_ops && tplg_ops->tear_down_all_pipelines && (old_state == SOF_DSP_PM_D0))
+ 		tplg_ops->tear_down_all_pipelines(sdev, false);
+ 
+ 	if (sdev->fw_state != SOF_FW_BOOT_COMPLETE)
