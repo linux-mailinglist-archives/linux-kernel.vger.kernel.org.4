@@ -2,126 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E226EA212
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637E66EA8C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbjDUDAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 23:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S230291AbjDULDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjDUC7r (ORCPT
+        with ESMTP id S229624AbjDULDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:59:47 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719610D1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:59:23 -0700 (PDT)
-X-ASG-Debug-ID: 1682045960-1eb14e638834900001-xx1T2L
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id BaCYZtnEBP2z2AAB (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 10:59:20 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
- 2023 10:59:20 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
- 2023 10:59:19 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Message-ID: <295cbf2a-8ba5-765b-4c07-25efc08fc47b@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
-Date:   Fri, 21 Apr 2023 18:59:18 +0800
+        Fri, 21 Apr 2023 07:03:40 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331389013
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:03:38 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b4e5fdb1eso2592376b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682075017; x=1684667017;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0I1sPCdYN0SbjWyDhk4aoTpPCovY0PSzi4d7N1NDJg=;
+        b=mc1zwRaK4FAH7g6eSmoxngIMQ+5NXpyIKsfLdgr5W8xUrUlq9W7TbZkKtInZhi+DfH
+         +otn/a7Mxi6OW2qTj0rtw+7PHVob4Hzgl+wa8tfdAwGGhx5SPWFzGlHv/cNk6hzFBOUP
+         y+jq2HY6gxEhJJlakAZcN6zK4wg1LXE4/we4Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682075017; x=1684667017;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m0I1sPCdYN0SbjWyDhk4aoTpPCovY0PSzi4d7N1NDJg=;
+        b=YBjGKrr2MFPkNN36QAQ4stKI2PLUZcnQUaGktkwEHFNRzYNZbA3HCdnW5b1oQMe8au
+         LWGesKJZ84O8IqJbWtmq6AJ/puKIH7vWk6ZWXr4txAEMqIhtyRnFs+oGR7M9RDQJJh1Y
+         KXBGEP8dnT2I39ZxCCzArMMlNrucft9Xfz473OqTMjU8WGPtvB4Vv1bp01thq2AeXNNg
+         NfNBVzwrNez/6qQMEWU3cu65tZKHB9Q0yy5SvjR00g7lbQA8j0ypEG1l34KxiRzDJjUr
+         P7kRZu5Sgls/UMzd79wHuoqCUZr9lv4VRQiySmNSaoBIYECF/vB475n2eqYuvWOTQ6ZR
+         3Cqw==
+X-Gm-Message-State: AAQBX9dRT8pw7f/WarBkrGCeUAp8i17vkgiTezxJlxalrtvifavcuqqH
+        N13Ws6MgWXHW6sVVHMmaMQmcnXjanal/EVo1DGs=
+X-Google-Smtp-Source: AKy350bwnnxLR6pYSUpKWU0Q4r+z54dq3jUrc4qFIiJZ2/JeH/C++AywzL44Oskd0E07kjJUUHSwww==
+X-Received: by 2002:a05:6a20:4323:b0:ef:acca:9e19 with SMTP id h35-20020a056a20432300b000efacca9e19mr6865535pzk.14.1682075017705;
+        Fri, 21 Apr 2023 04:03:37 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:47fa:fa8d:a971:f6ac])
+        by smtp.gmail.com with ESMTPSA id fb31-20020a056a002d9f00b005e5b11335b3sm2801286pfb.57.2023.04.21.04.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 04:03:37 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH] arm64: dts: mediatek: mt8192-asurada-hayato: Enable Bluetooth
+Date:   Fri, 21 Apr 2023 19:03:27 +0800
+Message-ID: <20230421110327.2395804-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_UHCI=ef=bc=9aadjust_zhaoxin_UHCI_contro?=
- =?UTF-8?Q?llers_OverCurrent_bit_value?=
-Content-Language: en-US
-X-ASG-Orig-Subj: =?UTF-8?Q?Re=3a_=5bPATCH=5d_UHCI=ef=bc=9aadjust_zhaoxin_UHCI_contro?=
- =?UTF-8?Q?llers_OverCurrent_bit_value?=
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
- <95017e76-d029-4e55-af4f-4c7be0a14576@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <95017e76-d029-4e55-af4f-4c7be0a14576@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1682045960
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1871
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107705
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/20 22:49, Alan Stern wrote:
-> On Thu, Apr 20, 2023 at 07:14:45PM +0800, Weitao Wang wrote:
->> Over Current condition is not standardized in the UHCI spec.
->> Zhaoxin UHCI controllers report OverCurrent bit active off.
->> Intel controllers report it active on, so we'll adjust the bit value.
-> 
-> The last sentence is irrelevant.  You should say instead that the
-> uhci-hcd driver needs to be told to expect the active-off behavior.
+Hayato's Realtek WiFi/BT module has it's Bluetooth function wired to
+UART1.
 
-Okay, I'll change this description.Thanks!
+Add and enable the relevant device nodes for it.
 
->>
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->> ---
->>   drivers/usb/host/uhci-pci.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
->> index 3592f757fe05..177e3c2aa287 100644
->> --- a/drivers/usb/host/uhci-pci.c
->> +++ b/drivers/usb/host/uhci-pci.c
->> @@ -126,6 +126,10 @@ static int uhci_pci_init(struct usb_hcd *hcd)
->>   	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
->>   		uhci->oc_low = 1;
->>   
->> +	/* ZHAOXIN controllers report OverCurrent bit active off. */
->> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
->> +		uhci->oc_low = 1;
-> 
-> This is really just a matter of taste, but IMO it would be better to
-> combine this comment and test with the preceding one.  Something like:
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ .../dts/mediatek/mt8192-asurada-hayato-r1.dts | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-This advice is good and the code looks more concise.
-I'll change these code and description in next patch version.
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+index 43a823990a92..6a7d7870525b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+@@ -40,9 +40,89 @@ CROS_STD_MAIN_KEYMAP
+ 	>;
+ };
+ 
++&pio {
++	bt_pins: bt-pins {
++		bt_kill: pins-bt-kill {
++			pinmux = <PINMUX_GPIO144__FUNC_GPIO144>; /* BT_KILL_L */
++			output-low;
++		};
++
++		bt_wake: pins-bt-wake {
++			pinmux = <PINMUX_GPIO22__FUNC_GPIO22>;  /* bt to wake ap */
++			bias-pull-up;
++		};
++
++		ap_wake_bt: pins-ap-wake-bt {
++			pinmux = <PINMUX_GPIO168__FUNC_GPIO168>; /* AP_WAKE_BT_H */
++			output-low;
++		};
++	};
++
++	uart1_pins: uart1-pins {
++		pins-rx {
++			pinmux = <PINMUX_GPIO94__FUNC_URXD1>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		pins-tx {
++			pinmux = <PINMUX_GPIO95__FUNC_UTXD1>;
++		};
++
++		pins-cts {
++			pinmux = <PINMUX_GPIO166__FUNC_UCTS1>;
++			input-enable;
++		};
++
++		pins-rts {
++			pinmux = <PINMUX_GPIO167__FUNC_URTS1>;
++			output-enable;
++		};
++	};
++
++	uart1_pins_sleep: uart1-pins-sleep {
++		pins-rx {
++			pinmux = <PINMUX_GPIO94__FUNC_GPIO94>;
++			input-enable;
++			bias-pull-up;
++		};
++		pins-tx {
++			pinmux = <PINMUX_GPIO95__FUNC_UTXD1>;
++		};
++		pins-cts {
++			pinmux = <PINMUX_GPIO166__FUNC_UCTS1>;
++			input-enable;
++		};
++		pins-rts {
++			pinmux = <PINMUX_GPIO167__FUNC_URTS1>;
++			output-enable;
++		};
++	};
++};
++
+ &touchscreen {
+ 	compatible = "hid-over-i2c";
+ 	post-power-on-delay-ms = <10>;
+ 	hid-descr-addr = <0x0001>;
+ 	vdd-supply = <&pp3300_u>;
+ };
++
++&uart1 {
++	status = "okay";
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&uart1_pins>;
++	pinctrl-1 = <&uart1_pins_sleep>;
++	/delete-property/ interrupts;
++	interrupts-extended = <&gic GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH 0>,
++			      <&pio 94 IRQ_TYPE_EDGE_FALLING>;
++
++	bluetooth: bluetooth {
++		compatible = "realtek,rtl8822cs-bt";
++		pinctrl-names = "default";
++		pinctrl-0 = <&bt_pins>;
++
++		enable-gpios = <&pio 144 GPIO_ACTIVE_HIGH>;
++		device-wake-gpios = <&pio 168 GPIO_ACTIVE_HIGH>;
++		host-wake-gpios = <&pio 22 GPIO_ACTIVE_LOW>;
++	};
++};
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
-Thanks,
-Weitao
-> 	/*
-> 	 * Intel controllers report the OverCurrent bit active on.  VIA
-> 	 * and ZHAOXIN controllers report it active off, so we'll adjust
-> 	 * the bit value.  (It's not standardized in the UHCI spec.)
-> 	 */
-> 	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
-> 	    to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
-> 		uhci->oc_low = 1;
-> 
-> Alan Stern
-> .
