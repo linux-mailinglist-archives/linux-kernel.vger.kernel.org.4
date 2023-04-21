@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE4A6EAD52
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCC86EAD54
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbjDUOne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S232637AbjDUOoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjDUOnR (ORCPT
+        with ESMTP id S232263AbjDUOoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:43:17 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F011446D;
-        Fri, 21 Apr 2023 07:42:50 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b733fd00bso1965021b3a.0;
-        Fri, 21 Apr 2023 07:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682088121; x=1684680121;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A77N0RoQju0/+WBmbiYrDl9vGswgrIXZW0NW2bQRQcY=;
-        b=EuI9Ezxqbz2cDGEmyUiWu4U5AjOatkeSkb9piDGzZLt9HE396LAHKTgtLlr7l6wki9
-         7VRqNyLKpu9JepX7OV3pIUblo9k7Dy6e51Aw8/vr1dqwqO4WVIlpH+L6ytnJ8b0dgzuJ
-         wXudwvtnRpnMcAuN7Q7wSgWtTZyvrm3PKMWQtg1X+MDzSAXAfLhrrf2oES+pa9RAiYfG
-         ggwWX8rvnuNhkyPD2SSkqUiKhLFQU+uoISx1++a31Ez+nrlrhjsqYFJ/7FvWBmYP3+Bl
-         /fSpytHZ3fUBoyCxbHiZxyECSUVIRDWAYAFIEGc3hO2pRBUtzK2z5M4HT8/SxRaxxVQp
-         DIew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682088121; x=1684680121;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A77N0RoQju0/+WBmbiYrDl9vGswgrIXZW0NW2bQRQcY=;
-        b=KYlKMEidx77BJs+wVBA8yYy1j7Dc8cTRSeN1hCcwgNpTeefhr/PtBxnnjDMedDiFW0
-         JvPAsyQlhmimDLrwu4OEvJNf5SzyJTZdjkS5IDvnzIvHUrp0Xv4CtWabjwA7CqHT7znT
-         56NbIWpSDLPmreN5aoqyOurpW+17MYy5bnm0Q0TcNBe7It6aEtsSiTRbrKw6h6DEaO7H
-         Djf2CoJs2bmW9AlgG9kCd9yi/o3ppE55Gj/be9/sSbJAo+CdDX6T7TJo6LKKRFm50hx7
-         hBMsRMiv04H/yij6jIF+Y51mvmV1rqfyVsOalxxH1HR+usCI4AZS+IFxYrjONlffzu+t
-         6hcQ==
-X-Gm-Message-State: AAQBX9e3zPpQ5hKoNgrNxqQfctBhnk4WEEhncA3cLj4yI46RMKWJy6CD
-        cNpZCthqvlwc8G5ckWTwZ4I=
-X-Google-Smtp-Source: AKy350aiNN3o64moz/Be6GjsiYzFMxsPgfZDCO3H4dtjDs3rjnfhsml0eUV+gi9fnJf4SwsQ+PnDkA==
-X-Received: by 2002:a05:6a00:2da4:b0:623:5880:98cd with SMTP id fb36-20020a056a002da400b00623588098cdmr7311455pfb.5.1682088120459;
-        Fri, 21 Apr 2023 07:42:00 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id a22-20020a056a000c9600b00628e9871c24sm3083776pfv.183.2023.04.21.07.41.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 07:42:00 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 21 Apr 2023 04:41:58 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     "Saleem, Shiraz" <shiraz.saleem@intel.com>,
-        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>
-Subject: Re: [PATCH] RDMA/irdma: Drop spurious WQ_UNBOUND from
- alloc_ordered_workqueue() call
-Message-ID: <ZEKgtoJaozAHFjV1@slm.duckdns.org>
-References: <ZEGW-IcFReR1juVM@slm.duckdns.org>
- <MWHPR11MB0029F5F9C9AC249F2BC3E981E9609@MWHPR11MB0029.namprd11.prod.outlook.com>
- <ZEKgHNlykqw7LmKm@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEKgHNlykqw7LmKm@ziepe.ca>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 21 Apr 2023 10:44:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578094487
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:44:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5097C218F2;
+        Fri, 21 Apr 2023 14:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682088178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FUaHjqwAUBVTmW0O/bwvpnE48ou2UUiRPqDFHCuym3M=;
+        b=HVVxQMBS7rq9Ji7T7UJvFhFYmPbIht4wZMdNEBF84t8JM5xqU1wTZYMU3Jxcs6iRt+cA1/
+        ztMystp5eKj+sDEMeScBjHAHV/TgUT9MbIc7ihu6b+hs5K1GX3ha8IrrJWpVcP5C8bSvDQ
+        Oja3UIfXaxczek1c21m9O4jw26EV7iY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682088178;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FUaHjqwAUBVTmW0O/bwvpnE48ou2UUiRPqDFHCuym3M=;
+        b=n+Yb+bt7mR0jXjlxH8/MBdsTegmSosMzwCokv0AmwV8vHfryEZDO4R3+3dU6UxJEiNNRKm
+        aKOCCdpkZoEquiCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 219991390E;
+        Fri, 21 Apr 2023 14:42:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7xoAAfKgQmQpBAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 21 Apr 2023 14:42:58 +0000
+Date:   Fri, 21 Apr 2023 16:42:57 +0200
+Message-ID: <87wn25qosu.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH] usb-audio: Rate limit usb_set_interface error reporting
+In-Reply-To: <ZEKf8UYBYa1h4JWR@chrisdown.name>
+References: <ZEKf8UYBYa1h4JWR@chrisdown.name>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Fri, Apr 21, 2023 at 11:39:24AM -0300, Jason Gunthorpe wrote:
-> On Fri, Apr 21, 2023 at 02:29:06PM +0000, Saleem, Shiraz wrote:
-> > > Subject: [PATCH] RDMA/irdma: Drop spurious WQ_UNBOUND from
-> > > alloc_ordered_workqueue() call
-> > > 
-> > > Workqueue is in the process of cleaning up the distinction between unbound
-> > > workqueues w/ @nr_active==1 and ordered workqueues. Explicit
-> > > WQ_UNBOUND isn't needed for alloc_ordered_workqueue() and will trigger a
-> > > warning in the future. Let's remove it. This doesn't cause any functional
-> > > changes.
-> > > 
-> > > Signed-off-by: Tejun Heo <tj@kernel.org>
-> > > ---
-> > >  drivers/infiniband/hw/irdma/hw.c |    4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > --- a/drivers/infiniband/hw/irdma/hw.c
-> > > +++ b/drivers/infiniband/hw/irdma/hw.c
-> > > @@ -1901,8 +1901,8 @@ int irdma_ctrl_init_hw(struct irdma_pci_
-> > >  			break;
-> > >  		rf->init_state = CEQ0_CREATED;
-> > >  		/* Handles processing of CQP completions */
-> > > -		rf->cqp_cmpl_wq = alloc_ordered_workqueue("cqp_cmpl_wq",
-> > > -						WQ_HIGHPRI |
-> > > WQ_UNBOUND);
-> > > +		rf->cqp_cmpl_wq =
-> > > +			alloc_ordered_workqueue("cqp_cmpl_wq",
-> > > WQ_HIGHPRI);
-> > >  		if (!rf->cqp_cmpl_wq) {
-> > >  			status = -ENOMEM;
-> > >  			break;
-> > 
-> > Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
+On Fri, 21 Apr 2023 16:38:41 +0200,
+Chris Down wrote:
 > 
-> Tejun, do you want this in your tree too?
+> When an error occurs during USB disconnection sometimes things can go
+> wrong as endpoint_set_interface may end up being called repeatedly. For
+> example:
+> 
+> % dmesg --notime | grep 'usb 3-7.1.4' | sort | uniq -c | head -2
+>    3069 usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     908 usb 3-7.1.4: 1:1: usb_set_interface failed (-71)
+> 
+> In my case, there sometimes are hundreds of these usb_set_interface
+> failure messages a second when I disconnect the hub that has my USB
+> audio device.
+> 
+> These messages can take a huge amount of the kmsg ringbuffer and don't
+> provide any extra information over the previous ones, so ratelimit them.
+> 
+> Signed-off-by: Chris Down <chris@chrisdown.name>
 
-This one doesn't create any dependency and can go through any tree. So, I
-guess routing through RDMA is better?
+This patch itself is safe and good to have, so I'm going to take it as
+is.
 
-Thanks.
+But I'm still curious in which code path the problem happens.  That
+is, we should address such unnecessary repeats if possible.  Do you
+have some more data?
 
--- 
-tejun
+
+thanks,
+
+Takashi
