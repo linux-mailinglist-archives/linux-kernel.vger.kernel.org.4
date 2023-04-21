@@ -2,167 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417656EA6C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDD26EA6CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjDUJSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S231527AbjDUJUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjDUJSm (ORCPT
+        with ESMTP id S230526AbjDUJUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:18:42 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C583D1;
-        Fri, 21 Apr 2023 02:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682068721; x=1713604721;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=OETLn0tM0/BHcq/RFX8yM5pj+JenjHCEFDVB5Qn7wKg=;
-  b=IWuPBIgjo2XxJRTTO1kjFC+9rSUPgA7lrZMwq3oCq54O8OW98y86wW7z
-   f90cOETdlqUrX3XRfODZVteN++YeCpwslCf/4TDIzJTnmijKWzAWx7KFt
-   Ui7MnqURX5SaHCNRwD5CkUlWojFfzl+8MkugxgGhRv6o+tlU0DX8qAI/B
-   p8okQICZG0eqYDd9U6xh8nLH1s+jC7xH3QjVTIKwWPb4T5eXYtJHYhgTD
-   0oZcv6oem7SkrvSFKhutOuVqUGx9GHQ8GzioNaY2uwuFc5xD2RsYL8iWM
-   7IIrmmFG3+8sJXoXCMUqM95wrtwSdpBw0SDFmkPDuVj5kqbLAwoRtt0D6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326280024"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="326280024"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:18:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="803666936"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="803666936"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Apr 2023 02:18:40 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 02:18:40 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 02:18:40 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 02:18:40 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 21 Apr 2023 02:18:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T7ylXIuM2lFQvEYy5gbJ2Gp4/rDBIIw/7FQYibDIg7wmLe/MxARWZnwtB9quxDEE1ylfg6UtKfFs+2e3uWxFNEivbBRSsFhG4aNEMt6UnhyIQcFMjRSgefsH1XFYMJQMynXGhzbY9WhGsjksSx1/l4FAg5w//xi8/rkxMqkt4HV7T8oBR6IjgolGfaNwXX2jmwjObTtfimLsdGO9WOSfO73Kvd4SxPNMDxsLk1cAKkHlYTkpW90nNRELPYKdjQL5Xro13VIFUMlfN7TiT/eQy+xB7KSt9MMDwhJj3EaLXwVV/Lhj+0cwjVYUQsEJ40tbsZB3YMfyWUQ0BjicIjl4kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OETLn0tM0/BHcq/RFX8yM5pj+JenjHCEFDVB5Qn7wKg=;
- b=dkZU4GlqSbCwR+7UQy2pbqQTqOqoAfIWxQhHFKUjz9Y1J4hVb93l7EDYlfG6+ztr1/jCUns+gAag13N1ayiI2fFNQjPbcuEy8l+D6qt+s6AP+955gfT5rajGAH/VxqGYqRsHmA1mnL5sLNsvjcDTJtTqUEQsJp8G2LjnY2EAwm2KLfEYf/xfRWI7URciZxUcLte2wXL3TEnFV9T847qpoHlCKH3cOsBz/nrvBlNe3Qi6BWUQ5b2MeV+cL+6/n1Uw+yb5w0b1y+Kox/PN1nHAxd/dAz6AJF2wt6rIA83s7F9LNF9wan+Z1nFqa0p8njIs59I8C+VEjV2XwfWex/3G5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SN7PR11MB7708.namprd11.prod.outlook.com (2603:10b6:806:352::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Fri, 21 Apr
- 2023 09:18:37 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3c9e:36da:562b:f1f5]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3c9e:36da:562b:f1f5%3]) with mapi id 15.20.6298.030; Fri, 21 Apr 2023
- 09:18:37 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>
-Subject: Re: [PATCH 1/2] KVM: VMX: Inject #GP on ENCLS if vCPU has paging
- disabled (CR0.PG==0)
-Thread-Topic: [PATCH 1/2] KVM: VMX: Inject #GP on ENCLS if vCPU has paging
- disabled (CR0.PG==0)
-Thread-Index: AQHZaBjTnv3Xw4rSL0WDrKfMqYpF1K8d+rGAgBeZmQA=
-Date:   Fri, 21 Apr 2023 09:18:36 +0000
-Message-ID: <0f4ce335514602dce385a162548aa465865ebbae.camel@intel.com>
-References: <20230405234556.696927-1-seanjc@google.com>
-         <20230405234556.696927-2-seanjc@google.com>
-         <082ff217ecb7633ef4c1363bfd27a20f8afcbe0c.camel@intel.com>
-In-Reply-To: <082ff217ecb7633ef4c1363bfd27a20f8afcbe0c.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SN7PR11MB7708:EE_
-x-ms-office365-filtering-correlation-id: 402e40d6-6a30-458b-2542-08db42496354
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9/pU5CbD2GdBDhR+1x+gowtKaFifQf1uSEEXcxy0j7+4uFc42cnL4xss/c9s26b5JhJWyIERu2UlpW2/4elpwP9CraqFsXPhvsUbyqXwoTYrRtswAKjjVtVkj8Qqo+aIp7pLyn3/CF+RITZZE1iM7WiLA2GB/VsVh6ELttXseH0+pmFeZkr7gUh1rQrxNdnssDQR+f7Jh8FYHfEZdM+QKrNbwXPPsgR/7tGDNT7m8eTeNcw9z+fmtiDecNPZxaA2J4TvILrlohyx0O4mshn2siaTJcAeAhAui0P9r3xONuhTAj9BzMaursbdgHbHJkQueoTM73C1XR70mm7YC8n/I2Z4+9vMDL23ANgNEZXHCTX5q42En6Dqt0mEVztqlMGt8mqXlsTnP9GrFZKVD0A5PJmHtA8YNSHNaZ9FCiNIdk3buLYTcFCDC/LnN4qJErQtFScit3pEoqe0brf/F0ZUNYZVirlPytlxJUbrQ8b2LnuhPY4jEqTJNQd/ow4YVLbZaZVfob1jN5I8G1cxn7OJhwMRBxJ4yDVTq6rowZhXXaq9PnYprC/yP6yzCvlia5/dcZxG7HChKueVxCfYVdJck8Du+GUVQFw09oSPSRQNoa1EhCUUDT0e+5+z2biNnMNs
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199021)(2906002)(4744005)(38070700005)(8936002)(8676002)(122000001)(41300700001)(82960400001)(5660300002)(38100700002)(36756003)(86362001)(478600001)(54906003)(110136005)(2616005)(26005)(6506007)(6512007)(71200400001)(6486002)(76116006)(91956017)(186003)(66946007)(4326008)(316002)(66446008)(66556008)(83380400001)(64756008)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VUNDZUpkTTEwT3pZMnNZdmRRZG9aMjVnYkNGeHZ5OHRjd01FSVJjQUdubEFm?=
- =?utf-8?B?RUE4WEIzVFlRYXozNkZjbWY1UEFZUXhDaXpLWmJ5dWMwb2Z2b245MzBNdURm?=
- =?utf-8?B?aXZtK21nNUlOQ2VGQmp3cEhKQlhsSTFHZW1yY2ttSXorQi8yUlRvQktsMEEz?=
- =?utf-8?B?QkxLdGdaRWJaSDFIbHJtNVhXeW81NVJUeCsveW9uVGVoVXNYZlE2VmhibHBN?=
- =?utf-8?B?ekw5UXlPUUVVdlV3dFBWQUNzZm44aUpmdVkrdEpma2I1cHdrWkVjbFl1S1Js?=
- =?utf-8?B?WUtkMm4rNHpnUWMwQnJTMkhmd2JjQ2RDL0UwWE1CRG9GVHI1QVhCT1RIZ0Rw?=
- =?utf-8?B?UjRSU2xFVXA4NzZ2aHdlTmxnY1ZkNHNSZ0ZWMUxhcU5RYzRpZUFHVVlvdFhI?=
- =?utf-8?B?cmRXeE5ocFlmdEpEcHU3dFRYeUhuVkg5dTFsMWlVVEMva2pEVTdlR2R5QS9n?=
- =?utf-8?B?V3RuSC9XOHdwMzAvWW10NlM5eVhGOVlxMndrNzBnZmR0cVFUZWtkTFdCWTYx?=
- =?utf-8?B?bDM2VkVSZ1B3WitYMmJsTzRzQjN1MnF6UHEvV2pUYk9kWEFlYW8yQjdyeHdj?=
- =?utf-8?B?M1NGVk85RXhLSkVpd3E5NGY4ckJ5NHp3anBMN1JyRWtac2UzSTEwK0xibllG?=
- =?utf-8?B?ZHRkNVBCa0xGdzM1aHd1RDdpcmpPTEw0UVZoaFF2UE8weUh1TldCYURxVWxw?=
- =?utf-8?B?eEZVbTZOdk9xSG5LTkc0ZkF3dk1ZbUU4eXpHT2JoQnhPMjZjKzhVTDl6cGg0?=
- =?utf-8?B?RzFWTkhHQTdwT1EvcXdCeTJoRVh6TnhtWHpnQ3ZIN2t5aXNXUGVuZFM5TElz?=
- =?utf-8?B?bFd6aStXSm04MXN3aWNFbjhaNVBRUXhTVzBqWnMzMWp5VCs2LzltTlZLLy9a?=
- =?utf-8?B?L2V4b3pyVGFyY3Q5NUVlSGx6NldZeUIrSUFCTWxpeWR1YURsTmd0VFdaNFk3?=
- =?utf-8?B?Rk1zYUZqSVpCcFVhMGRIOTdZYWR2S0pRRkNrUEdNZldab3FzKzZVMlpSQmo5?=
- =?utf-8?B?U3FFTnJpZWdOMzNCOUZ6ZzNvWi9ZSURXdXNZUWl0N0t3dmZ5YTE1YVNzNEZX?=
- =?utf-8?B?NTdZZ1RoK0Y1OHBMRnpac0RrZXNjdWpjekcvM2tSRHVuUmpXTkZSU21WT1h2?=
- =?utf-8?B?ckxPd1MrbGw3NzVZTjczQ3AyQ1pITUcrUHFWc1hwUnVraC9sWVU1V1RnRFh1?=
- =?utf-8?B?cnphbjRQejQwZ3kwN3AxcVNGci9aKzAzUitDUVc2am9DeHdXemgvY3o4TjlH?=
- =?utf-8?B?L0lTajFWd0pFV3FHbmtQaXJYUUlNakVoR2NadFJLTFJXalVqeHF3WWsxeEov?=
- =?utf-8?B?cDN0Yk9UM09qVTBQMXRncm9mdDJUTXNDT3NLZXNQU3luQjF5RjFta1Avc3hQ?=
- =?utf-8?B?T1BZNHlwZHU5UGhtMGZKWGtidmkxWnNKcnpUNlc1ZDVhSm16NlJCMmpiTnBM?=
- =?utf-8?B?Vjg5bW9ZUi9aQmRUeitFNnFJOVA5VE9zV3M5dFNudHdaVWRLa0VNbGpFNnhm?=
- =?utf-8?B?ZTltNUsvaEE5UllNRFZNLzBXOERNSUFpZWN4Ujl4aS9NbytmM1VPSDhmeXJZ?=
- =?utf-8?B?d1J5K0RybEtSK2Z4Q0VTZjhlZkE2c2NqR2ZoYjYvajMyK1hFU1lDTXFFZko3?=
- =?utf-8?B?bWxUOWRMdzdFRDF3NzA4TFBJdnhuMEM0NWMyV3JpeU0vTTlSeEJiSis0c2No?=
- =?utf-8?B?YzhCdEZxRGQ0NGNIRS9zakxjRnNVZGgwYTF1dnJYMzlFbjViZXNvOEh0RFRy?=
- =?utf-8?B?bWlzbmhSbTh4L1MxS3NwZ0lNVEZsSU0vV2tvWkVsVkpCYTVORFhNYmZ3K2J6?=
- =?utf-8?B?UjBabjlVbW0xUkhQVm1UdDBWaUd5UWVEbXlHT3B5K0NrR2szMExMTmNqZEtp?=
- =?utf-8?B?eUFRdWdTTngrTWpaNXZwby91VkdLekhSemlhcUZDelVtTFFwSVNneit0bm9k?=
- =?utf-8?B?RHNkNmhJem9QTzdDN2xvR01IMHBLMzhxbVJmOUxDcDRGOHRFZmRJMzRzU1Fq?=
- =?utf-8?B?TWJyWUpBRlJVWi9LRUw5QnJIRG84Y0lqdWRrNHFlQ2tUWnJzeWxpekZxVmdG?=
- =?utf-8?B?czFFUlZEcDBkeDF3T2htdDhvR3ByWUhmYXprWlFiYzNmNXdUQVl5U3J3SlFy?=
- =?utf-8?Q?eUEy++LqI7+ioFK5ULB2FKnjE?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BBDAB7415C7E134FA9C584372323E2F4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 21 Apr 2023 05:20:42 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77FCA5D0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:20:36 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7637c5ed865so172550239f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682068836; x=1684660836;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfAz7BwEb0UdyABaDwDZ9FoWZJHZV+6NVF2UDA8vAjI=;
+        b=Y89RPHik1843XJ4UIjDd/JcJcNA1dDqqgoMRV7oR50cv9R/mZQ4P04e6HswND+FLOJ
+         VoHYPUNYTv532wsNTEZFIKlKI2encda/GmAedw+vua1UUuXI9aimL1peXcUanhbVtQ46
+         geEe0YWbW4m8s8Teji5EaIzuVj3UvgdtWFGQhEVXSGoyagcxe4QsA55cT9THUfPqiVLi
+         6VOa730dPLqj9OTHIeI1QNzYF2rZpvAtGNODW+skyInT1Hs2Bif7NQwuDInWo8TK8mFe
+         o0KqAsh2f0DpgqWAGbq+gaHTQLk/imbfc7FHMzSCcoPiJDe0KS0Vv9D4WaQpMi5TO//b
+         TbqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682068836; x=1684660836;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mfAz7BwEb0UdyABaDwDZ9FoWZJHZV+6NVF2UDA8vAjI=;
+        b=V5S/PRFaymxpGtP0ZNgRUQQTXDH1aLhPj7gCrYBv/omNZiQQiEnKkkvC6nx4KMJeH8
+         WRSU8IIdbW/egTKcn3pVERZKn2R8eOsK5sA74DWcr6uKWi0MvqFhmFg5LjO0V7ehfAmZ
+         Za0rpZMXV7ptt1CQlJ1HgGuA9wWSMRxSoWt3LF/dds11H6ZbG1auPcxy4ex0RZ/atqf0
+         5ERd/FJXSJPJzB99nZUTRG9YSD63E8aOFwLXZSPHxpGOwnMlXr1vlC7cp+XceXYcP3ZE
+         KDm9Vm9zKWaBJfSo237Z394M/j+tJP4rOmvHzL1Nz8ElEBQ+muW1BTtp8c0zb157zMmQ
+         kdbA==
+X-Gm-Message-State: AAQBX9cdCku4tb3CLaxf/N1X5r7i5Sn1C3esDspLDfW7YEFewO/za2el
+        ddi+ezrHZR1EtP1VNPI5luB/y1iEugaHZxEa8fuT9g==
+X-Google-Smtp-Source: AKy350ZYzXx9EkWhAOR+ujsNCcrbrW+nYI/9f8Yqln91FfxAd1OKxUotlA5nSpSYhJ7nij3s+HBZLL+Mwm2zv9fVBs8=
+X-Received: by 2002:a5d:94d3:0:b0:760:ec3c:33ed with SMTP id
+ y19-20020a5d94d3000000b00760ec3c33edmr1754809ior.5.1682068835857; Fri, 21 Apr
+ 2023 02:20:35 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 402e40d6-6a30-458b-2542-08db42496354
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2023 09:18:36.8962
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CYgqwPLcFEybxt5ZVAWJnslCVj8vp8YcNjDbQydPm2lNNbw3Okn2KRNIvg2QmRBhYioF0iz+CmfOdZUiboaB+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7708
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230421082026.2115712-1-arnd@kernel.org>
+In-Reply-To: <20230421082026.2115712-1-arnd@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 21 Apr 2023 11:19:58 +0200
+Message-ID: <CANpmjNMRQiPPqifLbzob6OjOX9O+bWhGrQunZY+TY6gj9HwGug@mail.gmail.com>
+Subject: Re: [PATCH] kasan: use internal prototypes matching gcc-13 builtins
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -170,21 +84,892 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA0LTA2IGF0IDA4OjU0ICswMDAwLCBIdWFuZywgS2FpIHdyb3RlOg0KPiBP
-biBXZWQsIDIwMjMtMDQtMDUgYXQgMTY6NDUgLTA3MDAsIFNlYW4gQ2hyaXN0b3BoZXJzb24gd3Jv
-dGU6DQo+ID4gSW5qZWN0IGEgI0dQIHdoZW4gZW11bGF0aW5nL2ZvcndhcmRpbmcgYSB2YWxpZCBF
-TkNMUyBsZWFmIGlmIHRoZSB2Q1BVIGhhcw0KPiA+IHBhZ2luZyBkaXNhYmxlZCwgZS5nLiBpZiBL
-Vk0gaXMgaW50ZXJjZXB0aW5nIEVDUkVBVEUgdG8gZW5mb3JjZSBhZGRpdGlvbmFsDQo+ID4gcmVz
-dHJpY3Rpb25zLiAgVGhlIHBzZXVkb2NvZGUgaW4gdGhlIFNETSBsaXN0cyBhbGwgI0dQIHRyaWdn
-ZXJzLCBpbmNsdWRpbmcNCj4gPiBDUjAuUEc9MCwgYXMgYmVpbmcgY2hlY2tlZCBhZnRlciB0aGUg
-RU5MQ1MtZXhpdGluZyBjaGVja3MsIGkuZS4gdGhlDQo+ID4gVk0tRXhpdCB3aWxsIG9jY3VyIGJl
-Zm9yZSB0aGUgQ1BVIHBlcmZvcm1zIHRoZSBDUjAuUEcgY2hlY2suDQo+ID4gDQo+ID4gRml4ZXM6
-IDcwMjEwYzA0NGI0ZSAoIktWTTogVk1YOiBBZGQgU0dYIEVOQ0xTW0VDUkVBVEVdIGhhbmRsZXIg
-dG8gZW5mb3JjZSBDUFVJRCByZXN0cmljdGlvbnMiKQ0KPiA+IENjOiBCaW5iaW4gV3UgPGJpbmJp
-bi53dUBsaW51eC5pbnRlbC5jb20+DQo+ID4gQ2M6IEthaSBIdWFuZyA8a2FpLmh1YW5nQGludGVs
-LmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBTZWFuIENocmlzdG9waGVyc29uIDxzZWFuamNAZ29v
-Z2xlLmNvbT4NCj4gDQo+IFJldmlld2VkLWJ5OiBLYWkgSHVhbmcgPGthaS5odWFuZ0BpbnRlbC5j
-b20+DQo+IA0KPiA+IA0KDQpUZXN0ZWQgYnkgcnVubmluZyBFTkNMUyBpbiBwcm90ZWN0ZWQgbW9k
-ZSBiZWZvcmUgZW5hYmxpbmcgcGFnaW5nLCBhbmQgaW4gbXkgdGVzdA0KdGhlICNHUCB3YXMgaW5q
-ZWN0ZWQgdG8gdGhlIGd1ZXN0Lg0KDQpUZXN0ZWQtYnk6IEthaSBIdWFuZyA8a2FpLmh1YW5nQGlu
-dGVsLmNvbT4NCg==
+On Fri, 21 Apr 2023 at 10:20, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> gcc-13 warns about function definitions for builtin interfaces
+> that have a different prototype, e.g.:
+>
+> In file included from kasan_test.c:31:
+> kasan.h:574:6: error: conflicting types for built-in function '__asan_register_globals'; expected 'void(void *, long int)' [-Werror=builtin-declaration-mismatch]
+>   574 | void __asan_register_globals(struct kasan_global *globals, size_t size);
+> kasan.h:577:6: error: conflicting types for built-in function '__asan_alloca_poison'; expected 'void(void *, long int)' [-Werror=builtin-declaration-mismatch]
+>   577 | void __asan_alloca_poison(unsigned long addr, size_t size);
+> kasan.h:580:6: error: conflicting types for built-in function '__asan_load1'; expected 'void(void *)' [-Werror=builtin-declaration-mismatch]
+>   580 | void __asan_load1(unsigned long addr);
+> kasan.h:581:6: error: conflicting types for built-in function '__asan_store1'; expected 'void(void *)' [-Werror=builtin-declaration-mismatch]
+>   581 | void __asan_store1(unsigned long addr);
+> kasan.h:643:6: error: conflicting types for built-in function '__hwasan_tag_memory'; expected 'void(void *, unsigned char,  long int)' [-Werror=builtin-declaration-mismatch]
+>   643 | void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size);
+>
+> The two problems are:
+>
+>  - Addresses are passes as 'unsigned long' in the kernel, but gcc-13
+>    expects a 'void *'.
+>
+>  - sizes are expected to be the built-in ssize_t type, not the one that
+>    is provided by the kernel. On 32-bit architectures, this is usually
+>    a signed 'int' rather than 'unsigned long.
+>
+> Change all the prototypes to match these, using a custom 'kasan_size_t'
+> that is defined the way that gcc expects it regardless of the kernel's
+> size_t/ssize_t. Using 'void *' consistently for addresses gets rid of
+> a couple of type casts, so push that down to the leaf functions where
+> possible.
+>
+> This now passes all randconfig builds on arm, arm64 and x86, but I have
+> not tested it on the other architectures that support kasan, since they
+> tend to fail randconfig builds in other ways. This might fail if any
+> of the 32-bit architectures expect a 'long' instead of 'int' for the size
+> argument.
+>
+> The __asan_allocas_unpoison() function prototype is somewhat weird,
+> since it uses a pointer for 'stack_top' and an size_t for 'stack_bottom'.
+> This looks like it is meant to be 'addr' and 'size' like the others,
+> but the implementation clearly treats them as 'top' and 'bottom'.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Does it work with Clang?
+
+I don't mind either way, but the custom kasan_size_t change seems to
+just be needed to workaround the subtle inconsistency in type
+definition, but in reality there should never be a problem. I'd rather
+the KASAN code just uses normal kernel types and we just make the
+compiler be quiet about it.
+
+To do that, another option is -Wno-builtin-declaration-mismatch for
+mm/kasan/ which just shuts up the compiler, and allows us to keep the
+code as-is. Does it have any downsides?
+
+> ---
+>  arch/arm64/kernel/traps.c |   2 +-
+>  arch/arm64/mm/fault.c     |   2 +-
+>  include/linux/kasan.h     |   2 +-
+>  mm/kasan/common.c         |   2 +-
+>  mm/kasan/generic.c        |  72 ++++++++---------
+>  mm/kasan/kasan.h          | 166 ++++++++++++++++++++------------------
+>  mm/kasan/report.c         |  17 ++--
+>  mm/kasan/report_generic.c |  12 +--
+>  mm/kasan/report_hw_tags.c |   2 +-
+>  mm/kasan/report_sw_tags.c |   2 +-
+>  mm/kasan/shadow.c         |  36 ++++-----
+>  mm/kasan/sw_tags.c        |  20 ++---
+>  12 files changed, 170 insertions(+), 165 deletions(-)
+>
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 35a95b78b14f..3f5a21e5968e 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -1044,7 +1044,7 @@ static int kasan_handler(struct pt_regs *regs, unsigned long esr)
+>         bool recover = esr & KASAN_ESR_RECOVER;
+>         bool write = esr & KASAN_ESR_WRITE;
+>         size_t size = KASAN_ESR_SIZE(esr);
+> -       u64 addr = regs->regs[0];
+> +       void *addr = (void *)regs->regs[0];
+>         u64 pc = regs->pc;
+>
+>         kasan_report(addr, size, write, pc);
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index f4418382be98..940391ec5e1e 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -317,7 +317,7 @@ static void report_tag_fault(unsigned long addr, unsigned long esr,
+>          * find out access size.
+>          */
+>         bool is_write = !!(esr & ESR_ELx_WNR);
+> -       kasan_report(addr, 0, is_write, regs->pc);
+> +       kasan_report((void *)addr, 0, is_write, regs->pc);
+>  }
+>  #else
+>  /* Tag faults aren't enabled without CONFIG_KASAN_HW_TAGS. */
+> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> index f7ef70661ce2..819b6bc8ac08 100644
+> --- a/include/linux/kasan.h
+> +++ b/include/linux/kasan.h
+> @@ -343,7 +343,7 @@ static inline void *kasan_reset_tag(const void *addr)
+>   * @is_write: whether the bad access is a write or a read
+>   * @ip: instruction pointer for the accessibility check or the bad access itself
+>   */
+> -bool kasan_report(unsigned long addr, size_t size,
+> +bool kasan_report(const void *addr, size_t size,
+>                 bool is_write, unsigned long ip);
+>
+>  #else /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index b376a5d055e5..256930da578a 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -445,7 +445,7 @@ void * __must_check __kasan_krealloc(const void *object, size_t size, gfp_t flag
+>  bool __kasan_check_byte(const void *address, unsigned long ip)
+>  {
+>         if (!kasan_byte_accessible(address)) {
+> -               kasan_report((unsigned long)address, 1, false, ip);
+> +               kasan_report(address, 1, false, ip);
+>                 return false;
+>         }
+>         return true;
+> diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+> index e5eef670735e..c0cab050fbf7 100644
+> --- a/mm/kasan/generic.c
+> +++ b/mm/kasan/generic.c
+> @@ -40,39 +40,39 @@
+>   * depending on memory access size X.
+>   */
+>
+> -static __always_inline bool memory_is_poisoned_1(unsigned long addr)
+> +static __always_inline bool memory_is_poisoned_1(const void *addr)
+>  {
+> -       s8 shadow_value = *(s8 *)kasan_mem_to_shadow((void *)addr);
+> +       s8 shadow_value = *(s8 *)kasan_mem_to_shadow(addr);
+>
+>         if (unlikely(shadow_value)) {
+> -               s8 last_accessible_byte = addr & KASAN_GRANULE_MASK;
+> +               s8 last_accessible_byte = (unsigned long)addr & KASAN_GRANULE_MASK;
+>                 return unlikely(last_accessible_byte >= shadow_value);
+>         }
+>
+>         return false;
+>  }
+>
+> -static __always_inline bool memory_is_poisoned_2_4_8(unsigned long addr,
+> +static __always_inline bool memory_is_poisoned_2_4_8(const void *addr,
+>                                                 unsigned long size)
+>  {
+> -       u8 *shadow_addr = (u8 *)kasan_mem_to_shadow((void *)addr);
+> +       u8 *shadow_addr = (u8 *)kasan_mem_to_shadow(addr);
+>
+>         /*
+>          * Access crosses 8(shadow size)-byte boundary. Such access maps
+>          * into 2 shadow bytes, so we need to check them both.
+>          */
+> -       if (unlikely(((addr + size - 1) & KASAN_GRANULE_MASK) < size - 1))
+> +       if (unlikely((((unsigned long)addr + size - 1) & KASAN_GRANULE_MASK) < size - 1))
+>                 return *shadow_addr || memory_is_poisoned_1(addr + size - 1);
+>
+>         return memory_is_poisoned_1(addr + size - 1);
+>  }
+>
+> -static __always_inline bool memory_is_poisoned_16(unsigned long addr)
+> +static __always_inline bool memory_is_poisoned_16(const void *addr)
+>  {
+> -       u16 *shadow_addr = (u16 *)kasan_mem_to_shadow((void *)addr);
+> +       u16 *shadow_addr = (u16 *)kasan_mem_to_shadow(addr);
+>
+>         /* Unaligned 16-bytes access maps into 3 shadow bytes. */
+> -       if (unlikely(!IS_ALIGNED(addr, KASAN_GRANULE_SIZE)))
+> +       if (unlikely(!IS_ALIGNED((unsigned long)addr, KASAN_GRANULE_SIZE)))
+>                 return *shadow_addr || memory_is_poisoned_1(addr + 15);
+>
+>         return *shadow_addr;
+> @@ -120,26 +120,25 @@ static __always_inline unsigned long memory_is_nonzero(const void *start,
+>         return bytes_is_nonzero(start, (end - start) % 8);
+>  }
+>
+> -static __always_inline bool memory_is_poisoned_n(unsigned long addr,
+> -                                               size_t size)
+> +static __always_inline bool memory_is_poisoned_n(const void *addr, size_t size)
+>  {
+>         unsigned long ret;
+>
+> -       ret = memory_is_nonzero(kasan_mem_to_shadow((void *)addr),
+> -                       kasan_mem_to_shadow((void *)addr + size - 1) + 1);
+> +       ret = memory_is_nonzero(kasan_mem_to_shadow(addr),
+> +                       kasan_mem_to_shadow(addr + size - 1) + 1);
+>
+>         if (unlikely(ret)) {
+> -               unsigned long last_byte = addr + size - 1;
+> -               s8 *last_shadow = (s8 *)kasan_mem_to_shadow((void *)last_byte);
+> +               const void *last_byte = addr + size - 1;
+> +               s8 *last_shadow = (s8 *)kasan_mem_to_shadow(last_byte);
+>
+>                 if (unlikely(ret != (unsigned long)last_shadow ||
+> -                       ((long)(last_byte & KASAN_GRANULE_MASK) >= *last_shadow)))
+> +                       (((long)last_byte & KASAN_GRANULE_MASK) >= *last_shadow)))
+>                         return true;
+>         }
+>         return false;
+>  }
+>
+> -static __always_inline bool memory_is_poisoned(unsigned long addr, size_t size)
+> +static __always_inline bool memory_is_poisoned(const void *addr, size_t size)
+>  {
+>         if (__builtin_constant_p(size)) {
+>                 switch (size) {
+> @@ -159,7 +158,7 @@ static __always_inline bool memory_is_poisoned(unsigned long addr, size_t size)
+>         return memory_is_poisoned_n(addr, size);
+>  }
+>
+> -static __always_inline bool check_region_inline(unsigned long addr,
+> +static __always_inline bool check_region_inline(const void *addr,
+>                                                 size_t size, bool write,
+>                                                 unsigned long ret_ip)
+>  {
+> @@ -172,7 +171,7 @@ static __always_inline bool check_region_inline(unsigned long addr,
+>         if (unlikely(addr + size < addr))
+>                 return !kasan_report(addr, size, write, ret_ip);
+>
+> -       if (unlikely(!addr_has_metadata((void *)addr)))
+> +       if (unlikely(!addr_has_metadata(addr)))
+>                 return !kasan_report(addr, size, write, ret_ip);
+>
+>         if (likely(!memory_is_poisoned(addr, size)))
+> @@ -181,7 +180,7 @@ static __always_inline bool check_region_inline(unsigned long addr,
+>         return !kasan_report(addr, size, write, ret_ip);
+>  }
+>
+> -bool kasan_check_range(unsigned long addr, size_t size, bool write,
+> +bool kasan_check_range(const void *addr, size_t size, bool write,
+>                                         unsigned long ret_ip)
+>  {
+>         return check_region_inline(addr, size, write, ret_ip);
+> @@ -221,36 +220,37 @@ static void register_global(struct kasan_global *global)
+>                      KASAN_GLOBAL_REDZONE, false);
+>  }
+>
+> -void __asan_register_globals(struct kasan_global *globals, size_t size)
+> +void __asan_register_globals(void *ptr, kasan_size_t size)
+>  {
+>         int i;
+> +       struct kasan_global *globals = ptr;
+>
+>         for (i = 0; i < size; i++)
+>                 register_global(&globals[i]);
+>  }
+>  EXPORT_SYMBOL(__asan_register_globals);
+>
+> -void __asan_unregister_globals(struct kasan_global *globals, size_t size)
+> +void __asan_unregister_globals(void *ptr, kasan_size_t size)
+>  {
+>  }
+>  EXPORT_SYMBOL(__asan_unregister_globals);
+>
+>  #define DEFINE_ASAN_LOAD_STORE(size)                                   \
+> -       void __asan_load##size(unsigned long addr)                      \
+> +       void __asan_load##size(void *addr)                              \
+>         {                                                               \
+>                 check_region_inline(addr, size, false, _RET_IP_);       \
+>         }                                                               \
+>         EXPORT_SYMBOL(__asan_load##size);                               \
+>         __alias(__asan_load##size)                                      \
+> -       void __asan_load##size##_noabort(unsigned long);                \
+> +       void __asan_load##size##_noabort(void *);                       \
+>         EXPORT_SYMBOL(__asan_load##size##_noabort);                     \
+> -       void __asan_store##size(unsigned long addr)                     \
+> +       void __asan_store##size(void *addr)                             \
+>         {                                                               \
+>                 check_region_inline(addr, size, true, _RET_IP_);        \
+>         }                                                               \
+>         EXPORT_SYMBOL(__asan_store##size);                              \
+>         __alias(__asan_store##size)                                     \
+> -       void __asan_store##size##_noabort(unsigned long);               \
+> +       void __asan_store##size##_noabort(void *);                      \
+>         EXPORT_SYMBOL(__asan_store##size##_noabort)
+>
+>  DEFINE_ASAN_LOAD_STORE(1);
+> @@ -259,24 +259,24 @@ DEFINE_ASAN_LOAD_STORE(4);
+>  DEFINE_ASAN_LOAD_STORE(8);
+>  DEFINE_ASAN_LOAD_STORE(16);
+>
+> -void __asan_loadN(unsigned long addr, size_t size)
+> +void __asan_loadN(void *addr, kasan_size_t size)
+>  {
+>         kasan_check_range(addr, size, false, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__asan_loadN);
+>
+>  __alias(__asan_loadN)
+> -void __asan_loadN_noabort(unsigned long, size_t);
+> +void __asan_loadN_noabort(void *, kasan_size_t);
+>  EXPORT_SYMBOL(__asan_loadN_noabort);
+>
+> -void __asan_storeN(unsigned long addr, size_t size)
+> +void __asan_storeN(void *addr, kasan_size_t size)
+>  {
+>         kasan_check_range(addr, size, true, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__asan_storeN);
+>
+>  __alias(__asan_storeN)
+> -void __asan_storeN_noabort(unsigned long, size_t);
+> +void __asan_storeN_noabort(void *, kasan_size_t);
+>  EXPORT_SYMBOL(__asan_storeN_noabort);
+>
+>  /* to shut up compiler complaints */
+> @@ -284,7 +284,7 @@ void __asan_handle_no_return(void) {}
+>  EXPORT_SYMBOL(__asan_handle_no_return);
+>
+>  /* Emitted by compiler to poison alloca()ed objects. */
+> -void __asan_alloca_poison(unsigned long addr, size_t size)
+> +void __asan_alloca_poison(void *addr, kasan_size_t size)
+>  {
+>         size_t rounded_up_size = round_up(size, KASAN_GRANULE_SIZE);
+>         size_t padding_size = round_up(size, KASAN_ALLOCA_REDZONE_SIZE) -
+> @@ -295,7 +295,7 @@ void __asan_alloca_poison(unsigned long addr, size_t size)
+>                         KASAN_ALLOCA_REDZONE_SIZE);
+>         const void *right_redzone = (const void *)(addr + rounded_up_size);
+>
+> -       WARN_ON(!IS_ALIGNED(addr, KASAN_ALLOCA_REDZONE_SIZE));
+> +       WARN_ON(!IS_ALIGNED((unsigned long)addr, KASAN_ALLOCA_REDZONE_SIZE));
+>
+>         kasan_unpoison((const void *)(addr + rounded_down_size),
+>                         size - rounded_down_size, false);
+> @@ -307,18 +307,18 @@ void __asan_alloca_poison(unsigned long addr, size_t size)
+>  EXPORT_SYMBOL(__asan_alloca_poison);
+>
+>  /* Emitted by compiler to unpoison alloca()ed areas when the stack unwinds. */
+> -void __asan_allocas_unpoison(const void *stack_top, const void *stack_bottom)
+> +void __asan_allocas_unpoison(void *stack_top, kasan_size_t stack_bottom)
+>  {
+> -       if (unlikely(!stack_top || stack_top > stack_bottom))
+> +       if (unlikely(!stack_top || stack_top > (void *)stack_bottom))
+>                 return;
+>
+> -       kasan_unpoison(stack_top, stack_bottom - stack_top, false);
+> +       kasan_unpoison(stack_top, (void *)stack_bottom - stack_top, false);
+>  }
+>  EXPORT_SYMBOL(__asan_allocas_unpoison);
+>
+>  /* Emitted by the compiler to [un]poison local variables. */
+>  #define DEFINE_ASAN_SET_SHADOW(byte) \
+> -       void __asan_set_shadow_##byte(const void *addr, size_t size)    \
+> +       void __asan_set_shadow_##byte(const void *addr, kasan_size_t size)      \
+>         {                                                               \
+>                 __memset((void *)addr, 0x##byte, size);                 \
+>         }                                                               \
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index cd846ca34f44..cce8fd1b33fb 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -198,13 +198,13 @@ enum kasan_report_type {
+>  struct kasan_report_info {
+>         /* Filled in by kasan_report_*(). */
+>         enum kasan_report_type type;
+> -       void *access_addr;
+> +       const void *access_addr;
+>         size_t access_size;
+>         bool is_write;
+>         unsigned long ip;
+>
+>         /* Filled in by the common reporting code. */
+> -       void *first_bad_addr;
+> +       const void *first_bad_addr;
+>         struct kmem_cache *cache;
+>         void *object;
+>         size_t alloc_size;
+> @@ -289,6 +289,12 @@ struct kasan_stack_ring {
+>
+>  #endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
+>
+> +#ifdef CONFIG_64BIT
+> +typedef ssize_t kasan_size_t;
+> +#else
+> +typedef int kasan_size_t;
+> +#endif
+> +
+>  #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+>
+>  static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
+> @@ -311,7 +317,7 @@ static __always_inline bool addr_has_metadata(const void *addr)
+>   * @ret_ip: return address
+>   * @return: true if access was valid, false if invalid
+>   */
+> -bool kasan_check_range(unsigned long addr, size_t size, bool write,
+> +bool kasan_check_range(const void *addr, size_t size, bool write,
+>                                 unsigned long ret_ip);
+>
+>  #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
+> @@ -323,7 +329,7 @@ static __always_inline bool addr_has_metadata(const void *addr)
+>
+>  #endif /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
+>
+> -void *kasan_find_first_bad_addr(void *addr, size_t size);
+> +const void *kasan_find_first_bad_addr(const void *addr, size_t size);
+>  size_t kasan_get_alloc_size(void *object, struct kmem_cache *cache);
+>  void kasan_complete_mode_report_info(struct kasan_report_info *info);
+>  void kasan_metadata_fetch_row(char *buffer, void *row);
+> @@ -346,7 +352,7 @@ void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object);
+>  static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object) { }
+>  #endif
+>
+> -bool kasan_report(unsigned long addr, size_t size,
+> +bool kasan_report(const void *addr, size_t size,
+>                 bool is_write, unsigned long ip);
+>  void kasan_report_invalid_free(void *object, unsigned long ip, enum kasan_report_type type);
+>
+> @@ -571,82 +577,82 @@ void kasan_restore_multi_shot(bool enabled);
+>   */
+>
+>  asmlinkage void kasan_unpoison_task_stack_below(const void *watermark);
+> -void __asan_register_globals(struct kasan_global *globals, size_t size);
+> -void __asan_unregister_globals(struct kasan_global *globals, size_t size);
+> +void __asan_register_globals(void *globals, kasan_size_t size);
+> +void __asan_unregister_globals(void *globals, kasan_size_t size);
+>  void __asan_handle_no_return(void);
+> -void __asan_alloca_poison(unsigned long addr, size_t size);
+> -void __asan_allocas_unpoison(const void *stack_top, const void *stack_bottom);
+> -
+> -void __asan_load1(unsigned long addr);
+> -void __asan_store1(unsigned long addr);
+> -void __asan_load2(unsigned long addr);
+> -void __asan_store2(unsigned long addr);
+> -void __asan_load4(unsigned long addr);
+> -void __asan_store4(unsigned long addr);
+> -void __asan_load8(unsigned long addr);
+> -void __asan_store8(unsigned long addr);
+> -void __asan_load16(unsigned long addr);
+> -void __asan_store16(unsigned long addr);
+> -void __asan_loadN(unsigned long addr, size_t size);
+> -void __asan_storeN(unsigned long addr, size_t size);
+> -
+> -void __asan_load1_noabort(unsigned long addr);
+> -void __asan_store1_noabort(unsigned long addr);
+> -void __asan_load2_noabort(unsigned long addr);
+> -void __asan_store2_noabort(unsigned long addr);
+> -void __asan_load4_noabort(unsigned long addr);
+> -void __asan_store4_noabort(unsigned long addr);
+> -void __asan_load8_noabort(unsigned long addr);
+> -void __asan_store8_noabort(unsigned long addr);
+> -void __asan_load16_noabort(unsigned long addr);
+> -void __asan_store16_noabort(unsigned long addr);
+> -void __asan_loadN_noabort(unsigned long addr, size_t size);
+> -void __asan_storeN_noabort(unsigned long addr, size_t size);
+> -
+> -void __asan_report_load1_noabort(unsigned long addr);
+> -void __asan_report_store1_noabort(unsigned long addr);
+> -void __asan_report_load2_noabort(unsigned long addr);
+> -void __asan_report_store2_noabort(unsigned long addr);
+> -void __asan_report_load4_noabort(unsigned long addr);
+> -void __asan_report_store4_noabort(unsigned long addr);
+> -void __asan_report_load8_noabort(unsigned long addr);
+> -void __asan_report_store8_noabort(unsigned long addr);
+> -void __asan_report_load16_noabort(unsigned long addr);
+> -void __asan_report_store16_noabort(unsigned long addr);
+> -void __asan_report_load_n_noabort(unsigned long addr, size_t size);
+> -void __asan_report_store_n_noabort(unsigned long addr, size_t size);
+> -
+> -void __asan_set_shadow_00(const void *addr, size_t size);
+> -void __asan_set_shadow_f1(const void *addr, size_t size);
+> -void __asan_set_shadow_f2(const void *addr, size_t size);
+> -void __asan_set_shadow_f3(const void *addr, size_t size);
+> -void __asan_set_shadow_f5(const void *addr, size_t size);
+> -void __asan_set_shadow_f8(const void *addr, size_t size);
+> -
+> -void *__asan_memset(void *addr, int c, size_t len);
+> -void *__asan_memmove(void *dest, const void *src, size_t len);
+> -void *__asan_memcpy(void *dest, const void *src, size_t len);
+> -
+> -void __hwasan_load1_noabort(unsigned long addr);
+> -void __hwasan_store1_noabort(unsigned long addr);
+> -void __hwasan_load2_noabort(unsigned long addr);
+> -void __hwasan_store2_noabort(unsigned long addr);
+> -void __hwasan_load4_noabort(unsigned long addr);
+> -void __hwasan_store4_noabort(unsigned long addr);
+> -void __hwasan_load8_noabort(unsigned long addr);
+> -void __hwasan_store8_noabort(unsigned long addr);
+> -void __hwasan_load16_noabort(unsigned long addr);
+> -void __hwasan_store16_noabort(unsigned long addr);
+> -void __hwasan_loadN_noabort(unsigned long addr, size_t size);
+> -void __hwasan_storeN_noabort(unsigned long addr, size_t size);
+> -
+> -void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size);
+> -
+> -void *__hwasan_memset(void *addr, int c, size_t len);
+> -void *__hwasan_memmove(void *dest, const void *src, size_t len);
+> -void *__hwasan_memcpy(void *dest, const void *src, size_t len);
+> -
+> -void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+> +void __asan_alloca_poison(void *, kasan_size_t size);
+> +void __asan_allocas_unpoison(void *stack_top, kasan_size_t stack_bottom);
+> +
+> +void __asan_load1(void *);
+> +void __asan_store1(void *);
+> +void __asan_load2(void *);
+> +void __asan_store2(void *);
+> +void __asan_load4(void *);
+> +void __asan_store4(void *);
+> +void __asan_load8(void *);
+> +void __asan_store8(void *);
+> +void __asan_load16(void *);
+> +void __asan_store16(void *);
+> +void __asan_loadN(void *, kasan_size_t size);
+> +void __asan_storeN(void *, kasan_size_t size);
+> +
+> +void __asan_load1_noabort(void *);
+> +void __asan_store1_noabort(void *);
+> +void __asan_load2_noabort(void *);
+> +void __asan_store2_noabort(void *);
+> +void __asan_load4_noabort(void *);
+> +void __asan_store4_noabort(void *);
+> +void __asan_load8_noabort(void *);
+> +void __asan_store8_noabort(void *);
+> +void __asan_load16_noabort(void *);
+> +void __asan_store16_noabort(void *);
+> +void __asan_loadN_noabort(void *, kasan_size_t size);
+> +void __asan_storeN_noabort(void *, kasan_size_t size);
+> +
+> +void __asan_report_load1_noabort(void *);
+> +void __asan_report_store1_noabort(void *);
+> +void __asan_report_load2_noabort(void *);
+> +void __asan_report_store2_noabort(void *);
+> +void __asan_report_load4_noabort(void *);
+> +void __asan_report_store4_noabort(void *);
+> +void __asan_report_load8_noabort(void *);
+> +void __asan_report_store8_noabort(void *);
+> +void __asan_report_load16_noabort(void *);
+> +void __asan_report_store16_noabort(void *);
+> +void __asan_report_load_n_noabort(void *, kasan_size_t size);
+> +void __asan_report_store_n_noabort(void *, kasan_size_t size);
+> +
+> +void __asan_set_shadow_00(const void *addr, kasan_size_t size);
+> +void __asan_set_shadow_f1(const void *addr, kasan_size_t size);
+> +void __asan_set_shadow_f2(const void *addr, kasan_size_t size);
+> +void __asan_set_shadow_f3(const void *addr, kasan_size_t size);
+> +void __asan_set_shadow_f5(const void *addr, kasan_size_t size);
+> +void __asan_set_shadow_f8(const void *addr, kasan_size_t size);
+> +
+> +void *__asan_memset(void *addr, int c, kasan_size_t len);
+> +void *__asan_memmove(void *dest, const void *src, kasan_size_t len);
+> +void *__asan_memcpy(void *dest, const void *src, kasan_size_t len);
+> +
+> +void __hwasan_load1_noabort(void *);
+> +void __hwasan_store1_noabort(void *);
+> +void __hwasan_load2_noabort(void *);
+> +void __hwasan_store2_noabort(void *);
+> +void __hwasan_load4_noabort(void *);
+> +void __hwasan_store4_noabort(void *);
+> +void __hwasan_load8_noabort(void *);
+> +void __hwasan_store8_noabort(void *);
+> +void __hwasan_load16_noabort(void *);
+> +void __hwasan_store16_noabort(void *);
+> +void __hwasan_loadN_noabort(void *, kasan_size_t size);
+> +void __hwasan_storeN_noabort(void *, kasan_size_t size);
+> +
+> +void __hwasan_tag_memory(void *, u8 tag, kasan_size_t size);
+> +
+> +void *__hwasan_memset(void *addr, int c, kasan_size_t len);
+> +void *__hwasan_memmove(void *dest, const void *src, kasan_size_t len);
+> +void *__hwasan_memcpy(void *dest, const void *src, kasan_size_t len);
+> +
+> +void kasan_tag_mismatch(void *addr, unsigned long access_info,
+>                         unsigned long ret_ip);
+>
+>  #endif /* __MM_KASAN_KASAN_H */
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 892a9dc9d4d3..84d9f3b37014 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -211,7 +211,7 @@ static void start_report(unsigned long *flags, bool sync)
+>         pr_err("==================================================================\n");
+>  }
+>
+> -static void end_report(unsigned long *flags, void *addr)
+> +static void end_report(unsigned long *flags, const void *addr)
+>  {
+>         if (addr)
+>                 trace_error_report_end(ERROR_DETECTOR_KASAN,
+> @@ -450,8 +450,8 @@ static void print_memory_metadata(const void *addr)
+>
+>  static void print_report(struct kasan_report_info *info)
+>  {
+> -       void *addr = kasan_reset_tag(info->access_addr);
+> -       u8 tag = get_tag(info->access_addr);
+> +       void *addr = kasan_reset_tag((void *)info->access_addr);
+> +       u8 tag = get_tag((void *)info->access_addr);
+>
+>         print_error_description(info);
+>         if (addr_has_metadata(addr))
+> @@ -468,12 +468,12 @@ static void print_report(struct kasan_report_info *info)
+>
+>  static void complete_report_info(struct kasan_report_info *info)
+>  {
+> -       void *addr = kasan_reset_tag(info->access_addr);
+> +       void *addr = kasan_reset_tag((void *)info->access_addr);
+>         struct slab *slab;
+>
+>         if (info->type == KASAN_REPORT_ACCESS)
+>                 info->first_bad_addr = kasan_find_first_bad_addr(
+> -                                       info->access_addr, info->access_size);
+> +                                       (void *)info->access_addr, info->access_size);
+>         else
+>                 info->first_bad_addr = addr;
+>
+> @@ -544,11 +544,10 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_ty
+>   * user_access_save/restore(): kasan_report_invalid_free() cannot be called
+>   * from a UACCESS region, and kasan_report_async() is not used on x86.
+>   */
+> -bool kasan_report(unsigned long addr, size_t size, bool is_write,
+> +bool kasan_report(const void *addr, size_t size, bool is_write,
+>                         unsigned long ip)
+>  {
+>         bool ret = true;
+> -       void *ptr = (void *)addr;
+>         unsigned long ua_flags = user_access_save();
+>         unsigned long irq_flags;
+>         struct kasan_report_info info;
+> @@ -562,7 +561,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
+>
+>         memset(&info, 0, sizeof(info));
+>         info.type = KASAN_REPORT_ACCESS;
+> -       info.access_addr = ptr;
+> +       info.access_addr = addr;
+>         info.access_size = size;
+>         info.is_write = is_write;
+>         info.ip = ip;
+> @@ -571,7 +570,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
+>
+>         print_report(&info);
+>
+> -       end_report(&irq_flags, ptr);
+> +       end_report(&irq_flags, (void *)addr);
+>
+>  out:
+>         user_access_restore(ua_flags);
+> diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
+> index 87d39bc0a673..080c73acbfcc 100644
+> --- a/mm/kasan/report_generic.c
+> +++ b/mm/kasan/report_generic.c
+> @@ -30,9 +30,9 @@
+>  #include "kasan.h"
+>  #include "../slab.h"
+>
+> -void *kasan_find_first_bad_addr(void *addr, size_t size)
+> +const void *kasan_find_first_bad_addr(const void *addr, size_t size)
+>  {
+> -       void *p = addr;
+> +       const void *p = addr;
+>
+>         if (!addr_has_metadata(p))
+>                 return p;
+> @@ -362,14 +362,14 @@ void kasan_print_address_stack_frame(const void *addr)
+>  #endif /* CONFIG_KASAN_STACK */
+>
+>  #define DEFINE_ASAN_REPORT_LOAD(size)                     \
+> -void __asan_report_load##size##_noabort(unsigned long addr) \
+> +void __asan_report_load##size##_noabort(void *addr) \
+>  {                                                         \
+>         kasan_report(addr, size, false, _RET_IP_);        \
+>  }                                                         \
+>  EXPORT_SYMBOL(__asan_report_load##size##_noabort)
+>
+>  #define DEFINE_ASAN_REPORT_STORE(size)                     \
+> -void __asan_report_store##size##_noabort(unsigned long addr) \
+> +void __asan_report_store##size##_noabort(void *addr) \
+>  {                                                          \
+>         kasan_report(addr, size, true, _RET_IP_);          \
+>  }                                                          \
+> @@ -386,13 +386,13 @@ DEFINE_ASAN_REPORT_STORE(4);
+>  DEFINE_ASAN_REPORT_STORE(8);
+>  DEFINE_ASAN_REPORT_STORE(16);
+>
+> -void __asan_report_load_n_noabort(unsigned long addr, size_t size)
+> +void __asan_report_load_n_noabort(void *addr, kasan_size_t size)
+>  {
+>         kasan_report(addr, size, false, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__asan_report_load_n_noabort);
+>
+> -void __asan_report_store_n_noabort(unsigned long addr, size_t size)
+> +void __asan_report_store_n_noabort(void *addr, kasan_size_t size)
+>  {
+>         kasan_report(addr, size, true, _RET_IP_);
+>  }
+> diff --git a/mm/kasan/report_hw_tags.c b/mm/kasan/report_hw_tags.c
+> index 32e80f78de7d..065e1b2fc484 100644
+> --- a/mm/kasan/report_hw_tags.c
+> +++ b/mm/kasan/report_hw_tags.c
+> @@ -15,7 +15,7 @@
+>
+>  #include "kasan.h"
+>
+> -void *kasan_find_first_bad_addr(void *addr, size_t size)
+> +const void *kasan_find_first_bad_addr(const void *addr, size_t size)
+>  {
+>         /*
+>          * Hardware Tag-Based KASAN only calls this function for normal memory
+> diff --git a/mm/kasan/report_sw_tags.c b/mm/kasan/report_sw_tags.c
+> index 8b1f5a73ee6d..689e94f9fe3c 100644
+> --- a/mm/kasan/report_sw_tags.c
+> +++ b/mm/kasan/report_sw_tags.c
+> @@ -30,7 +30,7 @@
+>  #include "kasan.h"
+>  #include "../slab.h"
+>
+> -void *kasan_find_first_bad_addr(void *addr, size_t size)
+> +const void *kasan_find_first_bad_addr(const void *addr, size_t size)
+>  {
+>         u8 tag = get_tag(addr);
+>         void *p = kasan_reset_tag(addr);
+> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+> index c8b86f3273b5..dccef3e9ad2d 100644
+> --- a/mm/kasan/shadow.c
+> +++ b/mm/kasan/shadow.c
+> @@ -28,13 +28,13 @@
+>
+>  bool __kasan_check_read(const volatile void *p, unsigned int size)
+>  {
+> -       return kasan_check_range((unsigned long)p, size, false, _RET_IP_);
+> +       return kasan_check_range((void *)p, size, false, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__kasan_check_read);
+>
+>  bool __kasan_check_write(const volatile void *p, unsigned int size)
+>  {
+> -       return kasan_check_range((unsigned long)p, size, true, _RET_IP_);
+> +       return kasan_check_range((void *)p, size, true, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__kasan_check_write);
+>
+> @@ -50,7 +50,7 @@ EXPORT_SYMBOL(__kasan_check_write);
+>  #undef memset
+>  void *memset(void *addr, int c, size_t len)
+>  {
+> -       if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
+> +       if (!kasan_check_range(addr, len, true, _RET_IP_))
+>                 return NULL;
+>
+>         return __memset(addr, c, len);
+> @@ -60,8 +60,8 @@ void *memset(void *addr, int c, size_t len)
+>  #undef memmove
+>  void *memmove(void *dest, const void *src, size_t len)
+>  {
+> -       if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+> -           !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+> +       if (!kasan_check_range(src, len, false, _RET_IP_) ||
+> +           !kasan_check_range(dest, len, true, _RET_IP_))
+>                 return NULL;
+>
+>         return __memmove(dest, src, len);
+> @@ -71,17 +71,17 @@ void *memmove(void *dest, const void *src, size_t len)
+>  #undef memcpy
+>  void *memcpy(void *dest, const void *src, size_t len)
+>  {
+> -       if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+> -           !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+> +       if (!kasan_check_range(src, len, false, _RET_IP_) ||
+> +           !kasan_check_range(dest, len, true, _RET_IP_))
+>                 return NULL;
+>
+>         return __memcpy(dest, src, len);
+>  }
+>  #endif
+>
+> -void *__asan_memset(void *addr, int c, size_t len)
+> +void *__asan_memset(void *addr, int c, kasan_size_t len)
+>  {
+> -       if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
+> +       if (!kasan_check_range(addr, len, true, _RET_IP_))
+>                 return NULL;
+>
+>         return __memset(addr, c, len);
+> @@ -89,10 +89,10 @@ void *__asan_memset(void *addr, int c, size_t len)
+>  EXPORT_SYMBOL(__asan_memset);
+>
+>  #ifdef __HAVE_ARCH_MEMMOVE
+> -void *__asan_memmove(void *dest, const void *src, size_t len)
+> +void *__asan_memmove(void *dest, const void *src, kasan_size_t len)
+>  {
+> -       if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+> -           !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+> +       if (!kasan_check_range(src, len, false, _RET_IP_) ||
+> +           !kasan_check_range(dest, len, true, _RET_IP_))
+>                 return NULL;
+>
+>         return __memmove(dest, src, len);
+> @@ -100,10 +100,10 @@ void *__asan_memmove(void *dest, const void *src, size_t len)
+>  EXPORT_SYMBOL(__asan_memmove);
+>  #endif
+>
+> -void *__asan_memcpy(void *dest, const void *src, size_t len)
+> +void *__asan_memcpy(void *dest, const void *src, kasan_size_t len)
+>  {
+> -       if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+> -           !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+> +       if (!kasan_check_range(src, len, false, _RET_IP_) ||
+> +           !kasan_check_range(dest, len, true, _RET_IP_))
+>                 return NULL;
+>
+>         return __memcpy(dest, src, len);
+> @@ -111,13 +111,13 @@ void *__asan_memcpy(void *dest, const void *src, size_t len)
+>  EXPORT_SYMBOL(__asan_memcpy);
+>
+>  #ifdef CONFIG_KASAN_SW_TAGS
+> -void *__hwasan_memset(void *addr, int c, size_t len) __alias(__asan_memset);
+> +void *__hwasan_memset(void *addr, int c, kasan_size_t len) __alias(__asan_memset);
+>  EXPORT_SYMBOL(__hwasan_memset);
+>  #ifdef __HAVE_ARCH_MEMMOVE
+> -void *__hwasan_memmove(void *dest, const void *src, size_t len) __alias(__asan_memmove);
+> +void *__hwasan_memmove(void *dest, const void *src, kasan_size_t len) __alias(__asan_memmove);
+>  EXPORT_SYMBOL(__hwasan_memmove);
+>  #endif
+> -void *__hwasan_memcpy(void *dest, const void *src, size_t len) __alias(__asan_memcpy);
+> +void *__hwasan_memcpy(void *dest, const void *src, kasan_size_t len) __alias(__asan_memcpy);
+>  EXPORT_SYMBOL(__hwasan_memcpy);
+>  #endif
+>
+> diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
+> index 30da65fa02a1..ae8d26beb3a4 100644
+> --- a/mm/kasan/sw_tags.c
+> +++ b/mm/kasan/sw_tags.c
+> @@ -70,8 +70,8 @@ u8 kasan_random_tag(void)
+>         return (u8)(state % (KASAN_TAG_MAX + 1));
+>  }
+>
+> -bool kasan_check_range(unsigned long addr, size_t size, bool write,
+> -                               unsigned long ret_ip)
+> +bool kasan_check_range(const void *addr, size_t size, bool write,
+> +                       unsigned long ret_ip)
+>  {
+>         u8 tag;
+>         u8 *shadow_first, *shadow_last, *shadow;
+> @@ -133,12 +133,12 @@ bool kasan_byte_accessible(const void *addr)
+>  }
+>
+>  #define DEFINE_HWASAN_LOAD_STORE(size)                                 \
+> -       void __hwasan_load##size##_noabort(unsigned long addr)          \
+> +       void __hwasan_load##size##_noabort(void *addr)                  \
+>         {                                                               \
+> -               kasan_check_range(addr, size, false, _RET_IP_); \
+> +               kasan_check_range(addr, size, false, _RET_IP_);         \
+>         }                                                               \
+>         EXPORT_SYMBOL(__hwasan_load##size##_noabort);                   \
+> -       void __hwasan_store##size##_noabort(unsigned long addr)         \
+> +       void __hwasan_store##size##_noabort(void *addr)                 \
+>         {                                                               \
+>                 kasan_check_range(addr, size, true, _RET_IP_);          \
+>         }                                                               \
+> @@ -150,25 +150,25 @@ DEFINE_HWASAN_LOAD_STORE(4);
+>  DEFINE_HWASAN_LOAD_STORE(8);
+>  DEFINE_HWASAN_LOAD_STORE(16);
+>
+> -void __hwasan_loadN_noabort(unsigned long addr, unsigned long size)
+> +void __hwasan_loadN_noabort(void *addr, kasan_size_t size)
+>  {
+>         kasan_check_range(addr, size, false, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__hwasan_loadN_noabort);
+>
+> -void __hwasan_storeN_noabort(unsigned long addr, unsigned long size)
+> +void __hwasan_storeN_noabort(void *addr, kasan_size_t size)
+>  {
+>         kasan_check_range(addr, size, true, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__hwasan_storeN_noabort);
+>
+> -void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size)
+> +void __hwasan_tag_memory(void *addr, u8 tag, kasan_size_t size)
+>  {
+> -       kasan_poison((void *)addr, size, tag, false);
+> +       kasan_poison(addr, size, tag, false);
+>  }
+>  EXPORT_SYMBOL(__hwasan_tag_memory);
+>
+> -void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+> +void kasan_tag_mismatch(void *addr, unsigned long access_info,
+>                         unsigned long ret_ip)
+>  {
+>         kasan_report(addr, 1 << (access_info & 0xf), access_info & 0x10,
+> --
+> 2.39.2
+>
