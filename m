@@ -2,160 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7506EA673
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641A66EA681
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjDUJCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S231479AbjDUJFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbjDUJBs (ORCPT
+        with ESMTP id S230030AbjDUJFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:01:48 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2123.outbound.protection.outlook.com [40.107.94.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916963C0F;
-        Fri, 21 Apr 2023 02:01:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0bHgd+LZ08dq2HJzUjB3J/M9gt4Yo0rgEJ+/ZLbSDxsdIy6HarPU2cut98jOgBtnUS7lG06gtzhsRcXRd47DXVc7MJGldPYUKcRIPeNBdtED/DxyOiI7fd2gTeaHxqBOvRdiw0NIYhmDLzmu/jLF6y9pKEvS3FhG4Prp24Qk1nO5AEzP/pmrkKTVXijseqmhqvOZ5ehdzsHYvs4NYqZI3rKZ6csxNANO4bXDlsEtJULdeP4LiLIXxEivv5lG4cKygoiimUFc6VzKZXO9dD771vgWpAKhXcXvON8BQgQHNEIBqI79CKGF1ghwad40gCvdRWnPowg+tmvFQjDLLO3Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aQNXjXUOuOfNQ22c9rAV7qhXRXXarc09AHBsnEhqrSE=;
- b=KoLgOMBWa/CcLF/hrvTNSQfb9ok4rajUFE6XlBrqlJJorPqhOrgQX4oCWdUht91KdUMEa0ZflSkOujfKwCUPwDTbZoMrlm/cKBFZMeMdWXbFbKw5IbqvBtrdP80+nfRt395HppiM/1K8aKMpgGA8dfy2hEpTlU2yq/CKYSIel8QcWAjZLIdWdxRBomwgc6gEThsAtpeZpncPmWyK1bSVRISepnmOGM9sI/2DOon/qd5XeJ83ttVjclSo071aqqiBRgIBQOqGpX7lIP/KKFkZAZnsTP97arc7SS22AwPplNzCbZ67Ux6snjrtwBg2r8UkqI4zN4hJsLQRDZRJaYXMDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aQNXjXUOuOfNQ22c9rAV7qhXRXXarc09AHBsnEhqrSE=;
- b=pzfMce0xh3Ycx8CTNNKL14tMCvrxeHcDcGm0JYVXO8l1Gs7boKnWv442P2AIGKfQt0WG9QR9ugFADkkezDioq4tS0ssxPKyzy0uAN9Ftkq/G2sQrnxv4iw9P0idrj+ccEXEAucsJafmLxZtZxKTTLRvIwpPH8R0ciBz33pewEHU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL3PR13MB5161.namprd13.prod.outlook.com (2603:10b6:208:338::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 09:01:44 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
- 09:01:44 +0000
-Date:   Fri, 21 Apr 2023 11:01:36 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Danielle Ratson <danieller@nvidia.com>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Aaron Conole <aconole@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 1/9] net: enetc: fix MAC Merge layer
- remaining enabled until a link down event
-Message-ID: <ZEJQ8JxeiZ1sxTqP@corigine.com>
-References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
- <20230418111459.811553-2-vladimir.oltean@nxp.com>
- <ZEFKjPR/VL6llxDm@corigine.com>
- <20230420170354.n76b53ws6bitcoj2@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420170354.n76b53ws6bitcoj2@skbuf>
-X-ClientProxiedBy: AS4P192CA0019.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:5e1::8) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Fri, 21 Apr 2023 05:05:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529FB902D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682067938; x=1713603938;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ZJoYa/AXWIJW8/H4efRh+74qEMHSA59/EWCE4cBJ92I=;
+  b=dLyiXhpo/MuepBFjrW74bmCKkgLN6lJLUalKmYP/gfAYj8BTju7jYc27
+   V4WxMl1qidaNfGEqMHn4TnG6vTu2shwPAjznD7JDnK+SR9iMF1hZ2jGjk
+   gCn5vyd5D83F1VIyDLfBVOvDitvgykEVlSTef7nl6TdHTdWCJNoS4fGnw
+   PxbX/B0QiZpF6Q+RCwXTyPmED8T6jJtIOE+lKc1a91S1C5q7m4hax7VEq
+   8kRCxg/LkLlbOkCADPzH4QrG+HoW+Bu9FRwg7FaD6PfP9eHClvbekuhr9
+   4JjmwTd+3tmY4ty92pC2DDXbD+/5ogjlJUEv74Us7EFDCi22GWypfBQzN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="334826280"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="334826280"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:05:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="816355993"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="816355993"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:05:36 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Subject: Re: [PATCHv2] mm: skip CMA pages when they are not available
+References: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com>
+        <87v8hpspge.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAGWkznEt1mNWwA0aVmyH=oVFdVw4TCZYH+BYgim=V4z+4=oVvw@mail.gmail.com>
+Date:   Fri, 21 Apr 2023 17:02:12 +0800
+In-Reply-To: <CAGWkznEt1mNWwA0aVmyH=oVFdVw4TCZYH+BYgim=V4z+4=oVvw@mail.gmail.com>
+        (Zhaoyang Huang's message of "Fri, 21 Apr 2023 17:00:04 +0800")
+Message-ID: <87mt31sj57.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5161:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3c488a0-c24e-47b6-08cd-08db42470738
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H0uz61Uq1j3aVekvscYfCqnkvQwriKpgTsLXf0OUKQXwZj3nnZRw5yiMvqRTRBmZhZUc82io0G06SYtN7FE2pnjad1lXJB7EkHr9svX7Kpg/kw8VzrcjU0rotIWf9eBQtwasvWFhAEP+pQoyljGZwQK7g2kywvrt2CNYTqGhVaARzd11DlfwBwufUkgoxlNFBXGJFxyTUqAkaAb6F1+hpQA2JGsP8VnDWcCt65ARcy+98E/PoJPqzUVJmq+NKS+rhGXePmfntlviYZhEIFbENp5R/zXOSyXXbaQ0CJqOla1New298jA8R9+r6BLNgHF5BZklanN0XPQ1fZfwzgJyYT55thiCrXjGtJKQg16wts8Vc2wRW3ABbCyW9Jlsu08B/ylbEvmPpIelpShkxcNpuJ6s3JdlN0mPFRhuK8eJ1QjmbbF2qkV4gNbfIz7LHbJDPNlZ7/53GpD86GdPuLvOJru8vviXoGMrOq28b2o+KYFl1o8/pDfTgta4EENT+r4gsPdRwgN2qgqbS1xtdUUQUguQpTT9tuuWOhK4RDaaNtWmA2t4JOEUNIyAysnQ04tp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(346002)(396003)(376002)(136003)(366004)(451199021)(36756003)(54906003)(478600001)(6486002)(6666004)(41300700001)(8936002)(8676002)(38100700002)(66946007)(316002)(4326008)(66476007)(6916009)(2616005)(66556008)(186003)(6512007)(6506007)(86362001)(44832011)(2906002)(5660300002)(7416002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IoiNWkVsZVORxSIOnFlke8hkRWYC4smmpQf07cVvlvPzh7OrYoopk2r4eB8s?=
- =?us-ascii?Q?4qf41kbmyl6GPbUM4Ray1wkQSBvfn+ubXKBP8hYYuCSDGZok9HwO+HDY+nGP?=
- =?us-ascii?Q?BZjx/G+jKPLSH2NZpkAisNjvuuFt0+UblAo0bhybJss9/pwT0CEi6jEQoczT?=
- =?us-ascii?Q?Og5+SF037R6/PKbKUVNhsr9ropYNfvgOYYLy0nkCkQBNYGOosbXzztyeE9CR?=
- =?us-ascii?Q?3f92Y82snq775fTGf0DQApNAfRYECvSLynpQLzIF5gB4tbhpKgVjzfZPSonO?=
- =?us-ascii?Q?tK7sSkV4TAG2Zjqevl/TMblo5ePkwz0is64OWFnVMd2Gfx99OZT9p9MZqcn2?=
- =?us-ascii?Q?sl+yD2b67k2GQTjxjgmHMxUk7p7g7HVvwlCzuu/1RNCYA0TjG9N4+rZpZfRb?=
- =?us-ascii?Q?k2wIXo1ZqLcVEG1bhtHi79ctKUk0m0s0nhj/9KIUsACGpf53KzTcsvifSc+U?=
- =?us-ascii?Q?MIFc1lbI69MK7KySaX9yekCXSVarhLo8Jok370mtiP42QLqE9W1tsxyzy1gh?=
- =?us-ascii?Q?rmSb8t3/3c1q2q4U25NQJLuiWUBW3m1js6/35FD7iPcStk2/857b4CKo5x66?=
- =?us-ascii?Q?PFpnT6oH2qS3ebOYPamtpOSXWKN8ez71vWOLoMLQuxEPhNXDntEwP5DU0Pn+?=
- =?us-ascii?Q?OzU4f7xzyKDupPbRnRpR2dv57M0MYoJau2T/pPAW+GDG8h6l8LQz7JIuSF1A?=
- =?us-ascii?Q?Jeq4mngEuRifgmPv4e7EvcOMffQHb+YQvuxFe4uejKxXo8l5rnWVa6+jXcZF?=
- =?us-ascii?Q?uTU4BolRegvmgPAhf6lb8ieCIaAv+1PwPulzy9Ddc3eQLWwb+yu4D2cN2/ae?=
- =?us-ascii?Q?ESeHTuxxsUtOjs29VPku/m7RCefPKxxeed6qlyEawYe+56cboQdPBoqk1ZU8?=
- =?us-ascii?Q?kvGXulsqCWarJg/5SgiCZrcFw8j2UQCLW5X2DJWUiqdglJg/AhiNh/AyF1ho?=
- =?us-ascii?Q?xWJ/O8uWD0CcZShuJFu9ecY/Za1RNVsQA+R/2z1D6RU+bSV/HGQEaFJKR3DX?=
- =?us-ascii?Q?HFv5lNWV8wLkqL8DEe90nn4gREeIe2Sshup/22oAZ0iCAt4RnkqCCkFm3pB5?=
- =?us-ascii?Q?toUp8ntEfoO4zfZjha8HcOBDfRdjP3pGFxXZ/vJ+nmGCaFE9KknkEwX3s8Vt?=
- =?us-ascii?Q?uXlu40hhFHS33F1E4/9tV+LXGtxeSZsDNEvGbvP1I7yMYDR3VbWxz3X1z/i+?=
- =?us-ascii?Q?piE/wi+hTeTVr7j9PJb4yX81RXIWCGgnLZlO4JzPq+EnTbxAOO4Q64YF4BI0?=
- =?us-ascii?Q?di31sr0QW9NVChEiYVoXpUg51mIZyZUkJ9BAT7wJJFS3X7j05R7DGWr1Ic+7?=
- =?us-ascii?Q?JcwK9CV/GZR8pXk8enLec6TbmIvlaG/UyKhWgg+s1kP6H0GnPMVFQbevYVB3?=
- =?us-ascii?Q?9eIbDuxpBbpO8M9tDlT3RCRsz3zob6GRQ0HPmbQGEJCQzSLL5yIVs0F51l2p?=
- =?us-ascii?Q?lNDEUgDaTLmNFX3h4EiGQMkkQzEhEgZDQNPbKFvim076FwX0MBy9kkH68R8G?=
- =?us-ascii?Q?sfgjoDlzJm26bztkNy/ozqBYkMojkxemLKcUDGb6UK8LlRw3da3SmWwYtt7F?=
- =?us-ascii?Q?WpjConI3zAlRJNUAhOFbb/aH0taBlerGX9Qn8IguGZkRCt+B7MKEC7Aw2aWz?=
- =?us-ascii?Q?RZyTd3NROv+sDuLzy5IT3W3mDcn5xeioMDOld115KwpOuPrMEi167jryUfZJ?=
- =?us-ascii?Q?ZPEOOA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3c488a0-c24e-47b6-08cd-08db42470738
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 09:01:43.7321
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PIbqg9N+gdxx/UoRGddSR7vy8avuryFGZShHowo9jx17Z0PCvNRAM6on/esLfQeS+OMhuenMD/ZnLc9oMZ2FyoQNbU4fNTgBUy2HrMpv5A4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5161
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 08:03:54PM +0300, Vladimir Oltean wrote:
-> On Thu, Apr 20, 2023 at 04:22:04PM +0200, Simon Horman wrote:
-> > > -	/* If link is up, enable MAC Merge right away */
-> > > -	if (!!(priv->active_offloads & ENETC_F_QBU) &&
-> > > -	    !(val & ENETC_MMCSR_LINK_FAIL))
-> > > -		val |= ENETC_MMCSR_ME;
-> > > +	/* If link is up, enable/disable MAC Merge right away */
-> > > +	if (!(val & ENETC_MMCSR_LINK_FAIL)) {
-> > > +		if (!!(priv->active_offloads & ENETC_F_QBU))
-> > 
-> > nit: The !!() seems unnecessary,
-> >      I wonder if it can be written in a simpler way as:
-> > 
-> > 		if (priv->active_offloads & ENETC_F_QBU)
-> 
-> I agree. Normally I omit the double negation in simple statements like this.
-> Here I didn't, because the expression was split into 2 "if" conditions,
-> and I kept the individual terms as-is for some reason.
-> 
-> Since the generated object code is absolutely the same either way, I would not
-> resend just for minor style comments such as this one, if you don't mind.
-> However, I do appreciate the review and I'll pay more attention to this
-> detail in the future.
+Zhaoyang Huang <huangzhaoyang@gmail.com> writes:
 
-Thanks. I agree the result should be same.
-No need to resend because of this.
+> On Fri, Apr 21, 2023 at 2:47=E2=80=AFPM Huang, Ying <ying.huang@intel.com=
+> wrote:
+>>
+>> "zhaoyang.huang" <zhaoyang.huang@unisoc.com> writes:
+>>
+>> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>> >
+>> > This patch fixes unproductive reclaiming of CMA pages by skipping them=
+ when they
+>> > are not available for current context. It is arise from bellowing OOM =
+issue, which
+>> > caused by large proportion of MIGRATE_CMA pages among free pages. Ther=
+e has been
+>> > commit(168676649) to fix it by trying CMA pages first instead of fallb=
+ack in
+>> > rmqueue. I would like to propose another one from reclaiming perspecti=
+ve.
+>> >
+>> > 04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page a=
+llocation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=3D(null),cpuset=
+=3Dforeground,mems_allowed=3D0
+>> > 0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C=
+) 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB =
+(C) 0*1024kB 0*2048kB 0*4096kB =3D 35848kB
+>> > 0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) =
+49*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB=
+ (H) 0*1024kB 0*2048kB 0*4096kB =3D 3236kB
+>> >       ......
+>> > 041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocat=
+e memory on node -1, gfp=3D0xa20(GFP_ATOMIC)
+>> > 041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, obj=
+ect size: 64, buffer size: 64, default order: 0, min order: 0
+>> > 041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs:=
+ 3392, free: 0
+>>
+>> From the above description, you are trying to resolve an issue that has
+>> been resolved already.  If so, why do we need your patch?  What is the
+>> issue it try to resolve in current upstream kernel?
+>
+> Please consider this bellowing sequence as __perform_reclaim() return
+> with reclaiming 32 CMA pages successfully and then lead to
+> get_page_from_freelist failure if MIGRATE_CMA is NOT over 1/2 number
+> of free pages which will then unreserve H pageblocks and drain percpu
+> pageset. right? Furthermore, this could also introduce OOM as
+> direct_reclaim is the final guard for alloc_pages.
+>
+> *did_some_progress =3D __perform_reclaim(gfp_mask, order, ac);
+>
+> retry:
+> page =3D get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
+>
+> if (!page && !drained) {
+> unreserve_highatomic_pageblock(ac, false);
+> drain_all_pages(NULL);
+> drained =3D true;
+> goto retry;
+> }
+
+If you think OOM can be triggered, please try to reproduce it.
+
+Best Regards,
+Huang, Ying
+
+> return page;
+>>
+>> At the first glance, I don't think your patch doesn't make sense.  But
+>> you really need to show the value of the patch.
+>>
+>> Best Regards,
+>> Huang, Ying
+>>
+>> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>> > ---
+>> > v2: update commit message and fix build error when CONFIG_CMA is not s=
+et
+>> > ---
+>> > ---
+>> >  mm/vmscan.c | 15 +++++++++++++--
+>> >  1 file changed, 13 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> > index bd6637f..19fb445 100644
+>> > --- a/mm/vmscan.c
+>> > +++ b/mm/vmscan.c
+>> > @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsign=
+ed long nr_to_scan,
+>> >       unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+>> >       unsigned long skipped =3D 0;
+>> >       unsigned long scan, total_scan, nr_pages;
+>> > +     bool cma_cap =3D true;
+>> > +     struct page *page;
+>> >       LIST_HEAD(folios_skipped);
+>> >
+>> >       total_scan =3D 0;
+>> >       scan =3D 0;
+>> > +     if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
+>> > +             && (gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE))
+>> > +             cma_cap =3D false;
+>> > +
+>> >       while (scan < nr_to_scan && !list_empty(src)) {
+>> >               struct list_head *move_to =3D src;
+>> >               struct folio *folio;
+>> > @@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsign=
+ed long nr_to_scan,
+>> >               nr_pages =3D folio_nr_pages(folio);
+>> >               total_scan +=3D nr_pages;
+>> >
+>> > -             if (folio_zonenum(folio) > sc->reclaim_idx) {
+>> > +             page =3D &folio->page;
+>> > +
+>> > +             if ((folio_zonenum(folio) > sc->reclaim_idx)
+>> > +#ifdef CONFIG_CMA
+>> > +                     || (get_pageblock_migratetype(page) =3D=3D MIGRA=
+TE_CMA && !cma_cap)
+>> > +#endif
+>> > +             ) {
+>> >                       nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+>> >                       move_to =3D &folios_skipped;
+>> >                       goto move;
+>> >               }
+>> > -
+>> >               /*
+>> >                * Do not count skipped folios because that makes the fu=
+nction
+>> >                * return with no isolated folios if the LRU mostly cont=
+ains
