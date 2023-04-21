@@ -2,161 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CD46EA564
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B726EA56A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjDUH5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S231627AbjDUH5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjDUH4r (ORCPT
+        with ESMTP id S231440AbjDUH5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:56:47 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591B4A273;
-        Fri, 21 Apr 2023 00:56:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DUKoQhlnN/DMs7X8wsVMRvizN0Njhq9H4vz66JpGAmHye8UUJRYutDffGECyXO8K+qDAG9/j4fPWDVnB54Q+EOi+MsDJJh2b9ZfRchF1003EH4VgtcL9Cxp8xcFum0nvkke+Ad0TPOatrmETnefQk6dWSAvKhJKkA0DsXKZErr6LbdMCm80/WOMUTBgdV7QWEj2TBxGPVOapYGEakloQPceRJ+PYcSaIkuv+VE7Zyr9bDvSeMDXMjDapXIjCBWgnnuWjTfWUkf3K8+UpszegqRC2o/ibxHWVz7h4AazyFcYCrxFAQ06UpklHM7OfSRgCFnyoRl7dPJJHGrPUGGuAew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dcoqK+1uPvOKxbPqdmPzvqyeyfg1A6Qh6+26L00eAjU=;
- b=J09G7YYnhnz5EGWlpm3q3iQTcJbyRra96sjYg4tHTBce3L97VHl7mp9DGuPpOCztOy2/TIXL5J49D9FHkng0/3W6RrNToM6oWrFtKafLuUwot4gYZIKQ92s2zYfvh1msBfRZFDWV83wvpeY3MWJwTmpkyL79lSxkL7hoBWp/VluOMY4Q8mT0pWatM5Dia7ykvnqGnsDJFjLuun7dr7NXcz7v5JmH0BWmFhfFyLAmx8VGYgXzdGnoG9q+zGOoL6yMFWbJem8g7ZjbKVCs8mKu7zotEP8zmrJ/Lnrxyrwt9f+qw7nfrbVpTc0DkUuB1kd2AJwib07yWqsGAbsreE17HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dcoqK+1uPvOKxbPqdmPzvqyeyfg1A6Qh6+26L00eAjU=;
- b=cLd/+jHdqbHyh8gLL7kMs8Tl79A0WY8VoEG99dp40oN05Go4OBHWOeIesL/INPQGA71Yzvg1oF31RgOLIxYOVQoobrRLSRbYFPV305rl7dtdYCAhV0U3WtZwgUvXrhxfnJpVLS0Nbf1iHY8hjwUwMFn1Kwjbrxe23rXNqANg8Sq4kiH8WRhcJ4T3jApXF/oXSLyxNhgz6spX6OuOp7uLfarJLaXP7xSwLyCRJCoWTgvIvDCr87uCbwNojqN5RA7V1lL9uu2O1g99oxKDA+tRWBDvWtuqnN2+j7xaavqKRyGYBLDKVgN7gzjfVyZ78f3JHEblawzANXp503CpLySYZw==
-Received: from BN9PR03CA0678.namprd03.prod.outlook.com (2603:10b6:408:10e::23)
- by MN0PR12MB5978.namprd12.prod.outlook.com (2603:10b6:208:37d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 07:56:24 +0000
-Received: from BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10e:cafe::44) by BN9PR03CA0678.outlook.office365.com
- (2603:10b6:408:10e::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.27 via Frontend
- Transport; Fri, 21 Apr 2023 07:56:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT042.mail.protection.outlook.com (10.13.177.85) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.23 via Frontend Transport; Fri, 21 Apr 2023 07:56:23 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 21 Apr 2023
- 00:56:07 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 21 Apr
- 2023 00:56:07 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Fri, 21 Apr 2023 00:56:06 -0700
-Date:   Fri, 21 Apr 2023 00:56:05 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 0/3] Add set_dev_data and unset_dev_data support
-Message-ID: <ZEJBldGXBNGEy9tV@Asurada-Nvidia>
-References: <cover.1681976394.git.nicolinc@nvidia.com>
- <BN9PR11MB52764ED59905104D3A5A68C08C609@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZEI+LBkEeNZdJyTB@Asurada-Nvidia>
- <BN9PR11MB5276C39E256CD4B922435E1C8C609@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 21 Apr 2023 03:57:02 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7027DA8;
+        Fri, 21 Apr 2023 00:56:56 -0700 (PDT)
+X-UUID: 0dec830ce01a11eda9a90f0bb45854f4-20230421
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=sxNYSMoz06hMy3uIvM5UFTdP8k6fXmAzZv11t+SiaFE=;
+        b=mBfEw5E2PTHOMvkUs0p3UcTPJ1TF7+PhHhAp9GxBbQ0OUw3ApbAMgZzpTsAjfCdcim6ERVA+8nzH93hIhMYrD12z/R1ad53eZFW8DuirJhsmIbQCXUZq6ps0R+/4jFb7b6bip51z9NjR409RKt8pjC2raxRhYCyBEqsKvXc65eM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:6f2f2dc9-2390-46da-9dd3-4284b72fd113,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:bce312a2-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 0dec830ce01a11eda9a90f0bb45854f4-20230421
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <alice.chao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1109669155; Fri, 21 Apr 2023 15:56:42 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 21 Apr 2023 15:56:41 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 21 Apr 2023 15:56:41 +0800
+From:   Alice Chao <alice.chao@mediatek.com>
+To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
+        <mani@kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+CC:     <stanley.chu@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
+        <powen.kao@mediatek.com>, <naomi.chu@mediatek.com>,
+        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <tun-yu.yu@mediatek.com>,
+        <eddie.huang@mediatek.com>, <wsd_upstream@mediatek.com>
+Subject: [PATCH 1/1] ufs: core: fix &hwq->cq_lock deadlock issue
+Date:   Fri, 21 Apr 2023 15:56:36 +0800
+Message-ID: <20230421075636.24946-1-alice.chao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276C39E256CD4B922435E1C8C609@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT042:EE_|MN0PR12MB5978:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73b31e83-b77a-46fb-38ba-08db423de6e7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q0QuvBCLZAIR05oMkV2kHYTfuSGUEYGHWYb9g/Uy4UzkyGXJ4XHPHuXaaztcjxxeambxRsae14q0vUxH3EE6Z99EDDGVfPGaw1MpsK7/ZUqtmIbbyAc1oRl3ylLoRnr7JQAZs0p+iuP6hKMmz/N6gQYY2zzjC72+34UGICIxJtqqOvzhRN+N763ZPzMRmpoU+S/aJc5IX1ahTh4w/wRPYJfKd73Lixk//wmD3Q3hPDIOuTkthNclOHrZHWK2nZGNolUJwr0QJy6IyXw+TE9gSAeSsHNmN9EhoFQ92Qw62U6cSRZ8x+K3ffj5JfsFEVR+a8LQyUOb8LMiNCCcQGbVhSMgM941XLqtl+Op9Vb3uPKF6u2nYw/NoYN1XkUURp9TLupdgZSuu5mVq+vp9zMDor6ktSGM4tdMLEV7yIciG6NhXK0RGqO5rMqdMkjt7+6ZtM8eNSyC1Dat9BcHcOA/tzHJZcWt3UIpdyjWMXPoFnHRzzLyY2nGsLDokQVAOJJOY1eK+XWYY9n0jTksEOpzQADKhuSyCWQQzbfKyizvKMCs1krMOvtbxIKrysrbmtlxiSStQOIiGb4z6XcgfavhpOjOqqa/FupZ/4CkRKDsNdZLerISxeJpqPaaTqWaDMpR+Rj0QPNa+rSEo1sqvlTKoq9mq93wS+ZZIvdoh8u5MROg4O8/yu7SY5Rn41PjrXAnpok2j4mXw36Z44RIVdrl+XMOh0Mocr1HWkuKkG4TqTGuQJYcZA56EUaeZ6a1+x3LWo27A8lq4OAyyNtSbiIDoMTKzkS3sECf6nz09QOybpimqier9/2knbUjapYp3t+QLQNBz44I62itztgsHBC6rC5bqG7qK5qrRaZCE5SQgMg=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(40470700004)(46966006)(36840700001)(36860700001)(83380400001)(47076005)(40480700001)(426003)(336012)(40460700003)(186003)(55016003)(26005)(9686003)(70206006)(70586007)(82740400003)(6916009)(86362001)(41300700001)(8936002)(7416002)(2906002)(8676002)(316002)(7636003)(356005)(478600001)(966005)(33716001)(54906003)(5660300002)(4326008)(82310400005)(34020700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 07:56:23.5533
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73b31e83-b77a-46fb-38ba-08db423de6e7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5978
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 07:47:13AM +0000, Tian, Kevin wrote:
+[name:lockdep&]WARNING: inconsistent lock state
+[name:lockdep&]--------------------------------
+[name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+[name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
+  ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
+ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+[name:lockdep&]{IN-HARDIRQ-W} state was registered at:
+  lock_acquire+0x17c/0x33c
+  _raw_spin_lock+0x5c/0x7c
+  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+  ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
+  __handle_irq_event_percpu+0x140/0x3ec
+  handle_irq_event+0x50/0xd8
+  handle_fasteoi_irq+0x148/0x2b0
+  generic_handle_domain_irq+0x4c/0x6c
+  gic_handle_irq+0x58/0x134
+  call_on_irq_stack+0x40/0x74
+  do_interrupt_handler+0x84/0xe4
+  el1_interrupt+0x3c/0x78
+<snip>
 
-> > It is in the commit message of the cover-letter though:
-> > https://github.com/nicolinc/iommufd/commit/5e17d270bfca2a5e3e7401d4b
-> > f58ae53eb7a8a55
-> > --------------------------------------------------------
-> > Changelog
-> > v2:
-> >  * Integrated the uAPI into VFIO_DEVICE_BIND_IOMMUFD call
-> >  * Renamed the previous set_rid_user to set_dev_data, to decouple from
-> >    the PCI regime.
-> > v1:
-> >  https://lore.kernel.org/all/cover.1680762112.git.nicolinc@nvidia.com/
-> > --------------------------------------------------------
-> >
-> > > Could you add some words why changing from passing the information
-> > > in an iommufd ioctl to bind_iommufd? My gut-feeling leans toward
-> > > the latter option...
-> >
-> > Yea. Jason told me to decouple it from PCI. And merge it into
-> > a general uAPI. So I picked the BIND ioctl.
-> >
-> 
-> 'decouple it from PCI' is kind of covered by renaming set_rid
-> to set_data. but I didn't get why this has to be merged with another
-> uAPI. Once iommufd_device is created we could have separate
-> ioctls to poke its attributes individually. What'd be broken if this
-> is not done at BIND time?
+Possible unsafe locking scenario:
+       CPU0
+       ----
+  lock(&hwq->cq_lock);
+  <Interrupt>
+    lock(&hwq->cq_lock);
+  *** DEADLOCK ***
+2 locks held by kworker/u16:4/260:
 
-Oh, sorry. He didn't literally told me to merge, but commented
-"make sense" at my proposal of reusing BIND. So, I don't think
-adding to the BIND is a must here.
+[name:lockdep&]
+ stack backtrace:
+CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
+6.1.17-mainline-android14-2-g277223301adb #1
+Workqueue: ufs_eh_wq_0 ufshcd_err_handler
 
-The BIND is done in vfio_realize() where the RID (dev_data) is
-available also. And the new uAPI in my v1 actually gets called
-near the BIND. So, I feel we may just do it once? I am open to
-a better idea.
+ Call trace:
+  dump_backtrace+0x10c/0x160
+  show_stack+0x20/0x30
+  dump_stack_lvl+0x98/0xd8
+  dump_stack+0x20/0x60
+  print_usage_bug+0x584/0x76c
+  mark_lock_irq+0x488/0x510
+  mark_lock+0x1ec/0x25c
+  __lock_acquire+0x4d8/0xffc
+  lock_acquire+0x17c/0x33c
+  _raw_spin_lock+0x5c/0x7c
+  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+  ufshcd_poll+0x68/0x1b0
+  ufshcd_transfer_req_compl+0x9c/0xc8
+  ufshcd_err_handler+0x3bc/0xea0
+  process_one_work+0x2f4/0x7e8
+  worker_thread+0x234/0x450
+  kthread+0x110/0x134
+  ret_from_fork+0x10/0x20
 
-Thanks
-Nic
+ufs_mtk_mcq_intr() could refer to
+https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
+
+When ufshcd_err_handler() is executed, CQ event interrupt can enter
+waiting for the same lock. It could happened in upstream code path
+ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
+warning message will be generated when &hwq->cq_lock is used in IRQ
+context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
+spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
+
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+---
+ drivers/ufs/core/ufs-mcq.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 31df052fbc41..202ff71e1b58 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -299,11 +299,11 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_nolock);
+ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+ 				       struct ufs_hw_queue *hwq)
+ {
+-	unsigned long completed_reqs;
++	unsigned long completed_reqs, flags;
+ 
+-	spin_lock(&hwq->cq_lock);
++	spin_lock_irqsave(&hwq->cq_lock, flags);
+ 	completed_reqs = ufshcd_mcq_poll_cqe_nolock(hba, hwq);
+-	spin_unlock(&hwq->cq_lock);
++	spin_unlock_irqrestore(&hwq->cq_lock, flags);
+ 
+ 	return completed_reqs;
+ }
+-- 
+2.18.0
+
