@@ -2,136 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E226EB227
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C416EB22D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjDUTPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S233462AbjDUTQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233506AbjDUTPJ (ORCPT
+        with ESMTP id S229476AbjDUTQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:15:09 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAF749E6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:14:38 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b73203e0aso16228372b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682104478; x=1684696478;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jEgvnbrmc3TuMJvfDzFRQ8r7bac/zec/QDnNR+fUu8o=;
-        b=XaoLIVvhAeXIoGslsijhHTqvr5OalUonOX+tyIs6Ddonyz6IfPbZONBCCPmwbOnIal
-         +48DAhCUPm2K5TjUujQxz0rWUwr9B9Ln+ubWLI5Yq5o5+7yyaPX6w7Dx1youqzZpcpEn
-         tjtdehYOl/YFN6y8LIVKV7KUt5Op3re6w+ojw=
+        Fri, 21 Apr 2023 15:16:50 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CFD10D0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:16:48 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-32b532ee15bso87965115ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:16:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682104478; x=1684696478;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jEgvnbrmc3TuMJvfDzFRQ8r7bac/zec/QDnNR+fUu8o=;
-        b=b1Vps7Dm8UINIHShA1sG6VRzTgTxBlt1bu8N5SqqYE6MPd7y+ETQHdtVpmDgf/jNCP
-         5+YBKwMH8nDiio4pp2+I7N+11E8OrRxdv9BmnAtf0W7is2KLFJGLoo14OKoFhH73ZD6o
-         GWMdfMOL4n76lDqUqua1SVeloR3Fszx9G1d4q6LZFX4VP6xPMncL/yWrM+fIRvWl6lT3
-         Bz09vCbejOxXKQaG9azdCjKzbujneqlh5bxI0D9FsyYLTkg7GyH5O+sMIfxjbw+yv98d
-         lpWD+Ds2GTvHGpTRuDSO0eGB7bFR1Auq8nuQWhYrUCNRMmxHUfTWS9+zn5R/7TVMjN71
-         LXzA==
-X-Gm-Message-State: AAQBX9fsp2M6FBiwBa9BAFnn8mM23pkHOUm08zaxRWztRrscsLvXWT9+
-        qhNH6bvljfLXu9WfMbiy0NSHTQ==
-X-Google-Smtp-Source: AKy350Y1f+YAGYXv9LimfavyX8lKVpE9VjmW53qYwi1ozA+66yPdlwNXJo3fUaJrly4Ejdz2PSnCZw==
-X-Received: by 2002:a17:903:24f:b0:1a6:4032:ef2 with SMTP id j15-20020a170903024f00b001a640320ef2mr6485460plh.28.1682104477975;
-        Fri, 21 Apr 2023 12:14:37 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e9-20020a170902744900b001a656784229sm3039333plt.211.2023.04.21.12.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 12:14:37 -0700 (PDT)
-Message-ID: <6442e09d.170a0220.86574.6e1e@mx.google.com>
-X-Google-Original-Message-ID: <202304211210.@keescook>
-Date:   Fri, 21 Apr 2023 12:14:36 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     paul@paul-moore.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Subject: Re: [PATCH v9 01/11] LSM: Identify modules by more than name
-References: <20230421174259.2458-1-casey@schaufler-ca.com>
- <20230421174259.2458-2-casey@schaufler-ca.com>
+        d=1e100.net; s=20221208; t=1682104608; x=1684696608;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QxtOVbkNxSHHb3brNs8tJk7Ry7nocLpql9jiJZVqGeM=;
+        b=R7kZNZopdi615mFkOrdbhA/Zl48hC25XNVM4eSH6xYaoh63u1bO4FlJbODvoyMk0Ki
+         o5gNl+N7LS7FG2ozLyXm8z8spg/gjYQv3zqXm2pyNqzB8zQ5tmT8VRH7ffN0/cnhAeIC
+         ginxfxxFVoplsQ8eS+TLHcbvihUQnykBuFIr6pRmlwqF9J8m8tg045FmOZYvOCYuhJix
+         khmljfUBR0R7inniELTCQuQxwrttXAgh/HrS0xcMVRBXRzbh3ZXU/etjdCaUgcn1e7Bf
+         CzYydR1o9r/ifPqppCUUOidKf+B22JKtldZw1TbzGUBQi1y2UrEt+Xt0/ThSg7EgJ9TR
+         zJsg==
+X-Gm-Message-State: AAQBX9dTvD5aDR1f7MQctT/Za+5In+pq4HRel7Vu4dFEerXMehxDgNNz
+        huWqCkaj9Uwjmvy8SqUMWa8QA+Ux55CWguyPAPOoWlgmQxOm
+X-Google-Smtp-Source: AKy350b94zy4qEncxn7krhtVj+JkC0j3IV5KMCRSJLxww+6OGm++UjRnppSHMo7ysbSNgNTWGFUkAtZsXOwFWTDM/Qt5K1Qxv1e7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421174259.2458-2-casey@schaufler-ca.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d344:0:b0:32c:b806:d4a3 with SMTP id
+ a4-20020a92d344000000b0032cb806d4a3mr7131ilh.1.1682104607880; Fri, 21 Apr
+ 2023 12:16:47 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 12:16:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a0bc2b05f9dd7fab@google.com>
+Subject: [syzbot] [kvm?] WARNING in kvm_tdp_mmu_invalidate_all_roots
+From:   syzbot <syzbot+094a74444165dbcd3a54@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:42:49AM -0700, Casey Schaufler wrote:
-> Create a struct lsm_id to contain identifying information
-> about Linux Security Modules (LSMs). At inception this contains
-> the name of the module, an identifier associated with the security
-> module and an integer member "attrs" which identifies the API
-> related data associated with each security module. The initial set
-> of features maps to information that has traditionaly been available
-> in /proc/self/attr. They are documented in a new userspace-api file.
-> Change the security_add_hooks() interface to use this structure.
-> Change the individual modules to maintain their own struct lsm_id
-> and pass it to security_add_hooks().
-> 
-> The values are for LSM identifiers are defined in a new UAPI
-> header file linux/lsm.h. Each existing LSM has been updated to
-> include it's LSMID in the lsm_id.
-> 
-> The LSM ID values are sequential, with the oldest module
-> LSM_ID_CAPABILITY being the lowest value and the existing modules
-> numbered in the order they were included in the main line kernel.
-> This is an arbitrary convention for assigning the values, but
-> none better presents itself. The value 0 is defined as being invalid.
-> The values 1-99 are reserved for any special case uses which may
-> arise in the future. This may include attributes of the LSM
-> infrastructure itself, possibly related to namespacing or network
-> attribute management. A special range is identified for such attributes
-> to help reduce confusion for developers unfamiliar with LSMs.
-> 
-> LSM attribute values are defined for the attributes presented by
-> modules that are available today. As with the LSM IDs, The value 0
-> is defined as being invalid. The values 1-99 are reserved for any
-> special case uses which may arise in the future.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> Cc: linux-security-module <linux-security-module@vger.kernel.org>
+Hello,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+syzbot found the following issue on:
 
-Some nit-picks below...
+HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ac3de0280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
+dashboard link: https://syzkaller.appspot.com/bug?extid=094a74444165dbcd3a54
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> [...]
-> +/**
-> + * struct lsm_id - Identify a Linux Security Module.
-> + * @lsm: name of the LSM, must be approved by the LSM maintainers
-> + * @id: LSM ID number from uapi/linux/lsm.h
-> + *
-> + * Contains the information that identifies the LSM.
-> + */
-> +struct lsm_id {
-> +	const u8	*lsm;
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Since this is a %NUL-terminated string, I'd keep the convention of
-leaving this as "char", and perhaps even const. And "name" or "lsm_name"
-seems more descriptive:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
 
-	const char *const name;
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+094a74444165dbcd3a54@syzkaller.appspotmail.com
 
-> +	u64		id;
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 12623 at arch/x86/kvm/mmu/tdp_mmu.c:943 kvm_tdp_mmu_invalidate_all_roots+0x2bd/0x370 arch/x86/kvm/mmu/tdp_mmu.c:943
+Modules linked in:
+CPU: 0 PID: 12623 Comm: syz-executor.3 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:kvm_tdp_mmu_invalidate_all_roots+0x2bd/0x370 arch/x86/kvm/mmu/tdp_mmu.c:943
+Code: 00 e8 a7 67 64 00 49 8d 7c 24 18 31 f6 e8 eb 23 ec 08 31 ff 89 c3 89 c6 e8 b0 63 64 00 85 db 0f 85 00 fe ff ff e8 83 67 64 00 <0f> 0b e9 f4 fd ff ff 48 89 ef e8 94 46 b7 00 e9 88 fd ff ff e8 4a
+RSP: 0018:ffffc90005f7fc80 EFLAGS: 00010212
+RAX: 0000000000015eaf RBX: 0000000000000000 RCX: ffffc9000e5cd000
+RDX: 0000000000040000 RSI: ffffffff811f7dcd RDI: 0000000000000005
+RBP: ffffc900062ba788 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffffc900062b1000
+R13: 0000000000000000 R14: 0000000000000006 R15: ffffc900062b19d8
+FS:  00007f9c99c7c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa626bad988 CR3: 000000001cd68000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kvm_mmu_uninit_tdp_mmu+0x16/0x100 arch/x86/kvm/mmu/tdp_mmu.c:48
+ kvm_mmu_uninit_vm+0x6a/0x70 arch/x86/kvm/mmu/mmu.c:6239
+ kvm_arch_destroy_vm+0x369/0x490 arch/x86/kvm/x86.c:12465
+ kvm_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1245 [inline]
+ kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:5017 [inline]
+ kvm_dev_ioctl+0x11be/0x1bb0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:5059
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9c98e8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9c99c7c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f9c98fac120 RCX: 00007f9c98e8c169
+RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000005
+RBP: 00007f9c98ee7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff0f7a772f R14: 00007f9c99c7c300 R15: 0000000000022000
+ </TASK>
 
-if this is "id", "name" makes sense above.
 
--- 
-Kees Cook
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
