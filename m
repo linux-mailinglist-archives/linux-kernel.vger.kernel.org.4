@@ -2,72 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4D76EA213
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE9B6EA21C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbjDUDAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 23:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S234125AbjDUDCa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 23:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbjDUDAX (ORCPT
+        with ESMTP id S234031AbjDUDBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 23:00:23 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403BE10EC;
-        Thu, 20 Apr 2023 20:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=//YIhm6gzARI8o6MnvvcCv8dn1240DofB0ntD6C9IRA=; b=fc6Vr5SKLpsamAaUeQFF3+4Vt/
-        N05OljI+CgfOjikJDcdsOnE3IewxzXycsEkVOCxv2x38T7AdReqlDiAU6MvkUlZ1bpaHrziaSj0fL
-        iEzLAuXoaSqIPbCE4oLA1eqI1Tdd/591vBiRJ3uAvpi0cS6otTzMxl99GqqV0EeDxWIsJvtihY4Nn
-        1WAG/onN9Tr5LJcnw46JFh3PJJaiaeFiMVXTfi2/2vMDR6JRUjBB3EmCCcAWEts9w+ey3+zibNUPu
-        mvh7yZmCBTZ/eZNFfPFAEL8WSs+qqOyaqPJlsD6Z5F/+5AAA8Fuq5HlMqCUfyKoA0LU3ikTrSPyJT
-        DZ3ckHGg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pph0T-00B3bY-2A;
-        Fri, 21 Apr 2023 03:00:17 +0000
-Date:   Fri, 21 Apr 2023 04:00:17 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        "cc: Greg KH" <gregkh@linuxfoundation.org>, security@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Linus Torvalds <torvalds@linuxfoundation.org>
-Subject: Re: Patch for a overwriting/corruption of the file system
-Message-ID: <20230421030017.GA3390869@ZenIV>
-References: <CADZg-m0Z+dOGfG=ddJxqPvgFwG0+OLAyP157SNzj6R6J2p7L-g@mail.gmail.com>
- <ZA734rBwf4ib2u9n@kroah.com>
- <CADZg-m04XELrO-v-uYZ4PyYHXVPX35dgWbCHBpZvwepS4XV9Ew@mail.gmail.com>
- <CADZg-m2k_L8-byX0WKYw5Cj1JPPhxk3HCBexpqPtZvcLRNY8Ug@mail.gmail.com>
- <ZA77qAuaTVCEwqHc@kroah.com>
- <20230314095539.zf7uy27cjflqp6kp@wittgenstein>
- <20230314165708.GY3390869@ZenIV>
- <20230314171327.k6krhiql3d7tpqat@wittgenstein>
- <CADZg-m3w_xJ3cQS=+-yb7iS5PJg8kGHntMb7poP6tOsOXvnDeQ@mail.gmail.com>
- <CADZg-m1uBXit9gX0bcZQ3vWvg34J_sLX-df32x+JX=bjtJeg0w@mail.gmail.com>
+        Thu, 20 Apr 2023 23:01:40 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A34B86A8;
+        Thu, 20 Apr 2023 20:01:28 -0700 (PDT)
+X-UUID: 4b91f07f618d4ae5b48f46229cc7dbc6-20230421
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:e52280f5-6c42-4634-a19b-c8d67dc61862,IP:5,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+        N:release,TS:24
+X-CID-INFO: VERSION:1.1.22,REQID:e52280f5-6c42-4634-a19b-c8d67dc61862,IP:5,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:28,RULE:Release_Ham,ACTION:
+        release,TS:24
+X-CID-META: VersionHash:120426c,CLOUDID:ca08c584-cd9c-45f5-8134-710979e3df0e,B
+        ulkID:23042104015933YJ2GA9,BulkQuantity:6,Recheck:0,SF:19|42|38|24|17|102,
+        TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,Bulk:40|20,QS:nil,BEC:nil,COL
+        :0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 4b91f07f618d4ae5b48f46229cc7dbc6-20230421
+X-User: zhouzongmin@kylinos.cn
+Received: from [172.20.12.156] [(116.128.244.169)] by mailgw
+        (envelope-from <zhouzongmin@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 142489521; Fri, 21 Apr 2023 11:01:25 +0800
+Message-ID: <4f9722f0235ebb9702f98b1ec17d36801add04ca.camel@kylinos.cn>
+Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
+ drm_kms_helper_poll_disable during suspend
+From:   zongmin zhou <zhouzongmin@kylinos.cn>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Janne Grunau <j@jannau.net>
+Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        neil.armstrong@linaro.org, tony.luck@intel.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
+        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com
+Date:   Fri, 21 Apr 2023 11:00:27 +0800
+In-Reply-To: <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
+References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
+         <20230420200148.GD3280@jannau.net>
+         <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADZg-m1uBXit9gX0bcZQ3vWvg34J_sLX-df32x+JX=bjtJeg0w@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 02:33:48PM +0530, Kirtikumar Anandrao Ramchandani wrote:
-> While I am going through the code at the moment, I think there is one more
-> issue. It probably can't just compare "old_dir" and "new_dir", since those
-> are just pointers to structs. So, both addresses can be completely
-> different, and still represent the same folder, yes?
+On Thu, 2023-04-20 at 23:07 +0300, Dmitry Baryshkov wrote:
+> On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net> wrote:
+> > 
+> > On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
+> > > When drivers call drm_kms_helper_poll_disable from
+> > > their device suspend implementation without enabled output
+> > > polling before,
+> > > following warning will be reported,due to work->func not be
+> > > initialized:
+> > 
+> > we see the same warning with the wpork in progress kms driver for
+> > apple
+> > silicon SoCs. The connectors do not need to polled so the driver
+> > never
+> > calls drm_kms_helper_poll_init().
+> > 
+> > > [   55.141361] WARNING: CPU: 3 PID: 372 at
+> > > kernel/workqueue.c:3066 __flush_work+0x22f/0x240
+> > > [   55.141382] Modules linked in: nls_iso8859_1
+> > > snd_hda_codec_generic ledtrig_audio snd_hda_intel
+> > > snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core
+> > > snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi
+> > > snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper
+> > > drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul snd_timer
+> > > ghash_clmulni_intel binfmt_misc sha512_ssse3 aesni_intel
+> > > drm_kms_helper joydev input_leds syscopyarea crypto_simd snd
+> > > cryptd sysfillrect sysimgblt mac_hid serio_raw soundcore
+> > > qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp parport drm
+> > > ramoops reed_solomon pstore_blk pstore_zone efi_pstore virtio_rng
+> > > ip_tables x_tables autofs4 hid_generic usbhid hid ahci virtio_net
+> > > i2c_i801 crc32_pclmul psmouse virtio_scsi libahci i2c_smbus
+> > > lpc_ich xhci_pci net_failover virtio_blk xhci_pci_renesas
+> > > failover
+> > > [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted
+> > > 6.2.0-rc6+ #16
+> > > [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9,
+> > > 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org
+> > > 04/01/2014
+> > > [   55.141435] Workqueue: events_unbound async_run_entry_fn
+> > > [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
+> > > [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff 4c
+> > > 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff 0f 0b
+> > > e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54 d8 00 66
+> > > 90 90 90 90 90 90
+> > > [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
+> > > [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
+> > > ffffffff9b72bcbe
+> > > [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI:
+> > > ff3ea01e4265e330
+> > > [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09:
+> > > 8080808080808080
+> > > [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12:
+> > > ff3ea01e4265e330
+> > > [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15:
+> > > 0000000000000001
+> > > [   55.141455] FS:  0000000000000000(0000)
+> > > GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
+> > > [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4:
+> > > 0000000000771ee0
+> > > [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+> > > 0000000000000000
+> > > [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+> > > 0000000000000400
+> > > [   55.141466] PKRU: 55555554
+> > > [   55.141467] Call Trace:
+> > > [   55.141469]  <TASK>
+> > > [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
+> > > [   55.141478]  ? mptcp_seq_show+0xe0/0x180
+> > > [   55.141484]  __cancel_work_timer+0x124/0x1b0
+> > > [   55.141487]  cancel_delayed_work_sync+0x17/0x20
+> > > [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40
+> > > [drm_kms_helper]
+> > > [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90
+> > > [drm_kms_helper]
+> > > [   55.141531]  ? __pm_runtime_resume+0x64/0x90
+> > > [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
+> > > [   55.141540]  pci_pm_suspend+0x8b/0x1b0
+> > > [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
+> > > [   55.141547]  dpm_run_callback+0x4c/0x160
+> > > [   55.141550]  __device_suspend+0x14c/0x4c0
+> > > [   55.141553]  async_suspend+0x24/0xa0
+> > > [   55.141555]  async_run_entry_fn+0x34/0x120
+> > > [   55.141557]  process_one_work+0x21a/0x3f0
+> > > [   55.141560]  worker_thread+0x4e/0x3c0
+> > > [   55.141563]  ? __pfx_worker_thread+0x10/0x10
+> > > [   55.141565]  kthread+0xf2/0x120
+> > > [   55.141568]  ? __pfx_kthread+0x10/0x10
+> > > [   55.141570]  ret_from_fork+0x29/0x50
+> > > [   55.141575]  </TASK>
+> > > [   55.141575] ---[ end trace 0000000000000000 ]---
+> > > 
+> > > Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running vs
+> > > poll_enabled")
+> > > Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+> > > ---
+> > >  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/drm_probe_helper.c
+> > > b/drivers/gpu/drm/drm_probe_helper.c
+> > > index 8127be134c39..ac72b18e2257 100644
+> > > --- a/drivers/gpu/drm/drm_probe_helper.c
+> > > +++ b/drivers/gpu/drm/drm_probe_helper.c
+> > > @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct
+> > > drm_device *dev)
+> > >       if (dev->mode_config.poll_running)
+> > >               drm_kms_helper_disable_hpd(dev);
+> > > 
+> > > -     cancel_delayed_work_sync(&dev-
+> > > >mode_config.output_poll_work);
+> > > +     if (dev->mode_config.poll_enabled)
+> > > +             cancel_delayed_work_sync(&dev-
+> > > >mode_config.output_poll_work);
+> > 
+> > Checking for dev->mode_config.poll_enabled at the start of the
+> > function
+> > and return early if it is not true looks more in style with the
+> > rest of
+> > drm_probe_helper.c.
+> 
+> I think it is an error to call drm_kms_helper_poll_disable() if
+> polling was not initialized. So, in my opinion the fix should go to
+> the drm_mode_config_helper_suspend() / _resume() instead. Please add
+> a
+> guard there using dev->mode_config.poll_enabled.
+> 
+In my test case,It's ok to check for dev->mode_config.poll_enabled in
+drm_mode_config_helper_suspend() / _resume() before calling
+drm_kms_helper_poll_disable().But I find that some device driver call
+drm_kms_helper_poll_disable()/_enable directly without call
+_suspend()/_resume() function.
 
-No, they can not.  We should never have different in-core instances of
-struct inode representing the same on-disk object - otherwise all locking
-goes to hell, for example.
+So I think the safest way is to add a guard in
+drm_kms_helper_poll_disable() using dev->mode_config.poll_enabled.
+
+I'm looking forward to your comments and Suggestions.
+
+Thanks.
+> 
+> > No difference functionally of course. Tested with the apple kms
+> > driver.
+> > 
+> > Reviewed-by: Janne Grunau <j@jannau.net>
+> > 
+> > ciao
+> > Janne
+> 
+> 
+> 
+
