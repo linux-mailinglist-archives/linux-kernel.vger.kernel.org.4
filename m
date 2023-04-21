@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359CC6EA324
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD94A6EA341
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbjDUFdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S233086AbjDUFim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 01:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjDUFdA (ORCPT
+        with ESMTP id S231509AbjDUFii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:33:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A18061B3;
-        Thu, 20 Apr 2023 22:32:55 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94a342f4c8eso42133666b.0;
-        Thu, 20 Apr 2023 22:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682055174; x=1684647174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FFW7Gg1SgGBbBJt5owgBHTN5D7RxDmj2irhm6z31MIQ=;
-        b=VxiYdLrE1afaqY5HkATYYMkJb8GawuWMByr4Cnuu4TCSxIO9qF4emDfIiTguKIRkD3
-         7QBWafFYwaVQseFDu2qMwMedVO4LFCSbENEVcUdyfTniSaC5eq6N1wxvsGlZajUzkl1H
-         e7ljqj5zbwu858s53seRVTSKP2l5FFGynKhpJ/eAQu1eJs3CMwY0nqNiIwjDXB6SqdJ1
-         QBNTeeh9ogt9JVHMkEMfTlQ6N53PkAHY+cUlhG95De4FKk8ZogU6+QdTMGOQj762UiYH
-         1xIGvodhYAeTSIV+493oDYJbdhvWx7nYTRTD50c04793W47IUhpTTvRcfPXbEghJIict
-         RMrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682055174; x=1684647174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FFW7Gg1SgGBbBJt5owgBHTN5D7RxDmj2irhm6z31MIQ=;
-        b=MXhF7F1WKbVpWkyHxFGgjeQ66Mn1FefXxsbdNzxiswBMWYGkJTB2R375yntnlqfx4c
-         Fd9FzMK4CQ0Z4ifbGf/oNOaioe4EKf6fw4mkGstURexRHjD4JaQg2QBA0oRUhqYpXyQT
-         9Q6NyHygoVibApK84RBtJo1RITJQWlRI9OYZphdjdHyEg/cOFtvkjL/GjuvW205A+vwC
-         W+GakXVoJfdx1brj7OA5BHhxwwdKqVJ4KevkPs9tF4MtKZG51x6rkhkuXlf61i/9ml4r
-         b2LtXdeTV6/cK3YX/aYb5QTWIKvdg2edunCgOSfJLfxquRVNaiqpB4Yee89zpZJ8IYKO
-         ctWA==
-X-Gm-Message-State: AAQBX9dIH8o/H71cC6FhLqZ7AoqGQefuT9z1rCZxRFQ+3r2GQFTjvkfn
-        eqGuebvH39TBCpuh6dxlnWk=
-X-Google-Smtp-Source: AKy350Z/TfHG2ZHB6XiI5P2UxmdymQ0V+AbYUHsq26ml8FoULXU8BIx3YGBKeVyQ+boAr4AqINfHOw==
-X-Received: by 2002:a17:906:35d1:b0:94f:4ec3:f0f5 with SMTP id p17-20020a17090635d100b0094f4ec3f0f5mr3504174ejb.4.1682055173642;
-        Thu, 20 Apr 2023 22:32:53 -0700 (PDT)
-Received: from [192.168.0.101] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906174d00b0094e477eb441sm1573171eje.110.2023.04.20.22.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 22:32:53 -0700 (PDT)
-Message-ID: <d5140404-6b11-6755-a086-7e473d093494@gmail.com>
-Date:   Fri, 21 Apr 2023 07:32:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/4] staging: rtl8712: Adjustments for process_link_qual()
-Content-Language: en-US
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        kernel-janitors@vger.kernel.org, linux-staging@lists.linux.dev,
-        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Nam Cao <namcaov@gmail.com>
-Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
-References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
- <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
- <93913f0c-4699-cf9a-0f10-8edd478fd2b3@web.de>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <93913f0c-4699-cf9a-0f10-8edd478fd2b3@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 21 Apr 2023 01:38:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF165B7;
+        Thu, 20 Apr 2023 22:38:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E188564DC5;
+        Fri, 21 Apr 2023 05:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0A8C433D2;
+        Fri, 21 Apr 2023 05:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682055513;
+        bh=okX8G73kUYpMvr7PR1bTBTURUIZ0HskAOzEnVg/ac5k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rcq5qUUbeaGkV0SXQHTsMfe1ovnEc1Ga4y8233Pk/NDzDU21nWqH8OzY6CS7RgNaR
+         sQAxx6bX8nvfWZIYS4+zHlbtl0xcRaTldYz4Q+BCoMo+TFU8AEdo8zk0ySCDAZNGff
+         gMrbXQf00qVW0qBwlJ9+/Eug4KytKGpw+vcU4Nh1DzySTreycombjlRxwalViElGxb
+         x0J7KjYEwgyvVEhtPknJAIqexkE2aJd8S1lrPVXnUqthoJkKKYEQlLVPkIT0xmLXgz
+         g+KiqQ5i+Pn7fNXpl5rywQiQqRSL7FltkyMnw1XKWAe2+sOGke4AP6XDukp26TvQze
+         k6gwnYjZ8hHZw==
+Date:   Fri, 21 Apr 2023 14:38:28 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v5 2/9] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-Id: <20230421143828.bb274512144e133eb5fead1a@kernel.org>
+In-Reply-To: <CAADnVQ+R3ySQpFDnn-2EtUooDmkwTBCh_yRjqNBDhS5SvWrTYQ@mail.gmail.com>
+References: <168198993129.1795549.8306571027057356176.stgit@mhiramat.roam.corp.google.com>
+        <168198995084.1795549.16754963116067902376.stgit@mhiramat.roam.corp.google.com>
+        <20230420184932.pgv5wiqqt4fzswdk@MacBook-Pro-6.local>
+        <20230421084106.5a02844971e18cdd8ad163be@kernel.org>
+        <CAADnVQ+R3ySQpFDnn-2EtUooDmkwTBCh_yRjqNBDhS5SvWrTYQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +67,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 12:54, Markus Elfring wrote:
-> Date: Thu, 20 Apr 2023 12:05:12 +0200
-> 
-> A few update suggestions were taken into account
-> from static source code analysis.
-> 
-> Markus Elfring (4):
->    Delete null pointer checks
->    Delete two variables
->    Reduce scope for the variable “sqd”
->    Simplify the usage of an expression
-> 
->   drivers/staging/rtl8712/rtl8712_recv.c | 24 +++++++++++-------------
->   1 file changed, 11 insertions(+), 13 deletions(-)
-> 
-> --
-> 2.40.0
-> 
-> 
+On Thu, 20 Apr 2023 16:46:08 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Hi, you get the following checkpatch warning. Is this wanted?
+> On Thu, Apr 20, 2023 at 4:41 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Thu, 20 Apr 2023 11:49:32 -0700
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > On Thu, Apr 20, 2023 at 08:25:50PM +0900, Masami Hiramatsu (Google) wrote:
+> > > > +static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
+> > > > +                       struct pt_regs *regs)
+> > > > +{
+> > > > +   struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+> > > > +   struct fentry_trace_entry_head *entry;
+> > > > +   struct hlist_head *head;
+> > > > +   int size, __size, dsize;
+> > > > +   int rctx;
+> > > > +
+> > > > +   if (bpf_prog_array_valid(call)) {
+> > > > +           unsigned long orig_ip = instruction_pointer(regs);
+> > > > +           int ret;
+> > > > +
+> > > > +           ret = trace_call_bpf(call, regs);
+> > >
+> > > Please do not call bpf from fprobe.
+> > > There is no use case for it.
+> >
+> > OK.
+> >
+> > >
+> > > > +
+> > > > +           /*
+> > > > +            * We need to check and see if we modified the pc of the
+> > > > +            * pt_regs, and if so return 1 so that we don't do the
+> > > > +            * single stepping.
+> > > > +            */
+> > > > +           if (orig_ip != instruction_pointer(regs))
+> > > > +                   return 1;
+> > > > +           if (!ret)
+> > > > +                   return 0;
+> > > > +   }
+> > > > +
+> > > > +   head = this_cpu_ptr(call->perf_events);
+> > > > +   if (hlist_empty(head))
+> > > > +           return 0;
+> > > > +
+> > > > +   dsize = __get_data_size(&tf->tp, regs);
+> > > > +   __size = sizeof(*entry) + tf->tp.size + dsize;
+> > > > +   size = ALIGN(__size + sizeof(u32), sizeof(u64));
+> > > > +   size -= sizeof(u32);
+> > > > +
+> > > > +   entry = perf_trace_buf_alloc(size, NULL, &rctx);
+> > > > +   if (!entry)
+> > > > +           return 0;
+> > > > +
+> > > > +   entry->ip = entry_ip;
+> > > > +   memset(&entry[1], 0, dsize);
+> > > > +   store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
+> > > > +   perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
+> > > > +                         head, NULL);
+> > > > +   return 0;
+> > > > +}
+> > > > +NOKPROBE_SYMBOL(fentry_perf_func);
+> > > > +
+> > > > +static void
+> > > > +fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
+> > > > +           unsigned long ret_ip, struct pt_regs *regs)
+> > > > +{
+> > > > +   struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+> > > > +   struct fexit_trace_entry_head *entry;
+> > > > +   struct hlist_head *head;
+> > > > +   int size, __size, dsize;
+> > > > +   int rctx;
+> > > > +
+> > > > +   if (bpf_prog_array_valid(call) && !trace_call_bpf(call, regs))
+> > > > +           return;
+> > >
+> > > Same here.
+> > > These two parts look like copy-paste from kprobes.
+> > > I suspect this code wasn't tested at all.
+> >
+> > OK, I missed to test that bpf part. I thought bpf could be appended to
+> > any "trace-event" (looks like trace-event), isn't it?
+> 
+> No. We're not applying bpf filtering to any random event
+> that gets introduced in a tracing subsystem.
+> fprobe falls into that category.
+> Every hook where bpf can be invoked has to be thought through.
+> That mental exercise didn't happen here.
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Markus 
-Elfring <Markus.Elfring@web.de>' != 'Signed-off-by: Markus Elfring 
-<elfring@users.sourceforge.net>'
+OK. Just out of curiousity, where is the "tracepoint" filter applied?
+In the kernel (verifier?) or the userspace?
+
+Thank you,
 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> AW-NU120
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
