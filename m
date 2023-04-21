@@ -2,249 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80C46EA7DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B312D6EA7ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjDUKIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S231819AbjDUKJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjDUKIS (ORCPT
+        with ESMTP id S229751AbjDUKJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:08:18 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC75B750
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:08:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f4b911570so194292066b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682071693; x=1684663693;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hM5SLNSVGKeXl0IJbmJw2IfxPy1SIuLOexv/qUGdJdU=;
-        b=SGhUooxNWZKsB6kn4+/KSXf5KGgGykFlJxTC3x7ukpdih0NXb8r5hKThBhtuGfs6zI
-         y784veuBmivSGi0Ckjs+PrUGIB+HZf4QF2Uf+OUMI+KZ6EUc26YRxNch61yX9bH4/+Y1
-         r9Mi/E4UwtqU47X8kq9pkKcBFFCHqQ2NoNTLxDGzGo12Ho5oubkJb81viTHgKtmfjCna
-         azYbMKnSE5hP4rB1EeNuKOLOWcaSfzqs7UWJXVQWHEObV8EKUtQ0iTSs/Ir6ZIO3+F9V
-         yeKchtx9AN+3U9xKB679tomzcbxNKxaALZWl7Fks75fhnIPtFuk4LwXXBr97i8FwtqBz
-         /zwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682071693; x=1684663693;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hM5SLNSVGKeXl0IJbmJw2IfxPy1SIuLOexv/qUGdJdU=;
-        b=g4rn9CAIR0j0Hj2vnkOgoCGcBtveqy/lhc+9kHh4ZDrrTJJ0kMtP6ybZG6vWt3eMoP
-         5nIrSpehfWJwEc90Uva06hyzeDS9EDHnvGRtetKcINGG44ked/6eHmh3pav2DM7In4yd
-         U5V+6frH2nkNcUwjqX7yzmoxLTkBVvIvZSk/ekb2doHnefLR92Mr81AbU7cZ5zaqjfjc
-         QPC6KkYK9tFvcyqK6kewpZpYbc72ZHDZiJ9oWvqeNu6OSY47fkUzJK8QJi0RPidh2Vyb
-         MitTnNCBCcWHOhx+psfHa7DQpAg4RjFtOr87Dv6XnHue9TYS3Kl5d/HVT4NVwdvDeCFB
-         vbXg==
-X-Gm-Message-State: AAQBX9fC7wIq4JKYsL4DUTUOBu2ZyNHpd4TGmqhVG16hcsZ5v5CjBr93
-        gJz9dDiv59Jhzhm2ito5YOvH7A==
-X-Google-Smtp-Source: AKy350aeucgau/22GFXtw4PeQRuxC9tdMuwBIPqmJpCcUqiPVKp5SlTDFKZSWyO2cijLTxtjdXP/JQ==
-X-Received: by 2002:a17:906:850a:b0:947:92c9:6aa4 with SMTP id i10-20020a170906850a00b0094792c96aa4mr1728486ejx.4.1682071693139;
-        Fri, 21 Apr 2023 03:08:13 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:668b:1e57:3caa:4d06? ([2a02:810d:15c0:828:668b:1e57:3caa:4d06])
-        by smtp.gmail.com with ESMTPSA id ox6-20020a170907100600b008f89953b761sm1884267ejb.3.2023.04.21.03.08.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 03:08:12 -0700 (PDT)
-Message-ID: <a68e1bc8-df55-684e-300c-678565ae1dd6@linaro.org>
-Date:   Fri, 21 Apr 2023 12:08:11 +0200
+        Fri, 21 Apr 2023 06:09:21 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83D8A5DD;
+        Fri, 21 Apr 2023 03:09:16 -0700 (PDT)
+X-UUID: 8dfac93ee02c11edb6b9f13eb10bd0fe-20230421
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ggnad62p6Gudc5OFGlOZvU0TYyKqyqL4O7G2gKLarMk=;
+        b=oeOMhvPmu0Q+3HhO32lIrekEn6kEyh5/oZZWZUp3TEpcBQUG+YmDFZFr7BtgR2R38SdjORP+ofNh6eq00vCWOiL0AozZuBh6pRanE6964Jy/UAaprD9kCOpejSlQb1gTuxyWbSDmkDz/6YsXt8ECwxEI7o626xy4hcsZqYQ8Dwk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:98781159-7a00-435a-b064-1b1b477d3e91,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:afdcb8eb-db6f-41fe-8b83-13fe7ed1ef52,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 8dfac93ee02c11edb6b9f13eb10bd0fe-20230421
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 400563762; Fri, 21 Apr 2023 18:09:08 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 21 Apr 2023 18:09:07 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 21 Apr 2023 18:09:07 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
+        <perex@perex.cz>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/7] ASoC: mediatek: mt8188: revise AFE driver
+Date:   Fri, 21 Apr 2023 18:08:58 +0800
+Message-ID: <20230421100905.28045-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: qcom: Add SDX75 pinctrl
- devicetree compatible
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
-        manivannan.sadhasivam@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <1682070196-980-1-git-send-email-quic_rohiagar@quicinc.com>
- <1682070196-980-2-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1682070196-980-2-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 11:43, Rohit Agarwal wrote:
-> Add device tree binding Documentation details for Qualcomm SDX75
-> pinctrl driver.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+The series of patches consists of three major changes.
+First, remove redundant supply for ADDA DAI dirver. Second, revise ETDM
+control including APLL dynamic switch via DAPM, so APLL can be enabled
+when it is really required. Finally, AFE probe function is updated. Bus
+protection change was dropped at the previous patch because the dependent
+change was not accepted.
 
-Thank you for your patch. There is something to discuss/improve.
+Changes since v1:
+  - replace unnecessary dev_info with dev_dbg
+  - fix dt-binging ABI breaking behavior
 
-> +properties:
-> +  compatible:
-> +    const: qcom,sdx75-tlmm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +  interrupt-controller: true
-> +  "#interrupt-cells": true
-> +  gpio-controller: true
-> +
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 105
-> +
-> +  gpio-line-names:
-> +    maxItems: 133
+Trevor Wu (7):
+  ASoC: mediatek: mt8188: remove supply AUDIO_HIRES
+  ASoC: mediatek: mt8188: complete set_tdm_slot function
+  ASoC: mediatek: mt8188: revise ETDM control flow
+  ASoC: mediatek: mt8188: refine APLL control
+  ASoC: mediatek: mt8188: combine afe component registration
+  ASoC: mediatek: mt8188: add bus protection
+  ASoC: dt-bindings: mediatek,mt8188-afe: add audio properties
 
-If you have 210 GPIOs, then this should be 210.
+ .../bindings/sound/mediatek,mt8188-afe.yaml   |  16 +-
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.c    | 138 ++-
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.h    |  11 +
+ sound/soc/mediatek/mt8188/mt8188-afe-pcm.c    | 113 ++-
+ sound/soc/mediatek/mt8188/mt8188-dai-adda.c   |  37 -
+ sound/soc/mediatek/mt8188/mt8188-dai-etdm.c   | 922 ++++++++++--------
+ sound/soc/mediatek/mt8188/mt8188-reg.h        |   2 +
+ 7 files changed, 755 insertions(+), 484 deletions(-)
 
-> +
-> +  "#gpio-cells": true
-> +  gpio-ranges: true
-> +  wakeup-parent: true
-> +
-> +patternProperties:
-> +  "-state$":
-> +    oneOf:
-> +      - $ref: "#/$defs/qcom-sdx75-tlmm-state"
-> +      - patternProperties:
-> +          "-pins$":
-> +            $ref: "#/$defs/qcom-sdx75-tlmm-state"
-> +        additionalProperties: false
-> +
-> +$defs:
-> +  qcom-sdx75-tlmm-state:
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-
-unevaluatedProperties: false
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this
-> +          subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-9][0-9]|20[0-9])$"
-
-This says you have 210 GPIOs.
-
-> +            - enum: [ ufs_reset, sdc2_clk, sdc2_cmd, sdc2_data ]
-
-Keep these four enum values sorted alphabetically.
-
-> +        minItems: 1
-> +        maxItems: 36
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins.
-> +        enum: [ gpio, eth0_mdc, eth0_mdio, eth1_mdc, eth1_mdio,
-> +                qlink0_wmss_reset, qlink1_wmss_reset, rgmii_rxc, rgmii_rxd0,
-> +                rgmii_rxd1, rgmii_rxd2, rgmii_rxd3,rgmii_rx_ctl, rgmii_txc,
-> +                rgmii_txd0, rgmii_txd1, rgmii_txd2, rgmii_txd3, rgmii_tx_ctl,
-> +                adsp_ext_vfr, atest_char_start, atest_char_status0,
-> +                atest_char_status1, atest_char_status2, atest_char_status3,
-> +                audio_ref_clk, bimc_dte_test0, bimc_dte_test1,
-> +                char_exec_pending, char_exec_release, coex_uart2_rx,
-> +                coex_uart2_tx, coex_uart_rx, coex_uart_tx, cri_trng_rosc,
-> +                cri_trng_rosc0, cri_trng_rosc1, dbg_out_clk, ddr_bist_complete,
-> +                ddr_bist_fail, ddr_bist_start, ddr_bist_stop, ddr_pxi0_test,
-> +                ebi0_wrcdc_dq2, ebi0_wrcdc_dq3, ebi2_a_d, ebi2_lcd_cs,
-> +                ebi2_lcd_reset, ebi2_lcd_te, emac0_mcg_pst0, emac0_mcg_pst1,
-> +                emac0_mcg_pst2, emac0_mcg_pst3, emac0_ptp_aux, emac0_ptp_pps,
-> +                emac1_mcg_pst0, emac1_mcg_pst1, emac1_mcg_pst2, emac1_mcg_pst3,
-> +                emac1_ptp_aux0, emac1_ptp_aux1, emac1_ptp_aux2, emac1_ptp_aux3,
-> +                emac1_ptp_pps0, emac1_ptp_pps1, emac1_ptp_pps2, emac1_ptp_pps3,
-> +                emac_cdc_dtest0, emac_cdc_dtest1, emac_pps_in, ext_dbg_uart,
-> +                gcc_125_clk, gcc_gp1_clk, gcc_gp2_clk, gcc_gp3_clk,
-> +                gcc_plltest_bypassnl, gcc_plltest_resetn, i2s_mclk,
-> +                jitter_bist_ref, ldo_en, ldo_update, m_voc_ext, mgpi_clk_req,
-> +                native0, native1, native2, native3, native_char_start,
-> +                native_tsens_osc, native_tsense_pwm1, nav_dr_sync, nav_gpio_0,
-> +                nav_gpio_1, nav_gpio_2, nav_gpio_3, pa_indicator_1, pci_e_rst,
-> +                pcie0_clkreq_n, pcie1_clkreq_n, pcie2_clkreq_n, pll_bist_sync,
-> +                pll_clk_aux, pll_ref_clk, pri_mi2s_data0, pri_mi2s_data1,
-> +                pri_mi2s_sck, pri_mi2s_ws, prng_rosc_test0, prng_rosc_test1,
-> +                prng_rosc_test2, prng_rosc_test3, qdss_cti_trig0,
-> +                qdss_cti_trig1, qdss_gpio_traceclk, qdss_gpio_tracectl,
-> +                qdss_gpio_tracedata0, qdss_gpio_tracedata1,
-> +                qdss_gpio_tracedata10, qdss_gpio_tracedata11,
-> +                qdss_gpio_tracedata12, qdss_gpio_tracedata13,
-> +                qdss_gpio_tracedata14, qdss_gpio_tracedata15,
-> +                qdss_gpio_tracedata2, qdss_gpio_tracedata3,
-> +                qdss_gpio_tracedata4, qdss_gpio_tracedata5,
-> +                qdss_gpio_tracedata6, qdss_gpio_tracedata7,
-> +                qdss_gpio_tracedata8, qdss_gpio_tracedata9, qlink0_b_en,
-> +                qlink0_b_req, qlink0_l_en, qlink0_l_req, qlink1_l_en,
-> +                qlink1_l_req, qup_se0_l0, qup_se0_l1, qup_se0_l2, qup_se0_l3,
-> +                qup_se1_l2, qup_se1_l3, qup_se2_l0, qup_se2_l1, qup_se2_l2,
-> +                qup_se2_l3, qup_se3_l0, qup_se3_l1, qup_se3_l2, qup_se3_l3,
-> +                qup_se4_l2, qup_se4_l3, qup_se5_l0, qup_se5_l1, qup_se6_l0,
-> +                qup_se6_l1, qup_se6_l2, qup_se6_l3, qup_se7_l0, qup_se7_l1,
-> +                qup_se7_l2, qup_se7_l3, qup_se8_l2, qup_se8_l3, sdc1_tb_trig,
-> +                sdc2_tb_trig, sec_mi2s_data0, sec_mi2s_data1, sec_mi2s_sck,
-> +                sec_mi2s_ws, sgmii_phy_intr0, sgmii_phy_intr1, spmi_coex_clk,
-> +                spmi_coex_data, spmi_vgi_hwevent, tgu_ch0_trigout,
-> +                tri_mi2s_data0, tri_mi2s_data1, tri_mi2s_sck, tri_mi2s_ws,
-> +                uim1_clk, uim1_data, uim1_present, uim1_reset, uim2_clk,
-> +                uim2_data, uim2_present, uim2_reset, usb2phy_ac_en,
-> +                vsense_trigger_mirnat]
-> +
-> +      bias-disable: true
-> +      bias-pull-down: true
-> +      bias-pull-up: true
-> +      drive-strength: true
-> +      input-enable: true
-
-This is not allowed. Please rebase on pinctrl maintainer tree or next.
-
-> +      output-high: true
-> +      output-low: true
-> +
-> +    required:
-> +      - pins
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    tlmm: pinctrl@f100000 {
-> +        compatible = "qcom,sdx75-tlmm";
-> +        reg = <0x0f100000 0x300000>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +        gpio-ranges = <&tlmm 0 0 134>;
-
-Wrong number of pins. You have 210, right? This should be number of
-GPIOs + optionally UFS reset.
-
-
-Best regards,
-Krzysztof
+-- 
+2.18.0
 
