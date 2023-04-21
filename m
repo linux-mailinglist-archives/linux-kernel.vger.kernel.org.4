@@ -2,94 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70906EA974
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984B06EA97C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjDULkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
+        id S231946AbjDULmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbjDULkf (ORCPT
+        with ESMTP id S231725AbjDULmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:40:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E11BB8D;
-        Fri, 21 Apr 2023 04:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DA5A64F07;
-        Fri, 21 Apr 2023 11:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53D1C433D2;
-        Fri, 21 Apr 2023 11:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682077214;
-        bh=wCHuUBF9AL3TW0Lp9cVkBSjUPDIH4u2zFJIc/u4LnIo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kLHoFpxQYbkRcCbKHyPuyjpjy/IrQMOfXEW6R470c0p7LKNTUEPAi0qI//MUl9wWc
-         MJCVvGpy9MoGJttgB4l33G/d8Tg6jvtr3BBbf75nm3CSt9y+0AQ6Wz4DiNyBhLddFv
-         SZN/HzXA05+9vlLc2iEXQmaymmeYQQHc6F3xKn981u77QVc7cj463fqSrBHWZDCfpH
-         H6ZNFbvChLwrQBmKdCiwex43l1S4sAuaMiYgaqWF/9/3iC069w1nl3F1YC/p10CMOX
-         mFWbmn+cmMCEKAR/7hE8KFPz4BFSUd2t9Exg1BkQU85KGcQk2usABy+BdhoAg0h4dk
-         bYp8VfoRAtNVA==
-Date:   Fri, 21 Apr 2023 12:40:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: linux-next: manual merge of the risc-v tree with the
- risc-v-fixes tree
-Message-ID: <1db8bb94-022d-4b5c-af8e-f0dfd1e694a9@sirena.org.uk>
-References: <20230420124048.65232-1-broonie@kernel.org>
- <CAHVXubjeMX2Z2jX4kYfXRqb+DiR6-E8PGb+m0MnVN-aTW4hfkQ@mail.gmail.com>
+        Fri, 21 Apr 2023 07:42:21 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4E5B763;
+        Fri, 21 Apr 2023 04:42:05 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63d2ba63dddso1796998b3a.2;
+        Fri, 21 Apr 2023 04:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682077325; x=1684669325;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+QzXOowBk6zMAvVRHRGMTmto6TQPv6FzbyS50fs0HGw=;
+        b=mzbKHm0khz7tDrCEjsD2ozL+ocWl2vnK2eEKOD5Xnas4zNqxdMfIGRc5I6eAXIV2Ck
+         D1VIHErtUzhHk5bB8TRw/QdGWP8V3PCXVvSYcZzxDUiD/GsJcNpfsIzhpdf4beV1R+Da
+         VD2ZqnF/SnbPdNUIpQBXvIrbxF/ebD/+mmb435cpCxcV7Cb2b7mr5lg95SG8Tt5hvLwp
+         ifGNLZZQJoGgjGJst8QI+RHM0fVlgD111kJpVzS1eh6mcT3W/FqWBsWEtxBm3FqYCv6a
+         ZTcVA83HUGU/3VtZMmLVuPP1uiFYcI/nuCdR8kXLmBXuk1qNOvVRC1iobXQs+soOecbn
+         Rjvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682077325; x=1684669325;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+QzXOowBk6zMAvVRHRGMTmto6TQPv6FzbyS50fs0HGw=;
+        b=QgHfnNryW5fez0Eg/QkMbIMOmrUL8R0eevCTH5fQ7Zg5wzylnYLO9Q2AyaBBureCzG
+         2k8W28eF+INbWySicAX9mmpYvbdBttfEZNKXx8B0kd6XLU4VmgEDFWdDVdeOTeaZhtmT
+         c5Nw8yxYnSPiBdPlujFULd9fvvXzZW9bFn0GF/LyFz9jqg1YdsO3hTGY+y3xs9sOac0l
+         QIGl84KyBNTXmlzCiLLOn3y2zp80O07oH1XvaRTUXkCkTUYzRmckarI4N33jy5LOGNe0
+         925quRerccosrWhcwzwDdkrytATAm9a1ycN5mxEn59f+AXjDlDEnHRXJpabapTG1d7Rf
+         Uu+A==
+X-Gm-Message-State: AAQBX9fsEHv7UYXOo6IKIPZQ2oURs0rMPKOke9Kj/0fKI/FL0M7TA8/L
+        F3A7MhGSFGMlPiUQMAZOXNzxd+twMvkS4XtTEzE=
+X-Google-Smtp-Source: AKy350YeDB/pe50NcsvczdvPWP5Yftu6/H9TF0P1oFddZ/bS8uMvJSuHQK5TxWWa7pqU17OFm4oumJeeTi+i/NuKQFQ=
+X-Received: by 2002:a17:902:d48b:b0:1a6:5fa2:aa50 with SMTP id
+ c11-20020a170902d48b00b001a65fa2aa50mr6649243plg.1.1682077324621; Fri, 21 Apr
+ 2023 04:42:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SOxGwS+eI0rZpAoZ"
-Content-Disposition: inline
-In-Reply-To: <CAHVXubjeMX2Z2jX4kYfXRqb+DiR6-E8PGb+m0MnVN-aTW4hfkQ@mail.gmail.com>
-X-Cookie: Hailing frequencies open, Captain.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230415104104.5537-1-aford173@gmail.com> <3e47f0d1017fe4c9f71a5de65f32c6ba1662efe2.camel@pengutronix.de>
+ <CAHCN7xL4+9NogrnXA1PEWorwY7JpSGBozDtHT83JvzjfinmS+A@mail.gmail.com>
+ <CAHCN7xK8K+DsNAFTVAezwJQzZ7RCDb2CjCBZ8dNb=S8d1BmtMA@mail.gmail.com>
+ <f42a2a11c1a2df4d773b61a449e8f4d5a9a010d1.camel@pengutronix.de>
+ <CAHCN7x+bZHZHxYk=qC3QFS07kLO85w_rj1tOuX1Y3fJXekmvMQ@mail.gmail.com>
+ <19d2c40180d0b9176e17aa6e91c1e7f36f77f626.camel@pengutronix.de>
+ <CAHCN7x+HYmGoxZ107OdY1aJYtjNWB4p3fqJ1tGjOAK2eO356yA@mail.gmail.com>
+ <CGME20230421084034eucas1p14b1bcf83a86f7a2a828eac2d42eb1449@eucas1p1.samsung.com>
+ <56a805b4a74f620f7948f57d416b135effb6e52d.camel@pengutronix.de> <8cdb2f0d-f6a2-a04c-2cf4-c0762a47c050@samsung.com>
+In-Reply-To: <8cdb2f0d-f6a2-a04c-2cf4-c0762a47c050@samsung.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 21 Apr 2023 06:41:53 -0500
+Message-ID: <CAHCN7xKydLHoYMJiWyLgmaH5zzA9OSxAma0fHh9vsUEx36ME-A@mail.gmail.com>
+Subject: Re: [PATCH 1/6] drm: bridge: samsung-dsim: Support multi-lane calculations
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        aford@beaconembedded.com,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Fabio Estevam <festevam@gmail.com>, marex@denx.de,
+        Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 6:28=E2=80=AFAM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+>
+> On 21.04.2023 10:40, Lucas Stach wrote:
+> > Am Donnerstag, dem 20.04.2023 um 16:51 -0500 schrieb Adam Ford:
+> >> On Thu, Apr 20, 2023 at 8:43=E2=80=AFAM Lucas Stach <l.stach@pengutron=
+ix.de> wrote:
+> >>> Am Donnerstag, dem 20.04.2023 um 08:24 -0500 schrieb Adam Ford:
+> >>>> On Thu, Apr 20, 2023 at 8:06=E2=80=AFAM Lucas Stach <l.stach@pengutr=
+onix.de> wrote:
+> >>>>> Hi Adam,
+> >>>>>
+> >>>>> Am Mittwoch, dem 19.04.2023 um 05:47 -0500 schrieb Adam Ford:
+> >>>>>> On Mon, Apr 17, 2023 at 6:55=E2=80=AFAM Adam Ford <aford173@gmail.=
+com> wrote:
+> >>>>>>> On Mon, Apr 17, 2023 at 3:43=E2=80=AFAM Lucas Stach <l.stach@peng=
+utronix.de> wrote:
+> >>>>>>>> Hi Adam,
+> >>>>>>>>
+> >>>>>>>> Am Samstag, dem 15.04.2023 um 05:40 -0500 schrieb Adam Ford:
+> >>>>>>>>> If there is more than one lane, the HFP, HBP, and HSA is calcul=
+ated in
+> >>>>>>>>> bytes/pixel, then they are divided amongst the different lanes =
+with some
+> >>>>>>>>> additional overhead. This is necessary to achieve higher resolu=
+tions while
+> >>>>>>>>> keeping the pixel clocks lower as the number of lanes increase.
+> >>>>>>>>>
+> >>>>>>>> In the testing I did to come up with my patch "drm: bridge: sams=
+ung-
+> >>>>>>>> dsim: fix blanking packet size calculation" the number of lanes =
+didn't
+> >>>>>>>> make any difference. My testing might be flawed, as I could only
+> >>>>>>>> measure the blanking after translation from MIPI DSI to DPI, so =
+I'm
+> >>>>>>>> interested to know what others did here. How did you validate th=
+e
+> >>>>>>>> blanking with your patch? Would you have a chance to test my pat=
+ch and
+> >>>>>>>> see if it works or breaks in your setup?
+> >>>>>> Lucas,
+> >>>>>>
+> >>>>>> I tried your patch instead of mine.  Yours is dependent on the
+> >>>>>> hs_clock being always set to the burst clock which is configured b=
+y
+> >>>>>> the device tree.  I unrolled a bit of my stuff and replaced it wit=
+h
+> >>>>>> yours.  It worked at 1080p, but when I tried a few other resolutio=
+ns,
+> >>>>>> they did not work.  I assume it's because the DSI clock is fixed a=
+nd
+> >>>>>> not changing based on the pixel clock.  In the version I did, I on=
+ly
+> >>>>>> did that math when the lanes were > 1. In your patch, you divide b=
+y 8,
+> >>>>>> and in mine, I fetch the bits-per-pixel (which is 8) and I divide =
+by
+> >>>>>> that just in case the bpp ever changes from 8.  Overall,  I think =
+our
+> >>>>>> patches basically do the same thing.
+> >>>>> The calculations in your and my patch are quite different. I'm not
+> >>>>> taking into account the number of lanes or the MIPI format. I'm bas=
+ing
+> >> I was taking the number of lanes into account in order to calculate
+> >> the clock rate, since 4-lanes can run slower.
+> >>
+> > Ah that makes sense if you aren't running at full clock burst clock
+> > rate.
+> >
+> >>>> I was looking more at the division by 8 and the overhead correction =
+of 6.
+> >>>> This number 6 also appears in the NXP downstream kernel [1].  I know
+> >>>> Marek V had some concerns about that.
+> >>>>
+> >>> Yea, I don't fully remember the details about the overhead. Need to
+> >>> page that back in. The division by 8 in my patch is just to get from
+> >>> the bit to a byte clock, nothing to do with the MIPI format bits per
+> >>> channel or something like that.
+> >>>
+> >>>>> the blanking size purely on the ratio between MIPI DSI byte clock a=
+nd
+> >>>>> the DPI interface clock. It's quite counter-intuitive that the host
+> >>>>> would scale the blanking to the number of lanes automatically, but
+> >>>>> still require the MIPI packet offset removed, but that's what my
+> >>>>> measurements showed to produce the correct blanking after translati=
+on
+> >>>>> to DPI by the TC358767 bridge chip.
+> >>>> How many lanes is your DSI interface using?
+> >>>>
+> >>> When I did the measurements to come up with the patch, I varied the
+> >>> number of lanes between 1 and 4. Different number of lanes didn't mak=
+e
+> >>> a difference. In fact trying to compensate for the number of lanes wh=
+en
+> >>> calculating the blanking size to program into the controller lead to
+> >>> wildly wrong blanking on the DPI side of the external bridge.
+> >>>
+> >>>>> If you dynamically scale the HS clock, then you would need to input=
+ the
+> >>>>> real used HS clock to the calculation in my patch, instead of the f=
+ixed
+> >>>>> burst mode rate.
+> >>>> I think what you're saying makes sense.
+> >>>>
+> >>>> The code I originally modeled this from was from the NXP downstream
+> >>>> kernel where they define the calculation as being in words [2]. I am
+> >>>> not saying the NXP code is perfect, but the NXP code works.  With th=
+is
+> >>>> series, my monitors are able to sync a bunch of different resolution=
+s
+> >>>> from 1080p down to 640x480 and a bunch in between with various refre=
+sh
+> >>>> rates too. That was the goal of this series.
+> >>>>
+> >>>> Instead of just using your patch as-is, I will adapt yours to use th=
+e
+> >>>> scaled clock to see how it behaves and get back to you.
+> >>>>
+> >>> Thanks, that would be very much appreciated.
+> >> Lucas,
+> >>
+> >> I took your patch and added a dsi state variable named "hs_clock"  to
+> >> keep track of the output of samsung_dsim_set_pll which should be the
+> >> active high-speed clock.
+> >>
+> >> I then replaced one line in your code to reference the hs_clock
+> >> instead of the burst clock:
+> >>
+> >> @@ -960,7 +962,7 @@ static void samsung_dsim_set_display_mode(struct
+> >> samsung_dsim *dsi)
+> >>          u32 reg;
+> >>
+> >>          if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> >> -               int byte_clk_khz =3D dsi->burst_clk_rate / 1000 / 8;
+> >> +               int byte_clk_khz =3D dsi->hs_clock / 1000 / 8;
+> >>                  int hfp =3D (m->hsync_start - m->hdisplay) *
+> >> byte_clk_khz / m->clock;
+> >>
+> >> With that change, your patch works with the rest of my code, and I
+> >> think it's easier to read, and it doesn't involve recalculating the
+> >> clock speed each time since it's cached.  If you're OK with that, I'll
+> >> incorporate your code into V2 of my series, and I'll apply my changes
+> >> as a subsequent patch.  I hope to be able to send out V2 this weekend.
+> >>
+> > That's good to hear! Seems we are converging here. Feel free to pick up
+> > the patch, that's also easier for me as I don't have to resend with CC
+> > fixed.
+> >
+> >> I would be curious to know frm Marek Szyprowski what the impact is on
+> >> the Samsung devices, if any.
+> >>
+> > Since I messed up the list CC you also couldn't see his reply to my
+> > patch:
+> >
+> > | Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > |
+> > | Works fine on the Exynos based boards I have in my test farm.
+>
+> I didn't follow this discussion, I'm a bit busy with other stuff. I've
+> just tested this series and patch #3 break Exynos based board. If you
+> want me to test anything else (might be a work-in-progress code), just
+> let me know by the separate mail.
 
---SOxGwS+eI0rZpAoZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+That's ok. I'm going to drop my patch in favor of Lucas' patch, since
+you've already tested his, and it looks cleaner than mine.  Thanks for
+your willingness to test.  That really helps us move forward without
+breaking your stuff.
 
-On Thu, Apr 20, 2023 at 03:23:55PM +0200, Alexandre Ghiti wrote:
-
-> This does not look correct, fixmap setup should not be in
-> create_linear_mapping_range() function.
-> Please find below the diff I would apply:
-
-OK, if it's opportune (basically doesn't require redoing huge amounts of
-work) I'll replace the merge with your suggestion but I'm not sure if
-that'll happen or not.  Probably best to highlight when sending the pull
-request to Linus.
-
---SOxGwS+eI0rZpAoZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRCdhYACgkQJNaLcl1U
-h9DXnQf/ehoXVw3yHA/rG/uIW+Pt4AeaDAz1WdyJmwCyC66SyLRIU56r8UtXDObo
-7FqEvZdjC1hY803ifuhVim1oQw/t0a33u9pgzoWFgKoUukaB3TpAYAnR/dh4n6GW
-jNT4uVCxO0Uy3aV204BLx1nqV7DUW9EBWGs+ZzTJ70Xc5HgjuA2szvdnd6Rbfk9Y
-3xxs/Kkhx0+HEuGdapsc5Esvq9/hL4u5wtVM1mJdp8BMflAgSHl3Y1MLD3/3+Zka
-aShOASaj0aHNNc0DTlyp9LTJmcVPyPZWoM/n9tT9rivaO/RGRrKg0EhVvdCOtslG
-1kaI2bQpj4VvukTHD5p8w0cjc31+Eg==
-=w8AR
------END PGP SIGNATURE-----
-
---SOxGwS+eI0rZpAoZ--
+adam
+>
+> Best regards
+> --
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+>
