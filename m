@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AC56EAC35
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3556EAC38
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjDUOBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S232284AbjDUOCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232555AbjDUOBO (ORCPT
+        with ESMTP id S232282AbjDUOCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:01:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46021BC0;
-        Fri, 21 Apr 2023 07:01:10 -0700 (PDT)
+        Fri, 21 Apr 2023 10:02:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461C2E55;
+        Fri, 21 Apr 2023 07:02:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FBDE64899;
-        Fri, 21 Apr 2023 14:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA74C433D2;
-        Fri, 21 Apr 2023 14:01:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D479C61583;
+        Fri, 21 Apr 2023 14:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC683C433D2;
+        Fri, 21 Apr 2023 14:02:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682085669;
-        bh=ZCLw9ZzS5vGJQ3YdbBTBrFoiSskRJvAISNADqjyW6m0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UtfY9FSLHm4biHR9vLZnnZzDhnOXVyyjbR3w2D9sQg9Omt2n336N7rC9Bzk/HBDlv
-         GIn3jS837Sc8zbUyCNPkp1JRLWFCDJmDSuzYRlr3aTvM8lGb6PfyovB8bVTeiKBG7z
-         ZfLNp9HPfvQL8YTNIRxJsAi9/O5k+8r1JIMHWxhAi+1/G+zALkWSM7cwVItv5xtrld
-         Ev6yRGtRrl1NWytR6TO9NOqHIXykWf+R3CZ+CWRNPHhQ/1WQvCKG8ZS8hNoBDCF3Sy
-         2VToRoETH6oAjQ3fO4l6A+JH5I+pE0Zgjib4SkEzzjFP/2+KC3CRxjA+XbtyXFq7/l
-         kzdo+E8lYEPAA==
-Date:   Fri, 21 Apr 2023 07:01:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 06/22] net: thunderx: Use alloc_ordered_workqueue() to
- create ordered workqueues
-Message-ID: <20230421070108.638cce01@kernel.org>
-In-Reply-To: <20230421025046.4008499-7-tj@kernel.org>
-References: <20230421025046.4008499-1-tj@kernel.org>
-        <20230421025046.4008499-7-tj@kernel.org>
+        s=k20201202; t=1682085724;
+        bh=GjXQ675p/iRLIFKflcG4u7AegZ/RXFqFmNR23jX6N2M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QnZ4BywcF++EQGowkx8Cd7BlnvUfSEfiMTHNH4i1lFu6L0zMuOQN9xpMdlABrSYT7
+         Icb7bQDNlza7Z8lxXWQJt2txRa6/otzdVk+9nl+8+bHq93KXzpbbRJbGo5CM+TsMYB
+         eMLHNhSvFbRa/aGqQr8/2nP/NrTWfbeBV1N7COx/mSP5HftKXIPqJ+dOqLWw9MrCn9
+         5+ltMcUjmNmZj0vhP8Zet52f3SdEsFVN9sDyyz3ZEGL5lIpuvUB/hGHun04U3sNAcg
+         dT1J+U1z1V9VszNJVNtbbuz9PD7dYmAEJrqiUWgcd7R9Z2f8dYzQaPV/rq/kZMv3VS
+         8p0leTvnv8q3g==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] pipe: nonblocking rw for io_uring
+Date:   Fri, 21 Apr 2023 16:01:20 +0200
+Message-Id: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1995; i=brauner@kernel.org; h=from:subject:message-id; bh=GjXQ675p/iRLIFKflcG4u7AegZ/RXFqFmNR23jX6N2M=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ4Tddw/94i1OexN8ApvNT/xe230lwXapp59m3QeZizudZq yuyGjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIl41DP8FfkoJ860307/a6wVd/z9LW c0p0u/2sK683ip6wPmBMY3nxj+Z/Fs5W0wvqn8ccY5F13d0FTZAscU63ufjY1T1hzWu7OYHQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,14 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 16:50:30 -1000 Tejun Heo wrote:
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: Sunil Goutham <sgoutham@marvell.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: netdev@vger.kernel.org
+Hey Linus,
 
-You take this via your tree directly to Linus T?
+/* Summary */
+This contains Jens' work to support FMODE_NOWAIT and thus IOCB_NOWAIT
+for pipes ensuring that all places can deal with non-blocking requests.
+
+To this end, pass down the information that this is a nonblocking
+request so that pipe locking, allocation, and buffer checking correctly
+deal with those.
+
+The series is small but it felt standalone enough that I didn't want to
+lump it together with other, generic vfs work.
+
+/* Testing */
+clang: Ubuntu clang version 15.0.6
+gcc: (Ubuntu 12.2.0-3ubuntu1) 12.2.0
+
+All patches are based on 6.3-rc2 and have been sitting in linux-next.
+No build failures or warnings were observed. All old and new tests in
+fstests, selftests, and LTP pass without regressions.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with
+current mainline.
+
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/vfs/vfs tags/v6.4/vfs.pipe
+
+for you to fetch changes up to ec30adeb289d9054efae4e285b269438ce63fe03:
+
+  pipe: set FMODE_NOWAIT on pipes (2023-03-15 11:37:29 -0600)
+
+Please consider pulling these changes from the signed v6.4/vfs.pipe tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+v6.4/vfs.pipe
+
+----------------------------------------------------------------
+Jens Axboe (3):
+      fs: add 'nonblock' parameter to pipe_buf_confirm() and fops method
+      pipe: enable handling of IOCB_NOWAIT
+      pipe: set FMODE_NOWAIT on pipes
+
+ fs/fuse/dev.c             |  4 ++--
+ fs/pipe.c                 | 42 ++++++++++++++++++++++++++++++++++--------
+ fs/splice.c               | 11 +++++++----
+ include/linux/pipe_fs_i.h |  8 +++++---
+ 4 files changed, 48 insertions(+), 17 deletions(-)
