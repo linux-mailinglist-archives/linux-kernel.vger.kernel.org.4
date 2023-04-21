@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0357F6EB282
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC796EB283
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbjDUTtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54958 "EHLO
+        id S233638AbjDUTtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbjDUTsw (ORCPT
+        with ESMTP id S233668AbjDUTsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:48:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB4E2719;
-        Fri, 21 Apr 2023 12:48:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 197D46528E;
-        Fri, 21 Apr 2023 19:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B092C4339B;
-        Fri, 21 Apr 2023 19:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682106503;
-        bh=afKwtupox0lmyEy2Q4gdOb5TNtE8aabXgXrDrNzqgjQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mdShRbtnkd/NaU6+i82tMehIvpm1rVTs3gyCvTnZwKWAzBQO1Mdg9IhK2dMTlGr99
-         Sr84VNiUE+nowtLw3xsskiisShEYl+3hUtFymkKi54c1AijWx5ZBidEFzr4znzPEoJ
-         KwHYIyA9AXh9hig99chq6vnql+dz/rgrHFTnwteeLMU1fauiWySB8gUgm2SCzcStZa
-         esGsaO8Nas7PpjHBcUxkxUXGBbmj7jMSbkEIP7XN0zXY/V+mJtjT5sLDaikO0rP3ul
-         ZCacfQ+ROZUliQZm3NzaeEUWtisSD0CUzMDxEKfkQve68qw9Ue+HT1lTbaEIE0+8cx
-         AVEs4kPnfifhg==
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-b992ed878ebso3921738276.0;
-        Fri, 21 Apr 2023 12:48:23 -0700 (PDT)
-X-Gm-Message-State: AAQBX9fK935b0YH9ndOqVnIqpJ12OWi2u7P2xzeVeNsg6QxQEHhbY1iI
-        Kviv7m0OGZda0ORpbVhuZkmA8qehGgsTIsrklA==
-X-Google-Smtp-Source: AKy350YsYIfzI0RqjqJqRB+28l3TKuZ1sA2+QHyWG7L8jHA86q5CcPNymknn2wyoh/hlD3nM3IPV82X+5dRu/2FsZsM=
-X-Received: by 2002:a81:8415:0:b0:54f:64d8:9c9 with SMTP id
- u21-20020a818415000000b0054f64d809c9mr2826788ywf.21.1682106502454; Fri, 21
- Apr 2023 12:48:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230418150606.1528107-1-robh@kernel.org> <9543f619-88fa-8e54-6e9a-4334750e51b4@linaro.org>
-In-Reply-To: <9543f619-88fa-8e54-6e9a-4334750e51b4@linaro.org>
+        Fri, 21 Apr 2023 15:48:53 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1450B1FC7;
+        Fri, 21 Apr 2023 12:48:40 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-546de76c23eso1250343eaf.0;
+        Fri, 21 Apr 2023 12:48:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682106519; x=1684698519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TkPnOUh0neb4MVTUrbit7nLJd4t84y5z0PgNA0afTZ4=;
+        b=c/kjEyOnHOqo3rEBVjjToIgV+ouYAhM0PkZlNNt/oPFiteUIMD5BpA/PUC1rewt5q+
+         z6zu4Dlk3mjrxc1+z5dasYyTjO3QWH9MhOnRzoKi6+a4sl3Nk/ViisYntPAcjrRgLrgO
+         FMlqzMZBrhe6hEz98KFXatJ8oa0tF2vOg11ZjxPWDD43G4dM0xsHGQO8WEeUFLQ4X6oJ
+         PUhdZm/0jUq/Szb/EgmrgV4xrfwn2gp3Bcxp+EQTg4c5fS5J0/k6mKRccHrQxQ3J1GzF
+         Dpr/eJbjnjTpNPy+MaUcfsA7fC1KippOtiWwIT50Wwvkqg189LEZBu4jtvHDZ8nnq89T
+         f08A==
+X-Gm-Message-State: AAQBX9eBqAkZVOvul/sNYXo/9KIbGv+LXFdsxNr9Nedj6zuYV66Ou7d+
+        ctLjbpVz6T9ZXfHOvlFSMw==
+X-Google-Smtp-Source: AKy350aejOyl8OwPSFtGuW/8nDsydNRzme6iufoYXCm5IQo1b7EplyTp4nb/p6Zpes8WUkyN1b9qaA==
+X-Received: by 2002:a05:6820:1b89:b0:547:6a79:18cb with SMTP id cb9-20020a0568201b8900b005476a7918cbmr321342oob.9.1682106519367;
+        Fri, 21 Apr 2023 12:48:39 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m41-20020a4a952c000000b005251e3f92ecsm2045502ooi.47.2023.04.21.12.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 12:48:39 -0700 (PDT)
+Received: (nullmailer pid 1673608 invoked by uid 1000);
+        Fri, 21 Apr 2023 19:48:38 -0000
+Date:   Fri, 21 Apr 2023 14:48:38 -0500
 From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 21 Apr 2023 14:48:11 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+ZVAZc1nYJVLPQt=KM1qOZrZCrRC4q_o8XQjDdo_NuKA@mail.gmail.com>
-Message-ID: <CAL_Jsq+ZVAZc1nYJVLPQt=KM1qOZrZCrRC4q_o8XQjDdo_NuKA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: Fix schema for "qcom,paired"
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: phy: qmp-ufs: tweak clock and
+ clock-names for sa8775p
+Message-ID: <168210651750.1673545.13199192508532033264.robh@kernel.org>
+References: <20230419120914.173715-1-brgl@bgdev.pl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419120914.173715-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 2:56=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 18/04/2023 17:06, Rob Herring wrote:
-> > The "qcom,paired" schema is all wrong. First, it's a list rather than a=
-n
-> > object(dictionary). Second, it is missing a required type. The meta-sch=
-ema
-> > normally catches this, but schemas under "$defs" was not getting checke=
-d.
-> > A fix for that is pending.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.ya=
-ml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> > index 9412b9362328..4c3e9ff82105 100644
-> > --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> > +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> > @@ -144,8 +144,9 @@ $defs:
-> >          enum: [0, 1, 2, 3, 4, 5, 6, 7]
-> >
-> >        qcom,paired:
-> > -        - description:
-> > -            Indicates that the pin should be operating in paired mode.
-> > +        type: boolean
-> > +        description:
-> > +          Indicates that the pin should be operating in paired mode.
->
-> Current Linux implementation uses it as a generic pinconf param
-> pinconf_generic_params which is parsed by:
->
-> pinconf_generic_parse_dt_config() -> parse_dt_cfg() ->
-> of_property_read_u32()
->
->
-> The pinctrl-spmi-mpp.c driver, using this schema, treat it as a bool,
-> but I still wonder how the code will parse bool with
-> of_property_read_u32(). Maybe it should be uint32 with value of 0 and 1?
 
-That should be an error because the length is too short so it should
-go with some default from the code.
+On Wed, 19 Apr 2023 14:09:14 +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> maxItems is already globally set to 3. To make the binding easier to read
+> and remove redundancy, set minItems to 3 for sa8775p as this platform
+> requires exactly three clocks.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+> v1 -> v2:
+> - rephrased the commit message as this is not a fix but rather
+>   a readability improvement
+> 
+>  .../devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml    | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Looks like there is no user, though no property could mean keep the
-default/bootloader setting. Can you sort out which type is really
-desired here and hopefully we can get rid of the other type. It's not
-the first case of pinctrl properties with multiple types, but we don't
-really need more.
+Acked-by: Rob Herring <robh@kernel.org>
 
-Rob
