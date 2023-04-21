@@ -2,153 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095FC6EADD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC6C6EADDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbjDUPM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S232543AbjDUPPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 11:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjDUPM5 (ORCPT
+        with ESMTP id S229877AbjDUPPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:12:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B2413C16;
-        Fri, 21 Apr 2023 08:12:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2058065161;
-        Fri, 21 Apr 2023 15:12:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A31CBC433D2;
-        Fri, 21 Apr 2023 15:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682089974;
-        bh=YxpowVHwsKeFgDfSN4DkprW9h6O8h9UyRh/INgZFhQA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u5TjJixiqGqbmI2F/94VhizZOx77gxuv7jWOSb6YCSISr8e7x5V7lE3URl+LlLgfF
-         gJFeUEhWiiI9CPmZsAHPYWMYb+TJuYec0Ejv+XgWSphQe3ph01AHoz+VsHqItKXevB
-         OQd0veR80QyuIlsy0eqg8XzV7CCslr7Qoeh6UXr0=
-Date:   Fri, 21 Apr 2023 17:12:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     lucas.demarchi@intel.com, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, rafael@kernel.org,
-        christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, j.granados@samsung.com
-Subject: Re: [PATCH] module: add debugging auto-load duplicate module support
-Message-ID: <ZEKn89wPH19r2bM4@kroah.com>
-References: <20230418204636.791699-1-mcgrof@kernel.org>
- <2023041951-evolution-unwitting-1791@gregkh>
- <ZEB6DmF+l3LVrpFI@bombadil.infradead.org>
- <ZEDOWi8ifghwmOjp@kroah.com>
- <ZEGopJ8VAYnE7LQ2@bombadil.infradead.org>
+        Fri, 21 Apr 2023 11:15:17 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D15A93F6;
+        Fri, 21 Apr 2023 08:15:16 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5069097bac7so3080697a12.0;
+        Fri, 21 Apr 2023 08:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682090115; x=1684682115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T3PK1qOBFO8P3MzvQZi6m7wgAQpoMs4tfggDeStRvSI=;
+        b=ZyXd8aAAD+thdP7VsfaNJbWGnEkXxaYp037epXaW+svqRpnY/VqWfPdaE7uPRFevqh
+         R0d3kk9sU/egKwXaonJykZHGvWYmGvBq+4Xc++TPMskCSVNRrOchnNo7gn3QlQhI9pxN
+         w8C3ZCxp8IunByN8DQQXpZ7xmQB3y4ezkxMIDPwWh/Vd4PYQmMvO+bWDP1sBcb48Lwza
+         0EOxpVFZAJSgDe0O8T6QXHq1oIny+Tx0WQ2V/izpjU/rwHPltAZHn76PUEeSY9V/SCXB
+         BbVF+lHVnakPXf/cUVwYSw//qxA2xj0NS5Ohtd8IPg7FtxYIJ6kZZypsr/lOWwsFHK2p
+         tgdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682090115; x=1684682115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T3PK1qOBFO8P3MzvQZi6m7wgAQpoMs4tfggDeStRvSI=;
+        b=kjG241qGNN7/nJYMueTT23mPydE3LLh3EG1bW953We+u9EKkJEk33l/Sdzjqw63eTA
+         GSBb1yDssZqvK0DVrMZuCo31419R2svn1SzbQF/5T3StNqXzg+AMXCvTTzF8Z5qXaVk7
+         j5TSRjB/gZHnkODKOm/U2FS+9o4eoyJZ4FDuePXWi5Dws8TzVvmNQxdtlRtY/ox4/fbI
+         O5mWEVgF0Lgu+pOgerdWfjdSKfIPdQj99+L582PAOKw4Po0/fvJRL/PWI8CDcze2Re3P
+         vik1yq1qNo//wP9OPyxEbKt+PdCNTVyjnI8JNt9fNdD/WAWHEp3wOES++BDBg+2jBrAW
+         MbRA==
+X-Gm-Message-State: AAQBX9cGXSXaeZqH61UUx7sB9+bs4obA3O/ABix0IWQQuw4kHTTBU+n/
+        G8wqngV+AMTJqvEa0L+cyBVxgytPNpE6PCUeqRueljzsK34=
+X-Google-Smtp-Source: AKy350axwUWmK8HYFxGgA8KJ8TJI4dhynsXE51W+iUMlvnkT8UxABPq4OUDkqMX6vH0ui0lbXK6N6NKk+Mj3A11Dsqw=
+X-Received: by 2002:aa7:de92:0:b0:506:c096:18a9 with SMTP id
+ j18-20020aa7de92000000b00506c09618a9mr5265190edv.32.1682090114386; Fri, 21
+ Apr 2023 08:15:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEGopJ8VAYnE7LQ2@bombadil.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000b9915d05f9d98bdd@google.com> <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
+In-Reply-To: <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 21 Apr 2023 08:15:03 -0700
+Message-ID: <CAADnVQL4eJw11oHVqy40-9xUg_nWbQVjfAzoxM1z0RAYmeZ_tw@mail.gmail.com>
+Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Tom Rix <trix@redhat.com>, "Theodore Ts'o" <tytso@mit.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 02:03:32PM -0700, Luis Chamberlain wrote:
-> On Thu, Apr 20, 2023 at 07:32:10AM +0200, Greg KH wrote:
-> > On Wed, Apr 19, 2023 at 04:32:30PM -0700, Luis Chamberlain wrote:
-> > > > It's not "wasted", as it is returned when the module is determined to be
-> > > > a duplicate.  Otherwise everyone will want this enabled as they think it
-> > > > will actually save memory.
-> > > 
-> > > I'll change the language to be clear the issue is memory pressure early
-> > > on boot. I'll also add a bit of language to help at least guide people
-> > > to realize that the real value-add for this, ie, I'll have to mention we
-> > > suspect issue is udev and not module auto-loading and that this however
-> > > may still help find a few cases we can optimize for.
-> > 
-> > This isn't udev's "problem", all it is doing is what the kernel asked it
-> > to do.  The kernel said "Here's a new device I found, load a module for
-> > it please!"
-> 
-> If you believe that then the issue is still a kernel issue, and the
-> second part to that sentence "load a module for it" was done without
-> consideration of the implications, or without optimizations in mind.
-> Given the implications were perhaps not well understood it is unfair
-> for us to be hard on ourselves on that. But now we know, ideally if we
-> could we *should* only issue a request for a module *once* during boot.
+On Fri, Apr 21, 2023 at 7:43=E2=80=AFAM Dmitry Vyukov <dvyukov@google.com> =
+wrote:
+>
+> On Fri, 21 Apr 2023 at 16:33, syzbot
+> <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    76f598ba7d8e Merge tag 'for-linus' of git://git.kernel.=
+org..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D133bfbedc80=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D9c5d44636e9=
+1081b
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dc2de99a72baaa=
+06d31f3
+> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for D=
+ebian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/a3654f5f77b9/d=
+isk-76f598ba.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/abfb4aaa5772/vmli=
+nux-76f598ba.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/789fb5546551=
+/bzImage-76f598ba.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com
+>
+> +bpf maintainers
+>
+> If I am reading this correctly, this can cause a leak of kernel memory
+> and/or crash via bpf_get_current_comm helper.
+>
+> strcpy() can temporary leave comm buffer non-0 terminated as it
+> terminates it only after the copy:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/l=
+ib/string.c?id=3D76f598ba7d8e2bfb4855b5298caedd5af0c374a8#n184
+>
+> If bpf_get_current_comm() observes such non-0-terminated comm, it will
+> start reading off bounds.
 
-But there is no mapping between devices and modules other than what is
-exported in the module info and that is up to userspace to handle.
+fyi it's using strscpy_pad() in bpf-next.
+See commit f3f213497797 ("bpf: ensure all memory is initialized in
+bpf_get_current_comm")
+but this race might still exist. not sure.
 
-> Where does the kernel actually say "load a module"?
-
-The driver core says "hey a new device is now present!"
-
-Userspace takes that message and calls kmod with the device information
-which then determines what module to load by looking at the device
-aliases.
-
-> Isn't that just an implied gesture?
-
-Yes.
-
-> > And it's the kmod code here, not udev itself doing all of this.
-> 
-> Yes, IMHO kmod could and *should* be enhanced to share a loading context
-> during boot so to avoid duplicates too and then udev would have to
-> embrace such functionality. That's going to take time to propagate, as
-> you can imagine.
-
-udev is just the transport to kmod here, it's not in the job of
-filtering duplicate messages.
-
-> > Why not
-> > just rate-limit it in userspace if your system can't handle 10's of
-> > thousands of kmod calls all at once? I think many s390 systems did this
-> > decades ago when they were controlling 10's of thousands of scsi devices
-> > and were hit with "device detection storms" at boot like this.
-> 
-> Boot is a special context and in this particular case I agree userspace
-> kmod could/should be extended to avoid duplicate module requests in that
-> context. But likewise the kernel should only have to try to issue a
-> request for a single module once, if it could easily do that.
-
-Are you sure that this is happening at boot in a way that userspace
-didn't just trigger it on its own after init started up?  That happens
-as a "coldboot" walk of the device tree and all uevent are regenerated.
-That is userspace asking for this, so there's nothing that the kernel
-can do.
-
-> This does beg the question, why force userspace to rate limit if we
-> can do better in the kernel? Specially if *we're the ones*, as you say,
-> that are hinting to userspace to shoot back loading modules for us and we
-> know we're just going to drop duplicates?
-
-Maybe error out of duplicate module loading earlier?  I don't know,
-sorry.
-
-> > What specific devices and bus types are the problem here for these systems?
-> 
-> My best assessment of the situation is that each CPU in udev ends up triggering
-> a load of duplicate set of modules, not just one, but *a lot*. Not sure
-> what heuristics udev uses to load a set of modules per CPU.
-
-Again, finding which device and bus is causing the problem is going to
-be key here to try to solve the issue.  Are you logging duplicate module
-loads by name as well?
-
-thanks,
-
-greg k-h
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > BUG: KCSAN: data-race in strscpy / strscpy
+> >
+> > write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
+> >  strscpy+0xa9/0x170 lib/string.c:165
+> >  strscpy_pad+0x27/0x80 lib/string_helpers.c:835
+> >  __set_task_comm+0x46/0x140 fs/exec.c:1232
+> >  set_task_comm include/linux/sched.h:1984 [inline]
+> >  __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
+> >  kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
+> >  ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
+> >  ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
+> >  __ext4_fill_super fs/ext4/super.c:5480 [inline]
+> >  ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
+> >  get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
+> >  ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
+> >  vfs_get_tree+0x51/0x190 fs/super.c:1510
+> >  do_new_mount+0x200/0x650 fs/namespace.c:3042
+> >  path_mount+0x498/0xb40 fs/namespace.c:3372
+> >  do_mount fs/namespace.c:3385 [inline]
+> >  __do_sys_mount fs/namespace.c:3594 [inline]
+> >  __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
+> >  __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
+> >  strscpy+0xde/0x170 lib/string.c:174
+> >  ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
+> >  bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
+> >  ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
+> >  __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
+> >  bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
+> >  __bpf_prog_run include/linux/filter.h:601 [inline]
+> >  bpf_prog_run include/linux/filter.h:608 [inline]
+> >  __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
+> >  bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
+> >  __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
+> >  trace_sched_switch include/trace/events/sched.h:222 [inline]
+> >  __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
+> >  schedule+0x51/0x80 kernel/sched/core.c:6701
+> >  schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
+> >  kthread+0x11c/0x1e0 kernel/kthread.c:369
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >
+> > value changed: 0x72 -> 0x34
+> >
+> > Reported by Kernel Concurrency Sanitizer on:
+> > CPU: 0 PID: 16161 Comm: ext4lazyinit Not tainted 6.3.0-rc5-syzkaller-00=
+022-g76f598ba7d8e #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
+ Google 03/30/2023
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
