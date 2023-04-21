@@ -2,143 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC0A6EB23C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4DA6EB23E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjDUTY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S233522AbjDUTZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbjDUTYy (ORCPT
+        with ESMTP id S229657AbjDUTZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:24:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416492682
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:24:53 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a50cb65c92so22431955ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682105092; x=1684697092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvkLA+a8YoW/wuOsjaIxJzuPVSb1YjjMK/JpWWUYlMo=;
-        b=Z1mYNDZ6AkudtVnrT3n5V/eEIts8OddUDSW9KLn74LxIddwBxxMBvHvXimDOcCpD64
-         X6WHStiU+II2uxk73igF03YyRe+mqwSuW6H9Qtdv7u/DWvtDubpnzfk1YriCRr9za8v5
-         XC2S0BuPZrz2o6+CZXODj0TbYeG2KwCM2cVe6oSpp9pVUDXxGg9olTtkau7Q+5+NsYc4
-         cPFBjLGEPHFWzzeOrmDbwFXicua/PB03j/rs7FblIcXdCvm1JDi0Tcgqxr22anUmw5R3
-         tGRsDEZo6/EsKO19A+OOzPNIS7W+AHqe2QZk6VRckV7ELyCwNp6MWsNbX2FhgYUyMfrE
-         CxsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682105092; x=1684697092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvkLA+a8YoW/wuOsjaIxJzuPVSb1YjjMK/JpWWUYlMo=;
-        b=lts9+4jzJCMEq44G+YMNy30GxuW5o8KWVwE7KHbMuwwgCaVQZJ57DoqxLR/POvFDbe
-         hL3UUXr6MqYsyUki3TijOrhPVat705whRDV9BgVoOaWPKuBqQj59EfuO1JfjFNeZOJ9N
-         DwV2YI5JnoE2qARLCCsl0WegRIyFQtNgDXboQ7KX0KyucyTekxN1FjPCjU0wKhezrlZT
-         BR6vurVXEBf20RuCBTF3DLg3/pYLdD/w+XPG1JZeiBElQS0Jmmo9YE2fcZ45VkEHZvgA
-         f9VdNudeXSTuYwuSgyR2Wn1yq08bcCdn6P6j9e87ZQKbsYQnwmmODn435TMqp76InKIL
-         cuKg==
-X-Gm-Message-State: AAQBX9dSOQ5LAzxrgZtIkxrtaMaGA89WYlhUjeUGsAEb2icL7y6yeOmi
-        tZZwj3O1SF06+DIjVdpN+rlD74kWSVqrOMqKrsmjbg==
-X-Google-Smtp-Source: AKy350bWDl0o884sMlNpmr/NR+NvkEPHrIR9Z4zX48mWh2RO0zn4bHfGQxbBytUzrO9XtFhCP8cwpF/T0JLyArYTY9E=
-X-Received: by 2002:a17:903:22c8:b0:1a6:c12d:9036 with SMTP id
- y8-20020a17090322c800b001a6c12d9036mr7907063plg.33.1682105092516; Fri, 21 Apr
- 2023 12:24:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-46-atishp@rivosinc.com>
- <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com>
-In-Reply-To: <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Sat, 22 Apr 2023 00:54:41 +0530
-Message-ID: <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
-Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap hooks
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        Fri, 21 Apr 2023 15:25:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DD02D67;
+        Fri, 21 Apr 2023 12:25:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C4B461877;
+        Fri, 21 Apr 2023 19:25:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98362C433EF;
+        Fri, 21 Apr 2023 19:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682105103;
+        bh=W7uWtRhn74gI5DdykMl9Ygbat47KEyixL2s+R7CXf4Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P1uQO+lQn46h8sPkUIDTeuuuaqYEuXAC5XrVOBAwjT+6B4j8NizF8+Bhcmg/SbXDx
+         R35KPmFskBNMwE2hWOlTsNitogRtztEI5E/BMcoea1Ygr0ah4ez9K+IKV/JXLH8xg+
+         2hSscDX7Y8/QQfQ0dNAJrbGWNpjH3G26G1l8YL3wv2N927leM1laIByU2Nknx0W5Lh
+         9qUiz7pT6ig8062P2j0qb4E+8nVCmlLsP5ZWFcalVG/T7mul1u92MUMzR6U/UeaO7S
+         IR77iLd+n3LXOoNWDfycqXuLnHTaBxVfi9wkSaVNIx9yoRUXcGRCx1vUEBj83/9xev
+         DJZslEGbLEeSw==
+Date:   Fri, 21 Apr 2023 20:24:58 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Konstantin Ryabitsev <konstantin.ryabitsev@linux.dev>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, alexghiti@rivosinc.com,
+        aou@eecs.berkeley.edu, linux-kbuild@vger.kernel.org,
+        ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+        bjorn@kernel.org, npiggin@gmail.com,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v9 0/6] Introduce 64b relocatable kernel
+Message-ID: <20230421-uneaten-obvious-250d95c86560@spud>
+References: <mhng-bb70f74f-2b5b-4880-b7bf-975e67dc554e@palmer-ri-x1c9>
+ <ba235aa677a561ceb2dc776414403dc0@linux.dev>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cYLCWmWMPROB1qtr"
+Content-Disposition: inline
+In-Reply-To: <ba235aa677a561ceb2dc776414403dc0@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 3:46=E2=80=AFAM Dave Hansen <dave.hansen@intel.com>=
- wrote:
->
-> On 4/19/23 15:17, Atish Patra wrote:
-> > The guests running in CoVE must notify the host about its mmio regions
-> > so that host can enable mmio emulation.
->
-> This one doesn't make a lot of sense to me.
->
-> The guest and host must agree about the guest's physical layout up
-> front.  In general, the host gets to dictate that layout.  It tells the
-> guest, up front, what is present in the guest physical address space.
->
 
-That is passed through DT/ACPI (which will be measured) to the guest.
+--cYLCWmWMPROB1qtr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> This callback appears to say to the host:
->
->         Hey, I (the guest) am treating this guest physical area as MMIO.
->
-> But the host and guest have to agree _somewhere_ what the MMIO is used
-> for, not just that it is being used as MMIO.
->
+On Fri, Apr 21, 2023 at 07:10:14PM +0000, Konstantin Ryabitsev wrote:
+> April 21, 2023 2:59 PM, "Palmer Dabbelt" <palmer@dabbelt.com> wrote:
+> >> riscv: Use PUD/P4D/PGD pages for the linear mapping
+> >> (https://patchwork.kernel.org/project/linux-riscv/list/?series=3D73360=
+3)
+> >> base-commit-tag: v6.3-rc1
+> >=20
+> > The QEMU CI has some way to say "this depends on an un-merged patch set=
+ sent as $MESSAGE_ID", not
+> > sure if that's a b4-ism but it's a bit less confusing.
+>=20
+> I think it's patchwork-ism, actually. B4 will eventually learn to be
+> able to include dependent series info and automatically retrieve/apply
+> them in the proper order on "shazam", but it can't do that yet.
 
-Yes. The TSM (TEE Security Manager) which is equivalent to TDX also
-needs to be aware
-of the MMIO regions so that it can forward the faults accordingly.
-Most of the MMIO is emulated in the host (userspace or kernel
-emulation if present).
-The host is outside the trust boundary of the guest. Thus, guest needs
-to make sure the host
-only emulates the designated MMIO region. Otherwise, it opens an
-attack surface from a malicious host.
+A patchwork-ism or a patchew-ism? Drew Jones was my source for this, but
+he had said the thing to do in QEMU-land was put a:
+Based-on: $message-id
+in your cover letter for each thing that you depend on. I'm not entirely
+sure if that meant each series or each patch. I think patchew picks that
+up and dumps in it on a patchew github account that the CI might pick up
+on. From the QEMU docs:
+<quote>
+It is also okay to base patches on top of other on-going work that is
+not yet part of the git master branch. To aid continuous integration
+tools, such as `patchew <http://patchew.org/QEMU/>`__, you should `add a
+tag <https://lists.gnu.org/archive/html/qemu-devel/2017-08/msg01288.html>`__
+line ``Based-on: $MESSAGE_ID`` to your cover letter to make the series
+dependency obvious.
+<\quote>
 
-All other confidential computing solutions also depend on guest
-initiated MMIO as well. AFAIK, the TDX & SEV
-relies on #VE like exceptions to invoke that while this patch is
-similar to what pkvm does.
-This approach lets the enlightened guest control which MMIO regions it
-wants the host to emulate.
-It can be a subset of the region's host provided the layout. The guest
-device filtering solution is based on
-this idea as well [1].
+FWIW, my vote is for something with a message-id, rather than those
+patchwork series links that you can't dump into b4!
 
-[1] https://lore.kernel.org/all/20210930010511.3387967-1-sathyanarayanan.ku=
-ppuswamy@linux.intel.com/
+--cYLCWmWMPROB1qtr
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
->
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZELjCgAKCRB4tDGHoIJi
+0s1yAP9XTAhQrJD/xmNk2JTUsPIU6e0uJxU1rNaDElF8T2ioggD/RuvGZYpDeAT8
+rVM1QBn5DNrHVZWw5EILFxMXOgo1hA4=
+=0mnA
+-----END PGP SIGNATURE-----
+
+--cYLCWmWMPROB1qtr--
