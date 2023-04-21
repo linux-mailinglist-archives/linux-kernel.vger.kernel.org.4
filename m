@@ -2,166 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A688A6EA12B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 03:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE43D6EA12E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 03:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbjDUBnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 21:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S233277AbjDUBqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 21:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbjDUBno (ORCPT
+        with ESMTP id S232750AbjDUBqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 21:43:44 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2943C34
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 18:43:43 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a7ff4a454eso406515ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 18:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682041423; x=1684633423;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dIxy13HfCmUT7EC5y5m4UCU0YeS0VjV5fZQ5jhML6eE=;
-        b=qw8MaCUvrN0Zk46JopzDu1i95viE1y9QMcRYLwicZ7IUpzsNd4mLhxoglU3f6L67tD
-         XcHwkffp88Zp+CzDTdY0ZDrRe/0OpumfRosvaqq/M9HtwUW9JNTdtiqDzE6giLTNmfut
-         F3FiSaMXOj4IirV4/0xlNrpPfnNEsfSOg61PM2JDllV/+Xk4aKiYJP9QM0ZaNA/PoVmy
-         TP3aixmciyyj/ICJb85pAPLqFEW7VHzwO8TTIJDXTRDDVVRoPnHlrrl+W6hizmnSsnAp
-         s66LEehvPywdjmkjlJi0ZAVxnyQj8dk96ylVOMAcK4MRhtGNcJCjpMp0splqkZs50TCu
-         9SSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682041423; x=1684633423;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dIxy13HfCmUT7EC5y5m4UCU0YeS0VjV5fZQ5jhML6eE=;
-        b=bBtmsb7519ynVqbeqdqXAYzh7C6ENVUh+g6oAOwNieRo21TZ18vFOzRx7iCke3DqWh
-         ixw/Colw+z5px9Sqha2cUGyOtsgas4eoo+nQWBboTZCt2f+y2uQdxuvXftTy1afC/7YK
-         EhVOj93ywrmRrxf4142E4BiSpSW6S+Q7d7TPaTkXHxi6AEGcgQ7M/42g/MuUoRY1e4m6
-         9Ki9rAPZBSdXr30duztoPDXAxkOdkxngcEpxOwe6ygDuV9Uuop8eF/Iv/pgMNZRB9153
-         TFDMc9pp9zc8f2VdhZBmSyXsVcyoGWpfBI/xqGYWkA2mBIJZ4NOOkE1juI67i8HWhH7/
-         2omw==
-X-Gm-Message-State: AAQBX9e0MWP9vImGJvo1urpZFmW1rTjJg1hizbPMpaXmScOlYQkthW04
-        cMPOYj78MT+hKuzjOcClSksgirF97yiLLAmvr3RmHw==
-X-Google-Smtp-Source: AKy350aS2eg9ZuypDmu9bYDHvI0CqyL2p3mLuHY04xWLwJca+BkbuN4FFuxU81uvAcWXOwQQKjaQmXxLG+p3pbWr7Rs=
-X-Received: by 2002:a17:902:eb8c:b0:1a9:23a7:7c57 with SMTP id
- q12-20020a170902eb8c00b001a923a77c57mr135908plg.10.1682041423159; Thu, 20 Apr
- 2023 18:43:43 -0700 (PDT)
+        Thu, 20 Apr 2023 21:46:18 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC13C34
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 18:46:16 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230421014612epoutp04546ff640e827228805fe75b1f9c248f6~Xz_X5ja7h0559305593epoutp04Z
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:46:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230421014612epoutp04546ff640e827228805fe75b1f9c248f6~Xz_X5ja7h0559305593epoutp04Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682041572;
+        bh=sDfE152dq+m0G2WoSxOq/e24T2vvwaOy9VFq/rfmgj0=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=rCUg8lfIDLQzeBLHUJ0ME687pVAqcZdRoxoTibF2STaXUbu8jV3j9Jz455Fgq472S
+         Gu48F3Eeoizff4wYcvxhtmK+8FE+pgAxlZeBzjwNUwWeRmx8IjZJlj4oQsuTuqRdcJ
+         2e9jv52bfzeK61LJpbDb6LE2zBUY+9OJxcULfKp4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230421014611epcas2p1a28689311e00ab3ba51c6d126e621c07~Xz_XVeg8K2679226792epcas2p1u;
+        Fri, 21 Apr 2023 01:46:11 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.101]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q2cnH3hRYz4x9Q0; Fri, 21 Apr
+        2023 01:46:11 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A4.7B.09650.3EAE1446; Fri, 21 Apr 2023 10:46:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230421014611epcas2p2b935acf7c36c286b101a60d394b33118~Xz_WhFzph0793207932epcas2p2R;
+        Fri, 21 Apr 2023 01:46:11 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230421014610epsmtrp28eede8faaf9272b6c83ebbe6ed94ce7c~Xz_WgVQQa0895608956epsmtrp2d;
+        Fri, 21 Apr 2023 01:46:10 +0000 (GMT)
+X-AuditID: b6c32a48-023fa700000025b2-0f-6441eae31e4b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D8.ED.08279.2EAE1446; Fri, 21 Apr 2023 10:46:10 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230421014610epsmtip105635b2845b0d48bab79c08251daed48~Xz_WRjztt1892618926epsmtip1R;
+        Fri, 21 Apr 2023 01:46:10 +0000 (GMT)
+Message-ID: <222f3879-1aea-6261-e23d-9669bbcbe25c@samsung.com>
+Date:   Fri, 21 Apr 2023 10:43:46 +0900
 MIME-Version: 1.0
-References: <cover.1681580558.git.noodles@earth.li> <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
- <20230416012421.255bfd19@slackpad.lan> <ZEGOk1isRhaekk3h@earth.li>
-In-Reply-To: <ZEGOk1isRhaekk3h@earth.li>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 20 Apr 2023 18:43:06 -0700
-Message-ID: <CAGETcx-UnEK3CPC38Ef3gmHcq46nXSJbA9QAwEsF+Xt2bDKEWA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] ARM: dts: sun5i: chip: Enable bluetooth
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
+ DMA
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+Content-Language: en-US
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <20230419154657.h2kp7ouddy6m7l4r@intel.intel>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmue7jV44pBjNPyVg8mLeNzeL+1w5G
+        i8U/njNZTH34hM3i8n5ti72vt7JbbHp8jdXi8q45bBYzzu9jsmj8eJPdgcvj+pJPzB6bVnWy
+        edy5tofNY/OSeo++LasYPT5vkgtgi8q2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0
+        MFdSyEvMTbVVcvEJ0HXLzAE6TEmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6g
+        V5yYW1yal66Xl1piZWhgYGQKVJiQnTH1yTOmgh7hikXzPzI2MP7j62Lk5JAQMJG4umEaSxcj
+        F4eQwA5Gid1zlkA5nxglTi9eyw7hfGOU6NnTxAbT0nrzPRtEYi+jxNN7Z1ghnNeMEv+mP2AE
+        qeIVsJOY+WsqK4jNIqAqsfL9Mqi4oMTJmU9YQGxRgWiJxfumgNnCAkESS/7dZwKxRQTUJF4v
+        /sQEMpRZ4BKTxLbW/+wgCWYBcYlbT+aDFbEJaEt8X78YbAGngJVE76LPLBA18hLb385hBmmW
+        EFjKIXG3fxE7xN0uEruntDJC2MISr45vgYpLSXx+txfqt2yJ9ul/WCHsComLG2ZDxY0lZj1r
+        B+rlAFqgKbF+lz6IKSGgLHHkFtRaPomOw3/ZIcK8Eh1tQhCNahL3p56DGiIjMenISiYI20Pi
+        Ssc25gmMirOQQmUWkidnIXlmFsLeBYwsqxjFUguKc9NTi40KTOCxnZyfu4kRnGi1PHYwzn77
+        Qe8QIxMH4yFGCQ5mJRHeM65WKUK8KYmVValF+fFFpTmpxYcYTYFxM5FZSjQ5H5jq80riDU0s
+        DUzMzAzNjUwNzJXEeT92KKcICaQnlqRmp6YWpBbB9DFxcEo1MFXdmCU49Wbh71eqz07WORjM
+        uHd52/yzNya7l78OdJbLtfnUs+H02sqYxJXhL67LG/LI79YUNOANnua6PPvNeTHnhkVJmnM/
+        fNgx+6DAq4rf5/VExXPtlpjdmJxxo39xw+r7k5LaHzjeOK4UkdvKHl6+9pG6xUNd9elK6T8O
+        rXDkeRh0QmZCkNZfBX5GzoqrFYwzzsncYzp3Yvub/Vq8H2/Wl36e+q/zlWbPeofA8+9U56ve
+        mrbL99vU0C1ckadXG3jXnUvRk5K+Irvz2mubxSvdGRqO77/r9YCtP6l1ch3PJ98LOTeqVv9l
+        YF1y+sf3XctmKlw7GhEU9WT50ZCsOq7YZ+YT1rCrME85Yb1sUt9uJZbijERDLeai4kQAwTnn
+        jT0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupikeLIzCtJLcpLzFFi42LZdlhJTvfRK8cUg8fzLCwezNvGZnH/awej
+        xeIfz5kspj58wmZxeb+2xd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMnuwOVxfcknZo9NqzrZ
+        PO5c28PmsXlJvUffllWMHp83yQWwRXHZpKTmZJalFunbJXBlTH3yjKmgR7hi0fyPjA2M//i6
+        GDk5JARMJFpvvmfrYuTiEBLYzSixYt1fVoiEjMTyZ31sELawxP2WI2BxIYGXjBI7NyWD2LwC
+        dhIzf00Fi7MIqEqsfL+MESIuKHFy5hMWEFtUIFrixvJvTCC2sECQxJJ/98FsEQE1ideLPzGB
+        LGYWuMIk8eRiDwvEFV8ZJTbf/A82iVlAXOLWk/lgHWwC2hLf1y8G28YpYCXRu+gzC0SNmUTX
+        1i6oenmJ7W/nME9gFJqF5JBZSEbNQtIyC0nLAkaWVYySqQXFuem5xYYFhnmp5XrFibnFpXnp
+        esn5uZsYwdGlpbmDcfuqD3qHGJk4GA8xSnAwK4nwutvYpQjxpiRWVqUW5ccXleakFh9ilOZg
+        URLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXANMHR422MrnSQtNXy4wFuFmIphUk1MxXddj59
+        GMBzeRvr05YnO2IaLDfPjk5zuiR1O3aFsWdne9+UbHuO1ogFWS1ZIkn1Dzo7w2eE73j2mNn6
+        Vu+ag8f1Cj8+mjX3yrbPWX2Gd3PSduRFBUz22ufKeY+7xHSvvN4lyYIHQtXeJxvzVTazSPln
+        nj55pmG2lPKjVo3vk8t4baXjhNV4zOZNPb475Ynw556vrxpVrjOtlZUQZgnTmNxUvaX3wfyT
+        UiKXX8173rbXxNIr0FLpQKyfeX7M5++Of0uOL30wb+Nsyx+TU+e357saySUI88j9Px+np2b5
+        z21C9T8L06sTVR6sWFzP33BdxveJ6LGHC9OUWIozEg21mIuKEwFtRKbQHQMAAA==
+X-CMS-MailID: 20230421014611epcas2p2b935acf7c36c286b101a60d394b33118
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+        <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
+        <20230419060639.38853-2-jaewon02.kim@samsung.com>
+        <20230419154657.h2kp7ouddy6m7l4r@intel.intel>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 12:12=E2=80=AFPM Jonathan McDowell <noodles@earth.l=
-i> wrote:
+Hi Andi,
+
+
+On 23. 4. 20. 00:46, Andi Shyti wrote:
+> Hi Jaewon,
 >
-> On Sun, Apr 16, 2023 at 01:24:21AM +0100, Andre Przywara wrote:
-> > On Sat, 15 Apr 2023 18:46:03 +0100
-> > Jonathan McDowell <noodles@earth.li> wrote:
-> >
-> > > The C.H.I.P has an rtl8723bs device with the bluetooth interface hook=
-ed
-> > > up on UART3. Support for this didn't exist in mainline when the DTS w=
-as
-> > > initially added, but it does now, so enable it.
-> > >
-> > > Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> > > ---
-> > >  arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/=
-sun5i-r8-chip.dts
-> > > index fd37bd1f3920..4d72a181d8aa 100644
-> > > --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > @@ -255,6 +255,10 @@ &uart3 {
-> > >     pinctrl-0 =3D <&uart3_pg_pins>,
-> > >                 <&uart3_cts_rts_pg_pins>;
-> > >     status =3D "okay";
-> > > +
-> > > +   bluetooth {
-> > > +           compatible =3D "realtek,rtl8723bs-bt";
-> > > +   }
-> >
-> > As the kernel test robot already pointed out, there is a semicolon
-> > missing here.
-> > Otherwise looks good (dt-validate passes), but don't know if there are
-> > any wakeup GPIOs connected (can't seem to find a schematic?).
+> On Wed, Apr 19, 2023 at 03:06:36PM +0900, Jaewon Kim wrote:
+>> Polling mode supported with qurik if there was no DMA in the SOC.
+> I think you want to say here that "Through quirks we choose to
+> use polling mode whenever there is no DMA in the SoC".
 >
-> So there are wakeups, but if I add:
+>> However, there are cased where we cannot or do not want to use DMA.
+> /cased/cases/
 >
->         device-wake-gpios =3D <&axp_gpio 3 GPIO_ACTIVE_LOW>;
->         host-wake-gpios =3D <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
+>> To support this case, if DMA is not set, it is switched to polling mode.
+> You haven't really described what you are doing here... you could
+> just write something like: "Use DTS properties to select wether
+> to use polling or DMA mode."
 >
-> then some odd sort of dependency issue happens where the serial port
-> load is deferred waiting for the GPIO to appear, and then the device
-> doesn't work.
+> Side note, please use the imperative form when you want to
+> describe what you have done to fix the issue.
 
-When you say your device doesn't work, are you saying it never probes?
-<debugfs>/devices_deferred should tell you what devices have deferred and w=
-hy.
 
-> Error in dmesg is:
+Thanks for guide.
+
+I will change description in v3.
+
+
 >
-> serial serial0-0: deferred probe pending
+>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+>> ---
+>>   drivers/spi/spi-s3c64xx.c                 | 8 ++++++--
+>>   include/linux/platform_data/spi-s3c64xx.h | 1 +
+>>   2 files changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>> index 71d324ec9a70..273aa02322d9 100644
+>> --- a/drivers/spi/spi-s3c64xx.c
+>> +++ b/drivers/spi/spi-s3c64xx.c
+>> @@ -19,7 +19,6 @@
+>>   #include <linux/platform_data/spi-s3c64xx.h>
+>>   
+>>   #define MAX_SPI_PORTS		12
+>> -#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
+>>   #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
+>>   #define AUTOSUSPEND_TIMEOUT	2000
+>>   
+>> @@ -116,7 +115,7 @@
+>>   #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+>>   
+>>   #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+>> -#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
+>> +#define is_polling(x)	(x->cntrlr_info->polling)
+>>   
+>>   #define RXBUSY    (1<<2)
+>>   #define TXBUSY    (1<<3)
+>> @@ -1067,6 +1066,11 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
+>>   		sci->num_cs = temp;
+>>   	}
+>>   
+>> +	if (!of_find_property(dev->of_node, "dmas", NULL)) {
+>> +		dev_warn(dev, "cannot find DMA, changed to PIO mode\n");
+>> +		sci->polling = 1;
+> 	sci->polling = true;
 >
-> on 6.3-rc and on 6.1 I get:
+> But it could be even better:
 >
-> dw-apb-uart 1c28c00.serial: Failed to create device link (0x180) with axp=
-20x-gpio
+> 	sci->polling = !of_find_property(dev->of_node, "dmas", NULL));
+>
+> and you get rid of the dev_warn() that is not required.
+>
+> Andi
 
-This error message doesn't block anything. So I don't think this is
-the cause of your blocking issue. But I still want to understand why
-this error message is showing up.
 
-> I'm not clear why it's trying to link the serial port to the GPIO; it
-> seems that it should be the bluetooth device that depends on both the
-> UART and the GPIO,
+Okay, I will change 1 to 'true'..
 
-A fix for the device link error message went in on v6.3-rc3. Is that
-the 6.3 version you tested this on?
 
-Also, I tried looking into the UART driver
-(drivers/tty/serial/8250/8250_dw.c) but it wasn't clear how it ends up
-populating the bluetooth serial device. If you can point that out,
-that'd be helpful (assuming 6.3-rc3 still shows that error message).
+Thanks
 
-> and that the GPIO is actually optional so shouldn't
-> hold up loading, but I can't see how that should be represented.
+Jaewon Kim
 
-Optional dependencies should get ignored after the default
-deferred_probe_timeout runs out and the supplier driver hasn't been
-loaded yet.
-
--Saravana
-
-> Adding Greg + Saravana in the hope they can tell me what I've done wrong
-> here. The LED driver using a different GPIO line on the axp209 works
-> fine, so the device is definitely loaded and working ok.
