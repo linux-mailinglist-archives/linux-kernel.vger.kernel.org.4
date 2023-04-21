@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16C06EA1DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51306EA1DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbjDUCuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S233651AbjDUCu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbjDUCuv (ORCPT
+        with ESMTP id S233642AbjDUCuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:50:51 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D6AE75
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:50:50 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a6670671e3so16587725ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:50:50 -0700 (PDT)
+        Thu, 20 Apr 2023 22:50:54 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A862E75
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:50:53 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-247048f86c7so1235313a91.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682045450; x=1684637450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bKGjsyIEQfA0iO8Nku1mJhtuZxj/3k7VoGXX+ZH1FoA=;
-        b=aLqkSbyit+G7yJW3MnX4Cxl1GxeuxG5/Mo7SlaFjDU6AEr92CkIzV4iFbOsoCSU0JL
-         JxnbufKvNpZQVRWToz6+hEPcQhLZoVoteLhhdCTZFgLsuee4vgieciKYTy6hQ+AeIBP3
-         vZKkeMcmvhLdS/1OIijTw+6rfij0aP0K6b7MSAY5N1LmbfizzFevFw40TWKoq9ZdLeIQ
-         rjBJBqyirKKjYdj+0Lu02i5SqQDcbfeMtN4dR+qGcCse6BjVEYtOrtr7EDyerVxrHB4z
-         JRUS3vXlNm86iNDPVxZrn/LCyAa+xY2tnLB6520hw0qU9f6C0lXAZ+zpymSmQEKwmXU+
-         cP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682045450; x=1684637450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682045453; x=1684637453;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bKGjsyIEQfA0iO8Nku1mJhtuZxj/3k7VoGXX+ZH1FoA=;
-        b=fc/Kul4ktlSn1PYuqSD/gsl2EqvhQNkMk7rvlA2sBX/51TT+ApzrX5IMlv93STOoKD
-         yLQhPtAFbRZGlpPdWBOkIaL11sA43UJeH8JNYKL8DdoIyFBNY2YN8ESxqMnXXFXVhCUz
-         dYwH2C4bFaPnSlSZcv7zYu+kmvt8c9hYG8r7ygAf0jkwai+zZLmQP8xlDboVz4QAP9KP
-         Ny+JN9+I76JU9i0uEW2GIxaJb7TDGZUq4Ma6uBL2LvGnZO+sBU/vJxwMNW820MqjwMtF
-         hCEek93iZQrfy7jyAJWJua5OVuwuXYj9HDDfM9GfvhLJ83e4slMyftUg72EX0WreBrGy
-         pgtQ==
-X-Gm-Message-State: AAQBX9drlyCPKhf8cmcaRDxAHrl3mke+Mo6EhAsskCg+Q0JdihC8PyAL
-        l3Nfwoj7ZA74XGdhoody/GmE6NhA73o=
-X-Google-Smtp-Source: AKy350a1pJG3riRlVZkuCSz2gmRC0GwtBnFOzgdsCEzLWhv2uOMmD0pqpwaqRbrWPEZFXgwWxeed+A==
-X-Received: by 2002:a17:902:e848:b0:1a1:ab92:5c88 with SMTP id t8-20020a170902e84800b001a1ab925c88mr4577298plg.13.1682045449782;
-        Thu, 20 Apr 2023 19:50:49 -0700 (PDT)
+        bh=QmtrNohZohvwwvoXrwix45PfrI45pVOsg46nypoG6vA=;
+        b=ZmpAEUq+gjuPKgzNFcuAAdXwmm2GgiMJlJhP1UqCHPzgFmzgT/Z6Ri4oGf+vaelLbF
+         bo4eVpMsoWtjWBTio6FfNgAKkq3C5sXwv2quyHuNUvOTEYUuw9ww0QuVP4DrckZQtoJC
+         3ADJOE5YEviK6cYzpxW9M25DRSL9ZsUGz+3uPJsgTfoqmZtPSEX+tuMrLqWj81i7An02
+         nxmDWw1C2GX+ThleqlvVhVu0Q6NmK4HTO567n+ZW5hevASnd4N1RERG2XiuEe7P45kwI
+         zmc4aPBM2h1Bl0gmIJeKUixs5hDOsBbS6DfSJXPSEgahAgLQ1PeLj0Mud/zYDJ2Z+2Zb
+         lx7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682045453; x=1684637453;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QmtrNohZohvwwvoXrwix45PfrI45pVOsg46nypoG6vA=;
+        b=Sj6toxp1CfQb4PGuKKkPIMOom0AH94S3E3/OY3Qy9zxiuNcOBa9nRlQKYJEUXdNfzL
+         3hYTfU4PQjgXqtq8fWxJVhoTGKSyL2xehPkcrYV8hWNnjnyKqHkQILwjTfS6JXcvEebn
+         gGNuAyaGfQfPZ+ThJXhnPGL9ZIdUjDeQAPW3PsGYgPoKmBxR5zAyFXvlHoSgEySldo0r
+         j4kuRgbHOc4DyZn57jcWCAZx8HiI8bZf9yBXVY2N+ewahmq9VSmHQiVLFxIqRNdg5SNf
+         Qe0MDa9mub/hEsHkz2U1VUmorXPQa/LZHAMI5gdgmwJrQYxFo1yuTq61a2/hfKXMl1p7
+         OchQ==
+X-Gm-Message-State: AAQBX9eEpCUKoZVAPPu+rgZKw2P+HdyQKm1KDd6gh/lGv2cLGkGMndNP
+        GiHf0sHnc5ZyHEK4gfbJ3NI=
+X-Google-Smtp-Source: AKy350YCCXl0aX+uUc3WbUIS6fp5Ro/TyaD4dYwRUknPa7n2rlaCcw+doGuOEoZcxrkGH+2h6Bs9qw==
+X-Received: by 2002:a17:90a:d985:b0:247:193b:ce84 with SMTP id d5-20020a17090ad98500b00247193bce84mr3540463pjv.15.1682045452656;
+        Thu, 20 Apr 2023 19:50:52 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902aa4500b001a24cded097sm1722878plr.236.2023.04.20.19.50.49
+        by smtp.gmail.com with ESMTPSA id gg6-20020a17090b0a0600b0023d386e4806sm1742354pjb.57.2023.04.20.19.50.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 19:50:49 -0700 (PDT)
+        Thu, 20 Apr 2023 19:50:52 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCHSET wq/for-6.5] workqueue: Ordered workqueue creation cleanup
-Date:   Thu, 20 Apr 2023 16:50:24 -1000
-Message-Id: <20230421025046.4008499-1-tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Tejun Heo <tj@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 01/22] powerpc, workqueue: Use alloc_ordered_workqueue() to create ordered workqueues
+Date:   Thu, 20 Apr 2023 16:50:25 -1000
+Message-Id: <20230421025046.4008499-2-tj@kernel.org>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230421025046.4008499-1-tj@kernel.org>
+References: <20230421025046.4008499-1-tj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,7 +79,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+BACKGROUND
+==========
 
 When multiple work items are queued to a workqueue, their execution order
 doesn't match the queueing order. They may get executed in any order and
@@ -96,77 +106,69 @@ prevalence of chiplet designs which can benefit from such improvements, this
 isn't a state we wanna be in forever.
 
 This patch series audits all callsites that create an UNBOUND workqueue w/
-@max_active==1 and converts them to alloc_ordered_workqueue() as necessary
-and contains the following 22 patches.
+@max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
 
- 0001-powerpc-workqueue-Use-alloc_ordered_workqueue-to-cre.patch
- 0002-greybus-Use-alloc_ordered_workqueue-to-create-ordere.patch
- 0003-IB-hfi1-Use-alloc_ordered_workqueue-to-create-ordere.patch
- 0004-dm-integrity-Use-alloc_ordered_workqueue-to-create-o.patch
- 0005-media-amphion-Use-alloc_ordered_workqueue-to-create-.patch
- 0006-net-thunderx-Use-alloc_ordered_workqueue-to-create-o.patch
- 0007-net-octeontx2-Use-alloc_ordered_workqueue-to-create-.patch
- 0008-wifi-ath10-11-12k-Use-alloc_ordered_workqueue-to-cre.patch
- 0009-wifi-iwlwifi-Use-alloc_ordered_workqueue-to-create-o.patch
- 0010-wifi-mwifiex-Use-alloc_ordered_workqueue-to-create-o.patch
- 0011-net-wwan-t7xx-Use-alloc_ordered_workqueue-to-create-.patch
- 0012-scsi-Use-alloc_ordered_workqueue-to-create-ordered-w.patch
- 0013-virt-acrn-Use-alloc_ordered_workqueue-to-create-orde.patch
- 0014-soc-qcom-qmi-Use-alloc_ordered_workqueue-to-create-o.patch
- 0015-xen-pvcalls-Use-alloc_ordered_workqueue-to-create-or.patch
- 0016-btrfs-Use-alloc_ordered_workqueue-to-create-ordered-.patch
- 0017-cifs-Use-alloc_ordered_workqueue-to-create-ordered-w.patch
- 0018-net-qrtr-Use-alloc_ordered_workqueue-to-create-order.patch
- 0019-rxrpc-Use-alloc_ordered_workqueue-to-create-ordered-.patch
- 0020-crypto-octeontx2-Use-alloc_ordered_workqueue-to-crea.patch
- 0021-media-coda-Use-alloc_ordered_workqueue-to-create-ord.patch
- 0022-workqueue-Don-t-implicitly-make-UNBOUND-workqueues-w.patch
+WHAT TO LOOK FOR
+================
 
-0001-0021 convert the existing users and 0022 drops the implicit ordered
-promotion logic from alloc_workqueue(). I'll keep an eye out for a while
-after merging 0022. Thankfully, these are pretty easy to grep for. The
-patches can also be found in the following git branch.
+The conversions are from
 
- git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git ordered-cleanup
+  alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
 
-diffstat follows. Thanks.
+to
 
- arch/powerpc/kernel/tau_6xx.c                        |    2 -
- arch/powerpc/platforms/pseries/dlpar.c               |    3 --
- drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c   |   12 ++++-----
- drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c   |    6 ++--
- drivers/greybus/connection.c                         |    4 +--
- drivers/greybus/svc.c                                |    2 -
- drivers/infiniband/hw/hfi1/init.c                    |    7 ++---
- drivers/md/dm-integrity.c                            |    4 +--
- drivers/md/dm.c                                      |    2 -
- drivers/media/platform/amphion/vpu_core.c            |    2 -
- drivers/media/platform/amphion/vpu_v4l2.c            |    2 -
- drivers/media/platform/chips-media/coda-common.c     |    2 -
- drivers/net/ethernet/cavium/thunder/thunder_bgx.c    |    3 --
- drivers/net/ethernet/marvell/octeontx2/af/rvu.c      |    5 +---
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c |   13 ++++------
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c |    5 +---
- drivers/net/wireless/ath/ath10k/qmi.c                |    3 --
- drivers/net/wireless/ath/ath11k/qmi.c                |    3 --
- drivers/net/wireless/ath/ath12k/qmi.c                |    3 --
- drivers/net/wireless/intel/iwlwifi/pcie/trans.c      |    4 +--
- drivers/net/wireless/marvell/mwifiex/cfg80211.c      |   13 ++++------
- drivers/net/wireless/marvell/mwifiex/main.c          |   22 ++++++++----------
- drivers/net/wwan/t7xx/t7xx_hif_cldma.c               |   13 +++++-----
- drivers/net/wwan/t7xx/t7xx_hif_dpmaif_tx.c           |    5 ++--
- drivers/scsi/NCR5380.c                               |    5 +---
- drivers/scsi/hosts.c                                 |   12 ++++-----
- drivers/scsi/libiscsi.c                              |    5 +---
- drivers/soc/qcom/qmi_interface.c                     |    2 -
- drivers/virt/acrn/ioreq.c                            |    4 +--
- drivers/xen/pvcalls-back.c                           |    4 +--
- fs/btrfs/disk-io.c                                   |    2 -
- fs/btrfs/scrub.c                                     |    6 +++-
- fs/cifs/dfs_cache.c                                  |    2 -
- include/linux/workqueue.h                            |    4 ---
- kernel/workqueue.c                                   |   23 +++----------------
- net/qrtr/ns.c                                        |    2 -
- net/rxrpc/af_rxrpc.c                                 |    2 -
- 37 files changed, 92 insertions(+), 121 deletions(-)
+  alloc_ordered_workqueue(flags, args...)
+
+which don't cause any functional changes. If you know that fully ordered
+execution is not ncessary, please let me know. I'll drop the conversion and
+instead add a comment noting the fact to reduce confusion while conversion
+is in progress.
+
+If you aren't fully sure, it's completely fine to let the conversion
+through. The behavior will stay exactly the same and we can always
+reconsider later.
+
+As there are follow-up workqueue core changes, I'd really appreciate if the
+patch can be routed through the workqueue tree w/ your acks. Thanks.
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Nathan Lynch <nathanl@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+---
+ arch/powerpc/kernel/tau_6xx.c          | 2 +-
+ arch/powerpc/platforms/pseries/dlpar.c | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/powerpc/kernel/tau_6xx.c b/arch/powerpc/kernel/tau_6xx.c
+index 828d0f4106d2..cba6dd15de3b 100644
+--- a/arch/powerpc/kernel/tau_6xx.c
++++ b/arch/powerpc/kernel/tau_6xx.c
+@@ -200,7 +200,7 @@ static int __init TAU_init(void)
+ 	tau_int_enable = IS_ENABLED(CONFIG_TAU_INT) &&
+ 			 !strcmp(cur_cpu_spec->platform, "ppc750");
+ 
+-	tau_workq = alloc_workqueue("tau", WQ_UNBOUND, 1);
++	tau_workq = alloc_ordered_workqueue("tau", 0);
+ 	if (!tau_workq)
+ 		return -ENOMEM;
+ 
+diff --git a/arch/powerpc/platforms/pseries/dlpar.c b/arch/powerpc/platforms/pseries/dlpar.c
+index 75ffdbcd2865..e9117b03807e 100644
+--- a/arch/powerpc/platforms/pseries/dlpar.c
++++ b/arch/powerpc/platforms/pseries/dlpar.c
+@@ -564,8 +564,7 @@ int __init dlpar_workqueue_init(void)
+ 	if (pseries_hp_wq)
+ 		return 0;
+ 
+-	pseries_hp_wq = alloc_workqueue("pseries hotplug workqueue",
+-			WQ_UNBOUND, 1);
++	pseries_hp_wq = alloc_ordered_workqueue("pseries hotplug workqueue", 0);
+ 
+ 	return pseries_hp_wq ? 0 : -ENOMEM;
+ }
+-- 
+2.40.0
 
