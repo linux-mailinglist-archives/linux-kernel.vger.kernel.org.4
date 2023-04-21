@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264F36EA1FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D716EA1FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbjDUCwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S233965AbjDUCwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjDUCvV (ORCPT
+        with ESMTP id S233799AbjDUCvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:51:21 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F827692
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:51:19 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b4bf2d74aso1496380b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:51:19 -0700 (PDT)
+        Thu, 20 Apr 2023 22:51:22 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CAD3ABC;
+        Thu, 20 Apr 2023 19:51:20 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63d4595d60fso11556768b3a.0;
+        Thu, 20 Apr 2023 19:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682045479; x=1684637479;
+        d=gmail.com; s=20221208; t=1682045480; x=1684637480;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HCPjQIn4S0PQfuCNwvELUc3S8eh+s9mUvwJw7/d5uLU=;
-        b=XMLFtb9wYP9gqpPSKTS7T/p74xQvZs2nOgKFEigpBUk7eM6Kb8bvSh/sAWoXK1dcSj
-         KWvLP7zD7yOkPXgcobpT2jsCaQldUniFt2NYg1yoc43TcDmS4stE8W3P1iJVksjOSFgn
-         jFjMkwjkXmYgdw0wK5uHCXH21wcr+eFz6d3UdFMZxRfvvPHtseSbL2d8RWYeNIn0heuJ
-         FLmKIh3j/9iUx4YIIjpr7XgLkSBxR4PUF5gMWpa5OT7mIXmR9L4DowA/AYb/EeXijmVO
-         hy4tJiy1od2XsdGkrSh8kcquhPEtsLG9Z6cwResFqBkNejkqYJI+lXHC9L6wZvRHe583
-         m/KQ==
+        bh=TJ7Cn95EWZ5JETSsGI/LC39uqQkeGr0Ng7A7gd766EA=;
+        b=CFt5GCPcXiSYIqNG/mYRk8ghpeyEkcNq4qwBUDPRaEev1fEYOmm7mjIY9zy86NaTe7
+         nalXKDKQ7iFVeuyyWtCByf1EZSR1+vl9feDKy3HKhBve7m38ctf3Yq0GU5GnLY7HZUqK
+         falqItKIfqZQl4XGg01+vfIx2rS5cLzS1FsU5nWY9mUomVBErSS7TvYIix0qczmQxegi
+         sW3l5bEHmOJkEsywt0ZDgn2navgiwLgYpaHRea1OAZbuKVDsCHNZaD5FJAo7V746ARoH
+         SJuBclkFJ1SKVXtZZMIZ73j2KPhC4P8iZYttA+XsYJ85BbO6wxy+1lWaTjvQeSTp6eez
+         K5Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682045479; x=1684637479;
+        d=1e100.net; s=20221208; t=1682045480; x=1684637480;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=HCPjQIn4S0PQfuCNwvELUc3S8eh+s9mUvwJw7/d5uLU=;
-        b=HxsX7UzHRoMmP6ltvzBzL7/BGtdpNQWoCNiw3nEwb8YewtJAiQvpZxyIFfe+C4ijW0
-         nsk12f+1SQrqvro+D9Dfgbc7IayAVNqT55eCtBz3ZYEdRSJEJkDMJyBjSV7jQxyfK5BD
-         OnPI/CY9HmcuSzt/KaVCEEGWQtKQUqQMSlUEZP3kbZjekt3ejePAx2E3nMTWsxUbZfMF
-         fOcE7zRkaeIbWrK/+Iv60V0/Zlw4ENJz+ygeCe7sJfKX5k8786Qn3BTA/5za19U2A6Yy
-         TwiY5S8fDJWgPxvRnZ6l/tgPN7ZNrRUzJGPbCl2F8tW4gmtMME2Kkqi8yTpbo3EnNhaY
-         vwmQ==
-X-Gm-Message-State: AAQBX9coJbHwaV0L6b+LgZnJ01AsGimwwMOZrt/wGwH+WM4g6mrQ8zCx
-        VCkerv8VGmII16ihWzVKveJqS+gCCUE=
-X-Google-Smtp-Source: AKy350ZqQdhTADBSG8sDswV21AqHVDTdbtktu2O/S0Hkg5un6hH0viAxUI3uMxO9h5GAesNZA/ePlA==
-X-Received: by 2002:a05:6a00:15ce:b0:63d:3411:f9e3 with SMTP id o14-20020a056a0015ce00b0063d3411f9e3mr5061818pfu.19.1682045478499;
-        Thu, 20 Apr 2023 19:51:18 -0700 (PDT)
+        bh=TJ7Cn95EWZ5JETSsGI/LC39uqQkeGr0Ng7A7gd766EA=;
+        b=O0Neetxt5xGTTuTJWc2w7amfvhAF5lMJIECQuo7mAAAFdMdVCQ4SlvhmNceMlxmb7c
+         N7CSYumKVYmb7RQGFMOLKHYr5WelhIitaCEeh2ClGOLkwjeLdEcZvSnBpVKnIy1SEpsA
+         E9dltHp+fctaxg7NgPE49Mqr8+f88K4pUhiA9eY0VQpp/fXhfyJpWU6XuTl2Sz8yJGRH
+         kNs861/HtPIV6EcfEesm+USh6J13dvnU3BXYD2gZMpvFmjmfWMr4GcQLx+OmaitOQU1Y
+         GLqR+LVrEcRgHlnxFEMiOKJqKxmuOJch1KQfdkWoAMfNkLNO6Ww0fNiOUheG/XzswkZY
+         P2Pg==
+X-Gm-Message-State: AAQBX9ecDE9/O+TX71yg08TTvGjAarnRreKD/eqTNRTj1EaPC6N40uo4
+        EeXtRKXQsZvMiF9VLLgK/PU=
+X-Google-Smtp-Source: AKy350baSiCst6dCvRKF/+TZ4yzGbYkZbLlcaPduhbROqJlnfjSZgMY/gKn9hDq3YGyDVgfzPoSCaQ==
+X-Received: by 2002:a17:903:22c7:b0:1a6:3737:750c with SMTP id y7-20020a17090322c700b001a63737750cmr9367527plg.21.1682045480309;
+        Thu, 20 Apr 2023 19:51:20 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id n11-20020a056a00212b00b0063f167b41bdsm366523pfj.38.2023.04.20.19.51.17
+        by smtp.gmail.com with ESMTPSA id x9-20020a1709029a4900b001a6388ce38bsm1724224plv.240.2023.04.20.19.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 19:51:18 -0700 (PDT)
+        Thu, 20 Apr 2023 19:51:19 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH 15/22] xen/pvcalls: Use alloc_ordered_workqueue() to create ordered workqueues
-Date:   Thu, 20 Apr 2023 16:50:39 -1000
-Message-Id: <20230421025046.4008499-16-tj@kernel.org>
+        Tejun Heo <tj@kernel.org>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
+Subject: [PATCH 16/22] btrfs: Use alloc_ordered_workqueue() to create ordered workqueues
+Date:   Thu, 20 Apr 2023 16:50:40 -1000
+Message-Id: <20230421025046.4008499-17-tj@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230421025046.4008499-1-tj@kernel.org>
 References: <20230421025046.4008499-1-tj@kernel.org>
@@ -69,8 +68,8 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -130,36 +129,45 @@ As there are follow-up workqueue core changes, I'd really appreciate if the
 patch can be routed through the workqueue tree w/ your acks. Thanks.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>
-Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc: xen-devel@lists.xenproject.org
+Cc: Chris Mason <clm@fb.com>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: David Sterba <dsterba@suse.com>
+Cc: linux-btrfs@vger.kernel.org
 ---
- drivers/xen/pvcalls-back.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/btrfs/disk-io.c | 2 +-
+ fs/btrfs/scrub.c   | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/xen/pvcalls-back.c b/drivers/xen/pvcalls-back.c
-index 1f5219e12cc3..b41516f3f84a 100644
---- a/drivers/xen/pvcalls-back.c
-+++ b/drivers/xen/pvcalls-back.c
-@@ -361,7 +361,7 @@ static struct sock_mapping *pvcalls_new_active_socket(
- 	map->data.in = map->bytes;
- 	map->data.out = map->bytes + XEN_FLEX_RING_SIZE(map->ring_order);
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index 9e1596bb208d..b1f6ff69dbe1 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -2218,7 +2218,7 @@ static int btrfs_init_workqueues(struct btrfs_fs_info *fs_info)
+ 	fs_info->qgroup_rescan_workers =
+ 		btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
+ 	fs_info->discard_ctl.discard_workers =
+-		alloc_workqueue("btrfs_discard", WQ_UNBOUND | WQ_FREEZABLE, 1);
++		alloc_ordered_workqueue("btrfs_discard", WQ_FREEZABLE);
  
--	map->ioworker.wq = alloc_workqueue("pvcalls_io", WQ_UNBOUND, 1);
-+	map->ioworker.wq = alloc_ordered_workqueue("pvcalls_io", 0);
- 	if (!map->ioworker.wq)
- 		goto out;
- 	atomic_set(&map->io, 1);
-@@ -637,7 +637,7 @@ static int pvcalls_back_bind(struct xenbus_device *dev,
+ 	if (!(fs_info->workers && fs_info->hipri_workers &&
+ 	      fs_info->delalloc_workers && fs_info->flush_workers &&
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index 69c93ae333f6..70882358bdb0 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -4245,8 +4245,10 @@ static noinline_for_stack int scrub_workers_get(struct btrfs_fs_info *fs_info,
+ 	if (refcount_inc_not_zero(&fs_info->scrub_workers_refcnt))
+ 		return 0;
  
- 	INIT_WORK(&map->register_work, __pvcalls_back_accept);
- 	spin_lock_init(&map->copy_lock);
--	map->wq = alloc_workqueue("pvcalls_wq", WQ_UNBOUND, 1);
-+	map->wq = alloc_ordered_workqueue("pvcalls_wq", 0);
- 	if (!map->wq) {
- 		ret = -ENOMEM;
- 		goto out;
+-	scrub_workers = alloc_workqueue("btrfs-scrub", flags,
+-					is_dev_replace ? 1 : max_active);
++	if (is_dev_replace)
++		scrub_workers = alloc_ordered_workqueue("btrfs-scrub", flags);
++	else
++		scrub_workers = alloc_workqueue("btrfs-scrub", flags, max_active);
+ 	if (!scrub_workers)
+ 		goto fail_scrub_workers;
+ 
 -- 
 2.40.0
 
