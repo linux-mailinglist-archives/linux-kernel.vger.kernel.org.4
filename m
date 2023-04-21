@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274CA6EAF63
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDC86EAF71
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbjDUQnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S233000AbjDUQpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDUQnv (ORCPT
+        with ESMTP id S230331AbjDUQpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:43:51 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66029C17C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:43:50 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5055141a8fdso2692634a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:43:50 -0700 (PDT)
+        Fri, 21 Apr 2023 12:45:44 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DADC16F
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:45:43 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9536df4b907so317691466b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682095429; x=1684687429;
+        d=linaro.org; s=google; t=1682095541; x=1684687541;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sIuJOr9KDqgRyNZKu6Tt8XNVFok6Ecpq3eqDXh3VdVw=;
-        b=lBQgSPyCip8rYuFpD+Us5fMponEiWICDi4kBwWqP5Gu6VnZDpRxF90JVMutN889EKh
-         BklKXuWF0K0mMfc8jCX0zhVJHYmQ+OgHRfrDSwZnXv7BwbkN9TkrGVS+6VLWtIftCalK
-         24g4MpMs+/2fwlJ5QYO+dTLQFWz9aW1Ma200XNRjpdyriDrKqyP6AguuNqgJrIXFFmAr
-         Zo/Hx+b4IfPpjTKYCqYBPhgDzx6NDyCLPKbm0LnfGvwwyBbTRnhH+1TYmJa7Ffd4xug2
-         INwJ+T5PyDE3ETo4Wy3lM7AJjxq5t3KThmm+D580q14eObdPzLZku1G2h6G6rH6Q1KAO
-         bzBw==
+        bh=vnmiQ74ckbmCHzXsPF3khRNGWST2xYm7Uu52Oav4tVM=;
+        b=bhlmxaKOXCCVEKNTkJGozcV/ndNqekoqUUD7wxypm14K6Ajrke8cV04HxxIrorS9y2
+         owzU36YCZwD/rXEpGtDG9HXbPX3xEV4vLVpphDBJ5lOFg7rMNCmYIDVAHwGnhCVS/09V
+         pwE7ocXB7vCj6zInIT2Cnaj1dSDiOdjkuQWTXhDi5zn5ALEuLy16bu3e7XBr5nhej5lG
+         P4jNoB+jn8TSq+uUR6z5FF3vd0xt6CZRIMz08Y/88DyKtgHtJooTUT6Udm4qCjltuHc4
+         Ta9/SwC7vn8Rxqw4IzlKD7O+WO92WPp6iWN+CnioiHesps9l8sAcrJ2gxYzrkdsAyvtU
+         iu+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682095429; x=1684687429;
+        d=1e100.net; s=20221208; t=1682095541; x=1684687541;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIuJOr9KDqgRyNZKu6Tt8XNVFok6Ecpq3eqDXh3VdVw=;
-        b=H8whINpKFLCvnC7e+KLWKUBQbZP+TaC+2EjDUGuQjDL62jgD0BQb7CkGRI+A3Aq3eM
-         N2/kXRbF1v7SXHTM7MnQmt65/4c54m5IYXt735Ku+GpSDrPBUZGbcuur1ljOVJOkufNP
-         i6hdjNVRgmb16y9oT9dF+3l8jdCixETXeO5BDfi1tdUZe3wvCfYGSW4OJEgOrZN0Y9pA
-         L6GGMskNAhHzSkpwACUdo5fEctJQXKxE0wLc72rFvRYtwDh0dkaIqj87Dho9jY8CKbYc
-         KyAPjbb+JYreRjQgEQeYjKJVRxa/OCormx2MKcILQyJi9bVMZZDlxXIT5Q4oKMn6toU3
-         wmCg==
-X-Gm-Message-State: AAQBX9fkEDMU5Pa+Sskx0o0r6PhXbabUwEB7LhNVulxOQKXLirczGavy
-        BBFnWSF8h/HscYYB7SFRgDEeRQ==
-X-Google-Smtp-Source: AKy350Z9W1Awuyb/afDJDAwM+gnsZX1x4JGUQFrDP8K1cSk1huw1//Tq6t/V1q559iCtPTZ58No0sA==
-X-Received: by 2002:a17:907:e92:b0:94a:4d06:3de3 with SMTP id ho18-20020a1709070e9200b0094a4d063de3mr3205814ejc.72.1682095428846;
-        Fri, 21 Apr 2023 09:43:48 -0700 (PDT)
+        bh=vnmiQ74ckbmCHzXsPF3khRNGWST2xYm7Uu52Oav4tVM=;
+        b=QZzWKv7MBGFnWZ/jZ0GNol0hK5Aar0kzoUIhXm8s/hq26XMNrsJT3/30bxxEsnLprn
+         R7jYDxaA2GHEJVor6nHf7VyFRjGc8wwtIlA76phsvCcukXNGEuNMaO4iZFVFHLk4tU6I
+         TlqKCwX7cJICpJREEgingFK6r9hc4YnXoaiKqfVONehlL1MUBfkofPfTFfqg5OQvGlQD
+         43n3OeExMpmz/B3EPj2A/c2ftjrhd6J5UI6IkBVDjvKEevMdXyNNWWWX43d1apepLwaH
+         iezqFvv2qpxSrA6f4T8T1SwqkKBTkhXvG3OX8ywNvdRfQA3oM3uqAK3iRr975yQAwh3Y
+         T7rg==
+X-Gm-Message-State: AAQBX9dTyYvUedkjS3XxJ7CELx2PJ68wXmRg2+l48+f5wJPHMt0WhZSB
+        gHIJlDQszUc9ZS0W5tEpNKVG5Q==
+X-Google-Smtp-Source: AKy350a/T3bzp7xAMZP7/4+Ww9RoW1CuKYiHrcjkbeEKNilScolbMPJ2NDBvrevmBgyuxzGRAdY0DA==
+X-Received: by 2002:a17:907:2da7:b0:94e:d7b0:64d4 with SMTP id gt39-20020a1709072da700b0094ed7b064d4mr3220771ejc.47.1682095541531;
+        Fri, 21 Apr 2023 09:45:41 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
-        by smtp.gmail.com with ESMTPSA id t18-20020a17090616d200b0094f969e877bsm2242742ejd.43.2023.04.21.09.43.47
+        by smtp.gmail.com with ESMTPSA id q27-20020a170906361b00b0094e1026bc66sm2295111ejb.140.2023.04.21.09.45.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 09:43:48 -0700 (PDT)
-Message-ID: <5e622e88-5287-1ffc-aa9b-c7c85a661fd9@linaro.org>
-Date:   Fri, 21 Apr 2023 18:43:47 +0200
+        Fri, 21 Apr 2023 09:45:41 -0700 (PDT)
+Message-ID: <184f0a80-34bc-5ebf-58bb-82a310eb91f6@linaro.org>
+Date:   Fri, 21 Apr 2023 18:45:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 7/7] ASoC: dt-bindings: mediatek,mt8188-afe: add audio
- properties
+Subject: Re: [PATCH RESEND v2 1/2] dt-bindings: display: simple: add support
+ for InnoLux G070ACE-L01
 Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230421100905.28045-1-trevor.wu@mediatek.com>
- <20230421100905.28045-8-trevor.wu@mediatek.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     richard.leitner@linux.dev,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Richard Leitner <richard.leitner@skidata.com>
+References: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
+ <20230201-innolux-g070ace-v2-1-2371e251dd40@skidata.com>
+ <CAD=FV=XJCtqep+92h3gLfs4o2TwvL4MORjc9ydTSpZiZ0dsR0w@mail.gmail.com>
+ <fb93e95f-181f-917d-9216-a81dec1a2959@linaro.org>
+ <CAD=FV=Vs8UEfBZ56fYb3i1cmFbCSPrbgaedXB4+UvDTOyhzCzw@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230421100905.28045-8-trevor.wu@mediatek.com>
+In-Reply-To: <CAD=FV=Vs8UEfBZ56fYb3i1cmFbCSPrbgaedXB4+UvDTOyhzCzw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -81,66 +88,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 12:09, Trevor Wu wrote:
-> Assign top_a1sys_hp clock to 26M, and add apll1_d4 to clocks for switching
-> the parent of top_a1sys_hp dynamically
-> On the other hand, "mediatek,infracfg" is included for bus protection.
+On 21/04/2023 18:37, Doug Anderson wrote:
+> Hi,
 > 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  .../bindings/sound/mediatek,mt8188-afe.yaml      | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+> On Fri, Apr 21, 2023 at 9:26 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 21/04/2023 18:15, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Mon, Mar 13, 2023 at 12:51 AM <richard.leitner@linux.dev> wrote:
+>>>>
+>>>> From: Richard Leitner <richard.leitner@skidata.com>
+>>>>
+>>>> Add Innolux G070ACE-L01 7" WVGA (800x480) TFT LCD panel compatible
+>>>> string.
+>>>>
+>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+>>>
+>>> nit: as I understand it, ordering of tags is usually supposed to be
+>>> chronological. You signed off on this patch before Krzysztof acked it,
+>>> so the SoB should be above. I'll fix that when applying.
+>>
+>> Some people agree with this... but b4 disagrees, so I would say the
+>> tools should implement the right process and right decisions. We should
+>> not be correcting the tools' output, unless the tools are not correct -
+>> then fix the tools.
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
-> index 82ccb32f08f2..812e0702ca36 100644
-> --- a/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
-> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
-> @@ -29,6 +29,10 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/phandle
->      description: The phandle of the mediatek topckgen controller
->  
-> +  mediatek,infracfg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of the mediatek infracfg controller
-> +
->    power-domains:
->      maxItems: 1
->  
-> @@ -52,6 +56,7 @@ properties:
->        - description: mux for i2si1_mck
->        - description: mux for i2si2_mck
->        - description: audio 26m clock
-> +      - description: audio pll1 divide 4
->  
->    clock-names:
->      items:
-> @@ -73,6 +78,7 @@ properties:
->        - const: i2si1_m_sel
->        - const: i2si2_m_sel
->        - const: adsp_audio_26m
-> +      - const: apll1_d4
->  
->    mediatek,etdm-in1-cowork-source:
->      $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -147,6 +153,8 @@ required:
->    - power-domains
->    - clocks
->    - clock-names
-> +  - assigned-clocks
-> +  - assigned-clock-parents
+> Ah, interesting. I checked and as far as I could tell Richard had
+> manually added the tag when sending v2, so I didn't assume it as a
+> tool-added tag. I'm happy to let "b4" be the canonical thing that says
+> what the order should be.
+> 
+> OK, so I just tried this and I'm confused. I ran:
+> 
+> b4 am -P_ 20230201-innolux-g070ace-v2-2-2371e251dd40@skidata.com
+> 
+> ...and when I check the patch that b4 spits out my "Reviewed-by" tag
+> is _after_ the "Signed-off-by" tag, just like I asked for.
+> 
+> Just in case Acked-by was somehow different than Reviewed-by, I went
+> back to the original version where you added the Acked-by:
+> 
+>  b4 am -P_ 20221118075856.401373-1-richard.leitner@linux.dev
+> 
+> ...and, again, it matches the order that I thought was right. In other
+> words, the patch file generated says:
+> 
+>> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-You were explaining it last time, but it did not solve my concerns.
-Requiring these properties means that your hardware boots with incorrect
-clock parents, including result of any firmware, and there is no way it
-can correctly work without reparenting. What's more, this means that
-your clock hierarchy does not include these clocks for some reason, e.g.
-you need to reparent parents of some parent of your clock input,
-otherwise device cannot work. Cannot work never ever.
+We talk about `b4 trailers`, because the tag is applied by the
+submitter, not by the maintainer.
 
-Is this the case?
+> 
+> Did I get something wrong in the above?
 
-Have in mind that bindings are used also by other OS and projects, like
-bootloaders, firmware etc.
+Your `b4 am` will of course put the tag later, because it is you who
+applies the tag.
 
 Best regards,
 Krzysztof
