@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2EC6EA9D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8C36EA9D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjDUMAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        id S231229AbjDUMDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjDUMAC (ORCPT
+        with ESMTP id S229938AbjDUMCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:00:02 -0400
+        Fri, 21 Apr 2023 08:02:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5218E;
-        Fri, 21 Apr 2023 05:00:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D213A92
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:02:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64D2E6501B;
-        Fri, 21 Apr 2023 12:00:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B322C433EF;
-        Fri, 21 Apr 2023 11:59:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B049663FED
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4496C433EF;
+        Fri, 21 Apr 2023 12:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682078400;
-        bh=2wci7r9WH9t7CX0RAg9raWznjhJH00a3SCz5xvr2M6I=;
+        s=k20201202; t=1682078567;
+        bh=9g7jXvL+Vk47LSrV14mlLXjQs3XKeQ/P9UgGKL9znfM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DYYm/zOnCWvyrbUwywcgEA2F7liP6NWxK8bPC4jd34t6XcPHysXR5WFocWIjCyuJW
-         lz+WvETboPI3fGBtTpG5o2OgSjuaRgDB8ZZeU0C6anj8SRE8byTq61cV1cNKVuwZ1l
-         V06FVptO6B8KE1ZNgaoXdYIQrTybue4VGdtBx/pWxO89SP40rtkXBT7GbAYs6fTGpX
-         jW3/Cg+4Z3UUFNYDXQ7GJ8vgnni3AZFXTyPU5is1Uu0cVyUWTu4R0YQzlgvP9W3/Te
-         bSYYucXlL5ExFFUqQA0rMomvfI0/PUgcoYEGgDKAwR71U1vUKXC4ucf0Zz7P7tZmtn
-         VIKI9pcosP9Ag==
-Date:   Fri, 21 Apr 2023 12:59:55 +0100
+        b=tpQC20DmBLpdhqFSEYzNCGc/0weTtAAFu0CsTGNl1PxfqsuMR1vpyU/lBI+ht2I4O
+         Jk/2Y/RpB8bgwQTl6lbKMUVZBT02mZYCS5eB+8ME8b0E9gBRBTV9d9BKeDrK/Pslo4
+         hebhtaMK7fThVUH8Z7lx76uPi6tA8i985B1Ty0dsVFsWC671OAlP3ycMDVl94TMjUF
+         BHnmdxt8MiuNj5baFNXw9XX7lwkGoh/xYUeszuhgQD8/6WArLtM4Mp+t4HOxEnlTfA
+         U1juAk4GtLxisZnsLcNkie7KA9P0VXRHhfDlKmtIu9vrGgFV6/4Ot5WqDA8bO/BP4j
+         12XFbVnAPW0uA==
+Date:   Fri, 21 Apr 2023 13:02:42 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: linux-next: manual merge of the risc-v tree with the
- risc-v-fixes tree
-Message-ID: <9e8160e9-0c59-4567-aa5e-de6a563f631a@sirena.org.uk>
-References: <20230420124048.65232-1-broonie@kernel.org>
- <CAHVXubjeMX2Z2jX4kYfXRqb+DiR6-E8PGb+m0MnVN-aTW4hfkQ@mail.gmail.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Robin Gong <yibin.gong@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] regulator: pca9450: Fix BUCK2 enable_mask
+Message-ID: <228edf87-c4bc-4525-8f18-74e1638cea16@sirena.org.uk>
+References: <20230310092857.3555187-1-alexander.stein@ew.tq-group.com>
+ <1848012.tdWV9SEqCh@steina-w>
+ <7e44e0e2-b67c-96b4-3e8d-036650180201@kontron.de>
+ <3900361.irdbgypaU6@steina-w>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Bw2wcQW5FAv6qDBp"
+        protocol="application/pgp-signature"; boundary="3PYb3eT5MBw9/7wk"
 Content-Disposition: inline
-In-Reply-To: <CAHVXubjeMX2Z2jX4kYfXRqb+DiR6-E8PGb+m0MnVN-aTW4hfkQ@mail.gmail.com>
+In-Reply-To: <3900361.irdbgypaU6@steina-w>
 X-Cookie: Hailing frequencies open, Captain.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,32 +62,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Bw2wcQW5FAv6qDBp
+--3PYb3eT5MBw9/7wk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 20, 2023 at 03:23:55PM +0200, Alexandre Ghiti wrote:
+On Fri, Apr 21, 2023 at 01:57:01PM +0200, Alexander Stein wrote:
 
-> This does not look correct, fixmap setup should not be in
-> create_linear_mapping_range() function.
-> Please find below the diff I would apply:
+> Could some of the maintainers make a call here, how to address the origin=
+al=20
+> author where the change is taken from? Note: It is not cherry-picked, but=
+ only=20
+> some hunks are taken.
 
-There's actually another conflict in the riscv tree come up today so
-I'll roll this in.
+I don't particularly care so long as everyone involved who should be
+getting credit is reasonably happy.
 
---Bw2wcQW5FAv6qDBp
+--3PYb3eT5MBw9/7wk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRCeroACgkQJNaLcl1U
-h9CD3Af9FciQnqt/9gLGtd2EgVqkmooXNSztJLD7i5hgZ2AwNKFLeKcj28Y+LpSi
-jVOYYQtQIbcQmdlt60vgvJRz0Ud3bfL9ak+2twchVwGWZjcxfsQdVjEDq8lGLGkx
-yVvrukok9xfV9E3ijT1fewZL8X+NSnOhQxSrOIZvyaV3koIesnIgMrwl5iYyCGN1
-Fc/rNj635JEF4F/RnZXLEd5TG5zFVPyTSxJvAhc7oBgvnBqDrNaLMbDVaSHmxWmQ
-GDzSbA0u/pUBQ/HdQBeWMHJaKpVngmEsSsFaNd6PZAVzY42kiSjeijmj7PIg8GpK
-qwMNTkmFk81LRkCHZfOLPC89PsKpNA==
-=2fMy
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRCe2EACgkQJNaLcl1U
+h9DLTAf7BJ83hWL+uz42hvUA26053oJOaB8yYmuNYKTMOqIfL6cmssKH9MIdP04o
+OT2Bcg+49+a45pCwMSnfufkGSG0DF5JK/vET8tYGB1beHLlCLiDqlE9YnwvIgANL
+haGGygxLP4i00KsiTo6BGgSpgaizchBALi3ItUKBxfhg0VVtY5pMail0xPCu2G4q
+6xDCboVEeUti0j8ItieE71qOAoIwJ8W7rwKBQ0daTUYtT492vEnNg11seYYKgBGg
+0CuT9Ce27aWK+WQ8euq8AD8Cf5m6b3v2JyP/eh8Itutfags+mAwnYMpnDpdabOb2
+Fwr+7eT+G4roMkShhk6TrN2rehIkQA==
+=4Off
 -----END PGP SIGNATURE-----
 
---Bw2wcQW5FAv6qDBp--
+--3PYb3eT5MBw9/7wk--
