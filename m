@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2423B6EA90E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B6B6EA912
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjDULX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S230286AbjDULYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDULXY (ORCPT
+        with ESMTP id S229504AbjDULYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:23:24 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145844A2;
-        Fri, 21 Apr 2023 04:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682076203; x=1713612203;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=74+qAqIgYF47Iz1gO9HKLYWhwUWDspIE8Lqjj6JQMno=;
-  b=hL7DENgiIFf+BqHX6EiXIJ1HxRH+00Oe11R0OZQT1lqy9sHxDP8LotET
-   fJ1QS7nTO0IYyBhWFFrp2rAQcqlTSOaj5HJIZ6THwIvHHDEf79a/Z46ac
-   WpxWLkcvhW8fbB1/G9ksA1c79Vxf8Fc5Y0SMTdLzMrDk5N1bZZsK9YYnw
-   KVdK+4+LVx0iL/I8DmBtzRw+FRv5SKY9YpnvkyhSjX5X4dt0MRTJrQb54
-   uEuUi3DXrYICrxJK1P6zec7mZBgwPzVnageQQO8X4VTCH+vzfce9YJF3m
-   YU6AFCpMWw0OGQo+Rmi/eT9eVUaPkx1qZ917LLd9ADVtI4eUBGBnLVHNM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="344726466"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="344726466"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 04:23:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="781575235"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="781575235"
-Received: from vhavelx-mobl2.ger.corp.intel.com (HELO [10.213.192.37]) ([10.213.192.37])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 04:23:19 -0700
-Message-ID: <f2a423c2-302a-024a-cf65-199f4be6caec@linux.intel.com>
-Date:   Fri, 21 Apr 2023 12:23:16 +0100
+        Fri, 21 Apr 2023 07:24:05 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843D844A2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:24:04 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 207ED1EC049C;
+        Fri, 21 Apr 2023 13:24:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1682076243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=a87N52p5sMDjBSXQShCgpPp16fh6M2DXFX0u0FSwgJo=;
+        b=Qk44wo9eSzByOhRGpZ70+42SvVcdUZTQk1T3UcAKDQZHhurNFK7yI6rc2ycrYBQBS8K610
+        k229UH9ldd6fm6lR+0yOCyUAeqaHKYdDwhA0owRbS9ZW1KLKl+hN8d42K5oo/VETWkuqa0
+        gtER9XWW1ptfeiCsDpyEzoFo3VukFUw=
+Date:   Fri, 21 Apr 2023 13:23:55 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH v5 11/15] x86/mtrr: construct a memory map with cache
+ modes
+Message-ID: <20230421112355.GAZEJyS+w84odQ9s2i@fat_crate.local>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-12-jgross@suse.com>
+ <20230420121551.GMZEEs9wkUrvX05nQr@fat_crate.local>
+ <d164d84b-6773-36e3-1136-672072e9233d@suse.com>
+ <20230420130113.GCZEE3mfOTxcDn6e3/@fat_crate.local>
+ <681c5d8e-0e42-07e1-f91c-7696a2360f1c@suse.com>
+ <20230420145451.GFZEFSO6VmvXdK/qi9@fat_crate.local>
+ <bb77023b-8dd0-0551-5c16-92f184568161@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 5/6] drm: Add fdinfo memory stats
-Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230412224311.23511-1-robdclark@gmail.com>
- <20230412224311.23511-6-robdclark@gmail.com>
- <CACvgo525ogS4LSZDUyaqjSqjJWj=qLRkphji5469=3obFXoMrQ@mail.gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <CACvgo525ogS4LSZDUyaqjSqjJWj=qLRkphji5469=3obFXoMrQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bb77023b-8dd0-0551-5c16-92f184568161@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,47 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 05:10:03PM +0200, Juergen Gross wrote:
+> I think this will need another final loop over the MTRRs to check against the
+> constructed map if a MTRR is completely useless.
 
-On 21/04/2023 11:26, Emil Velikov wrote:
-> On Wed, 12 Apr 2023 at 23:43, Rob Clark <robdclark@gmail.com> wrote:
-> 
->> +/**
->> + * enum drm_gem_object_status - bitmask of object state for fdinfo reporting
->> + * @DRM_GEM_OBJECT_RESIDENT: object is resident in memory (ie. not unpinned)
->> + * @DRM_GEM_OBJECT_PURGEABLE: object marked as purgeable by userspace
->> + *
->> + * Bitmask of status used for fdinfo memory stats, see &drm_gem_object_funcs.status
->> + * and drm_show_fdinfo().  Note that an object can DRM_GEM_OBJECT_PURGEABLE if
->> + * it still active or not resident, in which case drm_show_fdinfo() will not
-> 
-> nit: s/can/can be/;s/if it still/if it is still/
-> 
->> + * account for it as purgeable.  So drivers do not need to check if the buffer
->> + * is idle and resident to return this bit.  (Ie. userspace can mark a buffer
->> + * as purgeable even while it is still busy on the GPU.. it does not _actually_
->> + * become puregeable until it becomes idle.  The status gem object func does
-> 
-> nit: s/puregeable/purgeable/
-> 
-> 
-> I think we want a similar note in the drm-usage-stats.rst file.
-> 
-> With the above the whole series is:
-> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+Yeah, I slept on it: so I think there should be a patch ontop which does
+add debug output - disabled by default and controllable by adding
+"mtrr=debug" on the cmdline or so - which dumps the cache map operations
+(add/remove) and the final table.
 
-Have you maybe noticed my slightly alternative proposal? (*) I am not a 
-fan of putting this flavour of accounting into the core with no way to 
-opt out. I think it leaves no option but to add more keys in the future 
-for any driver which will not be happy with the core accounting.
+The reason being, when this cache_map thing hits upstream, we would need
+a way to debug any potential issues which people might report so asking
+them to do a "mtrr=debug" boot would be a good help.
 
-*) https://patchwork.freedesktop.org/series/116581/
+And pls make the prints pr_info() and not pr_debug() because people
+should not have to recompile in order to enable that.
 
-> Fwiw: Keeping the i915 patch as part of this series would be great.
-> Sure i915_drm_client->id becomes dead code, but it's a piece one can
-> live with for a release or two. Then again it's not my call to make.
+> Another question: in case we detect such a hidden MTRR, should it be disabled
+> in order to have more MTRRs available for run-time adding?
 
-Rob can take the i915 patch from my RFC too.
+Let's not do anything for now and address this if really needed.
 
-Regards,
+Thx.
 
-Tvrtko
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
