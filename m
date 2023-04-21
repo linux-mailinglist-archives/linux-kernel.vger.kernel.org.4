@@ -2,140 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0D06EAD9A
+	by mail.lfdr.de (Postfix) with ESMTP id F22E36EAD9C
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjDUO66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S232829AbjDUO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjDUO6h (ORCPT
+        with ESMTP id S233081AbjDUO6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:58:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0C3514F60;
-        Fri, 21 Apr 2023 07:58:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C877D1480;
-        Fri, 21 Apr 2023 07:59:10 -0700 (PDT)
-Received: from [10.57.23.51] (unknown [10.57.23.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8010A3F6C4;
-        Fri, 21 Apr 2023 07:58:24 -0700 (PDT)
-Message-ID: <4bd8ce51-5874-0aa3-bc82-fec0cee9b8f1@arm.com>
-Date:   Fri, 21 Apr 2023 15:58:18 +0100
+        Fri, 21 Apr 2023 10:58:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785F3A274;
+        Fri, 21 Apr 2023 07:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=T9LXOdWMRXqaqS22weQhZo+/CD9S/0W7jBzVygMsK3Y=; b=InAJCSPOAlj1EKhhmNXf/r3IkX
+        6oW/gCF1ILhOM4eo3jviU83s+rVoOoIeFKFv57K4WyTkSf7ji0/t7AfrGlT9txK4DdnMOQ571f91R
+        PzYDogvvJM8tmfcZK8Jbs0R2aPa03EPJ41nKD4GbqtXJ6iIkEv1MJ6cvoeZGKKf5bD3dvYhEQ1WtU
+        hHJ4jEilijTsBkM0aC4ShNx+LDVeYYyQGw8R58W/f/HQxssV8lTTBGzu75RSgxi8ztIX8ZCFwlaUi
+        3EHwyEOdSVgiR4aPlsu6fsVJwqZdGVpZmQemafsBk8AQPG6LHdeYyD59Gp9CSUAb6fhrNpIGzJWOQ
+        cyI84C7Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ppsDj-00FLN0-P2; Fri, 21 Apr 2023 14:58:43 +0000
+Date:   Fri, 21 Apr 2023 15:58:43 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, tytso@mit.edu,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
+        bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mike Christie <michael.christie@oracle.com>
+Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
+Message-ID: <ZEKko6U2MxfkXgs5@casper.infradead.org>
+References: <000000000000b9915d05f9d98bdd@google.com>
+ <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce buffers
-Content-Language: en-GB
-To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Alexander Graf <graf@amazon.com>
-References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
- <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com>
- <20230328040724.GB25506@lst.de>
- <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
- <8cf7c515-9ce6-a2ed-0643-972aa3eba2fb@huaweicloud.com>
- <20230407055704.GD6803@lst.de> <20230407121555.4290a011@meshulam.tesarici.cz>
- <20230421150349.35966e0b@meshulam.tesarici.cz>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230421150349.35966e0b@meshulam.tesarici.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-21 14:03, Petr Tesařík wrote:
-> Hi Christoph!
+On Fri, Apr 21, 2023 at 04:43:19PM +0200, Dmitry Vyukov wrote:
+> On Fri, 21 Apr 2023 at 16:33, syzbot
+> <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    76f598ba7d8e Merge tag 'for-linus' of git://git.kernel.org..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=133bfbedc80000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=9c5d44636e91081b
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=c2de99a72baaa06d31f3
+> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/a3654f5f77b9/disk-76f598ba.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/abfb4aaa5772/vmlinux-76f598ba.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/789fb5546551/bzImage-76f598ba.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com
 > 
-> I'd like to follow up on this sub-thread:
+> +bpf maintainers
 > 
-> On Fri, 7 Apr 2023 12:15:55 +0200
-> Petr Tesařík <petr@tesarici.cz> wroe:
+> If I am reading this correctly, this can cause a leak of kernel memory
+> and/or crash via bpf_get_current_comm helper.
 > 
->> On Fri, 7 Apr 2023 07:57:04 +0200
->> Christoph Hellwig <hch@lst.de> wrote:
->> [...]
->>> (Btw, in case anyone is interested, we really need to get started
->>> on moving the dma fields out of struct device into a sub-struct
->>> only allocated for DMA capable busses)
->>
->> I like this idea. In fact, my WIP topic branch now moves the swiotlb
->> fields into a separate struct,
+> strcpy() can temporary leave comm buffer non-0 terminated as it
+> terminates it only after the copy:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/string.c?id=76f598ba7d8e2bfb4855b5298caedd5af0c374a8#n184
 > 
-> As you have noticed, I have removed that commit again in v2.
-> 
-> The reason is that I'm not sure about the intended goal. I have looked
-> around for examples of moving fields out of struct device and found
-> different approaches:
-> 
-> A. struct dev_msi_info
->     The MSI fields are merely grouped in a separate struct, which is
->     defined in device.h and embedded in struct device. I don't see much
->     benefit.
-> 
-> B. struct dev_pm_info
->     This struct is also embedded in struct device, but it is defined in
->     <linux/pm.h>, which is mentioned in MAINTAINERS. The benefit is that
->     further changes are reviewed by this maintainer. The downside is
->     that device.h includes pm.h.
-> 
-> C. struct dev_pin_info
->     This struct is merely declared in device.h and defined
->     pinctrl/devinfo.h (which is not included). Only a pointer to this
->     struct is stored in struct device. Of course, the pointer must be
->     initialized (and released) somehow.
-> 
-> Here my question: What did you want for DMA fields?
-> 
-> A. Only grouping those fields in their own struct?
-> B. Or move the definition to another include file (cf. MAINTAINERS)?
-> C. Or store a pointer in struct device?
+> If bpf_get_current_comm() observes such non-0-terminated comm, it will
+> start reading off bounds.
 
-dev->dma_parms is already this, and IIRC still has some very old 
-comments somewhere about consolidating the other DMA-related fields in 
-there.
+Just to be clear, this isn't ext4 at all; ext4 happens to be calling
+kthread_create(), but it's actually a generic kthread problem, right?
 
-> Since you mentioned "allocated", it sounds like you want to achieve C,
-> but:
+I'm not sure how it is that bpf is able to see the task before comm is
+initialised; that seems to be the real race here, that comm is not set
+before the kthread is a schedulable entity?  Adding the scheduler people.
+
+> > ==================================================================
+> > BUG: KCSAN: data-race in strscpy / strscpy
+> >
+> > write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
+> >  strscpy+0xa9/0x170 lib/string.c:165
+> >  strscpy_pad+0x27/0x80 lib/string_helpers.c:835
+> >  __set_task_comm+0x46/0x140 fs/exec.c:1232
+> >  set_task_comm include/linux/sched.h:1984 [inline]
+> >  __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
+> >  kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
+> >  ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
+> >  ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
+> >  __ext4_fill_super fs/ext4/super.c:5480 [inline]
+> >  ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
+> >  get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
+> >  ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
+> >  vfs_get_tree+0x51/0x190 fs/super.c:1510
+> >  do_new_mount+0x200/0x650 fs/namespace.c:3042
+> >  path_mount+0x498/0xb40 fs/namespace.c:3372
+> >  do_mount fs/namespace.c:3385 [inline]
+> >  __do_sys_mount fs/namespace.c:3594 [inline]
+> >  __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
+> >  __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
+> >  strscpy+0xde/0x170 lib/string.c:174
+> >  ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
+> >  bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
+> >  ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
+> >  __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
+> >  bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
+> >  __bpf_prog_run include/linux/filter.h:601 [inline]
+> >  bpf_prog_run include/linux/filter.h:608 [inline]
+> >  __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
+> >  bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
+> >  __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
+> >  trace_sched_switch include/trace/events/sched.h:222 [inline]
+> >  __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
+> >  schedule+0x51/0x80 kernel/sched/core.c:6701
+> >  schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
+> >  kthread+0x11c/0x1e0 kernel/kthread.c:369
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >
+> > value changed: 0x72 -> 0x34
+> >
+> > Reported by Kernel Concurrency Sanitizer on:
+> > CPU: 0 PID: 16161 Comm: ext4lazyinit Not tainted 6.3.0-rc5-syzkaller-00022-g76f598ba7d8e #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+> > ==================================================================
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 > 
-> 1. Is it worth the extra dereference for every use?
-> 2. How should the struct be allocated? Presumably not with kmalloc() in
->     device_initialize(), because I don't know how to determine if a
->     device is DMA capable this low in the call stack. So, should it be
->     allocated together with the containing structure? AFAICS this would
->     mean changing nearly all device drivers...
-
-The bus code knows whether it's a DMA-capable bus or not, and as such 
-should already be providing a .dma_configure method and/or performing 
-some initialisation of DMA fields. Many of the ones that would need to 
-are already providing dma_parms, in fact.
-
-Thanks,
-Robin.
-
-> 
-> As you can see, I need some more guidance from you before I can start
-> working on this. ;-)
-> 
-> Petr T
