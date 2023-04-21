@@ -2,89 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105996EB5A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F8C6EB5AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbjDUXRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 19:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
+        id S233496AbjDUXUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 19:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjDUXRP (ORCPT
+        with ESMTP id S231282AbjDUXUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 19:17:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E737E1A7;
-        Fri, 21 Apr 2023 16:17:13 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LN9FDs008745;
-        Fri, 21 Apr 2023 23:17:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fPrR2V1ihX+TUbUcf0RXlBt3X0cMYYKqUfCKslIGNSc=;
- b=epxglJPQncicmuQk4IyGcdfFm4ijgBHN05RgtfjCfRE1k72I0I/s0BmnMnWPkPNq+yoZ
- 5zuALXJIPJFjKg/Cr8qM9z7xkHvg25KEQ7g9cCeNroSfJUDpXFfGTBvmfzSJF8FflYEB
- IQfb3f64tRwbMOeKHnedeU5ZwR6tvgFUK4dgnksA29uJDp2kF9B1EbFw+uqEBOr+HAY6
- FOOac3nMNz2NmHASwdQfK3gMDB90E3gBuVKrFCK0yuvQ4RUpgUWCkddOar4g+FD9iNiG
- fn8F+qB3DpOkIaf740XEYkjUuD99BA8Eks89Kax/kmGBD/sZX2s79p1ixH4Agpt9CBG8 zQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3qdm9pbh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 23:17:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LNH2eS008175
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 23:17:02 GMT
-Received: from [10.110.0.180] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
- 2023 16:17:00 -0700
-Message-ID: <89b2a4a0-ddbb-b176-aa3c-c06449a9758d@quicinc.com>
-Date:   Fri, 21 Apr 2023 16:16:59 -0700
+        Fri, 21 Apr 2023 19:20:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E031E1706;
+        Fri, 21 Apr 2023 16:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682119231; x=1713655231;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+aOGfveR5QxLDNBV2uv6FM0FuGsHyyWTmz3hqDhOUGw=;
+  b=PGKPCRL1IsCNuUwR05mhdFAVAgRcu9WXfFAZcGQd0E33M3t5G/nbP5YA
+   ndOHT2bGsIxVszCHDLyyyy7bNuLW3soFHzu4LyWyQQDKZER899uCsKTBL
+   p5GSBRUxOS5FW2CGyuTBCAwHM2Rfh858FruV1yzEmPZFJujpfyV5dkSDn
+   zW+xled0dFvW7OKWDVumqhx0bR+Cwv0F3uwUVrD+cxGMqHg8wpgC/CptM
+   tpZnFF7//aeToURDcYFMWwGk4Y27m2blBb4W7ee7L4+BFOf6MBcnYrpw+
+   FZW53bDD7zRSojOiSyaJ0Zh3QEDUDteVS+asuD9UPYBA4/7EkQtFHHDyt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="326430844"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="326430844"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 16:20:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="669868629"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="669868629"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Apr 2023 16:20:28 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pq03H-000gvK-0A;
+        Fri, 21 Apr 2023 23:20:27 +0000
+Date:   Sat, 22 Apr 2023 07:19:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org,
+        mazziesaccount@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mehdi Djait <mehdi.djait.k@gmail.com>
+Subject: Re: [PATCH v2 5/5] iio: accel: Add support for Kionix/ROHM
+ KX132-1211 accelerometer
+Message-ID: <202304220729.FCofPRvH-lkp@intel.com>
+References: <cef09595632a40eff8a0864fea2e0eb6653930a5.1682019544.git.mehdi.djait.k@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
- chipsets
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
- <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
- <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
- <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
- <7b493d85-0691-8797-367e-1d71ea87c826@linaro.org>
- <4bea9976-d353-6783-f55a-3e83e7501da2@quicinc.com>
- <40f5ac92-f658-25cf-352b-60db49a129f6@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <40f5ac92-f658-25cf-352b-60db49a129f6@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Mm9GdUofrW1PWYcZvOpTFmXH1xYVNS_9
-X-Proofpoint-GUID: Mm9GdUofrW1PWYcZvOpTFmXH1xYVNS_9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- malwarescore=0 mlxlogscore=935 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304210203
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cef09595632a40eff8a0864fea2e0eb6653930a5.1682019544.git.mehdi.djait.k@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,173 +69,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mehdi,
 
-On 4/21/2023 4:11 PM, Dmitry Baryshkov wrote:
-> On 22/04/2023 02:08, Kuogee Hsieh wrote:
->>
->> On 4/21/2023 3:16 PM, Dmitry Baryshkov wrote:
->>> On 22/04/2023 01:05, Kuogee Hsieh wrote:
->>>>
->>>> On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
->>>>> On 21/04/2023 02:25, Kuogee Hsieh wrote:
->>>>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>>
->>>>>> Add DSC 1.2 hardware blocks to the catalog with necessary
->>>>>> sub-block and feature flag information.
->>>>>> Each display compression engine (DCE) contains dual hard
->>>>>> slice DSC encoders so both share same base address but with
->>>>>> its own different sub block address.
->>>>>
->>>>> Please correct line wrapping. 72-75 is usually the preferred width
->>>>>
->>>>>>
->>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>>> ---
->>>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h  | 19 
->>>>>> +++++++++++++++++++
->>>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h  | 11 
->>>>>> +++++++++++
->>>>>>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h    | 21 
->>>>>> +++++++++++++++++++++
->>>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h  | 19 
->>>>>> +++++++++++++++++++
->>>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h  | 19 
->>>>>> +++++++++++++++++++
->>>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c      | 12 
->>>>>> ++++++++++--
->>>>>>   6 files changed, 99 insertions(+), 2 deletions(-)
->>>>>>
->>>>>
->>>>>
->>>>> [I commented on sm8550, it applies to all the rest of platforms]
->>>>>
->>>>>> diff --git 
->>>>>> a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
->>>>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>>> index 9e40303..72a7bcf 100644
->>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>>> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
->>>>>> sm8550_merge_3d[] = {
->>>>>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
->>>>>>   };
->>>>>>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
->>>>>> +    .enc = {.base = 0x100, .len = 0x100},
->>>>>> +    .ctl = {.base = 0xF00, .len = 0x10},
->>>>>> +};
->>>>>> +
->>>>>> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
->>>>>> +    .enc = {.base = 0x200, .len = 0x100},
->>>>>> +    .ctl = {.base = 0xF80, .len = 0x10},
->>>>>> +};
->>>>>
->>>>> Please keep sblk in dpu_hw_catalog for now.
->>>>>
->>>>>> +
->>>>>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
->>>>>> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, 
->>>>>> sm8550_dsc_sblk_0),
->>>>>> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, 
->>>>>> sm8550_dsc_sblk_1),
->>>>>
->>>>> Is there a reason why index in "dsc_N" doesn't match the DSC_n 
->>>>> which comes next to it?
->>>>
->>>> usually each DCE (display compression engine) contains two hard 
->>>> slice encoders.
->>>>
->>>> DSC_0 and DSC_1 (index) is belong to dsc_0.
->>>>
->>>> If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
->>>
->>> Ah, I see now. So, the block register space is the following:
->>> DCEi ->
->>>   common
->>>   dsc0_enc
->>>   dsc1_enc
->>>   dsc0_ctl
->>>   dsc1_ctl
->>>
->>> Instead of declaring a single DCE unit with two DSC blocks, we 
->>> declare two distinct DSC blocks. This raises a question, how 
->>> independent are these two parts of a single DCE block? For example, 
->>> can we use them to perform compression with different parameters? Or 
->>> use one of them for the DP DSC and another one for DSI DSC? Can we 
->>> have the following configuration:
->>>
->>> DSC_0 => DP DSC
->>> DSC_1, DSC_2 => DSI DSC in DSC_MERGE topology?
->>
->> no, For merge mode you have to use same DCE, such as DSC_2 and DSC3 
->> (pair)
->
-> Ok, this is for the merge mode. So the dpu_rm should be extended to 
-> allocate them in pairs if merge mode is requested.
->
-> What about using DSC_0 for DP and DSC_1 for DSI? Is it possible?
+kernel test robot noticed the following build warnings:
 
-I never do that, but i think it should  works since they can work 
-independently.
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on next-20230421]
+[cannot apply to linus/master v6.3-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Mehdi-Djait/dt-bindings-iio-Add-KX132-1211-accelerometer/20230421-042531
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/cef09595632a40eff8a0864fea2e0eb6653930a5.1682019544.git.mehdi.djait.k%40gmail.com
+patch subject: [PATCH v2 5/5] iio: accel: Add support for Kionix/ROHM KX132-1211 accelerometer
+config: mips-randconfig-s031-20230421 (https://download.01.org/0day-ci/archive/20230422/202304220729.FCofPRvH-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/38837f58c549d688da8cb7cfb1aea0bd65a12548
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mehdi-Djait/dt-bindings-iio-Add-KX132-1211-accelerometer/20230421-042531
+        git checkout 38837f58c549d688da8cb7cfb1aea0bd65a12548
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/accel/
 
->
->>
->>>
->>>>
->>>>>
->>>>>> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
->>>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
->>>>>> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
->>>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
->>>>>> +};
->>>>>> +
->>>>>>   static const struct dpu_intf_cfg sm8550_intf[] = {
->>>>>>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
->>>>>> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 
->>>>>> 24, 25),
->>>>>>       /* TODO TE sub-blocks for intf1 & intf2 */
->>>>>> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
->>>>>>       .dspp = sm8550_dspp,
->>>>>>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
->>>>>>       .pingpong = sm8550_pp,
->>>>>> +    .dsc = sm8550_dsc,
->>>>>> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
->>>>>>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
->>>>>>       .merge_3d = sm8550_merge_3d,
->>>>>>       .intf_count = ARRAY_SIZE(sm8550_intf),
->>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>> index 03f162a..be08158 100644
->>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>> @@ -1,6 +1,6 @@
->>>>>>   // SPDX-License-Identifier: GPL-2.0-only
->>>>>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights 
->>>>>> reserved.
->>>>>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All 
->>>>>> rights reserved.
->>>>>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All 
->>>>>> rights reserved.
->>>>>>    */
->>>>>>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
->>>>>> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
->>>>>> sc7280_pp_sblk = {
->>>>>>       {\
->>>>>>       .name = _name, .id = _id, \
->>>>>>       .base = _base, .len = 0x140, \
->>>>>> -    .features = _features, \
->>>>>> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
->>>>>> +    }
->>>>>> +
->>>>>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
->>>>>> +    {\
->>>>>> +    .name = _name, .id = _id, \
->>>>>> +    .base = _base, .len = _len, \
->>>>>> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
->>>>>> +    .sblk = &_sblk, \
->>>>>>       }
->>>>>> /*************************************************************
->>>>>
->>>
->
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304220729.FCofPRvH-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/iio/accel/kionix-kx022a.c:698:20: sparse: sparse: invalid assignment: &=
+>> drivers/iio/accel/kionix-kx022a.c:698:20: sparse:    left side has type restricted __le16
+>> drivers/iio/accel/kionix-kx022a.c:698:20: sparse:    right side has type unsigned short
+
+vim +698 drivers/iio/accel/kionix-kx022a.c
+
+   684	
+   685	static int kx132_get_fifo_bytes(struct kx022a_data *data)
+   686	{
+   687		struct device *dev = regmap_get_device(data->regmap);
+   688		__le16 buf_status;
+   689		int ret, fifo_bytes;
+   690	
+   691		ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
+   692				       &buf_status, sizeof(buf_status));
+   693		if (ret) {
+   694			dev_err(dev, "Error reading buffer status\n");
+   695			return ret;
+   696		}
+   697	
+ > 698		buf_status &= data->chip_info->buf_smp_lvl_mask;
+   699		fifo_bytes = le16_to_cpu(buf_status);
+   700	
+   701		return fifo_bytes;
+   702	}
+   703	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
