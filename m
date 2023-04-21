@@ -2,56 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29886EAA8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6110A6EAB1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbjDUMkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        id S232387AbjDUM4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbjDUMjr (ORCPT
+        with ESMTP id S232406AbjDUM4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:39:47 -0400
-Received: from outbound-smtp03.blacknight.com (outbound-smtp03.blacknight.com [81.17.249.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216BC118C9
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:39:14 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp03.blacknight.com (Postfix) with ESMTPS id 78CF6C0BEB
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:39:13 +0100 (IST)
-Received: (qmail 8794 invoked from network); 21 Apr 2023 12:39:13 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 12:39:13 -0000
-Date:   Fri, 21 Apr 2023 13:39:11 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 04/26] mm: page_isolation: write proper kerneldoc
-Message-ID: <20230421123911.bccz3jgpeqa6foas@techsingularity.net>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-5-hannes@cmpxchg.org>
+        Fri, 21 Apr 2023 08:56:43 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E3974D;
+        Fri, 21 Apr 2023 05:56:34 -0700 (PDT)
+Received: from [194.95.143.137] (helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ppq3R-0002eq-SZ; Fri, 21 Apr 2023 14:39:57 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: fix nEXTRST on SOQuartz
+Date:   Fri, 21 Apr 2023 14:39:56 +0200
+Message-ID: <6259690.irdbgypaU6@phil>
+In-Reply-To: <12191318.O9o76ZdvQC@archbox>
+References: <20230419171731.28641-1-frattaroli.nicolas@gmail.com>
+ <8914603.GXAFRqVoOG@phil> <12191318.O9o76ZdvQC@archbox>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230418191313.268131-5-hannes@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 03:12:51PM -0400, Johannes Weiner wrote:
-> And remove the incorrect header comments.
+Am Freitag, 21. April 2023, 14:38:48 CEST schrieb Nicolas Frattaroli:
+> Hello,
 > 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> On Friday, 21 April 2023 13:58:58 CEST Heiko Stuebner wrote:
+> > Hi,
+> > 
+> > Am Mittwoch, 19. April 2023, 19:17:31 CEST schrieb Nicolas Frattaroli:
+> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+> > > b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi index
+> > > ce7165d7f1a1..f589a4fdaccb 100644
+> > > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+> > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+> > > @@ -65,6 +65,17 @@ led_work: led-work {
+> > > 
+> > >  		};
+> > >  	
+> > >  	};
+> > > 
+> > > +	nextrst_pin: nextrst-pin-regulator {
+> > > +		compatible = "regulator-fixed";
+> > > +		enable-active-high;
+> > > +		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
+> > > +		pinctrl-names = "default";
+> > > +		pinctrl-0 = <&nextrst_h>;
+> > > +		regulator-always-on;
+> > > +		regulator-boot-on;
+> > > +		regulator-name = "nextrst";
+> > > +	};
+> > > +
+> > 
+> > I agree with the sentiment and of course the rationale of the change,
+> > but not necessarily with the implementation ;-) .
+> > 
+> > Why is this done as a regulator?
+> > 
+> > If you want the nextrst line to be high, you could just use a gpio-hog
+> > for the line instead of doing a (fake?-)regulator.
+> 
+> Simply put: because I didn't know gpio hogs were a thing. I'll send a V2
+> to correct this. Thanks for pointing it out!
 
-Split out.
+great, thanks :-)
 
--- 
-Mel Gorman
-SUSE Labs
+Heiko
+
+
