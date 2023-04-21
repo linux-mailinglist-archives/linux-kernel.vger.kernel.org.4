@@ -2,147 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192016EA727
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60A36EA72E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjDUJhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S231981AbjDUJhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjDUJhj (ORCPT
+        with ESMTP id S231809AbjDUJhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:37:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD4A5C6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682069815;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uzH8QW/csXN0CxzGkETec+n4HWfPUmGi/veY0RKNigI=;
-        b=d9Z1ewWim8EUz8Rshr/DJ5otnCo8vhaSbpZsz1fwu/+KWDJlHUXHSxtbeOMUJPEF8ZiaAK
-        cAPbTrbzgrB4KwemynWWp2LX/3QpvxWI9qQtA5QwrRQmPjaEV0p+D/CT6kaR5woR1mMibW
-        nUbFvmFupDrmFiD7xsYMs19lsKsMN38=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-103-KWA3DhtiN_mo801N1TjrRg-1; Fri, 21 Apr 2023 05:36:54 -0400
-X-MC-Unique: KWA3DhtiN_mo801N1TjrRg-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94f271ebbc2so149066566b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:36:53 -0700 (PDT)
+        Fri, 21 Apr 2023 05:37:52 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8E9A5FF;
+        Fri, 21 Apr 2023 02:37:50 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4ec81773cf7so1448512e87.2;
+        Fri, 21 Apr 2023 02:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682069869; x=1684661869;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sz1OnOb0n4ydElkEDE6Ll6gkKnGXqAStKuCmUlNsLUM=;
+        b=JNPU1i1i+zs2YwGELrf5uO3IjQoXrG/1jBjmt2UFd11jjG369OlmATIYpwa4tFD6PY
+         l0Zmw6yVVeEBSPX7PFyanSY5oKhiibX8mPLWAzXTJLc7QpLhYXw0F/xCrEhFxcmXAWrv
+         WVVVfzuJ8pCoWgy2SpqE9RIM2S+4MjZT9k78QznE829CQlRBg29ODvzsgro4oLX9WqFc
+         lhFDxkBQ7oTv68WtW3cXxtlLxkJFtHTWHcqH9q2WRim/AmXlKrBnekD/gafml6rX/IkP
+         /euo26e9sHW5PSJ2HOAkwK97t+zBXNVBYZVI5A6B8O65JZNwb1BTHAVjLzFJ3eihY8Ip
+         E9oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682069812; x=1684661812;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682069869; x=1684661869;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uzH8QW/csXN0CxzGkETec+n4HWfPUmGi/veY0RKNigI=;
-        b=HP3j+vkX75ZP8BGG0epVZV/ebxOxnSy6WeDRTh0rxtloKxX9uRbR8I5F/8MNvK34tJ
-         SE3d9+zV5W1sEGMZvXbJ70+lXJwqsmmAiaY6QUn4qpMrIi3n4uy1vRXv0LDddn4qKDQM
-         1b/a6ZipWE4GlcK+YuKrilhl8RtZwPD9PyWFqzGGoWkG0RRYap0X2cQ/TELsyfFreFz0
-         oOkxUFOZXd1zU41mk4x6R07lfkkF+giD24dS38JxK2AQ48aSe2YPV+g1r724G1L9Po/a
-         /E+8rkYepFGBQRExzHlpesE0gb6OlJtzHpT8eSFcq4l+nENwqsaTd+Qn7xPlX4x/mqoU
-         SMHA==
-X-Gm-Message-State: AAQBX9fN7JZHH3Y44MHcuSrc71KuqIuXg9Ax7b76f+uUSiw8wp/R+LOq
-        NKvMQ3MZeWIuEpgx/xzP0iQyJktbcuAvhH22fBbgDJx4pSirjY8VWpa9zPMU9uF7ZZPuQDhV+7g
-        kTqVb1Ka4SALx3EHFbEBVfUW9z4dICpR6
-X-Received: by 2002:a17:906:b354:b0:953:3e29:f35c with SMTP id cd20-20020a170906b35400b009533e29f35cmr1733511ejb.45.1682069812659;
-        Fri, 21 Apr 2023 02:36:52 -0700 (PDT)
-X-Google-Smtp-Source: AKy350baQKAMD9B4o30q5gQRB/0ZHP7CQjqkTnOQkVeItXf6HwlW8pFLFiptNIBKmQfsiYwSmMf3yA==
-X-Received: by 2002:a17:906:b354:b0:953:3e29:f35c with SMTP id cd20-20020a170906b35400b009533e29f35cmr1733498ejb.45.1682069812419;
-        Fri, 21 Apr 2023 02:36:52 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm1827793ejb.109.2023.04.21.02.36.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 02:36:51 -0700 (PDT)
-Message-ID: <6feb48c8-6d74-6605-b7d1-48103ca9187e@redhat.com>
-Date:   Fri, 21 Apr 2023 11:36:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] iio: light: al3320a: Handle ACPI device CALS0001
-Content-Language: en-US, nl
-To:     Marius Hoch <mail@mariushoch.de>,
+        bh=sz1OnOb0n4ydElkEDE6Ll6gkKnGXqAStKuCmUlNsLUM=;
+        b=PVdOI5RKOx072WhpADunhtGP4g3tB2Dgycg2N4jPIi7z52WVOjHKVUh292cForRYnl
+         EDQO45eoXoYgg15/+JOV5j1ecTjqjQaDYjCHtygQTQM2mbZhhBAOEkMmVTdW92hsWBUQ
+         5GnjyGI/2cmDbfea4NveFn0s0vCvE4FenX8Synupy9tanbtE5v+FUGpcdG9xfF5aM6Sa
+         Ij/aM3bwTgYajPdzawu4/ie3DkX2fNC3i+64Qku8Pqhbmwr13095duzJYHeOotVo6Emn
+         Ksn1Su0VB8wlZCufEXmn8nxr9HJkeIqui8KFb+PDWxbEh1INVu4M2UdfgjPh1yWCi/wi
+         6LIg==
+X-Gm-Message-State: AAQBX9cS3rHIiZ8oaLrmg2TtTuZdTPbToZCM6VifjBxUvnkAIbslC+W9
+        +IctlNGLF25GgivP5qXLujs=
+X-Google-Smtp-Source: AKy350ZYkgij7NMRbdJJzs4P118dJbAD4yRBkU1YX+XBa0+WOYL78bHqCKH5yjice+HD8MNHnif6oA==
+X-Received: by 2002:ac2:5226:0:b0:4db:ebb3:b529 with SMTP id i6-20020ac25226000000b004dbebb3b529mr1224035lfl.46.1682069868926;
+        Fri, 21 Apr 2023 02:37:48 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id y9-20020ac24e69000000b004eb44c2ab6bsm499025lfs.294.2023.04.21.02.37.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 02:37:48 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 12:37:30 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Cameron <jic23@kernel.org>,
+        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230420232631.68864-1-mail@mariushoch.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230420232631.68864-1-mail@mariushoch.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paul Gazzillo <paul@pgazz.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 0/3] Support ROHM BU27008 RGB sensor
+Message-ID: <cover.1682067567.git.mazziesaccount@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UM7lZcgq94AC909u"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 4/21/23 01:26, Marius Hoch wrote:
-> This sensor can be found as CALS0001 on the Lenovo Yoga
-> Tablet 2 series.
-> 
-> Tested on a Lenovo Yoga Tablet 2 1051-F.
-> 
-> Signed-off-by: Marius Hoch <mail@mariushoch.de>
-> ---
-> v2: Explicitly include <linux/mod_devicetable.h> (don't rely on
-> linux/i2c.h including it)
+--UM7lZcgq94AC909u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, the patch looks good to me and I have
-tested this successfully on a Lenovo Yoga Tablet 2 851F :
+Add support for ROHM BU27008 RGB sensor.
 
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+and IR) with four configurable channels. Red and green being always
+available and two out of the rest three (blue, clear, IR) can be
+selected to be simultaneously measured. Typical application is adjusting
+LCD backlight of TVs, mobile phones and tablet PCs.
 
-Regards,
+This series supports reading the RGBC and IR channels using IIO
+frameeork. However, only two of the BC+IR can be enabled at the same
+time. Series adds also support for scale and integration time
+configuration, where scale consists of impact of both the integration
+time and hardware gain. The gain and time support is backed by the newly
+introduced IIO GTS helper. This series depends on GTS helper patches
+added in BU27034 support series which is already merged in iio/togreg
+which this series is based on.
 
-Hans
+The hardware allows configuring gain setting by writing a 5-bit gain
+selector value to a register. Part of the gain setting is common for all
+channels (RGBC + IR) but part of the selector value can be set
+separately for RGBC and IR:
+
+MODE_CONTROL2 REG:
+bit 7	    6	    5	    4	    3	    2	    1	    0
+-----------------------------------------------------------------
+|	RGB	selector		|
++---------------------------------------+
+-----------------------------------------------------------------
+| high bits IR	|			| low bits IR selector	|
++---------------+			+-----------------------+
+
+In theory it would be possible to set certain separate gain values for
+RGBC and IR channels, but this gets pretty confusing because there are a
+few 'unsupported' selector values. If only RGBC or IR was set, some
+extra handling should be done to prevent the other channel from getting
+unsupported value due to change in high-bits. Furthermore, allowing the
+channels to be set different gain values (in some cases when gains are
+such the HW supports it) would make the cases where also integration
+time is changed to achieve correct scale ... interesting. It might also
+be confusing for user to try predicting when setting different scales
+succeeds and when it does not. Furthermore, if for example the scale
+setting for RGBC caused IR selector to be invalid - it could also cause
+the IR scale to "jump" very far from previous value.
+
+To make the code simpler and more predictable for users, the current
+logic is as follows:
+
+1. Prevent setting IR scale. (My assumption is IR is less used than
+RGBC)
+2. When RGBC scale is set, set also the IR-selector to the same value.
+This prevents unsupported selector values and makes the IR scale changes
+predictable.
+
+The 2) could mean we effectively have the same scale for all channels.
+Unfortunately, the HW design is slightly peculiar and selector 0 means
+gain 1X on RGBC but gain 2X on IR. Rest of the selectors equal same gain
+values on RGBC and IR. The result is that while changin selector from 0
+=3D> 1 causes RGBC gain to go from 1X =3D> 4X, it causes IR gain to go from
+2X =3D> 4X.
+
+So, the driver provides separate scale entries for all channels (also
+RGB and C will have separate gain entries because these channels are of
+same type as IR channel). This makes it possible for user applications
+to go read the scales for all channels after setting scale for one (in
+order to detect the IR scale difference).
+
+Having the separate IR scale entry which applications can read to detect
+"arbitrary scale changes" makes it possible for applications to be
+written so they can cope if we need to implement the 'allow setting some
+different gains for IR and RGBC' - later.
+
+Finally, the scales_available is also provided for all other channels
+except the IR channel, which does not allow the scale to be changed.
+
+The sensor provides a data-ready IRQ and the driver implements a
+triggered buffer mode using this IRQ as a trigger.
+
+---
+
+Matti Vaittinen (3):
+  dt-bindings: iio: light: ROHM BU27008
+  iio: light: ROHM BU27008 color sensor
+  MAINTAINERS: Add ROHM BU27008
+
+ .../bindings/iio/light/rohm-bu27008.yaml      |   49 +
+ MAINTAINERS                                   |    3 +-
+ drivers/iio/light/Kconfig                     |   14 +
+ drivers/iio/light/Makefile                    |    1 +
+ drivers/iio/light/rohm-bu27008.c              | 1028 +++++++++++++++++
+ 5 files changed, 1094 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/rohm-bu2700=
+8.yaml
+ create mode 100644 drivers/iio/light/rohm-bu27008.c
 
 
+base-commit: 52cc189b4fc6af6accc45fe7b7053d76d8724059
+--=20
+2.40.0
 
 
-> ---
->  drivers/iio/light/al3320a.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/iio/light/al3320a.c b/drivers/iio/light/al3320a.c
-> index 9ff28bbf34bb..36214d790f71 100644
-> --- a/drivers/iio/light/al3320a.c
-> +++ b/drivers/iio/light/al3320a.c
-> @@ -16,6 +16,7 @@
->  #include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/mod_devicetable.h>
->  
->  #include <linux/iio/iio.h>
->  #include <linux/iio/sysfs.h>
-> @@ -247,11 +248,18 @@ static const struct of_device_id al3320a_of_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, al3320a_of_match);
->  
-> +static const struct acpi_device_id al3320a_acpi_match[] = {
-> +	{"CALS0001"},
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(acpi, al3320a_acpi_match);
-> +
->  static struct i2c_driver al3320a_driver = {
->  	.driver = {
->  		.name = AL3320A_DRV_NAME,
->  		.of_match_table = al3320a_of_match,
->  		.pm = pm_sleep_ptr(&al3320a_pm_ops),
-> +		.acpi_match_table = al3320a_acpi_match,
->  	},
->  	.probe_new	= al3320a_probe,
->  	.id_table	= al3320a_id,
-> 
-> base-commit: cb0856346a60fe3eb837ba5e73588a41f81ac05f
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--UM7lZcgq94AC909u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRCWUsACgkQeFA3/03a
+ocU3nQgAx3r+qSawdk+Gx3wMRvVdObpdOqMgbzlCRAOJFKxdKKt9Ydpt72+6xYBL
+G9OPpPVIAsO5/fEIVs1doqRAQxcEKZHj7SB0/vcIV4k9jbeApWmCCiU80VTgG+D0
+SX5XXudWAxy8BE6A2SbGJ8BsVNi/f/VF/ZM5WJ8xJ/Ms4Yy5RsUymoxI/MXnDoVi
+Gqc49cpWkSVPo1R+AYRgYyLlHbxWOkbuTNiAAgd9P4dytkj94VOfAdfmwAkgQOLc
+kC2gN9/MJ8Y1qp5oLzL4AmlAZYuS1LwMQQEw9dBo42HyvGPcBD97uP63gSLJ3EIT
+SCTAKsycPOq3Ym/Td9/JAUZXnTSLaw==
+=kpWx
+-----END PGP SIGNATURE-----
+
+--UM7lZcgq94AC909u--
