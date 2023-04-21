@@ -2,170 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F169A6EA6B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD68A6EA6A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjDUJOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S231779AbjDUJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjDUJOB (ORCPT
+        with ESMTP id S229884AbjDUJNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:14:01 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA8FB459;
-        Fri, 21 Apr 2023 02:13:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YpkX8iUw2vPd7+i6QIS5s1simCpzxoGmSNCNHcRhm67b0G6Z3fgoYoL0MgnoN4FTyHSp86uYds327tRFfdboEYkEWR42TLSgE7e8yxyuLVWMUrobPT8OVzvKZ9d9tOjAURYZ8AxotA/GqjYX3gLoi7ChcTY/UqZrxm03i/JumowtHELRHYtwNFOzKkkFP3R9V2mZy6iRLIoZCfeQMNmyhI0bpnbZWJx0CMoBpZBqK5XsRtAIAox8TQFNbamHD5QHk4S8KdMezyZEZ9EvTOF+G2QBs0ga9dg5a918RzlLvLRJzVnzNK8vrnOxaXA+JeebTzbCKzK7HocEUWAhiEFkJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KBymlZELQ1LwIUGIMOnDuoWy9yoiLRYT/iqSZYI/H1k=;
- b=IV8dAYKrubT6cUSTjtKj2LF2tOPyvUW8H4zPP3hJFtk7brY3gHuWaYBuNF+IGorhNQGKZekG54G2BgUDIuYNnyIQsJaKuGIcWCzt5suplKEPcgF/IMzi9q3VfzZdk2+QOiJIr2a51mF0WBy0JlyjuOSEcsi4w39DQBLQ0xsREjay1j6x5qfyqXvGIjqX0c1qdTIHlFuYy8yUiAU6ZAI+aqJ/V/iD5wNL3XtWYIufuyxe0xfoXmNUPxHPCkF4kVIko8eYmRhBrjNE1lKFFMtVcxZBLOLwq9GZ+5V45uCl0o2z3UOK2FoJTa20TUdP7H9rf3/s4ocVweDHYtfikeu+vQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KBymlZELQ1LwIUGIMOnDuoWy9yoiLRYT/iqSZYI/H1k=;
- b=Z+95gq1Up2wzRAywaGddBcIM0GKzFtnLGHdbN3khLh/nmgcKBF+b/U+8lOR//1iNExzAHlj3lzQppsS4r+qnroC3Th2F1PYvEnC5iCRNsDsS0K1VlXijyjAWHZ8E+3re9EFrN4qy/BwptGLzFCezWxFt5lK113hDe5B9DuE49dvdK0jqxVLC1EXXXJpHFuR4yqG7ptfmLPX7k0S6UOj0exUQVbLws26jqy9jhwJbH9i0365D/ELDWp3hnUxOmSWffkPjM/3C2BDfX84hpG2TsdXQhZcH9+UizdY+wH4XYllRtFtBqrXl1Ew/I0vQWxUGGcF1uYniFipBgQGUZSXOeQ==
-Received: from BN9P222CA0023.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::28)
- by PH7PR12MB7307.namprd12.prod.outlook.com (2603:10b6:510:20b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 09:13:42 +0000
-Received: from BL02EPF000145B9.namprd05.prod.outlook.com
- (2603:10b6:408:10c:cafe::94) by BN9P222CA0023.outlook.office365.com
- (2603:10b6:408:10c::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.24 via Frontend
- Transport; Fri, 21 Apr 2023 09:13:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL02EPF000145B9.mail.protection.outlook.com (10.167.241.209) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.16 via Frontend Transport; Fri, 21 Apr 2023 09:13:41 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 21 Apr 2023
- 02:13:29 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Fri, 21 Apr 2023 02:13:28 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Fri, 21 Apr 2023 02:13:24 -0700
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <jsnitsel@redhat.com>, <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <jarkko@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [Patch V10 0/3] Tegra TPM driver with HW flow control
-Date:   Fri, 21 Apr 2023 14:43:06 +0530
-Message-ID: <20230421091309.2672-1-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Fri, 21 Apr 2023 05:13:21 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C141998
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:20 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f109b1808so229725066b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682068398; x=1684660398;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xxxa39sRYsIqUGyxDA0sj3TJcO5atZMPoDeI65I6qiA=;
+        b=UD8IgWBqREhpJJAyEJjTmgocAe8i1Yzp1Ysg5Qcf6sZYHjL8eCs1ZF44BC5lyUsf+r
+         tCSHj/PvyuUckcDSlN++V+4lc+u0wOEZBegwINUCrYAM0hhOTUrgeoEvw8Z6rCaFF3ag
+         1FKRcT+vLlqB2mf7TnCbEptPqY/d3+FwcQzLNUHouYwCJ8ApmiMkjDJ63YWuq3M1r2Yg
+         hWQtGgmh8nn+BO+6HWjCmrO8CgXd4orNf4CP6P7+eshAqZfhVjwUodxzdpzrXBmZQItI
+         YyLoe/m4jWvgdDbaD9y8ujRCxGNVZonumwXuVRfTWz3kBH/STuVV2+8rIpqaa1u9YhI5
+         z/cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682068398; x=1684660398;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xxxa39sRYsIqUGyxDA0sj3TJcO5atZMPoDeI65I6qiA=;
+        b=YntA+xRsB45swb6M5wVYS+R2Ed7mpIM4j8RovgqAWoAwdkMn4tRVcgsYyh/YleO4oR
+         JWX01FNl8yLPH8K7IOhLeEOS/KUkEEHTZWtUI4cVqTUI45DB4EXGU/4jOUApQaWwfE0d
+         hRqeKCiWYnml946LHcjz20MDKrocV59REVXcAw+mpLMLktEmiyMIvLWoe3mzEHvMh1el
+         zwW4UsL9b2L4D4B7LwMFmzgF/R9GUg4TPdXFrCKoRbgsKdtEyQW2IC5JIEepPowUyOU0
+         bZ1fkQH1z9t+Kcme7TnR2P7Dy2V64pYWrG1P+NlBFHaOKCFVhBk3V7vUwxypH7RbpuFj
+         u8KA==
+X-Gm-Message-State: AAQBX9ddmJyi6aZMhNdmqzG7MSAH5bFKswX1RFiFuGBjGHCdK+2HcA6m
+        3FeuHQyHF55Sr4/IYwDtGAfyI75vYDsLX48H
+X-Google-Smtp-Source: AKy350Z51fHEnOiBFDpJWjgPvurG7DtFxu7CEeEObtuo/rubpZjMoHFef84+2ho8sa9l5xZn4+nsvQ==
+X-Received: by 2002:a17:906:269b:b0:94e:4fe5:613a with SMTP id t27-20020a170906269b00b0094e4fe5613amr1595454ejc.25.1682068398437;
+        Fri, 21 Apr 2023 02:13:18 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id lc21-20020a170906dff500b0094ef10eceb3sm1766775ejc.185.2023.04.21.02.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 02:13:18 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Date:   Fri, 21 Apr 2023 11:13:06 +0200
+Subject: [PATCH RFC v2 1/2] regulator: add properties to disable monitoring
+ on actions
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000145B9:EE_|PH7PR12MB7307:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4c616ae-6b1e-4086-1a9d-08db4248b35f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zMwC7T4t9G89tWPDHCYOCnpYbK/v/DP4AK7LtXzLT9EEVIz7lM/3KhCqof03g+KsOH4qgMdb+oNKFSZY8KwCMkaPcipZuo6IUsgE+Maekd76yI/4kFxhCTbUm3vMELygrdnMzRCXkkeiHtUk8aex/bX9WpyXmeGVaqlTEMXaKi0ViL4gUKSQmNEHE75ZywPRRAmaUmRE8Fr+k7fGLFcSjYmIEB6EUB9muK+tXHE/n1PJKmHt9rD4xiSPx0rhE53Sz3xeZf6uxEbOoxolAblcJsro4XvMx+0FKq/QqEmaX3AGr0g3Otq5cuplkOTc2biJMJ2w2z3zpx/RD7KbmlPQnryYIZkmvUA+0fQuRWg5Cpcdtn/FLZFIvyX8Y+gn6bCoavUf2zo67KZ4yFWb9eX18d22371sv66A3SRNONurkrZ0VnKVk7T+fo1Mw8/LVl9RHm1AdDHd4DfTxsV+ZoYnm6b1a4cfklG+AyEMBFpKWXtLJpoS8QuV9B/n9WetJpJdkmrQnMEInVg8paYVK45+qJjlPd8n7191si+ETq/LY3pBcfwFrba/SGHK8ggSPuG+2k0ysAjwjos9ZnuU8EIy07QNkPFE/TGLVPvDw9M0pCeAbuAOhuAQudwOwhilPi4WCF8zUzjEh0CD5jDMMIYT3ICyzmtMALL5LuLKcuxCnRT2XDvtapJeeIGoBRcEbU4+jySVuQPWjNbc3OeQuc+fVi7hX2BFlUe2iZRjJ8eTTEwHqLMobOClhEYhscHn4p/ZOax6vMeiGGRqASBuAtUMN0EJv03PybHg2AAvDBw0EWs+61m6cxYBFae8vzRCNs/T
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199021)(40470700004)(46966006)(36840700001)(186003)(86362001)(336012)(426003)(41300700001)(921005)(7636003)(356005)(107886003)(1076003)(316002)(40480700001)(82740400003)(4326008)(26005)(6666004)(7696005)(83380400001)(47076005)(82310400005)(2616005)(36860700001)(478600001)(40460700003)(110136005)(36756003)(8676002)(8936002)(5660300002)(70586007)(70206006)(2906002)(54906003)(7416002)(83996005)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 09:13:41.5458
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4c616ae-6b1e-4086-1a9d-08db4248b35f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7307
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230419-dynamic-vmon-v2-1-c303bcc75ebc@skidata.com>
+References: <20230419-dynamic-vmon-v2-0-c303bcc75ebc@skidata.com>
+In-Reply-To: <20230419-dynamic-vmon-v2-0-c303bcc75ebc@skidata.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, support.opensource@diasemi.com
+Cc:     DLG-Adam.Ward.opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TPM devices may insert wait state on last clock cycle of ADDR phase.
-For SPI controllers that support full-duplex transfers, this can be
-detected using software by reading the MISO line. For SPI controllers
-that only support half-duplex transfers, such as the Tegra QSPI, it is
-not possible to detect the wait signal from software. The QSPI
-controller in Tegra234 and Tegra241 implement hardware detection of the
-wait signal which can be enabled in the controller for TPM devices.
+From: Benjamin Bara <benjamin.bara@skidata.com>
 
-Add HW flow control in TIS driver and a flag in SPI data to indicate
-wait detection is required in HW. SPI controller driver determines if
-this is supported. Add HW detection in Tegra QSPI controller.
+These are useful when the state of the regulator might change during
+runtime, but the monitors state (in hardware) are not implicitly changed
+with the change of the regulator state or mode (in hardware). Also, when
+the monitors should be disabled while ramping after a set_value().
 
-Updates in this patch set 
- - Tegra QSPI identifies itself as half duplex.
- - TPM TIS SPI driver skips flow control for half duplex and send
-   transfers in single message for controller to handle it.
- - TPM device identifies as TPM device for controller to detect and
-   enable HW TPM wait poll feature.
+Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+---
+ drivers/regulator/core.c         | 64 ++++++++++++++++++++++++++++++++++++----
+ include/linux/regulator/driver.h | 10 +++++++
+ 2 files changed, 68 insertions(+), 6 deletions(-)
 
-Verified with a TPM device on Tegra241 ref board using TPM2 tools.
-
-V10
- - use spi_sync in place of spi_sync_locked
-V9
- - renamed tpm spi transfer functions
-V8:
- - fix compile warning.
-V7:
- - updated patch description.
- - TPM flag set in probe.
- - minor comments.
-V6:
- - Fix typo in chip name Tegra234.
- - Debug logs change skipped to be sent later.
- - Consistent usage of soc flag.
-V5:
- - No SPI bus locking.
-V4:
- - Split api change to different patch.
- - Describe TPM HW flow control.
-V3:
- - Use SPI device mode flag and SPI controller flags.
- - Drop usage of device tree flags.
- - Generic TPM half duplex controller handling.
- - HW & SW flow control for TPM. Drop additional driver.
-V2:
- - Fix dt schema errors.
-
-Krishna Yarlagadda (3):
-  spi: Add TPM HW flow flag
-  tpm_tis-spi: Add hardware wait polling
-  spi: tegra210-quad: Enable TPM wait polling
-
- drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
- drivers/spi/spi-tegra210-quad.c     | 14 +++++
- include/linux/spi/spi.h             | 16 ++++-
- 3 files changed, 116 insertions(+), 5 deletions(-)
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 4fcd36055b02..5052e1da85a7 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -1360,7 +1360,7 @@ static int notif_set_limit(struct regulator_dev *rdev,
+ 
+ static int handle_notify_limits(struct regulator_dev *rdev,
+ 			int (*set)(struct regulator_dev *, int, int, bool),
+-			struct notification_limit *limits)
++			const struct notification_limit *limits)
+ {
+ 	int ret = 0;
+ 
+@@ -1385,6 +1385,29 @@ static int handle_notify_limits(struct regulator_dev *rdev,
+ 
+ 	return ret;
+ }
++
++static const struct notification_limit disable_limits = {
++	.prot = REGULATOR_NOTIF_LIMIT_DISABLE,
++	.err = REGULATOR_NOTIF_LIMIT_DISABLE,
++	.warn = REGULATOR_NOTIF_LIMIT_DISABLE,
++};
++
++static int monitors_set_state(struct regulator_dev *rdev, bool enable)
++{
++	const struct regulation_constraints *reg_c = rdev->constraints;
++	const struct regulator_ops *ops = rdev->desc->ops;
++	int ret = 0;
++
++	/* only set the state if monitoring is activated in the device-tree. */
++	if (reg_c->over_voltage_detection)
++		ret = handle_notify_limits(rdev, ops->set_over_voltage_protection,
++					   enable ? &reg_c->over_voltage_limits : &disable_limits);
++	if (!ret && reg_c->under_voltage_detection)
++		ret = handle_notify_limits(rdev, ops->set_under_voltage_protection,
++					   enable ? &reg_c->under_voltage_limits : &disable_limits);
++	return ret;
++}
++
+ /**
+  * set_machine_constraints - sets regulator constraints
+  * @rdev: regulator source
+@@ -1512,7 +1535,7 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 			  "IC does not support requested over-current limits\n");
+ 	}
+ 
+-	if (rdev->constraints->over_voltage_detection)
++	if (rdev->constraints->over_voltage_detection && !rdev->desc->mon_disable_while_reg_off)
+ 		ret = handle_notify_limits(rdev,
+ 					   ops->set_over_voltage_protection,
+ 					   &rdev->constraints->over_voltage_limits);
+@@ -1526,7 +1549,7 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 			  "IC does not support requested over voltage limits\n");
+ 	}
+ 
+-	if (rdev->constraints->under_voltage_detection)
++	if (rdev->constraints->under_voltage_detection && !rdev->desc->mon_disable_while_reg_off)
+ 		ret = handle_notify_limits(rdev,
+ 					   ops->set_under_voltage_protection,
+ 					   &rdev->constraints->under_voltage_limits);
+@@ -2734,7 +2757,10 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
+ 
+ 	trace_regulator_enable_complete(rdev_get_name(rdev));
+ 
+-	return 0;
++	if (rdev->desc->mon_disable_while_reg_off)
++		ret = monitors_set_state(rdev, true);
++
++	return ret;
+ }
+ 
+ /**
+@@ -2893,7 +2919,12 @@ EXPORT_SYMBOL_GPL(regulator_enable);
+ 
+ static int _regulator_do_disable(struct regulator_dev *rdev)
+ {
+-	int ret;
++	int ret = 0;
++
++	if (rdev->desc->mon_disable_while_reg_off)
++		ret = monitors_set_state(rdev, false);
++	if (ret)
++		return ret;
+ 
+ 	trace_regulator_disable(rdev_get_name(rdev));
+ 
+@@ -3537,7 +3568,7 @@ static int _regulator_set_voltage_time(struct regulator_dev *rdev,
+ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
+ 				     int min_uV, int max_uV)
+ {
+-	int ret;
++	int ret = 0;
+ 	int delay = 0;
+ 	int best_val = 0;
+ 	unsigned int selector;
+@@ -3545,6 +3576,11 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
+ 	const struct regulator_ops *ops = rdev->desc->ops;
+ 	int old_uV = regulator_get_voltage_rdev(rdev);
+ 
++	if (rdev->desc->mon_disable_while_reg_set)
++		ret = monitors_set_state(rdev, false);
++	if (ret)
++		return ret;
++
+ 	trace_regulator_set_voltage(rdev_get_name(rdev), min_uV, max_uV);
+ 
+ 	min_uV += rdev->constraints->uV_offset;
+@@ -3636,6 +3672,10 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
+ out:
+ 	trace_regulator_set_voltage_complete(rdev_get_name(rdev), best_val);
+ 
++	if (rdev->desc->mon_disable_while_reg_set)
++		/* TODO: ignore return value here when ret already !0? */
++		ret = monitors_set_state(rdev, true);
++
+ 	return ret;
+ }
+ 
+@@ -4545,7 +4585,19 @@ int regulator_set_mode(struct regulator *regulator, unsigned int mode)
+ 	if (ret < 0)
+ 		goto out;
+ 
++	if (mode & rdev->desc->mon_unsupported_reg_modes)
++		ret = monitors_set_state(rdev, false);
++	if (ret)
++		goto out;
++
+ 	ret = rdev->desc->ops->set_mode(rdev, mode);
++	if (ret)
++		goto out;
++
++	if (mode & ~rdev->desc->mon_unsupported_reg_modes)
++		/* TODO: if set_mode fails, we stay unmonitored */
++		ret = monitors_set_state(rdev, true);
++
+ out:
+ 	regulator_unlock(rdev);
+ 	return ret;
+diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
+index d3b4a3d4514a..2fdc2c78e4bd 100644
+--- a/include/linux/regulator/driver.h
++++ b/include/linux/regulator/driver.h
+@@ -357,6 +357,12 @@ enum regulator_type {
+  *                     the regulator was actually enabled. Max upto enable_time.
+  *
+  * @of_map_mode: Maps a hardware mode defined in a DeviceTree to a standard mode
++ *
++ * @mon_disable_while_reg_off: Disables regulator's monitors while it is off.
++ * @mon_disable_while_reg_set: Disables regulator's monitors while it is changing its value.
++ * @mon_unsupported_reg_modes: Disables regulator's monitors before an unsupported mode is entered.
++ *                             Unsupported REGULATOR_MODE_* are OR'ed. REGULATOR_MODE_INVALID means
++ *                             all modes can be monitored.
+  */
+ struct regulator_desc {
+ 	const char *name;
+@@ -431,6 +437,10 @@ struct regulator_desc {
+ 	unsigned int poll_enabled_time;
+ 
+ 	unsigned int (*of_map_mode)(unsigned int mode);
++
++	unsigned int mon_disable_while_reg_off;
++	unsigned int mon_disable_while_reg_set;
++	unsigned int mon_unsupported_reg_modes;
+ };
+ 
+ /**
 
 -- 
-2.17.1
+2.34.1
 
