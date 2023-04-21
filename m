@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770516EB596
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C56E6EB59A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbjDUXNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 19:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S233811AbjDUXNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 19:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjDUXNR (ORCPT
+        with ESMTP id S233714AbjDUXNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 19:13:17 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C1E1FCF
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:13:15 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-44307db5d24so739311e0c.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682118794; x=1684710794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W9APFc9ivpo5zXMKU527+SylS9PZXuFh6E82kT31e0A=;
-        b=P9Vl/3JCowxD5BocUQXmOQbViMcaUKTXTfAkYZn8U86XJ5oBHf22lL6i+aKYxKP8uM
-         TVu/CV7AcIWPQb5IDm0vu+qWxQ8xF7daPyHs6231/ontULu9s1SIhqbVbdMsleMrD326
-         UFELebg4FBce8YPAIYI8ajKqji3tUdfjMwgfYbUSorEJljbh+pz0SoQ1vVlZXjoy3V2d
-         BAK/FjR6kDiUNQOyQTkU594EFz6367ZkS8t1puIMK5yZO77+h2VkKQDYgJB28PsTdZJJ
-         ZvBqbULS03HEfP7nbXY9HHU1Xjr09dbqEr1lXGPbc3CTzJkXP4coFCIo+Ma38w/wmo0y
-         2jvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682118794; x=1684710794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W9APFc9ivpo5zXMKU527+SylS9PZXuFh6E82kT31e0A=;
-        b=O/oYg137ZOHMdQaD4FmoyjxeTsg+xMKYeUYF5RY5FjDWr12kTdihTzttVH8rEB757p
-         pPlzZll0kdF/EEMJHOFaPysiEHneL/aKBGbvlH7yqzr/Zy8NIrG35/5PPe6a6dSoxrTR
-         vXIPqUzpSjxjL5jbEgwag6+jxUvXddCbonMh0thL2tJvzLPIoKPM5XrJCSYL9hQ/Ukvk
-         8EaJsohs6uW3ZujakqTdk53S+74y1oWVwqo9LmFuFQFXXWE1qH+zDJt6SAlR9zFtJ0cG
-         VuHpw/Vv/AE1w5l8HDiA4WCeCMh8MXkJx0cD7YSJm6oJh3IuC6d/SjgFGp+m+qRO5H5n
-         9alQ==
-X-Gm-Message-State: AAQBX9fTZo8+icgCtzNcrZUT0QhsfxTBnT5WypFLYwqCHfl3M/sGdaI4
-        4sLq1pxQxSE/cd6AuBOUk9MlUSdhzM45zzuyiTtB5A==
-X-Google-Smtp-Source: AKy350aBwtj33i0EyeclKXhYJ9xm52ked+sEEeS1vtU3I7lcyaDXT8VhjfhFHlIHUtaLo84g7v7YOJ+SnMqv0QpDQRE=
-X-Received: by 2002:a1f:bd04:0:b0:43f:f81c:293d with SMTP id
- n4-20020a1fbd04000000b0043ff81c293dmr1426001vkf.8.1682118794652; Fri, 21 Apr
- 2023 16:13:14 -0700 (PDT)
+        Fri, 21 Apr 2023 19:13:20 -0400
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD67626A1;
+        Fri, 21 Apr 2023 16:13:19 -0700 (PDT)
+Date:   Sat, 22 Apr 2023 01:13:16 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Simon Horman <horms@kernel.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: [PATCH nf-next v3 0/4] ipvs: Cleanups for v6.4
+Message-ID: <ZEMYjOlXKd+6zsgw@calendula>
+References: <20230409-ipvs-cleanup-v3-0-5149ea34b0b9@kernel.org>
+ <a873ffc-bcdf-934f-127a-80188e8b33e6@ssi.bg>
 MIME-Version: 1.0
-References: <20230421214946.2571580-1-seanjc@google.com>
-In-Reply-To: <20230421214946.2571580-1-seanjc@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Fri, 21 Apr 2023 16:12:48 -0700
-Message-ID: <CALzav=f=TFoqpR5tPDPOujoO6Gix-+zL-sZyyZK27qJvGPP9dg@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: x86: Preserve TDP MMU roots until they are
- explicitly invalidated
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a873ffc-bcdf-934f-127a-80188e8b33e6@ssi.bg>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 2:49=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
->  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
->  {
->         struct kvm_mmu_page *root;
->
-> -       lockdep_assert_held_write(&kvm->mmu_lock);
-> -       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
-> -               if (!root->role.invalid &&
-> -                   !WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root))) {
-> +       /*
-> +        * Note!  mmu_lock isn't held when destroying the VM!  There can'=
-t be
-> +        * other references to @kvm, i.e. nothing else can invalidate roo=
-ts,
-> +        * but walking the list of roots does need to be guarded against =
-roots
-> +        * being deleted by the asynchronous zap worker.
-> +        */
-> +       rcu_read_lock();
-> +
-> +       list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link) {
+On Mon, Apr 17, 2023 at 07:59:35PM +0300, Julian Anastasov wrote:
+> 
+> 	Hello,
+> 
+> On Mon, 17 Apr 2023, Simon Horman wrote:
+> 
+> > Hi Julian,
+> > 
+> > this series aims to clean up IPVS in several ways without
+> > implementing any functional changes, aside from removing
+> > some debugging output.
+> > 
+> > Patch 1/4: Update width of source for ip_vs_sync_conn_options
+> >            The operation is safe, use an annotation to describe it properly.
+> > 
+> > Patch 2/4: Consistently use array_size() in ip_vs_conn_init()
+> >            It seems better to use helpers consistently.
+> > 
+> > Patch 3/4: Remove {Enter,Leave}Function
+> >            These seem to be well past their use-by date.
+> > 
+> > Patch 4/4: Correct spelling in comments
+> > 	   I can't spell. But codespell helps me these days.
+> > 
+> > All changes: compile tested only!
+> > 
+> > ---
+> > Changes in v3:
+> > - Patch 2/4: Correct division by 1024.
+> >              It was applied to the wrong variable in v2.
+> > - Add Horatiu's Reviewed-by tag.
+> > 
+> > Changes in v2:
+> > - Patch 1/4: Correct spelling of 'conn' in subject.
+> > - Patch 2/4: Restore division by 1024. It was lost on v1.
+> > 
+> > ---
+> > Simon Horman (4):
+> >       ipvs: Update width of source for ip_vs_sync_conn_options
+> >       ipvs: Consistently use array_size() in ip_vs_conn_init()
+> >       ipvs: Remove {Enter,Leave}Function
+> >       ipvs: Correct spelling in comments
+> 
+> 	The patchset looks good to me, thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
 
-I see that roots are removed from the list with list_del_rcu(), so I
-agree this should be safe.
-
-KVM could, alternatively, acquire the mmu_lock in
-kvm_mmu_uninit_tdp_mmu(), which would let us keep the lockdep
-assertion and drop the rcu_read_lock() + comment. That might be worth
-it in case someone accidentally adds a call to
-kvm_tdp_mmu_invalidate_all_roots() without mmu_lock outside of VM
-teardown. kvm_mmu_uninit_tdp_mmu() is not a particularly performance
-sensitive path and adding the mmu_lock wouldn't add much overhead
-anyway (it would block for at most a few milliseconds waiting for the
-async work to reschedule).
+Applied, sorry Julian, I missed your Acked-by: tag.
