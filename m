@@ -2,140 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BFA6EB081
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECE16EB07C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbjDURXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S233017AbjDURWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbjDURWq (ORCPT
+        with ESMTP id S232630AbjDURWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:22:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B230FB
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682097719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F5BUIZCZG7tWuEnNiXnezg1wpCr6XGmaYZLZ1JJftNg=;
-        b=aVxfAhIzrWMhRJdQ1VTgCvGDg170bNeTigAFY2AJin4yZic4o5CkNaQ8gqN6Sg9vTZxQhi
-        S1sXize2V/8GjJVd4IdeYoupOCnse30q0F+8G4FI8jCvvhRUJ1/kmRA7l6VvMRQCWO3kmL
-        etrVq7nXNkMWjmyaQa4LM/TXFtOHJxA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-310-HyJcUf92O-qYIE-g8ck6Pw-1; Fri, 21 Apr 2023 13:21:41 -0400
-X-MC-Unique: HyJcUf92O-qYIE-g8ck6Pw-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f1763fac8bso13102235e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:21:40 -0700 (PDT)
+        Fri, 21 Apr 2023 13:22:18 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A62393F4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:22:16 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94a34d3812dso322824466b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682097734; x=1684689734;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BfR9lcqvLbO+sXRYYQ4Al5uQ4a/w4jqcaiHNX0XG2d8=;
+        b=M7kgruF3UfRfDWNCLtS06HOrbY/My1F5qsoj3AdCxeDtL9AnMCKstRKn/+mzyTSJXD
+         nUELrf0ki/bVD0Bf6VaQ/BPcAyOipMfOJft9lnwibEAhqePhPxl+6N2xFt8K2aLmxT4d
+         eI7byFtpOOMmoO8AzyO787vo6Mv+NG+LT4/rW6D9JlgChyif1F0ltmnqqBIp/0Lsuu0m
+         IO2ZCJHgpTWXkJgsbgBAHGD8t9exscbi9IJH23YwGaJndjTrVI5DhTELy21qO5sIXB3J
+         AiAoU6sruhfjdjNyk8Fg+wuorOokt2S7FMxMvRhCaYZ/12NWLYAdQflE/0HQdBDR8ffd
+         FQfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682097699; x=1684689699;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F5BUIZCZG7tWuEnNiXnezg1wpCr6XGmaYZLZ1JJftNg=;
-        b=iGzfwRwGojfopmqXXjS1TS14HiC6Ousr7RzEtJKcmzkj7XoY8jAi0QRiGPoplRt/TX
-         qJCg6weOT4IxwIDu30tTkWC7sTCsU2THHQnqbPftZp13L493R86M6xhoMn6DAWDugbuJ
-         aBjGHpoSzoWguQH23+f5+THmQD+SB5d5a5ED9vIF7mz5Fbhk3SpEiAeqdgnoPA9t8KzC
-         RwBHWdtnRpuIa7uZurFEIPo2LTqCmaiOdPgWfRbf7as+3q/60PwGd5p6LviD8SK4djVk
-         GuFeg58vJJcpcen3wFSYbKFtzoU44nShpCDBwkI+pA6yvvd/vaWlvr0cjIxRgpG+hp8k
-         Tkpw==
-X-Gm-Message-State: AAQBX9cNc562slVJdbA/V5np1reYIU0AhpRmbcAyeDbnK5VFScjdMgJb
-        2e8xR1AtbZI0LYps/nLFvzLeduhfT5V4h0fXMOM9m71JikbctL0UqdoeZpM9Ngqy3PqnUIqENl/
-        wjjQlleKxj7Shl+NGz/ENJwbv
-X-Received: by 2002:a05:600c:2306:b0:3f1:72ec:4016 with SMTP id 6-20020a05600c230600b003f172ec4016mr2580970wmo.0.1682097699584;
-        Fri, 21 Apr 2023 10:21:39 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aFn+YAjtfSjCVKeXGhCWAiZWMdwsuDncB3Nwm1fVnTmqMnOAjnMKFGp80Ll5DTm/pP7pP0nA==
-X-Received: by 2002:a05:600c:2306:b0:3f1:72ec:4016 with SMTP id 6-20020a05600c230600b003f172ec4016mr2580947wmo.0.1682097699200;
-        Fri, 21 Apr 2023 10:21:39 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c717:6a00:e38f:c852:dc11:9146? (p200300cbc7176a00e38fc852dc119146.dip0.t-ipconnect.de. [2003:cb:c717:6a00:e38f:c852:dc11:9146])
-        by smtp.gmail.com with ESMTPSA id g10-20020a7bc4ca000000b003f171234a08sm5302275wmk.20.2023.04.21.10.21.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 10:21:38 -0700 (PDT)
-Message-ID: <f809162e-4adc-cf9b-35f4-0f1b098ad283@redhat.com>
-Date:   Fri, 21 Apr 2023 19:21:36 +0200
+        d=1e100.net; s=20221208; t=1682097734; x=1684689734;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BfR9lcqvLbO+sXRYYQ4Al5uQ4a/w4jqcaiHNX0XG2d8=;
+        b=WLXtoXJOX7E7YQZPsFlZlmCyb0Q6dDQhAt6FBZFk+OEZeuGp3me0Kjzd88E2wsdQ7g
+         tA/+mGvvh+kwEZ/leU+e7q0SVbZhdkP32jV+rr707M3mDKx82iX7XkaTFii2G9WbI+Uw
+         gunYRCL1OBPn7Aos11xkAoqqj/WJcOBaxkZn7fqb1JM0OUG78k5loiudsynEZDp8stRU
+         dwrjY91nXr3/BaLxAM/tkKIWZzTlpidgTo5zE6VRvKa61eSJR/ms9j8uSlk02ZEaF47F
+         8pY2MlZBbMV7msHN0vDTMJqFAF7MmaXFH1ciBJdOKFkJb7uzLKkGMpUmGXGQ0gUdzFhE
+         LHAg==
+X-Gm-Message-State: AAQBX9eLjmqYRPRqIAHxnXUoNVhuQoWrRFiDiTRTPPZTLDR2KPDtJRTE
+        1Uz2Y1Tx+y7NK4N7mE1CEN9n96DprixGvl63CB48pg==
+X-Google-Smtp-Source: AKy350axrab997pt4/P+KsZ/mjGlBLpHSvPcnzMc+GCcSQviGW1yDnMwiUwpJtmJyvjReOIzY0QnplK4idGv54zBasw=
+X-Received: by 2002:aa7:d385:0:b0:4fb:7ccf:3b33 with SMTP id
+ x5-20020aa7d385000000b004fb7ccf3b33mr5514114edq.31.1682097734305; Fri, 21 Apr
+ 2023 10:22:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 1/3] mm/ksm: unmerge and clear VM_MERGEABLE when
- setting PR_SET_MEMORY_MERGE=0
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rik van Riel <riel@surriel.com>,
+References: <20230403220337.443510-1-yosryahmed@google.com>
+ <20230403220337.443510-2-yosryahmed@google.com> <20230421085341.b2zvzeuc745bs6sa@quack3>
+In-Reply-To: <20230421085341.b2zvzeuc745bs6sa@quack3>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 21 Apr 2023 10:21:36 -0700
+Message-ID: <CAJD7tkYUJd+HERVKDhqKimWdXUKoBvutvKJHJDJVMOTJBV9aKA@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh()
+ call outside lock section
+To:     Jan Kara <jack@suse.cz>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-2-david@redhat.com>
- <qvqwr0sei6sl.fsf@devbig1114.prn1.facebook.com>
- <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
-Organization: Red Hat
-In-Reply-To: <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> I understand we want to keep the name "symmetric" with
->> ksm_enable_merge_any, but it also unmerges the ksm pages. Do we want to
->> reflect that in the function name?
-> 
-> ksm_disable_merge_any_umerge() is suboptimal.
-> 
-> As ksm_disable_merge_any() now reverts what ksm_enable_merge_any() ended
-> up doing, I think it's just fine.
-> 
-> (it would be a different story if we'd be using "set" / "clear"
-> terminology instead of "enable" / "disable").
-> 
-> We can describe that in the comment.
-> 
->>
->> Can we add a comment for the function?
-> 
-> Can do for symmetry with ksm_enable_merge_any().
-> 
+On Fri, Apr 21, 2023 at 1:53=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
+>
+> On Mon 03-04-23 22:03:33, Yosry Ahmed wrote:
+> > wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
+> > flush, which can be expensive on large systems. Currently,
+> > wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
+> > have to make the rstat flush atomically. On systems with a lot of
+> > cpus/cgroups, this can cause us to disable irqs for a long time,
+> > potentially causing problems.
+> >
+> > Move the call to wb_over_bg_thresh() outside the lock section in
+> > preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic=
+.
+> > The list_empty(&wb->work_list) should be okay outside the lock section
+> > of wb->list_lock as it is protected by a separate lock (wb->work_lock),
+> > and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_=
+*
+> > lists the wb->list_lock is protecting. Also, the loop seems to be
+> > already releasing and reacquring the lock, so this refactoring looks
+> > safe.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>
+> The patch looks good to me. Nice find. Feel free to add:
+>
+> Reviewed-by: Jan Kara <jack@suse.cz>
 
-+/**
-+ * ksm_disable_merge_any - Disable merging on all compatible VMA's of the mm,
-+ *                        previously enabled via ksm_enable_merge_any().
-+ *
-+ * Disabling merging implies unmerging any merged pages, like setting
-+ * MADV_UNMERGEABLE would. If unmerging fails, the whole operation fails and
-+ * merging on all compatible VMA's remains enabled.
-+ *
-+ * @mm: Pointer to mm
-+ *
-+ * Returns 0 on success, otherwise error code
-+ */
+Thanks for taking a look!
 
-
--- 
-Thanks,
-
-David / dhildenb
-
+>
+>                                                                 Honza
+>
+> > ---
+> >  fs/fs-writeback.c | 16 +++++++++++-----
+> >  1 file changed, 11 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> > index 195dc23e0d831..012357bc8daa3 100644
+> > --- a/fs/fs-writeback.c
+> > +++ b/fs/fs-writeback.c
+> > @@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb=
+,
+> >       struct blk_plug plug;
+> >
+> >       blk_start_plug(&plug);
+> > -     spin_lock(&wb->list_lock);
+> >       for (;;) {
+> >               /*
+> >                * Stop writeback when nr_pages has been consumed
+> > @@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb=
+,
+> >               if (work->for_background && !wb_over_bg_thresh(wb))
+> >                       break;
+> >
+> > +
+> > +             spin_lock(&wb->list_lock);
+> > +
+> >               /*
+> >                * Kupdate and background works are special and we want t=
+o
+> >                * include all inodes that need writing. Livelock avoidan=
+ce is
+> > @@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *=
+wb,
+> >                * mean the overall work is done. So we keep looping as l=
+ong
+> >                * as made some progress on cleaning pages or inodes.
+> >                */
+> > -             if (progress)
+> > +             if (progress) {
+> > +                     spin_unlock(&wb->list_lock);
+> >                       continue;
+> > +             }
+> > +
+> >               /*
+> >                * No more inodes for IO, bail
+> >                */
+> > -             if (list_empty(&wb->b_more_io))
+> > +             if (list_empty(&wb->b_more_io)) {
+> > +                     spin_unlock(&wb->list_lock);
+> >                       break;
+> > +             }
+> > +
+> >               /*
+> >                * Nothing written. Wait for some inode to
+> >                * become available for writeback. Otherwise
+> > @@ -2093,9 +2101,7 @@ static long wb_writeback(struct bdi_writeback *wb=
+,
+> >               spin_unlock(&wb->list_lock);
+> >               /* This function drops i_lock... */
+> >               inode_sleep_on_writeback(inode);
+> > -             spin_lock(&wb->list_lock);
+> >       }
+> > -     spin_unlock(&wb->list_lock);
+> >       blk_finish_plug(&plug);
+> >
+> >       return nr_pages - work->nr_pages;
+> > --
+> > 2.40.0.348.gf938b09366-goog
+> >
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
