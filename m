@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F25C6EA28A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8433D6EA28C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbjDUECq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 00:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S233920AbjDUEDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 00:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbjDUECg (ORCPT
+        with ESMTP id S233801AbjDUECk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:02:36 -0400
+        Fri, 21 Apr 2023 00:02:40 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E744EEE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:02:34 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8f6bef3d4aso1939572276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:02:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB42E524B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:02:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8f566ea5e6so3701161276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682049753; x=1684641753;
+        d=google.com; s=20221208; t=1682049758; x=1684641758;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEBiF7ByWZHT8hk8CTAs7S8P0dMCig1qp9ER8e9wTTI=;
-        b=zaKGvpPPkSpchoZHU6U0I24jBX2qIKZqPmCqLKQwxNsTvgcZmojAMcmLO77HZwoA2Q
-         5PUv8FWzIKAwO240MbvzUMu1QzqMgdq3d5WqERH/Hdv8lsL3xy/hdKDD63Pm3IzQqwrI
-         gsqPoRnR/DC0HzKjOoaX2jp9LOfsnJerUmo1ZVU+dsM8uAMc8gqqZyUUTPMgBnW/t69x
-         qcb4IqlcuqLlfka5CuirZs99gUDidt8kf3a0DXbNZHAJsStpaVx9/w9FVVBQhONmB82C
-         GpyMdm0ZR+qTmteIe5XzfNe3lffxuOTR2xK/Y3B6tQ1v9dMVZEciYyM+grJaVeMepiOD
-         qNkw==
+        bh=EHcf3TtAxqYUDjiNAmiyf7rcYOiQRzr3HgI4M/rAcaU=;
+        b=vhOy+/6XGUNImozjW6uXE3awKrpBeiSgUUKudpv9mylXFGdVs6orwkvboBIKJ+gUSI
+         fYZxsGRNlFm42JgTEFcUFLD1/1BFY8psdjXBoP38wBHcHbK+wyMHxCGzN+w61d7gytkU
+         vu9cmM7aNMUhG0WLCVGBj+xxPFj9ebAu54bdHCIxwewn0vAO1Cqhp29CDwt7vEBNgg9Q
+         jrC7EJhVkPl+hArDZNM17DQB7/02YtPjoh48F2mhv8wHzWaUCan39/Vnac6KexCLRV0V
+         hXowYu8GYiC8PFpOmN/hmhw7rl1DR50qb8sDWApZ6QcE+iUGe+OnLapi388bUTfWh++g
+         r0YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682049753; x=1684641753;
+        d=1e100.net; s=20221208; t=1682049758; x=1684641758;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEBiF7ByWZHT8hk8CTAs7S8P0dMCig1qp9ER8e9wTTI=;
-        b=a+Y1WlYzcUbOrwj6APzMmRqEi70IjauUel/3oK2IAAUSGp97FxFqhwoUuctaZOPcjr
-         k11TpqjdkfiiaOvzTAnW/xDatRMPRhbCf9fbktVB6A4LMWESKs/rlftFDvPHqf4vHXzc
-         f2UVOGntPAcYD5tRWI0YL9TaJKEmM6fGQhpeohVaBk/TtWofv3QJogzrtLgwq0/wLwl2
-         y1FDJFzDcpMcbTJSoVZ61Rkyd9Js7Dpc/K3+bfChiTlEJ4Mx7T8Yet4Y/iXE1M7SuHHl
-         fzaYr3g6FQQt+Z8Y6Jlv0fEadfSdaE+Yah736EiNIc8vWaulvspCO96eE14L2qRF1iUH
-         N+LQ==
-X-Gm-Message-State: AAQBX9dELcrz7STflrf2wCZMiBnnh6/ZCQNjGe6jAHYZ9lMzNwX5LHTt
-        VbuUfXEESByLxacnJ62lLfdpf13ytNN9Ww==
-X-Google-Smtp-Source: AKy350Z4qe08DAOgSQCJ/aJkhSWjti/yq3AmrcunrXa5Dr5OO3XBAOZOvW7bm47CFcUVlqiZuF1VXH8w6XShUQ==
+        bh=EHcf3TtAxqYUDjiNAmiyf7rcYOiQRzr3HgI4M/rAcaU=;
+        b=IbPBEW7Mtu1F/fyGtDDG2ngqweLkraf9f3WFnh7rBEXdjeChRQhcwyGBg0T9MR609p
+         A1LlQDHZ3O2upyt4iAbRQWE4URMD1rFLDAtR9jrzuWDluCgW07tbfvHSJpMYSV8fRvbB
+         a1NWesYw1Ehzt4PdFMULLCp+BaXGv9v/IAw8UEGpNlrlANhFm0GvcYPWVQbFXCFDGTLM
+         fUWWh16N4ySaYw0mT4pWqBu0XvrFu8U9jj7wh91Xeqo5FllIWTG/dID3nG3F4t5763qh
+         9+DUBWhVa9w1RipZ5p86mSJeTQy0k43wp03tGsQ6DjMjWlNwqMrsuGu7VjMpOSoZuJlx
+         69gg==
+X-Gm-Message-State: AAQBX9dkZjH2SbnOhJHHpdCluYLBNaN+DOqtLmdLK2a4oxyw5GwBvbpv
+        iy9expqJPO4PC2lqFGM2UmfI7IzwF25lmg==
+X-Google-Smtp-Source: AKy350Y54kiwT82AuAuLomhBMXGh6hDiOxSmVnuqZHCRGMCYguaPXyqmvOXzegJ/z1hHhEwjXIqd/8eSj0tc5g==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:ca12:0:b0:b96:347d:46e7 with SMTP id
- a18-20020a25ca12000000b00b96347d46e7mr905278ybg.1.1682049753474; Thu, 20 Apr
- 2023 21:02:33 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 12:02:17 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with SMTP
+ id en8-20020a05690c2b8800b0054c15ad11e4mr897255ywb.0.1682049758080; Thu, 20
+ Apr 2023 21:02:38 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 12:02:18 +0800
 In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
 Mime-Version: 1.0
 References: <20230421040218.2156548-1-davidgow@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421040218.2156548-3-davidgow@google.com>
-Subject: [PATCH v3 3/4] Documentation: kunit: Warn that exit functions run
- even if init fails
+Message-ID: <20230421040218.2156548-4-davidgow@google.com>
+Subject: [PATCH v3 4/4] kunit: example: Provide example exit functions
 From:   David Gow <davidgow@google.com>
 To:     Benjamin Berg <benjamin@sipsolutions.net>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -75,72 +74,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KUnit's exit functions will run even if the corresponding init function
-fails. It's easy, when writing an exit function, to assume the init
-function succeeded, and (for example) access uninitialised memory or
-dereference NULL pointers.
+Add an example .exit and .suite_exit function to the KUnit example
+suite. Given exit functions are a bit more subtle than init functions
+(due to running in a different kthread, and running even after tests or
+test init functions fail), providing an easy place to experiment with
+them is useful.
 
-Note that this case exists and should be handled in the documentation.
-
-Suggested-by: Benjamin Berg <benjamin@sipsolutions.net>
-Link: https://lore.kernel.org/linux-kselftest/a39af0400abedb2e9b31d84c37551cecc3eed0e1.camel@sipsolutions.net/
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-No changes since v2:
-https://lore.kernel.org/linux-kselftest/20230419085426.1671703-3-davidgow@google.com/
-
-This patch was introduced in v2.
+This patch was introduced in v3.
 
 ---
- Documentation/dev-tools/kunit/usage.rst | 12 ++++++++++--
- include/kunit/test.h                    |  3 +++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ lib/kunit/kunit-example-test.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 9f720f1317d3..f6d6c9a9ff54 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -166,7 +166,12 @@ many similar tests. In order to reduce duplication in these closely related
- tests, most unit testing frameworks (including KUnit) provide the concept of a
- *test suite*. A test suite is a collection of test cases for a unit of code
- with optional setup and teardown functions that run before/after the whole
--suite and/or every test case. For example:
-+suite and/or every test case.
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index cd8b7e51d02b..24315c882b31 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -41,6 +41,16 @@ static int example_test_init(struct kunit *test)
+ 	return 0;
+ }
+ 
++/*
++ * This is run once after each test case, see the comment on
++ * example_test_suite for more information.
++ */
++static void example_test_exit(struct kunit *test)
++{
++	kunit_info(test, "cleaning up\n");
++}
 +
-+.. note::
-+   A test case will only run if it is associated with a test suite.
 +
-+For example:
+ /*
+  * This is run once before all test cases in the suite.
+  * See the comment on example_test_suite for more information.
+@@ -52,6 +62,16 @@ static int example_test_init_suite(struct kunit_suite *suite)
+ 	return 0;
+ }
  
- .. code-block:: c
- 
-@@ -196,7 +201,10 @@ after everything else. ``kunit_test_suite(example_test_suite)`` registers the
- test suite with the KUnit test framework.
- 
- .. note::
--   A test case will only run if it is associated with a test suite.
-+   The ``exit`` and ``suite_exit`` functions will run even if ``init`` or
-+   ``suite_init`` fail. Make sure that they can handle any inconsistent
-+   state which may result from ``init`` or ``suite_init`` encoutering errors
-+   or exiting early.
- 
- ``kunit_test_suite(...)`` is a macro which tells the linker to put the
- specified test suite in a special linker section so that it can be run by KUnit
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 57b309c6ca27..3028a1a3fcad 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -168,6 +168,9 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-  * test case, similar to the notion of a *test fixture* or a *test class*
-  * in other unit testing frameworks like JUnit or Googletest.
-  *
-+ * Note that @exit and @suite_exit will run even if @init or @suite_init
-+ * fail: make sure they can handle any inconsistent state which may result.
-+ *
-  * Every &struct kunit_case must be associated with a kunit_suite for KUnit
-  * to run it.
++/*
++ * This is run once after all test cases in the suite.
++ * See the comment on example_test_suite for more information.
++ */
++static void example_test_exit_suite(struct kunit_suite *suite)
++{
++	kunit_info(suite, "exiting suite\n");
++}
++
++
+ /*
+  * This test should always be skipped.
   */
+@@ -211,7 +231,9 @@ static struct kunit_case example_test_cases[] = {
+ static struct kunit_suite example_test_suite = {
+ 	.name = "example",
+ 	.init = example_test_init,
++	.exit = example_test_exit,
+ 	.suite_init = example_test_init_suite,
++	.suite_exit = example_test_exit_suite,
+ 	.test_cases = example_test_cases,
+ };
+ 
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
