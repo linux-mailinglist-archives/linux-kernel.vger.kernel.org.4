@@ -2,139 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFBC6EB211
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1046EB219
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbjDUTGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S233349AbjDUTHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjDUTGt (ORCPT
+        with ESMTP id S231645AbjDUTHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:06:49 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B477E53;
-        Fri, 21 Apr 2023 12:06:45 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1ppw5N-0002na-2t;
-        Fri, 21 Apr 2023 21:06:22 +0200
-Date:   Fri, 21 Apr 2023 20:06:18 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net-next 20/22] net: dsa: mt7530: force link-down on
- MACs before reset on MT7530
-Message-ID: <ZELeqnUKQApQPxUR@makrotopia.org>
-References: <20230421143648.87889-1-arinc.unal@arinc9.com>
- <20230421143648.87889-21-arinc.unal@arinc9.com>
- <ZELZAd4O9SyHLkwn@makrotopia.org>
- <7982894a-029c-585a-9ab5-3a6295c6abaa@arinc9.com>
+        Fri, 21 Apr 2023 15:07:19 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927CBE6A;
+        Fri, 21 Apr 2023 12:07:13 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-18777914805so12645899fac.1;
+        Fri, 21 Apr 2023 12:07:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682104033; x=1684696033;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YSB3Wm55juQO1zRSscn35Tw26e/tg+JlZE9j23M2tOc=;
+        b=HfZeQDE1Mdm52YPdCJRYqu1OM+JoTIW6SXC2LudaiTeNhK89IahbXOETpkcYABy956
+         eHQmrIPf/i4ap57VDFoeU3BFPZHofuhDUocMHnfgSQXFkzZxS+f4meaDg91eRF0H6uKi
+         lluj8r30pmutYE9y5tLo44jtniVpdTnP0jZ6YXQpZ0m2M/L1OIJkIddfGnMQUDOBKRwa
+         wsbt/OsnmTZp9l0eYjN4qR8ZzT3+rkOXcJYaRuQXncFHJNg27C3eExJ/9WO3/KlbQOKE
+         /rE8jNC3hNvgteRJLL4cEwAPOX2uPaOL+ifybCasxwIayauIMe0e1TPT1T1CK2MCy0jd
+         R3og==
+X-Gm-Message-State: AAQBX9f4kk0sABWwJ/XRqQP9y/9+HI7S69hahN8m354WaHQY0wpTBh4p
+        GC5J09jYj1H9HmBXuHEbHA==
+X-Google-Smtp-Source: AKy350a668NMazDil6/xlsaEhPdB8QbxGab/JTh5+29mo1XAPLT5RamzWo2BFsxfccba7Lfaz1ZJvQ==
+X-Received: by 2002:a05:6871:68d:b0:17a:f617:e26c with SMTP id l13-20020a056871068d00b0017af617e26cmr4857130oao.11.1682104032775;
+        Fri, 21 Apr 2023 12:07:12 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dk10-20020a0568303b0a00b006a60606de62sm2006458otb.52.2023.04.21.12.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 12:07:12 -0700 (PDT)
+Received: (nullmailer pid 1629669 invoked by uid 1000);
+        Fri, 21 Apr 2023 19:07:11 -0000
+Date:   Fri, 21 Apr 2023 14:07:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        David Collins <quic_collinsd@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH] dt-bindings: power: reset: qcom-pon: Only allow
+ reboot-mode pre-pmk8350
+Message-ID: <168210403110.1629611.9828460888076350953.robh@kernel.org>
+References: <20230419-topic-pmic_pon_bindings-v1-1-ea233dae0117@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7982894a-029c-585a-9ab5-3a6295c6abaa@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230419-topic-pmic_pon_bindings-v1-1-ea233dae0117@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 09:47:16PM +0300, Arınç ÜNAL wrote:
-> On 21.04.2023 21:42, Daniel Golle wrote:
-> > On Fri, Apr 21, 2023 at 05:36:46PM +0300, arinc9.unal@gmail.com wrote:
-> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > 
-> > > Force link-down on all MACs before internal reset. Let's follow suit commit
-> > > 728c2af6ad8c ("net: mt7531: ensure all MACs are powered down before
-> > > reset").
-> > > 
-> > > Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > ---
-> > >   drivers/net/dsa/mt7530.c | 4 ++++
-> > >   1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > > index ac1e3c58aaac..8ece3d0d820c 100644
-> > > --- a/drivers/net/dsa/mt7530.c
-> > > +++ b/drivers/net/dsa/mt7530.c
-> > > @@ -2203,6 +2203,10 @@ mt7530_setup(struct dsa_switch *ds)
-> > >   		return -EINVAL;
-> > >   	}
-> > > +	/* Force link-down on all MACs before internal reset */
-> > > +	for (i = 0; i < MT7530_NUM_PORTS; i++)
-> > > +		mt7530_write(priv, MT7530_PMCR_P(i), PMCR_FORCE_LNK);
-> > > +
-> > 
-> > Moving this part to mt753x_setup just before calling priv->info->sw_setup(ds);
-> > is probably better. Though it isn't documented I assume that the requirement
-> > to have the ports in force-link-down may also apply to MT7988, and for sure
-> > it doesn't do any harm.
-> > 
-> > Hence I suggest to squash this change:
-> > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > index a2cb7e296165e..998c4e8930cd3 100644
-> > --- a/drivers/net/dsa/mt7530.c
-> > +++ b/drivers/net/dsa/mt7530.c
-> > @@ -2203,10 +2203,6 @@ mt7530_setup(struct dsa_switch *ds)
-> >   		return -EINVAL;
-> >   	}
-> > -	/* Force link-down on all MACs before internal reset */
-> > -	for (i = 0; i < MT7530_NUM_PORTS; i++)
-> > -		mt7530_write(priv, MT7530_PMCR_P(i), PMCR_FORCE_LNK);
-> > -
-> >   	/* Reset the switch through internal reset */
-> >   	mt7530_write(priv, MT7530_SYS_CTRL,
-> >   		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
-> > @@ -2423,10 +2419,6 @@ mt7531_setup(struct dsa_switch *ds)
-> >   		dev_info(priv->dev, "found MT7531BE\n");
-> >   	}
-> > -	/* all MACs must be forced link-down before sw reset */
-> > -	for (i = 0; i < MT7530_NUM_PORTS; i++)
-> > -		mt7530_write(priv, MT7530_PMCR_P(i), MT7531_FORCE_LNK);
-> > -
-> >   	/* Reset the switch through internal reset */
-> >   	mt7530_write(priv, MT7530_SYS_CTRL,
-> >   		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
-> > @@ -2907,6 +2899,10 @@ mt753x_setup(struct dsa_switch *ds)
-> >   		priv->pcs[i].port = i;
-> >   	}
-> > +	/* Force link-down on all MACs before setup */
-> > +	for (i = 0; i < MT7530_NUM_PORTS; i++)
-> > +		mt7530_write(priv, MT7530_PMCR_P(i), PMCR_FORCE_LNK);
+
+On Wed, 19 Apr 2023 12:41:06 +0200, Konrad Dybcio wrote:
+> As pointed out by Shazad [1], PMICs using a separate HLOS+PBS scheme
+> (so PMK8350 and newer) are expected to pass reboot mode data through SDAM,
+> as the reboot mode registers are absent in the HLOS reg space.
 > 
-> MT7531 has got a different bit on the register for this, MT7531_FORCE_LNK.
-> Are you sure PMCR_FORCE_LNK would work for MT7531 too?
-
-No, I had overlooked that. As the effects of not doing the
-force-link-down before the reset are subtle and depend on the
-link-partners I may not have cought them in my tests.
-
-
+> Limit the reboot-mode.yaml inclusion to PMICs without a separate PBS
+> region.
 > 
-> Arınç
+> [1] https://lore.kernel.org/linux-arm-msm/12f13183-c381-25f7-459e-62e0c2b19498@quicinc.com/
+> 
+> Fixes: 03fccdc76dce ("dt-bindings: power: reset: qcom-pon: Add new compatible "qcom,pmk8350-pon"")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
+
