@@ -2,166 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD94A6EA341
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343CE6EA344
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbjDUFim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        id S230161AbjDUFkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 01:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjDUFii (ORCPT
+        with ESMTP id S233236AbjDUFkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:38:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF165B7;
-        Thu, 20 Apr 2023 22:38:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E188564DC5;
-        Fri, 21 Apr 2023 05:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0A8C433D2;
-        Fri, 21 Apr 2023 05:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682055513;
-        bh=okX8G73kUYpMvr7PR1bTBTURUIZ0HskAOzEnVg/ac5k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Rcq5qUUbeaGkV0SXQHTsMfe1ovnEc1Ga4y8233Pk/NDzDU21nWqH8OzY6CS7RgNaR
-         sQAxx6bX8nvfWZIYS4+zHlbtl0xcRaTldYz4Q+BCoMo+TFU8AEdo8zk0ySCDAZNGff
-         gMrbXQf00qVW0qBwlJ9+/Eug4KytKGpw+vcU4Nh1DzySTreycombjlRxwalViElGxb
-         x0J7KjYEwgyvVEhtPknJAIqexkE2aJd8S1lrPVXnUqthoJkKKYEQlLVPkIT0xmLXgz
-         g+KiqQ5i+Pn7fNXpl5rywQiQqRSL7FltkyMnw1XKWAe2+sOGke4AP6XDukp26TvQze
-         k6gwnYjZ8hHZw==
-Date:   Fri, 21 Apr 2023 14:38:28 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v5 2/9] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-Id: <20230421143828.bb274512144e133eb5fead1a@kernel.org>
-In-Reply-To: <CAADnVQ+R3ySQpFDnn-2EtUooDmkwTBCh_yRjqNBDhS5SvWrTYQ@mail.gmail.com>
-References: <168198993129.1795549.8306571027057356176.stgit@mhiramat.roam.corp.google.com>
-        <168198995084.1795549.16754963116067902376.stgit@mhiramat.roam.corp.google.com>
-        <20230420184932.pgv5wiqqt4fzswdk@MacBook-Pro-6.local>
-        <20230421084106.5a02844971e18cdd8ad163be@kernel.org>
-        <CAADnVQ+R3ySQpFDnn-2EtUooDmkwTBCh_yRjqNBDhS5SvWrTYQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Fri, 21 Apr 2023 01:40:07 -0400
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8497259C4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:40:05 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id pjV2pQlJ0YD96pjV2pjQ2t; Fri, 21 Apr 2023 07:40:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682055603;
+        bh=7qKZ3uxvb0ZRE+YpwV4WbK5yMlZJV1gsOrqwFy3n2zE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KOEQaCde+tDiFzYb8LGwh9OhPXUh73UetQ/YZaZtt3UT4E4M9pkvj5Og4I9M2g2QK
+         u1L1z0BYUFqNC3hPg1/H51ZONoH2ulxC6Asivzgm9X0r5u/uSy+aQxNpGsxG+KzuVA
+         s+Ulzm/7aWRMa77voDeSrnzJeccEJ7JTrZx5q4P4bt65OIJTPUfGc9rbYGb0nhyRB7
+         X5efAPbgVCLEgfKBIyxdHuvr4fY/mSqyaJOICDQqY/3dOhatez5V2W627blzulupeE
+         w3G7ofXAOfp1e+rsvjeM1H+uHWlVKSzlKG2S2PPlrTrWZHeBDuZSUpBDyyuy0j+3+i
+         AJxMwTAk18VHQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 21 Apr 2023 07:40:03 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <4385d07a-e124-d2f2-fbd0-eda1d602167b@wanadoo.fr>
+Date:   Fri, 21 Apr 2023 07:40:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next] net: dsa: b53: Slightly optimize b53_arl_read()
+Content-Language: fr, en-GB
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <c94fb1b4dcd9a04eff08cf9ba2444c348477e554.1682023416.git.christophe.jaillet@wanadoo.fr>
+ <be0d976a-2219-d007-617d-6865c0344335@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <be0d976a-2219-d007-617d-6865c0344335@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 16:46:08 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-
-> On Thu, Apr 20, 2023 at 4:41 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Thu, 20 Apr 2023 11:49:32 -0700
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >
-> > > On Thu, Apr 20, 2023 at 08:25:50PM +0900, Masami Hiramatsu (Google) wrote:
-> > > > +static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > > > +                       struct pt_regs *regs)
-> > > > +{
-> > > > +   struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > > > +   struct fentry_trace_entry_head *entry;
-> > > > +   struct hlist_head *head;
-> > > > +   int size, __size, dsize;
-> > > > +   int rctx;
-> > > > +
-> > > > +   if (bpf_prog_array_valid(call)) {
-> > > > +           unsigned long orig_ip = instruction_pointer(regs);
-> > > > +           int ret;
-> > > > +
-> > > > +           ret = trace_call_bpf(call, regs);
-> > >
-> > > Please do not call bpf from fprobe.
-> > > There is no use case for it.
-> >
-> > OK.
-> >
-> > >
-> > > > +
-> > > > +           /*
-> > > > +            * We need to check and see if we modified the pc of the
-> > > > +            * pt_regs, and if so return 1 so that we don't do the
-> > > > +            * single stepping.
-> > > > +            */
-> > > > +           if (orig_ip != instruction_pointer(regs))
-> > > > +                   return 1;
-> > > > +           if (!ret)
-> > > > +                   return 0;
-> > > > +   }
-> > > > +
-> > > > +   head = this_cpu_ptr(call->perf_events);
-> > > > +   if (hlist_empty(head))
-> > > > +           return 0;
-> > > > +
-> > > > +   dsize = __get_data_size(&tf->tp, regs);
-> > > > +   __size = sizeof(*entry) + tf->tp.size + dsize;
-> > > > +   size = ALIGN(__size + sizeof(u32), sizeof(u64));
-> > > > +   size -= sizeof(u32);
-> > > > +
-> > > > +   entry = perf_trace_buf_alloc(size, NULL, &rctx);
-> > > > +   if (!entry)
-> > > > +           return 0;
-> > > > +
-> > > > +   entry->ip = entry_ip;
-> > > > +   memset(&entry[1], 0, dsize);
-> > > > +   store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> > > > +   perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
-> > > > +                         head, NULL);
-> > > > +   return 0;
-> > > > +}
-> > > > +NOKPROBE_SYMBOL(fentry_perf_func);
-> > > > +
-> > > > +static void
-> > > > +fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > > > +           unsigned long ret_ip, struct pt_regs *regs)
-> > > > +{
-> > > > +   struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > > > +   struct fexit_trace_entry_head *entry;
-> > > > +   struct hlist_head *head;
-> > > > +   int size, __size, dsize;
-> > > > +   int rctx;
-> > > > +
-> > > > +   if (bpf_prog_array_valid(call) && !trace_call_bpf(call, regs))
-> > > > +           return;
-> > >
-> > > Same here.
-> > > These two parts look like copy-paste from kprobes.
-> > > I suspect this code wasn't tested at all.
-> >
-> > OK, I missed to test that bpf part. I thought bpf could be appended to
-> > any "trace-event" (looks like trace-event), isn't it?
+Le 21/04/2023 à 02:40, Florian Fainelli a écrit :
 > 
-> No. We're not applying bpf filtering to any random event
-> that gets introduced in a tracing subsystem.
-> fprobe falls into that category.
-> Every hook where bpf can be invoked has to be thought through.
-> That mental exercise didn't happen here.
+> 
+> On 4/20/2023 1:44 PM, Christophe JAILLET wrote:
+>> When the 'free_bins' bitmap is cleared, it is better to use its full
+>> maximum size instead of only the needed size.
+>> This lets the compiler optimize it because the size is now known at 
+>> compile
+>> time. B53_ARLTBL_MAX_BIN_ENTRIES is small (i.e. currently 4), so a 
+>> call to
+>> memset() is saved.
+>>
+>> Also, as 'free_bins' is local to the function, the non-atomic __set_bit()
+>> can also safely be used here.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>>   drivers/net/dsa/b53/b53_common.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/net/dsa/b53/b53_common.c 
+>> b/drivers/net/dsa/b53/b53_common.c
+>> index 3464ce5e7470..8c55fe0e0747 100644
+>> --- a/drivers/net/dsa/b53/b53_common.c
+>> +++ b/drivers/net/dsa/b53/b53_common.c
+>> @@ -1627,7 +1627,7 @@ static int b53_arl_read(struct b53_device *dev, 
+>> u64 mac,
+>>       if (ret)
+>>           return ret;
+>> -    bitmap_zero(free_bins, dev->num_arl_bins);
+>> +    bitmap_zero(free_bins, B53_ARLTBL_MAX_BIN_ENTRIES);
+> 
+> That one I am not a big fan, as the number of ARL bins is a function of 
+> the switch model, and this illustrates it well.
 
-OK. Just out of curiousity, where is the "tracepoint" filter applied?
-In the kernel (verifier?) or the userspace?
+Ok, up to you to take or not what looks the better solution.
 
-Thank you,
+ From my point of view, the "for (i = 0; i < dev->num_arl_bins" below 
+illustrates it better.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Maybe, another approach to save the memset() call would be remove the 
+bitmap_zero() call, and declare 'free_bins' as:
+
+    DECLARE_BITMAP(free_bins, B53_ARLTBL_MAX_BIN_ENTRIES) = { };
+(this syntax is already used in b53_configure_vlan())
+
+
+The compiler should still be able to optimize the initialisation and 
+this wouldn't, IMHO, introduce confusion about the intent.
+
+Let me know if you prefer to leave this hunk as-is, or if this other 
+alternative pleases you.
+
+
+CJ
+
+> 
+>>       /* Read the bins */
+>>       for (i = 0; i < dev->num_arl_bins; i++) {
+>> @@ -1641,7 +1641,7 @@ static int b53_arl_read(struct b53_device *dev, 
+>> u64 mac,
+>>           b53_arl_to_entry(ent, mac_vid, fwd_entry);
+>>           if (!(fwd_entry & ARLTBL_VALID)) {
+>> -            set_bit(i, free_bins);
+>> +            __set_bit(i, free_bins);
+> 
+> I would be keen on taking that hunk but keep the other as-is. Does that 
+> work for you?
+> -- 
+> Florian
+> 
+
