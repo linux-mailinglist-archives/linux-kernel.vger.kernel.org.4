@@ -2,85 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA816EB52B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9DD6EB52E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbjDUWrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S233960AbjDUWrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbjDUWq6 (ORCPT
+        with ESMTP id S233765AbjDUWrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:46:58 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6255F1FCE;
-        Fri, 21 Apr 2023 15:46:46 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b8f34bca001so2934465276.3;
-        Fri, 21 Apr 2023 15:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682117205; x=1684709205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vUUOIxrjpun/24RZv7I8ONxLUOsWypQs9rpKT/sGscM=;
-        b=Q8aUqJuWAgeaQceyp3w7NMH6kiF/bAlhEBz0LOUheInmP3kOueg8pAgUKhqV394irT
-         PqAWxm6mnhI78XaqtXQZWDSUtP5gPyR5UFsgf97x2Z5IcnzdekCfnB5ixtnkROc2ubFw
-         qY14EDO/S/W4ozktddGWRVbQUyLHyZ6LKygUHC20VxSaQ5o5PtECnmYPz4H5URTYwinE
-         RzemI+UIR4tm+0OeMaW037iVsB2XPVWy/9KJ1JjKsn9SB5hvRNW2/C1OEXqwnDzgwdzC
-         NuyU71JQSvBSP+NbOfanjl/vEvgW54aaHUOsUTFYOmImBov0zqm0NvV8RjV2Fvv7VRtd
-         nPkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682117205; x=1684709205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vUUOIxrjpun/24RZv7I8ONxLUOsWypQs9rpKT/sGscM=;
-        b=ZIdO8Hjodnr2xItB3LGQCiLNGvzykFZlazzS0BmJSoD8huOzlFBR18ialTFPHfaGwh
-         +UFEzgc58S0+HQbsC8LZ/331NKmrDQt96YZuMEPUjsEncb0h2IAjoCnB23ewztwDQ6Fp
-         vKKtFKYEPs+4WEZFar3SBONAjReHOFc8aroDsiB4tPk3KTMiNxZlssFb4ZHjxOdsfqpi
-         Kg8aa0JC16TeFZE5TVHa3mGjrItGqUYQl/1+j1zGUWShDn5045/wNH/s1OWqjveBvZf+
-         UmHd2cjsY0U2Ht/1m9KM/NxlVSW7biaQStgYwwxelIx/WIhemY85WH0f3rfFjT4ASRBA
-         thAw==
-X-Gm-Message-State: AAQBX9cctxft//xjwt4g46c8nEnmM1CsPTsgWtU5bPR5BtdVqPssOe3W
-        4l850rMCKo27/MWGoBGjINnk4lGb8nJRIPWqERo=
-X-Google-Smtp-Source: AKy350aAwaz5VZPCRreYkS3JrJcWaOP0Y6dLHzltykRV9YdT1BXuRHlfrSKtjt5f2GbfmQR3Zmrmj0j3/wZE4zDHG5A=
-X-Received: by 2002:a25:2085:0:b0:b96:f486:9efa with SMTP id
- g127-20020a252085000000b00b96f4869efamr3478748ybg.40.1682117205383; Fri, 21
- Apr 2023 15:46:45 -0700 (PDT)
+        Fri, 21 Apr 2023 18:47:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6C91FF1;
+        Fri, 21 Apr 2023 15:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VcM5hqe8ohQj2y6ERa1ukw3ufFJS21Hh1hq4I+TYzSo=; b=rgNlBrbBZQE/jPeLix+D0ilI0Q
+        71kmRlZ2+T7aKhtBX4TmXZ0BiGQZ6bWSHN2OzBeUMgbJLMrI7CQn70w0LvkZZGKGUJujkqTXWkWCn
+        Uh6eKQlha9lwPIMZE0f1gWoEFMdo8DN/1Pxf71MEA3Z2VCdB/1uMtYEpQ0H1m50J90mZqXPHNOXGx
+        bSzD0JUSBjwZItHuHF9/l21almvKizFj2XpMdsw1wY4wRNpKrGeRSwNNW62/pJmU8cPHf8nq6R41+
+        wt8Sfq2bTDEup+WZg0StBdVV64q8kbX2jTs0APsYWtyNZY/6fadEMw2ddReaCFvGP6+6ykleJrobe
+        Sok4SDkw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ppzWs-00FiFo-Cm; Fri, 21 Apr 2023 22:46:58 +0000
+Date:   Fri, 21 Apr 2023 23:46:58 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     hughd@google.com, akpm@linux-foundation.org, brauner@kernel.org,
+        djwong@kernel.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, hare@suse.de, kbusch@kernel.org,
+        patches@lists.linux.dev, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 3/8] shmem: account for high order folios
+Message-ID: <ZEMSYtF3np7W6bIX@casper.infradead.org>
+References: <20230421214400.2836131-1-mcgrof@kernel.org>
+ <20230421214400.2836131-4-mcgrof@kernel.org>
 MIME-Version: 1.0
-References: <20230413100157.740697-1-benno.lossin@proton.me>
-In-Reply-To: <20230413100157.740697-1-benno.lossin@proton.me>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 22 Apr 2023 00:46:34 +0200
-Message-ID: <CANiq72nbRDp5Ei0dzkKZJw16CzO6iXwXaBZUigz7qKdjBn9ypQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: init: broaden the blanket impl of `Init`
-To:     Benno Lossin <benno.lossin@proton.me>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421214400.2836131-4-mcgrof@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 12:02=E2=80=AFPM Benno Lossin <benno.lossin@proton.=
-me> wrote:
->
-> This makes it possible to use `T` as a `impl Init<T, E>` for every error
-> type `E` instead of just `Infallible`.
+On Fri, Apr 21, 2023 at 02:43:55PM -0700, Luis Chamberlain wrote:
+> -		if (xa_is_value(page))
+> -			swapped++;
+> +		if (xa_is_value(folio))
+> +			swapped+=(folio_nr_pages(folio));
 
-Applied to `rust-next`. Thanks!
+			swapped += folio_nr_pages(folio);
 
-Cheers,
-Miguel
+>  			if (xa_is_value(folio)) {
+> +				long swaps_freed = 0;
+>  				if (unfalloc)
+>  					continue;
+> -				nr_swaps_freed += !shmem_free_swap(mapping,
+> -							indices[i], folio);
+> +				swaps_freed = folio_nr_pages(folio);
+
+Why initialise it to 0 when you're about to set it to folio_nr_pages()?
+
+> +				if (!shmem_free_swap(mapping, indices[i], folio)) {
+> +					if (swaps_freed > 1)
+> +						pr_warn("swaps freed > 1 -- %lu\n", swaps_freed);
+
+Debug code that escaped into this patch?
+
+> -		info->swapped++;
+> +		info->swapped+=folio_nr_pages(folio);
+
+Same comment as earlier.
+
+> -	info->alloced--;
+> -	info->swapped--;
+> +	info->alloced-=num_swap_pages;
+> +	info->swapped-=num_swap_pages;
+
+Spacing
+
+> -	info->swapped--;
+> +	info->swapped-= folio_nr_pages(folio);
+
+Spacing.
+
