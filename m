@@ -2,196 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C406EA1A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980F36EA1AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbjDUCcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S233548AbjDUCci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjDUCcL (ORCPT
+        with ESMTP id S233298AbjDUCcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:32:11 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE826B2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:32:08 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b7096e2e4so1581880b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682044325; x=1684636325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Os9mukvCSPKKdw4nMw1R9O8vMlREwTtiShtLG9IPKE=;
-        b=HCUz5FFzKFUHDPDgsikCdeCMO1zCq/dlZrN9CoWrMcHhOk5eW5mGuvAW0p45w19CZ9
-         6DhK5F2Gk1GWEBSlELCPFSghDIlDSe1DGcJsa3XDYcDtdAEhjPD95OxhadNqFqLjy31a
-         AEwqXTmEZj/G96t5M0pUJFRsj3q4EZINhn5IxkcSe8fP6t4MfV3qgawZfZCEP/9uKbME
-         XEmL0ckKkFWmjHQeQG7hPRTo7o4ucGkjtRfjE1LcDP8ADmrc3OOqwoNwl3GOCVz2MgqQ
-         qWNVGhGaMk/y7AJaDYlyWUfw2DAWzlQCWRH/UzMHCoGdZelgd211UAMLzH4/cQqVS8G9
-         RY2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682044325; x=1684636325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+Os9mukvCSPKKdw4nMw1R9O8vMlREwTtiShtLG9IPKE=;
-        b=GyDngSSkrQzSKsDNRynKU+e7HlLuNOICytZ2ewTp1mXVMVqsDJqSVEAzH1HGDtqyWz
-         1JkxT8KSGHTIZoTSPAA9HjGXZq2joxMuaYeCrQraBCU0e4jT7Wav4K/kATzRcyqTSSxu
-         FWaQrtQfN6WO9MBoXNla82dXrDrvUHYjXMhrY2368JF39tz2zuawSPzRSdJyiUEZg9N8
-         h1RR6EpXGbwnGwQwReqmu27HylF0JU2RKdGQp92GFIgdRqVJymS9XrxeWfq7qdnqh7rS
-         c1obpE4wtOpxeaTyUaKYL5qDo6tTaPSbz3GJvhxo1/Yyg3hVRgaYouk60GCqmfrXZcz3
-         6FyA==
-X-Gm-Message-State: AAQBX9fmjNymL8x0Sxfv7b/sn3zO8nd1gNhH8xaomsRLfiLi0LCj/Lsy
-        jiJBkduIASHzfAwwSypB9d76ew==
-X-Google-Smtp-Source: AKy350an2piqFQ6UOXrk8jJ6gIyDjZgCDQB+P/aZgG82pfL/0ZNRMdlbfqgcUvlglP49ovd9ARWPuw==
-X-Received: by 2002:a05:6a00:1acd:b0:63d:2aac:7b88 with SMTP id f13-20020a056a001acd00b0063d2aac7b88mr4799316pfv.25.1682044325691;
-        Thu, 20 Apr 2023 19:32:05 -0700 (PDT)
-Received: from [10.71.57.173] ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id o8-20020a62f908000000b006260526cf0csm1847551pfh.116.2023.04.20.19.31.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 19:32:05 -0700 (PDT)
-Message-ID: <184a2930-99ee-4cbe-9d9e-2f7d7fa8a2e2@bytedance.com>
-Date:   Fri, 21 Apr 2023 10:31:55 +0800
+        Thu, 20 Apr 2023 22:32:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84DD4C24
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:32:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6307864D1D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:32:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C86DC433D2;
+        Fri, 21 Apr 2023 02:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682044348;
+        bh=HEG4UZZ00eL/X9g2cqzfCI9QxG2kcg5ncPgftIMiFTw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Sv2MkPWQyIZenWeYgGpsaaPWlZaq0zFBgBO06WLqjaNjjA1WAmxxQJd8Ymk5IVmbp
+         P87uVnsTrjZ/9NyGZupRO7ytEBTQHsySgOhEbBs9uu21tzhBrN/Lbx6VHXfqrjUYiC
+         DwH1aQYjHzADRkjkp7WOrtMZVQohStTx5freuDqxoeQQdIu0gn6zijEOAxf0rktHh+
+         btR03YZ2k7DQCFSsjHp0Z7WRkdcuneJdZ3NtDn3XUajZk/RlaKuFNQWZgyClp66MX2
+         bmSpTqLIxp4DAuA0UiOBbFr6KefOj/T3sbQvTnjJb4gZE8hlKa0GDAhD5qvNgPlF5h
+         9miMO5jl83+jQ==
+Message-ID: <90db4ad9-e7e8-1fa2-acbd-919fb9bbf7f3@kernel.org>
+Date:   Fri, 21 Apr 2023 10:32:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [External] Re: [PATCH bpf-next 1/2] bpf: Add
- bpf_task_under_cgroup helper
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, yangzhenze@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>
-References: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
- <20230420072657.80324-2-zhoufeng.zf@bytedance.com>
- <CAADnVQ+ffmrJCMa2R48AtJL3nT93jtKEdRv3RFeJ3Vo2L6ukQA@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQ+ffmrJCMa2R48AtJL3nT93jtKEdRv3RFeJ3Vo2L6ukQA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2] f2fs: refactor struct f2fs_attr macro
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230415152944.51393-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230415152944.51393-1-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/4/21 02:22, Alexei Starovoitov 写道:
-> On Thu, Apr 20, 2023 at 12:27 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> This adds a bpf helper that's similar to the
->> bpf_current_task_under_cgroup. The difference is that it is a
->> designated task.
->>
->> When hook sched related functions, sometimes it is necessary to
->> specify a task instead of the current task.
->>
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->> ---
->>   include/uapi/linux/bpf.h       | 13 +++++++++++++
->>   kernel/bpf/verifier.c          |  4 +++-
->>   kernel/trace/bpf_trace.c       | 31 +++++++++++++++++++++++++++++++
->>   tools/include/uapi/linux/bpf.h | 13 +++++++++++++
->>   4 files changed, 60 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 4b20a7269bee..3d31ddb39e10 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -5550,6 +5550,18 @@ union bpf_attr {
->>    *             0 on success.
->>    *
->>    *             **-ENOENT** if the bpf_local_storage cannot be found.
->> + *
->> + * long bpf_task_under_cgroup(struct bpf_map *map, struct task_struct *task, u32 index)
->> + *     Description
->> + *             Check whether the probe is being run is the context of a given
->> + *             subset of the cgroup2 hierarchy. The cgroup2 to test is held by
->> + *             *map* of type **BPF_MAP_TYPE_CGROUP_ARRAY**, at *index*.
->> + *     Return
->> + *             The return value depends on the result of the test, and can be:
->> + *
->> + *             * 1, if assigned task belongs to the cgroup2.
->> + *             * 0, if assigned task does not belong to the cgroup2.
->> + *             * A negative error code, if an error occurred.
->>    */
->>   #define ___BPF_FUNC_MAPPER(FN, ctx...)                 \
->>          FN(unspec, 0, ##ctx)                            \
->> @@ -5764,6 +5776,7 @@ union bpf_attr {
->>          FN(user_ringbuf_drain, 209, ##ctx)              \
->>          FN(cgrp_storage_get, 210, ##ctx)                \
->>          FN(cgrp_storage_delete, 211, ##ctx)             \
->> +       FN(task_under_cgroup, 212, ##ctx)               \
->>          /* */
->>
->>   /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 1e05355facdc..1e2c3c3e8d5f 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -7771,7 +7771,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
->>                  break;
->>          case BPF_MAP_TYPE_CGROUP_ARRAY:
->>                  if (func_id != BPF_FUNC_skb_under_cgroup &&
->> -                   func_id != BPF_FUNC_current_task_under_cgroup)
->> +                   func_id != BPF_FUNC_current_task_under_cgroup &&
->> +                   func_id != BPF_FUNC_task_under_cgroup)
->>                          goto error;
->>                  break;
->>          case BPF_MAP_TYPE_CGROUP_STORAGE:
->> @@ -7902,6 +7903,7 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
->>                          goto error;
->>                  break;
->>          case BPF_FUNC_current_task_under_cgroup:
->> +       case BPF_FUNC_task_under_cgroup:
->>          case BPF_FUNC_skb_under_cgroup:
->>                  if (map->map_type != BPF_MAP_TYPE_CGROUP_ARRAY)
->>                          goto error;
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index bcf91bc7bf71..b02a04768824 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -814,6 +814,35 @@ static const struct bpf_func_proto bpf_current_task_under_cgroup_proto = {
->>          .arg2_type      = ARG_ANYTHING,
->>   };
->>
->> +BPF_CALL_3(bpf_task_under_cgroup, struct bpf_map *, map, struct task_struct *,
->> +          task, u32, idx)
->> +{
->> +       struct bpf_array *array = container_of(map, struct bpf_array, map);
->> +       struct cgroup *cgrp;
->> +
->> +       if (unlikely(!task))
->> +               return -ENOENT;
->> +
->> +       if (unlikely(idx >= array->map.max_entries))
->> +               return -E2BIG;
->> +
->> +       cgrp = READ_ONCE(array->ptrs[idx]);
->> +       if (unlikely(!cgrp))
->> +               return -EAGAIN;
->> +
->> +       return task_under_cgroup_hierarchy(task, cgrp);
-> We don't add helpers anymore.
-> Please wrap task_under_cgroup_hierarchy() as a kfunc
-> that takes two TRUSTED pointers task and cgroup.
-Will do, thanks.
+On 2023/4/15 23:29, Yangtao Li wrote:
+> This patch provides a large number of variants of F2FS_RW_ATTR
+> and F2FS_RO_ATTR macros, reducing the number of parameters required
+> to initialize the f2fs_attr structure.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304152234.wjaY3IYm-lkp@intel.com/
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+> v2:
+> -fix compile error
+>   fs/f2fs/sysfs.c | 237 +++++++++++++++++++++++++++++-------------------
+>   1 file changed, 146 insertions(+), 91 deletions(-)
+> 
+> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> index 8ea05340bad9..1fb38b222684 100644
+> --- a/fs/f2fs/sysfs.c
+> +++ b/fs/f2fs/sysfs.c
+> @@ -842,68 +842,157 @@ static struct f2fs_attr f2fs_attr_##_name = {			\
+>   #define F2FS_GENERAL_RO_ATTR(name) \
+>   static struct f2fs_attr f2fs_attr_##name = __ATTR(name, 0444, name##_show, NULL)
+>   
+> -#define F2FS_STAT_ATTR(_struct_type, _struct_name, _name, _elname)	\
+> -static struct f2fs_attr f2fs_attr_##_name = {			\
+> -	.attr = {.name = __stringify(_name), .mode = 0444 },	\
+> -	.show = f2fs_sbi_show,					\
+> -	.struct_type = _struct_type,				\
+> -	.offset = offsetof(struct _struct_name, _elname),       \
+> -}
+> +#define STAT_INFO_RO_ATTR(name, elname)				\
+> +	F2FS_RO_ATTR(STAT_INFO, f2fs_stat_info, name, elname)	\
+> +
+> +#define GC_THREAD_RW_ATTR(name, elname)				\
+> +	F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, name, elname)	\
+> +
+> +#define SM_INFO_RW_ATTR(name, elname)				\
+> +	F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, name, elname)	\
+> +
+> +#define SM_INFO_GENERAL_RW_ATTR(elname)				\
+> +	SM_INFO_RW_ATTR(elname, elname)				\
+> +
+> +#define DCC_INFO_RW_ATTR(name, elname)					\
+> +	F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, name, elname)	\
+> +
+> +#define DCC_INFO_GENERAL_RW_ATTR(elname)			\
+> +	DCC_INFO_RW_ATTR(elname, elname)			\
+> +
+> +#define NM_INFO_RW_ATTR(name, elname)				\
+> +	F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, name, elname)	\
+> +
+> +#define NM_INFO_GENERAL_RW_ATTR(elname)				\
+> +	NM_INFO_RW_ATTR(elname, elname)				\
+> +
+> +#define F2FS_SBI_RW_ATTR(name, elname)				\
+> +	F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, name, elname)	\
+> +
+> +#define F2FS_SBI_GENERAL_RW_ATTR(elname)			\
+> +	F2FS_SBI_RW_ATTR(elname, elname)			\
+> +
+> +#define F2FS_SBI_GENERAL_RO_ATTR(elname)			\
+> +	F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, elname, elname)	\
+> +
+> +#define FAULT_INFO_RATE_GENERAL_RW_ATTR(elname)				\
+> +	F2FS_RW_ATTR(FAULT_INFO_RATE, f2fs_fault_info, elname, elname)	\
+> +
+> +#define FAULT_INFO_TYPE_GENERAL_RW_ATTR(elname)				\
+> +	F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, elname, elname)	\
+> +
+> +#define RESERVED_BLOCKS_GENERAL_RW_ATTR(elname)				\
+> +	F2FS_RW_ATTR(RESERVED_BLOCKS, f2fs_sb_info, elname, elname)	\
+> +
+> +#define CPRC_INFO_GENERAL_RW_ATTR(elname)				\
+> +	F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, elname, elname)	\
+> +
+> +#define ATGC_INFO_RW_ATTR(name, elname)				\
+> +	F2FS_RW_ATTR(ATGC_INFO, atgc_management, name, elname)	\
+>   
+> -F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_urgent_sleep_time,
+> -							urgent_sleep_time);
+> -F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_min_sleep_time, min_sleep_time);
+> -F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_max_sleep_time, max_sleep_time);
+> -F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_no_gc_sleep_time, no_gc_sleep_time);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_idle, gc_mode);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent, gc_mode);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, reclaim_segments, rec_prefree_segments);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_small_discards, max_discards);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_request, max_discard_request);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_issue_time);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_io_aware_gran, discard_io_aware_gran);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_urgent_util, discard_urgent_util);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
+> -F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_ordered_discard, max_ordered_discard);
+> -F2FS_RW_ATTR(RESERVED_BLOCKS, f2fs_sb_info, reserved_blocks, reserved_blocks);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, ipu_policy, ipu_policy);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_ipu_util, min_ipu_util);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_fsync_blocks, min_fsync_blocks);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_seq_blocks, min_seq_blocks);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_hot_blocks, min_hot_blocks);
+> -F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_ssr_sections, min_ssr_sections);
+> -F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ram_thresh, ram_thresh);
+> -F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ra_nid_pages, ra_nid_pages);
+> -F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, dirty_nats_ratio, dirty_nats_ratio);
+> -F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, max_roll_forward_node_blocks, max_rf_node_blocks);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_victim_search, max_victim_search);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, migration_granularity, migration_granularity);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, dir_level, dir_level);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, cp_interval, interval_time[CP_TIME]);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, idle_interval, interval_time[REQ_TIME]);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, discard_idle_interval,
+> -					interval_time[DISCARD_TIME]);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_idle_interval, interval_time[GC_TIME]);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info,
+> -		umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
+> +/* GC_THREAD ATTR */
+> +GC_THREAD_RW_ATTR(gc_urgent_sleep_time, urgent_sleep_time);
+> +GC_THREAD_RW_ATTR(gc_min_sleep_time, min_sleep_time);
+> +GC_THREAD_RW_ATTR(gc_max_sleep_time, max_sleep_time);
+> +GC_THREAD_RW_ATTR(gc_no_gc_sleep_time, no_gc_sleep_time);
+> +
+> +/* SM_INFO ATTR */
+> +SM_INFO_RW_ATTR(reclaim_segments, rec_prefree_segments);
+> +SM_INFO_GENERAL_RW_ATTR(ipu_policy);
+> +SM_INFO_GENERAL_RW_ATTR(min_ipu_util);
+> +SM_INFO_GENERAL_RW_ATTR(min_fsync_blocks);
+> +SM_INFO_GENERAL_RW_ATTR(min_seq_blocks);
+> +SM_INFO_GENERAL_RW_ATTR(min_hot_blocks);
+> +SM_INFO_GENERAL_RW_ATTR(min_ssr_sections);
+> +
+> +/* DCC_INFO ATTR */
+> +DCC_INFO_RW_ATTR(max_small_discards, max_discards);
+> +DCC_INFO_GENERAL_RW_ATTR(max_discard_request);
+> +DCC_INFO_GENERAL_RW_ATTR(min_discard_issue_time);
+> +DCC_INFO_GENERAL_RW_ATTR(mid_discard_issue_time);
+> +DCC_INFO_GENERAL_RW_ATTR(max_discard_issue_time);
+> +DCC_INFO_GENERAL_RW_ATTR(discard_io_aware_gran);
+> +DCC_INFO_GENERAL_RW_ATTR(discard_urgent_util);
+> +DCC_INFO_GENERAL_RW_ATTR(discard_granularity);
+> +DCC_INFO_GENERAL_RW_ATTR(max_ordered_discard);
+> +
+> +/* NM_INFO ATTR */
+> +NM_INFO_RW_ATTR(max_roll_forward_node_blocks, max_rf_node_blocks);
+> +NM_INFO_GENERAL_RW_ATTR(ram_thresh);
+> +NM_INFO_GENERAL_RW_ATTR(ra_nid_pages);
+> +NM_INFO_GENERAL_RW_ATTR(dirty_nats_ratio);
+> +
+> +/* F2FS_SBI ATTR */
+> +F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
+> +F2FS_SBI_RW_ATTR(gc_idle, gc_mode);
+> +F2FS_SBI_RW_ATTR(gc_urgent, gc_mode);
+> +F2FS_SBI_RW_ATTR(cp_interval, interval_time[CP_TIME]);
+> +F2FS_SBI_RW_ATTR(idle_interval, interval_time[REQ_TIME]);
+> +F2FS_SBI_RW_ATTR(discard_idle_interval, interval_time[DISCARD_TIME]);
+> +F2FS_SBI_RW_ATTR(gc_idle_interval, interval_time[GC_TIME]);
+> +F2FS_SBI_RW_ATTR(umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
+> +F2FS_SBI_RW_ATTR(gc_pin_file_thresh, gc_pin_file_threshold);
+> +F2FS_SBI_RW_ATTR(gc_reclaimed_segments, gc_reclaimed_segs);
+> +F2FS_SBI_GENERAL_RW_ATTR(max_victim_search);
+> +F2FS_SBI_GENERAL_RW_ATTR(migration_granularity);
+> +F2FS_SBI_GENERAL_RW_ATTR(dir_level);
+>   #ifdef CONFIG_F2FS_IOSTAT
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_enable, iostat_enable);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_period_ms, iostat_period_ms);
+> +F2FS_SBI_GENERAL_RW_ATTR(iostat_enable);
+> +F2FS_SBI_GENERAL_RW_ATTR(iostat_period_ms);
+>   #endif
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, readdir_ra, readdir_ra);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_io_bytes, max_io_bytes);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_pin_file_thresh, gc_pin_file_threshold);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
+> +F2FS_SBI_GENERAL_RW_ATTR(readdir_ra);
+> +F2FS_SBI_GENERAL_RW_ATTR(max_io_bytes);
+> +F2FS_SBI_GENERAL_RW_ATTR(data_io_flag);
+> +F2FS_SBI_GENERAL_RW_ATTR(node_io_flag);
+> +F2FS_SBI_GENERAL_RW_ATTR(gc_remaining_trials);
+> +F2FS_SBI_GENERAL_RW_ATTR(seq_file_ra_mul);
+> +F2FS_SBI_GENERAL_RW_ATTR(gc_segment_mode);
+> +F2FS_SBI_GENERAL_RW_ATTR(max_fragment_chunk);
+> +F2FS_SBI_GENERAL_RW_ATTR(max_fragment_hole);
+> +#ifdef CONFIG_F2FS_FS_COMPRESSION
+> +F2FS_SBI_GENERAL_RW_ATTR(compr_written_block);
+> +F2FS_SBI_GENERAL_RW_ATTR(compr_saved_block);
+> +F2FS_SBI_GENERAL_RW_ATTR(compr_new_inode);
+> +F2FS_SBI_GENERAL_RW_ATTR(compress_percent);
+> +F2FS_SBI_GENERAL_RW_ATTR(compress_watermark);
+> +#endif
+> +F2FS_SBI_GENERAL_RW_ATTR(peak_atomic_write);
+> +F2FS_SBI_GENERAL_RW_ATTR(committed_atomic_block);
+> +F2FS_SBI_GENERAL_RW_ATTR(revoked_atomic_block);
+
+relocate below entry here.
+
+F2FS_SBI_GENERAL_RO_ATTR(current_atomic_write);
+
+It needs to keep original comment for age extent cache entries.
+
+/* For block age extent cache */
+
+Thanks,
+
+> +F2FS_SBI_GENERAL_RW_ATTR(hot_data_age_threshold);
+> +F2FS_SBI_GENERAL_RW_ATTR(warm_data_age_threshold);
+> +F2FS_SBI_GENERAL_RW_ATTR(last_age_weight);
+> +F2FS_SBI_GENERAL_RO_ATTR(current_atomic_write);
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +F2FS_SBI_GENERAL_RO_ATTR(unusable_blocks_per_sec);
+> +#endif
+> +
+> +/* STAT_INFO ATTR */
+> +#ifdef CONFIG_F2FS_STAT_FS
+> +STAT_INFO_RO_ATTR(cp_foreground_calls, cp_count);
+> +STAT_INFO_RO_ATTR(cp_background_calls, bg_cp_count);
+> +STAT_INFO_RO_ATTR(gc_foreground_calls, call_count);
+> +STAT_INFO_RO_ATTR(gc_background_calls, bg_gc);
+> +#endif
+> +
+> +/* FAULT_INFO ATTR */
+>   #ifdef CONFIG_F2FS_FAULT_INJECTION
+> -F2FS_RW_ATTR(FAULT_INFO_RATE, f2fs_fault_info, inject_rate, inject_rate);
+> -F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
+> +FAULT_INFO_RATE_GENERAL_RW_ATTR(inject_rate);
+> +FAULT_INFO_TYPE_GENERAL_RW_ATTR(inject_type);
+>   #endif
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_remaining_trials, gc_remaining_trials);
+> -F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
+> +
+> +/* RESERVED_BLOCKS ATTR */
+> +RESERVED_BLOCKS_GENERAL_RW_ATTR(reserved_blocks);
+> +
+> +/* CPRC_INFO ATTR */
+> +CPRC_INFO_GENERAL_RW_ATTR(ckpt_thread_ioprio);
+> +
+> +/* ATGC_INFO ATTR */
+> +ATGC_INFO_RW_ATTR(atgc_candidate_ratio, candidate_ratio);
+> +ATGC_INFO_RW_ATTR(atgc_candidate_count, max_candidate_count);
+> +ATGC_INFO_RW_ATTR(atgc_age_weight, age_weight);
+> +ATGC_INFO_RW_ATTR(atgc_age_threshold, age_threshold);
+> +
+>   F2FS_GENERAL_RO_ATTR(dirty_segments);
+>   F2FS_GENERAL_RO_ATTR(free_segments);
+>   F2FS_GENERAL_RO_ATTR(ovp_segments);
+> @@ -917,10 +1006,6 @@ F2FS_GENERAL_RO_ATTR(main_blkaddr);
+>   F2FS_GENERAL_RO_ATTR(pending_discard);
+>   F2FS_GENERAL_RO_ATTR(gc_mode);
+>   #ifdef CONFIG_F2FS_STAT_FS
+> -F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_foreground_calls, cp_count);
+> -F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_background_calls, bg_cp_count);
+> -F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, gc_foreground_calls, call_count);
+> -F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, gc_background_calls, bg_gc);
+>   F2FS_GENERAL_RO_ATTR(moved_blocks_background);
+>   F2FS_GENERAL_RO_ATTR(moved_blocks_foreground);
+>   F2FS_GENERAL_RO_ATTR(avg_vblocks);
+> @@ -935,8 +1020,6 @@ F2FS_FEATURE_RO_ATTR(encrypted_casefold);
+>   #endif /* CONFIG_FS_ENCRYPTION */
+>   #ifdef CONFIG_BLK_DEV_ZONED
+>   F2FS_FEATURE_RO_ATTR(block_zoned);
+> -F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, unusable_blocks_per_sec,
+> -					unusable_blocks_per_sec);
+>   #endif
+>   F2FS_FEATURE_RO_ATTR(atomic_write);
+>   F2FS_FEATURE_RO_ATTR(extra_attr);
+> @@ -956,37 +1039,9 @@ F2FS_FEATURE_RO_ATTR(casefold);
+>   F2FS_FEATURE_RO_ATTR(readonly);
+>   #ifdef CONFIG_F2FS_FS_COMPRESSION
+>   F2FS_FEATURE_RO_ATTR(compression);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_written_block, compr_written_block);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_saved_block, compr_saved_block);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_new_inode, compr_new_inode);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_percent, compress_percent);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_watermark, compress_watermark);
+>   #endif
+>   F2FS_FEATURE_RO_ATTR(pin_file);
+>   
+> -/* For ATGC */
+> -F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_candidate_ratio, candidate_ratio);
+> -F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_candidate_count, max_candidate_count);
+> -F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_age_weight, age_weight);
+> -F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_age_threshold, age_threshold);
+> -
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, seq_file_ra_mul, seq_file_ra_mul);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_segment_mode, gc_segment_mode);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_reclaimed_segments, gc_reclaimed_segs);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_fragment_chunk, max_fragment_chunk);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_fragment_hole, max_fragment_hole);
+> -
+> -/* For atomic write */
+> -F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, current_atomic_write, current_atomic_write);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, peak_atomic_write, peak_atomic_write);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, committed_atomic_block, committed_atomic_block);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, revoked_atomic_block, revoked_atomic_block);
+> -
+> -/* For block age extent cache */
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, hot_data_age_threshold, hot_data_age_threshold);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, warm_data_age_threshold, warm_data_age_threshold);
+> -F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, last_age_weight, last_age_weight);
+> -
+>   #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
+>   static struct attribute *f2fs_attrs[] = {
+>   	ATTR_LIST(gc_urgent_sleep_time),
