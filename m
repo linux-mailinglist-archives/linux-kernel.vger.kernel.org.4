@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FDC6EAF3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3D36EAF3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjDUQe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S233148AbjDUQfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbjDUQey (ORCPT
+        with ESMTP id S232770AbjDUQfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:34:54 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3E61FE7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:34:53 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94a39f6e8caso317002766b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682094892; x=1684686892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EsgLhwa1Y3Dit9q7Aba5iOCEKA1BynatRRqIwSMY4k0=;
-        b=Am9QkEegkklyVMT9ls9O/2AuspxdFdHs/eOvjT3eAc++BPYy1vEb+tAXUb0C/YboJz
-         SUmrtlFj4TA9FvOGr2PY8fzEnrx2qL2bZuKeM6nstgGKnX0sdYIr/JNTjr275d63Pfxg
-         rc2pFlLecnCaebBKFu56vFvNECT4pSGUloBarHxzy+74pr0wNN/dQeAVWXpXXxEbJf6n
-         W423xBgzLuZ1Qv5uDS8o80sGTrYApPMceCIF8CKrPKp3du6Dqp+1n/xcndEZ2Oz2g0qh
-         44KZLpGxfoPCaRn2iS+xqARQMQo6iow15uDPYqalT1rpvBRNLxEnGWEVWj3Ek+tBXG/1
-         iSAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682094892; x=1684686892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EsgLhwa1Y3Dit9q7Aba5iOCEKA1BynatRRqIwSMY4k0=;
-        b=NV3ogmPdUxUpjABeSYKVFK2ANYguiU8XIVsnOx3M/X+CJvhJ8Szt32notx8TNA8OOK
-         gKejQp1Nf8sATqFaOhvAnjirSAlGQwV3/Hsvj32y7RcOtI5QQqejsDyjDGlPbQlA4KAR
-         Ds6y/nSz7cq4o5ZTnLnAk2yPhaiafvvANY95NtWl+xhHSFgPT/DdMvteqfZHPHvMRn2H
-         FkgQEb41iUeI1FZsl1GGj+OnecPSo+fn5HKBaM2NoZEI/oKSVmEAoZFlLCaCfAONpGcl
-         eGAMUJ0OLiKMjN5ABMAE1IOYDfHK2hrKs30vXOfIUYyPyH6lXyLsXtF6FhNJTXXTQ2qg
-         cCeA==
-X-Gm-Message-State: AAQBX9fX0v/+7k2tAeDICIFL6Xd+xdwe3tIREhZdndjq5kNief25MgYw
-        YQOXZRch6dKursmv8oSc/WRWMw==
-X-Google-Smtp-Source: AKy350ZZrT448cL88phrLfnem0Nr+1DJTsIy14wJAqL7qIoVMmVdTpqr2w1NdOQJHZsBgP+kcZqzmw==
-X-Received: by 2002:aa7:d88c:0:b0:506:adf0:ead5 with SMTP id u12-20020aa7d88c000000b00506adf0ead5mr5048223edq.30.1682094891767;
-        Fri, 21 Apr 2023 09:34:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b00501d73cfc86sm2091328edu.9.2023.04.21.09.34.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 09:34:51 -0700 (PDT)
-Message-ID: <64d12ac8-0fc7-264a-4a73-6cb642dcc319@linaro.org>
-Date:   Fri, 21 Apr 2023 18:34:50 +0200
+        Fri, 21 Apr 2023 12:35:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CEE1FFE
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:35:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3DC861090
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:35:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF72C433EF;
+        Fri, 21 Apr 2023 16:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682094952;
+        bh=nnUrL2/uCxS1kaZARBS1+/ZTmFCyuJT0YgKCTa+rc1g=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Oa81Pmy3R2FzPb3k/KG/nWj6IlSwMJ7NpIjZdt1utIKibjgjnTzUHUV1gAKlxmQL/
+         CgQ6IJwt3sxQdUMkz7dW++gGosGQQ1I6igW/9R98B2jPLDZ7sJnL+AdfryeANEZWE3
+         hDDvrLh35ESpbmSn5xof/ETumu3bZpxSlBTESGw9UiIox/bjDZf8JIkg2VZcx5n3xk
+         bRyV2I3HivhYPjDFCRS7TwrOXBLGn9Obban7QRufTu3DM9JCvf7nCp5zVjAfSX7nJK
+         u7DBg69vu6uTlkfJlJAEt0ych7FmnUfi6cm6eyIM8ZvPrMt76F3wvbo7xao2BCiUvq
+         9K/kjvZzIQMIw==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Fri, 21 Apr 2023 17:35:46 +0100
+Subject: [PATCH] ASoC: rt715: Use maple tree register cache
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: pinctrl: qcom: Add SDX75 pinctrl
- devicetree compatible
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
-        manivannan.sadhasivam@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <1682079770-27656-1-git-send-email-quic_rohiagar@quicinc.com>
- <1682079770-27656-2-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1682079770-27656-2-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230412-asoc-rt715-maple-v1-1-200a84835fde@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGG7QmQC/x2NQQrCMBAAv1L27EKSNq34FfGwjRsb1KTsihZK/
+ 97U4wwMs4KyJFa4NCsIf5OmkivYUwNhovxgTPfK4IxrTWcdkpaA8hmsxzfNL0Z79rH3g+nb2EH
+ NRlLGUSiH6Qh/RZ6HnoVjWv6n623bdks+sW95AAAA
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-00e42
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1913; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=nnUrL2/uCxS1kaZARBS1+/ZTmFCyuJT0YgKCTa+rc1g=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkQrtltH1fl6yvBPtXjhXRlZ1zgP5vCxhZcVu6cD56
+ RfcmX/SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZEK7ZQAKCRAk1otyXVSH0KlrB/
+ 49Gq1y9hogSCIsLazNSRxQbxeJYozgzfG7fANMEvvEEfGwvVjVnmwPBmtCp6++gdwCgKM37WesTggA
+ Va3K2bbARKdoiMg3RAfbn7vryLJ77BsgTz+7S+wQTmHhCOpSvE8h8bmngxWmgrjZxMhGyRjulKyglX
+ IHwD/woeBOy0Ca3n8HsBbhlpDIowhkPP+spxtB2uYJmKwjb+/4j5B3SqxJKK0+2gR3FmRq1QnLQKlH
+ nwzagIYK9LGkEenmK3cT4qoM86f5/QbFZFFQkC1ABxDuHqfa4p3JnvtsxCkUkL1EbEGVaR8Fi7030s
+ 0HuPbvvvECWiU+5sjLkNjyUr1YhYj4
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 14:22, Rohit Agarwal wrote:
-> Add device tree binding Documentation details for Qualcomm SDX75
-> pinctrl driver.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
->  .../bindings/pinctrl/qcom,sdx75-tlmm.yaml          | 168 +++++++++++++++++++++
->  1 file changed, 168 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
-> new file mode 100644
-> index 0000000..c141072
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
-> @@ -0,0 +1,168 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,sdx75-tlmm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. SDX75 TLMM block
-> +
-> +maintainers:
-> +  - Rohit Agarwal <quic_rohiagar@quicinc.com>
-> +
-> +description:
-> +  Top Level Mode Multiplexer pin controller in Qualcomm SDX75 SoC.
-> +
-> +allOf:
-> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sdx75-tlmm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +  interrupt-controller: true
-> +  "#interrupt-cells": true
-> +  gpio-controller: true
-> +
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 105
+regmap has introduced a maple tree based register cache which makes use of
+this more advanced data structure which has been added to the kernel
+recently. Maple trees are much flatter than rbtrees, meaning that they do
+not grow to such depths when the register map is sparse which makes access
+a bit more efficient. The maple tree cache type is still a bit of a work
+in progress but should be effective for some devices already.
 
-maxItems: 67
+RT715 seems like a good candidate for maple tree. It is a SoundWire MBQ
+device and therefore supports only single register read/write operations
+which do not use raw I/O and will therefore save the cost of converting
+to and from device native format when accessing the cache while not having
+a negative impact from the current lack of bulk operations in maple tree
+cache sync. It has a moderately large and quite sparse register map which
+is a good fit for storing in a maple tree.
 
-Anyway you need to fix errors. Be sure you have yamllint and newest
-dtschema.
+Convert to use maple tree. There should be little if any visible difference
+at runtime.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ sound/soc/codecs/rt715-sdw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/rt715-sdw.c b/sound/soc/codecs/rt715-sdw.c
+index 4e61e16470ed..5ffe9a00dfd8 100644
+--- a/sound/soc/codecs/rt715-sdw.c
++++ b/sound/soc/codecs/rt715-sdw.c
+@@ -354,7 +354,7 @@ static const struct regmap_config rt715_regmap = {
+ 	.max_register = 0x752039, /* Maximum number of register */
+ 	.reg_defaults = rt715_reg_defaults, /* Defaults */
+ 	.num_reg_defaults = ARRAY_SIZE(rt715_reg_defaults),
+-	.cache_type = REGCACHE_RBTREE,
++	.cache_type = REGCACHE_MAPLE,
+ 	.use_single_read = true,
+ 	.use_single_write = true,
+ 	.reg_read = rt715_sdw_read,
+
+---
+base-commit: f033c26de5a5734625d2dd1dc196745fae186f1b
+change-id: 20230412-asoc-rt715-maple-185f657063f4
 
 Best regards,
-Krzysztof
+-- 
+Mark Brown <broonie@kernel.org>
 
