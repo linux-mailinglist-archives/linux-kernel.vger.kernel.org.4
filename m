@@ -2,74 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6133F6EAB91
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EA06EAB99
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjDUN1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S232289AbjDUN2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjDUN1f (ORCPT
+        with ESMTP id S231459AbjDUN21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:27:35 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836ADD322
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:27:29 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id 006d021491bc7-541b60e0a7fso1057320eaf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682083648; x=1684675648;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZuEcBNI44bQPUlx25Dk5iSkVIfTfkFa2bdyje0ZPA4U=;
-        b=INYiRZCVUBLSzSAvbeLFV7LQVhXQlmAmrLc3qHqFuiKoP49Kvr1rJil7YtjMfxYbg1
-         HECmzJP3eN4h57bcYfr+e+p+vuP3ms2tSKWCCBZzLday4YOhuRLzWJ73GIVZM3OKEcDe
-         P7B9iXIkTF1qZgN5TS4Mn2FYfgHoYZ0Z4MkEQhOt4McW3QQACFTOMopEsy2z8rv/HtJ8
-         sFZ1v1an4XMM+qeZHa7N1ejBZYlnkCJmqtukFpX4+Ly5WdRC2CeMLtV4AfomQVoh5WN2
-         MGtKhadaBwNGMT0tecMBQzq95ztnOf8k+HACtAxWE1zvXIaDVwj9ZnnDqjfGoNygqH1n
-         4dfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682083648; x=1684675648;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZuEcBNI44bQPUlx25Dk5iSkVIfTfkFa2bdyje0ZPA4U=;
-        b=G9EuFYqPNEZXJq04Lvtn1dFQ/qW1ijdtSUGK0UPpzDqhUn11T2l+gX9d4aIlSJmtsY
-         4neP/E4SB6Dn4TO88bugW++5loKX3Ku/DP1OeTo+f5DxkBwA64gD1mLQMGHaKTUzJKgi
-         m9S1ROFIAMYk6Vmr+aMRnZMbJiv3OvR2nk26oQHg0EfyVp9EA9EtPQoOCy0TY0dii6p7
-         Ipnj+rxkhSc65Bmvv/b3NkD9FKYIxiHf8WclD+WzdyDtjHGaJGXhrUV/7hzDUejUZ5+5
-         2Ni1wfrdKtykFP7WfZ9wQL9Nx9ZEMj6Cdy3wdIFx4Kkq+sgPhEisEg4Grwr45wM3ANyD
-         Ec0A==
-X-Gm-Message-State: AAQBX9cqvAWlkxC1fv7SXf2/HLPlAc15I7L8IBCqotIXGNPXdN73G3rU
-        DX3Tv5TCg4IZzP3qrgc3jdhr7nH7ckNg/Yeyt3o=
-X-Google-Smtp-Source: AKy350Zef11h8yNPICLFnNZ1km50ABP1QZ5eTwcMvZzsrRKoGT9GpBy77V4azfg+57adg1EWrkNJP62QfEuRkhDuTEk=
-X-Received: by 2002:a05:6808:118:b0:38b:5349:e112 with SMTP id
- b24-20020a056808011800b0038b5349e112mr2499244oie.46.1682083648707; Fri, 21
- Apr 2023 06:27:28 -0700 (PDT)
+        Fri, 21 Apr 2023 09:28:27 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2049.outbound.protection.outlook.com [40.107.223.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10781258A;
+        Fri, 21 Apr 2023 06:28:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jxNC7wAf0AulZ6a/lGb7U1ip3Q9Z1BlOrxTcGfS49wunN5DxSxbYguX2UDITka00caxWMmHtlCQ8/oxPaluXM7CLFLgpQk6d556G+6ZTTFwKaqDpEPeOAowKZLuaRDKWjboIDQ108g081adA0SambYMqNjaz1zI7DTG0jVBfF86Ny61QF6NUWwbe49P0ZDmw43bFBU56R5bkQz8pInkvZD1z4v+KEFonoKvNN3rBT/CBmHkfaJt024u7aFuUW0mzLLKpFE1L30pVzVUUSZQk6sBGhfvb4/zaDOvSooaZhDJ/i1VGB9T8lvASIp7GhnGX+ZtiRhv+VwtPlDiCA38t9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vW47UN/vh/G+N87F7Y8wqtXEzR+PWSef1azKjLRw7mU=;
+ b=iD7mblZWoOo5ksl2WGPWqiL+qEv7CVkoXFTjRlPxGmeAmY8cBOhEI3xX5MINYwPipIFzmmyTV6QYKI/uwiOauwOTNLTElYrTK5JqU68l6KwLrmBzgUYk7Ns8H6PDnneRveHKDUm5j/ceQ5HSdS6Y2Fk/CWV++J7Aov54nuOu5oKCh3DUxn6cBHWh5lvvspcWeZDKvbtgCckzoi1Is6jTXRVJF7d5BUYnMGXs1QOyJ8oNrOOJElEBe7EYcQH7VBNl5/r/G1mW6XIkUj6FlntwzC0cSju7wUgNNlFQ/W4EGmYGp5ytK+hzX1caqwakEqzXQ3ndBSn6BooSm/hvlpN+sA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vW47UN/vh/G+N87F7Y8wqtXEzR+PWSef1azKjLRw7mU=;
+ b=2krrEtMgwCMnuz1ExtLatFl36n1BNi1pwQGE6GPqbqxzRsCWqSG24UJVRrf4xQC6ofcQTcqQXRAl1+AlMJO9x/4LmGpAxPYkqVATssXl4vHi6DBSJ3Z+rgkLgJRth21EdKB8msR8hzDxScJx0s7GhlKRHDj0GMSOkXV8H2COyG8=
+Received: from MN2PR12MB4333.namprd12.prod.outlook.com (2603:10b6:208:1d3::23)
+ by PH8PR12MB7424.namprd12.prod.outlook.com (2603:10b6:510:228::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.33; Fri, 21 Apr
+ 2023 13:28:04 +0000
+Received: from MN2PR12MB4333.namprd12.prod.outlook.com
+ ([fe80::82c1:97bc:de0:7bf6]) by MN2PR12MB4333.namprd12.prod.outlook.com
+ ([fe80::82c1:97bc:de0:7bf6%5]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
+ 13:28:03 +0000
+From:   "Mehta, Piyush" <piyush.mehta@amd.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [PATCH] dt-bindings: usb: dwc3: xilinx: Add interrupt-names to
+ include hibernation interrupt
+Thread-Topic: [PATCH] dt-bindings: usb: dwc3: xilinx: Add interrupt-names to
+ include hibernation interrupt
+Thread-Index: AQHZbQWTnoxb1Gh2F0KbBkWHL5rgVq8xcHAAgAQebNA=
+Date:   Fri, 21 Apr 2023 13:28:03 +0000
+Message-ID: <MN2PR12MB4333134E60DC454D29BFE2F588609@MN2PR12MB4333.namprd12.prod.outlook.com>
+References: <20230412060843.149283-1-piyush.mehta@amd.com>
+ <20230418184026.GA2099329-robh@kernel.org>
+In-Reply-To: <20230418184026.GA2099329-robh@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR12MB4333:EE_|PH8PR12MB7424:EE_
+x-ms-office365-filtering-correlation-id: 045037dd-c1c6-4c35-30b0-08db426c3c4c
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +QZvp+5tv+OILLGAXCTBXAuNdn8sA2rK3Ux5uXJLP2jzmSK6n6ZqDPdn1fPUN8bKAiilYLtasabTTT6bw7ADqsF7WgQdXHyqsR6En5uGjUM3DVr9tExgTsi0DrrZv8A7Gl7jWNtN+n9lAYL1iwrrjsv9j/Hbjmw2EaA8pjememi15zjJibUWjtprdnoU693E8/GJJq5cbYe6uNdioNXvjd/UCec0O3Ak9CoDwQuKVGQjJg9HiccWKCreZalceHTw7xlR1Ud7wpJwrlYY8I65sLniLqkUZOEDQVNaxEDeHC+WOevjtanf+WHVB1sgOorv4qfnCSeJnNpanw3dAOBNKcETNNDnNn1ntJsWhphD4FKoEHP7Yj82NGghV+0J1V6EZ2hhSQdtsRzC50kEGEfOpCcSSRTNTBnFmCK6qDyAjh06qhBK7NZZKFExQ/l6bFQm2Hqv+KhsuujK1bHSjWCmLZ2sid59vXB85ly5VNZ90TrwDGJ9aiEvMhsWOsLmiZzxmpI/N3aqLXF1mWCG/dxZxb8Cpc/JNHaDFfdfc9Fp4DKsMoTYsMyxVnkjUwzBIo8MXbUtTOcCBmfNKHpdttIg//I7pm39IE34MBZqBZaSYefUj4ISgFTT6RYBKa6bdzWNU7JKeUN4jQ7mAb26RzeAAw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4333.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199021)(86362001)(33656002)(55016003)(2906002)(83380400001)(26005)(66556008)(66946007)(186003)(53546011)(6916009)(478600001)(66476007)(76116006)(66446008)(8676002)(54906003)(7696005)(41300700001)(71200400001)(8936002)(52536014)(316002)(64756008)(4326008)(5660300002)(38100700002)(9686003)(6506007)(966005)(38070700005)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?e2fL7lG6pkw0DmI9e707HkwqXtD8uu+ZHjJZt0OEcJiAQJeIiVxU4hLrgex5?=
+ =?us-ascii?Q?yERMOWJ2wQZxduX5OwMgN6ZtMkgw1DZPLKK2pd6qDEpm6MI27gpvRvyGe0JP?=
+ =?us-ascii?Q?jqHjMh6+GsDJ6QXnDZS2co09QJz9kZi8k04NoQ32Kq7cAqOGpyt1/kvNSabC?=
+ =?us-ascii?Q?IfdnSXH6+BQNrPrQLI3eRU+R667e6ze8tE4IVDCzo2q2ptOzJo9pg3dOD7p9?=
+ =?us-ascii?Q?ZljYe1A4+rm9c7DQ283rZybqVtIbPGfrq26lEzNsRw6k6blBVneqGiYgpuMH?=
+ =?us-ascii?Q?AkbhAatQaD2w5V6AX8b3iTX9pc6WmeTpGz0uyWLTAzCtXm5eGdHAh8Sh+9oX?=
+ =?us-ascii?Q?747GXrwXqiQ5Hx2Zf8gUpmv23WOakCBKKLSjqHbSVoKxfw244P04A05S60Tn?=
+ =?us-ascii?Q?NctcbE35D57WgBra1cUFjzR39KELJOXj+sYqnegmAkqpoG0Rps3YDpQtOlvS?=
+ =?us-ascii?Q?a3OAwXbSealNU/PS+VBgOlYSRsx7bP+boltYvPTxMQVof0GsNc0z83F5xtXs?=
+ =?us-ascii?Q?DpJHWnyQ6yWijCUVhYiwQXIceUiojJoCduOx6DcxfSoy3C0ufUvAdyeWMLVl?=
+ =?us-ascii?Q?wIUZrQ8fMsyFnUPf9fpctSX4zqsyhCARsqmYJIx3JTax86t0PYMM2IuIqNGj?=
+ =?us-ascii?Q?npn+eB+8dGnsHqsdJ3kAjAv0JL0xRkZRLpnPY7Hqn7Sp4Z3/miEixpl+USrl?=
+ =?us-ascii?Q?UvisZ1V19yECHmDPtyohMj5V5M3kX2xgDj/9uGPS2hEtZkAHBz66twp/22l4?=
+ =?us-ascii?Q?u19HdyD6JK0bz5wqK6l/I41QjtBiR/yCV7Xf5h7AL5xFyj/Qz4MiP6f6cXa2?=
+ =?us-ascii?Q?sqEyL8zdWP56zQZPutgzUacn5ump/y3lhzmInROVbceIIBwib4u1khfIYyng?=
+ =?us-ascii?Q?ZiqPpecmVd63Sc5v0ZK+N0mWz1ReD8IbZbipFZ2sJwwcLY18GWZUzJm3PQZ4?=
+ =?us-ascii?Q?eiJtlJlg3IYiSZb37MvYlkXBwlrjh3JbBO+oHuYKfMOHaQrD7ow5v90Y5ZbM?=
+ =?us-ascii?Q?pIpBkE4dJbRjpO8Pzi2dOb9XBHHXNHQMIEbnGY3Xl00NUvh3Hpd752n5Wlko?=
+ =?us-ascii?Q?cOL9K5Ws538XmJCYj0oRqsVvB3uleLXTH/Ca2PdAzQt3ATz2UuV+oPk+oJHJ?=
+ =?us-ascii?Q?vjmnbYrC7BVY/DUW55c7rPjhyau0INGfS5NzsjCckrU/1XqDuT1px121LZ7i?=
+ =?us-ascii?Q?p8rJklk8SYzrtfnZxJ1K3MvqEt7BeAYmndgBOpZ9g4YEdsy5/xTJd0ThUY3X?=
+ =?us-ascii?Q?hTP6wlOp1jLctM3oRlC/AyTMf1qtt1H8+o+8GtW76qfQpthC+EKGVib2RMKY?=
+ =?us-ascii?Q?Ndkqibdm0hQ/9FfA26sIH++CVA67k2+JdUV24HJBUjJqO/2qzNgjcrAas1E+?=
+ =?us-ascii?Q?SKyEkwxspKXwIkWJHIxqTI3NrkTDZC4mNf7UAszlLZR34Rg7b78rOsqc5w1Q?=
+ =?us-ascii?Q?gn5r7RErPSyaKsd6adZ6pZJGZSvZ0fbnbhxQep1YUxrKq3HuvQKZiGmRGaYf?=
+ =?us-ascii?Q?pzEW65FQkMpclZXxQvVy/PhQlg5m/yEc25GvSm/19wVZLlXbvdzezHFyK3BO?=
+ =?us-ascii?Q?J/Iq8b+RX6D84jVkahM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Reply-To: lindwilson141@gmail.com
-Sender: drrhamasalam8@gmail.com
-Received: by 2002:a05:6358:3190:b0:11c:59ec:79b5 with HTTP; Fri, 21 Apr 2023
- 06:27:28 -0700 (PDT)
-From:   Ms linda wilson <lindwilson141@gmail.com>
-Date:   Fri, 21 Apr 2023 06:27:28 -0700
-X-Google-Sender-Auth: eoe_cpKaLbmtZJXdBhj88KgibRY
-Message-ID: <CALomdBaBiYyb+=tsKZKi4tNosXFeKAq8tB+9jBovui5gWxq5rg@mail.gmail.com>
-Subject: MY WARM GREETINGS,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4333.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 045037dd-c1c6-4c35-30b0-08db426c3c4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2023 13:28:03.8321
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UjQEWLyhK3QmAC9A4nWvJlLABdTcoB0GtS1Zu++pMHkc0T0RJGXXmQ3Xer42O/Nb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7424
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dearest Beloved One.
-good day how are you, Why I contacted you is because I have a Very
-important and urgent
-for you, awaiting to hear from you.
-Ms Linda Wilson
+Hi
+
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Wednesday, April 19, 2023 12:10 AM
+> To: Mehta, Piyush <piyush.mehta@amd.com>
+> Cc: gregkh@linuxfoundation.org; krzysztof.kozlowski+dt@linaro.org;
+> michal.simek@xilinx.com; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; Simek, Michal
+> <michal.simek@amd.com>; Paladugu, Siva Durga Prasad
+> <siva.durga.prasad.paladugu@amd.com>; linux-arm-
+> kernel@lists.infradead.org; git (AMD-Xilinx) <git@amd.com>
+> Subject: Re: [PATCH] dt-bindings: usb: dwc3: xilinx: Add interrupt-names =
+to
+> include hibernation interrupt
+>=20
+> On Wed, Apr 12, 2023 at 11:38:43AM +0530, Piyush Mehta wrote:
+> > The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
+> > Added host mode interrupts and "usb-wakeup" interrupt-names optional
+> > property in the binding schema to capture remote-wakeup and connect/
+> > disconnect event in the hibernation state.
+> >
+> > Xilinx dwc3-core uses "host" and "otg" interrupts interrupt-names DT
+> > properties from dwc3-core.
+>=20
+> Is wakeup really not implemented in the DWC3 core, but outside it?
+
+Wakeup is implemented inside the dwc3-core.
+
+Initially we planned to implement wakeup interrupt name/interrupt optional =
+property in the dwc3-core.
+However, looking at other vendor wakeup interrupt implementation (Commit: d=
+d566faebe9f dt-bindings: usb: qcom,dwc3: refine interrupt requirements)
+we moved wakeup property to xilinx USB binding.
+
+>=20
+> >
+> > Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> > ---
+> > Note:
+> > - Xilinx uses dwc3-cores interrupt-names DT property.
+> >   Link:
+> >   Xilinx-dwc3 core:
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bi
+> ndings/usb/dwc3-xilinx.yaml#L129
+> >   dwc3-core:
+> > https://github.com/torvalds/linux/blob/master/Documentation/devicetree
+> > /bindings/usb/snps%2Cdwc3.yaml#L42
+> > ---
+> >  Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > index 098b73134a1b..abc32db2448a 100644
+> > --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > @@ -44,6 +44,15 @@ properties:
+> >        - const: bus_clk
+> >        - const: ref_clk
+> >
+> > +  interrupts:
+> > +    items:
+> > +      - description: Handle to the line usb-wakeup used to wake
+> > +          up the host processor.
+> > +
+> > +  interrupt-names:
+> > +    items:
+> > +      - const: usb-wakeup
+>=20
+> 'wakeup' is the standard name. And you also need 'wakeup-source'
+> property.
+>=20
+> > +
+> >    resets:
+> >      description:
+> >        A list of phandles for resets listed in reset-names.
+> > --
+> > 2.25.1
+> >
