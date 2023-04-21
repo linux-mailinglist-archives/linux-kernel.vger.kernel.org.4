@@ -2,106 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDED56EA9AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33DD6EA9BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjDULxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S230299AbjDUL5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjDULxM (ORCPT
+        with ESMTP id S230188AbjDUL5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:53:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3893A4EED
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:53:04 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so1636572e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:53:04 -0700 (PDT)
+        Fri, 21 Apr 2023 07:57:08 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B42525C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682077982; x=1684669982;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7Tctvi1T7uWRNiQ9tzC4LHci30BlviPi5BuTXmg+G4U=;
-        b=tZuo84f7ymjDqoKsocYpW1UiwisOAs9s8vL4UPa2z/pupNzmkoPcomnrieemcNkMR1
-         yMXB59H/cCQ0i9pd7J9DYv2lJwSRxMimsi5QpHAGcDn+rPPSUJYqA+eZHZJCQ5gruBkg
-         DXZzq1iJJOZyJ2kPKVQhpYn942GqMdPrwzLF51MeTfH9Jx1zQlmDr5CJmQG27/xhdhQE
-         chFdxCKTMDURYGGEA1uD/+9JTdJIAW188cKB0bQq40BfeS2z7L3zok8gAGP/mMoHQd9q
-         ORvQhH+klLTbB/+o6QolHgewRnICtyTDyeobKgaO4MXHa7oLCaXo4s3MO9IzCWCFBF32
-         8iwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682077982; x=1684669982;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Tctvi1T7uWRNiQ9tzC4LHci30BlviPi5BuTXmg+G4U=;
-        b=Jkq1U2PAXiABipGYNHeHRomjkQvdhsXDILcvivwaI9DvLSk74jfpxFV2lJEZNO3sTV
-         RkRkg12ZRcxBV9/5AY0VzxEYv7SHhNL1PC/iyh47dxdN03Eav1HMJpVD8LbeM9fmJ9/o
-         amnEt2spSlEXcy40SlUNZWYvbymXKtcuTCVso5AEH1Cm2dqH+h/x2cmN1MVlxU0cj4Wk
-         582o3gENJ+yzzaRu3Gv3Lm/bcP95tmEWrgCHxIR0r34mKVqJz3sarpcykPp0WCILn/MW
-         yaGTkyEa2GZIG7kz2EyOY+bAl13Fs0MwkNjMshEryywArwSFaigxER11GQgrQzaiihi3
-         iVuw==
-X-Gm-Message-State: AAQBX9fnj38hv9oD+tuFsprdmqQ7+AXY3TCoaE+irmJqY7uVxcbln9eX
-        0CSbJPa3vcl5VvLQrb6MAss2HQ==
-X-Google-Smtp-Source: AKy350YMZLWzfe50czDUO5u26OQGGazQcsnJZc/FPugk3HRL4VBFH9MHyC3EfxlYvfGWvSWoTQT7vA==
-X-Received: by 2002:ac2:41d0:0:b0:4ed:ca92:87f2 with SMTP id d16-20020ac241d0000000b004edca9287f2mr1334279lfi.20.1682077982416;
-        Fri, 21 Apr 2023 04:53:02 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id z2-20020ac25de2000000b004ec89c94f04sm534673lfq.155.2023.04.21.04.53.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 04:53:02 -0700 (PDT)
-Message-ID: <bec64668-f6bf-c41a-58b2-6ca25b1b3668@linaro.org>
-Date:   Fri, 21 Apr 2023 13:53:00 +0200
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1682078226; x=1713614226;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=a0Ul1SNqBsekJ6dH0ZERjtw8a5XsIF9m8VEQ6n/tquQ=;
+  b=o9IXBYecMJBn0g4zd8QlqhIotP0v3fjMMOP+lI8T7rGQZkqracXuhxt4
+   Pi+hR2N+Llx2RmNz3JlWsfwQl/5ZtlIvJQjrj6q+9HjTHAjQ/9cP3hvZY
+   SSyhOIE29M6GK8kiaEX/WXmr+qXubIMXxZijQXiZXziv6xIYMlRhh9jf1
+   bLVSuE+UJDHoLQgv1D4CYLnjCUJZF1QhWiN4SBzRXj+GckwORRwySYxNm
+   cKiI28+ESkoeFoeLtnUkP7e7+PUlhf1r84Ag57yOoJZ6G/TERI20zTo+6
+   s1ugMGP4JIc+PqkefNtv0h82pOZVvEbnLVwUBaRs2Ym/7NEzCFBw8Xzik
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,214,1677538800"; 
+   d="scan'208";a="30482480"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 21 Apr 2023 13:57:05 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 21 Apr 2023 13:57:05 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 21 Apr 2023 13:57:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1682078225; x=1713614225;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=a0Ul1SNqBsekJ6dH0ZERjtw8a5XsIF9m8VEQ6n/tquQ=;
+  b=Zol1ArfWUjik00OLdicVeVkz2Vwt4XvFOUjxEXCQ1DI1AR4WiiyxHRCe
+   wa2xq0ZCJaY9JFyJ7WuZvQbtjaALBG0bku96XYPx3e6qVQ886DIPATZ6d
+   JNUrpqrgSvihcCP5nX7gpQTxmA25goMIVxt2I0frOUrVUhbAlaEd9NCnv
+   WsfLy6WrdVZEbQPSzqlgL+7OJrUhwhZKuNURQWCQtRhexiz/+Zo9FrP0V
+   Csn6IzlC9fl9jAgI1zrcGYdmqeOH0FnDaFsVIdes314TC1EgSuz1M225n
+   c6On4q+k5Hvqt3ch3nXoBMu6mCU1Q7I5X1egdktyCZL8jkxxek5AmgS2P
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,214,1677538800"; 
+   d="scan'208";a="30482477"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 21 Apr 2023 13:57:04 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C125E280056;
+        Fri, 21 Apr 2023 13:57:04 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Robin Gong <yibin.gong@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] regulator: pca9450: Fix BUCK2 enable_mask
+Date:   Fri, 21 Apr 2023 13:57:01 +0200
+Message-ID: <3900361.irdbgypaU6@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <7e44e0e2-b67c-96b4-3e8d-036650180201@kontron.de>
+References: <20230310092857.3555187-1-alexander.stein@ew.tq-group.com> <1848012.tdWV9SEqCh@steina-w> <7e44e0e2-b67c-96b4-3e8d-036650180201@kontron.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] soc: qcom: rmtfs: Fix error code in probe()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <76b21a14-70ff-4ca9-927d-587543c6699c@kili.mountain>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <76b21a14-70ff-4ca9-927d-587543c6699c@kili.mountain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+Am Montag, 13. M=E4rz 2023, 15:38:52 CEST schrieb Frieder Schrempf:
+> On 13.03.23 15:21, Alexander Stein wrote:
+> > Hi Frieder,
+> >=20
+> > thanks for your comments.
+> >=20
+> > Am Montag, 13. M=E4rz 2023, 14:46:08 CET schrieb Frieder Schrempf:
+> >> On 10.03.23 10:28, Alexander Stein wrote:
+> >>> This fixes a copy & paste error.
+> >>=20
+> >> I would mention here, that this doesn't contain any functional changes
+> >> as BUCK1_ENMODE_MASK is equal to BUCK2_ENMODE_MASK.
+> >=20
+> > That's a good idea.
+> >=20
+> >>> Fixes: 0935ff5f1f0a ("regulator: pca9450: add pca9450 pmic driver")
+> >>> Originally-from: Robin Gong <yibin.gong@nxp.com>
+> >>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> >>> ---
+> >>> This diff is extracted from a downstream commit authored by Robin Gon=
+g.
+> >>> I'm not sure if adding Originally-from: is enough here or I do have to
+> >>> change From: as well.
+> >>=20
+> >> I never heard of "Originally-from:". Does this tag exist? Is it
+> >> documented somewhere?
+> >=20
+> > Well, it's not documented, but it pops up occasionally in some commits,
+> > e.g. 3fb906e7fabbb ("cgroup/cpuset: Don't filter offline CPUs in
+> > cpuset_cpus_allowed() for top cpuset tasks")
+> > I might be something only some maintainers accept though.
+> >=20
+> >> I think that your tooling (git format-patch) should add a From: tag
+> >> automatically if you correctly pick up a patch from someone else.
+> >=20
+> > Well, it's not exactly cherry-picked, but extracted from an existing
+> > commit
+> > [1], so that's maybe why my name has been put into From: while extracti=
+ng.
+> > As the diff in this patch is not exactly the same as from the origin, I
+> > did
+> > not want to put Robin Gong into Signed-off-by. And I think having an
+> > author in From: but not in Signed-off-by: tag should not happen.
+> > Searching how I can still give credit I found Originally-from. If there=
+ is
+> > a better way to handle this, I'm ready to adapt to that.
+>=20
+> Ok, good question. I currently have a similar case somewhere else and
+> I'm also not really sure how to handle it properly. I don't think we are
+> ever allowed to add a Signed-off-by tag for someone else.
+> Maybe "Originally-from" is correct for this case but I never really like
+> to use tags that aren't generally accepted or documented somewhere.
+
+Could some of the maintainers make a call here, how to address the original=
+=20
+author where the change is taken from? Note: It is not cherry-picked, but o=
+nly=20
+some hunks are taken.
+Thanks
+
+Best regards,
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
 
-On 21.04.2023 12:44, Dan Carpenter wrote:
-> Return an error code if of_property_count_u32_elems() fails.  Don't
-> return success.
-> 
-> Fixes: e656cd0bcf3d ("soc: qcom: rmtfs: Optionally map RMTFS to more VMs")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/soc/qcom/rmtfs_mem.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
-> index ce48a9f3b4c8..f83811f51175 100644
-> --- a/drivers/soc/qcom/rmtfs_mem.c
-> +++ b/drivers/soc/qcom/rmtfs_mem.c
-> @@ -233,6 +233,7 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
->  		num_vmids = 0;
->  	} else if (num_vmids < 0) {
->  		dev_err(&pdev->dev, "failed to count qcom,vmid elements: %d\n", num_vmids);
-> +		ret = num_vmids;
->  		goto remove_cdev;
->  	} else if (num_vmids > NUM_MAX_VMIDS) {
->  		dev_warn(&pdev->dev,
