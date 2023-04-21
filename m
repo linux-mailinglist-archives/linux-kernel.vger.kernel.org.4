@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27756EA5DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A026EA5E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjDUIaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S231638AbjDUIbP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Apr 2023 04:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjDUIaM (ORCPT
+        with ESMTP id S231386AbjDUIbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:30:12 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E9386BC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:30:10 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b992ed878ebso1208966276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682065809; x=1684657809;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5klHMq64VIljoSVkOwPJ2cgj8nj1Si169hW4IY+bP4U=;
-        b=lrQhs+vo1k2UBUSg8IofSsZ0KVGmRL89oDZ8r7Zsg/81K9QtNTz6+xArvTE25AQkL9
-         BP0uHNf/IPGoUxcGQHCgqUORb2Gtr5OsXnQB9uJbd5eqCC/zfA5ZrCnP97clOCzTNa5d
-         mdD0NN1a6M7wE2U8hzBjrWffRXQWPMwKTYOh9O23KUEypN98MMGQhVbYBiZPKQwI0Ctw
-         pSXb56zGQtocA0R7fJxPCqoruGf80AFomCpYq0IDtzX+1vcZGVGjdTy4JS4OaVnPCD2s
-         gGD5i9mwhakqDnYpSsy858vGSBeCSAXzcSwkRjAcYDllLLMjU2Q16vs0pDIsEQwMeRvp
-         tEPQ==
+        Fri, 21 Apr 2023 04:31:10 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76898A54;
+        Fri, 21 Apr 2023 01:31:09 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-54f9e41dfa7so4562927b3.3;
+        Fri, 21 Apr 2023 01:31:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682065809; x=1684657809;
+        d=1e100.net; s=20221208; t=1682065869; x=1684657869;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5klHMq64VIljoSVkOwPJ2cgj8nj1Si169hW4IY+bP4U=;
-        b=hktCGAPjmFc6ekxmGvA0qyupm4YOzUrnXw7juOmdsRQWpkyUTJcdS3N+Qt3N0Z/Ls/
-         yEgBdFCwMFVIWj/OSkAVBh9z/+I5T3fpOY+EPQT5rthP/KyMqM/3+oxBAdKVltUwPzH7
-         v7Hx0oXfmEmJDWcgGU60vpgZytWCdD0aj74IrV8/dLeccHm6mnDP09WZ7M1quxRsm/oU
-         2JYHTshmAVwWj9DLB3wq6TKft67vXFHxoS5kPfnV4uR2Zr7uwKBGRx3CO47B37TOtz1I
-         G7bNrFTXd6SzKIqULbRQiKT1j7VI4/dsKlVeiT8OjfGCMvGYZinq+Gpmu1p8qqXe/Zlk
-         MR0Q==
-X-Gm-Message-State: AAQBX9eFF8lZDhR952Kk2v9VAsYVx4NKHaTwYP9m+6saL8KnjrJdzSCs
-        0OdjieUrwcLJE0S1WRkUDlE3LtkC0NnW5/iLM+W70w==
-X-Google-Smtp-Source: AKy350Zns/U+3vpNmpMzNn8WbDce9++folijXpvxedcLeNyjLrhBVN1M2j1Bs3JSk09cKtYRX5696eR1QSUH/+GFEPI=
-X-Received: by 2002:a25:46d4:0:b0:b8f:1cea:e064 with SMTP id
- t203-20020a2546d4000000b00b8f1ceae064mr1238150yba.32.1682065809654; Fri, 21
- Apr 2023 01:30:09 -0700 (PDT)
+        bh=XJk3HTBeWzZb2MBrPdY3fa4qSP22CufNx4/oB5AHnas=;
+        b=bsxp1q6Ed3cmYewioVSdXEZZ7wIXq5Mu00h8HZRZmNgavVYi3vEqpikeCEalDZFs2i
+         hWfv0TM/MXzpcVJ9Q71uwp41HG1wY6tDkl32JLkDp6QzoixkY85hzW1NL5GJ5ReLR3PT
+         0gCkt1euuPZliMopOmV8Vhr4kxSlW6aH9fQnlq4bovAxRe0OiS/o+afzDgcwVL81aj3m
+         cpAYwv8nhj8bQJSJI6ZlMMJIMlqyB9I/LKNUT70G/ypRbDouGlVarvTmw7wg7nDXwfzv
+         XWmZPPEgQGEv+hfmJsE+uix99Ih1nst63QKGpww0aEjDnSK12hU4PsSDlDdsguCVPpfq
+         VHdw==
+X-Gm-Message-State: AAQBX9eIcdYmfCMSOV20pf3QFPjIEpfr2/V3NpEzYVdvt2V2MTrMB33c
+        192F/AHdGyu9GP8u//OCnN8DXk38UB71THWs
+X-Google-Smtp-Source: AKy350bT7Fikl+l0vtTOYb6J9xjiW/Ls2ail2HfQVCcjbi34sSLCc4U6vvzPn9DgtxEC/sqIY/0z6g==
+X-Received: by 2002:a81:4f81:0:b0:54f:9b17:c7db with SMTP id d123-20020a814f81000000b0054f9b17c7dbmr1124686ywb.10.1682065868988;
+        Fri, 21 Apr 2023 01:31:08 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id y3-20020a0dd603000000b0054e82b6a95esm829855ywd.42.2023.04.21.01.31.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 01:31:08 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-54f9e41dfa7so4562827b3.3;
+        Fri, 21 Apr 2023 01:31:08 -0700 (PDT)
+X-Received: by 2002:a0d:df8d:0:b0:545:637c:3ed7 with SMTP id
+ i135-20020a0ddf8d000000b00545637c3ed7mr1500731ywe.1.1682065867983; Fri, 21
+ Apr 2023 01:31:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
-In-Reply-To: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 21 Apr 2023 10:29:58 +0200
-Message-ID: <CACRpkdYgDC0QJhH4s1P2ga3W=xXqjovhsNS2i5nikgu_ikenKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] Add PMI632 PMIC and RGB LED on sdm632-fairphone-fp3
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+References: <20230413114016.16068-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUNfcu=opFMSTP2E_VkgWXHazHFL2_Z4B0gFvQ7k8z7ZA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUNfcu=opFMSTP2E_VkgWXHazHFL2_Z4B0gFvQ7k8z7ZA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 21 Apr 2023 10:30:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVm=ahKaWZR2fK=T7GQwgBpnJ8xgYj_iBF0TxN3Ra5xcA@mail.gmail.com>
+Message-ID: <CAMuHMdVm=ahKaWZR2fK=T7GQwgBpnJ8xgYj_iBF0TxN3Ra5xcA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: rg2lc-smarc: Enable CRU, CSI support
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 6:43=E2=80=AFPM Luca Weiss <luca@z3ntu.xyz> wrote:
-
-> Add support for the PMI632 PMIC in the spmi-gpio & qcom-lpg driver, add
-> the dtsi for the PMIC and enable the notification LED on fairphone-fp3.
+On Thu, Apr 20, 2023 at 3:49 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Thu, Apr 13, 2023 at 1:40 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Enable CRU, CSI on RZ/G2LC SMARC EVK and tie the CSI to the OV5645 sensor
+> > using Device Tree overlay.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-(...)
-> Luca Weiss (8):
->       dt-bindings: pinctrl: qcom,pmic-gpio: add PMI632
->       pinctrl: qcom: spmi-gpio: Add PMI632 support
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> i.e. will queue in renesas-devel for v6.5.
 
-Patches 1 & 2 are finished so I applied them to the pinctrl tree so
-Luca does not need to keep reiterating these for the next kernel cycle.
+With s/rg2lc-smarc/rzg2lc-smarc/.
 
-Yours,
-Linus Walleij
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
