@@ -2,154 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E56D6EA66A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51D66EA66C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjDUJAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S229900AbjDUJAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDUJAU (ORCPT
+        with ESMTP id S229889AbjDUJA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:00:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B28526B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682067618; x=1713603618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dkqTBJMKo7F+hELtS2+2TMCCSxzpvF2p1cgx4R+h42I=;
-  b=GcWg4X9Zd1zMIyAznNAyrSSL1qFg83gAd5IAF8Vh8Dc6dMhtd2pkyrHT
-   8wqCvYypU1wEpP/+E3kGsRTJJnfjOV57nTUq1jymu3nx4Eg15U7ZMvnxH
-   aPlJ+NZSgFYW1QRrb3Kko45IpwWUs2eV3g7FQ281DnzMrTrnhUyJSCe36
-   3gDid9vygYC/TbWp7AXiJRPiK9MrvTQeqAqopGX/c+ukeKmYlP4kcv+Cm
-   cQNpWQ0UfxtFtp+RhlKhCLbnQOYf7hwxo7GxCi0cwSJ7t6Ieaz8PWxLfA
-   fKXrg6VLuTVjL37KrUp0Sosjrl0Fwh76dHRf5z8bjUHijh8ucLp/6Rsi8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="411217098"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="411217098"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:00:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642443294"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="642443294"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2023 02:00:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppmci-000gTE-2l;
-        Fri, 21 Apr 2023 09:00:08 +0000
-Date:   Fri, 21 Apr 2023 16:59:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Petr Mladek <pmladek@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
- solicited by any console
-Message-ID: <202304211628.wQn1SxkT-lkp@intel.com>
-References: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+        Fri, 21 Apr 2023 05:00:29 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E554902D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:00:28 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a8aea2a654so13052311fa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682067626; x=1684659626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4QkvhdTYnDkr/y7u4Tqh+X12AIRQj3eziSNdnEwCKok=;
+        b=eQBZDtzuaDLN/OA/t4ek+7wPgfOcN8abW+MeC5aXDdTuL5gahGhH8Y5wG59GuDnNgI
+         cpbo2VRYCwn1wqdifg0058q3wwSjogO+UudfmPGO6KZWUCgMamrkUFzuf6+0W1X/61tp
+         dR6QRpap1GIlRAB/mGTXkps5DrEZbDeYxoYEFPp96Df8CnHlLWzhwAGvEgV0CANTnblf
+         e8fGUh4YrM6RaGF2B+dDdV6Ja2nxmEsWtdmlMVPibbQViM01OJtFwb5bdNTyMOcoB8FN
+         tB2Qc9ms+TjIh35QNze1N9jr7Aoe/kmWBCRwJi5V1UWqWxOhmARDbbHS06jyAmJ3QP1e
+         YZog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682067626; x=1684659626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4QkvhdTYnDkr/y7u4Tqh+X12AIRQj3eziSNdnEwCKok=;
+        b=kdGMtxL8uD/bHOAVpS1aCnmkMZwuVPkMzSjrAeWw3Od4pvDgtFHS59m21pwJmAr0q3
+         3OcbTjbIM2h4CTxujI6hEhioXPbGe+jkF0hMdVI3RnYGfOfXgFXGDPQrcbEWZdlLCUBO
+         VtTGe3fshbFlGSwRWtVTSYnmkQE8HQHqjO0TqZJiX9evS15UNoBTONSmKAN/pOl6+zyp
+         6ea1vXhdi4DrY1WVANa19KMJl+H68i1yy+BrXKBtczIDBIxt1CILQkBOXbHUdtQJfXeR
+         wb3q0kvZQ2ngiNpUkAtqdrWMwaApe9+hx+aMajFeYyltkNzzVKJGF/k1G58eMgBb/0SY
+         9AmQ==
+X-Gm-Message-State: AAQBX9cZzDqRRRvoymBihXcE3kC+NmYi6LP8TiRSKoP8O3G250fSC2X3
+        KMuw9HMET6PVObdp4XPYQNEnIeSBb8NtB2Q7Hk4=
+X-Google-Smtp-Source: AKy350aq0fn25/npLop7sLmFVfMvWGQbZlqKXRn7b8pxRcAcj73FeZmbTwiyuZUs7/nMCVulR93/EPCanb6efbkz8cU=
+X-Received: by 2002:a2e:6806:0:b0:2a8:bc08:a9a3 with SMTP id
+ c6-20020a2e6806000000b002a8bc08a9a3mr488323lja.28.1682067626234; Fri, 21 Apr
+ 2023 02:00:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com> <87v8hpspge.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87v8hpspge.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Fri, 21 Apr 2023 17:00:04 +0800
+Message-ID: <CAGWkznEt1mNWwA0aVmyH=oVFdVw4TCZYH+BYgim=V4z+4=oVvw@mail.gmail.com>
+Subject: Re: [PATCHv2] mm: skip CMA pages when they are not available
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris,
+On Fri, Apr 21, 2023 at 2:47=E2=80=AFPM Huang, Ying <ying.huang@intel.com> =
+wrote:
+>
+> "zhaoyang.huang" <zhaoyang.huang@unisoc.com> writes:
+>
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > This patch fixes unproductive reclaiming of CMA pages by skipping them =
+when they
+> > are not available for current context. It is arise from bellowing OOM i=
+ssue, which
+> > caused by large proportion of MIGRATE_CMA pages among free pages. There=
+ has been
+> > commit(168676649) to fix it by trying CMA pages first instead of fallba=
+ck in
+> > rmqueue. I would like to propose another one from reclaiming perspectiv=
+e.
+> >
+> > 04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page al=
+location failure: order:0, mode:0xc00(GFP_NOIO), nodemask=3D(null),cpuset=
+=3Dforeground,mems_allowed=3D0
+> > 0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C)=
+ 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (=
+C) 0*1024kB 0*2048kB 0*4096kB =3D 35848kB
+> > 0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 4=
+9*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB =
+(H) 0*1024kB 0*2048kB 0*4096kB =3D 3236kB
+> >       ......
+> > 041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate=
+ memory on node -1, gfp=3D0xa20(GFP_ATOMIC)
+> > 041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, obje=
+ct size: 64, buffer size: 64, default order: 0, min order: 0
+> > 041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: =
+3392, free: 0
+>
+> From the above description, you are trying to resolve an issue that has
+> been resolved already.  If so, why do we need your patch?  What is the
+> issue it try to resolve in current upstream kernel?
 
-kernel test robot noticed the following build errors:
+Please consider this bellowing sequence as __perform_reclaim() return
+with reclaiming 32 CMA pages successfully and then lead to
+get_page_from_freelist failure if MIGRATE_CMA is NOT over 1/2 number
+of free pages which will then unreserve H pageblocks and drain percpu
+pageset. right? Furthermore, this could also introduce OOM as
+direct_reclaim is the final guard for alloc_pages.
 
-[auto build test ERROR on cb0856346a60fe3eb837ba5e73588a41f81ac05f]
+*did_some_progress =3D __perform_reclaim(gfp_mask, order, ac);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
-base:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
-patch link:    https://lore.kernel.org/r/43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris%40chrisdown.name
-patch subject: [PATCH v4 1/2] printk: Do not delay messages which aren't solicited by any console
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230421/202304211628.wQn1SxkT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/db9fb81bc5f175ef48cb317c24da85d0f6d4391d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
-        git checkout db9fb81bc5f175ef48cb317c24da85d0f6d4391d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
+retry:
+page =3D get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211628.wQn1SxkT-lkp@intel.com/
+if (!page && !drained) {
+unreserve_highatomic_pageblock(ac, false);
+drain_all_pages(NULL);
+drained =3D true;
+goto retry;
+}
 
-All errors (new ones prefixed by >>):
-
->> kernel/printk/printk.c:1297:2: error: unterminated function-like macro invocation
-           if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
-           ^
-   include/linux/compiler.h:56:9: note: macro 'if' defined here
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-           ^
->> kernel/printk/printk.c:4272:24: error: expected '}'
-   #endif /* CONFIG_SMP */
-                          ^
-   kernel/printk/printk.c:1293:1: note: to match this '{'
-   {
-   ^
-   2 errors generated.
-
-
-vim +1297 kernel/printk/printk.c
-
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1291  
-db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1292  static void boot_delay_msec(void)
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1293  {
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1294  	unsigned long long k;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1295  	unsigned long timeout;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1296  
-ff48cd26fc4889 kernel/printk/printk.c Thomas Gleixner 2017-05-16 @1297  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1298  		return;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1299  
-3a3b6ed2235f2f kernel/printk.c        Dave Young      2009-09-22  1300  	k = (unsigned long long)loops_per_msec * boot_delay;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1301  
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1302  	timeout = jiffies + msecs_to_jiffies(boot_delay);
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1303  	while (k) {
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1304  		k--;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1305  		cpu_relax();
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1306  		/*
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1307  		 * use (volatile) jiffies to prevent
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1308  		 * compiler reduction; loop termination via jiffies
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1309  		 * is secondary and may or may not happen.
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1310  		 */
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1311  		if (time_after(jiffies, timeout))
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1312  			break;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1313  		touch_nmi_watchdog();
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1314  	}
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1315  }
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1316  #else
-db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1317  static inline void boot_delay_msec(void)
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1318  {
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1319  }
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1320  #endif
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1321  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+return page;
+>
+> At the first glance, I don't think your patch doesn't make sense.  But
+> you really need to show the value of the patch.
+>
+> Best Regards,
+> Huang, Ying
+>
+> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > ---
+> > v2: update commit message and fix build error when CONFIG_CMA is not se=
+t
+> > ---
+> > ---
+> >  mm/vmscan.c | 15 +++++++++++++--
+> >  1 file changed, 13 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index bd6637f..19fb445 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigne=
+d long nr_to_scan,
+> >       unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+> >       unsigned long skipped =3D 0;
+> >       unsigned long scan, total_scan, nr_pages;
+> > +     bool cma_cap =3D true;
+> > +     struct page *page;
+> >       LIST_HEAD(folios_skipped);
+> >
+> >       total_scan =3D 0;
+> >       scan =3D 0;
+> > +     if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
+> > +             && (gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE))
+> > +             cma_cap =3D false;
+> > +
+> >       while (scan < nr_to_scan && !list_empty(src)) {
+> >               struct list_head *move_to =3D src;
+> >               struct folio *folio;
+> > @@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsigne=
+d long nr_to_scan,
+> >               nr_pages =3D folio_nr_pages(folio);
+> >               total_scan +=3D nr_pages;
+> >
+> > -             if (folio_zonenum(folio) > sc->reclaim_idx) {
+> > +             page =3D &folio->page;
+> > +
+> > +             if ((folio_zonenum(folio) > sc->reclaim_idx)
+> > +#ifdef CONFIG_CMA
+> > +                     || (get_pageblock_migratetype(page) =3D=3D MIGRAT=
+E_CMA && !cma_cap)
+> > +#endif
+> > +             ) {
+> >                       nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+> >                       move_to =3D &folios_skipped;
+> >                       goto move;
+> >               }
+> > -
+> >               /*
+> >                * Do not count skipped folios because that makes the fun=
+ction
+> >                * return with no isolated folios if the LRU mostly conta=
+ins
