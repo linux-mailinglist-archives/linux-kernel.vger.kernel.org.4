@@ -2,193 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A246EA20A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B276EA218
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbjDUCwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S232031AbjDUDB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 23:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbjDUCvy (ORCPT
+        with ESMTP id S233445AbjDUDBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:51:54 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C6D7ABC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:51:31 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b73203e0aso11426066b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682045491; x=1684637491;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W1WHvs8FWd3S03N28+vd/xDG2iC9YdMvjBgSLrt0Ra8=;
-        b=aHIS0UObijyj/uf3kCDBFk1KumJsx6sc+4Wzeq8S20U8TZCO1UOHgxF3CUqNqhUiAp
-         WV6LRLfcODt2FTkt9HCpcRbZ+J0f8Mzoc+/uwsZS2InzL/EKUULFjc49bFHYHNYsY/9G
-         yYYeDqd/2nf02/HwWoT7xyYME0DKm2NlpyOTtpujpIz7qW8uiKFn1S5wCwGqrFhPppv+
-         7NdvXkJwOZDwzTnj197PrkN0aSq+tpWNxMblkPKeUa+tHKxoT1bD4UcOBAyNFJxsBuH6
-         HB+o/aVjuknxO0PJ7Zdg5Ox0wQCdNDX7lJTIfsMpQ+R9ZnQYXtCe6Ur0+QWCl53Q/efe
-         6bkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682045491; x=1684637491;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=W1WHvs8FWd3S03N28+vd/xDG2iC9YdMvjBgSLrt0Ra8=;
-        b=KzCkVxTgf5wkh2pnKOIX+Qc7Rq60guN0m4aWZYO4E30je5goObbuFYUt3X9ByiqoHP
-         +bsV45rQ9nsGUYNuibn+eN3Wh8XkH0y3eh/o91fTO3YhGAK1UGTjjbss1fJgki59W5Pl
-         qOB3ZySa8nKzo2jxyKkx0LtAIKLuLzhZrNUUy05pKEeZlylL4LnHp3PGm5uV+jiApIDF
-         sVtwHy4zLXgBsA18EE+hPa/Ml7mx41yghiOhMl11Wf8ifVLFTMjRBBmJzDTaEz15+St3
-         1O8EWlXBT5IBUMq9bdzPimHUvF2nKbyE+C7hqAYixq1g7QO0CX/HlrFv92QQ2DbGggQV
-         ya4w==
-X-Gm-Message-State: AAQBX9cEhOmryF8jCJGPEnn63Cd5sBxKyROM/EoZey0UmCANztOuV4Oj
-        5AKBqDHa5RRxUmHBuWkVY/4=
-X-Google-Smtp-Source: AKy350ZdUJyK8JP/ReZa/fg6Wim+Ll01XKaRn0Pz9pqvc966pGDJ2f+sEdAbnzPoAUnzFj0AOcjmQw==
-X-Received: by 2002:a17:903:188:b0:1a9:2a9e:30a8 with SMTP id z8-20020a170903018800b001a92a9e30a8mr6228740plg.9.1682045491106;
-        Thu, 20 Apr 2023 19:51:31 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f21-20020a17090ace1500b002469a865810sm3630905pju.28.2023.04.20.19.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 19:51:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-From:   Tejun Heo <tj@kernel.org>
-To:     jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH 22/22] workqueue: Don't implicitly make UNBOUND workqueues w/ @max_active==1 ordered
-Date:   Thu, 20 Apr 2023 16:50:46 -1000
-Message-Id: <20230421025046.4008499-23-tj@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230421025046.4008499-1-tj@kernel.org>
-References: <20230421025046.4008499-1-tj@kernel.org>
+        Thu, 20 Apr 2023 23:01:33 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895FB6A7C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 20:01:07 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230421025541epoutp010db2ed65b3038fea48d877196d31edb9~X07CqVz6Y0241602416epoutp01J
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:55:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230421025541epoutp010db2ed65b3038fea48d877196d31edb9~X07CqVz6Y0241602416epoutp01J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682045741;
+        bh=gmRmW4hTEG/NaSgyx94GE0NJvkJijzgJH6axIRgmOlM=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=YlslFHEjyzlaVJ6bu2FOMvEEF5xs3iIur75jc1/cvcGr4i3GUMFvOS59FPFcr6xa2
+         BLqmAPsFp76Jj2EGpnlXWksXBexj/EhkA2Bn14HtL2SQFa0hJqw2r0aHj2gUP8LPP6
+         iYw2kahZ8WvKynmsMc5bfP1U+SPEuI/s7nhXV5vw=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230421025540epcas2p18f11ea2a332301a0a8818fc0820ac76d~X07CFVOcd1901919019epcas2p1P;
+        Fri, 21 Apr 2023 02:55:40 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q2fKS4Zydz4x9Q1; Fri, 21 Apr
+        2023 02:55:40 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        58.CC.09938.C2BF1446; Fri, 21 Apr 2023 11:55:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230421025539epcas2p1dfab9151ae85e99f06b26a6a6f16f059~X07BMf-9Z2676626766epcas2p1s;
+        Fri, 21 Apr 2023 02:55:39 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230421025539epsmtrp276dcd1d3eee3658e845b590971fb62bd~X07BLt9Lf1763617636epsmtrp2n;
+        Fri, 21 Apr 2023 02:55:39 +0000 (GMT)
+X-AuditID: b6c32a47-ca5fd700000026d2-51-6441fb2c119d
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F3.A1.08609.B2BF1446; Fri, 21 Apr 2023 11:55:39 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230421025539epsmtip23e461584995611f94637289c3e523786~X07A6hlsh1284112841epsmtip29;
+        Fri, 21 Apr 2023 02:55:39 +0000 (GMT)
+Message-ID: <874bb3d7-9b71-2ab0-9f0c-7f4066db50a4@samsung.com>
+Date:   Fri, 21 Apr 2023 11:53:15 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/4] spi: s3c64xx: add sleep during transfer
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <20230419155617.gobedupbdmdaj4kz@intel.intel>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmua7Ob8cUg5MTlCwezNvGZnH/awej
+        xeIfz5kspj58wmZxeb+2xd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMnuwOVxfcknZo9NqzrZ
+        PO5c28PmsXlJvUffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpa
+        mCsp5CXmptoqufgE6Lpl5gAdpqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/Q
+        K07MLS7NS9fLSy2xMjQwMDIFKkzIzlj6bjVbwVT+inUrtRsYP3J3MXJySAiYSCx/9I61i5GL
+        Q0hgB6NE84k2ZgjnE6PE2+cH2CCcz4wS3w5+YYNpOXGzhwkisYtRYnVbPwtIQkjgNaNE4zNn
+        EJtXwE7i2e9NjCA2i4CqxJVXH1kg4oISJ2c+AbNFBaIlFu+bAmYLCzhL7Lu1lB3EZhYQl7j1
+        ZD4TiC0ioCbxevEnsGXMApeYJA7MagArYhPQlvi+fjEriM0pYCVx5f0rZohmeYntb+eA/SAh
+        sJRDYu3k10BncwA5LhLH3gtCfCAs8er4FnYIW0ri87u9UJ9lS7RP/8MKYVdIXNwwGypuLDHr
+        WTsjyBhmAU2J9bv0ISYqSxy5xQKxlU+i4/Bfdogwr0RHmxBEo5rE/annoIbISEw6spIJwvaQ
+        +D9rHssERsVZSIEyC8nzs5D8Mgth7wJGllWMYqkFxbnpqcVGBcbwqE7Oz93ECE6xWu47GGe8
+        /aB3iJGJg/EQowQHs5II7xlXqxQh3pTEyqrUovz4otKc1OJDjKbAqJnILCWanA9M8nkl8YYm
+        lgYmZmaG5kamBuZK4rzStieThQTSE0tSs1NTC1KLYPqYODilGpgOqc2eeO7Fjhdvc+YwVEk/
+        PFFx4fNqS6WDLGH7bocudG1+eGHKXGGZWMfSOUez+jh3fplWxzBr6v1kxtJl5376T/tYJ9xz
+        5txigxs/UiJPvThYvCFswuYK2wKlkJhlSzys3Ry2GR+ZW9Xy8bJU0fTb/x1V/+yed/zbwrZP
+        rKumcwp7VmxUXhXB2eQgtrMpJW7OcrdXp49ein51+AfQZ/9PXU1a+XTvP7Y9lUJPn+Ta1Mp/
+        0vA+N3falWsqOXd9pxUf/BHDoutnt2Py9q13mFM6J5yZveWV5LaSlOll6d4CadoHja5lcgTJ
+        TVdufTZxFfv/iR3arZPK6jot2ldfnnHKweB7gemXp48CS5mfvDn7QImlOCPRUIu5qDgRADQe
+        +ao6BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkkeLIzCtJLcpLzFFi42LZdlhJXlf7t2OKwfw/RhYP5m1js7j/tYPR
+        YvGP50wWUx8+YbO4vF/bYu/rrewWmx5fY7W4vGsOm8WM8/uYLBo/3mR34PK4vuQTs8emVZ1s
+        Hneu7WHz2Lyk3qNvyypGj8+b5ALYorhsUlJzMstSi/TtErgylr5bzVYwlb9i3UrtBsaP3F2M
+        nBwSAiYSJ272MHUxcnEICexglLjXPosNIiEjsfxZH5QtLHG/5QgriC0k8JJRYs0GfRCbV8BO
+        4tnvTYwgNouAqsSVVx9ZIOKCEidnPgGzRQWiJW4s/8YEYgsLOEvsu7WUHcRmFhCXuPVkPlhc
+        REBN4vXiT2BHMAtcYpKYPmkbK8RF95gkHs86DLaZTUBb4vv6xWA2p4CVxJX3r5ghJplJdG3t
+        YoSw5SW2v53DPIFRaBaSQ2YhWTgLScssJC0LGFlWMUqmFhTnpucWGxYY5aWW6xUn5haX5qXr
+        JefnbmIEx5aW1g7GPas+6B1iZOJgPMQowcGsJMJ7xtUqRYg3JbGyKrUoP76oNCe1+BCjNAeL
+        kjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQamHQ95HXKuxZr0VF1x6iuK2rD40oVp9/7vtrCW
+        Pfnvvb537HXjzV/neRu+VGqfUKcc3nbuzi3+NPaJb5c2qleGpa+O8s+YZ5b9+9mEyvlhOlzB
+        ClFJlw+dMt6wpa10z5TAvjP2E5mbT3zaVFwup/Z7Y+B2d7cF+y+unGYct5dBhOXp3DX3AiQD
+        vspEHPWX+PXBYWqyZcjah6ys87/L+Ps5bWG4ffRUnp5i4b7cgKMnf11KPVt1qO9DS0LNuSr7
+        tJzddqJZkSv0bz0Lm7m8h4+16UXpo7VBp/ecq2temrqy8O4lrsVVPccX8di9nlpvtser/OKy
+        fT01d1hUHCf86vm09sLM59MKuRbLaoibqVt/VWIpzkg01GIuKk4EAOsnqI0cAwAA
+X-CMS-MailID: 20230421025539epcas2p1dfab9151ae85e99f06b26a6a6f16f059
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+        <CGME20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596@epcas2p1.samsung.com>
+        <20230419060639.38853-4-jaewon02.kim@samsung.com>
+        <b91c6cfb-4fd2-1189-72fd-92b40d1b4743@linaro.org>
+        <9d2e2bda-4213-35d0-55d7-827bad9b13a1@samsung.com>
+        <20230419155617.gobedupbdmdaj4kz@intel.intel>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5c0338c68706 ("workqueue: restore WQ_UNBOUND/max_active==1 to be ordered")
-automoatically promoted UNBOUND workqueues w/ @max_active==1 to ordered
-workqueues because UNBOUND workqueues w/ @max_active==1 used to be the way
-to create ordered workqueues and the new NUMA support broke it. These
-problems can be subtle and the fact that they can only trigger on NUMA
-machines made them even more difficult to debug.
+Hi Andi,
 
-However, overloading the UNBOUND allocation interface this way creates other
-issues. It's difficult to tell whether a given workqueue actually needs to
-be ordered and users that legitimately want a min concurrency level wq
-unexpectedly gets an ordered one instead. With planned UNBOUND workqueue
-udpates to improve execution locality and more prevalence of chiplet designs
-which can benefit from such improvements, this isn't a state we wanna be in
-forever.
 
-There aren't that many UNBOUND w/ @max_active==1 users in the tree and the
-preceding patches audited all and converted them to
-alloc_ordered_workqueue() as appropriate. This patch removes the implicit
-promotion of UNBOUND w/ @max_active==1 workqueues to ordered ones.
+On 23. 4. 20. 00:56, Andi Shyti wrote:
+> Hi Jaewon,
+>
+>>>> In polling mode, the status register is constantly read to check transfer
+>>>> completion. It cause excessive CPU usage.
+>>>> So, it calculates the SPI transfer time and made it sleep.
+>>>>
+>>>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+>>>> ---
+>>>>    drivers/spi/spi-s3c64xx.c | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>>>> index 886722fb40ea..cf3060b2639b 100644
+>>>> --- a/drivers/spi/spi-s3c64xx.c
+>>>> +++ b/drivers/spi/spi-s3c64xx.c
+>>>> @@ -561,6 +561,14 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>>>    	u32 cpy_len;
+>>>>    	u8 *buf;
+>>>>    	int ms;
+>>>> +	u32 tx_time;
+>>>> +
+>>>> +	/* sleep during signal transfer time */
+>>>> +	status = readl(regs + S3C64XX_SPI_STATUS);
+>>>> +	if (RX_FIFO_LVL(status, sdd) < xfer->len) {
+>>>> +		tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
+>>>> +		usleep_range(tx_time / 2, tx_time);
+>>>> +	}
+>>> Did you actually check the delays introduced by it? Is it worth?
+>> Yes, I already test it.
+>>
+>> Throughput was the same, CPU utilization decreased to 30~40% from 100%.
+>>
+>> Tested board is ExynosAutov9 SADK.
+>>
+>>
+>>>>    
+>>>>    	/* millisecs to xfer 'len' bytes @ 'cur_speed' */
+>>>>    	ms = xfer->len * 8 * 1000 / sdd->cur_speed;
+>>> You have now some code duplication so this could be combined.
+> you could put the 'if' under the 'ms = ...' and just use ms
+> without declaring any tx_time.
+>
+> Andi
 
-Workqueue will also add a debug option to make all unordered UNBOUND
-workqueues to use per-cpu pool_workqueues so that these problems can be
-surfaced easier on most machines.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>
----
- include/linux/workqueue.h |  4 +---
- kernel/workqueue.c        | 23 ++++-------------------
- 2 files changed, 5 insertions(+), 22 deletions(-)
+The unit of 'tx_time' is 'us'.
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index ac551b8ee7d9..e547a90f0328 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -339,7 +339,6 @@ enum {
- 	__WQ_DRAINING		= 1 << 16, /* internal: workqueue is draining */
- 	__WQ_ORDERED		= 1 << 17, /* internal: workqueue is ordered */
- 	__WQ_LEGACY		= 1 << 18, /* internal: create*_workqueue() */
--	__WQ_ORDERED_EXPLICIT	= 1 << 19, /* internal: alloc_ordered_workqueue() */
- 
- 	WQ_MAX_ACTIVE		= 512,	  /* I like 512, better ideas? */
- 	WQ_MAX_UNBOUND_PER_CPU	= 4,	  /* 4 * #cpus for unbound wq */
-@@ -417,8 +416,7 @@ alloc_workqueue(const char *fmt, unsigned int flags, int max_active, ...);
-  * Pointer to the allocated workqueue on success, %NULL on failure.
-  */
- #define alloc_ordered_workqueue(fmt, flags, args...)			\
--	alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED |		\
--			__WQ_ORDERED_EXPLICIT | (flags), 1, ##args)
-+	alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED | (flags), 1, ##args)
- 
- #define create_workqueue(name)						\
- 	alloc_workqueue("%s", __WQ_LEGACY | WQ_MEM_RECLAIM, 1, (name))
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index b8b541caed48..00bdcc3c5b36 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -4180,12 +4180,8 @@ static int apply_workqueue_attrs_locked(struct workqueue_struct *wq,
- 		return -EINVAL;
- 
- 	/* creating multiple pwqs breaks ordering guarantee */
--	if (!list_empty(&wq->pwqs)) {
--		if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
--			return -EINVAL;
--
--		wq->flags &= ~__WQ_ORDERED;
--	}
-+	if (WARN_ON(wq->flags & __WQ_ORDERED))
-+		return -EINVAL;
- 
- 	ctx = apply_wqattrs_prepare(wq, attrs, wq_unbound_cpumask);
- 	if (!ctx)
-@@ -4408,16 +4404,6 @@ struct workqueue_struct *alloc_workqueue(const char *fmt,
- 	struct workqueue_struct *wq;
- 	struct pool_workqueue *pwq;
- 
--	/*
--	 * Unbound && max_active == 1 used to imply ordered, which is no
--	 * longer the case on NUMA machines due to per-node pools.  While
--	 * alloc_ordered_workqueue() is the right way to create an ordered
--	 * workqueue, keep the previous behavior to avoid subtle breakages
--	 * on NUMA.
--	 */
--	if ((flags & WQ_UNBOUND) && max_active == 1)
--		flags |= __WQ_ORDERED;
--
- 	/* see the comment above the definition of WQ_POWER_EFFICIENT */
- 	if ((flags & WQ_POWER_EFFICIENT) && wq_power_efficient)
- 		flags |= WQ_UNBOUND;
-@@ -4625,14 +4611,13 @@ void workqueue_set_max_active(struct workqueue_struct *wq, int max_active)
- 	struct pool_workqueue *pwq;
- 
- 	/* disallow meddling with max_active for ordered workqueues */
--	if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
-+	if (WARN_ON(wq->flags & __WQ_ORDERED))
- 		return;
- 
- 	max_active = wq_clamp_max_active(max_active, wq->flags, wq->name);
- 
- 	mutex_lock(&wq->mutex);
- 
--	wq->flags &= ~__WQ_ORDERED;
- 	wq->saved_max_active = max_active;
- 
- 	for_each_pwq(pwq, wq)
-@@ -5868,7 +5853,7 @@ int workqueue_sysfs_register(struct workqueue_struct *wq)
- 	 * attributes breaks ordering guarantee.  Disallow exposing ordered
- 	 * workqueues.
- 	 */
--	if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
-+	if (WARN_ON(wq->flags & __WQ_ORDERED))
- 		return -EINVAL;
- 
- 	wq->wq_dev = wq_dev = kzalloc(sizeof(*wq_dev), GFP_KERNEL);
--- 
-2.40.0
+
+tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
+
+ms = xfer->len * 8 * 1000 / sdd->cur_speed;
+
+
+I add tx_time to minimize existing code modifications.
+
+If we are not using tx_time, we need to change ms to us and change the 
+related code.
+
+
+Thanks
+
+Jaewon Kim
+
 
