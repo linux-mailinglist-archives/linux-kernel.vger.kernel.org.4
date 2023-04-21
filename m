@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369596EADC5
+	by mail.lfdr.de (Postfix) with ESMTP id 8228D6EADC6
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjDUPLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
+        id S229580AbjDUPLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 11:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjDUPLP (ORCPT
+        with ESMTP id S232321AbjDUPLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:11:15 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F5D12C9A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:10:54 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so2982373a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:10:54 -0700 (PDT)
+        Fri, 21 Apr 2023 11:11:18 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30543D32A
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:11:03 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-518d325b8a2so2279129a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682089852; x=1684681852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1U9T8AS9cjrS3s9uITV3twM/U96KCqFNw0iG6buaIPE=;
-        b=zmhDusaW8TTAW6Vr95DNpJ5jqHZ5HwnfZEdA9VP2+WDvNqA23UvxwzQv8h8V1mBMYF
-         8biWtA8zCbdwRDNRXP80CcYVjbx5YHu/id55Z9bBFr2q2QW6nt2WpmHigPU2UoqqOCm6
-         4nNkUl+2s12mHW216cw0SqklmX9mJRLNrv32tywdYz354himN7+Cp839Qb7+z8Q95W+1
-         /fajuVy/rdfRN9fE/nh28IJVZvOUj3cTMTNrsG3aTl+Lxx2/rFY0Pq1WGQ/OChlomJUJ
-         NwnY9vGAO8EuQt+JffUfIE639JdiW+7VyL5IKJokIqHqIhvI3BLr8ICKew/oEoKiJsgg
-         EbhA==
+        d=linaro.org; s=google; t=1682089862; x=1684681862;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V6FaXoYkKJvHqik7V6/lHszSapOB8DXJHGCFiR9DavU=;
+        b=MY4dMcKPtmfefWBSJwFWazfdvvF90KDinQ9nmY1Q8uwOjsr0eyWsv7dRFcTtNOKhie
+         /F74SLFHoXkmGe2ljsQiGBYNOXxisfk2szEmRc7IPcFJhFvsm1AljpiagJvlYPNfo7Yb
+         z9DN/4tl2GFtD0Kmf02wqFw98YzVaW65ti8jpyPfegGr7igzJEd5Nu6BhcsQHWItT2kG
+         zVflS859lRQyk+8y6YpsIF4cHBUrcGO0+EMWeuANUoo001Y2EEx/fHwT2CL482Vog+dC
+         KLMTW+NtLcsVl68L6vVJoMywB8g1oVNdjyDYltncfBRr+no5wEEikDenXCU2Y5TJa1LL
+         Vnyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682089852; x=1684681852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1U9T8AS9cjrS3s9uITV3twM/U96KCqFNw0iG6buaIPE=;
-        b=BQQzZWrMKh+FL8Ca6N3Gf9bnNqXPWTQAG4UePLZ/g0rXEaXAwZ18ZVEy74OY8MplWC
-         Mg8xXSj/6T8YtSaAV4eCL2yUH2zCB0DZpqwhGhFL9q/3GD0NDnQ9yeX1is6jpbFaq9I4
-         W+i2y79ehiWWC1nOvQBvlINLmwSGlEsdYCQ/7sxoHYhTwa6hfXkAZg8jSjDr0KKerVem
-         mOiVTHj1WWehW10fl03czwXJn5Av6ImNHHMmGolDBIr2sJrTl0XSkKYV7Nj2AhRy4YwR
-         0b0LF8CAXlw1vjEIlJWPAma+KF8x8IFcUhLcBxE42+MKRxFYzdcJTS6l17z/Iqf2lptB
-         vHMw==
-X-Gm-Message-State: AAQBX9dxxoFzMBHR3+4pnaliljNePsgLR4pJPRL+a6FbJxOxDhsRwY7C
-        EJibRyZ+9aALYnw4/RPeX20FHQ==
-X-Google-Smtp-Source: AKy350ZUvt8W0YLUNRC+2yZAEZEoEaJ9B2Ng8mmI1fbNoP/iiYmsOVan9Q7Gk6nHMn7GZKhJMkV7eg==
-X-Received: by 2002:a17:906:52cc:b0:94e:6504:d134 with SMTP id w12-20020a17090652cc00b0094e6504d134mr2574638ejn.42.1682089852729;
-        Fri, 21 Apr 2023 08:10:52 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.230])
-        by smtp.gmail.com with ESMTPSA id n21-20020a1709062bd500b0094e729d333fsm2131198ejg.222.2023.04.21.08.10.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 08:10:52 -0700 (PDT)
-Message-ID: <e46dd2bb-16d1-0c99-56f0-f8c2c4bbc79b@linaro.org>
-Date:   Fri, 21 Apr 2023 16:10:50 +0100
+        d=1e100.net; s=20221208; t=1682089862; x=1684681862;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V6FaXoYkKJvHqik7V6/lHszSapOB8DXJHGCFiR9DavU=;
+        b=gwmehkP+N5evc7EWlW/NdeXXl0UxsLRr6l1BIUTkJnhf6fpM7drThUfHRvtlCAtPLt
+         7tl5w3OPDfy1Jwntzxb8Xy0rdd79EfG9ZttmhD61MRtZPee1ywuS5z+GsQICpXXAlnAc
+         d5yqT6SO0qeNJnw78ZKuWi0CxOTglUNIbui1XTvJNhu2tkGHrW3ryp8EZAW3mgrK2XXR
+         0WwWCZ0CXaGXBsTwBJuSOlWIXBphp1bKWr+xmImvfEEFauN1CsYK2WQ+sYpz7zykNCtp
+         0sJf9SEBeATz/0twFyVRjwyazJdYc/aWrj+jOMyuEHUR1sk+YmN4R2As8/DH8R/xe2zb
+         xtSA==
+X-Gm-Message-State: AAQBX9dXZjn8X4dJn8IsiH8Mjrr3J3bTqaLcUCBA3PfjSOAkaLBmH8Iq
+        fWUscmpZUhpRcu6PnlAPZxHMP0C+aOcuSgEuFYsgdA==
+X-Google-Smtp-Source: AKy350ZeHOdgTFbV9bRp9hOfo9A6H5eKIZwRoj8/gMFvoMUuwXkKiCLwWI7n1GE8VMq6MLsPCQmh4HmKyLMoXJHA9RM=
+X-Received: by 2002:a17:90b:4f47:b0:236:73d5:82cf with SMTP id
+ pj7-20020a17090b4f4700b0023673d582cfmr5168643pjb.9.1682089862559; Fri, 21 Apr
+ 2023 08:11:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK
- && CC_IS_CLANG by default
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     joneslee@google.com, Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        zhaoyang.huang@unisoc.com,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>, nogikh@google.com
-References: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
- <5d13e927-3713-4b9e-b007-6be5671d46f2@app.fastmail.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <5d13e927-3713-4b9e-b007-6be5671d46f2@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230416213406.2966521-1-davidai@google.com> <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
+ <CABN1KC+_HDi_i2zzpZVbqiUP5-QB9YrE5wzLqr==_wOemaCXzA@mail.gmail.com>
+ <bf8f21be-7249-fc27-9704-211d0f5a12b1@arm.com> <CAKfTPtAgkyE1xntn-4u9o8DFhH9iGq54c-QXYr0cE+zvoPx9Gw@mail.gmail.com>
+ <CAGETcx-suryHeB3wpaTSZBiw6+VwA7pe=GnrbtizSVj+C9Smtg@mail.gmail.com>
+In-Reply-To: <CAGETcx-suryHeB3wpaTSZBiw6+VwA7pe=GnrbtizSVj+C9Smtg@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 21 Apr 2023 17:10:51 +0200
+Message-ID: <CAKfTPtAfLqzwbCdd25HCFykBDhBQs9g7Mr6=X56nKYOOPnEdNQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce SCHED_FLAG_RESET_UCLAMP_ON_FORK
+ flag
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,32 +82,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+On Thu, 20 Apr 2023 at 18:26, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Thu, Apr 20, 2023 at 6:44=E2=80=AFAM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> >
+> > On Thu, 20 Apr 2023 at 11:37, Dietmar Eggemann <dietmar.eggemann@arm.co=
+m> wrote:
+> > >
+> > > On 20/04/2023 03:11, David Dai wrote:
+> > > > On Tue, Apr 18, 2023 at 10:18=E2=80=AFPM Dietmar Eggemann
+> > > > <dietmar.eggemann@arm.com> wrote:
+> > > >>
+> > > >
+> > > > Hi Dietmar, thanks for your time,
+> > > >
+> > > >> On 16/04/2023 23:34, David Dai wrote:
+> > > >>> A userspace service may manage uclamp dynamically for individual =
+tasks and
+> > > >>> a child task will unintentionally inherit a pesudo-random uclamp =
+setting.
+> > > >>> This could result in the child task being stuck with a static ucl=
+amp value
+> > > >>
+> > > >> Could you explain this with a little bit more detail? Why isn't th=
+e
+> > > >> child task also managed by the userspace service?
+> > > >
+> > > > See Qais=E2=80=99 reply that contains more detail on how it=E2=80=
+=99s being used in
+> > > > Android. In general, if a dynamic userspace service will adjust ucl=
+amp
+> > > > on the fly for a given task, but has no knowledge or control over i=
+f
+> > > > or when a task forks. Depending on the timing of the fork, a child
+> > > > task may inherit a very large or a small uclamp_min or uclamp_max
+> > > > value. The intent of this patch is to provide more flexibility to t=
+he
+> > > > uclamp APIs such that child tasks do not get stuck with a poor ucla=
+mp
+> > > > value when spawned while retaining other sched attributes. When
+> > > > RESET_ON_FORK is set on the parent task, it will reset uclamp value=
+s
+> > > > for the child but also reset other sched attributes as well.
+> > >
+> > > OK, in this case, why not just change behavior and always reset the
+> > > uclamp values at fork?
+> > >
+> > > Do we anticipate a use-case in which uclamp inheritance would be requ=
+ired?
+> > >
+> > > Let's not over-complicate the sched_[sg]etattr() unnecessarily.
+> >
+> > I was about to ask the same question and I'm aligned with Dietmar.
+> > Use RESET_ON_FORK and set all attributes
+>
+> That's racy though. If we have an external service (that's only
+> responsible for setting uclamp) setting all the attributes, the forked
+> thread could also be trying to set some of the attributes. Also, how
+> is this external service going to keep track of all the threads being
+> forked and set the right attributes for all of them?
 
-On 4/21/23 15:30, Arnd Bergmann wrote:
-> On Fri, Apr 21, 2023, at 15:01, Tudor Ambarus wrote:
-> 
->> The conclusion is that when KASAN is enabled the stack usage increases a
->> bit, but nothing unmanageable ~30-70 bytes, whereas when enabling
->> KASAN_STACK the stack usage is excessive, from ~1.7K to ~5.8K for these
->> cases.
->>
->> Disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default.
->> Adventurers can still override the default value by input prompt or
->> explicit values in defconfigs in case they feel that some real warnings
->> are missed.
->>
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> 
-> I think we are still better off with the warning enabled. When someone
-> really wants to run a kernel with KASAN_STACK enabled, they should have
-> a chance to see what they are getting into and not report any runtime
-> bugs that come from stack overflow. 
-> 
+My assumption was that you didn't use RESET_ON_FORK because there were
+other attributes that you wanted to keep from parent but it doesn't
+seem to be the case so use RESET_ON_FORK and if needed the forked
+thread will set its other attributes
 
-Are such stack overflows warnings reliable when we know that stack
-instrumentation causes excessive stack usage? Until clang is fixed one
-shall hunt frame-larger-than warnings with KASAN_STACK disabled.
-
-Cheers,
-ta
+>
+> If it's not considered a UAPI breakage, I'd rather we never inherit uclam=
+p.
+>
+> -Saravana
+>
+> >
+> > >
+> > > [...]
+> > >
+> > > >> Does this issue happen with uclamp mainline or only with Android's
+> > > >> slightly different version (max- vs. sum aggregation)?
+> > > >
+> > > > I=E2=80=99m using the version of uclamp that=E2=80=99s in Linus=E2=
+=80=99 tree. How uclamp is
+> > > > aggregated is unrelated to the problem I=E2=80=99m trying to solve =
+with this
+> > > > patch. Which is to extend the uclamp APIs to have finer control for
+> > > > the uclamp inheritance of child tasks.
+> > >
+> > > OK, I see.
