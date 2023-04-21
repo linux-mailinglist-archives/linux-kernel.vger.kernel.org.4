@@ -2,67 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65136EA188
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2792F6EA191
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbjDUCN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S233488AbjDUCUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjDUCNx (ORCPT
+        with ESMTP id S233265AbjDUCUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:13:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87B2138
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:13:52 -0700 (PDT)
+        Thu, 20 Apr 2023 22:20:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0CE3C34;
+        Thu, 20 Apr 2023 19:20:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FBB864CFC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98D8C433EF;
-        Fri, 21 Apr 2023 02:13:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 970A2647BB;
+        Fri, 21 Apr 2023 02:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E87BBC4339B;
+        Fri, 21 Apr 2023 02:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682043231;
-        bh=GfEnyAq1sJ23EkSIPV78r6qjEZKqFoMaypHu+SvGn38=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=GlW95Jarfr7xQ+vcBeF+RvAOWiaWU11zrAM/eyp15fjn+QnDlVSkF1VoD/1S02+hQ
-         usvbYbeUd8174uU0lPXBkbWWKKVjkDhPJUB3Tfoo8yUKJwvWOI/1Fe751BL2SylbTk
-         V1DBAIxr062I78XGNVm0Yq4CB2UV776hKxriSNkDYR76zxhiwfCJoWwyW7eO+g89h7
-         9Y8KYW9UBHBUDZ3dm8KMXk6IHLrpWPH2MkayZVyOGDDj1P+s32hVNWvxw3hxVOSZ7B
-         nTDBo3LKhYu29wpUwQZQ8XZ+qFIeVV5vooGBFEK9y7HfVPvu7Aq2SWv7hlrlcZ6rjS
-         UqninEqfRoNqg==
-Message-ID: <8e8b620f-f14e-ece3-2fc0-7c14869978ec@kernel.org>
-Date:   Fri, 21 Apr 2023 10:13:48 +0800
+        s=k20201202; t=1682043620;
+        bh=JA81Mm074MiULwVSpeXVNBbE+9b4mCmFNAJNTDHJN9I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dW0DRZSZa9yvitKhcuvlV6RwfF9ZNN8j6rbGiga/fbj4+skYNHvKPCG2rVDMYVpGL
+         JafzUs/4YVMvE87NhI1SObc+arOWCP65uWSvIRz8BBMy8jkQLakReATecUXCh5/73P
+         eyuExAJ+4aavW2L7Acv7Ux9EaToVMVKRQJzfnigibHgEdgidwWTVEIxlmtCOnRMiab
+         ADkJydS8f0TMsM9TElpghc5R8JBIKYt1ToV1vd3nEAW7XYHvM85eD2OehuNC6uVVZP
+         zmfGdhNiWDIGx/s+uOJsHWMXkKi7GXegJtcx3K8q56GnEDAONjcJ3LSt3qAYOssYaz
+         xzC98vYjntFQg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA5A3E270E1;
+        Fri, 21 Apr 2023 02:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: remove power-of-two limitation fo
- zoned device
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20230418004049.3262659-1-jaegeuk@kernel.org>
- <ZD69jto/SFPycuHm@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZD69jto/SFPycuHm@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: phy: fix circular LEDS_CLASS dependencies
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168204361982.5507.17481778283181053280.git-patchwork-notify@kernel.org>
+Date:   Fri, 21 Apr 2023 02:20:19 +0000
+References: <20230420084624.3005701-1-arnd@kernel.org>
+In-Reply-To: <20230420084624.3005701-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        f.fainelli@gmail.com, ansuelsmth@gmail.com, arnd@arndb.de,
+        linux@armlinux.org.uk, Frank.Sae@motor-comm.com,
+        rdunlap@infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/18 23:55, Jaegeuk Kim wrote:
-> In f2fs, there's no reason to force po2.
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 20 Apr 2023 10:45:51 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> The CONFIG_PHYLIB symbol is selected by a number of device drivers that
+> need PHY support, but it now has a dependency on CONFIG_LEDS_CLASS,
+> which may not be enabled, causing build failures.
+> 
+> Avoid the risk of missing and circular dependencies by guarding the
+> phylib LED support itself in another Kconfig symbol that can only be
+> enabled if the dependency is met.
+> 
+> [...]
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Here is the summary with links:
+  - net: phy: fix circular LEDS_CLASS dependencies
+    https://git.kernel.org/netdev/net-next/c/4bb7aac70b5d
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
