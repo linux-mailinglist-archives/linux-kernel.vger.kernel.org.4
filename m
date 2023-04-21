@@ -2,120 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD826EAA5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0446EAA62
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbjDUM2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S230144AbjDUMab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjDUM17 (ORCPT
+        with ESMTP id S229464AbjDUMa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:27:59 -0400
-Received: from outbound-smtp58.blacknight.com (outbound-smtp58.blacknight.com [46.22.136.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADED3B755
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:27:50 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp58.blacknight.com (Postfix) with ESMTPS id 339D9FACC8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:27:49 +0100 (IST)
-Received: (qmail 31734 invoked from network); 21 Apr 2023 12:27:49 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 12:27:48 -0000
-Date:   Fri, 21 Apr 2023 13:27:43 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 02/26] mm: compaction: avoid GFP_NOFS deadlocks
-Message-ID: <20230421122743.d7xfvzyhiunbphh3@techsingularity.net>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-3-hannes@cmpxchg.org>
+        Fri, 21 Apr 2023 08:30:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E48A5E4;
+        Fri, 21 Apr 2023 05:30:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0135561284;
+        Fri, 21 Apr 2023 12:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF286C433EF;
+        Fri, 21 Apr 2023 12:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682080226;
+        bh=qurM6pSWM3IbAE+idFHL8b8eovX/lSH8OmOwkRoNcQU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dkojo8e4E9lctsqc1uQxZF4+U9G3ahKKcxNKmT09NBEk458trFj5orQAej4jkMPQK
+         IoobBKYALuG3MCUEkAQcuPl5F9WS0IJFfNQqH05HbfTZGKQJwmp/NXSuOtrLDYeuB8
+         /3AImFxmOTBH/cAVJJyxW/8/45w5BGbk5yp+Z4t+PxXdoKaCcrgXRtyPOr9xYomQsL
+         L9cXwH1DTiz9BvBrdKg0r5QG1cGR1W1bLe3ZOuddAbMOtTkBf+/KjahIBcazY6tEkQ
+         u1jdWZXYzyfZ4vNgfybwZ8kzYwrC2Qzvl9XWbN2k+CVfGuGDV26MFy/H2nWVZZeguc
+         7QBuFjifVSZeg==
+From:   broonie@kernel.org
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: linux-next: manual merge of the nfsd tree with the powerpc tree
+Date:   Fri, 21 Apr 2023 13:30:18 +0100
+Message-Id: <20230421123018.78201-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230418191313.268131-3-hannes@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 03:12:49PM -0400, Johannes Weiner wrote:
-> During stress testing, two deadlock scenarios were observed:
-> 
-> 1. One GFP_NOFS allocation was sleeping on too_many_isolated(), and
->    all CPUs were busy with compactors that appeared to be spinning on
->    buffer locks.
-> 
->    Give GFP_NOFS compactors additional isolation headroom, the same
->    way we do during reclaim, to eliminate this deadlock scenario.
-> 
-> 2. In a more pernicious scenario, the GFP_NOFS allocation was
->    busy-spinning in compaction, but seemingly never making
->    progress. Upon closer inspection, memory was dominated by file
->    pages, which the fs compactor isn't allowed to touch. The remaining
->    anon pages didn't have the contiguity to satisfy the request.
-> 
->    Allow GFP_NOFS allocations to bypass watermarks when compaction
->    failed at the highest priority.
-> 
-> While these deadlocks were encountered only in tests with the
-> subsequent patches (which put a lot more demand on compaction), in
-> theory these problems already exist in the code today. Fix them now.
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Hi all,
 
-Definitely needs to be split out.
+Today's linux-next merge of the nfsd tree got conflicts in:
 
+  arch/powerpc/configs/powernv_defconfig
+  arch/powerpc/configs/pseries_defconfig
 
-> ---
->  mm/compaction.c | 15 +++++++++++++--
->  mm/page_alloc.c | 10 +++++++++-
->  2 files changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 8238e83385a7..84db84e8fd3a 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -745,8 +745,9 @@ isolate_freepages_range(struct compact_control *cc,
->  }
->  
->  /* Similar to reclaim, but different enough that they don't share logic */
-> -static bool too_many_isolated(pg_data_t *pgdat)
-> +static bool too_many_isolated(struct compact_control *cc)
->  {
-> +	pg_data_t *pgdat = cc->zone->zone_pgdat;
->  	bool too_many;
->  
->  	unsigned long active, inactive, isolated;
-> @@ -758,6 +759,16 @@ static bool too_many_isolated(pg_data_t *pgdat)
->  	isolated = node_page_state(pgdat, NR_ISOLATED_FILE) +
->  			node_page_state(pgdat, NR_ISOLATED_ANON);
->  
-> +	/*
-> +	 * GFP_NOFS callers are allowed to isolate more pages, so they
-> +	 * won't get blocked by normal direct-reclaimers, forming a
-> +	 * circular deadlock. GFP_NOIO won't get here.
-> +	 */
-> +	if (cc->gfp_mask & __GFP_FS) {
-> +		inactive >>= 3;
-> +		active >>= 3;
-> +	}
-> +
+between commit:
 
-This comment needs to explain why GFP_NOFS gets special treatment
-explaning that a GFP_NOFS context may not be able to migrate pages and
-why.
+  9ecda934f43b1 ("powerpc/configs: Make pseries_defconfig an alias for ppc64le_guest")
 
-As a follow-up, if GFP_NOFS cannot deal with the majority of the
-migration contexts then it should bail out of compaction entirely. The
-changelog doesn't say why but maybe SYNC_LIGHT is the issue?
+from the powerpc tree and commit:
 
--- 
-Mel Gorman
-SUSE Labs
+  e485f3a6eae08 ("ixgb: Remove ixgb driver")
+
+from the nfsd tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --git a/arch/powerpc/configs/powernv_defconfig b/arch/powerpc/configs/powernv_defconfig
+index 92e3a8fea04a5..f2a9be02a8d27 100644
+--- a/arch/powerpc/configs/powernv_defconfig
++++ b/arch/powerpc/configs/powernv_defconfig
+@@ -170,8 +170,6 @@ CONFIG_S2IO=m
+ CONFIG_E100=y
+ CONFIG_E1000=y
+ CONFIG_E1000E=y
+-CONFIG_IGB=y
+-CONFIG_IXGB=m
+ CONFIG_IXGBE=m
+ CONFIG_I40E=m
+ CONFIG_MLX4_EN=m
