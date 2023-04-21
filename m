@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8C36EA9D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEB66EA9ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjDUMDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
+        id S231562AbjDUMEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjDUMCt (ORCPT
+        with ESMTP id S229884AbjDUMEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:02:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D213A92
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:02:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B049663FED
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4496C433EF;
-        Fri, 21 Apr 2023 12:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682078567;
-        bh=9g7jXvL+Vk47LSrV14mlLXjQs3XKeQ/P9UgGKL9znfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tpQC20DmBLpdhqFSEYzNCGc/0weTtAAFu0CsTGNl1PxfqsuMR1vpyU/lBI+ht2I4O
-         Jk/2Y/RpB8bgwQTl6lbKMUVZBT02mZYCS5eB+8ME8b0E9gBRBTV9d9BKeDrK/Pslo4
-         hebhtaMK7fThVUH8Z7lx76uPi6tA8i985B1Ty0dsVFsWC671OAlP3ycMDVl94TMjUF
-         BHnmdxt8MiuNj5baFNXw9XX7lwkGoh/xYUeszuhgQD8/6WArLtM4Mp+t4HOxEnlTfA
-         U1juAk4GtLxisZnsLcNkie7KA9P0VXRHhfDlKmtIu9vrGgFV6/4Ot5WqDA8bO/BP4j
-         12XFbVnAPW0uA==
-Date:   Fri, 21 Apr 2023 13:02:42 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Robin Gong <yibin.gong@nxp.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] regulator: pca9450: Fix BUCK2 enable_mask
-Message-ID: <228edf87-c4bc-4525-8f18-74e1638cea16@sirena.org.uk>
-References: <20230310092857.3555187-1-alexander.stein@ew.tq-group.com>
- <1848012.tdWV9SEqCh@steina-w>
- <7e44e0e2-b67c-96b4-3e8d-036650180201@kontron.de>
- <3900361.irdbgypaU6@steina-w>
+        Fri, 21 Apr 2023 08:04:42 -0400
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8940B49E1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:04:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1682078679;
+        bh=5/uODYlvVyCE/ZF+EkuMLcehTyez19vBG2MgS39y1so=;
+        h=From:To:Cc:Subject:Date;
+        b=zC+W5FWeE3MuygI2UKBoaggJguo3IptS4zGo53HgMlHjI2RYviMC/wmyyZjNyTXxp
+         Fc37UxlhyPC+Lcns0yRhwVjwKUJA3WNgv7Z4z6hU1T8C1bseucOwRCm9MKaP40rL1s
+         bjLfApPwj/7kCBLrmD764PU/DMj7OejaXwrzDDCQ=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 124AB2D5; Fri, 21 Apr 2023 20:04:36 +0800
+X-QQ-mid: xmsmtpt1682078676t7gj1gxvo
+Message-ID: <tencent_B2592997622AA2AF59A31E88DB069C424408@qq.com>
+X-QQ-XMAILINFO: N3l5ASPewLWqzZ4BwtTGxMe6MnXfHNzqXtd18wOTO1YoqtR7na9dFPR8zfpjYz
+         2dhQDT2OJNtjx+mf1/Acb4dMS4YK+62KB7CGyhxlaihPIKz9lN1pRARLTcjthO4AyyInwZ2zdcM4
+         r6OlPWYLQPhrtqHWst/x39d53+R6ii9ltJxPIq+liIp0+hTniwJujnzLqfwgrdcq+3gYRqYsFToE
+         79f0lHx3l76dX9V4NEcpa44eD7+KP1zzVHHCZ93V4ZIR/JZ+qV2FVFjw90NtM7xz+XGcqpkE+Vfy
+         Eiw2mc2e63qvVM7SPBtpLLBaSNTH9GN4R//AlJaaxP9Lj4PeNnhRV5J/lkXd8tS4aq3Fe/7rMm1P
+         t4TPml/Jr7tEIVd05wZ7VeacpOxNljOY6EZYu9r0gYqE03fmyqPs6v3PCU/sRS4DvtjEMWqoFcQp
+         /5LSSoeShTGqM99QOKQu0A2BG6ltxzKDyBMwSez9ZogZ+Ve2lZ4vaPv+VJdlfVucluSg9DYiwYrD
+         x/6ilG1Y8L2XFvgiL1V1BBNx+qX5ldxRR9SjuSx/3BOfjUvbFLME297LDxXiXZSZApOnSG862o4z
+         5UP1vQ52YsrXfUXXMS1ybchfzzc/gpiRKMsgxpcy/SvuorQsGDICsgNzMFR2K2f6lRJuVQptLQkW
+         CLxSmydDm2hVqCNDHMd+DISzCiKBLtlCbTYiA8KwsCPwt50C+Xi4C9jca2q0iy6zwl+eiLVMfvvH
+         Jc/u0OeT3N5sBQPJjf1ZaI2f1GE6kPro7YFxOQIr185z/DJpvCVIxGws5h569wEGfiQom8SBxlCe
+         hmE9UwD0ehZTN9WgO3kQPUS98pM66JpoxfQEs2jg6d78h1E08q869MUjKne75l619AUC3clM5F8H
+         kProxmmyQi09aPqdScJMc05vAh8kqyzSrVIjUi29qdIHug9fqcyV2rJpRASuVPMevGLtgx/kaNp8
+         FOwxPeQ8hp7JRI7pvNyRZijrImNwpkyXMYzaT0jQId23IZOoLCsw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     mst@redhat.com
+Cc:     Rong Tao <rongtao@cestc.cn>, Jason Wang <jasowang@redhat.com>,
+        linux-kernel@vger.kernel.org (open list),
+        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
+        NET DRIVERS)
+Subject: [PATCH] tools/virtio: ringtest: Add .gitignore
+Date:   Fri, 21 Apr 2023 20:04:33 +0800
+X-OQ-MSGID: <20230421120434.238082-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3PYb3eT5MBw9/7wk"
-Content-Disposition: inline
-In-Reply-To: <3900361.irdbgypaU6@steina-w>
-X-Cookie: Hailing frequencies open, Captain.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,36 +64,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rong Tao <rongtao@cestc.cn>
 
---3PYb3eT5MBw9/7wk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ignore ringtest binaries.
 
-On Fri, Apr 21, 2023 at 01:57:01PM +0200, Alexander Stein wrote:
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/virtio/ringtest/.gitignore | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 tools/virtio/ringtest/.gitignore
 
-> Could some of the maintainers make a call here, how to address the origin=
-al=20
-> author where the change is taken from? Note: It is not cherry-picked, but=
- only=20
-> some hunks are taken.
+diff --git a/tools/virtio/ringtest/.gitignore b/tools/virtio/ringtest/.gitignore
+new file mode 100644
+index 000000000000..4c6f4bad6b5d
+--- /dev/null
++++ b/tools/virtio/ringtest/.gitignore
+@@ -0,0 +1,6 @@
++/noring
++/ptr_ring
++/ring
++/virtio_ring_0_9
++/virtio_ring_inorder
++/virtio_ring_poll
+-- 
+2.39.1
 
-I don't particularly care so long as everyone involved who should be
-getting credit is reasonably happy.
-
---3PYb3eT5MBw9/7wk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRCe2EACgkQJNaLcl1U
-h9DLTAf7BJ83hWL+uz42hvUA26053oJOaB8yYmuNYKTMOqIfL6cmssKH9MIdP04o
-OT2Bcg+49+a45pCwMSnfufkGSG0DF5JK/vET8tYGB1beHLlCLiDqlE9YnwvIgANL
-haGGygxLP4i00KsiTo6BGgSpgaizchBALi3ItUKBxfhg0VVtY5pMail0xPCu2G4q
-6xDCboVEeUti0j8ItieE71qOAoIwJ8W7rwKBQ0daTUYtT492vEnNg11seYYKgBGg
-0CuT9Ce27aWK+WQ8euq8AD8Cf5m6b3v2JyP/eh8Itutfags+mAwnYMpnDpdabOb2
-Fwr+7eT+G4roMkShhk6TrN2rehIkQA==
-=4Off
------END PGP SIGNATURE-----
-
---3PYb3eT5MBw9/7wk--
