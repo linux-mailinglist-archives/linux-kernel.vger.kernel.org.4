@@ -2,92 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0A36EA52E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137036EA53B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjDUHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S231408AbjDUHuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjDUHrl (ORCPT
+        with ESMTP id S230089AbjDUHuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:47:41 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B7B902F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:47:35 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63d4595d60fso12636044b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682063255; x=1684655255;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+szQLnykesBFXcAq23XEggqpIQQDxm1SpvIgtBdDdQc=;
-        b=ilzo9c2eLpG5BOdzTnJ1tkqhp9s2JwqSPj4VzslIQPFHhDhVdpoBWfev2lcvMWYGAk
-         LWFmGUCMpF5uNIxObmAY1y7Cwz0tVv3fXlx7DirA+zGhp0gHsbVrJYts4KlIEMaVNShW
-         s58ijis6EBKvlJ4RD7wg+QyKC9HgwxlOoMmGiStZytqdwsRGkEPAbnd97VSChuXp0WX2
-         +zQZucIclSJNEB8LrJuUWNbLETDbXuARP7J4BpZwlsp3F2KaeVnEGE3ElxagEGNuNPMX
-         MhhrdCYxE4HJypzTxNex6giAt99IH51nzCLsiUbRV5I8Mu3122JtZN6LienGlMgmPFwP
-         f7Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682063255; x=1684655255;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+szQLnykesBFXcAq23XEggqpIQQDxm1SpvIgtBdDdQc=;
-        b=VSjZNzSBGe/CPeUG4meKHBkL7PEJIZaM647iVK8zk4pTS8APeWuP4anQipXB2mjWy0
-         kHpVx7fFWNpg0DhOjm7dbGzgKrkN2ieFmvcn6TW6AOtFUzyDcOFk0JO0hCc0vUrVyq4L
-         Go1XZc0bsnAJ8J6Ny5fDmOgQX39qX+BHHiMXrOIJV6DkCw5HHWn8YQpski7HGWgfANQq
-         k5rIIOGHd3LiVcpgeQL0u9kfLgMZevcrvrbul2AhRHRakUTG2lmtjPBzXOq2ZvS9LW+8
-         IKRLtSyEeiEhEeKvWAURkYpreuTcu+agKc0PXjqnwPhZsRtPqKJOv1OPnmXKdBt6a6JR
-         CcIg==
-X-Gm-Message-State: AAQBX9cafOCNiYcyxDcNwiwSWR+S7upQ/3cFyCqv31w9/nQdfcUUr66S
-        pEWGfNEdhUU6pNPhzpluo53+BA==
-X-Google-Smtp-Source: AKy350YWXAjbfegp64SHi2kVBPvjPJX53ws5n0MUPi+U6yw4/3MYRHocvwLpECOt3NyF2XecW9aODA==
-X-Received: by 2002:a05:6a20:3d17:b0:ee:4210:6ca with SMTP id y23-20020a056a203d1700b000ee421006camr5099315pzi.7.1682063255147;
-        Fri, 21 Apr 2023 00:47:35 -0700 (PDT)
-Received: from localhost ([122.172.85.8])
-        by smtp.gmail.com with ESMTPSA id x7-20020a056a00270700b0062ddefe02dfsm2464680pfv.171.2023.04.21.00.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 00:47:34 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 13:17:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mason Huo <mason.huo@starfivetech.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 0/3] Add JH7110 cpufreq support
-Message-ID: <20230421074732.hazan2cpmozpht6x@vireshk-i7>
-References: <20230411083257.16155-1-mason.huo@starfivetech.com>
- <CAJZ5v0j_MCv6e08qYKMhiZ2kKzovO+W4scMAKUokNJvt2myS-A@mail.gmail.com>
+        Fri, 21 Apr 2023 03:50:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B8A3C22;
+        Fri, 21 Apr 2023 00:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682063402; x=1713599402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Uiroj0n/u+QOES0WHXYHHG/HRX95w83Ff6vjs3Kqv1M=;
+  b=vrJtVz34WfC8Q/hPG76+ayVUkS1sagmctZ7iqujUGCwGJ/9zCfp9T3Eo
+   qQL62HpDruJcS4odPET8JggZ9vZxPyKaRRWgm9dfRlG49/Ntt4Ua0ghQF
+   7dL1Piyzg4hXolVTBho94td7Xz+oZgwxZGmQTGCVwk1RuoUJd2QElKhxp
+   cwJ4FXjPBWkK8VlBL/6VIbM4//77VgyT+xnIeXtU4h+RRiJS8MbzaMqP4
+   A8TeGKLVhJslS+x7wuI7Yx6VurK8KQoikgJvaC+6frKoulmjZJLXGSEaG
+   mQFd6JuWAjQApIKT7ADg9sO/JWcUtA3OZ87M3ogQ5ZcG5jAWm9cUTNzr/
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,214,1677567600"; 
+   d="scan'208";a="207640124"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2023 00:50:01 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 21 Apr 2023 00:50:00 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Fri, 21 Apr 2023 00:50:00 -0700
+Date:   Fri, 21 Apr 2023 09:49:59 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <maciej.fijalkowski@intel.com>,
+        <alexandr.lobakin@intel.com>
+Subject: Re: [PATCH net-next] net: lan966x: Don't use xdp_frame when action
+ is XDP_TX
+Message-ID: <20230421074959.t2ttsy6qpfjgngcr@soft-dev3-1>
+References: <20230420121152.2737625-1-horatiu.vultur@microchip.com>
+ <f79e2dde-6d45-cc97-0cde-05454bdb5077@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j_MCv6e08qYKMhiZ2kKzovO+W4scMAKUokNJvt2myS-A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <f79e2dde-6d45-cc97-0cde-05454bdb5077@intel.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-04-23, 17:58, Rafael J. Wysocki wrote:
-> Viresh, can you have a look at this, please?
+The 04/20/2023 16:49, Alexander Lobakin wrote:
 > 
-> It is very similar to the ARM thing AFAICS.
+> From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Date: Thu, 20 Apr 2023 14:11:52 +0200
 
-Sorry, I missed your email earlier. I have already applied the cpufreq
-specific patch now.
+Hi Olek,
+
+> 
+> > When the action of an xdp program was XDP_TX, lan966x was creating
+> > a xdp_frame and use this one to send the frame back. But it is also
+> > possible to send back the frame without needing a xdp_frame, because
+> > it possible to send it back using the page.
+> > And then once the frame is transmitted is possible to use directly
+> > page_pool_recycle_direct as lan966x is using page pools.
+> > This would save some CPU usage on this path.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> 
+> [...]
+> 
+> > @@ -702,6 +704,7 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+> >  int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> >                          struct xdp_frame *xdpf,
+> >                          struct page *page,
+> > +                        u32 len,
+> >                          bool dma_map)
+> 
+> I think you can cut the number of arguments by almost a half:
+> 
+> int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+>                            void *ptr, u32 len)
+> {
+>         if (len) {
+>                 /* XDP_TX, ptr is page */
+>                 page = ptr;
+> 
+>                 dma_sync_here(page, len);
+>         } else {
+>                 /* XDP_REDIR, ptr is xdp_frame */
+>                 xdpf = ptr;
+> 
+>                 dma_map_here(xdpf->data, xdpf->len);
+>         }
+> 
+> @page and @xdpf are mutually exclusive. When @xdpf is non-null, @len is
+> excessive (xdpf->len is here), so you can use @len as logical
+> `len * !dma_map`, i.e. zero for REDIR and the actual frame length for TX.
+
+Thanks for the review. You are right, I can reduce number of arguments,
+the reason why I have done it like this, I thought it is a little bit more
+clear this way. But I will update as you propose in the next version
+
+> 
+> I generally enjoy seeing how you constantly improve stuff in your driver :)
+> 
+> >  {
+> >       struct lan966x *lan966x = port->lan966x;
+> > @@ -722,6 +725,15 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> >               goto out;
+> >       }
+> [...]
+> 
+> Thanks,
+> Olek
 
 -- 
-viresh
+/Horatiu
