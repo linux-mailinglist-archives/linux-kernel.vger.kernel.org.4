@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8A26EB1E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F5D6EB1EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjDUS7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S233426AbjDUS7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbjDUS7M (ORCPT
+        with ESMTP id S233237AbjDUS7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:59:12 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7BB2D4B;
-        Fri, 21 Apr 2023 11:59:11 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1ppvy8-0002kb-09;
-        Fri, 21 Apr 2023 20:58:52 +0200
-Date:   Fri, 21 Apr 2023 19:58:48 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net-next 21/22] net: dsa: mt7530: get rid of useless
- error returns on phylink code path
-Message-ID: <ZELc6MjOicjsPGGb@makrotopia.org>
-References: <20230421143648.87889-1-arinc.unal@arinc9.com>
- <20230421143648.87889-22-arinc.unal@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Fri, 21 Apr 2023 14:59:31 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A6630DA
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:59:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a66888cb89so21648175ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682103562; x=1684695562;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FS3xd+GxAsAM22DtQ8EZILFt6ljQaMvOWy1hQtNJeRI=;
+        b=npcCe58zYvv1Q6YVOAIpfMxs/qcn/n3bq+Y2B/kyhgrQ2IwgNZsxdK9FrRF3J4dTgx
+         YPGdpqPIpEye6AlFSBOpIxJlceRyot6Lcc0IRC3dj1G7B6gr3MrPA/A1NElUGrVoY53Z
+         rnCogjjVEwKQgiuL7DG0+0Nqiz8lvWlf1/Y2Re++oGfgI6xYE8O0YibIDswxz1LljMWF
+         4pB7LSAEZDN/niJMqEiXAS+y/uGoEayNq18mhRc2gGbryI7zhJ/2vGks7sCE4FWq4h9R
+         dH7rr4jcpK2pwlb9XffOkm3s1hMe1cpIOFpPU5spiIgfag/16tCoJG3CXz3k5vOh+WFb
+         kX7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682103562; x=1684695562;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FS3xd+GxAsAM22DtQ8EZILFt6ljQaMvOWy1hQtNJeRI=;
+        b=Ci489QmCNnvAV8QaocJu+8yRulCI/E6qb6QBIRGJqzU+5C/Yu1OKl2y9QDTq4bPwV2
+         fcUHLIDYJL72LpcaxRWxTQWNpp2vkGYtPwnQ4F92qPl21dVtBgpA5dztd6mEMax8w/hs
+         FdHRB9lLpzIkxzxsppohR254kLB2Vx4ozSOBfzLjd/lQD/dF+XQ7x3Cd0quwn2QLFM2M
+         r60wvAcpFf7dX1Q0y8azFtkloHPPUMMUv37aOhE80C8Re4UXFlgiCOlurctZtbaEMNVs
+         5rxJb7N/3hLkj26cvteLOM4ELcHPWzr5afqJX9DIP7CyoLUmjY9z7GCjxPodRV9fTtok
+         9ocg==
+X-Gm-Message-State: AAQBX9eflAylpfXUOwZuOkGti5uyyd8/XY/MWumKEQDV629LNtGpFq+L
+        BeC9muSbohlAyzhJdEPfu3YRDycvoPUp+CbOinI=
+X-Google-Smtp-Source: AKy350Zk9u1sIOJGf2PvJ1wX8lSj0Nf1O/kXAYgAfDfeDXmtve5mj6ldwrjQYrqdOoqd6Tcu0TGTlw==
+X-Received: by 2002:a17:903:188:b0:1a8:ce:afd1 with SMTP id z8-20020a170903018800b001a800ceafd1mr7743984plg.20.1682103562246;
+        Fri, 21 Apr 2023 11:59:22 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id bh7-20020a170902a98700b001a19cf1b37esm3057504plb.40.2023.04.21.11.59.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 11:59:21 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 11:59:21 -0700 (PDT)
+X-Google-Original-Date: Wed, 19 Apr 2023 07:55:56 PDT (-0700)
+Subject:     Re: [PATCH v9 0/6] Introduce 64b relocatable kernel
+In-Reply-To: <20230329045329.64565-1-alexghiti@rivosinc.com>
+CC:     ndesaulniers@google.com, bjorn@kernel.org, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, alexghiti@rivosinc.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexghiti@rivosinc.com
+Message-ID: <mhng-bb70f74f-2b5b-4880-b7bf-975e67dc554e@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230421143648.87889-22-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,216 +76,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:36:47PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Remove error returns on the cases where they are already handled with the
-> function the mac_port_get_caps member points to.
-> 
-> mt7531_mac_config() is also called from mt7531_cpu_port_config() outside of
-> phylink but the port and interface modes are already handled there.
-> 
-> Change the functions and the mac_port_config function pointer to void now
-> that there're no error returns anymore.
-> 
-> Remove mt753x_is_mac_port() that used to help the said error returns.
-> 
-> On mt7531_mac_config(), switch to if statements to simplify the code.
-> 
-> Remove internal phy cases from mt753x_phylink_mac_config() as there is no
-> configuration to be done for them. There's also no need to check the
-> interface mode as that's already handled with the function the
-> mac_port_get_caps member points to.
-> 
-> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Tue, 28 Mar 2023 21:53:23 PDT (-0700), alexghiti@rivosinc.com wrote:
+> After multiple attempts, this patchset is now based on the fact that the
+> 64b kernel mapping was moved outside the linear mapping.
+>
+> The first patch allows to build relocatable kernels but is not selected
+> by default. That patch is a requirement for KASLR.
+> The second and third patches take advantage of an already existing powerpc
+> script that checks relocations at compile-time, and uses it for riscv.
+>
+> This patchset is rebased on top of:
+>
+> riscv: Use PUD/P4D/PGD pages for the linear mapping
+> (https://patchwork.kernel.org/project/linux-riscv/list/?series=733603)
+> base-commit-tag: v6.3-rc1
 
-Acked-by: Daniel Golle <daniel@makrotopia.org>
-Tested-by: Daniel Golle <daniel@makrotopia.org>
-(on BPi-R3 MT7986A+MT7531AE, BPi-R64 MT7622+MT7531BE and MT7988A rfb)
+The QEMU CI has some way to say "this depends on an un-merged patch set 
+sent as $MESSAGE_ID", not sure if that's a b4-ism but it's a bit less 
+confusing.
 
-> ---
->  drivers/net/dsa/mt7530.c | 81 ++++++++--------------------------------
->  drivers/net/dsa/mt7530.h |  2 +-
->  2 files changed, 17 insertions(+), 66 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index 8ece3d0d820c..3d19e06061cb 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2556,7 +2556,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
->  	}
->  }
->  
-> -static int
-> +static void
->  mt7530_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		  phy_interface_t interface)
->  {
-> @@ -2567,22 +2567,14 @@ mt7530_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  	} else if (port == 6) {
->  		mt7530_setup_port6(priv->ds, interface);
->  	}
-> -
-> -	return 0;
->  }
->  
-> -static int mt7531_rgmii_setup(struct mt7530_priv *priv, u32 port,
-> -			      phy_interface_t interface,
-> -			      struct phy_device *phydev)
-> +static void mt7531_rgmii_setup(struct mt7530_priv *priv, u32 port,
-> +			       phy_interface_t interface,
-> +			       struct phy_device *phydev)
->  {
->  	u32 val;
->  
-> -	if (priv->p5_sgmii) {
-> -		dev_err(priv->dev, "RGMII mode is not available for port %d\n",
-> -			port);
-> -		return -EINVAL;
-> -	}
-> -
->  	val = mt7530_read(priv, MT7531_CLKGEN_CTRL);
->  	val |= GP_CLK_EN;
->  	val &= ~GP_MODE_MASK;
-> @@ -2610,20 +2602,14 @@ static int mt7531_rgmii_setup(struct mt7530_priv *priv, u32 port,
->  		case PHY_INTERFACE_MODE_RGMII_ID:
->  			break;
->  		default:
-> -			return -EINVAL;
-> +			break;
->  		}
->  	}
-> -	mt7530_write(priv, MT7531_CLKGEN_CTRL, val);
->  
-> -	return 0;
-> -}
-> -
-> -static bool mt753x_is_mac_port(u32 port)
-> -{
-> -	return (port == 5 || port == 6);
-> +	mt7530_write(priv, MT7531_CLKGEN_CTRL, val);
->  }
->  
-> -static int
-> +static void
->  mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		  phy_interface_t interface)
->  {
-> @@ -2631,42 +2617,21 @@ mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  	struct phy_device *phydev;
->  	struct dsa_port *dp;
->  
-> -	if (!mt753x_is_mac_port(port)) {
-> -		dev_err(priv->dev, "port %d is not a MAC port\n", port);
-> -		return -EINVAL;
-> -	}
-> -
-> -	switch (interface) {
-> -	case PHY_INTERFACE_MODE_RGMII:
-> -	case PHY_INTERFACE_MODE_RGMII_ID:
-> -	case PHY_INTERFACE_MODE_RGMII_RXID:
-> -	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +	if (phy_interface_mode_is_rgmii(interface)) {
->  		dp = dsa_to_port(ds, port);
->  		phydev = dp->slave->phydev;
-> -		return mt7531_rgmii_setup(priv, port, interface, phydev);
-> -	case PHY_INTERFACE_MODE_SGMII:
-> -	case PHY_INTERFACE_MODE_NA:
-> -	case PHY_INTERFACE_MODE_1000BASEX:
-> -	case PHY_INTERFACE_MODE_2500BASEX:
-> -		/* handled in SGMII PCS driver */
-> -		return 0;
-> -	default:
-> -		return -EINVAL;
-> +		mt7531_rgmii_setup(priv, port, interface, phydev);
->  	}
-> -
-> -	return -EINVAL;
->  }
->  
-> -static int
-> +static void
->  mt753x_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		  const struct phylink_link_state *state)
->  {
->  	struct mt7530_priv *priv = ds->priv;
->  
-> -	if (!priv->info->mac_port_config)
-> -		return 0;
-> -
-> -	return priv->info->mac_port_config(ds, port, mode, state->interface);
-> +	if (priv->info->mac_port_config)
-> +		priv->info->mac_port_config(ds, port, mode, state->interface);
->  }
->  
->  static struct phylink_pcs *
-> @@ -2695,30 +2660,18 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  	u32 mcr_cur, mcr_new;
->  
->  	switch (port) {
-> -	case 0 ... 4: /* Internal phy */
-> -		if (state->interface != PHY_INTERFACE_MODE_GMII &&
-> -		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
-> -			goto unsupported;
-> -		break;
->  	case 5: /* Port 5, can be used as a CPU port. */
->  		if (priv->p5_configured)
->  			break;
->  
-> -		if (mt753x_mac_config(ds, port, mode, state) < 0)
-> -			goto unsupported;
-> +		mt753x_mac_config(ds, port, mode, state);
->  		break;
->  	case 6: /* Port 6, can be used as a CPU port. */
->  		if (priv->p6_configured)
->  			break;
->  
-> -		if (mt753x_mac_config(ds, port, mode, state) < 0)
-> -			goto unsupported;
-> +		mt753x_mac_config(ds, port, mode, state);
->  		break;
-> -	default:
-> -unsupported:
-> -		dev_err(ds->dev, "%s: unsupported %s port: %i\n",
-> -			__func__, phy_modes(state->interface), port);
-> -		return;
->  	}
->  
->  	mcr_cur = mt7530_read(priv, MT7530_PMCR_P(port));
-> @@ -2811,7 +2764,6 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
->  	struct mt7530_priv *priv = ds->priv;
->  	phy_interface_t interface;
->  	int speed;
-> -	int ret;
->  
->  	switch (port) {
->  	case 5:
-> @@ -2836,9 +2788,8 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
->  	else
->  		speed = SPEED_1000;
->  
-> -	ret = mt7531_mac_config(ds, port, MLO_AN_FIXED, interface);
-> -	if (ret)
-> -		return ret;
-> +	mt7531_mac_config(ds, port, MLO_AN_FIXED, interface);
-> +
->  	mt7530_write(priv, MT7530_PMCR_P(port),
->  		     PMCR_CPU_PORT_SETTING(priv->id));
->  	mt753x_phylink_pcs_link_up(&priv->pcs[port].pcs, MLO_AN_FIXED,
-> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
-> index cad9115de22b..ee2b3d2d6258 100644
-> --- a/drivers/net/dsa/mt7530.h
-> +++ b/drivers/net/dsa/mt7530.h
-> @@ -722,7 +722,7 @@ struct mt753x_info {
->  	void (*mac_port_validate)(struct dsa_switch *ds, int port,
->  				  phy_interface_t interface,
->  				  unsigned long *supported);
-> -	int (*mac_port_config)(struct dsa_switch *ds, int port,
-> +	void (*mac_port_config)(struct dsa_switch *ds, int port,
->  			       unsigned int mode,
->  			       phy_interface_t interface);
->  };
-> -- 
-> 2.37.2
-> 
+I merged this on top of the pre-merge hugepage linear mapping changes, 
+it's on for-next.
+
+> Changes in v9:
+>   * Fix gcc/llvm compilation errors by adding patch 1, thanks to Bjorn
+>   * Move a patch to move rela.dyn outside of init (patch 2): it is a
+>     separate patch to clearly explain why
+>   * To effectively move rela.dyn to init, we need to add patch 6: separate patch since we may be
+>     able at some point to revert (along with patch 2).
+>   * Add a lot of orphan sections to the linker script
+>
+> Changes in v8:
+>   * Fix UEFI boot by moving rela.dyn section into the data so that PE/COFF
+>     loader actually copies the relocations too
+>   * Fix check that used PGDIR instead of PUD which was not correct
+>     for sv48 and sv57
+>   * Fix PE/COFF header data size definition as it led to size of 0
+>
+> Changes in v7:
+>   * Rebase on top of v5.15
+>   * Fix LDFLAGS_vmlinux which was overriden when CONFIG_DYNAMIC_FTRACE was
+>     set
+>   * Make relocate_kernel static
+>   * Add Ack from Michael
+>
+> Changes in v6:
+>   * Remove the kernel move to vmalloc zone
+>   * Rebased on top of for-next
+>   * Remove relocatable property from 32b kernel as the kernel is mapped in
+>     the linear mapping and would then need to be copied physically too
+>   * CONFIG_RELOCATABLE depends on !XIP_KERNEL
+>   * Remove Reviewed-by from first patch as it changed a bit
+>
+> Changes in v5:
+>   * Add "static __init" to create_kernel_page_table function as reported by
+>     Kbuild test robot
+>   * Add reviewed-by from Zong
+>   * Rebase onto v5.7
+>
+> Changes in v4:
+>   * Fix BPF region that overlapped with kernel's as suggested by Zong
+>   * Fix end of module region that could be larger than 2GB as suggested by Zong
+>   * Fix the size of the vm area reserved for the kernel as we could lose
+>     PMD_SIZE if the size was already aligned on PMD_SIZE
+>   * Split compile time relocations check patch into 2 patches as suggested by Anup
+>   * Applied Reviewed-by from Zong and Anup
+>
+> Changes in v3:
+>   * Move kernel mapping to vmalloc
+>
+> Changes in v2:
+>   * Make RELOCATABLE depend on MMU as suggested by Anup
+>   * Rename kernel_load_addr into kernel_virt_addr as suggested by Anup
+>   * Use __pa_symbol instead of __pa, as suggested by Zong
+>   * Rebased on top of v5.6-rc3
+>   * Tested with sv48 patchset
+>   * Add Reviewed/Tested-by from Zong and Anup
+>
+> Alexandre Ghiti (6):
+>   riscv: Prepare EFI header for relocatable kernels
+>   riscv: Move .rela.dyn outside of init to avoid empty relocations
+>   riscv: Introduce CONFIG_RELOCATABLE
+>   powerpc: Move script to check relocations at compile time in scripts/
+>   riscv: Check relocations at compile time
+>   riscv: Use --emit-relocs in order to move .rela.dyn in init
+>
+>  arch/powerpc/tools/relocs_check.sh  | 18 ++--------
+>  arch/riscv/Kconfig                  | 14 ++++++++
+>  arch/riscv/Makefile                 |  7 ++--
+>  arch/riscv/Makefile.postlink        | 49 ++++++++++++++++++++++++++
+>  arch/riscv/boot/Makefile            |  7 ++++
+>  arch/riscv/include/asm/set_memory.h |  3 ++
+>  arch/riscv/kernel/efi-header.S      | 19 ++++++++--
+>  arch/riscv/kernel/vmlinux.lds.S     | 26 ++++++++++----
+>  arch/riscv/mm/Makefile              |  4 +++
+>  arch/riscv/mm/init.c                | 54 ++++++++++++++++++++++++++++-
+>  arch/riscv/tools/relocs_check.sh    | 26 ++++++++++++++
+>  scripts/relocs_check.sh             | 20 +++++++++++
+>  12 files changed, 218 insertions(+), 29 deletions(-)
+>  create mode 100644 arch/riscv/Makefile.postlink
+>  create mode 100755 arch/riscv/tools/relocs_check.sh
+>  create mode 100755 scripts/relocs_check.sh
