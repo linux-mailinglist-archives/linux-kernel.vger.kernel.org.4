@@ -2,159 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C2E6EAEFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009CE6EAEFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjDUQYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S232428AbjDUQ06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233018AbjDUQYX (ORCPT
+        with ESMTP id S229916AbjDUQ04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:24:23 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5F99030;
-        Fri, 21 Apr 2023 09:24:20 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pptYN-0001o5-0y;
-        Fri, 21 Apr 2023 18:24:07 +0200
-Date:   Fri, 21 Apr 2023 17:24:04 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net-next 04/22] net: dsa: mt7530: improve comments
- regarding port 5 and 6
-Message-ID: <ZEK4pIrlA_u69isg@makrotopia.org>
-References: <20230421143648.87889-1-arinc.unal@arinc9.com>
- <20230421143648.87889-5-arinc.unal@arinc9.com>
+        Fri, 21 Apr 2023 12:26:56 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21134869B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:26:55 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-507bdc5ca2aso3210715a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682094413; x=1684686413;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vIEVML4IO5anh889+aalXEgSW3X6EwyG+xKSv5s4BBU=;
+        b=vNf7B7OMSpTvkt/QhbB/PsdtgWBg1pW9dMi93H7w5lWvBEWhimVzdKHM56ubv9YdOi
+         MhSrry6TwNkGNklCPZ61WR+7zLhsd1Cp/go24HmMDtFzKEaH0KV3bPz+YzXwGXo3NdFa
+         AZqalVa8nxwpxvHRp77seyGRegReWeSrY7c+XCBK741gPSfK13cdMNmKo65eIZSU4jCj
+         irpenpQa2kKEPFolx2roZEow6EovgxA3f+ypHKWdATTLEmonSrskN/EDE0xdJ3gSoUol
+         QfjO3WbZ6W1HG4z7biEvEPaZ4rGDWbPI3rvS2yfP9tiTxb3SYT5RsEk1ClZTElkIxVu2
+         ikHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682094413; x=1684686413;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vIEVML4IO5anh889+aalXEgSW3X6EwyG+xKSv5s4BBU=;
+        b=Ummi/jiMonj5QwKqWs2g9TWGB4tvMmAqAd+VyR+kdm0Tm9D7RhTv7jCC2u3E0TcPvL
+         mQ6s+vIi9+ogxZouWUV44EczKZqGtEWqcbhHCdduFOFpGULznNVEqgOPg3l7k9PX8Kci
+         U8tq2rzF82jX6zS1ckITj2+V+9srjWW2W8+t464g6Dd91XmgClcrXHY204c0LSNTjheo
+         xQDwMtnfea/sOHN3eS+EHqvrUHrGTRLHiQsF6OdWSqi4MW7v2T6cbVDhzrZVCb1IufCT
+         Mg1Wv0P0nXk4ZzYsEc4OwYA3nPv4kKduESiLvfzV5FhoIVGqec+SL9MRwoRwGuXbHD2+
+         ZmKA==
+X-Gm-Message-State: AAQBX9cAeLHGfjP5l04WzvWWkZmZsNbJzhTlbLCVxoebDv81+vd1YxvA
+        aARMMzVB+h5NGNdz5PvPmMP/oQ==
+X-Google-Smtp-Source: AKy350ZlepiYHICnCvkKxXgRvs5qFi+tujr0SqeW/avud6pnNBIJ6AakgyIPJCcworE7G0FK8U1oBA==
+X-Received: by 2002:a17:906:194d:b0:94e:c938:1987 with SMTP id b13-20020a170906194d00b0094ec9381987mr2928538eje.7.1682094413624;
+        Fri, 21 Apr 2023 09:26:53 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id gn5-20020a1709070d0500b0094f29a53129sm2190915ejc.205.2023.04.21.09.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:26:53 -0700 (PDT)
+Message-ID: <fb93e95f-181f-917d-9216-a81dec1a2959@linaro.org>
+Date:   Fri, 21 Apr 2023 18:26:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RESEND v2 1/2] dt-bindings: display: simple: add support
+ for InnoLux G070ACE-L01
+To:     Doug Anderson <dianders@chromium.org>, richard.leitner@linux.dev
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Richard Leitner <richard.leitner@skidata.com>
+References: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
+ <20230201-innolux-g070ace-v2-1-2371e251dd40@skidata.com>
+ <CAD=FV=XJCtqep+92h3gLfs4o2TwvL4MORjc9ydTSpZiZ0dsR0w@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=XJCtqep+92h3gLfs4o2TwvL4MORjc9ydTSpZiZ0dsR0w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230421143648.87889-5-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:36:30PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 21/04/2023 18:15, Doug Anderson wrote:
+> Hi,
 > 
-> There's no logic to numerically order the CPU ports. State the port number
-> and its capability of being used as a CPU port instead.
+> On Mon, Mar 13, 2023 at 12:51 AM <richard.leitner@linux.dev> wrote:
+>>
+>> From: Richard Leitner <richard.leitner@skidata.com>
+>>
+>> Add Innolux G070ACE-L01 7" WVGA (800x480) TFT LCD panel compatible
+>> string.
+>>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
 > 
-> Remove the irrelevant PHY muxing information from
-> mt7530_mac_port_get_caps(). Explain the supported MII modes instead.
-> 
-> Remove the out of place PHY muxing information from
-> mt753x_phylink_mac_config(). The function is for both the MT7530 and MT7531
-> switches but there's no PHY muxing on MT7531.
-> 
-> These comments were gradually introduced with the commits below.
-> ca366d6c889b ("net: dsa: mt7530: Convert to PHYLINK API")
-> 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
-> 88bdef8be9f6 ("net: dsa: mt7530: Extend device data ready for adding a new
-> hardware")
-> c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> nit: as I understand it, ordering of tags is usually supposed to be
+> chronological. You signed off on this patch before Krzysztof acked it,
+> so the SoB should be above. I'll fix that when applying.
 
-Acked-by: Daniel Golle <daniel@makrotopia.org>
+Some people agree with this... but b4 disagrees, so I would say the
+tools should implement the right process and right decisions. We should
+not be correcting the tools' output, unless the tools are not correct -
+then fix the tools.
 
-> ---
->  drivers/net/dsa/mt7530.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index edc34be745b2..e956ffa1eea8 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2504,7 +2504,9 @@ static void mt7530_mac_port_get_caps(struct dsa_switch *ds, int port,
->  			  config->supported_interfaces);
->  		break;
->  
-> -	case 5: /* 2nd cpu port with phy of port 0 or 4 / external phy */
-> +	case 5: /* Port 5 which can be used as a CPU port supports rgmii with
-> +		 * delays, mii, and gmii.
-> +		 */
->  		phy_interface_set_rgmii(config->supported_interfaces);
->  		__set_bit(PHY_INTERFACE_MODE_MII,
->  			  config->supported_interfaces);
-> @@ -2512,7 +2514,9 @@ static void mt7530_mac_port_get_caps(struct dsa_switch *ds, int port,
->  			  config->supported_interfaces);
->  		break;
->  
-> -	case 6: /* 1st cpu port */
-> +	case 6: /* Port 6 which can be used as a CPU port supports rgmii and
-> +		 * trgmii.
-> +		 */
->  		__set_bit(PHY_INTERFACE_MODE_RGMII,
->  			  config->supported_interfaces);
->  		__set_bit(PHY_INTERFACE_MODE_TRGMII,
-> @@ -2532,14 +2536,17 @@ static void mt7531_mac_port_get_caps(struct dsa_switch *ds, int port,
->  			  config->supported_interfaces);
->  		break;
->  
-> -	case 5: /* 2nd cpu port supports either rgmii or sgmii/8023z */
-> +	case 5: /* Port 5 which can be used as a CPU port supports rgmii with
-> +		 * delays on MT7531BE, sgmii/802.3z on MT7531AE.
-> +		 */
->  		if (!priv->p5_sgmii) {
->  			phy_interface_set_rgmii(config->supported_interfaces);
->  			break;
->  		}
->  		fallthrough;
->  
-> -	case 6: /* 1st cpu port supports sgmii/8023z only */
-> +	case 6: /* Port 6 which can be used as a CPU port supports sgmii/802.3z.
-> +		 */
->  		__set_bit(PHY_INTERFACE_MODE_SGMII,
->  			  config->supported_interfaces);
->  		__set_bit(PHY_INTERFACE_MODE_1000BASEX,
-> @@ -2731,7 +2738,7 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
->  			goto unsupported;
->  		break;
-> -	case 5: /* 2nd cpu port with phy of port 0 or 4 / external phy */
-> +	case 5: /* Port 5, can be used as a CPU port. */
->  		if (priv->p5_interface == state->interface)
->  			break;
->  
-> @@ -2741,7 +2748,7 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		if (priv->p5_intf_sel != P5_DISABLED)
->  			priv->p5_interface = state->interface;
->  		break;
-> -	case 6: /* 1st cpu port */
-> +	case 6: /* Port 6, can be used as a CPU port. */
->  		if (priv->p6_interface == state->interface)
->  			break;
->  
-> -- 
-> 2.37.2
-> 
+
+
+Best regards,
+Krzysztof
+
