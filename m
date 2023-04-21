@@ -2,119 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79BD6EA1C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA2D6EA1D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjDUCqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        id S233344AbjDUCtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbjDUCqM (ORCPT
+        with ESMTP id S232138AbjDUCtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:46:12 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A5A3585;
-        Thu, 20 Apr 2023 19:46:11 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a69f686345so15417535ad.2;
-        Thu, 20 Apr 2023 19:46:11 -0700 (PDT)
+        Thu, 20 Apr 2023 22:49:31 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAACE2723;
+        Thu, 20 Apr 2023 19:49:29 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5066ce4f725so1637929a12.1;
+        Thu, 20 Apr 2023 19:49:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682045171; x=1684637171;
+        d=gmail.com; s=20221208; t=1682045368; x=1684637368;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/4MG1ldebCN8w18KiQjjLtylboO9qHQ1hlD9i7pvobs=;
-        b=n++x+IO4IgXrj/OR/hsFO8dPXOTVcdeugXF+u2FizNTy3u6VSi/WX+/cK4D58tmyUd
-         aDZxuYFGzop1SBcf8b8mwLNeRTnobBYAeOG/FqATuV/PebmDYLhnOdy+5410lZdf0Wl7
-         JMK9K2KF/RnW00nVlrKCY4l1JvNJwIXlfOW3j5nm0v/ZZrjobeVTf2zB2mVY4IPt636l
-         +XpGi7HrE98yXYtmfkYhhI1gKME+H+LW5dxaeVB6FWiwxSfjVKH7mqesmTwj53xt4CGe
-         mN0XoRbM1CPdfu0vMIy0fW1mz9DN1dClGshGFBPuxAQx/jBGpH9yUFA0NMmoUWcpk/Ae
-         Cw2w==
+        bh=+HNMXzHWvBEHzj9QSaYOYNRm6D/JVAcKYsrrAYs6ues=;
+        b=J2haeZG7RdoZWZpd3ZntCOuHIAqDAgYBepUCCiv5hw1RwHsDYi61lOGi2oCQh5ZH3O
+         EAoovY3k6DJDwUTqMfjjtDvyEPqL3q5/M0oPub4dIXtbBhPCrgK3n8z5EeF0lmTimrHc
+         sGbWZpYzyxPgWy1OGA8K8CxjkeGl8q2L17RJ9XQgumSRmhShwosDwYpqCA6h6Dbxwums
+         8o2uj5I4Ng2Si0Ym9WoIZX677i0g5Zg7bMbsXZwSn4A4SvJcwoZa/YP/BojprhN/NOw8
+         E0F+TeOKDYjsXTNWOZ7DtqUnoMB/A7XSgYGS0h5ODe3ggStLbHqzWxSn8YCKTW9dO/qe
+         F6Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682045171; x=1684637171;
+        d=1e100.net; s=20221208; t=1682045368; x=1684637368;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/4MG1ldebCN8w18KiQjjLtylboO9qHQ1hlD9i7pvobs=;
-        b=IRnp144h0zw8Q3FUWhvjMqTVcBAiFFRD++wiJbo9T4RA77CrVT+zAKzHC634f/s9eS
-         ehwnSE7mtZ1GJEojMt4XvgochRppX37TZLXnN74vHHQf3rrs6hdjuADKPiDwEtAnVHJG
-         729/7z3e0F/2DRZVpfyFM+VNNE/qXTaZ8/FGHStDMQxg9U96d6jPhXIzYGd8/6hPQSXF
-         P9q/uQN3QqdayL80ol+5sho0lYuMJVYHMApYy92g9HQtpHmZlr/1CEUEjMJwQqXncz8T
-         LSH4J3pOtyzfahkY8bcO57yZUHld56GDqBE1k49aROUUqrwBU643t32ORczK6Oy4EypN
-         1+xQ==
-X-Gm-Message-State: AAQBX9cw6X976ben/fNmFb8n64AObtJL2ZfXeE+Sm+OVNvZBsgs+BtvM
-        LtJuq7UpQB/5Jbr+3j5OIoGNAdZGhtcfVMdbmgM=
-X-Google-Smtp-Source: AKy350bDjCPznbR8mnqZRmImn2jeRAWK1p/HSL+/aBlAcnv5/22Vlry6Nuov8Fa/Hzq+8EMmQJKbTXeKW+ZJRbcOdkw=
-X-Received: by 2002:a17:902:c3c5:b0:1a5:309e:d205 with SMTP id
- j5-20020a170902c3c500b001a5309ed205mr3673496plj.21.1682045171094; Thu, 20 Apr
- 2023 19:46:11 -0700 (PDT)
+        bh=+HNMXzHWvBEHzj9QSaYOYNRm6D/JVAcKYsrrAYs6ues=;
+        b=RcY+W+fYzJep+PmQdC6E1+ZOh+7xpLxTAdJHOMoSKsIJCDpL2p+0YBzRejASxpcB0J
+         emvomluNPy0zWxP3jF3JNRg1dKoZIQWhwq8KcrYep3PpcloETsxKZ0qZiOwj6lIWtxMG
+         TCv6++jsuyigUsGIHA52mWoU1hAzeKH6YrHDnYOTBJZXHjC3LvqNzhYUjrMKCeAUBmLZ
+         Z6BLmzb1qrr5Tq1iLFJKeLHJhZ7MRcwaTrEdZ3WwiPFhgw191lgCJcI3yQSHXnnIPndh
+         JXDWSZh1cgem+CvzpXe/W/UuU1z9BFymRH5KvasNVlk36b6tofci+p51R486xIJiyH2a
+         hI/Q==
+X-Gm-Message-State: AAQBX9diuSbsmKXu1nHC0aH99yTcF2PXAkoOre5IOMcXCvA7J66AWxMR
+        W2M4FM9foumcrlfhdLh6M+TqDJbpSP2PVxB3YW61sKgRGhQ=
+X-Google-Smtp-Source: AKy350ai74xPKhE2xPqnYTzdA58xoThXFlI6Bop3dQ/PP+2cWuDlEPDOCoU8/80INtmcMUbdznWPq5j4dZYMEXQp4ac=
+X-Received: by 2002:a17:907:3ad0:b0:94f:24d7:64d5 with SMTP id
+ fi16-20020a1709073ad000b0094f24d764d5mr808055ejc.56.1682045368170; Thu, 20
+ Apr 2023 19:49:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230413033422.28003-1-zyytlz.wz@163.com> <6a13265d-634e-d52a-44d9-65d05ab28b1a@oracle.com>
-In-Reply-To: <6a13265d-634e-d52a-44d9-65d05ab28b1a@oracle.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 21 Apr 2023 10:45:58 +0800
-Message-ID: <CAJedcCzJTq6uFU1fGZ2Qhih4dy6z9DYZOwjrT-P8esMSvL0+cw@mail.gmail.com>
-Subject: Re: [PATCH v2] scsi: qedi: Fix use after free bug in qedi_remove due
- to race condition
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, njavali@marvell.com,
-        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com
+References: <20221222221244.1290833-1-kuba@kernel.org> <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
+In-Reply-To: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Fri, 21 Apr 2023 10:48:51 +0800
+Message-ID: <CAL+tcoBU+UD_8aXkJy95zNzFeOBMQvQE6jj9syiKvOh_wcLrcw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] softirq: uncontroversial change
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org,
+        tglx@linutronix.de, jstultz@google.com, edumazet@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Christie <michael.christie@oracle.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=
-=8820=E6=97=A5=E5=91=A8=E5=9B=9B 23:39=E5=86=99=E9=81=93=EF=BC=9A
+On Fri, Apr 21, 2023 at 1:34=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
+te:
 >
-> On 4/12/23 10:34 PM, Zheng Wang wrote:
-> > In qedi_probe, it calls __qedi_probe, which bound &qedi->recovery_work
-> > with qedi_recovery_handler and bound &qedi->board_disable_work
-> > with qedi_board_disable_work.
+> Hi all,
+> On Thu, 2022-12-22 at 14:12 -0800, Jakub Kicinski wrote:
+> > Catching up on LWN I run across the article about softirq
+> > changes, and then I noticed fresh patches in Peter's tree.
+> > So probably wise for me to throw these out there.
 > >
-> > When it calls qedi_schedule_recovery_handler, it will finally
-> > call schedule_delayed_work to start the work.
+> > My (can I say Meta's?) problem is the opposite to what the RT
+> > sensitive people complain about. In the current scheme once
+> > ksoftirqd is woken no network processing happens until it runs.
 > >
-> > When we call qedi_remove to remove the driver, there
-> > may be a sequence as follows:
+> > When networking gets overloaded - that's probably fair, the problem
+> > is that we confuse latency tweaks with overload protection. We have
+> > a needs_resched() in the loop condition (which is a latency tweak)
+> > Most often we defer to ksoftirqd because we're trying to be nice
+> > and let user space respond quickly, not because there is an
+> > overload. But the user space may not be nice, and sit on the CPU
+> > for 10ms+. Also the sirq's "work allowance" is 2ms, which is
+> > uncomfortably close to the timer tick, but that's another story.
 > >
-> > Fix it by finishing the work before cleanup in qedi_remove.
+> > We have a sirq latency tracker in our prod kernel which catches
+> > 8ms+ stalls of net Tx (packets queued to the NIC but there is
+> > no NAPI cleanup within 8ms) and with these patches applied
+> > on 5.19 fully loaded web machine sees a drop in stalls from
+> > 1.8 stalls/sec to 0.16/sec. I also see a 50% drop in outgoing
+> > TCP retransmissions and ~10% drop in non-TLP incoming ones.
+> > This is not a network-heavy workload so most of the rtx are
+> > due to scheduling artifacts.
 > >
-> > CPU0                  CPU1
+> > The network latency in a datacenter is somewhere around neat
+> > 1000x lower than scheduling granularity (around 10us).
 > >
-> >                      |qedi_recovery_handler
-> > qedi_remove          |
-> >   __qedi_remove      |
-> > iscsi_host_free      |
-> > scsi_host_put        |
-> > //free shost         |
-> >                      |iscsi_host_for_each_session
-> >                      |//use qedi->shost
+> > These patches (patch 2 is "the meat") change what we recognize
+> > as overload. Instead of just checking if "ksoftirqd is woken"
+> > it also caps how long we consider ourselves to be in overload,
+> > a time limit which is different based on whether we yield due
+> > to real resource exhaustion vs just hitting that needs_resched().
 > >
-> > Fixes: 4b1068f5d74b ("scsi: qedi: Add MFW error recovery process")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> > v2:
-> > - remove unnecessary comment suggested by Mike Christie and cancel the =
-work
-> > after qedi_ops->stop and qedi_ops->ll2->stop which ensure there is no m=
-ore
-> > work suggested by Manish Rangankar
+> > I hope the core concept is not entirely idiotic. It'd be great
+> > if we could get this in or fold an equivalent concept into ongoing
+> > work from others, because due to various "scheduler improvements"
+> > every time we upgrade the production kernel this problem is getting
+> > worse :(
 >
-> Look ok to me now. Thanks.
->
-> Reviewed-by: Mike Christie <michael.christie@oracle.com>
+[...]
+> Please allow me to revive this old thread.
 
-Thanks for your review.
+Hi Paolo,
 
-Best regards,
-Zheng
+So good to hear this :)
+
+>
+> My understanding is that we want to avoid adding more heuristics here,
+> preferring a consistent refactor.
+>
+> I would like to propose a revert of:
+>
+> 4cd13c21b207 softirq: Let ksoftirqd do its job
+>
+> the its follow-ups:
+>
+> 3c53776e29f8 Mark HI and TASKLET softirq synchronous
+> 0f50524789fc softirq: Don't skip softirq execution when softirq thread is=
+ parking
+
+More than this, I list some related patches mentioned in the above
+commit 3c53776e29f8:
+1ff688209e2e ("watchdog: core: make sure the watchdog_worker is not deferre=
+d")
+8d5755b3f77b ("watchdog: softdog: fire watchdog even if softirqs do
+not get to run")
+217f69743681 ("net: busy-poll: allow preemption in sk_busy_loop()")
+
+>
+> The problem originally addressed by 4cd13c21b207 can now be tackled
+> with the threaded napi, available since:
+>
+> 29863d41bb6e net: implement threaded-able napi poll loop support
+>
+> Reverting the mentioned commit should address the latency issues
+> mentioned by Jakub - I verified it solves a somewhat related problem in
+> my setup - and reduces the layering of heuristics in this area.
+
+Sure, it is. I also can verify its usefulness in the real workload.
+Some days ago I also sent a heuristics patch [1] that can bypass the
+ksoftirqd if the user chooses to mask some type of softirq. Let the
+user decide it.
+
+But I observed that if we mask some softirqs, or we can say,
+completely revert the commit 4cd13c21b207, the load would go higher
+and the kernel itself may occupy/consume more time than before. They
+were tested under the similar workload launched by our applications.
+
+[1]: https://lore.kernel.org/all/20230410023041.49857-1-kerneljasonxing@gma=
+il.com/
+
+>
+> A refactor introducing uniform overload detection and proper resource
+> control will be better, but I admit it's beyond me and anyway it could
+> still land afterwards.
+
++1
+
+Thanks,
+Jason
+>
+> Any opinion more then welcome!
+>
+> Thanks,
+>
+> Paolo
+>
