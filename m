@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12D16EAA37
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00316EAA45
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjDUMVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S232000AbjDUMXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjDUMVl (ORCPT
+        with ESMTP id S229709AbjDUMXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:21:41 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC1286B0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:21:39 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so2735007b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682079699; x=1684671699;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a8vI3H8Vhti9iIXhtM99KOSVknA/KfjkawUfvqnXKUI=;
-        b=G01UQBGronyv47AoOs+I8wiWeAcTN8u5fKiZ82ws+CMKZlKlrOvsRMnJg/Oa0RSV9d
-         Y875Pt3uO+GiHGmOyWMpcETxMJO6YM13jfPdlkjKziFvzyGegy/bWkZCQtwJvbhUe/W0
-         LNPCPd9qth6GTB2PUzpIgFYvckvlyqw9ITEGhoFUrxz0sDGd7vf/nMU/s7C4LfFVXTvW
-         b1DkUne8WZy2fFFuXUyA/tCD2cJBZoW8+QX0kqNdv1pnjvtRZiZ30QM0K4gtEazpKdZA
-         cQ5mLaQNRCJI9bq5fj7Z3uv+ZVriGVqT/g5sbUjSbTXaFZQgYw2v/UlJ7y89Uelh8etv
-         o96g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682079699; x=1684671699;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a8vI3H8Vhti9iIXhtM99KOSVknA/KfjkawUfvqnXKUI=;
-        b=dSdcv5G+pRhTdkqX/4ZpfYuG75c0orGT4kvzFfnYoQ1ebNnm02IpYnqRbKXmn+q+Yi
-         L1nyJP/UiZg43W7l3+wHhScqeq3jAG3psO2Bqaox14fWDSq/viIDwjgqJ97GaMuOA/D9
-         kV0FrTNRz5YwgJikfRqAWNjdAboUhaUxsAoclIbcUOtyslSkc2E8qg1GY47XChn8fYeD
-         mywf8dYCl0oeJs0srWKca+qGBljDt1JD3W33z7DTTlMUiFDASSB8nBH7AGWRl8FWLNPk
-         I3UM8GSwBInB8V9FHIhDIAFfQSA6eywDtTQ6AmK6aCHU62cmhW+h64kjKUAtnmYrTffB
-         DVoA==
-X-Gm-Message-State: AAQBX9d389gDDfmSZvWpAeOtrJkKrJMTDASIcdsdP8ai/2TYUGlebpce
-        Hm1jBR0r2+FeyE+3TO702sEVLzImG2LTaQ==
-X-Google-Smtp-Source: AKy350afJ36qNyVgx+6yn/CP19OhW+FVTDY01l7DQckmce5u7vWq2vjkXi+Vu34oL7vNqI3sRJyylA==
-X-Received: by 2002:a05:6a20:158d:b0:f0:ec64:f3db with SMTP id h13-20020a056a20158d00b000f0ec64f3dbmr6923598pzj.24.1682079699289;
-        Fri, 21 Apr 2023 05:21:39 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-83.three.co.id. [180.214.232.83])
-        by smtp.gmail.com with ESMTPSA id h11-20020a056a00218b00b0063b8ada8777sm2916689pfi.112.2023.04.21.05.21.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 05:21:38 -0700 (PDT)
-Message-ID: <bf4ef6ce-8fa9-57b8-7d18-2a4cbb41455b@gmail.com>
-Date:   Fri, 21 Apr 2023 19:21:36 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: strings
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     =?UTF-8?Q?Andr=c3=a9_Coelho?= <andrealbergaria@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <8de1912e-8009-3c85-ece5-7ca7f03be42a@gmail.com>
- <ZEIPKhKNz7LnhM/q@debian.me> <ZEIuh80SfDms30dc@1wt.eu>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <ZEIuh80SfDms30dc@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 21 Apr 2023 08:23:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CB38A7A;
+        Fri, 21 Apr 2023 05:23:04 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LBXb1p026943;
+        Fri, 21 Apr 2023 12:23:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=YLmpEWurGjZjj/kpB/p58mgJcImg4YxjC2quxPWDXNw=;
+ b=bAgcE6XbByL0mNSR3b/tazxUNceC3S4QGH1nGTrIO0oVbEkP12o7wwceRcPkIl63YxQ5
+ 7IhY1FuUBz3xZzX6BkHXoJRHQDJEiTSgrREzF+tR1RsxEK28rHCtyfLz6RmRqTQNEa0I
+ w2M2fK/tpCBF3Ms0mKqOXWyLH8+H+rmZXvWmQpiCdLJqv3yB1hW5n2qvW9IxezZqgtNN
+ uTIBTFbJuGEdLmX1BdJvRMp+oJbxlXdrX1q5UwYH0/52SwqtqU5C2abS2Bs0XOwcG66E
+ s1W/M6oh/BVNRjtokRSSCknoh/22+6B9SRreJdQ4sADePGRxB6264UuzFxtNA+iZjTF4 Ow== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3dcv1ht5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 12:23:00 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 33LCMu3Y007411;
+        Fri, 21 Apr 2023 12:22:56 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3pyn0kq4vx-1;
+        Fri, 21 Apr 2023 12:22:56 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33LCMtm0007399;
+        Fri, 21 Apr 2023 12:22:56 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 33LCMt9e007396;
+        Fri, 21 Apr 2023 12:22:55 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id F22B850AC; Fri, 21 Apr 2023 17:52:54 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v3 0/2] Add pinctrl support for SDX75
+Date:   Fri, 21 Apr 2023 17:52:48 +0530
+Message-Id: <1682079770-27656-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IIxOGfIo6TLr4b5P_3X6QMDkeTqCrZ-w
+X-Proofpoint-ORIG-GUID: IIxOGfIo6TLr4b5P_3X6QMDkeTqCrZ-w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_05,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=632 adultscore=0 clxscore=1015 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210107
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/23 13:34, Willy Tarreau wrote:
+Hi,
 
->> Looks like above link is about hex arithmetic implemented using strings,
->> right?
-> 
-> It looks more like a reinvention of the classical multi-byte string
-> processing (memcmp, memcpy, memmove etc).
-> 
->> Also, on what use cases can your idea fit the kernel context? Or doesn't the
->> kernel already have the implementation yet?
-> 
-> Sure it does, look at __crypto_memneq() for example, or more generally
-> at any memcmp() or memcpy() implementation from the last 30 years, for
-> example in glibc.
-> 
+Changes in v3:
+ - Rebased the bindings on linux-next as suggested by Krzysztof.
 
-Thanks for explanation! I don't have any serious C[++] programming
-background, so I was confused when I wrote the original reply.
+Changes in v2:
+ - Updated the bindings to clear the bindings check.
+
+This patch series adds pinctrl bindings and tlmm support for SDX75.
+
+Thanks,
+Rohit.
+
+Rohit Agarwal (2):
+  dt-bindings: pinctrl: qcom: Add SDX75 pinctrl devicetree compatible
+  pinctrl: qcom: Add SDX75 pincontrol driver
+
+ .../bindings/pinctrl/qcom,sdx75-tlmm.yaml          |  168 ++
+ drivers/pinctrl/qcom/Kconfig                       |   30 +-
+ drivers/pinctrl/qcom/Makefile                      |    3 +-
+ drivers/pinctrl/qcom/pinctrl-sdx75.c               | 1603 ++++++++++++++++++++
+ 4 files changed, 1793 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sdx75.c
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.7.4
 
