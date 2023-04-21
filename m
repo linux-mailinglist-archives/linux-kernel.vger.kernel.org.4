@@ -2,122 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A7E6EAA25
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FED46EAA31
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjDUMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S231947AbjDUMTa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Apr 2023 08:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjDUMRv (ORCPT
+        with ESMTP id S231537AbjDUMT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:17:51 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16AA9039
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:17:49 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-763646b324aso329413539f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:17:49 -0700 (PDT)
+        Fri, 21 Apr 2023 08:19:28 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA199016;
+        Fri, 21 Apr 2023 05:19:27 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-54f851bcd4fso18321077b3.3;
+        Fri, 21 Apr 2023 05:19:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682079469; x=1684671469;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=czyz4jPXZl6oM7+PF3+JFt1DVnlTxkTrAGRzEaB5Bgk=;
-        b=dbygSm/qwB9e4VaCzD2V4ScW38IFzfF3eAy+vRga5166y9QdSpi9WdukLf4I5LX23e
-         Ifi1p+RB2JZA/7OcXDFcTOzwBXBZvi8OnzsnHG/uL0RJ5m57L89qq5PwoNN2+eXANFy9
-         ey0fwPXEaGnu+np8B3Zqpk2z9uqKvpkYGOBDfXcJrySRW48+rT6tRX03NgrmbYdQyhaO
-         OoFpeks5ZzfyJud7YqI57lIqA2+p/fMnNYbnTm+MfX9IQNscNOmm7CGCAJQYs5Wzdmpi
-         wrGPOuMMw6UdDhc8gif4jqP6VaOme8MOI2Q7ExWpYfOh1cBB4GAkHzP/L5z9hEihtdWe
-         GIfQ==
-X-Gm-Message-State: AAQBX9cRQKKU2ip+U6/dF/Rd8TMSJwIuY/k28G9Ld/NAICOXeZAducP/
-        zLN0tJsS7JIgay+RUk69mOBix/4TmjOzbvm0LUetIl9VDZEX
-X-Google-Smtp-Source: AKy350Z5L9F4MKiEFyqwzMO/3b69TKAPFK23KWq1pLXa3RrBpmt6Op3F0GyqDOTiThXXlsToK2BvgsLZYKFPH37pwP6WSpwcsuqJ
+        d=1e100.net; s=20221208; t=1682079566; x=1684671566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MBGPxGXW5B4PY2iHwEX+HXfd0m2xt7m/C36xWqTMiSA=;
+        b=AqFykgijJuqjGymMzP0RZqWP/wC1yXC7hsBygpbHU3oxn3p2bWtahMl41Ofaa/c43N
+         f2aI1n36BHTQkobRobG9oNTmG911+pEc4CjRLBrcrDhMIKV6X9KZV8N/UXt+m5FnsY5v
+         Pr9T+60bbG8zZm2PoQ3WcfNnLvO3wizfdwnr5lENQBo8PEUzu11FXx2zsrgBvfVXz1X9
+         PEhAdOQgZXl7YtVYs7hXJ9AvR8ml/KUx1JHGIiY5d5HFtAWfdDvE+TVtI+t5z2BoXC5j
+         fLKTz5w3JQAD8Z0be2vvGsX6tR+Z9DcsNkp/9RpINJqnNPUEHYlThtgx1ivK4u69CZlX
+         k2sQ==
+X-Gm-Message-State: AAQBX9dc+Wo2SmKcY7sW+YlIr2pfoKSLs6y/tvBHGEKp/x63tOOPAQvC
+        2uyKIf1s41OjPvnUlfNkRY4y0U2cP/IeHtP3
+X-Google-Smtp-Source: AKy350ZRuKSELWIE5Ozqt7iRdH+dDlFRPTbfRf9NJRDn9lhm70obydqAYCQI32ROUJ8nrvXq32KkfQ==
+X-Received: by 2002:a0d:ccd2:0:b0:54f:b4c2:bba9 with SMTP id o201-20020a0dccd2000000b0054fb4c2bba9mr1537793ywd.25.1682079566344;
+        Fri, 21 Apr 2023 05:19:26 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id d197-20020a814fce000000b0054f8de7c6f1sm920373ywb.70.2023.04.21.05.19.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 05:19:25 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-54f99770f86so18372957b3.1;
+        Fri, 21 Apr 2023 05:19:25 -0700 (PDT)
+X-Received: by 2002:a81:65c6:0:b0:52e:cd73:f927 with SMTP id
+ z189-20020a8165c6000000b0052ecd73f927mr1487441ywb.48.1682079565541; Fri, 21
+ Apr 2023 05:19:25 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a90b:0:b0:760:efd4:9582 with SMTP id
- c11-20020a5ea90b000000b00760efd49582mr2460102iod.2.1682079469260; Fri, 21 Apr
- 2023 05:17:49 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 05:17:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003fd60705f9d7a53b@google.com>
-Subject: [syzbot] [wireless?] WARNING in cfg80211_bss_update (3)
-From:   syzbot <syzbot+9d593239580fe3639301@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <26932016c83c2ad350db59f5daf96117a38bbbd8.1679566927.git.geert@linux-m68k.org>
+ <cfcfc689de8480a3ab0a03826e4c95f22c5af937.camel@physik.fu-berlin.de>
+In-Reply-To: <cfcfc689de8480a3ab0a03826e4c95f22c5af937.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 21 Apr 2023 14:19:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV_oZDe-FWLHPKaqEdMZRcumbNbaf6PY6HTUzF6YmNmJw@mail.gmail.com>
+Message-ID: <CAMuHMdV_oZDe-FWLHPKaqEdMZRcumbNbaf6PY6HTUzF6YmNmJw@mail.gmail.com>
+Subject: Re: [PATCH v2] sh: Replace <uapi/asm/types.h> by <asm-generic/int-ll64.h>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Adrian,
 
-syzbot found the following issue on:
+On Fri, Apr 21, 2023 at 1:14 PM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Thu, 2023-03-23 at 11:22 +0100, Geert Uytterhoeven wrote:
+> > As arch/sh/include/uapi/asm/types.h doesn't exist, sh doesn't provide
+> > any sh-specific uapi definitions, and it can just include
+> > <asm-generic/int-ll64.h>, like most other architectures.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > ---
+> > v2:
+> >   - Rebased for SPDX-License-Identifier addition in 2017.
+> >
+> >  arch/sh/include/asm/types.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/sh/include/asm/types.h b/arch/sh/include/asm/types.h
+> > index 68eb24ad201383ef..9b3fc923ee28701c 100644
+> > --- a/arch/sh/include/asm/types.h
+> > +++ b/arch/sh/include/asm/types.h
+> > @@ -2,7 +2,7 @@
+> >  #ifndef __ASM_SH_TYPES_H
+> >  #define __ASM_SH_TYPES_H
+> >
+> > -#include <uapi/asm/types.h>
+> > +#include <asm-generic/int-ll64.h>
+> >
+> >  /*
+> >   * These aren't exported outside the kernel to avoid name space clashes
+>
+> It seems that many (most?) architectures don't even provide their own types.h
+> header. Does it even make sense to still carry that header or can it be provided
+> from somewhere else?
 
-HEAD commit:    6a8f57ae2eb0 Linux 6.3-rc7
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1716e35bc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=11869c60f54496a7
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d593239580fe3639301
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+SH does because it defines extra types {insn,reg}_size_t.
+We can get rid of it by moving these extra types elsewhere, but is that
+worth the effort?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Gr{oetje,eeting}s,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/beced60615bb/disk-6a8f57ae.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ba2bd636062/vmlinux-6a8f57ae.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1f235faaf4bc/bzImage-6a8f57ae.xz
+                        Geert
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d593239580fe3639301@syzkaller.appspotmail.com
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 15587 at net/wireless/scan.c:1584 cfg80211_combine_bsses net/wireless/scan.c:1584 [inline]
-WARNING: CPU: 1 PID: 15587 at net/wireless/scan.c:1584 cfg80211_bss_update+0x197d/0x21f0 net/wireless/scan.c:1778
-Modules linked in:
-CPU: 1 PID: 15587 Comm: kworker/u4:21 Not tainted 6.3.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-Workqueue: phy15 ieee80211_iface_work
-RIP: 0010:cfg80211_combine_bsses net/wireless/scan.c:1584 [inline]
-RIP: 0010:cfg80211_bss_update+0x197d/0x21f0 net/wireless/scan.c:1778
-Code: df 48 c1 ea 03 80 3c 02 00 0f 85 15 06 00 00 49 c7 47 48 00 00 00 00 31 f6 31 ff e8 dd 1e 24 f8 e9 5c f1 ff ff e8 63 22 24 f8 <0f> 0b e9 8a f3 ff ff e8 57 22 24 f8 0f 0b 4c 89 f7 e8 6d 4d b5 fa
-RSP: 0018:ffffc9000637f598 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff88803b8cd7c0 RSI: ffffffff895ec8fd RDI: 0000000000000000
-RBP: ffff88807d2a8000 R08: 0000000000000000 R09: 0000000000000006
-R10: 0000000000000006 R11: 0000000000094001 R12: ffff8880762a0068
-R13: 0000000000000005 R14: 0000000000000006 R15: ffff8880762a0000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1f57b2eff8 CR3: 000000007df78000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- cfg80211_inform_single_bss_frame_data+0x72c/0x1020 net/wireless/scan.c:2492
- cfg80211_inform_bss_frame_data+0xc3/0xca0 net/wireless/scan.c:2525
- ieee80211_bss_info_update+0x35c/0xb50 net/mac80211/scan.c:190
- ieee80211_rx_bss_info net/mac80211/ibss.c:1120 [inline]
- ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1609 [inline]
- ieee80211_ibss_rx_queued_mgmt+0x19c9/0x3030 net/mac80211/ibss.c:1638
- ieee80211_iface_process_skb net/mac80211/iface.c:1583 [inline]
- ieee80211_iface_work+0xa4d/0xd70 net/mac80211/iface.c:1637
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
