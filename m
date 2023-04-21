@@ -2,292 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFD16EAFAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187696EB021
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjDUQvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        id S232502AbjDURE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbjDUQuy (ORCPT
+        with ESMTP id S232190AbjDURET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:50:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E210E15465;
-        Fri, 21 Apr 2023 09:50:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61C05651EE;
-        Fri, 21 Apr 2023 16:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331CFC433D2;
-        Fri, 21 Apr 2023 16:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682095848;
-        bh=4PKiSD8pwG5uc1Vw6yZ0oSBjtuD6XwS0DlNSSbfnKsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQ66G6XLulYion85rTrndH58L6seuTd2gccaZxnRqVC7s5BKVG9Nucg0IqbjAiiYE
-         B0WzG5jIAcz+yu4cC/Xeo+HpWlT4p38/C+5iZmxhRnZitiN61hbZ90vrp4B8vPJ2vr
-         hCnpO6o9y5yqZDQm7ijcMOGsiJ8OZFDN9cqWLDW1ccOxU5JndF9vyg64QN9tEjUKnm
-         vAg9J+zSj1CLG3wNb25N270+W9JgA6sYjpY6lSScGFmhNhVvYoImAw70yCdvpxLS1q
-         8dC2FiNCMZTb46KYFMuHd3gRwNrlpzNEQEelBPPWfklg8fbkNbb0oGYC9pezM9OErr
-         CSzESswaimKfA==
-Date:   Fri, 21 Apr 2023 17:50:43 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Fri, 21 Apr 2023 13:04:19 -0400
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA6615467
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:03:44 -0700 (PDT)
+Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-443bd60988eso1236971e0c.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682096622; x=1684688622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qnl878ao3KfZM1Schc0iPqmLuMtCb4QrPUJTPEHHzyA=;
+        b=Pty3FRa1jIUWP5Ve+3o+4753/XzXKR4XZv3WT6gT/gRjF4DRd2QKKtK0fvPe2Bv9mW
+         qiPN1vuATImU9l54VIn97iblJmjIWYdamRWCtVGrrjLMl8TiEiL5JHYFzVfsPLwlYZE0
+         l2lrVKGsIp5hsUcpI0rI7RuJbPiD3Ql6mVEd0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682096622; x=1684688622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qnl878ao3KfZM1Schc0iPqmLuMtCb4QrPUJTPEHHzyA=;
+        b=S8r5Puka/LDVRRzCPkTqqNy6gfHr+p5VyfVKwLasKHNVXVgvbEkLLLi+TNLIdv9Nmy
+         v1tcOsjMHxCsaZ/3mNcmgBC3pyMybnRjdwMwoealZPebDnSAtaXI8kBsnb9uz/WfXiLT
+         VGRJ6Smof4+F7dGMsAIwIWwPgIFSYq5lzJ6aVtIYOb5a/lLXAjFsft8wxH7zKvmuWyK4
+         G5HGO41RexaC0jORXaoWZzcEHG5hZXFP//Iw/LUxX9gZ3Wgb4MDCga27DIFXCzZ9nGWf
+         Ph1s69agIvmOW5xczpcIdcZ3Qrpu8ih7J+ZDGR+UoPE4I+ZhOwFf82jpdTIRMIjsHBvc
+         8VRw==
+X-Gm-Message-State: AAQBX9dBF/MlMPUV2gUASj85qLLpxfWzB+KkS/z1zDMvoJxDhO30Aoh4
+        bw0NbLbzwunXFv9RD0AyN4HaR3kdmaQvTn8rmos=
+X-Google-Smtp-Source: AKy350Y7D6ZtbgZVPytpnHXNb2yR5jS+Tkg7RXqJxavfiTJwiprUL8ObGrbqSluNMWa3W3iJwUelkA==
+X-Received: by 2002:ad4:5f87:0:b0:5f1:5f73:aed8 with SMTP id jp7-20020ad45f87000000b005f15f73aed8mr10200029qvb.20.1682095924144;
+        Fri, 21 Apr 2023 09:52:04 -0700 (PDT)
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com. [209.85.160.169])
+        by smtp.gmail.com with ESMTPSA id x20-20020a0ce254000000b005f372f4a561sm1292758qvl.35.2023.04.21.09.52.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:52:03 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-3ef34c49cb9so1177841cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:52:03 -0700 (PDT)
+X-Received: by 2002:ac8:5811:0:b0:3ee:d8fe:6f5c with SMTP id
+ g17-20020ac85811000000b003eed8fe6f5cmr361276qtg.1.1682095922914; Fri, 21 Apr
+ 2023 09:52:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
+ <20230201-innolux-g070ace-v2-1-2371e251dd40@skidata.com> <CAD=FV=XJCtqep+92h3gLfs4o2TwvL4MORjc9ydTSpZiZ0dsR0w@mail.gmail.com>
+ <fb93e95f-181f-917d-9216-a81dec1a2959@linaro.org> <CAD=FV=Vs8UEfBZ56fYb3i1cmFbCSPrbgaedXB4+UvDTOyhzCzw@mail.gmail.com>
+ <184f0a80-34bc-5ebf-58bb-82a310eb91f6@linaro.org>
+In-Reply-To: <184f0a80-34bc-5ebf-58bb-82a310eb91f6@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 21 Apr 2023 09:51:49 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WLHpddAMo7GQwj98TtDn0xw6UzgYUKyVhSDZw1acKpCg@mail.gmail.com>
+Message-ID: <CAD=FV=WLHpddAMo7GQwj98TtDn0xw6UzgYUKyVhSDZw1acKpCg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2 1/2] dt-bindings: display: simple: add support
+ for InnoLux G070ACE-L01
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     richard.leitner@linux.dev,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] riscv: dts: starfive: add tdm node and sound card
-Message-ID: <20230421-dropper-upstage-200ae7e47092@spud>
-References: <20230420024118.22677-1-walker.chen@starfivetech.com>
- <20230420024118.22677-5-walker.chen@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="F4ErV7BKuepPeVJv"
-Content-Disposition: inline
-In-Reply-To: <20230420024118.22677-5-walker.chen@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        dri-devel@lists.freedesktop.org,
+        Richard Leitner <richard.leitner@skidata.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---F4ErV7BKuepPeVJv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Apr 21, 2023 at 9:45=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/04/2023 18:37, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, Apr 21, 2023 at 9:26=E2=80=AFAM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 21/04/2023 18:15, Doug Anderson wrote:
+> >>> Hi,
+> >>>
+> >>> On Mon, Mar 13, 2023 at 12:51=E2=80=AFAM <richard.leitner@linux.dev> =
+wrote:
+> >>>>
+> >>>> From: Richard Leitner <richard.leitner@skidata.com>
+> >>>>
+> >>>> Add Innolux G070ACE-L01 7" WVGA (800x480) TFT LCD panel compatible
+> >>>> string.
+> >>>>
+> >>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+> >>>
+> >>> nit: as I understand it, ordering of tags is usually supposed to be
+> >>> chronological. You signed off on this patch before Krzysztof acked it=
+,
+> >>> so the SoB should be above. I'll fix that when applying.
+> >>
+> >> Some people agree with this... but b4 disagrees, so I would say the
+> >> tools should implement the right process and right decisions. We shoul=
+d
+> >> not be correcting the tools' output, unless the tools are not correct =
+-
+> >> then fix the tools.
+> >
+> > Ah, interesting. I checked and as far as I could tell Richard had
+> > manually added the tag when sending v2, so I didn't assume it as a
+> > tool-added tag. I'm happy to let "b4" be the canonical thing that says
+> > what the order should be.
+> >
+> > OK, so I just tried this and I'm confused. I ran:
+> >
+> > b4 am -P_ 20230201-innolux-g070ace-v2-2-2371e251dd40@skidata.com
+> >
+> > ...and when I check the patch that b4 spits out my "Reviewed-by" tag
+> > is _after_ the "Signed-off-by" tag, just like I asked for.
+> >
+> > Just in case Acked-by was somehow different than Reviewed-by, I went
+> > back to the original version where you added the Acked-by:
+> >
+> >  b4 am -P_ 20221118075856.401373-1-richard.leitner@linux.dev
+> >
+> > ...and, again, it matches the order that I thought was right. In other
+> > words, the patch file generated says:
+> >
+> >> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> We talk about `b4 trailers`, because the tag is applied by the
+> submitter, not by the maintainer.
+>
+> >
+> > Did I get something wrong in the above?
+>
+> Your `b4 am` will of course put the tag later, because it is you who
+> applies the tag.
 
-Hey Walker,
+Ah, got it. So I guess from the perspective of "b4" every time the
+author modifies a patch (like adding new tags to it) then it's a new
+application of Signed-off-by and thus the old Signed-off-by is removed
+from the top and a new one is added below all the tags that have been
+received. Thus if b4 grabs all the tags off the mailing list for
+applying it ends up in a different order than if it grabs all the tags
+off the mailing list for sending a new version.
 
-On Thu, Apr 20, 2023 at 10:41:18AM +0800, Walker Chen wrote:
-> Add the tdm controller node and sound card for the StarFive JH7110 SoC.
+OK, I can understand that perspective. I'll keep it in mind.
 
-Is this one of these waveshare things + a visionfive 2?
-https://www.waveshare.com/wm8960-audio-hat.htm
-
-I'm a bit lost as to why this needs a whole new board, should it not
-just be an overlay that you can apply to the existing dts?
-
-Taking this to an extreme, should I expect to see a new devicetree for
-everything RPi hat that you decide to use with a VisionFive 2?
-
-Also, it'd be nice to provide a Link: to where someone can find more
-info on this combination of items. Google for "wm8960 visionfive 2"
-gives me nothing, nor does "starfive audio card" etc.
-
-Thanks,
-Conor.
-
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/Makefile         |  1 +
->  .../starfive/jh7110-starfive-audio-card.dts   | 67 +++++++++++++++++++
->  .../jh7110-starfive-visionfive-2.dtsi         | 40 +++++++++++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 21 ++++++
->  4 files changed, 129 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-audio-ca=
-rd.dts
->=20
-> diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/=
-starfive/Makefile
-> index 170956846d49..cb22cb7f66b0 100644
-> --- a/arch/riscv/boot/dts/starfive/Makefile
-> +++ b/arch/riscv/boot/dts/starfive/Makefile
-> @@ -4,3 +4,4 @@ dtb-$(CONFIG_ARCH_STARFIVE) +=3D jh7100-starfive-visionfi=
-ve-v1.dtb
-> =20
->  dtb-$(CONFIG_ARCH_STARFIVE) +=3D jh7110-starfive-visionfive-2-v1.2a.dtb
->  dtb-$(CONFIG_ARCH_STARFIVE) +=3D jh7110-starfive-visionfive-2-v1.3b.dtb
-> +dtb-$(CONFIG_ARCH_STARFIVE) +=3D jh7110-starfive-audio-card.dtb
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-audio-card.dts =
-b/arch/riscv/boot/dts/starfive/jh7110-starfive-audio-card.dts
-> new file mode 100644
-> index 000000000000..967d9aa7d1e1
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-audio-card.dts
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> +/*
-> + * Device Tree for JH7110 + Simple Audio Card
-> + *
-> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> + */
-> +
-> +/dts-v1/;
-> +#include "jh7110-starfive-visionfive-2-v1.3b.dts"
-> +
-> +/ {
-> +	model =3D "StarFive VisionFive 2 Audio Board";
-> +	compatible =3D "starfive,visionfive-2-audio", "starfive,jh7110";
-> +
-> +	wm8960_mclk: wm8960-mclk {
-> +		compatible =3D "fixed-clock";
-> +		clock-output-names =3D "wm8960_mclk";
-> +		#clock-cells =3D <0>;
-> +		clock-frequency =3D <24576000>;
-> +	};
-> +
-> +	sound {
-> +		compatible =3D "simple-audio-card";
-> +
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +
-> +		simple-audio-card,name =3D "Starfive-TDM-Sound-Card";
-> +		simple-audio-card,widgets =3D "Microphone", "Mic Jack",
-> +					    "Line", "Line In",
-> +					    "Line", "Line Out",
-> +					    "Speaker", "Speaker",
-> +					    "Headphone", "Headphone Jack";
-> +		simple-audio-card,routing =3D "Headphone Jack", "HP_L",
-> +					    "Headphone Jack", "HP_R",
-> +					    "Speaker", "SPK_LP",
-> +					    "Speaker", "SPK_LN",
-> +					    "LINPUT1", "Mic Jack",
-> +					    "LINPUT3", "Mic Jack",
-> +					    "RINPUT1", "Mic Jack",
-> +					    "RINPUT2", "Mic Jack";
-> +
-> +		simple-audio-card,dai-link@0 {
-> +			reg =3D <0>;
-> +			format =3D "dsp_a";
-> +			bitclock-master =3D <&dailink_master>;
-> +			frame-master =3D <&dailink_master>;
-> +
-> +			cpu {
-> +				sound-dai =3D <&tdm>;
-> +			};
-> +			dailink_master: codec {
-> +				sound-dai =3D <&wm8960>;
-> +				clocks =3D <&wm8960_mclk>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&i2c0 {
-> +	wm8960: codec@1a {
-> +		compatible =3D "wlf,wm8960";
-> +		reg =3D <0x1a>;
-> +		wlf,shared-lrclk;
-> +		#sound-dai-cells =3D <0>;
-> +	};
-> +};
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dt=
-si b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index 1155b97b593d..19b5954ee72d 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -214,6 +214,40 @@
->  			slew-rate =3D <0>;
->  		};
->  	};
-> +
-> +	tdm0_pins: tdm0-pins {
-> +		tdm0-pins-tx {
-> +			pinmux =3D <GPIOMUX(44, GPOUT_SYS_TDM_TXD,
-> +					      GPOEN_ENABLE,
-> +					      GPI_NONE)>;
-> +			bias-pull-up;
-> +			drive-strength =3D <2>;
-> +			input-disable;
-> +			input-schmitt-disable;
-> +			slew-rate =3D <0>;
-> +		};
-> +
-> +		tdm0-pins-rx {
-> +			pinmux =3D <GPIOMUX(61, GPOUT_HIGH,
-> +					      GPOEN_DISABLE,
-> +					      GPI_SYS_TDM_RXD)>;
-> +			input-enable;
-> +		};
-> +
-> +		tdm0-pins-sync {
-> +			pinmux =3D <GPIOMUX(63, GPOUT_HIGH,
-> +					      GPOEN_DISABLE,
-> +					      GPI_SYS_TDM_SYNC)>;
-> +			input-enable;
-> +		};
-> +
-> +		tdm0-pins-pcmclk {
-> +			pinmux =3D <GPIOMUX(38, GPOUT_HIGH,
-> +					      GPOEN_DISABLE,
-> +					      GPI_SYS_TDM_CLK)>;
-> +			input-enable;
-> +		};
-> +	};
->  };
-> =20
->  &uart0 {
-> @@ -221,3 +255,9 @@
->  	pinctrl-0 =3D <&uart0_pins>;
->  	status =3D "okay";
->  };
-> +
-> +&tdm {
-> +	pinctrl-names =3D "default";
-> +	pinctrl-0 =3D <&tdm0_pins>;
-> +	status =3D "okay";
-> +};
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/d=
-ts/starfive/jh7110.dtsi
-> index 866313570a7e..cfda6fb0d91b 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -366,6 +366,27 @@
->  			status =3D "disabled";
->  		};
-> =20
-> +		tdm: tdm@10090000 {
-> +			compatible =3D "starfive,jh7110-tdm";
-> +			reg =3D <0x0 0x10090000 0x0 0x1000>;
-> +			clocks =3D <&syscrg JH7110_SYSCLK_TDM_AHB>,
-> +				 <&syscrg JH7110_SYSCLK_TDM_APB>,
-> +				 <&syscrg JH7110_SYSCLK_TDM_INTERNAL>,
-> +				 <&syscrg JH7110_SYSCLK_TDM_TDM>,
-> +				 <&syscrg JH7110_SYSCLK_MCLK_INNER>,
-> +				 <&tdm_ext>;
-> +			clock-names =3D "tdm_ahb", "tdm_apb",
-> +				      "tdm_internal", "tdm",
-> +				      "mclk_inner", "tdm_ext";
-> +			resets =3D <&syscrg JH7110_SYSRST_TDM_AHB>,
-> +				 <&syscrg JH7110_SYSRST_TDM_APB>,
-> +				 <&syscrg JH7110_SYSRST_TDM_CORE>;
-> +			dmas =3D <&dma 20>, <&dma 21>;
-> +			dma-names =3D "rx","tx";
-> +			#sound-dai-cells =3D <0>;
-> +			status =3D "disabled";
-> +		};
-> +
->  		stgcrg: clock-controller@10230000 {
->  			compatible =3D "starfive,jh7110-stgcrg";
->  			reg =3D <0x0 0x10230000 0x0 0x10000>;
-> --=20
-> 2.17.1
->=20
-
---F4ErV7BKuepPeVJv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEK+4wAKCRB4tDGHoIJi
-0kG0AQDuslhSfus6Zt85o7IMCS+mMyQXVs1NlLzVWZNXKs04vwEA/pHxG8wU7sZB
-UakVjfxinK085SBifNYIPGOW+JKClg8=
-=e/iM
------END PGP SIGNATURE-----
-
---F4ErV7BKuepPeVJv--
+-Doug
