@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC146EACA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D621B6EACA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjDUOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S232083AbjDUOSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjDUOR6 (ORCPT
+        with ESMTP id S232248AbjDUOSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:58 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7E8E50
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:56 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f88a34bd6so23283717b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:56 -0700 (PDT)
+        Fri, 21 Apr 2023 10:18:01 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C523012C9C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:59 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b98ef5b557fso1821614276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086676; x=1684678676;
+        d=google.com; s=20221208; t=1682086679; x=1684678679;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+n+j8heP4pCjXZYyBacJTBZB3NL6fBggzFdjHd9oRv0=;
-        b=1J+xPZGWBNzha1s2A0zh1bYQja2oWHpvpOCxFHuTZtFUWKMmSQnBfxHBH0Zcm44kZA
-         mPOZ/Fht1Aftwl9AJ1rKtC59A4jvXdb1ZYW8T2qD/3ZYsP8HOjEF5aK/sPWCyvfddAGs
-         YZVHhrnd9w2mxWucAZPFAtJnP9MSj3lmKy/TSOAxNQS4f3hIn2T2k8w1STVe4BtZELVX
-         pJkgxjkF5hE3w133duRa8aLyLmZJq1iOL967XYQ/GUbKLPXFkKw4b9ahEO8C0ZO6zECt
-         izmMTaC7MHs6J71osGTiOvAsndQZ1oFYtSarJD7aSOdBEp0EuGUc3FUDwpkI1pL1x4Bm
-         A4Iw==
+        bh=pHZMVL6RAnw5G7UfUNTFa5CzwFEHRn1u+l8+oLzhKx4=;
+        b=MfKd7cn5Uub1nNM2RiV3ISktGqpLP5EyFHMUPTILCfI1qopVg8PNxzIa5VZ+WVXZcx
+         YZQQ69rym1OqIQnu263AjZ26mfrN9dRc/O+yt9qJlZr0OQWY7+sFU45p712eZ73X/pq+
+         4Nuhsixxps7DcDhS8ICV53xkgX4iMhzzYLMYV6mG4O4qavIN7UXl1yLnU6UYwzdbAfEJ
+         XNoVRfO8lEMNDiQ7idtMdbVoXBEUHQvqduc/A77nuADM4Lw/KkA2p6bc2WIgZsi3U3N/
+         trNTBvt2RGd59HStffaZOaFrM5q5/qYO3yTC7XGOJfGCsPSLoeWY96CWcfKm4Xj9mPLG
+         QXQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086676; x=1684678676;
+        d=1e100.net; s=20221208; t=1682086679; x=1684678679;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+n+j8heP4pCjXZYyBacJTBZB3NL6fBggzFdjHd9oRv0=;
-        b=lbhX6jxSMRBrM5xU/6LJ/QxLxLfDH7B1sF+Vh0haf3x9kUi0OFEJ2RhCiCCgNhAVjF
-         RAGIpj09qCxyQ0+uW0Viq+K4mcYeH4ZX1Ehp0+soqJ+jmgp6aamkL46j9NptlYLopUhu
-         VYYSh0LgxmxnY4r6XEkGUvnVWU288BwRDckkBpvzeI6qOp9NQzuQojL5pH6Awj2C//gy
-         v/EVTiNAt6OIxt/HoiWAQgHbdebM3CI68HaFUvYfr07Irfa88ieZWkWKiKo6Yl0VEHXW
-         5/ih1Ti+WR9E1xY2QG456MHjhKfu9NsSMCIrCPxS1JCBv0G6LqNvPLN8JoVvQidHSR9u
-         iGhA==
-X-Gm-Message-State: AAQBX9c2+mnIX+4ltbhse4brVeLw5G6FsU2TNQBcgH1HN2Gllpt48h9t
-        ihXnCgQBgDp1WzBbJnC410vIVt+Jmyuc6R0K8g==
-X-Google-Smtp-Source: AKy350arYGzYEIPhtnp3xySUlV+rNDfVObOqcPYOAss6sIzU6gdyo3tnVcUWjCj9A0vbWC7usI/Jxf0ocUwJeeSCCw==
+        bh=pHZMVL6RAnw5G7UfUNTFa5CzwFEHRn1u+l8+oLzhKx4=;
+        b=WG7eALEQKF6SLx/ZrIdyfuA+tAipUWPXX/1tQhEjdNttEulfZBQDDMvQLnhTeRsmns
+         UvLfI9Om67+Z01AdoxnhHxdGl64u21ZPL32AqDW1rePDh97OR4sLWxav12Mlipq82xNu
+         jcxv+rRwEcddbJUUA2GRqhmWYE/fbycJbOQfT+FvtC946OdvC2wxkYmqMXKZhhZZQ9/h
+         8TZZutdVU3Qogzo+Bph4qDi7V8HAQTnvZWzHAyn5PBDq4ndMjTLNWPJTP+Ou9FFiGOFK
+         O7IcwYAFz3PwZC6UFIrOGjvVOgzNS8Fpvfmh+sdzQWtwXsAb3cI3vupbzd6/UWRnDS+T
+         zmGA==
+X-Gm-Message-State: AAQBX9c1twgwXiy/Px/UdHL0JdNC1nSt+vS+/nS8jlSBGGLKV+5RZUrE
+        dKEhJe5myFnazbWfrJcKuYb2fz1RUlL7EtHxsw==
+X-Google-Smtp-Source: AKy350YvnC4D+q7r4n05l+Chcu0lsHZ9od5ZFR9ulTDdbShO1MkzfnoQXP97E9KcRU77diwK2ta/zXGnRQ/DKTb2qw==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a0d:ec48:0:b0:54f:ae82:3f92 with SMTP
- id r8-20020a0dec48000000b0054fae823f92mr1328767ywn.2.1682086675839; Fri, 21
- Apr 2023 07:17:55 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:18 +0200
+ (user=peternewman job=sendgmr) by 2002:a81:ae68:0:b0:533:8f19:4576 with SMTP
+ id g40-20020a81ae68000000b005338f194576mr1440134ywk.0.1682086679114; Fri, 21
+ Apr 2023 07:17:59 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:19 +0200
 In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
 Mime-Version: 1.0
 References: <20230421141723.2405942-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-5-peternewman@google.com>
-Subject: [PATCH v1 4/9] x86/resctrl: Flush MBM event counts on soft RMID change
+Message-ID: <20230421141723.2405942-6-peternewman@google.com>
+Subject: [PATCH v1 5/9] x86/resctrl: Call mon_event_count() directly for soft RMIDs
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -76,80 +76,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To implement soft RMIDs, context switch must detect when the current
-soft RMID is changing and if so, flush the CPU's MBM event counts to the
-outgoing soft RMID.
+There is no point in using IPIs to call mon_event_count() when it is
+only reading software counters from memory.
 
-To avoid impacting context switch performance in the non-soft RMID case,
-protect the new logic with a static branch.
+When RMIDs are soft, mon_event_read() just calls mon_event_count()
+directly.
 
-Co-developed-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- arch/x86/include/asm/resctrl.h         | 27 +++++++++++++++++++++++++-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c |  1 +
- 2 files changed, 27 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 9 ++++++++-
+ arch/x86/kernel/cpu/resctrl/internal.h    | 1 +
+ arch/x86/kernel/cpu/resctrl/monitor.c     | 5 +++++
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
-index e7acf118d770..50d05e883dbb 100644
---- a/arch/x86/include/asm/resctrl.h
-+++ b/arch/x86/include/asm/resctrl.h
-@@ -36,6 +36,9 @@ DECLARE_PER_CPU(struct resctrl_pqr_state, pqr_state);
- DECLARE_STATIC_KEY_FALSE(rdt_enable_key);
- DECLARE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
- DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
-+DECLARE_STATIC_KEY_FALSE(rdt_soft_rmid_enable_key);
-+
-+void resctrl_mbm_flush_cpu(void);
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index b44c487727d4..b2ed25a08f6f 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -534,7 +534,14 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
+ 	rr->val = 0;
+ 	rr->first = first;
  
- /*
-  * __resctrl_sched_in() - Writes the task's CLOSid/RMID to IA32_PQR_MSR
-@@ -75,9 +78,31 @@ static inline void __resctrl_sched_in(struct task_struct *tsk)
- 	}
- 
- 	if (closid != state->cur_closid || rmid != state->cur_rmid) {
-+		if (static_branch_likely(&rdt_soft_rmid_enable_key)) {
-+			/*
-+			 * Flush current event counts to outgoing soft rmid
-+			 * when it changes.
-+			 */
-+			if (rmid != state->cur_rmid)
-+				resctrl_mbm_flush_cpu();
-+
-+			/*
-+			 * rmid never changes in this mode, so skip wrmsr if the
-+			 * closid is not changing.
-+			 */
-+			if (closid != state->cur_closid)
-+				wrmsr(MSR_IA32_PQR_ASSOC, state->hw_rmid,
-+				      closid);
-+		} else {
-+			wrmsr(MSR_IA32_PQR_ASSOC, rmid, closid);
-+		}
-+
+-	smp_call_function_any(&d->cpu_mask, mon_event_count, rr, 1);
++	if (rdt_mon_soft_rmid)
 +		/*
-+		 * Record new closid/rmid last so soft rmid case can detect
-+		 * changes.
++		 * Soft RMID counters reside in memory, so they can be read from
++		 * anywhere.
 +		 */
- 		state->cur_closid = closid;
- 		state->cur_rmid = rmid;
--		wrmsr(MSR_IA32_PQR_ASSOC, rmid, closid);
- 	}
++		mon_event_count(rr);
++	else
++		smp_call_function_any(&d->cpu_mask, mon_event_count, rr, 1);
  }
  
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 6ad33f355861..c10f4798156a 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -35,6 +35,7 @@
- DEFINE_STATIC_KEY_FALSE(rdt_enable_key);
- DEFINE_STATIC_KEY_FALSE(rdt_mon_enable_key);
- DEFINE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
-+DEFINE_STATIC_KEY_FALSE(rdt_soft_rmid_enable_key);
- static struct kernfs_root *rdt_root;
- struct rdtgroup rdtgroup_default;
- LIST_HEAD(rdt_all_groups);
+ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index 256eee05d447..e6ff31a4dbc4 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -115,6 +115,7 @@ struct rmid_read {
+ 
+ extern bool rdt_alloc_capable;
+ extern bool rdt_mon_capable;
++extern bool rdt_mon_soft_rmid;
+ extern unsigned int rdt_mon_features;
+ extern struct list_head resctrl_schema_all;
+ 
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+index 3671100d3cc7..bb857eefa3b0 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -57,6 +57,11 @@ static struct rmid_entry	*rmid_ptrs;
+  */
+ bool rdt_mon_capable;
+ 
++/*
++ * Global boolean to indicate when RMIDs are implemented in software.
++ */
++bool rdt_mon_soft_rmid;
++
+ /*
+  * Global to indicate which monitoring events are enabled.
+  */
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
