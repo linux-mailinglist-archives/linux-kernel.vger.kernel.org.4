@@ -2,248 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E1A6EABFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C6B6EAF7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbjDUNpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S233234AbjDUQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjDUNor (ORCPT
+        with ESMTP id S232445AbjDUQuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:44:47 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E814E4B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:44:46 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so1992539a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682084686; x=1684676686;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOuUvGYa1UY7aV7SDI82JrZqTwaMJovJYXLXCJsoqaY=;
-        b=Ven6OvEm3yGyfd415NbqzUDqeUaje9Pw9UV+0yMmzKnGCou6giojsgwyFsuHPtmEnq
-         NgF9xcRLvUdmOZYFVY8p8xrsfbq0hU9EEJJxsis3VFiCjWfcBHUl4NRLwpVlLkn1Qr/u
-         9PDQEGW/M04Umq1ZtC/Jqx+w/d8lNJaYWK71RqYKJfdNKNQyIsA2wl6C+FqWW5zvUupc
-         j1Lukzt1VLxusm0ElhGTYPGWTbVF0ABypfNbFxRJJb9lxYgHtQSTAhU+4T/uPjaZg3rH
-         5/Mmn43G+JTt6lC9FpGdsT8wj7pTUvgxCjGkTI9DrDlajAlALUauy1BGOgs07xg4HAwo
-         Y0WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682084686; x=1684676686;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eOuUvGYa1UY7aV7SDI82JrZqTwaMJovJYXLXCJsoqaY=;
-        b=g25tBSw1EI5UMaUOF1TZwXrnieTXE69te+3WpKxTenvHJu3bMrZjGmjB1V5eR0s/ZK
-         JWPJH0edz4h+o5OaGO+JoIeVca+SdJT9C5IILYllZwNQ6aM0ouIDklgmt9R0idHJ+mvZ
-         eSJkr2l2JmRKBS5bIsf9CBoMaTCWh0gXOeWQYosQ0C++uSKkE1JWTJojwTINpYi1Opeq
-         DMnPp1PFZWqmXgYTd8aSiVdxqwAmXJNNanfp3ZmcmuP3kM3MMqNUaSzcp5cuW8JlldPI
-         1NWnMYrhLG552IUo7vG+2qRMrs4qYuikLUSsoVkUNx4hFKaKz1HC/RoZz8zpF1q0e2Cy
-         B7Eg==
-X-Gm-Message-State: AAQBX9cHwebNgtHJT0dah/kMZFys/tfVCR70SWcZ/WXAmbeRL7t162W6
-        vU1ZF3VxT957qX9K8pJcoMGIxaPfgpk8ktRpqwqTZQ==
-X-Google-Smtp-Source: AKy350bZGEbr7NzA4yB7Y30WbAnF8N2CCkCSCXBRQmpYW2zCtsxiyJndezqWFID6sXsAfvYkTQAOQnox2HPZ1OXZGPI=
-X-Received: by 2002:a17:90a:ff91:b0:23b:38b2:f0bd with SMTP id
- hf17-20020a17090aff9100b0023b38b2f0bdmr5302216pjb.15.1682084685872; Fri, 21
- Apr 2023 06:44:45 -0700 (PDT)
+        Fri, 21 Apr 2023 12:50:46 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F6A8691;
+        Fri, 21 Apr 2023 09:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682095844; x=1713631844;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gwxpo+wRlLq+sgXMaWLO4NiSZPubB5SwUMSLYgQBk08=;
+  b=ShNcUZmGNxVMCZpMeWzeILKCM7e21k0IEKlYeaCSYBJMyj9/GAUjkB45
+   5YCs1duXEyjzg0Osi48zY7WmGdwVppnXK0ZiXdvXTjGTYRvijWW0ceuxd
+   K88hsAU93G/3b38Pc70b9wbL6RDo40CGA9VC6nbIEepERPmozIGi6KQNw
+   jWP6tYdM+z3s8Ehv3Y8Spqtb8pzX/a9JGzqS38bh5yX+fx7gdWFpU/fNk
+   foPlET74yoIeyOZDPgG+6w7GuDRGFLCSc+WN7gPF9FGdzzll8VrOhFlMK
+   e/4UvWCLIQB6RkKLpjOOL7hY7i9lKBlZlAJ7vf4IOzaxXfpJEWNY5esyM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="344786937"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="344786937"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 09:50:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="722817352"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="722817352"
+Received: from embargo.jf.intel.com ([10.165.9.183])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 09:50:41 -0700
+From:   Yang Weijiang <weijiang.yang@intel.com>
+To:     seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
+        john.allen@amd.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rick.p.edgecombe@intel.com, weijiang.yang@intel.com
+Subject: [PATCH v2 00/21] Enable CET Virtualization
+Date:   Fri, 21 Apr 2023 09:45:54 -0400
+Message-Id: <20230421134615.62539-1-weijiang.yang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230410081206.23441-1-jiahao.os@bytedance.com> <20230410081206.23441-3-jiahao.os@bytedance.com>
-In-Reply-To: <20230410081206.23441-3-jiahao.os@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 21 Apr 2023 15:44:34 +0200
-Message-ID: <CAKfTPtDaG12qb4piQahJNNrEgAM3ouTKCzHA8BsAAYg015Ggpw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched/core: Avoid double calling update_rq_clock()
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Apr 2023 at 10:12, Hao Jia <jiahao.os@bytedance.com> wrote:
->
-> There are some double rq clock update warnings are triggered.
-> ------------[ cut here ]------------
-> rq->clock_update_flags & RQCF_UPDATED
-> WARNING: CPU: 17 PID: 138 at kernel/sched/core.c:741
-> update_rq_clock+0xaf/0x180
-> Call Trace:
->  <TASK>
->  __balance_push_cpu_stop+0x146/0x180
->  ? migration_cpu_stop+0x2a0/0x2a0
->  cpu_stopper_thread+0xa3/0x140
->  smpboot_thread_fn+0x14f/0x210
->  ? sort_range+0x20/0x20
->  kthread+0xe6/0x110
->  ? kthread_complete_and_exit+0x20/0x20
->  ret_from_fork+0x1f/0x30
->
-> ------------[ cut here ]------------
-> rq->clock_update_flags & RQCF_UPDATED
-> WARNING: CPU: 54 PID: 0 at kernel/sched/core.c:741
-> update_rq_clock+0xaf/0x180
-> Call Trace:
->  <TASK>
->  unthrottle_cfs_rq+0x4b/0x300
->  __cfsb_csd_unthrottle+0xe0/0x100
->  __flush_smp_call_function_queue+0xaf/0x1d0
->  flush_smp_call_function_queue+0x49/0x90
->  do_idle+0x17c/0x270
->  cpu_startup_entry+0x19/0x20
->  start_secondary+0xfa/0x120
->  secondary_startup_64_no_verify+0xce/0xdb
->
-> ------------[ cut here ]------------
-> rq->clock_update_flags & RQCF_UPDATED
-> WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
-> update_rq_clock+0xaf/0x180
-> Call Trace:
->  <TASK>
->  unthrottle_cfs_rq+0x4b/0x300
->  rq_offline_fair+0x89/0x90
->  set_rq_offline.part.118+0x28/0x60
+CET (Control-flow Enforcement Technology) is a CPU feature used to prevent\n
+Return/Jump-Oriented Programming (ROP/JOP) attacks. CET introduces a new\n
+exception type, Control Protection (#CP), and two sub-features(SHSTK,IBT)\n
+to defend against ROP/JOP style control-flow subversion attacks.\n
 
-So this is generated by patch 1, isn't it ?
+Shadow Stack (SHSTK):
+  A shadow stack is a second stack used exclusively for control transfer
+  operations. The shadow stack is separate from the data/normal stack and
+  can be enabled individually in user and kernel mode. When shadow stacks
+  are enabled, CALL pushes the return address on both the data and shadow
+  stack. RET pops the return address from both stacks and compares them.
+  If the return addresses from the two stacks do not match, the processor
+  generates a #CP.
 
->  rq_attach_root+0xc4/0xd0
->  cpu_attach_domain+0x3dc/0x7f0
->  partition_sched_domains_locked+0x2a5/0x3c0
->  rebuild_sched_domains_locked+0x477/0x830
->  rebuild_sched_domains+0x1b/0x30
->  cpuset_hotplug_workfn+0x2ca/0xc90
->  ? balance_push+0x56/0xf0
->  ? _raw_spin_unlock+0x15/0x30
->  ? finish_task_switch+0x98/0x2f0
->  ? __switch_to+0x291/0x410
->  ? __schedule+0x65e/0x1310
->  process_one_work+0x1bc/0x3d0
->  worker_thread+0x4c/0x380
->  ? preempt_count_add+0x92/0xa0
->  ? rescuer_thread+0x310/0x310
->  kthread+0xe6/0x110
->  ? kthread_complete_and_exit+0x20/0x20
->  ret_from_fork+0x1f/0x30
->
-> For the __balance_push_cpu_stop() case, we remove update_rq_clock() from
-> the __migrate_task() function to avoid double updating the rq clock.
-> And in order to avoid missing rq clock update, add update_rq_clock()
-> call before migration_cpu_stop() calls __migrate_task().
->
-> This also works for unthrottle_cfs_rq(), so we also removed
-> update_rq_clock() from the unthrottle_cfs_rq() function to avoid
-> warnings caused by calling it multiple times, such as
-> __cfsb_csd_unthrottle() and unthrottle_offline_cfs_rqs(). and
-> in order to avoid missing rq clock update, we correspondingly add
-> update_rq_clock() calls before unthrottle_cfs_rq() runs.
->
-> Note that the rq clock has been updated before the set_rq_offline()
-> function runs, so we don't need to add update_rq_clock() call in
-> unthrottle_offline_cfs_rqs().
->
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> ---
->  kernel/sched/core.c | 11 +++++++----
->  kernel/sched/fair.c |  9 ++++++---
->  2 files changed, 13 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 0d18c3969f90..c1abd88ec1ed 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2376,7 +2376,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
->         if (!is_cpu_allowed(p, dest_cpu))
->                 return rq;
->
-> -       update_rq_clock(rq);
->         rq = move_queued_task(rq, rf, p, dest_cpu);
->
->         return rq;
-> @@ -2434,10 +2433,12 @@ static int migration_cpu_stop(void *data)
->                                 goto out;
->                 }
->
-> -               if (task_on_rq_queued(p))
-> +               if (task_on_rq_queued(p)) {
-> +                       update_rq_clock(rq);
->                         rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
-> -               else
-> +               } else {
->                         p->wake_cpu = arg->dest_cpu;
-> +               }
->
->                 /*
->                  * XXX __migrate_task() can fail, at which point we might end
-> @@ -10759,8 +10760,10 @@ static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
->                 cfs_rq->runtime_enabled = runtime_enabled;
->                 cfs_rq->runtime_remaining = 0;
->
-> -               if (cfs_rq->throttled)
-> +               if (cfs_rq->throttled) {
-> +                       update_rq_clock(rq);
->                         unthrottle_cfs_rq(cfs_rq);
-> +               }
->                 rq_unlock_irq(rq, &rf);
->         }
->         if (runtime_was_enabled && !runtime_enabled)
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6986ea31c984..03ced34e992e 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -5438,8 +5438,6 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
->
->         cfs_rq->throttled = 0;
->
-> -       update_rq_clock(rq);
-> -
->         raw_spin_lock(&cfs_b->lock);
->         cfs_b->throttled_time += rq_clock(rq) - cfs_rq->throttled_clock;
->         list_del_rcu(&cfs_rq->throttled_list);
-> @@ -5518,6 +5516,7 @@ static void __cfsb_csd_unthrottle(void *arg)
->         struct rq_flags rf;
->
->         rq_lock(rq, &rf);
-> +       update_rq_clock(rq);
->
->         /*
->          * Since we hold rq lock we're safe from concurrent manipulation of
-> @@ -5547,6 +5546,7 @@ static inline void __unthrottle_cfs_rq_async(struct cfs_rq *cfs_rq)
->         bool first;
->
->         if (rq == this_rq()) {
-> +               update_rq_clock(rq);
->                 unthrottle_cfs_rq(cfs_rq);
->                 return;
->         }
-> @@ -5563,6 +5563,7 @@ static inline void __unthrottle_cfs_rq_async(struct cfs_rq *cfs_rq)
->  #else
->  static inline void __unthrottle_cfs_rq_async(struct cfs_rq *cfs_rq)
->  {
-> +       update_rq_clock(rq_of(cfs_rq));
->         unthrottle_cfs_rq(cfs_rq);
->  }
->  #endif
-> @@ -5640,8 +5641,10 @@ static bool distribute_cfs_runtime(struct cfs_bandwidth *cfs_b)
->         if (local_unthrottle) {
->                 rq = cpu_rq(this_cpu);
->                 rq_lock_irqsave(rq, &rf);
-> -               if (cfs_rq_throttled(local_unthrottle))
-> +               if (cfs_rq_throttled(local_unthrottle)) {
-> +                       update_rq_clock(rq);
->                         unthrottle_cfs_rq(local_unthrottle);
-> +               }
->                 rq_unlock_irqrestore(rq, &rf);
->         }
->
-> --
-> 2.37.0
->
+Indirect Branch Tracking (IBT):
+  IBT adds new instrutions, ENDBRANCH{32|64}, to mark valid target addresses
+  of indirect branches (CALL, JMP etc...). If an indirect branch is executed
+  and the next instruction is _not_ an ENDBRANCH, the processor generates a #CP.
+
+
+Build dependency:
+--------------------------------------------------------------------------
+The first 5 patches are took over from CET native series [1] in linux-next,
+they must be included in kernel tree when build host kernel for testing CET
+in guest. Will remove them once the native series landed in mainline kernel
+tree. It's just for build and test purpose.
+
+
+Implementation:
+--------------------------------------------------------------------------
+Historically, the early KVM patches can support both user SHSTK and IBT,
+and most of the early patches are carried forward with changes by this new
+series. Then with kernel IBT feature merged in 5.18, a new patch was added
+to support the feature for guest. The last patch is introduced to support
+supervisor SHSTK but the feature is not enabled on Intel platform for now,
+the main purpose of this patch is to facilitate AMD folks to enable the
+feature.
+
+In summary, this new series enables CET user SHSTK/IBT and kernel IBT, but
+doesn't fully support CET supervisor SHSTK, the enabling work is left for
+the future.
+
+Supported CET sub-features:
+
+                  |
+    User SHSTK    |    User IBT      (user mode)
+--------------------------------------------------
+    s-SHSTK (X)   |    Kernel IBT    (kernel mode)
+                  |
+
+The user SHSTK/IBT relies on host side XSAVES support(XSS[bit 11]) for user
+mode CET states. The kernel IBT doesn't have dependency on host XSAVES.
+The supervisor SHSTK relies on host side XSAVES support(XSS[bit 12]) for
+supervisor mode CET states.
+
+This version removed unnecessary checks for host CET enabling status before
+enabling guest CET support, making guest CET support apart from that of host.
+By doing so, it's expected to be more friendly to cloud computing scenarios.
+
+
+CET states management:
+--------------------------------------------------------------------------
+CET user mode states, MSR_IA32_{U_CET,PL3_SSP} depends on {XSAVES|XRSTORS}
+instructions to swap guest/host context when vm-exit/vm-entry happens. 
+On vm-exit, the guest CET states are stored to guest fpu area and host user
+mode states are loaded from thread/process context before vCPU returns to
+userspace, vice-versa on vm-entry. See details in kvm_{load|put}_guest_fpu().
+So the user mode state validity depends on host side U_CET bit set in MSR_XSS.
+
+CET supervisor mode states are grouped into two categories - XSAVES dependent
+and non-dependent, the former includes MSR_IA32_PL{0,1,2}_SSP, the later
+consists of MSR_IA32_S_CET and MSR_IA32_INTR_SSP_TBL. The XSAVES dependent
+MSR's save/restore depends on S_CET bit set in MSR_XSS. Since the native series
+doesn't enable S_CET support, these s-SHSTK shadow stack pointers are invalid.
+
+Moveover, new VMCS fields, {GUEST|HOST}_{S_CET,SSP,INTR_SSP_TABL}, are
+introduced for guest/host supervisor state switch. When CET entry/exit load
+bits are set, the guest/host MSR_IA32_{S_CET,INTR_SSP_TBL,SSP} are swapped
+automatically at vm-exit/entry. With these new fields, current guest kernel
+IBT enalbing doesn't depend on host {XSAVES|XRSTORS} support.
+
+
+Tests:
+--------------------------------------------------------------------------
+This series passed basic CET user shadow stack test and kernel IBT test in
+L1 and L2 guest. It also passed CET KUT test which has been merged there.
+
+Executed all KUT tests and KVM selftests against this series, all test cases
+passes except the vmx test, the failure is due to CR4_CET bit testing in
+test_vmxon_bad_cr(). After add CR4_CET bit to skip list, the test passed.
+I'll send a patch to fix this issue later.
+
+
+To run user shadow stack test and kernel IBT test in VM, you need an CET
+capable platform, e.g., Sapphire Rapids server, and follow below steps to
+build host/guest kernel properly:
+
+1. Buld host kernel. Patch this series to kernel tree and build kernel
+with CET capable gcc version(e.g., >=8.5.0).
+
+2. Build guest kernel. Patch CET native series to kernel tree and opt-in
+CONFIG_X86_KERNEL_IBT and CONFIG_X86_USER_SHADOW_STACK options.
+
+3. Launch a VM with QEMU built with CET enabling patches [2].
+
+Check kernel selftest test_shadow_stack_64 output:
+[INFO]  new_ssp = 7f8c82100ff8, *new_ssp = 7f8c82101001
+[INFO]  changing ssp from 7f8c82900ff0 to 7f8c82100ff8
+[INFO]  ssp is now 7f8c82101000
+[OK]    Shadow stack pivot
+[OK]    Shadow stack faults
+[INFO]  Corrupting shadow stack
+[INFO]  Generated shadow stack violation successfully
+[OK]    Shadow stack violation test
+[INFO]  Gup read -> shstk access success
+[INFO]  Gup write -> shstk access success
+[INFO]  Violation from normal write
+[INFO]  Gup read -> write access success
+[INFO]  Violation from normal write
+[INFO]  Gup write -> write access success
+[INFO]  Cow gup write -> write access success
+[OK]    Shadow gup test
+[INFO]  Violation from shstk access
+[OK]    mprotect() test
+[SKIP]  Userfaultfd unavailable.
+[OK]    32 bit test
+
+Check kernel IBT with dmesg | grep CET:
+CET detected: Indirect Branch Tracking enabled
+
+--------------------------------------------------------------------------
+Changes in v2:
+1. Remove excessive checks on host CET Kconfig options in v1 patchset [3].
+2. Make CET CPUIDs, MSRs and control flags enabling independent to host CET status.
+3. Introduce supervisor SHSTK support to make the patch set complete.
+4. Refactor patches to accommodate above changes.
+5. Rebase on kvm-x86/next [4].
+
+
+[1]: linux-next: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/?h=next-20230420
+[2]: QEMU patch: https://lore.kernel.org/all/20230421041227.90915-1-weijiang.yang@intel.com/
+[3]: v1 patchset: https://lore.kernel.org/all/20220616084643.19564-1-weijiang.yang@intel.com/
+[4]: Rebase branch: https://github.com/kvm-x86/linux.git, commit: 7b632f72528d (tag: kvm-x86-next-2023.04.14)
+
+
+Rick Edgecombe (5):
+  x86/shstk: Add Kconfig option for shadow stack
+  x86/cpufeatures: Add CPU feature flags for shadow stacks
+  x86/cpufeatures: Enable CET CR4 bit for shadow stack
+  x86/fpu/xstate: Introduce CET MSR and XSAVES supervisor states
+  x86/fpu: Add helper for modifying xstate
+
+Sean Christopherson (2):
+  KVM:x86: Report XSS as to-be-saved if there are supported features
+  KVM:x86: Load guest FPU state when accessing xsaves-managed MSRs
+
+Yang Weijiang (14):
+  KVM:x86: Refresh CPUID on write to guest MSR_IA32_XSS
+  KVM:x86: Init kvm_caps.supported_xss with supported feature bits
+  KVM:x86: Add #CP support in guest exception classification
+  KVM:VMX: Introduce CET VMCS fields and control bits
+  KVM:x86: Add fault checks for guest CR4.CET setting
+  KVM:VMX: Emulate reads and writes to CET MSRs
+  KVM:VMX: Add a synthetic MSR to allow userspace VMM to access
+    GUEST_SSP
+  KVM:x86: Report CET MSRs as to-be-saved if CET is supported
+  KVM:x86: Save/Restore GUEST_SSP to/from SMM state save area
+  KVM:VMX: Pass through user CET MSRs to the guest
+  KVM:x86: Enable CET virtualization for VMX and advertise to userspace
+  KVM:nVMX: Enable user CET support for nested VMX
+  KVM:x86: Enable supervisor IBT support for guest
+  KVM:x86: Support CET supervisor shadow stack MSR access
+
+ arch/x86/Kconfig                         |  24 ++++
+ arch/x86/Kconfig.assembler               |   5 +
+ arch/x86/include/asm/cpufeatures.h       |   2 +
+ arch/x86/include/asm/disabled-features.h |   8 +-
+ arch/x86/include/asm/fpu/api.h           |   9 ++
+ arch/x86/include/asm/fpu/types.h         |  16 ++-
+ arch/x86/include/asm/fpu/xstate.h        |   6 +-
+ arch/x86/include/asm/kvm_host.h          |   3 +-
+ arch/x86/include/asm/vmx.h               |   8 ++
+ arch/x86/include/uapi/asm/kvm.h          |   1 +
+ arch/x86/include/uapi/asm/kvm_para.h     |   1 +
+ arch/x86/kernel/cpu/common.c             |  35 ++++--
+ arch/x86/kernel/cpu/cpuid-deps.c         |   1 +
+ arch/x86/kernel/fpu/core.c               |  19 +++
+ arch/x86/kernel/fpu/xstate.c             |  90 +++++++-------
+ arch/x86/kvm/cpuid.c                     |  23 +++-
+ arch/x86/kvm/cpuid.h                     |   6 +
+ arch/x86/kvm/smm.c                       |  20 +++
+ arch/x86/kvm/vmx/capabilities.h          |   4 +
+ arch/x86/kvm/vmx/nested.c                |  29 ++++-
+ arch/x86/kvm/vmx/vmcs12.c                |   6 +
+ arch/x86/kvm/vmx/vmcs12.h                |  14 ++-
+ arch/x86/kvm/vmx/vmx.c                   | 150 ++++++++++++++++++++++-
+ arch/x86/kvm/vmx/vmx.h                   |   6 +-
+ arch/x86/kvm/x86.c                       |  79 ++++++++++--
+ arch/x86/kvm/x86.h                       |  46 ++++++-
+ 26 files changed, 528 insertions(+), 83 deletions(-)
+
+
+base-commit: 7b632f72528d5fa3f0265358a393f534da47d9dd
+-- 
+2.27.0
+
