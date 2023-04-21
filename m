@@ -2,175 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FBF6EA311
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502DD6EA322
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjDUFX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        id S232790AbjDUFcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 01:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjDUFXY (ORCPT
+        with ESMTP id S229878AbjDUFc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:23:24 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C3B1F4EEE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:23:22 -0700 (PDT)
-Received: from [172.30.38.111] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 8F4DD180175226;
-        Fri, 21 Apr 2023 13:23:15 +0800 (CST)
-Message-ID: <973e113f-e4f3-af44-a580-62e15535f542@nfschina.com>
-Date:   Fri, 21 Apr 2023 13:23:11 +0800
+        Fri, 21 Apr 2023 01:32:29 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA665B93
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:32:27 -0700 (PDT)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C9AFE44278
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:32:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1682055145;
+        bh=6fZMAPxaQ2NtCFw/OrUJgDL+NjbElpsSBv71T4079w4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=gr1fCnULfyCNiWrIoIObRLAbjz6edhUrfK1lJTjtlQsAy6tqesCbgIa7VLtWFCyjE
+         u/LoNXje++UsuPBpljvhzrdfs2AAxe3qNTyb+Qz07Ry7Vl+eOUj4uxGjkEiPhW1CZb
+         qYzwkYqDOlUXdUGuHSlBNzeG8PtY7cVsbpPROoVOdFqpreHhgOMVkY4Ga1KKbW2zU8
+         XeeEALATABwTaMPxlaP+6zfZaRhQ1PHqR3KdvIFMZmbyVp0o9rQcHyHySgcC1IawGG
+         as7sszRMCOwPcx4WEp0M8NBf2kSn6zEN1IxecrhqFsV9rZy1I9ODnXrbWhqaz1xqiY
+         FQYD678OM6s5g==
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2473661358eso1656085a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:32:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682055144; x=1684647144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6fZMAPxaQ2NtCFw/OrUJgDL+NjbElpsSBv71T4079w4=;
+        b=FK1YCxFsu96C4MmWqj2jkhuj30Fv5ubxiPUl4gRQzkFVPrtuWEwHZHchYfa2xRW7Dt
+         MQoaNgFw/XwM356ax+vGzMsw7O2COfTGjGXgb+Ia/NmB+c4MCkOa40DlDwU2Sa5GfUoy
+         N/sM12h4R1DPl0Si2f6X7NSLq2nYRfYXGiarYgkhjd0ZlMeWoY8jwzBHZfxccRvWRHr8
+         IyeaLlSOZHgl5MEIySQhWW38IWBbsjBnvC/+zH2nEgY6Z623uplLFDmQmMiYA1l1JOBU
+         GsX1G9jZB0AbM//hkisxODGBSRO+Hv/wWbR33Di+WGwvBlfLKzG954mBkQA66eXgaj9Q
+         sG6g==
+X-Gm-Message-State: AAQBX9fpNw0M1Jrlez36oFkUBMGGSc00VmhI91U27eVW/mM3v7ktBEyQ
+        8JaN9LprLpcZaI7+p/q/kcXnbDX3ujMdaVzu/Bbq8d4P0nCif3y8Py+oVpizaxdPJVFzsHBkktF
+        GsbzKMoRVDZRP9jKs1zjl3YkpAOjiN8YVS7TFOtWT7tCNCCE92KdOqmQIwg==
+X-Received: by 2002:a17:90b:3648:b0:247:35c7:bd67 with SMTP id nh8-20020a17090b364800b0024735c7bd67mr3754300pjb.46.1682055143745;
+        Thu, 20 Apr 2023 22:32:23 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZW3SE5cSn/yddEPPQw5KYQiQxrGhjGAVAADd/GQ9uokNzzHmPpmqsq9Qa5iBnIp1hnHZ8RBNckOT4JFBvEcnM=
+X-Received: by 2002:a17:90b:3648:b0:247:35c7:bd67 with SMTP id
+ nh8-20020a17090b364800b0024735c7bd67mr3754285pjb.46.1682055143456; Thu, 20
+ Apr 2023 22:32:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] firmware:Remove unnecessary (void*) conversions
-Content-Language: en-US
-To:     kabel@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+References: <20230420125941.333675-1-kai.heng.feng@canonical.com>
+ <20230420125941.333675-3-kai.heng.feng@canonical.com> <f1409ba9-5370-1e0d-8b6c-e9782505937f@linux.intel.com>
+In-Reply-To: <f1409ba9-5370-1e0d-8b6c-e9782505937f@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 21 Apr 2023 13:32:12 +0800
+Message-ID: <CAAd53p4chNHrHA8RhSjQYH4znVXHZHJ4m4JrzFiOsun_JsegXA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] PCI/AER: Disable AER interrupt on suspend
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <202304201916.8OvkVl9W-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 10:53=E2=80=AFPM Sathyanarayanan Kuppuswamy
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+>
+>
+> On 4/20/23 5:59 AM, Kai-Heng Feng wrote:
+> > PCIe service that shares IRQ with PME may cause spurious wakeup on
+> > system suspend.
+> >
+> > PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
+> > that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
+> > (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
+> > much here to disable AER during system suspend.
+> >
+> > This is very similar to previous attempts to suspend AER and DPC [1],
+> > but with a different reason.
+> >
+> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
+feng@canonical.com/
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
+> >
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+>
+> In Patch #1, you skip clearing AER errors in the resume path, right? So i=
+f we disable
+> interrupts here, will AER driver not be notified on resume path error?
 
-在 2023/4/20 19:49, kernel test robot 写道:
-> Hi yunchuan,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.3-rc7 next-20230419]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/yunchuan/firmware-Remove-unnecessary-void-conversions/20230420-154004
-> patch link:    https://lore.kernel.org/r/20230420073751.1031944-1-yunchuan%40nfschina.com
-> patch subject: [PATCH] firmware:Remove unnecessary (void*) conversions
-> config: hexagon-randconfig-r034-20230420 (https://download.01.org/0day-ci/archive/20230420/202304201916.8OvkVl9W-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/1dee3a7afbb402fc49f0af9eeb312f221e99fab6
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review yunchuan/firmware-Remove-unnecessary-void-conversions/20230420-154004
->          git checkout 1dee3a7afbb402fc49f0af9eeb312f221e99fab6
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304201916.8OvkVl9W-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     In file included from drivers/firmware/turris-mox-rwtm.c:11:
->     In file included from include/linux/dma-mapping.h:10:
->     In file included from include/linux/scatterlist.h:9:
->     In file included from arch/hexagon/include/asm/io.h:334:
->     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __raw_readb(PCI_IOBASE + addr);
->                               ~~~~~~~~~~ ^
->     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->                                                             ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->     #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->                                                       ^
->     In file included from drivers/firmware/turris-mox-rwtm.c:11:
->     In file included from include/linux/dma-mapping.h:10:
->     In file included from include/linux/scatterlist.h:9:
->     In file included from arch/hexagon/include/asm/io.h:334:
->     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->                                                             ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->     #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->                                                       ^
->     In file included from drivers/firmware/turris-mox-rwtm.c:11:
->     In file included from include/linux/dma-mapping.h:10:
->     In file included from include/linux/scatterlist.h:9:
->     In file included from arch/hexagon/include/asm/io.h:334:
->     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             __raw_writeb(value, PCI_IOBASE + addr);
->                                 ~~~~~~~~~~ ^
->     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->                                                           ~~~~~~~~~~ ^
->     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->                                                           ~~~~~~~~~~ ^
->>> drivers/firmware/turris-mox-rwtm.c:286:19: error: incompatible integer to pointer conversion initializing 'struct mox_rwtm *' with an expression of type 'unsigned long' [-Wint-conversion]
->             struct mox_rwtm *rwtm = rng->priv;
->                              ^      ~~~~~~~~~
->     6 warnings and 1 error generated.
+I agree the driver should report the error via aer_isr_one_error() on
+resume path.
+But on the system I am using (Intel ADL PCH), once the interrupt is
+disabled, PCI_ERR_ROOT_STATUS doesn't record error anymore.
+Not sure if it's intended though.
 
-
-Yes, that's an oversight, 'priv' should be unsigned long variable.I 
-didn't pay attention to the structure definition in 
-'include/linux/hw_random.h'.
-
-Thanks for your quick feedbacks and sorry for being late.
-
+Kai-Heng
 
 >
+> > v3:
+> >  - No change.
+> >
+> > v2:
+> >  - Only disable AER IRQ.
+> >  - No more check on PME IRQ#.
+> >  - Use helper.
+> >
+> >  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index 1420e1f27105..9c07fdbeb52d 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
+> >       return 0;
+> >  }
+> >
+> > +static int aer_suspend(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +     struct pci_dev *pdev =3D rpc->rpd;
+> > +
+> > +     aer_disable_irq(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int aer_resume(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +     struct pci_dev *pdev =3D rpc->rpd;
+> > +
+> > +     aer_enable_irq(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  /**
+> >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+> >   * @dev: pointer to Root Port, RCEC, or RCiEP
+> > @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver =
+=3D {
+> >       .service        =3D PCIE_PORT_SERVICE_AER,
+> >
+> >       .probe          =3D aer_probe,
+> > +     .suspend        =3D aer_suspend,
+> > +     .resume         =3D aer_resume,
+> >       .remove         =3D aer_remove,
+> >  };
+> >
 >
-> vim +286 drivers/firmware/turris-mox-rwtm.c
->
->     283	
->     284	static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
->     285	{
->   > 286		struct mox_rwtm *rwtm = rng->priv;
->     287		struct armada_37xx_rwtm_tx_msg msg;
->     288		int ret;
->     289	
->     290		if (max > 4096)
->     291			max = 4096;
->     292	
->     293		msg.command = MBOX_CMD_GET_RANDOM;
->     294		msg.args[0] = 1;
->     295		msg.args[1] = rwtm->buf_phys;
->     296		msg.args[2] = (max + 3) & ~3;
->     297	
->     298		if (!wait) {
->     299			if (!mutex_trylock(&rwtm->busy))
->     300				return -EBUSY;
->     301		} else {
->     302			mutex_lock(&rwtm->busy);
->     303		}
->     304	
->     305		ret = mbox_send_message(rwtm->mbox, &msg);
->     306		if (ret < 0)
->     307			goto unlock_mutex;
->     308	
->     309		ret = wait_for_completion_interruptible(&rwtm->cmd_done);
->     310		if (ret < 0)
->     311			goto unlock_mutex;
->     312	
->     313		ret = mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
->     314		if (ret < 0)
->     315			goto unlock_mutex;
->     316	
->     317		memcpy(data, rwtm->buf, max);
->     318		ret = max;
->     319	
->     320	unlock_mutex:
->     321		mutex_unlock(&rwtm->busy);
->     322		return ret;
->     323	}
->     324	
->
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
