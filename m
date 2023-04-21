@@ -2,43 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191206EAEA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F3D6EAEA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbjDUQD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S232936AbjDUQEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbjDUQDZ (ORCPT
+        with ESMTP id S232591AbjDUQEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:03:25 -0400
-Received: from outbound-smtp07.blacknight.com (outbound-smtp07.blacknight.com [46.22.139.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A1BE61
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:03:24 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp07.blacknight.com (Postfix) with ESMTPS id AA4731C3D0F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:03:22 +0100 (IST)
-Received: (qmail 14677 invoked from network); 21 Apr 2023 16:03:22 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 16:03:22 -0000
-Date:   Fri, 21 Apr 2023 17:03:20 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 12/26] mm: page_alloc: per-migratetype free counts
-Message-ID: <20230421160320.zz2he2iprq37vnl3@techsingularity.net>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-13-hannes@cmpxchg.org>
- <20230421142841.parju3gmqmpefigq@techsingularity.net>
- <20230421153501.GE320347@cmpxchg.org>
+        Fri, 21 Apr 2023 12:04:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B1D32A;
+        Fri, 21 Apr 2023 09:04:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE837619FD;
+        Fri, 21 Apr 2023 16:04:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414FFC433D2;
+        Fri, 21 Apr 2023 16:04:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682093046;
+        bh=XKlPr6uDvxCV6++QaXDCvxgmIhxfSV6g1aBX1EDd6/E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YvOY8ukU7+89A+/bW+xfR21Kl2zYpreIqu7qiwMDDw3oP3guG1sgT4M4ee/cPip2V
+         bVmW+VAswwC5z2Tpo/QrUcc94O/lM9rs7HsK5WX4AEfIpJWzG8o8zs4OFg9v379omw
+         0GNTrq8WF7O991DEV5vXmnLqjgmR2Y5KHgd+MAPG0/CM7qtZNKHPpJpDXrfVuGQA9r
+         EiOrlGeh1s8ljzG5pAY0oJRc+QjqtXcmeMZ147lcMcO15CZrMVSHC6edPyYwDjv8tO
+         rzp5ozZ29BJN9derrw+IuZWJa8aA02dB+ccKn5yRzqqCaG/Mo3HjSQmAWEVM4/YHiZ
+         JrAJYWp0s5Q1g==
+From:   broonie@kernel.org
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     stable@vger.kernel.org, Marco Elver <elver@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the tip tree
+Date:   Fri, 21 Apr 2023 17:03:53 +0100
+Message-Id: <20230421160353.106874-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230421153501.GE320347@cmpxchg.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,43 +58,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 11:35:01AM -0400, Johannes Weiner wrote:
-> On Fri, Apr 21, 2023 at 03:28:41PM +0100, Mel Gorman wrote:
-> > On Tue, Apr 18, 2023 at 03:12:59PM -0400, Johannes Weiner wrote:
-> > > Increase visibility into the defragmentation behavior by tracking and
-> > > reporting per-migratetype free counters.
-> > > 
-> > > Subsequent patches will also use those counters to make more targeted
-> > > reclaim/compaction decisions.
-> > > 
-> > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > 
-> > Visibility into fragmentation behaviour is information that is
-> > almost certainly only useful to a developer and even then, there is
-> > /proc/pagetypeinfo. At minimum, move this patch to later in the series
-> > but I'm skeptical about its benefit.
-> 
-> Having them available in the memory dump (OOM, sysrq) was essential
-> while debugging problems in later patches. For OOMs or lockups,
-> pagetypeinfo isn't available. It would be useful to have them included
-> in user reports if any issues pop up.
-> 
+Hi all,
 
-OOM+sysrq could optionally take the very expensive step of traversing the
-lists to get the count so yes, it helps debugging, but not necessarily
-critical.
+After merging the tip tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-> They're used internally in several places later on, too.
-> 
+/tmp/next/build/kernel/time/posix-cpu-timers.c: In function 'posix_cpu_timer_wait_running_nsleep':
+/tmp/next/build/kernel/time/posix-cpu-timers.c:1310:30: error: 'timr' is a pointer; did you mean to use '->'?
+ 1310 |         spin_unlock_irq(&timr.it_lock);
+      |                              ^
+      |                              ->
+/tmp/next/build/kernel/time/posix-cpu-timers.c:1312:28: error: 'timr' is a pointer; did you mean to use '->'?
+ 1312 |         spin_lock_irq(&timr.it_lock);
+      |                            ^
+      |                            ->
 
-I did see that for deciding the suitability for compaction. Minimally, put
-the patches adjacent in the series and later if possible so that the series
-can be taken in parts. There are a lot of patches that should be relatively
-uncontroversial so maybe make "mm: page_alloc: introduce MIGRATE_FREE" the
-pivot point between incremental improvements and "everything on and after
-this patch is relatively high risk, could excessively compact/reclaim,
-could livelock etc".
 
--- 
-Mel Gorman
-SUSE Labs
+Caused by commit
+
+  2aaae4bf41b101f7e ("posix-cpu-timers: Implement the missing timer_wait_running callback")
+
+The !POSIX_CPU_TIMERS_TASK_WORK case wasn't fully updated.  I've used
+the version of the tip tree from next-20230420 instead.
