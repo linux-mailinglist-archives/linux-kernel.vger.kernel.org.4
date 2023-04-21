@@ -2,171 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26D56EB09D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E038C6EB0B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbjDURfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S233054AbjDURhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjDURfU (ORCPT
+        with ESMTP id S230076AbjDURhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:35:20 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F3D5251
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:35:18 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3ef2f81a96cso22175881cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682098518; x=1684690518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lXK86wEYiVwAAffwU2RrQU5w4OvwpRlSMCsUx9Wsyw8=;
-        b=dh3k5zlWzfu6th6WS5+nnxJv12bmwzJ8kcsy5CNsvsEzR1JVM6O6CyHsFBb+sFGGEb
-         ieFhheJ7NCcb/qMtYTaAwQiRMA09D6tDISITrIQFyAxwL9TolUtieAOu8Cqi7yAoVj9J
-         y1+SSii6oCjsVWCYFIp5IViRdYds0IZ1r65F8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682098518; x=1684690518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lXK86wEYiVwAAffwU2RrQU5w4OvwpRlSMCsUx9Wsyw8=;
-        b=WacPaqTi73/1TITpYJmx9gMj+8TJW9MurLotJ/lax/XwDVNG6j5vTQG/23rjeB5Nqb
-         AZHHjLto0abQcO0HcDh895xBeMyn161HG2vpCaDoMN4I/+x+1P6niDtMiYHfhEl37PwS
-         eZSAc8tUZcBr0/bS3oN2b1URNVKNriJaJpfFEwiKgFFo9yr7Wl+mtgrET+WoHSWS21Aw
-         iK4Ttp3gBg3oyitDgHY0Otl9MTnbPPJB162KWnq6zR8QoRs4xNC1+hDO4YmLEgGuMfBJ
-         bmYlhNxqMvhcYugHCbxc2Gwrq8wROoioNvkuxu57mvgyCT0DC+srCYgH52UnPwnx6JBf
-         EX5Q==
-X-Gm-Message-State: AAQBX9fF+GlihI1QK1LAfEYSy7Nr63M2kK5mQo5Rg77Fqpi8NdZldWB+
-        yH6PMPOW04oO1oz2a1pxxjDh14qp+AVABqU6al0=
-X-Google-Smtp-Source: AKy350ZuDm129FR3JuklKK8wYKwha2xyU+G+MIYu2nty/HXwhgF4dBJnEMfdN+XUE/5AUgtC+XVzVA==
-X-Received: by 2002:ac8:7fc2:0:b0:3ef:5993:42e0 with SMTP id b2-20020ac87fc2000000b003ef599342e0mr7168745qtk.10.1682098517980;
-        Fri, 21 Apr 2023 10:35:17 -0700 (PDT)
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com. [209.85.160.180])
-        by smtp.gmail.com with ESMTPSA id g13-20020ac8774d000000b003eae8609f64sm1473779qtu.13.2023.04.21.10.35.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 10:35:17 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-3ef31924c64so1192311cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:35:17 -0700 (PDT)
-X-Received: by 2002:ac8:588f:0:b0:3ef:26ec:f27a with SMTP id
- t15-20020ac8588f000000b003ef26ecf27amr395030qta.13.1682098516847; Fri, 21 Apr
- 2023 10:35:16 -0700 (PDT)
+        Fri, 21 Apr 2023 13:37:39 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2061.outbound.protection.outlook.com [40.107.100.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92D940E7;
+        Fri, 21 Apr 2023 10:37:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VTAln3H8WKmyH4/fyc1s0mdjTi5petpMHtpcR8DhmpcPAoqH/ryLZqtMxW0zjAgH6Q9uNsGxhQg3GjwALNwlCfUTgRZYDIWnVVUkwi5COq6n2zoyOg9TEIR6hmFaUmFKOh9hx1pWzzkr8ckHUmWaQFumr1lOMNqR5DoUW9mG9GXc3bqhWnEsrO72pKauZSdOXQKu24nAV3/I4UvKAtWiQkJmDB7k6KmTVe0bqfhLZIjnsKqqw92G+tiI8CzTlQ7+ERUNQ3bPopGDPrvO4IY1LauFlz6vJvkVpRZEMIJefrmBHv0ELChxshEHQ/hkLJ06k/b6NdMhJ34sJUqoYbZpIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MOB+9ycjDK7dj5EqGIBjuF/vezbe9ZFOicmuyMSZARc=;
+ b=I/ku1ug83wCcyavHHzqV5QZgxIqWH6QgooLqEAjTjsA62zRm3N940HLVSLYk7tfWR0aTjtYLAgAfvYAWU5uPRjVcVfrIhFyJ+JphIZ/wTSrc3qlB08L/4Q1GS4d1QrkM64B4TdKRubQfNAn5IgNEElilhJu9922H4foeG+NcuR2HxvxHb1sfTudrvjVz0EzG5N1cjDq9RArrEkMcovjMoOTzivb0WRtBKmE2umyHQMXSTLuZFnwdYrotK2uFbLRZrWOzm56xpb6GY3zgIgIX6iQFa83AStRrIw20tAOHyM7Ls+YOd0vZIYmhx8BkzDcVT6Gvp76TGb684F44oQ8Ydw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MOB+9ycjDK7dj5EqGIBjuF/vezbe9ZFOicmuyMSZARc=;
+ b=W1VllpRWqY8o088/nxE4+dZcbVX0Lyz3u44DI1p23enF5UE+vOxIZbR+a+INfHQ/LBaNReS+1eUrAwBm9Nx5Bc/NVxNLoRN8mmng5vXjPLTJyTmnasTuMECQpczsikeVLeArLnzUSGRcJRngQL8z7hi8qhZsLJmUmfOE9ypmUcMXCvl70S+11GHmQ2t3fXNvJlb7WOuiAyg04dB3uwO2mweB4OgZ5sdwDXCSazJGO6BFBLCuVPBulZtiysGRMD/CnuGuzumQgxCtJ44egYJWKyE194LJQ8L67+YyHyByBIZ0LZmsIo0xBv5XS/IDH3+sGOKCD9ywzimE82ZJFnPwKw==
+Received: from BN9PR03CA0854.namprd03.prod.outlook.com (2603:10b6:408:13d::19)
+ by IA1PR12MB6356.namprd12.prod.outlook.com (2603:10b6:208:3e0::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
+ 2023 17:37:35 +0000
+Received: from BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13d:cafe::9f) by BN9PR03CA0854.outlook.office365.com
+ (2603:10b6:408:13d::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.25 via Frontend
+ Transport; Fri, 21 Apr 2023 17:37:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT026.mail.protection.outlook.com (10.13.177.51) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.26 via Frontend Transport; Fri, 21 Apr 2023 17:37:34 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 21 Apr 2023
+ 10:37:25 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 21 Apr
+ 2023 10:37:25 -0700
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Fri, 21 Apr 2023 10:37:24 -0700
+Date:   Fri, 21 Apr 2023 10:37:22 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 0/3] Add set_dev_data and unset_dev_data support
+Message-ID: <ZELJ0uv4gGCPrDfX@Asurada-Nvidia>
+References: <cover.1681976394.git.nicolinc@nvidia.com>
+ <BN9PR11MB52764ED59905104D3A5A68C08C609@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZEI+LBkEeNZdJyTB@Asurada-Nvidia>
+ <BN9PR11MB5276C39E256CD4B922435E1C8C609@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZEJBldGXBNGEy9tV@Asurada-Nvidia>
+ <BN9PR11MB527693075725A13DB9EE18678C609@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZEJHPb1E1/eI8V6A@Asurada-Nvidia>
+ <ZEKLDzU8C2niNyOw@nvidia.com>
 MIME-Version: 1.0
-References: <1681996394-13099-1-git-send-email-quic_vnivarth@quicinc.com>
- <1681996394-13099-6-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=VU9Zdk2wz=90cjmuBWxaVz9w+UxzrTtW_ny-jrwVLV3w@mail.gmail.com> <7a6fe89b-5898-08d3-6c44-2cfc9d8fae7a@quicinc.com>
-In-Reply-To: <7a6fe89b-5898-08d3-6c44-2cfc9d8fae7a@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 21 Apr 2023 10:35:04 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U_7t4H9nXy6Ku49qLqbhZ02K-_XQv_Ssgkp26s3LyDMw@mail.gmail.com>
-Message-ID: <CAD=FV=U_7t4H9nXy6Ku49qLqbhZ02K-_XQv_Ssgkp26s3LyDMw@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] spi: spi-qcom-qspi: Add DMA mode support
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZEKLDzU8C2niNyOw@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT026:EE_|IA1PR12MB6356:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64546c55-6cb9-49fc-a938-08db428f17e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1ZZs4XpdAUWoJQnW7+aFw/yUjsr6O/B02cNa9i8TU0m9PNH1Eg9wIPRzA+T1leD+YL0ExZMZjM3IO/o1G70uKGup/cfn7ww9cVJ2ACstXD6EX8xE7YuHXyayWIagGiV8hmByCeR5e20Ed5KqVvxaCCh2LYogleBcXIWWdOJnsdPChmhlThD65AU4hQC96MpvDuD2WhOAQm3RYdwmtRqPk+M3XBB4Xres0eKRQh4M6Nc5BjZZh7juiK4IsZljqOiJgMQNbFxRsSoVjt0EKZCkzcLtfEshTYnWwoGDi3glyBEyht0CJ8kjkL3ep4DkNV2EtCu5BUSzd4+4dQt3uxARuLlXf2Kf6JbTjca2y8u0woaQG0cR71sczUhhNLp+4UVxIo0kA1NiQRvcjmAaONvXX/nSmt3IXapPLMdB08z7Ru/GdPqxGHVHny/vKnJQ8HLbbWzgrmCfGqmxzK23PP2dhmSWHTvYFHG/Cb1jmDDiPlawMbUaTyUhjjPqGgvrnhBPpXy1062P+RrxqjuYnMMQdPETsnUGpv8PkCVEojfnHLUd1mOLy+rc1KfusSNFNFeFRDOKSJmr/LQfjugRj53Y+95450DVKupknHiciJkF/vuf2xz90XtEQTeKmJfsf/RxLLxnEnKFb2OHwpyIpnlpZcQB8T/9OHH3QL7o5FRq/gJdXlqxhLtOlnd0sFTjsWJOMPym23VGNwLZ1F4zSI7bRVuuPIEvznjrNo4Vc3iVAfvHr69c4LcuqH+ecmUEeINYC1+K8JNcdWJlkYZm4C/Wnubjt037k/ugu+Y9p0QL+eA=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(82740400003)(36860700001)(316002)(70206006)(4326008)(47076005)(336012)(426003)(70586007)(34020700004)(478600001)(54906003)(6636002)(8676002)(6862004)(356005)(41300700001)(7636003)(8936002)(2906002)(5660300002)(7416002)(9686003)(26005)(186003)(86362001)(33716001)(82310400005)(40460700003)(55016003)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 17:37:34.9971
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64546c55-6cb9-49fc-a938-08db428f17e9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6356
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Apr 21, 2023 at 10:09:35AM -0300, Jason Gunthorpe wrote:
+> On Fri, Apr 21, 2023 at 01:20:13AM -0700, Nicolin Chen wrote:
+> 
+> > +/**
+> > + * struct iommufd_device_set_data - ioctl(IOMMU_DEVICE_SET_DATA)
+> > + * @size: sizeof(struct iommufd_device_set_data)
+> > + * @dev_id: The device to set a device data
+> > + * @data_uptr: User pointer of the device user data.
+> > + * @data_len: Length of the device user data.
+> > + */
+> > +struct iommufd_device_set_data {
+> > +	__u32 size;
+> > +	__u32 dev_id;
+> > +	__aligned_u64   data_uptr;
+> > +	__u32 data_len;
+> > +};
+> > +#define IOMMU_DEVICE_SET_DATA _IO(IOMMUFD_TYPE, IOMMUFD_CMD_DEVICE_SET_DATA)
+> > +
+> > +/**
+> > + * struct iommufd_device_unset_data - ioctl(IOMMU_DEVICE_UNSET_DATA)
+> > + * @size: sizeof(struct iommufd_device_unset_data)
+> > + * @dev_id: The device to unset its device data
+> > + */
+> > +struct iommufd_device_unset_data {
+> > +	__u32 size;
+> > +	__u32 dev_id;
+> > +};
+> > +#define IOMMU_DEVICE_UNSET_DATA _IO(IOMMUFD_TYPE, IOMMUFD_CMD_DEVICE_UNSET_DATA)
+> > 
+> > Maybe just like this?
+> 
+> How would the iommu_ops backing this work?
 
-On Fri, Apr 21, 2023 at 9:58=E2=80=AFAM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> Hi,
->
-> Thanks a lot for the review and inputs...
->
->
-> On 4/20/2023 10:49 PM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Thu, Apr 20, 2023 at 6:13=E2=80=AFAM Vijaya Krishna Nivarthi
-> > <quic_vnivarth@quicinc.com> wrote:
-> >> @@ -137,11 +155,29 @@ enum qspi_clocks {
-> >>          QSPI_NUM_CLKS
-> >>   };
-> >>
-> >> +enum qspi_xfer_mode {
-> >> +       QSPI_FIFO,
-> >> +       QSPI_DMA
-> >> +};
-> >> +
-> >> +/*
-> >> + * Number of entries in sgt returned from spi framework that-
-> >> + * will be supported. Can be modified as required.
-> >> + * In practice, given max_dma_len is 64KB, the number of
-> >> + * entries is not expected to exceed 1.
-> >> + */
-> >> +#define QSPI_MAX_SG 5
-> > I actually wonder if this would be more nicely done just using a
-> > linked list, which naturally mirrors how SGs work anyway. You'd add
-> > "struct list_head" to the end of "struct qspi_cmd_desc" and just store
-> > a pointer to the head in "struct qcom_qspi".
-> >
-> > For freeing, you can always get back the "virtual" address because
-> > it's just the address of each node. You can always get back the
-> > physical address because it's stored in "data_address".
-> >
-> Please note that in "struct qspi_cmd_desc"
->
-> data_address - dma_address of data buffer returned by spi framework
->
-> next_descriptor - dma_address of the next descriptor in chain
->
->
-> If we were to have a linked list of descriptors that we can parse and
-> free, it would require 2 more fields
->
-> this_descriptor_dma - dma address of the current descriptor
+How about the following piece? Needs a test with QEMU though..
 
-Isn't that exactly the same value as "data_address"? Sure,
-"data_address" is a u32 and the DMA address is 64-bits, but elsewhere
-in the code you already rely on the fact that the upper bits of the
-DMA address are 0 when you do:
+static const size_t iommufd_device_data_size[] = {
+	[IOMMU_HW_INFO_TYPE_NONE] = 0,
+	[IOMMU_HW_INFO_TYPE_INTEL_VTD] = 0,
+	[IOMMU_HW_INFO_TYPE_ARM_SMMUV3] =
+		sizeof(struct iommu_device_data_arm_smmuv3),
+};
 
-virt_cmd_desc->data_address =3D dma_ptr
+int iommufd_device_set_data(struct iommufd_ucmd *ucmd)
+{
+	struct iommufd_device_set_data *cmd = ucmd->cmd;
+	struct iommufd_device *idev;
+	const struct iommu_ops *ops;
+	void *data = NULL;
+	u32 klen = 0;
+	int rc;
 
+	if (!cmd->data_uptr || !cmd->data_len)
+		return -EINVAL;
 
-> next_descriptor_virt - virtual address of the next descriptor in chain
+	idev = iommufd_get_device(ucmd, cmd->dev_id);
+	if (IS_ERR(idev))
+		return PTR_ERR(idev);
 
-Right, this would be the value of the next node in the linked list,
-right? So basically by adding a list_node_t you can find it easily.
+	ops = dev_iommu_ops(idev->dev);
+	if (!ops || !ops->set_dev_data_user || !ops->unset_dev_data_user ||
+	    ops->hw_info_type >= ARRAY_SIZE(iommufd_device_data_size)) {
+		rc = -EOPNOTSUPP;
+		goto out_put_idev;
+	}
 
+	klen = iommufd_device_data_size[ops->hw_info_type];
+	if (!klen) {
+		rc = -EOPNOTSUPP;
+		goto out_put_idev;
+	}
 
-> >> +static int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, dma_addr_t dm=
-a_ptr,
-> >> +                       uint32_t n_bytes)
-> >> +{
-> >> +       struct qspi_cmd_desc *virt_cmd_desc, *prev;
-> >> +       dma_addr_t dma_cmd_desc;
-> >> +
-> >> +       /* allocate for dma cmd descriptor */
-> >> +       virt_cmd_desc =3D (struct qspi_cmd_desc *)dma_pool_alloc(ctrl-=
->dma_cmd_pool,
-> >> +               GFP_KERNEL, &dma_cmd_desc);
-> > Remove unnecessary cast; "void *" assigns fine w/out a cast.
-> >
-> > Add "| GFP_ZERO" and then get rid of the need to clear the "reserved"
-> > and "next_descriptor" stuff below.
-> >
-> I needed __GFP_ZERO to prevent a compile error, used same.
+	data = kzalloc(klen, GFP_KERNEL);
+	if (!data) {
+		rc = -ENOMEM;
+		goto out_put_idev;
+	}
 
-Ah, sorry. Sounds good.
+	if (copy_struct_from_user(data, klen, u64_to_user_ptr(cmd->data_uptr),
+				  cmd->data_len)) {
+		rc = -EFAULT;
+		goto out_free_data;
+	}
 
--Doug
+	rc = ops->set_dev_data_user(idev->dev, data);
+out_free_data:
+	kfree(data);
+out_put_idev:
+	iommufd_put_object(&idev->obj);
+	return rc;
+}
