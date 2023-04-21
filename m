@@ -2,138 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831E86EB1A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202E76EB1A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjDUS3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S233294AbjDUSaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbjDUS3O (ORCPT
+        with ESMTP id S230110AbjDUSaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:29:14 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F92E1BD5;
-        Fri, 21 Apr 2023 11:29:13 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8C7B35C00C9;
-        Fri, 21 Apr 2023 14:29:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 21 Apr 2023 14:29:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1682101752; x=1682188152; bh=E1
-        giA72jTN/HCoY+ZkODXi5a5cgWitw0+lONQS3/t7A=; b=cLCvpeRM5lx2n8YJEv
-        ctpJlrZd/cvTHHyzMCqw1BVqTcXVgeLCqb6QV1QZ0tmVSCw9Hokf234+XqSzm4wE
-        8ZE2nK2wllZNzlTioQ86W4TDsy24scnOtD3hOgN0i3sihzKtD/okV26x7RMy9Bd0
-        2LXLm7wPcpVpII3aB9gwV7jKqUblefDZ83PxTFnb1EHAHQggvFodY38vkpyMRptU
-        hl0PYvUz/2O8jpnRSYxgPwgQGxXBJv2NDPISJg1Bh/F/2iUTViHO30IulUGDPCCy
-        Z8n7wWABxBx8tPwzyZv+kYdZ3sRfOpFf9kCDyQmAVjQhC3u9TmI3DbQvqjNzdC0x
-        g0OQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682101752; x=1682188152; bh=E1giA72jTN/HC
-        oY+ZkODXi5a5cgWitw0+lONQS3/t7A=; b=XIrOUyfO9vgiYaLiAwjPy6D6dkCoa
-        284FdZQk/VS33jzayeoEjODvPto3BtKkfK70YwVOCM2JSOMn75m1dCaqYnLonpC3
-        9l5MIAw/lEGNYqSmWOPgvPg7EwkCcuIXJmxOeQUxnkwBVJcgugyAAd1ThFSemUbR
-        6Hqy95yY9FGhXXuago4M6ZZKvk2fpnGwEi/ttra1jyu+Z7uefg/A0ULK7lcOcilI
-        Kjrwf6Zb16O5X4zZv2iaYMNJbRIC8Oq+agK1Ke/2HXtUuQ2K1gKENt8ONx5a3htl
-        nlsAz9A8jPMF8dMPtv/L5qnyuCMMxN8zqAzpb3arJMG4eGGB7CWOIloqQ==
-X-ME-Sender: <xms:-NVCZJ1y9aVR_c2-q74uNpgqQQIr4t699w2AZhqOzF6hB3vvFL0Olw>
-    <xme:-NVCZAH3LEUyx7er7Xqd1PCEpJqR8mCpiOSdEwl-n_4r8_mSyJvkxUQMe6Rwxk53h
-    MynYdHG-vSvBpvUffM>
-X-ME-Received: <xmr:-NVCZJ5pXGSRP5sW3a08clyDOmzstPkj0c4movDV16kxcaNiRpHt9YS-2uWnqQ7LkXov430R-wH_h4KRxHv33W4uJ6WOIZi_VRySJQf2VKw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
-    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
-    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
-    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:-NVCZG1YyGj4YgZUYhedoOMlBVfL44meJBCxX7zwKb3AwiWd6aQ3qQ>
-    <xmx:-NVCZMFYf-PDrJWxacrKl9YQqn1WOtd2h_N3L0Ipw-uFeEQeTgspBg>
-    <xmx:-NVCZH_MyPcAEHIY_wVcMcgN6VxV-l6kIJ8aLexBsK6hoJDXrynoRQ>
-    <xmx:-NVCZJdmIt5oZlIXlfJZ1g609Ohse9_1NSdEJhW0c04NsWiZWbgJYQ>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 21 Apr 2023 14:29:10 -0400 (EDT)
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-2-david@redhat.com>
- <qvqwr0sei6sl.fsf@devbig1114.prn1.facebook.com>
- <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
- <f809162e-4adc-cf9b-35f4-0f1b098ad283@redhat.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1 1/3] mm/ksm: unmerge and clear VM_MERGEABLE when
- setting PR_SET_MEMORY_MERGE=0
-Date:   Fri, 21 Apr 2023 11:28:49 -0700
-In-reply-to: <f809162e-4adc-cf9b-35f4-0f1b098ad283@redhat.com>
-Message-ID: <qvqwwn25rswa.fsf@devbig1114.prn1.facebook.com>
+        Fri, 21 Apr 2023 14:30:11 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372CF1FF7;
+        Fri, 21 Apr 2023 11:30:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682101767; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=QMY72ZsT9TPdktf6rDLixt10ZbESgqGRHQv2+qRrpQTZhZ+LUjPDxD0D99mT0NB3mf4t0qV1ZPfuynoh3v44mzPWkUHxNKEN7XzSTuJdVvvTX/vqdG8B6EBPRIjUTCcvIhzrFx1m48257lMOBnlJbaeKF9qZpVbgqmDJaE9aZJc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682101767; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=6nxLE0R6gjb1/ZHAsw0XUmCm7YOxzHcMKWxooBKcqKA=; 
+        b=S9fLar+FxFMpRUb/5WZzvU6U7ZUJ+etZQ2VniUSsr1EoCPrLLvkdY/eXtiKnLEiDBbO0ZDo+G8fjy7s2fUU7rB2Q7OE7rJ95S+Y62KdENw6B+jZV5Dbiai2dp6zkATksIsYz7N1DshU/Dh5Qun/OXySVwlr9imWSJgXdAHoToUU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682101767;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=6nxLE0R6gjb1/ZHAsw0XUmCm7YOxzHcMKWxooBKcqKA=;
+        b=jct97Cl8fpkeEJ6Y1c+kVOuloS/ggaZRmV2WlhEFtm1WA8+RKLlHJ+5+rdfL52K7
+        r4lS6fF9A6zft/LJwCvFizgLQim+wS4MVosxjlxPS5S1lFfH1srIxiENn9ZHGcm+rzn
+        Wo2I8RF2wf0AAdSD/lRVRU4JE8kNol34rZR1ZQbg=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 16821017651111007.8313054039817; Fri, 21 Apr 2023 11:29:25 -0700 (PDT)
+Message-ID: <cc43eb64-b1f0-813e-2506-79cc41ab5def@arinc9.com>
+Date:   Fri, 21 Apr 2023 21:29:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH net-next 03/22] net: dsa: mt7530: properly support
+ MT7531AE and MT7531BE
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230421143648.87889-1-arinc.unal@arinc9.com>
+ <20230421143648.87889-4-arinc.unal@arinc9.com>
+ <ZEKqH2oELsJKANkh@makrotopia.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZEKqH2oELsJKANkh@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-David Hildenbrand <david@redhat.com> writes:
-
->>> I understand we want to keep the name "symmetric" with
->>> ksm_enable_merge_any, but it also unmerges the ksm pages. Do we want to
->>> reflect that in the function name?
->> ksm_disable_merge_any_umerge() is suboptimal.
->> As ksm_disable_merge_any() now reverts what ksm_enable_merge_any() ended
->> up doing, I think it's just fine.
->> (it would be a different story if we'd be using "set" / "clear"
->> terminology instead of "enable" / "disable").
->> We can describe that in the comment.
+On 21.04.2023 18:22, Daniel Golle wrote:
+> On Fri, Apr 21, 2023 at 05:36:29PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 >>
->>>
->>> Can we add a comment for the function?
->> Can do for symmetry with ksm_enable_merge_any().
+>> Introduce the p5_sgmii pointer to store the information for whether port 5
+>> has got SGMII or not. Print "found MT7531AE" if it's got it, print "found
+>> MT7531BE" if it hasn't.
 >>
->
-> +/**
-> + * ksm_disable_merge_any - Disable merging on all compatible VMA's of the mm,
-> + *                        previously enabled via ksm_enable_merge_any().
-> + *
-> + * Disabling merging implies unmerging any merged pages, like setting
-> + * MADV_UNMERGEABLE would. If unmerging fails, the whole operation fails and
-> + * merging on all compatible VMA's remains enabled.
-> + *
-> + * @mm: Pointer to mm
-> + *
-> + * Returns 0 on success, otherwise error code
-> + */
+>> Move the comment about MT7531AE and MT7531BE to mt7531_setup(), where the
+>> switch is identified.
+>>
+>> Get rid of mt7531_dual_sgmii_supported() now that priv->p5_sgmii stores the
+>> information. Address the code where mt7531_dual_sgmii_supported() is used.
+>>
+>> Get rid of mt7531_is_rgmii_port() which just prints the opposite of
+>> priv->p5_sgmii.
+>>
+>> Remove P5_INTF_SEL_GMAC5_SGMII. The p5_interface_select enum is supposed to
+>> represent the mode that port 5 is used in, not the hardware information of
+>> port 5. Set p5_intf_sel to P5_INTF_SEL_GMAC5 instead, if port 5 is not
+>> dsa_is_unused_port().
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   drivers/net/dsa/mt7530-mdio.c |  7 ++---
+>>   drivers/net/dsa/mt7530.c      | 49 +++++++++++++++--------------------
+>>   drivers/net/dsa/mt7530.h      |  6 +++--
+>>   3 files changed, 27 insertions(+), 35 deletions(-)
+>>
+>> diff --git a/drivers/net/dsa/mt7530-mdio.c b/drivers/net/dsa/mt7530-mdio.c
+>> index 088533663b83..fa3ee85a99c1 100644
+>> --- a/drivers/net/dsa/mt7530-mdio.c
+>> +++ b/drivers/net/dsa/mt7530-mdio.c
+>> @@ -81,17 +81,14 @@ static const struct regmap_bus mt7530_regmap_bus = {
+>>   };
+>>   
+>>   static int
+>> -mt7531_create_sgmii(struct mt7530_priv *priv, bool dual_sgmii)
+>> +mt7531_create_sgmii(struct mt7530_priv *priv)
+>>   {
+>>   	struct regmap_config *mt7531_pcs_config[2] = {};
+>>   	struct phylink_pcs *pcs;
+>>   	struct regmap *regmap;
+>>   	int i, ret = 0;
+>>   
+>> -	/* MT7531AE has two SGMII units for port 5 and port 6
+>> -	 * MT7531BE has only one SGMII unit for port 6
+>> -	 */
+>> -	for (i = dual_sgmii ? 0 : 1; i < 2; i++) {
+>> +	for (i = priv->p5_sgmii ? 0 : 1; i < 2; i++) {
+>>   		mt7531_pcs_config[i] = devm_kzalloc(priv->dev,
+>>   						    sizeof(struct regmap_config),
+>>   						    GFP_KERNEL);
+>> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+>> index c680873819b0..edc34be745b2 100644
+>> --- a/drivers/net/dsa/mt7530.c
+>> +++ b/drivers/net/dsa/mt7530.c
+>> @@ -473,15 +473,6 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
+>>   	return 0;
+>>   }
+>>   
+>> -static bool mt7531_dual_sgmii_supported(struct mt7530_priv *priv)
+>> -{
+>> -	u32 val;
+>> -
+>> -	val = mt7530_read(priv, MT7531_TOP_SIG_SR);
+>> -
+>> -	return (val & PAD_DUAL_SGMII_EN) != 0;
+>> -}
+>> -
+>>   static int
+>>   mt7531_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
+>>   {
+>> @@ -496,7 +487,7 @@ mt7531_pll_setup(struct mt7530_priv *priv)
+>>   	u32 xtal;
+>>   	u32 val;
+>>   
+>> -	if (mt7531_dual_sgmii_supported(priv))
+>> +	if (priv->p5_sgmii)
+>>   		return;
+>>   
+>>   	val = mt7530_read(priv, MT7531_CREV);
+>> @@ -907,8 +898,6 @@ static const char *p5_intf_modes(unsigned int p5_interface)
+>>   		return "PHY P4";
+>>   	case P5_INTF_SEL_GMAC5:
+>>   		return "GMAC5";
+>> -	case P5_INTF_SEL_GMAC5_SGMII:
+>> -		return "GMAC5_SGMII";
+>>   	default:
+>>   		return "unknown";
+>>   	}
+>> @@ -2440,6 +2429,18 @@ mt7531_setup(struct dsa_switch *ds)
+>>   		return -ENODEV;
+>>   	}
+>>   
+>> +	/* MT7531AE has got two SGMII units. One for port 5, one for port 6.
+>> +	 * MT7531BE has got only one SGMII unit which is for port 6.
+>> +	 */
+>> +	val = mt7530_read(priv, MT7531_TOP_SIG_SR);
+>> +
+>> +	if ((val & PAD_DUAL_SGMII_EN) != 0) {
+>> +		priv->p5_sgmii = true;
+>> +		dev_info(priv->dev, "found MT7531AE\n");
+>> +	} else {
+>> +		dev_info(priv->dev, "found MT7531BE\n");
+> 
+> I don't think dev_info is useful here for regular users.
+> If you really want this output, use dev_dbg to reduce log pollution.
+> Imho completely removing the else branch and only silently
+> setting priv->p5_sgmii is sufficient, as users can also turn on
+> dyndbg for drivers/net/pcs/pcs-mtk-lynxi.c and will then be informed
+> about the created SGMII/1000Base-X/2500Base-X PCS instances.
 
+Sounds good, I'll drop it.
 
-LGTM
-
-Acked-by: Stefan Roesch <shr@devkernel.io>
+Arınç
