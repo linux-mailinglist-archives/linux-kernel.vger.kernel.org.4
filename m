@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9D76EA138
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 03:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D1C6EA135
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 03:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjDUBsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 21:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S233283AbjDUBsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 21:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbjDUBsR (ORCPT
+        with ESMTP id S233247AbjDUBsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 21:48:17 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ED35B98
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 18:48:13 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230421014811epoutp0296095263d880826df114a1fcdcfc6948~X0AHAsiv62048620486epoutp02T
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:48:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230421014811epoutp0296095263d880826df114a1fcdcfc6948~X0AHAsiv62048620486epoutp02T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682041691;
-        bh=1OOFri94d52LXG4EPLKy/KBumjQNxs+eAWlUBgJRS9M=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=tgQfe1bOanVa+63VEkFJfeSNUgg3OhLHhidO6E90PRGETXUS9pvcx5Zd3MJo4UrM9
-         JwdWT88NMneoUAewFccb6knCWLBW3fhy8R7DSQGnQF1gve501eDJlCIz+PrV+ALr/u
-         9nCnUhAspuzY82l6hsSF0v/E07kHWB42oACphTd8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230421014811epcas2p4066b33d63886b6820c0e3137738bd8fe~X0AGou-je0308503085epcas2p4-;
-        Fri, 21 Apr 2023 01:48:11 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q2cqb0TPHz4x9Q3; Fri, 21 Apr
-        2023 01:48:11 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        68.71.09961.A5BE1446; Fri, 21 Apr 2023 10:48:10 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230421014810epcas2p1712c2740eac5eaa34006237858dfd8e5~X0AF8NWBO0538305383epcas2p1-;
-        Fri, 21 Apr 2023 01:48:10 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230421014810epsmtrp1b1fe22dbfaaea3338813eb5a9fee3d52~X0AF7Y34h1216812168epsmtrp1v;
-        Fri, 21 Apr 2023 01:48:10 +0000 (GMT)
-X-AuditID: b6c32a45-bb5ff700000026e9-fd-6441eb5a9116
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C0.EA.08609.A5BE1446; Fri, 21 Apr 2023 10:48:10 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230421014810epsmtip175cfaddfaea55304c37787c52014b006~X0AFpyRCk2749627496epsmtip1L;
-        Fri, 21 Apr 2023 01:48:10 +0000 (GMT)
-Message-ID: <87c2a0e1-fb3a-7b0a-c87a-ac792357ef26@samsung.com>
-Date:   Fri, 21 Apr 2023 10:45:45 +0900
+        Thu, 20 Apr 2023 21:48:04 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0CD4C06;
+        Thu, 20 Apr 2023 18:47:58 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94f6c285d92so167294966b.3;
+        Thu, 20 Apr 2023 18:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682041676; x=1684633676;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eDYwHq82vKxTxcR5vuod/O4FBcL/Rgh8EGKnuklb1g4=;
+        b=R40+Jy8SDgI3HrxPyBTBVOGaQ2VHSsvgrrxK7ynsRm2caaOVXl4Dm5aFqLDhXZ0uF8
+         v2kh/jcbjBqnxJRhmcqg0646lUmIJi/6NTySnm3BfC0Yi4xGVRtwARF6crfOiXQf2/8W
+         FN0gVnMa2TYmlWHrwABnmnQvfx0YYoz2jrd8FDb1dgyBcvl2Odrt3L//KSZz11o6rsXS
+         UVJAschNdkZQx7P4LJk9PaeQrbUwlrvBsHK9V2uJcPbEFFLg+TtzfsTCCHBNgttE+lvN
+         wEhShnQFfwwZXceuy8LmYTZU73RaAASTy5L59mnRJys2IH2FM3J/gIWsXQeBn63fliLn
+         +rDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682041676; x=1684633676;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eDYwHq82vKxTxcR5vuod/O4FBcL/Rgh8EGKnuklb1g4=;
+        b=T9Fqt4QBC6mXEevtGVtqYPz1cXwqE1XfVn64bmwM6b+q2hzU0f1bIa1QmUYupTw1+p
+         jtm7B3pCK6JU9oRJulh4Smpe9691Xu9lbrZJcrH2UX9kOSTvHC1LPLjs5hQWzEoiHVvd
+         si1zIJybK0qOikf37dH5mcg1PF7W1DGYNPJPG9ungodQ25RYAXjwvnDd8K5azJuIOckn
+         SOYjx1DKaldeb+7++6Sq5uIaQsYCXLjqnuEFniETWD8nkNwE0owLW7Uhnvv3EXx6w/wq
+         +DSNDeOAHbQ3sPu5VsfQZRcFz2XyYESX/BqnYL37anpSBJwcIHowtvl+UAzoxwSHdD14
+         AUrw==
+X-Gm-Message-State: AAQBX9cIyJ8SMqOmeyYXMmVdMyq2bPDpl9/fEYPDEe8+M4YWKIarS2qJ
+        +CvnFjK1RdHvDBEstmD2La6iPJsHlqc=
+X-Google-Smtp-Source: AKy350bQrKchpZcfEmru0faAGFPa9zS2Qa0JpalCeHi3owdE2jdvHBD59NMxnwKNc/3OwUOQzS/vcg==
+X-Received: by 2002:a17:907:3c11:b0:88a:1ea9:a5ea with SMTP id gh17-20020a1709073c1100b0088a1ea9a5eamr629559ejc.65.1682041676309;
+        Thu, 20 Apr 2023 18:47:56 -0700 (PDT)
+Received: from noahgold-desk.intel.com ([2600:1010:b044:5553:d1a3:a9c6:1560:d322])
+        by smtp.gmail.com with ESMTPSA id z26-20020a170906715a00b0094f0237c32bsm1360932ejj.208.2023.04.20.18.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 18:47:56 -0700 (PDT)
+From:   Noah Goldstein <goldstein.w.n@gmail.com>
+To:     linux-ext4@vger.kernel.org
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-kernel@vger.kernel.org,
+        Noah Goldstein <goldstein.w.n@gmail.com>
+Subject: [PATCH v1] ext4: move `ext4_count_free` to ext4.h so it can be easily inlined
+Date:   Thu, 20 Apr 2023 20:47:49 -0500
+Message-Id: <20230421014750.2315938-1-goldstein.w.n@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/4] spi: s3c64xx: add cpu_relax in polling loop
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <01d22e48-40f0-b1dd-aa00-cf484c4364ee@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmmW7Ua8cUg78nrS0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i02Pr7FaXN41h81ixvl9TBaNH2+yO3B6XF/yidlj06pONo871/aw
-        eWxeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
-        uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL
-        89L18lJLrAwNDIxMgQoTsjNuv13HWrCOr+Js2w7WBsZz3F2MnBwSAiYSp7ZfZO9i5OIQEtjB
-        KHFq5wlmCOcTo8TJGbsYIZzPjBJTd7YxwbT8eTyTDSKxi1Fiya6jUFWvGSW2v7/NAlLFK2An
-        cfnHZUYQm0VAVeLXu92sEHFBiZMzn4DViApESyzeNwXMFhZwl9hx9R9YPbOAuMStJ/OZQIaK
-        CCxmlOh7/AlsHbPARkaJzU1T2UGq2AS0Jb6vXww2lRNo281385ghuuUltr+dA/aFhMBcDolr
-        y2YzQhzuInH9YAM7hC0s8er4FihbSuJlfxuUnS3RPv0PK4RdIXFxw2w2CNtYYtazdqA5HEAL
-        NCXW79IHMSUElCWO3GKBWMsn0XH4LztEmFeio00IolFN4v7Uc1BDZCQmHVkJDUUPiSMzd7FN
-        YFSchRQss5C8PwvJM7MQ9i5gZFnFKJZaUJybnlpsVGAIj+7k/NxNjOAEq+W6g3Hy2w96hxiZ
-        OBgPMUpwMCuJ8J5xtUoR4k1JrKxKLcqPLyrNSS0+xGgKjJyJzFKiyfnAFJ9XEm9oYmlgYmZm
-        aG5kamCuJM4rbXsyWUggPbEkNTs1tSC1CKaPiYNTqoEpcqHzr40379dtTu8Mn7j0ziP7zS5X
-        lpoEMTtunrVeYLXTmdrSTZU6e9z9qk592DMrqe703suFHzY8+VV56/kzXTWtlQejr7RZ+Llf
-        PaxU0save313TORicTnhNYZ5bF6eGStzMxot3qxeaFIp5/tte4RQYPcM5tcrLhtnWP5Z+Prg
-        ijM2knJTqx7c3H60PO/iVLNm7nlHSu+dmfFKoOT7Bxl+3tcpbLfPC7QprlWVW3VVkzFrx7Fo
-        7YfRscVRVXf+XHF5VD6VaSdPutfueuPpSta6HQ/jqoSb5rvH8u3tPvHAqP6EoM0PM4OpHXvZ
-        Cwz9VZnnzr1yOawya9LHY69i4/bohInaVYnb7T2/se2/EktxRqKhFnNRcSIAKEYrQTkEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnkeLIzCtJLcpLzFFi42LZdlhJTjfqtWOKwd27chYP5m1js1j84zmT
-        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujNtv17EWrOOrONu2g7WB8Rx3FyMnh4SA
-        icSfxzPZuhi5OIQEdjBKPJ/VwgSRkJFY/qyPDcIWlrjfcoQVouglo8T0r1NYQRK8AnYSl39c
-        ZgSxWQRUJX692w0VF5Q4OfMJC4gtKhAtcWP5N7ChwgLuEjuu/gOrZxYQl7j1ZD4TyFARgcWM
-        Eh2X3rKDOMwCGxklVl5fzwyx7hGTxONJN8HGsgloS3xfvxjM5gRaffPdPGaIUWYSXVu7oMbK
-        S2x/O4d5AqPQLCSXzEKycRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/d
-        xAiOKy2tHYx7Vn3QO8TIxMF4iFGCg1lJhPeMq1WKEG9KYmVValF+fFFpTmrxIUZpDhYlcd4L
-        XSfjhQTSE0tSs1NTC1KLYLJMHJxSDUxJRytPni+bzTX7aVLOnt3qAp9nPjE/xDxpfaZlyo/+
-        6Z7XDvqdemP9mlnba3Gyou+mvTFbUz3LTycVpHxSeKR+fFLUlNDiNJsF0tvPL8/gsloh1Tq1
-        da/R2WfMYXZCeQcucCy49j42wSu0RcH+umqjbXmIEYcvlwff/2w+uSXvJWT6nm/e+3nFqsiz
-        S4r6p0ouC1+qwzbhkd3y7jIFnrKZu3ddaDDiaHsiyHlHN+1C0ul45+Dsh8yvyrjrToauPLNL
-        ffL5FAujKsFdd3Itj2aIyD13OZLxTCTg9TFrkarQK9FzuzIt69kmT5u/4kfzdp+XcZsveage
-        u5ptzrI53bn1cXBhV4Kae7hFR8KSCiWW4oxEQy3mouJEALwSynwaAwAA
-X-CMS-MailID: 20230421014810epcas2p1712c2740eac5eaa34006237858dfd8e5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230419062755epcas2p43a646bbae5f01e3120331407ad873318
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
-        <CGME20230419062755epcas2p43a646bbae5f01e3120331407ad873318@epcas2p4.samsung.com>
-        <20230419060639.38853-3-jaewon02.kim@samsung.com>
-        <36f37a18-0022-0368-bf7c-ebdd724b1558@linaro.org>
-        <abbf5608-dbe7-af39-e555-d76ffe65dea4@samsung.com>
-        <01d22e48-40f0-b1dd-aa00-cf484c4364ee@linaro.org>
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+`ext4_count_free` is a one-line helper that is clearly better off
+being inlined. This saves a handful instructions in `vmlinux` on x86.
 
-On 23. 4. 21. 00:39, Krzysztof Kozlowski wrote:
-> On 19/04/2023 13:13, Jaewon Kim wrote:
->> On 23. 4. 19. 17:14, Krzysztof Kozlowski wrote:
->>> On 19/04/2023 08:06, Jaewon Kim wrote:
->>>> Adds cpu_relax() to prevent long busy-wait.
->>> How cpu_relax prevents long waiting?
->> As I know, cpu_relax() can be converted to yield. This can prevent
->> excessive use of the CPU in busy-loop.
-> That's ok, you just wrote that it will prevent long waiting, so I assume
-> it will shorten the wait time.
->
->> I'll replace poor sentence like below in v3.
->>
->> ("Adds cpu_relax() to allow CPU relaxation in busy-loop")
->>
->>>> There is busy-wait loop to check data transfer completion in polling mode.
->>>>
->>>> Signed-off-by: Jaewon Kim<jaewon02.kim@samsung.com>
->>>> ---
->>>>    drivers/spi/spi-s3c64xx.c | 1 +
->>>>    1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
->>>> index 273aa02322d9..886722fb40ea 100644
->>>> --- a/drivers/spi/spi-s3c64xx.c
->>>> +++ b/drivers/spi/spi-s3c64xx.c
->>>> @@ -568,6 +568,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
->>>>    
->>>>    	val = msecs_to_loops(ms);
->>>>    	do {
->>>> +		cpu_relax();
->>> Shouldn't this be just readl_poll_timeout()? Or the syntax would be too
->>> complicated?
->> I think we can replace this while() loop to readl_poll_timeout().
->>
->> However, we should use 0 value as 'delay_us' parameter. Because delay
->> can affect throughput.
->>
->>
->> My purpose is add relax to this busy-loop.
->>
->> we cannot give relax if we change to readl_poll_timeout().
-> readl_poll_timeout() will know to do the best. You do not need to add
-> cpu_relax there.
-Okay, I will change it to readl_poll_timeout()
->
-> Best regards,
-> Krzysztof
->
->
+Instruction estimates use `wc -l` on `objdump`
+Before: 8539271
+After : 8539248
 
-Thanks
+So saves roughly 20 instructions
 
-Jaewon Kim
+Signed-off-by: Noah Goldstein <goldstein.w.n@gmail.com>
+---
+ fs/ext4/bitmap.c | 5 -----
+ fs/ext4/ext4.h   | 6 +++++-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/fs/ext4/bitmap.c b/fs/ext4/bitmap.c
+index f63e028c638c..c3cd2b878bbd 100644
+--- a/fs/ext4/bitmap.c
++++ b/fs/ext4/bitmap.c
+@@ -11,11 +11,6 @@
+ #include <linux/buffer_head.h>
+ #include "ext4.h"
+ 
+-unsigned int ext4_count_free(char *bitmap, unsigned int numchars)
+-{
+-	return numchars * BITS_PER_BYTE - memweight(bitmap, numchars);
+-}
+-
+ int ext4_inode_bitmap_csum_verify(struct super_block *sb, ext4_group_t group,
+ 				  struct ext4_group_desc *gdp,
+ 				  struct buffer_head *bh, int sz)
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index 08b29c289da4..6e1d3c175a70 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -2675,7 +2675,11 @@ struct mmpd_data {
+ # define NORET_AND	noreturn,
+ 
+ /* bitmap.c */
+-extern unsigned int ext4_count_free(char *bitmap, unsigned numchars);
++static inline unsigned int ext4_count_free(char *bitmap, unsigned int numchars)
++{
++	return numchars * BITS_PER_BYTE - memweight(bitmap, numchars);
++}
++
+ void ext4_inode_bitmap_csum_set(struct super_block *sb, ext4_group_t group,
+ 				struct ext4_group_desc *gdp,
+ 				struct buffer_head *bh, int sz);
+-- 
+2.34.1
 
