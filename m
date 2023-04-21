@@ -2,252 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B1B6EB528
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0D06EB526
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbjDUWqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S233909AbjDUWqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjDUWqc (ORCPT
+        with ESMTP id S229543AbjDUWqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:46:32 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FFC26A5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:46:30 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a6e5be6224so524305ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:46:30 -0700 (PDT)
+        Fri, 21 Apr 2023 18:46:22 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35871FCD;
+        Fri, 21 Apr 2023 15:46:21 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5562c93f140so690567b3.1;
+        Fri, 21 Apr 2023 15:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682117190; x=1684709190;
+        d=gmail.com; s=20221208; t=1682117181; x=1684709181;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=grxtbYgBEZhFXTnkmUQSXwfMPjYR4qLeWhU06c7fEJo=;
-        b=LdfV8328hCSEL7clgImntNqsjxIE6gpJx7G924HHBO4P0LLmlWh8r1f3M78lmOqsRH
-         K+MZax8iX6iDU5iiSuYpt+qdLoo+bv2RWJAD+kVPJqPvLLMgJ3RmPEe00lXzp9BZEzih
-         RDm/s5YUQ4LdcojdFDlLWMdzD/HNSCKxBhwEHbcStUiYbKSwSxZtLJqScw2X/tMQpNue
-         7Q0v7GD4Btpw/0sEet7FiJXs6P+S6HShG3YS6btnZHQB8FQwsnzh7dTn6/15dAZQLq7q
-         pIDEvozCPbIlWuVAL0jx8yOg2gF0BVGzdzG/4ZTRpHyFG6Jwvwsesg6fu3nd9+s/ceqP
-         w9wA==
+        bh=N8J/G7dB6fCp2xG0xoJDui4DL2plxJGL8yp09N3bKW4=;
+        b=gB2eMgT6zWwAiSi67l6PzypippJp7OT/IOWEB7PCGz6MH5cxWm/7b/nr2F6Zrgu8NG
+         Y4yvqSW8GbF+gpDeIGrRfRBfHJMpp8ysLmxDL1OQVzl/Jdww0cL6Z5S0TBwEgnMPWQXR
+         4VjW/+Wu+jJgSKfWcMh/QrBigO2iCCK+iCV6dKIXIF6LTNSA/t9xGsHk1qbwww7lVRjN
+         A5fFUKgvjtg1xNpr6ex4MLTRbVj0ML1O95Id0iJsHCIc0L5ut/k9MlLBC7qan6zYVbRf
+         EUjcDBmzgb5CwYSDyj1OcE/n/kvlQFVDgOqLhyyczfON2RoM/mfpVZ2IU2zIRVLGn+tL
+         DZAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682117190; x=1684709190;
+        d=1e100.net; s=20221208; t=1682117181; x=1684709181;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=grxtbYgBEZhFXTnkmUQSXwfMPjYR4qLeWhU06c7fEJo=;
-        b=eNGst2VJ3uueREpOgGMF7IVCARG8JW+CJrUqVp6ef9cmHn3KOWubkO0e7ML8pgDStl
-         n8ncbhZjuAu1j/lUN51Qi2BKBa5T35Un4RmGYGmbulvzXZbuDttKWk4/h+6kp5xWK8vg
-         EnPeX6yKyWemdNxcABe1ZEW9af7rCcheg+Lgb5HISxJhVO7fb2MQ85S0tT8sS1E76rom
-         xDARdZsxO+aFKDSPz4HKQ/LJgHKpgOOSFi5xzTSJN4Gf6oQSrOOYyftw54QoWO20nsUw
-         nwuQR1qGFwWfnl17cb7+PWXa0H0eaYkfQXsITonrAZOk4hffaE/nNAGcNaoT5fVek5Y8
-         U/Lg==
-X-Gm-Message-State: AAQBX9f/iE65zZ0oFOGYbToCbm/e/VXyFYJz95J/O6pXB3sYy2Ldwxem
-        mgTV8Jw5siYML6hw+YN++nWAh9mclY+uiLzlAnOvyw==
-X-Google-Smtp-Source: AKy350bEB1pKwAM1VUR5fdz9R+Z9KrwHyX5kQUSH/7E09sGk0HXwt+4pGmiw/MQ0eSqZeYh7EZsxftVWrQdX7cbk71U=
-X-Received: by 2002:a17:902:ecc9:b0:198:af4f:de07 with SMTP id
- a9-20020a170902ecc900b00198af4fde07mr25570plh.7.1682117189428; Fri, 21 Apr
- 2023 15:46:29 -0700 (PDT)
+        bh=N8J/G7dB6fCp2xG0xoJDui4DL2plxJGL8yp09N3bKW4=;
+        b=LkF8L/omZbkIPetZ6WyKari/TaD0QM09DYaOc8FFCyAi7pV11c8zbcboX7gniCyu5a
+         TOg17srjRu1BcGouTQ9OekfbO6nw89U0H8DzuV4fMN6XCEVPaeQIf1cDDWq7FUDNVK2Y
+         EaGfU5UIWtiyqrTXTXlmv+v0LLNzJfAJU05Iu3nCLMRvk/QXM7YjdtCY/RLFRsBIur+D
+         AxeF4aXChzj6m9oE1/R2arWAaJ/7q56QHt31mYYXG6nwpnvCb2zpu7H3+muXp2JyH6kb
+         ta140Nb3FRhVFZlC/SIdQHTQJ70wdepk3pBnFrgIDt1ebI7m2PjMVj3/56PTA+gvLvB7
+         iVDQ==
+X-Gm-Message-State: AAQBX9f+3hW2sVnW3ms3VUDYNNT8AMBLXyHfxPfdDcChD//bVp6Fur4c
+        YTKEbcmc6PgpHaJMEpLsazHHuEZz6LRWfnPjdB4=
+X-Google-Smtp-Source: AKy350aszP8cZ00/JsNBnpsbsv/FVIPIsSNMgOkdQvwGWf4dPX0KcyvMOTtmYL0KqMWU85US7GqYqJZcvsBxeVeB2JY=
+X-Received: by 2002:a0d:d742:0:b0:555:d20f:6572 with SMTP id
+ z63-20020a0dd742000000b00555d20f6572mr3014437ywd.12.1682117181137; Fri, 21
+ Apr 2023 15:46:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1681580558.git.noodles@earth.li> <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
- <20230416012421.255bfd19@slackpad.lan> <ZEGOk1isRhaekk3h@earth.li>
- <CAGETcx-UnEK3CPC38Ef3gmHcq46nXSJbA9QAwEsF+Xt2bDKEWA@mail.gmail.com> <ZEJJGGeIu8QW44mh@earth.li>
-In-Reply-To: <ZEJJGGeIu8QW44mh@earth.li>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 21 Apr 2023 15:45:52 -0700
-Message-ID: <CAGETcx8JDYUT2bdDhJ0PN8_CPmHJ37jCfnuoav6CGFJoovfSqA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] ARM: dts: sun5i: chip: Enable bluetooth
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230412221823.830135-1-ojeda@kernel.org>
+In-Reply-To: <20230412221823.830135-1-ojeda@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 22 Apr 2023 00:46:09 +0200
+Message-ID: <CANiq72kXNi+bKxnVy7NcogvA8b4KbVD7zBf29oC5EE5VbF_YvQ@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add Benno Lossin as Rust reviewer
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Benno Lossin <benno.lossin@proton.me>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 1:28=E2=80=AFAM Jonathan McDowell <noodles@earth.li=
-> wrote:
+On Thu, Apr 13, 2023 at 12:18=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wr=
+ote:
 >
-> On Thu, Apr 20, 2023 at 06:43:06PM -0700, Saravana Kannan wrote:
-> > On Thu, Apr 20, 2023 at 12:12=E2=80=AFPM Jonathan McDowell <noodles@ear=
-th.li> wrote:
-> > > On Sun, Apr 16, 2023 at 01:24:21AM +0100, Andre Przywara wrote:
-> > > > On Sat, 15 Apr 2023 18:46:03 +0100
-> > > > Jonathan McDowell <noodles@earth.li> wrote:
-> > > >
-> > > > > The C.H.I.P has an rtl8723bs device with the bluetooth interface =
-hooked
-> > > > > up on UART3. Support for this didn't exist in mainline when the D=
-TS was
-> > > > > initially added, but it does now, so enable it.
-> > > > >
-> > > > > Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> > > > > ---
-> > > > >  arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++++
-> > > > >  1 file changed, 4 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/=
-dts/sun5i-r8-chip.dts
-> > > > > index fd37bd1f3920..4d72a181d8aa 100644
-> > > > > --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > > > +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> > > > > @@ -255,6 +255,10 @@ &uart3 {
-> > > > >     pinctrl-0 =3D <&uart3_pg_pins>,
-> > > > >                 <&uart3_cts_rts_pg_pins>;
-> > > > >     status =3D "okay";
-> > > > > +
-> > > > > +   bluetooth {
-> > > > > +           compatible =3D "realtek,rtl8723bs-bt";
-> > > > > +   }
-> > > >
-> > > > As the kernel test robot already pointed out, there is a semicolon
-> > > > missing here.
-> > > > Otherwise looks good (dt-validate passes), but don't know if there =
-are
-> > > > any wakeup GPIOs connected (can't seem to find a schematic?).
-> > >
-> > > So there are wakeups, but if I add:
-> > >
-> > >         device-wake-gpios =3D <&axp_gpio 3 GPIO_ACTIVE_LOW>;
-> > >         host-wake-gpios =3D <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
-> > >
-> > > then some odd sort of dependency issue happens where the serial port
-> > > load is deferred waiting for the GPIO to appear, and then the device
-> > > doesn't work.
-> >
-> > When you say your device doesn't work, are you saying it never probes?
+> Benno has been involved with the Rust for Linux project for
+> the better part of a year now. He has been working on solving
+> the safe pinned initialization problem [1], which resulted in
+> the pin-init API patch series [2] that allows to reduce the
+> need for `unsafe` code in the kernel. He is also working on
+> the field projection RFC for Rust [3] to bring pin-init as
+> a language feature.
+>
+> His expertise with the language will be very useful to have
+> around in the future if Rust grows within the kernel, thus
+> add him to the `RUST` entry as reviewer.
 
-Read your whole email and it's a strange issue. Also, going forward to
-avoid confusion, only reply to questions with respect to 6.3-rc7.
+Applied to `rust-next`.
 
-> The bluetooth device (realtek,rtl8723bs-bt) never appears, apparently
-> because the UART it's attached to never loads - it doesn't even try to
-> load the firmware.
->
-> > <debugfs>/devices_deferred should tell you what devices have deferred a=
-nd why.
->
-> root@chip:~# cat /sys/kernel/debug/devices_deferred
-> serial0-0
-
-Do you see this in 6.3-rc7 too?
-
-> > > Error in dmesg is:
-> > >
-> > > serial serial0-0: deferred probe pending
-> > >
-> > > on 6.3-rc and on 6.1 I get:
-> > >
-> > > dw-apb-uart 1c28c00.serial: Failed to create device link (0x180) with=
- axp20x-gpio
-> >
-> > This error message doesn't block anything. So I don't think this is
-> > the cause of your blocking issue. But I still want to understand why
-> > this error message is showing up.
-> >
-> > > I'm not clear why it's trying to link the serial port to the GPIO; it
-> > > seems that it should be the bluetooth device that depends on both the
-> > > UART and the GPIO,
-> >
-> > A fix for the device link error message went in on v6.3-rc3. Is that
-> > the 6.3 version you tested this on?
->
-> I originally tried on 6.1.21, which is where I got the "Failed to create
-> device link" message. I then moved to 6.3-rc7 as I saw there had been
-> further changes recently. There I just get the:
->
-> serial serial0-0: deferred probe pending
-
-If the deferral is related to fw_devlink, you should see the reason
-for deferring in the devices_deferred file. So I don't think the issue
-is related to fw_devlink.
-
-> message.
->
-> > Also, I tried looking into the UART driver
-> > (drivers/tty/serial/8250/8250_dw.c) but it wasn't clear how it ends up
-> > populating the bluetooth serial device. If you can point that out,
-> > that'd be helpful (assuming 6.3-rc3 still shows that error message).
->
-> I have the following in my device tree:
->
-> &uart3 {
->         pinctrl-names =3D "default";
->         pinctrl-0 =3D <&uart3_pg_pins>,
->                     <&uart3_cts_rts_pg_pins>;
->         status =3D "okay";
->
->         bluetooth {
->                 compatible =3D "realtek,rtl8723bs-bt";
->                 device-wake-gpios =3D <&axp_gpio 3 GPIO_ACTIVE_LOW>;
->                 host-wake-gpios =3D <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 *=
-/
->         };
-> };
->
-> uart3 is a snps,dw-apb-uart, defined in arch/arm/boot/dts/sun5i.dtsi
->
-> The UART and AXP209 device drivers are compiled into the kernel:
->
-> CONFIG_PINCTRL_AXP209=3Dy
-> CONFIG_SERIAL_8250=3Dy
-> CONFIG_SERIAL_8250_DW=3Dy
->
-> The bluetooth bits are modules (btrtl, hci_uart).
->
-> If I remove the device-wake-gpios line then the Bluetooth device works
-> fine, and /sys/kernel/debug/devices_deferred is empty.
->
-> Somehow it seems like the GPIO is being parsed as a dependency for the
-> serial port, even though the serial port + GPIO are both dependencies
-> for the bluetooth device.
-
-I'm fairly sure that fw_devlink isn't causing that. Because even
-without bluetooth, fw_devlink doesn't consider any suppliers listed in
-child DT nodes as mandatory suppliers. That has been the case since
-the beginning.
-
-> Even with that, given both are built-in I
-> don't understand why the serial port never completes setup.
-
-My guess is that the driver itself has some bug that's sensitive to
-device probe order even though it shouldn't.
-
-Can you add #define DEBUG 1 to the top of drivers/base/core.c and
-share the boot log? I can try and help debug it.
-
--Saravana
-
-> > > and that the GPIO is actually optional so shouldn't
-> > > hold up loading, but I can't see how that should be represented.
-> >
-> > Optional dependencies should get ignored after the default
-> > deferred_probe_timeout runs out and the supplier driver hasn't been
-> > loaded yet.
->
-> When I say it's optional I mean if it's not listed everything works
-> fine, but I don't believe there's anyway to express that in the DTS.
-> It's certainly not required for the serial port, just the bluetooth
-> device.
->
-> J.
->
-> --
-> Web [                     Don't be a stranger.                     ]
-> site: https:// [                                          ]      Made by
-> www.earth.li/~noodles/  [                      ]         HuggieTag 0.0.24
+Cheers,
+Miguel
