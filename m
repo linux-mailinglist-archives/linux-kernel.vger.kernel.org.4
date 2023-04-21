@@ -2,214 +2,488 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D306EB242
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9736EB244
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjDUT2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S233014AbjDUTbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjDUT23 (ORCPT
+        with ESMTP id S232672AbjDUTbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:28:29 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7C7E55;
-        Fri, 21 Apr 2023 12:28:27 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4eed764a10cso2133299e87.0;
-        Fri, 21 Apr 2023 12:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682105306; x=1684697306;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3fs5vArEoThWvHEwgVac02PfGMwSsmxq51Eot541Pk=;
-        b=USV86Vg8oEbhQWhj3kgaVwT1WLmRzqGOuVVZ+sEIOlvEUigNJk8ma1IL5/BkcYQiwM
-         gOgDdrhzZOTBsTf5GMC2xUDXnOtAUXpV01hpy27MD6MAy4xu/jbH0mPJuAHE0VNXxGkQ
-         TUn7p0uiw1K3ChWOCch0ESazwc1gCpMEtw++/xWCytsWmjjyV3dImKnaaPWH1brZSb16
-         qQRJENEnzjhJiYc0IlHZDS3E37MNQu0JifMVAXs6AvI3Y6H4F8QAB8WLPk3Wj+Vf9Rp6
-         KJVTT63SpaDSupX2Zf2SyL1E3Jvj2pdxfTGEZk4UZVHQQdCtMffrN0IpyNoe4gPPohPH
-         MLAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682105306; x=1684697306;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b3fs5vArEoThWvHEwgVac02PfGMwSsmxq51Eot541Pk=;
-        b=RsIizsZukd7W/ei+htz/cYuVAhEkm1dMh0VtbpHNTn4iscbB6bBZsZlHdusiDjKTi2
-         lC+cZjyRlP0/0/j4a6IhkMflITQqtmhcQB4qhIlGGFAzkt9YJXVwiMiPGIrFx+4uP+C+
-         XcfDR14/R9KS0oCAl7MRDkb3SyxgKPw89MdDANCeT4tL68MyiuMXmDmhiL/mtwDIrh6t
-         22yQ7r7c49QnT0IN4Wbc/HupTPVHgPh/KeIU/uiK3Hvpo+s/ZBDTwi9LT/Ihhuxkq4HH
-         ZAkQeN/iRpEXUAjM+rb5LpAVQQbV+PdQ4COZShiHkhF4mJ1p6otpQzqCLvQ8G3ALoJQv
-         h6ow==
-X-Gm-Message-State: AAQBX9f/JVr2m0TQuLwL3YDwHi22nvaRxPVHcBHOrZU7SE/K3ohO9ica
-        tlOsmSWb0TLWgPPAooL5f1hsEa8jc9JgSA==
-X-Google-Smtp-Source: AKy350b4nzhvyStKwG8CwDoH+ikPDWhGFNxeEaFNvuDpetkuK+c66QM2naloCN6WduMmD3HR23CP0g==
-X-Received: by 2002:ac2:5475:0:b0:4ec:81c7:119a with SMTP id e21-20020ac25475000000b004ec81c7119amr1664912lfn.3.1682105305633;
-        Fri, 21 Apr 2023 12:28:25 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004cf6c56fdb5sm638885lfi.232.2023.04.21.12.28.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 12:28:24 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 22:28:22 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv1 2/5] dt-bindings: ata: ahci: add RK3588 AHCI controller
-Message-ID: <20230421192822.yckihqlk2vlkueyc@mobilestation>
-References: <20230413182345.92557-1-sebastian.reichel@collabora.com>
- <20230413182345.92557-3-sebastian.reichel@collabora.com>
+        Fri, 21 Apr 2023 15:31:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF5A2115
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:31:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F8ED65292
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 19:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31D0C433EF;
+        Fri, 21 Apr 2023 19:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682105473;
+        bh=e4U2iRcrnMMWny+DAY52Ff4P3Acj5Jz2bmr/2TEBl2w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gk2SzSql3IOkxrGEb+vR/xWHCeKyWTkUutaul7YqYN7Im77R1XJy1pxQf4yq6LMRM
+         QcQfeaHfA2LVswaxI+EmlsZjYIEJRXMdrPBzrNMtzQSEAGaVHg5g8iW6ePyWifiOhg
+         UhZA9TOXUSgseB6ZIQKC44kvQm5e/gNZqS5AOXxfFq5dEeaWj3MKSN4gHJLzuHzuTE
+         06dhyzDFxZGfyZtW+NOBK/+/jIHwVinxNJvqrX8vEjeA4Tm+9c/CrrCYpfIEyWJw08
+         Ac4t9CV9xNdACdsQfr6371QiKdLeGzzHKiC5QpQzDgvVrzi2U6jXx7Ddxgn1YzKwLm
+         3lDsuA6M434Yg==
+Date:   Fri, 21 Apr 2023 12:31:11 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: Re: [PATCH v8] f2fs: support errors=remount-ro|continue|panic
+ mountoption
+Message-ID: <ZELkf+5mC1XuAwIN@google.com>
+References: <20230408123153.954480-1-chao@kernel.org>
+ <ZEBM5X5ngeomrWK9@google.com>
+ <8cf87712-e392-bc51-08c9-f4c1096d4948@kernel.org>
+ <ZEFprx0Xbv0Ol36A@google.com>
+ <4656fe9c-cacb-1e52-1a3c-b549bac899c8@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230413182345.92557-3-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4656fe9c-cacb-1e52-1a3c-b549bac899c8@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian
-
-On Thu, Apr 13, 2023 at 08:23:42PM +0200, Sebastian Reichel wrote:
-> Just like RK3568, the RK3588 has a DWC based AHCI controller.
+On 04/21, Chao Yu wrote:
+> On 2023/4/21 0:34, Jaegeuk Kim wrote:
+> > On 04/20, Chao Yu wrote:
+> > > On 2023/4/20 4:19, Jaegeuk Kim wrote:
+> > > > On 04/08, Chao Yu wrote:
+> > > > > This patch supports errors=remount-ro|continue|panic mount option,
+> > > > > by default it uses "remount-ro" mode.
+> > > > > 
+> > > > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > > > > ---
+> > > > > v8:
+> > > > > - record stop reason synchronously if it's from ioctl shutdown interface
+> > > > > - fix typo in doc and commit message.
+> > > > > - use f2fs_hw_is_readonly() instead of bdev_read_only()
+> > > > >    Documentation/filesystems/f2fs.rst |   5 ++
+> > > > >    fs/f2fs/checkpoint.c               |   7 +-
+> > > > >    fs/f2fs/f2fs.h                     |  20 ++++-
+> > > > >    fs/f2fs/file.c                     |   5 --
+> > > > >    fs/f2fs/gc.c                       |   2 +-
+> > > > >    fs/f2fs/super.c                    | 134 ++++++++++++++++++++++++++---
+> > > > >    6 files changed, 149 insertions(+), 24 deletions(-)
+> > > > > 
+> > > > > diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+> > > > > index 2055e72871fe..ba4c02fad647 100644
+> > > > > --- a/Documentation/filesystems/f2fs.rst
+> > > > > +++ b/Documentation/filesystems/f2fs.rst
+> > > > > @@ -351,6 +351,11 @@ age_extent_cache	 Enable an age extent cache based on rb-tree. It records
+> > > > >    			 data block update frequency of the extent per inode, in
+> > > > >    			 order to provide better temperature hints for data block
+> > > > >    			 allocation.
+> > > > > +errors=%s		 Specify f2fs behavior on critical errors. This supports modes:
+> > > > > +			 "panic", "continue" and "remount-ro", respectively, trigger
+> > > > > +			 panic immediately, continue without doing anything, and remount
+> > > > > +			 the partition in read-only mode. By default it uses "remount-ro"
+> > > > > +			 mode.
+> > > > >    ======================== ============================================================
+> > > > >    Debugfs Entries
+> > > > > diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+> > > > > index 73ae4e85e70d..e6b266bb9ce0 100644
+> > > > > --- a/fs/f2fs/checkpoint.c
+> > > > > +++ b/fs/f2fs/checkpoint.c
+> > > > > @@ -30,12 +30,9 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
+> > > > >    						unsigned char reason)
+> > > > >    {
+> > > > >    	f2fs_build_fault_attr(sbi, 0, 0);
+> > > > > -	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+> > > > > -	if (!end_io) {
+> > > > > +	if (!end_io)
+> > > > >    		f2fs_flush_merged_writes(sbi);
+> > > > > -
+> > > > > -		f2fs_handle_stop(sbi, reason);
+> > > > > -	}
+> > > > > +	f2fs_handle_critical_error(sbi, reason, end_io);
+> > > > >    }
+> > > > >    /*
+> > > > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > > > > index ac4942f8e83e..7d9c5a65f974 100644
+> > > > > --- a/fs/f2fs/f2fs.h
+> > > > > +++ b/fs/f2fs/f2fs.h
+> > > > > @@ -162,6 +162,7 @@ struct f2fs_mount_info {
+> > > > >    	int fs_mode;			/* fs mode: LFS or ADAPTIVE */
+> > > > >    	int bggc_mode;			/* bggc mode: off, on or sync */
+> > > > >    	int memory_mode;		/* memory mode */
+> > > > > +	int errors;			/* errors parameter */
+> > > > >    	int discard_unit;		/*
+> > > > >    					 * discard command's offset/size should
+> > > > >    					 * be aligned to this unit: block,
+> > > > > @@ -1370,6 +1371,12 @@ enum {
+> > > > >    	MEMORY_MODE_LOW,	/* memory mode for low memry devices */
+> > > > >    };
+> > > > > +enum errors_option {
+> > > > > +	MOUNT_ERRORS_READONLY,	/* remount fs ro on errors */
+> > > > > +	MOUNT_ERRORS_CONTINUE,	/* continue on errors */
+> > > > > +	MOUNT_ERRORS_PANIC,	/* panic on errors */
+> > > > > +};
+> > > > > +
+> > > > >    static inline int f2fs_test_bit(unsigned int nr, char *addr);
+> > > > >    static inline void f2fs_set_bit(unsigned int nr, char *addr);
+> > > > >    static inline void f2fs_clear_bit(unsigned int nr, char *addr);
+> > > > > @@ -1786,8 +1793,14 @@ struct f2fs_sb_info {
+> > > > >    	struct workqueue_struct *post_read_wq;	/* post read workqueue */
+> > > > > -	unsigned char errors[MAX_F2FS_ERRORS];	/* error flags */
+> > > > > -	spinlock_t error_lock;			/* protect errors array */
+> > > > > +	/*
+> > > > > +	 * If we are in irq context, let's update error information into
+> > > > > +	 * on-disk superblock in the work.
+> > > > > +	 */
+> > > > > +	struct work_struct s_error_work;
+> > > > > +	unsigned char errors[MAX_F2FS_ERRORS];		/* error flags */
+> > > > > +	unsigned char stop_reason[MAX_STOP_REASON];	/* stop reason */
+> > > > > +	spinlock_t error_lock;			/* protect errors/stop_reason array */
+> > > > >    	bool error_dirty;			/* errors of sb is dirty */
+> > > > >    	struct kmem_cache *inline_xattr_slab;	/* inline xattr entry */
+> > > > > @@ -3522,8 +3535,9 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
+> > > > >    int f2fs_quota_sync(struct super_block *sb, int type);
+> > > > >    loff_t max_file_blocks(struct inode *inode);
+> > > > >    void f2fs_quota_off_umount(struct super_block *sb);
+> > > > > -void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason);
+> > > > >    void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag);
+> > > > > +void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
+> > > > > +							bool irq_context);
+> > > > >    void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error);
+> > > > >    int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+> > > > >    int f2fs_sync_fs(struct super_block *sb, int sync);
+> > > > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > > > > index 14e9a20e68df..10743e864d57 100644
+> > > > > --- a/fs/f2fs/file.c
+> > > > > +++ b/fs/f2fs/file.c
+> > > > > @@ -2221,7 +2221,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+> > > > >    				ret = 0;
+> > > > >    				f2fs_stop_checkpoint(sbi, false,
+> > > > >    						STOP_CP_REASON_SHUTDOWN);
+> > > > > -				set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> > > > >    				trace_f2fs_shutdown(sbi, in, ret);
+> > > > >    			}
+> > > > >    			return ret;
+> > > > > @@ -2234,7 +2233,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+> > > > >    		if (ret)
+> > > > >    			goto out;
+> > > > >    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> > > > > -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> > > > >    		thaw_bdev(sb->s_bdev);
+> > > > >    		break;
+> > > > >    	case F2FS_GOING_DOWN_METASYNC:
+> > > > > @@ -2243,16 +2241,13 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+> > > > >    		if (ret)
+> > > > >    			goto out;
+> > > > >    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> > > > > -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> > > > >    		break;
+> > > > >    	case F2FS_GOING_DOWN_NOSYNC:
+> > > > >    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> > > > > -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> > > > >    		break;
+> > > > >    	case F2FS_GOING_DOWN_METAFLUSH:
+> > > > >    		f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_META_IO);
+> > > > >    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> > > > > -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> > > > >    		break;
+> > > > >    	case F2FS_GOING_DOWN_NEED_FSCK:
+> > > > >    		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> > > > > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> > > > > index f1d0dd9c5a6c..6dc2bc710ba8 100644
+> > > > > --- a/fs/f2fs/gc.c
+> > > > > +++ b/fs/f2fs/gc.c
+> > > > > @@ -59,7 +59,7 @@ static int gc_thread_func(void *data)
+> > > > >    		if (gc_th->gc_wake)
+> > > > >    			gc_th->gc_wake = false;
+> > > > > -		if (try_to_freeze()) {
+> > > > > +		if (try_to_freeze() || f2fs_readonly(sbi->sb)) {
+> > > > >    			stat_other_skip_bggc_count(sbi);
+> > > > >    			continue;
+> > > > >    		}
+> > > > > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> > > > > index 23574894e170..1573bf123197 100644
+> > > > > --- a/fs/f2fs/super.c
+> > > > > +++ b/fs/f2fs/super.c
+> > > > > @@ -164,6 +164,7 @@ enum {
+> > > > >    	Opt_discard_unit,
+> > > > >    	Opt_memory_mode,
+> > > > >    	Opt_age_extent_cache,
+> > > > > +	Opt_errors,
+> > > > >    	Opt_err,
+> > > > >    };
+> > > > > @@ -243,6 +244,7 @@ static match_table_t f2fs_tokens = {
+> > > > >    	{Opt_discard_unit, "discard_unit=%s"},
+> > > > >    	{Opt_memory_mode, "memory=%s"},
+> > > > >    	{Opt_age_extent_cache, "age_extent_cache"},
+> > > > > +	{Opt_errors, "errors=%s"},
+> > > > >    	{Opt_err, NULL},
+> > > > >    };
+> > > > > @@ -1268,6 +1270,25 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+> > > > >    		case Opt_age_extent_cache:
+> > > > >    			set_opt(sbi, AGE_EXTENT_CACHE);
+> > > > >    			break;
+> > > > > +		case Opt_errors:
+> > > > > +			name = match_strdup(&args[0]);
+> > > > > +			if (!name)
+> > > > > +				return -ENOMEM;
+> > > > > +			if (!strcmp(name, "remount-ro")) {
+> > > > > +				F2FS_OPTION(sbi).errors =
+> > > > > +						MOUNT_ERRORS_READONLY;
+> > > > > +			} else if (!strcmp(name, "continue")) {
+> > > > > +				F2FS_OPTION(sbi).errors =
+> > > > > +						MOUNT_ERRORS_CONTINUE;
+> > > > > +			} else if (!strcmp(name, "panic")) {
+> > > > > +				F2FS_OPTION(sbi).errors =
+> > > > > +						MOUNT_ERRORS_PANIC;
+> > > > > +			} else {
+> > > > > +				kfree(name);
+> > > > > +				return -EINVAL;
+> > > > > +			}
+> > > > > +			kfree(name);
+> > > > > +			break;
+> > > > >    		default:
+> > > > >    			f2fs_err(sbi, "Unrecognized mount option \"%s\" or missing value",
+> > > > >    				 p);
+> > > > > @@ -1623,6 +1644,9 @@ static void f2fs_put_super(struct super_block *sb)
+> > > > >    	f2fs_destroy_node_manager(sbi);
+> > > > >    	f2fs_destroy_segment_manager(sbi);
+> > > > > +	/* flush s_error_work before sbi destroy */
+> > > > > +	flush_work(&sbi->s_error_work);
+> > > > > +
+> > > > >    	f2fs_destroy_post_read_wq(sbi);
+> > > > >    	kvfree(sbi->ckpt);
+> > > > > @@ -2053,6 +2077,13 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+> > > > >    	else if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_LOW)
+> > > > >    		seq_printf(seq, ",memory=%s", "low");
+> > > > > +	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_READONLY)
+> > > > > +		seq_printf(seq, ",errors=%s", "remount-ro");
+> > > > > +	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE)
+> > > > > +		seq_printf(seq, ",errors=%s", "continue");
+> > > > > +	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC)
+> > > > > +		seq_printf(seq, ",errors=%s", "panic");
+> > > > > +
+> > > > >    	return 0;
+> > > > >    }
+> > > > > @@ -2081,6 +2112,7 @@ static void default_options(struct f2fs_sb_info *sbi)
+> > > > >    	}
+> > > > >    	F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_ON;
+> > > > >    	F2FS_OPTION(sbi).memory_mode = MEMORY_MODE_NORMAL;
+> > > > > +	F2FS_OPTION(sbi).errors = MOUNT_ERRORS_READONLY;
+> > > > 
+> > > > Was the default MOUNT_ERRORS_CONTINUE?
+> > > 
+> > > Okay, let me revise in v9.
+> > > 
+> > > Please note that main difference between continue mode and readonly mode once
+> > > cp_error is set:
+> > > 
+> > > 		continue mode		readonly mode
+> > > access ops:	Normal			Normal
+> > > modify ops:	-EIO			-EROFS
+> > > mount option	rw			ro
+> > 
+> > Could you please add the difference of all the modes in patch description?
+> > 
+> > I think it'd be good to add:
+> > 1. access ops
+> > 2. syscall errors
+> > 3. mount option
+> > 4. pending data writes
+> > 5. pending node writes
+> > 6. pending meta writes
 > 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
-> FWIW IDK what exactly the ASIC clock is. The TRM does not provide any
-> details unfortunately. It is required for functional SATA, though.
-> ---
->  .../devicetree/bindings/ata/snps,dwc-ahci-common.yaml       | 6 ++++--
->  Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml    | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
+> Sure, I'd like to add below description into f2fs.rst, any comments?
 > 
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> index c1457910520b..0df8f49431eb 100644
-> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> @@ -31,11 +31,11 @@ properties:
->        PM-alive clock, RxOOB detection clock, embedded PHYs reference (Rx/Tx)
->        clock, etc.
->      minItems: 1
-> -    maxItems: 4
-> +    maxItems: 5
->  
->    clock-names:
->      minItems: 1
-> -    maxItems: 4
-> +    maxItems: 5
->      items:
->        oneOf:
->          - description: Application APB/AHB/AXI BIU clock
-> @@ -50,6 +50,8 @@ properties:
->            const: rxoob
->          - description: SATA Ports reference clock
->            const: ref
+> 			 			continue	remount-ro	panic
+> 			 access ops		normal		noraml		N/A
+> 			 syscall errors		-EIO		-EROFS		N/A
+> 			 mount option		rw		ro		N/A
 
-> +        - description: Rockchip ASIC clock
-> +          const: asic
+So the only difference is the above two, as in any cases, we won't flush pending
+pages at all? What about keeping nondir/node pages in the remount-ro case
+differently?
 
-Actually it's a standard DW SATA AHCI PHY-interface clock (named as
-clk_asicN in the DW SATA AHCI HW manual). So feel free to add it to the
-clock-names array with the description (taken from the manual): "PHY
-Transmit Clock". The manual also says that the clock is generated by
-the PHY0 for clocking Port0 Link and Transport Layers (TX clock
-domain): 37.5 MHz, 75 MHz, 150 MHz, 300 MHz, or 600 MHz.
-
-Similarly there is another clocks source "clk_rbcN". It's "PHY Receive
-Clock" which is used to receive data from the PHYn. It can be also
-added to the clock-names property under the name "rbc".
-
-Note 1. Please add the suggested names to the property constraint
-above the "ref" name definition. The later clock is mainly relevant to
-the attached PHY rather than to the SATA AHCI controller itself.
-
-Note 2. "rxoob", "asic" and "rbc" clocks are defined as "clk_rxoobN",
-"clk_asicN" and "clk_rbcN" which means they are supposed to be defined
-(if relevant) for each available SATA port. So in general they should
-have been defined in the port sub-nodes clocks/clock-names properties.
-
-Note 3. Note natively DW SATA AHCI doesn't have any PIPE interface (or
-anything being called as PIPE). Instead it provides a PMA-interface
-which is directly connected to a Synopsys SATA xG PHY with no
-intermediate coders (PCS). Like this:
-
-+---------+     +--------+
-|         | PMA | Snps DW| SATA
-| DW SATA |<--->| SATA xG|<---->
-|  AHCI   | I/F |  PHY   |
-|         |     |        |
-+---------+     +--------+
-
-In that case the DW SATA AHCI IP-core is supposed to be synthesized
-with the particular Synopsys PHY type specified in the parameter
-PHY_INTERFACE_TYPE. If a non-standard PHY is connected (like in your
-case) PHY_INTERFACE_TYPE is supposed to be set to zero thus providing
-a wide set of the PMA-interface configs which otherwise would have
-been pre-defined with the Synopsys PHY-specific values. So judging by
-the clock names in your patches and the way the DT-nodes are designed
-Rockchip SATA AHCI controller diagram must be looking like this:
-
-+---------+      +-------+       +--------+
-|         | PIPE | some  | Rx/Tx | PMA/PMD| SATA
-| DW SATA |<---->|  PCS  |<----->| NANEng |<---->
-|  AHCI   |former|       |       |  PHY   |
-|         |DW PMA|       |       |        |
-+---------+      +-------+       +--------+
-
-In the former case (DW SATA AHCI with Synopsys SATA xG PHY attached)
-all the clocks "pmalive", "rbc", "asic" and "rxoob" are generated by
-the Synopsys PHYs itself so there is no need in having them explicitly
-defined in the system. In your case AFAICS a non-standard PCS+PHY
-setup is utilized and the clocks are generated by a system-wide unit -
-CRU.
-
->  
->    resets:
->      description:
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> index 5afa4b57ce20..c6a0d6c8b62c 100644
-> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> @@ -23,9 +23,11 @@ properties:
->          const: snps,dwc-ahci
->        - description: SPEAr1340 AHCI SATA device
->          const: snps,spear-ahci
-
-> -      - description: Rockhip RK3568 AHCI controller
-> +      - description: Rockhip AHCI controller
->          items:
-> -          - const: rockchip,rk3568-dwc-ahci
-> +          - enum:
-> +              - rockchip,rk3568-dwc-ahci
-> +              - rockchip,rk3588-dwc-ahci
->            - const: snps,dwc-ahci
-
-What about moving all that in a dedicated YAML-file in order to define a
-more comprehensive schema with actual "clocks", "clock-names",
-ports-specific properties constraints? (see the way it's done for
-Baikal-T1 SATA AHCI in ata/baikal,bt1-ahci.yaml).
-
-Please note in that case you'll either need to drop the generic
-fallback compatible (it's not like it would have been much useful
-anyway) from your and RK3568 SATA DT-nodes, or define the
-"select: properties: compatible: ..." property in the generic
-DW SATA AHCI DT-schema, in order to prevent the generic schema being
-automatically applied to the your SATA DT-nodes.
-
--Serge(y)
-
->  
->  patternProperties:
-> -- 
-> 2.39.2
+> 			 pending dir write	keep		keep		N/A
+> 			 pending nondir write	drop		drop		N/A
+> 			 pending node write	drop		drop		N/A
+> 			 pending meta write	keep		keep		N/A
 > 
+> Thanks,
+> 
+> > 
+> > 
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > > >    	sbi->sb->s_flags &= ~SB_INLINECRYPT;
+> > > > > @@ -2282,6 +2314,9 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+> > > > >    	if (err)
+> > > > >    		goto restore_opts;
+> > > > > +	/* flush outstanding errors before changing fs state */
+> > > > > +	flush_work(&sbi->s_error_work);
+> > > > > +
+> > > > >    	/*
+> > > > >    	 * Previous and new state of filesystem is RO,
+> > > > >    	 * so skip checking GC and FLUSH_MERGE conditions.
+> > > > > @@ -3931,45 +3966,60 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
+> > > > >    	return err;
+> > > > >    }
+> > > > > -void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason)
+> > > > > +static void save_stop_reason(struct f2fs_sb_info *sbi, unsigned char reason)
+> > > > > +{
+> > > > > +	unsigned long flags;
+> > > > > +
+> > > > > +	spin_lock_irqsave(&sbi->error_lock, flags);
+> > > > > +	if (sbi->stop_reason[reason] < GENMASK(BITS_PER_BYTE - 1, 0))
+> > > > > +		sbi->stop_reason[reason]++;
+> > > > > +	spin_unlock_irqrestore(&sbi->error_lock, flags);
+> > > > > +}
+> > > > > +
+> > > > > +static void f2fs_record_stop_reason(struct f2fs_sb_info *sbi)
+> > > > >    {
+> > > > >    	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+> > > > > +	unsigned long flags;
+> > > > >    	int err;
+> > > > >    	f2fs_down_write(&sbi->sb_lock);
+> > > > > -	if (raw_super->s_stop_reason[reason] < GENMASK(BITS_PER_BYTE - 1, 0))
+> > > > > -		raw_super->s_stop_reason[reason]++;
+> > > > > +	spin_lock_irqsave(&sbi->error_lock, flags);
+> > > > > +	memcpy(raw_super->s_stop_reason, sbi->stop_reason, MAX_STOP_REASON);
+> > > > > +	spin_unlock_irqrestore(&sbi->error_lock, flags);
+> > > > >    	err = f2fs_commit_super(sbi, false);
+> > > > > -	if (err)
+> > > > > -		f2fs_err(sbi, "f2fs_commit_super fails to record reason:%u err:%d",
+> > > > > -								reason, err);
+> > > > > +
+> > > > >    	f2fs_up_write(&sbi->sb_lock);
+> > > > > +	if (err)
+> > > > > +		f2fs_err(sbi, "f2fs_commit_super fails to record err:%d", err);
+> > > > >    }
+> > > > >    void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag)
+> > > > >    {
+> > > > > -	spin_lock(&sbi->error_lock);
+> > > > > +	unsigned long flags;
+> > > > > +
+> > > > > +	spin_lock_irqsave(&sbi->error_lock, flags);
+> > > > >    	if (!test_bit(flag, (unsigned long *)sbi->errors)) {
+> > > > >    		set_bit(flag, (unsigned long *)sbi->errors);
+> > > > >    		sbi->error_dirty = true;
+> > > > >    	}
+> > > > > -	spin_unlock(&sbi->error_lock);
+> > > > > +	spin_unlock_irqrestore(&sbi->error_lock, flags);
+> > > > >    }
+> > > > >    static bool f2fs_update_errors(struct f2fs_sb_info *sbi)
+> > > > >    {
+> > > > > +	unsigned long flags;
+> > > > >    	bool need_update = false;
+> > > > > -	spin_lock(&sbi->error_lock);
+> > > > > +	spin_lock_irqsave(&sbi->error_lock, flags);
+> > > > >    	if (sbi->error_dirty) {
+> > > > >    		memcpy(F2FS_RAW_SUPER(sbi)->s_errors, sbi->errors,
+> > > > >    							MAX_F2FS_ERRORS);
+> > > > >    		sbi->error_dirty = false;
+> > > > >    		need_update = true;
+> > > > >    	}
+> > > > > -	spin_unlock(&sbi->error_lock);
+> > > > > +	spin_unlock_irqrestore(&sbi->error_lock, flags);
+> > > > >    	return need_update;
+> > > > >    }
+> > > > > @@ -3993,6 +4043,66 @@ void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
+> > > > >    	f2fs_up_write(&sbi->sb_lock);
+> > > > >    }
+> > > > > +static bool system_going_down(void)
+> > > > > +{
+> > > > > +	return system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF
+> > > > > +		|| system_state == SYSTEM_RESTART;
+> > > > > +}
+> > > > > +
+> > > > > +void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
+> > > > > +							bool irq_context)
+> > > > > +{
+> > > > > +	struct super_block *sb = sbi->sb;
+> > > > > +	bool shutdown = reason == STOP_CP_REASON_SHUTDOWN;
+> > > > > +	bool continue_fs = !shutdown &&
+> > > > > +			F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE;
+> > > > > +
+> > > > > +	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+> > > > > +
+> > > > > +	if (!f2fs_hw_is_readonly(sbi)) {
+> > > > > +		save_stop_reason(sbi, reason);
+> > > > > +
+> > > > > +		if (irq_context && !shutdown)
+> > > > > +			schedule_work(&sbi->s_error_work);
+> > > > > +		else
+> > > > > +			f2fs_record_stop_reason(sbi);
+> > > > > +	}
+> > > > > +
+> > > > > +	/*
+> > > > > +	 * We force ERRORS_RO behavior when system is rebooting. Otherwise we
+> > > > > +	 * could panic during 'reboot -f' as the underlying device got already
+> > > > > +	 * disabled.
+> > > > > +	 */
+> > > > > +	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC &&
+> > > > > +				!shutdown && !system_going_down() &&
+> > > > > +				!is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN))
+> > > > > +		panic("F2FS-fs (device %s): panic forced after error\n",
+> > > > > +							sb->s_id);
+> > > > > +
+> > > > > +	if (shutdown)
+> > > > > +		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> > > > > +
+> > > > > +	/* continue filesystem operators if errors=continue */
+> > > > > +	if (continue_fs || f2fs_readonly(sb))
+> > > > > +		return;
+> > > > > +
+> > > > > +	f2fs_warn(sbi, "Remounting filesystem read-only");
+> > > > > +	/*
+> > > > > +	 * Make sure updated value of ->s_mount_flags will be visible before
+> > > > > +	 * ->s_flags update
+> > > > > +	 */
+> > > > > +	smp_wmb();
+> > > > > +	sb->s_flags |= SB_RDONLY;
+> > > > > +}
+> > > > > +
+> > > > > +static void f2fs_record_error_work(struct work_struct *work)
+> > > > > +{
+> > > > > +	struct f2fs_sb_info *sbi = container_of(work,
+> > > > > +					struct f2fs_sb_info, s_error_work);
+> > > > > +
+> > > > > +	f2fs_record_stop_reason(sbi);
+> > > > > +}
+> > > > > +
+> > > > >    static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
+> > > > >    {
+> > > > >    	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+> > > > > @@ -4223,7 +4333,9 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+> > > > >    	sb->s_fs_info = sbi;
+> > > > >    	sbi->raw_super = raw_super;
+> > > > > +	INIT_WORK(&sbi->s_error_work, f2fs_record_error_work);
+> > > > >    	memcpy(sbi->errors, raw_super->s_errors, MAX_F2FS_ERRORS);
+> > > > > +	memcpy(sbi->stop_reason, raw_super->s_stop_reason, MAX_STOP_REASON);
+> > > > >    	/* precompute checksum seed for metadata */
+> > > > >    	if (f2fs_sb_has_inode_chksum(sbi))
+> > > > > @@ -4620,6 +4732,8 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+> > > > >    	f2fs_destroy_segment_manager(sbi);
+> > > > >    stop_ckpt_thread:
+> > > > >    	f2fs_stop_ckpt_thread(sbi);
+> > > > > +	/* flush s_error_work before sbi destroy */
+> > > > > +	flush_work(&sbi->s_error_work);
+> > > > >    	f2fs_destroy_post_read_wq(sbi);
+> > > > >    free_devices:
+> > > > >    	destroy_device_list(sbi);
+> > > > > -- 
+> > > > > 2.36.1
