@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711236EACAB
+	by mail.lfdr.de (Postfix) with ESMTP id BB5216EACAC
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbjDUOTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:19:04 -0400
+        id S232465AbjDUOTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:19:01 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjDUOSI (ORCPT
+        with ESMTP id S232508AbjDUOSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:18:08 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2B413C0B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:18:05 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f855ecb9cso23424457b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:18:05 -0700 (PDT)
+        Fri, 21 Apr 2023 10:18:50 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E8E13C33
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:18:08 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8f52c2da49so2925455276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:18:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086685; x=1684678685;
+        d=google.com; s=20221208; t=1682086688; x=1684678688;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6639SD0H0EtLqB4ey0Z/SCfQQd2BwEFoKtAHXawttg=;
-        b=F99tHTPdoQ7C9Ix3lhzgS+44QzUBAXokIJ7FiF1lJ2iBIJ3DQYl/MLze6AckhIXvdc
-         Hn1QgxpX5Y0KkD6eTmkiklywcUgCl65/mQAQ80srV+i65MYkbmqxNV6Wuv9hhHPEJgYj
-         hj+Bvt+Bxx/5LGd0tPAx/FTKSotEpkvZ8kjx5jYAVY0+ZyZBlSdJuheD1Xo4AwSjku6L
-         dt04yxCX5IT74kYysO2NmG5vOOht4o5PPfR6VATD2lZ3ZJXCc50kxU8yoAvhAHZBevKb
-         84pRmjxRdUbiYE/VJLBlphZEamluppZApe1XIXNcNQGXa6KhQTOAtfRelsZKUhgS7kOl
-         u/dg==
+        bh=4R40htVFkZdRKo0vr5qbbFiTdJ0ln75dPc18Ex1B+xs=;
+        b=C5BMyCvlSu+eRzBuquykI60dxIq34oqxyOw42+ATs4ZC1qIFL9f0A1m6cTj1Jn86Bc
+         44vRd37/KN9LFP3+Vgd6I3Tk6cDxaeV8xTNfWw+0kITVFdf4LaajI4M8GClIsJGdlrVo
+         ZXBYbKbAqjawn9c6qHTuBylMX2eEVIDSk0Hh2f96PyUpJcGQfEmbP1iNKvAkagqwNwAZ
+         fBeCOT5hlALd9f2omWh3ORkodnLziGqV4RS8XBrfYg7P9BwfF/wp99EnLYDYtUg6u7Q2
+         xLGNagHO1uKYyrOjiHAOyGA9bxx8PXRaYcRCp6RHq+hedzzLAVlekMwLMyDxa8FSee+d
+         Xn8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086685; x=1684678685;
+        d=1e100.net; s=20221208; t=1682086688; x=1684678688;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6639SD0H0EtLqB4ey0Z/SCfQQd2BwEFoKtAHXawttg=;
-        b=c+LP5NPfcppbn3UNioXDM1axzdkS5eBWOOXAkp8WLK5fsF0vMwFo/fvEqnEf4su+nB
-         RdyMcobBcbmxBC9BLjJqGt6oYbx5hOxCJEJhYv+YuRDoqzLZDfSY473JLqqStfydXdKG
-         SvlBJmqfuTXRBsDH1IwGL625V6vhV9IHBJGyfQGg6AGsnswHu+THh9ydGKIo+nWxQwM9
-         SShkAdQbF2S1Vnt8iurhld+whY55a51yOOXs7ggT3i5zlJZmPO0tdQvKr1hIVEZfFV3U
-         QmSIgSIHGyd7SnPjCc3ibkrcdC/AM2bmhF9Yk3sdfkNPMH4gVUAnoe0+Ck76ZwbIfjYb
-         ruLg==
-X-Gm-Message-State: AAQBX9fZgTLcS1tpykYcKFe3w9bZGWi8YmSSAP9zINkUjn6UxgT9vPAz
-        Ua28HditBgjkPzjJ6UID09vEQnUvG9RZD1Fgaw==
-X-Google-Smtp-Source: AKy350Zqg4pAFdUI6twozs01y17oAXKmGbDox7mIzThIQRrL0cyze52D8zeEHvJU+8u/Ow1KWrdOeo4oh9evn0a9dA==
+        bh=4R40htVFkZdRKo0vr5qbbFiTdJ0ln75dPc18Ex1B+xs=;
+        b=WbasDNy0lw5FI+BiHQMJndivEXzXnMCCpJO0zRvd4uruP/Zr63Qt3GJCz8h7deCMgh
+         OEzy2NAyBfyUGVLI8GQEnqyXPtcGh3L82slnmi5iN+JH0YkCsMwNv9C8R8S+mPP32R9I
+         8x4UxkIfoG5IKDXAQKEnuaAI9DUK0bEmuVVk8E8833YKCNxBAsPL16aRQs2C2xwCXYWS
+         LOpMrUPcNWySdV4IVfg3yCTGAOa1xea0aUAPsSjJLS25CqL8ai8Ykg4kw1d7ztwnR79L
+         5AjvIIJflqWgJOECwI8taEs+l55Kx9WlmuivopWat8/4+Tp6RjVu/kyDKdwJbXjvTOuF
+         JMiQ==
+X-Gm-Message-State: AAQBX9e+fnd0FQJCid0T3uj2gV3QJ6aMijFjbFItSu+rN6fihYvh9t+g
+        tbMCCwVZncYdn/Z2HBbTmhHu1veLDaaOlE1OGQ==
+X-Google-Smtp-Source: AKy350bMJkGMk536H1XiJn0O8T/FQl3R76sq1Khx/MzdZxPj4mYPweyZpf3i2nlBd/q2SesN161ZSeUiH7ipq5W7HA==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a81:b149:0:b0:54f:bb37:4a1c with SMTP
- id p70-20020a81b149000000b0054fbb374a1cmr1291578ywh.8.1682086684958; Fri, 21
- Apr 2023 07:18:04 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:21 +0200
+ (user=peternewman job=sendgmr) by 2002:a25:d1d0:0:b0:b98:6352:be19 with SMTP
+ id i199-20020a25d1d0000000b00b986352be19mr1290128ybg.9.1682086687990; Fri, 21
+ Apr 2023 07:18:07 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:22 +0200
 In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
 Mime-Version: 1.0
 References: <20230421141723.2405942-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-8-peternewman@google.com>
-Subject: [PATCH v1 7/9] x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
+Message-ID: <20230421141723.2405942-9-peternewman@google.com>
+Subject: [PATCH v1 8/9] x86/resctrl: Use mbm_update() to push soft RMID counts
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -69,82 +69,79 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To implement soft RMIDs, each CPU needs a HW RMID that is unique within
-its L3 cache domain. This is the minimum number of RMIDs needed to
-monitor all CPUs.
+__mon_event_count() only reads the current software count and does not
+cause CPUs in the domain to flush. For mbm_update() to be effective in
+preventing overflow in hardware counters with soft RMIDs, it needs to
+flush the domain CPUs so that all of the HW RMIDs are read.
 
-This is accomplished by determining the rank of each CPU's mask bit
-within its L3 shared_cpu_mask in resctrl_online_cpu().
+When RMIDs are soft, mbm_update() is intended to push bandwidth counts
+to the software counters rather than pulling the counts from hardware
+when userspace reads event counts, as this is a lot more efficient when
+the number of HW RMIDs is fixed.
+
+When RMIDs are soft, mbm_update() only calls mbm_flush_cpu_handler() on
+each CPU in the domain rather than reading all RMIDs.
 
 Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- arch/x86/kernel/cpu/resctrl/core.c | 39 +++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/resctrl/monitor.c | 28 +++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index 47b1c37a81f8..b0d873231b1e 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -596,6 +596,38 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
- 	}
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+index 3d54a634471a..9575cb79b8ee 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -487,6 +487,11 @@ void resctrl_mbm_flush_cpu(void)
+ 		__mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
  }
  
-+/* Assign each CPU an RMID that is unique within its cache domain. */
-+static u32 determine_hw_rmid_for_cpu(int cpu)
++static void mbm_flush_cpu_handler(void *p)
 +{
-+	struct cpu_cacheinfo *ci = get_cpu_cacheinfo(cpu);
-+	struct cacheinfo *l3ci = NULL;
-+	u32 rmid;
-+	int i;
-+
-+	/* Locate the cacheinfo for this CPU's L3 cache. */
-+	for (i = 0; i < ci->num_leaves; i++) {
-+		if (ci->info_list[i].level == 3 &&
-+		    (ci->info_list[i].attributes & CACHE_ID)) {
-+			l3ci = &ci->info_list[i];
-+			break;
-+		}
-+	}
-+	WARN_ON(!l3ci);
-+
-+	if (!l3ci)
-+		return 0;
-+
-+	/* Use the position of cpu in its shared_cpu_mask as its RMID. */
-+	rmid = 0;
-+	for_each_cpu(i, &l3ci->shared_cpu_map) {
-+		if (i == cpu)
-+			break;
-+		rmid++;
-+	}
-+
-+	return rmid;
++	resctrl_mbm_flush_cpu();
 +}
 +
- static void clear_closid_rmid(int cpu)
+ static int __mon_event_count_soft_rmid(u32 rmid, struct rmid_read *rr)
  {
- 	struct resctrl_pqr_state *state = this_cpu_ptr(&pqr_state);
-@@ -604,7 +636,12 @@ static void clear_closid_rmid(int cpu)
- 	state->default_rmid = 0;
- 	state->cur_closid = 0;
- 	state->cur_rmid = 0;
--	wrmsr(MSR_IA32_PQR_ASSOC, 0, 0);
-+	state->hw_rmid = 0;
-+
-+	if (static_branch_likely(&rdt_soft_rmid_enable_key))
-+		state->hw_rmid = determine_hw_rmid_for_cpu(cpu);
-+
-+	wrmsr(MSR_IA32_PQR_ASSOC, state->hw_rmid, 0);
- }
+ 	struct mbm_state *m;
+@@ -806,12 +811,27 @@ void mbm_handle_overflow(struct work_struct *work)
+ 	r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+ 	d = container_of(work, struct rdt_domain, mbm_over.work);
  
- static int resctrl_online_cpu(unsigned int cpu)
++	if (rdt_mon_soft_rmid) {
++		/*
++		 * HW RMIDs are permanently assigned to CPUs, so only a per-CPU
++		 * flush is needed.
++		 */
++		on_each_cpu_mask(&d->cpu_mask, mbm_flush_cpu_handler, NULL,
++				 false);
++	}
++
+ 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
+-		mbm_update(r, d, prgrp->mon.rmid);
++		/*
++		 * mbm_update() on every RMID would result in excessive IPIs
++		 * when RMIDs are soft.
++		 */
++		if (!rdt_mon_soft_rmid) {
++			mbm_update(r, d, prgrp->mon.rmid);
+ 
+-		head = &prgrp->mon.crdtgrp_list;
+-		list_for_each_entry(crgrp, head, mon.crdtgrp_list)
+-			mbm_update(r, d, crgrp->mon.rmid);
++			head = &prgrp->mon.crdtgrp_list;
++			list_for_each_entry(crgrp, head, mon.crdtgrp_list)
++				mbm_update(r, d, crgrp->mon.rmid);
++		}
+ 
+ 		if (is_mba_sc(NULL))
+ 			update_mba_bw(prgrp, d);
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
