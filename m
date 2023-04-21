@@ -2,143 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CBA6EA7E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8C06EA7F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjDUKJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S231882AbjDUKKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjDUKJS (ORCPT
+        with ESMTP id S231869AbjDUKJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:09:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BC79EE4;
-        Fri, 21 Apr 2023 03:09:12 -0700 (PDT)
-X-UUID: 8e301da0e02c11edb6b9f13eb10bd0fe-20230421
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4/XAwCB7RYfwLn3KM/ff3HebXoCyXF6+AnRXC40z1tg=;
-        b=Io6IzqT8Un7Rb19L5hnnMNPWw7mxCuc3L1wnz8ZQ/doqrnyVXtXDMj4BmmbfzGuZQUjR5xYooh3mM1/qg+sAI0zGqiDJg/M9o8WxeTek5JgsE6mK6PRCousUCIZJ4zFJOSVSJw1IvLxVuSGQEmSVLykRWANbUza31WQlRHu5ZBk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:9356a11d-32db-4930-bfbb-03b68650cf88,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:441817a2-8fcb-430b-954a-ba3f00fa94a5,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 8e301da0e02c11edb6b9f13eb10bd0fe-20230421
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1084427410; Fri, 21 Apr 2023 18:09:08 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 21 Apr 2023 18:09:08 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 21 Apr 2023 18:09:08 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2 7/7] ASoC: dt-bindings: mediatek,mt8188-afe: add audio properties
-Date:   Fri, 21 Apr 2023 18:09:05 +0800
-Message-ID: <20230421100905.28045-8-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230421100905.28045-1-trevor.wu@mediatek.com>
-References: <20230421100905.28045-1-trevor.wu@mediatek.com>
+        Fri, 21 Apr 2023 06:09:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680B0C145;
+        Fri, 21 Apr 2023 03:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682071778; x=1713607778;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GLPpA5lDZ0mZwbKjbwTkAID/m0yPy1TX9T+nWpkCkQI=;
+  b=MrxTDsH3ESd2/6xOpMYn/2qmdMY7TDKbjsOUk1E0FmYSuc1+a91trNcj
+   IDLYRL6n9jBHZKRxvGrtTPf7pIq/hO3881+VG9yLqTYjIuPQNSLeZf4X9
+   ubIoZOJ1StJD8BCGtU3k3qgVQhED9k4mwSDdTlVrEEi31X/sjQMkzqFR4
+   hevkboWRyUFvSMa/Z/GSemrwbdtdLDTyyedYtRMHKFbHanbd3bECJz0d5
+   W87gsNVxJKUSRfJLylE3c2WJYAq3dwgQc+oph8gioHRnIhNR9Ow7ReOlY
+   pqVj0zHrSqSBy46PxJ15TLZhtJYaK5hd4jMzJfWUg7E8qLsmxv6EPLQDH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="411228614"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="411228614"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 03:09:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="816371086"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="816371086"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2023 03:09:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 192B3C06; Fri, 21 Apr 2023 13:09:40 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 1/1] PCI: of: Propagate firmware node by calling device_set_node()
+Date:   Fri, 21 Apr 2023 13:09:39 +0300
+Message-Id: <20230421100939.68225-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assign top_a1sys_hp clock to 26M, and add apll1_d4 to clocks for switching
-the parent of top_a1sys_hp dynamically
-On the other hand, "mediatek,infracfg" is included for bus protection.
+Insulate pci_set_of_node() and pci_set_bus_of_node() from possible
+changes to fwnode_handle implementation by using device_set_node()
+instead of open-coding dev->dev.fwnode assignments.
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../bindings/sound/mediatek,mt8188-afe.yaml      | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+v3: fixed compilation issue
+v2: rewritten commit message as suggested (Bjorn), rebased on the latest code
 
-diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
-index 82ccb32f08f2..812e0702ca36 100644
---- a/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
-+++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
-@@ -29,6 +29,10 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek topckgen controller
+ drivers/pci/of.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+index 4c2ef2e28fb5..82bff748cd4d 100644
+--- a/drivers/pci/of.c
++++ b/drivers/pci/of.c
+@@ -39,16 +39,14 @@ int pci_set_of_node(struct pci_dev *dev)
+ 		return -ENODEV;
+ 	}
  
-+  mediatek,infracfg:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of the mediatek infracfg controller
-+
-   power-domains:
-     maxItems: 1
+-	dev->dev.of_node = node;
+-	dev->dev.fwnode = &node->fwnode;
++	device_set_node(&dev->dev, of_fwnode_handle(node));
+ 	return 0;
+ }
  
-@@ -52,6 +56,7 @@ properties:
-       - description: mux for i2si1_mck
-       - description: mux for i2si2_mck
-       - description: audio 26m clock
-+      - description: audio pll1 divide 4
+ void pci_release_of_node(struct pci_dev *dev)
+ {
+ 	of_node_put(dev->dev.of_node);
+-	dev->dev.of_node = NULL;
+-	dev->dev.fwnode = NULL;
++	device_set_node(&dev->dev, NULL);
+ }
  
-   clock-names:
-     items:
-@@ -73,6 +78,7 @@ properties:
-       - const: i2si1_m_sel
-       - const: i2si2_m_sel
-       - const: adsp_audio_26m
-+      - const: apll1_d4
+ void pci_set_bus_of_node(struct pci_bus *bus)
+@@ -63,17 +61,13 @@ void pci_set_bus_of_node(struct pci_bus *bus)
+ 			bus->self->external_facing = true;
+ 	}
  
-   mediatek,etdm-in1-cowork-source:
-     $ref: /schemas/types.yaml#/definitions/uint32
-@@ -147,6 +153,8 @@ required:
-   - power-domains
-   - clocks
-   - clock-names
-+  - assigned-clocks
-+  - assigned-clock-parents
+-	bus->dev.of_node = node;
+-
+-	if (bus->dev.of_node)
+-		bus->dev.fwnode = &bus->dev.of_node->fwnode;
++	device_set_node(&bus->dev, of_fwnode_handle(node));
+ }
  
- additionalProperties: false
+ void pci_release_bus_of_node(struct pci_bus *bus)
+ {
+ 	of_node_put(bus->dev.of_node);
+-	bus->dev.of_node = NULL;
+-	bus->dev.fwnode = NULL;
++	device_set_node(&bus->dev, NULL);
+ }
  
-@@ -184,7 +192,8 @@ examples:
-                  <&topckgen 78>, //CLK_TOP_I2SO2
-                  <&topckgen 79>, //CLK_TOP_I2SI1
-                  <&topckgen 80>, //CLK_TOP_I2SI2
--                 <&adsp_audio26m 0>; //CLK_AUDIODSP_AUDIO26M
-+                 <&adsp_audio26m 0>, //CLK_AUDIODSP_AUDIO26M
-+                 <&topckgen 136>; //CLK_TOP_APLL1_D4
-         clock-names = "clk26m",
-                       "apll1",
-                       "apll2",
-@@ -202,7 +211,10 @@ examples:
-                       "i2so2_m_sel",
-                       "i2si1_m_sel",
-                       "i2si2_m_sel",
--                      "adsp_audio_26m";
-+                      "adsp_audio_26m",
-+                      "apll1_d4";
-+        assigned-clocks = <&topckgen 83>; //CLK_TOP_A1SYS_HP
-+        assigned-clock-parents =  <&clk26m>;
-     };
- 
- ...
+ struct device_node * __weak pcibios_get_phb_of_node(struct pci_bus *bus)
 -- 
-2.18.0
+2.40.0.1.gaa8946217a0b
 
