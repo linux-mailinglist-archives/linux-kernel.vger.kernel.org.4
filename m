@@ -2,107 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923FA6EAA9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E0D6EAAB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjDUMmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S232416AbjDUMoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjDUMmf (ORCPT
+        with ESMTP id S232315AbjDUMno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:42:35 -0400
+        Fri, 21 Apr 2023 08:43:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BEB118C5;
-        Fri, 21 Apr 2023 05:42:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E61AD322
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:43:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0444F63E9A;
-        Fri, 21 Apr 2023 12:42:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649D0C433EF;
-        Fri, 21 Apr 2023 12:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682080926;
-        bh=1viMKIx6sqkhuLg2xAjcicJimbx0TA+4g/Mnc+kkj3c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BW24TVib54lA9ORge5qtx6oE5Hj4K0FUcHqURggViP0rNx3DKw07WK5sfUU2pLfTo
-         daTK1gAQpA6Nr/MsoJgx+iQ9ufT7JNri4s0aQMOfHntfaefeArkjKsMvjyxMvX5ZkV
-         9YZs4YRKTJdGeVCLIlhrnqK9mODAo2K5zvncMP3jxeqgfSynQXaU5bXmv8UTpIiCp6
-         304dM4VX4jjleJLiVsyrh8vRsVQz2QqXUEbAGg7e+En8MmlOH4vGIBe8jh2UeX9SIq
-         3N4SXgj6JGpOGc3WLzuoTponSdoU6Gk4LVeR6nleFE9/ZeQd7whAuSJO+T6JdVvBhv
-         LPuvlUp3Ox5OQ==
-Date:   Fri, 21 Apr 2023 13:41:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Haibo Chen <haibo.chen@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v7 2/5] regulator: max77541: Add ADI MAX77541/MAX77540
- Regulator Support
-Message-ID: <0f8ffae5-1267-4373-8979-1989318497ec@sirena.org.uk>
-References: <20230412111256.40013-1-okan.sahin@analog.com>
- <20230412111256.40013-3-okan.sahin@analog.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF6F865048
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D717CC4339B;
+        Fri, 21 Apr 2023 12:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682080992;
+        bh=wZUJL0ot3BY3ul97b9ZJj5/rYeOtV1g665q0bfb+5mE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=toUi93YUwN1w14v8+tYN0ka9D8n0WVeUQx+WAtq8gdPdMgYpgzJUS4UJ9iL44a90f
+         x+kRUQhop5JyMnfRYUmbYStfp3xTuNts0Xi4LiMNl0Li5TnXNMm+yMt3tVh6w9FkIG
+         lNJXs2vXrcSOiHza5l3T0S4HaFCTVA1iryANRYJs=
+Date:   Fri, 21 Apr 2023 14:43:09 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Char/Misc driver fixes for 6.3-final
+Message-ID: <ZEKE3cyac7wCBgvH@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1FRzun8VXwn6ZIl1"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230412111256.40013-3-okan.sahin@analog.com>
-X-Cookie: Hailing frequencies open, Captain.
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d:
 
---1FRzun8VXwn6ZIl1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Linux 6.3-rc6 (2023-04-09 11:15:57 -0700)
 
-On Wed, Apr 12, 2023 at 02:12:43PM +0300, Okan Sahin wrote:
+are available in the Git repository at:
 
-> Regulator driver for both MAX77541 and MAX77540.
-> The MAX77541 is a high-efficiency step-down converter
-> with two 3A switching phases for single-cell Li+ battery
-> and 5VDC systems.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.3-final
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+for you to fetch changes up to a042d7feae7eff98a9ad5a9de5004e60883a96d3:
 
---1FRzun8VXwn6ZIl1
-Content-Type: application/pgp-signature; name="signature.asc"
+  Merge tag 'fpga-for-6.3-final' of git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga into char-misc-next (2023-04-11 09:41:40 +0200)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Char/Misc driver fixes for 6.3-final
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRChJUACgkQJNaLcl1U
-h9BgwAf9FFeuk/6y+CZ9pA0Rp+BYHqdrTxCmBMSO+UPH2NliQymSV+sHGkDOq02r
-iqh0AK+SAs6dEZmN+Xx6k98CsM6N0m4Rh+fF8cR9O27WOsNH06QSPuDWCLeno1ZA
-H1jKKF6ByRumicUzziIma9kOjA1ufx0AAVfUbdBt1ZCgJeuZv0yWb3d+jAvHOWcH
-lSDTkN7jwo1UjFFowTkH6MzmElS43JdiZ5eXdLYFRJAs4aTv0r4MKQoksckGMt/u
-wOZ8arow4RwJz0f+akvSvyFaOm3F4IoLCf4Hz+gPdVOQIuKX2PKunGluODN63GRI
-wZPgsp5OEw0pWsLo6Ko4eI3K/WgEjw==
-=Ut0n
------END PGP SIGNATURE-----
+Here are some last-minute tiny driver fixes for 6.3-final.  They
+include fixes for some fpga and iio drivers:
+  - fpga bridge driver fix
+  - fpga dfl error reporting fix
+  - fpga m10bmc driver fix
+  - fpga xilinx driver fix
+  - iio light driver fix
+  - iio dac fwhandle leak fix
+  - iio adc driver fix
 
---1FRzun8VXwn6ZIl1--
+All of these have been in linux-next for a few weeks with no reported
+problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alexis Lothoré (1):
+      fpga: bridge: properly initialize bridge device before populating children
+
+Bjorn Helgaas (1):
+      fpga: dfl-pci: Drop redundant pci_enable_pcie_error_reporting()
+
+Brian Masney (1):
+      iio: light: tsl2772: fix reading proximity-diodes from device tree
+
+Dan Carpenter (1):
+      iio: adc: at91-sama5d2_adc: fix an error code in at91_adc_allocate_trigger()
+
+Greg Kroah-Hartman (2):
+      Merge tag 'iio-fixes-for-6.3b' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-linus
+      Merge tag 'fpga-for-6.3-final' of git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga into char-misc-next
+
+Ilpo Järvinen (1):
+      fpga: m10bmc-sec: Fix rsu_send_data() to return FW_UPLOAD_ERR_HW_ERROR
+
+Liang He (1):
+      iio: dac: ad5755: Add missing fwnode_handle_put()
+
+Michal Simek (1):
+      fpga: xilinx-pr-decoupler: Use readl wrapper instead of pure readl
+
+ drivers/fpga/dfl-pci.c                  | 20 ++++++--------------
+ drivers/fpga/fpga-bridge.c              |  3 ++-
+ drivers/fpga/intel-m10-bmc-sec-update.c |  2 +-
+ drivers/fpga/xilinx-pr-decoupler.c      |  2 +-
+ drivers/iio/adc/at91-sama5d2_adc.c      |  2 +-
+ drivers/iio/dac/ad5755.c                |  1 +
+ drivers/iio/light/tsl2772.c             |  1 +
+ 7 files changed, 13 insertions(+), 18 deletions(-)
