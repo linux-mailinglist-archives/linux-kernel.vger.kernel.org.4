@@ -2,126 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CA16EABF1
+	by mail.lfdr.de (Postfix) with ESMTP id 772476EABF0
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjDUNnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S232252AbjDUNnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjDUNmt (ORCPT
+        with ESMTP id S232557AbjDUNmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:42:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201861386C;
-        Fri, 21 Apr 2023 06:42:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E7A616E9;
-        Fri, 21 Apr 2023 13:42:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32791C433EF;
-        Fri, 21 Apr 2023 13:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682084521;
-        bh=jsN16Cs8YsE77h9jjLEg6GRIme2CQpBrwqLQqDJd2TQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JNn1DqAbNx/sCs/osw5eIeOedCZVdloVIQo9EhPsYfTNj3HmFkVv/m43vOH5beif6
-         vaYLCAtdjcIF6mod/8BpKqSg7Dqhpvs9L0+UH68IZ8RGWVv6AdrDEDANMd/x+AdRKL
-         5nwqm4HJRu9y3RLi2PY/NVlciFSQv0+fhS02th9Jw7yMru8lHNc5VSM8tyBN61dCA+
-         usXloyPOuciyHmpABQk8tKSykCsGT8r1MKlaILdk+5zdmIIDso+C8xWz1gfWArJw8V
-         k6qsAopG5fhOlg+QqbjyXJHiR0toLNZCoYbk6RkXQ+c4ntim1hKzj1XLPforMFlEJH
-         SmC/QhxcC0cbQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] pidfd updates
-Date:   Fri, 21 Apr 2023 15:41:10 +0200
-Message-Id: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
-X-Mailer: git-send-email 2.34.1
+        Fri, 21 Apr 2023 09:42:53 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309A9118EB
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:42:20 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b8f51500a82so2159315276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682084537; x=1684676537;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JDE51zksfO+2BQYs2uxEkBWwzXHikJbqw2bzLyRXwaw=;
+        b=wpGNGkwCP6qhmDCTaIgu67XqT1Ne8yFuulkw6+VKZDDLlhH/MTjSIyQhwRY9T3goum
+         /oR12owOzVb3UpnwFxZxcN6a8zQ57W5RXkREo7mqJo2O/xt0DWcorbVH2pUIYtA76px9
+         MJ44uNf6YWHiQryP15EFD2/29KE3jBLjb1a6n9yYiXiXKvRuWnbCyr74FbU0LQZd92zJ
+         9izLLhcDEVT0XSH8RnybC46qTo2qKlBCPVJ+w68b6UVqdMsJx5r7MOoNrDgojopmlk9g
+         yAAFncbSjRK5C6++USLE/ehJIAyQSwOBAC+79NgJRZgTXLvVhreT61b8LFqvicp1uKbQ
+         PDAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682084537; x=1684676537;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JDE51zksfO+2BQYs2uxEkBWwzXHikJbqw2bzLyRXwaw=;
+        b=WJjqr8EW8fQffnZgCD1jD2f+Rfzsi9ubgqEZLPUXfhVg3xo1iG61tlEvEC0e/hVMZb
+         U6HhWnB9wvxb4nhrIys7Y1RoTFOl5FyR7Sxui6kTm33MCFh2HV71NQRSE8rSPFJUaLvj
+         suu+qA+UX1aMNxSEXOMM8e+N2GBNBpZNpKKNXBv48FRuuc3rb6y7IYsdPN89Gi0AD8wW
+         DxhluFPRbFmX+9TCzPogld1t/OTbxtcIatQkr+/4mgc76E+zHK3291iXgL9VOZwl/QAP
+         5PTyskLSp84s4hk9T8wueVNpSS89PWf1KgUVT0YB+4o3Or7WYW1fDOr30KDUmBdP4Cbl
+         yDkw==
+X-Gm-Message-State: AAQBX9cNb2lsJgyH/lv4XklhwXztPzMCMu89Z8yKWlPdvUJ/mKTBr6AI
+        xNdbTAxx8jcm/6LR4dw/+mGuj2biH/NfHuWvyyyP/A==
+X-Google-Smtp-Source: AKy350a5SILKYcpime34mpGOMEVeRMBKWl75iNX3Pwr4E7FN7GNe+ZdrX2VuLz9ewSKOn6gkqrDRwwfejYqjRpydKAY=
+X-Received: by 2002:a25:bc8:0:b0:b92:510a:7320 with SMTP id
+ 191-20020a250bc8000000b00b92510a7320mr2321396ybl.42.1682084537629; Fri, 21
+ Apr 2023 06:42:17 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2760; i=brauner@kernel.org; h=from:subject:message-id; bh=jsN16Cs8YsE77h9jjLEg6GRIme2CQpBrwqLQqDJd2TQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ4Tfy1OuXJjEcvXBwfnbry4m3250vnTTL4LSOr/1+12yez fOLeix2lLAxiXAyyYoosDu0m4XLLeSo2G2VqwMxhZQIZwsDFKQATsZNi+O8YtvTPjkVFjsvevOw6c3 pTt8G639cM+X7t77yZKH/UKTaPkeGL1hPBYuHrt37ePcE6wdp4Rc+ilPR3kgd3eRWuW/9mfTQHAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230420115520.16472-1-quic_tdas@quicinc.com>
+In-Reply-To: <20230420115520.16472-1-quic_tdas@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 21 Apr 2023 16:42:06 +0300
+Message-ID: <CAA8EJprthTKxCDsMHTXZrLCyhGgTfF3LvqhkrF2-b6XFygKJ2A@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: camcc-sc7180: Add parent dependency to all
+ camera GDSCs
+To:     Taniya Das <quic_tdas@quicinc.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_skakitap@quicinc.com, quic_cponnapa@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+On Thu, 20 Apr 2023 at 14:55, Taniya Das <quic_tdas@quicinc.com> wrote:
+>
+> Mark titan_top_gdsc as parent to all other camera GDSCs.
 
-/* Summary */
-This adds a new pidfd_prepare() helper which allows the caller to
-reserve a pidfd number and allocates a new pidfd file that stashes the
-provided struct pid.
+Please expand the commit message. Your text describes what the patch
+does, but it can be observed from the patch itself. Please describe
+why it is done.
 
-It should be avoided installing a file descriptor into a task's file
-descriptor table just to close it again via close_fd() in case an
-error occurs. The fd has been visible to userspace and might already be
-in use. Instead, a file descriptor should be reserved but not installed
-into the caller's file descriptor table.
+>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>  drivers/clk/qcom/camcc-sc7180.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/camcc-sc7180.c b/drivers/clk/qcom/camcc-sc7180.c
+> index e2b4804695f3..8a4ba7a19ed1 100644
+> --- a/drivers/clk/qcom/camcc-sc7180.c
+> +++ b/drivers/clk/qcom/camcc-sc7180.c
+> @@ -1480,12 +1480,21 @@ static struct clk_branch cam_cc_sys_tmr_clk = {
+>         },
+>  };
+>
+> +static struct gdsc titan_top_gdsc = {
+> +       .gdscr = 0xb134,
+> +       .pd = {
+> +               .name = "titan_top_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +};
+> +
+>  static struct gdsc bps_gdsc = {
+>         .gdscr = 0x6004,
+>         .pd = {
+>                 .name = "bps_gdsc",
+>         },
+>         .pwrsts = PWRSTS_OFF_ON,
+> +       .parent = &titan_top_gdsc.pd,
+>         .flags = HW_CTRL,
+>  };
+>
+> @@ -1495,6 +1504,7 @@ static struct gdsc ife_0_gdsc = {
+>                 .name = "ife_0_gdsc",
+>         },
+>         .pwrsts = PWRSTS_OFF_ON,
+> +       .parent = &titan_top_gdsc.pd,
+>  };
+>
+>  static struct gdsc ife_1_gdsc = {
+> @@ -1503,6 +1513,7 @@ static struct gdsc ife_1_gdsc = {
+>                 .name = "ife_1_gdsc",
+>         },
+>         .pwrsts = PWRSTS_OFF_ON,
+> +       .parent = &titan_top_gdsc.pd,
+>  };
+>
+>  static struct gdsc ipe_0_gdsc = {
+> @@ -1512,15 +1523,9 @@ static struct gdsc ipe_0_gdsc = {
+>         },
+>         .pwrsts = PWRSTS_OFF_ON,
+>         .flags = HW_CTRL,
+> +       .parent = &titan_top_gdsc.pd,
+>  };
+>
+> -static struct gdsc titan_top_gdsc = {
+> -       .gdscr = 0xb134,
+> -       .pd = {
+> -               .name = "titan_top_gdsc",
+> -       },
+> -       .pwrsts = PWRSTS_OFF_ON,
+> -};
+>
+>  static struct clk_hw *cam_cc_sc7180_hws[] = {
+>         [CAM_CC_PLL2_OUT_EARLY] = &cam_cc_pll2_out_early.hw,
+> --
+> 2.17.1
+>
 
-If another failure path is hit then the reserved file descriptor and
-file can just be put without any userspace visible side-effects. And if
-all failure paths are cleared the file descriptor and file can be
-installed into the task's file descriptor table.
 
-This helper is now used in all places that open coded this functionality
-before. For example, this is currently done during copy_process() and
-fanotify used pidfd_create(), which returns a pidfd that has already
-been made visibile in the caller's file descriptor table, but then
-closed it using close_fd().
-
-In one of the next merge windows there is also new functionality coming
-to unix domain sockets that will have to rely on pidfd_prepare().
-
-/* Testing */
-clang: Ubuntu clang version 15.0.6
-gcc: (Ubuntu 12.2.0-3ubuntu1) 12.2.0
-
-All patches are based on 6.3-rc4 and have been sitting in linux-next.
-No build failures or warnings were observed. All old and new tests in
-fstests, selftests, and LTP pass without regressions.
-
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with
-current mainline.
-
-The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
-
-  Linux 6.3-rc4 (2023-03-26 14:40:20 -0700)
-
-are available in the Git repository at:
-
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/v6.4/pidfd.file
-
-for you to fetch changes up to eee3a0e93924f2aab8ebaa7f2e26fd0f3b33f9e7:
-
-  fanotify: use pidfd_prepare() (2023-04-03 11:16:57 +0200)
-
-Please consider pulling these changes from the signed v6.4/pidfd.file tag.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-v6.4/pidfd.file
-
-----------------------------------------------------------------
-Christian Brauner (3):
-      pid: add pidfd_prepare()
-      fork: use pidfd_prepare()
-      fanotify: use pidfd_prepare()
-
- fs/notify/fanotify/fanotify_user.c | 13 +++--
- include/linux/pid.h                |  1 +
- kernel/fork.c                      | 98 +++++++++++++++++++++++++++++++++-----
- kernel/pid.c                       | 19 +++-----
- 4 files changed, 104 insertions(+), 27 deletions(-)
+-- 
+With best wishes
+Dmitry
