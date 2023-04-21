@@ -2,51 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA456EAA1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A053A6EAA2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjDUMP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S231802AbjDUMTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjDUMP0 (ORCPT
+        with ESMTP id S229612AbjDUMTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:15:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E6D5B93;
-        Fri, 21 Apr 2023 05:15:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DACB60B01;
-        Fri, 21 Apr 2023 12:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B42C433D2;
-        Fri, 21 Apr 2023 12:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682079324;
-        bh=4CzcETXQykZY+fHpWCvvKB+S7P+we+lzEzbxvcgMVeM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eKl5BQzrlZSF8qZrskzbZqlNQI76ROsBhYulGMAU6sb094LsQGtTHFngWS8l/w05R
-         /MktApIRkIE/Irk3G8I1K3YqX92esw7l02UEkhh4ncwN8E7lXbjtY2Wi8xBxSb21pY
-         YDeG8/NQlvtCHsplTRg8WoAtVzaWlmcSFnZQOHPi24SmAGhrntCnwL47gFcFMU0Kw6
-         FdmSH+FtW7b7s2c756mjlEhAh/dP1XS95/8/0S9xvE/gYdt/8xW4LyGO5j6UwRY/oN
-         Xe+DH8rBRCRX2XpJ/Qak1OgvdzJgWlNunybUCDQ6OUoTj91R1X4pKrY+4tYFKOKTz0
-         e41cUz4jrSFrQ==
-From:   broonie@kernel.org
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: linux-next: manual merge of the risc-v tree with the origin tree
-Date:   Fri, 21 Apr 2023 13:15:19 +0100
-Message-Id: <20230421121519.75428-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 21 Apr 2023 08:19:12 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DDB86B0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:19:07 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230421121905epoutp010e7c9a499590a3756e0b22508c87d7ca~X8m83kAIw1062510625epoutp01O
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:19:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230421121905epoutp010e7c9a499590a3756e0b22508c87d7ca~X8m83kAIw1062510625epoutp01O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682079545;
+        bh=aG6CvdnKAQ/G7eThPVIYT4X7N/OR4iJxhfybZE60YQs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VHnEt9Sz8DL6dH7PL/djzxUJk1a2lO8RhCghWoJ9xZMlKqDfwWlrVH1TmOobfCXMj
+         dpINhCZuIt1FhyUrQ/4jhANC7107dsSLV7d+Gwyh9Q6vW8VV2WFPDlpPm+BHnLDBCH
+         bUtxswmuEO/NlP8hGuMtbNcUuFZNws23nDQsrBf0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230421121904epcas5p1bc7ae5c34a38da71bfa4dc20ea87a478~X8m8fQQX00882608826epcas5p1I;
+        Fri, 21 Apr 2023 12:19:04 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Q2tqW2Sv0z4x9Pt; Fri, 21 Apr
+        2023 12:19:03 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        52.6D.09961.73F72446; Fri, 21 Apr 2023 21:19:03 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230421121902epcas5p476b16ea1b5ca093afcee51662331189f~X8m6k818u2683326833epcas5p4G;
+        Fri, 21 Apr 2023 12:19:02 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230421121902epsmtrp24c7f5a6c3cc979d5f83c481b3f964be4~X8m6j6WCb2454524545epsmtrp2m;
+        Fri, 21 Apr 2023 12:19:02 +0000 (GMT)
+X-AuditID: b6c32a49-2c1ff700000026e9-dc-64427f3728e1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        12.E6.08609.63F72446; Fri, 21 Apr 2023 21:19:02 +0900 (KST)
+Received: from green245 (unknown [107.99.41.245]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230421121901epsmtip1e58fc934cbfd3ec05ffda0f2b5ca2c0a~X8m41Ufbo1246212462epsmtip1D;
+        Fri, 21 Apr 2023 12:19:00 +0000 (GMT)
+Date:   Fri, 21 Apr 2023 17:46:05 +0530
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        sagi@grimberg.me, hch@lst.de, kbusch@kernel.org,
+        ming.lei@redhat.com
+Subject: Re: [PATCH v2 0/3] io_uring: Pass the whole sqe to commands
+Message-ID: <20230421121605.GA30924@green245>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230421114440.3343473-1-leitao@debian.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNJsWRmVeSWpSXmKPExsWy7bCmlq55vVOKwZL7AhZzVm1jtFh9t5/N
+        YuXqo0wW71rPsVhMOnSN0WLVrHtMFm8nbGG02HtL2+LyrjlsFvOXPWW3ODS5mcli3ev3LA48
+        Hr/a5jJ7TGx+x+6xc9Zddo/z9zayeFw+W+qxaVUnm8fmJfUeu282sHm833eVzePzJrkArqhs
+        m4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygq5UUyhJz
+        SoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BSYFesWJucWleel6eaklVoYGBkamQIUJ2RlH
+        1zxlKTjGUbFz2k7WBsa17F2MnBwSAiYSrX3LGEFsIYHdjBJNf+K7GLmA7E+MEos7VrNDOJ8Z
+        JWbO3MwC03Gtv58RIrELKNGwmgnCecYoceXfZ1aQKhYBVYnlF7YAJTg42AQ0JS5MLgUJiwio
+        SEw82wM2lVngJ6PEzoX3wO4QFnCR2PRlHxuIzSugK/Hn3CtWCFtQ4uTMJywgczgFLCUWnXAC
+        CYsKKEsc2HYcbK+EwAkOiUWfrjOC1EgAzTm0QQjiUGGJV8e3QL0pJfH53V42CDtZ4tLMc0wQ
+        donE4z0HoWx7idZT/cwgNrNAhsTH7f/ZIWw+id7fT5ggxvNKdLRBjVeUuDfpKSuELS7xcMYS
+        VogSD4n+g9Dg6WGU6Lxyn3kCo9wsJM/MQrIBwraS6PzQxDoLqJ1ZQFpi+T8OCFNTYv0u/QWM
+        rKsYJVMLinPTU4tNCwzzUsvhMZycn7uJEZyKtTx3MN598EHvECMTB+MhRgkOZiURXo9SpxQh
+        3pTEyqrUovz4otKc1OJDjKbAyJnILCWanA/MBnkl8YYmlgYmZmZmJpbGZoZK4rzqtieThQTS
+        E0tSs1NTC1KLYPqYODilGpgyZYOeHpgcP3/SWZnyFR+TZe2nKKydYbnwnqdNd3B91qGmNUa1
+        1u/ToxfNDAxe+IX35aTnrAylCt0vV7mFnvzIpbZpunXE63vHlh44/5HZjfX5kf/Wd8slGN0/
+        m++QWK8sInl2d4pAp8Qldr1nndci2f/yahUGGCrObUvwfBfnviNvhs7C3QWa7wOd9metPJYk
+        ebP6TMLZfdEuGT7xcod+yXNx7PwY2RO4re4F2yPFhKK7X7SPiu/38/l99sBlZbNZnF3fIh1f
+        H+oJ+KUiLObUazR9f7vBA7mHiTtzdQ9cLLCzlN3IprW09eCkuocPeGdzrjl4XNC4uf2cFfvF
+        JdkMXSGyVm8eNwSph/QocCqxFGckGmoxFxUnAgByXh1eTgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJTtes3inFYNlKPYs5q7YxWqy+289m
+        sXL1USaLd63nWCwmHbrGaLFq1j0mi7cTtjBa7L2lbXF51xw2i/nLnrJbHJrczGSx7vV7Fgce
+        j19tc5k9Jja/Y/fYOesuu8f5extZPC6fLfXYtKqTzWPzknqP3Tcb2Dze77vK5vF5k1wAVxSX
+        TUpqTmZZapG+XQJXxuIV71kKfrBWtB3rYWpg/MnSxcjJISFgInGtv5+xi5GLQ0hgB6PE6d+X
+        2SES4hLN135A2cISK/89Z4coesIocfX7ETaQBIuAqsTyC1uYuhg5ONgENCUuTC4FCYsIqEhM
+        PNsDVs8s8JtRYsqn1awgCWEBF4lNX/aB9fIK6Er8OfeKFWJoD6PEzBvXGCESghInZz4BO49Z
+        wExi3uaHzCALmAWkJZb/4wAxOQUsJRadcAKpEBVQljiw7TjTBEbBWUiaZyFpnoXQvICReRWj
+        ZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnCEaWntYNyz6oPeIUYmDsZDjBIczEoivB6l
+        TilCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MB38YmPN
+        ePEgz8T75x6f6f+twGWuI/PwkcrB60cvHGg73tv38sPTwiBFn1nVBw0Xy2xjOmj03Dup9aCP
+        w5+t8zySns/bpaUrmG4ybwujhsj9izef9TX0ZJieS37GM0fcr6np1mzzlJmyj0IvzrlWHH13
+        TsJR65UP+v/FbeTLVA6clbNynRVzeWfkbA7/02LXFW2ba0s7ZBUO1eed3Gox64g6y7VZfFtE
+        dJ2Z95ZWrWBwanGoPxl0as6ThQ/F521733mGWdRuWsuFwuky5h86nvFotJ6fFR9y5Njnyw7T
+        Kn4xvJbadEGiLdJV8uSDadPXsM0KnZY7P/2cUenW0xdalkW+W296QOjBAbnPnO7mKWeUWIoz
+        Eg21mIuKEwGi4fDXHwMAAA==
+X-CMS-MailID: 20230421121902epcas5p476b16ea1b5ca093afcee51662331189f
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----DBoZ3SwRANBUL.4oxx5P7t7PoRgN1JiEjGDoy8d5VOZGQ23m=_36c71_"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230421114703epcas5p37cd0ddb29674d8f3d5fe2f1fa494d1f0
+References: <CGME20230421114703epcas5p37cd0ddb29674d8f3d5fe2f1fa494d1f0@epcas5p3.samsung.com>
+        <20230421114440.3343473-1-leitao@debian.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,115 +120,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+------DBoZ3SwRANBUL.4oxx5P7t7PoRgN1JiEjGDoy8d5VOZGQ23m=_36c71_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-Today's linux-next merge of the risc-v tree got a conflict in:
+On Fri, Apr 21, 2023 at 04:44:37AM -0700, Breno Leitao wrote:
+>These three patches prepare for the sock support in the io_uring cmd, as
+>described in the following RFC:
+>
+>	https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/
+>
+>Since the support linked above depends on other refactors, such as the sock
+>ioctl() sock refactor[1], I would like to start integrating patches that have
+>consensus and can bring value right now.  This will also reduce the patchset
+>size later.
+>
+>Regarding to these three patches, they are simple changes that turn
+>io_uring cmd subsystem more flexible (by passing the whole SQE to the
+>command), and cleaning up an unnecessary compile check.
 
-  arch/riscv/mm/init.c
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 
-between commit:
-
-  ef69d2559fe91 ("riscv: Move early dtb mapping into the fixmap region")
-
-from the origin tree and commits:
-
-  8589e346bbb67 ("riscv: Move the linear mapping creation in its own function")
-  3335068f87217 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-  401e84488800d ("riscv: Move DTB_EARLY_BASE_VA to the kernel address space")
-  39b33072941f8 ("riscv: Introduce CONFIG_RELOCATABLE")
-
-from the risc-v tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-I suspect something more is needed to handle 401e84488800d ("riscv: Move
-DTB_EARLY_BASE_VA to the kernel address space") properly but I have zero
-familiarity with this code or ability to test.
+------DBoZ3SwRANBUL.4oxx5P7t7PoRgN1JiEjGDoy8d5VOZGQ23m=_36c71_
+Content-Type: text/plain; charset="utf-8"
 
 
-diff --cc arch/riscv/mm/init.c
-index 0f14f4a8d179a,bce899b180cd2..0000000000000
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@@ -1070,23 -1164,63 +1144,74 @@@ asmlinkage void __init setup_vm(uintptr
-  	pt_ops_set_fixmap();
-  }
-  
-- static void __init setup_vm_final(void)
-+ static void __init create_linear_mapping_range(phys_addr_t start,
-+ 					       phys_addr_t end)
-  {
-+ 	phys_addr_t pa;
-  	uintptr_t va, map_size;
-- 	phys_addr_t pa, start, end;
-+ 
-+ 	for (pa = start; pa < end; pa += map_size) {
-+ 		va = (uintptr_t)__va(pa);
-+ 		map_size = best_map_size(pa, end - pa);
-+ 
-+ 		create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
-+ 				   pgprot_from_va(va));
-+ 	}
-+ }
-+ 
-+ static void __init create_linear_mapping_page_table(void)
-+ {
-+ 	phys_addr_t start, end;
-  	u64 i;
-  
-+ #ifdef CONFIG_STRICT_KERNEL_RWX
-+ 	phys_addr_t ktext_start = __pa_symbol(_start);
-+ 	phys_addr_t ktext_size = __init_data_begin - _start;
-+ 	phys_addr_t krodata_start = __pa_symbol(__start_rodata);
-+ 	phys_addr_t krodata_size = _data - __start_rodata;
-+ 
-+ 	/* Isolate kernel text and rodata so they don't get mapped with a PUD */
-+ 	memblock_mark_nomap(ktext_start,  ktext_size);
-+ 	memblock_mark_nomap(krodata_start, krodata_size);
-+ #endif
-+ 
-+ 	/* Map all memory banks in the linear mapping */
-+ 	for_each_mem_range(i, &start, &end) {
-+ 		if (start >= end)
-+ 			break;
-+ 		if (start <= __pa(PAGE_OFFSET) &&
-+ 		    __pa(PAGE_OFFSET) < end)
-+ 			start = __pa(PAGE_OFFSET);
-+ 		if (end >= __pa(PAGE_OFFSET) + memory_limit)
-+ 			end = __pa(PAGE_OFFSET) + memory_limit;
-+ 
-+ 		create_linear_mapping_range(start, end);
-+ 	}
-+ 
-+ #ifdef CONFIG_STRICT_KERNEL_RWX
-+ 	create_linear_mapping_range(ktext_start, ktext_start + ktext_size);
-+ 	create_linear_mapping_range(krodata_start,
-+ 				    krodata_start + krodata_size);
-+ 
-+ 	memblock_clear_nomap(ktext_start,  ktext_size);
-+ 	memblock_clear_nomap(krodata_start, krodata_size);
-+ #endif
-+ }
-+ 
-+ static void __init setup_vm_final(void)
-+ {
-  	/* Setup swapper PGD for fixmap */
- +#if !defined(CONFIG_64BIT)
- +	/*
- +	 * In 32-bit, the device tree lies in a pgd entry, so it must be copied
- +	 * directly in swapper_pg_dir in addition to the pgd entry that points
- +	 * to fixmap_pte.
- +	 */
- +	unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
- +
- +	set_pgd(&swapper_pg_dir[idx], early_pg_dir[idx]);
- +#endif
-++
-  	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
-  			   __pa_symbol(fixmap_pgd_next),
-  			   PGDIR_SIZE, PAGE_TABLE);
+------DBoZ3SwRANBUL.4oxx5P7t7PoRgN1JiEjGDoy8d5VOZGQ23m=_36c71_--
