@@ -2,69 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9740C6EAA6C
+	by mail.lfdr.de (Postfix) with ESMTP id C1B836EAA6D
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjDUMhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 08:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S231960AbjDUMh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjDUMhX (ORCPT
+        with ESMTP id S231209AbjDUMhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:37:23 -0400
-Received: from outbound-smtp52.blacknight.com (outbound-smtp52.blacknight.com [46.22.136.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877B4193
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:37:22 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp52.blacknight.com (Postfix) with ESMTPS id F1603FACC5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:37:20 +0100 (IST)
-Received: (qmail 23836 invoked from network); 21 Apr 2023 12:37:20 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 12:37:20 -0000
-Date:   Fri, 21 Apr 2023 13:37:19 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 03/26] mm: make pageblock_order 2M per default
-Message-ID: <20230421123719.w7tufd6asqdpxcf3@techsingularity.net>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-4-hannes@cmpxchg.org>
+        Fri, 21 Apr 2023 08:37:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D56EE66
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:37:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 28CBB1FDDF;
+        Fri, 21 Apr 2023 12:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682080642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EvoK1WWFPG2xWQZWGarP7RltMsW/Mnk7TCbhJIkBmME=;
+        b=HiL3hQLbhf6lbkrFxxq7moWP8BupRXMLUP+4CjwWUAquwFILKxrg9DWkrJHK7gwgu0fQcI
+        IQkdGv8NT1wgib8U6Ny5uKu5uTQ5U1/0zZs6yIRADh4nbzvMhI/h2hyIy6d5Ao0FLihG9S
+        1PktsPuDo61oeoioEnkmcnHQfDjjm2U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682080642;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EvoK1WWFPG2xWQZWGarP7RltMsW/Mnk7TCbhJIkBmME=;
+        b=vns+Gyh/CJ9jWO3QwOWVDg7blkrdbp193jMejPw7hJzMwNEJmRJsCfXLfmHwfycUV/Dkai
+        1Z/UWM4aKPx2i/AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0039D1390E;
+        Fri, 21 Apr 2023 12:37:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pR7wOYGDQmQ4PAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 21 Apr 2023 12:37:21 +0000
+Message-ID: <2f4370b6-8426-400a-8be1-36a48dadccad@suse.de>
+Date:   Fri, 21 Apr 2023 14:37:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230418191313.268131-4-hannes@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
+Content-Language: en-US
+To:     Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20230420155705.21463-1-pa@panix.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230420155705.21463-1-pa@panix.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------XmeV6f1nal7YKKa0YL1hO1eL"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 03:12:50PM -0400, Johannes Weiner wrote:
-> pageblock_order can be of various sizes, depending on configuration,
-> but the default is MAX_ORDER-1. Given 4k pages, that comes out to
-> 4M. This is a large chunk for the allocator/reclaim/compaction to try
-> to keep grouped per migratetype. It's also unnecessary as the majority
-> of higher order allocations - THP and slab - are smaller than that.
-> 
-> Before subsequent patches increase the effort that goes into
-> maintaining migratetype isolation, it's important to first set the
-> defrag block size to what's likely to have common consumers.
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------XmeV6f1nal7YKKa0YL1hO1eL
+Content-Type: multipart/mixed; boundary="------------9wE9hytJvpmKl0IeMkzBdihm";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Javier Martinez Canillas <javierm@redhat.com>, linux-kernel@vger.kernel.org,
+ Hans de Goede <hdegoede@redhat.com>, Ard Biesheuvel <ardb@kernel.org>
+Message-ID: <2f4370b6-8426-400a-8be1-36a48dadccad@suse.de>
+Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
+References: <20230420155705.21463-1-pa@panix.com>
+In-Reply-To: <20230420155705.21463-1-pa@panix.com>
 
-This patch may be a distraction in the context of this series. I don't feel
-particularly strongly about it but it has strong bikeshed potential. For
-configurations that support huge pages of any sort, it should be PMD_ORDER,
-for anything else the choice is arbitrary. 2M is as good a guess as
-anyway because even if it was tied to the PAGE_ALLOC_COSTLY_ORDER then
-the pageblock bitmap overhead might be annoying.
+--------------9wE9hytJvpmKl0IeMkzBdihm
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
--- 
-Mel Gorman
-SUSE Labs
+SGkNCg0KQW0gMjAuMDQuMjMgdW0gMTc6NTcgc2NocmllYiBQaWVycmUgQXNzZWxpbjoNCj4g
+U29tZSBsZWdhY3kgQklPU2VzIHJlcG9ydCBubyByZXNlcnZlZCBiaXRzIGluIHRoZWlyIDMy
+LWJpdCByZ2IgbW9kZSwNCj4gYnJlYWtpbmcgdGhlIGNhbGN1bGF0aW9uIG9mIGJpdHNfcGVy
+X3BpeGVsIGluIGNvbW1pdCBmMzVjZDNmYTc3MjkNCj4gKCJmaXJtd2FyZS9zeXNmYjogRml4
+IEVGSS9WRVNBIGZvcm1hdCBzZWxlY3Rpb24iKS4gIEhvd2V2ZXIgdGhleSByZXBvcnQNCj4g
+bGZiX2RlcHRoIGNvcnJlY3RseSBmb3IgdGhvc2UgbW9kZXMuICBLZWVwIHRoZSBjb21wdXRh
+dGlvbiBidXQNCj4gc2V0IGJpdHNfcGVyX3BpeGVsIHRvIGxmYl9kZXB0aCBpZiB0aGUgbGF0
+dGVyIGlzIGxhcmdlci4NCj4gDQo+IHYyIGZpeGVzIHRoZSB3YXJuaW5ncyBmcm9tIGEgbWF4
+MygpIG1hY3JvIHdpdGggYXJndW1lbnRzIG9mIGRpZmZlcmVudA0KPiB0eXBlczsgIHNwbGl0
+IHRoZSBiaXRzX3Blcl9waXhlbCBhc3NpZ25tZW50IHRvIGF2b2lkIHVnbHlmaW5nIHRoZSBj
+b2RlDQo+IHdpdGggdG9vIG1hbnkgY2FzdHMuDQo+IA0KPiB2MyBmaXhlcyBzcGFjZSBhbmQg
+Zm9ybWF0dGluZyBibGlwcyBwb2ludGVkIG91dCBieSBKYXZpZXIsIGFuZCBjaGFuZ2UNCj4g
+dGhlIGJpdF9wZXJfcGl4ZWwgYXNzaWdubWVudCBiYWNrIHRvIGEgc2luZ2xlIHN0YXRlbWVu
+dCB1c2luZyB0d28gY2FzdHMuDQo+IA0KPiBMaW5rOiBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9yLzRQc202QjZMcWt6MVFYTUBwYW5peDMucGFuaXguY29tDQo+IExpbms6IGh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL3IvMjAyMzA0MTIxNTAyMjUuMzc1NzIyMy0xLWphdmllcm1AcmVk
+aGF0LmNvbQ0KPiBMaW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAy
+MzA0MTgxODMzMjUuMjMyNy0xLXBhQHBhbml4LmNvbS9ULyN1DQo+IExpbms6IGh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2RyaS1kZXZlbC8yMDIzMDQxOTA0NDgzNC4xMDgxNi0xLXBhQHBh
+bml4LmNvbS9ULyN1DQo+IEZpeGVzOiBmMzVjZDNmYTc3MjkgKCJmaXJtd2FyZS9zeXNmYjog
+Rml4IEVGSS9WRVNBIGZvcm1hdCBzZWxlY3Rpb24iKQ0KPiBTaWduZWQtb2ZmLWJ5OiBQaWVy
+cmUgQXNzZWxpbiA8cGFAcGFuaXguY29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL2Zpcm13YXJl
+L3N5c2ZiX3NpbXBsZWZiLmMgfCAxMyArKysrKysrKy0tLS0tDQo+ICAgMSBmaWxlIGNoYW5n
+ZWQsIDggaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMgYi9kcml2ZXJzL2Zpcm13YXJl
+L3N5c2ZiX3NpbXBsZWZiLmMNCj4gaW5kZXggODJjNjRjYjlmNTMxLi42ZjdjNWQwYzUwOTAg
+MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZmlybXdhcmUvc3lzZmJfc2ltcGxlZmIuYw0KPiAr
+KysgYi9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMNCj4gQEAgLTUxLDE1ICs1
+MSwxOCBAQCBfX2luaXQgYm9vbCBzeXNmYl9wYXJzZV9tb2RlKGNvbnN0IHN0cnVjdCBzY3Jl
+ZW5faW5mbyAqc2ksDQo+ICAgCSAqDQo+ICAgCSAqIEl0J3Mgbm90IGVhc2lseSBwb3NzaWJs
+ZSB0byBmaXggdGhpcyBpbiBzdHJ1Y3Qgc2NyZWVuX2luZm8sDQo+ICAgCSAqIGFzIHRoaXMg
+Y291bGQgYnJlYWsgVUFQSS4gVGhlIGJlc3Qgc29sdXRpb24gaXMgdG8gY29tcHV0ZQ0KPiAt
+CSAqIGJpdHNfcGVyX3BpeGVsIGhlcmUgYW5kIGlnbm9yZSBsZmJfZGVwdGguIEluIHRoZSBs
+b29wIGJlbG93LA0KPiArCSAqIGJpdHNfcGVyX3BpeGVsIGZyb20gdGhlIGNvbG9yIGJpdHMs
+IHJlc2VydmVkIGJpdHMgYW5kDQo+ICsJICogcmVwb3J0ZWQgbGZiX2RlcHRoLCB3aGljaGV2
+ZXIgaXMgaGlnaGVzdC4gIEluIHRoZSBsb29wIGJlbG93LA0KPiAgIAkgKiBpZ25vcmUgc2lt
+cGxlZmIgZm9ybWF0cyB3aXRoIGFscGhhIGJpdHMsIGFzIEVGSSBhbmQgVkVTQQ0KPiAgIAkg
+KiBkb24ndCBzcGVjaWZ5IGFscGhhIGNoYW5uZWxzLg0KPiAgIAkgKi8NCj4gICAJaWYgKHNp
+LT5sZmJfZGVwdGggPiA4KSB7DQo+IC0JCWJpdHNfcGVyX3BpeGVsID0gbWF4KG1heDMoc2kt
+PnJlZF9zaXplICsgc2ktPnJlZF9wb3MsDQo+IC0JCQkJCSAgc2ktPmdyZWVuX3NpemUgKyBz
+aS0+Z3JlZW5fcG9zLA0KPiAtCQkJCQkgIHNpLT5ibHVlX3NpemUgKyBzaS0+Ymx1ZV9wb3Mp
+LA0KPiAtCQkJCSAgICAgc2ktPnJzdmRfc2l6ZSArIHNpLT5yc3ZkX3Bvcyk7DQo+ICsJCS8q
+IG1heCgpIG1hY3JvcyBhcmdzIHNob3VsZCBiZSBvZiB0aGUgc2FtZSB0eXBlICovDQo+ICsJ
+CWJpdHNfcGVyX3BpeGVsID0gbWF4MygodTE2KW1heDMoc2ktPnJlZF9zaXplICsgc2ktPnJl
+ZF9wb3MsDQo+ICsJCQkJCXNpLT5ncmVlbl9zaXplICsgc2ktPmdyZWVuX3BvcywNCj4gKwkJ
+CQkJc2ktPmJsdWVfc2l6ZSArIHNpLT5ibHVlX3BvcyksDQo+ICsJCQkJKHUxNikoc2ktPnJz
+dmRfc2l6ZSArIHNpLT5yc3ZkX3BvcyksDQo+ICsJCQkJc2ktPmxmYl9kZXB0aCk7DQoNCkkg
+Zm91bmQgdGhpcyBjYXN0aW5nIG1lc3MgZXZlbiBtb3JlIHVucmVhZGFibGUuIEkgd2VudCBi
+YWNrIHRvIHYyLCBmaXhlZCANCnRoZSBzdHlsZSBpc3N1ZXMgYW5kIGNvbW1pdHRlZCB0aGUg
+cGF0Y2ggYXMgdjQgKHN0aWxsIHVuZGVyIHlvdXIgbmFtZSkuDQoNCiANCmh0dHBzOi8vY2dp
+dC5mcmVlZGVza3RvcC5vcmcvZHJtL2RybS10aXAvY29tbWl0Lz9pZD0xYjYxN2JjOTMxNzg5
+MTJmYTM2Zjg3YTk1N2MxNWQxZjE3MDhjMjk5DQoNClRoYW5rcyBhIGxvdCBmb3IgdGhlIGJ1
+Z2ZpeC4NCg0KQmVzdCByZWdhcmQNClRob21hcw0KDQo+ICAgCX0gZWxzZSB7DQo+ICAgCQli
+aXRzX3Blcl9waXhlbCA9IHNpLT5sZmJfZGVwdGg7DQo+ICAgCX0NCj4gDQo+IGJhc2UtY29t
+bWl0OiA2YThmNTdhZTJlYjA3YWIzOWE2ZjBjY2FkNjBjNzYwNzQzMDUxMDI2DQoNCi0tIA0K
+VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
+dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2
+MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5k
+cmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJn
+KQ0K
+
+--------------9wE9hytJvpmKl0IeMkzBdihm--
+
+--------------XmeV6f1nal7YKKa0YL1hO1eL
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRCg4EFAwAAAAAACgkQlh/E3EQov+CM
+iw//STbJrpmNJBVRLkuKoNjkUuwQLZJ+/lt2SFTyAMeRde64udOgpRnlnhXurFowBwOSrqKyPKGb
+quk/AY3F4YGt7ZU364woIjrmUGivJWLPwnWhH73fImTMFcwGR3un6K82igE/l232cugo5LOMv4b3
+GaxsE1E6HnaA0+z+hirpMVUvEnE4OwM5MRdiy/X5N/WPTwCDjOvwZdDNsDSKmLJt1u2T4aOs7+vm
+gsKd8ErEZR/+mp4qVQpy6rmQI10j7O2WrrQlw0eVg6NW7LIqhZwF6+EJXNrN+uuDeGRTxQXW+WUS
+DOM32as11pVruNhOUaBKDWhDmvbglW0GjhauiUfCbICobMiWR9PNdRu7Eszs8Qtke2F6opq78UjM
+WMWUwHFSfQDLJvZoSihWaaa0gUwNz/+fX7S0FrL2fPit5QsqH7MJ5Gmc86fLbOcIbMJI6kvIicrD
+Z7zHzOkcGWyUt9WEFAEOuaO+HQpE0CxzE/804uosWJS4SbjXvwcIATri/Bj9QwYTCBhehkgYz9Vi
+ks/sMnbvIO0Enksu7fVKYo2WzRdCnwM6nVjIyRU6pRnwgOEzG5SqTH99SlHAyRBQBtGJARhohLSz
+4qD4+2qsb54vwlXPOqYmtJTmwPcWExZ+0ER+MzxxvvWyVxfRUJOUrd7tF/BT/s1lynqgdC9rZFec
+86Q=
+=Df9s
+-----END PGP SIGNATURE-----
+
+--------------XmeV6f1nal7YKKa0YL1hO1eL--
