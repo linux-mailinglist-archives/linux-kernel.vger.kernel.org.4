@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62076EB303
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801A86EB30B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjDUUpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 16:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
+        id S231521AbjDUUuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 16:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbjDUUpj (ORCPT
+        with ESMTP id S229543AbjDUUuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 16:45:39 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3881FE4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:45:38 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f3cd32799so360090266b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682109936; x=1684701936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yjzyPI+dsLA9tFzE+qKkauFePAkFasKeOC/4yMxjAAI=;
-        b=DUuLCebzYtE+ayM8PjgVfm071n3KjKq4Uxh2tvIlKRsXDugAbe9KvWb9IypVj+KeA/
-         LaU1gkfuO19/c+8yyPvVaVvXNuS0LXGgfchDY68c/LT4En+R/i4TsI4Shsba9bWd35Ab
-         5QXEisavijws5iGjZ+nokU1cr5G+/mKuNH4SI=
+        Fri, 21 Apr 2023 16:50:52 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78041FCE;
+        Fri, 21 Apr 2023 13:50:50 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6a606135408so2272411a34.0;
+        Fri, 21 Apr 2023 13:50:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682109936; x=1684701936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yjzyPI+dsLA9tFzE+qKkauFePAkFasKeOC/4yMxjAAI=;
-        b=LPlrK5UDUt5JhXAsEffAZ5w2pYNqzIL9p0M63q1skv7zaV+lMunYBMANLPN+73FUW1
-         dPvOqQ335z2Zm7YqULNFS90BCv+cvO3rTd3aWMCNU4j3ZGPXCEMQbgQLcwMrllOjKVUf
-         ggXCX5S+9X6Dq30dkIy7aijTXM2HHPCZQTkTrIx4aMvfrhsQ/ZYjVMBSeW+ALqum57Dp
-         wde6ev038naf0nx5csbx1PfbUHYo/5WWkAJBOZk2m6fJyAUJ3CKOTnK0/0zz9iMyfWab
-         L5Ur/9ZcfCg/pWeEF0S45R7Rjp3Wnza2Ih4BYO+eWFkxRyxpj5pIlEseLqzdmxdA9SQN
-         yA7A==
-X-Gm-Message-State: AAQBX9cjO/nEBfu+Q9rKioLzi0UBMabeVvDacM39Jn3eB+x9zwlPYP8m
-        bpHuZ5I1NA2YcSKV8oUfkLRe11JfTHoH/qolQPDpyw==
-X-Google-Smtp-Source: AKy350aFquTJnXPsk3/YxURkSUB0wkbVD/Jksz2cpHmtti6/iI+McI+xyiJ9L0GLkuaYRbX+AhTdxg==
-X-Received: by 2002:a17:906:358f:b0:94f:2916:7d6 with SMTP id o15-20020a170906358f00b0094f291607d6mr3890173ejb.19.1682109936337;
-        Fri, 21 Apr 2023 13:45:36 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id md23-20020a170906ae9700b0094fa846be48sm2468844ejb.132.2023.04.21.13.45.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 13:45:35 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-507bdc5ca2aso3649473a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:45:35 -0700 (PDT)
-X-Received: by 2002:a05:6402:641:b0:504:921b:825 with SMTP id
- u1-20020a056402064100b00504921b0825mr5638433edx.36.1682109935212; Fri, 21 Apr
- 2023 13:45:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682110250; x=1684702250;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mXtCjLr6e0ACopDROp6u8nUQuHmLJz4px5GPfgN7eBs=;
+        b=TUaO0wl8KaFHrcF1Lj21f1zJ5mly5IVwmjyLPjGpv8SBL180QIdPBhhFUYyiky4JUr
+         ZvvTM4935larbI6j+beSwZ0K4dxr1ALUgaPhevsUL8B0NyJmBjwPmsnGb+PYmpJZbCvx
+         7J3RASs80R0nC27nq/M/BavElF7r7XgfbSAQUZt4TFUfIxR5Yc1fUROrkyO1Qd/Fy9ag
+         JyGkoJMuz6TixS5d/PXiORdrh98uiug9/XE8bEcNu5V/kjQgrw7/76giacfPyyjh3RTA
+         PcdXYW3h1amF1IIsWeTWRYw5JZaC77TzV/JQhG4CTyBrTydfOcuKBz2ava5+yliJiu30
+         bM8Q==
+X-Gm-Message-State: AAQBX9eG05GlcExWdPTt/DB1OzoUnAclYaTd9QUN6N6aO7u61pXmKoOF
+        0t2uCnDXSXswMOJnd02QMA==
+X-Google-Smtp-Source: AKy350bPLU6VfMLXu2FkytWiKxId89Rd2v0v24jbsfIKHmbVrFRwKEmRaexmkc8JvSdGQcxb3jpkAg==
+X-Received: by 2002:a9d:6348:0:b0:69f:7d3:6eae with SMTP id y8-20020a9d6348000000b0069f07d36eaemr3194982otk.7.1682110250073;
+        Fri, 21 Apr 2023 13:50:50 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i15-20020a9d624f000000b0069fb8bfb4f3sm2071766otk.77.2023.04.21.13.50.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 13:50:49 -0700 (PDT)
+Received: (nullmailer pid 1745210 invoked by uid 1000);
+        Fri, 21 Apr 2023 20:50:48 -0000
+Date:   Fri, 21 Apr 2023 15:50:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, phone-devel@vger.kernel.org
+Subject: Re: [PATCH] media: dt-bindings: ov2685: Correct data-lanes attribute
+Message-ID: <168211024600.1745117.14232716289484936971.robh@kernel.org>
+References: <20230419-ov2685-dtschema-fixup-v1-1-c850a34b3a26@z3ntu.xyz>
 MIME-Version: 1.0
-References: <168166781352.1843526.278570500979918184@leemhuis.info>
- <CAHk-=wjQaxmXTR68VnEJvLgB=H2agMTrrF4EXkXT4Hbdf2ZuMQ@mail.gmail.com>
- <CAJZ5v0j_MwW6JaqTRNhmz=LcW8==GZ0X-=W0+z0tOsGQyDd0Dw@mail.gmail.com>
- <b51f571a-d6b2-1908-d94a-bc0b2a751905@leemhuis.info> <CAJZ5v0j+VieZvQUXtyEJg47oggji2zgcJ6W9Mnge9Xz867QTJQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j+VieZvQUXtyEJg47oggji2zgcJ6W9Mnge9Xz867QTJQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 21 Apr 2023 13:45:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgD98pmSK3ZyHk_d9kZ2bhgN6DuNZMAJaV0WTtbkf=RDw@mail.gmail.com>
-Message-ID: <CAHk-=wgD98pmSK3ZyHk_d9kZ2bhgN6DuNZMAJaV0WTtbkf=RDw@mail.gmail.com>
-Subject: Re: the wake-on-lan regression from 6.2 (was: Re: Linux regressions
- report for mainline [2023-04-16])
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        David Sterba <dsterba@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419-ov2685-dtschema-fixup-v1-1-c850a34b3a26@z3ntu.xyz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 12:22=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> It will get fixed, most likely by reverting the offending commit and
-> most likely during the 6.4 merge window.
 
-No.
+On Wed, 19 Apr 2023 17:58:27 +0200, Luca Weiss wrote:
+> When adapting the original doc conversion to support 2 lanes, minItems
+> should've been added as well since the sensor supports either 1 or 2
+> lanes. Add minItems to make the validation happy again.
+> 
+> Fixes: 8d561d78aeab ("media: dt-bindings: ov2685: convert to dtschema")
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-It's now reverted in my tree.
+Acked-by: Rob Herring <robh@kernel.org>
 
-We're not doing *another* release with this known-broken garbage. It's
-been pending for much too long already.
-
-Known-broken commits either
-
- (a) get a timely fix that doesn't have other questions
-
-or
-
- (b) get reverted
-
-Not this kind of "this is broken, has been known to be broken for a
-long time, people have bisected it, and we're just sitting here
-wondering what to do".
-
-> Note that ACPICA is involved, so the analogous revert needs to be
-> submitted there and I'm traveling right now.
-
-No, we're not waiting for "it's broken in the ACPICA tree" and using
-that as an excuse to have a broken kernel.
-
-If the ACPICA tree can't get their act together in two months, that's
-their problem. It does not mean that users should need to suffer known
-issues.
-
-                Linus
