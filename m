@@ -2,112 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673076EAA16
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA456EAA1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbjDUMOj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Apr 2023 08:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S231891AbjDUMP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjDUMOh (ORCPT
+        with ESMTP id S229843AbjDUMP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 08:14:37 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BFE7D93;
-        Fri, 21 Apr 2023 05:14:35 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-b992ed878ebso1928075276.0;
-        Fri, 21 Apr 2023 05:14:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682079274; x=1684671274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rpGP5Ic7xgbtuWAjmqGMPKY1bCeKiuYvBRGEng3tVTI=;
-        b=XbCRSaginUwipaKBdY/XOMNasKG6wGN8PBehqW/1uy++/NfdnTp7hrtEMMjbl5gWvh
-         GS3q8MR/0kRPpQ03TSr2pTanOjALeeQq+/K5KqrPTiNdtooO9xrN/QAFGy+BmqgBLtrm
-         SerGcvmARt3wCaEmgo4nIZuRUNUyCuZOOOfqH/yDG0F1wQBfSs6thr3fMDSz6VAJSI7B
-         rovXRox/yRu3KXXz3xwQMZ9s3kqxaISY7iwkRCOEpAOGUogyqKblkj2blRnYSVr5P7h4
-         eH+rp7AXaZvY3uWr/apBKC0e1T+yCjkhFS4y6JAe39Oo6Ov1QL7cLmhsu4AXgcx8TJlP
-         /y7w==
-X-Gm-Message-State: AAQBX9eHKR49S0Y9j2hpU6eLVnHuAhGjOa+cBRKGEU/0vbyWh0am+TgD
-        oUVNGh/1AYpHDocdF7s5iLRhCoYLuNc8xtq6
-X-Google-Smtp-Source: AKy350Z+1cDxc7jwK0RKyI8MhwiZYmjnDO3bciT0yaOyFF6tOfIMFPGEzG/3n0dtZiDuWk+rQe2bcQ==
-X-Received: by 2002:a25:d254:0:b0:b8f:46d8:dfb1 with SMTP id j81-20020a25d254000000b00b8f46d8dfb1mr1743831ybg.4.1682079274466;
-        Fri, 21 Apr 2023 05:14:34 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id 124-20020a251482000000b00b9550fcb12fsm881146ybu.64.2023.04.21.05.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 05:14:34 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-b992ed878ebso1927996276.0;
-        Fri, 21 Apr 2023 05:14:34 -0700 (PDT)
-X-Received: by 2002:a0d:d68d:0:b0:54f:9b37:c1af with SMTP id
- y135-20020a0dd68d000000b0054f9b37c1afmr1836713ywd.1.1682079274054; Fri, 21
- Apr 2023 05:14:34 -0700 (PDT)
+        Fri, 21 Apr 2023 08:15:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E6D5B93;
+        Fri, 21 Apr 2023 05:15:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DACB60B01;
+        Fri, 21 Apr 2023 12:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B42C433D2;
+        Fri, 21 Apr 2023 12:15:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682079324;
+        bh=4CzcETXQykZY+fHpWCvvKB+S7P+we+lzEzbxvcgMVeM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eKl5BQzrlZSF8qZrskzbZqlNQI76ROsBhYulGMAU6sb094LsQGtTHFngWS8l/w05R
+         /MktApIRkIE/Irk3G8I1K3YqX92esw7l02UEkhh4ncwN8E7lXbjtY2Wi8xBxSb21pY
+         YDeG8/NQlvtCHsplTRg8WoAtVzaWlmcSFnZQOHPi24SmAGhrntCnwL47gFcFMU0Kw6
+         FdmSH+FtW7b7s2c756mjlEhAh/dP1XS95/8/0S9xvE/gYdt/8xW4LyGO5j6UwRY/oN
+         Xe+DH8rBRCRX2XpJ/Qak1OgvdzJgWlNunybUCDQ6OUoTj91R1X4pKrY+4tYFKOKTz0
+         e41cUz4jrSFrQ==
+From:   broonie@kernel.org
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: linux-next: manual merge of the risc-v tree with the origin tree
+Date:   Fri, 21 Apr 2023 13:15:19 +0100
+Message-Id: <20230421121519.75428-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <74dbe68dc8e2ffb6180092f73723fe21ab692c7a.1679566500.git.geert+renesas@glider.be>
- <434fe02c2c774ae4d1694ff222884bc5d5fc25e6.camel@physik.fu-berlin.de>
-In-Reply-To: <434fe02c2c774ae4d1694ff222884bc5d5fc25e6.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Apr 2023 14:14:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW72T=OU0iEtbAjHqYUv_k0+xe8NeUod4BhzNTUqoPH6A@mail.gmail.com>
-Message-ID: <CAMuHMdW72T=OU0iEtbAjHqYUv_k0+xe8NeUod4BhzNTUqoPH6A@mail.gmail.com>
-Subject: Re: [PATCH v3] sh: Use generic GCC library routines
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>, linux-sh@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+Hi all,
 
-On Fri, Apr 21, 2023 at 1:03 PM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Thu, 2023-03-23 at 11:18 +0100, Geert Uytterhoeven wrote:
-> > The C implementations of __ashldi3(), __ashrdi3__(), and __lshrdi3() in
-> > arch/sh/lib/ are identical to the generic C implementations in lib/.
-> > Reduce duplication by switching SH to the generic versions.
-> >
-> > Update the include path in arch/sh/boot/compressed accordingly.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-> > --- a/arch/sh/lib/Makefile
-> > +++ b/arch/sh/lib/Makefile
-> > @@ -7,9 +7,7 @@ lib-y  = delay.o memmove.o memchr.o \
-> >        checksum.o strlen.o div64.o div64-generic.o
-> >
-> >  # Extracted from libgcc
-> > -obj-y += movmem.o ashldi3.o ashrdi3.o lshrdi3.o \
-> > -      ashlsi3.o ashrsi3.o ashiftrt.o lshrsi3.o \
-> > -      udiv_qrnnd.o
-> > +obj-y += movmem.o ashlsi3.o ashrsi3.o ashiftrt.o lshrsi3.o udiv_qrnnd.o
->
-> Why are the single-precision (denoted as "si") variants not being replaced?
->
-> Don't we have generic versions for these?
+  arch/riscv/mm/init.c
 
-Because they are written in assembler, and thus different from generic
-versions, and because Linux does not include generic versions for these.
+between commit:
 
-Gr{oetje,eeting}s,
+  ef69d2559fe91 ("riscv: Move early dtb mapping into the fixmap region")
 
-                        Geert
+from the origin tree and commits:
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+  8589e346bbb67 ("riscv: Move the linear mapping creation in its own function")
+  3335068f87217 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+  401e84488800d ("riscv: Move DTB_EARLY_BASE_VA to the kernel address space")
+  39b33072941f8 ("riscv: Introduce CONFIG_RELOCATABLE")
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+from the risc-v tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+I suspect something more is needed to handle 401e84488800d ("riscv: Move
+DTB_EARLY_BASE_VA to the kernel address space") properly but I have zero
+familiarity with this code or ability to test.
+
+
+diff --cc arch/riscv/mm/init.c
+index 0f14f4a8d179a,bce899b180cd2..0000000000000
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@@ -1070,23 -1164,63 +1144,74 @@@ asmlinkage void __init setup_vm(uintptr
+  	pt_ops_set_fixmap();
+  }
+  
+- static void __init setup_vm_final(void)
++ static void __init create_linear_mapping_range(phys_addr_t start,
++ 					       phys_addr_t end)
+  {
++ 	phys_addr_t pa;
+  	uintptr_t va, map_size;
+- 	phys_addr_t pa, start, end;
++ 
++ 	for (pa = start; pa < end; pa += map_size) {
++ 		va = (uintptr_t)__va(pa);
++ 		map_size = best_map_size(pa, end - pa);
++ 
++ 		create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
++ 				   pgprot_from_va(va));
++ 	}
++ }
++ 
++ static void __init create_linear_mapping_page_table(void)
++ {
++ 	phys_addr_t start, end;
+  	u64 i;
+  
++ #ifdef CONFIG_STRICT_KERNEL_RWX
++ 	phys_addr_t ktext_start = __pa_symbol(_start);
++ 	phys_addr_t ktext_size = __init_data_begin - _start;
++ 	phys_addr_t krodata_start = __pa_symbol(__start_rodata);
++ 	phys_addr_t krodata_size = _data - __start_rodata;
++ 
++ 	/* Isolate kernel text and rodata so they don't get mapped with a PUD */
++ 	memblock_mark_nomap(ktext_start,  ktext_size);
++ 	memblock_mark_nomap(krodata_start, krodata_size);
++ #endif
++ 
++ 	/* Map all memory banks in the linear mapping */
++ 	for_each_mem_range(i, &start, &end) {
++ 		if (start >= end)
++ 			break;
++ 		if (start <= __pa(PAGE_OFFSET) &&
++ 		    __pa(PAGE_OFFSET) < end)
++ 			start = __pa(PAGE_OFFSET);
++ 		if (end >= __pa(PAGE_OFFSET) + memory_limit)
++ 			end = __pa(PAGE_OFFSET) + memory_limit;
++ 
++ 		create_linear_mapping_range(start, end);
++ 	}
++ 
++ #ifdef CONFIG_STRICT_KERNEL_RWX
++ 	create_linear_mapping_range(ktext_start, ktext_start + ktext_size);
++ 	create_linear_mapping_range(krodata_start,
++ 				    krodata_start + krodata_size);
++ 
++ 	memblock_clear_nomap(ktext_start,  ktext_size);
++ 	memblock_clear_nomap(krodata_start, krodata_size);
++ #endif
++ }
++ 
++ static void __init setup_vm_final(void)
++ {
+  	/* Setup swapper PGD for fixmap */
+ +#if !defined(CONFIG_64BIT)
+ +	/*
+ +	 * In 32-bit, the device tree lies in a pgd entry, so it must be copied
+ +	 * directly in swapper_pg_dir in addition to the pgd entry that points
+ +	 * to fixmap_pte.
+ +	 */
+ +	unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
+ +
+ +	set_pgd(&swapper_pg_dir[idx], early_pg_dir[idx]);
+ +#endif
+++
+  	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
+  			   __pa_symbol(fixmap_pgd_next),
+  			   PGDIR_SIZE, PAGE_TABLE);
