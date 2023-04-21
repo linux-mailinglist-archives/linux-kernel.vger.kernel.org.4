@@ -2,206 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109DA6EA79B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466466EA7A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjDUJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S231745AbjDUJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbjDUJy0 (ORCPT
+        with ESMTP id S229751AbjDUJzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:54:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080341731;
-        Fri, 21 Apr 2023 02:54:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CE0D64F91;
-        Fri, 21 Apr 2023 09:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C02EC4339B;
-        Fri, 21 Apr 2023 09:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682070864;
-        bh=jx47eb6GtiJ0tw6fDSwNwaDW+uhBn/Dda5fxHwTKoUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ikXp+sOjbhO7PxZpEnD/kgKHkabrc+mpVG1r/2X16WqRW26MVkgvrCns1deCTt2E/
-         Wm1tItf3Lg16gwQGTqvkN7v5C+BEsPBGKjsp/YkrWkHb2X/NNId1mI3JKCGAUKHICE
-         nnNmK7R3MG1SKgpvNmgRwA7qz7Z/oM4FFl9mUDTIYc/7Ac/aBgLyJArliBz8MqP9mK
-         F6DMoKEmb0H61YNFPa6KW4fjnZOM9kKEcCA1/DxkG5m8dHiGMo9GaObCwZWQIJ0wk0
-         8IlsPeZxT2z4qIQJdA0XhE7yc8UArmYphtPqAoya97pFBecVZIIDCj2oK1/h+UNJvB
-         vHAQN5dz4eIAQ==
-Date:   Fri, 21 Apr 2023 11:54:17 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: hv: Replace retarget_msi_interrupt_params with
- hyperv_pcpu_input_arg
-Message-ID: <ZEJdSXv6IwSxPp9r@lpieralisi>
-References: <20230421013025.17152-1-decui@microsoft.com>
+        Fri, 21 Apr 2023 05:55:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EED1A244
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682070897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PU5EzJ54+PKjP4fyHsqL6OGsZoIpT5Q384KSWXkirPU=;
+        b=I8H06KW5oyJ1D56SzO/217oDAHIZFpJDV778KUWl3m4zYzoBH84EVTIfEjP/DAJYTJWiDB
+        Tiz1ny/AL4UYrpyWqyPLT9baDhH+Xl+k5ie25G85Updxe9KKNG4MyaV4vRyB3Fk9T0yfWK
+        JKEXulm++16Ssr8sYUPakoUdz89kTEE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-316-wJ5l6lg1N4WIDUbeUB6jLg-1; Fri, 21 Apr 2023 05:54:56 -0400
+X-MC-Unique: wJ5l6lg1N4WIDUbeUB6jLg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94eaa8f18eeso119408566b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:54:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682070895; x=1684662895;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PU5EzJ54+PKjP4fyHsqL6OGsZoIpT5Q384KSWXkirPU=;
+        b=ZJUn4yrL3YlVFwTZc5qjpABaSvqrKXXz0nrXcL8DPBnUjCrQqWShAS70TyOEblQzeH
+         TC+ph32GpVVJWcNJIyVjg6sF/eKqkdxNaTqB3aBy7I50Az4wLkxQ0wRbCv8Q2NJE2cad
+         CYLyhuHGZVVIGWP+rGs8xZvC9wYoAjSLjEqf1ig+vjGYuP/S+rTzVnTPkUKgueA6TNoR
+         /XNBp9a8nB1HLiA39CmX+Dw3pDMtTubVGDeEOm8qaMwFCKoLGxze0w1I/4f/lfC4DZxo
+         KuNfFXHG5JLKTyl8BWV89uIyrVUeMujpU2yKiTx3q4603nHANctAnI1aB2+Pqmb/tWti
+         n9bQ==
+X-Gm-Message-State: AAQBX9cjbBU9B7w5oq/Q4GylIWrb5c1ZpIjbZmia3f/699kFuevxP9xk
+        bk9YMU7v9XVKykHFRBHfnLKUmx51D5QWhcCCd4mDl4CnXdVIYZWhUsz11h5yufcQmkT6MMEUNP7
+        HAhLL2LoFsSlxRCskpwowCBzRPynMHEYHLyY=
+X-Received: by 2002:a17:906:70cb:b0:947:df9e:4082 with SMTP id g11-20020a17090670cb00b00947df9e4082mr1592745ejk.35.1682070894658;
+        Fri, 21 Apr 2023 02:54:54 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YcSK1ugfdii2y4sj9PtoHsSwjf3tWw/0Cyxo4TxC3m/vg1fQhtemTqWj26RF9Sy4plUsX0qw==
+X-Received: by 2002:a17:906:70cb:b0:947:df9e:4082 with SMTP id g11-20020a17090670cb00b00947df9e4082mr1592719ejk.35.1682070894153;
+        Fri, 21 Apr 2023 02:54:54 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a13-20020a1709066d4d00b0094a9b9c4979sm1843430ejt.88.2023.04.21.02.54.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 02:54:53 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 8DC8DAA903F; Fri, 21 Apr 2023 11:54:52 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Kal Cutter Conley <kal.conley@dectris.com>
+Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+In-Reply-To: <ZEJZYa8WT6A9VpOJ@boxer>
+References: <20230406130205.49996-2-kal.conley@dectris.com>
+ <87sfdckgaa.fsf@toke.dk> <ZDBEng1KEEG5lOA6@boxer>
+ <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
+ <875ya12phx.fsf@toke.dk>
+ <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
+ <87ile011kz.fsf@toke.dk>
+ <CAHApi-=ODe-WtJ=m6bycQhKoQxb+kk2Yk9Fx5SgBsWUuWT_u-A@mail.gmail.com>
+ <874jpdwl45.fsf@toke.dk>
+ <CAHApi-kcaMRPj4mEPs87_4Z6iO5qEpzOOcbVza7vxURqCtpz=Q@mail.gmail.com>
+ <ZEJZYa8WT6A9VpOJ@boxer>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 21 Apr 2023 11:54:52 +0200
+Message-ID: <87r0sdsgpf.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421013025.17152-1-decui@microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 06:30:25PM -0700, Dexuan Cui wrote:
-> 4 commits are involved here:
-> A (2016): commit 0de8ce3ee8e3 ("PCI: hv: Allocate physically contiguous hypercall params buffer")
-> B (2017): commit be66b6736591 ("PCI: hv: Use page allocation for hbus structure")
-> C (2019): commit 877b911a5ba0 ("PCI: hv: Avoid a kmemleak false positive caused by the hbus buffer")
-> D (2018): commit 68bb7bfb7985 ("X86/Hyper-V: Enable IPI enlightenments")
-> 
-> Patch D introduced the per-CPU hypercall input page "hyperv_pcpu_input_arg"
-> in 2018. With patch D, we no longer need the per-Hyper-V-PCI-bus hypercall
-> input page "hbus->retarget_msi_interrupt_params" that was added in patch A,
-> and the issue addressed by patch B is no longer an issue, and we can also
-> get rid of patch C.
-> 
-> The change here is required for PCI device assignment to work for
-> Confidential VMs (CVMs) running without a paravisor, because otherwise we
-> would have to call set_memory_decrypted() for
-> "hbus->retarget_msi_interrupt_params" before calling the hypercall
-> HVCALL_RETARGET_INTERRUPT.
-> 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> ---
-> 
-> Changes in v2:
->   Fixed the inaccuracy in the commit message (Thanks Michael):
->     "Confidential VMs (CVMs)" -> "Confidential VMs (CVMs) running without a paravisor".
-> 
->   Added Michael's Reviewed-by.
-> 
->  drivers/pci/controller/pci-hyperv.c | 48 +++++------------------------
->  1 file changed, 7 insertions(+), 41 deletions(-)
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> On Tue, Apr 18, 2023 at 01:12:00PM +0200, Kal Cutter Conley wrote:
+>
+> Hi there,
+>
+>> > >> In addition, presumably when using this mode, the other XDP actions
+>> > >> (XDP_PASS, XDP_REDIRECT to other targets) would stop working unless we
+>> > >> add special handling for that in the kernel? We'll definitely need to
+>> > >> handle that somehow...
+>> > >
+>> > > I am not familiar with all the details here. Do you know a reason why
+>> > > these cases would stop working / why special handling would be needed?
+>> > > For example, if I have a UMEM that uses hugepages and XDP_PASS is
+>> > > returned, then the data is just copied into an SKB right? SKBs can
+>> > > also be created directly from hugepages AFAIK. So I don't understand
+>> > > what the issue would be. Can someone explain this concern?
+>> >
+>> > Well, I was asking :) It may well be that the SKB path just works; did
+>> > you test this? Pretty sure XDP_REDIRECT to another device won't, though?
+>
+> for XDP_PASS we have to allocate a new buffer and copy the contents from
+> current xdp_buff that was backed by xsk_buff_pool and give the current one
+> back to pool. I am not sure if __napi_alloc_skb() is always capable of
+> handling len > PAGE_SIZE - i believe there might a particular combination
+> of settings that allows it, but if not we should have a fallback path that
+> would iterate over data and copy this to a certain (linear + frags) parts.
+> This implies non-zero effort that is needed for jumbo frames ZC support.
+>
+> I can certainly test this out and play with it - maybe this just works, I
+> didn't check yet. Even if it does, then we need some kind of temporary
+> mechanism that will forbid loading ZC jumbo frames due to what Toke
+> brought up.
 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 337f3b4a04fc0..bc32662c6bb7f 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -508,20 +508,11 @@ struct hv_pcibus_device {
->  	struct msi_domain_info msi_info;
->  	struct irq_domain *irq_domain;
->  
-> -	spinlock_t retarget_msi_interrupt_lock;
-> -
->  	struct workqueue_struct *wq;
->  
->  	/* Highest slot of child device with resources allocated */
->  	int wslot_res_allocated;
->  	bool use_calls; /* Use hypercalls to access mmio cfg space */
-> -
-> -	/* hypercall arg, must not cross page boundary */
-> -	struct hv_retarget_device_interrupt retarget_msi_interrupt_params;
-> -
-> -	/*
-> -	 * Don't put anything here: retarget_msi_interrupt_params must be last
-> -	 */
->  };
->  
->  /*
-> @@ -645,9 +636,9 @@ static void hv_arch_irq_unmask(struct irq_data *data)
->  	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
->  	int_desc = data->chip_data;
->  
-> -	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
-> +	local_irq_save(flags);
->  
-> -	params = &hbus->retarget_msi_interrupt_params;
-> +	params = *this_cpu_ptr(hyperv_pcpu_input_arg);
->  	memset(params, 0, sizeof(*params));
->  	params->partition_id = HV_PARTITION_ID_SELF;
->  	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
-> @@ -680,7 +671,7 @@ static void hv_arch_irq_unmask(struct irq_data *data)
->  
->  		if (!alloc_cpumask_var(&tmp, GFP_ATOMIC)) {
->  			res = 1;
-> -			goto exit_unlock;
-> +			goto out;
->  		}
->  
->  		cpumask_and(tmp, dest, cpu_online_mask);
-> @@ -689,7 +680,7 @@ static void hv_arch_irq_unmask(struct irq_data *data)
->  
->  		if (nr_bank <= 0) {
->  			res = 1;
-> -			goto exit_unlock;
-> +			goto out;
->  		}
->  
->  		/*
-> @@ -708,8 +699,8 @@ static void hv_arch_irq_unmask(struct irq_data *data)
->  	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
->  			      params, NULL);
->  
-> -exit_unlock:
-> -	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
-> +out:
-> +	local_irq_restore(flags);
->  
->  	/*
->  	 * During hibernation, when a CPU is offlined, the kernel tries
-> @@ -3598,35 +3589,11 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	bool enter_d0_retry = true;
->  	int ret;
->  
-> -	/*
-> -	 * hv_pcibus_device contains the hypercall arguments for retargeting in
-> -	 * hv_irq_unmask(). Those must not cross a page boundary.
-> -	 */
-> -	BUILD_BUG_ON(sizeof(*hbus) > HV_HYP_PAGE_SIZE);
-> -
->  	bridge = devm_pci_alloc_host_bridge(&hdev->device, 0);
->  	if (!bridge)
->  		return -ENOMEM;
->  
-> -	/*
-> -	 * With the recent 59bb47985c1d ("mm, sl[aou]b: guarantee natural
-> -	 * alignment for kmalloc(power-of-two)"), kzalloc() is able to allocate
-> -	 * a 4KB buffer that is guaranteed to be 4KB-aligned. Here the size and
-> -	 * alignment of hbus is important because hbus's field
-> -	 * retarget_msi_interrupt_params must not cross a 4KB page boundary.
-> -	 *
-> -	 * Here we prefer kzalloc to get_zeroed_page(), because a buffer
-> -	 * allocated by the latter is not tracked and scanned by kmemleak, and
-> -	 * hence kmemleak reports the pointer contained in the hbus buffer
-> -	 * (i.e. the hpdev struct, which is created in new_pcichild_device() and
-> -	 * is tracked by hbus->children) as memory leak (false positive).
-> -	 *
-> -	 * If the kernel doesn't have 59bb47985c1d, get_zeroed_page() *must* be
-> -	 * used to allocate the hbus buffer and we can avoid the kmemleak false
-> -	 * positive by using kmemleak_alloc() and kmemleak_free() to ask
-> -	 * kmemleak to track and scan the hbus buffer.
-> -	 */
-> -	hbus = kzalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
-> +	hbus = kzalloc(sizeof(*hbus), GFP_KERNEL);
->  	if (!hbus)
->  		return -ENOMEM;
->  
-> @@ -3683,7 +3650,6 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	INIT_LIST_HEAD(&hbus->dr_list);
->  	spin_lock_init(&hbus->config_lock);
->  	spin_lock_init(&hbus->device_list_lock);
-> -	spin_lock_init(&hbus->retarget_msi_interrupt_lock);
->  	hbus->wq = alloc_ordered_workqueue("hv_pci_%x", 0,
->  					   hbus->bridge->domain_nr);
->  	if (!hbus->wq) {
-> -- 
-> 2.25.1
-> 
+Yeah, this was exactly the kind of thing I was worried about (same for
+XDP_REDIRECT). Thanks for fleshing it out a bit :)
+
+>> >
+>> 
+>> I was also asking :-)
+>> 
+>> I tested that the SKB path is usable today with this patch.
+>> Specifically, sending and receiving large jumbo packets with AF_XDP
+>> and that a non-multi-buffer XDP program could access the whole packet.
+>> I have not specifically tested XDP_REDIRECT to another device or
+>> anything with ZC since that is not possible without driver support.
+>> 
+>> My feeling is, there wouldn't be non-trivial issues here since this
+>> patchset changes nothing except allowing the maximum chunk size to be
+>> larger. The driver either supports larger MTUs with XDP enabled or it
+>> doesn't. If it doesn't, the frames are dropped anyway. Also, chunk
+>> size mismatches between two XSKs (e.g. with XDP_REDIRECT) would be
+>> something supported or not supported irrespective of this patchset.
+>
+> Here is the comparison between multi-buffer and jumbo frames that I did
+> for ZC ice driver. Configured MTU was 8192 as this is the frame size for
+> aligned mode when working with huge pages. I am presenting plain numbers
+> over here from xdpsock.
+>
+> Mbuf, packet size = 8192 - XDP_PACKET_HEADROOM
+> 885,705pps - rxdrop frame_size=4096
+> 806,307pps - l2fwd frame_size=4096
+> 877,989pps - rxdrop frame_size=2048
+> 773,331pps - l2fwd frame_size=2048
+>
+> Jumbo, packet size = 8192 - XDP_PACKET_HEADROOM
+> 893,530pps - rxdrop frame_size=8192
+> 841,860pps - l2fwd frame_size=8192
+>
+> Kal might say that multi-buffer numbers are imaginary as these patches
+> were never shown to the public ;) but now that we have extensive test
+> suite I am fixing some last issues that stand out, so we are asking for
+> some more patience over here... overall i was expecting that they will be
+> much worse when compared to jumbo frames, but then again i believe this
+> implementation is not ideal and can be improved. Nevertheless, jumbo
+> frames support has its value.
+
+Thank you for doing these! Okay, so that's between 1-4% improvement (vs
+the 4k frags). I dunno, I wouldn't consider that a slam dunk; would
+depend on the additional complexity if it is worth it to do both, IMO...
+
+-Toke
+
