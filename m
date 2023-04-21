@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D709A6EA4AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581026EA4BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjDUH1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S231151AbjDUH35 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Apr 2023 03:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjDUH1q (ORCPT
+        with ESMTP id S231136AbjDUH3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:27:46 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBBFD132;
-        Fri, 21 Apr 2023 00:27:44 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pplBD-0004sS-00; Fri, 21 Apr 2023 09:27:39 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E0BBCC0121; Fri, 21 Apr 2023 09:27:12 +0200 (CEST)
-Date:   Fri, 21 Apr 2023 09:27:12 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>, jpoimboe@kernel.org,
-        peterz@infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
-Message-ID: <20230421072712.GA5563@alpha.franken.de>
-References: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
- <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
- <20230419233710.GA1314058@dev-arch.thelio-3990X>
+        Fri, 21 Apr 2023 03:29:53 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE12132;
+        Fri, 21 Apr 2023 00:29:51 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-b8f549d36e8so2246155276.3;
+        Fri, 21 Apr 2023 00:29:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682062190; x=1684654190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mtuOdz7tU5+YoOdrdSdLBBwOK8V97jXWFycy5r6znBE=;
+        b=GEWJdIxw4/jDX6EbMvYnk48qkdY4wPdPWBOvxV5bMIlQNd/SuSkLGJt26fjJegzgF3
+         jnUXAPlABEVLqDbrGPd9GQMr3CgIbnACRIsRwg6rMgF/NYxX6mBJhtmxiZoSJmjOjvkU
+         krwSRePaA9gZxR5VKKIFHuT6sIYFrCHs29rbKAz84t/DhMDPpJomY0s6aoBlJVC2CTKf
+         XGqswM2nHPmwLzG+Zw+zA2rYdt0f8CcA5CtKlj38IDpgqOi6SKzAWgLwErgyqxDCvFj4
+         NpbiuGSROfhZzvAi55L6PK1ECFQLdtLGlo2AR1NIY/YFSFs3LyGgqXI9MJryZEkgmeQQ
+         EJ2Q==
+X-Gm-Message-State: AAQBX9exw/O4rruUgkeFkeszUF1qWqe3twDdWnvfFa1FwUsvv6QWwxgK
+        RSQScvmtz9L8sXbbTg28SEog8fKFtFlIVXMl
+X-Google-Smtp-Source: AKy350Y9ehpan2PHH1CyBB9KHWFQIvC4H/B/ypkMUdyZAmybOatR+niH6Dl1gOreOlA6H5Ea3/lj6Q==
+X-Received: by 2002:a25:c094:0:b0:b8f:4c0a:b28d with SMTP id c142-20020a25c094000000b00b8f4c0ab28dmr1390167ybf.46.1682062190524;
+        Fri, 21 Apr 2023 00:29:50 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id a3-20020a256603000000b00b8ed4bee6absm793002ybc.48.2023.04.21.00.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 00:29:50 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-54fe25c2765so20675667b3.3;
+        Fri, 21 Apr 2023 00:29:50 -0700 (PDT)
+X-Received: by 2002:a0d:fec5:0:b0:555:c5d2:1647 with SMTP id
+ o188-20020a0dfec5000000b00555c5d21647mr1040236ywf.31.1682062189819; Fri, 21
+ Apr 2023 00:29:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419233710.GA1314058@dev-arch.thelio-3990X>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <a51e9f32c19a007f4922943282cb12c89064440d.1681671848.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <a51e9f32c19a007f4922943282cb12c89064440d.1681671848.git.christophe.jaillet@wanadoo.fr>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 21 Apr 2023 09:29:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXN2Lv_O1cRqUofDrn-4Xe9o-ex81KmojDWBqyiBVwGmw@mail.gmail.com>
+Message-ID: <CAMuHMdXN2Lv_O1cRqUofDrn-4Xe9o-ex81KmojDWBqyiBVwGmw@mail.gmail.com>
+Subject: Re: [PATCH v2] sh: sq: Use the bitmap API when applicable
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 04:37:10PM -0700, Nathan Chancellor wrote:
-> > > diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-> > > index d72dc6e1cf3c..9b9bf9bc7d24 100644
-> > > --- a/arch/mips/include/asm/bugs.h
-> > > +++ b/arch/mips/include/asm/bugs.h
-> > > @@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
-> > >  extern void check_bugs32(void);
-> > >  extern void check_bugs64(void);
-> > >
-> > > -static inline void check_bugs_early(void)
-> > > +static inline void __init check_bugs_early(void)
-> > >  {
-> > >         if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-> > >                 check_bugs64_early();
-> > >  }
-> > 
-> > If the only call site is in arch/mips/kernel/setup.c, then perhaps we
-> > can move the definition of check_bugs_early there and mark it static
-> > __init and drop inline?
-> 
-> Sure, we could even go a step further and just copy the body into the
-> one call site ourselves, I see little reason for this to be a dedicated
-> function. That is probably best done in a separate patch altogether in
-> lieu of just adding __init.
+On Thu, Apr 20, 2023 at 9:41 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+> Using the bitmap API is less verbose than hand writing it.
+> It also improves the semantic.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> v2:
+>    - synch with latest linux-next because of 80f746e2bd0e which fixes a bug
 
-I don't expect any new checks added to check_bugs_early so let's
-move the whole function into the call site.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thomas.
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
