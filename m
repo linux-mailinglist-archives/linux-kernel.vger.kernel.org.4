@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C076EA634
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AE56EA635
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbjDUIsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
+        id S231818AbjDUItB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjDUIr0 (ORCPT
+        with ESMTP id S231823AbjDUIsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:47:26 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CADA257;
-        Fri, 21 Apr 2023 01:45:29 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 662A0207BE;
-        Fri, 21 Apr 2023 10:45:24 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LhpUn87_eFQR; Fri, 21 Apr 2023 10:45:24 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id F3F25205ED;
-        Fri, 21 Apr 2023 10:45:23 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout1.secunet.com (Postfix) with ESMTP id EE38D80004A;
-        Fri, 21 Apr 2023 10:45:23 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 10:45:23 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 21 Apr
- 2023 10:45:23 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 0C9C33180C1D; Fri, 21 Apr 2023 10:45:23 +0200 (CEST)
-Date:   Fri, 21 Apr 2023 10:45:22 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     Leon Romanovsky <leonro@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>
-Subject: Re: [PATCH xfrm 0/2] Couple of error unwind fixes to packet offload
-Message-ID: <ZEJNInz0FPYhZbmK@gauss3.secunet.de>
-References: <cover.1681906552.git.leon@kernel.org>
+        Fri, 21 Apr 2023 04:48:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DAF6A5D6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:46:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 643431480;
+        Fri, 21 Apr 2023 01:47:00 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7B0D3F5A1;
+        Fri, 21 Apr 2023 01:46:15 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 09:46:11 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH] firmware: arm_scmi: Fix incorrect alloc_workqueue()
+ invocation
+Message-ID: <ZEJNU1om5IhQHB2J@e120937-lin>
+References: <ZEGTnajiQm7mkkZS@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1681906552.git.leon@kernel.org>
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZEGTnajiQm7mkkZS@slm.duckdns.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 03:19:06PM +0300, Leon Romanovsky wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
+On Thu, Apr 20, 2023 at 09:33:49AM -1000, Tejun Heo wrote:
+> scmi_xfer_raw_worker_init() is specifying a flag, WQ_SYSFS, as @max_active.
+> Fix it by or'ing WQ_SYSFS into @flags so that it actually enables sysfs
+> interface and using 0 for @max_active for the default setting.
 > 
-> Hi Steffen,
-> 
-> There are two straightforward fixes to XFRM.
-> 
-> Thanks
-> 
-> Leon Romanovsky (2):
->   xfrm: release all offloaded policy memory
->   xfrm: Fix leak of dev tracker
 
-Applied, thanks Leon!
+Hi Tejun,
+
+my bad I messed up the params in the call.
+
+LGTM.
+
+Thanks,
+Cristian
+
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> ---
+>  drivers/firmware/arm_scmi/raw_mode.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/drivers/firmware/arm_scmi/raw_mode.c
+> +++ b/drivers/firmware/arm_scmi/raw_mode.c
+> @@ -1066,7 +1066,7 @@ static int scmi_xfer_raw_worker_init(str
+>  
+>  	raw->wait_wq = alloc_workqueue("scmi-raw-wait-wq-%d",
+>  				       WQ_UNBOUND | WQ_FREEZABLE |
+> -				       WQ_HIGHPRI, WQ_SYSFS, raw->id);
+> +				       WQ_HIGHPRI | WQ_SYSFS, 0, raw->id);
+>  	if (!raw->wait_wq)
+>  		return -ENOMEM;
+>  
