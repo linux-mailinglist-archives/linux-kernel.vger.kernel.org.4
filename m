@@ -2,139 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8BB6EB54D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2686EB587
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbjDUW7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S233706AbjDUXJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 19:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjDUW7a (ORCPT
+        with ESMTP id S229932AbjDUXJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:59:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A61984
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682117968; x=1713653968;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BNH4RXrQEbbk+XIrvoTOK8UwfUDRDleaNE5QY9JbK2o=;
-  b=FMzn8fJTviDcRedXEzNj9SF2OscbzEWVGh7ZyfjKjBTQSG70bR99DIZ/
-   JNdyOcuMDH0nwMwMmFiUOqBhYavq0+U404okfbrrv+XVrBjSN3f8sFcAq
-   QMmtJGEmKl1DvdKetM/nOnu2egJ7gRxL6hIioIynFh8IXCWYG3xZCFMBC
-   35/H3NxuK4i+IczmgHXFSUkW+ClkgTT2qYKrXDeyAkxqzGyoCjx79b+c8
-   dlJr65KScXoy3e0QKXSZ+AOUDOHJEMo2OoVQgKV0qo6fNk5jfyGbrI39c
-   e8rZ4lQexo+WmGrZqZU1c0ECKpLVUdqSaTHFnW3th8BK0bKIHFb326Or5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="343585371"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="343585371"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 15:59:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="866838297"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="866838297"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 21 Apr 2023 15:59:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppziw-000gu4-10;
-        Fri, 21 Apr 2023 22:59:26 +0000
-Date:   Sat, 22 Apr 2023 06:59:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype
- for 'lpc32xx_loopback_set'
-Message-ID: <202304220650.KSVbcJ8z-lkp@intel.com>
+        Fri, 21 Apr 2023 19:09:05 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F67319B3;
+        Fri, 21 Apr 2023 16:09:03 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LLkBUv018799;
+        Fri, 21 Apr 2023 23:08:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=NrWL5L19tZP4h4qid7tM/oqw2qQB19TVlhNcq9Zl2u0=;
+ b=JbysjYUs0jMhqZM5Ry4UtWGOptvXXIWWvEJOCAiti8eB9V1bw1T6hLMA/3UrM56kniFC
+ S7reFlzRIaT9wonnui82AkIk/shlaLMKjGEpbMDZf4rLwBZn9gzT7vid+NXuJpZ8Kk9Q
+ ojoetrX9oOv9Mv/2SDGhzF5FYGyE40U5kPTV9frjSncrP1ek4dzcsS/IlfPAGbcX0J1Q
+ S0P4rGszqo+ardAr8PMsTcSJ1y74xmMavzuj3ckp584RfZuLgYTnNoM86rVEVoTqfXN1
+ 5XofIOxlFpmyC0xc3AMYNc167Fy1f9OSP8C/7pdvOIbHmuMzTFYt4JugXnT/jteCRUwx Gg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q41wu083b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 23:08:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LN8rxk032617
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 23:08:53 GMT
+Received: from [10.110.0.180] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
+ 2023 16:08:51 -0700
+Message-ID: <4bea9976-d353-6783-f55a-3e83e7501da2@quicinc.com>
+Date:   Fri, 21 Apr 2023 16:08:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
+ chipsets
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>
+CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
+ <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
+ <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
+ <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
+ <7b493d85-0691-8797-367e-1d71ea87c826@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <7b493d85-0691-8797-367e-1d71ea87c826@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0L4kFsjCAx1dmZq-Jhik2ZW3WnMn-14h
+X-Proofpoint-ORIG-GUID: 0L4kFsjCAx1dmZq-Jhik2ZW3WnMn-14h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ mlxlogscore=791 bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210202
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
 
-First bad commit (maybe != root cause):
+On 4/21/2023 3:16 PM, Dmitry Baryshkov wrote:
+> On 22/04/2023 01:05, Kuogee Hsieh wrote:
+>>
+>> On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
+>>> On 21/04/2023 02:25, Kuogee Hsieh wrote:
+>>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>>>
+>>>> Add DSC 1.2 hardware blocks to the catalog with necessary
+>>>> sub-block and feature flag information.
+>>>> Each display compression engine (DCE) contains dual hard
+>>>> slice DSC encoders so both share same base address but with
+>>>> its own different sub block address.
+>>>
+>>> Please correct line wrapping. 72-75 is usually the preferred width
+>>>
+>>>>
+>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>> ---
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h  | 19 
+>>>> +++++++++++++++++++
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h  | 11 +++++++++++
+>>>>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h    | 21 
+>>>> +++++++++++++++++++++
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h  | 19 
+>>>> +++++++++++++++++++
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h  | 19 
+>>>> +++++++++++++++++++
+>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c      | 12 
+>>>> ++++++++++--
+>>>>   6 files changed, 99 insertions(+), 2 deletions(-)
+>>>>
+>>>
+>>>
+>>> [I commented on sm8550, it applies to all the rest of platforms]
+>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>>>> index 9e40303..72a7bcf 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>>>> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
+>>>> sm8550_merge_3d[] = {
+>>>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+>>>>   };
+>>>>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
+>>>> +    .enc = {.base = 0x100, .len = 0x100},
+>>>> +    .ctl = {.base = 0xF00, .len = 0x10},
+>>>> +};
+>>>> +
+>>>> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
+>>>> +    .enc = {.base = 0x200, .len = 0x100},
+>>>> +    .ctl = {.base = 0xF80, .len = 0x10},
+>>>> +};
+>>>
+>>> Please keep sblk in dpu_hw_catalog for now.
+>>>
+>>>> +
+>>>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
+>>>> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, 
+>>>> sm8550_dsc_sblk_0),
+>>>> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, 
+>>>> sm8550_dsc_sblk_1),
+>>>
+>>> Is there a reason why index in "dsc_N" doesn't match the DSC_n which 
+>>> comes next to it?
+>>
+>> usually each DCE (display compression engine) contains two hard slice 
+>> encoders.
+>>
+>> DSC_0 and DSC_1 (index) is belong to dsc_0.
+>>
+>> If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
+>
+> Ah, I see now. So, the block register space is the following:
+> DCEi ->
+>   common
+>   dsc0_enc
+>   dsc1_enc
+>   dsc0_ctl
+>   dsc1_ctl
+>
+> Instead of declaring a single DCE unit with two DSC blocks, we declare 
+> two distinct DSC blocks. This raises a question, how independent are 
+> these two parts of a single DCE block? For example, can we use them to 
+> perform compression with different parameters? Or use one of them for 
+> the DP DSC and another one for DSI DSC? Can we have the following 
+> configuration:
+>
+> DSC_0 => DP DSC
+> DSC_1, DSC_2 => DSI DSC in DSC_MERGE topology?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8e41e0a575664d26bb87e012c39435c4c3914ed9
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   12 months ago
-config: arm-buildonly-randconfig-r004-20230421 (https://download.01.org/0day-ci/archive/20230422/202304220650.KSVbcJ8z-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+no, For merge mode you have to use same DCE, such as DSC_2 and DSC3 (pair)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304220650.KSVbcJ8z-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype for 'lpc32xx_loopback_set' [-Wmissing-prototypes]
-      63 | void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-         |      ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +/lpc32xx_loopback_set +63 arch/arm/mach-lpc32xx/serial.c
-
-e6e912c4964ce5 Kevin Wells   2010-07-27  61  
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  62  /* LPC3250 Errata HSUART.1: Hang workaround via loopback mode on inactivity */
-ffba29c9ebd097 Arnd Bergmann 2019-08-09 @63  void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  64  {
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  65  	int bit;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  66  	u32 tmp;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  67  
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  68  	switch (mapbase) {
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  69  	case LPC32XX_HS_UART1_BASE:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  70  		bit = 0;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  71  		break;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  72  	case LPC32XX_HS_UART2_BASE:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  73  		bit = 1;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  74  		break;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  75  	case LPC32XX_HS_UART7_BASE:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  76  		bit = 6;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  77  		break;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  78  	default:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  79  		WARN(1, "lpc32xx_hs: Warning: Unknown port at %08x\n", mapbase);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  80  		return;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  81  	}
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  82  
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  83  	tmp = readl(LPC32XX_UARTCTL_CLOOP);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  84  	if (state)
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  85  		tmp |= (1 << bit);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  86  	else
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  87  		tmp &= ~(1 << bit);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  88  	writel(tmp, LPC32XX_UARTCTL_CLOOP);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  89  }
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  90  EXPORT_SYMBOL_GPL(lpc32xx_loopback_set);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  91  
-
-:::::: The code at line 63 was first introduced by commit
-:::::: ffba29c9ebd0977dbf77bf6064776716a51b8ae5 serial: lpc32xx: allow compile testing
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+>>
+>>>
+>>>> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
+>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
+>>>> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
+>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
+>>>> +};
+>>>> +
+>>>>   static const struct dpu_intf_cfg sm8550_intf[] = {
+>>>>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
+>>>> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 
+>>>> 25),
+>>>>       /* TODO TE sub-blocks for intf1 & intf2 */
+>>>> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+>>>>       .dspp = sm8550_dspp,
+>>>>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
+>>>>       .pingpong = sm8550_pp,
+>>>> +    .dsc = sm8550_dsc,
+>>>> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
+>>>>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+>>>>       .merge_3d = sm8550_merge_3d,
+>>>>       .intf_count = ARRAY_SIZE(sm8550_intf),
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> index 03f162a..be08158 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> @@ -1,6 +1,6 @@
+>>>>   // SPDX-License-Identifier: GPL-2.0-only
+>>>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights 
+>>>> reserved.
+>>>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights 
+>>>> reserved.
+>>>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All 
+>>>> rights reserved.
+>>>>    */
+>>>>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
+>>>> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
+>>>> sc7280_pp_sblk = {
+>>>>       {\
+>>>>       .name = _name, .id = _id, \
+>>>>       .base = _base, .len = 0x140, \
+>>>> -    .features = _features, \
+>>>> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
+>>>> +    }
+>>>> +
+>>>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
+>>>> +    {\
+>>>> +    .name = _name, .id = _id, \
+>>>> +    .base = _base, .len = _len, \
+>>>> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
+>>>> +    .sblk = &_sblk, \
+>>>>       }
+>>>> /*************************************************************
+>>>
+>
