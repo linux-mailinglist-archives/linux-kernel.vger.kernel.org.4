@@ -2,275 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1906EB462
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196606EB469
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbjDUWEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S232925AbjDUWGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbjDUWEo (ORCPT
+        with ESMTP id S233523AbjDUWFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:04:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD15D10F3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682114635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ejU3CHJlEVdqeTxzhMOwDdKIBa+AQnr4MNeCEdZSVeY=;
-        b=DzAQBXsd2M9pNEPBYRVxig8ujDBd7mcF2ElowdrjJv6W7ybUtJiv6j46GEDrDj5WUS/CIj
-        ymCUvOlf66bCVDpmcjDvmhbAhshgd9Cp10y9QyMjfhW24JyBGJDI6BM2wJiGFutW9u4We+
-        KI4dnkkIQ9wBBhuB3En0vuD6gIuD5Pw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-467-2pCQDPHhPA6S5rmXOgbU5Q-1; Fri, 21 Apr 2023 18:03:48 -0400
-X-MC-Unique: 2pCQDPHhPA6S5rmXOgbU5Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1345F3C0ED58;
-        Fri, 21 Apr 2023 22:03:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C368040C2064;
-        Fri, 21 Apr 2023 22:03:46 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-cc:     dhowells@redhat.com, Jeffrey Altman <jaltman@auristor.com>,
-        kafs-testing+fedora36_64checkkafs-build-306@auristor.com,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] rxrpc: Fix potential race in error handling in afs_make_call()
+        Fri, 21 Apr 2023 18:05:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2615630C1;
+        Fri, 21 Apr 2023 15:05:53 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LLSlo2026114;
+        Fri, 21 Apr 2023 22:05:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bTuKtHGTeLnEy77rrZuzHq6grMBEthzjY0RdJSovizQ=;
+ b=gezY9NUmYUYqiMwkfJ71cGd5NtST1Y7lCHbSm+E1p8S5eBEK2KJqJGYgqVXpLtLNuLai
+ 9B65qbgaJo15gCja8zhSf8Rx95NopZAxVGQWJSwbRuuue4qa0m01kjEiCDoZ0SyWO2Qk
+ ZBEWAj2P7UZZdqZKLcZ/KQvBms6WgSrAB0bkfGeFw+i4jkYejR3A6PQ8RlbTJj+Ocm/t
+ GXvaoJoEyf9GSKNYlo2GzfeOfJPhJXREdNcN3faX6NMmeXF1C4T9KC58i6hMTEG4TSaC
+ QZXvKEWZZ55d2W/uV+hsj10YRklyx7/UhtZlIbmIDydH1j8mvZtHjPsC3rnqUKQ05A0g IQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3tmqs7cj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 22:05:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LM5fvF009059
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 22:05:41 GMT
+Received: from [10.110.0.180] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
+ 2023 15:05:40 -0700
+Message-ID: <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
+Date:   Fri, 21 Apr 2023 15:05:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <228969.1682114626.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 21 Apr 2023 23:03:46 +0100
-Message-ID: <228970.1682114626@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
+ chipsets
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>
+CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
+ <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
+ <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oCjwfEqMgOxWu08l3yMN7gwYqwWBmTMi
+X-Proofpoint-ORIG-GUID: oCjwfEqMgOxWu08l3yMN7gwYqwWBmTMi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=940 spamscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210193
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
 
-If the rxrpc call set up by afs_make_call() receives an error whilst it is
-transmitting the request, there's the possibility that it may get to the
-point the rxrpc call is ended (after the error_kill_call label) just as th=
-e
-call is queued for async processing.
+On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
+> On 21/04/2023 02:25, Kuogee Hsieh wrote:
+>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>
+>> Add DSC 1.2 hardware blocks to the catalog with necessary
+>> sub-block and feature flag information.
+>> Each display compression engine (DCE) contains dual hard
+>> slice DSC encoders so both share same base address but with
+>> its own different sub block address.
+>
+> Please correct line wrapping. 72-75 is usually the preferred width
+>
+>>
+>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h  | 19 
+>> +++++++++++++++++++
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h  | 11 +++++++++++
+>>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h    | 21 
+>> +++++++++++++++++++++
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h  | 19 
+>> +++++++++++++++++++
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h  | 19 
+>> +++++++++++++++++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c      | 12 ++++++++++--
+>>   6 files changed, 99 insertions(+), 2 deletions(-)
+>>
+>
+>
+> [I commented on sm8550, it applies to all the rest of platforms]
+>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>> index 9e40303..72a7bcf 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
+>> sm8550_merge_3d[] = {
+>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+>>   };
+>>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
+>> +    .enc = {.base = 0x100, .len = 0x100},
+>> +    .ctl = {.base = 0xF00, .len = 0x10},
+>> +};
+>> +
+>> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
+>> +    .enc = {.base = 0x200, .len = 0x100},
+>> +    .ctl = {.base = 0xF80, .len = 0x10},
+>> +};
+>
+> Please keep sblk in dpu_hw_catalog for now.
+>
+>> +
+>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
+>> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, sm8550_dsc_sblk_0),
+>> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, sm8550_dsc_sblk_1),
+>
+> Is there a reason why index in "dsc_N" doesn't match the DSC_n which 
+> comes next to it?
 
-This could manifest itself as call->rxcall being seen as NULL in
-afs_deliver_to_call() when it tries to lock the call.
+usually each DCE (display compression engine) contains two hard slice 
+encoders.
 
-Fix this by splitting rxrpc_kernel_end_call() into a function to shut down
-an rxrpc call and a function to release the caller's reference and calling
-the latter only when we get to afs_put_call().
+DSC_0 and DSC_1 (index) is belong to dsc_0.
 
-Reported-by: Jeffrey Altman <jaltman@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Tested-by: kafs-testing+fedora36_64checkkafs-build-306@auristor.com
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: linux-afs@lists.infradead.org
-cc: netdev@vger.kernel.org
----
- Documentation/networking/rxrpc.rst |   17 ++++++++++++-----
- fs/afs/rxrpc.c                     |    9 ++++-----
- include/net/af_rxrpc.h             |    3 ++-
- net/rxrpc/af_rxrpc.c               |   37 +++++++++++++++++++++++++------=
-------
- net/rxrpc/rxperf.c                 |    3 ++-
- 5 files changed, 45 insertions(+), 24 deletions(-)
+If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
 
-diff --git a/Documentation/networking/rxrpc.rst b/Documentation/networking=
-/rxrpc.rst
-index ec1323d92c96..c318ac5eb66f 100644
---- a/Documentation/networking/rxrpc.rst
-+++ b/Documentation/networking/rxrpc.rst
-@@ -848,14 +848,21 @@ The kernel interface functions are as follows:
-      returned.  The caller now holds a reference on this and it must be
-      properly ended.
- =
-
-- (#) End a client call::
-+ (#) Shut down a client call::
- =
-
--	void rxrpc_kernel_end_call(struct socket *sock,
-+	void rxrpc_kernel_shutdown_call(struct socket *sock,
-+					struct rxrpc_call *call);
-+
-+     This is used to shut down a previously begun call.  The user_call_ID=
- is
-+     expunged from AF_RXRPC's knowledge and will not be seen again in
-+     association with the specified call.
-+
-+ (#) Release the ref on a client call::
-+
-+	void rxrpc_kernel_put_call(struct socket *sock,
- 				   struct rxrpc_call *call);
- =
-
--     This is used to end a previously begun call.  The user_call_ID is ex=
-punged
--     from AF_RXRPC's knowledge and will not be seen again in association =
-with
--     the specified call.
-+     This is used to release the caller's ref on an rxrpc call.
- =
-
-  (#) Send data through a call::
- =
-
-diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
-index 7817e2b860e5..e08b850c3e6d 100644
---- a/fs/afs/rxrpc.c
-+++ b/fs/afs/rxrpc.c
-@@ -179,7 +179,8 @@ void afs_put_call(struct afs_call *call)
- 		ASSERT(call->type->name !=3D NULL);
- =
-
- 		if (call->rxcall) {
--			rxrpc_kernel_end_call(net->socket, call->rxcall);
-+			rxrpc_kernel_shutdown_call(net->socket, call->rxcall);
-+			rxrpc_kernel_put_call(net->socket, call->rxcall);
- 			call->rxcall =3D NULL;
- 		}
- 		if (call->type->destructor)
-@@ -420,10 +421,8 @@ void afs_make_call(struct afs_addr_cursor *ac, struct=
- afs_call *call, gfp_t gfp)
- 	 * The call, however, might be queued on afs_async_calls and we need to
- 	 * make sure we don't get any more notifications that might requeue it.
- 	 */
--	if (call->rxcall) {
--		rxrpc_kernel_end_call(call->net->socket, call->rxcall);
--		call->rxcall =3D NULL;
--	}
-+	if (call->rxcall)
-+		rxrpc_kernel_shutdown_call(call->net->socket, call->rxcall);
- 	if (call->async) {
- 		if (cancel_work_sync(&call->async_work))
- 			afs_put_call(call);
-diff --git a/include/net/af_rxrpc.h b/include/net/af_rxrpc.h
-index ba717eac0229..01a35e113ab9 100644
---- a/include/net/af_rxrpc.h
-+++ b/include/net/af_rxrpc.h
-@@ -57,7 +57,8 @@ int rxrpc_kernel_recv_data(struct socket *, struct rxrpc=
-_call *,
- 			   struct iov_iter *, size_t *, bool, u32 *, u16 *);
- bool rxrpc_kernel_abort_call(struct socket *, struct rxrpc_call *,
- 			     u32, int, enum rxrpc_abort_reason);
--void rxrpc_kernel_end_call(struct socket *, struct rxrpc_call *);
-+void rxrpc_kernel_shutdown_call(struct socket *sock, struct rxrpc_call *c=
-all);
-+void rxrpc_kernel_put_call(struct socket *sock, struct rxrpc_call *call);
- void rxrpc_kernel_get_peer(struct socket *, struct rxrpc_call *,
- 			   struct sockaddr_rxrpc *);
- bool rxrpc_kernel_get_srtt(struct socket *, struct rxrpc_call *, u32 *);
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index 9022071c55e3..ebe5b2906a59 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -341,31 +341,44 @@ static void rxrpc_dummy_notify_rx(struct sock *sk, s=
-truct rxrpc_call *rxcall,
- }
- =
-
- /**
-- * rxrpc_kernel_end_call - Allow a kernel service to end a call it was us=
-ing
-+ * rxrpc_kernel_shutdown_call - Allow a kernel service to shut down a cal=
-l it was using
-  * @sock: The socket the call is on
-  * @call: The call to end
-  *
-- * Allow a kernel service to end a call it was using.  The call must be
-+ * Allow a kernel service to shut down a call it was using.  The call mus=
-t be
-  * complete before this is called (the call should be aborted if necessar=
-y).
-  */
--void rxrpc_kernel_end_call(struct socket *sock, struct rxrpc_call *call)
-+void rxrpc_kernel_shutdown_call(struct socket *sock, struct rxrpc_call *c=
-all)
- {
- 	_enter("%d{%d}", call->debug_id, refcount_read(&call->ref));
- =
-
- 	mutex_lock(&call->user_mutex);
--	rxrpc_release_call(rxrpc_sk(sock->sk), call);
--
--	/* Make sure we're not going to call back into a kernel service */
--	if (call->notify_rx) {
--		spin_lock(&call->notify_lock);
--		call->notify_rx =3D rxrpc_dummy_notify_rx;
--		spin_unlock(&call->notify_lock);
-+	if (!test_bit(RXRPC_CALL_RELEASED, &call->flags)) {
-+		rxrpc_release_call(rxrpc_sk(sock->sk), call);
-+
-+		/* Make sure we're not going to call back into a kernel service */
-+		if (call->notify_rx) {
-+			spin_lock(&call->notify_lock);
-+			call->notify_rx =3D rxrpc_dummy_notify_rx;
-+			spin_unlock(&call->notify_lock);
-+		}
- 	}
--
- 	mutex_unlock(&call->user_mutex);
-+}
-+EXPORT_SYMBOL(rxrpc_kernel_shutdown_call);
-+
-+/**
-+ * rxrpc_kernel_put_call - Release a reference to a call
-+ * @sock: The socket the call is on
-+ * @call: The call to put
-+ *
-+ * Drop the application's ref on an rxrpc call.
-+ */
-+void rxrpc_kernel_put_call(struct socket *sock, struct rxrpc_call *call)
-+{
- 	rxrpc_put_call(call, rxrpc_call_put_kernel);
- }
--EXPORT_SYMBOL(rxrpc_kernel_end_call);
-+EXPORT_SYMBOL(rxrpc_kernel_put_call);
- =
-
- /**
-  * rxrpc_kernel_check_life - Check to see whether a call is still alive
-diff --git a/net/rxrpc/rxperf.c b/net/rxrpc/rxperf.c
-index 4a2e90015ca7..085e7892d310 100644
---- a/net/rxrpc/rxperf.c
-+++ b/net/rxrpc/rxperf.c
-@@ -342,7 +342,8 @@ static void rxperf_deliver_to_call(struct work_struct =
-*work)
- call_complete:
- 	rxperf_set_call_complete(call, ret, remote_abort);
- 	/* The call may have been requeued */
--	rxrpc_kernel_end_call(rxperf_socket, call->rxcall);
-+	rxrpc_kernel_shutdown_call(rxperf_socket, call->rxcall);
-+	rxrpc_kernel_put_call(rxperf_socket, call->rxcall);
- 	cancel_work(&call->work);
- 	kfree(call);
- }
-
+>
+>> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
+>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
+>> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
+>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
+>> +};
+>> +
+>>   static const struct dpu_intf_cfg sm8550_intf[] = {
+>>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
+>> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>>       /* TODO TE sub-blocks for intf1 & intf2 */
+>> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+>>       .dspp = sm8550_dspp,
+>>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
+>>       .pingpong = sm8550_pp,
+>> +    .dsc = sm8550_dsc,
+>> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
+>>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+>>       .merge_3d = sm8550_merge_3d,
+>>       .intf_count = ARRAY_SIZE(sm8550_intf),
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 03f162a..be08158 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -1,6 +1,6 @@
+>>   // SPDX-License-Identifier: GPL-2.0-only
+>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights 
+>> reserved.
+>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All 
+>> rights reserved.
+>>    */
+>>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
+>> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
+>> sc7280_pp_sblk = {
+>>       {\
+>>       .name = _name, .id = _id, \
+>>       .base = _base, .len = 0x140, \
+>> -    .features = _features, \
+>> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
+>> +    }
+>> +
+>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
+>> +    {\
+>> +    .name = _name, .id = _id, \
+>> +    .base = _base, .len = _len, \
+>> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
+>> +    .sblk = &_sblk, \
+>>       }
+>> /*************************************************************
+>
