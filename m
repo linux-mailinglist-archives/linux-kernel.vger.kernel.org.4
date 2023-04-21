@@ -2,178 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC0A6EA584
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6856EA589
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjDUID4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S231548AbjDUIFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjDUIDr (ORCPT
+        with ESMTP id S231681AbjDUIE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:03:47 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E1A9004;
-        Fri, 21 Apr 2023 01:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682064225; x=1713600225;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uaalytOD7E9KTAxWb0CBOWck+EskKmiavYRIJcVqFvs=;
-  b=ZdJVX5PmC8E6JvOq8ZsNx444i87GFrRhfCgJFsh6pXgw7QqlI7vzqGes
-   L7FHpEU2hKkxGPf1Ei+agi+KyFdler94/W96mVotnwe1DPDx6eKn327XM
-   7Qgj92QUpTKf4u7b99uivmP/xdI/TlpUg2dgwK4UqOmXAC9sOtbByb9ub
-   SwmcKzb1ZBIi5comdRvwc2oP7WeCT/94jnQwfe4WIuEeIGbjTYbLLMVUI
-   /a0IJdLvdhRlXvIVyKlOxk+IEYJLBqeVL6ccPspyzsm8xn6kVOwZtZUsO
-   TP5JpT0EI6ketHdQzzYiuOfuaHgc7kMu5j7PWKkpSVOSnzfXYvWSIzL23
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,214,1677567600"; 
-   d="scan'208";a="148255781"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2023 01:03:44 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 21 Apr 2023 01:03:40 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 21 Apr 2023 01:03:40 -0700
-Date:   Fri, 21 Apr 2023 10:03:39 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <richardcochran@gmail.com>,
-        <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>
-Subject: Re: [PATCH net-next] net: lan966x: Don't use xdp_frame when action
- is XDP_TX
-Message-ID: <20230421080339.x2fllg65qmcrk6vk@soft-dev3-1>
-References: <20230420121152.2737625-1-horatiu.vultur@microchip.com>
- <ZEGmHe2pyxwWiYRL@boxer>
+        Fri, 21 Apr 2023 04:04:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38869903B;
+        Fri, 21 Apr 2023 01:04:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 963E721A36;
+        Fri, 21 Apr 2023 08:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682064290;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5StWWj+w1KUl4+HyVtWVGj32yDGQYLskTdzziZvHcn0=;
+        b=tBma7/5H8UACRRP4uhvJ1XFPn0cH5j87T3qGW5EBO+mjIS+UpgC6Kp9CbIvkuVFxcv3HmV
+        mpHfUxgxr0jYLovLDfdbyF2fd6WThEelBW3YH29mk338JQ93PhOwS/7vjbaOXtNMkUr/ay
+        TaVk9Jd3URPZ+G/Nd/RK5XnhqPwimCY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682064290;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5StWWj+w1KUl4+HyVtWVGj32yDGQYLskTdzziZvHcn0=;
+        b=pGOhMt1TaBvJ2SFwx/cL7Fyxn0YXubuwyXUcqKRDAcHN9jWU1b/vMviKlXpPOJNcY8f2Gm
+        gzSYk5p9bYsSTACQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F09DB1390E;
+        Fri, 21 Apr 2023 08:04:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FPpMOaFDQmQUJAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Fri, 21 Apr 2023 08:04:49 +0000
+Date:   Fri, 21 Apr 2023 10:04:55 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        LTP List <ltp@lists.linux.it>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH 5.4 00/92] 5.4.241-rc1 review
+Message-ID: <20230421080455.GB2747101@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20230418120304.658273364@linuxfoundation.org>
+ <CA+G9fYuT3N0LFaJGzQW2SYPJxEbEWLONDZO2OfBbeHNrsowy2w@mail.gmail.com>
+ <ZD+fDeWVOXklD01f@yuki>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEGmHe2pyxwWiYRL@boxer>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZD+fDeWVOXklD01f@yuki>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/20/2023 22:52, Maciej Fijalkowski wrote:
-> [Some people who received this message don't often get email from maciej.fijalkowski@intel.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
-> 
+> Hi!
+> > > This is the start of the stable review cycle for the 5.4.241 release.
+> > > There are 92 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
 
-Hi Maciej,
+> > > Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> > > Anything received after that time might be too late.
 
-> 
-> On Thu, Apr 20, 2023 at 02:11:52PM +0200, Horatiu Vultur wrote:
-> 
-> 'net: ' in patch subject is excessive to me
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.241-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> > > and the diffstat can be found below.
 
-I usually have set this in the subject. I can remove this in the next
-version and I will try to keep in mind for other patches for lan966x.
+> > > thanks,
 
-> 
-> > When the action of an xdp program was XDP_TX, lan966x was creating
-> > a xdp_frame and use this one to send the frame back. But it is also
-> > possible to send back the frame without needing a xdp_frame, because
-> > it possible to send it back using the page.
-> 
-> s/it/it is
-> 
-> > And then once the frame is transmitted is possible to use directly
-> > page_pool_recycle_direct as lan966x is using page pools.
-> > This would save some CPU usage on this path.
-> 
-> i remember this optimization gave me noticeable perf improvement, would
-> you mind sharing it in % on your side?
+> > > greg k-h
 
-The way I have done the measurements, is to measure actually how much
-more traffic can be send back. I tried with different frame sizes,
-frame size     improvement
-64                ~8%
-256              ~11%
-512               ~8%
-1000              ~0%
-1500              ~0%
 
-I will make sure do add this to the comments in the next version.
+> > Recently we have upgraded the LTP test suite version and started noticing
+> > these test failures on 5.4.
+> > Test getting skipped on 4.19 and 4.14 as not supported features.
 
-> 
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > Need to investigate test case issues or kernel issues.
+
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+> > NOTE:
+
 > > ---
-> >  .../ethernet/microchip/lan966x/lan966x_fdma.c | 35 +++++++++++--------
-> >  .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
-> >  .../ethernet/microchip/lan966x/lan966x_xdp.c  | 11 +++---
-> >  3 files changed, 27 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > index 2ed76bb61a731..7947259e67e4e 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > @@ -390,6 +390,7 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
-> >  static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
-> >  {
-> >       struct lan966x_tx *tx = &lan966x->tx;
-> > +     struct lan966x_rx *rx = &lan966x->rx;
-> >       struct lan966x_tx_dcb_buf *dcb_buf;
-> >       struct xdp_frame_bulk bq;
-> >       struct lan966x_db *db;
-> > @@ -432,7 +433,8 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
-> >                       if (dcb_buf->xdp_ndo)
-> >                               xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
-> >                       else
-> > -                             xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
-> > +                             page_pool_recycle_direct(rx->page_pool,
-> > +                                                      dcb_buf->data.page);
-> >               }
-> >
-> >               clear = true;
-> > @@ -702,6 +704,7 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
-> >  int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
-> >                          struct xdp_frame *xdpf,
-> >                          struct page *page,
-> > +                        u32 len,
-> 
-> agreed with Olek regarding arguments reduction here
+> > creat09.c:73: TINFO: User nobody: uid = 65534, gid = 65534
+> > creat09.c:75: TINFO: Found unused GID 11: SUCCESS (0)
+> > creat09.c:120: TINFO: File created with umask(0)
+> > creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+> > creat09.c:112: TPASS: mntpoint/testdir/creat.tmp: Setgid bit not set
+> > creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+> > creat09.c:112: TPASS: mntpoint/testdir/open.tmp: Setgid bit not set
+> > creat09.c:120: TINFO: File created with umask(S_IXGRP)
+> > creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+> > creat09.c:110: TFAIL: mntpoint/testdir/creat.tmp: Setgid bit is set
+> > creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+> > creat09.c:110: TFAIL: mntpoint/testdir/open.tmp: Setgid bit is set
 
-Yes, I will change this in the next version.
+> > Test history links,
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16338751/suite/ltp-syscalls/test/creat09/history/
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16337895/suite/ltp-cve/test/cve-2018-13405/history/
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16338751/suite/ltp-syscalls/test/creat09/log
 
-> 
-> >                          bool dma_map)
-> >  {
-> >       struct lan966x *lan966x = port->lan966x;
-> > @@ -722,6 +725,15 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
-> >               goto out;
-> >       }
-> >
-> > +     /* Fill up the buffer */
-> > +     next_dcb_buf = &tx->dcbs_buf[next_to_use];
-> > +     next_dcb_buf->use_skb = false;
-> > +     next_dcb_buf->xdp_ndo = dma_map;
-> 
-> a bit misleading that xdp_ndo is a bool :P
+> That's likely a missing kernel patch, as this is a regression test there
+> should have been links to the patches and CVE referencies in the test
+> output as the test is tagged with kernel commits and CVE numbers:
 
-There are few other variables that are misleading :), I need to get to
-this and clean it a little bit.
+>         .tags = (const struct tst_tag[]) {
+>                 {"linux-git", "0fa3ecd87848"},
+>                 {"CVE", "2018-13405"},
+>                 {"CVE", "2021-4037"},
+>                 {"linux-git", "01ea173e103e"},
+Only this one has been backported (as
+e76bd6da51235ce86f5a8017dd6c056c76da64f9), the other two are missing.
+>                 {"linux-git", "1639a49ccdce"},
+>                 {"linux-git", "426b4ca2d6a5"},
+The last one is merge tag, I wonder if it's correct:
+426b4ca2d6a5 ("Merge tag 'fs.setgid.v6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux")
+Maybe just 1639a49ccdce would be ok.
 
-> 
-> > +     next_dcb_buf->len = len + IFH_LEN_BYTES;
-> > +     next_dcb_buf->used = true;
-> > +     next_dcb_buf->ptp = false;
-> > +     next_dcb_buf->dev = port->dev;
-> > +
-> >       /* Generate new IFH */
-> >       if (dma_map) {
-> >               if (xdpf->headroom < IFH_LEN_BYTES) {
--- 
-/Horatiu
+@Yang Xu
+1) why 1639a49ccdce has not been merged to stable tree? It does not apply now,
+was that the only reason? Or is it not applicable?
+
+@Yang Xu is really 426b4ca2d6a5 needed? Was it easier to list merge commit than
+particular fixes? Merge commit contains:
+
+5fadbd992996 ("ceph: rely on vfs for setgid stripping")
+1639a49ccdce ("fs: move S_ISGID stripping into the vfs_*() helpers")
+ac6800e279a2 ("fs: Add missing umask strip in vfs_tmpfile")
+2b3416ceff5e ("fs: add mode_strip_sgid() helper")
+
+They have not been backported to 5.4 stable, nor to the older releases.
+Again, they don't apply.
+
+
+>                 {}
+>         },
+
+> > ---
+
+> > fanotify14.c:161: TCONF: FAN_REPORT_TARGET_FID not supported in kernel?
+> > fanotify14.c:157: TINFO: Test case 7: fanotify_init(FAN_CLASS_NOTIF |
+> > FAN_REPORT_TARGET_FID | FAN_REPORT_DFID_FID, O_RDONLY)
+> > fanotify14.c:161: TCONF: FAN_REPORT_TARGET_FID not supported in kernel?
+> > [  377.081993] EXT4-fs (loop0): mounting ext3 file system using the
+> > ext4 subsystem
+> > fanotify14.c:157: TINFO: Test case 8: fanotify_init(FAN_CLASS_NOTIF |
+> > FAN_REPORT_DFID_FID, O_RDONLY)
+> > [  377.099137] EXT4-fs (loop0): mounted filesystem with ordered data
+> > mode. Opts: (null)
+> > fanotify14.c:175: TFAIL: fanotify_init(tc->init.flags, O_RDONLY)
+> > failed: EINVAL (22)
+
+> Possibly like the test may be missing check for a FAN_REPORT_DFID_FID
+> support.
+
+@Amir could you please look at this fanotify14.c failure on 5.4.241-rc1?
+
+Kind regards,
+Petr
