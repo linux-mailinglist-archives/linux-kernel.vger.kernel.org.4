@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E86A6EA5ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D276EA5F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjDUIeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S231579AbjDUIex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjDUIer (ORCPT
+        with ESMTP id S231517AbjDUIeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:34:47 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE2476B6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:34:45 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54fb4c97d55so4618197b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:34:45 -0700 (PDT)
+        Fri, 21 Apr 2023 04:34:50 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB6A76B6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:34:49 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94ef8b88a5bso180919066b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682066085; x=1684658085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fp/ACjcZCf0EcpuagDl4EZfkEmf33hHdlU+uun89GDc=;
-        b=qarcqIc6SRTL8HBCIZpm+9e7y4OJJ/CuQgypU8/t22C1pcBLHWvotUZqOa+aSGhKTp
-         n6ze3o3VuxjOF5TIDaTzylWNQVmGPzt0sbK6pDbABpmsoDANhcgmz/pRHiJArV9n1xGI
-         /FjxsYBvNKRbAwJkthp0goKLdq3LC2EQa18t9hUA45wfKdQzHTArWHfMmzaxYy+54v/y
-         I6YQzTdfLUle7YQ1dJ8a0FtArBfd0tZyCbLmgKZWqFxYMXZHMZvfma1dXYnJlHOd+Owr
-         8h+NXrNaqK986NCef5jyOYFR2wtk9HTM4J0RBk5OJ62Sn5hebCWh8wj+H/qrqDnNkME5
-         7NkA==
+        d=linaro.org; s=google; t=1682066088; x=1684658088;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JLrpYppJRBZnm4293v5qlzP26kcaV844cal3A2By+/4=;
+        b=WmqsnnE8cSF2LkSO+3yYmUeQvDPnjfEkEtmHmzbkHE+ri/yyS8It/xq4CIUR4TIWJI
+         wH6tIJj8gQtF4wbhYMvcOIxjYo4nn7wLPYH5brs7giYUZ5dEe1Dy8BsQsyebLYm4dCLR
+         WrBwwC8YNVvp0WNn+v2PsRS4j1TylV3Ban+2ek5vmN+Efo5GqtqGvoybxLX8C9eUn1PW
+         GTv44XBbEaVO5UE1e7AUR2eb4xvp+/e1eCyU3dd7K937TamRC8Ys2bwTJIbuwCU2c8Jf
+         Z2+bhW0FGGf295VyBxnt8F1k+48pznYHl3VMOeTAnp7etg7gRfwEP6GjLD2QKtxJ+Het
+         atOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682066085; x=1684658085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fp/ACjcZCf0EcpuagDl4EZfkEmf33hHdlU+uun89GDc=;
-        b=S0PBfUOZdng7eAqvBBjcvIgB3bCtu0ZFQ7juCGiOGmThDhYdmn+0WseaFgK9aLvvDQ
-         qI472h+Se3j6jrTogqKGiICtSItap+BbC/cjFXdiosetkKET4jBsI9g3a8w7JEwkK0KT
-         7nIBEwfXV3Ea1AhiIBWWhZXn9A+iTEUOG9M/owuKsLXv/Y7Yr8YD7rMNzzv65ODkUTcE
-         eV1WHZDQRfX8Y0c3gc/ehNIjgY1Us9CNJn1ew8HoLeExt+KcQw24O1KHGYUsV8y1IT8P
-         BI/1nW6gHwF8YFTk6goaQWrDiq0DM3A5/K6LtYgGN/Vjlmj7FnexFMdJ0gDBVEGHzxZu
-         OIFw==
-X-Gm-Message-State: AAQBX9et0kOeVb4Hfx+iR4O57ExIaZDv4W4jDy28vOQ3g9gHzgue215b
-        oK/CStu5fWpb4Sb6KU0MKurj1KKC9cSCSCKIIs5YIA==
-X-Google-Smtp-Source: AKy350Yb4Fz0U89tXFn8B6ENGKQYsi+pslftagGUV88tFpZd1gHJSxkRiNiY0l3gWO5hnKalWWgxY51ckK9X0bfjAnM=
-X-Received: by 2002:a81:5205:0:b0:54f:cc36:e919 with SMTP id
- g5-20020a815205000000b0054fcc36e919mr1218013ywb.4.1682066085190; Fri, 21 Apr
- 2023 01:34:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682066088; x=1684658088;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JLrpYppJRBZnm4293v5qlzP26kcaV844cal3A2By+/4=;
+        b=FRQFOVYr0J00t3jNZc5szqUeSsFAOMX44NN/SHibbnVlULGmQjLUTchQ1DPDYfuxW9
+         jNd0J1fPfcMAa0N1ALEsVriciO1VlUhfezJdD9ly3Tc3GjAXzW+F/AAL9Y4jPDr32vtt
+         oaM+GjDhjAfXW4VLx642EmtAnb5xsVAMCEucCmsusPSRpKcBGVcAiBBTDyvksusIk80i
+         W2SqQjBLLdzab0kAlMpjEFCycMsR0r45EZMstvU9/gp1osfjStI7ph2V1TGELzl6wVEj
+         35lOh05mlr+ujzYlBlXjHlhW4LL3D9fd96MvOa55iRaWW51I9MBrLXKTmrIy6oZHrb5/
+         lTcA==
+X-Gm-Message-State: AAQBX9c9tqlOBP/VUyJ3SgUM6e1LlzmAW1z8r2Mr1yMuUl9/Hj+PWt3Z
+        gDz6bNK0e37SJQo/iA9Pua2wLA==
+X-Google-Smtp-Source: AKy350ZWzTa+6dzxFcNGIlO21Ew9EETMq6dUqln7SS4w2bvqzBSO/XL24kivsmI/kDkUJ6hAtEBFzA==
+X-Received: by 2002:a17:907:a809:b0:94e:68a5:b7b8 with SMTP id vo9-20020a170907a80900b0094e68a5b7b8mr1506381ejc.76.1682066087953;
+        Fri, 21 Apr 2023 01:34:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:668b:1e57:3caa:4d06? ([2a02:810d:15c0:828:668b:1e57:3caa:4d06])
+        by smtp.gmail.com with ESMTPSA id de23-20020a1709069bd700b0094f02ebedf5sm1763209ejc.64.2023.04.21.01.34.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 01:34:47 -0700 (PDT)
+Message-ID: <7492e42e-c8c4-7222-d990-d6ed5b894625@linaro.org>
+Date:   Fri, 21 Apr 2023 10:34:46 +0200
 MIME-Version: 1.0
-References: <20230414101217.1342891-1-eblanc@baylibre.com> <20230414101217.1342891-3-eblanc@baylibre.com>
-In-Reply-To: <20230414101217.1342891-3-eblanc@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 21 Apr 2023 10:34:34 +0200
-Message-ID: <CACRpkdab_26D9BMGeSygy_oa6SFa62ytXcy+Ydi3yPzQO3tU4A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] pinctrl: tps6594: add for TPS6594 PMIC
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com, aseketeli@baylibre.com,
-        sterzik@ti.com, u-kumar1@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+Content-Language: en-US
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Cong Dang <cong.dang.xn@renesas.com>,
+        Hai Pham <hai.pham.ud@renesas.com>,
+        linux-kernel@vger.kernel.org
+References: <20230419130234.44321-1-wsa+renesas@sang-engineering.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419130234.44321-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Esteban,
+On 19/04/2023 15:02, Wolfram Sang wrote:
+> According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+> setting is different on R-Car SoCs, i.e.
+> 
+> R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+> other R-Car Gen3: STRTIM[2:0] is set to 0x7
+> other R-Car Gen4: STRTIM[3:0] is set to 0xf
+> 
+> To fix this issue, a DT match data was added to specify the setting
+> for special use cases.
+> 
+> Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+> Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+> [wsa: rebased, restructured, added Gen4 support]
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Change since v3:
+> * rebased to latest changes in the driver
+> 
+> The previous version was already reviewed by Geert and tested by
+> Prabhakar. Since the rebase for v4 was not super trivial, I decided to
+> drop the tags. It would be great if you could have another look. Thank
+> you already. Happy hacking!
 
-thanks for your patch!
+Thank you for the patch.
+It is too late in the cycle for me to pick it up. I will take it after
+the merge window.
 
-On Fri, Apr 14, 2023 at 12:12=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com=
-> wrote:
 
-> TI TPS6594 PMIC has 11 GPIOs which can be used for different
-> functions.
->
-> This add a pinctrl and pinmux drivers in order to use those functions.
->
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
-(...)
-> +config PINCTRL_TPS6594
-> +       tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
-> +       depends on MFD_TPS6594
-> +       default MFD_TPS6594
-> +       select PINMUX
-> +       select GPIOLIB
+Best regards,
+Krzysztof
 
-select GPIO_REGMAP
-?
-
-I think this driver can use the GPIO_REGMAP helper library.
-
-Please look into other drivers using this, such as
-drivers/gpio/gpio-sl28cpld.c
-
-Yours,
-Linus Walleij
