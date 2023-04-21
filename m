@@ -2,90 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA59D6EA43C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D21B6EA441
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjDUHDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S229511AbjDUHFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDUHDh (ORCPT
+        with ESMTP id S229507AbjDUHFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:03:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC271FE7;
-        Fri, 21 Apr 2023 00:03:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 76E591FDDC;
-        Fri, 21 Apr 2023 07:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682060614; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 21 Apr 2023 03:05:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BB9269F
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682060660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2rtWXlVT5BsQ+9u99bjnLdBNoxWAcQElzaxacnHOXTI=;
-        b=1F8t7EYbDxtAnuR9jahNG2NSpaCyAN8tuFMnBdX0e9yVSzLrb9UO6uG+6VmdWHToruPTJO
-        XcUaXvQOq9jPc2JZs1O7be9XRrm0QG703Ik2bv+15LpnlHvGuZlcjp0axKo+Wz/waAjm4w
-        JxUni3tpgaWPkf0K7MZFqLolAmpSCn4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682060614;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2rtWXlVT5BsQ+9u99bjnLdBNoxWAcQElzaxacnHOXTI=;
-        b=VtwYNriBGsu5v97+sGmbgOcQAu2YRRbXwoACP3zhiPTY+elacxfqPuPXXNBKyBMxkmzwlN
-        Vkk0IGGso0ShA1Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A10F13456;
-        Fri, 21 Apr 2023 07:03:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zZbgGUY1QmRKAgAAMHmgww
-        (envelope-from <dwagner@suse.de>); Fri, 21 Apr 2023 07:03:34 +0000
-Date:   Fri, 21 Apr 2023 09:03:33 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-Subject: Re: [PATCH REPOST blktests v2 7/9] nvme-rc: Calculate IO size for
- fio jobs
-Message-ID: <7qew4jvwfgvpsqlci6dh6r6vjmzrzaphbqzzxqvvpdfadkj3ab@vxvbvh26bvji>
-References: <20230421060505.10132-1-dwagner@suse.de>
- <20230421060505.10132-8-dwagner@suse.de>
- <6aa42bc9-e04e-cfc6-32cf-f1739944070b@suse.de>
+        bh=sQJO95UUdAAV3qDudgkbVRn+BO9giFeNO5BoGKzmtSE=;
+        b=ctC0ij+bkEcwH8vtzfsFmbbFFLaHHnfjHGbvxHSvQo4y12rwyF+7YDfxpjDVhG22ttGf3N
+        hnZoBSkqBorFh16LS1I6bBp0GGDYGoJPHJW5qBs9iGzu5Ymy+07+MGXoBbxE2J10XnNx81
+        HPYWTz3nBSYa1SSZ349cGroCEBzwa3k=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-176-c3ROmvOPN4inIiRQXPubkg-1; Fri, 21 Apr 2023 03:04:17 -0400
+X-MC-Unique: c3ROmvOPN4inIiRQXPubkg-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f08901fed3so8369265e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:04:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682060656; x=1684652656;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sQJO95UUdAAV3qDudgkbVRn+BO9giFeNO5BoGKzmtSE=;
+        b=dWC0gR1n7mBHk22r3aa4+yEcsB9kFfFAywn2bKECzTTpn/qok0ZlyE/uAGrjGvYa5O
+         Mnq3p46BxA5wzEfeKuygEjOH7LPh7M2s0tQHKppF3Bb2nIQgAYouieqXjHZPE1S7v5Vq
+         9vzn807OjIpJAVoOAEx1I9wcozNcdlCmdq6N2tyN/tZeOVdi0AJazZhY2hObXi9gouY3
+         mpcgvxevcJgEsfXAVbDDpod+uVwzumnt72oJu2ar6LV9cDDV3PO/FIbKfDSi05njtg4R
+         kufjvP0+vX2kWM0thrhmMiypP46bd2Wl/2EywXBWlMBoum2xupKwnoIERupWlDKFd3OB
+         VzRw==
+X-Gm-Message-State: AAQBX9colRlSjemoto6FYr4feA3sZpCI3GG+hZLhxtiI1n+dL2f7X3z5
+        zWP6shhJIV2PZ/rojdjxZRjO7OE2HItO87uB09Vc6hnYlRaOvGHoGp3LzPqoW3yvlGwj5W2W39l
+        5e3H3y5N3aNef2P8+LtRQLPaQ
+X-Received: by 2002:adf:dc89:0:b0:2f7:faa0:3f19 with SMTP id r9-20020adfdc89000000b002f7faa03f19mr3151250wrj.28.1682060656347;
+        Fri, 21 Apr 2023 00:04:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aHGati/ymbZ+DxYiF2QaRNV5Ff23Y+Nuvqn19bIrzunMC8mgm4mQ7wFV57Pwfs/5R1bDroBQ==
+X-Received: by 2002:adf:dc89:0:b0:2f7:faa0:3f19 with SMTP id r9-20020adfdc89000000b002f7faa03f19mr3151237wrj.28.1682060656055;
+        Fri, 21 Apr 2023 00:04:16 -0700 (PDT)
+Received: from redhat.com ([2.55.62.70])
+        by smtp.gmail.com with ESMTPSA id g2-20020a5d5402000000b002da75c5e143sm3732830wrv.29.2023.04.21.00.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 00:04:15 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 03:04:12 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Andrey Smetanin <asmetanin@yandex-team.ru>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yc-core@yandex-team.ru
+Subject: Re: [PATCH] vhost_net: revert upend_idx only on retriable error
+Message-ID: <20230421030345-mutt-send-email-mst@kernel.org>
+References: <20221123102207.451527-1-asmetanin@yandex-team.ru>
+ <CACGkMEs3gdcQ5_PkYmz2eV-kFodZnnPPhvyRCyLXBYYdfHtNjw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6aa42bc9-e04e-cfc6-32cf-f1739944070b@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACGkMEs3gdcQ5_PkYmz2eV-kFodZnnPPhvyRCyLXBYYdfHtNjw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 08:33:46AM +0200, Hannes Reinecke wrote:
- > +_nvme_calc_rand_io_size() {
-> > +	local img_size_mb
-> > +	local io_size_mb
-> > +
-> > +	img_size_mb="$(convert_to_mb "$1")"
-> > +	io_size_mb="$(printf "%d" $((((img_size_mb * 1024 * 1024) / $(nproc) - 1) / 1024)))"
-> > +
+On Thu, Dec 01, 2022 at 05:01:58PM +0800, Jason Wang wrote:
+> On Wed, Nov 23, 2022 at 6:24 PM Andrey Smetanin
+> <asmetanin@yandex-team.ru> wrote:
+> >
+> > Fix possible virtqueue used buffers leak and corresponding stuck
+> > in case of temporary -EIO from sendmsg() which is produced by
+> > tun driver while backend device is not up.
+> >
+> > In case of no-retriable error and zcopy do not revert upend_idx
+> > to pass packet data (that is update used_idx in corresponding
+> > vhost_zerocopy_signal_used()) as if packet data has been
+> > transferred successfully.
 > 
-> ... ending with ridiculous small io sizes on machines with lots of CPUs.
-> Please cap nproc by something sane like 32.
+> Should we mark head.len as VHOST_DMA_DONE_LEN in this case?
+> 
+> Thanks
 
-Yeah, propably not really good long time strategy. I was wondering if we should
-make run_fio() variants smarter and do the size callculation there and not by
-the callee. If we do this, we could make the number of jobs dependend on CPUs
-and image size a bit nicer.
+Jason do you want to take over this work? It's been stuck
+in my inbox for a while.
+
+> >
+> > Signed-off-by: Andrey Smetanin <asmetanin@yandex-team.ru>
+> > ---
+> >  drivers/vhost/net.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> > index 20265393aee7..93e9166039b9 100644
+> > --- a/drivers/vhost/net.c
+> > +++ b/drivers/vhost/net.c
+> > @@ -934,13 +934,16 @@ static void handle_tx_zerocopy(struct vhost_net *net, struct socket *sock)
+> >
+> >                 err = sock->ops->sendmsg(sock, &msg, len);
+> >                 if (unlikely(err < 0)) {
+> > +                       bool retry = err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS;
+> > +
+> >                         if (zcopy_used) {
+> >                                 if (vq->heads[ubuf->desc].len == VHOST_DMA_IN_PROGRESS)
+> >                                         vhost_net_ubuf_put(ubufs);
+> > -                               nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
+> > -                                       % UIO_MAXIOV;
+> > +                               if (retry)
+> > +                                       nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
+> > +                                               % UIO_MAXIOV;
+> >                         }
+> > -                       if (err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS) {
+> > +                       if (retry) {
+> >                                 vhost_discard_vq_desc(vq, 1);
+> >                                 vhost_net_enable_vq(net, vq);
+> >                                 break;
+> > --
+> > 2.25.1
+> >
+
