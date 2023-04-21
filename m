@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111E76EA21D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4D76EA213
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbjDUDCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 23:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S233822AbjDUDAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 23:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbjDUDB6 (ORCPT
+        with ESMTP id S234282AbjDUDAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 23:01:58 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9198F193;
-        Thu, 20 Apr 2023 20:01:55 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q2fNH6x7hz17W42;
-        Fri, 21 Apr 2023 10:58:07 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 11:01:52 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH] perf tracepoint: Fix memory leak in is_valid_tracepoint()
-Date:   Fri, 21 Apr 2023 02:59:53 +0000
-Message-ID: <20230421025953.173826-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Thu, 20 Apr 2023 23:00:23 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403BE10EC;
+        Thu, 20 Apr 2023 20:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=//YIhm6gzARI8o6MnvvcCv8dn1240DofB0ntD6C9IRA=; b=fc6Vr5SKLpsamAaUeQFF3+4Vt/
+        N05OljI+CgfOjikJDcdsOnE3IewxzXycsEkVOCxv2x38T7AdReqlDiAU6MvkUlZ1bpaHrziaSj0fL
+        iEzLAuXoaSqIPbCE4oLA1eqI1Tdd/591vBiRJ3uAvpi0cS6otTzMxl99GqqV0EeDxWIsJvtihY4Nn
+        1WAG/onN9Tr5LJcnw46JFh3PJJaiaeFiMVXTfi2/2vMDR6JRUjBB3EmCCcAWEts9w+ey3+zibNUPu
+        mvh7yZmCBTZ/eZNFfPFAEL8WSs+qqOyaqPJlsD6Z5F/+5AAA8Fuq5HlMqCUfyKoA0LU3ikTrSPyJT
+        DZ3ckHGg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pph0T-00B3bY-2A;
+        Fri, 21 Apr 2023 03:00:17 +0000
+Date:   Fri, 21 Apr 2023 04:00:17 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "cc: Greg KH" <gregkh@linuxfoundation.org>, security@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: Patch for a overwriting/corruption of the file system
+Message-ID: <20230421030017.GA3390869@ZenIV>
+References: <CADZg-m0Z+dOGfG=ddJxqPvgFwG0+OLAyP157SNzj6R6J2p7L-g@mail.gmail.com>
+ <ZA734rBwf4ib2u9n@kroah.com>
+ <CADZg-m04XELrO-v-uYZ4PyYHXVPX35dgWbCHBpZvwepS4XV9Ew@mail.gmail.com>
+ <CADZg-m2k_L8-byX0WKYw5Cj1JPPhxk3HCBexpqPtZvcLRNY8Ug@mail.gmail.com>
+ <ZA77qAuaTVCEwqHc@kroah.com>
+ <20230314095539.zf7uy27cjflqp6kp@wittgenstein>
+ <20230314165708.GY3390869@ZenIV>
+ <20230314171327.k6krhiql3d7tpqat@wittgenstein>
+ <CADZg-m3w_xJ3cQS=+-yb7iS5PJg8kGHntMb7poP6tOsOXvnDeQ@mail.gmail.com>
+ <CADZg-m1uBXit9gX0bcZQ3vWvg34J_sLX-df32x+JX=bjtJeg0w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADZg-m1uBXit9gX0bcZQ3vWvg34J_sLX-df32x+JX=bjtJeg0w@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When is_valid_tracepoint() returns 1, need to call put_events_file() to
-free `dir_path`.
+On Wed, Mar 15, 2023 at 02:33:48PM +0530, Kirtikumar Anandrao Ramchandani wrote:
+> While I am going through the code at the moment, I think there is one more
+> issue. It probably can't just compare "old_dir" and "new_dir", since those
+> are just pointers to structs. So, both addresses can be completely
+> different, and still represent the same folder, yes?
 
-Fixes: 25a7d914274d ("perf parse-events: Use get/put_events_file()")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/util/tracepoint.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/perf/util/tracepoint.c b/tools/perf/util/tracepoint.c
-index 89ef56c43311..92dd8b455b90 100644
---- a/tools/perf/util/tracepoint.c
-+++ b/tools/perf/util/tracepoint.c
-@@ -50,6 +50,7 @@ int is_valid_tracepoint(const char *event_string)
- 				 sys_dirent->d_name, evt_dirent->d_name);
- 			if (!strcmp(evt_path, event_string)) {
- 				closedir(evt_dir);
-+				put_events_file(dir_path);
- 				closedir(sys_dir);
- 				return 1;
- 			}
--- 
-2.30.GIT
-
+No, they can not.  We should never have different in-core instances of
+struct inode representing the same on-disk object - otherwise all locking
+goes to hell, for example.
