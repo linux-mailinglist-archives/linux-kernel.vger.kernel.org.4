@@ -2,141 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543486EAB2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217756EAB31
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjDUNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S232140AbjDUNEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjDUNB7 (ORCPT
+        with ESMTP id S231209AbjDUNEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:01:59 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7434E139
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:01:56 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ec817735a7so1621736e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682082115; x=1684674115;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+pWrcmsJUX8U6gG47Cy8fz3Wshzrb7IqPV8c+anomU=;
-        b=yKE17/lzivMJk61HwSk2EqY4iWCRK1T8NXenmV6C6bSY0NM3mB/nf+31qChrFoFszg
-         07cNFN1c8X5MSC1CaN7fL+RlFflAPQoGGw1ptclfPydQBGzueBKQvVYIvZ/Rk8rZVr5G
-         xsWY66ijl6krJ1w/cbbUsV+cw+BdKiZ2kzi3nZc6P25Fm/lEufU96f73kv0wva756fO3
-         ECMRLCiZU6dWP9UlCkSsu5hhJC8nsLy47n3EJFp0kJs1nribgKts+erNkoQeYjYrBQEu
-         myfi/dGW47jn+Ck1nE2cCSZva2KUPlz3mI4E7NPIgpILRZfBCcBHcwNe0nTzn+xJfdjp
-         /jxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682082115; x=1684674115;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2+pWrcmsJUX8U6gG47Cy8fz3Wshzrb7IqPV8c+anomU=;
-        b=l1suZvDGwXVlNvYRR3jbZvR4/ZWSWo8N0pGiIDJ2ki1U2xmQR+mktA0uA/oxGVG8fd
-         UVztjztsMULkmPYemjlpkXB8jg71f1CjtdeaMQpmJZG7XtxRrP/mGTOC5OxWrGe3B4XL
-         blz2/7nkDEtN/2dVdJu+4287Jir+YAmWR/nIHOMaWa1EfPxwYVJPbgDq9+CEUdDCHoc8
-         RPWCLcS9+XgrQ9VPfrmB9GxzyFzfGNtRWnw6DxIicBh3dNubwbhnuCCvCCAGC08K2l3I
-         omZq4fHQEBSgiPMRCx2/A26NwE2hAFRTsEHHzl9cvd5sDHG07HRJum9vfhud4CIRW9Pp
-         W+NQ==
-X-Gm-Message-State: AAQBX9c/7iU0ahEs52w47zgvXDtC4EGGKPwglHMLq6j4urFfIyo34S2/
-        iVavsBMvuc8L40mck1pySxq84g==
-X-Google-Smtp-Source: AKy350a8bqdgRrM6tQZzeOHfajjyD8LhZPR6WtO2lESmG4CApYidT2Meawa9DvC56LrLN7sIUiRuPg==
-X-Received: by 2002:ac2:5ddc:0:b0:4e0:b407:fdf4 with SMTP id x28-20020ac25ddc000000b004e0b407fdf4mr1180562lfq.37.1682082114673;
-        Fri, 21 Apr 2023 06:01:54 -0700 (PDT)
-Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id y14-20020ac2446e000000b004edb2620375sm552906lfl.283.2023.04.21.06.01.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 06:01:54 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        akpm@linux-foundation.org
-Cc:     arnd@arndb.de, joneslee@google.com, peterz@infradead.org,
-        keescook@chromium.org, jpoimboe@kernel.org,
-        zhaoyang.huang@unisoc.com, liam.howlett@oracle.com,
-        rdunlap@infradead.org, geert+renesas@glider.be,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        broonie@kernel.org, dvyukov@google.com, nogikh@google.com,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default
-Date:   Fri, 21 Apr 2023 13:01:11 +0000
-Message-ID: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        Fri, 21 Apr 2023 09:04:00 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9638D44A8;
+        Fri, 21 Apr 2023 06:03:56 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 74AB015F397;
+        Fri, 21 Apr 2023 15:03:51 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1682082231; bh=sGBRvJGV7WV4NbrM0zicd1I0kijHaIpvCeCXTkGH27E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=x12krQEYJpaSr6cDmf7P+YQo8RV/NgldpWlH2k3pQHvLiJ3Vk5Y52NY7izNb+AuCa
+         8kmzq8cizHOKF4Mn9A/GGsVE9n/U1dXxJ+thnkfdsM37A/jJBUv/4skZlGJNlVuvJe
+         vE9piS1JUuCdMNPfZTW35WD0rJ9UqP3cCSKs5jMmnS4yy+XkGvQ9Bb0vIxrmT5TkrR
+         zl+BPyJSI8gtULfPfxaRgyGk9dGtlkdbat0VVy8mOmWKXCl65CBtQpW4vQ8elSOhox
+         4jO5UgefdhAAzz/uxTRgr3gF3zdmRpeZsXC6newwGo0VCvaM11Z+YlX5O2ZRR/GTzj
+         PYDwZAr8lgHIg==
+Date:   Fri, 21 Apr 2023 15:03:49 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexander Graf <graf@amazon.com>
+Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce
+ buffers
+Message-ID: <20230421150349.35966e0b@meshulam.tesarici.cz>
+In-Reply-To: <20230407121555.4290a011@meshulam.tesarici.cz>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+        <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com>
+        <20230328040724.GB25506@lst.de>
+        <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
+        <8cf7c515-9ce6-a2ed-0643-972aa3eba2fb@huaweicloud.com>
+        <20230407055704.GD6803@lst.de>
+        <20230407121555.4290a011@meshulam.tesarici.cz>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building with clang-15 a x86_64_defconfig kernel were CONFIG_KASAN
-and CONFIG_KASAN_STACK are enabled resulted in the following errors:
+Hi Christoph!
 
-drivers/block/loop.c:1531:12: error: stack frame size (2616) exceeds limit (2048) in 'lo_ioctl'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:964:6: error: stack frame size (3032) exceeds limit (2048) in 'intel_engine_init_ctx_wa'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:1818:6: error: stack frame size (5496) exceeds limit (2048) in 'intel_gt_init_workarounds'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:3153:6: error: stack frame size (5848) exceeds limit (2048) in 'intel_engine_init_workarounds'
-drivers/usb/core/devio.c:2801:13: error: stack frame size (2104) exceeds limit (2048) in 'usbdev_ioctl'
+I'd like to follow up on this sub-thread:
 
-With Clang, stack instrumentation has a problem that causes excessive
-stack usage, see https://bugs.llvm.org/show_bug.cgi?id=38809.
-KASAN_STACK with clang is deemed unsafe and disabled when
-compile-testing. However when !COMPILE_TEST the errors are hit because
-CONFIG_FRAME_WARN is not disabled.
+On Fri, 7 Apr 2023 12:15:55 +0200
+Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wroe:
 
-Looking into the errors, they are indeed caused by compiling with clang
-and KASAN_STACK enabled. I determined KASAN_STACK's bloat by lowering
-the CONFIG_FRAME_WARN limit. Thus when KASAN and KASAN_STACK are
-disabled the same stack frames have the following sizes:
+> On Fri, 7 Apr 2023 07:57:04 +0200
+> Christoph Hellwig <hch@lst.de> wrote:
+>[...]
+> > (Btw, in case anyone is interested, we really need to get started
+> > on moving the dma fields out of struct device into a sub-struct
+> > only allocated for DMA capable busses) =20
+>=20
+> I like this idea. In fact, my WIP topic branch now moves the swiotlb
+> fields into a separate struct,
 
-drivers/block/loop.c:1531:12: error: stack frame size (528) exceeds limit (50) in 'lo_ioctl'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:964:6: error: stack frame size (72) exceeds limit (50) in 'intel_engine_init_ctx_wa'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:1818:6: error: stack frame size (104) exceeds limit (50) in 'intel_gt_init_workarounds'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:3153:6: error: stack frame size (88) exceeds limit (50) in 'intel_engine_init_workarounds'
-drivers/usb/core/devio.c:2801:13: error: stack frame size (416) exceeds limit (50) in 'usbdev_ioctl'
+As you have noticed, I have removed that commit again in v2.
 
-When KASAN is enabled and KASAN_STACK is disabled the same stack frames
-have the following sizes:
+The reason is that I'm not sure about the intended goal. I have looked
+around for examples of moving fields out of struct device and found
+different approaches:
 
-drivers/block/loop.c:1531:12: error: stack frame size (600) exceeds limit (50) in 'lo_ioctl'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:964:6: error: stack frame size (120) exceeds limit (50) in 'intel_engine_init_ctx_wa'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:1818:6: error: stack frame size (136) exceeds limit (50) in 'intel_gt_init_workarounds'
-drivers/gpu/drm/i915/gt/intel_workarounds.c:3153:6: error: stack frame size (128) exceeds limit (50) in 'intel_engine_init_workarounds'
-drivers/usb/core/devio.c:2801:13: error: stack frame size (480) exceeds limit (50) in 'usbdev_ioctl'
+A. struct dev_msi_info
+   The MSI fields are merely grouped in a separate struct, which is
+   defined in device.h and embedded in struct device. I don't see much
+   benefit.
 
-The conclusion is that when KASAN is enabled the stack usage increases a
-bit, but nothing unmanageable ~30-70 bytes, whereas when enabling
-KASAN_STACK the stack usage is excessive, from ~1.7K to ~5.8K for these
-cases.
+B. struct dev_pm_info
+   This struct is also embedded in struct device, but it is defined in
+   <linux/pm.h>, which is mentioned in MAINTAINERS. The benefit is that
+   further changes are reviewed by this maintainer. The downside is
+   that device.h includes pm.h.
 
-Disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default.
-Adventurers can still override the default value by input prompt or
-explicit values in defconfigs in case they feel that some real warnings
-are missed.
+C. struct dev_pin_info
+   This struct is merely declared in device.h and defined
+   pinctrl/devinfo.h (which is not included). Only a pointer to this
+   struct is stored in struct device. Of course, the pointer must be
+   initialized (and released) somehow.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- lib/Kconfig.debug | 1 +
- 1 file changed, 1 insertion(+)
+Here my question: What did you want for DMA fields?
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 39d1d93164bd..c5e8b76737af 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -430,6 +430,7 @@ config FRAME_WARN
- 	int "Warn for stack frames larger than"
- 	range 0 8192
- 	default 0 if KMSAN
-+	default 0 if KASAN_STACK && CC_IS_CLANG
- 	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
- 	default 2048 if PARISC
- 	default 1536 if (!64BIT && XTENSA)
--- 
-2.40.0.634.g4ca3ef3211-goog
+A. Only grouping those fields in their own struct?
+B. Or move the definition to another include file (cf. MAINTAINERS)?
+C. Or store a pointer in struct device?
 
+Since you mentioned "allocated", it sounds like you want to achieve C,
+but:
+
+1. Is it worth the extra dereference for every use?
+2. How should the struct be allocated? Presumably not with kmalloc() in
+   device_initialize(), because I don't know how to determine if a
+   device is DMA capable this low in the call stack. So, should it be
+   allocated together with the containing structure? AFAICS this would
+   mean changing nearly all device drivers...
+
+As you can see, I need some more guidance from you before I can start
+working on this. ;-)
+
+Petr T
