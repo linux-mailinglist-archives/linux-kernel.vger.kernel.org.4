@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D766EB2E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023AC6EAA8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbjDUU2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 16:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S231384AbjDUMjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDUU2T (ORCPT
+        with ESMTP id S232071AbjDUMjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 16:28:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C101730
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:28:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682108896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JI7ghwB60oMagdu7Y4eAitqD3tX1oyMmnXoP24a20tM=;
-        b=0kLRQ1gf1Sdu2o1z8yEDN0c6EOY8Ae/lP/X2jXYKehyoWBCmWbZXfIgScKNTzJY7i56k2c
-        xSEXiIgIGf9o4PhnuxcZObn5v/CbaEnfu/PlUrxhu1rOtf2QaPqvGGJ3PISTLqMzYc74OB
-        6T54mn+wgtUbBUywAVteIj6F7wc3Z6E1+EiRjOMEoBr/Ofqwvo8lZ1Hsfzq4JDWhI3B7GA
-        oDBeGRpvbhkG0/SQOwszR4h4S6D1kZHdGReRn80HcSSSPiQefrAF/G7nTHISSHwKtVplDe
-        zeIGUMjyiJnt3WWgRfJLGbyqzXWW/3arxUEMe1SwA+YJbnIo5MCBqS8OOyOAxw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682108896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JI7ghwB60oMagdu7Y4eAitqD3tX1oyMmnXoP24a20tM=;
-        b=ZsX6s4nMtJICTg8yewqdPARIQF02Q8zdfT+NRGplgu/YRrHnuWlQJ0BvABK0ULUW4lI6FA
-        XgpvRAK884bH4WBg==
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
-In-Reply-To: <ZELADFhjWR2Swn3l@lothringen>
-References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
- <ZELADFhjWR2Swn3l@lothringen>
-Date:   Fri, 21 Apr 2023 22:28:15 +0200
-Message-ID: <87pm7x0ylc.ffs@tglx>
+        Fri, 21 Apr 2023 08:39:04 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E755270C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:38:57 -0700 (PDT)
+X-ASG-Debug-ID: 1682080734-1eb14e6388386f0001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 37mxsCJQR2Tv15ej (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 20:38:54 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 20:38:54 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 20:38:53 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH v2 0/4] Fix some issues of xHCI for zhaoxin
+Date:   Sat, 22 Apr 2023 04:38:49 +0800
+X-ASG-Orig-Subj: [PATCH v2 0/4] Fix some issues of xHCI for zhaoxin
+Message-ID: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1682080734
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 539
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.1931 1.0000 -0.8641
+X-Barracuda-Spam-Score: 2.24
+X-Barracuda-Spam-Status: No, SCORE=2.24 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107724
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,21 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21 2023 at 18:55, Frederic Weisbecker wrote:
-> On Fri, Apr 21, 2023 at 05:24:36PM +0200, Thomas Gleixner wrote:
->> It's far from trivial because you'd need correlation between the
->> interrupt entry and the enter to and return from arch_cpu_idle().
->> 
->> I fear manual inspection is the main tool here :(
->
-> I thought so :)
->
-> I'm already halfway through the architectures, then will come the cpuidle drivers...
+Fix some issues of xHCI for zhaoxin.
 
-For objtool covered architectures you might come up with some annotation
-which allows objtool to yell, when it discovers a local_irq_enable() or
-such at the wrong place.
+Weitao Wang (4):
+  xhci: Add some quirks for zhaoxin xhci to fix issues
+  xhci: fix issue of cross page boundary in TRB prefetch
+  xhci: Show zhaoxin xHCI root hub speed correctly
+  xhci: Add zhaoxin xHCI U1/U2 feature support
 
-Thanks,
+ drivers/usb/host/xhci-mem.c |  8 +++--
+ drivers/usb/host/xhci-pci.c | 11 +++++++
+ drivers/usb/host/xhci.c     | 65 +++++++++++++++++++++++--------------
+ drivers/usb/host/xhci.h     |  2 ++
+ 4 files changed, 59 insertions(+), 27 deletions(-)
 
-        tglx
+-- 
+2.32.0
+
