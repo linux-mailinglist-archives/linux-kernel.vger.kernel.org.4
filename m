@@ -2,250 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951DE6EB287
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309976EB295
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbjDUTtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S232683AbjDUT5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233640AbjDUTtn (ORCPT
+        with ESMTP id S231396AbjDUT5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:49:43 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BFA1FDF
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:49:40 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b5c48ea09so2304596b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682106579; x=1684698579;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JIvd4x7LTmDxMSDhcMvwp3CwwVRBeE4EwRrm8E3OHq4=;
-        b=Qf4Fe9MPe5Sj8cgdIfHhirtvk0msL50MfrH/MbU696GxuEuSEK4DkX7X54jWkmKTkt
-         92UodqD70fJK92aU4yCXHFdiyKfFNouCzW+CnAxELl24bUhr1MV0RGZlKp+BqK/AYK9m
-         aymxZOALqVgWFAJoAzMFPfsQXI9dNbU8iaRoo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682106579; x=1684698579;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JIvd4x7LTmDxMSDhcMvwp3CwwVRBeE4EwRrm8E3OHq4=;
-        b=FlsUq2ped5/QP7esCmOmfzaWv1zIVt5rLOMYde5pA83yTdvUhTUwKlEsZHbJjRTJYN
-         MjHd6thtZOS7fdivel2aa0vpO8BFA39c0aul7XqOIS66jWLq6xu59s1DDio60BUpQsAZ
-         5oqehW8Cr+rVEwqYDy+H0xhAXGkbum9Ei+jDIowgHF7BtF43qnbCzorFKLm++OqNRlWV
-         rx6HRycZbC3Xj57aU86nMkPKKEjE5qOei5fzm03qB5LtLMl+rZf75G/98utNZFHN49H7
-         GQ98s7euDowfwQXXp6hVVaWm/NMCMzZC/cAAET3S4qyV3M72Qw9etqVyl2FIOIdRErv+
-         8i5g==
-X-Gm-Message-State: AAQBX9evlnYviFceAKHjGcnvJnZ8BRoGbSs+chNgZO32Ekj1XWWU0dnl
-        L6JhfPYt3DkTnzK4iPwOZ/dQmw==
-X-Google-Smtp-Source: AKy350Y5XxLtjv4JulE2GGm+rJvmzJmA407m70wz0D8uBy7wGU21LL3TEB+ZO1R9v4L5F34Xq6yOEQ==
-X-Received: by 2002:a05:6a20:3941:b0:f0:1b0b:acf7 with SMTP id r1-20020a056a20394100b000f01b0bacf7mr8411267pzg.2.1682106579571;
-        Fri, 21 Apr 2023 12:49:39 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t9-20020a6549c9000000b0051b3ef1295csm2926598pgs.53.2023.04.21.12.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 12:49:39 -0700 (PDT)
-Message-ID: <6442e8d3.650a0220.f3e8d.6a3f@mx.google.com>
-X-Google-Original-Message-ID: <202304211247.@keescook>
-Date:   Fri, 21 Apr 2023 12:49:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     paul@paul-moore.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Subject: Re: [PATCH v9 08/11] Smack: implement setselfattr and getselfattr
- hooks
-References: <20230421174259.2458-1-casey@schaufler-ca.com>
- <20230421174259.2458-9-casey@schaufler-ca.com>
+        Fri, 21 Apr 2023 15:57:19 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422B12700
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682107038; x=1713643038;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=og4F4vuOrf2Ixfm0chq8agl9joBvFHLSfSL17IjCupE=;
+  b=Z/vIG8oQmlgGSCHD8C2v7V0Ahv4NEWohL7haTrssms/672GDyw+slbLD
+   bELe1hVdCivrkoz+sxH7Q9JMqfOjNj0JENilq/wZnLpd/90rjkQE1RISl
+   qux5Bgxk8qNvhrjRaStAsWYbjNYN0+HNGKqNmYwdCQdkjyKRcjYtbXDR7
+   D0z4NZr+YKc7E9nd85bNscOcWpTuLyjILBbDhsDEU/kNw+QfVkZKyZuG6
+   dEndVeaTruKnrujpfosOnWfsYbwN/bdNma5u5LGnMrND60QmvqIpg2KBn
+   zOsk93ZWG4wrJeD9N+FgUOi+nLJrVDwasZE1z3D+kj14uXs5AURJjata7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="325669315"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="325669315"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 12:54:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="642620445"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="642620445"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2023 12:54:27 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppwpp-000glt-15;
+        Fri, 21 Apr 2023 19:54:21 +0000
+Date:   Sat, 22 Apr 2023 03:53:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH v4 3/3] mm,page_owner: Filter out stacks by a threshold
+ counter
+Message-ID: <202304220312.gCQb3BRX-lkp@intel.com>
+References: <20230421101415.5734-4-osalvador@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421174259.2458-9-casey@schaufler-ca.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230421101415.5734-4-osalvador@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:42:56AM -0700, Casey Schaufler wrote:
-> Implement Smack support for security_[gs]etselfattr.
-> Refactor the setprocattr hook to avoid code duplication.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  security/smack/smack_lsm.c | 105 +++++++++++++++++++++++++++++++++++--
->  1 file changed, 100 insertions(+), 5 deletions(-)
-> 
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 3cf862fcbe08..902b39c187bf 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -3552,6 +3552,41 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
->  	return;
->  }
->  
-> +/**
-> + * smack_getselfattr - Smack current process attribute
-> + * @attr: which attribute to fetch
-> + * @ctx: buffer to receive the result
-> + * @size: available size in, actual size out
-> + * @flags: unused
-> + *
-> + * Fill the passed user space @ctx with the details of the requested
-> + * attribute.
-> + *
-> + * Returns 1, the number of attributes, on success, an error code otherwise.
-> + */
-> +static int smack_getselfattr(unsigned int __user attr,
-> +			     struct lsm_ctx __user *ctx, size_t *size,
-> +			     u32 __user flags)
-> +{
-> +	struct smack_known *skp = smk_of_current();
-> +	int total;
-> +	int slen;
-> +	int rc = 1;
-> +
-> +	if (attr != LSM_ATTR_CURRENT)
-> +		return -EOPNOTSUPP;
-> +
-> +	slen = strlen(skp->smk_known) + 1;
-> +	total = ALIGN(slen + sizeof(*ctx), 8);
-> +	if (total > *size)
-> +		rc = -E2BIG;
-> +	else
-> +		lsm_fill_user_ctx(ctx, skp->smk_known, slen, LSM_ID_SMACK, 0);
-> +
-> +	*size = total;
-> +	return rc;
-> +}
-> +
->  /**
->   * smack_getprocattr - Smack process attribute access
->   * @p: the object task
-> @@ -3581,8 +3616,8 @@ static int smack_getprocattr(struct task_struct *p, const char *name, char **val
->  }
->  
->  /**
-> - * smack_setprocattr - Smack process attribute setting
-> - * @name: the name of the attribute in /proc/.../attr
-> + * do_setattr - Smack process attribute setting
-> + * @attr: the ID of the attribute
->   * @value: the value to set
->   * @size: the size of the value
->   *
-> @@ -3591,7 +3626,7 @@ static int smack_getprocattr(struct task_struct *p, const char *name, char **val
->   *
->   * Returns the length of the smack label or an error code
->   */
-> -static int smack_setprocattr(const char *name, void *value, size_t size)
-> +static int do_setattr(u64 attr, void *value, size_t size)
->  {
->  	struct task_smack *tsp = smack_cred(current_cred());
->  	struct cred *new;
-> @@ -3605,8 +3640,8 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
->  	if (value == NULL || size == 0 || size >= SMK_LONGLABEL)
->  		return -EINVAL;
->  
-> -	if (strcmp(name, "current") != 0)
-> -		return -EINVAL;
-> +	if (attr != LSM_ATTR_CURRENT)
-> +		return -EOPNOTSUPP;
->  
->  	skp = smk_import_entry(value, size);
->  	if (IS_ERR(skp))
-> @@ -3645,6 +3680,64 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
->  	return size;
->  }
->  
-> +/**
-> + * smack_setselfattr - Set a Smack process attribute
-> + * @attr: which attribute to set
-> + * @ctx: buffer containing the data
-> + * @size: size of @ctx
-> + * @flags: unused
-> + *
-> + * Fill the passed user space @ctx with the details of the requested
-> + * attribute.
-> + *
-> + * Returns 0 on success, an error code otherwise.
-> + */
-> +static int smack_setselfattr(unsigned int __user attr,
-> +			     struct lsm_ctx __user *ctx, size_t __user size,
+Hi Oscar,
 
-"size_t __user" isn't valid: it's not a pointer.
+kernel test robot noticed the following build warnings:
 
-> +			     u32 __user flags)
-> +{
-> +	struct lsm_ctx *lctx;
-> +	void *context;
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc7]
+[cannot apply to akpm-mm/mm-everything next-20230420]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Why is "context" used here at all? Can't this entirely be lctx?
+url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/lib-stackdepot-Add-a-refcount-field-in-stack_record/20230421-181709
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230421101415.5734-4-osalvador%40suse.de
+patch subject: [PATCH v4 3/3] mm,page_owner: Filter out stacks by a threshold counter
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230422/202304220312.gCQb3BRX-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/716d3f03add56cf9ed9ae5e49d73cf7e0cbfcb19
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oscar-Salvador/lib-stackdepot-Add-a-refcount-field-in-stack_record/20230421-181709
+        git checkout 716d3f03add56cf9ed9ae5e49d73cf7e0cbfcb19
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> +	int rc;
-> +
-> +	context = kmalloc(size, GFP_KERNEL);
-> +	if (context == NULL)
-> +		return -ENOMEM;
-> +
-> +	lctx = (struct lsm_ctx *)context;
-> +	if (copy_from_user(context, ctx, size))
-> +		rc = -EFAULT;
-> +	else if (lctx->ctx_len > size)
-> +		rc = -EINVAL;
-> +	else
-> +		rc = do_setattr(attr, lctx + 1, lctx->ctx_len);
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304220312.gCQb3BRX-lkp@intel.com/
 
-There is no "second lctx", please pass lctx->ctx instead.
+All warnings (new ones prefixed by >>):
 
-> +
-> +	kfree(context);
-> +	if (rc > 0)
-> +		return 0;
-> +	return rc;
-> +}
-> +
-> +/**
-> + * smack_setprocattr - Smack process attribute setting
-> + * @name: the name of the attribute in /proc/.../attr
-> + * @value: the value to set
-> + * @size: the size of the value
-> + *
-> + * Sets the Smack value of the task. Only setting self
-> + * is permitted and only with privilege
-> + *
-> + * Returns the length of the smack label or an error code
-> + */
-> +static int smack_setprocattr(const char *name, void *value, size_t size)
-> +{
-> +	int attr = lsm_name_to_attr(name);
-> +
-> +	if (attr)
-> +		return do_setattr(attr, value, size);
-> +	return -EINVAL;
-> +}
-> +
->  /**
->   * smack_unix_stream_connect - Smack access on UDS
->   * @sock: one sock
-> @@ -4955,6 +5048,8 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
->  
->  	LSM_HOOK_INIT(d_instantiate, smack_d_instantiate),
->  
-> +	LSM_HOOK_INIT(getselfattr, smack_getselfattr),
-> +	LSM_HOOK_INIT(setselfattr, smack_setselfattr),
->  	LSM_HOOK_INIT(getprocattr, smack_getprocattr),
->  	LSM_HOOK_INIT(setprocattr, smack_setprocattr),
->  
-> -- 
-> 2.39.2
-> 
+>> mm/page_owner.c:746:1: warning: format specifies type 'unsigned long' but the argument has type 'unsigned long long' [-Wformat]
+   DEFINE_SIMPLE_ATTRIBUTE(proc_page_owner_threshold, &page_owner_threshold_get,
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs.h:3079:2: note: expanded from macro 'DEFINE_SIMPLE_ATTRIBUTE'
+           DEFINE_SIMPLE_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs.h:3066:36: note: expanded from macro 'DEFINE_SIMPLE_ATTRIBUTE_XSIGNED'
+           __simple_attr_check_format(__fmt, 0ull);                        \
+                                      ~~~~~  ^~~~
+   1 warning generated.
+
+
+vim +746 mm/page_owner.c
+
+   745	
+ > 746	DEFINE_SIMPLE_ATTRIBUTE(proc_page_owner_threshold, &page_owner_threshold_get,
+   747				&page_owner_threshold_set, "%lu");
+   748	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
