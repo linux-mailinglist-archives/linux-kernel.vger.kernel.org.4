@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0C76EA7CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596056EA7D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjDUKEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        id S231324AbjDUKFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjDUKEW (ORCPT
+        with ESMTP id S231594AbjDUKEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:04:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99CF5FE6;
-        Fri, 21 Apr 2023 03:04:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5167764FB0;
-        Fri, 21 Apr 2023 10:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DC5C433D2;
-        Fri, 21 Apr 2023 10:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682071460;
-        bh=g3WHW+xRgwO3ZHAUrKODgElvqmfjuqfmpZpWonWjEOI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oOiuR7FV67WxFwGwxkgMPC4g8g/xlpD9SLtIFFTyYg+TQfRsUXNZsWyoew9NrKzQJ
-         p/cglKug0my+LAlIQN7ZarZsK9giXZ1PhevEpOs69drgTDBkcVZ1MUEVbo+ZW53XNd
-         CEuYUBUc8tcpxIdIEr4m5kNp/U82qONDgNzBrZlKNYZc5u4gMJEyJ9X7fkFq9jk9/m
-         Y9j2fZ6rukWvOCfRH+SL7yQ78YcMCM+iAC+IibCWPEz2ftpMtXHZnx3AMk53FZbzp1
-         jhIGCm+X/P9aidjfywCs4JnHccIpInQMFZag0rY2jQIb/ksrKLBdp/u+49S//z5/SH
-         pwQ+FKxbDiAkA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mani@kernel.org, bhelgaas@google.com, kw@linux.com,
-        robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v5 0/5] Add PCIe EP support for SDX65
-Date:   Fri, 21 Apr 2023 12:04:13 +0200
-Message-Id: <168207144110.82183.2405271863357510101.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1680243502-23744-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1680243502-23744-1-git-send-email-quic_rohiagar@quicinc.com>
+        Fri, 21 Apr 2023 06:04:43 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A4B755;
+        Fri, 21 Apr 2023 03:04:39 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33LA4WaS065937;
+        Fri, 21 Apr 2023 05:04:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682071472;
+        bh=rDJjkLEWgWQKOCBzrTnDZV9WdVOoQEU3x29VW9Nmsbs=;
+        h=From:To:CC:Subject:Date;
+        b=D8sVJla+D03D+rTjFYdJYGK6Z413A/fMQrNXYE8Rq3HcriAblgInpKYu6fALLqEkM
+         WlnEciMGm9BM2Rv/oYjm4upl4GbZ/hU7ww2M6PGuoWZOXftxIoLB8/bYMHOMmgW2Jf
+         95eEPm//P58AIuSi8L0wGqwyiTwNmAmAVobrPOds=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33LA4WKv115829
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 Apr 2023 05:04:32 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 21
+ Apr 2023 05:04:32 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 21 Apr 2023 05:04:32 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33LA4UIF005944;
+        Fri, 21 Apr 2023 05:04:31 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <mchehab@kernel.org>, <sakari.ailus@linux.intel.com>,
+        <laurent.pinchart@ideasonboard.com>, <hverkuil-cisco@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <u-kumar1@ti.com>, <vaishnav.a@ti.com>
+Subject: [PATCH] media: v4l2-mc: Drop subdev check in v4l2_create_fwnode_links_to_pad()
+Date:   Fri, 21 Apr 2023 15:34:30 +0530
+Message-ID: <20230421100430.28962-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 11:48:17 +0530, Rohit Agarwal wrote:
-> Changes in v5:
->  - Addressed some minor comments from Konrad
->  - Rebased on top of 6.3-rc5.
-> 
-> Changes in v4:
->  - Addressed comment from Dmitry to move the gpios to the board file.
-> 
-> [...]
+While updating v4l2_create_fwnode_links_to_pad() to accept non-subdev
+sinks, the check is_media_entity_v4l2_subdev() was not removed which
+prevented the function from being used with non-subdev sinks, Drop the
+unnecessary check.
 
-Applied to controller/dt, thanks!
+Fixes: bd5a03bc5be8 ("media: Accept non-subdev sinks in v4l2_create_fwnode_links_to_pad()")
 
-[1/5] dt-bindings: PCI: qcom: Add SDX65 SoC
-      https://git.kernel.org/pci/pci/c/661a7e9aa551
+Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+---
+ drivers/media/v4l2-core/v4l2-mc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks,
-Lorenzo
+diff --git a/drivers/media/v4l2-core/v4l2-mc.c b/drivers/media/v4l2-core/v4l2-mc.c
+index bf0c18100664..22fe08fce0a9 100644
+--- a/drivers/media/v4l2-core/v4l2-mc.c
++++ b/drivers/media/v4l2-core/v4l2-mc.c
+@@ -314,8 +314,7 @@ int v4l2_create_fwnode_links_to_pad(struct v4l2_subdev *src_sd,
+ {
+ 	struct fwnode_handle *endpoint;
+ 
+-	if (!(sink->flags & MEDIA_PAD_FL_SINK) ||
+-	    !is_media_entity_v4l2_subdev(sink->entity))
++	if (!(sink->flags & MEDIA_PAD_FL_SINK))
+ 		return -EINVAL;
+ 
+ 	fwnode_graph_for_each_endpoint(dev_fwnode(src_sd->dev), endpoint) {
+-- 
+2.17.1
+
