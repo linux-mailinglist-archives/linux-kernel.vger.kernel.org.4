@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F9E6EA8DB
+	by mail.lfdr.de (Postfix) with ESMTP id B0F596EA8DC
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjDULJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S229864AbjDULJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDULJM (ORCPT
+        with ESMTP id S229575AbjDULJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:09:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D43193F6;
-        Fri, 21 Apr 2023 04:09:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D01061654;
-        Fri, 21 Apr 2023 11:09:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF3FC433EF;
-        Fri, 21 Apr 2023 11:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682075350;
-        bh=lmNia07ZER0CBxltSg2zLh3RRHlpope5dUs5elkjwww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TJohQZI/1n5YgSB2/dKB/fsfDxMle61fpiSt9jLuEWEOTbBdZzVlsl5iMwsFNU0bj
-         9rHI6npDEXkTk+KznKGXkIP/l7QQGUH1TaIIj0wH02wAHI7yZDHZvBQQQ0xeOFmlPH
-         f7F9c4pqac8HEgPC6aHfMWe45hiItfdNJkjQXa8k=
-Date:   Fri, 21 Apr 2023 13:08:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= 
-        <stanley_chang@realtek.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] usb: phy: add usb phy notify port status API
-Message-ID: <ZEJux2KTnGw-WE1A@kroah.com>
-References: <20230421080333.18681-1-stanley_chang@realtek.com>
- <ZEJHLR27pVwVI3_J@kroah.com>
- <efd6e621210a407db9c153712f362366@realtek.com>
+        Fri, 21 Apr 2023 07:09:09 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511369EC9;
+        Fri, 21 Apr 2023 04:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682075347; x=1713611347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rZwTsejC2mJApJ3bCH/FR+Q5/YQX630MzFVYcEDFrCY=;
+  b=RIK6k8KrRp+QdMQlH0CPByFdlHp5QQm368vfg4vE2trhQXUjIx8RQP+H
+   wguY1pnzboHDbB+gvt4jWwCMV2CJ7/Aqar7GZxSKej8TqmXbjr7bXb4UO
+   fnVrrpgTPJPA0qGvWvDsngZAUmuJgQZaKmDfzd43bbVEH2xYO9E3+IdZd
+   eZ63oyABVWj5fUPT2UqULGCS3RV3fzrcvg9+pWo9JNz8HyBd4+KBHb50i
+   cxH0ygvAhpEA7GLJNdO43I5GNG4+fI2epT6azDXj1yoXWCWEw/Lg2rl/z
+   Tr9n6VX6yO/nm/n6esD4WOwvTCuWPMGjsoSMv6GJhzdmcMEugP7rSP6mC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="347870256"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="347870256"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 04:09:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="836146196"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="836146196"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Apr 2023 04:09:02 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 21 Apr 2023 14:09:01 +0300
+Date:   Fri, 21 Apr 2023 14:09:01 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     gregkh@linuxfoundation.org, srk@ti.com, r-gunasekaran@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tps6598x: Fix fault at module removal
+Message-ID: <ZEJuzQSwSvP6p9gR@kuha.fi.intel.com>
+References: <20230421101720.34318-1-rogerq@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <efd6e621210a407db9c153712f362366@realtek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230421101720.34318-1-rogerq@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 08:32:19AM +0000, Stanley Chang[昌育德] wrote:
-> > 
-> > On Fri, Apr 21, 2023 at 04:03:31PM +0800, Stanley Chang wrote:
-> > > In Realtek SoC, the parameter of usb phy is designed to can dynamic
-> > > tuning base on port status. Therefore, add a notify callback of phy
-> > > driver when usb port status change.
-> > >
-> > > Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> > > ---
-> > >  drivers/usb/core/hub.c  | 13 +++++++++++++  include/linux/usb/phy.h |
-> > > 14 ++++++++++++++
-> > >  2 files changed, 27 insertions(+)
-> > 
-> > We can not add callbacks in the kernel that are not actually used, otherwise
-> > they will just be instantly removed.
-> > 
-> > Please submit any drivers that need this change at the same time so that we
-> > can verify that the callback is actually correct and needed, otherwise we can
-> > not take this change.
-> > 
+On Fri, Apr 21, 2023 at 01:17:20PM +0300, Roger Quadros wrote:
+> We need to cancel the delayed workqueue if it is being used
+> else it will cause paging request fault during module removal.
 > 
-> In this stage, we usb phy driver is not at linux upstream. 
+> Fixes: 0d6a119cecd7 ("usb: typec: tps6598x: Add support for polling interrupts status")
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
 
-Then obviously we can not take this change (nor would you want us to.)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> For the android GKI, we have to add this callback to upstream or use the vendor hook of android.
-> I will plan to upstream the realtek usb phy driver.
+> ---
+>  drivers/usb/typec/tipd/core.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 8b075ca82ef6..438cc40660a1 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -886,6 +886,9 @@ static void tps6598x_remove(struct i2c_client *client)
+>  {
+>  	struct tps6598x *tps = i2c_get_clientdata(client);
+>  
+> +	if (!client->irq)
+> +		cancel_delayed_work_sync(&tps->wq_poll);
+> +
+>  	tps6598x_disconnect(tps, 0);
+>  	typec_unregister_port(tps->port);
+>  	usb_role_switch_put(tps->role_sw);
+> -- 
+> 2.34.1
 
-As you already have this driver, why not send it to us now?
-
-thanks,
-
-greg k-h
+-- 
+heikki
