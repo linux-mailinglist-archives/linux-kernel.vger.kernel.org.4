@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5EF6EA5C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF476EA5C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjDUIXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
+        id S231655AbjDUIY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbjDUIXi (ORCPT
+        with ESMTP id S231625AbjDUIY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:23:38 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7403524B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:23:36 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94a342f15e4so182413466b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682065415; x=1684657415;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EmPBpQGOUS8JJiDMBMaclv6rO3Q/6XPU7C23CWrw9Rw=;
-        b=mG0wLaPN4fSBV8/3aWZPz628ip8mxdPk1vppSyIJVHde9nPTtOkAKZCbix6EHNBKnV
-         PKP9L487EYvmJ8xwf6Yo6fPGC4YxrwwbKGUE43EVIOzEWVge0o9LEZ4txc7F42UY57hK
-         DjzcMHDlF8N/qyyWbK1mz17jrxHmGYl+o7W8Sgu3dmydVg4vpLqJ1SLuBpxl9Lp4r5hP
-         WMEgR1aMSSh3Tc2RF2GsbZOnpoHzr9Tug14wGjEQg735+ALOnw4eWK/c/HKyg1rxjMb1
-         LyoMOxc9Gfmf+/94JoQ1B9A4uAbpI9QJte/s8by5iUDLyeDyMO4gXKwizQ2X/xDMdty4
-         Onjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682065415; x=1684657415;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EmPBpQGOUS8JJiDMBMaclv6rO3Q/6XPU7C23CWrw9Rw=;
-        b=A7HoZf9smL0wWkXkoTojEP8rdEuV8srmtbt2YnjiFk2q/rpBHQVFi7l0yPUjhdsg/x
-         SQ/Zr2WSCLb7TfLh/4XSiAkEoOyoAZFENgwX8uAntOs6+zIQ0rQBSQHIEaalkQ5Q/AGK
-         N2qERpouDIllZuk5O4Fh7+ls0HOuV2+fPvHizF+46e+hlI4jMdt24b8fzQaPyNMLf2jM
-         Og5PiX4FyS+ghbHSmI0vMPvx4GBa046U/79e3nlOuB03lsZsOTaCWCzqLVkmALYv8myo
-         AD+q9P7vgOEQCOIQS/tM2yBHl4xdu0u0GEdIfBqixOmUsQ5DOydzSybqVzMjUeYQDheh
-         Eu6g==
-X-Gm-Message-State: AAQBX9dlNqhlVrcsgTtRxHppZLbssv8ZSa32YMyoVvBHzLz6gHaYNdRj
-        LRX1sZnBKEmGQGFTGNDQZGEFsg==
-X-Google-Smtp-Source: AKy350YvfZWr5OqJW1qfClL4SIH2kms66aJYo321dM7KyczZNmMStEzdxqlMpa/xHgBaw2s6lEL5BQ==
-X-Received: by 2002:a17:906:6bc2:b0:932:cec7:6801 with SMTP id t2-20020a1709066bc200b00932cec76801mr1362738ejs.54.1682065415213;
-        Fri, 21 Apr 2023 01:23:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:668b:1e57:3caa:4d06? ([2a02:810d:15c0:828:668b:1e57:3caa:4d06])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170906700600b0094f5a74ba83sm1759590ejj.39.2023.04.21.01.23.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 01:23:34 -0700 (PDT)
-Message-ID: <b406dd13-fedb-0e6e-2f1b-ad3ebb617dc4@linaro.org>
-Date:   Fri, 21 Apr 2023 10:23:32 +0200
+        Fri, 21 Apr 2023 04:24:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353DA10D5;
+        Fri, 21 Apr 2023 01:24:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2CAF618D3;
+        Fri, 21 Apr 2023 08:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A8EC433EF;
+        Fri, 21 Apr 2023 08:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682065496;
+        bh=lnx9JSZMnAAmgHMt+elXCqGcZ+NDFpyQuPzVgtDnPMs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gPoHk2vGt7f1AqebQOUA7qMS1VF/y2oNIFTTFuPWwRlavGOlcrE/+ziDPr4aEQELP
+         4wCZHQC0yvueCGv84dWQPSNSkqkjZihMmk5qCcFAVsbqDj4lEwB4llIxQOtUJvZS7S
+         3KWqbuAVCpPOr80qzB2ZbVx6BjSzocMOcsFrpCcJbCICNlateEUT/VWMdjxEYO61oU
+         wvppHrkuBmoU2NrRjrxbTIWpilwya53P9wR3wlipHO+ioHKi0LvNTsbWbk3x4LMuTU
+         xy3Rm/mlAIi+XKr+xAk72DZQMJ2UWDWLpE8kyGS+xeuaKCWixfWnAnEPL4Y75EsJad
+         ZJ2SnrwB6COEg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        kernel-tls-handshake@lists.linux.dev, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net/handshake: fix section mismatch error for handshake_genl_net_ops
+Date:   Fri, 21 Apr 2023 10:24:44 +0200
+Message-Id: <20230421082450.2572594-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] dt-bindings: iio: imu: mpu6050: Add icm20600 bindings
- to mpu6050
-Content-Language: en-US
-To:     Hermes Zhang <chenhuiz@axis.com>, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com, Lars-Peter Clausen <lars@metafoo.de>,
-        devicetree@vger.kernel.org
-References: <20230421071630.524822-1-chenhuiz@axis.com>
- <20230421071630.524822-3-chenhuiz@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230421071630.524822-3-chenhuiz@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 09:16, Hermes Zhang wrote:
-> Adding the invensense ICM-20600 to the compatible list of the mpu6050
-> driver
-> 
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
->  .../devicetree/bindings/iio/imu/invensense,mpu6050.yaml          | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
-> index ec64d7877fe5..67711bc0ee6c 100644
-> --- a/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
-> +++ b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
-> @@ -20,6 +20,7 @@ properties:
->            - invensense,icm20608
->            - invensense,icm20609
->            - invensense,icm20689
-> +          - invensense,icm20600
->            - invensense,icm20602
+From: Arnd Bergmann <arnd@arndb.de>
 
-Didn't we start switching to compatible groups of devices? This looks
-compatible with 20602.
+The new netlink interface causes a link-time warning about the use of
+a discarded symbol:
 
-Best regards,
-Krzysztof
+WARNING: modpost: vmlinux.o: section mismatch in reference: handshake_exit (section: .exit.text) -> (unknown) (section: .init.data)
+ERROR: modpost: Section mismatches detected.
+
+There are other instances of pernet_operations that are marked as
+__net_initdata as well, so I'm not sure what the lifetime rules are,
+but it's clear that any discarded symbol cannot be referenced from an
+exitcall, so remove that annotation here.
+
+Fixes: 3b3009ea8abb ("net/handshake: Create a NETLINK service for handling handshake requests")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ net/handshake/netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/handshake/netlink.c b/net/handshake/netlink.c
+index 8ea0ff993f9f..35c9c445e0b8 100644
+--- a/net/handshake/netlink.c
++++ b/net/handshake/netlink.c
+@@ -249,7 +249,7 @@ static void __net_exit handshake_net_exit(struct net *net)
+ 	}
+ }
+ 
+-static struct pernet_operations __net_initdata handshake_genl_net_ops = {
++static struct pernet_operations handshake_genl_net_ops = {
+ 	.init		= handshake_net_init,
+ 	.exit		= handshake_net_exit,
+ 	.id		= &handshake_net_id,
+-- 
+2.39.2
 
