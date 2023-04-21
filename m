@@ -2,243 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB626EA62D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DBA6EA631
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbjDUIpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S231844AbjDUIpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjDUIoX (ORCPT
+        with ESMTP id S231639AbjDUIpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:44:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33055AD1B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:43:49 -0700 (PDT)
+        Fri, 21 Apr 2023 04:45:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED972B453;
+        Fri, 21 Apr 2023 01:44:33 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E7EF21A39;
-        Fri, 21 Apr 2023 08:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682066627; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=f/5jk2+b1fnNip0aTWmUDkNeszCEWI23lfeJ4Fk1A+c=;
-        b=wQluwF2GybSdll2UEVYlD6B0L3WJo5zo7chB64FWgoLVvTtEEKTd+FEI7mkN1djdx1+5cu
-        sAUpG/DBXUWZlexf9u5RzqlP9vH0WKgrZbVIZcCvxtPhDDz3qZkUWmvvBLcUpcKJm/gEbc
-        YQYCaFu+oiKR0YyuIlY6MyO17+b4GYE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682066627;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 879171FDDD;
+        Fri, 21 Apr 2023 08:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682066672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KpfBfmqRRKyv8aJsshuOUoOBIKY9oBx+lkGtFjN8Ay0=;
+        b=j866XPc071ijrQ3iucv97B1Px9WNR8xKur6aAfZkDoJt92c9qZ2EEG0e08Mk7l6q50IBo1
+        Jbe8Ll+CgPZmcV6NAkrovPOQAiNXea0dnVUW426uRqFGBiG9baccOMvyQcS+B87SsGf2Ow
+        eaVYNsbSuO8nQwiyMf0W3hmT9HLLEP8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682066672;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=f/5jk2+b1fnNip0aTWmUDkNeszCEWI23lfeJ4Fk1A+c=;
-        b=aKOh5ofI6Jh8Xp8vFGJcxeuyjZllNBxmR1SMi0KN4RWHh41VY+W3iKuwJkhIhtq7fG+xri
-        +Fir4z4y9PrVmsAg==
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KpfBfmqRRKyv8aJsshuOUoOBIKY9oBx+lkGtFjN8Ay0=;
+        b=uB7DYNUNgVRAMfp3ph8fA4MdVrNC5vz2L8SkkTdSb8ZCTO1OiFG78kPdT9fz2Xdn9LUYoM
+        vlGlDoqXL7+rSGCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF6421390E;
-        Fri, 21 Apr 2023 08:43:46 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 751ED1390E;
+        Fri, 21 Apr 2023 08:44:32 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id UvQPOcJMQmQJOAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 21 Apr 2023 08:43:46 +0000
-Date:   Fri, 21 Apr 2023 10:43:46 +0200
-Message-ID: <87pm7xsjzx.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] sound fixes for 6.3
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        id oQCQHPBMQmRsOAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 21 Apr 2023 08:44:32 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 97C7BA0729; Fri, 21 Apr 2023 10:44:31 +0200 (CEST)
+Date:   Fri, 21 Apr 2023 10:44:31 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     syzbot <syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
+ get_max_inline_xattr_value_size
+Message-ID: <20230421084431.ynek7epoy3mceecr@quack3>
+References: <000000000000cdfab505f819529a@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000cdfab505f819529a@google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Thu 30-03-23 00:48:50, syzbot wrote:
+> HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=114fae51c80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=1966db24521e5f6e23f7
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1597fd0ec80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14149471c80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/58216d4aadcf/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com
+> 
+> EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
+> EXT4-fs error (device loop0): ext4_xattr_ibody_get:669: inode #18: comm syz-executor366: corrupted in-inode xattr: bad magic number in in-inode xattr
+> ==================================================================
+> BUG: KASAN: slab-use-after-free in get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
+> Read of size 4 at addr ffff88807c4ac084 by task syz-executor366/5076
+> 
+> CPU: 0 PID: 5076 Comm: syz-executor366 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:319 [inline]
+>  print_report+0x163/0x540 mm/kasan/report.c:430
+>  kasan_report+0x176/0x1b0 mm/kasan/report.c:536
+>  get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
+>  ext4_get_max_inline_size+0x141/0x200 fs/ext4/inline.c:113
+>  ext4_prepare_inline_data+0x87/0x1d0 fs/ext4/inline.c:393
+>  ext4_da_write_inline_data_begin+0x208/0xe40 fs/ext4/inline.c:931
+>  ext4_da_write_begin+0x4da/0x960 fs/ext4/inode.c:3064
+>  generic_perform_write+0x300/0x5e0 mm/filemap.c:3926
+>  ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:289
+>  ext4_file_write_iter+0x1d6/0x1930
+>  call_write_iter include/linux/fs.h:1851 [inline]
+>  new_sync_write fs/read_write.c:491 [inline]
+>  vfs_write+0x7b2/0xbb0 fs/read_write.c:584
+>  ksys_write+0x1a0/0x2c0 fs/read_write.c:637
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-please pull sound fixes for v6.3 from:
+The problem seems to be that get_max_inline_xattr_value_size() is iterating
+xattr space like:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.3
+        for (; !IS_LAST_ENTRY(entry); entry = EXT4_XATTR_NEXT(entry)) {
+                if (!entry->e_value_inum && entry->e_value_size) {
+                        size_t offs = le16_to_cpu(entry->e_value_offs);
+                        if (offs < min_offs)
+                                min_offs = offs;
+                }
+        }
 
-The topmost commit is 2ae147d643d326f74d93ba4f72a405f25f2677ea
+without checking for validity of the structures and we can reach this path
+without verifying xattrs are valid. Perhaps we should verify in-inode xattr
+data as part for __ext4_iget()?
 
-----------------------------------------------------------------
-
-sound fixes for 6.3-final
-
-Just a few fixes: all small and device-specific (ASoC FSL, SOF, and
-HD-audio quirks), should be safe to apply at the last minute.
-
-----------------------------------------------------------------
-
-Andy Chi (1):
-      ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
-
-Chancel Liu (1):
-      ASoC: fsl_sai: Fix pins setting for i.MX8QM platform
-
-Daniel Baluta (1):
-      ASoC: SOF: pm: Tear down pipelines only if DSP was active
-
-Jaroslav Kysela (1):
-      ALSA: hda/realtek: Remove specific patch for Dell Precision 3260
-
-Long Wang (1):
-      ASoC: max98373: change power down sequence for smart amp
-
-Nikita Zhandarovich (1):
-      ASoC: fsl_asrc_dma: fix potential null-ptr-deref
-
-Peter Ujfalusi (1):
-      ASoC: SOF: ipc4-topology: Clarify bind failure caused by missing fw_module
-
----
- sound/pci/hda/patch_realtek.c |  2 +-
- sound/soc/codecs/max98373.c   |  4 ++--
- sound/soc/fsl/fsl_asrc_dma.c  | 11 ++++++++---
- sound/soc/fsl/fsl_sai.c       |  2 +-
- sound/soc/sof/ipc4-topology.c | 10 ++++++----
- sound/soc/sof/pm.c            |  8 +++++++-
- 6 files changed, 25 insertions(+), 12 deletions(-)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 3b9f077a227f..f70d6a33421d 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9288,7 +9288,6 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1028, 0x0a62, "Dell Precision 5560", ALC289_FIXUP_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1028, 0x0a9d, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x0a9e, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
--	SND_PCI_QUIRK(0x1028, 0x0ac9, "Dell Precision 3260", ALC283_FIXUP_CHROME_BOOK),
- 	SND_PCI_QUIRK(0x1028, 0x0b19, "Dell XPS 15 9520", ALC289_FIXUP_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1028, 0x0b1a, "Dell Precision 5570", ALC289_FIXUP_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1028, 0x0b37, "Dell Inspiron 16 Plus 7620 2-in-1", ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS),
-@@ -9469,6 +9468,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
- 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
-+	SND_PCI_QUIRK(0x103c, 0x8b65, "HP ProBook 455 15.6 inch G10 Notebook PC", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
- 	SND_PCI_QUIRK(0x103c, 0x8b66, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
- 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8b7d, "HP", ALC236_FIXUP_HP_GPIO_LED),
-diff --git a/sound/soc/codecs/max98373.c b/sound/soc/codecs/max98373.c
-index f90a6a7ba83b..fde055c6c894 100644
---- a/sound/soc/codecs/max98373.c
-+++ b/sound/soc/codecs/max98373.c
-@@ -31,7 +31,7 @@ static int max98373_dac_event(struct snd_soc_dapm_widget *w,
- 			MAX98373_GLOBAL_EN_MASK, 1);
- 		usleep_range(30000, 31000);
- 		break;
--	case SND_SOC_DAPM_POST_PMD:
-+	case SND_SOC_DAPM_PRE_PMD:
- 		regmap_update_bits(max98373->regmap,
- 			MAX98373_R20FF_GLOBAL_SHDN,
- 			MAX98373_GLOBAL_EN_MASK, 0);
-@@ -64,7 +64,7 @@ static const struct snd_kcontrol_new max98373_spkfb_control =
- static const struct snd_soc_dapm_widget max98373_dapm_widgets[] = {
- SND_SOC_DAPM_DAC_E("Amp Enable", "HiFi Playback",
- 	MAX98373_R202B_PCM_RX_EN, 0, 0, max98373_dac_event,
--	SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_POST_PMD),
-+	SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD),
- SND_SOC_DAPM_MUX("DAI Sel Mux", SND_SOC_NOPM, 0, 0,
- 	&max98373_dai_controls),
- SND_SOC_DAPM_OUTPUT("BE_OUT"),
-diff --git a/sound/soc/fsl/fsl_asrc_dma.c b/sound/soc/fsl/fsl_asrc_dma.c
-index 3b81a465814a..05a7d1588d20 100644
---- a/sound/soc/fsl/fsl_asrc_dma.c
-+++ b/sound/soc/fsl/fsl_asrc_dma.c
-@@ -209,14 +209,19 @@ static int fsl_asrc_dma_hw_params(struct snd_soc_component *component,
- 		be_chan = soc_component_to_pcm(component_be)->chan[substream->stream];
- 		tmp_chan = be_chan;
- 	}
--	if (!tmp_chan)
--		tmp_chan = dma_request_slave_channel(dev_be, tx ? "tx" : "rx");
-+	if (!tmp_chan) {
-+		tmp_chan = dma_request_chan(dev_be, tx ? "tx" : "rx");
-+		if (IS_ERR(tmp_chan)) {
-+			dev_err(dev, "failed to request DMA channel for Back-End\n");
-+			return -EINVAL;
-+		}
-+	}
- 
- 	/*
- 	 * An EDMA DEV_TO_DEV channel is fixed and bound with DMA event of each
- 	 * peripheral, unlike SDMA channel that is allocated dynamically. So no
- 	 * need to configure dma_request and dma_request2, but get dma_chan of
--	 * Back-End device directly via dma_request_slave_channel.
-+	 * Back-End device directly via dma_request_chan.
- 	 */
- 	if (!asrc->use_edma) {
- 		/* Get DMA request of Back-End */
-diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-index 1b197478b3d9..990bba0be1fb 100644
---- a/sound/soc/fsl/fsl_sai.c
-+++ b/sound/soc/fsl/fsl_sai.c
-@@ -1546,7 +1546,7 @@ static const struct fsl_sai_soc_data fsl_sai_imx8qm_data = {
- 	.use_imx_pcm = true,
- 	.use_edma = true,
- 	.fifo_depth = 64,
--	.pins = 1,
-+	.pins = 4,
- 	.reg_offset = 0,
- 	.mclk0_is_mclk1 = false,
- 	.flags = 0,
-diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-index 669b99a4f76e..3a5394c3dd83 100644
---- a/sound/soc/sof/ipc4-topology.c
-+++ b/sound/soc/sof/ipc4-topology.c
-@@ -1806,10 +1806,12 @@ static int sof_ipc4_route_setup(struct snd_sof_dev *sdev, struct snd_sof_route *
- 	int ret;
- 
- 	if (!src_fw_module || !sink_fw_module) {
--		/* The NULL module will print as "(efault)" */
--		dev_err(sdev->dev, "source %s or sink %s widget weren't set up properly\n",
--			src_fw_module->man4_module_entry.name,
--			sink_fw_module->man4_module_entry.name);
-+		dev_err(sdev->dev,
-+			"cannot bind %s -> %s, no firmware module for: %s%s\n",
-+			src_widget->widget->name, sink_widget->widget->name,
-+			src_fw_module ? "" : " source",
-+			sink_fw_module ? "" : " sink");
-+
- 		return -ENODEV;
- 	}
- 
-diff --git a/sound/soc/sof/pm.c b/sound/soc/sof/pm.c
-index 8d3383085d12..85412aeb1ca1 100644
---- a/sound/soc/sof/pm.c
-+++ b/sound/soc/sof/pm.c
-@@ -183,6 +183,7 @@ static int sof_suspend(struct device *dev, bool runtime_suspend)
- 	const struct sof_ipc_tplg_ops *tplg_ops = sof_ipc_get_ops(sdev, tplg);
- 	pm_message_t pm_state;
- 	u32 target_state = snd_sof_dsp_power_target(sdev);
-+	u32 old_state = sdev->dsp_power_state.state;
- 	int ret;
- 
- 	/* do nothing if dsp suspend callback is not set */
-@@ -192,7 +193,12 @@ static int sof_suspend(struct device *dev, bool runtime_suspend)
- 	if (runtime_suspend && !sof_ops(sdev)->runtime_suspend)
- 		return 0;
- 
--	if (tplg_ops && tplg_ops->tear_down_all_pipelines)
-+	/* we need to tear down pipelines only if the DSP hardware is
-+	 * active, which happens for PCI devices. if the device is
-+	 * suspended, it is brought back to full power and then
-+	 * suspended again
-+	 */
-+	if (tplg_ops && tplg_ops->tear_down_all_pipelines && (old_state == SOF_DSP_PM_D0))
- 		tplg_ops->tear_down_all_pipelines(sdev, false);
- 
- 	if (sdev->fw_state != SOF_FW_BOOT_COMPLETE)
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
