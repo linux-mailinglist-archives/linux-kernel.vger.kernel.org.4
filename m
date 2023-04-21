@@ -2,119 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2796EA455
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F056EA457
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjDUHIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S229625AbjDUHJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjDUHIi (ORCPT
+        with ESMTP id S229583AbjDUHJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:08:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9E7DBF;
-        Fri, 21 Apr 2023 00:08:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27B0F61BD4;
-        Fri, 21 Apr 2023 07:08:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF2FC433D2;
-        Fri, 21 Apr 2023 07:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682060901;
-        bh=bQzQaoashK/4PV029DbpZuuIfz5K69u3O9j4z8ufa1w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Sgyw3xUIbQ0riYIXVtTtryebT2IV79C2Dzffgn++x2nOcPdFgf0uy8AiHWsh9R/I8
-         MxN+cYCzKwsO5w1H9vWHm87B0HQXXNFj2n90LKBusL7ViUDQCFyHcQ6l/OKGQblLef
-         Z+Cmf+YjuD5FIGnZF+93/Jl0067BzmVh+gIiPJTQHVTOP9eVGCLozkvR8VPDRQcORE
-         Mapq9etseBp9hqZbip30rMIja9qwF3dKrQ8zFA9dZeCepeyF7u08Tnk4U/SP+CUP67
-         JfFejy8zqaN905Fynf0q3jxJNEgBo++0nSuW72UKMK+bYSWH4X9ndfhuFoZBYWF/vJ
-         ltmYXZX7e0n8Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jason Yan <yanaijie@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jan Kara <jack@suse.cz>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Ye Bin <yebin10@huawei.com>, Baokun Li <libaokun1@huawei.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ext4: avoid unused-variable warning with CONFIG_QUOTA=n
-Date:   Fri, 21 Apr 2023 09:08:11 +0200
-Message-Id: <20230421070815.2260326-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 21 Apr 2023 03:09:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A833D1BD6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682060952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YvNqSawyJ3nJ/vCXn5tWx+RQcufZPyD2kLszhPcCGec=;
+        b=dQaSVH4JFlQNFv6Lk8FuUxE5LQDZqueuai/Ow1Qpipj4idA5Vxr/zhfRRGaWx1cIgj+0La
+        oyCIXFPQYrBODLRRQ6kWlgBjQPGhV7UyOOngYHhnjzNf9rt3daZb0Lad46oLbZ6O2yDHuc
+        WWsoIncHaAVXE11RuIEALXmJ+tUb8G0=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-487-QAh_RlKmNjCn4q4hONujAA-1; Fri, 21 Apr 2023 03:09:11 -0400
+X-MC-Unique: QAh_RlKmNjCn4q4hONujAA-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1878c453f6fso1338498fac.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:09:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682060951; x=1684652951;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YvNqSawyJ3nJ/vCXn5tWx+RQcufZPyD2kLszhPcCGec=;
+        b=Uc4buAoMRLZKdRkhyZEoY9z36rK2dWLM/9QHPuRevi6kEHm50LxA84MTo8fjEKzeoS
+         NySHfM/6fDV1P1vP+5ES+KNpn50wNPY6r98HMi84aHzq08v2kZyxSQu0AyGsWx2MOUHM
+         G8PQJfZ53609TVzf/W3RGTav0UTlAiItWJ3QbWjvuvLfefZwCc4RGE9ctqrEx2N9jsh+
+         W3TzzDXaryZ5GC3llp+MTBggiR73BRF7Vprys46nz+C224fwtYsOUOELXixOsPyC07Ja
+         xGkQazUjq/UxFKJvpeHQAHeonvttDpf0Ef+zUnXqbO3XdZniQgp3hRwLtUwoDkhpp/WR
+         26kA==
+X-Gm-Message-State: AAQBX9ch9eMjre9c2SvOXeCd3TNsYwo5rCWNw8XxDun3xcUMMXQQsbRd
+        O3ELA2+3KZYqqiHTcInQbvkRVQiW5Sfns8qQ9Qt86QS3bF46Nz8JRhq2RTYmUV95zYdJeV664UQ
+        eUeo+YxjkXimmH5NR9jwWK+xDmRPZVJCrG2qQthm7
+X-Received: by 2002:a05:6870:428e:b0:177:b62d:cc1c with SMTP id y14-20020a056870428e00b00177b62dcc1cmr3330130oah.0.1682060950843;
+        Fri, 21 Apr 2023 00:09:10 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZUnxaXgksNu0d9L0Wy5hrT6fYbh4k+ofySxdJolQXrJne1N1iwbOSJoXTrNObqrrmgHYlJIYKcUn7cD+PIHKQ=
+X-Received: by 2002:a05:6870:428e:b0:177:b62d:cc1c with SMTP id
+ y14-20020a056870428e00b00177b62dcc1cmr3330122oah.0.1682060950649; Fri, 21 Apr
+ 2023 00:09:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230419134329.346825-1-maxime.coquelin@redhat.com>
+ <CACGkMEuiHqPkqYk1ZG3RZXLjm+EM3bmR0v1T1yH-ADEazOwTMA@mail.gmail.com> <ZEGG2GJw2DQk689j@x1n>
+In-Reply-To: <ZEGG2GJw2DQk689j@x1n>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 21 Apr 2023 15:08:59 +0800
+Message-ID: <CACGkMEvtBQg5fTTzSaMRwZH7P3WiDx0=eov9RdCtSFaHVtbh1w@mail.gmail.com>
+Subject: Re: [RFC 0/2] vduse: add support for networking devices
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Maxime Coquelin <maxime.coquelin@redhat.com>,
+        xieyongji@bytedance.com, mst@redhat.com, david.marchand@redhat.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Apr 21, 2023 at 2:39=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, Apr 20, 2023 at 12:34:06PM +0800, Jason Wang wrote:
+> > > 3. Coredump:
+> > >   In order to be able to perform post-mortem analysis, DPDK
+> > >   Vhost library marks pages used for vrings and descriptors
+> > >   buffers as MADV_DODUMP using madvise(). However with
+> > >   VDUSE it fails with -EINVAL. My understanding is that we
+> > >   set VM_DONTEXPAND flag to the VMAs and madvise's
+> > >   MADV_DODUMP fails if it is present. I'm not sure to
+> > >   understand why madvise would prevent MADV_DODUMP if
+> > >   VM_DONTEXPAND is set. Any thoughts?
+> >
+> > Adding Peter who may know the answer.
+>
+> I don't.. but I had a quick look, it seems that VM_DONTEXPAND was kind of
+> reused (and I'm not sure whether it's an abuse or not so far..) to
+> represent device driver pages since removal of VM_RESERVED:
 
-After some code reshuffling, the index variables in two functions
-are only used in an #ifdef:
+Interesting, but there're indeed cases where VM_DONTEXPAND is used by
+non-driver codes. The pages mapped by VDUSE are not device driver
+pages but the IOTLB and virtqueue.
 
-fs/ext4/super.c: In function 'ext4_put_super':
-fs/ext4/super.c:1262:13: error: unused variable 'i' [-Werror=unused-variable]
-fs/ext4/super.c: In function '__ext4_fill_super':
-fs/ext4/super.c:5200:22: error: unused variable 'i' [-Werror=unused-variable]
+Btw the definition of VM_SPECIAL doesn't say anything related to dump:
 
-Since all supported compilers now allow having variable declarations
-inside of a for() loop, move them into the #ifdef block directly.
+/*
+ * Special vmas that are non-mergable, non-mlock()able.
+ */
+#define VM_SPECIAL (VM_IO | VM_DONTEXPAND | VM_PFNMAP | VM_MIXEDMAP)
 
-Fixes: dcbf87589d90 ("ext4: factor out ext4_flex_groups_free()")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/ext4/super.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> https://lore.kernel.org/all/20120731103457.20182.88454.stgit@zurg/
+> https://lore.kernel.org/all/20120731103503.20182.94365.stgit@zurg/
+>
+> But I think that change at least breaks hugetlb once so there's the
+> explicit hugetlb check to recover that behavior back:
+>
+> https://lore.kernel.org/all/20180930054629.29150-1-daniel@linux.ibm.com/
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index d03bf0ecf505..9b331ef593ea 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1259,7 +1259,7 @@ static void ext4_put_super(struct super_block *sb)
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	struct ext4_super_block *es = sbi->s_es;
- 	int aborted = 0;
--	int i, err;
-+	int err;
- 
- 	/*
- 	 * Unregister sysfs before destroying jbd2 journal.
-@@ -1311,7 +1311,7 @@ static void ext4_put_super(struct super_block *sb)
- 	ext4_flex_groups_free(sbi);
- 	ext4_percpu_param_destroy(sbi);
- #ifdef CONFIG_QUOTA
--	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-+	for (int i = 0; i < EXT4_MAXQUOTAS; i++)
- 		kfree(get_qf_name(sb, sbi, i));
- #endif
- 
-@@ -5197,7 +5197,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 	ext4_fsblk_t logical_sb_block;
- 	struct inode *root;
- 	int ret = -ENOMEM;
--	unsigned int i;
- 	int needs_recovery;
- 	int err = 0;
- 	ext4_group_t first_not_zeroed;
-@@ -5628,7 +5627,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- #endif
- 
- #ifdef CONFIG_QUOTA
--	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-+	for (int i = 0; i < EXT4_MAXQUOTAS; i++)
- 		kfree(get_qf_name(sb, sbi, i));
- #endif
- 	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
--- 
-2.39.2
+This seems similar to the case of VDUSE.
+
+Thanks
+
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
 
