@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C77A6EA1A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116C76EA1A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbjDUC1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S233522AbjDUCa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbjDUC1p (ORCPT
+        with ESMTP id S232030AbjDUCay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:27:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30E1212D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:27:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ED5B63C15
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8479AC433D2;
-        Fri, 21 Apr 2023 02:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682044063;
-        bh=4JEobs9Do9ZCkbJdX/Ov15UlPaXoUmhwg2v+lomPIJo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gXW8xqMdV47iMCXEZz+YfCuUmAFLSbLmryBulhPqWwkmSauttA/Ih38W/tkOOBEHF
-         AVyJeHl0/fPywnEa5i52bmm6L0XYm6zFtrTmq23pFZ2B189fzXr33YZfVVCElga4lO
-         TPnFIyRhfa+LTsQ+3pZ7yx4ySmdHV+OQgQKyQagm1jLCTGwURxijfih18dFbo8MS8t
-         OFcmGj8nFJ/+3ko4YUadov8QK/rpSVd1eeQxMvXDJEgsgzeAom8oWYRFR7xhOK5yNm
-         E/gJzTegvZIGmJKvuf6jKciPuhmhl83QGJ8XexGTxC+YgGgzIlxY4p+NQZfMdiH59z
-         qBreWDc5otN/g==
-Message-ID: <b031f528-f3dd-44ed-5370-2133a74f9332@kernel.org>
-Date:   Fri, 21 Apr 2023 10:27:40 +0800
+        Thu, 20 Apr 2023 22:30:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A8D2680;
+        Thu, 20 Apr 2023 19:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682044253; x=1713580253;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lXmb3JKMQYphwt/h/vLhy2biJxC/A3UU1XVEqedzQEc=;
+  b=Ibdf87UTT57mwRLYE9PRvoufavJsyCZtiZRphTpzCDcgdHdbmtejbWVd
+   Sp30EfDuaOZBHHi1iWt7jX6qHZet6+9BLT3XXNdurj3059fCestLKVsRZ
+   F0Lx7VvnF/yeRN5uuxFkVddTONF9ieyt3rQ1kr2EjavdBKnr0peyILhVc
+   MkvaLeUmZ3qwx7kTId4+EBSM+o+MFRW3kaka95bX2IjOPcOXak+MOCUou
+   HM+L39dDEKYWNJaQQ2XwAoZSn6iS6blSO+Y1Rrq74Y6dS85+UBobI+vIC
+   glNqgdrCAKHbru/1OqIkYJOlnoKOQcIjB0lZuhUAmirFGC2ZP6v9gVK+F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="408836761"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="408836761"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 19:30:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="866546785"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="866546785"
+Received: from bgroza-mobl.amr.corp.intel.com (HELO [10.212.168.100]) ([10.212.168.100])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 19:30:51 -0700
+Message-ID: <adad9761-b671-66ec-8946-78d017071076@linux.intel.com>
+Date:   Thu, 20 Apr 2023 19:30:47 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] f2fs: remove unnessary comment in __may_age_extent_tree
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/4] PCI: Keep AER status in pci_restore_state()
 Content-Language: en-US
-To:     Qi Han <hanqi@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230418060954.67585-1-hanqi@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230418060954.67585-1-hanqi@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230420125941.333675-1-kai.heng.feng@canonical.com>
+ <e84eda25-dbe9-a108-c4d4-ee3fa746d9ca@linux.intel.com>
+ <CAAd53p4hYR9f_Mh9cxGfBVnK_akLQMBACLDBnEHHzacJ5OZEGg@mail.gmail.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <CAAd53p4hYR9f_Mh9cxGfBVnK_akLQMBACLDBnEHHzacJ5OZEGg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +68,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/18 14:09, Qi Han wrote:
-> This comment make no sense and is in the wrong place, so let's
-> remove it.
+
+
+On 4/20/23 6:35 PM, Kai-Heng Feng wrote:
+> Hi Sathyanarayanan,
 > 
-> Signed-off-by: Qi Han <hanqi@vivo.com>
-> ---
->   fs/f2fs/extent_cache.c | 1 -
->   1 file changed, 1 deletion(-)
+> On Thu, Apr 20, 2023 at 10:39 PM Sathyanarayanan Kuppuswamy
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>>
+>> Hi Kai,
 > 
-> diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-> index 28b12553f2b3..1f6d7de35794 100644
-> --- a/fs/f2fs/extent_cache.c
-> +++ b/fs/f2fs/extent_cache.c
-> @@ -86,7 +86,6 @@ static bool __may_age_extent_tree(struct inode *inode)
->   
->   	if (!test_opt(sbi, AGE_EXTENT_CACHE))
->   		return false;
-> -	/* don't cache block age info for cold file */
->   	if (is_inode_flag_set(inode, FI_COMPRESSED_FILE))
->   		return false;
+> It's Kai-Heng :)
+> 
+>>
+>> On 4/20/23 5:59 AM, Kai-Heng Feng wrote:
+>>> When AER is using the same IRQ as PME, AER interrupt is treated as a
+>>> wakeup event and it can disrupt system suspend process.
+>>>
+>>> If that happens, the system will report it's woken up by PME IRQ without
+>>> indicating any AER error since AER status is cleared on resume.
+>>>
+>>> So keep the AER status so users can know the system is woken up by AER
+>>> instead of PME.
+>>>
+>>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> ---
+>>
+>> Any history on why it is cleared before? Is it done to hide some resume
+>> issues?
+> 
+> It was introduced by commit b07461a8e45b ("PCI/AER: Clear error status
+> registers during enumeration and restore").
+> The justification is quite reasonable so I think maybe we should keep it as is.
 
-Should move it here instead of removal?
+Yes. It looks like it is better to leave it as it is.
 
-/* don't cache block age info for cold file */
 
->   	if (file_is_cold(inode))
+> 
+> Kai-Heng
+> 
+>>
+>>> v3:
+>>>  - No change.
+>>>
+>>> v2:
+>>>  - New patch.
+>>>
+>>>  drivers/pci/pci.c | 1 -
+>>>  1 file changed, 1 deletion(-)
+>>>
+>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>>> index 7a67611dc5f4..71aead00fc20 100644
+>>> --- a/drivers/pci/pci.c
+>>> +++ b/drivers/pci/pci.c
+>>> @@ -1778,7 +1778,6 @@ void pci_restore_state(struct pci_dev *dev)
+>>>       pci_restore_dpc_state(dev);
+>>>       pci_restore_ptm_state(dev);
+>>>
+>>> -     pci_aer_clear_status(dev);
+>>>       pci_restore_aer_state(dev);
+>>>
+>>>       pci_restore_config_space(dev);
+>>
+>> --
+>> Sathyanarayanan Kuppuswamy
+>> Linux Kernel Developer
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
