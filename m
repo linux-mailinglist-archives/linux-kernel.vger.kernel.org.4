@@ -2,174 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01546EA5A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36C26EA5AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjDUIQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S230464AbjDUISq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjDUIQF (ORCPT
+        with ESMTP id S229882AbjDUISo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:16:05 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A4B13E
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:16:00 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-7637c5ed865so168824439f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1682064958; x=1684656958;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qCGHRBc+uVHcj0EdY6TeoG6GbZWnSmTkOlbKkZxZR9A=;
-        b=HS27dZTQ/xyvfSneaQekhHkzapypxPOR9xdvahvYgvDQdNwCgmyh+hWm94qg9PDiFJ
-         JfysofErBDhQA/HBN1RIPTDUgoNCQPmy28GJT0JfJwXpWVPiEFaEa1eGYpDssxjnPKad
-         ND4Do1kKYY1hw4bP72aMorvjUlRYIp89179/w=
+        Fri, 21 Apr 2023 04:18:44 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7D05B8F
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:18:42 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32b532ee15bso66109655ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:18:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682064958; x=1684656958;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qCGHRBc+uVHcj0EdY6TeoG6GbZWnSmTkOlbKkZxZR9A=;
-        b=kDIzcDmbwvJ+jXPIhwPWGGVZ4sj6xcvCQhMMQQWxj41A6M7QP/uvnMP1XAjkaayASM
-         v+x1mX58V6d5kpaH2901SqhMe2Fa7MC0FvejLLSy8VOCiIxAnYN6e9l/1XqixgakgkUq
-         RQ9aiW8pyjAreCzHJM3yNPVTxtAl6cmgVPUXbv3UCe7KymdeFa6IWrtyR7uU9l09JsJ6
-         JdwkuMKHke3LZG1CjGTXN06cfWJc+3iDEwaH7xdut0e7VBDzeVLuscB8vUfnuPMMTQod
-         jbMu+1RErG76YVsToguBmNAWC2MOMkovPh4+Dl+U1WvPbgjuNI4E35g1M9C82VYDkW6H
-         1toA==
-X-Gm-Message-State: AAQBX9fGWIiS56fmwJ/gtpkNXkK2aLH/PW5uY3U4uEVtsJJgp4HDwLLF
-        DD9MEMWtWPLZYC+r8d7bb5WUpg7S3Va2OSwln2s=
-X-Google-Smtp-Source: AKy350a/Ot5qjHO2A6etlksx60Ur9+OLDkpJY5TIXGN6F+YYh4pskZCRYr2Iu4Swk0XPJRox724XXw==
-X-Received: by 2002:a5e:9401:0:b0:763:8eea:5d8b with SMTP id q1-20020a5e9401000000b007638eea5d8bmr3006483ioj.4.1682064958394;
-        Fri, 21 Apr 2023 01:15:58 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id e22-20020a5d9256000000b0076356c2d1acsm905845iol.52.2023.04.21.01.15.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 01:15:57 -0700 (PDT)
-Message-ID: <57f311ec-381a-e468-3b28-bd73521d5e00@ieee.org>
-Date:   Fri, 21 Apr 2023 03:15:56 -0500
+        d=1e100.net; s=20221208; t=1682065122; x=1684657122;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cNHaaL2wteXKqOq6fFI1R7yBNdGqHMxiJZSvBDXQeZg=;
+        b=PemuZ8KNc6M1xu1TSmPJFaYdS6RJiE2NM+B5RdvW1/ja2CBA6dcFKFsqXFU9HKqmux
+         mmsyDYBRW17Ii1Y9oOOjiSd/bVXEyxORyU3HpD/uQAqJaUrblBCWBshiefdlwlaz1upC
+         VKnlgqetxuYglVYiWTFVMDAZ80ATPEMHGK48+N0Ga27yH0YDukHVM0Pqi+6M/4db7kbE
+         e/iNaB4paVoxMlP2T8dLvX8L+nVL/RvvEs+MCp37HALx0hx8PAFpD1JxfI082gYjK2/9
+         /KN07FUvLoWzOzHWlg/KxYyBMNbHUzLeRbfm4C2PzSS43CYWWDbGD/f8iY/jQBSCyL2C
+         Mfkw==
+X-Gm-Message-State: AAQBX9dJ+r9VrsnJAWif4NeLtSwEw1mBe8lqBhsHNwGbS443Y6KQtXtw
+        IRly9Nme3NaqMKVzDNl9o1YY+argEX8rTpHC7pCJZqh7MOPq
+X-Google-Smtp-Source: AKy350Ylf2SFjtkfmSasoThrRHsmxmztXdYjzONGesFMvSmkoIb+rZOG//dG5WNQ9GlCFQgtJqArXDOZoM9PQGpLjUW2WNmiUdIn
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 02/22] greybus: Use alloc_ordered_workqueue() to create
- ordered workqueues
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org
-References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-3-tj@kernel.org>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20230421025046.4008499-3-tj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9282:0:b0:763:7dfb:27b2 with SMTP id
+ s2-20020a5d9282000000b007637dfb27b2mr2040169iom.0.1682065121845; Fri, 21 Apr
+ 2023 01:18:41 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 01:18:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000013aaac05f9d44e7a@google.com>
+Subject: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
+From:   syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 9:50 PM, Tejun Heo wrote:
-> BACKGROUND
-> ==========
-> 
-> When multiple work items are queued to a workqueue, their execution order
-> doesn't match the queueing order. They may get executed in any order and
-> simultaneously. When fully serialized execution - one by one in the queueing
-> order - is needed, an ordered workqueue should be used which can be created
-> with alloc_ordered_workqueue().
-> 
-> However, alloc_ordered_workqueue() was a later addition. Before it, an
-> ordered workqueue could be obtained by creating an UNBOUND workqueue with
-> @max_active==1. This originally was an implementation side-effect which was
-> broken by 4c16bd327c74 ("workqueue: restore WQ_UNBOUND/max_active==1 to be
-> ordered"). Because there were users that depended on the ordered execution,
-> 5c0338c68706 ("workqueue: restore WQ_UNBOUND/max_active==1 to be ordered")
-> made workqueue allocation path to implicitly promote UNBOUND workqueues w/
-> @max_active==1 to ordered workqueues.
-> 
-> While this has worked okay, overloading the UNBOUND allocation interface
-> this way creates other issues. It's difficult to tell whether a given
-> workqueue actually needs to be ordered and users that legitimately want a
-> min concurrency level wq unexpectedly gets an ordered one instead. With
-> planned UNBOUND workqueue updates to improve execution locality and more
-> prevalence of chiplet designs which can benefit from such improvements, this
-> isn't a state we wanna be in forever.
-> 
-> This patch series audits all callsites that create an UNBOUND workqueue w/
-> @max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
-> 
-> WHAT TO LOOK FOR
-> ================
-> 
-> The conversions are from
-> 
->    alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
-> 
-> to
-> 
->    alloc_ordered_workqueue(flags, args...)
-> 
-> which don't cause any functional changes. If you know that fully ordered
-> execution is not ncessary, please let me know. I'll drop the conversion and
-> instead add a comment noting the fact to reduce confusion while conversion
-> is in progress.
-> 
-> If you aren't fully sure, it's completely fine to let the conversion
-> through. The behavior will stay exactly the same and we can always
-> reconsider later.
-> 
-> As there are follow-up workqueue core changes, I'd really appreciate if the
-> patch can be routed through the workqueue tree w/ your acks. Thanks.
+Hello,
 
-Both of the workqueues affected here should be ordered.
+syzbot found the following issue on:
 
-Acked-by: Alex Elder <elder@linaro.org>
+HEAD commit:    fcd476ea6a88 Merge tag 'urgent-rcu.2023.03.28a' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=146618b9c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f7350c77b8056a38
+dashboard link: https://syzkaller.appspot.com/bug?extid=b7c3ba8cdc2f6cf83c21
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: greybus-dev@lists.linaro.org
-> ---
->   drivers/greybus/connection.c | 4 ++--
->   drivers/greybus/svc.c        | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/greybus/connection.c b/drivers/greybus/connection.c
-> index e3799a53a193..9c88861986c8 100644
-> --- a/drivers/greybus/connection.c
-> +++ b/drivers/greybus/connection.c
-> @@ -187,8 +187,8 @@ _gb_connection_create(struct gb_host_device *hd, int hd_cport_id,
->   	spin_lock_init(&connection->lock);
->   	INIT_LIST_HEAD(&connection->operations);
->   
-> -	connection->wq = alloc_workqueue("%s:%d", WQ_UNBOUND, 1,
-> -					 dev_name(&hd->dev), hd_cport_id);
-> +	connection->wq = alloc_ordered_workqueue("%s:%d", 0, dev_name(&hd->dev),
-> +						 hd_cport_id);
->   	if (!connection->wq) {
->   		ret = -ENOMEM;
->   		goto err_free_connection;
-> diff --git a/drivers/greybus/svc.c b/drivers/greybus/svc.c
-> index 16cced80867a..0d7e749174a4 100644
-> --- a/drivers/greybus/svc.c
-> +++ b/drivers/greybus/svc.c
-> @@ -1318,7 +1318,7 @@ struct gb_svc *gb_svc_create(struct gb_host_device *hd)
->   	if (!svc)
->   		return NULL;
->   
-> -	svc->wq = alloc_workqueue("%s:svc", WQ_UNBOUND, 1, dev_name(&hd->dev));
-> +	svc->wq = alloc_ordered_workqueue("%s:svc", 0, dev_name(&hd->dev));
->   	if (!svc->wq) {
->   		kfree(svc);
->   		return NULL;
+Unfortunately, I don't have any reproducer for this issue yet.
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f3d8ce4faab0/disk-fcd476ea.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fc53d9dee279/vmlinux-fcd476ea.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/22ad755d39b2/bzImage-fcd476ea.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in __fput / __tty_hangup
+
+write to 0xffff88813b31e828 of 8 bytes by task 17702 on cpu 0:
+ __tty_hangup+0x1e2/0x510 drivers/tty/tty_io.c:622
+ tty_vhangup+0x17/0x20 drivers/tty/tty_io.c:701
+ pty_close+0x262/0x280 drivers/tty/pty.c:79
+ tty_release+0x204/0x930 drivers/tty/tty_io.c:1753
+ __fput+0x245/0x570 fs/file_table.c:321
+ ____fput+0x15/0x20 fs/file_table.c:349
+ task_work_run+0x123/0x160 kernel/task_work.c:179
+ get_signal+0xe5c/0xfe0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x89/0x2b0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6d/0xe0 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff88813b31e828 of 8 bytes by task 17705 on cpu 1:
+ __fput+0x21c/0x570 fs/file_table.c:320
+ ____fput+0x15/0x20 fs/file_table.c:349
+ task_work_run+0x123/0x160 kernel/task_work.c:179
+ get_signal+0xe5c/0xfe0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x89/0x2b0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6d/0xe0 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+value changed: 0xffffffff84e91ed0 -> 0xffffffff84e91dc0
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 17705 Comm: syz-executor.0 Not tainted 6.3.0-rc4-syzkaller-00034-gfcd476ea6a88 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/17/2023
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
