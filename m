@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDD36EA2A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69606EA2D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjDUEWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 00:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S233209AbjDUEeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 00:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbjDUEWp (ORCPT
+        with ESMTP id S229811AbjDUEeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:22:45 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCF05FE6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:22:43 -0700 (PDT)
+        Fri, 21 Apr 2023 00:34:15 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B3B5FEB;
+        Thu, 20 Apr 2023 21:34:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682050963; x=1713586963;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=H9iJKcVIMytaSDCm2vBtv7QGVs8Ip4teKb26JClgYJM=;
-  b=IvrXnnmG80PM96SI97ZEtDhVF9/TV6/xr3UgRec17mH40uapyYnMr+d4
-   f+SBzNK0Y0nlD96JssWjqqzK079x1Zr/H0W5pqhJfv31u7Hxa2+gK0zxX
-   PI1K9qQMUUKOYuADUco+xkd7SNOQVHoSil3QLL5l3j6WOtiSfBIUJnqAk
-   mgzKrqieC3wA+mvwy7tlhD8bQfvTX6eSANezH0dV4Z7uC71XX526bNPDu
-   S2KDTjOE0x6zMOuvUmO3rYBTdUXRI7BJ2mq0bGriJab+eVLB6uaM6zqqp
-   I7eslMJUSY8kUHSCQZDc3hcgGamlZsdrQ6YvODKQ77rXFTiY/FqCbz5xc
+  t=1682051653; x=1713587653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HcG2OaQaMXxW7kOzW0omM87pnvqjWJ8bghxZYMQSVrk=;
+  b=FHQPx7JE/u8lXxu76QY2KwVcDbLxAmZWHodg4L90QHqIntBBNb/X/ZQp
+   Uny80K15vEMUrVcmUyho/Mjbj16USbwa9RznFZPkUcYzspoaIxdaUDpQ1
+   /Zn8dFpjZaGssHk2HlHGfvVzkW0vOCTwGNxKE34Toxbw2EEIxMLOstslP
+   NvP3yW8ct/JdYkU3fH0Atm2HfO9eEK8mrBHfWmxfdot1EC24jzdrHtN8O
+   HIn0nyf3WuK2YP6ILvxr0IQSQb0EeML5AV8oPN9ngqD8JvGut+NYMAr6J
+   t6Mahoh5vmLYVTcGkIFcncXCn5FuWhxyOt6IFSRCrFaqXpH019nYXAMhz
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="408849266"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325514898"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="408849266"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:22:39 -0700
+   d="scan'208";a="325514898"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:34:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021794073"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="669598926"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="1021794073"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:22:37 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>,
-        <mgorman@techsingularity.net>, <vbabka@suse.cz>, <mhocko@suse.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm/page_alloc: consider pfn holes after pfn_valid() in
- __pageblock_pfn_to_page()
-References: <62e231a8f2e50c04dcadc7a0cfaa6dea5ce1ec05.1681296022.git.baolin.wang@linux.alibaba.com>
-        <94bfa3cc-674e-25b0-e7e2-d74c970acef7@redhat.com>
-        <ac8bb4e9-e7f5-f9da-bca0-ac7ef6d68c23@linux.alibaba.com>
-        <87cz3zt3u6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com>
-Date:   Fri, 21 Apr 2023 12:21:28 +0800
-In-Reply-To: <52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com> (Baolin
-        Wang's message of "Thu, 20 Apr 2023 17:11:45 +0800")
-Message-ID: <874jp9uapj.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="669598926"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Apr 2023 21:34:03 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppiTC-000gJw-2d;
+        Fri, 21 Apr 2023 04:34:02 +0000
+Date:   Fri, 21 Apr 2023 12:33:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        jdelvare@suse.com, linux@roeck-us.net, manio@skyboo.net
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property
+ APIs
+Message-ID: <202304211232.U03a7306-lkp@intel.com>
+References: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,114 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+Hi Chris,
 
-> On 4/20/2023 3:22 PM, Huang, Ying wrote:
->> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
->> 
->>> On 4/12/2023 7:25 PM, David Hildenbrand wrote:
->>>> On 12.04.23 12:45, Baolin Wang wrote:
->>>>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(),
->>>>> which checks whether the given zone contains holes, and uses pfn_valid()
->>>>> to check if the end pfn is valid. However pfn_valid() can not make sure
->>>>> the end pfn is not a hole if the size of a pageblock is larger than the
->>>>> size of a sub-mem_section, since the struct page getting by pfn_to_page()
->>>>> may represent a hole or an unusable page frame, which may cause incorrect
->>>>> zone contiguous is set.
->>>>>
->>>>> Though another user of pageblock_pfn_to_page() in compaction seems work
->>>>> well now, it is better to avoid scanning or touching these offline pfns.
->>>>> So like commit 2d070eab2e82 ("mm: consider zone which is not fully
->>>>> populated to have holes"), we should also use pfn_to_online_page() for
->>>>> the end pfn to make sure it is a valid pfn with usable page frame.
->>>>> Meanwhile the pfn_valid() for end pfn can be dropped now.
->>>>>
->>>>> Moreover we've already used pfn_to_online_page() for start pfn to make
->>>>> sure it is online and valid, so the pfn_valid() for the start pfn is
->>>>> unnecessary, drop it.
->>>> pageblocks are supposed to fall into a single memory section, so in
->>>> mos > cases, if the start is online, so is the end.
->>>
->>> Yes, the granularity of memory hotplug is a mem_section.
->>>
->>> However, suppose the pageblock order is MAX_ORDER-1, and the size of a
->>> sub-section is 2M, that means a pageblock will fall into 2 sub
->>> mem-section, and if there is a hole in the zone, that means the 2nd
->>> sub mem-section can be invalid without setting subsection_map bitmap.
->>>
->>> So the start is online can make sure the end pfn of a pageblock is
->>> online, but a valid start pfn can not make sure the end pfn is valid
->>> in the bitmap of ms->usage->subsection_map.
->> arch_add_memory
->>    add_pages
->>      __add_pages
->>        sparse_add_section /* set subsection_map */
->> arch_add_memory() is only called by add_memory_resource() and
->> pagemap_range() (called add_pages() too).  In add_memory_resource(),
->> check_hotplug_memory_range() will enforce a strict hotplug range
->> alignment requirement (128 MB on x86_64).  pagemap_range() are used for
->> ZONE_DEVICE only.  That is, for normal memory, hotplug granularity is
->> much larger than 2MB.
->> IIUC, the situation you mentioned above is impossible.  Or do I miss
->> something?
->
-> Thanks for your input. Your example is correct, but this is not the
-> case I want to describe. My case is not about the memory hotplug,
-> instead about the early memory holes when initialzing the memory. Let
-> me try to describe explicity:
->
-> First suppose the pageblock order is MAX_ORDER-1, and see below memory
-> layout as an example:
->
-> [    0.000000] Zone ranges:
-> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
-> [    0.000000]   DMA32    empty
-> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000001fa3c7ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
-> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
-> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
-> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7dfffff]
->
-> Focus on the last memory range, and there is a hole for the range [mem
-> 0x0000001fa7590000-0x0000001fa7dfffff]. That means the last pageblock 
-> will contain the range from 0x1fa7c00000 to 0x1fa7ffffff, since the
-> pageblock must be 4M aligned. And in this page block, these pfns will 
-> fall into 2 sub-section (the sub-section size is 2M aligned).
->
-> So, the 1st sub-section (indicates pfn range: 0x1fa7c00000 -
-> 0x1fa7dfffff ) in this pageblock is valid by 
-> free_area_init()--->subsection_map_init(), but the 2nd sub-section
-> (indicates pfn range: 0x1fa7e00000 - 0x1fa7ffffff ) in this pageblock
-> is not valid.
->
-> The problem is, if we just check the pageblock start of the hole pfn
-> (such as 0x1fa7dfffff) to make sure the hole pfn (0x1fa7dfffff) is
-> also valid, which is NOT correct. So that is what I mean "the start is
-> online can make sure the end pfn of a pageblock is online, but a valid
-> start pfn can not make sure the end pfn is valid in the bitmap of 
-> ms->usage->subsection_map."
->
-> Hope I make it clear. Does that make sense to you? Thanks.
+kernel test robot noticed the following build errors:
 
-Thanks for your detailed description.  You are right, it's possible that
-the second subsection of a pageblock is a hole.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.3-rc7]
+[cannot apply to next-20230420]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It's good to remove unnecessary pfn_valid(start_pfn) check in your
-original patch.  But it appears unnecessary to replace
-pfn_valid(end_pfn) with pfn_to_online_page(end_pfn).  Yes, it's possible
-that there's a hole in a page block.  But it appears that this will not
-break anything.  Per my understanding, even if we had fixed this one,
-there may be other smaller memory holes in a pageblock represented as
-reserved pages.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/hwmon-adt7475-Use-device_property-APIs-when-configuring-polarity/20230419-074117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230418233656.869055-3-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property APIs
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230421/202304211232.U03a7306-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/59836340c66130951595e2adebf284eca3063ccd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chris-Packham/hwmon-adt7475-Use-device_property-APIs-when-configuring-polarity/20230419-074117
+        git checkout 59836340c66130951595e2adebf284eca3063ccd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/ drivers/net/ethernet/intel/ice/ kernel/rcu/
 
-Best Regards,
-Huang, Ying
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304211232.U03a7306-lkp@intel.com/
 
-[snip]
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/adt7475.c:1471:36: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           ret = device_property_read_string(&client->dev, propname, &function);
+                                             ^~~~~~~~~~~~
+   include/linux/property.h:54:48: note: passing argument to parameter 'dev' here
+   int device_property_read_string(struct device *dev, const char *propname,
+                                                  ^
+   drivers/hwmon/adt7475.c:1497:36: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           ret = device_property_read_string(&client->dev, propname, &function);
+                                             ^~~~~~~~~~~~
+   include/linux/property.h:54:48: note: passing argument to parameter 'dev' here
+   int device_property_read_string(struct device *dev, const char *propname,
+                                                  ^
+   drivers/hwmon/adt7475.c:1559:37: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           int ret = device_property_read_u32(&client->dev, property,
+                                              ^~~~~~~~~~~~
+   include/linux/property.h:164:59: note: passing argument to parameter 'dev' here
+   static inline int device_property_read_u32(struct device *dev,
+                                                             ^
+   3 errors generated.
+
+
+vim +1471 drivers/hwmon/adt7475.c
+
+  1464	
+  1465	static int load_config3(const struct i2c_client *client, const char *propname)
+  1466	{
+  1467		const char *function;
+  1468		u8 config3;
+  1469		int ret;
+  1470	
+> 1471		ret = device_property_read_string(&client->dev, propname, &function);
+  1472		if (!ret) {
+  1473			ret = adt7475_read(REG_CONFIG3);
+  1474			if (ret < 0)
+  1475				return ret;
+  1476	
+  1477			config3 = ret & ~CONFIG3_SMBALERT;
+  1478			if (!strcmp("pwm2", function))
+  1479				;
+  1480			else if (!strcmp("smbalert#", function))
+  1481				config3 |= CONFIG3_SMBALERT;
+  1482			else
+  1483				return -EINVAL;
+  1484	
+  1485			return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
+  1486		}
+  1487	
+  1488		return 0;
+  1489	}
+  1490	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
