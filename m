@@ -2,82 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A96E6EA4F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93ED6EA4F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjDUHhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S231201AbjDUHhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjDUHhN (ORCPT
+        with ESMTP id S231204AbjDUHho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:37:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6B1B9;
-        Fri, 21 Apr 2023 00:37:11 -0700 (PDT)
-Received: from canpemm100004.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q2mW75WGfzL28l;
-        Fri, 21 Apr 2023 15:34:27 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm100004.china.huawei.com (7.192.105.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 15:37:09 +0800
-Subject: Re: [PATCH] ext4: avoid unused-variable warning with CONFIG_QUOTA=n
-To:     Arnd Bergmann <arnd@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-CC:     Arnd Bergmann <arnd@arndb.de>, Jan Kara <jack@suse.cz>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Ye Bin <yebin10@huawei.com>, Baokun Li <libaokun1@huawei.com>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230421070815.2260326-1-arnd@kernel.org>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <6de68c52-b391-6b79-20eb-9ae7fe40e28a@huawei.com>
-Date:   Fri, 21 Apr 2023 15:37:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 21 Apr 2023 03:37:44 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA5A39020;
+        Fri, 21 Apr 2023 00:37:29 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxJPw3PUJkB+ofAA--.49641S3;
+        Fri, 21 Apr 2023 15:37:27 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeU0PUJkg7YyAA--.32348S3;
+        Fri, 21 Apr 2023 15:37:26 +0800 (CST)
+Subject: Re: [PATCH v13 1/2] thermal: loongson-2: add thermal management
+ support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230221095355.9799-1-zhuyinbo@loongson.cn>
+ <1af930f6-51ae-c986-3eeb-556b2fa34047@linaro.org>
+ <070bd997-b70b-ede1-fe71-dcf410aa3c1a@loongson.cn>
+ <9ce1e719-9bfe-cba3-ed8d-fe9dcd1abc8a@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <eb39d031-0a1b-acab-11c2-97b60a65c48b@loongson.cn>
+Date:   Fri, 21 Apr 2023 15:37:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20230421070815.2260326-1-arnd@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <9ce1e719-9bfe-cba3-ed8d-fe9dcd1abc8a@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm100004.china.huawei.com (7.192.105.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxAeU0PUJkg7YyAA--.32348S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tFy7Kr4xur17urWDWrW5GFg_yoW8JFW8pr
+        WUCayDKFWjgrsa9a17K3s3Wrs0va9xJr4DXws5Gw4kAr98t34ftFZrJ3WY9F1kJr4Iqr4U
+        tr4Ut397Xa1DZFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0HqcUUUUU=
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
 
-On 2023/4/21 15:08, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> After some code reshuffling, the index variables in two functions
-> are only used in an #ifdef:
-> 
-> fs/ext4/super.c: In function 'ext4_put_super':
-> fs/ext4/super.c:1262:13: error: unused variable 'i' [-Werror=unused-variable]
-> fs/ext4/super.c: In function '__ext4_fill_super':
-> fs/ext4/super.c:5200:22: error: unused variable 'i' [-Werror=unused-variable]
-> 
-> Since all supported compilers now allow having variable declarations
-> inside of a for() loop, move them into the #ifdef block directly.
-> 
-> Fixes: dcbf87589d90 ("ext4: factor out ext4_flex_groups_free()")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   fs/ext4/super.c | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
 
-Thanks for the patch. But Nathan has already sent a patch to fix this.
+在 2023/4/21 下午3:17, Krzysztof Kozlowski 写道:
+> On 21/04/2023 04:00, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/4/20 下午11:54, Krzysztof Kozlowski 写道:
+>>> On 21/02/2023 10:53, Yinbo Zhu wrote:
+>>>> This patch adds the support for Loongson-2 thermal sensor controller,
+>>>> which can support maximum 4 sensors, each sensor contains a sampling
+>>>> register and a control register. The sampling register is used to obtain
+>>>> the temperature in real time, the control register GATE field is used to
+>>>> set the threshold of high or low temperature, when the input temperature
+>>>> is higher than the high temperature threshold or lower than the low
+>>>> temperature threshold, an interrupt will occur.
+>>>>
+>>>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>> Change in v13:
+>>>> 		1. Add a description about that how works the sensor.
+>>>> 		2. Drop the COMPILE_TEST.
+>>>
+>>> Why? We want to compile test. We really, really want.
+>>>
+>>
+>> I noted a commit "8df4ef3eaa62b" that accoring to Daniel's reminder.
+> 
+> The commit is for OF! That's not the case here. Your driver is limited
+> to chosen ARCH.
+> 
 
-http://patchwork.ozlabs.org/project/linux-ext4/patch/20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org/
+okay, I got it.  I will add back depends on COMPILE_TEST.
 
-Jason
+Thanks.
+> Best regards,
+> Krzysztof
+> 
+
