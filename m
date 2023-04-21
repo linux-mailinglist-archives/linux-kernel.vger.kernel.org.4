@@ -2,143 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F566EA843
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239186EA804
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjDUKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S230154AbjDUKNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjDUKW5 (ORCPT
+        with ESMTP id S230096AbjDUKNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:22:57 -0400
-X-Greylist: delayed 589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 03:22:15 PDT
-Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED61BC0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
-        t=1682071923; bh=9LouxiBlmrmKuY4D4L114DxgCvo/TJdTAEmNocqna70=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=I7oHR8CUHrXpp00K5C88NdBdNLJvY/3rRPV2L72jQGXvRDpfRnOiaS45iy3QGPHzH
-         xQXs68VeBtcIgg6C57mS/JbpMmOTIW924gBAwRruZZckAzGMxYNxC5YXU5uHwGhidj
-         H4z+5bMizkzElg4vMfNRRVFMsSvpuK5hUNEf48DQkj7Waq5KLl5Mv6z/9iQ6/QL+To
-         6aeWIum9Z8yHnr6rblJcVt/8Znt64xPK0uN32J1YAfSRqHo+CppuNUROvFD+VSAca8
-         rTTsS/OvrnroQklZPb+xp98mM6utnWRlJmjDC9Np1FLBYNh6iDtBmmag3wSy5Wlqzg
-         iUikfYHNQRzQA==
-Received: from localhost.localdomain (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id 71B741801D9;
-        Fri, 21 Apr 2023 10:11:59 +0000 (UTC)
-From:   Xueming Feng <kuro@kuroa.me>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xueming Feng <kuro@kuroa.me>
-Subject: [PATCH] Dump map id instead of value for map_of_maps types
-Date:   Fri, 21 Apr 2023 18:11:54 +0800
-Message-Id: <20230421101154.23690-1-kuro@kuroa.me>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Fri, 21 Apr 2023 06:13:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62438AF04;
+        Fri, 21 Apr 2023 03:13:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 15F091FDDC;
+        Fri, 21 Apr 2023 10:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682072012; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r6wWKx5dDKFmTIcIYNBq1MQUPmJkbAp8f/jd3WbQHMU=;
+        b=Z24b84qaXsafYxTU01etW0C6yQx+jEUWbuL2ZTAaKXxwRestqLVw4E0xENQSwVPoR09DNQ
+        FaNYM9anVh/Y9fXugiohOGxxhkbQ1viU53UJayzTRsmmfqNFHUjxumkbW9Zo+J1GjStVUg
+        2GWyv3jHPVOsKnj7NTSlArB4EvZiDsE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682072012;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r6wWKx5dDKFmTIcIYNBq1MQUPmJkbAp8f/jd3WbQHMU=;
+        b=wluaBxVfb+rzQ3wrkA8IStKDPvQj84jb9cZ3zM0az/l+GWLEuYDNm0m9jBpORjgAGMABU4
+        fsTWTgo6EqaZzFCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F37A51390E;
+        Fri, 21 Apr 2023 10:13:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 83RPO8thQmS1ZwAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 21 Apr 2023 10:13:31 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7EE2EA0729; Fri, 21 Apr 2023 12:13:31 +0200 (CEST)
+Date:   Fri, 21 Apr 2023 12:13:31 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [RFC PATCH 1/3] fs: add infrastructure for opportunistic
+ high-res ctime/mtime updates
+Message-ID: <20230421101331.dlxom6b5e7yds5tn@quack3>
+References: <20230411142708.62475-1-jlayton@kernel.org>
+ <20230411142708.62475-2-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: wVywTRvN0KikguucsLYVn11XDAQRkNGT
-X-Proofpoint-ORIG-GUID: wVywTRvN0KikguucsLYVn11XDAQRkNGT
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.572,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F01:2022-06-21=5F01,2020-02-14=5F11,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=862
- adultscore=0 bulkscore=0 spamscore=0 phishscore=0 malwarescore=0
- mlxscore=0 clxscore=1030 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2304210088
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411142708.62475-2-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using `bpftool map dump` in plain format, it is usually
-more convenient to show the inner map id instead of raw value.
-Changing this behavior would help with quick debugging with
-`bpftool`, without disruption scripted behavior. Since user
-could dump the inner map with id, but need to convert value.
+On Tue 11-04-23 10:27:06, Jeff Layton wrote:
+> The VFS always uses coarse-grained timestamp updates for filling out the
+> ctime and mtime after a change. This has the benefit of allowing
+> filesystems to optimize away metadata updates.
+> 
+> Unfortunately, this has always been an issue when we're exporting via
+> NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
+> lot of exported filesystems don't properly support a change attribute
+> and are subject to the same problem of timestamp granularity. Other
+> applications have similar issues (e.g backup applications).
+> 
+> Switching to always using high resolution timestamps would improve the
+> situation for NFS, but that becomes rather expensive, as we'd have to
+> log a lot more metadata updates.
+> 
+> This patch grabs a new i_state bit to use as a flag that filesystems can
+> set in their getattr routine to indicate that the mtime or ctime was
+> queried since it was last updated.
+> 
+> It then adds a new current_cmtime function that acts like the
+> current_time helper, but will conditionally grab high-res timestamps
+> when the i_state flag is set in the inode.
+> 
+> This allows NFS and other applications to reap the benefits of high-res
+> ctime and mtime timestamps, but at a substantially lower cost than
+> fetching them every time.
+> 
+> Cc: Dave Chinner <david@fromorbit.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/inode.c         | 40 ++++++++++++++++++++++++++++++++++++++--
+>  fs/stat.c          | 10 ++++++++++
+>  include/linux/fs.h |  5 ++++-
+>  3 files changed, 52 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/inode.c b/fs/inode.c
+> index 4558dc2f1355..3630f67fd042 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -2062,6 +2062,42 @@ static int __file_update_time(struct file *file, struct timespec64 *now,
+>  	return ret;
+>  }
+>  
+> +/**
+> + * current_cmtime - Return FS time (possibly high-res)
+> + * @inode: inode.
+> + *
+> + * Return the current time truncated to the time granularity supported by
+> + * the fs, as suitable for a ctime or mtime change. If something recently
+> + * fetched the ctime or mtime out of the inode via getattr, then get a
+> + * high-resolution timestamp.
+> + *
+> + * Note that inode and inode->sb cannot be NULL.
+> + * Otherwise, the function warns and returns coarse time without truncation.
+> + */
+> +struct timespec64 current_cmtime(struct inode *inode)
+> +{
+> +	struct timespec64 now;
+> +
+> +	if (unlikely(!inode->i_sb)) {
 
-Signed-off-by: Xueming Feng <kuro@kuroa.me>
----
- tools/bpf/bpftool/main.c | 16 ++++++++++++++++
- tools/bpf/bpftool/main.h |  1 +
- tools/bpf/bpftool/map.c  |  9 +++++++--
- 3 files changed, 24 insertions(+), 2 deletions(-)
+I don't think we can have inodes without a superblock. Did you ever hit
+this?
 
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 08d0ac543c67..d297200c91f7 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -251,6 +251,22 @@ int detect_common_prefix(const char *arg, ...)
- 	return 0;
- }
- 
-+void fprint_uint(FILE *f, void *arg, unsigned int n)
-+{
-+	unsigned char *data = arg;
-+	unsigned int data_uint = 0;
-+
-+	for (unsigned int i = 0; i < n && i < 4; i++) {
-+	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+		data_uint |= data[i] << (i * 8);
-+	#else
-+		data_uint |= data[i] << ((n - i - 1) * 8);
-+	#endif
-+	}
-+
-+	fprintf(f, "%d", data_uint);
-+}
-+
- void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
- {
- 	unsigned char *data = arg;
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 0ef373cef4c7..7488ef38e7a9 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
- 
- bool is_prefix(const char *pfx, const char *str);
- int detect_common_prefix(const char *arg, ...);
-+void fprint_uint(FILE *f, void *arg, unsigned int n);
- void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
- void usage(void) __noreturn;
- 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index aaeb8939e137..638bd8de8135 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
- 		}
- 
- 		if (info->value_size) {
--			printf("value:%c", break_names ? '\n' : ' ');
--			fprint_hex(stdout, value, info->value_size, " ");
-+			if (map_is_map_of_maps(info->type)) {
-+				printf("id:%c", break_names ? '\n' : ' ');
-+				fprint_uint(stdout, value, info->value_size);
-+			} else {
-+				printf("value:%c", break_names ? '\n' : ' ');
-+				fprint_hex(stdout, value, info->value_size, " ");
-+			}
- 		}
- 
- 		printf("\n");
+> +		WARN(1, "%s() called with uninitialized super_block in the inode", __func__);
+> +		ktime_get_coarse_real_ts64(&now);
+> +		return now;
+> +	}
+> +
+> +	/* Do a lockless check for the flag before taking the spinlock */
+> +	if (READ_ONCE(inode->i_state) & I_CMTIME_QUERIED) {
+> +		ktime_get_real_ts64(&now);
+> +		spin_lock(&inode->i_lock);
+> +		inode->i_state &= ~I_CMTIME_QUERIED;
+
+Isn't this a bit fragile? If someone does:
+
+	inode->i_mtime = current_cmtime(inode);
+	inode->i_ctime = current_cmtime(inode);
+
+the ctime update will be coarse although it should be fine-grained.
+
+> +		spin_unlock(&inode->i_lock);
+> +	} else {
+> +		ktime_get_coarse_real_ts64(&now);
+> +	}
+> +
+> +	return timestamp_truncate(now, inode);
+
+I'm a bit confused here. Isn't the point of this series also to give NFS
+finer grained granularity time stamps than what the filesystem is possibly
+able to store on disk?
+
+Hmm, checking XFS it sets 1 ns granularity (as well as tmpfs) so for these
+using the coarser timers indeed gives a performance benefit. And probably
+you've decided not implement the "better NFS support with coarse grained
+timestamps" yet.
+
+> +}
+> +EXPORT_SYMBOL(current_cmtime);
+> +
+>  /**
+>   * file_update_time - update mtime and ctime time
+>   * @file: file accessed
+> @@ -2080,7 +2116,7 @@ int file_update_time(struct file *file)
+>  {
+>  	int ret;
+>  	struct inode *inode = file_inode(file);
+> -	struct timespec64 now = current_time(inode);
+> +	struct timespec64 now = current_cmtime(inode);
+>  
+>  	ret = inode_needs_update_time(inode, &now);
+>  	if (ret <= 0)
+> @@ -2109,7 +2145,7 @@ static int file_modified_flags(struct file *file, int flags)
+>  {
+>  	int ret;
+>  	struct inode *inode = file_inode(file);
+> -	struct timespec64 now = current_time(inode);
+> +	struct timespec64 now = current_cmtime(inode);
+>  
+>  	/*
+>  	 * Clear the security bits if the process is not being run by root.
+> diff --git a/fs/stat.c b/fs/stat.c
+> index 7c238da22ef0..d8b80a2e36b7 100644
+> --- a/fs/stat.c
+> +++ b/fs/stat.c
+> @@ -64,6 +64,16 @@ void generic_fillattr(struct mnt_idmap *idmap, struct inode *inode,
+>  }
+>  EXPORT_SYMBOL(generic_fillattr);
+>  
+> +void fill_cmtime_and_mark(struct inode *inode, struct kstat *stat)
+> +{
+> +	spin_lock(&inode->i_lock);
+> +	inode->i_state |= I_CMTIME_QUERIED;
+> +	stat->ctime = inode->i_ctime;
+> +	stat->mtime = inode->i_mtime;
+> +	spin_unlock(&inode->i_lock);
+> +}
+> +EXPORT_SYMBOL(fill_cmtime_and_mark);
+
+The name could be better here :). Maybe stat_fill_cmtime_and_mark()?
+
+								Honza
 -- 
-2.37.1 (Apple Git-137.1)
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
