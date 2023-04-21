@@ -2,127 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA926EAF2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6446EAF31
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbjDUQcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S233139AbjDUQcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbjDUQcj (ORCPT
+        with ESMTP id S233037AbjDUQco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:32:39 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA6D1702
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:32:36 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3ef588dcf7aso16542761cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:32:36 -0700 (PDT)
+        Fri, 21 Apr 2023 12:32:44 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133201FFE
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:32:41 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5050491cb04so2779015a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:32:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682094755; x=1684686755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yla/4p2oOldTOYUR/tBNrxjFRWDCxFy5rsjLcKDZm0=;
-        b=IIgMXIAsLX6acEerwuEG1+MjsTqE3bx1KI0BxQfpjUAmK3E6dBjQ0RccgOa2SFlESk
-         jMabF1fjcn8hswczr7Qmr1M5ZMln1zLje4A+Zi4oc4mcaLlGdvf+BM1WelSpNQCCx3i6
-         MpPfs+g5ViS6y1PZ/Z22tw2a+1h1tQVuiZ7Za4ovAwVlPbNQcKUF1xczcdKtGDvoXMiF
-         JuNzCwCDr9vP2zwkLYCJxorm3dprSxwSg38Cr6rrcj4woDTHeyv6FKg2nPQ23D1uGqcT
-         pSrDcQnMvpwrZvEommOhMCGRGPaXVz+MYgON0XhPllfJxYeTBUlNDq9ZwohH/H/huVom
-         dowg==
+        d=linaro.org; s=google; t=1682094759; x=1684686759;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2xEKK+IWDwn9+CE2UiVTuzWMnWPoPGhpxxnf2lmN0BM=;
+        b=RlxFgFhz+3cVrw2oB207qhBDxwFt3YhouzHUco8ucp7hLrAzahabZaMLVXjuiP9SAw
+         JED88vP7crO9tuUDlxg5QVZk53UW1+R114rQ6aNwsz8DazH3zu1J8zfZJc1r72DY136Q
+         /mozWEO5F8jovGvbjJGbCq0rJ8NCWVpIzIfRGHQgxn3MsTmnZSVl/z0EhLkIHZJxFv3F
+         UeW/iGld1qSjKD9+etIzdc93iYg0BWq/axiPsL12g9WMtRLEIuP9oW4qp2TqvCDgAL4A
+         02cHPKGt+R27ejVidP+3hxuv+fGmAZ1GXpyCziYBN2TsWyFarj7v+7ImwTe/ImnCBdjZ
+         7vPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682094755; x=1684686755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9yla/4p2oOldTOYUR/tBNrxjFRWDCxFy5rsjLcKDZm0=;
-        b=DE0+UpqZArBSjD/uIxXcl7FGc6h7kKGLQ6xzS0VWeQvOr/VqeH5+d1PPOr2ut7ggLB
-         5mebpZ3DCwvhK4kEpwy1Db5rNb+UXKCZkfg36MI5OQPEglrVqe7r+WjECkQMc/zoDTKd
-         wcef8sighp/PLpAj23Fmg12QJDmhOVNd2hXVRd51eCdnuY+1wJxDGgeNwW1dgFA1pDPG
-         Eg7AVRkHcGIgnE/wUg1l/B24+/HfegAEuxIH2FnwFqZqHVDs58IPPNGLmR/wp2Niicif
-         Ri4TPn2zH+d+QaQzBRAMhmQj5S/4tHYPTK3dQNGOYJPV7mvKIXwy+ZVwehTf3mltR1c/
-         gaJw==
-X-Gm-Message-State: AAQBX9fKyA6MN8KQtGUxq7RNMMV6gAhBJXo++s98MUq9q60/nSumwjQM
-        MBYn8y2F2oR0+h9CnfARKCT07g==
-X-Google-Smtp-Source: AKy350bj3/K/tk2k4WizRt2yPrEl47IiwR4WqXmA0klRcGVpUS135pGT1DB1cqHqXdDI0Exxp3B+5w==
-X-Received: by 2002:ac8:5f0d:0:b0:3ef:2fbd:90c3 with SMTP id x13-20020ac85f0d000000b003ef2fbd90c3mr8748270qta.37.1682094755652;
-        Fri, 21 Apr 2023 09:32:35 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:6f0d])
-        by smtp.gmail.com with ESMTPSA id b142-20020ae9eb94000000b0074cd846d215sm1447569qkg.64.2023.04.21.09.32.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 09:32:35 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 12:32:34 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 12/26] mm: page_alloc: per-migratetype free counts
-Message-ID: <20230421163234.GF320347@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-13-hannes@cmpxchg.org>
- <20230421142841.parju3gmqmpefigq@techsingularity.net>
- <20230421153501.GE320347@cmpxchg.org>
- <20230421160320.zz2he2iprq37vnl3@techsingularity.net>
+        d=1e100.net; s=20221208; t=1682094759; x=1684686759;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2xEKK+IWDwn9+CE2UiVTuzWMnWPoPGhpxxnf2lmN0BM=;
+        b=JvptnGZoAZ3FByYKL3rfykdpYpI9YPJZLtlKTyFbyZa+7UviLKk4sqjAAdvaJFK9DS
+         6Y7OgFjMb29Yu/P6kv3rEJTnNTrdHtNZig34TXCH3oqMZ4PhFJOWmOq6kpUhZFqDBhDr
+         0V4SccSK3QKpu+UYW4O7TKl16BR1dtyATRkerzOA71GkEhow4Q87rROJpnABgHqFwFWT
+         7fGvbLAyvFF+2Ayjm686l/yBS2smiS5AHjhSAUAdoYHdXsf9w+d2FWYOJsy6CMaEvOjD
+         hCbHEn6dfpv2HemK7NiyFakS4zXz2tK0pEUaxPZtRvpqP2XX91S7uvbNbpeoLVqBBUDS
+         yxAw==
+X-Gm-Message-State: AAQBX9c+JjVeUu+rK0y+FCHXbNjDoVj1cN/+4HSkWSDcBuql30fcwsAF
+        tp5RNHjqJ1fIt85qBkwvBA9/rg==
+X-Google-Smtp-Source: AKy350asCofQRrDL9ByYuVAC23+qU7mGfFIrYsfBuOwtXCD9zUw08y3kOlPbRcMsYP4LR545G6uYWA==
+X-Received: by 2002:a17:906:b7c4:b0:94f:17b7:5db3 with SMTP id fy4-20020a170906b7c400b0094f17b75db3mr2990249ejb.20.1682094759454;
+        Fri, 21 Apr 2023 09:32:39 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id f6-20020a17090624c600b0095707b7dd04sm1303356ejb.42.2023.04.21.09.32.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:32:38 -0700 (PDT)
+Message-ID: <28fed252-4255-b0d6-4343-f2aeb946f9c6@linaro.org>
+Date:   Fri, 21 Apr 2023 18:32:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421160320.zz2he2iprq37vnl3@techsingularity.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: qcom: Add SDX75 pinctrl
+ devicetree compatible
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     andersson@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, richardcochran@gmail.com,
+        netdev@vger.kernel.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, agross@kernel.org, linux-gpio@vger.kernel.org,
+        manivannan.sadhasivam@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        devicetree@vger.kernel.org
+References: <1682070196-980-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1682070196-980-2-git-send-email-quic_rohiagar@quicinc.com>
+ <168208107990.922528.1582713033522143366.robh@kernel.org>
+ <d4f94878-6c0a-18ee-c1d7-18ae5b56db0c@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d4f94878-6c0a-18ee-c1d7-18ae5b56db0c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:03:20PM +0100, Mel Gorman wrote:
-> On Fri, Apr 21, 2023 at 11:35:01AM -0400, Johannes Weiner wrote:
-> > On Fri, Apr 21, 2023 at 03:28:41PM +0100, Mel Gorman wrote:
-> > > On Tue, Apr 18, 2023 at 03:12:59PM -0400, Johannes Weiner wrote:
-> > > > Increase visibility into the defragmentation behavior by tracking and
-> > > > reporting per-migratetype free counters.
-> > > > 
-> > > > Subsequent patches will also use those counters to make more targeted
-> > > > reclaim/compaction decisions.
-> > > > 
-> > > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > > 
-> > > Visibility into fragmentation behaviour is information that is
-> > > almost certainly only useful to a developer and even then, there is
-> > > /proc/pagetypeinfo. At minimum, move this patch to later in the series
-> > > but I'm skeptical about its benefit.
-> > 
-> > Having them available in the memory dump (OOM, sysrq) was essential
-> > while debugging problems in later patches. For OOMs or lockups,
-> > pagetypeinfo isn't available. It would be useful to have them included
-> > in user reports if any issues pop up.
-> > 
-> 
-> OOM+sysrq could optionally take the very expensive step of traversing the
-> lists to get the count so yes, it helps debugging, but not necessarily
-> critical.
-> 
-> > They're used internally in several places later on, too.
-> > 
-> 
-> I did see that for deciding the suitability for compaction. Minimally, put
-> the patches adjacent in the series and later if possible so that the series
-> can be taken in parts. There are a lot of patches that should be relatively
-> uncontroversial so maybe make "mm: page_alloc: introduce MIGRATE_FREE" the
-> pivot point between incremental improvements and "everything on and after
-> this patch is relatively high risk, could excessively compact/reclaim,
-> could livelock etc".
+On 21/04/2023 15:50, Rohit Agarwal wrote:
+>=20
+> On 4/21/2023 6:26 PM, Rob Herring wrote:
+>> On Fri, 21 Apr 2023 15:13:15 +0530, Rohit Agarwal wrote:
+>>> Add device tree binding Documentation details for Qualcomm SDX75
+>>> pinctrl driver.
+>>>
+>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>> ---
+>>>   .../bindings/pinctrl/qcom,sdx75-tlmm.yaml          | 177 ++++++++++=
++++++++++++
+>>>   1 file changed, 177 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,s=
+dx75-tlmm.yaml
+>>>
+>> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_che=
+ck'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>
+>> yamllint warnings/errors:
+>> ./Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml:76:52=
+: [warning] too few spaces after comma (commas)
+>>
+>> dtschema/dtc warnings/errors:
+>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/binding=
+s/pinctrl/qcom,sdx75-tlmm.example.dtb: pinctrl@f100000: uart-w-state: 'on=
+eOf' conditional failed, one must be fixed:
+>> 	'function' is a required property
+>> 	'pins' is a required property
+>> 	'rx-pins', 'tx-pins' do not match any of the regexes: 'pinctrl-[0-9]+=
+'
+>> 	'qup_se1_l2_mira' is not one of ['gpio', 'eth0_mdc', 'eth0_mdio', 'et=
+h1_mdc', 'eth1_mdio', 'qlink0_wmss_reset', 'qlink1_wmss_reset', 'rgmii_rx=
+c', 'rgmii_rxd0', 'rgmii_rxd1', 'rgmii_rxd2', 'rgmii_rxd3', 'rgmii_rx_ctl=
+', 'rgmii_txc', 'rgmii_txd0', 'rgmii_txd1', 'rgmii_txd2', 'rgmii_txd3', '=
+rgmii_tx_ctl', 'adsp_ext_vfr', 'atest_char_start', 'atest_char_status0', =
+'atest_char_status1', 'atest_char_status2', 'atest_char_status3', 'audio_=
+ref_clk', 'bimc_dte_test0', 'bimc_dte_test1', 'char_exec_pending', 'char_=
+exec_release', 'coex_uart2_rx', 'coex_uart2_tx', 'coex_uart_rx', 'coex_ua=
+rt_tx', 'cri_trng_rosc', 'cri_trng_rosc0', 'cri_trng_rosc1', 'dbg_out_clk=
+', 'ddr_bist_complete', 'ddr_bist_fail', 'ddr_bist_start', 'ddr_bist_stop=
+', 'ddr_pxi0_test', 'ebi0_wrcdc_dq2', 'ebi0_wrcdc_dq3', 'ebi2_a_d', 'ebi2=
+_lcd_cs', 'ebi2_lcd_reset', 'ebi2_lcd_te', 'emac0_mcg_pst0', 'emac0_mcg_p=
+st1', 'emac0_mcg_pst2', 'emac0_mcg_pst3', 'emac0_ptp_aux', 'emac0_ptp_pps=
+', 'emac1_mcg_pst0', 'emac1_mcg_pst1', 'emac1_mcg_pst2', 'emac1_mcg_pst3'=
+, 'emac1_ptp_aux0', 'emac1_ptp_aux1', 'emac1_ptp_aux2', 'emac1_ptp_aux3',=
+ 'emac1_ptp_pps0', 'emac1_ptp_pps1', 'emac1_ptp_pps2', 'emac1_ptp_pps3', =
+'emac_cdc_dtest0', 'emac_cdc_dtest1', 'emac_pps_in', 'ext_dbg_uart', 'gcc=
+_125_clk', 'gcc_gp1_clk', 'gcc_gp2_clk', 'gcc_gp3_clk', 'gcc_plltest_bypa=
+ssnl', 'gcc_plltest_resetn', 'i2s_mclk', 'jitter_bist_ref', 'ldo_en', 'ld=
+o_update', 'm_voc_ext', 'mgpi_clk_req', 'native0', 'native1', 'native2', =
+'native3', 'native_char_start', 'native_tsens_osc', 'native_tsense_pwm1',=
+ 'nav_dr_sync', 'nav_gpio_0', 'nav_gpio_1', 'nav_gpio_2', 'nav_gpio_3', '=
+pa_indicator_1', 'pci_e_rst', 'pcie0_clkreq_n', 'pcie1_clkreq_n', 'pcie2_=
+clkreq_n', 'pll_bist_sync', 'pll_clk_aux', 'pll_ref_clk', 'pri_mi2s_data0=
+', 'pri_mi2s_data1', 'pri_mi2s_sck', 'pri_mi2s_ws', 'prng_rosc_test0', 'p=
+rng_rosc_test1', 'prng_rosc_test2', 'prng_rosc_test3', 'qdss_cti_trig0', =
+'qdss_cti_trig1', 'qdss_gpio_traceclk', 'qdss_gpio_tracectl', 'qdss_gpio_=
+tracedata0', 'qdss_gpio_tracedata1', 'qdss_gpio_tracedata10', 'qdss_gpio_=
+tracedata11', 'qdss_gpio_tracedata12', 'qdss_gpio_tracedata13', 'qdss_gpi=
+o_tracedata14', 'qdss_gpio_tracedata15', 'qdss_gpio_tracedata2', 'qdss_gp=
+io_tracedata3', 'qdss_gpio_tracedata4', 'qdss_gpio_tracedata5', 'qdss_gpi=
+o_tracedata6', 'qdss_gpio_tracedata7', 'qdss_gpio_tracedata8', 'qdss_gpio=
+_tracedata9', 'qlink0_b_en', 'qlink0_b_req', 'qlink0_l_en', 'qlink0_l_req=
+', 'qlink1_l_en', 'qlink1_l_req', 'qup_se0_l0', 'qup_se0_l1', 'qup_se0_l2=
+', 'qup_se0_l3', 'qup_se1_l2', 'qup_se1_l3', 'qup_se2_l0', 'qup_se2_l1', =
+'qup_se2_l2', 'qup_se2_l3', 'qup_se3_l0', 'qup_se3_l1', 'qup_se3_l2', 'qu=
+p_se3_l3', 'qup_se4_l2', 'qup_se4_l3', 'qup_se5_l0', 'qup_se5_l1', 'qup_s=
+e6_l0', 'qup_se6_l1', 'qup_se6_l2', 'qup_se6_l3', 'qup_se7_l0', 'qup_se7_=
+l1', 'qup_se7_l2', 'qup_se7_l3', 'qup_se8_l2', 'qup_se8_l3', 'sdc1_tb_tri=
+g', 'sdc2_tb_trig', 'sec_mi2s_data0', 'sec_mi2s_data1', 'sec_mi2s_sck', '=
+sec_mi2s_ws', 'sgmii_phy_intr0', 'sgmii_phy_intr1', 'spmi_coex_clk', 'spm=
+i_coex_data', 'spmi_vgi_hwevent', 'tgu_ch0_trigout', 'tri_mi2s_data0', 't=
+ri_mi2s_data1', 'tri_mi2s_sck', 'tri_mi2s_ws', 'uim1_clk', 'uim1_data', '=
+uim1_present', 'uim1_reset', 'uim2_clk', 'uim2_data', 'uim2_present', 'ui=
+m2_reset', 'usb2phy_ac_en', 'vsense_trigger_mirnat']
+>> 	'qup_se1_l3_mira' is not one of ['gpio', 'eth0_mdc', 'eth0_mdio', 'et=
+h1_mdc', 'eth1_mdio', 'qlink0_wmss_reset', 'qlink1_wmss_reset', 'rgmii_rx=
+c', 'rgmii_rxd0', 'rgmii_rxd1', 'rgmii_rxd2', 'rgmii_rxd3', 'rgmii_rx_ctl=
+', 'rgmii_txc', 'rgmii_txd0', 'rgmii_txd1', 'rgmii_txd2', 'rgmii_txd3', '=
+rgmii_tx_ctl', 'adsp_ext_vfr', 'atest_char_start', 'atest_char_status0', =
+'atest_char_status1', 'atest_char_status2', 'atest_char_status3', 'audio_=
+ref_clk', 'bimc_dte_test0', 'bimc_dte_test1', 'char_exec_pending', 'char_=
+exec_release', 'coex_uart2_rx', 'coex_uart2_tx', 'coex_uart_rx', 'coex_ua=
+rt_tx', 'cri_trng_rosc', 'cri_trng_rosc0', 'cri_trng_rosc1', 'dbg_out_clk=
+', 'ddr_bist_complete', 'ddr_bist_fail', 'ddr_bist_start', 'ddr_bist_stop=
+', 'ddr_pxi0_test', 'ebi0_wrcdc_dq2', 'ebi0_wrcdc_dq3', 'ebi2_a_d', 'ebi2=
+_lcd_cs', 'ebi2_lcd_reset', 'ebi2_lcd_te', 'emac0_mcg_pst0', 'emac0_mcg_p=
+st1', 'emac0_mcg_pst2', 'emac0_mcg_pst3', 'emac0_ptp_aux', 'emac0_ptp_pps=
+', 'emac1_mcg_pst0', 'emac1_mcg_pst1', 'emac1_mcg_pst2', 'emac1_mcg_pst3'=
+, 'emac1_ptp_aux0', 'emac1_ptp_aux1', 'emac1_ptp_aux2', 'emac1_ptp_aux3',=
+ 'emac1_ptp_pps0', 'emac1_ptp_pps1', 'emac1_ptp_pps2', 'emac1_ptp_pps3', =
+'emac_cdc_dtest0', 'emac_cdc_dtest1', 'emac_pps_in', 'ext_dbg_uart', 'gcc=
+_125_clk', 'gcc_gp1_clk', 'gcc_gp2_clk', 'gcc_gp3_clk', 'gcc_plltest_bypa=
+ssnl', 'gcc_plltest_resetn', 'i2s_mclk', 'jitter_bist_ref', 'ldo_en', 'ld=
+o_update', 'm_voc_ext', 'mgpi_clk_req', 'native0', 'native1', 'native2', =
+'native3', 'native_char_start', 'native_tsens_osc', 'native_tsense_pwm1',=
+ 'nav_dr_sync', 'nav_gpio_0', 'nav_gpio_1', 'nav_gpio_2', 'nav_gpio_3', '=
+pa_indicator_1', 'pci_e_rst', 'pcie0_clkreq_n', 'pcie1_clkreq_n', 'pcie2_=
+clkreq_n', 'pll_bist_sync', 'pll_clk_aux', 'pll_ref_clk', 'pri_mi2s_data0=
+', 'pri_mi2s_data1', 'pri_mi2s_sck', 'pri_mi2s_ws', 'prng_rosc_test0', 'p=
+rng_rosc_test1', 'prng_rosc_test2', 'prng_rosc_test3', 'qdss_cti_trig0', =
+'qdss_cti_trig1', 'qdss_gpio_traceclk', 'qdss_gpio_tracectl', 'qdss_gpio_=
+tracedata0', 'qdss_gpio_tracedata1', 'qdss_gpio_tracedata10', 'qdss_gpio_=
+tracedata11', 'qdss_gpio_tracedata12', 'qdss_gpio_tracedata13', 'qdss_gpi=
+o_tracedata14', 'qdss_gpio_tracedata15', 'qdss_gpio_tracedata2', 'qdss_gp=
+io_tracedata3', 'qdss_gpio_tracedata4', 'qdss_gpio_tracedata5', 'qdss_gpi=
+o_tracedata6', 'qdss_gpio_tracedata7', 'qdss_gpio_tracedata8', 'qdss_gpio=
+_tracedata9', 'qlink0_b_en', 'qlink0_b_req', 'qlink0_l_en', 'qlink0_l_req=
+', 'qlink1_l_en', 'qlink1_l_req', 'qup_se0_l0', 'qup_se0_l1', 'qup_se0_l2=
+', 'qup_se0_l3', 'qup_se1_l2', 'qup_se1_l3', 'qup_se2_l0', 'qup_se2_l1', =
+'qup_se2_l2', 'qup_se2_l3', 'qup_se3_l0', 'qup_se3_l1', 'qup_se3_l2', 'qu=
+p_se3_l3', 'qup_se4_l2', 'qup_se4_l3', 'qup_se5_l0', 'qup_se5_l1', 'qup_s=
+e6_l0', 'qup_se6_l1', 'qup_se6_l2', 'qup_se6_l3', 'qup_se7_l0', 'qup_se7_=
+l1', 'qup_se7_l2', 'qup_se7_l3', 'qup_se8_l2', 'qup_se8_l3', 'sdc1_tb_tri=
+g', 'sdc2_tb_trig', 'sec_mi2s_data0', 'sec_mi2s_data1', 'sec_mi2s_sck', '=
+sec_mi2s_ws', 'sgmii_phy_intr0', 'sgmii_phy_intr1', 'spmi_coex_clk', 'spm=
+i_coex_data', 'spmi_vgi_hwevent', 'tgu_ch0_trigout', 'tri_mi2s_data0', 't=
+ri_mi2s_data1', 'tri_mi2s_sck', 'tri_mi2s_ws', 'uim1_clk', 'uim1_data', '=
+uim1_present', 'uim1_reset', 'uim2_clk', 'uim2_data', 'uim2_present', 'ui=
+m2_reset', 'usb2phy_ac_en', 'vsense_trigger_mirnat']
+>> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devi=
+cetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
+>>
+>> doc reference errors (make refcheckdocs):
+>>
+>> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/168=
+2070196-980-2-git-send-email-quic_rohiagar@quicinc.com
+>>
+>> The base for the series is generally the latest rc1. A different depen=
+dency
+>> should be noted in *this* patch.
+>>
+>> If you already ran 'make dt_binding_check' and didn't see the above
+>> error(s), then make sure 'yamllint' is installed and dt-schema is up t=
+o
+>> date:
+>>
+>> pip3 install dtschema --upgrade
+>>
+>> Please check and re-submit after running the above command yourself. N=
+ote
+>> that DT_SCHEMA_FILES can be set to your schema file to speed up checki=
+ng
+>> your schema. However, it must be unset to test all examples with your =
+schema.
+> Make dt_binding_check not throwing this error even after updating the=20
+> dtschema and yamllint is installed.
 
-Okay, I see now where you're coming from. That's good feedback.
+It does. For both errors. First looks like coming from yamllint so be
+sure to have it installed. Second is independent of yamllint and you
+should see it.
 
-Actually most of the patches work toward the final goal of managing
-free memory in whole blocks. The only exception are the block pages,
-the nofs deadlock, the page_isolation kernel doc, and *maybe* the
-should_[compact|reclaim]_retry cleanups. I tried to find the
-standalone value in each of the prep patches as well to avoid
-forward-referencing in the series too much. But obviously these
-standalone reasons tend to be on the weak side.
+Best regards,
+Krzysztof
 
-I'll rework the changelogs (and patch ordering) where applicable to
-try to make the dependencies clearer.
