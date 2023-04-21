@@ -2,98 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57616EB1BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB456EB1AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbjDUSi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S233197AbjDUSdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjDUSi2 (ORCPT
+        with ESMTP id S230110AbjDUSdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:38:28 -0400
-X-Greylist: delayed 368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 11:38:26 PDT
-Received: from out-51.mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BD72110
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:38:25 -0700 (PDT)
+        Fri, 21 Apr 2023 14:33:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C119B1BCB;
+        Fri, 21 Apr 2023 11:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682101987; x=1713637987;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vUU6tG9KX3iUy8vtArJasd1+iOyl58okWHaGw2zYd4I=;
+  b=UZ8AN2x35EUvclr64obBlaus8D87UiHyIvX4YBP47XmGMeWV6tcK+2o0
+   Dhxdh8Ellb9bq8iYfbL7hi5jAL83lMftSoLoQw13+nGEvbBgssMK3jXve
+   mqKmkQOb0GezUYjvIcyg/B5y3e7qof34bbDMJX0FqlBCYUJ99mlj9WO1i
+   4ZzHkbVLiJWKsbfTrCdiWWjThYZWdQCvN7CG9urzkiA/tKSXMD/N4b9Yo
+   zFU+ISLGOOenG5PbLQuQnkYi8tH0fOT2GdJEHiWS03bNlLl1APte2wDcX
+   rA5crp8nv+L+L/F5x5bIBJiRW+76Y/l+YC1nQg4At1PxEfBhUEIWxiu4O
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,216,1677567600"; 
+   d="scan'208";a="210644301"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2023 11:33:06 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 21 Apr 2023 11:32:49 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Fri, 21 Apr 2023 11:32:48 -0700
+Date:   Fri, 21 Apr 2023 20:32:48 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>,
+        <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net-next v2] lan966x: Don't use xdp_frame when action is
+ XDP_TX
+Message-ID: <20230421183248.n7a2c67umthlm3fg@soft-dev3-1>
+References: <20230421131422.3530159-1-horatiu.vultur@microchip.com>
+ <714b6bd0-014f-a5ab-af02-d4d9e4390454@intel.com>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682101936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uqYeX2aBmdkBzAWr+UB3hayRraxOs8lPFg59w2CNeVo=;
-        b=WJBeMck123/k/KlRkqace/tptWT6sToqwwkOZww3bMDPcmzdHWZdqtE8O5MAJgtNYFtER3
-        lbIBsZkDNvGg7OmiRCNyZ4kIag0Z9rFa4VnGYYTqwGu18kP/CY1SdP5+qKUZuj71owfEhb
-        0F/0SrxyEyhbcbQr4w/O8FYs1OHVgEY=
-Date:   Fri, 21 Apr 2023 18:32:15 +0000
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Konstantin Ryabitsev" <konstantin.ryabitsev@linux.dev>
-Message-ID: <4d4471f957af144d7a0f22a2147d90f9@linux.dev>
-Subject: Re: [PATCH RESEND v2 1/2] dt-bindings: display: simple: add
- support for InnoLux G070ACE-L01
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Doug Anderson" <dianders@chromium.org>
-Cc:     richard.leitner@linux.dev,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>,
-        "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        "Richard Leitner" <richard.leitner@skidata.com>
-In-Reply-To: <2d7d8462-4e75-bbd2-4ae5-6403eda43020@linaro.org>
-References: <2d7d8462-4e75-bbd2-4ae5-6403eda43020@linaro.org>
- <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
- <20230201-innolux-g070ace-v2-1-2371e251dd40@skidata.com>
- <CAD=FV=XJCtqep+92h3gLfs4o2TwvL4MORjc9ydTSpZiZ0dsR0w@mail.gmail.com>
- <fb93e95f-181f-917d-9216-a81dec1a2959@linaro.org>
- <CAD=FV=Vs8UEfBZ56fYb3i1cmFbCSPrbgaedXB4+UvDTOyhzCzw@mail.gmail.com>
- <184f0a80-34bc-5ebf-58bb-82a310eb91f6@linaro.org>
- <CAD=FV=WLHpddAMo7GQwj98TtDn0xw6UzgYUKyVhSDZw1acKpCg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <714b6bd0-014f-a5ab-af02-d4d9e4390454@intel.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-April 21, 2023 1:01 PM, "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro=
-.org> wrote:=0A>> Ah, got it. So I guess from the perspective of "b4" eve=
-ry time the=0A>> author modifies a patch (like adding new tags to it) the=
-n it's a new=0A>> application of Signed-off-by and thus the old Signed-of=
-f-by is removed=0A>> from the top and a new one is added below all the ta=
-gs that have been=0A>> received. Thus if b4 grabs all the tags off the ma=
-iling list for=0A>> applying it ends up in a different order than if it g=
-rabs all the tags=0A>> off the mailing list for sending a new version.=0A=
->> =0A>> OK, I can understand that perspective. I'll keep it in mind.=0A>=
- =0A> Yeah. I actually agree with your point that submitter's SoB should=
-=0A> always be the last one, but I agree more with using process via=0A> =
-standardized tools. IOW, since I cannot change in this matter b4, I need=
-=0A> to agree with it. :)=0A=0AFWIW, everyone disagrees on how it should =
-be done (which is a totally normal state of things). B4 uses the "chain o=
-f custody" logic when it comes to trailers, described here:=0A=0Ahttps://=
-lore.kernel.org/tools/20221031165842.vxr4kp6h7qnkc53l@meerkat.local/=0A=
-=0AIn brief, the logic here is that the "Signed-off-by" trailer indicates=
- where the chain of custody for all previous trailers ends. The following=
- order:=0A=0AReviewed-by: Reviewer <>=0ASigned-off-by: Submitter <>=0ASig=
-ned-off-by: Submaintainer <>=0A=0ATells that it was the Submitter who col=
-lected and applied the Reviewed-by tag, which is why when someone runs "b=
-4 trailers -u", their Signed-off-by is always moved to the bottom to indi=
-cate the proper chain of custody boundary.=0A=0AThe following order says =
-something very different:=0A=0ASigned-off-by: Submitter <>=0AReviewed-by:=
- Reviewer <>=0ASigned-off-by: Submaintainer <>=0A=0AThis indicates that t=
-he "Reviewed-by" trailer was collected by the Submaintainer, because it i=
-s below the chain-of-custody boundary of the Submitter.=0A=0AThe main rea=
-son is if Reviewer says "hey, I don't remember reviewing this, who put my=
- name in there," the order will point at the person in whose custody sect=
-ion this tag shows up.=0A=0AHope this helps.=0A=0ABest regards,=0A-K
+The 04/21/2023 15:34, Alexander Lobakin wrote:
+> 
+> From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Date: Fri, 21 Apr 2023 15:14:22 +0200
+> 
+> [...]
+> 
+> > @@ -699,15 +701,14 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+> >       tx->last_in_use = next_to_use;
+> >  }
+> >
+> > -int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> > -                        struct xdp_frame *xdpf,
+> > -                        struct page *page,
+> > -                        bool dma_map)
+> > +int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+> >  {
+> >       struct lan966x *lan966x = port->lan966x;
+> >       struct lan966x_tx_dcb_buf *next_dcb_buf;
+> >       struct lan966x_tx *tx = &lan966x->tx;
+> > +     struct xdp_frame *xdpf;
+> >       dma_addr_t dma_addr;
+> > +     struct page *page;
+> >       int next_to_use;
+> >       __be32 *ifh;
+> >       int ret = 0;
+> > @@ -722,8 +723,19 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> >               goto out;
+> >       }
+> >
+> > +     /* Fill up the buffer */
+> > +     next_dcb_buf = &tx->dcbs_buf[next_to_use];
+> > +     next_dcb_buf->use_skb = false;
+> > +     next_dcb_buf->xdp_ndo = !len;
+> > +     next_dcb_buf->len = len + IFH_LEN_BYTES;
+> 
+> Is it intended that for .ndo_xdp_xmit cases this field will equal just
+> %IFH_LEN_BYTES as @len is zero?
+
+Argh, no it is a mistake. For that case it should be xdpf->len +
+IFH_LEN_BYTES. As I focus on the XDP_TX, I fogot to test also
+XDP_REDIRECT. :(
+Thanks for the good catch!
+
+I will fix this in the next version.
+
+> 
+> > +     next_dcb_buf->used = true;
+> > +     next_dcb_buf->ptp = false;
+> > +     next_dcb_buf->dev = port->dev;
+> > +
+> >       /* Generate new IFH */
+> > -     if (dma_map) {
+> > +     if (!len) {
+> > +             xdpf = ptr;
+> > +
+> >               if (xdpf->headroom < IFH_LEN_BYTES) {
+> >                       ret = NETDEV_TX_OK;
+> >                       goto out;
+> [...]
+> 
+> Thanks,
+> Olek
+
+-- 
+/Horatiu
