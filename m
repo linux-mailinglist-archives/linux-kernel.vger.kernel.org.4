@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A5E6EB1C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA50A6EB1C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbjDUSjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S233338AbjDUSmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjDUSjH (ORCPT
+        with ESMTP id S229578AbjDUSmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:39:07 -0400
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9921FF3;
-        Fri, 21 Apr 2023 11:39:06 -0700 (PDT)
-Message-ID: <b6dfbc63d89715a1298117bc0afeb436.pc@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1682102343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xu/A0sGZABzTtCZ5T1EI8r0dy3MZmrDAsQUyPMNdKJ8=;
-        b=od/6EJKJcn1yXwsU4vEpxhv++WsIFIwBxgLe2VSqk1MeH0oeGEKs2vgK7+7yh2ZmBNxZue
-        tV9O3qB7eKPXoQfLxH50blDVQej7/vWfU1kKHPdQpPHcmk7TpESqT4fE3ZUCHNcEB5jriz
-        Cbk7SPDRI5PjX7n1IcWNOoUmK5PqcZxllosU+sY1xuUxvVhsYWFvRZOIyQv8B+kAuCWh6m
-        g98Pk8NC6kGphI5St5683Rj6hX8X0rRBdcuONOx+N+xxVNHG7e0Dg/60fUC4XmHDXK16eh
-        cbHxZ+2dDlnBGStncBw8d00RFYq549Fts6wYfo//+UewYhNpOsoCOZor7tyPbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1682102343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xu/A0sGZABzTtCZ5T1EI8r0dy3MZmrDAsQUyPMNdKJ8=;
-        b=fXzXe3Gu1UkMJVoUdfLFJoMA8wATq2vY3FLKJh0yRyRNYi0ofDuN8Qqp6piSG8f9dxllsM
-        rnQggNgCylYnLvsTS3lHYY+k59Kdvcv8vAONUt8aTQGsXAEikJX+CwJoqpHMcpEJlOWii3
-        ZTffFHRn0VD3zXIMwEzdLgRIxCYEEG33HFA6gTc5Dd8ab85xKn9/bV+fUJ2ExLBwJPNiPb
-        mUO4VdOtvJ0yXsWjN5jLfnGv6W8af6ahk4qESjXFJmaAul5Sv4ui5uBe1GLNMvUxTXCCrO
-        dADfD+QWdM6jqgKz/T+mfWAi3r4Zg6Xc6iEoUvqVkYJET+cssJ7JUHBC33Bk2w==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1682102343; a=rsa-sha256;
-        cv=none;
-        b=CcghgD5TFQ9bquEGIUo3Cd1UvctPVoaIo8l501jebbUbUY7XjxeXPssmjZ4SHKgK4XcXLB
-        s2qOzvI7KBOT2PQ/lMVuy9XZJ8SI4/BnCHiSOgGsx63m2VPQXS3ntZqqqoQ+8lmscrOwbT
-        EcvDRl2khXG8z4Tum/Yz8AwKcJBXnvfkeq53LsT8DalBiZE7PiUuZfM3Tfi4uc6BFmCiRm
-        4ARwfkjpYJe4mUxvtg0RtDsQy+2ChxZwr0A1RXrC8zmiohxd/0JvGI7ibX4PPsA1n7hySX
-        jdwOKzsgJuZOHmEc1Ms5wH12+eykvcKU8A802psCx/7AIAcb8+YqRSqH078E0Q==
-From:   Paulo Alcantara <pc@manguebit.com>
-To:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>, Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: Re: [PATCH 17/22] cifs: Use alloc_ordered_workqueue() to create
- ordered workqueues
-In-Reply-To: <20230421025046.4008499-18-tj@kernel.org>
-References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-18-tj@kernel.org>
-Date:   Fri, 21 Apr 2023 15:38:57 -0300
+        Fri, 21 Apr 2023 14:42:14 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B277C1728;
+        Fri, 21 Apr 2023 11:42:13 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LBYTbb011343;
+        Fri, 21 Apr 2023 18:42:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=D+zxcmfcTVJSf2VwbasakLQRdVH5zKDovEgkZgH543E=;
+ b=ERlKO4epj3mOPBXCw8MB8Sky51a4uvPPcm3BWVV2wsbu5WZsni+ZLwfMgHyDaJNEFjpo
+ 4p42SUaxVhReQY8SL4xUcRzxohnuzRZB90pjw3szw/ZT1a1OceHiH6VNKZW8uffxkC9e
+ 7hdb64+uTuNWt8M1pTAyM/CTuIWM5DUK0e5CtWVcu7szTXspOrllwQ2TC3jFPomPfkU+
+ FJNrylk1Eeu4kl8AAht1gnG7/U3xjJfk4axcWbWG4mUZ0zquYb+6mq70/Hj8Lnbh2hUR
+ E9gMQhaTvKP+eLsz6nf6GWq2mRI6ucPzc2aKZ6SFKy5CcfT5KY45AUhvs1C6ae2iRXQa ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3phdhc5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 18:42:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LIg0Ps009769
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 18:42:01 GMT
+Received: from [10.110.74.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
+ 2023 11:41:59 -0700
+Message-ID: <7579b02e-5b4d-72b7-4cef-e18f9fc86d7d@quicinc.com>
+Date:   Fri, 21 Apr 2023 11:41:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dp: unregister audio driver during unbind
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>,
+        <dmitry.baryshkov@linaro.org>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <lyude@redhat.com>
+CC:     <javierm@redhat.com>, <tzimmermann@suse.de>,
+        <quic_khsieh@quicinc.com>, <quic_bjorande@quicinc.com>,
+        <johan+linaro@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230421145657.12186-1-srinivas.kandagatla@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230421145657.12186-1-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 45iFphmqevtGiCTObiY7FBrdu-TvvRs0
+X-Proofpoint-ORIG-GUID: 45iFphmqevtGiCTObiY7FBrdu-TvvRs0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ mlxlogscore=775 phishscore=0 suspectscore=0 adultscore=0 mlxscore=0
+ spamscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210164
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tejun Heo <tj@kernel.org> writes:
 
-> BACKGROUND
-> ==========
->
-> When multiple work items are queued to a workqueue, their execution order
-> doesn't match the queueing order. They may get executed in any order and
-> simultaneously. When fully serialized execution - one by one in the queueing
-> order - is needed, an ordered workqueue should be used which can be created
-> with alloc_ordered_workqueue().
->
-> However, alloc_ordered_workqueue() was a later addition. Before it, an
-> ordered workqueue could be obtained by creating an UNBOUND workqueue with
-> @max_active==1. This originally was an implementation side-effect which was
-> broken by 4c16bd327c74 ("workqueue: restore WQ_UNBOUND/max_active==1 to be
-> ordered"). Because there were users that depended on the ordered execution,
-> 5c0338c68706 ("workqueue: restore WQ_UNBOUND/max_active==1 to be ordered")
-> made workqueue allocation path to implicitly promote UNBOUND workqueues w/
-> @max_active==1 to ordered workqueues.
->
-> While this has worked okay, overloading the UNBOUND allocation interface
-> this way creates other issues. It's difficult to tell whether a given
-> workqueue actually needs to be ordered and users that legitimately want a
-> min concurrency level wq unexpectedly gets an ordered one instead. With
-> planned UNBOUND workqueue updates to improve execution locality and more
-> prevalence of chiplet designs which can benefit from such improvements, this
-> isn't a state we wanna be in forever.
->
-> This patch series audits all callsites that create an UNBOUND workqueue w/
-> @max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
->
-> WHAT TO LOOK FOR
-> ================
->
-> The conversions are from
->
->   alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
->
-> to
->
->   alloc_ordered_workqueue(flags, args...)
->
-> which don't cause any functional changes. If you know that fully ordered
-> execution is not ncessary, please let me know. I'll drop the conversion and
-> instead add a comment noting the fact to reduce confusion while conversion
-> is in progress.
->
-> If you aren't fully sure, it's completely fine to let the conversion
-> through. The behavior will stay exactly the same and we can always
-> reconsider later.
->
-> As there are follow-up workqueue core changes, I'd really appreciate if the
-> patch can be routed through the workqueue tree w/ your acks. Thanks.
->
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: Steve French <sfrench@samba.org>
-> Cc: Paulo Alcantara <pc@cjr.nz>
-> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
-> Cc: Shyam Prasad N <sprasad@microsoft.com>
-> Cc: Tom Talpey <tom@talpey.com>
-> Cc: linux-cifs@vger.kernel.org
-> Cc: samba-technical@lists.samba.org
+
+On 4/21/2023 7:56 AM, Srinivas Kandagatla wrote:
+> while binding the code always registers a audio driver, however there
+> is no corresponding unregistration done in unbind. This leads to multiple
+> redundant audio platform devices if dp_display_bind and dp_display_unbind
+> happens multiple times during startup. On X13s platform this resulted in
+> 6 to 9 audio codec device instead of just 3 codec devices for 3 dp ports.
+> 
+> Fix this by unregistering codecs on unbind.
+> 
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 > ---
->  fs/cifs/dfs_cache.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
+Fixes: d13e36d7d222 ("drm/msm/dp: add audio support for Display Port on 
+MSM")
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+(pls ignore the line break in the fixes tag, its a mail editor issue, I 
+will apply the tag properly while applying to -fixes)
