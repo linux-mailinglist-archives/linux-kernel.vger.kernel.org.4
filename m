@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED9B6EA537
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A9E6EA545
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjDUHto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S230393AbjDUHwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjDUHtm (ORCPT
+        with ESMTP id S229603AbjDUHwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:49:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7312D57;
-        Fri, 21 Apr 2023 00:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682063381; x=1713599381;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vyjw8gaJvfXStzUI8gtf7qcqGZwPkXifYf2vhi91CVI=;
-  b=ATFKrbkzbdVdLCu+OKC+QUtx6dxXa9ytUmg0fGgIEqkgyE7Orlbx+I/3
-   1pukV2NpMZxSfUDIFX0HSBL9WQr1KEzvx55lOFKRBsQ720JTxHT3f9U3N
-   AkhtYP4y1Vrw940swRPMoqrO9t/heW6ApR6jFC8IUuLe5lCX/zMGopaMP
-   Wcp5bg80g2NX7VFt4dHfvVHRoVoR6hj+TxiOb4OwwPx7GOR9PS7GdV0Fk
-   kfyzvk7uT4fzd98SKKEgdBtoaRZhzfmMVxllF/fzzKqk/8D7H7E0yaWTp
-   nWYXdaCXo8T8vYQi28vl+/G9uG75DuVUi1hw+Eju2CZzLyIjVp4WjZpbw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="344693371"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="344693371"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 00:49:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="685652489"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="685652489"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga007.jf.intel.com with ESMTP; 21 Apr 2023 00:49:38 -0700
-Message-ID: <a2bea61f-05c2-77bf-73d7-04e35e5023af@linux.intel.com>
-Date:   Fri, 21 Apr 2023 10:51:06 +0300
+        Fri, 21 Apr 2023 03:52:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E307DAA
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:52:47 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94a39f6e8caso217193666b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682063565; x=1684655565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5jyQvtkjr7ktOwnMvKFvNnF+GYCbKmPXGYqdPfrCCx0=;
+        b=HZ7YH2uD3n7M1DYcAgjkiaCpV8J4YreupSN55YXHb8wdXMPQOTA86GGZu0g5EUyRqU
+         U00W1VXUhKADBcaLcHJ84osfZCjnhoCWMmmB2Uh3nclRsHiACYsi7pMY1lm6Hgbp2YLz
+         IfuZb5AbCNs3VSISX/PFB+k+Pqe1uqmRDThkZ4k8UXzc+bCOx9CJIpSbwO2PE9qZ0Chz
+         54s+YL4CuqWekzRrzOc/9oVcUeb2heZMC8FsqGdsG7PBIBVPlNkZEODqOiA5VM/ZP9Jd
+         o6/vQfWeecEkNPKYLVYlRwAGct19Ns6hf579+LzS/SBxwLKlQNrU0+kNdrf45d33J8xa
+         wJ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682063565; x=1684655565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5jyQvtkjr7ktOwnMvKFvNnF+GYCbKmPXGYqdPfrCCx0=;
+        b=P2PFTP1LQdUkJfTJoIk9V0PuF4AXcMZQdOE8vGUYSSokfqRsaKHZwv6L1u5hVnNwDo
+         Tsg9CR7K2ay+RvY0plEqMeKTgm+Hq0JqFiyD4nSBEI/7JFRn09/m2qFesZWU0vQQaW0K
+         msYuXnu7Emia7xdpnCLqWZCkDZG+jQx+7TJl2WMUmDAkZMr6RziVbW1j0V9vjU2aG3xP
+         vPJfoPlzrNBw2Hfv8Ffv4cu+0td3DpHvCZrLHBijj+uyfxwkhBBf+sPHt2H0C64RjvRE
+         isXREZ9ctohAe8fQPaGKz/ZnZSROz7SxUsUBDQWB5PszYa5nVi4xADnzgMDXWPin2rmK
+         uOPA==
+X-Gm-Message-State: AAQBX9d6a1xh8+WAqMw0fP2aYuOWhgL/NRMwJL1/dMJ7RVyoybdrj+n0
+        BxBEIoUuaTvshi51+GvNiQCiFA==
+X-Google-Smtp-Source: AKy350ZBEewCEid1fXIGiqjdiiCmdX9Fux2UjvhL2POTMz2155hb0ctMfZVbcn4nm2URI0g5MdQa/Q==
+X-Received: by 2002:a17:906:b354:b0:953:3e29:f35c with SMTP id cd20-20020a170906b35400b009533e29f35cmr1473060ejb.45.1682063565612;
+        Fri, 21 Apr 2023 00:52:45 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:668b:1e57:3caa:4d06? ([2a02:810d:15c0:828:668b:1e57:3caa:4d06])
+        by smtp.gmail.com with ESMTPSA id o23-20020a170906769700b0094e9f87c6d4sm1685207ejm.192.2023.04.21.00.52.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 00:52:44 -0700 (PDT)
+Message-ID: <054a384b-b0ef-2697-4a70-09868694ec6d@linaro.org>
+Date:   Fri, 21 Apr 2023 09:52:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/7] mfd: Add support for the Lantiq PEF2256 framer
 Content-Language: en-US
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
- <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
- <92cf6ed0-be37-d8a6-14c7-c5043f076916@intel.com>
- <a270bd46-fb39-50a7-c2a7-da98b06458ff@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <a270bd46-fb39-50a7-c2a7-da98b06458ff@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+To:     Lee Jones <lee@kernel.org>, Herve Codina <herve.codina@bootlin.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230417171601.74656-1-herve.codina@bootlin.com>
+ <20230417171601.74656-4-herve.codina@bootlin.com>
+ <20230420123946.GB996918@google.com> <20230420151551.78c1288b@bootlin.com>
+ <20230420134703.GC996918@google.com> <20230421092645.56127f11@bootlin.com>
+ <20230421074558.GQ996918@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230421074558.GQ996918@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,132 +86,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.4.2023 13.56, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2023/4/20 22:07, Mathias Nyman wrote:
->> On 20.4.2023 20.21, Weitao Wang wrote:
->>> Add U1/U2 feature support of xHCI for zhaoxin.
+On 21/04/2023 09:45, Lee Jones wrote:
+> On Fri, 21 Apr 2023, Herve Codina wrote:
+> 
+>> Hi Lee, Krzysztof,
+>>
+>> On Thu, 20 Apr 2023 14:47:03 +0100
+>> Lee Jones <lee@kernel.org> wrote:
+>>
+>>> On Thu, 20 Apr 2023, Herve Codina wrote:
 >>>
->>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->>> ---
->>>   drivers/usb/host/xhci-pci.c |  5 +++++
->>>   drivers/usb/host/xhci.c     | 27 +++++++++++++++++++++++++--
->>>   2 files changed, 30 insertions(+), 2 deletions(-)
+>>>> On Thu, 20 Apr 2023 13:39:46 +0100
+>>>> Lee Jones <lee@kernel.org> wrote:
+>>>>   
+>>>>> On Mon, 17 Apr 2023, Herve Codina wrote:
+>>>>>   
+>>>>>> The Lantiq PEF2256 is a framer and line interface component designed to
+>>>>>> fulfill all required interfacing between an analog E1/T1/J1 line and the
+>>>>>> digital PCM system highway/H.100 bus.
+>>>>>>
+>>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>>>>>> ---
+>>>>>>  drivers/mfd/Kconfig         |  16 +
+>>>>>>  drivers/mfd/Makefile        |   1 +
+>>>>>>  drivers/mfd/pef2256-regs.h  | 250 ++++++++++
+>>>>>>  drivers/mfd/pef2256.c       | 950 ++++++++++++++++++++++++++++++++++++    
+>>>>>
+>>>>> 95% of this driver needs to be moved somewhere else.
+>>>>>
+>>>>> What is a Framer?  Perhaps sound/ is a good candidate?  
+>>>>
+>>>> The pef2256 framer is a device that transfers data to/from a TDM (time-slots
+>>>> data) from/to quite old telecommunication lines (E1 in my case).
+>>>> Several subsystem can set/get data to/from the TDM. Each device using their
+>>>> own time-slots set.
+>>>>
+>>>> On my use-case, I have some audio consumer and a not yet upstreamed HDLC
+>>>> consumer. Both of them uses the framer to know the E1 link state.
+>>>> The framer needs to be initialized 'globally' and not by a specific consumer
+>>>> as several consumers can use the framer.  
 >>>
->>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->>> index 6db07ca419c3..a235effe8e5c 100644
->>> --- a/drivers/usb/host/xhci-pci.c
->>> +++ b/drivers/usb/host/xhci-pci.c
->>> @@ -334,6 +334,11 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->>>            pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
->>>           xhci->quirks |= XHCI_NO_SOFT_RETRY;
->>> +    if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN) {
->>> +        xhci->quirks |= XHCI_LPM_SUPPORT;
->>> +        xhci->quirks |= XHCI_ZHAOXIN_HOST;
->>> +    }
->>> +
->>>       /* xHC spec requires PCI devices to support D3hot and D3cold */
->>>       if (xhci->hci_version >= 0x120)
->>>           xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index 6307bae9cddf..730c0f68518d 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -4802,7 +4802,7 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
->>>           }
->>>       }
->>> -    if (xhci->quirks & XHCI_INTEL_HOST)
->>> +    if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
->>>           timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
+>>> I can't think of a good place for this.
+>>>
+>>> If all else fails, it's drivers/misc
+>>>
+>>>>>>  include/linux/mfd/pef2256.h |  52 ++
+>>>>>>  5 files changed, 1269 insertions(+)
+>>>>>>  create mode 100644 drivers/mfd/pef2256-regs.h
+>>>>>>  create mode 100644 drivers/mfd/pef2256.c
+>>>>>>  create mode 100644 include/linux/mfd/pef2256.h    
+>>>>>
+>>>>> [...]
+>>>>>   
+>>>>>> +static int pef2256_add_audio_devices(struct pef2256 *pef2256)
+>>>>>> +{
+>>>>>> +	const char *compatible = "lantiq,pef2256-codec";
+>>>>>> +	struct mfd_cell *audio_devs;
+>>>>>> +	struct device_node *np;
+>>>>>> +	unsigned int count = 0;
+>>>>>> +	unsigned int i;
+>>>>>> +	int ret;
+>>>>>> +
+>>>>>> +	for_each_available_child_of_node(pef2256->dev->of_node, np) {
+>>>>>> +		if (of_device_is_compatible(np, compatible))
+>>>>>> +			count++;
+>>>>>> +	}    
+>>>>>
+>>>>> Converting Device Tree nodes into MFD cells to register with the
+>>>>> Platform Device API is not a reasonable use-case of MFD.
+>>>>>
+>>>>> Have the CODEC driver match on "lantiq,pef2256-codec" and let it
+>>>>> instantiate itself.  
+>>>>
+>>>> As the framer is going to used by several subsystem, I cannot instantiate
+>>>> it in the specific ASoC subsystem.
+>>>>   
+>>>>>
+>>>>> Your first version using of_platform_populate() was closer to the mark.  
+>>>>
+>>>> The issue was that I need MFD cells for the pinctrl part.  
+>>>
+>>> Why can't it be represented in DT?
 >>
->> Looks odd to tie Zhaoxin vendor to Intel specific values but ok,
->> if they diverge in the future we anyway need to modify this.
-> 
-> These Intel specific values look good for zhaoxin xHCI with test.
-> Reused this piece of code for simplicity. If there are any difference
-> for these value, update will be submitted in the future.
-> 
->>>       else
->>>           timeout_ns = udev->u1_params.sel;
->>> @@ -4866,7 +4866,7 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
->>>           }
->>>       }
->>> -    if (xhci->quirks & XHCI_INTEL_HOST)
->>> +    if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
->>>           timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
+>> The pinctrl part has no specific compatible string.
+>> Not sure that a compatible string for pinctrl can be accepted
+>> as there is only one pinctrl subnode and no specific reg for this
+>> subnode.
 >>
->> same.
+>> The DT looks like this:
+>>     framer@2000000 {
+>>       compatible = "lantiq,pef2256";
+>>       reg = <0x2000000 0x100>;
+>>       ...
+>>       pinctrl {
+>>         pef2256_rpa_sypr: rpa-pins {
+>>           pins = "RPA";
+>>           function = "SYPR";
+>>         };
+>>       };
 >>
->>>       else
->>>           timeout_ns = udev->u2_params.sel;
->>> @@ -4938,6 +4938,27 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
->>>       return 0;
->>>   }
->>> +static int xhci_check_zhaoxin_tier_policy(struct usb_device *udev,
->>> +        enum usb3_link_state state)
->>> +{
->>> +    struct usb_device *parent;
->>> +    unsigned int num_hubs;
->>> +
->>> +    /* Don't enable U1/U2 if the device is on an external hub. */
->>> +    for (parent = udev->parent, num_hubs = 0; parent->parent;
->>> +            parent = parent->parent)
->>> +        num_hubs++;
->>> +
->>> +    if (num_hubs < 1)
->>> +        return 0;
->>> +
->>> +    dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
->>> +            " below external hub.\n");
->>> +    dev_dbg(&udev->dev, "Plug device into root hub "
->>> +            "to decrease power consumption.\n");
->>> +    return -E2BIG;
->>> +}
->>> +
+>>       pef2256_codec0: codec-0 {
+>>         compatible = "lantiq,pef2256-codec";
+>>         #sound-dai-cells = <0>;
+>>         sound-name-prefix = "PEF2256_0";
+>>       };
+>>     };
 >>
->> I don't think we should add more vendor specific functions, this is almost
->> an exact copy of xhci_check_intel_tier_policy().
+>> Krzysztof, is it acceptable to have a compatible string in the pinctrl node ?
 > 
-> Adding duplicate vendor related code is indeed a bit redundant.
+> Why wouldn't it be?
 > 
->> How about getting rid of both of those and use something like this instead (untested):
->>
->> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->> index 2b280beb0011..e9a25e4d99cf 100644
->> --- a/drivers/usb/host/xhci.c
->> +++ b/drivers/usb/host/xhci.c
->> @@ -4926,10 +4926,24 @@ static int xhci_check_tier_policy(struct xhci_hcd *xhci,
->>                  struct usb_device *udev,
->>                  enum usb3_link_state state)
->>   {
->> -       if (xhci->quirks & XHCI_INTEL_HOST)
->> -               return xhci_check_intel_tier_policy(udev, state);
->> -       else
->> -               return 0;
->> +       struct usb_device *parent = udev->parent;
->> +       int tier = 1; /* roothub is tier1 */
->> +
->> +       while (parent) {
->> +               parent = parent->parent;
->> +               tier++;
->> +       }
->> +
->> +       if (xhci->quirks & XHCI_INTEL_HOST && tier > 3)
->> +               goto fail;
->> +       if (xhci->quirks & XHCI_ZHAOXIN_HOST && tier > 2)
->> +               goto fail;
->> +
->> +       return 0;
->> +fail:
->> +       dev_dbg(&udev->dev, "Tier policy prevents U1/U2 LPM states for devices at tier %d\n",
->> +               tier);
->> +       return -E2BIG;
->>   }
+> $ git grep ".compatible" -- drivers/pinctrl/
 > 
-> These code looks very elegant. Could I resubmit patch using your code
-> after testing pass on Intel and Zhaoxin platform.
-> 
+>> In this case, it will looks like this:
+>>     framer@2000000 {
+>>       compatible = "lantiq,pef2256";
+>>       reg = <0x2000000 0x100>;
+>>       ...
+>>       pinctrl {
+>>         compatible = "lantiq,pef2256-pinctrl";
 
-Yes, you can add Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+If you do not have any resources, there is no point in having separate
+compatible for separate device node.
 
-Thanks
-Mathias
+Anyway this discussions should not be about DT. How Linux drivers are
+implementing DT is not really a guide how to write DT. Since these
+series were brought there were some DT decisions made based how you want
+to write the driver. No, please don't. I also do not see any problems in
+handling more-or-less complex driver structures without poking the DT.
+We have already many such device families.
+
+Best regards,
+Krzysztof
+
