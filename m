@@ -2,80 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716166EADCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787126EADCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbjDUPLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S231429AbjDUPMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 11:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjDUPLo (ORCPT
+        with ESMTP id S230472AbjDUPMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:11:44 -0400
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD9125A9;
-        Fri, 21 Apr 2023 08:11:35 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3f178da219bso18928115e9.1;
-        Fri, 21 Apr 2023 08:11:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682089894; x=1684681894;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o/1bU+3yxMOBZJYn8hiebgLUc19mnJbyR5cgTJ3rOoE=;
-        b=JqQ0U0B62sc1MttFb74RoR1NEOA/uQT/JGtPmDFOhqZaA4BiEmvBpUn0uWZhxC60q+
-         HGbSL5T33VFVfuoQlKhbEER6d0cadcxi7ZZ6sT79sl8a8BwPBLevsFk5dmwPwbvJIJJ7
-         R3Y5vGXbBzsA/EmgvP2YUF6M8x+navM/pu0XvCBWywU8ww1CSzQ7SOxGAgC+ySvvqkTR
-         2F+XcmSqAh8FxGV7d4Bw667xL0gLjw0u4lL/PAe7R+bMVV/9M/uMQ2ewiHp3MDLtG9ag
-         FgIZ14+aG14ctdlsrHYmMtda5U5+Dwr/acJW3QRMw5i6d8Tw5bov/BLzhU5gHzSk2/EC
-         duwA==
-X-Gm-Message-State: AAQBX9dMcTZazM21+BMI2+FTi4xTWUaWrbG80layV2s8lcFjz6SGpuJV
-        nIR61M3qiKAEl87qH7xUChw=
-X-Google-Smtp-Source: AKy350YDSzZrIvT5JL0AAWk8219k6NeLFDVD+qfQEpr4w7Xa0eQOblolNTj8eRXWplZdeZgdYRBmEg==
-X-Received: by 2002:a1c:c906:0:b0:3f1:6ec5:3105 with SMTP id f6-20020a1cc906000000b003f16ec53105mr2233609wmb.20.1682089893877;
-        Fri, 21 Apr 2023 08:11:33 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-011.fbsv.net. [2a03:2880:31ff:b::face:b00c])
-        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f17300c7dcsm4990006wml.48.2023.04.21.08.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 08:11:33 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 08:11:31 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        sagi@grimberg.me, kbusch@kernel.org, ming.lei@redhat.com
-Subject: Re: [PATCH 1/2] io_uring: Pass whole sqe to commands
-Message-ID: <ZEKno++WWPauufw0@gmail.com>
-References: <20230419102930.2979231-1-leitao@debian.org>
- <20230419102930.2979231-2-leitao@debian.org>
- <20230420045712.GA4239@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230420045712.GA4239@lst.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 21 Apr 2023 11:12:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5E313855
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:12:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ACCCC21A2F;
+        Fri, 21 Apr 2023 15:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682089920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pB+SaarZkswQ/Ojvq8IRHEQLm9aa2k8O20tyEXe9Ttk=;
+        b=m4QzAOYY+p0BUDAoshRgoAQZPHsp25Eo+rXYfxamvg3RZxXIxSdWveuandX2Zi8tYbyxh/
+        ZtT5zrcHa0NEq5QvloF5sltO7Keps8PbnqyTjK7g7NEa84zT9Yp+49wIOkiwuoGqtpZfL0
+        77RNmIUqwwvrqtkU4TYOmCng13wF+c8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682089920;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pB+SaarZkswQ/Ojvq8IRHEQLm9aa2k8O20tyEXe9Ttk=;
+        b=L7jyBMY90E1QCULSBruK640aKq0CC1MXYiZUu8X2WeSOFdlimbBU91LdIhCLC9tOBKb+A5
+        m8TjO1+O3BSHR9Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 765EB1390E;
+        Fri, 21 Apr 2023 15:12:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l96vG8CnQmRbFAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 21 Apr 2023 15:12:00 +0000
+Date:   Fri, 21 Apr 2023 17:11:59 +0200
+Message-ID: <87mt31qngg.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH] usb-audio: Rate limit usb_set_interface error reporting
+In-Reply-To: <ZEKiO7lh94QUyuAs@chrisdown.name>
+References: <ZEKf8UYBYa1h4JWR@chrisdown.name>
+        <87wn25qosu.wl-tiwai@suse.de>
+        <ZEKiO7lh94QUyuAs@chrisdown.name>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 06:57:12AM +0200, Christoph Hellwig wrote:
-> On Wed, Apr 19, 2023 at 03:29:29AM -0700, Breno Leitao wrote:
-> >  	struct nvme_uring_cmd_pdu *pdu = nvme_uring_cmd_pdu(ioucmd);
-> > -	const struct nvme_uring_cmd *cmd = ioucmd->cmd;
-> > +	const struct nvme_uring_cmd *cmd = (struct nvme_uring_cmd *)ioucmd->sqe->cmd;
+On Fri, 21 Apr 2023 16:48:27 +0200,
+Chris Down wrote:
 > 
-> Please don't add the pointless cast.  And in general avoid the overly
-> long lines.
+> Hi Takashi,
+> 
+> Takashi Iwai writes:
+> > This patch itself is safe and good to have, so I'm going to take it as
+> > is.
+> 
+> Thanks!
+> 
+> > But I'm still curious in which code path the problem happens.  That
+> > is, we should address such unnecessary repeats if possible.  Do you
+> > have some more data?
+> 
+> Unfortunately not, I've been running with a kernel testing some other
+> mm changes recently so haven't had a chance to debug what's going on
+> here. But it starts like this:
+> 
+>     [Fri Apr 21 13:21:10 2023] usb 3-7: USB disconnect, device number 39
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1: USB disconnect, device number 40
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.1: USB disconnect, device number 42
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: cannot submit urb (err = -19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: Unable to submit urb #2: -19 at snd_usb_queue_pending_output_urbs
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: cannot submit urb 0, error -19: no device
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: cannot submit urb 0, error -19: no device
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: cannot submit urb 0, error -19: no device
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: 1:0: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.4: 2:0: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.2: USB disconnect, device number 44
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [Fri Apr 21 13:21:10 2023] usb 3-7.1.4: 1:1: usb_set_interface failed (-19)
+>     [... thousands of messages ensue ...]
+> 
+> So it looks like maybe some ordering is not quite right in
+> destruction, perhaps only on multi-level USB topologies?
 
-If I don't add this cast, the compiler complains with the follow error:
+Hrm, is "usb 3-7.1.4" really the USB audio device?  The previous
+errors like "Unable to submit urb #2..." are certainly for USB audio,
+and those are with "usb 3-7.4".
 
-	drivers/nvme/host/ioctl.c: In function ‘nvme_uring_cmd_io’:
-	drivers/nvme/host/ioctl.c:555:37: error: initialization of ‘const struct nvme_uring_cmd *’ from incompatible pointer type ‘const __u8 *’ {aka ‘const unsigned char *’} [-Werror=incompatible-pointer-types]
-	  const struct nvme_uring_cmd *cmd = ioucmd->sqe->cmd;
+You patch may still make sense, though.  So I'll keep it applied.
+
+
+thanks,
+
+Takashi
