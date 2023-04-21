@@ -2,153 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06586EA721
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192016EA727
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjDUJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S231246AbjDUJhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjDUJg0 (ORCPT
+        with ESMTP id S229820AbjDUJhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:36:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6577D93CF;
-        Fri, 21 Apr 2023 02:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682069785; x=1713605785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZdhPVeSYHPtv0zuACx4Eqg5I8pftb2XTKuKHkbl9AJ0=;
-  b=Yb3PXKOBfMh0IgF/yzrg1OGxLn8V/prPTa9Ih9i1BR7k9NCRYTpL9xhQ
-   jMsxEyuF3LTavZYyux3mBuXEgHYdMbzKEZu9DgVBZiTD3aRdLrPwSlx9p
-   wRx7vpIXFA/sM84Nc+7JWftdZOHtFNIqWZ3JF3Z1/w+BBkGnRIap2+AYi
-   3uWsNT5VgFcl4xixjZ5v+kRJHy2XsPhjH5DbvTZg1+5QpjwlJjkbPuK4+
-   LFsJPJlsR/zseqEkRbXEqwBh/7U1M6zOpOXDKGgYeVuhwMVZRQD9GjUGP
-   eq3qfT4FHoQmbOROh2ZeUM7WB3jLgMSCtX5kK8FOsINaS2NfTPpHcedWR
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326283980"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="326283980"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:36:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="692216444"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="692216444"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2023 02:36:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ppnBj-0035cy-3C;
-        Fri, 21 Apr 2023 12:36:19 +0300
-Date:   Fri, 21 Apr 2023 12:36:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dinh Nguyen <dinh.nguyen@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        dinguyen@kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com
-Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
- SoCFPGA platforms
-Message-ID: <ZEJZE5bxyXsrAZPJ@smile.fi.intel.com>
-References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
- <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
- <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
- <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
- <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
- <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
- <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
- <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
+        Fri, 21 Apr 2023 05:37:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD4A5C6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682069815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzH8QW/csXN0CxzGkETec+n4HWfPUmGi/veY0RKNigI=;
+        b=d9Z1ewWim8EUz8Rshr/DJ5otnCo8vhaSbpZsz1fwu/+KWDJlHUXHSxtbeOMUJPEF8ZiaAK
+        cAPbTrbzgrB4KwemynWWp2LX/3QpvxWI9qQtA5QwrRQmPjaEV0p+D/CT6kaR5woR1mMibW
+        nUbFvmFupDrmFiD7xsYMs19lsKsMN38=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-103-KWA3DhtiN_mo801N1TjrRg-1; Fri, 21 Apr 2023 05:36:54 -0400
+X-MC-Unique: KWA3DhtiN_mo801N1TjrRg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94f271ebbc2so149066566b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:36:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682069812; x=1684661812;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzH8QW/csXN0CxzGkETec+n4HWfPUmGi/veY0RKNigI=;
+        b=HP3j+vkX75ZP8BGG0epVZV/ebxOxnSy6WeDRTh0rxtloKxX9uRbR8I5F/8MNvK34tJ
+         SE3d9+zV5W1sEGMZvXbJ70+lXJwqsmmAiaY6QUn4qpMrIi3n4uy1vRXv0LDddn4qKDQM
+         1b/a6ZipWE4GlcK+YuKrilhl8RtZwPD9PyWFqzGGoWkG0RRYap0X2cQ/TELsyfFreFz0
+         oOkxUFOZXd1zU41mk4x6R07lfkkF+giD24dS38JxK2AQ48aSe2YPV+g1r724G1L9Po/a
+         /E+8rkYepFGBQRExzHlpesE0gb6OlJtzHpT8eSFcq4l+nENwqsaTd+Qn7xPlX4x/mqoU
+         SMHA==
+X-Gm-Message-State: AAQBX9fN7JZHH3Y44MHcuSrc71KuqIuXg9Ax7b76f+uUSiw8wp/R+LOq
+        NKvMQ3MZeWIuEpgx/xzP0iQyJktbcuAvhH22fBbgDJx4pSirjY8VWpa9zPMU9uF7ZZPuQDhV+7g
+        kTqVb1Ka4SALx3EHFbEBVfUW9z4dICpR6
+X-Received: by 2002:a17:906:b354:b0:953:3e29:f35c with SMTP id cd20-20020a170906b35400b009533e29f35cmr1733511ejb.45.1682069812659;
+        Fri, 21 Apr 2023 02:36:52 -0700 (PDT)
+X-Google-Smtp-Source: AKy350baQKAMD9B4o30q5gQRB/0ZHP7CQjqkTnOQkVeItXf6HwlW8pFLFiptNIBKmQfsiYwSmMf3yA==
+X-Received: by 2002:a17:906:b354:b0:953:3e29:f35c with SMTP id cd20-20020a170906b35400b009533e29f35cmr1733498ejb.45.1682069812419;
+        Fri, 21 Apr 2023 02:36:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm1827793ejb.109.2023.04.21.02.36.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 02:36:51 -0700 (PDT)
+Message-ID: <6feb48c8-6d74-6605-b7d1-48103ca9187e@redhat.com>
+Date:   Fri, 21 Apr 2023 11:36:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] iio: light: al3320a: Handle ACPI device CALS0001
+Content-Language: en-US, nl
+To:     Marius Hoch <mail@mariushoch.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230420232631.68864-1-mail@mariushoch.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230420232631.68864-1-mail@mariushoch.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 09:46:20AM -0500, Dinh Nguyen wrote:
-> On 4/19/2023 6:46 AM, Andy Shevchenko wrote:
-> > On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
-> > > On 4/17/2023 4:51 PM, Guenter Roeck wrote:
-> > > > On 4/17/23 13:55, Dinh Nguyen wrote:
+Hi,
 
-...
-
-> > > > ... and this contradict each other. If bit 31 indicates an error,
-> > > > this can not be a signed 32-bit value.
-> > > > 
-> > > You're right! I've re-read the spec and should have the the code look for
-> > > the specific error values:
-> > > 
-> > > 0x80000000 - inactive
-> > > 0x80000001 - old value
-> > > 0x80000002 - invalid channel
-> > > 0x80000003 -  corrupted.
-> > No, they are not hex. Probably you need to define an error space with it, but
-> > at least just use signed _decimal_ values.
-> > 
-> > Instead of BIT(31) this should go as
-> > 
-> > #define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
-> > #define ..._ERR_MAX ... // or whatever name is better
-> > 
-> > Then in your code
-> > 
-> > 	if (value >= _ERR_MAX)
-> > 		return 0;
-> > 
-> > 	err = _ERR_MAX - value;
-> > 	switch (err) {
-> > 		...
-> > 	}
-> > 
-> > P.S. I asked during internal review if the values are bit fielded when errors.
-> > AFAIU that time they are, now it seems different.
+On 4/21/23 01:26, Marius Hoch wrote:
+> This sensor can be found as CALS0001 on the Lenovo Yoga
+> Tablet 2 series.
 > 
-> Can I ask what's wrong with this simple implementation?
-
-Technically, nothing, but from understanding point of view it would be better
-to have explicit ranges of error number space vs. actual value space.
-
-The idea in the firmware of that device seems to me similar to what we have in
-the Linux kernel. Note, it may be not _so_ explicitly, but the error number
-space is limited by a PAGE_SIZE. All the same may be applied here.
-
-> static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv *priv)
-> {
->         int value = priv->temperature.value;
+> Tested on a Lenovo Yoga Tablet 2 1051-F.
 > 
->         switch (value) {
->         case ETEMP_NOT_PRESENT:
->                 return -ENOENT;
->         case ETEMP_CORRUPT:
->         case ETEMP_NOT_INITIALIZED:
->                 return -ENODATA;
->         case ETEMP_BUSY:
->                 return -EBUSY;
->         case ETEMP_INACTIVE:
->         case ETEMP_TIMEOUT:
->         case ETEMP_TOO_OLD:
->                 return -EAGAIN;
->         default:
->                 /* No error */
->                 return 0;
->         }
-> }
+> Signed-off-by: Marius Hoch <mail@mariushoch.de>
+> ---
+> v2: Explicitly include <linux/mod_devicetable.h> (don't rely on
+> linux/i2c.h including it)
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks, the patch looks good to me and I have
+tested this successfully on a Lenovo Yoga Tablet 2 851F :
 
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+
+> ---
+>  drivers/iio/light/al3320a.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/iio/light/al3320a.c b/drivers/iio/light/al3320a.c
+> index 9ff28bbf34bb..36214d790f71 100644
+> --- a/drivers/iio/light/al3320a.c
+> +++ b/drivers/iio/light/al3320a.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/mod_devicetable.h>
+>  
+>  #include <linux/iio/iio.h>
+>  #include <linux/iio/sysfs.h>
+> @@ -247,11 +248,18 @@ static const struct of_device_id al3320a_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, al3320a_of_match);
+>  
+> +static const struct acpi_device_id al3320a_acpi_match[] = {
+> +	{"CALS0001"},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, al3320a_acpi_match);
+> +
+>  static struct i2c_driver al3320a_driver = {
+>  	.driver = {
+>  		.name = AL3320A_DRV_NAME,
+>  		.of_match_table = al3320a_of_match,
+>  		.pm = pm_sleep_ptr(&al3320a_pm_ops),
+> +		.acpi_match_table = al3320a_acpi_match,
+>  	},
+>  	.probe_new	= al3320a_probe,
+>  	.id_table	= al3320a_id,
+> 
+> base-commit: cb0856346a60fe3eb837ba5e73588a41f81ac05f
 
