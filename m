@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9DD6EB52E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4210A6EB534
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbjDUWrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S233737AbjDUWrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbjDUWrK (ORCPT
+        with ESMTP id S232094AbjDUWro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:47:10 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6C91FF1;
-        Fri, 21 Apr 2023 15:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VcM5hqe8ohQj2y6ERa1ukw3ufFJS21Hh1hq4I+TYzSo=; b=rgNlBrbBZQE/jPeLix+D0ilI0Q
-        71kmRlZ2+T7aKhtBX4TmXZ0BiGQZ6bWSHN2OzBeUMgbJLMrI7CQn70w0LvkZZGKGUJujkqTXWkWCn
-        Uh6eKQlha9lwPIMZE0f1gWoEFMdo8DN/1Pxf71MEA3Z2VCdB/1uMtYEpQ0H1m50J90mZqXPHNOXGx
-        bSzD0JUSBjwZItHuHF9/l21almvKizFj2XpMdsw1wY4wRNpKrGeRSwNNW62/pJmU8cPHf8nq6R41+
-        wt8Sfq2bTDEup+WZg0StBdVV64q8kbX2jTs0APsYWtyNZY/6fadEMw2ddReaCFvGP6+6ykleJrobe
-        Sok4SDkw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ppzWs-00FiFo-Cm; Fri, 21 Apr 2023 22:46:58 +0000
-Date:   Fri, 21 Apr 2023 23:46:58 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     hughd@google.com, akpm@linux-foundation.org, brauner@kernel.org,
-        djwong@kernel.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, hare@suse.de, kbusch@kernel.org,
-        patches@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 3/8] shmem: account for high order folios
-Message-ID: <ZEMSYtF3np7W6bIX@casper.infradead.org>
-References: <20230421214400.2836131-1-mcgrof@kernel.org>
- <20230421214400.2836131-4-mcgrof@kernel.org>
+        Fri, 21 Apr 2023 18:47:44 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF300F2;
+        Fri, 21 Apr 2023 15:47:38 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LMXdPV013531;
+        Fri, 21 Apr 2023 22:47:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=7jtwcQ2eXKaXKxxSOLLQ1U76nRkqnQcOBDX6LutvMJw=;
+ b=TWG0uska9j4xGrq/MCUngN4uluxi+DQZtiBulQYF7MbWxZnqZieVieek6K1yEtuJF2xE
+ i69Ud8OOuoeGurHSbSn0Vqs+DhLwWnIt+j9z6LApZc4I2kDPjIRJXuGomMzexwXMzOoy
+ kLdi6kgCzKzgAZ4VCOrSNMOBTM5ORrCJj3/nww6aqGLr3JRMb4elSQe7vfr4oz3i7EVy
+ 8w/0D9w76gJIVXbbI7FDz6tn1InW9oQP8U898uUdx1Wra9fIFpopjVZGh1sDrimuj81g
+ yrMBPUwNCqiYuqxoW9mK5SyB5EudfgT04wPS3TiY9dGUWz5n85AKCzy1Ep1s5HYzLmIk qQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3thds8jt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 22:47:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LMlVeM021444
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 22:47:31 GMT
+Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 21 Apr 2023 15:47:30 -0700
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
+        <marijn.suijten@somainline.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] drm/msm/dpu: remove DPU_DSPP_GC handling in dspp flush
+Date:   Fri, 21 Apr 2023 15:47:19 -0700
+Message-ID: <20230421224721.12738-1-quic_abhinavk@quicinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421214400.2836131-4-mcgrof@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zYwcGwWxVyblow5OQOQRT_NVx4JjwbyW
+X-Proofpoint-GUID: zYwcGwWxVyblow5OQOQRT_NVx4JjwbyW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ clxscore=1015 priorityscore=1501 malwarescore=0 mlxlogscore=853 mlxscore=0
+ impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304210199
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,44 +80,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:43:55PM -0700, Luis Chamberlain wrote:
-> -		if (xa_is_value(page))
-> -			swapped++;
-> +		if (xa_is_value(folio))
-> +			swapped+=(folio_nr_pages(folio));
+Gamma correction blocks (GC) are not used today so lets remove
+the usage of DPU_DSPP_GC in the dspp flush to make it easier
+to remove GC from the catalog.
 
-			swapped += folio_nr_pages(folio);
+We can add this back when GC is properly supported in DPU with
+one of the standard DRM properties.
 
->  			if (xa_is_value(folio)) {
-> +				long swaps_freed = 0;
->  				if (unfalloc)
->  					continue;
-> -				nr_swaps_freed += !shmem_free_swap(mapping,
-> -							indices[i], folio);
-> +				swaps_freed = folio_nr_pages(folio);
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Why initialise it to 0 when you're about to set it to folio_nr_pages()?
-
-> +				if (!shmem_free_swap(mapping, indices[i], folio)) {
-> +					if (swaps_freed > 1)
-> +						pr_warn("swaps freed > 1 -- %lu\n", swaps_freed);
-
-Debug code that escaped into this patch?
-
-> -		info->swapped++;
-> +		info->swapped+=folio_nr_pages(folio);
-
-Same comment as earlier.
-
-> -	info->alloced--;
-> -	info->swapped--;
-> +	info->alloced-=num_swap_pages;
-> +	info->swapped-=num_swap_pages;
-
-Spacing
-
-> -	info->swapped--;
-> +	info->swapped-= folio_nr_pages(folio);
-
-Spacing.
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+index bbdc95ce374a..57adaebab563 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+@@ -336,9 +336,6 @@ static void dpu_hw_ctl_update_pending_flush_dspp_sub_blocks(
+ 	case DPU_DSPP_PCC:
+ 		ctx->pending_dspp_flush_mask[dspp - DSPP_0] |= BIT(4);
+ 		break;
+-	case DPU_DSPP_GC:
+-		ctx->pending_dspp_flush_mask[dspp - DSPP_0] |= BIT(5);
+-		break;
+ 	default:
+ 		return;
+ 	}
+-- 
+2.39.2
 
