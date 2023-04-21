@@ -2,161 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290DB6EB1CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E636EB1CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbjDUSpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S233061AbjDUSp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjDUSpf (ORCPT
+        with ESMTP id S229935AbjDUSp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:45:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ACCE6D;
-        Fri, 21 Apr 2023 11:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F45bDSwjMQFBIyyPup/mzrLU83zDLKudjeMCgm+n9uU=; b=osGw+QeXAhyfhx4s/aSHya/bVu
-        4MjNm8ps5IYkBaiFFjBjwFyRkjHsdsqH1ofkZhYknco9iUWB8pYz9fZtT1FPwofmLmMafJguE/eGm
-        AKAc0eHxwCgQRgCy377BMO4Lv5EY3zGM5M61Wv3KiEqQtl+6X3Jizlaclq/O3X0LMTCmxsI5gjXtR
-        T0JNl67yNMfvAmKM+h8MGGRjhSb9zhYOxSmLaz7wv60fNVFQpAKg3hncCtonVN/9HhR650Npsrwuc
-        Z4das1bJxPpMFfZsyvr11CkamiHmCBLxaaa+KTvP9OJoXrgYYwe/uNwohNG0PxAMFI0697PKiFzw5
-        lLVeDllQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ppvl4-00BeWM-1x;
-        Fri, 21 Apr 2023 18:45:22 +0000
-Date:   Fri, 21 Apr 2023 11:45:22 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, rafael@kernel.org,
-        christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, j.granados@samsung.com
-Subject: Re: [PATCH] module: add debugging auto-load duplicate module support
-Message-ID: <ZELZwms4wrc419gt@bombadil.infradead.org>
-References: <20230418204636.791699-1-mcgrof@kernel.org>
- <2023041951-evolution-unwitting-1791@gregkh>
- <ZEB6DmF+l3LVrpFI@bombadil.infradead.org>
- <ZEDOWi8ifghwmOjp@kroah.com>
- <ZEGopJ8VAYnE7LQ2@bombadil.infradead.org>
- <ZEKn89wPH19r2bM4@kroah.com>
- <bnhskcp6hy6liwlefyjcxumlnvmkmyvhvatkq7ve3kb2zecyxl@c3jq2apjqlcy>
- <ZELKKVJ11LdFsBYo@bombadil.infradead.org>
- <wjgsfhr642ec2ly24tsdqb5a3hlhvsyxknyajqql4zziqemrwh@w5rdsmxuownn>
+        Fri, 21 Apr 2023 14:45:57 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74094173A
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682102753; x=1713638753;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Gj29/8RHpZU2aU2OLpmCoOn/WQFnEXB7WJK3pS9JWYs=;
+  b=BKkfpEhlXpI9ePf4UBsr9G9omK1ZydEAXegu5y0G/cJ930jIlyNWxHor
+   ZcHT+VOtxMwB35wGHdZ5LWrEzsKryjb+HVksTsLqxLgQhZrUgMPTNP65Y
+   szlJs/KXK2U65l6bjRCkwoh6hEVXEHgAqDUe4l6yyIJ9JAZVWeOYNUBIE
+   OlmvsYcOt3L2kOfuGr5E9TjRS/9tcS9uhgMuYgKndEawXLUu8rIAZJOTW
+   J2lHrnZZICM00YztR9GWyKzxMhEptyYGxlUa7c9TR6aHh7uwHjs/m4JDD
+   kWyOyC7g+og7sJKvmbpa1JDnbUlNRM9FNzAK0TdGDmr8cAMlRfBb8P3XI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="348850427"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="348850427"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 11:45:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="1022004493"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="1022004493"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Apr 2023 11:45:52 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     eranian@google.com, ak@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V4 1/2] perf/x86/intel/ds: Flush the PEBS buffer in PEBS enable
+Date:   Fri, 21 Apr 2023 11:45:28 -0700
+Message-Id: <20230421184529.3320912-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <wjgsfhr642ec2ly24tsdqb5a3hlhvsyxknyajqql4zziqemrwh@w5rdsmxuownn>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 11:31:03AM -0700, Lucas De Marchi wrote:
-> On Fri, Apr 21, 2023 at 10:38:49AM -0700, Luis Chamberlain wrote:
-> > Just as with the kludge-of-concept I posted for kread [0], userspace
-> > also should have similar issues in mapping module name to arbitrary
-> > file names given:
-> > 
-> >  o a module can be in different paths and libkmod could for
-> >     example at one point load a module in one path, then userspace
-> >     removes it, and the next path is used.
-> 
-> no, it can't. Unless you are doing out of tree modules and loading them
-> manually by path. There can only be one module with the same name in kmod's
-> database. If you have duplicate modules, depmod will use the dir
-> priority configured by the distro (see depmod.d(5)).
-> 
-> Since we are talking about *udev* it's not a real possibility as
-> 1) the udev requests are serialized
-> 2) there is only 1 kmod ctx, so they use the same configuration, no
-> funky kmod_new("/another-rootfs", ...) type of thing.
-> 
-> >  o module names may differ from the filename slightly (in the kernel
-> >    we replace dash with "_", refer to KBUILD_MODNAME
-> 
-> this is taken care by depmod/libkmod too. All the aliases are mapped to
-> module names and then normalized. See modname_normalize() in kmod.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Great! So this should be much simpler in userspace.
+Several similar kernel warnings can be triggered,
 
-> > [1] https://lore.kernel.org/all/ZDmAvwi+KNvie+OI@bombadil.infradead.org/T/#md172510af8fdf7e0f76f6caafee9c99f7a8b6de7
-> > 
-> > > libkmod only skips the call if the module is already in
-> > > the live state.
-> > 
-> > It can do better, it can converge requests to avoid a kernel_read*()
-> > from using vmalloc space. Note that this was not well known before,
-> > but now it is clear.
-> 
-> in userspace, if using the same context and using init_module() rather
-> than finit_module(), I **guess** we would have a similar thing due to
-> the memory pool for modules: we don't read the module again. That is not
-> true for finit_module() though as we just open and pass the fd.
+  [56605.607840] CPU0 PEBS record size 0, expected 32, config 0
+  cpuc->record_size=208
 
-I think we could not not care about init_module() races for now.
+when the below commands are running in parallel for a while on SPR.
 
-> > I realize though that this could mean sharing a context between all
-> > loads thoughs in udev, and such a change could take significant time
-> > and review to complete.
-> 
-> But there is only one context. There aren't multiple paralell requests
-> from multiple sources. Probably need to Cc someone still changing
-> udev's builtin...  but from a quick look, from what I remember about
-> that the last time I touched it and without data to prove me wrong,
-> it seems we are not looking at the right problem space to come up with a
-> solution.
+  while true; do perf record --no-buildid -a --intr-regs=AX -e
+  cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
 
-Data seems to indicate that somehow this might not be true.
+  while true; do perf record -o /tmp/out -W -d -e
+  '{ld_blocks.store_forward:period=1000000,
+  MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
+  -c 1037 ./triad; done
+  *The triad program is just the generation of loads/stores.
 
-> > If we *wanted* to do this in kernel instead, I have already shown it's
-> > not hard.
-> > 
-> > > It seems systemd-udev also duplicates the check
-> > > in src/shared/module-util.c:module_load_and_warn()
-> > 
-> > Evidence is showing that does not suffice for the races which are
-> > currently possible.
-> 
-> can you raise the udev verbosity and share?
+The warnings are triggered when an unexpected PEBS record (with a
+different config and size) is found.
 
-How do I do that?
+A system-wide PEBS event with the large PEBS config may be enabled
+during a context switch. Some PEBS records for the system-wide PEBS may
+be generated while the old task is sched out but the new one hasn't been
+sched in yet. When the new task is sched in, the cpuc->pebs_record_size
+may be updated for the per-task PEBS events. So the existing system-wide
+PEBS records have a different size from the later PEBS records.
 
-> All the kmod-builtin
-> calls will already be logged there. See
-> src/udev/udev-event.c:udev_event_execute_run() leading to
-> 
-> 	log_device_debug(event->dev, "Running built-in command \"%s\"", command);
-> 	r = udev_builtin_run(event->dev, &event->rtnl, builtin_cmd, command, false);
-> 
-> if you are rather seeing "Running command", ohh... then your udev was
-> built without libkmod and it will just fork/exec. Not what we want.
+The PEBS buffer should be flushed right before the hardware is
+reprogrammed. The new size and threshold should be updated after the old
+buffer has been flushed.
 
-I'm using debian testing everything vanilla packages except the kernel,
-using modules-next.
+Reported-by: Stephane Eranian <eranian@google.com>
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
 
-> so it seems the easiest thing to do is collect the udev log.
-> 
-> hopefully you don't have CONFIG_UEVENT_HELPER_PATH set or anything
-> mucking /sys/kernel/uevent_helper. Right?
+Changes since V3:
+- update comments
 
-No.
+ arch/x86/events/intel/ds.c | 41 +++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 12 deletions(-)
 
-  Luis
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index a2e566e53076..94043232991c 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1252,22 +1252,26 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+ 	if (x86_pmu.intel_cap.pebs_baseline && add) {
+ 		u64 pebs_data_cfg;
+ 
+-		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
+-		if (cpuc->n_pebs == 1) {
++		/* Clear pebs_data_cfg for first PEBS. */
++		if (cpuc->n_pebs == 1)
+ 			cpuc->pebs_data_cfg = 0;
+-			cpuc->pebs_record_size = sizeof(struct pebs_basic);
+-		}
+ 
+ 		pebs_data_cfg = pebs_update_adaptive_cfg(event);
+ 
+-		/* Update pebs_record_size if new event requires more data. */
+-		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
++		/*
++		 * Only update the pebs_data_cfg here. The pebs_record_size
++		 * will be updated later when the new pebs_data_cfg takes effect.
++		 */
++		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
+ 			cpuc->pebs_data_cfg |= pebs_data_cfg;
+-			adaptive_pebs_record_size_update();
+-			update = true;
+-		}
+ 	}
+ 
++	/*
++	 * For the adaptive PEBS, the threshold will be updated later
++	 * when the new pebs_data_cfg takes effect.
++	 * The threshold may not be accurate before that, but that
++	 * does not hurt.
++	 */
+ 	if (update)
+ 		pebs_update_threshold(cpuc);
+ }
+@@ -1326,6 +1330,13 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
+ 	wrmsrl(base + idx, value);
+ }
+ 
++static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
++{
++	if (cpuc->n_pebs == cpuc->n_large_pebs &&
++	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
++		intel_pmu_drain_pebs_buffer();
++}
++
+ void intel_pmu_pebs_enable(struct perf_event *event)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+@@ -1345,6 +1356,14 @@ void intel_pmu_pebs_enable(struct perf_event *event)
+ 	if (x86_pmu.intel_cap.pebs_baseline) {
+ 		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
+ 		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
++			/*
++			 * drain_pebs() assumes uniform record size;
++			 * hence we need to drain when changing said
++			 * size.
++			 */
++			intel_pmu_drain_large_pebs(cpuc);
++			adaptive_pebs_record_size_update();
++			pebs_update_threshold(cpuc);
+ 			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
+ 			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
+ 		}
+@@ -1391,9 +1410,7 @@ void intel_pmu_pebs_disable(struct perf_event *event)
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	struct hw_perf_event *hwc = &event->hw;
+ 
+-	if (cpuc->n_pebs == cpuc->n_large_pebs &&
+-	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
+-		intel_pmu_drain_pebs_buffer();
++	intel_pmu_drain_large_pebs(cpuc);
+ 
+ 	cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
+ 
+-- 
+2.35.1
+
