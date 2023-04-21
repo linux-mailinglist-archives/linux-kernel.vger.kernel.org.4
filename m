@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD656EB594
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770516EB596
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbjDUXLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 19:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S233536AbjDUXNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 19:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjDUXLW (ORCPT
+        with ESMTP id S232120AbjDUXNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 19:11:22 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49D119B3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:11:20 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4edb93139ddso2261059e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:11:20 -0700 (PDT)
+        Fri, 21 Apr 2023 19:13:17 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C1E1FCF
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:13:15 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-44307db5d24so739311e0c.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 16:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682118679; x=1684710679;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qJUo6beAMRbp0vlvpZBk1BpByGMWre8jpweMav9TgP0=;
-        b=Yg5LFdFc0DS7XJPemqn/rPpKs33+TtaRam/qw6tQdpNJvjVwydF/djRtmpd9WVDEbF
-         Z9sD+rH80+WinnigIOXMvlsQ56aRQBNLdfLjdiq+cRdK3mhUwNe2+phVjL3qs5RERlVY
-         Mx7fZ6jN2LXNHwPBT+Y4F0KqtM6EOLuz+QWOHFYp+p27DYde+ZHqL2lzyNNJTBYYWTLo
-         mWPyU9VgKA66tUJl4dAIjAP7byHMK/EjZNN065zXZkQl5kRUDghnyitUvYCovXJRjQUa
-         GbiNeeLqXDJTCu0OHWP1M9+VDrrOeWE1M4fhThMtKgxBiCQu8uTHTdzBxkmqQ7Q6qUL0
-         PKiQ==
+        d=google.com; s=20221208; t=1682118794; x=1684710794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W9APFc9ivpo5zXMKU527+SylS9PZXuFh6E82kT31e0A=;
+        b=P9Vl/3JCowxD5BocUQXmOQbViMcaUKTXTfAkYZn8U86XJ5oBHf22lL6i+aKYxKP8uM
+         TVu/CV7AcIWPQb5IDm0vu+qWxQ8xF7daPyHs6231/ontULu9s1SIhqbVbdMsleMrD326
+         UFELebg4FBce8YPAIYI8ajKqji3tUdfjMwgfYbUSorEJljbh+pz0SoQ1vVlZXjoy3V2d
+         BAK/FjR6kDiUNQOyQTkU594EFz6367ZkS8t1puIMK5yZO77+h2VkKQDYgJB28PsTdZJJ
+         ZvBqbULS03HEfP7nbXY9HHU1Xjr09dbqEr1lXGPbc3CTzJkXP4coFCIo+Ma38w/wmo0y
+         2jvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682118679; x=1684710679;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qJUo6beAMRbp0vlvpZBk1BpByGMWre8jpweMav9TgP0=;
-        b=USoZcmZh/IP/zhK/t1E52dFUQmui7pj0Cwn9jomwyEJm4kz0p5w57liKB7/xogFb0i
-         D42JbxPyBIda9VPitoBlCkCEp/djxp2tL3t0z+YAZbaCw+YpOcfkBL3hHnRfKIK64Do+
-         GNezCVs2I32+S/AeR6g0sEbvHEsHEKSWmCPx4pDSRHsgCwkHKWiWqM8Eizx6trVrrIdR
-         N7oTatHOHcVJFJDqiz4447CuQ+GCiD/ybE/B0c91keh+yJMMKolGKm0WeHxzbDf3FwQm
-         XqbpzsfeNAV78Bxy7KFydmWD1K41/HJLzRwLG75vIGtuYViSl9zdpwmw+K7bGaxJ45Nq
-         0S2g==
-X-Gm-Message-State: AAQBX9dDrTa/x55JqDbuiJ4/OSeYIe0BE7NE+iEKLKqLoeQ56AyQ2Vcj
-        VYlVrhiigRA8B7h3sgI0t4+/Ww==
-X-Google-Smtp-Source: AKy350ZAAKyal4gS0/yAXhsV5vwGmxK49MmMhMPoRUkth4u83gsBW8LjrMMGgkZ8gh5ynacNmxucNg==
-X-Received: by 2002:a19:f015:0:b0:4ed:b48c:4443 with SMTP id p21-20020a19f015000000b004edb48c4443mr1806917lfc.39.1682118678916;
-        Fri, 21 Apr 2023 16:11:18 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id l15-20020ac2430f000000b004eb2f35045bsm691953lfh.269.2023.04.21.16.11.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 16:11:18 -0700 (PDT)
-Message-ID: <40f5ac92-f658-25cf-352b-60db49a129f6@linaro.org>
-Date:   Sat, 22 Apr 2023 02:11:17 +0300
+        d=1e100.net; s=20221208; t=1682118794; x=1684710794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W9APFc9ivpo5zXMKU527+SylS9PZXuFh6E82kT31e0A=;
+        b=O/oYg137ZOHMdQaD4FmoyjxeTsg+xMKYeUYF5RY5FjDWr12kTdihTzttVH8rEB757p
+         pPlzZll0kdF/EEMJHOFaPysiEHneL/aKBGbvlH7yqzr/Zy8NIrG35/5PPe6a6dSoxrTR
+         vXIPqUzpSjxjL5jbEgwag6+jxUvXddCbonMh0thL2tJvzLPIoKPM5XrJCSYL9hQ/Ukvk
+         8EaJsohs6uW3ZujakqTdk53S+74y1oWVwqo9LmFuFQFXXWE1qH+zDJt6SAlR9zFtJ0cG
+         VuHpw/Vv/AE1w5l8HDiA4WCeCMh8MXkJx0cD7YSJm6oJh3IuC6d/SjgFGp+m+qRO5H5n
+         9alQ==
+X-Gm-Message-State: AAQBX9fTZo8+icgCtzNcrZUT0QhsfxTBnT5WypFLYwqCHfl3M/sGdaI4
+        4sLq1pxQxSE/cd6AuBOUk9MlUSdhzM45zzuyiTtB5A==
+X-Google-Smtp-Source: AKy350aBwtj33i0EyeclKXhYJ9xm52ked+sEEeS1vtU3I7lcyaDXT8VhjfhFHlIHUtaLo84g7v7YOJ+SnMqv0QpDQRE=
+X-Received: by 2002:a1f:bd04:0:b0:43f:f81c:293d with SMTP id
+ n4-20020a1fbd04000000b0043ff81c293dmr1426001vkf.8.1682118794652; Fri, 21 Apr
+ 2023 16:13:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
- chipsets
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
- <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
- <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
- <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
- <7b493d85-0691-8797-367e-1d71ea87c826@linaro.org>
- <4bea9976-d353-6783-f55a-3e83e7501da2@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <4bea9976-d353-6783-f55a-3e83e7501da2@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230421214946.2571580-1-seanjc@google.com>
+In-Reply-To: <20230421214946.2571580-1-seanjc@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Fri, 21 Apr 2023 16:12:48 -0700
+Message-ID: <CALzav=f=TFoqpR5tPDPOujoO6Gix-+zL-sZyyZK27qJvGPP9dg@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Preserve TDP MMU roots until they are
+ explicitly invalidated
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,167 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2023 02:08, Kuogee Hsieh wrote:
-> 
-> On 4/21/2023 3:16 PM, Dmitry Baryshkov wrote:
->> On 22/04/2023 01:05, Kuogee Hsieh wrote:
->>>
->>> On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
->>>> On 21/04/2023 02:25, Kuogee Hsieh wrote:
->>>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>
->>>>> Add DSC 1.2 hardware blocks to the catalog with necessary
->>>>> sub-block and feature flag information.
->>>>> Each display compression engine (DCE) contains dual hard
->>>>> slice DSC encoders so both share same base address but with
->>>>> its own different sub block address.
->>>>
->>>> Please correct line wrapping. 72-75 is usually the preferred width
->>>>
->>>>>
->>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>> ---
->>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h  | 19 
->>>>> +++++++++++++++++++
->>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h  | 11 +++++++++++
->>>>>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h    | 21 
->>>>> +++++++++++++++++++++
->>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h  | 19 
->>>>> +++++++++++++++++++
->>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h  | 19 
->>>>> +++++++++++++++++++
->>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c      | 12 
->>>>> ++++++++++--
->>>>>   6 files changed, 99 insertions(+), 2 deletions(-)
->>>>>
->>>>
->>>>
->>>> [I commented on sm8550, it applies to all the rest of platforms]
->>>>
->>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
->>>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>> index 9e40303..72a7bcf 100644
->>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
->>>>> sm8550_merge_3d[] = {
->>>>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
->>>>>   };
->>>>>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
->>>>> +    .enc = {.base = 0x100, .len = 0x100},
->>>>> +    .ctl = {.base = 0xF00, .len = 0x10},
->>>>> +};
->>>>> +
->>>>> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
->>>>> +    .enc = {.base = 0x200, .len = 0x100},
->>>>> +    .ctl = {.base = 0xF80, .len = 0x10},
->>>>> +};
->>>>
->>>> Please keep sblk in dpu_hw_catalog for now.
->>>>
->>>>> +
->>>>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
->>>>> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, 
->>>>> sm8550_dsc_sblk_0),
->>>>> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, 
->>>>> sm8550_dsc_sblk_1),
->>>>
->>>> Is there a reason why index in "dsc_N" doesn't match the DSC_n which 
->>>> comes next to it?
->>>
->>> usually each DCE (display compression engine) contains two hard slice 
->>> encoders.
->>>
->>> DSC_0 and DSC_1 (index) is belong to dsc_0.
->>>
->>> If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
->>
->> Ah, I see now. So, the block register space is the following:
->> DCEi ->
->>   common
->>   dsc0_enc
->>   dsc1_enc
->>   dsc0_ctl
->>   dsc1_ctl
->>
->> Instead of declaring a single DCE unit with two DSC blocks, we declare 
->> two distinct DSC blocks. This raises a question, how independent are 
->> these two parts of a single DCE block? For example, can we use them to 
->> perform compression with different parameters? Or use one of them for 
->> the DP DSC and another one for DSI DSC? Can we have the following 
->> configuration:
->>
->> DSC_0 => DP DSC
->> DSC_1, DSC_2 => DSI DSC in DSC_MERGE topology?
-> 
-> no, For merge mode you have to use same DCE, such as DSC_2 and DSC3 (pair)
+On Fri, Apr 21, 2023 at 2:49=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+>  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
+>  {
+>         struct kvm_mmu_page *root;
+>
+> -       lockdep_assert_held_write(&kvm->mmu_lock);
+> -       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
+> -               if (!root->role.invalid &&
+> -                   !WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root))) {
+> +       /*
+> +        * Note!  mmu_lock isn't held when destroying the VM!  There can'=
+t be
+> +        * other references to @kvm, i.e. nothing else can invalidate roo=
+ts,
+> +        * but walking the list of roots does need to be guarded against =
+roots
+> +        * being deleted by the asynchronous zap worker.
+> +        */
+> +       rcu_read_lock();
+> +
+> +       list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link) {
 
-Ok, this is for the merge mode. So the dpu_rm should be extended to 
-allocate them in pairs if merge mode is requested.
+I see that roots are removed from the list with list_del_rcu(), so I
+agree this should be safe.
 
-What about using DSC_0 for DP and DSC_1 for DSI? Is it possible?
-
-> 
->>
->>>
->>>>
->>>>> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
->>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
->>>>> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
->>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
->>>>> +};
->>>>> +
->>>>>   static const struct dpu_intf_cfg sm8550_intf[] = {
->>>>>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
->>>>> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 
->>>>> 25),
->>>>>       /* TODO TE sub-blocks for intf1 & intf2 */
->>>>> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
->>>>>       .dspp = sm8550_dspp,
->>>>>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
->>>>>       .pingpong = sm8550_pp,
->>>>> +    .dsc = sm8550_dsc,
->>>>> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
->>>>>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
->>>>>       .merge_3d = sm8550_merge_3d,
->>>>>       .intf_count = ARRAY_SIZE(sm8550_intf),
->>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>> index 03f162a..be08158 100644
->>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>> @@ -1,6 +1,6 @@
->>>>>   // SPDX-License-Identifier: GPL-2.0-only
->>>>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights 
->>>>> reserved.
->>>>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights 
->>>>> reserved.
->>>>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All 
->>>>> rights reserved.
->>>>>    */
->>>>>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
->>>>> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
->>>>> sc7280_pp_sblk = {
->>>>>       {\
->>>>>       .name = _name, .id = _id, \
->>>>>       .base = _base, .len = 0x140, \
->>>>> -    .features = _features, \
->>>>> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
->>>>> +    }
->>>>> +
->>>>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
->>>>> +    {\
->>>>> +    .name = _name, .id = _id, \
->>>>> +    .base = _base, .len = _len, \
->>>>> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
->>>>> +    .sblk = &_sblk, \
->>>>>       }
->>>>> /*************************************************************
->>>>
->>
-
--- 
-With best wishes
-Dmitry
-
+KVM could, alternatively, acquire the mmu_lock in
+kvm_mmu_uninit_tdp_mmu(), which would let us keep the lockdep
+assertion and drop the rcu_read_lock() + comment. That might be worth
+it in case someone accidentally adds a call to
+kvm_tdp_mmu_invalidate_all_roots() without mmu_lock outside of VM
+teardown. kvm_mmu_uninit_tdp_mmu() is not a particularly performance
+sensitive path and adding the mmu_lock wouldn't add much overhead
+anyway (it would block for at most a few milliseconds waiting for the
+async work to reschedule).
