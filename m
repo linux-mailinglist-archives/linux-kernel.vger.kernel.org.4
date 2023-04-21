@@ -2,124 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACC76EA568
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CD46EA564
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjDUH5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S231511AbjDUH5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjDUH46 (ORCPT
+        with ESMTP id S231561AbjDUH4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:56:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645809757
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:55:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682063726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ESPESgM91xh/lMsc1yOsPFi1GlFz8zsJkocCN9t7IWU=;
-        b=VoDOK/i26y65nCcrGxweY/v3Ybw5iRgOjrDQKEpTaCh4DXTG7oC5BVAJoJN49VlouYTnMq
-        TO+jwAumYD3Z+ES2LEhMij06Wrr/KpvsDYFLcKRZMDMDxUYK7GkHrlYee5WIvi0XZoVoVu
-        Esm1vpleelfjAbKw9LLSp4PNjQpWlIM=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-102-geQtMnhQMS-ZxFwOTZgCKg-1; Fri, 21 Apr 2023 03:55:25 -0400
-X-MC-Unique: geQtMnhQMS-ZxFwOTZgCKg-1
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-5066c9c2ed6so1572050a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:55:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682063723; x=1684655723;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESPESgM91xh/lMsc1yOsPFi1GlFz8zsJkocCN9t7IWU=;
-        b=S2AKR6fSetdyhD9qcUzm2wKkNkEV7i7MEuPuOJEOs5SGrhiRdHNp9S1A/Yu73kdnSp
-         UtT1ONjr92SIIlRiyF8lk5ugaLxEXaJmeKI456jQysBlif54YFbIcbhmGZTxcGApgoRn
-         ROTh3hPqGwGl/zRAkrnLED8qFrFCFUecLuUpxkugodeLUWOUPjpEq5Q6insDb78mdu1w
-         xuMPJxTumITfRvgbhVQRALfBJ9fOTl8QHI1R/MVA4farvhw8ZRVvcC1EMmiKKEK9KKyB
-         wvfOgHlyXPSZbh7C0XTeYmqTD3pjBaP4/NIGztFswFQs4eetd6So3ZdIkQ0u5C4aRDYN
-         85Ew==
-X-Gm-Message-State: AAQBX9cCLNsOEsfQhnLqhczLWMtZPeRLuKB40ZsNXTKIbd3Q63+6txGX
-        ngHhmAb4auZ6uENRHhXb7AXD6txg427Xv3Tl59GYwhcbgAVYlpZMNRk75UUwVDvTWTJaOqQ6Th3
-        Aywtv1Xv9VeJoXvAAv1NcSjTx
-X-Received: by 2002:aa7:de92:0:b0:504:a2c8:ea60 with SMTP id j18-20020aa7de92000000b00504a2c8ea60mr3870174edv.35.1682063723518;
-        Fri, 21 Apr 2023 00:55:23 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YJgL61ShkQoLQ//neSduz5Vb3bvnQFRw0O5sty7xGAP4DjPX2wDuYK66FDTSaxFjHLfrDj/w==
-X-Received: by 2002:aa7:de92:0:b0:504:a2c8:ea60 with SMTP id j18-20020aa7de92000000b00504a2c8ea60mr3870164edv.35.1682063723249;
-        Fri, 21 Apr 2023 00:55:23 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa7cd83000000b004fbf6b35a56sm1588535edv.76.2023.04.21.00.55.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 00:55:22 -0700 (PDT)
-Message-ID: <fef45f01-81ee-c973-3d4f-86d537df98b6@redhat.com>
-Date:   Fri, 21 Apr 2023 09:55:22 +0200
+        Fri, 21 Apr 2023 03:56:47 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591B4A273;
+        Fri, 21 Apr 2023 00:56:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DUKoQhlnN/DMs7X8wsVMRvizN0Njhq9H4vz66JpGAmHye8UUJRYutDffGECyXO8K+qDAG9/j4fPWDVnB54Q+EOi+MsDJJh2b9ZfRchF1003EH4VgtcL9Cxp8xcFum0nvkke+Ad0TPOatrmETnefQk6dWSAvKhJKkA0DsXKZErr6LbdMCm80/WOMUTBgdV7QWEj2TBxGPVOapYGEakloQPceRJ+PYcSaIkuv+VE7Zyr9bDvSeMDXMjDapXIjCBWgnnuWjTfWUkf3K8+UpszegqRC2o/ibxHWVz7h4AazyFcYCrxFAQ06UpklHM7OfSRgCFnyoRl7dPJJHGrPUGGuAew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dcoqK+1uPvOKxbPqdmPzvqyeyfg1A6Qh6+26L00eAjU=;
+ b=J09G7YYnhnz5EGWlpm3q3iQTcJbyRra96sjYg4tHTBce3L97VHl7mp9DGuPpOCztOy2/TIXL5J49D9FHkng0/3W6RrNToM6oWrFtKafLuUwot4gYZIKQ92s2zYfvh1msBfRZFDWV83wvpeY3MWJwTmpkyL79lSxkL7hoBWp/VluOMY4Q8mT0pWatM5Dia7ykvnqGnsDJFjLuun7dr7NXcz7v5JmH0BWmFhfFyLAmx8VGYgXzdGnoG9q+zGOoL6yMFWbJem8g7ZjbKVCs8mKu7zotEP8zmrJ/Lnrxyrwt9f+qw7nfrbVpTc0DkUuB1kd2AJwib07yWqsGAbsreE17HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dcoqK+1uPvOKxbPqdmPzvqyeyfg1A6Qh6+26L00eAjU=;
+ b=cLd/+jHdqbHyh8gLL7kMs8Tl79A0WY8VoEG99dp40oN05Go4OBHWOeIesL/INPQGA71Yzvg1oF31RgOLIxYOVQoobrRLSRbYFPV305rl7dtdYCAhV0U3WtZwgUvXrhxfnJpVLS0Nbf1iHY8hjwUwMFn1Kwjbrxe23rXNqANg8Sq4kiH8WRhcJ4T3jApXF/oXSLyxNhgz6spX6OuOp7uLfarJLaXP7xSwLyCRJCoWTgvIvDCr87uCbwNojqN5RA7V1lL9uu2O1g99oxKDA+tRWBDvWtuqnN2+j7xaavqKRyGYBLDKVgN7gzjfVyZ78f3JHEblawzANXp503CpLySYZw==
+Received: from BN9PR03CA0678.namprd03.prod.outlook.com (2603:10b6:408:10e::23)
+ by MN0PR12MB5978.namprd12.prod.outlook.com (2603:10b6:208:37d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
+ 2023 07:56:24 +0000
+Received: from BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10e:cafe::44) by BN9PR03CA0678.outlook.office365.com
+ (2603:10b6:408:10e::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.27 via Frontend
+ Transport; Fri, 21 Apr 2023 07:56:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT042.mail.protection.outlook.com (10.13.177.85) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.23 via Frontend Transport; Fri, 21 Apr 2023 07:56:23 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 21 Apr 2023
+ 00:56:07 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 21 Apr
+ 2023 00:56:07 -0700
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Fri, 21 Apr 2023 00:56:06 -0700
+Date:   Fri, 21 Apr 2023 00:56:05 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 0/3] Add set_dev_data and unset_dev_data support
+Message-ID: <ZEJBldGXBNGEy9tV@Asurada-Nvidia>
+References: <cover.1681976394.git.nicolinc@nvidia.com>
+ <BN9PR11MB52764ED59905104D3A5A68C08C609@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZEI+LBkEeNZdJyTB@Asurada-Nvidia>
+ <BN9PR11MB5276C39E256CD4B922435E1C8C609@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 0/6] iio: st_sensors: Add lsm303d support
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Marius Hoch <mail@mariushoch.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Denis Ciocca <denis.ciocca@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230415231130.115094-1-mail@mariushoch.de>
- <3eb3de24-41b4-9566-9b11-a12d21904793@redhat.com>
-In-Reply-To: <3eb3de24-41b4-9566-9b11-a12d21904793@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276C39E256CD4B922435E1C8C609@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT042:EE_|MN0PR12MB5978:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73b31e83-b77a-46fb-38ba-08db423de6e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q0QuvBCLZAIR05oMkV2kHYTfuSGUEYGHWYb9g/Uy4UzkyGXJ4XHPHuXaaztcjxxeambxRsae14q0vUxH3EE6Z99EDDGVfPGaw1MpsK7/ZUqtmIbbyAc1oRl3ylLoRnr7JQAZs0p+iuP6hKMmz/N6gQYY2zzjC72+34UGICIxJtqqOvzhRN+N763ZPzMRmpoU+S/aJc5IX1ahTh4w/wRPYJfKd73Lixk//wmD3Q3hPDIOuTkthNclOHrZHWK2nZGNolUJwr0QJy6IyXw+TE9gSAeSsHNmN9EhoFQ92Qw62U6cSRZ8x+K3ffj5JfsFEVR+a8LQyUOb8LMiNCCcQGbVhSMgM941XLqtl+Op9Vb3uPKF6u2nYw/NoYN1XkUURp9TLupdgZSuu5mVq+vp9zMDor6ktSGM4tdMLEV7yIciG6NhXK0RGqO5rMqdMkjt7+6ZtM8eNSyC1Dat9BcHcOA/tzHJZcWt3UIpdyjWMXPoFnHRzzLyY2nGsLDokQVAOJJOY1eK+XWYY9n0jTksEOpzQADKhuSyCWQQzbfKyizvKMCs1krMOvtbxIKrysrbmtlxiSStQOIiGb4z6XcgfavhpOjOqqa/FupZ/4CkRKDsNdZLerISxeJpqPaaTqWaDMpR+Rj0QPNa+rSEo1sqvlTKoq9mq93wS+ZZIvdoh8u5MROg4O8/yu7SY5Rn41PjrXAnpok2j4mXw36Z44RIVdrl+XMOh0Mocr1HWkuKkG4TqTGuQJYcZA56EUaeZ6a1+x3LWo27A8lq4OAyyNtSbiIDoMTKzkS3sECf6nz09QOybpimqier9/2knbUjapYp3t+QLQNBz44I62itztgsHBC6rC5bqG7qK5qrRaZCE5SQgMg=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(40470700004)(46966006)(36840700001)(36860700001)(83380400001)(47076005)(40480700001)(426003)(336012)(40460700003)(186003)(55016003)(26005)(9686003)(70206006)(70586007)(82740400003)(6916009)(86362001)(41300700001)(8936002)(7416002)(2906002)(8676002)(316002)(7636003)(356005)(478600001)(966005)(33716001)(54906003)(5660300002)(4326008)(82310400005)(34020700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 07:56:23.5533
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73b31e83-b77a-46fb-38ba-08db423de6e7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5978
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marius,
+On Fri, Apr 21, 2023 at 07:47:13AM +0000, Tian, Kevin wrote:
 
-On 4/16/23 22:19, Hans de Goede wrote:
-
-<snip>
-
-> 2: There are some other unsupported sensors on these models too,
-> perhaps you are interested in adding support for these too?
+> > It is in the commit message of the cover-letter though:
+> > https://github.com/nicolinc/iommufd/commit/5e17d270bfca2a5e3e7401d4b
+> > f58ae53eb7a8a55
+> > --------------------------------------------------------
+> > Changelog
+> > v2:
+> >  * Integrated the uAPI into VFIO_DEVICE_BIND_IOMMUFD call
+> >  * Renamed the previous set_rid_user to set_dev_data, to decouple from
+> >    the PCI regime.
+> > v1:
+> >  https://lore.kernel.org/all/cover.1680762112.git.nicolinc@nvidia.com/
+> > --------------------------------------------------------
+> >
+> > > Could you add some words why changing from passing the information
+> > > in an iommufd ioctl to bind_iommufd? My gut-feeling leans toward
+> > > the latter option...
+> >
+> > Yea. Jason told me to decouple it from PCI. And merge it into
+> > a general uAPI. So I picked the BIND ioctl.
+> >
 > 
-> Here are my personal notes on this:
->  -Light sensor should work with drivers/iio/light/al3320a.c
->   https://github.com/JideTechnology/remixos-kernel/commit/c52d55b4bd907e87b7b115b3943219f3e089a77a
-> 
->  -MXM1120 HALL sensor, have datasheet, measures angle of kickstand thingie, use
->   for SW_TABLET_MODE. Do a pdx86 driver just for the Tab 2 which checks that the
->   kick stand is out *and* the BT keyboard is paired, in that case report
->   SW_TABLET_MODE=0, in all other cases report SW_TABLET_MODE=1 ??
->   For the commit msg:
->   Datasheet available here: http://haechitech.com/tech-support/
->   Requires creating an account, once you have an account you can immediately download
->   the provided datasheets (or let me know if you want me to email you a copy)
+> 'decouple it from PCI' is kind of covered by renaming set_rid
+> to set_data. but I didn't get why this has to be merged with another
+> uAPI. Once iommufd_device is created we could have separate
+> ioctls to poke its attributes individually. What'd be broken if this
+> is not done at BIND time?
 
-A quick follow up on this, since you said you were going to take a look.
+Oh, sorry. He didn't literally told me to merge, but commented
+"make sense" at my proposal of reusing BIND. So, I don't think
+adding to the BIND is a must here.
 
-I think with the way bluetooth works under Linux, with a bunch of the work
-being done in userspace that figuring out if the BT keyboard is paired is
-not going to work in kernelspace. So I think the best we can do here is
-simply export the angle of the kickstand as an iio angle sensor.
+The BIND is done in vfio_realize() where the RID (dev_data) is
+available also. And the new uAPI in my v1 actually gets called
+near the BIND. So, I feel we may just do it once? I am open to
+a better idea.
 
-Regards,
-
-Hans
-
-
+Thanks
+Nic
