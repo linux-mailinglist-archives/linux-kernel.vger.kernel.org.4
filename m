@@ -2,233 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B016B6EAD74
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402356EAD84
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjDUOwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S232790AbjDUOzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjDUOw3 (ORCPT
+        with ESMTP id S232215AbjDUOzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:52:29 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310111710
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:52:28 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so7095e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:52:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682088746; x=1684680746;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yx2zF1Vv+quQ8XthUhL5gxaw3YApklUY0OznVHk0AoM=;
-        b=Nn7UZDlE8AIJXW83tuIeohHXALz4FRk6p1P2dMpDR647zw/FGwW4KczHtEJjQZsBVl
-         JjYC5EfvBdG4MC2j0Uokg7PH7sFwzhqMGrNn1GWU38QNOowZyJwwUrJj3eQoF0nh851b
-         pOzOiZlNyblDJMI4Ml+lZ30+klCvFF9n+mS97E57+JrlU6a9JfwvZJhl1uWMJKO7Buur
-         T6xG6Fy5T8kNxlTWAKbxYpF87deMhOQGuywLejmTuC8q0KbuY7dZGKVInglKJSAq6evn
-         lkLO/sdwx8z9+b0u17/bC2fO5etsC3V8pLTIMjWrylKOXj5oIK4kiqv0Y7MXYxY3LbFt
-         3zBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682088746; x=1684680746;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yx2zF1Vv+quQ8XthUhL5gxaw3YApklUY0OznVHk0AoM=;
-        b=QJBtz3nPwj5MxG5wSQrt1v0ZrWvWS3K3PZpbLVwAKZWRHrpDW8V0zYaelS8Gmrj5/7
-         MH4CIYPy05zGLBISMXbcWYJyKoQmbCJjf9/3u46r36cqrY3NlJPIO/DRFhBaQucVSKoe
-         b5EfwizW7L3eylAZEeAEKBn3fP/TWQXAd5t2fT+zWM55LuX2sSCoDHWP7PHIDbQA/eSd
-         VKtUIZRn7E/6WDuqgdk0rCcUDdn1utGSBjMrrhUoBMf+3SRKOICX1MZL32MleRRYCHxw
-         bPnIzjD+pxt2m4fhm5+yvAv8OkfQSgIzcMFTU9GMWR7Geq3xN2rWYJ24QTTtknS7kjPa
-         F0Vg==
-X-Gm-Message-State: AAQBX9c5ee7Vj133mk48tugNTGSWfq87L2UC1OSel9YRcQw/6lPHQYjz
-        2JDKW5+5qtbf+S7JKcZQUah4jqg6d2uu6t0BuN6gEQ==
-X-Google-Smtp-Source: AKy350ZKj6vZd/NS14fOGUq2SbbOCrrPmiZsdZ8cnu9Y2sBqb1zWQO32UZS1G80gZaxjd0Gpm0VmRzx8EdgJzy9B9Q0=
-X-Received: by 2002:a05:6512:3092:b0:4ed:b0bd:a96c with SMTP id
- z18-20020a056512309200b004edb0bda96cmr190682lfd.6.1682088746201; Fri, 21 Apr
- 2023 07:52:26 -0700 (PDT)
+        Fri, 21 Apr 2023 10:55:52 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FADAAF20;
+        Fri, 21 Apr 2023 07:55:46 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LE9Q9s031312;
+        Fri, 21 Apr 2023 14:55:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=ytlqZYrH0qoFzwZ2+BYeEx9kCxU/tFANcdaojFrOpM8=;
+ b=VxXvr/AXvJmFrMMZAh6S4MCqMKk4MvWG4ILxEw59tkuRXW43NolKWPUwbVV8WPHIo3OX
+ QDjRyAR50K4v8UASIa5+//Zf1JqFmfG86iH9zhlW7yNaMgfFAsxpNQJ1FMJodrT5te0o
+ iZPhrJZaH/sVEhXpTtp5PaVC3WEphMBnGRbUj7JHkzQnSAgAisA38iG09j8Flgauh8/T
+ xVg0cwFKa7IVkaGmWwpyF3KJF94X6SO5IzbFM9RvNqDBYWak/4AsoW2OIpCTC/DYNCzS
+ U8czRMskNaLO6pOF9EJPQduzCDHTq9N7/U7V736RE5VjACbTyweEcovidTfBQfDBHGEZ 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q3umwkf4x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 14:55:41 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33LEcGgr013987;
+        Fri, 21 Apr 2023 14:55:40 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q3umwkf4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 14:55:40 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33LC6fls003740;
+        Fri, 21 Apr 2023 14:55:39 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3pykj8jb8q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 14:55:39 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33LEtcRF32506598
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Apr 2023 14:55:38 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D64658056;
+        Fri, 21 Apr 2023 14:55:35 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FC3C5805A;
+        Fri, 21 Apr 2023 14:55:34 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.8.185])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 21 Apr 2023 14:55:34 +0000 (GMT)
+Message-ID: <ef89b203b67a4a6a8c6aea069c0a2f188a3cfcb0.camel@linux.ibm.com>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     Amir Goldstein <amir73il@gmail.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
+Date:   Fri, 21 Apr 2023 10:55:34 -0400
+In-Reply-To: <20230411-umgewandelt-gastgewerbe-870e4170781c@brauner>
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
+         <20230409-genick-pelikan-a1c534c2a3c1@brauner>
+         <b2591695afc11a8924a56865c5cd2d59e125413c.camel@kernel.org>
+         <20230411-umgewandelt-gastgewerbe-870e4170781c@brauner>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jqS1OM330qLgNJZbinJ-NZ1skzQgU5kx
+X-Proofpoint-GUID: boew0fgaxtLpb0GeLYZZDJckZkynqIgn
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <00000000000050327205f9d993b2@google.com>
-In-Reply-To: <00000000000050327205f9d993b2@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 21 Apr 2023 16:52:13 +0200
-Message-ID: <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
-Subject: Re: [syzbot] [crypto?] KCSAN: data-race in random_recv_done /
- virtio_read (3)
-To:     syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        olivia@selenic.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_07,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ malwarescore=0 phishscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210127
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023 at 16:36, syzbot
-<syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    2faac9a98f01 Merge tag 'keys-fixes-20230321' of git://git...
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1113f21cc80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3eb0bb0ae89a5345
-> dashboard link: https://syzkaller.appspot.com/bug?extid=726dc8c62c3536431ceb
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/571c9c5a3db2/disk-2faac9a9.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/a051e3d7c495/vmlinux-2faac9a9.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ff5ec0d6e37d/bzImage-2faac9a9.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
+On Tue, 2023-04-11 at 10:38 +0200, Christian Brauner wrote:
+> On Sun, Apr 09, 2023 at 06:12:09PM -0400, Jeff Layton wrote:
+> > On Sun, 2023-04-09 at 17:22 +0200, Christian Brauner wrote:
+> > > On Fri, Apr 07, 2023 at 09:29:29AM -0400, Jeff Layton wrote:
+> > > > > > > > 
+> > > > > > > > I would ditch the original proposal in favor of this 2-line patch shown here:
+> > > > > > > > 
+> > > > > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
+> > > > > 
+> > > > > We should cool it with the quick hacks to fix things. :)
+> > > > > 
+> > > > 
+> > > > Yeah. It might fix this specific testcase, but I think the way it uses
+> > > > the i_version is "gameable" in other situations. Then again, I don't
+> > > > know a lot about IMA in this regard.
+> > > > 
+> > > > When is it expected to remeasure? If it's only expected to remeasure on
+> > > > a close(), then that's one thing. That would be a weird design though.
+> > > > 
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > Ok, I think I get it. IMA is trying to use the i_version from the
+> > > > > > > overlayfs inode.
+> > > > > > > 
+> > > > > > > I suspect that the real problem here is that IMA is just doing a bare
+> > > > > > > inode_query_iversion. Really, we ought to make IMA call
+> > > > > > > vfs_getattr_nosec (or something like it) to query the getattr routine in
+> > > > > > > the upper layer. Then overlayfs could just propagate the results from
+> > > > > > > the upper layer in its response.
+> > > > > > > 
+> > > > > > > That sort of design may also eventually help IMA work properly with more
+> > > > > > > exotic filesystems, like NFS or Ceph.
+> > > > > > > 
+> > > > > > > 
+> > > > > > > 
+> > > > > > 
+> > > > > > Maybe something like this? It builds for me but I haven't tested it. It
+> > > > > > looks like overlayfs already should report the upper layer's i_version
+> > > > > > in getattr, though I haven't tested that either:
+> > > > > > 
+> > > > > > -----------------------8<---------------------------
+> > > > > > 
+> > > > > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
+> > > > > > 
+> > > > > > IMA currently accesses the i_version out of the inode directly when it
+> > > > > > does a measurement. This is fine for most simple filesystems, but can be
+> > > > > > problematic with more complex setups (e.g. overlayfs).
+> > > > > > 
+> > > > > > Make IMA instead call vfs_getattr_nosec to get this info. This allows
+> > > > > > the filesystem to determine whether and how to report the i_version, and
+> > > > > > should allow IMA to work properly with a broader class of filesystems in
+> > > > > > the future.
+> > > > > > 
+> > > > > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > > > ---
+> > > > > 
+> > > > > So, I think we want both; we want the ovl_copyattr() and the
+> > > > > vfs_getattr_nosec() change:
+> > > > > 
+> > > > > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
+> > > > >     is in line what we do with all other inode attributes. IOW, the
+> > > > >     overlayfs inode's i_version counter should aim to mirror the
+> > > > >     relevant layer's i_version counter. I wouldn't know why that
+> > > > >     shouldn't be the case. Asking the other way around there doesn't
+> > > > >     seem to be any use for overlayfs inodes to have an i_version that
+> > > > >     isn't just mirroring the relevant layer's i_version.
+> > > > 
+> > > > It's less than ideal to do this IMO, particularly with an IS_I_VERSION
+> > > > inode.
+> > > > 
+> > > > You can't just copy up the value from the upper. You'll need to call
+> > > > inode_query_iversion(upper_inode), which will flag the upper inode for a
+> > > > logged i_version update on the next write. IOW, this could create some
+> > > > (probably minor) metadata write amplification in the upper layer inode
+> > > > with IS_I_VERSION inodes.
+> > > 
+> > > I'm likely just missing context and am curious about this so bear with me. Why
+> > > do we need to flag the upper inode for a logged i_version update? Any required
+> > > i_version interactions should've already happened when overlayfs called into
+> > > the upper layer. So all that's left to do is for overlayfs' to mirror the
+> > > i_version value after the upper operation has returned.
+> > 
+> > > ovl_copyattr() - which copies the inode attributes - is always called after the
+> > > operation on the upper inode has finished. So the additional query seems odd at
+> > > first glance. But there might well be a good reason for it. In my naive
+> > > approach I would've thought that sm along the lines of:
+> > >
+> > > diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
+> > > index 923d66d131c1..8b089035b9b3 100644
+> > > --- a/fs/overlayfs/util.c
+> > > +++ b/fs/overlayfs/util.c
+> > > @@ -1119,4 +1119,5 @@ void ovl_copyattr(struct inode *inode)
+> > >         inode->i_mtime = realinode->i_mtime;
+> > >         inode->i_ctime = realinode->i_ctime;
+> > >         i_size_write(inode, i_size_read(realinode));
+> > > +       inode_set_iversion_raw(inode, inode_peek_iversion_raw(realinode));
+> > >  }
+> > > 
+> > > would've been sufficient.
+> > > 
+> > 
+> > Nope, because then you wouldn't get any updates to i_version after that
+> > point.
+> > 
+> > Note that with an IS_I_VERSION inode we only update the i_version when
+> > there has been a query since the last update. What you're doing above is
+> > circumventing that mechanism. You'll get the i_version at the time of of
+> > the ovl_copyattr, but there won't be any updates of it after that point
+> > because the QUERIED bit won't end up being set on realinode.
+> 
+> I get all that.
+> But my understanding had been that the i_version value at the time of
+> ovl_copyattr() would be correct. Because when ovl_copyattr() is called
+> the expected i_version change will have been done in the relevant layer
+> includig raising the QUERIED bit. Since the layers are not allowed to be
+> changed outside of the overlayfs mount any change to them can only
+> originate from overlayfs which would necessarily call ovl_copyattr()
+> again. IOW, overlayfs would by virtue of its implementation keep the
+> i_version value in sync.
+> 
+> Overlayfs wouldn't even raise SB_I_VERSION. It would indeed just be a
+> cache of i_version of the relevant layer.
+> 
+> > 
+> > 
+> > > Since overlayfs' does explicitly disallow changes to the upper and lower trees
+> > > while overlayfs is mounted it seems intuitive that it should just mirror the
+> > > relevant layer's i_version.
+> > >
+> > >
+> > > If we don't do this, then we should probably document that i_version doesn't
+> > > have a meaning yet for the inodes of stacking filesystems.
+> > > 
+> > 
+> > Trying to cache the i_version is counterproductive, IMO, at least with
+> > an IS_I_VERSION inode.
+> > 
+> > The problem is that a query against the i_version has a side-effect. It
+> > has to (atomically) mark the inode for an update on the next change.
+> > 
+> > If you try to cache that value, you'll likely end up doing more queries
+> > than you really need to (because you'll need to keep the cache up to
+> > date) and you'll have an i_version that will necessarily lag the one in
+> > the upper layer inode.
+> > 
+> > The whole point of the change attribute is to get the value as it is at
+> > this very moment so we can check whether there have been changes. A
+> > laggy value is not terribly useful.
+> > 
+> > Overlayfs should just always call the upper layer's ->getattr to get the
+> > version. I wouldn't even bother copying it up in the first place. Doing
+> > so is just encouraging someone to try use the value in the overlayfs
+> > inode, when they really need to go through ->getattr and get the one
+> > from the upper layer.
+> 
+> That seems reasonable to me. I read this as an agreeing with my earlier
+> suggestion to document that i_version doesn't have a meaning for the
+> inodes of stacking filesystems and that we should spell out that
+> vfs_getattr()/->getattr() needs to be used to interact with i_version.
+> 
+> We need to explain to subsystems such as IMA somwhere what the correct
+> way to query i_version agnostically is; independent of filesystem
+> implementation details.
+> 
+> Looking at IMA, it queries the i_version directly without checking
+> whether it's an IS_I_VERSION() inode first. This might make a
+> difference.h
+> 
+> Afaict, filesystems that persist i_version to disk automatically raise
+> SB_I_VERSION. I would guess that it be considered a bug if a filesystem
+> would persist i_version to disk and not raise SB_I_VERSION. If so IMA
+> should probably be made to check for IS_I_VERSION() and it will probably
+> get that by switching to vfs_getattr_nosec().
 
-Here this:
+When the filesystem isn't mounted with I_VERSION, i_version should be
+set to 0.
 
-size = min_t(unsigned int, size, vi->data_avail);
-memcpy(buf, vi->data + vi->data_idx, size);
-vi->data_idx += size;
-vi->data_avail -= size;
+Originally when the filesytem wasn't mounted with I_VERSION support,
+the file would only be measured once.  With commit ac0bf025d2c0 ("ima:
+Use i_version only when filesystem supports it"), this changed.   The
+"iint" flags are reset, causing the file to be re-
+{measure/appraised/audited} on next access.
 
-runs concurrently with:
+-- 
+thanks,
 
-if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
-    return;
-vi->data_idx = 0;
+Mimi
 
-I did not fully grasp how/where vi->data is populated, but it looks
-like it can lead to use of uninit/stale random data, or even to out of
-bounds access, say if vi->data_avail is already updated, but
-vi->data_idx is not yet reset to 0. Then concurrent reading will read
-not where it's supposed to read.
-
-
-
-> ==================================================================
-> BUG: KCSAN: data-race in random_recv_done / virtio_read
->
-> read to 0xffff8881019054ec of 4 bytes by task 14079 on cpu 0:
->  copy_data drivers/char/hw_random/virtio-rng.c:70 [inline]
->  virtio_read+0xc3/0x3f0 drivers/char/hw_random/virtio-rng.c:92
->  rng_get_data drivers/char/hw_random/core.c:197 [inline]
->  rng_dev_read+0x1a7/0x5e0 drivers/char/hw_random/core.c:234
->  vfs_read+0x192/0x560 fs/read_write.c:468
->  ksys_read+0xeb/0x1a0 fs/read_write.c:613
->  __do_sys_read fs/read_write.c:623 [inline]
->  __se_sys_read fs/read_write.c:621 [inline]
->  __x64_sys_read+0x42/0x50 fs/read_write.c:621
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> write to 0xffff8881019054ec of 4 bytes by interrupt on cpu 1:
->  random_recv_done+0x62/0x90 drivers/char/hw_random/virtio-rng.c:45
->  vring_interrupt+0x150/0x170 drivers/virtio/virtio_ring.c:2491
->  __handle_irq_event_percpu+0x91/0x490 kernel/irq/handle.c:158
->  handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
->  handle_irq_event+0x64/0xf0 kernel/irq/handle.c:210
->  handle_edge_irq+0x17f/0x5a0 kernel/irq/chip.c:819
->  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
->  handle_irq arch/x86/kernel/irq.c:231 [inline]
->  __common_interrupt+0x64/0x100 arch/x86/kernel/irq.c:250
->  common_interrupt+0x49/0xc0 arch/x86/kernel/irq.c:240
->  asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:636
->
-> value changed: 0x00000000 -> 0x00000040
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 14077 Comm: syz-executor.2 Not tainted 6.3.0-rc3-syzkaller-00016-g2faac9a98f01 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> ==================================================================
-> ==================================================================
-> BUG: KCSAN: data-race in detach_buf_split / virtqueue_add
->
-> read to 0xffff888101a76950 of 4 bytes by task 14131 on cpu 0:
->  virtqueue_add_split drivers/virtio/virtio_ring.c:553 [inline]
->  virtqueue_add+0x4b9/0x2130 drivers/virtio/virtio_ring.c:2117
->  virtqueue_add_inbuf+0x53/0x80 drivers/virtio/virtio_ring.c:2196
->  request_entropy drivers/char/hw_random/virtio-rng.c:61 [inline]
->  copy_data drivers/char/hw_random/virtio-rng.c:74 [inline]
->  virtio_read+0x1c5/0x3f0 drivers/char/hw_random/virtio-rng.c:92
->  rng_get_data drivers/char/hw_random/core.c:197 [inline]
->  rng_dev_read+0x1a7/0x5e0 drivers/char/hw_random/core.c:234
->  vfs_read+0x192/0x560 fs/read_write.c:468
->  ksys_read+0xeb/0x1a0 fs/read_write.c:613
->  __do_sys_read fs/read_write.c:623 [inline]
->  __se_sys_read fs/read_write.c:621 [inline]
->  __x64_sys_read+0x42/0x50 fs/read_write.c:621
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> read-write to 0xffff888101a76950 of 4 bytes by interrupt on cpu 1:
->  detach_buf_split+0x2fc/0x570 drivers/virtio/virtio_ring.c:757
->  virtqueue_get_buf_ctx_split drivers/virtio/virtio_ring.c:835 [inline]
->  virtqueue_get_buf_ctx+0x3c8/0x5c0 drivers/virtio/virtio_ring.c:2311
->  virtqueue_get_buf+0x1f/0x30 drivers/virtio/virtio_ring.c:2317
->  random_recv_done+0x4c/0x90 drivers/char/hw_random/virtio-rng.c:42
->  vring_interrupt+0x150/0x170 drivers/virtio/virtio_ring.c:2491
->  __handle_irq_event_percpu+0x91/0x490 kernel/irq/handle.c:158
->  handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
->  handle_irq_event+0x64/0xf0 kernel/irq/handle.c:210
->  handle_edge_irq+0x17f/0x5a0 kernel/irq/chip.c:819
->  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
->  handle_irq arch/x86/kernel/irq.c:231 [inline]
->  __common_interrupt+0x64/0x100 arch/x86/kernel/irq.c:250
->  common_interrupt+0x9e/0xc0 arch/x86/kernel/irq.c:240
->  asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:636
->  xas_find+0x10a/0x3f0
->  find_get_entry mm/filemap.c:2008 [inline]
->  filemap_get_folios+0xa4/0x3f0 mm/filemap.c:2174
->  mpage_map_and_submit_buffers fs/ext4/inode.c:2358 [inline]
->  mpage_map_and_submit_extent fs/ext4/inode.c:2513 [inline]
->  ext4_do_writepages+0x1017/0x2140 fs/ext4/inode.c:2876
->  ext4_writepages+0x127/0x250 fs/ext4/inode.c:2964
->  do_writepages+0x1c5/0x340 mm/page-writeback.c:2551
->  filemap_fdatawrite_wbc+0xdb/0xf0 mm/filemap.c:390
->  __filemap_fdatawrite_range mm/filemap.c:423 [inline]
->  __filemap_fdatawrite mm/filemap.c:429 [inline]
->  filemap_flush+0x95/0xc0 mm/filemap.c:456
->  ext4_alloc_da_blocks+0x50/0x130 fs/ext4/inode.c:3218
->  ext4_release_file+0x5f/0x1c0 fs/ext4/file.c:158
->  __fput+0x245/0x570 fs/file_table.c:321
->  ____fput+0x15/0x20 fs/file_table.c:349
->  task_work_run+0x123/0x160 kernel/task_work.c:179
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0x600/0x1710 kernel/exit.c:869
->  do_group_exit+0x101/0x150 kernel/exit.c:1019
->  get_signal+0xea9/0xfe0 kernel/signal.c:2859
->  arch_do_signal_or_restart+0x89/0x2b0 arch/x86/kernel/signal.c:306
->  exit_to_user_mode_loop+0x6d/0xe0 kernel/entry/common.c:168
->  exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
->  irqentry_exit_to_user_mode+0x9/0x20 kernel/entry/common.c:309
->  irqentry_exit+0x12/0x40 kernel/entry/common.c:412
->  exc_general_protection+0x339/0x4c0 arch/x86/kernel/traps.c:728
->  asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
->
-> value changed: 0x00000001 -> 0x00000000
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 14098 Comm: syz-executor.1 Not tainted 6.3.0-rc3-syzkaller-00016-g2faac9a98f01 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> ==================================================================
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
