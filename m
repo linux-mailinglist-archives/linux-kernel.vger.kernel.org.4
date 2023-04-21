@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7786EAB3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C960C6EAAC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbjDUNHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S232213AbjDUMrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjDUNHW (ORCPT
+        with ESMTP id S232159AbjDUMru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:07:22 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5E39758;
-        Fri, 21 Apr 2023 06:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=aIxUgGvt5DkV8QmGmTQ/SB4Ktspy4zcEHcRXPG7T79Y=; b=eLZUR5mAPW6VsrGcfeYqAlYiDP
-        xFb1gxiHU8BJkOx4jeyCXLQ2IYnSm9NTxTZtFyA0Gs3AB/7CuwfZ1U7CeUMN4QxPG2xVNKam189yd
-        p4QFHUacCC4atRZkfnh9Ogu2RvQS8huh0SW2jEgNW9kQFFT8hejqKwOCe1GwP5bbvYpU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ppqAD-00AsrA-6n; Fri, 21 Apr 2023 14:46:57 +0200
-Date:   Fri, 21 Apr 2023 14:46:57 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: qca8k: fix LEDS_CLASS dependency
-Message-ID: <b632b856-c9f9-455c-8e5c-147431b1e7c8@lunn.ch>
-References: <20230420213639.2243388-1-arnd@kernel.org>
+        Fri, 21 Apr 2023 08:47:50 -0400
+Received: from outbound-smtp37.blacknight.com (outbound-smtp37.blacknight.com [46.22.139.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892E71B1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 05:47:48 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp37.blacknight.com (Postfix) with ESMTPS id 12AAB1FC1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:47:47 +0100 (IST)
+Received: (qmail 20574 invoked from network); 21 Apr 2023 12:47:46 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 12:47:46 -0000
+Date:   Fri, 21 Apr 2023 13:47:44 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 05/26] mm: page_alloc: per-migratetype pcplist for
+ THPs
+Message-ID: <20230421124744.skrxvziwg3bx7rgt@techsingularity.net>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-6-hannes@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230420213639.2243388-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230418191313.268131-6-hannes@cmpxchg.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:36:31PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Apr 18, 2023 at 03:12:52PM -0400, Johannes Weiner wrote:
+> Right now, there is only one pcplist for THP allocations. However,
+> while most THPs are movable, the huge zero page is not. This means a
+> movable THP allocation can grab an unmovable block from the pcplist,
+> and a subsequent THP split, partial free, and reallocation of the
+> remainder will mix movable and unmovable pages in the block.
 > 
-> With LEDS_CLASS=m, a built-in qca8k driver fails to link:
+> While this isn't a huge source of block pollution in practice, it
+> happens often enough to trigger debug warnings fairly quickly under
+> load. In the interest of tightening up pageblock hygiene, make the THP
+> pcplists fully migratetype-aware, just like the lower order ones.
 > 
-> arm-linux-gnueabi-ld: drivers/net/dsa/qca/qca8k-leds.o: in function `qca8k_setup_led_ctrl':
-> qca8k-leds.c:(.text+0x1ea): undefined reference to `devm_led_classdev_register_ext'
-> 
-> Change the dependency to avoid the broken configuration.
-> 
-> Fixes: 1e264f9d2918 ("net: dsa: qca8k: add LEDs basic support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Split out :P
 
-    Andrew
+Take special care of this one because, while I didn't check this, I
+suspect it'll push the PCP structure size into the next cache line and
+increase overhead.
+
+The changelog makes it unclear why exactly this happens or why the
+patch fixes it. The huge zero page strips GFP_MOVABLE (so unmovable)
+but at allocation time, it doesn't really matter what the movable type
+is because it's a full pageblock. It doesn't appear to be a hazard until
+the split happens. Assuming that's the case, it should be ok to always
+set the pageblock movable for THP allocations regardless of GFP flags at
+allocation time or else set the pageblock MOVABLE at THP split (always
+MOVABLE at allocation time makes more sense).
+
+-- 
+Mel Gorman
+SUSE Labs
