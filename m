@@ -2,142 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF51E6EB0CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41096EA750
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjDURmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S230117AbjDUJlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233450AbjDURmJ (ORCPT
+        with ESMTP id S230450AbjDUJlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:42:09 -0400
-Received: from out-18.mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DE615A35
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:41:37 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682098890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8lsVSCZFASjGj882L2SUq8X57TGcITsPyPXAfEkTLgs=;
-        b=PFr/EZaro7ssLUyyiZMxEP8YjsXfPwxeIaTBtv49tB58yI+pA+FCiq9xPo1wG91VUqogAG
-        FyfKBvQ9Z2R68a2BgzhattI724YLKBAbj5PronSuPVAPPPW8Z0PtgStuMgWLu5uwlluwGl
-        HlqkPYGxLE4udEvViO3aTzpvtlubx/U=
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: [PATCH] mm: kmem: fix a NULL pointer dereference in obj_stock_flush_required()
-Date:   Fri, 21 Apr 2023 10:40:54 -0700
-Message-Id: <20230421174054.3434533-1-roman.gushchin@linux.dev>
-In-Reply-To: <00000000000058b63f05f9d98811@google.com>
-References: <00000000000058b63f05f9d98811@google.com>
+        Fri, 21 Apr 2023 05:41:52 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19C2AD24
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:41:46 -0700 (PDT)
+X-ASG-Debug-ID: 1682070104-1eb14e6387376d0001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id sJ8LRkrTU6nIIko7 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 21 Apr 2023 17:41:44 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 17:41:43 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 21 Apr
+ 2023 17:41:43 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
+Date:   Sat, 22 Apr 2023 01:41:42 +0800
+X-ASG-Orig-Subj: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
+Message-ID: <20230421174142.382602-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1682070104
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1596
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0002 1.0000 -2.0198
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107717
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KCSAN found an issue in obj_stock_flush_required():
-stock->cached_objcg can be reset between the check and dereference:
+OverCurrent condition is not standardized in the UHCI spec.
+Zhaoxin UHCI controllers report OverCurrent bit active off.
+In order to handle OverCurrent condition correctly, the uhci-hcd
+driver needs to be told to expect the active-off behavior.
 
-==================================================================
-BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
-
-write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
- drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
- refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
- obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
- memcg_slab_free_hook mm/slab.h:587 [inline]
- __cache_free mm/slab.c:3373 [inline]
- __do_kmem_cache_free mm/slab.c:3577 [inline]
- kmem_cache_free+0x105/0x280 mm/slab.c:3602
- __d_free fs/dcache.c:298 [inline]
- dentry_free fs/dcache.c:375 [inline]
- __dentry_kill+0x422/0x4a0 fs/dcache.c:621
- dentry_kill+0x8d/0x1e0
- dput+0x118/0x1f0 fs/dcache.c:913
- __fput+0x3bf/0x570 fs/file_table.c:329
- ____fput+0x15/0x20 fs/file_table.c:349
- task_work_run+0x123/0x160 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
- obj_stock_flush_required mm/memcontrol.c:3319 [inline]
- drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
- try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
- try_charge mm/memcontrol.c:2837 [inline]
- mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
- sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
- sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
- udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
- udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
- sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
- __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
- __do_sys_setsockopt net/socket.c:2282 [inline]
- __se_sys_setsockopt net/socket.c:2279 [inline]
- __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0xffff8881382d52c0 -> 0xffff888138893740
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller-00387-g534293368afa #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-
-Fix it by reading the cached_objcg with READ_ONCE().
-
-Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
-Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Link: https://lore.kernel.org/linux-mm/CACT4Y+ZfucZhM60YPphWiCLJr6+SGFhT+jjm8k1P-a_8Kkxsjg@mail.gmail.com/T/#t
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: stable@vger.kernel.org
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
- mm/memcontrol.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+v1->v2
+ - Modify the description of this patch.
+ - Let Zhaoxin and VIA share a common oc_low flag
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 5abffe6f8389..9426a1ddc190 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3314,10 +3314,11 @@ static struct obj_cgroup *drain_obj_stock(struct memcg_stock_pcp *stock)
- static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
- 				     struct mem_cgroup *root_memcg)
- {
-+	struct obj_cgroup *objcg = READ_ONCE(stock->cached_objcg);
- 	struct mem_cgroup *memcg;
+ drivers/usb/host/uhci-pci.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+index 3592f757fe05..034586911bb5 100644
+--- a/drivers/usb/host/uhci-pci.c
++++ b/drivers/usb/host/uhci-pci.c
+@@ -119,11 +119,12 @@ static int uhci_pci_init(struct usb_hcd *hcd)
  
--	if (stock->cached_objcg) {
--		memcg = obj_cgroup_memcg(stock->cached_objcg);
-+	if (objcg) {
-+		memcg = obj_cgroup_memcg(objcg);
- 		if (memcg && mem_cgroup_is_descendant(memcg, root_memcg))
- 			return true;
- 	}
+ 	uhci->rh_numports = uhci_count_ports(hcd);
+ 
+-	/* Intel controllers report the OverCurrent bit active on.
+-	 * VIA controllers report it active off, so we'll adjust the
+-	 * bit value.  (It's not standardized in the UHCI spec.)
++	/* Intel controllers report the OverCurrent bit active on.  VIA
++	 * and ZHAOXIN controllers report it active off, so we'll adjust
++	 * the bit value.  (It's not standardized in the UHCI spec.)
+ 	 */
+-	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
++	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
++		to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
+ 		uhci->oc_low = 1;
+ 
+ 	/* HP's server management chip requires a longer port reset delay. */
 -- 
-2.40.0
+2.32.0
 
