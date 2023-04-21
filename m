@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076AA6EA586
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC0A6EA584
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjDUIEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S231537AbjDUID4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjDUIE2 (ORCPT
+        with ESMTP id S231515AbjDUIDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:04:28 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACC58A62;
-        Fri, 21 Apr 2023 01:04:25 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33L83YGD0021724, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33L83YGD0021724
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 21 Apr 2023 16:03:34 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+        Fri, 21 Apr 2023 04:03:47 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E1A9004;
+        Fri, 21 Apr 2023 01:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682064225; x=1713600225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uaalytOD7E9KTAxWb0CBOWck+EskKmiavYRIJcVqFvs=;
+  b=ZdJVX5PmC8E6JvOq8ZsNx444i87GFrRhfCgJFsh6pXgw7QqlI7vzqGes
+   L7FHpEU2hKkxGPf1Ei+agi+KyFdler94/W96mVotnwe1DPDx6eKn327XM
+   7Qgj92QUpTKf4u7b99uivmP/xdI/TlpUg2dgwK4UqOmXAC9sOtbByb9ub
+   SwmcKzb1ZBIi5comdRvwc2oP7WeCT/94jnQwfe4WIuEeIGbjTYbLLMVUI
+   /a0IJdLvdhRlXvIVyKlOxk+IEYJLBqeVL6ccPspyzsm8xn6kVOwZtZUsO
+   TP5JpT0EI6ketHdQzzYiuOfuaHgc7kMu5j7PWKkpSVOSnzfXYvWSIzL23
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,214,1677567600"; 
+   d="scan'208";a="148255781"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2023 01:03:44 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 21 Apr 2023 16:03:34 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 21 Apr 2023 16:03:33 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Fri, 21 Apr 2023 16:03:33 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1] usb: phy: add usb phy notify port status API
-Date:   Fri, 21 Apr 2023 16:03:31 +0800
-Message-ID: <20230421080333.18681-1-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
+ 15.1.2507.21; Fri, 21 Apr 2023 01:03:40 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Fri, 21 Apr 2023 01:03:40 -0700
+Date:   Fri, 21 Apr 2023 10:03:39 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>
+Subject: Re: [PATCH net-next] net: lan966x: Don't use xdp_frame when action
+ is XDP_TX
+Message-ID: <20230421080339.x2fllg65qmcrk6vk@soft-dev3-1>
+References: <20230420121152.2737625-1-horatiu.vultur@microchip.com>
+ <ZEGmHe2pyxwWiYRL@boxer>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <ZEGmHe2pyxwWiYRL@boxer>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,72 +67,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In Realtek SoC, the parameter of usb phy is designed to can dynamic
-tuning base on port status. Therefore, add a notify callback of phy
-driver when usb port status change.
+The 04/20/2023 22:52, Maciej Fijalkowski wrote:
+> [Some people who received this message don't often get email from maciej.fijalkowski@intel.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> 
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
- drivers/usb/core/hub.c  | 13 +++++++++++++
- include/linux/usb/phy.h | 14 ++++++++++++++
- 2 files changed, 27 insertions(+)
+Hi Maciej,
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 97a0f8faea6e..b4fbbeae1927 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
- 		ret = 0;
- 	}
- 	mutex_unlock(&hub->status_mutex);
-+
-+	if (!ret) {
-+		struct usb_device *hdev = hub->hdev;
-+
-+		if (hdev && !hdev->parent) {
-+			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
-+
-+			if (hcd->usb_phy)
-+				usb_phy_notify_port_status(hcd->usb_phy,
-+					    port1 - 1, *status, *change);
-+		}
-+	}
-+
- 	return ret;
- }
- 
-diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
-index e4de6bc1f69b..53bf3540098f 100644
---- a/include/linux/usb/phy.h
-+++ b/include/linux/usb/phy.h
-@@ -144,6 +144,10 @@ struct usb_phy {
- 	 */
- 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
- 
-+	/* notify phy port status change */
-+	int	(*notify_port_status)(struct usb_phy *x,
-+		int port, u16 portstatus, u16 portchange);
-+
- 	/* notify phy connect status change */
- 	int	(*notify_connect)(struct usb_phy *x,
- 			enum usb_device_speed speed);
-@@ -316,6 +320,16 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
- 		return 0;
- }
- 
-+static inline int
-+usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus,
-+	    u16 portchange)
-+{
-+	if (x && x->notify_port_status)
-+		return x->notify_port_status(x, port, portstatus, portchange);
-+	else
-+		return 0;
-+}
-+
- static inline int
- usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
- {
+> 
+> On Thu, Apr 20, 2023 at 02:11:52PM +0200, Horatiu Vultur wrote:
+> 
+> 'net: ' in patch subject is excessive to me
+
+I usually have set this in the subject. I can remove this in the next
+version and I will try to keep in mind for other patches for lan966x.
+
+> 
+> > When the action of an xdp program was XDP_TX, lan966x was creating
+> > a xdp_frame and use this one to send the frame back. But it is also
+> > possible to send back the frame without needing a xdp_frame, because
+> > it possible to send it back using the page.
+> 
+> s/it/it is
+> 
+> > And then once the frame is transmitted is possible to use directly
+> > page_pool_recycle_direct as lan966x is using page pools.
+> > This would save some CPU usage on this path.
+> 
+> i remember this optimization gave me noticeable perf improvement, would
+> you mind sharing it in % on your side?
+
+The way I have done the measurements, is to measure actually how much
+more traffic can be send back. I tried with different frame sizes,
+frame size     improvement
+64                ~8%
+256              ~11%
+512               ~8%
+1000              ~0%
+1500              ~0%
+
+I will make sure do add this to the comments in the next version.
+
+> 
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  .../ethernet/microchip/lan966x/lan966x_fdma.c | 35 +++++++++++--------
+> >  .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
+> >  .../ethernet/microchip/lan966x/lan966x_xdp.c  | 11 +++---
+> >  3 files changed, 27 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > index 2ed76bb61a731..7947259e67e4e 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > @@ -390,6 +390,7 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
+> >  static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+> >  {
+> >       struct lan966x_tx *tx = &lan966x->tx;
+> > +     struct lan966x_rx *rx = &lan966x->rx;
+> >       struct lan966x_tx_dcb_buf *dcb_buf;
+> >       struct xdp_frame_bulk bq;
+> >       struct lan966x_db *db;
+> > @@ -432,7 +433,8 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+> >                       if (dcb_buf->xdp_ndo)
+> >                               xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
+> >                       else
+> > -                             xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
+> > +                             page_pool_recycle_direct(rx->page_pool,
+> > +                                                      dcb_buf->data.page);
+> >               }
+> >
+> >               clear = true;
+> > @@ -702,6 +704,7 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+> >  int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> >                          struct xdp_frame *xdpf,
+> >                          struct page *page,
+> > +                        u32 len,
+> 
+> agreed with Olek regarding arguments reduction here
+
+Yes, I will change this in the next version.
+
+> 
+> >                          bool dma_map)
+> >  {
+> >       struct lan966x *lan966x = port->lan966x;
+> > @@ -722,6 +725,15 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> >               goto out;
+> >       }
+> >
+> > +     /* Fill up the buffer */
+> > +     next_dcb_buf = &tx->dcbs_buf[next_to_use];
+> > +     next_dcb_buf->use_skb = false;
+> > +     next_dcb_buf->xdp_ndo = dma_map;
+> 
+> a bit misleading that xdp_ndo is a bool :P
+
+There are few other variables that are misleading :), I need to get to
+this and clean it a little bit.
+
+> 
+> > +     next_dcb_buf->len = len + IFH_LEN_BYTES;
+> > +     next_dcb_buf->used = true;
+> > +     next_dcb_buf->ptp = false;
+> > +     next_dcb_buf->dev = port->dev;
+> > +
+> >       /* Generate new IFH */
+> >       if (dma_map) {
+> >               if (xdpf->headroom < IFH_LEN_BYTES) {
 -- 
-2.34.1
-
+/Horatiu
