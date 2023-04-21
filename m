@@ -2,161 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084186EAB5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117B36EAB64
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjDUNQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
+        id S231252AbjDUNT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjDUNQR (ORCPT
+        with ESMTP id S231877AbjDUNTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:16:17 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00047C654
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:16:15 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-95678d891d6so221949466b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:16:15 -0700 (PDT)
+        Fri, 21 Apr 2023 09:19:25 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE21BC673;
+        Fri, 21 Apr 2023 06:19:23 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4ec8da7aaf8so1687755e87.2;
+        Fri, 21 Apr 2023 06:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1682082974; x=1684674974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8XMxjEm4UvnsoHzLAHBkPkEwF3Gt/9CwX8y4iqsN5RM=;
-        b=jG+FvIrl+PnQY2V/+/flKf7p6cz0IwKUMHve/yF8z2kv2EiqetKGPGvzn9z3sWYh+Y
-         iQs/X0Do1qDOY4E0w4wH+jWgK9owtfi4Aer5sxYo/dPb1NYkKAMM6eaEpUBHFiF+AUsS
-         RacrXeGWmbXtI/V0+88BPz5aCwqfR6FVenFm2aRwGDmlh7vbrkUhhLssYsf6ouuG+wNS
-         73L4fBzQuRIG6JViXq93O7EXoP7uCN/RISzWwBiyLOquRiFH2rhk6+aRyji4ymw34Qk6
-         JoNdfQqG+p8fcBU1NUvsk1TSgJteVfiNMgY/cntm5cH9Tc3Lk+OWgEqXuXhRcBui/PJc
-         qcYQ==
+        d=gmail.com; s=20221208; t=1682083162; x=1684675162;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IRS7anluXydQHxja6o7heaiNzwN0suh6IrwOE+RxWvU=;
+        b=EoMT80WOlRKsImBbG31qLbCV3f47BS7YQ3ysBgGsud01wLp99C3p8WMRILdvgnv3yI
+         WCukJYKlZwN1lVesUabg4ZfcmUPv+E2NwxoXohOd8tx0KaQvG0o+TfiQpBSq908QJ0cQ
+         B6Dza3OOkfGd1lUvvy1f590294edYbonDaLM00Q2O/q9WcLlgGBpkrYqw5WXWYl7YbPk
+         wqqnyHme8I5A80Uzx5v+TJdzgWBTkCHzwnfRki8UX8omrWyS41c2pME+vYe3b1+eJZKv
+         ZmSI9DyhHt7Rul1euecVSFqnCuoR7zrALVgKBUlOKAh/AJM++mE0VWMFxWGXPhE6mFk2
+         ceYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682082974; x=1684674974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8XMxjEm4UvnsoHzLAHBkPkEwF3Gt/9CwX8y4iqsN5RM=;
-        b=FDiexVuODteIC1fgLEGH6AKb0FJnnvh49ys0N26gDl9dkSqODGuIRUxBJI0jJcwxOi
-         0qo7km/FSMKodoMXu3ZtLRx9Lf5YpA/bMHE/NAV800LMep29rOrneTCHvbHZNRakx+VF
-         ERjHpA1kv9oawsrsyNS0MDPE3dhjAeV8C4Un8y7ULERh5vuV/C2bJKzLRqU2Mj9cK+l0
-         JeNOdDBH+Z63+B/KDMjioD/SI5wdDkrPR/DZQuoccTBAGr/0MZMCPmi+aEAB+vVVgQON
-         pTbnyaG5lplHuwSH1LbpbMf7LlZ3NLb8ebEFgVcULoGuPW9o6p5IxzCieDbhbEU7ddQT
-         BqYg==
-X-Gm-Message-State: AAQBX9fmyagyxs9QyNKzV8XjkJr0Uirkaj60sny9P0dwMqmKqASizKVX
-        X/WcGXUc1HrdcNqqE6TIGyMbC+rkZ7nxjUiPcJaLlLrnqfp2n69p5N5qPQ==
-X-Google-Smtp-Source: AKy350YpLHxIgjQxSyvTw/OkPmB9KWS2SVXe5O8dmW8okji2xcd0yrVO+8HrGFVCIpoLQvcaAPH1ap/uCtVjJhCk4Xk=
-X-Received: by 2002:a17:906:c416:b0:953:37eb:7727 with SMTP id
- u22-20020a170906c41600b0095337eb7727mr2260294ejz.43.1682082974310; Fri, 21
- Apr 2023 06:16:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682083162; x=1684675162;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IRS7anluXydQHxja6o7heaiNzwN0suh6IrwOE+RxWvU=;
+        b=IWshCVBzghRAsadFiSatK45EXab3CLQpm3sT41aD9KXDL+YIs2ZGT1fPz9DtOun92P
+         8z4djzdlyEJIksPN6p3yABHKl40q8A6OLmEyWAT6OeeDhsxxbcrkbm6sl+K8/8Zj5YB/
+         M2RTQn+9ijL0YEKIssFKHVpa3HKtZL5J4kQTN0SgIaC37/qwOkNEvz80YLBnN17rhCkJ
+         yewlPeIX+6foPh24mwqRyhDWRwmk9AJfB24jCnRFaiKKYmz6wqv9Dmex40s9wc+fBbQq
+         Ws+aMQ/KsgkyMA8MhCnfO8TJjgOOM6cfOJTTWMsJKsbJEbVxLsQck8Fb2HDWO1bZtxk7
+         3AdQ==
+X-Gm-Message-State: AAQBX9cqgDHVTAOmLjMNSddZ1LvNl7y/3EAFImp6hwB02zhGJylLbEbP
+        MSUOFmfQRdlyFmD++lrSerAa8NGGBiE=
+X-Google-Smtp-Source: AKy350Z5mkQeZ07tFeLRvRbrfXcaVCylGPbN81BbX1r3vnBbDZ4bqkyYkasyKhvd4d59J/B8ZWsUwg==
+X-Received: by 2002:ac2:4a8c:0:b0:4eb:982:adf with SMTP id l12-20020ac24a8c000000b004eb09820adfmr1315591lfp.26.1682083161761;
+        Fri, 21 Apr 2023 06:19:21 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id x2-20020ac25dc2000000b004ec8b5891e2sm553403lfq.226.2023.04.21.06.19.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 06:19:21 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:19:19 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: Multiple undefined configuration options are dependent in
+ Kconfig under the v6.3-rc4 drivers directory
+Message-ID: <20230421131919.3yy4smvzcrtjbnbu@mobilestation>
+References: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
+ <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
+ <20230410232725.zwbccyryboxj3bh5@mobilestation>
+ <011B19A8-1276-4603-B4D8-4CA7E9F07B3D@flygoat.com>
 MIME-Version: 1.0
-References: <20230404153452.2405681-1-apatel@ventanamicro.com>
-In-Reply-To: <20230404153452.2405681-1-apatel@ventanamicro.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 21 Apr 2023 18:46:02 +0530
-Message-ID: <CAAhSdy3V-BMzuCLcvZ9YVLVF+0o3D+6rMrSGJ3-BDBxxpBx1ZQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/9] RISC-V KVM virtualize AIA CSRs
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <011B19A8-1276-4603-B4D8-4CA7E9F07B3D@flygoat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 9:05=E2=80=AFPM Anup Patel <apatel@ventanamicro.com>=
- wrote:
->
-> The RISC-V AIA specification is now frozen as-per the RISC-V internationa=
-l
-> process. The latest frozen specifcation can be found at:
-> https://github.com/riscv/riscv-aia/releases/download/1.0-RC3/riscv-interr=
-upts-1.0-RC3.pdf
->
-> This series implements first phase of AIA virtualization which targets
-> virtualizing AIA CSRs. This also provides a foundation for the second
-> phase of AIA virtualization which will target in-kernel AIA irqchip
-> (including both IMSIC and APLIC).
->
-> The first two patches are shared with the "Linux RISC-V AIA Support"
-> series which adds AIA driver support.
->
-> To test this series, use AIA drivers from the "Linux RISC-V AIA Support"
-> series and use KVMTOOL from the riscv_aia_v1 branch at:
-> https://github.com/avpatel/kvmtool.git
->
-> These patches can also be found in the riscv_kvm_aia_csr_v4 branch at:
-> https://github.com/avpatel/linux.git
->
-> Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
-> (https://lore.kernel.org/lkml/20230401112730.2105240-1-apatel@ventanamicr=
-o.com/)
->
-> Based-on: 20230403121527.2286489-1-apatel@ventanamicro.com
-> (https://lore.kernel.org/lkml/20230403121527.2286489-1-apatel@ventanamicr=
-o.com/)
->
-> Changes since v3:
->  - Split PATCH7 into two patches
->  - Addressed comments in PATCH7, PATCH8 and PATCH9
->
-> Changes since v2:
->  - Rebased on Linux-6.3-rc5
->  - Split PATCH5 into two separate patches as suggested by Atish.
->
-> Changes since v1:
->  - Addressed from Drew and Conor in PATCH1
->  - Use alphabetical ordering for SMAIA and SSAIA enum in PATCH2
->  - Use GENMASK() in PATCH3
->
-> Anup Patel (9):
->   RISC-V: Add AIA related CSR defines
->   RISC-V: Detect AIA CSRs from ISA string
->   RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
->   RISC-V: KVM: Initial skeletal support for AIA
->   RISC-V: KVM: Implement subtype for CSR ONE_REG interface
->   RISC-V: KVM: Add ONE_REG interface for AIA CSRs
->   RISC-V: KVM: Use bitmap for irqs_pending and irqs_pending_mask
->   RISC-V: KVM: Virtualize per-HART AIA CSRs
->   RISC-V: KVM: Implement guest external interrupt line management
+On Fri, Apr 14, 2023 at 09:18:20AM +0100, Jiaxun Yang wrote:
+> 
+> 
+> > 2023年4月11日 00:40，Serge Semin <fancer.lancer@gmail.com> 写道：
+> > 
+> > On Thu, Mar 30, 2023 at 07:34:58AM +0900, Damien Le Moal wrote:
+> >> On 3/29/23 16:52, 孙滢 wrote:
+> >>> It has been discovered that the following configuration options are undefined in the current latest version, v6.3-rc4, yet they are being relied upon by other configuration options in multiple Kconfig files:
+> >>> 
+> >>> MIPS_BAIKAL_T1 is undefined, used as a 'depends on' condition in multiple files such as drivers/ata/Kconfig, drivers/hwmon/Kconfig, drivers/bus/Kconfig, and drivers/memory/Kconfig.
+> >>> MFD_MAX597X is undefined, used as a 'depends on' condition in Kconfig file drivers/regulator/Kconfig.
+> >>> MFD_SM5703 is undefined, used as a 'depends on' condition in Kconfig file drivers/regulator/Kconfig.
+> >>> ARCH_THUNDERBAY is undefined, used as a 'depends on' condition in Kconfig files drivers/pinctrl/Kconfig and drivers/phy/intel/Kconfig.
+> >>> ARCH_BCM4908 is undefined, used as a 'depends on' condition in Kconfig file drivers/leds/blink/Kconfig.
+> >>> MFD_TN48M_CPLD is undefined, used as a 'depends on' condition in Kconfig files drivers/gpio/Kconfig and drivers/reset/Kconfig. 
+> >>> USB_HSIC_USB3613 is undefined, used as a 'depends on' condition in drivers/staging/greybus/Kconfig and drivers/staging/greybus/arche-platform.c.
+> > 
+> > Please, don't drop the MIPS_BAIKAL_T1 config. It will be defined and
+> > thus utilized after I submit the SoC CSP support to the MIPS arch.
+> 
 
-I have queued PATCH1 to PATCH8 for Linux-6.4
+> Hi Serge,
+> 
+> Is there any special support at MIPS arch level required by Baikal T1?
+> 
+> I think MIPS32R5 generic kernel should fit your purpose? You can easily add some “workaround”
+> under generic kernel framework as well.
 
-The PATCH9 depends on "RISC-V IPI Improvements" series
-so this patch will be sent as separate PR or differed to Linux-6.5
+Alas there are multiple configs specific to our chip. So the MIPS
+generic sub-module won't workout our needs at the current state. I'll
+have a better look at it when time comes (whether it's possible to fix
+it up somehow) but meanwhile it's better to retain the MIPS_BAIKAL_T1
+config in the drivers.
 
-Regards,
-Anup
+-Serge(y)
 
->
->  arch/riscv/include/asm/csr.h      | 107 ++++-
->  arch/riscv/include/asm/hwcap.h    |   8 +
->  arch/riscv/include/asm/kvm_aia.h  | 137 +++++++
->  arch/riscv/include/asm/kvm_host.h |  14 +-
->  arch/riscv/include/uapi/asm/kvm.h |  18 +-
->  arch/riscv/kernel/cpu.c           |   2 +
->  arch/riscv/kernel/cpufeature.c    |   2 +
->  arch/riscv/kvm/Makefile           |   1 +
->  arch/riscv/kvm/aia.c              | 627 ++++++++++++++++++++++++++++++
->  arch/riscv/kvm/main.c             |  23 +-
->  arch/riscv/kvm/mmu.c              |   3 +-
->  arch/riscv/kvm/vcpu.c             | 190 +++++++--
->  arch/riscv/kvm/vcpu_insn.c        |   1 +
->  arch/riscv/kvm/vm.c               |   4 +
->  arch/riscv/kvm/vmid.c             |   4 +-
->  15 files changed, 1083 insertions(+), 58 deletions(-)
->  create mode 100644 arch/riscv/include/asm/kvm_aia.h
->  create mode 100644 arch/riscv/kvm/aia.c
->
-> --
-> 2.34.1
->
+> 
+> Thanks
+> Jiaxun
+> 
+> 
+> 
+> 
