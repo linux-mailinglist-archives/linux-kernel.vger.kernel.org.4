@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E0C6EA0B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 02:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12276EA0B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 02:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjDUAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 20:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S231754AbjDUAlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 20:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjDUAku (ORCPT
+        with ESMTP id S231944AbjDUAl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 20:40:50 -0400
+        Thu, 20 Apr 2023 20:41:27 -0400
 Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75CA9F;
-        Thu, 20 Apr 2023 17:40:48 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63d4595d60fso11103828b3a.0;
-        Thu, 20 Apr 2023 17:40:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BEC9F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 17:41:26 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b509fe13eso1316549b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 17:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682037648; x=1684629648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTuACkgKkUG8BEjwqXpr54lGYsJ9iErhStfiFT3Cv7A=;
-        b=FSchoR9xgp6F+ve4+ehe7wI+avX0bRiEH9RPU3EVxiKT1InQGzWmlFVCHI+wuQ56Bd
-         POdQhLwUfJ5GniUFhzZ8YgQRn482TmzKYWU4Kztqg9WrDaDuxgToh32bCXyvGcmYLZBn
-         gkCVWOmnLYgqDt5dtwY/Ig46jludUd0UTVKMGKoVpk9PAvVQ9ZB43/HI4EewOkY13BVR
-         tiFFJ0uC1obSwv9MxNkEJmhtPohB1JkG5nDTBLquJjzS7qXfF6OmAz8GWdKAStUNmCJH
-         c7d9pPxx42AibEzTFYTXYRuuDDnmRL5UEE+1AtwtaUBGpst38nWpJJk8AKVqQ74Wz2FN
-         TBRA==
+        d=google.com; s=20221208; t=1682037685; x=1684629685;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=V9j1g7sK3q1/d39/yJUozMObHifrV7DZPVY+c2FKrBI=;
+        b=tG404iTeIKBzFQ2afETCq9JjRtSLFROG7JgUWHjmUVO8bezWtXVh9fjsDB9qRaIpqR
+         /9KZTJMWPrlLV74rGkMv7B4tbZNrlmUxFtH7VaISia45q5Lw9wUn5XxXswwB+SI8mV0H
+         2+V1tEiLlOzEgFuupmaWSol/CF5rJ2CbgUCUA1E75EJfZrMVrW8AtG/5A+o8Qb98o9xb
+         euWEaN9Luo30IGtV6DG4HQTnL7HAOp8AkUL4lNTmoyOJw/uwGTRCnfKnTuOj/bzAbOWn
+         XtpnK4b1vc3J4C9KitxYQNQ579ym3u+zhSl78+KkkBB8gpr9vSYLygR0mXdpPS8ZMurR
+         aYUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682037648; x=1684629648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682037685; x=1684629685;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTuACkgKkUG8BEjwqXpr54lGYsJ9iErhStfiFT3Cv7A=;
-        b=KN91QSqYeFhuiTDHY6zAmmF7DLt2qXjKiJsDCSSYvReH8RGQ+MHAbEQIVS+brvNraY
-         UomkGFSMcJ1JEWWPb/rPqlCqpoAQQrYumgsR3lxjIKV5x77Zc16/X3znjucG28JhxqtI
-         GDDtIARxZjdlIGMEo0jmHwiH1A+n8p7HIejTfjcAj8jeMZhoBcaPdH83o1BHc6bQTl5X
-         Pxk202VpoCRgkUU8K+yhbEgda5/jPE7r8PyHXph8V0xVh+v0aK+kn+w5an2JSbW8Nftf
-         dvE+cFmnSb/rof4T0uM0M1vzRQI/RJHaTK9VG9flHPg7i0vRT5yUmVIJwLedMozhp2Qi
-         isJg==
-X-Gm-Message-State: AAQBX9eBP12YcD3tQ9RCM+oHGQqvE3U1KaA+EtxcjEpxCZrv1eoE98xe
-        jTdidfNoYaIb/0DtHFaVpG4=
-X-Google-Smtp-Source: AKy350aevJh+Ax/Lfo5mZD5qxH5k9UlZic5c4IzDGiFBdH37T91eUaWm/KoHdNEnp0LR2meRFjunzA==
-X-Received: by 2002:a17:90a:1481:b0:23f:9445:318e with SMTP id k1-20020a17090a148100b0023f9445318emr3560129pja.3.1682037648157;
-        Thu, 20 Apr 2023 17:40:48 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:65e8:96ae:d527:184b? ([2600:8802:b00:4a48:65e8:96ae:d527:184b])
-        by smtp.gmail.com with ESMTPSA id lt24-20020a17090b355800b00247735d1463sm1685467pjb.39.2023.04.20.17.40.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 17:40:47 -0700 (PDT)
-Message-ID: <be0d976a-2219-d007-617d-6865c0344335@gmail.com>
-Date:   Thu, 20 Apr 2023 17:40:45 -0700
+        bh=V9j1g7sK3q1/d39/yJUozMObHifrV7DZPVY+c2FKrBI=;
+        b=XlZKlSCRz2sm1D6Vfv6d1U/UHEdRDjp3cOh8zeZctReDy2DOz3AxYCedqjojvZ77t5
+         guAhMP2BafARa2gh2abQCLp9Uc/xDgZ8vmqiGtx52L6FdZyeY+/GEyTtUzKbkO7Bfs1l
+         yODyILJxTO0pWSjc1bzG3+eRYT8ECC/Ke75CWCmHtigEHORb6M6/Ecj02WQ/nXZ5266t
+         PEw2WYml07JFQFHi2LA+WSLtNUIjTECRXGh506mBVULyUB6M2Owt/28PoSpS4WuGXPAH
+         fUL/39LHtzi2jdKdahLemuWsLJbzuEDy7yiHhblVgsuAmIdtbJDVBRrCoOYL5H2LAhYq
+         tddA==
+X-Gm-Message-State: AAQBX9cFK1z+8yS3FUhtLda/JuddxfOQ1H0QrZkcjCy035QcLfjHpOwQ
+        znod9fmWu6ehJU1zP6R2jjw8zA==
+X-Google-Smtp-Source: AKy350bVNciq3SNwM9/Ddxv0JWqBoEq72bXp1tM1bZOuJakAJlgFz+RpCEcC6VXd3q9ffKbHa+m4YA==
+X-Received: by 2002:a05:6a00:14c5:b0:63f:15cc:9c1c with SMTP id w5-20020a056a0014c500b0063f15cc9c1cmr1476876pfu.34.1682037685429;
+        Thu, 20 Apr 2023 17:41:25 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s23-20020a62e717000000b005aa60d8545esm1813677pfh.61.2023.04.20.17.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 17:41:24 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 00:41:20 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     linux-mm@kvack.org, tkjos@google.com, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: Using page-fault handler in binder
+Message-ID: <ZEHbsOmokBGlzNjo@google.com>
+References: <ZEGh4mliGHvyWIvo@google.com>
+ <CAJuCfpEGBquOjEBFD87DEHqWc0TZ8TkLHRh6RAjR=1wFPbMNHw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net-next] net: dsa: b53: Slightly optimize b53_arl_read()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <c94fb1b4dcd9a04eff08cf9ba2444c348477e554.1682023416.git.christophe.jaillet@wanadoo.fr>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <c94fb1b4dcd9a04eff08cf9ba2444c348477e554.1682023416.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpEGBquOjEBFD87DEHqWc0TZ8TkLHRh6RAjR=1wFPbMNHw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/20/2023 1:44 PM, Christophe JAILLET wrote:
-> When the 'free_bins' bitmap is cleared, it is better to use its full
-> maximum size instead of only the needed size.
-> This lets the compiler optimize it because the size is now known at compile
-> time. B53_ARLTBL_MAX_BIN_ENTRIES is small (i.e. currently 4), so a call to
-> memset() is saved.
+On Thu, Apr 20, 2023 at 02:35:00PM -0700, Suren Baghdasaryan wrote:
+> On Thu, Apr 20, 2023 at 1:34 PM Carlos Llamas <cmllamas@google.com> wrote:
+> >
+> > Instead of caching page pointers, I believe binder could make use of
+> > get_user_pages_remote() and trigger a page fault as needed. Basically,
+> > implement something similar to access_remote_vm() but that instead does
+> > a copy_from_user(). However, I don't see many in-tree users of these
+> > routines, so I wonder if I'm overlooking something in this approach?
 > 
-> Also, as 'free_bins' is local to the function, the non-atomic __set_bit()
-> can also safely be used here.
+> Sounds doable but there might be GUP details I'm missing...
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/net/dsa/b53/b53_common.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > One more reason for the page caching in binder is being able to free
+> > pages from the shrinker's callback. Unused pages are added to an LRU
+> > list and we manually zap/free them when they are reclaimed. It is not
+> > evident to me how can binder mark a range within the vma region as
+> > reclaimable?
 > 
-> diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
-> index 3464ce5e7470..8c55fe0e0747 100644
-> --- a/drivers/net/dsa/b53/b53_common.c
-> +++ b/drivers/net/dsa/b53/b53_common.c
-> @@ -1627,7 +1627,7 @@ static int b53_arl_read(struct b53_device *dev, u64 mac,
->   	if (ret)
->   		return ret;
->   
-> -	bitmap_zero(free_bins, dev->num_arl_bins);
-> +	bitmap_zero(free_bins, B53_ARLTBL_MAX_BIN_ENTRIES);
+> I think you would have to release the individual pages using
+> put_page(). Also note that get_user_pages_remote() is being
+> deprecated, see:
+> https://elixir.bootlin.com/linux/latest/source/mm/gup.c#L2171
 
-That one I am not a big fan, as the number of ARL bins is a function of 
-the switch model, and this illustrates it well.
+Yeah, I remember reading that comment but it doesn't make sense since
+the suggested alternatives do not support operations on _remote_ mm.
 
->   
->   	/* Read the bins */
->   	for (i = 0; i < dev->num_arl_bins; i++) {
-> @@ -1641,7 +1641,7 @@ static int b53_arl_read(struct b53_device *dev, u64 mac,
->   		b53_arl_to_entry(ent, mac_vid, fwd_entry);
->   
->   		if (!(fwd_entry & ARLTBL_VALID)) {
-> -			set_bit(i, free_bins);
-> +			__set_bit(i, free_bins);
+I actually tracked this down and it seems the original comment was made
+for get_user_pages() instead, in commit f0818f472d8d ("mm: gup: add
+get_user_pages_locked and get_user_pages_unlocked"). The whole comment
+block was then carried over without update into get_user_pages_remote()
+in commit 1e9877902dc7 ("mm/gup: Introduce get_user_pages_remote()").
+The comment block was finally switched to use the "_remote" portion in
+commit adc8cb406e52 ("mm/gup.c: update the documentation"). In reality,
+this comment should be relocated to the get_user_pages() section.
 
-I would be keen on taking that hunk but keep the other as-is. Does that 
-work for you?
---
-Florian
+> 
+> >
+> > Any pointers are appreciated!
+> >
+> > --
+> > Carlos Llamas
