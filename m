@@ -2,215 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C63D6EA68B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB1E6EA67A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjDUJG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S231293AbjDUJEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjDUJGP (ORCPT
+        with ESMTP id S231130AbjDUJE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:06:15 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7908C9EDA
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:05:47 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2472dc49239so1721957a91.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:05:47 -0700 (PDT)
+        Fri, 21 Apr 2023 05:04:28 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87228691;
+        Fri, 21 Apr 2023 02:04:26 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4ec8eca56cfso1475239e87.0;
+        Fri, 21 Apr 2023 02:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682067947; x=1684659947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t0gJQV+jBsuJN+dqapwDGx8wuqSDbN1mALWddpdSsEk=;
-        b=S5Ivxp968YSA3NDLM8BeS1NCb2DfvXA3IuISPyCNzeNTePZMImiqO1QFMplQ3aXvDz
-         /JvtVHFnfcDqRSLbbaCRYizZ6eVphwrfwkjJf7dk2xAGd6ln9qyu2KFaV5fIQGQLEGbh
-         UFTjg240tmdYVaKwG8OZ6gX0sCfvi3mqh0IFgjtv3fmK0Ctvild8XBJs1iZoKvJFwu54
-         qQqD2rnDRafbasd6xUreABRj/ccs0fL2FTpiONAYRciJzBzv3/2xzI1k/ZZ/gFwxgUY5
-         HePnsiegALfcpVVlCX9aIdraq+Dy+PNzgb9CdkwgZPAqjAbqksx1axNBgTMMnjnnUNXn
-         zPMg==
+        d=gmail.com; s=20221208; t=1682067865; x=1684659865;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GD+kPjbrYOpAZ5eEFt/aG7lSE+x3V2Tz7Zj3HJKlsWE=;
+        b=IQBfC7RLkilRMtCYiEcDkvo09J8JyR1j0INIjE/SJ/fi0WUOHhDuz5HEWOxs8pPCA/
+         wkQcvof39Gly8MHYMak5oxg7TF8x/X7A/yJ+OLD6Qujj/Xhe0SBUI9Zld/glCU1eSM7I
+         ln0DCz2FCDzBUqd6MHMcJB/44CEd9Sr5M2QqcfitUepulc9Kx1J2/1MZ12lYLpdM76jw
+         ipM+HHrdW+4ptedQXpdgyqGAa+Ri699aqQd2kVFungN66QJ8AEnwWZowrtL8k1Ug8xTC
+         w4AkaORA6gmIQbuVncLsYu9ZWSOl/CWIoIfa/xStTGaxj2nkQfgOL7DFlHboPPjRniXk
+         jLIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682067947; x=1684659947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t0gJQV+jBsuJN+dqapwDGx8wuqSDbN1mALWddpdSsEk=;
-        b=gTN0oncV2w5FaVWfLc2afc1zmU+Js/zvW368AHribxuHm8y9w4dvjQjxPWqiKTpLxd
-         juhuwEIrY8ZxlyN5xpxoe88CkLgr4pO1p6hTEt2EPeGXIfgsmzXWjkoICQ6LEuKiWAUB
-         iFTYTG/XCjIJkrUH4ZqhJO+QYHlGonsSGyeOtp+Q4UXJsYyq2H19y5MFCuAOSREXfNg0
-         koSpFJ0BtaOjFf15zJ7ya9cUKzPhABwL1ARQqvKAy0VyBAeTVALYxiSI3W6o8FBg0vMv
-         s76vGMIWGA2X7Y4PsVz1Ir+QO1i6RVd9LkubtqJ5kmZguniSZy7yIqj7der83G1S5+oO
-         ibDw==
-X-Gm-Message-State: AAQBX9f9i1uPw9BQQOkOgckDN1SPalcOEl3rMojA+ykAlanPS6+DXAAj
-        yNFw+wb/+QU/rCj6piFYznVFeQ==
-X-Google-Smtp-Source: AKy350Yq/tolYlOhf1pDRg+pi8crdvgzu8tht/po/DMcygONgBqFFU6dDpp2J5xJKwIpk+nmGlNlMw==
-X-Received: by 2002:a17:90a:3004:b0:246:681c:71fd with SMTP id g4-20020a17090a300400b00246681c71fdmr4294867pjb.6.1682067946936;
-        Fri, 21 Apr 2023 02:05:46 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090a950300b0024796ddd19bsm4192309pjo.7.2023.04.21.02.05.39
+        d=1e100.net; s=20221208; t=1682067865; x=1684659865;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GD+kPjbrYOpAZ5eEFt/aG7lSE+x3V2Tz7Zj3HJKlsWE=;
+        b=DP8NphRSqTaYXWZ+KNOiEGSbjG8GbMxi9LMjIuznX6azbbXCqfczWajpxV5pG9hd8r
+         ySs+M0A0q+RTQh0yameZXMOAh/OuwkQFkZo2h2eoJCZ2x7/09LrS8WNH71YkSzAsN3r8
+         0M9aF4TzPFNByDnQXRHSK8/oOM5bZo6s1QX7DTIREuuc7rIQI1t/wpZg/w1Z7K16uIi+
+         thgLHEELvtsaZqGjT5/ojKPwg73iqCOnJBl/DIQMB6PK8pk55f50lbyHpYqU3B7adhf8
+         bAX+xDAHWFKAy1/JVNIyxnnYgZ4btkCMXZMqexJQpaQxzQg3UCU38CV7b4bJuO0mjB2l
+         WIqg==
+X-Gm-Message-State: AAQBX9ecdrdYHzqs+dsNM7iT1/yPr66/BD8LWmU7xVZ6E2GOp8PdrokF
+        dCpfvaZySRpwNZm2A68YHJs=
+X-Google-Smtp-Source: AKy350b73lGa6EYgToUGZU3RxFCZJndbtfCcOwL70CGkEcByRSNhGgk7mM1xrzRIPWcJWHPJhmqxFA==
+X-Received: by 2002:ac2:4e49:0:b0:4ec:a18e:f985 with SMTP id f9-20020ac24e49000000b004eca18ef985mr1211349lfr.13.1682067864875;
+        Fri, 21 Apr 2023 02:04:24 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id g2-20020a19ac02000000b004ec87cf6b69sm495878lfc.169.2023.04.21.02.04.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 02:05:46 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-Date:   Fri, 21 Apr 2023 17:04:03 +0800
-Message-Id: <20230421090403.15515-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
-References: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
+        Fri, 21 Apr 2023 02:04:24 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 12:04:22 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v8 0/5] spi: dw: DW SPI DMA Driver updates
+Message-ID: <20230421090422.grujbps24fckewxb@mobilestation>
+References: <20230420055131.2048959-1-joychakr@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420055131.2048959-1-joychakr@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On Thu, Apr 20, 2023 at 05:51:26AM +0000, Joy Chakraborty wrote:
+> This Patch series adds support for 32 bits per word trasfers using DMA
+> and some defensive checks around dma controller capabilities.
 
-test_progs:
-Tests new kfunc bpf_task_under_cgroup().
+The series looks good to me except a small nitpick described in the
+patch 5. Just a note for future patchset it's preferable to have the
+fixes-patches placed at the head of the series thus it would minimize
+a possible to catch merge-conflicts on the patches backporting. In
+case of your fixes patch it won't be relevant since the change is
+independent from the rest of the series updates.
 
-The bpf program saves the pid which call the getuid syscall within a
-given cgroup to the remote_pid, which is convenient for the user-mode
-program to verify the test correctness.
+So feel free to add the tags:
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Tested-by: Serge Semin <fancer.lancer@gmail.com>
+* tested on Baikal-T1 based system with DW SPI-looped back interface
+transferring a chunk of data with DFS:8,12,16.
 
-The user-mode program creates its own mount namespace, and mounts the
-cgroupsv2 hierarchy in there, call the getuid syscall, then check if
-remote_pid and local_pid are equal.
+Note before moving further we'll need to wait for @Andy response.
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- .../bpf/prog_tests/task_under_cgroup.c        | 46 +++++++++++++++++++
- .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
- .../bpf/progs/test_task_under_cgroup.c        | 40 ++++++++++++++++
- 3 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+-Serge(y)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-new file mode 100644
-index 000000000000..bd3deb469938
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "test_task_under_cgroup.skel.h"
-+
-+#define FOO	"/foo"
-+
-+void test_task_under_cgroup(void)
-+{
-+	struct test_task_under_cgroup *skel;
-+	int ret, foo = -1;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		return;
-+
-+	skel = test_task_under_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-+		goto cleanup;
-+
-+	skel->rodata->local_pid = getpid();
-+	skel->rodata->cgid = get_cgroup_id(FOO);
-+
-+	ret = test_task_under_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-+		goto cleanup;
-+
-+	ret = test_task_under_cgroup__attach(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-+		goto cleanup;
-+
-+	syscall(__NR_getuid);
-+
-+	test_task_under_cgroup__detach(skel);
-+
-+	ASSERT_EQ(skel->bss->remote_pid, skel->rodata->local_pid,
-+		  "test task_under_cgroup");
-+
-+cleanup:
-+	if (foo)
-+		close(foo);
-+
-+	test_task_under_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-index 22914a70db54..41b3ea231698 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-@@ -26,6 +26,7 @@ struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp, int level) __ksym;
- struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
-+int bpf_task_under_cgroup(struct cgroup *cgrp, struct task_struct *task) __ksym;
- 
- static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_lookup(struct cgroup *cgrp)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-new file mode 100644
-index 000000000000..e2740f9b029d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <vmlinux.h>
-+#include <asm/unistd.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "cgrp_kfunc_common.h"
-+
-+const volatile int local_pid;
-+const volatile long cgid;
-+int remote_pid;
-+
-+SEC("tp_btf/sys_enter")
-+int BPF_PROG(sysenter, struct pt_regs *regs, long id)
-+{
-+	struct cgroup *cgrp;
-+
-+	if (id != __NR_getuid)
-+		return 0;
-+
-+	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		return 0;
-+
-+	if (!bpf_task_under_cgroup(cgrp, bpf_get_current_task_btf()))
-+		goto out;
-+
-+	remote_pid = local_pid;
-+
-+out:
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.20.1
-
+> ---
+> V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
+> ---
+> V1->V2 Changes : Add dma capability check to make sure address widths
+> are supported.
+> ---
+> V2->V3 Changes : Split changes , add DMA direction check and other
+> cosmetic chnages.
+> ---
+> V3->V4 Changes : Fix Sparce Warning
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+> ---
+> V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+> check before initalisation of further capabilities, remove zero
+> initialisations, remove error OR'ing.
+> ---
+> V5->V6 Changes :
+> 	-Remove case of n_bytes=3 using 4_bytes buswidth
+> 	-Avoid forward decaration
+> 	-Break capability check patch into 2
+> 	-round n_bytes to power of 2 ( Bug Fix)
+> 	-Add more explanation in commit text.
+> ---
+> V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+> func()
+> ---
+> 
+> Joy Chakraborty (5):
+>   spi: dw: Add 32 bpw support to SPI DW DMA driver
+>   spi: dw: Move dw_spi_can_dma()
+>   spi: dw: Add DMA directional capability check
+>   spi: dw: Add DMA address widths capability check
+>   spi: dw: Round of n_bytes to power of 2
+> 
+>  drivers/spi/spi-dw-core.c |  2 +-
+>  drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
+>  drivers/spi/spi-dw.h      |  1 +
+>  3 files changed, 60 insertions(+), 19 deletions(-)
+> 
+> -- 
+> 2.40.0.634.g4ca3ef3211-goog
+> 
