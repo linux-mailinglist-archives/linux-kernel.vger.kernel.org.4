@@ -2,93 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5CE6EAE6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223C36EAE90
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbjDUP51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S232995AbjDUP7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 11:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbjDUP5Y (ORCPT
+        with ESMTP id S233025AbjDUP7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:57:24 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4ED14462
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:57:19 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b781c9787so644504b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:57:19 -0700 (PDT)
+        Fri, 21 Apr 2023 11:59:11 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A562146EE
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:58:58 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3e0965f70ecso1165251cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682092639; x=1684684639;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kSZLkVrR4znaBU7/34lRloMzkiKioLgkBLFv9+jq45M=;
-        b=g4bXgCh8LuC3ClwDCLrnCk0XQ0qeQ8+OkLvZpxtjzYrZORmg8nhN3RUxO44Kkkuply
-         2uzoyEoYfpmUh28rAxSNTQZglyOFV4uJYxda/1j5YNle//kU+2KxjgNrwxJl9ulpI4FF
-         7HiLJELiaOETqk2CrKziAAdf71lsbulo0yXBeQpzbMG4ku61nobUoKvIwHpwyQpCpAuz
-         q+LuacPxrCzs57vj2UUex3zg0/aU70H5HByVlPD4vtEJb2/KY8GsHjtZGsTPT1L77WNb
-         CEhEjC6kF/7LqtFeTRDheD3Pd8bUSAXP4QPNnFGDDq8xMPW8zZCeDiTK2SzixoxpbXqS
-         F0tw==
+        d=google.com; s=20221208; t=1682092737; x=1684684737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6N5YHEQ1RxQ6t0+aJXh2jcD1fRRCI0f96yxG6zaIICc=;
+        b=rIGzYdqapPL9+W7+H5tzyiGPkOpGKGgGeNOvHm+l64bjXc2GkGmZ8omePTtuEmH/tq
+         yaQUvVWt3JZpIrSj1DKOtdO35/NswoUrQ02AJJLpP0LwJ3xpBBuyn16uimovYxmj7qox
+         /a+vhRZvuEiLPVLcsnUeaucOZujg426/0R/hJK3QHdVpsgFVcqXcfApDzpMPxHVis2mG
+         lKboH4TT1Cs01ew2O1aJEU9wPnNQuumusx5fNtWPK7KF0/J81UEUU5yqDfKvF/q4ggh8
+         dFM/YA5v7554O1H/m8cbf9RBpVPl8PnPmhvcp3b0uBNZ5J2Qu44pRW+FDW+pkNd9Utaa
+         QAig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682092639; x=1684684639;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kSZLkVrR4znaBU7/34lRloMzkiKioLgkBLFv9+jq45M=;
-        b=lPmoD4YtO+nL3gl+SF2WnVvs6x60JtZxz8aHuCxnL6JJ0bT86yp7GIOKcjT6EDjFpq
-         lPTsvTPtHVMpZwjAbMAeisUpiOaUPfX8mtswhjM1UFIhLDEbMDGKZ2szviMa47M6iSsT
-         3GGZFSl+SDF+lKql23XmbIT9NrI8ygETT/giHSYKN9yYXCgKCFuEcoBR5DxW+PItRVKQ
-         DPEIszDy5dr6QeFAmhzn7uCWxSSVEAF6533mtp7kV9XAAJRt16oR64xxGRIOrtbSQx2b
-         48GsvPywD72ZaDHRv90Tt/7+/sznpGzYAx5zES04f21GnbnN2xwt1i5/gCIBiWG8iV0A
-         3/5g==
-X-Gm-Message-State: AAQBX9fMjUmW6KZ4U97PBSoVrnuThVjepmzBVa3Jra+U5iWWa2r8f5Kp
-        lBgBRN4FHBH6XrRXeShrS1iCpA==
-X-Google-Smtp-Source: AKy350bmJO3gBsnB6yY3o4rGG0zrD6tuLB1Xi8207GssvwrIUXDbqDVivrR9GhG8tmYVgSkpJaZ55A==
-X-Received: by 2002:a05:6a20:54a6:b0:cb:af96:9436 with SMTP id i38-20020a056a2054a600b000cbaf969436mr8222809pzk.0.1682092638756;
-        Fri, 21 Apr 2023 08:57:18 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id p8-20020a63e648000000b0051b9e82d6d6sm2780655pgj.40.2023.04.21.08.57.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 08:57:18 -0700 (PDT)
-Message-ID: <26e393fd-ffba-db6a-3a08-eb5aaa70315d@kernel.dk>
-Date:   Fri, 21 Apr 2023 09:57:17 -0600
+        d=1e100.net; s=20221208; t=1682092737; x=1684684737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6N5YHEQ1RxQ6t0+aJXh2jcD1fRRCI0f96yxG6zaIICc=;
+        b=R3njdh63V3QAfsPN0j6kH4n/nf13kE++OxhQdDSIyTsBuoVt5bdzhauLwt6xXcSB81
+         ClhPKA1EAKxwZZ93dEAOZYZGZXqUw9lLLkvyCflHBc0nKA7D/fhjp5qOk5YS8y2JFRpD
+         R1xXXLTg5W1o2BfEO6SrxNe0qJ/M01oDZVtfQGM2waFqL6MFuG//pkkirvfG2qbFIRND
+         WMzGVEjpopcv/TG5mk8CIO39/kGFF6j4BvznU5sP1hzyMHPlCmARY4y9PegmnE4R3j5g
+         +HK4WBq6kL3kVYglsCBYDnbPKNiWJJgL6Pm5qkg9CpgcHgEoJaTz7HaQPg4LHALF9Jhz
+         Kc2A==
+X-Gm-Message-State: AAQBX9cgLz6TdgDOPK/IQHL6K2AeebEGzJWDGtnRphDEMRbSfgSQMchb
+        qcrSRYoEi8QYLNRpaJB43Ha03i6bg7eZIUKepTZmPQ==
+X-Google-Smtp-Source: AKy350azJw/DXQ+putIXbnmGTqvzhibiaxZ2QAMPFJ4KP1m4ycIBy3nknh7w3QBXDOHgrsdT1/6tDDVF6h9d6X9oIc0=
+X-Received: by 2002:ac8:5811:0:b0:3ee:d8fe:6f5c with SMTP id
+ g17-20020ac85811000000b003eed8fe6f5cmr334258qtg.1.1682092736735; Fri, 21 Apr
+ 2023 08:58:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: Can you drop the splice patches?
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Ayush Jain <ayush.jain3@amd.com>, Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Steve French <stfrench@microsoft.com>, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <208643.1682091901@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <208643.1682091901@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230414051922.3625666-1-irogers@google.com> <d1fe801a-22d0-1f9b-b127-227b21635bd5@linux.intel.com>
+ <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
+ <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com> <CAP-5=fXZSACj=kGM5t3pBHkQ-W1i0eJayAQ77_ToEp4zXWzJnw@mail.gmail.com>
+ <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com> <CAP-5=fVVFjKgUGV8zVurd99BOhASQ9mMaZqOyw13PYLhZWpsOA@mail.gmail.com>
+ <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com>
+ <84b19053-2e9f-5251-6816-26d2475894c0@linux.intel.com> <CAP-5=fWJKmo4eLKe9+=3pKGe7g+xfA+YxOz7AOgqLfcRNzNaLw@mail.gmail.com>
+ <201a2ad6-3fb4-4b2a-d8a4-34d924e680c3@linux.intel.com> <CAP-5=fVWN5=URg0Og7KW7f7L4LSw6D8ghOKjP7La=0c+MkXFCg@mail.gmail.com>
+ <2b8768bf-de24-946f-62da-6ed171a5c324@linux.intel.com> <CAP-5=fU9WeBga_tQKi6QKX1-t=C1w5CoPc8Rn9myR=1CxeQuMg@mail.gmail.com>
+ <46508ba1-6bd5-a28e-5ae8-bc69a679b2c5@linux.intel.com> <CAP-5=fWeBN0gzCzk3_gh=bd_H+q5B+1KqofG5q-JGTaFk7akog@mail.gmail.com>
+ <7836c3c0-75bb-7c66-d6b1-ee6ff1201117@linux.intel.com>
+In-Reply-To: <7836c3c0-75bb-7c66-d6b1-ee6ff1201117@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 21 Apr 2023 08:58:19 -0700
+Message-ID: <CAP-5=fXMmj1mNuGNbocmjb1ytqvgAkdjUR2tYgH0Lzvwp+_L4A@mail.gmail.com>
+Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        "Yasin, Ahmad" <ahmad.yasin@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Taylor, Perry" <perry.taylor@intel.com>,
+        "Alt, Samantha" <samantha.alt@intel.com>,
+        "Biggers, Caleb" <caleb.biggers@intel.com>,
+        "Wang, Weilin" <weilin.wang@intel.com>,
+        Edward <edward.baker@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/23 9:45 AM, David Howells wrote:
-> Hi Jens,
-> 
-> Can you drop the splice patches for the moment, please?  Al spotted problems
-> with them.
+On Fri, Apr 21, 2023 at 6:32=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.c=
+om> wrote:
+>
+>
+>
+> On 2023-04-20 8:19 p.m., Ian Rogers wrote:
+> >>>>                         struct evlist *metric_evlist =3D evlist__new=
+();
+> >>>>                         struct evsel *metric_evsel;
+> >>>>
+> >>>> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-d=
+isplay.c
+> >>>> index 6b46bbb3d322..072fa56744b4 100644
+> >>>> --- a/tools/perf/util/stat-display.c
+> >>>> +++ b/tools/perf/util/stat-display.c
+> >>>> @@ -747,7 +747,7 @@ static void uniquify_event_name(struct evsel *co=
+unter)
+> >>>>         int ret =3D 0;
+> >>>>
+> >>>>         if (counter->uniquified_name || counter->use_config_name ||
+> >>>> -           !counter->pmu_name || !strncmp(counter->name, counter->p=
+mu_name,
+> >>>> +           !counter->pmu_name || !counter->name ||
+> >>>> !strncmp(counter->name, counter->pmu_name,
+> >>>>                                            strlen(counter->pmu_name)=
+))
+> >>>>                 return;
+> >>>
+> >>> Is this a pre-existing hybrid bug? It is a real shame hybrid shows so
+> >>> few common code paths. In general evsel__name should be preferred ove=
+r
+> >>> directly accessing name.
+> >>
+> >>
+> >> I don't think so.
+> >>
+> >> I haven't dig into the bug yet. But from the source code I can tell th=
+at
+> >> the check is the same as the current 6.3-rc7.
+> >>
+> >> For the current 6.3-rc7, perf stat true works.
+> >> The perf stat -M TopdownL1 --metric-no-group can work as well.
+> >>
+> >> But with the current perf-tools-next branch, perf stat true gives a
+> >> Segmentation fault.
+> >>
+> >> The TopdownL1 doesn't work either.
+> >>
+> >> # ./perf stat -M TopdownL1 --metric-no-group
+> >> Error:
+> >> The sys_perf_event_open() syscall returned with 22 (Invalid argument)
+> >> for event (topdown-retiring).
+> >> /bin/dmesg | grep -i perf may provide additional information.
+> >
+> > I see hybrid failing basic sanity tests both for 6.3 and in
+> > perf-tools-next. For metrics I see:
+> >
+> > ```
+> > $ git status
+> > ...
+> > Your branch is up to date with 'linus/master'
+> > ...
+> > $ git describe
+> > v6.3-rc7-139-gb7bc77e2f2c7
+> > $ sudo perf stat -M TopdownL1 -a sleep 1
+>
+> Try the --metric-no-group.
 
-Yep I saw Al's comments, it won't go out this time. I'll drop them from
-for-next as well.
+You can't not group topdown events, needed for the performance core,
+on Linux 6.3. The logic to make that not necessary was added to
+perf-tools-next and you are currently looking to revert the changes in
+perf-tools-next.
+https://lore.kernel.org/all/20230312021543.3060328-1-irogers@google.com/
 
--- 
-Jens Axboe
+Thanks,
+Ian
 
-
+>
+>
+> > WARNING: events in group from different hybrid PMUs!
+> > WARNING: grouped events cpus do not match, disabling group:
+> >  anon group { topdown-retiring, topdown-retiring,
+> > INT_MISC.UOP_DROPPING, topdown-fe-bound, topdown-fe-bound,
+> > CPU_CLK_UNHALTED.CORE, topdown-be-bound, topdown-be-bound,
+> > topdown-bad-spec, topdown-bad-spec }
+> > Error:
+> > The sys_perf_event_open() syscall returned with 22 (Invalid argument)
+> > for event (topdown-retiring).
+> > /bin/dmesg | grep -i perf may provide additional information.
+> > ```
+> >
+> > It seems perf on hybrid is quite broken in 6.3, but I doubt we can fix
+> > 6.3 given the late stage of the release cycle. As perf-tools-next
+> > enables TopdownL1 metrics when no events or metric are specified and
+> > when the metric group is present, on hybrid this will cause the
+> > pre-existing bug to appear for the no events/metrics case. I suspect
+> > this is the cause of the crashes you see, but I'm seeing assertion
+> > failures and similar as I'm using a debug build.
+> >
+> > I'm looking into fixing perf-tools-next and not 6.3. Maybe there will
+> > be something we can cherry-pick back to fix up 6.3. It hasn't been
+> > easy to find hardware to test on, and if the machine I'm remotely
+> > using falls over then I have no means to test, so fingers crossed.
+> >
+>
+> OK. So the json metric thing is buggy on both 6.3 and perf-tools-next. I
+> think it is even worse in the perf-tools-next.
+> Besides the bugs, the json metric also changes the output layout of perf
+> stat default. The tools, which are on top of perf, are all impacted.
+>
+> The question is why we are in such a rush to move the default of perf
+> stat from reliable kernel metric to json metric?
+>
+> Can we take a step back? Create a perf/json_metric or whatever branch,
+> fix all the issues thoroughly, and then merge to the mainline.
+>
+> I think the default of perf stat is frequently used by not only the
+> newbees but also the veterans. That could have a big user-visible impact.
+>
+> The 6.4 merge window is approaching. Can we at least revert the patches
+> for 6.4?
+>
+> Arnaldo, what do you think?
+>
+> Thanks,
+> Kan
