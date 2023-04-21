@@ -2,205 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2C16EAEDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E1A6EAEE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbjDUQNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S232907AbjDUQPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbjDUQM4 (ORCPT
+        with ESMTP id S230255AbjDUQP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:12:56 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055713FB0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:12:46 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b8f5121503eso2466329276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682093565; x=1684685565;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZKO1I2nyCroJ5CwepD9IlxcHZJ24Ly0m35i9l8S4MQs=;
-        b=HJfyn5H0QVx3NXHRM8iU50CH7Ukb/wfDINz8hm/4f7n2NjK0MiMfZadyU4/9ZxGvkJ
-         pH/IHUyy274lKYCO1jODOlPX2cacKBGdFCiGRGEYu2bzEwGpsO7LKkbrxIkAQWVLIc+j
-         byWAkFmPgv/5cQKlcgPuQSV6bzI9E6E8GcAvs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682093565; x=1684685565;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZKO1I2nyCroJ5CwepD9IlxcHZJ24Ly0m35i9l8S4MQs=;
-        b=HWtQQItZJM81Y6S9wON0ZAo2sj/N5wl+EgWKf9jCKuG+ziBJYIuMTzcWiMZlVYDnMO
-         pn9SmWyH3vUlMu9SE92B+Xj/1z2Rd/e6mWHOPSnHXfVG3qruRxKoTgH5yywAhQ/OodHy
-         OCT22yiaxP+fawnGc6XPgCSB9TilQSmECYq+YZzHGRrAUmGdsNYQbLYwv1ATDNUJGDGb
-         qEZTcurXNnHcKxVhNKpUPgYJCDrhJ9BgZFXe8isw8Nmp45Ck6kxh6+m+43g38T5rOe3E
-         YYYHGLOyGRJtpXsbZGb/BCAFy6KrjERq3fkik7t2DUX3TZ2WtX3riO0wG3k7X0LZ0lO3
-         JBmQ==
-X-Gm-Message-State: AAQBX9dAiDItUK+puXXS5DKN+8fZJIrv3pCGbyiaUFOIZ9+U0BK8xcVA
-        gMApk0ZnwfFVdmma/y7x1evKZg==
-X-Google-Smtp-Source: AKy350ZfHj4U+debwEjtoM+P+zXHEbqLPoMWNeevKjzr0FvvwqIS7hVfrAuFlrrufYErsNiIub5ahw==
-X-Received: by 2002:a25:b31b:0:b0:b8c:4e4:d3d4 with SMTP id l27-20020a25b31b000000b00b8c04e4d3d4mr2748897ybj.17.1682093565513;
-        Fri, 21 Apr 2023 09:12:45 -0700 (PDT)
-Received: from localhost ([2620:0:1035:15:25e5:2115:c97c:bf00])
-        by smtp.gmail.com with UTF8SMTPSA id n12-20020a0dcb0c000000b00552e32354f8sm1038529ywd.32.2023.04.21.09.12.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 09:12:45 -0700 (PDT)
-From:   Mark Yacoub <markyacoub@chromium.org>
-X-Google-Original-From: Mark Yacoub <markyacoub@google.com>
-To:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     seanpaul@chromium.org, dianders@chromium.org,
-        Mark Yacoub <markyacoub@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] dp_hdcp: Get the hdcp key from the connector prop
-Date:   Fri, 21 Apr 2023 12:12:37 -0400
-Message-ID: <20230421161237.357342-3-markyacoub@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-In-Reply-To: <20230421161237.357342-1-markyacoub@google.com>
-References: <20230421161237.357342-1-markyacoub@google.com>
+        Fri, 21 Apr 2023 12:15:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93BB19B6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:15:27 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 844C421A4E;
+        Fri, 21 Apr 2023 16:15:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1682093726; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AwF3d3ZNKKYJ/ZXOzikimHY4xWkQNJAaMDbXHQeEkp8=;
+        b=He0o2Y0sS0ygDdSIMnnUAsLNV9RleANDBBPQ/ylIDNPuS1YCMJFzp+giaO15jxFp04tSIT
+        bJC2oZpBatRUUhK7Cod1Ry1O0cIk4765EJaU8L6wNIY2AkNGxUk8g4D7lB5fjdccqRs3qk
+        gDWffqjAZdLV4zbMlaTTlfy0wTz65NU=
+Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 157212C145;
+        Fri, 21 Apr 2023 16:15:26 +0000 (UTC)
+Date:   Fri, 21 Apr 2023 18:15:22 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: port lock: was: Re: [PATCH printk v1 11/18] printk: nobkl:
+ Introduce printer threads
+Message-ID: <ZEK2mu9ikDhDeVvu@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-12-john.ogness@linutronix.de>
+ <ZC6U/CZCNmgnTpI4@alley>
+ <ZEEMJxobFe_UZ8gV@alley>
+ <87zg72vo5g.fsf@jogness.linutronix.de>
+ <ZEE_ERSc_jHaVVe9@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEE_ERSc_jHaVVe9@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Yacoub <markyacoub@chromium.org>
+On Thu 2023-04-20 15:33:10, Petr Mladek wrote:
+> On Thu 2023-04-20 12:39:31, John Ogness wrote:
+> I know. And the hostile takeover is not my concern.
+> 
+> My concern are races between write_atomic() in emergency context
+> and other driver code serialized only by the port->lock.
+> 
+> We need an API that will make sure that any code serialized
+> by port->lock is properly serialized against write->atomic()
+> when the console is registered.
 
-[Why]
-To support protected content, the driver requires a key.
-Currently, it's being injected from debugfs, which is not super useful
-to run a user space in the wild.
+I though more about it. My idea is the following:
 
-[How]
-When the key is needed, fetch the "Content Protection Property" on the
-connector and get the key blob. Verify that the size is valid and use
-it.
+A. The nbcon side might have basically four modes
+   for taking the new nbcon lock. It might have four interfaces:
 
-Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_hdcp.c | 66 +++++++++++++++++++++++++++++---
- 1 file changed, 61 insertions(+), 5 deletions(-)
+    nbcon_trylock(struct console *con,
+		  enum cons_prio prio);
+    nbcon_trylock_emergency(struct console *con,
+		  enum cons_prio prio);
+    nbcon_trylock_panic(struct console *con,
+		  enum cons_prio prio);
+    nbcon_lock(struct console *con,
+		  enum cons_prio prio);
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_hdcp.c b/drivers/gpu/drm/msm/dp/dp_hdcp.c
-index 191340971f943..4321d245b36c9 100644
---- a/drivers/gpu/drm/msm/dp/dp_hdcp.c
-+++ b/drivers/gpu/drm/msm/dp/dp_hdcp.c
-@@ -117,19 +117,61 @@ static bool dp_hdcp_are_keys_valid(struct drm_connector *connector,
- 	return FIELD_GET(DP_HDCP_KEY_STATUS, val) == DP_HDCP_KEY_STATUS_VALID;
- }
- 
-+static bool dp_hdcp_get_key_from_connector(struct drm_connector *connector,
-+					   struct drm_bridge *bridge)
-+{
-+	struct drm_property_blob *key_blob;
-+	u8 *raw_key;
-+	int ret;
-+	struct dp_hdcp *hdcp;
-+	struct drm_device *dev = connector->dev;
-+	struct drm_property *prop =
-+		dev->mode_config.content_protection_key_property;
-+
-+	if (!prop)
-+		return false;
-+
-+	key_blob = connector->state->content_protection_key;
-+	if (!key_blob)
-+		return false;
-+
-+	raw_key = key_blob->data;
-+
-+	if (key_blob->length !=
-+	    DRM_HDCP_KSV_LEN + DP_HDCP_NUM_KEYS * DP_HDCP_KEY_LEN) {
-+		drm_dbg_atomic(
-+			dev,
-+			"[CONNECTOR:%d:%s] Content Protection Key is a blob that we don't expect.\n",
-+			connector->base.id, connector->name);
-+		return false;
-+	}
-+
-+	hdcp = dp_display_bridge_to_hdcp(bridge);
-+	ret = dp_hdcp_ingest_key(hdcp, key_blob->data, key_blob->length);
-+	if (ret)
-+		return false;
-+
-+	return true;
-+}
-+
- static int dp_hdcp_load_keys(struct drm_connector *connector, void *driver_data)
- {
- 	struct drm_bridge *bridge = (struct drm_bridge *)driver_data;
- 	struct dp_hdcp *hdcp = dp_display_bridge_to_hdcp(bridge);
- 	int i, ret = 0;
-+	bool is_hdcp_key_valid;
- 
- 	mutex_lock(&hdcp->key_lock);
-+	is_hdcp_key_valid = hdcp->key.valid;
-+	mutex_unlock(&hdcp->key_lock);
- 
--	if (!hdcp->key.valid) {
--		ret = -ENOENT;
--		goto out;
-+	if (!is_hdcp_key_valid &&
-+	    !dp_hdcp_get_key_from_connector(connector, bridge)) {
-+		return -ENOENT;
- 	}
- 
-+	mutex_lock(&hdcp->key_lock);
-+
- 	dp_catalog_hdcp_write_aksv(hdcp->catalog, hdcp->key.ksv.words);
- 
- 
-@@ -139,7 +181,6 @@ static int dp_hdcp_load_keys(struct drm_connector *connector, void *driver_data)
- 	}
- 	dp_catalog_hdcp_post_write_key(hdcp->catalog);
- 
--out:
- 	mutex_unlock(&hdcp->key_lock);
- 	return ret;
- }
-@@ -346,6 +387,8 @@ int dp_hdcp_attach(struct dp_hdcp *hdcp, struct drm_connector *connector,
- 		   struct drm_bridge *bridge, struct dp_catalog *catalog)
- {
- 	struct drm_hdcp_helper_data *helper_data;
-+	struct drm_device *dev;
-+	struct drm_property *prop;
- 
- 	/* HDCP is not configured for this device */
- 	if (!hdcp->parser->io.dp_controller.hdcp_key.base)
-@@ -357,7 +400,20 @@ int dp_hdcp_attach(struct dp_hdcp *hdcp, struct drm_connector *connector,
- 		return PTR_ERR(helper_data);
- 
- 	helper_data->driver_data = bridge;
--	hdcp->dev = connector->dev;
-+
-+	dev = connector->dev;
-+	prop = dev->mode_config.content_protection_key_property;
-+	if (!prop) {
-+		prop = drm_property_create(dev, DRM_MODE_PROP_BLOB,
-+					   "Content Protection Key", 0);
-+	}
-+	if (!prop)
-+		return -1;
-+	drm_object_attach_property(&connector->base, prop,
-+				   DRM_MODE_HDCP_CONTENT_TYPE0);
-+	dev->mode_config.content_protection_key_property = prop;
-+
-+	hdcp->dev = dev;
- 	hdcp->connector = connector;
- 	hdcp->helper_data = helper_data;
- 	hdcp->catalog = catalog;
--- 
-2.40.0.634.g4ca3ef3211-goog
+, where
 
+   + nbcon_trylock() would use the current approach for
+     the printk kthread. It means that it would try to get
+     the lock with a timeout. But it would never try to
+     steel the lock.
+
+   + nbcon_trylock_emergency() would use the current approach
+     used in emergency context. It would busy wait and
+     then try to steel the lock. But it would take over the lock
+     only when it is in safe context.
+
+    + nbcon_trylock_panic() would behave the same way as
+      nbcon_trylock_emergency(). But it would allow to
+      take over the lock even when it is unsafe. It might
+      still fail when it is not called on the CPU that
+      handles the panic().
+
+    + nbcon_lock() would wait until the lock is really
+      available.
+
+  and
+
+  enum cons_prio would be one of the four priorities.
+
+  The API should disable cpu migration to make sure that
+  it will stay the same until the lock is released.
+
+  The caller should rememner the priority somewhere,
+  e,g. in struct cons_ctxt.
+
+
+B. The port->lock side would switch to the new nbcon lock
+   when the console is registered. There are two big questions
+   that come to my mind:
+
+  1. The original code does not expect that it might lose
+     the lock.
+
+     It should be enough to mark the entire section .unsafe.
+     In that case, only the final panic() call might steel
+     the lock.
+
+
+  2. The console registration must be done a safe way
+     to make sure that all callers will use the same
+     real lock (port->lock or nbcon_lock).
+
+
+  IMHO, the uart_port part might look like:
+
+void uart_port_lock_irqsafe(struct uart_port *port,
+	int *cookie,
+	unsigned long &flags)
+{
+	struct console *con;
+
+try_again:
+	/* Synchrnonization against console registration. */
+	*cookie = console_srcu_read_lock();
+
+	con = rcu_access_pointer(nbcon->cons);
+
+	if (!can_use_nbcon_lock(con)) {
+		/* Only the port lock is available. */
+		spin_lock_irqsafe(&port->lock, *flags);
+		port->locked = LOCKED_BY_PORT_LOCK;
+		return;
+	}
+
+
+	/*
+	 * The nbcon lock is available. Take it instead of
+	 * the port->lock. The only exception is when
+	 * there is registration in progress. In this case,
+	 * port->lock has to be taken as well.
+	 *
+	 * It will always be taken only with the normal priority.
+	 * when called from the port lock side.
+	 */
+	nbcon_lock(con, CON_PRIO_NORMAL);
+	local_irq_save(*flags);
+
+	if (cons->registration_in_progress) {
+		spin_lock(&port->lock);
+		port->locked = LOCKED_BY_BOTH_LOCKS;
+	} else {
+		port->locked = LOCKED_BY_NBCON_LOCK;
+	}
+
+	/*
+	 * Makes sure that only nbcon_lock_panic() would
+	 * be able to steel this lock.
+	 */
+	if (!nbcon_enter_unsafe(con, CON_PRIO_NORMAL)) {
+		revert locks;
+		goto try_again;
+	}
+}
+
+void uart_port_unlock_irqrestore(struct uart_port *port,
+	int *cookie, unsigned long *flags)
+{
+	struct console *con;
+
+	con = rcu_access_pointer(nbcon->cons);
+
+	switch (port->locked) {
+	LOCKED_BY_PORT_LOCK:
+		spin_unlock_irqrestore(&port->lock, *flags);
+		break;
+	LOCKED_BY_BOTH_LOCKS:
+		spin_unlock(&port->lock);
+		fallthrough;
+	LOCKED_BY_NBCON_LOCK:
+		nbcon_exit_unsafe(con, CON_PRIO_NORMAL);
+		local_irq_restore(*flags);
+		nbcon_unlock(con, CON_PRIO_NORMAL);
+	};
+
+	console_srcu_unlock(*cookie);
+}
+
+
+and finally the registration:
+
+void register_console(struct console *newcon)
+{
+[...]
+	if (con->flags & CON_NBCON) {
+		nbcon_lock(con);
+		nbcon->regisration_in_progress = true;
+		nbcon_unlock(con);
+
+		/*
+		 * Make sure that callers are locked by both
+		 * nbcon_lock() and port->lock()
+		 */
+		synchronize_srcu();
+	}
+
+	/* Insert the console into console_list */
+
+	if (con->flags & CON_NBCON) {
+		nbcon_lock(con);
+		nbcon->regisration_in_progress = false;
+		nbcon_unlock(con);
+	}
+[...]
+}
+
+and similar thing in uregister_console().
+
+I am not sure if I should send this on Friday evening. But I reworked
+it many times and I do not longer see any obvious reason why it
+could not work.
+
+My relief is that it builds on top of your code. It basically just
+adds the port_lock interface. I hope that it would actually simplify
+things a lot.
+
+Well, a huge challenge might be to replace all spin_lock(port->lock)
+calls with the new API. There is a lot of code shared between various
+consoles and we wanted to migrate them one-by-one.
+
+On the other hand, the new port_lock() API should behave as simple
+spin lock when port->cons is a legacy console.
+
+Best Regards,
+Petr
