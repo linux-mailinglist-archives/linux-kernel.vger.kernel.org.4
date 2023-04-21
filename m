@@ -2,139 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE39F6EA350
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB42C6EA35C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbjDUFq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S233582AbjDUFwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 01:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDUFq1 (ORCPT
+        with ESMTP id S233445AbjDUFwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:46:27 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283145FE6;
-        Thu, 20 Apr 2023 22:46:26 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec8148f73eso1230854e87.1;
-        Thu, 20 Apr 2023 22:46:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682055984; x=1684647984;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qrlfV5n8Lg9nBjvRn99BY3DeQ7uAmbc+OFU0aM7skag=;
-        b=X9WSQYeo/2Y55JJv0fzWwxkRoVJm9Eay/Z7x+JK0akY2eootZI7q4Fkw/P6lDmHam7
-         hZPsZTFtNMKdYKfMoPRV5hfQjwHvAxv9AknTrxiCgbfiqjwnzP6N/x0bUzTrYtN3uJWb
-         LhxYLY7s8azY5pXP4gnt0UO5Xm+J4iduULrVEDlScibBFJj0ccqGAsWxng9lHnyofI3K
-         oCDLJhat1lFyaDlBCuo0BXXCdazNrEq8wxrJehPc0NLus9MeqICg+N80ojvWb3c4NKA7
-         4dQSDS6cXtGM8SzhmsL9k1X3Ghk84xgKCN4b1xQG2n+eBZ8cRRSkIhX991y843szLTKt
-         8SwA==
+        Fri, 21 Apr 2023 01:52:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3001BF3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682056315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5I7evANVAfJwuk/ANSR7cqv4R/exMlo0YUcDm4ZAsZk=;
+        b=UtxCWy8koms1qCGcMDK9fq4UEboxvZwC4G+44dKwwH8HP9mjQmvj0O3OBdbvhHzmy6QCBv
+        QztgHpLY532/EggarORuBZly/Me9hxOImipg8hBYUFHp11Dxh2TsFOeKvf0F6yWVx+nTSa
+        tC6pLmGKCrG+rQ2AXTupP/NFQU+kVmw=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-1ZYTnbiIPByVyxnr6-gRhg-1; Fri, 21 Apr 2023 01:51:53 -0400
+X-MC-Unique: 1ZYTnbiIPByVyxnr6-gRhg-1
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-38bedafc58dso591253b6e.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:51:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682055984; x=1684647984;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qrlfV5n8Lg9nBjvRn99BY3DeQ7uAmbc+OFU0aM7skag=;
-        b=PSIIpHw9EElXm9wqgi/F+Qa/gMDTg83XvXaeDLsABzTk7LNJ8DMgdh4n9jbysqUAYA
-         GKHcDkd9IzuWsp2oBye9ZnBcmft2gfOC2WPAPGiV+CCsFLre3z/iRl6CL6SpQZmCsnLc
-         lyaNYR9gnKFQRyV3tleVbeBLh7w+cJm26bsLwXMldes6ejNFmwymhYmvIYdXyBMT+9li
-         Z+VQIrK6xScAuKbKY4OW14WaZd4L0edd/M7Y790uO9qUy+GVtuMxvKt5JMo0o3ANFHoW
-         GCMf10ikLsjW8tw4M7FnO0qxjwthygo3VYThD7b8LFIxeMEWvm78GVBQQaOHuooJYZxc
-         OLDg==
-X-Gm-Message-State: AAQBX9c5nkrdfzfytaijrx1HIkz0tAxO58H0tLSNQANzoX9Ziv4/m8U2
-        4NJZ/cKHNZbgXmqH00Piejw=
-X-Google-Smtp-Source: AKy350bHTiYbhBuNCMi7vFNCNUKCJSXMr70qE4k+H+8Zfn7V7PleDL2lWHX9mWPwQTjwSnldA1F2UA==
-X-Received: by 2002:ac2:5ddc:0:b0:4e0:b407:fdf4 with SMTP id x28-20020ac25ddc000000b004e0b407fdf4mr844334lfq.37.1682055984067;
-        Thu, 20 Apr 2023 22:46:24 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05651238c300b004ec5229092dsm447576lft.34.2023.04.20.22.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 22:46:23 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 08:46:11 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: fix doc for iio_gts_find_sel_by_int_time
-Message-ID: <ZEIjI4YUzqPZk/9X@fedora>
+        d=1e100.net; s=20221208; t=1682056313; x=1684648313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5I7evANVAfJwuk/ANSR7cqv4R/exMlo0YUcDm4ZAsZk=;
+        b=fw7jnSKbZurRplW+FYAqtNg4T5fiwg8APlEt403whaf2mi23dWW0AqKCoX5pqnByeG
+         40KB8iO0BBntFYRO360IamUC+SNJ2kHXOkcwbosBHyUTsh1UhLXVleXSEc3vuam0S+53
+         R1z7M1xnSKGtfJVg5zSDlgJg+1da9bef+PWZKZ3wNeTjnywmIEoZjd+MYhWdEnzNmZSV
+         OF8LukSd3RcaW8CUM7MtvB/Wv2ri/trlMDstcJXN5NnerNsxG6c4QPunQyvqC0OFa0/h
+         7JutvCoR7TsMvoPvlk3Rkzx4QqDINtJ/PcpZJGyU8YZ9JXY9ca0owo7Bs4zVPZmHzGvu
+         GvrQ==
+X-Gm-Message-State: AAQBX9fm/ecT6zgMFfWPkDruWzs7gtZ5g0Q0x8NcDhConzv/9EF16E0H
+        Pu5T8gBBjhFEClWKMdRMQB8VfZJKpZp0M4wxCxZCr3NQu2vur3jZj0kTNHqratBgdLBgNg60qB/
+        q48ntXJqZFAiyfS1asPSTam4IiDwb4D26L92l2XnG
+X-Received: by 2002:a05:6808:16ab:b0:38c:17a7:5b7b with SMTP id bb43-20020a05680816ab00b0038c17a75b7bmr2056929oib.19.1682056313004;
+        Thu, 20 Apr 2023 22:51:53 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bchGp1g3M4Oxp2OMGsAtahE5jQNn822SVg525TzI2VQbnv6N9KJLpXdXFbYWo5pLOIS/diFH+MGlS5GPILS4Q=
+X-Received: by 2002:a05:6808:16ab:b0:38c:17a7:5b7b with SMTP id
+ bb43-20020a05680816ab00b0038c17a75b7bmr2056923oib.19.1682056312733; Thu, 20
+ Apr 2023 22:51:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Qatxs7Q+MHiWtUHL"
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419134329.346825-1-maxime.coquelin@redhat.com>
+ <CACGkMEuiHqPkqYk1ZG3RZXLjm+EM3bmR0v1T1yH-ADEazOwTMA@mail.gmail.com> <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com>
+In-Reply-To: <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 21 Apr 2023 13:51:41 +0800
+Message-ID: <CACGkMEuWpHokhwvJ5cF41_C=ezqFhoOyUOposdZ5+==A642OmQ@mail.gmail.com>
+Subject: Re: [RFC 0/2] vduse: add support for networking devices
+To:     Maxime Coquelin <maxime.coquelin@redhat.com>
+Cc:     xieyongji@bytedance.com, mst@redhat.com, david.marchand@redhat.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 10:16=E2=80=AFPM Maxime Coquelin
+<maxime.coquelin@redhat.com> wrote:
+>
+>
+>
+> On 4/20/23 06:34, Jason Wang wrote:
+> > On Wed, Apr 19, 2023 at 9:43=E2=80=AFPM Maxime Coquelin
+> > <maxime.coquelin@redhat.com> wrote:
+> >>
+> >> This small series enables virtio-net device type in VDUSE.
+> >> With it, basic operation have been tested, both with
+> >> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+> >> adding VDUSE support [0] using split rings layout.
+> >>
+> >> Control queue support (and so multiqueue) has also been
+> >> tested, but require a Kernel series from Jason Wang
+> >> relaxing control queue polling [1] to function reliably.
+> >>
+> >> Other than that, we have identified a few gaps:
+> >>
+> >> 1. Reconnection:
+> >>   a. VDUSE_VQ_GET_INFO ioctl() returns always 0 for avail
+> >>      index, even after the virtqueue has already been
+> >>      processed. Is that expected? I have tried instead to
+> >>      get the driver's avail index directly from the avail
+> >>      ring, but it does not seem reliable as I sometimes get
+> >>      "id %u is not a head!\n" warnings. Also such solution
+> >>      would not be possible with packed ring, as we need to
+> >>      know the wrap counters values.
+> >
+> > Looking at the codes, it only returns the value that is set via
+> > set_vq_state(). I think it is expected to be called before the
+> > datapath runs.
+> >
+> > So when bound to virtio-vdpa, it is expected to return 0. But we need
+> > to fix the packed virtqueue case, I wonder if we need to call
+> > set_vq_state() explicitly in virtio-vdpa before starting the device.
+> >
+> > When bound to vhost-vdpa, Qemu will call VHOST_SET_VRING_BASE which
+> > will end up a call to set_vq_state(). Unfortunately, it doesn't
+> > support packed ring which needs some extension.
+> >
+> >>
+> >>   b. Missing IOCTLs: it would be handy to have new IOCTLs to
+> >>      query Virtio device status,
+> >
+> > What's the use case of this ioctl? It looks to me userspace is
+> > notified on each status change now:
+> >
+> > static int vduse_dev_set_status(struct vduse_dev *dev, u8 status)
+> > {
+> >          struct vduse_dev_msg msg =3D { 0 };
+> >
+> >          msg.req.type =3D VDUSE_SET_STATUS;
+> >          msg.req.s.status =3D status;
+> >
+> >          return vduse_dev_msg_sync(dev, &msg);
+> > }
+>
+> The idea was to be able to query the status at reconnect time, and
+> neither having to assume its value nor having to store its value in a
+> file (the status could change while the VDUSE application is stopped,
+> but maybe it would receive the notification at reconnect).
 
---Qatxs7Q+MHiWtUHL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I see.
 
-The kerneldoc for iio_gts_find_sel_by_int_time() has an error.
-Documentation states that function is searching a selector for a HW-gain
-while it is searching a selector for an integration time.
+>
+> I will prototype using a tmpfs file to save needed information, and see
+> if it works.
 
-Fix the documentation by saying the function is looking for a selector
-for an integration time.
+It might work but then the API is not self contained. Maybe it's
+better to have a dedicated ioctl.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- include/linux/iio/iio-gts-helper.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> >> and retrieve the config
+> >>      space set at VDUSE_CREATE_DEV time.
+> >
+> > In order to be safe, VDUSE avoids writable config space. Otherwise
+> > drivers could block on config writing forever. That's why we don't do
+> > it now.
+>
+> The idea was not to make the config space writable, but just to be able
+> to fetch what was filled at VDUSE_CREATE_DEV time.
+>
+> With the tmpfs file, we can avoid doing that and just save the config
+> space there.
 
-diff --git a/include/linux/iio/iio-gts-helper.h b/include/linux/iio/iio-gts=
--helper.h
-index dd64e544a3da..9cb6c80dea71 100644
---- a/include/linux/iio/iio-gts-helper.h
-+++ b/include/linux/iio/iio-gts-helper.h
-@@ -135,7 +135,7 @@ static inline int iio_gts_find_int_time_by_sel(struct i=
-io_gts *gts, int sel)
- /**
-  * iio_gts_find_sel_by_int_time - find selector matching integration time
-  * @gts:	Gain time scale descriptor
-- * @gain:	HW-gain for which matching selector is searched for
-+ * @time:	Integration time for which matching selector is searched for
-  *
-  * Return:	a selector matching given integration time or -EINVAL if
-  *		selector was not found.
+Same as the case for status.
 
-base-commit: 52cc189b4fc6af6accc45fe7b7053d76d8724059
---=20
-2.40.0
+Thanks
 
+>
+> > We need to harden the config write before we can proceed to this I thin=
+k.
+> >
+> >>
+> >> 2. VDUSE application as non-root:
+> >>    We need to run the VDUSE application as non-root. There
+> >>    is some race between the time the UDEV rule is applied
+> >>    and the time the device starts being used. Discussing
+> >>    with Jason, he suggested we may have a VDUSE daemon run
+> >>    as root that would create the VDUSE device, manages its
+> >>    rights and then pass its file descriptor to the VDUSE
+> >>    app. However, with current IOCTLs, it means the VDUSE
+> >>    daemon would need to know several information that
+> >>    belongs to the VDUSE app implementing the device such
+> >>    as supported Virtio features, config space, etc...
+> >>    If we go that route, maybe we should have a control
+> >>    IOCTL to create the device which would just pass the
+> >>    device type. Then another device IOCTL to perform the
+> >>    initialization. Would that make sense?
+> >
+> > I think so. We can hear from others.
+> >
+> >>
+> >> 3. Coredump:
+> >>    In order to be able to perform post-mortem analysis, DPDK
+> >>    Vhost library marks pages used for vrings and descriptors
+> >>    buffers as MADV_DODUMP using madvise(). However with
+> >>    VDUSE it fails with -EINVAL. My understanding is that we
+> >>    set VM_DONTEXPAND flag to the VMAs and madvise's
+> >>    MADV_DODUMP fails if it is present. I'm not sure to
+> >>    understand why madvise would prevent MADV_DODUMP if
+> >>    VM_DONTEXPAND is set. Any thoughts?
+> >
+> > Adding Peter who may know the answer.
+>
+> Thanks!
+> Maxime
+>
+> > Thanks
+> >
+> >>
+> >> [0]: https://patchwork.dpdk.org/project/dpdk/list/?series=3D27594&stat=
+e=3D%2A&archive=3Dboth
+> >> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0W=
+vjGRr3whU+QasUg@mail.gmail.com/T/
+> >>
+> >> Maxime Coquelin (2):
+> >>    vduse: validate block features only with block devices
+> >>    vduse: enable Virtio-net device type
+> >>
+> >>   drivers/vdpa/vdpa_user/vduse_dev.c | 11 +++++++----
+> >>   1 file changed, 7 insertions(+), 4 deletions(-)
+> >>
+> >> --
+> >> 2.39.2
+> >>
+> >
+>
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---Qatxs7Q+MHiWtUHL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRCIwkACgkQeFA3/03a
-ocVL/AgAnY0Cvk9xClN2LfnIjZccke39vN5sO+jY62eOOkjbQSePRXOzLJ1UZykj
-4FSbXiHy/93F5raSNHcCxaJTtNwUwylbpad6HP4dHRIusD6ZOG7OTjUiX9hnZ3uq
-yS7ZkXcPw+XNzNDfq5cvH24n4O4X8LUFjwMmISkhzzEm6W9WfPY4trj9GBseuOUD
-Y+htKULsB7uiiP+Z1CAmqOLHZ+agDGWaBXmj+8WuQNsRlPwDTsOINa3Hj1q4gwHg
-YPphEJdfI2kpIrnICd+cqlK8AxL6d9uzLTfBHcQ4W54WycqNexfW/EH5+YEAoZPB
-LGNT15neE2Xr88b4pA7DmJ7hNsirHw==
-=bgbs
------END PGP SIGNATURE-----
-
---Qatxs7Q+MHiWtUHL--
