@@ -2,318 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E663E6EAF60
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274CA6EAF63
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbjDUQnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S232648AbjDUQnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDUQnO (ORCPT
+        with ESMTP id S230331AbjDUQnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:43:14 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15094C16F;
-        Fri, 21 Apr 2023 09:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682095393; x=1713631393;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=gMdAN66UnzCbu4uMuRRlJkiDbvN1yU+znW/SywhApNc=;
-  b=JJ4KYh3aMj87CyZ5kiah6/p+1rfrAOfds8JGNfVYSt4CoV9XGtvUiMrQ
-   3k0lXgqk3NLBSIbCgfJTtJDgWfAPCPFlK8xGYBUh3zGzOI+SpFGy2ro5e
-   4OlaHVCu8siHIjKnkdJjX9fXS9SfLvDBy4OoweYc/VYZoB41EJJxmCTuP
-   33GJpSEvPN3issY75yNifWTV5pu8e3qxRNCaDhuyu54vM5XV+1W42VjDY
-   dX56s7hsIsKJDgaAdzB3ijRHqr6W3z9i89FW5NIdZYjsnGdyyqwzWVvWZ
-   JN+TlDhvS2L0ObK8IxMFPTPDjs61ou0hGD66/KkdA/7Pker9ojbwTnCtg
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="411300038"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="411300038"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 09:43:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="761628822"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="761628822"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2023 09:43:11 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 09:43:11 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 09:43:11 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 09:43:11 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 21 Apr 2023 09:43:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gQ7UPEnsZt/pez/sDcipkoqmSA3pTAtj6Vk4GvdxmKr8Nm5raYckmmlMmszjFCObbaWsb5mV4yGsiavmulzG1Mf89/6sFAZFrs87PxEnT2B+ZBIlyDd7cksDuXW4goHrbaNbEImaqki8u7mw4BwlW4Hns7X2AI3Ayy4bocvg/Wl3G0LfRTBwcttR1ReN9jvPEduBQzGt87//E5YrW4YU3UgH9/nr4GNwWwrOfz7gLOnpRH4rcPRWvw0KBvobLvJ9orxI9JwFBZxcFztjZX4g1jIWBjbdeMIB5dN1Ty7DvnbuSvdm9NoBlk9ocT/5L0zpFG/Yp+7iy9bw4zXLQ8Y1gQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5UHmkGxow93TaGp/xAW1UdiO5+Fon6lyWWCoUGwQjh8=;
- b=VflXZyMcBO8n4wtf/UTQMtiwwZvs8qogVYcZx97X8kJ6zlmbro318h3JotN/cc+T19ccLRph3KKv4xuZbRasMts3DQ+8g6VtdBZKxs7RrjNvevuPtp/LucXW0zGm8DoMtHCJ7F6IZj5ZcfbZbz53cSCo96LnW0tg5O+4ODyfv/8eRiXPUUIzsJi7ERM8OvgqFDqLyaADaT6cHJlQSiUgzA5CHq6/Bs4ff8AT3VleOD2/JBkthf/IQoAhGPbGCvUcRtBui6XGSXRDj/LC3cpTH8rPxfJS1yYdFillXmxhfTVZYrG8ac/vP9tv7Mmxi7XKwYX8CCF1sNENwAqoK3k9IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SA1PR11MB6613.namprd11.prod.outlook.com (2603:10b6:806:254::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 16:43:02 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4%3]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
- 16:43:02 +0000
-Date:   Fri, 21 Apr 2023 09:42:39 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Luis Chamberlain <mcgrof@kernel.org>, <david@redhat.com>,
-        <patches@lists.linux.dev>, <linux-modules@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <pmladek@suse.com>, <petr.pavlu@suse.com>, <prarit@redhat.com>,
-        <torvalds@linux-foundation.org>, <rafael@kernel.org>,
-        <christophe.leroy@csgroup.eu>, <tglx@linutronix.de>,
-        <peterz@infradead.org>, <song@kernel.org>, <rppt@kernel.org>,
-        <dave@stgolabs.net>, <willy@infradead.org>, <vbabka@suse.cz>,
-        <mhocko@suse.com>, <dave.hansen@linux.intel.com>,
-        <colin.i.king@gmail.com>, <jim.cromie@gmail.com>,
-        <catalin.marinas@arm.com>, <jbaron@akamai.com>,
-        <rick.p.edgecombe@intel.com>, <j.granados@samsung.com>
-Subject: Re: [PATCH] module: add debugging auto-load duplicate module support
-Message-ID: <bnhskcp6hy6liwlefyjcxumlnvmkmyvhvatkq7ve3kb2zecyxl@c3jq2apjqlcy>
-References: <20230418204636.791699-1-mcgrof@kernel.org>
- <2023041951-evolution-unwitting-1791@gregkh>
- <ZEB6DmF+l3LVrpFI@bombadil.infradead.org>
- <ZEDOWi8ifghwmOjp@kroah.com>
- <ZEGopJ8VAYnE7LQ2@bombadil.infradead.org>
- <ZEKn89wPH19r2bM4@kroah.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZEKn89wPH19r2bM4@kroah.com>
-X-ClientProxiedBy: BYAPR05CA0003.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::16) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+        Fri, 21 Apr 2023 12:43:51 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66029C17C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:43:50 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5055141a8fdso2692634a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682095429; x=1684687429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sIuJOr9KDqgRyNZKu6Tt8XNVFok6Ecpq3eqDXh3VdVw=;
+        b=lBQgSPyCip8rYuFpD+Us5fMponEiWICDi4kBwWqP5Gu6VnZDpRxF90JVMutN889EKh
+         BklKXuWF0K0mMfc8jCX0zhVJHYmQ+OgHRfrDSwZnXv7BwbkN9TkrGVS+6VLWtIftCalK
+         24g4MpMs+/2fwlJ5QYO+dTLQFWz9aW1Ma200XNRjpdyriDrKqyP6AguuNqgJrIXFFmAr
+         Zo/Hx+b4IfPpjTKYCqYBPhgDzx6NDyCLPKbm0LnfGvwwyBbTRnhH+1TYmJa7Ffd4xug2
+         INwJ+T5PyDE3ETo4Wy3lM7AJjxq5t3KThmm+D580q14eObdPzLZku1G2h6G6rH6Q1KAO
+         bzBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682095429; x=1684687429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sIuJOr9KDqgRyNZKu6Tt8XNVFok6Ecpq3eqDXh3VdVw=;
+        b=H8whINpKFLCvnC7e+KLWKUBQbZP+TaC+2EjDUGuQjDL62jgD0BQb7CkGRI+A3Aq3eM
+         N2/kXRbF1v7SXHTM7MnQmt65/4c54m5IYXt735Ku+GpSDrPBUZGbcuur1ljOVJOkufNP
+         i6hdjNVRgmb16y9oT9dF+3l8jdCixETXeO5BDfi1tdUZe3wvCfYGSW4OJEgOrZN0Y9pA
+         L6GGMskNAhHzSkpwACUdo5fEctJQXKxE0wLc72rFvRYtwDh0dkaIqj87Dho9jY8CKbYc
+         KyAPjbb+JYreRjQgEQeYjKJVRxa/OCormx2MKcILQyJi9bVMZZDlxXIT5Q4oKMn6toU3
+         wmCg==
+X-Gm-Message-State: AAQBX9fkEDMU5Pa+Sskx0o0r6PhXbabUwEB7LhNVulxOQKXLirczGavy
+        BBFnWSF8h/HscYYB7SFRgDEeRQ==
+X-Google-Smtp-Source: AKy350Z9W1Awuyb/afDJDAwM+gnsZX1x4JGUQFrDP8K1cSk1huw1//Tq6t/V1q559iCtPTZ58No0sA==
+X-Received: by 2002:a17:907:e92:b0:94a:4d06:3de3 with SMTP id ho18-20020a1709070e9200b0094a4d063de3mr3205814ejc.72.1682095428846;
+        Fri, 21 Apr 2023 09:43:48 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id t18-20020a17090616d200b0094f969e877bsm2242742ejd.43.2023.04.21.09.43.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:43:48 -0700 (PDT)
+Message-ID: <5e622e88-5287-1ffc-aa9b-c7c85a661fd9@linaro.org>
+Date:   Fri, 21 Apr 2023 18:43:47 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SA1PR11MB6613:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05ed257f-6adf-45df-3606-08db42876d81
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vDIVEWCYVBK0Vc7+4m+3LaH1NK1BR2ipOnPyWgUpCJhkz1U7mejUMWm4F8cyIi2Qtp3/46YeemMHlrqFlSgwJQpwZ13Oujw0NISsW15hy6NEpXot3yZP0e7HvJF6dAoaADnromnFK9lPI5WaRoP74Em61Qcg4DT0Q9r/+TnM5lOl8FxxQF56/fvAxtGt1tkrBC00BvaaSFCNrZljU+MCDaJ/S5xNgfPTjrciSMCiS8JgYsUYa7RvJyLTAfpGRgjOsFjg5Jw+xls//fTtbveB+7iwK805jNG9QNbUH/zkQ6iaa4qPT4xCFHTi/IOA8O9XdO2eFmw1/aqkYPLsRTqmFw+CWXvzckhFBOzuTbLABZ1QC+4tGPuJJDXct8iLMMvrh4lvQkH01ZznqyEMBZDdqISal/6t1pH4obQS4j64BLgwCO4HHWhd0qgqQSzzekVuNx7DprCryIFhZk0s+8h2qzRn4iY3jSwdmnNXqQ8yRBR74IefLLUCHkKMVRsojK4yVmMB+gqjRJ7CHrWVV6x2D85VKi0r+iIHWsOiGQ6KWh00o3/I7ypQzQTBbyd8vK4b
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39860400002)(366004)(136003)(376002)(346002)(451199021)(86362001)(316002)(478600001)(6916009)(66946007)(66476007)(66556008)(186003)(4326008)(6506007)(2906002)(26005)(9686003)(6512007)(83380400001)(5660300002)(66899021)(38100700002)(6666004)(8676002)(6486002)(33716001)(8936002)(82960400001)(41300700001)(7416002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+E/II+e9W4JLdV7FRoDqEb3PkUJlFVBA9+wGEbGfEdy8iTZrutpXhX/+6tdV?=
- =?us-ascii?Q?yskrLW5x+jAx2s0IyyVQjatWbU9d2V3ddCDw0GCC2vkv/4WlEihvI6TZUN2W?=
- =?us-ascii?Q?cTrOVh/70iiRoTBCj4iCsvqrHwUz8qZXk9Wb9nXqDQzyNFPHHhKCYtlTYesd?=
- =?us-ascii?Q?SbzweoD77IQcmDaadqJXZuS+5LrFZv00KWffFNNp69ELqim0I7/rr9g2Aumn?=
- =?us-ascii?Q?QOJYgm8W4mb3Z88G5aLYo8cT4DdALkFXN9d6paUnLbH2eKhj4D7vrTdtrndS?=
- =?us-ascii?Q?otsnUFrEjALOC5Azn5BiqJO6epzBprQhlprYw0SNmHPxM9txmM7u5l8hmhz4?=
- =?us-ascii?Q?TJKK2H6YWWqzvmEdUWzEDeefvBT7afowb4siYyquCRTwy7EBkmJNKNaqZggf?=
- =?us-ascii?Q?Q1AzYGb/cYRMAbf+0/4gF1EmHOF8Pylp8J7y0LMWim6NdXIUzx518HaeGWn0?=
- =?us-ascii?Q?j687/LiSotLY/otv04FI1vAGYdraQAPAeGd3awGmeHDoD3NE4ali20qGqTIC?=
- =?us-ascii?Q?7L3FuFLeMeSQCepMj2tavU4FRjSN5gAm10mJGLBOTVqNW52pbHC1h/Z7dZOM?=
- =?us-ascii?Q?xxClIE7a3lMyO5b7SETaSwVSO4fP/UVlVgD3uj9cGeUc4kJs55gIMbvnPRnG?=
- =?us-ascii?Q?4iszrwXAzj8RTC5Qhkm1+OB4cAttHHcCIHKYFMJU85YHIT6ZBVRQ/7IpxRp+?=
- =?us-ascii?Q?vBcSLHRe+mNejWajemnnXN7Osp21sWxelc2ncsr6IsjMFBhFfH/za+tNx/PO?=
- =?us-ascii?Q?PD8nsmnXDepl/VsWvX64aMzuSTPN+PvOITDxMQ0wIDYeqQ++T6AGPs6gx1oK?=
- =?us-ascii?Q?P3940rs2IZsjI2RrxmUJwzaQuQD3qHww1u0VUp84ZgeWNVIaWd/StyCKryXJ?=
- =?us-ascii?Q?dtjtuLPnS67K15Rs7SqUscMzbgC1q4EIAr1do+B0rA0FhCV4oywoa6YrZpqz?=
- =?us-ascii?Q?DFeNJuJTQwtYL7x2/lShvvqoX/v1oaCJh+/v32LoH4nu8mKPCkenU5QVb9g7?=
- =?us-ascii?Q?tVMeRW46/8QmzmSOJCCCIOMK8tKP1tU68jpA6Bs3CBVlnmv2819iTgkj1HQq?=
- =?us-ascii?Q?yzQpiTGm0/4GgPisWOsGLIB4t5kU7Ecwc3LcbJzas9mTFKk3UU/4UTBZPAwB?=
- =?us-ascii?Q?MyQWiId08qVSsTV1jntvm2tIbwFPMniliJrgl7D75NpdYUtwmLGmJ+yhnvQL?=
- =?us-ascii?Q?0+0hUzM9iF7jPDmHNU/fI3GkDVxcAeEqbYFXS55pg01ZxRR7ed7QByPdg883?=
- =?us-ascii?Q?bg2Tm7h9EX8Z18In13MqUKMAPcQH4nVojh2mWp8vFRiFbB4A9+jZNJN2LC0z?=
- =?us-ascii?Q?HjbrXEAMkniOTLm4b36C/ptf2b17+kQXNc1n4zUY6rNIvBPBNrZ+tku3qj6h?=
- =?us-ascii?Q?cmUZ8bS17+bgbcLW8xoADvcA/zbs/O9eFYAkOC9nAGKZf4o8G+HPscmjcPvY?=
- =?us-ascii?Q?QdsJomNWPl8Et6piFd00bg/YQrPGGnKa9FXOchAZJPOs8RoN0i0/k/f8ekwD?=
- =?us-ascii?Q?1fpQu4Zpj3qgcMKM39UPiiJ8mZoGz6HcqZ4Nowz5yo1+SOfQJeRJqPrpe6Og?=
- =?us-ascii?Q?WDeWLb9j2bzzidatD6fINFh61AwIhp1yBC5dOVXtH3hrxBCgO/7Olrx8WzJY?=
- =?us-ascii?Q?SQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05ed257f-6adf-45df-3606-08db42876d81
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 16:43:02.4364
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3J7gTNB6+Yot+91fSuHhd077xdt6aerw1dj6hc8mfFkbYT34cWULL4pntq/pqcqA2srldoa+z7o+LhwDJQSSsntJsiCrHFBDquLx/3I1FX8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6613
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 7/7] ASoC: dt-bindings: mediatek,mt8188-afe: add audio
+ properties
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230421100905.28045-1-trevor.wu@mediatek.com>
+ <20230421100905.28045-8-trevor.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230421100905.28045-8-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:12:51PM +0200, Greg KH wrote:
->On Thu, Apr 20, 2023 at 02:03:32PM -0700, Luis Chamberlain wrote:
->> On Thu, Apr 20, 2023 at 07:32:10AM +0200, Greg KH wrote:
->> > On Wed, Apr 19, 2023 at 04:32:30PM -0700, Luis Chamberlain wrote:
->> > > > It's not "wasted", as it is returned when the module is determined to be
->> > > > a duplicate.  Otherwise everyone will want this enabled as they think it
->> > > > will actually save memory.
->> > >
->> > > I'll change the language to be clear the issue is memory pressure early
->> > > on boot. I'll also add a bit of language to help at least guide people
->> > > to realize that the real value-add for this, ie, I'll have to mention we
->> > > suspect issue is udev and not module auto-loading and that this however
->> > > may still help find a few cases we can optimize for.
->> >
->> > This isn't udev's "problem", all it is doing is what the kernel asked it
->> > to do.  The kernel said "Here's a new device I found, load a module for
->> > it please!"
->>
->> If you believe that then the issue is still a kernel issue, and the
->> second part to that sentence "load a module for it" was done without
->> consideration of the implications, or without optimizations in mind.
->> Given the implications were perhaps not well understood it is unfair
->> for us to be hard on ourselves on that. But now we know, ideally if we
->> could we *should* only issue a request for a module *once* during boot.
->
->But there is no mapping between devices and modules other than what is
->exported in the module info and that is up to userspace to handle.
->
->> Where does the kernel actually say "load a module"?
->
->The driver core says "hey a new device is now present!"
->
->Userspace takes that message and calls kmod with the device information
->which then determines what module to load by looking at the device
->aliases.
->
->> Isn't that just an implied gesture?
->
->Yes.
->
->> > And it's the kmod code here, not udev itself doing all of this.
->>
->> Yes, IMHO kmod could and *should* be enhanced to share a loading context
->> during boot so to avoid duplicates too and then udev would have to
->> embrace such functionality. That's going to take time to propagate, as
->> you can imagine.
->
->udev is just the transport to kmod here, it's not in the job of
->filtering duplicate messages.
+On 21/04/2023 12:09, Trevor Wu wrote:
+> Assign top_a1sys_hp clock to 26M, and add apll1_d4 to clocks for switching
+> the parent of top_a1sys_hp dynamically
+> On the other hand, "mediatek,infracfg" is included for bus protection.
+> 
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
+>  .../bindings/sound/mediatek,mt8188-afe.yaml      | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
+> index 82ccb32f08f2..812e0702ca36 100644
+> --- a/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
+> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
+> @@ -29,6 +29,10 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description: The phandle of the mediatek topckgen controller
+>  
+> +  mediatek,infracfg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle of the mediatek infracfg controller
+> +
+>    power-domains:
+>      maxItems: 1
+>  
+> @@ -52,6 +56,7 @@ properties:
+>        - description: mux for i2si1_mck
+>        - description: mux for i2si2_mck
+>        - description: audio 26m clock
+> +      - description: audio pll1 divide 4
+>  
+>    clock-names:
+>      items:
+> @@ -73,6 +78,7 @@ properties:
+>        - const: i2si1_m_sel
+>        - const: i2si2_m_sel
+>        - const: adsp_audio_26m
+> +      - const: apll1_d4
+>  
+>    mediatek,etdm-in1-cowork-source:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> @@ -147,6 +153,8 @@ required:
+>    - power-domains
+>    - clocks
+>    - clock-names
+> +  - assigned-clocks
+> +  - assigned-clock-parents
 
-udev nowadays use *lib*kmod. It's udev who has the
-context it can operate on.
+You were explaining it last time, but it did not solve my concerns.
+Requiring these properties means that your hardware boots with incorrect
+clock parents, including result of any firmware, and there is no way it
+can correctly work without reparenting. What's more, this means that
+your clock hierarchy does not include these clocks for some reason, e.g.
+you need to reparent parents of some parent of your clock input,
+otherwise device cannot work. Cannot work never ever.
 
-Also, those module loads will not use the path this patch is changing
-call_modprobe is not the path that triggers udev to load modules.
-/me confused
+Is this the case?
 
-What can be done from userspace in the udev path
+Have in mind that bindings are used also by other OS and projects, like
+bootloaders, firmware etc.
 
-1) udev to do the ratelimit'ing. Define a time window,
-filter out uevents in systemd/src/udev/udev-builtin-kmod.c
+Best regards,
+Krzysztof
 
-2) libkmod to do the ratelimit'ing with a similar approach, but udev
-needs to tell libkmod what is the window it wants to use
-
-3) libkmod to act on the context it has from the *kernel*. It used
-to be cheap with the call simply blocking early on the syscall in
-a mutex... or we didn't have that many calls. So libkmod
-simply calls [f]init_module() again regardless of the module's
-state being in a "coming" state.  Is this the case here? I haven't
-seen this data. This is done to avoid a) the toctou implied and b) to
-provide the correct return for that call - libkmod can't know if the
-previous call will succeed or fail.
-
-libkmod only skips the call if the module is already in
-the live state. It seems systemd-udev also duplicates the check
-in src/shared/module-util.c:module_load_and_warn()
-
-Note that libkmod already spares loading the module multiple times from
-disk as it uses a memory pool for the modules. It reuses one iff it
-comes from the same context (i.e. it's only udev involved and not a
-bunch of parallel calls to modprobe).
-
-4) If all the calls are coming from the same context and it is udev...
-I'm not sure this is actually the problem - the udev's kmod builtin
-handler is single-threaded and will handle one request at a time.
-I don't see any data to confirm it's coming from a single source or
-multiple sources. Could you get a trace containing [f]init_module and
-the trace_module_request(), together with a verbose udev log?
-
-If this is all coming from a synthetic use case with thousands of
-modprobe execs, I'm not sure there is much to do on the userspace side.
-
->
->> > Why not
->> > just rate-limit it in userspace if your system can't handle 10's of
->> > thousands of kmod calls all at once? I think many s390 systems did this
->> > decades ago when they were controlling 10's of thousands of scsi devices
->> > and were hit with "device detection storms" at boot like this.
->>
->> Boot is a special context and in this particular case I agree userspace
->> kmod could/should be extended to avoid duplicate module requests in that
-
-see above
-
->> context. But likewise the kernel should only have to try to issue a
->> request for a single module once, if it could easily do that.
->
->Are you sure that this is happening at boot in a way that userspace
->didn't just trigger it on its own after init started up?  That happens
->as a "coldboot" walk of the device tree and all uevent are regenerated.
->That is userspace asking for this, so there's nothing that the kernel
->can do.
->
->> This does beg the question, why force userspace to rate limit if we
->> can do better in the kernel? Specially if *we're the ones*, as you say,
->> that are hinting to userspace to shoot back loading modules for us and we
->> know we're just going to drop duplicates?
->
->Maybe error out of duplicate module loading earlier?  I don't know,
->sorry.
-
-I still don't see what's the source of the problem from the data
-available. Is the kernel issuing multiple request_module()? Or is the
-kernel sending multiple udev event for userspace to map the alias to the
-module and load it? The mapping alias -> module currently belongs in
-userspace so if you are de-duplicating, it can't be only on the module
-name.
-
->
->> > What specific devices and bus types are the problem here for these systems?
->>
->> My best assessment of the situation is that each CPU in udev ends up triggering
->> a load of duplicate set of modules, not just one, but *a lot*. Not sure
->> what heuristics udev uses to load a set of modules per CPU.
->
->Again, finding which device and bus is causing the problem is going to
->be key here to try to solve the issue.  Are you logging duplicate module
-
-agreed.
-
-If the info I requested above is available on other threads, could you
-point me to those?
-
-thanks
-Lucas De Marchi
-
->loads by name as well?
->
->thanks,
->
->greg k-h
