@@ -2,89 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557716EB5BA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426126EB5C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 01:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbjDUXZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 19:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S233723AbjDUXrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 19:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbjDUXZa (ORCPT
+        with ESMTP id S233465AbjDUXrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 19:25:30 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0A2171B;
-        Fri, 21 Apr 2023 16:25:28 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LMemKM027312;
-        Fri, 21 Apr 2023 23:25:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jo698b9kC38YuFkFAulLL8uZp9Tf9BwRfwEyBVmKSGw=;
- b=MuowO5y7WcL98JrpPA1Mh5Vxsh+VrWqvSyYxmKMX99TVZcIevHPvllQUKZhKjKrmz7ZT
- rTQs/84OzlPxOMOa1vRlN/qq5UdNjBr5g9HC0bEl737UywFanVXeTpajuuit7/beGOhy
- FSNNbZ4ODXJb8SLUTRS+vKGw1Ym+0GsivGYKO+42wcm1w71560vGqZ9Vsqq7LUWQNYr1
- Maez7ybTT+LD6adVEMBwL8HKXJohg0wkceBvwVvnQwXXjaZT8GZWnAQ8Ihd707R5NzTB
- r4H8lj92n4IQmUbyOq+CuBSzMAHtpEP9NUbOfSaqtZTPbzHGgAIyIb5hTmDezs2bCGIC DA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3phdhugu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 23:25:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LNPHWS013848
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 23:25:17 GMT
-Received: from [10.110.74.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
- 2023 16:25:16 -0700
-Message-ID: <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com>
-Date:   Fri, 21 Apr 2023 16:25:15 -0700
+        Fri, 21 Apr 2023 19:47:14 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C93198D;
+        Fri, 21 Apr 2023 16:47:13 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b95fb433f59so3971765276.0;
+        Fri, 21 Apr 2023 16:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682120832; x=1684712832;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GJsAK53yCn6OZsdg8FYiry45Ov2h8LJ83w5TZ/7f1tM=;
+        b=lnL3DNtR32fZ4k28MgyvsFrMh0oSSbipvwxRkwPN18iK+C7r/847WV74+5itfSsLQO
+         Vf2UCHFVHe4N8iXzDrC7iQbVUfZL5oLKa2GnRjVm472s6r7ZIpxGER5vKehUWXKzHCut
+         M05CjFTx/h9eEjABT9hSzOZ0GX+lh3NtpOTHARynJgDVA63mONxtR9M7RPx8tZ7flzCN
+         Q2DGyP9zSGdZQw0LJ3LMRxtzRKTisfCmV0YjE/jlKw/PrtkhaRITt7RqWgjcIxG6VyR4
+         RuTIKr9CfvcOtcQqJaFEYIrB67oMfWYsl7EOtuV5BkYQkTcS4fICrKeAA5llqtGJDXCI
+         nIAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682120832; x=1684712832;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GJsAK53yCn6OZsdg8FYiry45Ov2h8LJ83w5TZ/7f1tM=;
+        b=fpcw1GpHzlJUa50rhkMJ3Yi5AUr3g2P9XY3j/W3EuxPJX9NJ+avGffFXl6bhfUfXN9
+         OeTvqo6zSvAOroUxHEUxcUbifZL4Oqk/YIQEihKMP7y2xzwcMVhNtsJtlSsIA16boRx3
+         pfbzIG/ztckX/27bjYm2VaidXGfLwyqG6NlwsBKKS4QbOpd/T6NE1TJJOhC+I7BcQMFE
+         JP7nTWkUFiNIxLrsZWWApNI1C2I62PXfPJdxVMKi70h068nIRUbv/B5NAv9Ky32duRXF
+         Lu7pTuYJ2RV1cYxX7fxYw8BM+7VEVXD7fAM10/LXXl8ueLPzC5HMHd4UebA9MmeCkEo2
+         JODA==
+X-Gm-Message-State: AAQBX9cirkp7nwAbIbd/Yhk+x4tCRs9J1FSl5GezF1vVO5sxBCq3+1v6
+        2xLH0GfdhgkOYDxF3g6fCm6eYcpswVb/oDSGW/Z7DFozmYMuSg==
+X-Google-Smtp-Source: AKy350ZoNTSqD5UB35ajc/8n8uXRjP/m3jBWBogtLuXVqDsxbu+eC8g9u+N3IPS2CF7RJJnxkdGoQD3c+Ckj8ok3plo=
+X-Received: by 2002:a25:2154:0:b0:b99:3e95:6892 with SMTP id
+ h81-20020a252154000000b00b993e956892mr2241480ybh.44.1682120832442; Fri, 21
+ Apr 2023 16:47:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
- RM instead of IDs
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1IVxCeOGBIg5Mg6pf_XbadZAjZAzk-sK
-X-Proofpoint-ORIG-GUID: 1IVxCeOGBIg5Mg6pf_XbadZAjZAzk-sK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- mlxlogscore=897 phishscore=0 suspectscore=0 adultscore=0 mlxscore=0
- spamscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304210205
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230412121431.41627-1-wedsonaf@gmail.com>
+In-Reply-To: <20230412121431.41627-1-wedsonaf@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 22 Apr 2023 01:47:00 +0200
+Message-ID: <CANiq72mELB=pHS2ocK8z51h1BhhySzV3PSTD98F+YTB3EbZ_uw@mail.gmail.com>
+Subject: Re: [PATCH v4.1] rust: lock: add `Guard::do_unlocked`
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,102 +74,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 12, 2023 at 2:14=E2=80=AFPM Wedson Almeida Filho <wedsonaf@gmai=
+l.com> wrote:
+>
+> It releases the lock, executes some function provided by the caller,
+> then reacquires the lock. This is preparation for the implementation of
+> condvars, which will sleep after between unlocking and relocking.
 
+Applied to `rust-next` within the main series, with the irqsave bits
+removed as discussed. Thanks!
 
-On 4/21/2023 1:53 PM, Marijn Suijten wrote:
-> The Resource Manager already iterates over all available blocks from the
-> catalog, only to pass their ID to a dpu_hw_xxx_init() function which
-> uses an _xxx_offset() helper to search for and find the exact same
-> catalog pointer again to initialize the block with, fallible error
-> handling and all.
-> 
-> Instead, pass const pointers to the catalog entries directly to these
-> _init functions and drop the for loops entirely, saving on both
-> readability complexity and unnecessary cycles at boot.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Overall, a nice cleanup!
-
-One comment below.
-
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
->   23 files changed, 139 insertions(+), 375 deletions(-)
-> 
-
-<snipped>
-
-> -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
-> -		void __iomem *addr,
-> -		const struct dpu_mdss_cfg *m)
-> +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
-> +		void __iomem *addr)
->   {
->   	struct dpu_hw_intf *c;
-> -	const struct dpu_intf_cfg *cfg;
-> +
-> +	if (cfg->type == INTF_NONE) {
-> +		pr_err("Cannot create interface hw object for INTF_NONE type\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-
-The caller of dpu_hw_intf_init which is the RM already has protection 
-for INTF_NONE, see below
-
-         for (i = 0; i < cat->intf_count; i++) {
-                 struct dpu_hw_intf *hw;
-                 const struct dpu_intf_cfg *intf = &cat->intf[i];
-
-                 if (intf->type == INTF_NONE) {
-                         DPU_DEBUG("skip intf %d with type none\n", i);
-                         continue;
-                 }
-                 if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
-                         DPU_ERROR("skip intf %d with invalid id\n", 
-intf->id);
-                         continue;
-                 }
-                 hw = dpu_hw_intf_init(intf->id, mmio, cat);
-
-So this part can be dropped.
-
->   
->   	c = kzalloc(sizeof(*c), GFP_KERNEL);
->   	if (!c)
->   		return ERR_PTR(-ENOMEM);
->   
-> -	cfg = _intf_offset(idx, m, addr, &c->hw);
-> -	if (IS_ERR_OR_NULL(cfg)) {
-> -		kfree(c);
-> -		pr_err("failed to create dpu_hw_intf %d\n", idx);
-> -		return ERR_PTR(-EINVAL);
-> -	}
-> +	c->hw.blk_addr = addr + cfg->base;
-> +	c->hw.log_mask = DPU_DBG_MASK_INTF;
->   
-
-<snipped>
+Cheers,
+Miguel
