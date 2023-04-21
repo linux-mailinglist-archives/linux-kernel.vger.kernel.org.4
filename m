@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744416EAD8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0D06EAD9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbjDUO5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S231172AbjDUO66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbjDUO5r (ORCPT
+        with ESMTP id S233151AbjDUO6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:57:47 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09639EED
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:57:35 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5055141a8fdso2518203a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1682089054; x=1684681054;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2tGOts3QoCJkBrTh/elI0w5gRAXfGN6PXECZof4lKmE=;
-        b=WYm/u6je/yQrVcdxaM21rxEZ0+GXTk8XaxTEQOkETzAnYXRJnQgamFUHVTTAMyw+w1
-         3+rbI16Nbl7j0JK/T/VYMCfo1xsFJxbxyBEsS7Z7Li9VJv9YNQTCFzykz8UP200xICu8
-         8ja7sQj9zZZ4b8tbUrtpD/NA9+e5aM9ZE3RqSYihq4tPCJtf4oPf+o4n5X6wE7X/XJVD
-         qh41TZI1OXMriBxEiTxTI0FpFwFGTz2WtrmkcpSLA9co23FWI0R8YWUmrLp2OrkpzIeo
-         3nfcR3CRqre9dJ5ci8wSoEvzZzEb/VS0v6gHSga7GIk59vh/KSr8e/SHphyLG0tc+fap
-         Fayw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682089054; x=1684681054;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2tGOts3QoCJkBrTh/elI0w5gRAXfGN6PXECZof4lKmE=;
-        b=UyO962P6olWl4Ofy/aXbMET2xXlfi2N9zU25UWEvLITZHC905AdwIQyK5qxgPbkLhY
-         l394aB3hrI9HdhX4GhgCcbHpU+HSsOfI21oT1Duh/MtlBmCtxBPKUflFYwKm+m3K6GZk
-         8aXsb+KsfxoPjtVc2rBM6X5K7k5FoEGQL1Xv9mfxRaobCIJ8s0wFSSgC0Z6I9PxofiOJ
-         lX9JXk/2KqKJrzZfHEdC9bGjzOFfGIoWmIjqt3HZALBpeIXgGgoInbPz7npJH0HjizCu
-         j+M3ORQiPOKGb+3Uqv/0iAFXQFL9Cc1xqBxcHdhQybQc/Nk8BrdXwGUCYfvi9QLz3ndX
-         vjKA==
-X-Gm-Message-State: AAQBX9ejbQ+yPwF/lrpC7708Poi4pG9mpSWqJcdfikCdqNN/2BtAN7K1
-        TH2zvi8TF/w1Gl8zsB6/L7f/B7faZEhztUvBZ4VF1Q==
-X-Google-Smtp-Source: AKy350YOqjCAd20DbcXBhENwSsKheuT7lUuo2ljQofZhsNS/wOOp3VDL8h65sMreevD+PCzHnCnp1uqIlwwd4A0NSNg=
-X-Received: by 2002:a17:907:86ac:b0:94f:3804:5cd6 with SMTP id
- qa44-20020a17090786ac00b0094f38045cd6mr2991499ejc.66.1682089054218; Fri, 21
- Apr 2023 07:57:34 -0700 (PDT)
+        Fri, 21 Apr 2023 10:58:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0C3514F60;
+        Fri, 21 Apr 2023 07:58:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C877D1480;
+        Fri, 21 Apr 2023 07:59:10 -0700 (PDT)
+Received: from [10.57.23.51] (unknown [10.57.23.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8010A3F6C4;
+        Fri, 21 Apr 2023 07:58:24 -0700 (PDT)
+Message-ID: <4bd8ce51-5874-0aa3-bc82-fec0cee9b8f1@arm.com>
+Date:   Fri, 21 Apr 2023 15:58:18 +0100
 MIME-Version: 1.0
-References: <20230411082248.1020719-1-yizhou.tang@shopee.com> <20230411112130.7zswqnyifgjhshif@quack3>
-In-Reply-To: <20230411112130.7zswqnyifgjhshif@quack3>
-From:   Tang Yizhou <yizhou.tang@shopee.com>
-Date:   Fri, 21 Apr 2023 22:57:22 +0800
-Message-ID: <CACuPKx=+g_bhLKH1d9M4WOUVyRRKGj+sP0q4td1gRE9ghtVYog@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: Fix memcg writeback for rt tasks
-To:     Jan Kara <jack@suse.cz>
-Cc:     neilb@suse.com, tj@kernel.org, wufengguang@huawei.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, hch@lst.de,
-        mhocko@suse.com, tangyeechou@gmail.com, chunguang.xu@shopee.com,
-        yue.zhao@shopee.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce buffers
+Content-Language: en-GB
+To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexander Graf <graf@amazon.com>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+ <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com>
+ <20230328040724.GB25506@lst.de>
+ <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
+ <8cf7c515-9ce6-a2ed-0643-972aa3eba2fb@huaweicloud.com>
+ <20230407055704.GD6803@lst.de> <20230407121555.4290a011@meshulam.tesarici.cz>
+ <20230421150349.35966e0b@meshulam.tesarici.cz>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230421150349.35966e0b@meshulam.tesarici.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,70 +65,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC Christoph Hellwig and Michal Hocko.
+On 2023-04-21 14:03, Petr Tesařík wrote:
+> Hi Christoph!
+> 
+> I'd like to follow up on this sub-thread:
+> 
+> On Fri, 7 Apr 2023 12:15:55 +0200
+> Petr Tesařík <petr@tesarici.cz> wroe:
+> 
+>> On Fri, 7 Apr 2023 07:57:04 +0200
+>> Christoph Hellwig <hch@lst.de> wrote:
+>> [...]
+>>> (Btw, in case anyone is interested, we really need to get started
+>>> on moving the dma fields out of struct device into a sub-struct
+>>> only allocated for DMA capable busses)
+>>
+>> I like this idea. In fact, my WIP topic branch now moves the swiotlb
+>> fields into a separate struct,
+> 
+> As you have noticed, I have removed that commit again in v2.
+> 
+> The reason is that I'm not sure about the intended goal. I have looked
+> around for examples of moving fields out of struct device and found
+> different approaches:
+> 
+> A. struct dev_msi_info
+>     The MSI fields are merely grouped in a separate struct, which is
+>     defined in device.h and embedded in struct device. I don't see much
+>     benefit.
+> 
+> B. struct dev_pm_info
+>     This struct is also embedded in struct device, but it is defined in
+>     <linux/pm.h>, which is mentioned in MAINTAINERS. The benefit is that
+>     further changes are reviewed by this maintainer. The downside is
+>     that device.h includes pm.h.
+> 
+> C. struct dev_pin_info
+>     This struct is merely declared in device.h and defined
+>     pinctrl/devinfo.h (which is not included). Only a pointer to this
+>     struct is stored in struct device. Of course, the pointer must be
+>     initialized (and released) somehow.
+> 
+> Here my question: What did you want for DMA fields?
+> 
+> A. Only grouping those fields in their own struct?
+> B. Or move the definition to another include file (cf. MAINTAINERS)?
+> C. Or store a pointer in struct device?
 
+dev->dma_parms is already this, and IIRC still has some very old 
+comments somewhere about consolidating the other DMA-related fields in 
+there.
 
-On Tue, Apr 11, 2023 at 7:21=E2=80=AFPM Jan Kara <jack@suse.cz> wrote:
->
-> On Tue 11-04-23 16:22:48, yizhou.tang@shopee.com wrote:
-> > From: Tang Yizhou <yizhou.tang@shopee.com>
-> >
-> > In domain_dirty_limits(), the calculation of the thresh and bg_thresh
-> > variable needs to consider whether it's for global dirtypage writeback
-> > or memcg dirtypage writeback. However, in the rt_task branch, the
-> > accumulation of both variables only considers the global_wb_domain,
-> > which seems strange to me.
-> >
-> > I find the accumulation was introduced in the commit a53eaff8c119 ("MM:
-> > increase safety margin provided by PF_LESS_THROTTLE"). IMHO, realtime
-> > tasks are given a higher page cache limit because they require higher
-> > responsiveness, but we also need to consider whether the writeback of
-> > realtime tasks occurs in the global dirtypage writeback or in the memcg
-> > dirtypage writeback scenario.
-> >
-> > Later Neil said he didn't know what was wanted for realtime in the
-> > commit message of commit a37b0715ddf3 ("mm/writeback: replace
-> > PF_LESS_THROTTLE with PF_LOCAL_THROTTLE"). I guess he made this small
-> > mistake since the commit a53eaff8c119 ("MM: increase safety margin
-> > provided by PF_LESS_THROTTLE").
-> >
-> > Fixes: a53eaff8c119 ("MM: increase safety margin provided by PF_LESS_TH=
-ROTTLE")
-> > CC: NeilBrown <neilb@suse.com>
-> > CC: Tejun Heo <tj@kernel.org>
-> > CC: Fengguang Wu <wufengguang@huawei.com>
-> > Signed-off-by: Tang Yizhou <yizhou.tang@shopee.com>
->
-> Thanks for the patch! Was this found just by code inspection or is there
-> any practical problem you are trying to fix with this patch?
->
-> > diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-> > index 516b1aa247e8..7d92de73360e 100644
-> > --- a/mm/page-writeback.c
-> > +++ b/mm/page-writeback.c
-> > @@ -419,8 +419,8 @@ static void domain_dirty_limits(struct dirty_thrott=
-le_control *dtc)
-> >               bg_thresh =3D thresh / 2;
-> >       tsk =3D current;
-> >       if (rt_task(tsk)) {
-> > -             bg_thresh +=3D bg_thresh / 4 + global_wb_domain.dirty_lim=
-it / 32;
-> > -             thresh +=3D thresh / 4 + global_wb_domain.dirty_limit / 3=
-2;
-> > +             bg_thresh +=3D bg_thresh / 4 + dtc_dom(dtc)->dirty_limit =
-/ 32;
-> > +             thresh +=3D thresh / 4 + dtc_dom(dtc)->dirty_limit / 32;
->
-> This makes sense but I'm not 100% sure this does not reintroduce the
-> problem a53eaff8c119 was trying to fix. Reading the changelog, it seems t=
-he
-> extra term you are fixing is there specifically to deal with ratelimiting=
-,
-> which is global (and not per-memcg), of calls to balance_dirty_pages() an=
-d
-> hence using global_wb_domain.dirty_limit is indeed correct. Neil?
->
->                                                                 Honza
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+> Since you mentioned "allocated", it sounds like you want to achieve C,
+> but:
+> 
+> 1. Is it worth the extra dereference for every use?
+> 2. How should the struct be allocated? Presumably not with kmalloc() in
+>     device_initialize(), because I don't know how to determine if a
+>     device is DMA capable this low in the call stack. So, should it be
+>     allocated together with the containing structure? AFAICS this would
+>     mean changing nearly all device drivers...
+
+The bus code knows whether it's a DMA-capable bus or not, and as such 
+should already be providing a .dma_configure method and/or performing 
+some initialisation of DMA fields. Many of the ones that would need to 
+are already providing dma_parms, in fact.
+
+Thanks,
+Robin.
+
+> 
+> As you can see, I need some more guidance from you before I can start
+> working on this. ;-)
+> 
+> Petr T
