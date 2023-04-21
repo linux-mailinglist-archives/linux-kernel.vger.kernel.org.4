@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D716EA1FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C066EA201
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbjDUCwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
+        id S234009AbjDUCwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233799AbjDUCvW (ORCPT
+        with ESMTP id S233822AbjDUCvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:51:22 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CAD3ABC;
-        Thu, 20 Apr 2023 19:51:20 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63d4595d60fso11556768b3a.0;
-        Thu, 20 Apr 2023 19:51:20 -0700 (PDT)
+        Thu, 20 Apr 2023 22:51:41 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11013769B;
+        Thu, 20 Apr 2023 19:51:23 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-24b3451b2fcso1230404a91.3;
+        Thu, 20 Apr 2023 19:51:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682045480; x=1684637480;
+        d=gmail.com; s=20221208; t=1682045482; x=1684637482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TJ7Cn95EWZ5JETSsGI/LC39uqQkeGr0Ng7A7gd766EA=;
-        b=CFt5GCPcXiSYIqNG/mYRk8ghpeyEkcNq4qwBUDPRaEev1fEYOmm7mjIY9zy86NaTe7
-         nalXKDKQ7iFVeuyyWtCByf1EZSR1+vl9feDKy3HKhBve7m38ctf3Yq0GU5GnLY7HZUqK
-         falqItKIfqZQl4XGg01+vfIx2rS5cLzS1FsU5nWY9mUomVBErSS7TvYIix0qczmQxegi
-         sW3l5bEHmOJkEsywt0ZDgn2navgiwLgYpaHRea1OAZbuKVDsCHNZaD5FJAo7V746ARoH
-         SJuBclkFJ1SKVXtZZMIZ73j2KPhC4P8iZYttA+XsYJ85BbO6wxy+1lWaTjvQeSTp6eez
-         K5Yw==
+        bh=akTWRPzzBJ0wdmeG4+QDU8Yy42VUO1hiVrnvCUyERAQ=;
+        b=EygXMbRMlcMPeJ20d4+Tkyht4zHzW+SkyJpVIWTlQyx71Cwsz2OY+unwD9T5JAydrD
+         T6KMsfIN4B8EPW8iytzfJnaBRbHq4HHGXitYTxBANO7ekg0TmwXgnlsu7gMbycoc4zLj
+         kIVpqIAP6C2mhgzLGKVBnxOU+dyM82smGgFhXOH3vERe2GNc+hKACo1HzQcmZXk2V6iz
+         GD9l4zn8XR0lumYvsiZUcOcxLJlysZhVaz+EVzwts3iObxQ4HwvyNbwGIxux3gEC/5zC
+         pcWDbYX9KYXykYpEY7iNY4+8Ls9dGaw54xrvCOK7BTs8I5C1h+lZe/sAeiD9tCLH2Dj/
+         bQ9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682045480; x=1684637480;
+        d=1e100.net; s=20221208; t=1682045482; x=1684637482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TJ7Cn95EWZ5JETSsGI/LC39uqQkeGr0Ng7A7gd766EA=;
-        b=O0Neetxt5xGTTuTJWc2w7amfvhAF5lMJIECQuo7mAAAFdMdVCQ4SlvhmNceMlxmb7c
-         N7CSYumKVYmb7RQGFMOLKHYr5WelhIitaCEeh2ClGOLkwjeLdEcZvSnBpVKnIy1SEpsA
-         E9dltHp+fctaxg7NgPE49Mqr8+f88K4pUhiA9eY0VQpp/fXhfyJpWU6XuTl2Sz8yJGRH
-         kNs861/HtPIV6EcfEesm+USh6J13dvnU3BXYD2gZMpvFmjmfWMr4GcQLx+OmaitOQU1Y
-         GLqR+LVrEcRgHlnxFEMiOKJqKxmuOJch1KQfdkWoAMfNkLNO6Ww0fNiOUheG/XzswkZY
-         P2Pg==
-X-Gm-Message-State: AAQBX9ecDE9/O+TX71yg08TTvGjAarnRreKD/eqTNRTj1EaPC6N40uo4
-        EeXtRKXQsZvMiF9VLLgK/PU=
-X-Google-Smtp-Source: AKy350baSiCst6dCvRKF/+TZ4yzGbYkZbLlcaPduhbROqJlnfjSZgMY/gKn9hDq3YGyDVgfzPoSCaQ==
-X-Received: by 2002:a17:903:22c7:b0:1a6:3737:750c with SMTP id y7-20020a17090322c700b001a63737750cmr9367527plg.21.1682045480309;
-        Thu, 20 Apr 2023 19:51:20 -0700 (PDT)
+        bh=akTWRPzzBJ0wdmeG4+QDU8Yy42VUO1hiVrnvCUyERAQ=;
+        b=ZABb3fD18osOCzPHcClRebDXbrOEJi3z1hL9piKu2+uYwRFCq+IJOskmxN24I0KKos
+         9cBn4z03UvxX3lcBfCeKKeylJFppdevpWLFVgPXuk2Hcvb7WgbyVZIQaVCSX6yersq7x
+         M4d+NNwoGf48FDlMz0FJYK1c+45xwqUFj3HsXErcvlkFP93JH9/ap+/pS3JbZsAJzGtB
+         qurMSZt+MFqJbynZl+KWxnbB4XOEJeZ4mf/ig+LrjVrdqZlN0cAJR49zxbB8r+o40zWa
+         RTIFyUHxOsFsD7gCcj5XDNPx2nK/TMRIzADgu3QJZ7ctRXLvVlZn3o4rV92tWldBf+ZD
+         q+0w==
+X-Gm-Message-State: AAQBX9eCCny4AcEByHHYIT79BvDONiiSUsclJwLgGraiybIOiCDqbbT+
+        iH2VRvgxlMYAoo67d/tNPOw=
+X-Google-Smtp-Source: AKy350ZeN7cItyvRbQDp96ext1pT7LnT8Kp2/aMd8xBTWr6Sc3SQBLXwbA5ayehlZA1RxHQCC91yaw==
+X-Received: by 2002:a17:90a:880b:b0:240:3dc7:4939 with SMTP id s11-20020a17090a880b00b002403dc74939mr3682529pjn.27.1682045482177;
+        Thu, 20 Apr 2023 19:51:22 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x9-20020a1709029a4900b001a6388ce38bsm1724224plv.240.2023.04.20.19.51.19
+        by smtp.gmail.com with ESMTPSA id f9-20020a17090a638900b00246fbf416dasm1787580pjj.14.2023.04.20.19.51.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 19:51:19 -0700 (PDT)
+        Thu, 20 Apr 2023 19:51:21 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Subject: [PATCH 16/22] btrfs: Use alloc_ordered_workqueue() to create ordered workqueues
-Date:   Thu, 20 Apr 2023 16:50:40 -1000
-Message-Id: <20230421025046.4008499-17-tj@kernel.org>
+        Tejun Heo <tj@kernel.org>, Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: [PATCH 17/22] cifs: Use alloc_ordered_workqueue() to create ordered workqueues
+Date:   Thu, 20 Apr 2023 16:50:41 -1000
+Message-Id: <20230421025046.4008499-18-tj@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230421025046.4008499-1-tj@kernel.org>
 References: <20230421025046.4008499-1-tj@kernel.org>
@@ -129,44 +132,29 @@ As there are follow-up workqueue core changes, I'd really appreciate if the
 patch can be routed through the workqueue tree w/ your acks. Thanks.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Chris Mason <clm@fb.com>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: David Sterba <dsterba@suse.com>
-Cc: linux-btrfs@vger.kernel.org
+Cc: Steve French <sfrench@samba.org>
+Cc: Paulo Alcantara <pc@cjr.nz>
+Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+Cc: Shyam Prasad N <sprasad@microsoft.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: samba-technical@lists.samba.org
 ---
- fs/btrfs/disk-io.c | 2 +-
- fs/btrfs/scrub.c   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ fs/cifs/dfs_cache.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-index 9e1596bb208d..b1f6ff69dbe1 100644
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -2218,7 +2218,7 @@ static int btrfs_init_workqueues(struct btrfs_fs_info *fs_info)
- 	fs_info->qgroup_rescan_workers =
- 		btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
- 	fs_info->discard_ctl.discard_workers =
--		alloc_workqueue("btrfs_discard", WQ_UNBOUND | WQ_FREEZABLE, 1);
-+		alloc_ordered_workqueue("btrfs_discard", WQ_FREEZABLE);
+diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
+index 30cbdf8514a5..aece6d51bce7 100644
+--- a/fs/cifs/dfs_cache.c
++++ b/fs/cifs/dfs_cache.c
+@@ -290,7 +290,7 @@ int dfs_cache_init(void)
+ 	int rc;
+ 	int i;
  
- 	if (!(fs_info->workers && fs_info->hipri_workers &&
- 	      fs_info->delalloc_workers && fs_info->flush_workers &&
-diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-index 69c93ae333f6..70882358bdb0 100644
---- a/fs/btrfs/scrub.c
-+++ b/fs/btrfs/scrub.c
-@@ -4245,8 +4245,10 @@ static noinline_for_stack int scrub_workers_get(struct btrfs_fs_info *fs_info,
- 	if (refcount_inc_not_zero(&fs_info->scrub_workers_refcnt))
- 		return 0;
- 
--	scrub_workers = alloc_workqueue("btrfs-scrub", flags,
--					is_dev_replace ? 1 : max_active);
-+	if (is_dev_replace)
-+		scrub_workers = alloc_ordered_workqueue("btrfs-scrub", flags);
-+	else
-+		scrub_workers = alloc_workqueue("btrfs-scrub", flags, max_active);
- 	if (!scrub_workers)
- 		goto fail_scrub_workers;
+-	dfscache_wq = alloc_workqueue("cifs-dfscache", WQ_FREEZABLE | WQ_UNBOUND, 1);
++	dfscache_wq = alloc_ordered_workqueue("cifs-dfscache", WQ_FREEZABLE);
+ 	if (!dfscache_wq)
+ 		return -ENOMEM;
  
 -- 
 2.40.0
