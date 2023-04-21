@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442986EA652
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2FF6EA656
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjDUIxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S229965AbjDUIyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjDUIxC (ORCPT
+        with ESMTP id S231723AbjDUIyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:53:02 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B8DA5E6;
-        Fri, 21 Apr 2023 01:53:00 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 9E8AE1BF20F;
-        Fri, 21 Apr 2023 08:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1682067179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 21 Apr 2023 04:54:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F417A268;
+        Fri, 21 Apr 2023 01:53:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8E75821A45;
+        Fri, 21 Apr 2023 08:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682067222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=PqkC2hlSfWIiijztGsfpugS5O+kwYH1qXwTL4AZW7ec=;
-        b=FsdTgkjE/vd7mIOJsDk3o+ZqQ7RzI+CzfrmFq7j2mcIokRGlPJc5ZK3XYRNgw8MSLOLD06
-        mOVKc/sQYuygcpFczQyYwEqpbRREFiKPuy3/ogpAIKw/JOEcRlGuBU2J5QgTAKRbkK8JkZ
-        HDP6IQ1GCSor14Xyoncob53He/adzOqNtGqO3R58cHpgzyUbF27JSfOUMxXBiIVCpExFzY
-        x41qq8bUkilAq0MZ8j8ohjn1g8tTCb1dRx4qtehrytEO9w8HHSYyzZfro/VslD9Vl1LBMb
-        TzxmR/3jzePbL6l6yCDyvHliTy8RtMJSy2RfJe0BqolgSSwyHun/T4581tuikA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 3/3] MAINTAINERS: add the Renesas X9250 driver entry
-Date:   Fri, 21 Apr 2023 10:52:45 +0200
-Message-Id: <20230421085245.302169-4-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230421085245.302169-1-herve.codina@bootlin.com>
-References: <20230421085245.302169-1-herve.codina@bootlin.com>
+        bh=TCgmgxLZjgBpHMVFd5dl+S+78y8snFvoa5hj4IkLKoE=;
+        b=DD3XydQvq2QEpcTvPifPVBUDTl+Q1vC8UkEnUANJmx94wjnPGZMZIdPgbbIjDTb6puvIEX
+        N0IA1hP0Gyew7LmVfFz6UQqOWSYav9dSa+4gOBWY2nM+bid/rQgR+n896ET5c8MDUjLGhD
+        +1gtKZkb0byMBdkk5cHcQhLuievKAbA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682067222;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TCgmgxLZjgBpHMVFd5dl+S+78y8snFvoa5hj4IkLKoE=;
+        b=X9A5npHx6rz1+iay8T2pmWurjIpbJdx/lP8Xi7ZG6oyuIl696EnQV4LsYls8Itl45mA1vJ
+        dpFF1YcwgA4pfhBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D84C13456;
+        Fri, 21 Apr 2023 08:53:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IRKIHhZPQmTsPAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 21 Apr 2023 08:53:42 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 06E2FA0729; Fri, 21 Apr 2023 10:53:42 +0200 (CEST)
+Date:   Fri, 21 Apr 2023 10:53:41 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh()
+ call outside lock section
+Message-ID: <20230421085341.b2zvzeuc745bs6sa@quack3>
+References: <20230403220337.443510-1-yosryahmed@google.com>
+ <20230403220337.443510-2-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403220337.443510-2-yosryahmed@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,32 +81,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer for the
-Renesas X9250 IIO driver.
+On Mon 03-04-23 22:03:33, Yosry Ahmed wrote:
+> wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
+> flush, which can be expensive on large systems. Currently,
+> wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
+> have to make the rstat flush atomically. On systems with a lot of
+> cpus/cgroups, this can cause us to disable irqs for a long time,
+> potentially causing problems.
+> 
+> Move the call to wb_over_bg_thresh() outside the lock section in
+> preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic.
+> The list_empty(&wb->work_list) should be okay outside the lock section
+> of wb->list_lock as it is protected by a separate lock (wb->work_lock),
+> and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_*
+> lists the wb->list_lock is protecting. Also, the loop seems to be
+> already releasing and reacquring the lock, so this refactoring looks
+> safe.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+The patch looks good to me. Nice find. Feel free to add:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8ec7ccba9848..0027af3e14cb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17926,6 +17926,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
- F:	drivers/clk/clk-versaclock7.c
- 
-+RENESAS X9250 DIGITAL POTENTIOMETERS DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
-+F:	drivers/iio/potentiometer/x9250.c
-+
- RESET CONTROLLER FRAMEWORK
- M:	Philipp Zabel <p.zabel@pengutronix.de>
- S:	Maintained
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/fs-writeback.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> index 195dc23e0d831..012357bc8daa3 100644
+> --- a/fs/fs-writeback.c
+> +++ b/fs/fs-writeback.c
+> @@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb,
+>  	struct blk_plug plug;
+>  
+>  	blk_start_plug(&plug);
+> -	spin_lock(&wb->list_lock);
+>  	for (;;) {
+>  		/*
+>  		 * Stop writeback when nr_pages has been consumed
+> @@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb,
+>  		if (work->for_background && !wb_over_bg_thresh(wb))
+>  			break;
+>  
+> +
+> +		spin_lock(&wb->list_lock);
+> +
+>  		/*
+>  		 * Kupdate and background works are special and we want to
+>  		 * include all inodes that need writing. Livelock avoidance is
+> @@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *wb,
+>  		 * mean the overall work is done. So we keep looping as long
+>  		 * as made some progress on cleaning pages or inodes.
+>  		 */
+> -		if (progress)
+> +		if (progress) {
+> +			spin_unlock(&wb->list_lock);
+>  			continue;
+> +		}
+> +
+>  		/*
+>  		 * No more inodes for IO, bail
+>  		 */
+> -		if (list_empty(&wb->b_more_io))
+> +		if (list_empty(&wb->b_more_io)) {
+> +			spin_unlock(&wb->list_lock);
+>  			break;
+> +		}
+> +
+>  		/*
+>  		 * Nothing written. Wait for some inode to
+>  		 * become available for writeback. Otherwise
+> @@ -2093,9 +2101,7 @@ static long wb_writeback(struct bdi_writeback *wb,
+>  		spin_unlock(&wb->list_lock);
+>  		/* This function drops i_lock... */
+>  		inode_sleep_on_writeback(inode);
+> -		spin_lock(&wb->list_lock);
+>  	}
+> -	spin_unlock(&wb->list_lock);
+>  	blk_finish_plug(&plug);
+>  
+>  	return nr_pages - work->nr_pages;
+> -- 
+> 2.40.0.348.gf938b09366-goog
+> 
 -- 
-2.39.2
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
