@@ -2,191 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FA06EADFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D355A6EAE07
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 17:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjDUP0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 11:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S232496AbjDUP1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 11:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbjDUP0e (ORCPT
+        with ESMTP id S232851AbjDUP1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 11:26:34 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828FBBB89;
-        Fri, 21 Apr 2023 08:26:33 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f1958d3a85so4689855e9.1;
-        Fri, 21 Apr 2023 08:26:33 -0700 (PDT)
+        Fri, 21 Apr 2023 11:27:50 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDFDBB95
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:27:46 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5066ce4f490so2646153a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 08:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682090792; x=1684682792;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sj/J7bBG6FjM8tAyQNQhnbZ2Rmtu2/+gz7MFzMP1cA8=;
-        b=MHvBTVrIttJbs0SZk5eiJLxbUaG74Sfr1EvU0Edd7JVzcuWZvu9RcVyYv6JxRZDfzP
-         f9YEQo1Okn+muqR7g6/eg7VcWVTy9NGGRiuRLlafK08Bpf8F3XyKf8LaxGul7OiTECaO
-         5oKzQwe7R9xqU35OEJ/8qALhWkKSNK1ogkbb1oIT19oZbj+s/Ayx5oWA5F9Ls1IBS//8
-         ZDL5UW2TId5MgsixOw6CiW2hvkuNAiHZX3bCsdV4ytX67STBSNEOVudgmyy+Ep8sRSGM
-         uzm0Is0qWofMsM5wDLWadusSdtn64uKwK0gwZSGzTEBio4rnkxNRND34+QrTwb7m/eiQ
-         TBlg==
+        d=dectris.com; s=google; t=1682090865; x=1684682865;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gx5GxGtrrjOAGUdwY+1Co2nSlcyUyAY3EIxCkRgyP34=;
+        b=PxSombqCkAsg664VeNNmDxvmdjYf4dVj/5vyCqT9TwatG1st3eDRZnY9a5R4md+08R
+         Wlj29tQkP0zchjP27MtI4tzvWqid3espmDxOLkS0u8O6ChXIbmPMFUBTkEXVXwV9/2rO
+         G2km4+cC+4xjckG50ka0axJFD8eDMEfWiG8fo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682090792; x=1684682792;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1682090865; x=1684682865;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Sj/J7bBG6FjM8tAyQNQhnbZ2Rmtu2/+gz7MFzMP1cA8=;
-        b=M58HZaPNrVACsProyXRGwthfvpaQDmca272mk3NlPF8QZulwGgnHxCTucbxV8PpJgF
-         lZjBlrVzlgwpwU5ryNogZi5FAWwtJw1+RFedf25HWBnw8YU3K+55Z8O9zZ2hDUIoxPZV
-         djKFjqGp+cV6/jCaf+UMQ9E8FUh/NVoUMu9y3MIcSLFkOC5lLpT1OQH7FEFqOAEcKNho
-         fqKxpGlQ4UnWs5FxRInMXgz275p3MJjrPlL+pHte1qLj9IKpFF++7R9L1YP10jDNFR1h
-         YBjwWCOD0EQ9LxCFhLe4HcsnNKPmlSkdoiCWXMGOUX8b4IP15ltINeNuklI+zz5hjjV9
-         ZBrg==
-X-Gm-Message-State: AAQBX9f1kzRPIsD0RmpIceZVH2uMMyo3IpUjAETjp6/YPO2LwLfefnP2
-        gV/RUuFVweopor90hpKVBvc=
-X-Google-Smtp-Source: AKy350Yxinw9SGq3XrBKhx6z7PPrrBznT5wZk4Zl9gpfkCIh1CtMRhsQD2QqD1qHq6nHgxWbSXUeZQ==
-X-Received: by 2002:a1c:cc04:0:b0:3f0:9f9b:1665 with SMTP id h4-20020a1ccc04000000b003f09f9b1665mr2276223wmb.3.1682090791749;
-        Fri, 21 Apr 2023 08:26:31 -0700 (PDT)
-Received: from archbox.v.cablecom.net (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id a12-20020a05600c224c00b003f1788eeffesm8363153wmm.43.2023.04.21.08.26.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 08:26:31 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: rockchip: fix nEXTRST on SOQuartz
-Date:   Fri, 21 Apr 2023 17:26:10 +0200
-Message-Id: <20230421152610.21688-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        bh=gx5GxGtrrjOAGUdwY+1Co2nSlcyUyAY3EIxCkRgyP34=;
+        b=DrouYPGNzuW9EbsuEccSKK8wCbc+H9b1ZBE1352J5MPkfO/noKHTizgI3YKR4wGMdd
+         acqMoKttJss3c4SJu9VNi4xMH+4hvefpZWC0nS2VNHP7locin8GGArM63oaG/xtUyOl6
+         TlTy5ByNHDSnLgZDKje/hgczv6pRDLYSbhwrG8cOKB/4hXy7y4jBbxBJ/EMvkYz4tfyc
+         Hivvoo+Ic1O+PvU63FCwdrkQhILc0IryrhYyMX9wof7aG5GgyIgY4gL3zLA80pSPhTo3
+         xiVCTTDnRuW8HfGAJLd8W8ounNsLRuRbB0nT0qiZ1xXy+ilO3TgHc8FEhTuc6WEJw6mm
+         KAKg==
+X-Gm-Message-State: AAQBX9cklDgibgv9e0AZQMzJ6RiTPfMzPEqTfTMLJ/hg8fNCPhZcU07O
+        t+g7VQ+pG9MVheOwT6iUAc9nSO+fEXPsaz7GI3mrOw==
+X-Google-Smtp-Source: AKy350Y68zZjWdPdSC6TpDMd7z4/NcQ7/qcne2yDz4AxGzEmekWkM42mEM6MlU1Eb30cHq26JDtT+nSbORqAIO55DgA=
+X-Received: by 2002:aa7:d81a:0:b0:504:98f1:464c with SMTP id
+ v26-20020aa7d81a000000b0050498f1464cmr5176775edq.23.1682090865240; Fri, 21
+ Apr 2023 08:27:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230406130205.49996-2-kal.conley@dectris.com>
+ <87sfdckgaa.fsf@toke.dk> <ZDBEng1KEEG5lOA6@boxer> <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
+ <875ya12phx.fsf@toke.dk> <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
+ <87ile011kz.fsf@toke.dk> <CAHApi-=ODe-WtJ=m6bycQhKoQxb+kk2Yk9Fx5SgBsWUuWT_u-A@mail.gmail.com>
+ <874jpdwl45.fsf@toke.dk> <CAHApi-kcaMRPj4mEPs87_4Z6iO5qEpzOOcbVza7vxURqCtpz=Q@mail.gmail.com>
+ <ZEJZYa8WT6A9VpOJ@boxer>
+In-Reply-To: <ZEJZYa8WT6A9VpOJ@boxer>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Fri, 21 Apr 2023 17:27:33 +0200
+Message-ID: <CAHApi-ngO=hYTL449hUuV_b4mAa4NVS6eE5Uya1dZM6fEE7rPA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In pre-production prototypes (of which I only know one person
-having one, Peter Geis), GPIO0 pin A5 was tied to the SDMMC
-power enable pin on the CM4 connector. On all production models,
-this is not the case; instead, this pin is used for the nEXTRST
-signal, and the SDMMC power enable pin is always pulled high.
+> Here is the comparison between multi-buffer and jumbo frames that I did
+> for ZC ice driver. Configured MTU was 8192 as this is the frame size for
+> aligned mode when working with huge pages. I am presenting plain numbers
+> over here from xdpsock.
+>
+> Mbuf, packet size = 8192 - XDP_PACKET_HEADROOM
+> 885,705pps - rxdrop frame_size=4096
+> 806,307pps - l2fwd frame_size=4096
+> 877,989pps - rxdrop frame_size=2048
+> 773,331pps - l2fwd frame_size=2048
+>
+> Jumbo, packet size = 8192 - XDP_PACKET_HEADROOM
+> 893,530pps - rxdrop frame_size=8192
+> 841,860pps - l2fwd frame_size=8192
 
-Since everyone currently using the SOQuartz device trees will
-want this change, it is made to the tree without splitting the
-trees into two separate ones of which users will then inevitably
-choose the wrong one.
+Thanks so much for sharing these initial results! Do you have similar
+measurements for ~9000 byte packets in unaligned mode? We typically
+receive packets larger than 8192 bytes.
 
-This fixes USB and PCIe on a wide variety of CM4IO-compatible
-boards which use the nEXTRST signal.
+>
+> Kal might say that multi-buffer numbers are imaginary as these patches
+> were never shown to the public ;) but now that we have extensive test
+> suite I am fixing some last issues that stand out, so we are asking for
+> some more patience over here... overall i was expecting that they will be
+> much worse when compared to jumbo frames, but then again i believe this
+> implementation is not ideal and can be improved. Nevertheless, jumbo
+> frames support has its value.
 
-Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
-Changes in v2:
- - use GPIO hog instead of a fake regulator
-
- .../boot/dts/rockchip/rk3566-soquartz-cm4.dts | 18 +++++++-----
- .../boot/dts/rockchip/rk3566-soquartz.dtsi    | 29 +++++++++----------
- 2 files changed, 24 insertions(+), 23 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-index 263ce40770dd..cddf6cd2fecb 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-@@ -28,6 +28,16 @@ vcc_5v: vcc-5v-regulator {
- 		regulator-max-microvolt = <5000000>;
- 		vin-supply = <&vcc12v_dcin>;
- 	};
-+
-+	vcc_sd_pwr: vcc-sd-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_sd_pwr";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc3v3_sys>;
-+	};
- };
- 
- /* phy for pcie */
-@@ -130,13 +140,7 @@ &saradc {
- };
- 
- &sdmmc0 {
--	vmmc-supply = <&sdmmc_pwr>;
--	status = "okay";
--};
--
--&sdmmc_pwr {
--	regulator-min-microvolt = <3300000>;
--	regulator-max-microvolt = <3300000>;
-+	vmmc-supply = <&vcc_sd_pwr>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-index ce7165d7f1a1..3036985e2567 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-@@ -104,16 +104,6 @@ vcc3v3_sys: vcc3v3-sys-regulator {
- 		regulator-max-microvolt = <3300000>;
- 		vin-supply = <&vcc5v0_sys>;
- 	};
--
--	sdmmc_pwr: sdmmc-pwr-regulator {
--		compatible = "regulator-fixed";
--		enable-active-high;
--		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&sdmmc_pwr_h>;
--		regulator-name = "sdmmc_pwr";
--		status = "disabled";
--	};
- };
- 
- &cpu0 {
-@@ -155,6 +145,19 @@ &gmac1m0_clkinout
- 	status = "disabled";
- };
- 
-+&gpio0 {
-+	nextrst-hog {
-+		gpio-hog;
-+		/*
-+		 * GPIO_ACTIVE_LOW + output-low here means that the pin is set
-+		 * to high, because output-low decides the value pre-inversion.
-+		 */
-+		gpios = <RK_PA5 GPIO_ACTIVE_LOW>;
-+		output-low;
-+		line-name = "nEXTRST";
-+	};
-+};
-+
- &gpu {
- 	mali-supply = <&vdd_gpu>;
- 	status = "okay";
-@@ -538,12 +541,6 @@ wifi_enable_h: wifi-enable-h {
- 			rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
- 	};
--
--	sdmmc-pwr {
--		sdmmc_pwr_h: sdmmc-pwr-h {
--			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
--		};
--	};
- };
- 
- &pmu_io_domains {
--- 
-2.40.0
-
+You made me chuckle ;-) Any measurements people can provide are
+helpful, even if they must be taken with a grain of salt. ;-). How
+much of your test suite can be upstreamed in the future? My assumption
+was the difference should be measurable, at least you have confirmed
+that. :-)
