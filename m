@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F036EAC74
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9466EAC79
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjDUOLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S231778AbjDUOL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbjDUOLv (ORCPT
+        with ESMTP id S232550AbjDUOLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Apr 2023 10:11:51 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CDA1259E
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:11:45 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94e53ef6815so235966766b.1
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CEA125B0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:11:46 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94ef8b88a5bso233888266b.2
         for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair; t=1682086304; x=1684678304;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L+ingdxVlBAhx25mIHmohRsrlSprqOSnQvcGnUxqFXU=;
-        b=K7QrebmCX4fOWCWQ+IN56eGYHw2eCyT52m+HN56/5dQf+TwupwcfBoj6ORZLog0nno
-         VlpAEcKOcF1iv0a8wW6mhOupvnSXzv4+/hLin/GL6MbhdD+9KfeIWrDD2zabw6Ewl4DC
-         lqpNJ3IWgWaxhH/QMqzKeB2+UsPhT00dLiBprlLlJqZelnD90pTg7yj7ibmB4ILLUkak
-         kzEFxMh6i8+xFZc9U/mQoACKz26bNYF/+0afIcGmc6ZNBigVYyM7/oxx79+uo2DfZl4z
-         VE1eMeY7FK57OQ7e6FDH2BMCP1+bUE7OsY07DfJeOPUFiqe9FlGJd+sbuN2/bQX8caW4
-         QasQ==
+        bh=m46VLD2JzGlramKy/E9COqcajcCIODXlIHm11HTuzOE=;
+        b=zkCuK8CQwZrSK4X+CfJq5XsJyphe5C+bUQ0PXube+pfE42fImAdmk4sATOhnWhNqdA
+         f9dSC/KiADF8A/jn0l1ZrE1HWBxYtq/nvBWyJ+8+vhwlJOSIdkbYN/ekOMHwpsz2cG4e
+         lk72ujRuCwnV2bNcLwtXE02SR0hHQGRwkZIUqJAQBvkTvOeVD1EsH66dhGH1J+9ylKL6
+         pjmM4LjT7piQvr2hmuq6jPtpILy2WB2fq5BvhD5boYSxMJ3B9s30v4pyh9M/4VaO2mwe
+         bZMDwucBGAvgNj3qe+4l4P8MPclvP7pssxJKb5LtbRv8ZKt7qjAEt+ViLBL1MPlBkwJT
+         suDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1682086304; x=1684678304;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L+ingdxVlBAhx25mIHmohRsrlSprqOSnQvcGnUxqFXU=;
-        b=NpkhFjiyWtaK52ieWY0l5R5BYXTHGC620eQlJCUV1G4MN0MTJZgFhGVaSzQ+cUjh4z
-         DUYdHC5tICQA4dpTKod3ZF4CYneo2X2EpoZXnJmfPZtQEjiWDXRbKOY/rkIUujONqyIp
-         nm+eXmJdHhwOXsLcGsD5ZPdAk2nz+sVpYptGS4C3Q5Y97woYodMdL63Tiy1LIXcrRXOi
-         f8Fo3awV3Ij1a/UZO73g9g1Tuw7Sz9s/KkXDKLt4pSzuuZLp0alGin4AfBosxKbVFX17
-         4olLN7+7wENkXmC0zgO73nrTk8x1L/Z627VgI6OzKd2f/9qpwPmnSeXXHfDAKbn1JhJy
-         6zOQ==
-X-Gm-Message-State: AAQBX9eHXFY+324MArpNEaplEtGl00iRMvcdRZXWawXgBv2K5d+uNL0s
-        mHaSC19rPpUA+SiIKIW8nMpT5g==
-X-Google-Smtp-Source: AKy350ZMhAjwG0/5PIPQdKZP1jumJQjpX2ZmkNfhIe4mMn9XlNsi9Im7Q6HeruABSEm49XFegBm2NA==
-X-Received: by 2002:a17:906:7e45:b0:94f:5079:ade2 with SMTP id z5-20020a1709067e4500b0094f5079ade2mr2473933ejr.62.1682086303670;
-        Fri, 21 Apr 2023 07:11:43 -0700 (PDT)
+        bh=m46VLD2JzGlramKy/E9COqcajcCIODXlIHm11HTuzOE=;
+        b=RLo4DSdN6pxM9GuFWpMQZvHbMP+5IGslHyKU3opuUFf+ec0mMfNRJ7gmngRQNsyG+s
+         6PWkl0pWBLTHXLEHnYZQxProyugS3tS1CGWcD6naXGDrPhvY9PA3m1TWqk4Sv4g/SdUS
+         2DYjQzhyFlObzI8g1qi20G2EzJ9AIl6Y7yBwoiFjHe8MIEF/ngsV3itLomxdYLzZjy+o
+         k2w60qwkaXoxDV3bovo1YG+au73rKzfqEpdgg79Lc2iY7n+IpgEoAlLwfAP31US4koVh
+         ainyiGW7kRBKoPLyQ4hZQ86ScXBdSOjlWzJt6Sj5jMLaCf5JTkhmQEqnJUPPPkiZd4ds
+         c43A==
+X-Gm-Message-State: AAQBX9ewXrwoDlSD6Z3hZw3xCP4oNvtSTIDQa+rR4vVrRFj1zainHR7s
+        XcFRoSM7ZWEuuPHB2hL7MVWJkQ==
+X-Google-Smtp-Source: AKy350ZfxB3umaKd0NpZrYC31H42nosmXh8NeMizQGxgz4awVYGG2fe6OEvQDPjdhBhb44RnANeVLQ==
+X-Received: by 2002:a17:907:7888:b0:94e:6f2d:d1c9 with SMTP id ku8-20020a170907788800b0094e6f2dd1c9mr2654828ejc.68.1682086304455;
+        Fri, 21 Apr 2023 07:11:44 -0700 (PDT)
 Received: from [172.16.220.31] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm2104299ejb.109.2023.04.21.07.11.42
+        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm2104299ejb.109.2023.04.21.07.11.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 07:11:43 -0700 (PDT)
+        Fri, 21 Apr 2023 07:11:44 -0700 (PDT)
 From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Fri, 21 Apr 2023 16:11:39 +0200
-Subject: [PATCH RFC 2/4] Bluetooth: btqca: Add WCN3988 support
+Date:   Fri, 21 Apr 2023 16:11:40 +0200
+Subject: [PATCH RFC 3/4] arm64: dts: qcom: sm6350: add uart1 node
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230421-fp4-bluetooth-v1-2-0430e3a7e0a2@fairphone.com>
+Message-Id: <20230421-fp4-bluetooth-v1-3-0430e3a7e0a2@fairphone.com>
 References: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
 In-Reply-To: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
 To:     "David S. Miller" <davem@davemloft.net>,
@@ -89,118 +89,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Bluetooth chip codenamed APACHE which is part of
-WCN3988.
-
-The firmware for this chip has a slightly different naming scheme
-compared to most others. For ROM Version 0x0200 we need to use
-apbtfw10.tlv + apnv10.bin and for ROM version 0x201 apbtfw11.tlv +
-apnv11.bin
+Add the node describing uart1 incl. opp table and pinctrl.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/bluetooth/btqca.c   | 13 +++++++++++--
- drivers/bluetooth/btqca.h   | 12 ++++++++++--
- drivers/bluetooth/hci_qca.c | 12 ++++++++++++
- 3 files changed, 33 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 63 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index fd0941fe8608..3ee1ef88a640 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -594,14 +594,20 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	/* Firmware files to download are based on ROM version.
- 	 * ROM version is derived from last two bytes of soc_ver.
- 	 */
--	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-+	if (soc_type == QCA_WCN3988)
-+		rom_ver = ((soc_ver & 0x00000f00) >> 0x05) | (soc_ver & 0x0000000f);
-+	else
-+		rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index 18c4616848ce..16c5e9a6c98a 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -378,6 +378,25 @@ opp-2073600000 {
+ 		};
+ 	};
  
- 	if (soc_type == QCA_WCN6750)
- 		qca_send_patch_config_cmd(hdev);
- 
- 	/* Download rampatch file */
- 	config.type = TLV_TYPE_PATCH;
--	if (qca_is_wcn399x(soc_type)) {
-+	if (soc_type == QCA_WCN3988) {
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/apbtfw%02x.tlv", rom_ver);
-+	} else if (qca_is_wcn399x(soc_type)) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/crbtfw%02x.tlv", rom_ver);
- 	} else if (soc_type == QCA_QCA6390) {
-@@ -636,6 +642,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	if (firmware_name)
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/%s", firmware_name);
-+	else if (soc_type == QCA_WCN3988)
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/apnv%02x.bin", rom_ver);
- 	else if (qca_is_wcn399x(soc_type)) {
- 		if (ver.soc_id == QCA_WCN3991_SOC_ID) {
- 			snprintf(config.fwname, sizeof(config.fwname),
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index b884095bcd9d..fc6cf314eb0e 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -142,6 +142,7 @@ enum qca_btsoc_type {
- 	QCA_INVALID = -1,
- 	QCA_AR3002,
- 	QCA_ROME,
-+	QCA_WCN3988,
- 	QCA_WCN3990,
- 	QCA_WCN3998,
- 	QCA_WCN3991,
-@@ -162,8 +163,15 @@ int qca_set_bdaddr(struct hci_dev *hdev, const bdaddr_t *bdaddr);
- int qca_send_pre_shutdown_cmd(struct hci_dev *hdev);
- static inline bool qca_is_wcn399x(enum qca_btsoc_type soc_type)
- {
--	return soc_type == QCA_WCN3990 || soc_type == QCA_WCN3991 ||
--	       soc_type == QCA_WCN3998;
-+	switch (soc_type) {
-+	case QCA_WCN3988:
-+	case QCA_WCN3990:
-+	case QCA_WCN3991:
-+	case QCA_WCN3998:
-+		return true;
-+	default:
-+		return false;
-+	}
- }
- static inline bool qca_is_wcn6750(enum qca_btsoc_type soc_type)
- {
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 1597797ff169..96b837410a6b 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1835,6 +1835,17 @@ static const struct hci_uart_proto qca_proto = {
- 	.dequeue	= qca_dequeue,
- };
- 
-+static const struct qca_device_data qca_soc_data_wcn3988 __maybe_unused = {
-+	.soc_type = QCA_WCN3988,
-+	.vregs = (struct qca_vreg []) {
-+		{ "vddio", 15000  },
-+		{ "vddxo", 80000  },
-+		{ "vddrf", 300000 },
-+		{ "vddch0", 450000 },
-+	},
-+	.num_vregs = 4,
-+};
++	qup_opp_table: opp-table-qup {
++		compatible = "operating-points-v2";
 +
- static const struct qca_device_data qca_soc_data_wcn3990 __maybe_unused = {
- 	.soc_type = QCA_WCN3990,
- 	.vregs = (struct qca_vreg []) {
-@@ -2359,6 +2370,7 @@ static const struct of_device_id qca_bluetooth_of_match[] = {
- 	{ .compatible = "qcom,qca6174-bt" },
- 	{ .compatible = "qcom,qca6390-bt", .data = &qca_soc_data_qca6390},
- 	{ .compatible = "qcom,qca9377-bt" },
-+	{ .compatible = "qcom,wcn3988-bt", .data = &qca_soc_data_wcn3988},
- 	{ .compatible = "qcom,wcn3990-bt", .data = &qca_soc_data_wcn3990},
- 	{ .compatible = "qcom,wcn3991-bt", .data = &qca_soc_data_wcn3991},
- 	{ .compatible = "qcom,wcn3998-bt", .data = &qca_soc_data_wcn3998},
++		opp-75000000 {
++			opp-hz = /bits/ 64 <75000000>;
++			required-opps = <&rpmhpd_opp_low_svs>;
++		};
++
++		opp-100000000 {
++			opp-hz = /bits/ 64 <100000000>;
++			required-opps = <&rpmhpd_opp_svs>;
++		};
++
++		opp-128000000 {
++			opp-hz = /bits/ 64 <128000000>;
++			required-opps = <&rpmhpd_opp_nom>;
++		};
++	};
++
+ 	pmu {
+ 		compatible = "arm,armv8-pmuv3";
+ 		interrupts = <GIC_PPI 5 IRQ_TYPE_LEVEL_LOW>;
+@@ -741,6 +760,22 @@ i2c0: i2c@880000 {
+ 				status = "disabled";
+ 			};
+ 
++			uart1: serial@884000 {
++				compatible = "qcom,geni-uart";
++				reg = <0 0x00884000 0 0x4000>;
++				clock-names = "se";
++				clocks = <&gcc GCC_QUPV3_WRAP0_S1_CLK>;
++				pinctrl-names = "default";
++				pinctrl-0 = <&qup_uart1_cts>, <&qup_uart1_rts>, <&qup_uart1_tx>, <&qup_uart1_rx>;
++				interrupts = <GIC_SPI 602 IRQ_TYPE_LEVEL_HIGH>;
++				power-domains = <&rpmhpd SM6350_CX>;
++				operating-points-v2 = <&qup_opp_table>;
++				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
++						<&aggre1_noc MASTER_QUP_0 0 &clk_virt SLAVE_EBI_CH0 0>;
++				interconnect-names = "qup-core", "qup-config";
++				status = "disabled";
++			};
++
+ 			i2c2: i2c@888000 {
+ 				compatible = "qcom,geni-i2c";
+ 				reg = <0 0x00888000 0 0x4000>;
+@@ -1726,6 +1761,34 @@ qup_i2c10_default: qup-i2c10-default-state {
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
++
++			qup_uart1_cts: qup-uart1-cts-default-state {
++				pins = "gpio61";
++				function = "qup01";
++				drive-strength = <2>;
++				bias-disable;
++			};
++
++			qup_uart1_rts: qup-uart1-rts-default-state {
++				pins = "gpio62";
++				function = "qup01";
++				drive-strength = <2>;
++				bias-pull-down;
++			};
++
++			qup_uart1_tx: qup-uart1-tx-default-state {
++				pins = "gpio63";
++				function = "qup01";
++				drive-strength = <2>;
++				bias-pull-up;
++			};
++
++			qup_uart1_rx: qup-uart1-rx-default-state {
++				pins = "gpio64";
++				function = "qup01";
++				drive-strength = <2>;
++				bias-disable;
++			};
+ 		};
+ 
+ 		apps_smmu: iommu@15000000 {
 
 -- 
 2.40.0
