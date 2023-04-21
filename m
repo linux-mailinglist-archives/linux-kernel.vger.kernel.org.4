@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C8E6EACDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38136EACDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbjDUO2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
+        id S232511AbjDUO2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjDUO2l (ORCPT
+        with ESMTP id S229612AbjDUO2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:28:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF25030E9;
-        Fri, 21 Apr 2023 07:28:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 448CD619AC;
-        Fri, 21 Apr 2023 14:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB40C433D2;
-        Fri, 21 Apr 2023 14:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682087318;
-        bh=AzfPnAUc3z8qzBjnjgulDz6zl9zCld31PMAUqciQslw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bHb/jLpHdKFAi1nDJtxWoUBINsBxoBKEeXYcW8nFOxUoG72B1fVizGLgfJgM/0tnV
-         m+YW/jFTmVGnPRg6ggs43pnYlsBL+lWWYgVPET/1NbO6VRTITrFg1CiiOJHcFiGBFH
-         qjw/vAsBaX+okguwAada5Ntlvvkq9V4X7AD3tCo3s3JzlXNUFrl15/mpSd3Wgfu7rS
-         DnGqcitl72wIz+UWJfEqjnlYzHnIAHLgvxH5TzwJOLkxFEpxNK6jnxUDWPXNkDQ7I2
-         U9tiZGmo5SZx5yuNb6Z6RZWqsAYx+DwqzCRwwhWF0zlo62+Yq+6LnTq8XjJW54jhmP
-         UhXcFNC0vr2nQ==
-Date:   Fri, 21 Apr 2023 07:28:37 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 06/22] net: thunderx: Use alloc_ordered_workqueue() to
- create ordered workqueues
-Message-ID: <20230421072837.1495599b@kernel.org>
-In-Reply-To: <ZEKaABXSb-KppyMO@slm.duckdns.org>
-References: <20230421025046.4008499-1-tj@kernel.org>
-        <20230421025046.4008499-7-tj@kernel.org>
-        <20230421070108.638cce01@kernel.org>
-        <ZEKaABXSb-KppyMO@slm.duckdns.org>
+        Fri, 21 Apr 2023 10:28:47 -0400
+Received: from outbound-smtp28.blacknight.com (outbound-smtp28.blacknight.com [81.17.249.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F52776A7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:28:45 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp28.blacknight.com (Postfix) with ESMTPS id AAC08CCCDC
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:28:43 +0100 (IST)
+Received: (qmail 30212 invoked from network); 21 Apr 2023 14:28:43 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 14:28:43 -0000
+Date:   Fri, 21 Apr 2023 15:28:41 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 12/26] mm: page_alloc: per-migratetype free counts
+Message-ID: <20230421142841.parju3gmqmpefigq@techsingularity.net>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-13-hannes@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20230418191313.268131-13-hannes@cmpxchg.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023 04:13:20 -1000 Tejun Heo wrote:
-> On Fri, Apr 21, 2023 at 07:01:08AM -0700, Jakub Kicinski wrote:
-> > On Thu, 20 Apr 2023 16:50:30 -1000 Tejun Heo wrote:  
-> > > Signed-off-by: Tejun Heo <tj@kernel.org>
-> > > Cc: Sunil Goutham <sgoutham@marvell.com>
-> > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > Cc: Eric Dumazet <edumazet@google.com>
-> > > Cc: Jakub Kicinski <kuba@kernel.org>
-> > > Cc: Paolo Abeni <pabeni@redhat.com>
-> > > Cc: linux-arm-kernel@lists.infradead.org
-> > > Cc: netdev@vger.kernel.org  
-> > 
-> > You take this via your tree directly to Linus T?  
+On Tue, Apr 18, 2023 at 03:12:59PM -0400, Johannes Weiner wrote:
+> Increase visibility into the defragmentation behavior by tracking and
+> reporting per-migratetype free counters.
 > 
-> Yeah, that'd be my preference unless someone is really against it.
+> Subsequent patches will also use those counters to make more targeted
+> reclaim/compaction decisions.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Visibility into fragmentation behaviour is information that is
+almost certainly only useful to a developer and even then, there is
+/proc/pagetypeinfo. At minimum, move this patch to later in the series
+but I'm skeptical about its benefit.
+
+-- 
+Mel Gorman
+SUSE Labs
