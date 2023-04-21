@@ -2,109 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9B26EB518
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD85A6EB521
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbjDUWnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S233917AbjDUWoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjDUWnI (ORCPT
+        with ESMTP id S233763AbjDUWoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:43:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15B71BE3;
-        Fri, 21 Apr 2023 15:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m1e8oWBFoE6cQzJQhP6tkmJTF5BRaTgWrs55dNNPGgw=; b=Smrt+UFGINhHo2Xrc2HQAomUpt
-        KdADUqVFMhwxbRWcmREvw1bQBiMRmv7u1VHSLfO2r5em1Zj/XxTAmw7/HcUR9ttQaF8d2Diefdw5D
-        uoOtzyqYMfwT0U2ruXS6u6GrihqG+LVtt0vIr5CDhAK044jw6tnpZR3cyj05xH1uyLXFnDn6VrPEw
-        gDyQonGbIXXkHeEJRLBmWe+u9G6HvUBs46RoibpsVWVWM0htT4eotGxHKOtZ4TZBsk9CJ3yt5Prei
-        aviVAba62+KGLTyAuC4pZQGaPad4uPr+wnbwU9BXDzPk/txPucorIgTpV2x7DbBnOHFLXUIBD/soV
-        vZjX6KMQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ppzSv-00Fi3h-IU; Fri, 21 Apr 2023 22:42:53 +0000
-Date:   Fri, 21 Apr 2023 23:42:53 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     hughd@google.com, akpm@linux-foundation.org, brauner@kernel.org,
-        djwong@kernel.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, hare@suse.de, kbusch@kernel.org,
-        patches@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 2/8] shmem: convert to use folio_test_hwpoison()
-Message-ID: <ZEMRbcHSQqyek8Ov@casper.infradead.org>
-References: <20230421214400.2836131-1-mcgrof@kernel.org>
- <20230421214400.2836131-3-mcgrof@kernel.org>
+        Fri, 21 Apr 2023 18:44:12 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75A91FCD
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:44:09 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50685f1b6e0so3877138a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1682117048; x=1684709048;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tvf5j/bINAOiQrCkYKeeaDxMIaoN8V+mcRrm9nEicRY=;
+        b=Ov7f87q+/GNcxXrkOnaERdvsYozN6ITub+SEYzIvIhDWs4EDVBoknOMx+R5E1AudF8
+         +hNH3cwIO85Ba53Hx2FGdcP4Ke3cVEfmjDIB8LAeJvesnVwsjMws0taaAC0Z3ScxxppB
+         f9sXawapASYud7MGVUciJPDAF8I3L9G8ENjp4DM9u9bpNnlajdgg3qcx1MBdiZ3UB2Fa
+         NeMLvIL9E+9M/rsaxsq7SOYCpkvY46G7xYRFTef5MFdtwOEXwRjkmSPi4eWGePakMnwZ
+         pXbehglwI+R+IHSTPYmZvVuA5yinKq8YLUw6Tc0gYBDSpxIRk1T3lHX200NH/BlXRa//
+         ja/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682117048; x=1684709048;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tvf5j/bINAOiQrCkYKeeaDxMIaoN8V+mcRrm9nEicRY=;
+        b=Vw7mf2E0UyQrTSkU5ymeWQ83qS2PuzE6TOW1GQmyGaG0VMjarHyzKrpXB+lLOAGvGU
+         /B5eoZ2V3TTaHUQyv/FLBK9PPwgl9w6QHaeKPuhFiUSaPGxyQ7vT/H5h8KOr8b6yJe+o
+         MNC+1Pa9tjarcfRZufrXio1OCsO5+6ZzrT0sGDoSKLh9mzfxc4Y4IrNhhgWpc/Gh05z0
+         R0dGRlrLsYwUWg7xXGYByPhZzGKDX8qdbnSngjnD4ZO4vj+UZcUAPpO6cuwmDGujHTns
+         VVG2HURm59NrEd6IOoEN8DUjP83A4YsYsgr1sb13CViep8DETGkZs/RmDF7oXBreiPh6
+         sI0g==
+X-Gm-Message-State: AAQBX9c3HFIvTTzA8eOj2vhl9xAwG6Qy7dSsc9J8nIN3qbBK+xrIww99
+        DFY8V4cs8PJJqrTk9zg/ztfupxWjDWVxcFzxF5Usaw==
+X-Google-Smtp-Source: AKy350Z7tsZGMHuCKfKxhW0176voBwFeqIcIduoNvJQR7FvSkUZn/IfrPrvT/mGuDF7WXe/8PffnqO89+53UAmMv9+k=
+X-Received: by 2002:a05:6402:1ad1:b0:504:7f60:9f6d with SMTP id
+ ba17-20020a0564021ad100b005047f609f6dmr5201714edb.9.1682117048360; Fri, 21
+ Apr 2023 15:44:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421214400.2836131-3-mcgrof@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230421101154.23690-1-kuro@kuroa.me>
+In-Reply-To: <20230421101154.23690-1-kuro@kuroa.me>
+From:   Quentin Monnet <quentin@isovalent.com>
+Date:   Fri, 21 Apr 2023 23:43:57 +0100
+Message-ID: <CACdoK4Jez-Hpv2s6iSj_j2qxt6rrHLpXULbJbY72_w8LVECdbw@mail.gmail.com>
+Subject: Re: [PATCH] Dump map id instead of value for map_of_maps types
+To:     Xueming Feng <kuro@kuroa.me>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:43:54PM -0700, Luis Chamberlain wrote:
-> The PageHWPoison() call can be converted over to the respective folio call
-> folio_test_hwpoison(). This introduces no functional changes.
+On Fri, 21 Apr 2023 at 11:12, Xueming Feng <kuro@kuroa.me> wrote:
+>
+> When using `bpftool map dump` in plain format, it is usually
+> more convenient to show the inner map id instead of raw value.
+> Changing this behavior would help with quick debugging with
+> `bpftool`, without disruption scripted behavior. Since user
 
-Um, no.  Nobody should use folio_test_hwpoison(), it's a nonsense.
+s/disruption/disrupting/ ?
 
-Individual pages are hwpoisoned.  You're only testing the head page
-if you use folio_test_hwpoison().  There's folio_has_hwpoisoned() to
-test if _any_ page in the folio is poisoned.  But blindly converting
-PageHWPoison to folio_test_hwpoison() is wrong.
+> could dump the inner map with id, but need to convert value.
+>
+> Signed-off-by: Xueming Feng <kuro@kuroa.me>
 
-If anyone knows how to poison folio_test_hwpoison() to make it not
-work, I'd appreciate it.
+Thanks for this patch! It looks good, with some minor comments below.
 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 > ---
->  mm/shmem.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 5bf92d571092..6f117c3cbe89 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -3483,7 +3483,7 @@ static const char *shmem_get_link(struct dentry *dentry,
->  		folio = filemap_get_folio(inode->i_mapping, 0);
->  		if (IS_ERR(folio))
->  			return ERR_PTR(-ECHILD);
-> -		if (PageHWPoison(folio_page(folio, 0)) ||
-> +		if (folio_test_hwpoison(folio) ||
->  		    !folio_test_uptodate(folio)) {
->  			folio_put(folio);
->  			return ERR_PTR(-ECHILD);
-> @@ -3494,7 +3494,7 @@ static const char *shmem_get_link(struct dentry *dentry,
->  			return ERR_PTR(error);
->  		if (!folio)
->  			return ERR_PTR(-ECHILD);
-> -		if (PageHWPoison(folio_page(folio, 0))) {
-> +		if (folio_test_hwpoison(folio)) {
->  			folio_unlock(folio);
->  			folio_put(folio);
->  			return ERR_PTR(-ECHILD);
-> @@ -4672,7 +4672,7 @@ struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
->  		return &folio->page;
->  
->  	page = folio_file_page(folio, index);
-> -	if (PageHWPoison(page)) {
-> +	if (folio_test_hwpoison(folio)) {
->  		folio_put(folio);
->  		return ERR_PTR(-EIO);
->  	}
-> -- 
-> 2.39.2
-> 
+>  tools/bpf/bpftool/main.c | 16 ++++++++++++++++
+>  tools/bpf/bpftool/main.h |  1 +
+>  tools/bpf/bpftool/map.c  |  9 +++++++--
+>  3 files changed, 24 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> index 08d0ac543c67..d297200c91f7 100644
+> --- a/tools/bpf/bpftool/main.c
+> +++ b/tools/bpf/bpftool/main.c
+> @@ -251,6 +251,22 @@ int detect_common_prefix(const char *arg, ...)
+>         return 0;
+>  }
+>
+> +void fprint_uint(FILE *f, void *arg, unsigned int n)
+
+I suppose you based this function on fprint_hex(). But for your
+function, let's remove the first argument? We always print to stdout.
+We can always turn it to a "fprint" version again if we need to print
+elsewhere in the future.
+
+Also, "arg" should probably be a "const"?
+
+Can you please rename "n" to "arg_size" or something similar?
+
+> +{
+> +       unsigned char *data = arg;
+> +       unsigned int data_uint = 0;
+> +
+> +       for (unsigned int i = 0; i < n && i < 4; i++) {
+
+Please move the declaration for "i" to the top of the function, for consistency.
+
+Also, why stop at i == 4? Couldn't this function be used for 8-byte
+long integers too? It should be up to the caller function to set "n"
+correctly.
+
+> +       #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+> +               data_uint |= data[i] << (i * 8);
+> +       #else
+> +               data_uint |= data[i] << ((n - i - 1) * 8);
+> +       #endif
+> +       }
+> +
+> +       fprintf(f, "%d", data_uint);
+> +}
+> +
+>  void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
+>  {
+>         unsigned char *data = arg;
+> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+> index 0ef373cef4c7..7488ef38e7a9 100644
+> --- a/tools/bpf/bpftool/main.h
+> +++ b/tools/bpf/bpftool/main.h
+> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
+>
+>  bool is_prefix(const char *pfx, const char *str);
+>  int detect_common_prefix(const char *arg, ...);
+> +void fprint_uint(FILE *f, void *arg, unsigned int n);
+>  void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+>  void usage(void) __noreturn;
+>
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index aaeb8939e137..638bd8de8135 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+>                 }
+>
+>                 if (info->value_size) {
+> -                       printf("value:%c", break_names ? '\n' : ' ');
+> -                       fprint_hex(stdout, value, info->value_size, " ");
+> +                       if (map_is_map_of_maps(info->type)) {
+> +                               printf("id:%c", break_names ? '\n' : ' ');
+> +                               fprint_uint(stdout, value, info->value_size);
+> +                       } else {
+> +                               printf("value:%c", break_names ? '\n' : ' ');
+> +                               fprint_hex(stdout, value, info->value_size, " ");
+> +                       }
+>                 }
+>
+>                 printf("\n");
+> --
+> 2.37.1 (Apple Git-137.1)
+>
