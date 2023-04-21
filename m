@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94CA6EB4CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE2E6EB4D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbjDUWcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S233938AbjDUWcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbjDUWbz (ORCPT
+        with ESMTP id S233848AbjDUWcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:31:55 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB4F3A86
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-95316faa3a8so376754966b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:51 -0700 (PDT)
+        Fri, 21 Apr 2023 18:32:02 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D712123
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94a34d3812dso373232666b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682116310; x=1684708310;
+        d=linaro.org; s=google; t=1682116312; x=1684708312;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7v4mG2PrvGHT4HWW2aD7kz/Jo5VqruKafQcmH0GEdHQ=;
-        b=LRwxYnYte61pFMXBNA4fGK8jUs7j4rOkyOV4DdeP+ttViOoqcp1tzRcSM8sa6ZXXhX
-         vhWQAmT5hkJY2mOlU7tXY5f/L/K/EhmJJrJrZ4+133xDbLq8LjeQ5pIfF+PvofBirVJ6
-         bC59k8XvlJTnxagd5d1KHmr826EoFOSYDtlUPT12aCyD5RNHsKsg3vG7wPuvougchO8p
-         0ZoczI3MB6arJx/H5gLkYcuv3bqEBBGwuz5XsLPqaSbQVmoI5anSkmBjrMQWKK47VdJw
-         B6W++SAaY+DJSV8Z2ZCU7l0i2h7Qck4sB4jUnR24mbutUri2h/jAGjXx/ihbfCO7M3pU
-         Elbg==
+        bh=z/JXh3KMYvLK06HDirT25EHs53ovQgqJ5TzbHwT/AYg=;
+        b=DWPXztrUVvPQULYZ1j30gTAOTD/rB0+B0XLM56SuuRqMQKSwX9sCdFLa7sewsDZrui
+         JwS9pXvO9h0VnLxjjJ3l+xH1MPmymodCX/LI3xD8bZ3GMldEBLRTty38maVbC3FhiB36
+         fB2ig0ujglejO6dVgr21LPaj6ud9Ivd9waoFleBroyp32Dku4Sc76NBWjwedinGT3TRJ
+         X1m3BIMtEGiopADUyxz/3W5CelN/dbIXnGssWG5CIrUrRURlHUVITtY8O7Tj4xqTZYqA
+         ujWSfKMqmU15SNYWKxq5SREIQl9jDpq9haa9VBVLYbBa4DXvHeKF1j0aT1AsKbYB+/wM
+         zp4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682116310; x=1684708310;
+        d=1e100.net; s=20221208; t=1682116312; x=1684708312;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7v4mG2PrvGHT4HWW2aD7kz/Jo5VqruKafQcmH0GEdHQ=;
-        b=PhOJa0WxVRl4F9H1PWGvowRnqNeBZ50V3WuWVDdQDXON4eZpPWaCGpIeX2VlCXurO8
-         l2q40fFRvevKX4XDXEFXPiwPLcQY7tCDC57OVL5y2XHXPaEQzGoRH6d97F/KpjZD6/yz
-         /JcWEQjQspe62Y5O0Oax3TmMK4AcFNy3Tzy50kN85fWEPU2UN5zLueIH7ciIdXZZxWN8
-         zf7kYomzqrjo5iVGlQIQtGcdjoYLNsHlluUQ0rCZuESBQDGjh32S2DVsqHiXFM8BGoMT
-         T58XhbTOFYKPxkOHP0geR8axpPKje0xXmtn8o4vu1bPSQaDLnUB1EOyQ+zsWPJihTUGs
-         /cGg==
-X-Gm-Message-State: AAQBX9foYEBJldajcSH0mpWaNNsk22stPqfMaMzp8WLtJWTCxD9GOCNb
-        98q66VyJiWa/Wy5Td0kxXbLjRCWkEM5hw/UwXaVK8w==
-X-Google-Smtp-Source: AKy350ZToStdpI3/6McxwF83TbNvU0TpEGKWh9SGPOim56WxkraHbbPATz3MtaW9Xt/+n4pzC+JJtg==
-X-Received: by 2002:a17:907:7845:b0:957:12b7:30b0 with SMTP id lb5-20020a170907784500b0095712b730b0mr3566568ejc.18.1682116310636;
-        Fri, 21 Apr 2023 15:31:50 -0700 (PDT)
+        bh=z/JXh3KMYvLK06HDirT25EHs53ovQgqJ5TzbHwT/AYg=;
+        b=HxV0juDElCNYf7gkzZUozGruZMD/5RtwP5ke2O0pfoA+zM5hIVyIG8SNW/g57uazMv
+         +l9Ek82+RnG9Ygtw2F6qYuB7M2a59hipl4iUJqcG0+D5CQplr58X8gi9RT9kLFb+grbK
+         YKR9OUPQhBJ3m46B5eQ7O30p+9Qqqkx38m5wqKtJVnRghzpWrJ/ju+urcbfdJelnqolF
+         GsfRG0MzPFLUlYcO8XOqSDTl6+Mt4bi/XtlqHx3RIaNPcLTkpE3DVHoxV4qVHBKAVNjG
+         gPzaZOande4QOQ8CwjZy2qk3gMkV2VOIDMvV3P5jRsx2LzJJ55zRBSVEst+nnd6VTQe+
+         TxIg==
+X-Gm-Message-State: AAQBX9eWDE/zG20bX8S3Io+FN6Y0kBcRlrWTkrFPBwtf7tJwt4g4C0+h
+        zD+LgmmAg+GYuwR24xmMS3DySQ==
+X-Google-Smtp-Source: AKy350YmcK1D5WYWTu1lCCnLsNdzO3Hik5EGsJBcczUkgtnr30yP7c3gLlS149BrTtCSghRjxAMyPQ==
+X-Received: by 2002:a17:906:fcc:b0:94f:250b:2536 with SMTP id c12-20020a1709060fcc00b0094f250b2536mr3229726ejk.28.1682116312383;
+        Fri, 21 Apr 2023 15:31:52 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
-        by smtp.gmail.com with ESMTPSA id aa21-20020a170907355500b00957dad777c1sm308173ejc.107.2023.04.21.15.31.49
+        by smtp.gmail.com with ESMTPSA id k1-20020a170906a38100b0094ece70481csm2537895ejz.197.2023.04.21.15.31.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 15:31:50 -0700 (PDT)
+        Fri, 21 Apr 2023 15:31:52 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+To:     =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+        linux-realtek-soc@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: rockchip: add missing cache properties
-Date:   Sat, 22 Apr 2023 00:31:48 +0200
-Message-Id: <20230421223149.115185-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: realtek: add missing cache properties
+Date:   Sat, 22 Apr 2023 00:31:50 +0200
+Message-Id: <20230421223151.115243-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,9 +74,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 As all level 2 and level 3 caches are unified, add required
-cache-unified properties to fix warnings like:
+cache-unified and cache-level properties to fix warnings like:
 
-  rk3588s-khadas-edge2.dtb: l3-cache: 'cache-unified' is a dependency of 'cache-size'
+  rtd1293-ds418j.dtb: l2-cache: 'cache-level' is a required property
+  rtd1293-ds418j.dtb: l2-cache: 'cache-unified' is a required property
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
@@ -83,107 +85,81 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Please take the patch via sub-arch SoC tree.
 ---
- arch/arm64/boot/dts/rockchip/rk3308.dtsi  | 1 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi  | 1 +
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 9 +++++++++
- 3 files changed, 11 insertions(+)
+ arch/arm64/boot/dts/realtek/rtd1293.dtsi | 2 ++
+ arch/arm64/boot/dts/realtek/rtd1295.dtsi | 2 ++
+ arch/arm64/boot/dts/realtek/rtd1296.dtsi | 2 ++
+ arch/arm64/boot/dts/realtek/rtd1395.dtsi | 2 ++
+ arch/arm64/boot/dts/realtek/rtd16xx.dtsi | 4 ++++
+ 5 files changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-index dd228a256a32..2ae4bb7d5e62 100644
---- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-@@ -97,6 +97,7 @@ CPU_SLEEP: cpu-sleep {
+diff --git a/arch/arm64/boot/dts/realtek/rtd1293.dtsi b/arch/arm64/boot/dts/realtek/rtd1293.dtsi
+index 2d92b56ac94d..d0c9387ac17a 100644
+--- a/arch/arm64/boot/dts/realtek/rtd1293.dtsi
++++ b/arch/arm64/boot/dts/realtek/rtd1293.dtsi
+@@ -30,6 +30,8 @@ cpu1: cpu@1 {
+ 
  		l2: l2-cache {
  			compatible = "cache";
- 			cache-level = <2>;
++			cache-level = <2>;
 +			cache-unified;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index 6d7a7bf72ac7..e729e7a22b23 100644
---- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-@@ -103,6 +103,7 @@ CPU_SLEEP: cpu-sleep {
- 		l2: l2-cache0 {
+diff --git a/arch/arm64/boot/dts/realtek/rtd1295.dtsi b/arch/arm64/boot/dts/realtek/rtd1295.dtsi
+index 1402abe80ea1..b7f63102f2dd 100644
+--- a/arch/arm64/boot/dts/realtek/rtd1295.dtsi
++++ b/arch/arm64/boot/dts/realtek/rtd1295.dtsi
+@@ -44,6 +44,8 @@ cpu3: cpu@3 {
+ 
+ 		l2: l2-cache {
  			compatible = "cache";
- 			cache-level = <2>;
++			cache-level = <2>;
 +			cache-unified;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 657c019d27fa..5badc68fe9f0 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -230,6 +230,7 @@ l2_cache_l0: l2-cache-l0 {
- 			cache-sets = <512>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
+diff --git a/arch/arm64/boot/dts/realtek/rtd1296.dtsi b/arch/arm64/boot/dts/realtek/rtd1296.dtsi
+index fb864a139c97..4f805f576cef 100644
+--- a/arch/arm64/boot/dts/realtek/rtd1296.dtsi
++++ b/arch/arm64/boot/dts/realtek/rtd1296.dtsi
+@@ -44,6 +44,8 @@ cpu3: cpu@3 {
+ 
+ 		l2: l2-cache {
+ 			compatible = "cache";
++			cache-level = <2>;
 +			cache-unified;
  		};
+ 	};
  
- 		l2_cache_l1: l2-cache-l1 {
-@@ -239,6 +240,7 @@ l2_cache_l1: l2-cache-l1 {
- 			cache-sets = <512>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
+diff --git a/arch/arm64/boot/dts/realtek/rtd1395.dtsi b/arch/arm64/boot/dts/realtek/rtd1395.dtsi
+index 05c9216a87ee..2efe5b25c83c 100644
+--- a/arch/arm64/boot/dts/realtek/rtd1395.dtsi
++++ b/arch/arm64/boot/dts/realtek/rtd1395.dtsi
+@@ -44,6 +44,8 @@ cpu3: cpu@3 {
+ 
+ 		l2: l2-cache {
+ 			compatible = "cache";
++			cache-level = <2>;
 +			cache-unified;
  		};
+ 	};
  
- 		l2_cache_l2: l2-cache-l2 {
-@@ -248,6 +250,7 @@ l2_cache_l2: l2-cache-l2 {
- 			cache-sets = <512>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
+diff --git a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
+index bf4d9e917925..34802cc62983 100644
+--- a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
++++ b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
+@@ -88,11 +88,15 @@ cpu5: cpu@500 {
+ 		l2: l2-cache {
+ 			compatible = "cache";
+ 			next-level-cache = <&l3>;
++			cache-level = <2>;
 +			cache-unified;
+ 
  		};
  
- 		l2_cache_l3: l2-cache-l3 {
-@@ -257,6 +260,7 @@ l2_cache_l3: l2-cache-l3 {
- 			cache-sets = <512>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
-+			cache-unified;
- 		};
- 
- 		l2_cache_b0: l2-cache-b0 {
-@@ -266,6 +270,7 @@ l2_cache_b0: l2-cache-b0 {
- 			cache-sets = <1024>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
-+			cache-unified;
- 		};
- 
- 		l2_cache_b1: l2-cache-b1 {
-@@ -275,6 +280,7 @@ l2_cache_b1: l2-cache-b1 {
- 			cache-sets = <1024>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
-+			cache-unified;
- 		};
- 
- 		l2_cache_b2: l2-cache-b2 {
-@@ -284,6 +290,7 @@ l2_cache_b2: l2-cache-b2 {
- 			cache-sets = <1024>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
-+			cache-unified;
- 		};
- 
- 		l2_cache_b3: l2-cache-b3 {
-@@ -293,6 +300,7 @@ l2_cache_b3: l2-cache-b3 {
- 			cache-sets = <1024>;
- 			cache-level = <2>;
- 			next-level-cache = <&l3_cache>;
-+			cache-unified;
- 		};
- 
- 		l3_cache: l3-cache {
-@@ -301,6 +309,7 @@ l3_cache: l3-cache {
- 			cache-line-size = <64>;
- 			cache-sets = <4096>;
- 			cache-level = <3>;
+ 		l3: l3-cache {
+ 			compatible = "cache";
++			cache-level = <3>;
 +			cache-unified;
  		};
  	};
