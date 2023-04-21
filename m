@@ -2,125 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF536EAB4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FD26EAB5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjDUNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S232117AbjDUNPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbjDUNND (ORCPT
+        with ESMTP id S232265AbjDUNPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:13:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A909ECF;
-        Fri, 21 Apr 2023 06:13:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8AB463E7D;
-        Fri, 21 Apr 2023 13:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF73C433D2;
-        Fri, 21 Apr 2023 13:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682082781;
-        bh=LTVF3UalAmWiwiNCKiCSSsd5kOFARhJPHx3eV2qtZfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EnFjT+cLXDWGzZ2ck7tAXbOS238fadx5OvphD1h6WpDW1zxp9KWxta5nCszqE9qla
-         fYPHZjk9NQowBxU3/tAjfuR3PXl2la+L7blgf4Uik7rocsNEiItVlmtKF3f9Bz7YCV
-         ZavqiwSgBqkoUYe9VZtdMrZ7GWCN2KrIACfuWa+t35WCl0wPeUMqmulVuXWKIB1LEP
-         Vedfm7zHiUttnBzzwPoI2slNA45yN2Ge2eyBtuaYld0fIUWLG8P5ypIqq3DFyALVLM
-         2bbufYNlOCmRPfLLio26ExAslQCDv7uABZm3Ux+jlLvoqFQXxydbpMRe3FqKvWVpid
-         zqsO7350CAuEQ==
-Date:   Fri, 21 Apr 2023 15:12:53 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        helgaas@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v6 7/9] PCI: tegra194: Fix possible array out of bounds
- access
-Message-ID: <ZEKL1XzYzOwcEkHK@lpieralisi>
-References: <20230411110002.19824-1-sumitg@nvidia.com>
- <20230411110002.19824-8-sumitg@nvidia.com>
+        Fri, 21 Apr 2023 09:15:39 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D57A5F0;
+        Fri, 21 Apr 2023 06:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682082937; x=1713618937;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kmiOUVgBvjfIs0p4hj+2OzOGUD9EcJfcUGBRPSb0QWE=;
+  b=GPRVPDMObKteuhX+d5bqVNEmjAz3TQa+p4F1IT3enbCH3SZmxNm1DgJA
+   N7K8HvnY5JCPaK4gDtDTLgsjzUhWUH3P6w8JdOz2wDJuTMfGwZn479wAB
+   a0MyfCRisr10wkW/8W3NQWRFCtu4kM8I8jDXNI+4nI3Liy26f6m+mLH4N
+   uXZKw426FjEEU2i/OJLQAsrfW7VFsmTKZVA7/V11TuJSqzZxw3ZOuxq32
+   78/cnBEgbLcXg4KaoF3FQayJK8QjYW/3KxwjM3O4NIUVpt5hw8XFjGcQo
+   rBQ7N3+DA58KM05rVkGb8aJQRAnmMxlt47OZOyq5qBXJBACiTxDDmNCRf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,214,1677567600"; 
+   d="scan'208";a="148298571"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2023 06:15:35 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 21 Apr 2023 06:15:11 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 21 Apr 2023 06:15:08 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>,
+        <alexandr.lobakin@intel.com>, <maciej.fijalkowski@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v2] lan966x: Don't use xdp_frame when action is XDP_TX
+Date:   Fri, 21 Apr 2023 15:14:22 +0200
+Message-ID: <20230421131422.3530159-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411110002.19824-8-sumitg@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:30:00PM +0530, Sumit Gupta wrote:
-> Add check to fix the possible array out of bounds violation by
-> making speed equal to GEN1_CORE_CLK_FREQ when its value is more
-> than the size of "pcie_gen_freq" array. This array has size of
-> four but possible speed (CLS) values are from "0 to 0xF". So,
-> "speed - 1" values are "-1 to 0xE". This change was suggested by
-> "Bjorn Helgaas" in the below link.
+When the action of an xdp program was XDP_TX, lan966x was creating
+a xdp_frame and use this one to send the frame back. But it is also
+possible to send back the frame without needing a xdp_frame, because
+it is possible to send it back using the page.
+And then once the frame is transmitted is possible to use directly
+page_pool_recycle_direct as lan966x is using page pools.
+This would save some CPU usage on this path, which results in higher
+number of transmitted frames. Bellow are the statistics:
+Frame size:    Improvement:
+64                ~8%
+256              ~11%
+512               ~8%
+1000              ~0%
+1500              ~0%
 
-There is a Suggested-by tag and a Link: tag remove the last
-sentence, that's duplicate information.
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+v1->v2:
+- reduce number of arguments for the function lan966x_fdma_xmit_xdpf,
+  as some of them are mutual exclusive, and other can be replaced with
+  deduced from the other ones
+- update commit message and add statistics for the improvement
+---
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 43 +++++++++++--------
+ .../ethernet/microchip/lan966x/lan966x_main.h |  6 +--
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  | 10 ++---
+ 3 files changed, 31 insertions(+), 28 deletions(-)
 
-> Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> Link: https://lore.kernel.org/lkml/72b9168b-d4d6-4312-32ea-69358df2f2d0@nvidia.com/
-> ---
->  drivers/pci/controller/dwc/pcie-tegra194.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 2ed76bb61a731..85c13231e0176 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -390,6 +390,7 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
+ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ {
+ 	struct lan966x_tx *tx = &lan966x->tx;
++	struct lan966x_rx *rx = &lan966x->rx;
+ 	struct lan966x_tx_dcb_buf *dcb_buf;
+ 	struct xdp_frame_bulk bq;
+ 	struct lan966x_db *db;
+@@ -432,7 +433,8 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ 			if (dcb_buf->xdp_ndo)
+ 				xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
+ 			else
+-				xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
++				page_pool_recycle_direct(rx->page_pool,
++							 dcb_buf->data.page);
+ 		}
+ 
+ 		clear = true;
+@@ -699,15 +701,14 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+ 	tx->last_in_use = next_to_use;
+ }
+ 
+-int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+-			   struct xdp_frame *xdpf,
+-			   struct page *page,
+-			   bool dma_map)
++int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ {
+ 	struct lan966x *lan966x = port->lan966x;
+ 	struct lan966x_tx_dcb_buf *next_dcb_buf;
+ 	struct lan966x_tx *tx = &lan966x->tx;
++	struct xdp_frame *xdpf;
+ 	dma_addr_t dma_addr;
++	struct page *page;
+ 	int next_to_use;
+ 	__be32 *ifh;
+ 	int ret = 0;
+@@ -722,8 +723,19 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 		goto out;
+ 	}
+ 
++	/* Fill up the buffer */
++	next_dcb_buf = &tx->dcbs_buf[next_to_use];
++	next_dcb_buf->use_skb = false;
++	next_dcb_buf->xdp_ndo = !len;
++	next_dcb_buf->len = len + IFH_LEN_BYTES;
++	next_dcb_buf->used = true;
++	next_dcb_buf->ptp = false;
++	next_dcb_buf->dev = port->dev;
++
+ 	/* Generate new IFH */
+-	if (dma_map) {
++	if (!len) {
++		xdpf = ptr;
++
+ 		if (xdpf->headroom < IFH_LEN_BYTES) {
+ 			ret = NETDEV_TX_OK;
+ 			goto out;
+@@ -743,11 +755,15 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 			goto out;
+ 		}
+ 
++		next_dcb_buf->data.xdpf = xdpf;
++
+ 		/* Setup next dcb */
+ 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+ 					  xdpf->len + IFH_LEN_BYTES,
+ 					  dma_addr);
+ 	} else {
++		page = ptr;
++
+ 		ifh = page_address(page) + XDP_PACKET_HEADROOM;
+ 		memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
+ 		lan966x_ifh_set_bypass(ifh, 1);
+@@ -756,25 +772,18 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 		dma_addr = page_pool_get_dma_addr(page);
+ 		dma_sync_single_for_device(lan966x->dev,
+ 					   dma_addr + XDP_PACKET_HEADROOM,
+-					   xdpf->len + IFH_LEN_BYTES,
++					   len + IFH_LEN_BYTES,
+ 					   DMA_TO_DEVICE);
+ 
++		next_dcb_buf->data.page = page;
++
+ 		/* Setup next dcb */
+ 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+-					  xdpf->len + IFH_LEN_BYTES,
++					  len + IFH_LEN_BYTES,
+ 					  dma_addr + XDP_PACKET_HEADROOM);
+ 	}
+ 
+-	/* Fill up the buffer */
+-	next_dcb_buf = &tx->dcbs_buf[next_to_use];
+-	next_dcb_buf->use_skb = false;
+-	next_dcb_buf->data.xdpf = xdpf;
+-	next_dcb_buf->xdp_ndo = dma_map;
+-	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
+ 	next_dcb_buf->dma_addr = dma_addr;
+-	next_dcb_buf->used = true;
+-	next_dcb_buf->ptp = false;
+-	next_dcb_buf->dev = port->dev;
+ 
+ 	/* Start the transmission */
+ 	lan966x_fdma_tx_start(tx, next_to_use);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 757378516f1fd..27f272831ea5c 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -262,6 +262,7 @@ struct lan966x_tx_dcb_buf {
+ 	union {
+ 		struct sk_buff *skb;
+ 		struct xdp_frame *xdpf;
++		struct page *page;
+ 	} data;
+ 	u32 len;
+ 	u32 used : 1;
+@@ -593,10 +594,7 @@ int lan966x_ptp_setup_traps(struct lan966x_port *port, struct ifreq *ifr);
+ int lan966x_ptp_del_traps(struct lan966x_port *port);
+ 
+ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
+-int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+-			   struct xdp_frame *frame,
+-			   struct page *page,
+-			   bool dma_map);
++int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len);
+ int lan966x_fdma_change_mtu(struct lan966x *lan966x);
+ void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
+ void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index 2e6f486ec67d7..9ee61db8690b4 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -62,7 +62,7 @@ int lan966x_xdp_xmit(struct net_device *dev,
+ 		struct xdp_frame *xdpf = frames[i];
+ 		int err;
+ 
+-		err = lan966x_fdma_xmit_xdpf(port, xdpf, NULL, true);
++		err = lan966x_fdma_xmit_xdpf(port, xdpf, 0);
+ 		if (err)
+ 			break;
+ 
+@@ -76,7 +76,6 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ {
+ 	struct bpf_prog *xdp_prog = port->xdp_prog;
+ 	struct lan966x *lan966x = port->lan966x;
+-	struct xdp_frame *xdpf;
+ 	struct xdp_buff xdp;
+ 	u32 act;
+ 
+@@ -90,11 +89,8 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ 	case XDP_PASS:
+ 		return FDMA_PASS;
+ 	case XDP_TX:
+-		xdpf = xdp_convert_buff_to_frame(&xdp);
+-		if (!xdpf)
+-			return FDMA_DROP;
+-
+-		return lan966x_fdma_xmit_xdpf(port, xdpf, page, false) ?
++		return lan966x_fdma_xmit_xdpf(port, page,
++					      data_len - IFH_LEN_BYTES) ?
+ 		       FDMA_DROP : FDMA_TX;
+ 	case XDP_REDIRECT:
+ 		if (xdp_do_redirect(port->dev, &xdp, xdp_prog))
+-- 
+2.38.0
 
-Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
-
-> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-> index 09825b4a075e..e6eec85480ca 100644
-> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
-> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-> @@ -223,6 +223,7 @@
->  #define EP_STATE_ENABLED	1
->  
->  static const unsigned int pcie_gen_freq[] = {
-> +	GEN1_CORE_CLK_FREQ,	/* PCI_EXP_LNKSTA_CLS == 0; undefined */
->  	GEN1_CORE_CLK_FREQ,
->  	GEN2_CORE_CLK_FREQ,
->  	GEN3_CORE_CLK_FREQ,
-> @@ -459,7 +460,11 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
->  
->  	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
->  		PCI_EXP_LNKSTA_CLS;
-> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> +
-> +	if (speed >= ARRAY_SIZE(pcie_gen_freq))
-> +		speed = 0;
-> +
-> +	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
->  
->  	if (pcie->of_data->has_ltr_req_fix)
->  		return IRQ_HANDLED;
-> @@ -1020,7 +1025,11 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
->  
->  	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
->  		PCI_EXP_LNKSTA_CLS;
-> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> +
-> +	if (speed >= ARRAY_SIZE(pcie_gen_freq))
-> +		speed = 0;
-> +
-> +	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
->  
->  	tegra_pcie_enable_interrupts(pp);
->  
-> -- 
-> 2.17.1
-> 
