@@ -2,92 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF2D6EA923
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E83A6EA94B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjDULcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S231676AbjDULf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjDULc3 (ORCPT
+        with ESMTP id S231285AbjDULfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:32:29 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EF193F6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:32:28 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ppp05-000755-84; Fri, 21 Apr 2023 13:32:25 +0200
-Message-ID: <c4c09a67-6897-751c-c091-6e33f48542cc@leemhuis.info>
-Date:   Fri, 21 Apr 2023 13:32:24 +0200
+        Fri, 21 Apr 2023 07:35:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D4AAF1A;
+        Fri, 21 Apr 2023 04:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682076922; x=1713612922;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=Hgf4GUcvraNUcwP7ECqhlabBrNBOaHjkbk61oEsey4w=;
+  b=Kvbt8uE8F45GPIjvLXBh33mPF2MLlSsW77srm+4kKG1gtA3rgTxyhD8m
+   3Rbz8/SCGlridEDNoO/1lAtg2qcjQP5Qm0tg2V9SQDVinxmj2HAO/aaqs
+   DXZ33HbCT7TLmxYbxSzjUZNxLvZhmxl63RtEJJUKAVJfmNJ52ISseQZIk
+   tmE6ln/OC69KSlIz9WcfBJxb8JCIPKts/tzyRFeg+SahHmR6ldo2q5KDP
+   70y9eyEQU3XRinl4xMSwBxC+gzlIaOouq/INiJudNligRPZMNXW8A6xnB
+   4ccI2PUqKmjR2i9dZFyZt/9DAliv5XtI7KMV2gYmsm6eXoer7h0RgmYge
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="432249850"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="432249850"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 04:35:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642489641"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="642489641"
+Received: from lab-ah.igk.intel.com ([10.102.138.202])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 04:35:17 -0700
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Date:   Fri, 21 Apr 2023 13:35:04 +0200
+Subject: [PATCH v7 1/7] lib/ref_tracker: add unlocked leak print helper
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
-Content-Language: en-US, de-DE
-To:     Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20230420155705.21463-1-pa@panix.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <20230420155705.21463-1-pa@panix.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1682076748;ca384fe1;
-X-HE-SMSGID: 1ppp05-000755-84
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230224-track_gt-v7-1-11f08358c1ec@intel.com>
+References: <20230224-track_gt-v7-0-11f08358c1ec@intel.com>
+In-Reply-To: <20230224-track_gt-v7-0-11f08358c1ec@intel.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.04.23 17:57, Pierre Asselin wrote:
-> Some legacy BIOSes report no reserved bits in their 32-bit rgb mode,
-> breaking the calculation of bits_per_pixel in commit f35cd3fa7729
-> ("firmware/sysfb: Fix EFI/VESA format selection").  However they report
-> lfb_depth correctly for those modes.  Keep the computation but
-> set bits_per_pixel to lfb_depth if the latter is larger.
-> 
-> v2 fixes the warnings from a max3() macro with arguments of different
-> types;  split the bits_per_pixel assignment to avoid uglyfing the code
-> with too many casts.
-> 
-> v3 fixes space and formatting blips pointed out by Javier, and change
-> the bit_per_pixel assignment back to a single statement using two casts.
-> 
-> Link: https://lore.kernel.org/r/4Psm6B6Lqkz1QXM@panix3.panix.com
-> Link: https://lore.kernel.org/r/20230412150225.3757223-1-javierm@redhat.com
-> Link: https://lore.kernel.org/dri-devel/20230418183325.2327-1-pa@panix.com/T/#u
-> Link: https://lore.kernel.org/dri-devel/20230419044834.10816-1-pa@panix.com/T/#u
-> Fixes: f35cd3fa7729 ("firmware/sysfb: Fix EFI/VESA format selection")
-> Signed-off-by: Pierre Asselin <pa@panix.com>
+To have reliable detection of leaks, caller must be able to check under the same
+lock both: tracked counter and the leaks. dir.lock is natural candidate for such
+lock and unlocked print helper can be called with this lock taken.
+As a bonus we can reuse this helper in ref_tracker_dir_exit.
 
-Linus might release the final this weekend and this is among the last
-few 6.3 regressions I track. Hence please allow me to ask:
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+---
+ include/linux/ref_tracker.h |  8 ++++++
+ lib/ref_tracker.c           | 66 ++++++++++++++++++++++++++-------------------
+ 2 files changed, 46 insertions(+), 28 deletions(-)
 
-Pierre, Tomas, Javier, et. al: how many "legacy BIOSes" do we suspect
-are affected by this? So many that it might be worth delaying the
-release by one week? And in case everybody involved might agree that
-this patch is ready by today or tomorrow: might it be worth asking Linus
-to merge this patch directly[1]?
+diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
+index 9ca353ab712b5e..87a92f2bec1b88 100644
+--- a/include/linux/ref_tracker.h
++++ b/include/linux/ref_tracker.h
+@@ -36,6 +36,9 @@ static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
+ 
+ void ref_tracker_dir_exit(struct ref_tracker_dir *dir);
+ 
++void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
++				  unsigned int display_limit);
++
+ void ref_tracker_dir_print(struct ref_tracker_dir *dir,
+ 			   unsigned int display_limit);
+ 
+@@ -56,6 +59,11 @@ static inline void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ {
+ }
+ 
++static inline void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
++						unsigned int display_limit)
++{
++}
++
+ static inline void ref_tracker_dir_print(struct ref_tracker_dir *dir,
+ 					 unsigned int display_limit)
+ {
+diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
+index dc7b14aa3431e2..d4eb0929af8f96 100644
+--- a/lib/ref_tracker.c
++++ b/lib/ref_tracker.c
+@@ -14,6 +14,38 @@ struct ref_tracker {
+ 	depot_stack_handle_t	free_stack_handle;
+ };
+ 
++void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
++				  unsigned int display_limit)
++{
++	struct ref_tracker *tracker;
++	unsigned int i = 0;
++
++	lockdep_assert_held(&dir->lock);
++
++	list_for_each_entry(tracker, &dir->list, head) {
++		if (i < display_limit) {
++			pr_err("leaked reference.\n");
++			if (tracker->alloc_stack_handle)
++				stack_depot_print(tracker->alloc_stack_handle);
++			i++;
++		} else {
++			break;
++		}
++	}
++}
++EXPORT_SYMBOL(ref_tracker_dir_print_locked);
++
++void ref_tracker_dir_print(struct ref_tracker_dir *dir,
++			   unsigned int display_limit)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&dir->lock, flags);
++	ref_tracker_dir_print_locked(dir, display_limit);
++	spin_unlock_irqrestore(&dir->lock, flags);
++}
++EXPORT_SYMBOL(ref_tracker_dir_print);
++
+ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ {
+ 	struct ref_tracker *tracker, *n;
+@@ -27,13 +59,13 @@ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ 		kfree(tracker);
+ 		dir->quarantine_avail++;
+ 	}
+-	list_for_each_entry_safe(tracker, n, &dir->list, head) {
+-		pr_err("leaked reference.\n");
+-		if (tracker->alloc_stack_handle)
+-			stack_depot_print(tracker->alloc_stack_handle);
++	if (!list_empty(&dir->list)) {
++		ref_tracker_dir_print_locked(dir, 16);
+ 		leak = true;
+-		list_del(&tracker->head);
+-		kfree(tracker);
++		list_for_each_entry_safe(tracker, n, &dir->list, head) {
++			list_del(&tracker->head);
++			kfree(tracker);
++		}
+ 	}
+ 	spin_unlock_irqrestore(&dir->lock, flags);
+ 	WARN_ON_ONCE(leak);
+@@ -42,28 +74,6 @@ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ }
+ EXPORT_SYMBOL(ref_tracker_dir_exit);
+ 
+-void ref_tracker_dir_print(struct ref_tracker_dir *dir,
+-			   unsigned int display_limit)
+-{
+-	struct ref_tracker *tracker;
+-	unsigned long flags;
+-	unsigned int i = 0;
+-
+-	spin_lock_irqsave(&dir->lock, flags);
+-	list_for_each_entry(tracker, &dir->list, head) {
+-		if (i < display_limit) {
+-			pr_err("leaked reference.\n");
+-			if (tracker->alloc_stack_handle)
+-				stack_depot_print(tracker->alloc_stack_handle);
+-			i++;
+-		} else {
+-			break;
+-		}
+-	}
+-	spin_unlock_irqrestore(&dir->lock, flags);
+-}
+-EXPORT_SYMBOL(ref_tracker_dir_print);
+-
+ int ref_tracker_alloc(struct ref_tracker_dir *dir,
+ 		      struct ref_tracker **trackerp,
+ 		      gfp_t gfp)
 
-[FWIW, I highly suspect the answer to the last two questions is "no,
-that's definitely not worth is", just wanted to confirm]
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] yes, that's a thing we do:
-https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/
+-- 
+2.34.1
