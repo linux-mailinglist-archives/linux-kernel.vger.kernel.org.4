@@ -2,143 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DBA6EA631
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C076EA634
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjDUIpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S231736AbjDUIsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjDUIpQ (ORCPT
+        with ESMTP id S231757AbjDUIr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:45:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED972B453;
-        Fri, 21 Apr 2023 01:44:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 21 Apr 2023 04:47:26 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CADA257;
+        Fri, 21 Apr 2023 01:45:29 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 662A0207BE;
+        Fri, 21 Apr 2023 10:45:24 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LhpUn87_eFQR; Fri, 21 Apr 2023 10:45:24 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 879171FDDD;
-        Fri, 21 Apr 2023 08:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682066672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KpfBfmqRRKyv8aJsshuOUoOBIKY9oBx+lkGtFjN8Ay0=;
-        b=j866XPc071ijrQ3iucv97B1Px9WNR8xKur6aAfZkDoJt92c9qZ2EEG0e08Mk7l6q50IBo1
-        Jbe8Ll+CgPZmcV6NAkrovPOQAiNXea0dnVUW426uRqFGBiG9baccOMvyQcS+B87SsGf2Ow
-        eaVYNsbSuO8nQwiyMf0W3hmT9HLLEP8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682066672;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KpfBfmqRRKyv8aJsshuOUoOBIKY9oBx+lkGtFjN8Ay0=;
-        b=uB7DYNUNgVRAMfp3ph8fA4MdVrNC5vz2L8SkkTdSb8ZCTO1OiFG78kPdT9fz2Xdn9LUYoM
-        vlGlDoqXL7+rSGCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 751ED1390E;
-        Fri, 21 Apr 2023 08:44:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oQCQHPBMQmRsOAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 21 Apr 2023 08:44:32 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 97C7BA0729; Fri, 21 Apr 2023 10:44:31 +0200 (CEST)
-Date:   Fri, 21 Apr 2023 10:44:31 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     syzbot <syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- get_max_inline_xattr_value_size
-Message-ID: <20230421084431.ynek7epoy3mceecr@quack3>
-References: <000000000000cdfab505f819529a@google.com>
+        by a.mx.secunet.com (Postfix) with ESMTPS id F3F25205ED;
+        Fri, 21 Apr 2023 10:45:23 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout1.secunet.com (Postfix) with ESMTP id EE38D80004A;
+        Fri, 21 Apr 2023 10:45:23 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 21 Apr 2023 10:45:23 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 21 Apr
+ 2023 10:45:23 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 0C9C33180C1D; Fri, 21 Apr 2023 10:45:23 +0200 (CEST)
+Date:   Fri, 21 Apr 2023 10:45:22 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Leon Romanovsky <leon@kernel.org>
+CC:     Leon Romanovsky <leonro@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jakub Kicinski <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>
+Subject: Re: [PATCH xfrm 0/2] Couple of error unwind fixes to packet offload
+Message-ID: <ZEJNInz0FPYhZbmK@gauss3.secunet.de>
+References: <cover.1681906552.git.leon@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <000000000000cdfab505f819529a@google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1681906552.git.leon@kernel.org>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 30-03-23 00:48:50, syzbot wrote:
-> HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=114fae51c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1966db24521e5f6e23f7
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1597fd0ec80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14149471c80000
+On Wed, Apr 19, 2023 at 03:19:06PM +0300, Leon Romanovsky wrote:
+> From: Leon Romanovsky <leonro@nvidia.com>
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/58216d4aadcf/mount_0.gz
+> Hi Steffen,
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com
+> There are two straightforward fixes to XFRM.
 > 
-> EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
-> EXT4-fs error (device loop0): ext4_xattr_ibody_get:669: inode #18: comm syz-executor366: corrupted in-inode xattr: bad magic number in in-inode xattr
-> ==================================================================
-> BUG: KASAN: slab-use-after-free in get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
-> Read of size 4 at addr ffff88807c4ac084 by task syz-executor366/5076
+> Thanks
 > 
-> CPU: 0 PID: 5076 Comm: syz-executor366 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:319 [inline]
->  print_report+0x163/0x540 mm/kasan/report.c:430
->  kasan_report+0x176/0x1b0 mm/kasan/report.c:536
->  get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
->  ext4_get_max_inline_size+0x141/0x200 fs/ext4/inline.c:113
->  ext4_prepare_inline_data+0x87/0x1d0 fs/ext4/inline.c:393
->  ext4_da_write_inline_data_begin+0x208/0xe40 fs/ext4/inline.c:931
->  ext4_da_write_begin+0x4da/0x960 fs/ext4/inode.c:3064
->  generic_perform_write+0x300/0x5e0 mm/filemap.c:3926
->  ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:289
->  ext4_file_write_iter+0x1d6/0x1930
->  call_write_iter include/linux/fs.h:1851 [inline]
->  new_sync_write fs/read_write.c:491 [inline]
->  vfs_write+0x7b2/0xbb0 fs/read_write.c:584
->  ksys_write+0x1a0/0x2c0 fs/read_write.c:637
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Leon Romanovsky (2):
+>   xfrm: release all offloaded policy memory
+>   xfrm: Fix leak of dev tracker
 
-The problem seems to be that get_max_inline_xattr_value_size() is iterating
-xattr space like:
-
-        for (; !IS_LAST_ENTRY(entry); entry = EXT4_XATTR_NEXT(entry)) {
-                if (!entry->e_value_inum && entry->e_value_size) {
-                        size_t offs = le16_to_cpu(entry->e_value_offs);
-                        if (offs < min_offs)
-                                min_offs = offs;
-                }
-        }
-
-without checking for validity of the structures and we can reach this path
-without verifying xattrs are valid. Perhaps we should verify in-inode xattr
-data as part for __ext4_iget()?
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Applied, thanks Leon!
