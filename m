@@ -2,62 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5636EAD02
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC346EAD04
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbjDUOdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S232715AbjDUOeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjDUOdm (ORCPT
+        with ESMTP id S232701AbjDUOeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:33:42 -0400
-Received: from outbound-smtp51.blacknight.com (outbound-smtp51.blacknight.com [46.22.136.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA5110DD
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:33:01 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp51.blacknight.com (Postfix) with ESMTPS id 3835CFACF2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:33:00 +0100 (IST)
-Received: (qmail 23535 invoked from network); 21 Apr 2023 14:32:59 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Apr 2023 14:32:59 -0000
-Date:   Fri, 21 Apr 2023 15:32:58 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 13/26] mm: compaction: remove compaction result
- helpers
-Message-ID: <20230421143258.c24oytksvehbqs5w@techsingularity.net>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-14-hannes@cmpxchg.org>
+        Fri, 21 Apr 2023 10:34:09 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0FC13862
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:33:51 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-760eead6a4aso162745139f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:33:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682087631; x=1684679631;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Xd2qd+WH/MF9eO5FF4xvXMEmGQHBwIElfg0S6pRbbI=;
+        b=Uizk0xguJq7NBWNZsEjJpRQMJPuK2qnFs1/gXggZObRZSxQ36q5fEHJBhRrrWux1/r
+         v4sNz+tOZ2UGo/W6Zl1MtJCacSzQEo9UnVpXRLClq9BhjMGkL48/2C76fXZFF0JhVezY
+         brwAeF83W4WgY9bbcvS4KzQv44uKfEFJNw2UG13VrpMAZteA50mPOmy3LKfCpO/NL3L8
+         xzPlIzD1oGtIHloFAfPCxfaNqmaFMaqznBmiRfMSTQ3rGYTU7Xdna1KEsePAdHwZN/qs
+         KLRjyZd+BhahTKCnZ/RA0YrF7MVPpppD+SyrrxF5qDDh6Vx5qzXKHqtskrS0GQz7+KRP
+         ZNlQ==
+X-Gm-Message-State: AAQBX9fZFJdu/Z2SDAhJW56PU36XBiptIMJHYe1RAhwPhrUbO72RuVvH
+        pjzV3Kv6i7vYIlC7Ir/ThY0YQYDvufvO9HoeH5cn/s+XGb75
+X-Google-Smtp-Source: AKy350brjF+Ql9WJtxgiejEpnpViFjaxOuOrE62IqEN/HsbedJPQiTthgLnXxcF82gPlJ1j0Udt/bpFBsLm7zd3MA/AphV+p3arI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230418191313.268131-14-hannes@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:8502:0:b0:40f:80e3:6585 with SMTP id
+ g2-20020a028502000000b0040f80e36585mr2518484jai.1.1682087630965; Fri, 21 Apr
+ 2023 07:33:50 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 07:33:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b9915d05f9d98bdd@google.com>
+Subject: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
+From:   syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 03:13:00PM -0400, Johannes Weiner wrote:
-> I found myself repeatedly looking up the implementation of these
-> helpers while working on the code, which suggests they are not a
-> helpful abstraction. Inline them.
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Hello,
 
-Not massively convinced one way or the other. Still, probably deserves
-to join the end of the preparation patch before MIGRATE_FREE is
-introduced in the interest in spltting the series into digestable
-pieces.
+syzbot found the following issue on:
 
--- 
-Mel Gorman
-SUSE Labs
+HEAD commit:    76f598ba7d8e Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=133bfbedc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9c5d44636e91081b
+dashboard link: https://syzkaller.appspot.com/bug?extid=c2de99a72baaa06d31f3
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a3654f5f77b9/disk-76f598ba.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/abfb4aaa5772/vmlinux-76f598ba.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/789fb5546551/bzImage-76f598ba.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in strscpy / strscpy
+
+write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
+ strscpy+0xa9/0x170 lib/string.c:165
+ strscpy_pad+0x27/0x80 lib/string_helpers.c:835
+ __set_task_comm+0x46/0x140 fs/exec.c:1232
+ set_task_comm include/linux/sched.h:1984 [inline]
+ __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
+ kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
+ ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
+ ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
+ __ext4_fill_super fs/ext4/super.c:5480 [inline]
+ ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
+ get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
+ ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
+ vfs_get_tree+0x51/0x190 fs/super.c:1510
+ do_new_mount+0x200/0x650 fs/namespace.c:3042
+ path_mount+0x498/0xb40 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
+ __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
+ strscpy+0xde/0x170 lib/string.c:174
+ ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
+ bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
+ ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
+ __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
+ bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
+ __bpf_prog_run include/linux/filter.h:601 [inline]
+ bpf_prog_run include/linux/filter.h:608 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
+ bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
+ __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
+ trace_sched_switch include/trace/events/sched.h:222 [inline]
+ __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
+ schedule+0x51/0x80 kernel/sched/core.c:6701
+ schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
+ kthread+0x11c/0x1e0 kernel/kthread.c:369
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+value changed: 0x72 -> 0x34
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 16161 Comm: ext4lazyinit Not tainted 6.3.0-rc5-syzkaller-00022-g76f598ba7d8e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
