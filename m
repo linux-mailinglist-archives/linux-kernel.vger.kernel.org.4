@@ -2,260 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76736EA894
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D856EA899
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjDUKsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S229825AbjDUKuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDUKsB (ORCPT
+        with ESMTP id S231598AbjDUKuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:48:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0D283D1;
-        Fri, 21 Apr 2023 03:47:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1726460B6F;
-        Fri, 21 Apr 2023 10:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A37C433EF;
-        Fri, 21 Apr 2023 10:47:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682074078;
-        bh=YMiCd2tn+Kwhq5vt740oxHkL6CrclEtNSKXXgkMDZzc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Hjutz1fvbTbSug9eVUquviL4tAoNlkEh+D8UwRz2EmqxPmD/qIE/1sOTRzmn5mwqx
-         mKM95MWbE5ujOBQHDUryrtj3aqFhc0Q0SATadEGGrZRLjIxBV8nq0lrqpmhmgCTUKh
-         lndHzOw7gLoe3S5beyCwDRSRjL1vX/WylSDNOcfAjn6RKpLfuCoNsC6AMTVf+ZImBs
-         M3cix5G9qaqYVwm89y3tY5ZNdrS3+cNddU1PF9z56nFky4dcJSc1cQmV7aUBD+FE+2
-         Vp7JlPZBRoPkjedQHc7virsAH4OI+StJ+5EdISxvirGszqGIL3Gz4r8XpZo0rZk+Jg
-         biHjSlsBXy5yw==
-Message-ID: <fb17a0931ae29b89d661b7b2295726689c350ae3.camel@kernel.org>
-Subject: Re: [RFC PATCH 1/3] fs: add infrastructure for opportunistic
- high-res ctime/mtime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        Dave Chinner <david@fromorbit.com>
-Date:   Fri, 21 Apr 2023 06:47:55 -0400
-In-Reply-To: <20230421101331.dlxom6b5e7yds5tn@quack3>
-References: <20230411142708.62475-1-jlayton@kernel.org>
-         <20230411142708.62475-2-jlayton@kernel.org>
-         <20230421101331.dlxom6b5e7yds5tn@quack3>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.0 (3.48.0-1.fc38) 
+        Fri, 21 Apr 2023 06:50:10 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2119.outbound.protection.outlook.com [40.107.255.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B88B93CF
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:50:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U/yJupf6bubNrtqj5usiXLZRp8WPM47E942NEHrpCQ7GiGJGC85FelUDUl5CkyrwakKOe3mrZf4QRp4PTrVUnMzmG03ktK5xPa6MlLiHzVO7iTW/2AGJhrsDWKZM+RLg0kfj62Np630WkOPLrRk/wEY3n0AaQ8LG2ffBSZHM3DsVhWAttKzA8AdeYXwnOtLLwDPZPZMkQua8TUUA8cPcc1rWgJZ+nMzsI0UYr+Poy17bzEehJhgLLDh8NYpr22iRScVQPz4wUTPYe+TOXGoclIvlJ2TLnscbo9atvtUkeRf0bXUafWfO7KwV/W8nq3uIFkPBjfDdFLbH1dabmRMMbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eLlXcvR2SbAtB3WMLuhyZt6HKuwEbd9pl0xYHE9dkZc=;
+ b=MbmAYmBk8REuhmftHn4yb0BZtgkwdueZkjyNtR9ws2BHCHvWImSAh2fYlwpOhwgY3rLqkmSezh1UfvUGG8eofAbm2WoO1hd2/nJmL4P6lOrS3Z+ooUHIXlp42lu8Vd73Rd4kHdwK3z/0hXXdVUknAjcX+fF6r1EtwKjbEZY/6ruKYRACbDripbr7N241okE6j3UaKdtZ1EFmW3VTFAwFr5yqa8hbj9F/vK1uTjPVZ0oSSESQHpGoxtRY9IzEwes4yD7YAnyEzRLLt0ltuJa/PMn6bTtTpuV5zFp8vDOwwsIOcdeL+kouHXeIencFMUnmld+jlOZb4nzA3wT979/n2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eLlXcvR2SbAtB3WMLuhyZt6HKuwEbd9pl0xYHE9dkZc=;
+ b=k05CwEQDrQY+TFa8RrrZwan6mKkjcZPGgW7IeWRiyMB2GQUiKLWx2pk0xDcBUg55oi7NcK82+GsMEDSH1wtdExGauUzMr50kSAuwl4Onf0kw7BeFFhLbGX7sjVMiNPD1kAM8n1Qvn1WWCbKeMcssvP+yrBuoXJrXOOlvhl+7kHKpp8nfL97j6pU0lElOBiCy0KB+NJYorhP5uBRxso/0WMOj24skac9gBTw95wQRDRyDgutK0sJJBBFsuagpf+BptTHk/U99EzAxDMgSWxT/+escYXV+a57ACB+F47oYou7OlBxAlZx1oiiGORwdBoJV+jD0/VUIM0Ju8XFnZRSP3g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB4634.apcprd06.prod.outlook.com (2603:1096:400:125::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
+ 2023 10:49:56 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%7]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
+ 10:49:56 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: make __issue_discard_cmd() return more appropriate error code
+Date:   Fri, 21 Apr 2023 18:49:43 +0800
+Message-Id: <20230421104943.11878-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0008.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::20)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB4634:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8428019d-2476-4a85-2703-08db425624ca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w1rs6koQEk1+ow2Iqs4NXfZi7iKjPkTwIZoSPHHToYVXJOmg2V7BBtpvSAG+Su4hGMzLSj0q79pM312sc1RVUiWI0+RTibz4+6UFMX81VDx/p997cLJl+OINE8I1Ds9tzN5qJHGzobPHSuqXTrTlDosHFL3Bu2HLhO0sdP4kQ4xFcqR4CvP8TcOY6wJKb8iZ3e+jaWq9i2qx61r/9RaXlsCeKOpz7pnrUxW/aRZgfQouibJoRkEA0g7bZcDfUCZ7qhOqhzb4dkX9qakZOsBvZI1mawhnJQgBwDV51ZXdwLhePtQqNrZH93JbBEDuSFbCd6sgQzYKBr7/QpRvzEq1i2OEjs7xdA+nqYp7Tz0bjR1E5NSUIYRp21tdltYwFt2E6+pDDsJxqm/LwzlQcOH83gB5wui/wCDYsKQcmX7bmrodJzFWBOPc6St8mJYP2TnU3WnGGorL/g7ycaaScVnJkhAbDIhhlWJZh9k5w23aKt3+i4VLaLn/3OrxypbH3Hnh50EsjZVAC+HZiZj41q84CzujhvcdhQH7QI7WNH+BvEAx5oSKrJkLJJp1GZD9tptWxfsCoXSiG3xr/Szwszy0eOqAHqGepCQUfxQL9rwe62ZSAsgreZAtRyBCEQERYXDr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39850400004)(376002)(346002)(136003)(451199021)(316002)(6506007)(26005)(1076003)(186003)(6512007)(41300700001)(83380400001)(2616005)(110136005)(66946007)(66556008)(4744005)(4326008)(52116002)(6486002)(38350700002)(6666004)(66476007)(2906002)(478600001)(36756003)(5660300002)(86362001)(8936002)(8676002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3QUVvG0wOnP0JgZFqRADsDk4CbUncw9XtlqzDc8OvK0zpD4WbI2ag7rjhaD9?=
+ =?us-ascii?Q?izwlcODnXPq39/eq4lWmCDux/QZLCzPxL3NxTUVbsrKMQOj+SxWtX7edoT/k?=
+ =?us-ascii?Q?8EaeiRcTqb5om/ZCMgB0p04+F2X4Ucf/DcOHYn1XJvhAyALH35blMKSYmWaL?=
+ =?us-ascii?Q?D7XduV9lOR4BfTEr7XmZcPL17E06Q5YPaYkou6MSH+FIYj89iqWq85H3nyDh?=
+ =?us-ascii?Q?raIEkhn+P7ZxKvbRWgwVyuIIQ03CdZpVcU91NDhtduXjat9zIR98z97prPAH?=
+ =?us-ascii?Q?d0IvCV0JWpcpWxyvbSvjRvHdPplH0hypehOsSmMSN7A1NSwxaBjpLyIhM7Iv?=
+ =?us-ascii?Q?b+bBhmrdPZg/eTdov2Dl0IMO/qDD2lhBur8mJTw0z3fDJ2wynJmvg/XiD+ed?=
+ =?us-ascii?Q?XzY7/13dZlPXrhCMz64i3CnRab1I1QeXsWoM+T42i682X4YsasHULz7KyJio?=
+ =?us-ascii?Q?JgmKBtq86dD5bNyalC0GPtYVYgnsj/wnXg4s7Wqu78+CsQzbFxwjsdUA6o+X?=
+ =?us-ascii?Q?EVAKfej5pB9EuuFIzKBEtyw0lSMNR76Aki7oiTDOvaeKOojska5MDPYP4TQU?=
+ =?us-ascii?Q?0zazo3H/Db0QHCExrhyyVDjW0Ttq9xANSGXrKA0kyF80r9Dr1C0/L/RsKWi7?=
+ =?us-ascii?Q?0sF5yhwGkrFWfu3cLe5l9rIbS87HD4ElvzvE64cRnVvWtpS0LVGMngZDiH4m?=
+ =?us-ascii?Q?yOwU84QbTSWI+Ht6Dr248vs+omH0tcdoy83e1GOMza9GMuey4BGRiEg+Qsug?=
+ =?us-ascii?Q?iP/MPyGkXhLZCl4zoKBx5jiR5AV0LTkA3Q2DKKiTKhegDoJ5FkihGkYvaNkV?=
+ =?us-ascii?Q?D4tQ7v3umEFLYyxZyrULGUcDu5UEKVO5QAzFFaXiW2eRYANA3hAjdX93S/ao?=
+ =?us-ascii?Q?CGMKlWMWlAgZZbBnZ/hEUWz76TdFEYDCRvivcSuBuOVFfblJBwltcqFGS4Mg?=
+ =?us-ascii?Q?Gc6gxudz3sy8zWQL4kADxvaYOtBuM68N4g+n1V4+mk5rwJVhB/SE2AwuEG6L?=
+ =?us-ascii?Q?3xvjF6TcCG8+owPm3uYxpIWkJ3jJe/E9wwI4ZpyYL5pKfRwHzQFobk9mX1Qi?=
+ =?us-ascii?Q?Y1LUvKvCgJ2871zsd9lo1uxHGCTSeaLjy1Gf+xlunyB53vSdawX8bnR9kW9l?=
+ =?us-ascii?Q?qdWU/F5icICLEyQu7uBKG6QEXKfsb4iMQVC7+ruEqsdFJWvBURdRZ0ctH4B9?=
+ =?us-ascii?Q?2d9r/tLIOUhL4IEmBkKqgkCwlZUduWVjZC6H2pX6MejbNc8A21Xj3t3W4I+E?=
+ =?us-ascii?Q?k+bpbL+lqQ3ME7dh4GNclUV7OMEonXgtpLHE8plDM22tliSlegvolWbVuEbi?=
+ =?us-ascii?Q?/Bw9hY0J5Na5Wy/860wC1wnQVF6qsRTFun2wI79vc8LeCFIgZvY09NS8YFt9?=
+ =?us-ascii?Q?IpN2jjvuX3oDhqiIZL6s/S/0fO19LVZv6eqXLKGIwqbB3O8cEeGslKm0MZZU?=
+ =?us-ascii?Q?pkhq2gQLO92IYWBVgkb0e8MBWF5wfVgDtdu3HKZEcaqSXX25BbVo9Rdtom0h?=
+ =?us-ascii?Q?FlpbJvJKtip/t6FJBpKe4YTL/pdyJVmzTV55WXyuTmgceB25sINAWqAjiiGp?=
+ =?us-ascii?Q?RWmPu3SGJl66nAKWNx5Uks2z4ATOEVJnSyzo/HiG?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8428019d-2476-4a85-2703-08db425624ca
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 10:49:55.7650
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mnmy9S8Opb7hccq1robMzj/kEAysDkII6InqcEgSyG7k2QLZrcF/Q/rdZ0JRFkXtrVL8zIsj55TBRYrPZvgwpw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4634
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-04-21 at 12:13 +0200, Jan Kara wrote:
-> On Tue 11-04-23 10:27:06, Jeff Layton wrote:
-> > The VFS always uses coarse-grained timestamp updates for filling out th=
-e
-> > ctime and mtime after a change. This has the benefit of allowing
-> > filesystems to optimize away metadata updates.
-> >=20
-> > Unfortunately, this has always been an issue when we're exporting via
-> > NFSv3, which relies on timestamps to validate caches. Even with NFSv4, =
-a
-> > lot of exported filesystems don't properly support a change attribute
-> > and are subject to the same problem of timestamp granularity. Other
-> > applications have similar issues (e.g backup applications).
-> >=20
-> > Switching to always using high resolution timestamps would improve the
-> > situation for NFS, but that becomes rather expensive, as we'd have to
-> > log a lot more metadata updates.
-> >=20
-> > This patch grabs a new i_state bit to use as a flag that filesystems ca=
-n
-> > set in their getattr routine to indicate that the mtime or ctime was
-> > queried since it was last updated.
-> >=20
-> > It then adds a new current_cmtime function that acts like the
-> > current_time helper, but will conditionally grab high-res timestamps
-> > when the i_state flag is set in the inode.
-> >=20
-> > This allows NFS and other applications to reap the benefits of high-res
-> > ctime and mtime timestamps, but at a substantially lower cost than
-> > fetching them every time.
-> >=20
-> > Cc: Dave Chinner <david@fromorbit.com>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  fs/inode.c         | 40 ++++++++++++++++++++++++++++++++++++++--
-> >  fs/stat.c          | 10 ++++++++++
-> >  include/linux/fs.h |  5 ++++-
-> >  3 files changed, 52 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/fs/inode.c b/fs/inode.c
-> > index 4558dc2f1355..3630f67fd042 100644
-> > --- a/fs/inode.c
-> > +++ b/fs/inode.c
-> > @@ -2062,6 +2062,42 @@ static int __file_update_time(struct file *file,=
- struct timespec64 *now,
-> >  	return ret;
-> >  }
-> > =20
-> > +/**
-> > + * current_cmtime - Return FS time (possibly high-res)
-> > + * @inode: inode.
-> > + *
-> > + * Return the current time truncated to the time granularity supported=
- by
-> > + * the fs, as suitable for a ctime or mtime change. If something recen=
-tly
-> > + * fetched the ctime or mtime out of the inode via getattr, then get a
-> > + * high-resolution timestamp.
-> > + *
-> > + * Note that inode and inode->sb cannot be NULL.
-> > + * Otherwise, the function warns and returns coarse time without trunc=
-ation.
-> > + */
-> > +struct timespec64 current_cmtime(struct inode *inode)
-> > +{
-> > +	struct timespec64 now;
-> > +
-> > +	if (unlikely(!inode->i_sb)) {
->=20
-> I don't think we can have inodes without a superblock. Did you ever hit
-> this?
->=20
+Returns -EBUSY when __issue_discard() is interrupted by io,
+instead of returning -1.
 
-No, I copied this from current_time. I've already removed this in my
-working branch. We can probably remove it from current_time too.
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/segment.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > +		WARN(1, "%s() called with uninitialized super_block in the inode", _=
-_func__);
-> > +		ktime_get_coarse_real_ts64(&now);
-> > +		return now;
-> > +	}
-> > +
-> > +	/* Do a lockless check for the flag before taking the spinlock */
-> > +	if (READ_ONCE(inode->i_state) & I_CMTIME_QUERIED) {
-> > +		ktime_get_real_ts64(&now);
-> > +		spin_lock(&inode->i_lock);
-> > +		inode->i_state &=3D ~I_CMTIME_QUERIED;
->=20
-> Isn't this a bit fragile? If someone does:
->=20
-> 	inode->i_mtime =3D current_cmtime(inode);
-> 	inode->i_ctime =3D current_cmtime(inode);
->=20
-> the ctime update will be coarse although it should be fine-grained.
->=20
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 6db410f1bb8c..a005948dca93 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -1604,7 +1604,7 @@ static int __issue_discard_cmd(struct f2fs_sb_info *sbi,
+ 	}
+ 
+ 	if (!issued && io_interrupted)
+-		issued = -1;
++		issued = -EBUSY;
+ 
+ 	return issued;
+ }
+@@ -1829,7 +1829,7 @@ static int issue_discard_thread(void *data)
+ 		if (issued > 0) {
+ 			__wait_all_discard_cmd(sbi, &dpolicy);
+ 			wait_ms = dpolicy.min_interval;
+-		} else if (issued == -1) {
++		} else if (issued == -EBUSY) {
+ 			wait_ms = f2fs_time_to_wait(sbi, DISCARD_TIME);
+ 			if (!wait_ms)
+ 				wait_ms = dpolicy.mid_interval;
+-- 
+2.39.0
 
-It is a bit. We'll need for users to do something like:
-
-    inode->i_mtime =3D inode->i_ctime =3D current_ctime(inode);
-
-Fortunately, most do this already.
-
-> > +		spin_unlock(&inode->i_lock);
-> > +	} else {
-> > +		ktime_get_coarse_real_ts64(&now);
-> > +	}
-> > +
-> > +	return timestamp_truncate(now, inode);
->=20
-> I'm a bit confused here. Isn't the point of this series also to give NFS
-> finer grained granularity time stamps than what the filesystem is possibl=
-y
-> able to store on disk?
->=20
-
-No. We actually don't want to hand out timestamps more granular than the
-underlying filesystem can support, as we'd end up having to invalidate
-caches for all of those inodes once the server rebooted and the
-unrecordable bits get zeroed out.
-
-The main idea here is to just ensure that we use fine-grained timestamps
-when someone has queried the mtime or ctime since the last time it was
-updated.
-
-> Hmm, checking XFS it sets 1 ns granularity (as well as tmpfs) so for thes=
-e
-> using the coarser timers indeed gives a performance benefit. And probably
-> you've decided not implement the "better NFS support with coarse grained
-> timestamps" yet.
->=20
-
-Yep. The coarse grained timestamps are a _good_ thing for most
-filesystems as they allow you to skip a lot of metadata updates. My hope
-is that this will end up being like the i_version changes such that the
-extra fine-grained updates should be relatively rare and should
-(hopefully!) not cause noticeable performance blips. We'll see!
-
-> > +}
-> > +EXPORT_SYMBOL(current_cmtime);
-> > +
-> >  /**
-> >   * file_update_time - update mtime and ctime time
-> >   * @file: file accessed
-> > @@ -2080,7 +2116,7 @@ int file_update_time(struct file *file)
-> >  {
-> >  	int ret;
-> >  	struct inode *inode =3D file_inode(file);
-> > -	struct timespec64 now =3D current_time(inode);
-> > +	struct timespec64 now =3D current_cmtime(inode);
-> > =20
-> >  	ret =3D inode_needs_update_time(inode, &now);
-> >  	if (ret <=3D 0)
-> > @@ -2109,7 +2145,7 @@ static int file_modified_flags(struct file *file,=
- int flags)
-> >  {
-> >  	int ret;
-> >  	struct inode *inode =3D file_inode(file);
-> > -	struct timespec64 now =3D current_time(inode);
-> > +	struct timespec64 now =3D current_cmtime(inode);
-> > =20
-> >  	/*
-> >  	 * Clear the security bits if the process is not being run by root.
-> > diff --git a/fs/stat.c b/fs/stat.c
-> > index 7c238da22ef0..d8b80a2e36b7 100644
-> > --- a/fs/stat.c
-> > +++ b/fs/stat.c
-> > @@ -64,6 +64,16 @@ void generic_fillattr(struct mnt_idmap *idmap, struc=
-t inode *inode,
-> >  }
-> >  EXPORT_SYMBOL(generic_fillattr);
-> > =20
-> > +void fill_cmtime_and_mark(struct inode *inode, struct kstat *stat)
-> > +{
-> > +	spin_lock(&inode->i_lock);
-> > +	inode->i_state |=3D I_CMTIME_QUERIED;
-> > +	stat->ctime =3D inode->i_ctime;
-> > +	stat->mtime =3D inode->i_mtime;
-> > +	spin_unlock(&inode->i_lock);
-> > +}
-> > +EXPORT_SYMBOL(fill_cmtime_and_mark);
->=20
-> The name could be better here :). Maybe stat_fill_cmtime_and_mark()?
->=20
-> 							=09
-
-I have a quite different set that I've been working on that I'll
-(hopefully!) post soon. That one uses the least significant bit of the
-tv_nsec field as the QUERIED flag instead of the spinlock.
-
-Still cleaning up the set and need to test it some more though, so it's
-not quite ready to post. Stay tuned!
-
-Thanks for the review!=20
---=20
-Jeff Layton <jlayton@kernel.org>
