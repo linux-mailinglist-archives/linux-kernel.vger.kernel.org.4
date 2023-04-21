@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3226EA34B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE39F6EA350
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbjDUFnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S233397AbjDUFq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 01:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDUFnp (ORCPT
+        with ESMTP id S229451AbjDUFq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:43:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC04D1;
-        Thu, 20 Apr 2023 22:43:42 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q2k2H41Cpz8xD2;
-        Fri, 21 Apr 2023 13:42:47 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 13:43:40 +0800
-Message-ID: <1bd6a635-5a3d-c294-38ce-5c6fcff6494f@huawei.com>
-Date:   Fri, 21 Apr 2023 13:43:39 +0800
+        Fri, 21 Apr 2023 01:46:27 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283145FE6;
+        Thu, 20 Apr 2023 22:46:26 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec8148f73eso1230854e87.1;
+        Thu, 20 Apr 2023 22:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682055984; x=1684647984;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qrlfV5n8Lg9nBjvRn99BY3DeQ7uAmbc+OFU0aM7skag=;
+        b=X9WSQYeo/2Y55JJv0fzWwxkRoVJm9Eay/Z7x+JK0akY2eootZI7q4Fkw/P6lDmHam7
+         hZPsZTFtNMKdYKfMoPRV5hfQjwHvAxv9AknTrxiCgbfiqjwnzP6N/x0bUzTrYtN3uJWb
+         LhxYLY7s8azY5pXP4gnt0UO5Xm+J4iduULrVEDlScibBFJj0ccqGAsWxng9lHnyofI3K
+         oCDLJhat1lFyaDlBCuo0BXXCdazNrEq8wxrJehPc0NLus9MeqICg+N80ojvWb3c4NKA7
+         4dQSDS6cXtGM8SzhmsL9k1X3Ghk84xgKCN4b1xQG2n+eBZ8cRRSkIhX991y843szLTKt
+         8SwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682055984; x=1684647984;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qrlfV5n8Lg9nBjvRn99BY3DeQ7uAmbc+OFU0aM7skag=;
+        b=PSIIpHw9EElXm9wqgi/F+Qa/gMDTg83XvXaeDLsABzTk7LNJ8DMgdh4n9jbysqUAYA
+         GKHcDkd9IzuWsp2oBye9ZnBcmft2gfOC2WPAPGiV+CCsFLre3z/iRl6CL6SpQZmCsnLc
+         lyaNYR9gnKFQRyV3tleVbeBLh7w+cJm26bsLwXMldes6ejNFmwymhYmvIYdXyBMT+9li
+         Z+VQIrK6xScAuKbKY4OW14WaZd4L0edd/M7Y790uO9qUy+GVtuMxvKt5JMo0o3ANFHoW
+         GCMf10ikLsjW8tw4M7FnO0qxjwthygo3VYThD7b8LFIxeMEWvm78GVBQQaOHuooJYZxc
+         OLDg==
+X-Gm-Message-State: AAQBX9c5nkrdfzfytaijrx1HIkz0tAxO58H0tLSNQANzoX9Ziv4/m8U2
+        4NJZ/cKHNZbgXmqH00Piejw=
+X-Google-Smtp-Source: AKy350bHTiYbhBuNCMi7vFNCNUKCJSXMr70qE4k+H+8Zfn7V7PleDL2lWHX9mWPwQTjwSnldA1F2UA==
+X-Received: by 2002:ac2:5ddc:0:b0:4e0:b407:fdf4 with SMTP id x28-20020ac25ddc000000b004e0b407fdf4mr844334lfq.37.1682055984067;
+        Thu, 20 Apr 2023 22:46:24 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id p3-20020a05651238c300b004ec5229092dsm447576lft.34.2023.04.20.22.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 22:46:23 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 08:46:11 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: fix doc for iio_gts_find_sel_by_int_time
+Message-ID: <ZEIjI4YUzqPZk/9X@fedora>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
- dump_user_range()
-Content-Language: en-US
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>
-CC:     Jane Chu <jane.chu@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
- <20230418031243.GA2845864@hori.linux.bs1.fc.nec.co.jp>
- <54d761bb-1bcc-21a2-6b53-9d797a3c076b@huawei.com>
- <20230419072557.GA2926483@hori.linux.bs1.fc.nec.co.jp>
- <9fa67780-c48f-4675-731b-4e9a25cd29a0@huawei.com>
- <7d0c38a9-ed2a-a221-0c67-4a2f3945d48b@oracle.com>
- <6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com>
- <9a9876a2-a2fd-40d9-b215-3e6c8207e711@huawei.com>
- <20230421031356.GA3048466@hori.linux.bs1.fc.nec.co.jp>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230421031356.GA3048466@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Qatxs7Q+MHiWtUHL"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,262 +72,69 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--Qatxs7Q+MHiWtUHL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/4/21 11:13, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Thu, Apr 20, 2023 at 11:05:12PM +0800, Kefeng Wang wrote:
->>
->>
->> On 2023/4/20 10:59, Kefeng Wang wrote:
->>>
->>>
->>> On 2023/4/20 10:03, Jane Chu wrote:
->>>>
->>>> On 4/19/2023 5:03 AM, Kefeng Wang wrote:
->>>>>
->>>>>
->>>>> On 2023/4/19 15:25, HORIGUCHI NAOYA(堀口 直也) wrote:
->>>>>> On Tue, Apr 18, 2023 at 05:45:06PM +0800, Kefeng Wang wrote:
->>>>>>>
->>>>>>>
->>> ...
->>>>>>>>> @@ -371,6 +372,14 @@ size_t
->>>>>>>>> _copy_mc_to_iter(const void *addr, size_t bytes,
->>>>>>>>> struct iov_iter *i)
->>>>>>>>>     EXPORT_SYMBOL_GPL(_copy_mc_to_iter);
->>>>>>>>>     #endif /* CONFIG_ARCH_HAS_COPY_MC */
->>>>>>>>> +static void *memcpy_from_iter(struct iov_iter
->>>>>>>>> *i, void *to, const void *from,
->>>>>>>>> +                 size_t size)
->>>>>>>>> +{
->>>>>>>>> +    if (iov_iter_is_copy_mc(i))
->>>>>>>>> +        return (void *)copy_mc_to_kernel(to, from, size);
->>>>>>>>
->>>>>>>> Is it helpful to call memory_failure_queue() if
->>>>>>>> copy_mc_to_kernel() fails
->>>>>>>> due to a memory error?
->>>>>>>
->>>>>>> For dump_user_range(), the task is dying, if copy incomplete size, the
->>>>>>> coredump will fail and task will exit, also memory_failure will
->>>>>>> be called by kill_me_maybe(),
->>>>>>>
->>>>>>>    CPU: 0 PID: 1418 Comm: test Tainted: G   M
->>>>>>> 6.3.0-rc5 #29
->>>>>>>    Call Trace:
->>>>>>>     <TASK>
->>>>>>>     dump_stack_lvl+0x37/0x50
->>>>>>>     memory_failure+0x51/0x970
->>>>>>>     kill_me_maybe+0x5b/0xc0
->>>>>>>     task_work_run+0x5a/0x90
->>>>>>>     exit_to_user_mode_prepare+0x194/0x1a0
->>>>>>>     irqentry_exit_to_user_mode+0x9/0x30
->>>>>>>     noist_exc_machine_check+0x40/0x80
->>>>>>>     asm_exc_machine_check+0x33/0x40
->>>>>>
->>>>>> Is this call trace printed out when copy_mc_to_kernel()
->>>>>> failed by finding
->>>>>> a memory error (or in some testcase using error injection)?
->>>>>
->>>>> I add dump_stack() into memory_failure() to check whether the poisoned
->>>>> memory is called or not, and the call trace shows it do call
->>>>> memory_failure()， but I get confused when do the test.
->>>>>
->>>>>> In my understanding, an MCE should not be triggered when
->>>>>> MC-safe copy tries
->>>>>> to access to a memory error.  So I feel that we might be talking about
->>>>>> different scenarios.
->>>>>>
->>>>>> When I questioned previously, I thought about the following scenario:
->>>>>>
->>>>>>     - a process terminates abnormally for any reason like
->>>>>> segmentation fault,
->>>>>>     - then, kernel tries to create a coredump,
->>>>>>     - during this, the copying routine accesses to corrupted
->>>>>> page to read.
->>>>>>
->>>>> Yes, we tested like your described,
->>>>>
->>>>> 1) inject memory error into a process
->>>>> 2) send a SIGABT/SIGBUS to process to trigger the coredump
->>>>>
->>>>> Without patch, the system panic, and with patch only process exits.
->>>>>
->>>>>> In this case the corrupted page should not be handled by
->>>>>> memory_failure()
->>>>>> yet (because otherwise properly handled hwpoisoned page
->>>>>> should be ignored
->>>>>> by coredump process).  The coredump process would exit with
->>>>>> failure with
->>>>>> your patch, but then, the corrupted page is still left
->>>>>> unhandled and can
->>>>>> be reused, so any other thread can easily access to it again.
->>>>>
->>>>> As shown above, the corrupted page will be handled by
->>>>> memory_failure(), but what I'm wondering,
->>>>> 1) memory_failure() is not always called
->>>>> 2) look at the above call trace, it looks like from asynchronous
->>>>>      interrupt, not from synchronous exception, right?
->>>>>
->>>>>>
->>>>>> You can find a few other places (like __wp_page_copy_user
->>>>>> and ksm_might_need_to_copy)
->>>>>> to call memory_failure_queue() to cope with such unhandled error pages.
->>>>>> So does memcpy_from_iter() do the same?
->>>>>
->>>>> I add some debug print in do_machine_check() on x86:
->>>>>
->>>>> 1) COW,
->>>>>     m.kflags: MCE_IN_KERNEL_RECOV
->>>>>     fixup_type: EX_TYPE_DEFAULT_MCE_SAFE
->>>>>
->>>>>     CPU: 11 PID: 2038 Comm: einj_mem_uc
->>>>>     Call Trace:
->>>>>      <#MC>
->>>>>      dump_stack_lvl+0x37/0x50
->>>>>      do_machine_check+0x7ad/0x840
->>>>>      exc_machine_check+0x5a/0x90
->>>>>      asm_exc_machine_check+0x1e/0x40
->>>>>     RIP: 0010:copy_mc_fragile+0x35/0x62
->>>>>
->>>>>     if (m.kflags & MCE_IN_KERNEL_RECOV) {
->>>>>             if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
->>>>>                     mce_panic("Failed kernel mode recovery", &m, msg);
->>>>>     }
->>>>>
->>>>>     if (m.kflags & MCE_IN_KERNEL_COPYIN)
->>>>>             queue_task_work(&m, msg, kill_me_never);
->>>>>
->>>>> There is no memory_failure() called when
->>>>> EX_TYPE_DEFAULT_MCE_SAFE, also EX_TYPE_FAULT_MCE_SAFE too,
->>>>> so we manually add a memory_failure_queue() to handle with
->>>>> the poisoned page.
->>>>>
->>>>> 2） Coredump,  nothing print about m.kflags and fixup_type,
->>
->> Sorry，I forget to set coredump file size :(
->>
->> The coredump do trigger the do_machine_check() with same m.kflags and
->> fixup_type like cow
->>
->>
->>>>> with above check, add a memory_failure_queue() or memory_failure() seems
->>>>> to be needed for memcpy_from_iter(), but it is totally different from
->>>>> the COW scenario
->>>>>
->>
->> so the memcpy_from_iter() from coredump is same as cow scenario.
-> 
-> Okay, thank you for confirmation.
-> 
->>
->>>>>
->>>>> Another question, other copy_mc_to_kernel() callers, eg,
->>>>> nvdimm/dm-writecache/dax, there are not call memory_failure_queue(),
->>>>> should they need a memory_failure_queue(), if so, why not add it into
->>>>> do_machine_check() ?
->>>>
->>>
->>> What I mean is that EX_TYPE_DEFAULT_MCE_SAFE/EX_TYPE_FAULT_MCE_SAFE
->>> is designed to identify fixups which allow in kernel #MC recovery,
->>> that is, the caller of copy_mc_to_kernel() must know the source
->>> is a user address, so we could add a MCE_IN_KERNEL_COPYIN fro
->>> the MCE_SAFE type.
->>
->> And I think we need the following change for MCE_SAFE copy to set
->> MCE_IN_KERNEL_COPYIN.
->>
->>>
->>> diff --git a/arch/x86/kernel/cpu/mce/severity.c
->>> b/arch/x86/kernel/cpu/mce/severity.c
->>> index c4477162c07d..63e94484c5d6 100644
->>> --- a/arch/x86/kernel/cpu/mce/severity.c
->>> +++ b/arch/x86/kernel/cpu/mce/severity.c
->>> @@ -293,12 +293,11 @@ static noinstr int error_context(struct mce *m,
->>> struct pt_regs *regs)
->>>           case EX_TYPE_COPY:
->>>                   if (!copy_user)
->>>                           return IN_KERNEL;
->>> -               m->kflags |= MCE_IN_KERNEL_COPYIN;
-> 
-> This change seems to not related to what you try to fix.
-> Could this break some other workloads like copying from user address?
-> 
+The kerneldoc for iio_gts_find_sel_by_int_time() has an error.
+Documentation states that function is searching a selector for a HW-gain
+while it is searching a selector for an integration time.
 
-Yes, this move MCE_IN_KERNEL_COPYIN set into next case, both COPY and
-MCE_SAFE type will set MCE_IN_KERNEL_COPYIN, for EX_TYPE_COPY, we don't
-break it.
+Fix the documentation by saying the function is looking for a selector
+for an integration time.
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+ include/linux/iio/iio-gts-helper.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/iio/iio-gts-helper.h b/include/linux/iio/iio-gts=
+-helper.h
+index dd64e544a3da..9cb6c80dea71 100644
+--- a/include/linux/iio/iio-gts-helper.h
++++ b/include/linux/iio/iio-gts-helper.h
+@@ -135,7 +135,7 @@ static inline int iio_gts_find_int_time_by_sel(struct i=
+io_gts *gts, int sel)
+ /**
+  * iio_gts_find_sel_by_int_time - find selector matching integration time
+  * @gts:	Gain time scale descriptor
+- * @gain:	HW-gain for which matching selector is searched for
++ * @time:	Integration time for which matching selector is searched for
+  *
+  * Return:	a selector matching given integration time or -EINVAL if
+  *		selector was not found.
+
+base-commit: 52cc189b4fc6af6accc45fe7b7053d76d8724059
+--=20
+2.40.0
 
 
->>>                   fallthrough;
->>>
->>>           case EX_TYPE_FAULT_MCE_SAFE:
->>>           case EX_TYPE_DEFAULT_MCE_SAFE:
->>> -               m->kflags |= MCE_IN_KERNEL_RECOV;
->>> +               m->kflags |= MCE_IN_KERNEL_RECOV | MCE_IN_KERNEL_COPYIN;
->>>                   return IN_KERNEL_RECOV;
->>>
->>>           default:
->>>
->>> then we could drop memory_failure_queue(pfn, flags) from cow/ksm copy,
->>> or every Machine Check safe memory copy will need a memory_failure_xx()
->>> call.
->>
->> which help use to kill unneeded memory_failure_queue() call, any comments?
-> 
-> I'm not 100% sure that we can safely use queue_task_work() instead of
-> memory_failure_queue() (due to the difference between workqueue and task
-> work, which should be recently discussed in thread [1]).  So I prefer to
-> keep the approach of memory_failure_queue() to keep the impact minimum.
-> 
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-+tony for x86 mce
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
-The x86 call queue_task_work() for EX_TYPE_COPY, so EX_TYPE_FAULT_MCE_SAFE
-and EX_TYPE_DEFAULT_MCE_SAFE should be similar to EX_TYPE_COPY,
-memcpy_mc_xxx return bytes not copied, let the task to decide
-what to do next, and call memory_failure(pfn, 0) to isolate
-the poisoned page.
+--Qatxs7Q+MHiWtUHL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-1) queue_task_work() will make the memory_failure() called before 
-return-to-user
-2) memory_failure_queue() called in COW will put the work on a specific
-cpu(current task is running), and memory_failure() will be called in
-the work. see more from commit d302c2398ba2 ("mm, hwpoison: when copy-
-on-write hits poison, take page offline"),  "It is important, but not 
-urgent, to mark the source page as h/w poisoned and unmap it from other
-tasks."
+-----BEGIN PGP SIGNATURE-----
 
-Both of them just wants to isolate memory, they shouldn't add action,
-they set flag=0 for memory_failure(). so preliminarily, there are not 
-different.
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRCIwkACgkQeFA3/03a
+ocVL/AgAnY0Cvk9xClN2LfnIjZccke39vN5sO+jY62eOOkjbQSePRXOzLJ1UZykj
+4FSbXiHy/93F5raSNHcCxaJTtNwUwylbpad6HP4dHRIusD6ZOG7OTjUiX9hnZ3uq
+yS7ZkXcPw+XNzNDfq5cvH24n4O4X8LUFjwMmISkhzzEm6W9WfPY4trj9GBseuOUD
+Y+htKULsB7uiiP+Z1CAmqOLHZ+agDGWaBXmj+8WuQNsRlPwDTsOINa3Hj1q4gwHg
+YPphEJdfI2kpIrnICd+cqlK8AxL6d9uzLTfBHcQ4W54WycqNexfW/EH5+YEAoZPB
+LGNT15neE2Xr88b4pA7DmJ7hNsirHw==
+=bgbs
+-----END PGP SIGNATURE-----
 
-
-
-> [1] https://lore.kernel.org/lkml/20230417011407.58319-1-xueshuai@linux.alibaba.com/T/#u
-> 
-
-The COPY_MC support on arm64 is still under review[1],  xueshuai's patch
-is only trying to fix the uncorrected si_code of synchronous exceptions
-when memory error occurred, so I think it is not involved the COPY_MC.
-
-
-[1] 
-https://lore.kernel.org/lkml/20221219120008.3818828-1-tongtiangen@huawei.com/
-
-
-Thanks
-
-> Thanks,
-> Naoya Horiguchi
-> 
->>
->>
->>>
->>> +Thomas，who add the two types, could you share some comments about
->>> this,thanks.
->>>
->>>> In the dax case, if the source address is poisoned, and we do follow
->>>> up with memory_failure_queue(pfn, flags), what should the value of
->>>> the 'flags' be ?
->>>
->>
->> With above diff change, we don't add a memory_failure_queue() into dax too.
+--Qatxs7Q+MHiWtUHL--
