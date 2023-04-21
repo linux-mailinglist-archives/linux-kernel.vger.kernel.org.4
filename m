@@ -2,345 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF656EABF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E1A6EABFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjDUNoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S231617AbjDUNpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbjDUNn6 (ORCPT
+        with ESMTP id S229821AbjDUNor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:43:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E86901D;
-        Fri, 21 Apr 2023 06:43:56 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 13:43:53 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682084633;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0O37kSG9cn47ThZVSKDBRehsK4sAJTXDHn8iITKki0=;
-        b=ye5oNglfHgalrD3a8fVUci7oynPcGigmAzNtz5lFcVQN9pUZGY2DYFzDbVV/K/e5DbhMyq
-        5D5hkuqbPMvPWTdQ9U5QLZg97iYujh5ccfJ+CVo8TWN4f1qd+mTJtbF36yA17iJjSz8Z+F
-        2Cctd+YBGu14aGkYuKoyb4zNc4yH90k80jxLmlp6YIYjmHQGtGL5yjZx2b3CQlIP5CgUkx
-        Ou+56KRbrwjF+vx2b2OZzmNlgBdKQuEtAC2DpWMW+2OwPOgE4mPiJAZ2pRrLOuqPxSrfCv
-        KKOD6zS2qlKZciR14F9JKMuRrSOV62AFGa6yrMmYT4Q2+xn/UxrhXr8UPk3s+w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682084633;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0O37kSG9cn47ThZVSKDBRehsK4sAJTXDHn8iITKki0=;
-        b=xUW+bM0Dax1LJRz70nG6Zllvvjc/Zi5zTKPZzvQdnnijPcKep+IjtfU8DkvxFSZczthiKD
-        /jDDCI7Nx1QA8OCA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-cpu-timers: Implement the missing
- timer_wait_running callback
-Cc:     Marco Elver <elver@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        stable@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <87zg764ojw.ffs@tglx>
-References: <87zg764ojw.ffs@tglx>
+        Fri, 21 Apr 2023 09:44:47 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E814E4B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:44:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so1992539a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 06:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682084686; x=1684676686;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eOuUvGYa1UY7aV7SDI82JrZqTwaMJovJYXLXCJsoqaY=;
+        b=Ven6OvEm3yGyfd415NbqzUDqeUaje9Pw9UV+0yMmzKnGCou6giojsgwyFsuHPtmEnq
+         NgF9xcRLvUdmOZYFVY8p8xrsfbq0hU9EEJJxsis3VFiCjWfcBHUl4NRLwpVlLkn1Qr/u
+         9PDQEGW/M04Umq1ZtC/Jqx+w/d8lNJaYWK71RqYKJfdNKNQyIsA2wl6C+FqWW5zvUupc
+         j1Lukzt1VLxusm0ElhGTYPGWTbVF0ABypfNbFxRJJb9lxYgHtQSTAhU+4T/uPjaZg3rH
+         5/Mmn43G+JTt6lC9FpGdsT8wj7pTUvgxCjGkTI9DrDlajAlALUauy1BGOgs07xg4HAwo
+         Y0WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682084686; x=1684676686;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eOuUvGYa1UY7aV7SDI82JrZqTwaMJovJYXLXCJsoqaY=;
+        b=g25tBSw1EI5UMaUOF1TZwXrnieTXE69te+3WpKxTenvHJu3bMrZjGmjB1V5eR0s/ZK
+         JWPJH0edz4h+o5OaGO+JoIeVca+SdJT9C5IILYllZwNQ6aM0ouIDklgmt9R0idHJ+mvZ
+         eSJkr2l2JmRKBS5bIsf9CBoMaTCWh0gXOeWQYosQ0C++uSKkE1JWTJojwTINpYi1Opeq
+         DMnPp1PFZWqmXgYTd8aSiVdxqwAmXJNNanfp3ZmcmuP3kM3MMqNUaSzcp5cuW8JlldPI
+         1NWnMYrhLG552IUo7vG+2qRMrs4qYuikLUSsoVkUNx4hFKaKz1HC/RoZz8zpF1q0e2Cy
+         B7Eg==
+X-Gm-Message-State: AAQBX9cHwebNgtHJT0dah/kMZFys/tfVCR70SWcZ/WXAmbeRL7t162W6
+        vU1ZF3VxT957qX9K8pJcoMGIxaPfgpk8ktRpqwqTZQ==
+X-Google-Smtp-Source: AKy350bZGEbr7NzA4yB7Y30WbAnF8N2CCkCSCXBRQmpYW2zCtsxiyJndezqWFID6sXsAfvYkTQAOQnox2HPZ1OXZGPI=
+X-Received: by 2002:a17:90a:ff91:b0:23b:38b2:f0bd with SMTP id
+ hf17-20020a17090aff9100b0023b38b2f0bdmr5302216pjb.15.1682084685872; Fri, 21
+ Apr 2023 06:44:45 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168208463308.404.3673866554234059628.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230410081206.23441-1-jiahao.os@bytedance.com> <20230410081206.23441-3-jiahao.os@bytedance.com>
+In-Reply-To: <20230410081206.23441-3-jiahao.os@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 21 Apr 2023 15:44:34 +0200
+Message-ID: <CAKfTPtDaG12qb4piQahJNNrEgAM3ouTKCzHA8BsAAYg015Ggpw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sched/core: Avoid double calling update_rq_clock()
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+On Mon, 10 Apr 2023 at 10:12, Hao Jia <jiahao.os@bytedance.com> wrote:
+>
+> There are some double rq clock update warnings are triggered.
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 17 PID: 138 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  __balance_push_cpu_stop+0x146/0x180
+>  ? migration_cpu_stop+0x2a0/0x2a0
+>  cpu_stopper_thread+0xa3/0x140
+>  smpboot_thread_fn+0x14f/0x210
+>  ? sort_range+0x20/0x20
+>  kthread+0xe6/0x110
+>  ? kthread_complete_and_exit+0x20/0x20
+>  ret_from_fork+0x1f/0x30
+>
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 54 PID: 0 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  unthrottle_cfs_rq+0x4b/0x300
+>  __cfsb_csd_unthrottle+0xe0/0x100
+>  __flush_smp_call_function_queue+0xaf/0x1d0
+>  flush_smp_call_function_queue+0x49/0x90
+>  do_idle+0x17c/0x270
+>  cpu_startup_entry+0x19/0x20
+>  start_secondary+0xfa/0x120
+>  secondary_startup_64_no_verify+0xce/0xdb
+>
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  unthrottle_cfs_rq+0x4b/0x300
+>  rq_offline_fair+0x89/0x90
+>  set_rq_offline.part.118+0x28/0x60
 
-Commit-ID:     f7abf14f0001a5a47539d9f60bbdca649e43536b
-Gitweb:        https://git.kernel.org/tip/f7abf14f0001a5a47539d9f60bbdca649e43536b
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 17 Apr 2023 15:37:55 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 21 Apr 2023 15:34:33 +02:00
+So this is generated by patch 1, isn't it ?
 
-posix-cpu-timers: Implement the missing timer_wait_running callback
-
-For some unknown reason the introduction of the timer_wait_running callback
-missed to fixup posix CPU timers, which went unnoticed for almost four years.
-Marco reported recently that the WARN_ON() in timer_wait_running()
-triggers with a posix CPU timer test case.
-
-Posix CPU timers have two execution models for expiring timers depending on
-CONFIG_POSIX_CPU_TIMERS_TASK_WORK:
-
-1) If not enabled, the expiry happens in hard interrupt context so
-   spin waiting on the remote CPU is reasonably time bound.
-
-   Implement an empty stub function for that case.
-
-2) If enabled, the expiry happens in task work before returning to user
-   space or guest mode. The expired timers are marked as firing and moved
-   from the timer queue to a local list head with sighand lock held. Once
-   the timers are moved, sighand lock is dropped and the expiry happens in
-   fully preemptible context. That means the expiring task can be scheduled
-   out, migrated, interrupted etc. So spin waiting on it is more than
-   suboptimal.
-
-   The timer wheel has a timer_wait_running() mechanism for RT, which uses
-   a per CPU timer-base expiry lock which is held by the expiry code and the
-   task waiting for the timer function to complete blocks on that lock.
-
-   This does not work in the same way for posix CPU timers as there is no
-   timer base and expiry for process wide timers can run on any task
-   belonging to that process, but the concept of waiting on an expiry lock
-   can be used too in a slightly different way:
-
-    - Add a mutex to struct posix_cputimers_work. This struct is per task
-      and used to schedule the expiry task work from the timer interrupt.
-
-    - Add a task_struct pointer to struct cpu_timer which is used to store
-      a the task which runs the expiry. That's filled in when the task
-      moves the expired timers to the local expiry list. That's not
-      affecting the size of the k_itimer union as there are bigger union
-      members already
-
-    - Let the task take the expiry mutex around the expiry function
-
-    - Let the waiter acquire a task reference with rcu_read_lock() held and
-      block on the expiry mutex
-
-   This avoids spin-waiting on a task which might not even be on a CPU and
-   works nicely for RT too.
-
-Fixes: ec8f954a40da ("posix-timers: Use a callback for cancel synchronization on PREEMPT_RT")
-Reported-by: Marco Elver <elver@google.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Marco Elver <elver@google.com>
-Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/87zg764ojw.ffs@tglx
----
- include/linux/posix-timers.h   | 17 ++++---
- kernel/time/posix-cpu-timers.c | 81 +++++++++++++++++++++++++++------
- kernel/time/posix-timers.c     |  4 ++-
- 3 files changed, 82 insertions(+), 20 deletions(-)
-
-diff --git a/include/linux/posix-timers.h b/include/linux/posix-timers.h
-index 2c6e99c..d607f51 100644
---- a/include/linux/posix-timers.h
-+++ b/include/linux/posix-timers.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/spinlock.h>
- #include <linux/list.h>
-+#include <linux/mutex.h>
- #include <linux/alarmtimer.h>
- #include <linux/timerqueue.h>
- 
-@@ -62,16 +63,18 @@ static inline int clockid_to_fd(const clockid_t clk)
-  * cpu_timer - Posix CPU timer representation for k_itimer
-  * @node:	timerqueue node to queue in the task/sig
-  * @head:	timerqueue head on which this timer is queued
-- * @task:	Pointer to target task
-+ * @pid:	Pointer to target task PID
-  * @elist:	List head for the expiry list
-  * @firing:	Timer is currently firing
-+ * @handling:	Pointer to the task which handles expiry
-  */
- struct cpu_timer {
--	struct timerqueue_node	node;
--	struct timerqueue_head	*head;
--	struct pid		*pid;
--	struct list_head	elist;
--	int			firing;
-+	struct timerqueue_node		node;
-+	struct timerqueue_head		*head;
-+	struct pid			*pid;
-+	struct list_head		elist;
-+	int				firing;
-+	struct task_struct __rcu	*handling;
- };
- 
- static inline bool cpu_timer_enqueue(struct timerqueue_head *head,
-@@ -135,10 +138,12 @@ struct posix_cputimers {
- /**
-  * posix_cputimers_work - Container for task work based posix CPU timer expiry
-  * @work:	The task work to be scheduled
-+ * @mutex:	Mutex held around expiry in context of this task work
-  * @scheduled:  @work has been scheduled already, no further processing
-  */
- struct posix_cputimers_work {
- 	struct callback_head	work;
-+	struct mutex		mutex;
- 	unsigned int		scheduled;
- };
- 
-diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
-index 2f5e9b3..e9c6f9d 100644
---- a/kernel/time/posix-cpu-timers.c
-+++ b/kernel/time/posix-cpu-timers.c
-@@ -846,6 +846,8 @@ static u64 collect_timerqueue(struct timerqueue_head *head,
- 			return expires;
- 
- 		ctmr->firing = 1;
-+		/* See posix_cpu_timer_wait_running() */
-+		rcu_assign_pointer(ctmr->handling, current);
- 		cpu_timer_dequeue(ctmr);
- 		list_add_tail(&ctmr->elist, firing);
- 	}
-@@ -1161,7 +1163,49 @@ static void handle_posix_cpu_timers(struct task_struct *tsk);
- #ifdef CONFIG_POSIX_CPU_TIMERS_TASK_WORK
- static void posix_cpu_timers_work(struct callback_head *work)
- {
-+	struct posix_cputimers_work *cw = container_of(work, typeof(*cw), work);
-+
-+	mutex_lock(&cw->mutex);
- 	handle_posix_cpu_timers(current);
-+	mutex_unlock(&cw->mutex);
-+}
-+
-+/*
-+ * Invoked from the posix-timer core when a cancel operation failed because
-+ * the timer is marked firing. The caller holds rcu_read_lock(), which
-+ * protects the timer and the task which is expiring it from being freed.
-+ */
-+static void posix_cpu_timer_wait_running(struct k_itimer *timr)
-+{
-+	struct task_struct *tsk = rcu_dereference(timr->it.cpu.handling);
-+
-+	/* Has the handling task completed expiry already? */
-+	if (!tsk)
-+		return;
-+
-+	/* Ensure that the task cannot go away */
-+	get_task_struct(tsk);
-+	/* Now drop the RCU protection so the mutex can be locked */
-+	rcu_read_unlock();
-+	/* Wait on the expiry mutex */
-+	mutex_lock(&tsk->posix_cputimers_work.mutex);
-+	/* Release it immediately again. */
-+	mutex_unlock(&tsk->posix_cputimers_work.mutex);
-+	/* Drop the task reference. */
-+	put_task_struct(tsk);
-+	/* Relock RCU so the callsite is balanced */
-+	rcu_read_lock();
-+}
-+
-+static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
-+{
-+	/* Ensure that timr->it.cpu.handling task cannot go away */
-+	rcu_read_lock();
-+	spin_unlock_irq(&timr->it_lock);
-+	posix_cpu_timer_wait_running(timr);
-+	rcu_read_unlock();
-+	/* @timr is on stack and is valid */
-+	spin_lock_irq(&timr->it_lock);
- }
- 
- /*
-@@ -1177,6 +1221,7 @@ void clear_posix_cputimers_work(struct task_struct *p)
- 	       sizeof(p->posix_cputimers_work.work));
- 	init_task_work(&p->posix_cputimers_work.work,
- 		       posix_cpu_timers_work);
-+	mutex_init(&p->posix_cputimers_work.mutex);
- 	p->posix_cputimers_work.scheduled = false;
- }
- 
-@@ -1255,6 +1300,18 @@ static inline void __run_posix_cpu_timers(struct task_struct *tsk)
- 	lockdep_posixtimer_exit();
- }
- 
-+static void posix_cpu_timer_wait_running(struct k_itimer *timr)
-+{
-+	cpu_relax();
-+}
-+
-+static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
-+{
-+	spin_unlock_irq(&timr->it_lock);
-+	cpu_relax();
-+	spin_lock_irq(&timr->it_lock);
-+}
-+
- static inline bool posix_cpu_timers_work_scheduled(struct task_struct *tsk)
- {
- 	return false;
-@@ -1363,6 +1420,8 @@ static void handle_posix_cpu_timers(struct task_struct *tsk)
- 		 */
- 		if (likely(cpu_firing >= 0))
- 			cpu_timer_fire(timer);
-+		/* See posix_cpu_timer_wait_running() */
-+		rcu_assign_pointer(timer->it.cpu.handling, NULL);
- 		spin_unlock(&timer->it_lock);
- 	}
- }
-@@ -1497,23 +1556,16 @@ static int do_cpu_nanosleep(const clockid_t which_clock, int flags,
- 		expires = cpu_timer_getexpires(&timer.it.cpu);
- 		error = posix_cpu_timer_set(&timer, 0, &zero_it, &it);
- 		if (!error) {
--			/*
--			 * Timer is now unarmed, deletion can not fail.
--			 */
-+			/* Timer is now unarmed, deletion can not fail. */
- 			posix_cpu_timer_del(&timer);
-+		} else {
-+			while (error == TIMER_RETRY) {
-+				posix_cpu_timer_wait_running_nsleep(&timer);
-+				error = posix_cpu_timer_del(&timer);
-+			}
- 		}
--		spin_unlock_irq(&timer.it_lock);
- 
--		while (error == TIMER_RETRY) {
--			/*
--			 * We need to handle case when timer was or is in the
--			 * middle of firing. In other cases we already freed
--			 * resources.
--			 */
--			spin_lock_irq(&timer.it_lock);
--			error = posix_cpu_timer_del(&timer);
--			spin_unlock_irq(&timer.it_lock);
--		}
-+		spin_unlock_irq(&timer.it_lock);
- 
- 		if ((it.it_value.tv_sec | it.it_value.tv_nsec) == 0) {
- 			/*
-@@ -1623,6 +1675,7 @@ const struct k_clock clock_posix_cpu = {
- 	.timer_del		= posix_cpu_timer_del,
- 	.timer_get		= posix_cpu_timer_get,
- 	.timer_rearm		= posix_cpu_timer_rearm,
-+	.timer_wait_running	= posix_cpu_timer_wait_running,
- };
- 
- const struct k_clock clock_process = {
-diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 0c8a87a..808a247 100644
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -846,6 +846,10 @@ static struct k_itimer *timer_wait_running(struct k_itimer *timer,
- 	rcu_read_lock();
- 	unlock_timer(timer, *flags);
- 
-+	/*
-+	 * kc->timer_wait_running() might drop RCU lock. So @timer
-+	 * cannot be touched anymore after the function returns!
-+	 */
- 	if (!WARN_ON_ONCE(!kc->timer_wait_running))
- 		kc->timer_wait_running(timer);
- 
+>  rq_attach_root+0xc4/0xd0
+>  cpu_attach_domain+0x3dc/0x7f0
+>  partition_sched_domains_locked+0x2a5/0x3c0
+>  rebuild_sched_domains_locked+0x477/0x830
+>  rebuild_sched_domains+0x1b/0x30
+>  cpuset_hotplug_workfn+0x2ca/0xc90
+>  ? balance_push+0x56/0xf0
+>  ? _raw_spin_unlock+0x15/0x30
+>  ? finish_task_switch+0x98/0x2f0
+>  ? __switch_to+0x291/0x410
+>  ? __schedule+0x65e/0x1310
+>  process_one_work+0x1bc/0x3d0
+>  worker_thread+0x4c/0x380
+>  ? preempt_count_add+0x92/0xa0
+>  ? rescuer_thread+0x310/0x310
+>  kthread+0xe6/0x110
+>  ? kthread_complete_and_exit+0x20/0x20
+>  ret_from_fork+0x1f/0x30
+>
+> For the __balance_push_cpu_stop() case, we remove update_rq_clock() from
+> the __migrate_task() function to avoid double updating the rq clock.
+> And in order to avoid missing rq clock update, add update_rq_clock()
+> call before migration_cpu_stop() calls __migrate_task().
+>
+> This also works for unthrottle_cfs_rq(), so we also removed
+> update_rq_clock() from the unthrottle_cfs_rq() function to avoid
+> warnings caused by calling it multiple times, such as
+> __cfsb_csd_unthrottle() and unthrottle_offline_cfs_rqs(). and
+> in order to avoid missing rq clock update, we correspondingly add
+> update_rq_clock() calls before unthrottle_cfs_rq() runs.
+>
+> Note that the rq clock has been updated before the set_rq_offline()
+> function runs, so we don't need to add update_rq_clock() call in
+> unthrottle_offline_cfs_rqs().
+>
+> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+> ---
+>  kernel/sched/core.c | 11 +++++++----
+>  kernel/sched/fair.c |  9 ++++++---
+>  2 files changed, 13 insertions(+), 7 deletions(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 0d18c3969f90..c1abd88ec1ed 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2376,7 +2376,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
+>         if (!is_cpu_allowed(p, dest_cpu))
+>                 return rq;
+>
+> -       update_rq_clock(rq);
+>         rq = move_queued_task(rq, rf, p, dest_cpu);
+>
+>         return rq;
+> @@ -2434,10 +2433,12 @@ static int migration_cpu_stop(void *data)
+>                                 goto out;
+>                 }
+>
+> -               if (task_on_rq_queued(p))
+> +               if (task_on_rq_queued(p)) {
+> +                       update_rq_clock(rq);
+>                         rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
+> -               else
+> +               } else {
+>                         p->wake_cpu = arg->dest_cpu;
+> +               }
+>
+>                 /*
+>                  * XXX __migrate_task() can fail, at which point we might end
+> @@ -10759,8 +10760,10 @@ static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
+>                 cfs_rq->runtime_enabled = runtime_enabled;
+>                 cfs_rq->runtime_remaining = 0;
+>
+> -               if (cfs_rq->throttled)
+> +               if (cfs_rq->throttled) {
+> +                       update_rq_clock(rq);
+>                         unthrottle_cfs_rq(cfs_rq);
+> +               }
+>                 rq_unlock_irq(rq, &rf);
+>         }
+>         if (runtime_was_enabled && !runtime_enabled)
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6986ea31c984..03ced34e992e 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5438,8 +5438,6 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+>
+>         cfs_rq->throttled = 0;
+>
+> -       update_rq_clock(rq);
+> -
+>         raw_spin_lock(&cfs_b->lock);
+>         cfs_b->throttled_time += rq_clock(rq) - cfs_rq->throttled_clock;
+>         list_del_rcu(&cfs_rq->throttled_list);
+> @@ -5518,6 +5516,7 @@ static void __cfsb_csd_unthrottle(void *arg)
+>         struct rq_flags rf;
+>
+>         rq_lock(rq, &rf);
+> +       update_rq_clock(rq);
+>
+>         /*
+>          * Since we hold rq lock we're safe from concurrent manipulation of
+> @@ -5547,6 +5546,7 @@ static inline void __unthrottle_cfs_rq_async(struct cfs_rq *cfs_rq)
+>         bool first;
+>
+>         if (rq == this_rq()) {
+> +               update_rq_clock(rq);
+>                 unthrottle_cfs_rq(cfs_rq);
+>                 return;
+>         }
+> @@ -5563,6 +5563,7 @@ static inline void __unthrottle_cfs_rq_async(struct cfs_rq *cfs_rq)
+>  #else
+>  static inline void __unthrottle_cfs_rq_async(struct cfs_rq *cfs_rq)
+>  {
+> +       update_rq_clock(rq_of(cfs_rq));
+>         unthrottle_cfs_rq(cfs_rq);
+>  }
+>  #endif
+> @@ -5640,8 +5641,10 @@ static bool distribute_cfs_runtime(struct cfs_bandwidth *cfs_b)
+>         if (local_unthrottle) {
+>                 rq = cpu_rq(this_cpu);
+>                 rq_lock_irqsave(rq, &rf);
+> -               if (cfs_rq_throttled(local_unthrottle))
+> +               if (cfs_rq_throttled(local_unthrottle)) {
+> +                       update_rq_clock(rq);
+>                         unthrottle_cfs_rq(local_unthrottle);
+> +               }
+>                 rq_unlock_irqrestore(rq, &rf);
+>         }
+>
+> --
+> 2.37.0
+>
