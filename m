@@ -2,140 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E5B6EB246
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D5C6EB248
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbjDUTdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 15:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S233525AbjDUTeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjDUTda (ORCPT
+        with ESMTP id S229917AbjDUTeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 15:33:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7152689
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682105607; x=1713641607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yHrEfHYdBfmX0sXULWVVwq6T6mEzJwmFiWY/9EbRX9M=;
-  b=PgEYMyCrB0cAzXO6DM+p68MSpgGMtMDuMbJhDgJbctMAwP49etD6PKW1
-   uZruCGC/0W94zU7/i9VJ+6IHZV+zmw6XwiC4XBW2ru+bcV/mjqMO66NI3
-   AUdGuWrFLwYREASUvlKwLkyjrjExY4CvJtF2oTdgz7xmBdQhBN1wfQbLW
-   RXgMJCqC2Sf4GGqjh3m2j/P/dVzSbvri2s9oQfHjUDFGI3GycLry5Qlcr
-   0+m37jvgR61ayIv0X2frhQR0ybcskScIGCr3zpty5tGKwdGJBkoSVBnS6
-   rBnNq1Wiu33pvBFTlXxlTw4Ehkla+XZpjNLpml+RydqCnb/Ao09B5rrgL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="409003693"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="409003693"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 12:33:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="803833372"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="803833372"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Apr 2023 12:33:21 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppwVU-000gkm-24;
-        Fri, 21 Apr 2023 19:33:20 +0000
-Date:   Sat, 22 Apr 2023 03:32:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH v4 3/3] mm,page_owner: Filter out stacks by a threshold
- counter
-Message-ID: <202304220331.FdXghWlY-lkp@intel.com>
-References: <20230421101415.5734-4-osalvador@suse.de>
+        Fri, 21 Apr 2023 15:34:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622F72689;
+        Fri, 21 Apr 2023 12:34:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED41165278;
+        Fri, 21 Apr 2023 19:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 098F2C433D2;
+        Fri, 21 Apr 2023 19:34:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682105661;
+        bh=HNqeH+VMbPJ3EWIDUZyi6CdeaOLeGdEC2ghSTW5BMi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rtSoih7V6FecNVK38ChC8+JYWaLmwmXIFIzbRCtUQ3x+21xzq+Fa64GiTmKqIoRTv
+         Lr1mbQc+2CKqhgFnvV02JEQGGcC/xqr5Fn0Fb7zqTDLdugJRj2WHzdu/F18wZYBhgL
+         yCF7nzXuNbuWG8OFZVPiG2drJ+NgzHQX6V+Hbh2lGKoTiSyq5I353+56aVV9X2GCn2
+         Ca/up7v8WaU+e0I94H0aWOfmU+CCtomXVCXQXkzXjVXVwN74apjOW2B8SSBp4ko9OP
+         bmLFJp5EZXfrWUOcKirrlbzJpmxxT0Vg+strWvaCQjiMI6JKoibBm5kjjQSrNq3EIX
+         97wCx3VTO0/CQ==
+Date:   Fri, 21 Apr 2023 22:34:18 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Michael =?iso-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v11 00/14] TPM IRQ fixes
+Message-ID: <ZELlOh8Y2skjFez0@kernel.org>
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+ <4c094418-7725-b815-f1f9-8b12f1ac4d72@gmx.de>
+ <c02493fac223707de39e44d51b0a0ce512565250.camel@mniewoehner.de>
+ <20230319135338.c7k6r3ws6lby5qgv@kernel.org>
+ <ZEK+w3Q++vu4Kl5x@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230421101415.5734-4-osalvador@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZEK+w3Q++vu4Kl5x@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oscar,
+On Fri, Apr 21, 2023 at 07:50:14PM +0300, Jarkko Sakkinen wrote:
+> On Sun, Mar 19, 2023 at 03:53:38PM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Mar 16, 2023 at 06:18:11PM +0100, Michael Niewöhner wrote:
+> > > On Fri, 2023-02-24 at 15:48 +0100, Lino Sanfilippo wrote:
+> > > > On 24.11.22 at 14:55, Lino Sanfilippo wrote:
+> > > > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > > > > 
+> > > > > This series enables IRQ support for the TPM TIS core. For this reason a
+> > > > > number of bugfixes around the interrupt handling are required (patches 1 to
+> > > > > 5).
+> > > > > 
+> > > > > Patch 6 takes into account that according to the TPM Interface
+> > > > > Specification stsValid and commandRead interrupts might not be supported
+> > > > > by the hardware. For this reason the supported interrupts are first queried
+> > > > > and stored. Then wait_for_tpm_stat() is adjusted to not wait for status
+> > > > > changes that are not reported by interrupts.
+> > > > > 
+> > > > > Patch 7 moves the interrupt flag checks into an own function as suggested
+> > > > > by Jarkko.
+> > > > > 
+> > > > > Patch 8 Removes the possibility that tpm_tis_data->locality can be changed
+> > > > > at driver runtime so this variable can be read without the need to protect
+> > > > > it against concurrent modification.
+> > > > > 
+> > > > > Patch 9 addresses the issue with concurrent locality handling:
+> > > > > Since the interrupt handler writes the interrupt status registers it needs
+> > > > > to hold the locality. However it runs concurrently to the thread which
+> > > > > triggered the interrupt (e.g. by reading or writing data to the TPM). So
+> > > > > it must take care when claiming and releasing the locality itself,
+> > > > > because it may race with the concurrent running thread which also claims
+> > > > > and releases the locality.
+> > > > > To avoid that both interrupt and concurrent running thread interfere with
+> > > > > each other a locality counter is used which guarantees that at any time
+> > > > > the locality is held as long as it is required by one of both execution
+> > > > > paths.
+> > > > > 
+> > > > > Patch 10 implements the request of a threaded interrupt handler. This is
+> > > > > needed since SPI uses a mutex for data transmission and since we access the
+> > > > > interrupt status register via SPI in the irq handler we need a sleepable
+> > > > > context.
+> > > > > 
+> > > > > Patch 11 makes sure that writes to the interrupt register are effective if
+> > > > > done in the interrupt handler.
+> > > > > 
+> > > > > Patch 12 makes sure that writes to the interrupt and INTERRUPT_VECTOR
+> > > > > and INTERRUPT_ENABLE registers are effective by holding the locality.
+> > > > > 
+> > > > > Patch 13 makes sure that the TPM is properly initialized after power cycle
+> > > > > before the irq test is done.
+> > > > > 
+> > > > > Patch 14 enables the test for interrupts by setting the required flag
+> > > > > before the test is executed.
+> > > > > 
+> > > > > Changes in v11:
+> > > > > - adjust patches 4,5 and 14 slightly to void the consecutive removal and
+> > > > >   re-addition of the "ret" variable in tpm_tis_gen_interrupt()
+> > > > > 
+> > > > > Changes in v10:
+> > > > > - fix typo in subject line as pointed out by Jason Andryuk
+> > > > > - improve patch "tpm, tpm_tis: Claim locality before writing interrupt
+> > > > >   registers" by extending the scope with held locality". For this reason
+> > > > >   the "Reviewed-by" tag by Jarko and the "Tested-by" tag by Michael have
+> > > > >   been removed.
+> > > > > - add fix to avoid TPM_RC_INITIALIZE after power cycle when testing irqs
+> > > > >   (PATCH 13)
+> > > > > - add fix to restore the old interrupt vector at error (PATCH 4)
+> > > > > 
+> > > > > 
+> > > > > Changes in v9:
+> > > > > - add a fix for an issue when interrupts are reenabled on resume (PATCH 11)
+> > > > > - improve the commit message for patch 8 as requested by Jarkko
+> > > > > - improved functions naming
+> > > > > - changed patch 12 (tpm, tpm_tis: Enable interrupt test) to not delete the
+> > > > >   TPM_CHIP_FLAG_IRQ flag any more when tpm2_get_tpm_pt() fails. Due to this
+> > > > >   change the 'Tested-by' tag from Michael and the 'Reviewed-by:' tag from
+> > > > >   Jarko has been removed
+> > > > > 
+> > > > > Changes in v8:
+> > > > > - tpm_tis_data->locality is not changed at runtime any more so that it can
+> > > > > be read without any protection against concurrent modification.
+> > > > > - add missing brackets as pointed out by Jason Andryuk
+> > > > > 
+> > > > > Changes in v7:
+> > > > > - moved interrupt flag checks into an own function as suggested by Jarkko
+> > > > > - added "Tested-by" tags for Tests from Michael Niewöhner
+> > > > > - fixed one comment
+> > > > > 
+> > > > > Changes in v6:
+> > > > > - set TPM_TIS_IRQ_TESTED in flag member of the tpm_tis_data struct instead
+> > > > > in an own bitfield
+> > > > > - improve commit messages
+> > > > > - use int_mask instead of irqs_in_use as variable name
+> > > > > - use sts_mask instead of active_irqs as variable name
+> > > > > - squash patch 5 and 6
+> > > > > - prefix functions with tpm_tis_
+> > > > > - remove "fixes" tag
+> > > > > 
+> > > > > Changes in v5:
+> > > > > - improve commit message of patch 1 as requested by Jarko
+> > > > > - drop patch that makes locality handling simpler by only claiming it at
+> > > > >   driver startup and releasing it at driver shutdown (requested by Jarko)
+> > > > > - drop patch that moves the interrupt test from tpm_tis_send()
+> > > > >   to tmp_tis_probe_irq_single() as requested by Jarko
+> > > > > - add patch to make locality handling threadsafe so that it can also be
+> > > > >   done by the irq handler
+> > > > > - separate logical changes into own patches
+> > > > > - always request threaded interrupt handler
+> > > > > 
+> > > > > Changes in v4:
+> > > > > - only request threaded irq in case of SPI as requested by Jarko.
+> > > > > - reimplement patch 2 to limit locality handling changes to the TIS core.
+> > > > > - separate fixes from cleanups as requested by Jarko.
+> > > > > - rephrase commit messages
+> > > > > 
+> > > > > Changes in v3:
+> > > > > - fixed compiler error reported by kernel test robot
+> > > > > - rephrased commit message as suggested by Jarko Sakkinen
+> > > > > - added Reviewed-by tag
+> > > > > 
+> > > > > Changes in v2:
+> > > > > - rebase against 5.12
+> > > > > - free irq on error path
+> > > > > 
+> > > > > 
+> > > > > Lino Sanfilippo (14):
+> > > > >   tpm, tpm_tis: Avoid cache incoherency in test for interrupts
+> > > > >   tpm, tpm_tis: Claim locality before writing TPM_INT_ENABLE register
+> > > > >   tpm, tpm_tis: Disable interrupts if tpm_tis_probe_irq() failed
+> > > > >   tpm, tpm_tis: Do not skip reset of original interrupt vector
+> > > > >   tpm, tpm_tis: Claim locality before writing interrupt registers
+> > > > >   tpm, tpm_tis: Only handle supported interrupts
+> > > > >   tpm, tpm_tis: Move interrupt mask checks into own function
+> > > > >   tpm, tpm_tis: do not check for the active locality in interrupt
+> > > > >     handler
+> > > > >   tpm, tpm: Implement usage counter for locality
+> > > > >   tpm, tpm_tis: Request threaded interrupt handler
+> > > > >   tpm, tpm_tis: Claim locality in interrupt handler
+> > > > >   tpm, tpm_tis: Claim locality when interrupts are reenabled on resume
+> > > > >   tpm, tpm_tis: startup chip before testing for interrupts
+> > > > >   tpm, tpm_tis: Enable interrupt test
+> > > > > 
+> > > > >  drivers/char/tpm/tpm-chip.c     |  38 ++--
+> > > > >  drivers/char/tpm/tpm.h          |   1 +
+> > > > >  drivers/char/tpm/tpm_tis.c      |   2 +-
+> > > > >  drivers/char/tpm/tpm_tis_core.c | 299 ++++++++++++++++++++------------
+> > > > >  drivers/char/tpm/tpm_tis_core.h |   5 +-
+> > > > >  5 files changed, 214 insertions(+), 131 deletions(-)
+> > > > > 
+> > > > 
+> > > > Hi Jarkko,
+> > > > 
+> > > > its been a while now since the review of this series has been completed. Will
+> > > > it be merged in the
+> > > > near future? Or is there anything left to do (from my side)?
+> > > > 
+> > > > Regards,
+> > > > Lino
+> > > > 
+> > > 
+> > > @Jarkko ping ;)
+> > > 
+> > 
+> > Thanks for reminding. I was wondering this week what was the situation
+> > but latest version I had bookmarked from lore was 10.
+> > 
+> > Please ping earlier! I'll get on testing this, apologies.
+> 
+> I tested this with libvirt/QEMU/swtpm and did the following tests:
+> 
+> 1. TPM 1.2 suspend/resume.
+> 2. TPM 2.0 kselftest.
+> 3. TPM 2.0 suspend/resume + kselftest.
+> 
+> I see no issues so I can pick this for my pull request.
+> 
+> Tests were performed on top of v6.3-rc7.
+> 
+> For all:
+> 
+> Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-kernel test robot noticed the following build warnings:
+Changes are in my tree and should be soon mirrored to linux-next.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc7]
-[cannot apply to akpm-mm/mm-everything next-20230420]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Please check for any possible abnormalities, I tried to be careful.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/lib-stackdepot-Add-a-refcount-field-in-stack_record/20230421-181709
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230421101415.5734-4-osalvador%40suse.de
-patch subject: [PATCH v4 3/3] mm,page_owner: Filter out stacks by a threshold counter
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20230422/202304220331.FdXghWlY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/716d3f03add56cf9ed9ae5e49d73cf7e0cbfcb19
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Oscar-Salvador/lib-stackdepot-Add-a-refcount-field-in-stack_record/20230421-181709
-        git checkout 716d3f03add56cf9ed9ae5e49d73cf7e0cbfcb19
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304220331.FdXghWlY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/debugfs.h:15,
-                    from mm/page_owner.c:2:
-   mm/page_owner.c: In function 'proc_page_owner_threshold_open':
->> mm/page_owner.c:747:52: warning: format '%lu' expects argument of type 'long unsigned int', but argument 2 has type 'long long unsigned int' [-Wformat=]
-     747 |                         &page_owner_threshold_set, "%lu");
-         |                                                    ^~~~~
-   include/linux/fs.h:3066:36: note: in definition of macro 'DEFINE_SIMPLE_ATTRIBUTE_XSIGNED'
-    3066 |         __simple_attr_check_format(__fmt, 0ull);                        \
-         |                                    ^~~~~
-   mm/page_owner.c:746:1: note: in expansion of macro 'DEFINE_SIMPLE_ATTRIBUTE'
-     746 | DEFINE_SIMPLE_ATTRIBUTE(proc_page_owner_threshold, &page_owner_threshold_get,
-         | ^~~~~~~~~~~~~~~~~~~~~~~
-   mm/page_owner.c:747:55: note: format string is defined here
-     747 |                         &page_owner_threshold_set, "%lu");
-         |                                                     ~~^
-         |                                                       |
-         |                                                       long unsigned int
-         |                                                     %llu
-
-
-vim +747 mm/page_owner.c
-
-   745	
-   746	DEFINE_SIMPLE_ATTRIBUTE(proc_page_owner_threshold, &page_owner_threshold_get,
- > 747				&page_owner_threshold_set, "%lu");
-   748	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+BR, Jarkko
