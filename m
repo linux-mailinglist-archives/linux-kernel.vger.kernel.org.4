@@ -2,92 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B6B6EA912
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5566EA918
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjDULYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S229504AbjDULZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDULYF (ORCPT
+        with ESMTP id S229709AbjDULZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:24:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843D844A2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:24:04 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 207ED1EC049C;
-        Fri, 21 Apr 2023 13:24:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1682076243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=a87N52p5sMDjBSXQShCgpPp16fh6M2DXFX0u0FSwgJo=;
-        b=Qk44wo9eSzByOhRGpZ70+42SvVcdUZTQk1T3UcAKDQZHhurNFK7yI6rc2ycrYBQBS8K610
-        k229UH9ldd6fm6lR+0yOCyUAeqaHKYdDwhA0owRbS9ZW1KLKl+hN8d42K5oo/VETWkuqa0
-        gtER9XWW1ptfeiCsDpyEzoFo3VukFUw=
-Date:   Fri, 21 Apr 2023 13:23:55 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH v5 11/15] x86/mtrr: construct a memory map with cache
- modes
-Message-ID: <20230421112355.GAZEJyS+w84odQ9s2i@fat_crate.local>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-12-jgross@suse.com>
- <20230420121551.GMZEEs9wkUrvX05nQr@fat_crate.local>
- <d164d84b-6773-36e3-1136-672072e9233d@suse.com>
- <20230420130113.GCZEE3mfOTxcDn6e3/@fat_crate.local>
- <681c5d8e-0e42-07e1-f91c-7696a2360f1c@suse.com>
- <20230420145451.GFZEFSO6VmvXdK/qi9@fat_crate.local>
- <bb77023b-8dd0-0551-5c16-92f184568161@suse.com>
+        Fri, 21 Apr 2023 07:25:39 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FF593F6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:25:32 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230421112529euoutp01fb35a1eb9b3b8801a76eb178f3f2aae5~X74JuRCU32512625126euoutp01p
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:25:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230421112529euoutp01fb35a1eb9b3b8801a76eb178f3f2aae5~X74JuRCU32512625126euoutp01p
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682076329;
+        bh=X9Uc8/wiA5Xs838ROjL7g0Ad87gfoAq/y+Io8xsD7P8=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=eF5WL1cOCRIvScF5JHW8nJ0vD/ti/rBF1RbjE0NVv45+mu+jeY/cuMORpTu4DeCjz
+         K4jVR6DKk02nBJE/j7hpzJ8uhm4aN+deqYFVS0vPqyWokk4EgwYv97cUAZnBQudTZn
+         2laSjYnlhk0+cDgKId+06gf6uuvR1QHeRBlZxHUE=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230421112528eucas1p2c36a166fe8a830b0b661643a70693641~X74JUbLYJ2901129011eucas1p2l;
+        Fri, 21 Apr 2023 11:25:28 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id ED.5D.09503.8A272446; Fri, 21
+        Apr 2023 12:25:28 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230421112528eucas1p202ae1e38ffbc63d3ff968ca9d8141d94~X74IyZduT3120531205eucas1p2i;
+        Fri, 21 Apr 2023 11:25:28 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230421112528eusmtrp28fd5e92e7d1e7ed2ff2de6ae20c3b1ba~X74IxqX7f1838318383eusmtrp2L;
+        Fri, 21 Apr 2023 11:25:28 +0000 (GMT)
+X-AuditID: cbfec7f2-ea5ff7000000251f-f9-644272a8aaad
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9E.DD.34412.8A272446; Fri, 21
+        Apr 2023 12:25:28 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230421112527eusmtip11e24bee1308db329ce428ae9f7dab24c~X74HlSgIj0246502465eusmtip1r;
+        Fri, 21 Apr 2023 11:25:26 +0000 (GMT)
+Message-ID: <28219b3d-e2cc-63b1-555b-c3845300f45a@samsung.com>
+Date:   Fri, 21 Apr 2023 13:25:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bb77023b-8dd0-0551-5c16-92f184568161@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 3/6] drm: bridge: samsung-dsim: Fetch
+ pll-clock-frequency automatically
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     marex@denx.de, aford@beaconembedded.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230415104104.5537-3-aford173@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbVRjGc+69vb1067wUZo9MxDXDOBQKbhkngREpRK9x6rLpNMNFmvUG
+        iC2QlvpBIHa6wegUC4ubK58bKKxZIatNN5AOZSuUoIxtBVwBK4EI1DJgIDg+Nm0vKv897/O+
+        v/Oe5+RQuKieDKOysvNYdbZcKSEFhK3zQW90o1qmiK1vk6LhoR4cfd9/io+cgxcw5KmbJ9Aj
+        WxmOam708pDrzxkSjfa/gco9BgItWAwkmqhpAqjb108g01ctBCqdHMVRSVk9H1nGBnhIv3wR
+        R3daK0nkKzoG0EyLG6Dy6rs8dMJ+g4/WrlgINGkVvwgZ85yHx0w16HCm2ugkGPtiLcG0GEf4
+        TMXJczymrm0KYyymEpJxGm5jzPBAG8l4TnVhzHf1nzCX713FmC/XYplSqwkw85an9tOHBYkK
+        Vpn1AauWJqULMn+6f5HItdEfVSyc4evACaEeBFGQ3g2PN9fieiCgRHQjgKtVf/H9DRG9AODQ
+        1CGuMQ/gnaZqUg+oAHF+Rsn5DQDarSaMK+YA1HfYCD8tpJPgalkV4QcIOhKuXk/h7GDYfW48
+        MLKVZuGnFT6+fySEPgKt7Xv8Nk6LoXu8BvPrUDoFdq8tBo7H6eskHPI5AixJx0H9tJ706yA6
+        HlZ8W0pycAS8Ml0ZSANpswAWrdhJLmYq/Pm4A3A6BHq7rHxOPwkftdRgHFAMYO2KZ70wAKib
+        cK8TCXC4dzkQH6d3wuZWKWcnw0sDXpx7lS3wl+lg7hJbYLnt7LothCeLRNz0M9DY1fTf2h/7
+        buMGIDFueBbjhvzGDXGM/++tBYQJiFmtRpXBauKy2Q9jNHKVRpudEXM0R2UB/3zknodd96+C
+        Ku9cTAfAKNABIIVLQoUzsTKFSKiQf5zPqnPeU2uVrKYDbKMIiVj43N7uoyI6Q57Hvs+yuaz6
+        3y5GBYXpMHHxiKVgYnO4fTrcsjP5YJriB9uy4pCr52ZskKw56olJu6oh/c12z4j7i+3PXogS
+        ppT52jaN/3rk97Cb7xpmT1dt3Sd/rCWSzKqbe6270Lzv7czf4Fxq6crewVsearFzsDHRsTT+
+        yoMd+de+Pnj4ckH+kgfi2x8mnhfLdqmSFjI37U47cMt9r3B/dGX6seJXawr7PptV992devmd
+        BF8wGRmv7Wx3Sr2zVPZZXV1qZKEqLbr2j4XNuTmO8j1pwY7PzSV5oS8p3pLpkh8fbS42W7VO
+        V3yIMtw14tUcGFvNk5a0Er0ZFdtcUQ1j1y6lFaPnI05HLMleKPgmxZZ4Zhf++o7ohKclhCZT
+        HheFqzXyvwEgL8bWNwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBKsWRmVeSWpSXmKPExsVy+t/xu7oripxSDK7P57C4c/s0s8Xuq93s
+        FieuL2KyuL/4M4vF/20TmS3mHznHanHl63s2i4dX/S0m3Z/AYvFl0wQ2i+fz1zFanHxzlcVi
+        1dSdLBZ9Lx4yW3ROXMJusenxNVaLrl8rmS0u75rDZvGmrZHR4v3OW4wWk+bdZLVo3XuE3eLv
+        9k0sFi+2iDtIeKz9eJ/V4+XyBmaPebNOsHjs/baAxWPnrLvsHrM7ZrJ6LN7zkslj06pONo8T
+        Ey4xedy5tofN4373cSaPzUvqPTa+28Hk0f/XwKNvyypGj8+b5AIEovRsivJLS1IVMvKLS2yV
+        og0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQyznxayVKwTaBi9pdp7A2Mrbxd
+        jBwcEgImEgvf53QxcnEICSxllFi7fDZzFyMnUFxG4uS0BlYIW1jiz7UuNoii94wSV2btAEvw
+        CthJ/Jk4lwVkEIuAqsSfw84QYUGJkzOfsIDYogKpEjf2/GEDsYUFYiXaH1xlBLGZBcQlbj2Z
+        zwRiiwg4S5z8+40JZD6zwFE2iROPvzJDLNvOKHFj4j6wSWwChhJdb7vAJnEKmEvMXtbHBjHJ
+        TKJraxfUVHmJ7W/nME9gFJqF5JBZSBbOQtIyC0nLAkaWVYwiqaXFuem5xUZ6xYm5xaV56XrJ
+        +bmbGIFJaNuxn1t2MK589VHvECMTB+MhRgkOZiUR3vcGTilCvCmJlVWpRfnxRaU5qcWHGE2B
+        gTGRWUo0OR+YBvNK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpi4
+        f3WGp69zONK/T8LPgf/S7h0TeXrYf/as+Dd/j2Hr27ssaeEBeqURW49vaxK6YPXe72rY3W0z
+        dpswSj3RTC3Nu2KV9UwovWRNSk+b2aPSc2tWyDkzTBb+1BB5tzPsVNzERm4Frncqi1zvsSWF
+        rjmuubtDo3viXLtfcXOWaizcF9ulMnNukF/SoeRfG58qPN3/4fZ/iT3bEwMEDyys2HvmnZDg
+        4fM+XfNqNv44ojvTNPekRbnUltDnQtc4GRoY+Kd1X7khsKYl2dx5/cbpT1babDrV7bJQYMOj
+        igBb1TijD96su/bf28E7+SyXitR8gbpDJzd8KHnXWr1m2pvHh00LjAuqOSepT7ZcaHi/7Zy9
+        EktxRqKhFnNRcSIANn5Fx8sDAAA=
+X-CMS-MailID: 20230421112528eucas1p202ae1e38ffbc63d3ff968ca9d8141d94
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230415104123eucas1p103250c1748170354509932778b233900
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230415104123eucas1p103250c1748170354509932778b233900
+References: <20230415104104.5537-1-aford173@gmail.com>
+        <CGME20230415104123eucas1p103250c1748170354509932778b233900@eucas1p1.samsung.com>
+        <20230415104104.5537-3-aford173@gmail.com>
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 05:10:03PM +0200, Juergen Gross wrote:
-> I think this will need another final loop over the MTRRs to check against the
-> constructed map if a MTRR is completely useless.
+On 15.04.2023 12:41, Adam Ford wrote:
+> Fetch the clock rate of "sclk_mipi" (or "pll_clk") instead of
+> having an entry in the device tree for samsung,pll-clock-frequency.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Yeah, I slept on it: so I think there should be a patch ontop which does
-add debug output - disabled by default and controllable by adding
-"mtrr=debug" on the cmdline or so - which dumps the cache map operations
-(add/remove) and the final table.
+This one breaks DSI panel operation on my Exynos-based Trats, Trats2 and 
+TM2e boards. I've didn't check the details, but probably something is 
+missing in the dts to make it working properly. Surprisingly the display 
+is still working fine on Arndale board with DSI TC358764 bridge.
 
-The reason being, when this cache_map thing hits upstream, we would need
-a way to debug any potential issues which people might report so asking
-them to do a "mtrr=debug" boot would be a good help.
+> ---
+>   drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+> index 9fec32b44e05..73f0c3fbbdf5 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -1744,11 +1744,6 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
+>   	struct device_node *node = dev->of_node;
+>   	int ret;
+>   
+> -	ret = samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequency",
+> -				       &dsi->pll_clk_rate);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>   	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
+>   				       &dsi->burst_clk_rate);
+>   	if (ret < 0)
+> @@ -1823,13 +1818,18 @@ int samsung_dsim_probe(struct platform_device *pdev)
+>   		if (IS_ERR(dsi->clks[i])) {
+>   			if (strcmp(clk_names[i], "sclk_mipi") == 0) {
+>   				dsi->clks[i] = devm_clk_get(dev, OLD_SCLK_MIPI_CLK_NAME);
+> -				if (!IS_ERR(dsi->clks[i]))
+> +				if (!IS_ERR(dsi->clks[i])) {
+> +					dsi->pll_clk_rate = clk_get_rate(dsi->clks[i]);
+>   					continue;
+> +				}
+>   			}
+>   
+>   			dev_info(dev, "failed to get the clock: %s\n", clk_names[i]);
+>   			return PTR_ERR(dsi->clks[i]);
+>   		}
+> +
+> +		if (strcmp(clk_names[i], "sclk_mipi") == 0)
+> +			dsi->pll_clk_rate = clk_get_rate(dsi->clks[i]);
+>   	}
+>   
+>   	dsi->reg_base = devm_platform_ioremap_resource(pdev, 0);
 
-And pls make the prints pr_info() and not pr_debug() because people
-should not have to recompile in order to enable that.
-
-> Another question: in case we detect such a hidden MTRR, should it be disabled
-> in order to have more MTRRs available for run-time adding?
-
-Let's not do anything for now and address this if really needed.
-
-Thx.
-
+Best regards
 -- 
-Regards/Gruss,
-    Boris.
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-https://people.kernel.org/tglx/notes-about-netiquette
