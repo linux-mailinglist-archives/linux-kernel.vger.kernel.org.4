@@ -2,98 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB626EA660
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E56D6EA66A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbjDUI5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S229650AbjDUJAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjDUI4z (ORCPT
+        with ESMTP id S229580AbjDUJAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:56:55 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF18A5FF;
-        Fri, 21 Apr 2023 01:56:51 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-5ef54bcded4so8334576d6.1;
-        Fri, 21 Apr 2023 01:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682067410; x=1684659410;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qXhEILP7MIbeRegT9QhmF9Jbqb5hykNTAv4rFurPXOo=;
-        b=Fp8vNPjFC8gwk56JdwhvgixReiu7sHBr42H+rxicYairhgzRr3XxufHNn7LTllmLrt
-         RKK06lWxyEnQ+t4dyN/w7hmLHXOlTu9Gjtv756fVWta6JCA/ZlyXTHUmgAAYqHyGgKmv
-         3zHMcbPt3oMdV3MBEPQF/QV5bKiFdeFpTDDWMby3I/5s2QifWhDAO6daaHS8I6t1RAOm
-         FuVWAMsnNpGCk56hFN2RSJLAKZqqzA1Qv89wKOWIamIs3xeW5IUjSObzD4jGAoQKLOGT
-         0nvnJHCNvQUlYxrSRc8GGC5EnKJClwi6np86K7bapdH+2eeVOupkNA5vkORorIqojpxb
-         5v0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682067410; x=1684659410;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qXhEILP7MIbeRegT9QhmF9Jbqb5hykNTAv4rFurPXOo=;
-        b=DXIlYhzY3/42ToofeCf1Qons0P9cLsO8njvlbiJN6ZkgEkFSgavvDbJ0Arb9QIJbqo
-         C/EVgXzlVZi1XuluaBDm68jIBq2MHFfcuTijTF/4wIpGRRg5nBKA7VlFkEWWwqCN8wIT
-         vYz3dz36CIJ76ii5A+peOopFR0R7OUP87ceLvM4P+VTROTFESM7MgbeDHNqLHj4TrqEt
-         wAubQnHd7TNJbDSGHA7JT7V3Csuguun1UW/u3E7avnusPq6lME+5ptf4ANmGy5XDZV1F
-         MEa7lHMfW/n+aMmNJXWoiHFL0eXu9vhCk3unqP1lKljINcryqYxqj/Ymb2LJMQ5IP8ny
-         WiMQ==
-X-Gm-Message-State: AAQBX9doalvnHDxWs2+qiJxwUk9PBWRU4u+I4yivLY5e74b2ObiG+gYH
-        qzH3aEujibTZR1Bdd8pZvp0rcKeVy+sHk6qU
-X-Google-Smtp-Source: AKy350Zruw6CuMXgd+e3OySpeenWD9EnXJSTyoiWBbyds2AXwDQko5XgQ00OnjewRfm41mpvH+Pfqw==
-X-Received: by 2002:a05:6214:124c:b0:5cd:1adc:30e2 with SMTP id r12-20020a056214124c00b005cd1adc30e2mr7170251qvv.11.1682067410196;
-        Fri, 21 Apr 2023 01:56:50 -0700 (PDT)
-Received: from ?IPv6:2003:f6:ef05:8700:853c:3ba5:d710:3c1d? (p200300f6ef058700853c3ba5d7103c1d.dip0.t-ipconnect.de. [2003:f6:ef05:8700:853c:3ba5:d710:3c1d])
-        by smtp.gmail.com with ESMTPSA id q15-20020a0cf5cf000000b00603551afd50sm481424qvm.39.2023.04.21.01.56.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 01:56:49 -0700 (PDT)
-Message-ID: <b60c56780c76272d55ea58a4a7aab7450b97c6af.camel@gmail.com>
-Subject: Re: [PATCH v3] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Masahiro Honda <honda@mechatrax.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 21 Apr 2023 10:58:57 +0200
-In-Reply-To: <20230420102316.757-1-honda@mechatrax.com>
-References: <20230420102316.757-1-honda@mechatrax.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Fri, 21 Apr 2023 05:00:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B28526B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682067618; x=1713603618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dkqTBJMKo7F+hELtS2+2TMCCSxzpvF2p1cgx4R+h42I=;
+  b=GcWg4X9Zd1zMIyAznNAyrSSL1qFg83gAd5IAF8Vh8Dc6dMhtd2pkyrHT
+   8wqCvYypU1wEpP/+E3kGsRTJJnfjOV57nTUq1jymu3nx4Eg15U7ZMvnxH
+   aPlJ+NZSgFYW1QRrb3Kko45IpwWUs2eV3g7FQ281DnzMrTrnhUyJSCe36
+   3gDid9vygYC/TbWp7AXiJRPiK9MrvTQeqAqopGX/c+ukeKmYlP4kcv+Cm
+   cQNpWQ0UfxtFtp+RhlKhCLbnQOYf7hwxo7GxCi0cwSJ7t6Ieaz8PWxLfA
+   fKXrg6VLuTVjL37KrUp0Sosjrl0Fwh76dHRf5z8bjUHijh8ucLp/6Rsi8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="411217098"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="411217098"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:00:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642443294"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="642443294"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2023 02:00:09 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppmci-000gTE-2l;
+        Fri, 21 Apr 2023 09:00:08 +0000
+Date:   Fri, 21 Apr 2023 16:59:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Petr Mladek <pmladek@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
+ solicited by any console
+Message-ID: <202304211628.wQn1SxkT-lkp@intel.com>
+References: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-20 at 19:23 +0900, Masahiro Honda wrote:
-> The Sigma-Delta ADCs supported by this driver can use SDO as an interrupt
-> line to indicate the completion of a conversion. However, some devices
-> cannot properly detect the completion of a conversion by an interrupt.
-> This is for the reason mentioned in the following commit.
->=20
-> commit e9849777d0e2 ("genirq: Add flag to force mask in
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 disable_irq[_nosync]=
-()")
->=20
-> A read operation is performed by an extra interrupt before the completion
-> of a conversion. This patch fixes the issue by setting IRQ_DISABLE_UNLAZY
-> flag.
->=20
-> Signed-off-by: Masahiro Honda <honda@mechatrax.com>
-> ---
+Hi Chris,
 
-LGTM:
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com
+[auto build test ERROR on cb0856346a60fe3eb837ba5e73588a41f81ac05f]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
+base:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
+patch link:    https://lore.kernel.org/r/43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris%40chrisdown.name
+patch subject: [PATCH v4 1/2] printk: Do not delay messages which aren't solicited by any console
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230421/202304211628.wQn1SxkT-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/db9fb81bc5f175ef48cb317c24da85d0f6d4391d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
+        git checkout db9fb81bc5f175ef48cb317c24da85d0f6d4391d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304211628.wQn1SxkT-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/printk/printk.c:1297:2: error: unterminated function-like macro invocation
+           if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
+           ^
+   include/linux/compiler.h:56:9: note: macro 'if' defined here
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+           ^
+>> kernel/printk/printk.c:4272:24: error: expected '}'
+   #endif /* CONFIG_SMP */
+                          ^
+   kernel/printk/printk.c:1293:1: note: to match this '{'
+   {
+   ^
+   2 errors generated.
+
+
+vim +1297 kernel/printk/printk.c
+
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1291  
+db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1292  static void boot_delay_msec(void)
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1293  {
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1294  	unsigned long long k;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1295  	unsigned long timeout;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1296  
+ff48cd26fc4889 kernel/printk/printk.c Thomas Gleixner 2017-05-16 @1297  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1298  		return;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1299  
+3a3b6ed2235f2f kernel/printk.c        Dave Young      2009-09-22  1300  	k = (unsigned long long)loops_per_msec * boot_delay;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1301  
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1302  	timeout = jiffies + msecs_to_jiffies(boot_delay);
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1303  	while (k) {
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1304  		k--;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1305  		cpu_relax();
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1306  		/*
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1307  		 * use (volatile) jiffies to prevent
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1308  		 * compiler reduction; loop termination via jiffies
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1309  		 * is secondary and may or may not happen.
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1310  		 */
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1311  		if (time_after(jiffies, timeout))
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1312  			break;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1313  		touch_nmi_watchdog();
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1314  	}
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1315  }
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1316  #else
+db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1317  static inline void boot_delay_msec(void)
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1318  {
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1319  }
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1320  #endif
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1321  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
