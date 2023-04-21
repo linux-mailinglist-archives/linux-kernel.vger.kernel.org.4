@@ -2,262 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BC26EB1D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EBB6EB1FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 21:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjDUSuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S232323AbjDUTC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 15:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjDUSuV (ORCPT
+        with ESMTP id S229666AbjDUTCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:50:21 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A6B188
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:50:19 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a526aa3dd5so27770785ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682103019; x=1684695019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/IIUhUlmRecN66Z6gik+9JylRPrSHv9qYt9esJpbqSI=;
-        b=THDL4+u/vOfwLaOnCW6eh/CjgCzPbUBKAHWf1LgoVb5urObrbbDHtE6LnFnJmkcGbJ
-         X8sScn53VOwmiufg6b6vh6lFIqrfOMJmRlqDY7muic2fAlWCCsOBcmJbCjOoIvNUxnTw
-         CCi7AskMw6mhK+++me+sRjwikLpeFgIwFV0nF0mmjg428f8Rammes3zg4WwGMq8g786W
-         u8Qe//FfgFBTmm/8czZ4ckylnzNPDOezoP2aS60VK1m3/oMe/h5ZP8lwmqiqiNZdCveU
-         hRoUCo88MTFudnwN/fMDvgNm+b5CVsDTOcg14bYbIUZFekjOGitMEoCJ5+oTpJJu4z/U
-         HanA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682103019; x=1684695019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/IIUhUlmRecN66Z6gik+9JylRPrSHv9qYt9esJpbqSI=;
-        b=PJMXBty2c47tB+H7ef/QqHbevprOuV9dqAhQttidcQFPAVG9YhUSfJkD/sRTdYGfaZ
-         M1v2Xh6eUnkL0o6aLxwL0Fb4QvpNLDHpi3v99p+DUO8gWh8HijevyzE101zlpnEimla4
-         QGvZUtBoKtqc6EF0qmTIeIMjBW5ZnhzMq2i2fc4pQQn3nDm0XMIp8Hz0SlJ7J8mFOsT6
-         tsRL4Ad9O+2wKyeT7Ru0Ei7qaT9+0EykeinN9Whcv7e9k2oE8y23kDJfY6YkMYhvjdcy
-         0dFfcVJ566uT+xx3gGGWWcl9CiM+WruUNE6gz0Dga/rrhzAJt+nD2KEhDXpRvgj+l7vU
-         Fl3w==
-X-Gm-Message-State: AAQBX9d8RSNnwm1pF/ne0MbS/uvRP5abHD88W0nFkjKpQ9TJtY9g8Z0T
-        bzZ7T+L1YFQjhNJb9cUw9ecCn/V2IAHbbqSLkeF4dQ==
-X-Google-Smtp-Source: AKy350YdSljDnRrQJM9jfWzeZ/GLttvpy4dWrgL7+90Nmaems+z3L9naUfpMZAy9sq8Fz7lbqPOj5hZdKf+W5l/Qavg=
-X-Received: by 2002:a17:902:8501:b0:1a1:f95a:24f2 with SMTP id
- bj1-20020a170902850100b001a1f95a24f2mr5252822plb.19.1682103019136; Fri, 21
- Apr 2023 11:50:19 -0700 (PDT)
+        Fri, 21 Apr 2023 15:02:54 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51F81B7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 12:02:51 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id BF9356012C;
+        Fri, 21 Apr 2023 21:02:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682103769; bh=FdPLFo2RCEc+i7kfmV4WzCU9lEz+rq4G5vyLOVPZVMA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TpJBRDU3qD+JJll+nc9tmd8Hw+AZ2iCdd9Og5fCCvajbtQJrDKHvJg2b/gsgaUvYm
+         CdoZmGvyGfG2fu8c3qxBLLvoJWBKz4S+ERNBrVXbkOxLFFMbHZfnM6yop4jQHGTWhf
+         Sv64qiby+JtfH/v8Hy1YF1ilqbp4G/gBrgB7l50RarlI00aA2APnI4YNfKDdBU3Pxv
+         qRJ5DP4E1ZXLBtZXTOsDQOZD8Ghj3HgAAnOrJbyRVJzvReP3K8U1ChXSvUmeRpt4PF
+         vlGGXBQXkDVOuSDYVaZdk0jGkNIDAYOSNLzOrMYCzjOuU1DNy7zGfOo2G4vXLNuwns
+         OPpjPrB8JXyeQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NWTIAfSD5oSf; Fri, 21 Apr 2023 21:02:46 +0200 (CEST)
+Received: by domac.alu.hr (Postfix, from userid 1014)
+        id 07CF06012D; Fri, 21 Apr 2023 21:02:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682103766; bh=FdPLFo2RCEc+i7kfmV4WzCU9lEz+rq4G5vyLOVPZVMA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Mo2qI/yHsmckJiAeUa08ZtRCHAK43wYe/vmVKGsmz0NBD8PYeRR0OD8akGP8+dV5r
+         utD+eHfnLTeHFLsk+qXA2ULh5oIQfTv99rzLmfSA3m2o9AJzWdytM9c/weGdCs4/7/
+         hcYkHj728SD1WnPcyee83j5OqquZmcdYAVjnGCzT3bD6a0pERYeI5B8OMrpksKLqQT
+         IyJeC3AGkB1QiSWPHQyoZS60U4SWay50Cp/MjlydKdBEUTwzUXmRWroCdGzOr8rqNm
+         uqwmtAFyhvUrDpen9P4HJ88s5EJqaqGPpprxOxPJKIzNNhSqhYZ8gi9suyfy06E0rq
+         eCiizFhgHTGQg==
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH RESEND v4 1/1] test_firmware: fix some memory leaks and racing conditions
+Date:   Fri, 21 Apr 2023 20:52:06 +0200
+Message-Id: <20230421185205.28743-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-11-atishp@rivosinc.com>
- <ZEFXiXu+0XLSdRkQ@google.com>
-In-Reply-To: <ZEFXiXu+0XLSdRkQ@google.com>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Sat, 22 Apr 2023 00:20:08 +0530
-Message-ID: <CAHBxVyGGsvYrRpx1=ahW-5ALskAQJsgjF=9a=BMreuQov0En6Q@mail.gmail.com>
-Subject: Re: [RFC 10/48] RISC-V: KVM: Implement static memory region measurement
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 8:47=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Wed, Apr 19, 2023, Atish Patra wrote:
-> > +int kvm_riscv_cove_vm_measure_pages(struct kvm *kvm, struct kvm_riscv_=
-cove_measure_region *mr)
-> > +{
-> > +     struct kvm_cove_tvm_context *tvmc =3D kvm->arch.tvmc;
-> > +     int rc =3D 0, idx, num_pages;
-> > +     struct kvm_riscv_cove_mem_region *conf;
-> > +     struct page *pinned_page, *conf_page;
-> > +     struct kvm_riscv_cove_page *cpage;
-> > +
-> > +     if (!tvmc)
-> > +             return -EFAULT;
-> > +
-> > +     if (tvmc->finalized_done) {
-> > +             kvm_err("measured_mr pages can not be added after finaliz=
-e\n");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     num_pages =3D bytes_to_pages(mr->size);
-> > +     conf =3D &tvmc->confidential_region;
-> > +
-> > +     if (!IS_ALIGNED(mr->userspace_addr, PAGE_SIZE) ||
-> > +         !IS_ALIGNED(mr->gpa, PAGE_SIZE) || !mr->size ||
-> > +         !cove_is_within_region(conf->gpa, conf->npages << PAGE_SHIFT,=
- mr->gpa, mr->size))
-> > +             return -EINVAL;
-> > +
-> > +     idx =3D srcu_read_lock(&kvm->srcu);
-> > +
-> > +     /*TODO: Iterate one page at a time as pinning multiple pages fail=
- with unmapped panic
-> > +      * with a virtual address range belonging to vmalloc region for s=
-ome reason.
->
-> I've no idea what code you had, but I suspect the fact that vmalloc'd mem=
-ory isn't
-> guaranteed to be physically contiguous is relevant to the panic.
->
+Some functions were called both from locked and unlocked context, so
+the lock was dropped prematurely, introducing a race condition when
+deadlock was avoided.
 
-Ahh. That makes sense. Thanks.
+Having two locks wouldn't assure a race-proof mutual exclusion.
 
-> > +      */
-> > +     while (num_pages) {
-> > +             if (signal_pending(current)) {
-> > +                     rc =3D -ERESTARTSYS;
-> > +                     break;
-> > +             }
-> > +
-> > +             if (need_resched())
-> > +                     cond_resched();
-> > +
-> > +             rc =3D get_user_pages_fast(mr->userspace_addr, 1, 0, &pin=
-ned_page);
-> > +             if (rc < 0) {
-> > +                     kvm_err("Pinning the userpsace addr %lx failed\n"=
-, mr->userspace_addr);
-> > +                     break;
-> > +             }
-> > +
-> > +             /* Enough pages are not available to be pinned */
-> > +             if (rc !=3D 1) {
-> > +                     rc =3D -ENOMEM;
-> > +                     break;
-> > +             }
-> > +             conf_page =3D alloc_page(GFP_KERNEL | __GFP_ZERO);
-> > +             if (!conf_page) {
-> > +                     rc =3D -ENOMEM;
-> > +                     break;
-> > +             }
-> > +
-> > +             rc =3D cove_convert_pages(page_to_phys(conf_page), 1, tru=
-e);
-> > +             if (rc)
-> > +                     break;
-> > +
-> > +             /*TODO: Support other pages sizes */
-> > +             rc =3D sbi_covh_add_measured_pages(tvmc->tvm_guest_id, pa=
-ge_to_phys(pinned_page),
-> > +                                              page_to_phys(conf_page),=
- SBI_COVE_PAGE_4K,
-> > +                                              1, mr->gpa);
-> > +             if (rc)
-> > +                     break;
-> > +
-> > +             /* Unpin the page now */
-> > +             put_page(pinned_page);
-> > +
-> > +             cpage =3D kmalloc(sizeof(*cpage), GFP_KERNEL_ACCOUNT);
-> > +             if (!cpage) {
-> > +                     rc =3D -ENOMEM;
-> > +                     break;
-> > +             }
-> > +
-> > +             cpage->page =3D conf_page;
-> > +             cpage->npages =3D 1;
-> > +             cpage->gpa =3D mr->gpa;
-> > +             cpage->hva =3D mr->userspace_addr;
->
-> Snapshotting the userspace address for the _source_ page can't possibly b=
-e useful.
->
+__test_dev_config_update_bool(), __test_dev_config_update_u8() and
+__test_dev_config_update_size_t() unlocked versions of the functions
+were introduced to be called from the locked contexts as a workaround
+without releasing the main driver's lock and causing a race condition.
 
-Yeah. Currently, the hva in the kvm_riscv_cove_page is not used
-anywhere in the code. We can remove it.
+This should guarantee mutual exclusion and prevent any race conditions.
 
-> > +             cpage->is_mapped =3D true;
-> > +             INIT_LIST_HEAD(&cpage->link);
-> > +             list_add(&cpage->link, &tvmc->measured_pages);
-> > +
-> > +             mr->userspace_addr +=3D PAGE_SIZE;
-> > +             mr->gpa +=3D PAGE_SIZE;
-> > +             num_pages--;
-> > +             conf_page =3D NULL;
-> > +
-> > +             continue;
-> > +     }
-> > +     srcu_read_unlock(&kvm->srcu, idx);
-> > +
-> > +     if (rc < 0) {
-> > +             /* We don't to need unpin pages as it is allocated by the=
- hypervisor itself */
->
-> This comment makes no sense.  The above code is doing all of the allocati=
-on and
-> pinning, which strongly suggests that KVM is the hypervisor.  But this co=
-mment
-> implies that KVM is not the hypervisor.
->
+Locked versions simply allow for mutual exclusion and call the unlocked
+counterparts, to avoid duplication of code.
 
-I mean to say here the conf_page is allocated in the kernel using
-alloc_page. So no pinning/unpinning is required.
-It seems the comment is probably misleading & confusing at best. I
-will remove it.
+trigger_batched_requests_store() and trigger_batched_requests_async_store()
+now return -EBUSY if called with test_fw_config->reqs already allocated,
+so the memory leak is prevented.
 
-> And "pinned_page" is cleared unpinned in the loop after the page is added=
-+measured,
-> which looks to be the same model as TDX where "pinned_page" is the source=
- and
-> "conf_page" is gifted to the hypervisor.  But on failure, e.g. when alloc=
-ating
-> "conf_page", that reference is not put.
->
+The same functions now keep track of the allocated buf for firmware in
+req->fw_buf as release_firmware() will not deallocate this storage for us.
 
-Thanks. Will fix it.
+Additionally, in __test_release_all_firmware(), req->fw_buf is released
+before calling release_firmware(req->fw),
+foreach test_fw_config->reqs[i], i = 0 .. test_fw_config->num_requests-1
 
-> > +             cove_delete_page_list(kvm, &tvmc->measured_pages, false);
-> > +             /* Free the last allocated page for which conversion/meas=
-urement failed */
-> > +             kfree(conf_page);
->
-> Assuming my guesses about how the architecture works are correct, this is=
- broken
-> if sbi_covh_add_measured_pages() fails. The page has already been gifted =
-to the
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
+Cc: Luis Chamberlain <mcgrof@kernel.org> 
+Cc: Russ Weight <russell.h.weight@intel.com> 
+Cc: Tianfei zhang <tianfei.zhang@intel.com> 
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr> 
+Cc: Zhengchao Shao <shaozhengchao@huawei.com> 
+Cc: Colin Ian King <colin.i.king@gmail.com> 
+Cc: linux-kernel@vger.kernel.org 
+Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: Luis R. Rodriguez <mcgrof@kernel.org>
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+v3 -> v4
+ - fix additional memory leaks of the allocated firmware buffers
+ - fix noticed racing conditions in conformance with the existing code
+ - make it a single patch
 
-Yeah. The last conf_page should be reclaimed as well if measured_pages
-fail at any point in the loop.
-All other allocated ones would be reclaimed as a part of cove_delete_page_l=
-ist.
+ lib/test_firmware.c | 81 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 63 insertions(+), 18 deletions(-)
 
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 05ed84c2fc4c..1d7d480b8eeb 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -45,6 +45,7 @@ struct test_batched_req {
+ 	bool sent;
+ 	const struct firmware *fw;
+ 	const char *name;
++	const char *fw_buf;
+ 	struct completion completion;
+ 	struct task_struct *task;
+ 	struct device *dev;
+@@ -175,8 +176,14 @@ static void __test_release_all_firmware(void)
+ 
+ 	for (i = 0; i < test_fw_config->num_requests; i++) {
+ 		req = &test_fw_config->reqs[i];
+-		if (req->fw)
++		if (req->fw) {
++			if (req->fw_buf) {
++				kfree_const(req->fw_buf);
++				req->fw_buf = NULL;
++			}
+ 			release_firmware(req->fw);
++			req->fw = NULL;
++		}
+ 	}
+ 
+ 	vfree(test_fw_config->reqs);
+@@ -353,16 +360,26 @@ static ssize_t config_test_show_str(char *dst,
+ 	return len;
+ }
+ 
+-static int test_dev_config_update_bool(const char *buf, size_t size,
++static inline int __test_dev_config_update_bool(const char *buf, size_t size,
+ 				       bool *cfg)
+ {
+ 	int ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	if (kstrtobool(buf, cfg) < 0)
+ 		ret = -EINVAL;
+ 	else
+ 		ret = size;
++
++	return ret;
++}
++
++static int test_dev_config_update_bool(const char *buf, size_t size,
++				       bool *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_bool(buf, size, cfg);
+ 	mutex_unlock(&test_fw_mutex);
+ 
+ 	return ret;
+@@ -373,7 +390,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
+-static int test_dev_config_update_size_t(const char *buf,
++static int __test_dev_config_update_size_t(
++					 const char *buf,
+ 					 size_t size,
+ 					 size_t *cfg)
+ {
+@@ -384,9 +402,7 @@ static int test_dev_config_update_size_t(const char *buf,
+ 	if (ret)
+ 		return ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	*(size_t *)cfg = new;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+@@ -402,7 +418,7 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
+-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++static int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ {
+ 	u8 val;
+ 	int ret;
+@@ -411,14 +427,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ 	if (ret)
+ 		return ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	*(u8 *)cfg = val;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+ }
+ 
++static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_u8(buf, size, cfg);
++	mutex_unlock(&test_fw_mutex);
++
++	return ret;
++}
++
+ static ssize_t test_dev_config_show_u8(char *buf, u8 val)
+ {
+ 	return snprintf(buf, PAGE_SIZE, "%u\n", val);
+@@ -471,10 +496,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_u8(buf, count,
+-				       &test_fw_config->num_requests);
++	rc = __test_dev_config_update_u8(buf, count,
++					 &test_fw_config->num_requests);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -518,10 +543,10 @@ static ssize_t config_buf_size_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_size_t(buf, count,
+-					   &test_fw_config->buf_size);
++	rc = __test_dev_config_update_size_t(buf, count,
++					     &test_fw_config->buf_size);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -548,10 +573,10 @@ static ssize_t config_file_offset_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_size_t(buf, count,
+-					   &test_fw_config->file_offset);
++	rc = __test_dev_config_update_size_t(buf, count,
++					     &test_fw_config->file_offset);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -652,6 +677,8 @@ static ssize_t trigger_request_store(struct device *dev,
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 	release_firmware(test_firmware);
++	if (test_fw_config->reqs)
++		__test_release_all_firmware();
+ 	test_firmware = NULL;
+ 	rc = request_firmware(&test_firmware, name, dev);
+ 	if (rc) {
+@@ -752,6 +779,8 @@ static ssize_t trigger_async_request_store(struct device *dev,
+ 	mutex_lock(&test_fw_mutex);
+ 	release_firmware(test_firmware);
+ 	test_firmware = NULL;
++	if (test_fw_config->reqs)
++		__test_release_all_firmware();
+ 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
+ 				     NULL, trigger_async_request_cb);
+ 	if (rc) {
+@@ -794,6 +823,8 @@ static ssize_t trigger_custom_fallback_store(struct device *dev,
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 	release_firmware(test_firmware);
++	if (test_fw_config->reqs)
++		__test_release_all_firmware();
+ 	test_firmware = NULL;
+ 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
+ 				     dev, GFP_KERNEL, NULL,
+@@ -856,6 +887,8 @@ static int test_fw_run_batch_request(void *data)
+ 						 test_fw_config->buf_size);
+ 		if (!req->fw)
+ 			kfree(test_buf);
++		else
++			req->fw_buf = test_buf;
+ 	} else {
+ 		req->rc = test_fw_config->req_firmware(&req->fw,
+ 						       req->name,
+@@ -895,6 +928,11 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 
++	if (test_fw_config->reqs) {
++		rc = -EBUSY;
++		goto out_bail;
++	}
++
+ 	test_fw_config->reqs =
+ 		vzalloc(array3_size(sizeof(struct test_batched_req),
+ 				    test_fw_config->num_requests, 2));
+@@ -911,6 +949,7 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
+ 		req->fw = NULL;
+ 		req->idx = i;
+ 		req->name = test_fw_config->name;
++		req->fw_buf = NULL;
+ 		req->dev = dev;
+ 		init_completion(&req->completion);
+ 		req->task = kthread_run(test_fw_run_batch_request, req,
+@@ -993,6 +1032,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 
++	if (test_fw_config->reqs) {
++		rc = -EBUSY;
++		goto out_bail;
++	}
++
+ 	test_fw_config->reqs =
+ 		vzalloc(array3_size(sizeof(struct test_batched_req),
+ 				    test_fw_config->num_requests, 2));
+@@ -1010,6 +1054,7 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
+ 	for (i = 0; i < test_fw_config->num_requests; i++) {
+ 		req = &test_fw_config->reqs[i];
+ 		req->name = test_fw_config->name;
++		req->fw_buf = NULL;
+ 		req->fw = NULL;
+ 		req->idx = i;
+ 		init_completion(&req->completion);
+-- 
+2.30.2
 
-
-> TSM by cove_convert_pages(), but there is no call to sbi_covh_tsm_reclaim=
-_pages(),
-> which I'm guessing is necesary to transition the page back to a state whe=
-re it can
-> be safely used by the host.
