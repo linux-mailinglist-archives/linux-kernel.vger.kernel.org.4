@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C831A6EB14F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7076EB152
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjDUSAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
+        id S232690AbjDUSBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjDUSAe (ORCPT
+        with ESMTP id S230406AbjDUSBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:00:34 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B291BF8;
-        Fri, 21 Apr 2023 11:00:27 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1879fc89e67so1475933fac.0;
-        Fri, 21 Apr 2023 11:00:27 -0700 (PDT)
+        Fri, 21 Apr 2023 14:01:33 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7597D172C;
+        Fri, 21 Apr 2023 11:01:32 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-18665c1776dso1760581fac.2;
+        Fri, 21 Apr 2023 11:01:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682100027; x=1684692027;
+        d=1e100.net; s=20221208; t=1682100092; x=1684692092;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pD45LRJYwcwGuhNgZXOZfLUe3Rp7o6tEE2EZGvtQuzY=;
-        b=kS4lqwjBftAU4U0BzTvWHS9UFiQqzXvZl26ZiLlD469REj3HRoYX7gyWk7sFlbmdnZ
-         dPU7H96S5HAHJp9fEpMcffY5jEh0MD+3wBfWNTqqAOKYfFaA9E2pwYFJMndg+/Lf0kE2
-         9YYpR4n52Jjq5gpuAP9/N/9imT+zdNtJWXjQyHKgNyB3ffM18Rvqu0XUsgIGwJx3ZaBP
-         JShOd0JZBDZuInYURsfTuq+V+G/+LbPYW9kB9EhckV0PtQR94kwYO8paP+aYlRXHz74J
-         azFwL1a6u+68kvlcmw9hD2+N6PPJt7csTLv9Kxt2SWl/ZqQGQML/prPNsOPJBg545ptR
-         BG9A==
-X-Gm-Message-State: AAQBX9eAO4FRmftCdzso1tAUBTjHHvU2/AymEic+0Zln2FEHGpsZMPpY
-        xvHTJCv9512tTLLgNIBQtw==
-X-Google-Smtp-Source: AKy350b2fQzu9H8xXTbqN6A1n9NlXJPvwjLvHLyVvV33r549va/iRuLiPVlgV1jQrex1VTdY1CSdRg==
-X-Received: by 2002:a05:6870:8186:b0:17a:b378:8e1d with SMTP id k6-20020a056870818600b0017ab3788e1dmr4628318oae.0.1682100026777;
-        Fri, 21 Apr 2023 11:00:26 -0700 (PDT)
+        bh=nnmTMZtvA/f6TPhezgaB/eM/0Kt2Nz3CF0RXPywChaE=;
+        b=Vghxhr6U7Cb/tTXVnZLqZWNTURAJoIClkTSV/9F25DsHwk3vjI2BHC8dkhekZ9u3bo
+         6YOCkFoSUOEfsYm2UKq2F83MxvR7FhNTSJRw1saHHO/EMGtoBNLwST1AIeAe1Xj+M3tb
+         ziu+WDnbiIy4VcqZEoEKMAAT/CfkGYgujs1a68TOZWnVm/Eo4xfs8mEcFoq5Sqlcq2C3
+         cIPLJB1AT+61IT7nZJHLLmRnH86JNG7kt2Niaj2O6iTHBUnjEdly255+3AOmcyYAW3vp
+         Xbt1p4y69HNGz+TuNap/TNgbDrh/WweeKAdgelceIGLmebZM6qD7Mi48yW024Xquig5e
+         r19g==
+X-Gm-Message-State: AAQBX9flw9JUKbI7tVnz8JmEcn21RTj9d0bLMwbMp1GsdytdMyjywH9q
+        5r09ppfnggMB6grnbp7Qkg==
+X-Google-Smtp-Source: AKy350bS6Yt9+puose4G3XnzK+iG2RBGcT82lno6wn46NVV3zf3nyr8BIptdf9X2gnZJqGbUtRaqFw==
+X-Received: by 2002:a05:6871:84:b0:17f:e13:9c96 with SMTP id u4-20020a056871008400b0017f0e139c96mr4884396oaa.51.1682100091343;
+        Fri, 21 Apr 2023 11:01:31 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n124-20020a4a4082000000b00541854ce607sm1956261ooa.28.2023.04.21.11.00.25
+        by smtp.gmail.com with ESMTPSA id c3-20020a056870b28300b0018b22156e84sm1790729oao.38.2023.04.21.11.01.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 11:00:26 -0700 (PDT)
-Received: (nullmailer pid 1549286 invoked by uid 1000);
-        Fri, 21 Apr 2023 18:00:25 -0000
-Date:   Fri, 21 Apr 2023 13:00:25 -0500
+        Fri, 21 Apr 2023 11:01:30 -0700 (PDT)
+Received: (nullmailer pid 1552920 invoked by uid 1000);
+        Fri, 21 Apr 2023 18:01:29 -0000
+Date:   Fri, 21 Apr 2023 13:01:29 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     sboyd@kernel.org, arinc.unal@arinc9.com, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-clk@vger.kernel.org, matthias.bgg@gmail.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, p.zabel@pengutronix.de
-Subject: Re: [PATCH v3 1/9] dt-bindings: clock: add mtmips SoCs system
- controller
-Message-ID: <168210002512.1549232.11622395955569841871.robh@kernel.org>
-References: <20230418090312.2818879-1-sergio.paracuellos@gmail.com>
- <20230418090312.2818879-2-sergio.paracuellos@gmail.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     linux-usb@vger.kernel.org, hanjie.lin@amlogic.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        yue.wang@amlogic.com, rockosov@gmail.com, robh+dt@kernel.org,
+        hminas@synopsys.com, martin.blumenstingl@googlemail.com,
+        mturquette@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        jbrunet@baylibre.com, neil.armstrong@linaro.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-amlogic@lists.infradead.org, khilman@baylibre.com,
+        kishon@kernel.org, Thinh.Nguyen@synopsys.com,
+        kernel@sberdevices.ru, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] dt-bindings: usb: dwc2: add support for Amlogic
+ A1 SoC USB peripheral
+Message-ID: <168210008936.1552867.8929832255980698687.robh@kernel.org>
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+ <20230418111612.19479-4-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418090312.2818879-2-sergio.paracuellos@gmail.com>
+In-Reply-To: <20230418111612.19479-4-ddrokosov@sberdevices.ru>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -70,18 +75,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 18 Apr 2023 11:03:04 +0200, Sergio Paracuellos wrote:
-> Adds device tree binding documentation for system controller node present
-> in Mediatek MIPS and Ralink SOCs. This node is a clock and reset provider
-> for the rest of the world. This covers RT2880, RT3050, RT3052, RT3350,
-> RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
+On Tue, 18 Apr 2023 14:16:10 +0300, Dmitry Rokosov wrote:
+> Provide the appropriate compatible string for the DWC2 IP that is found
+> inside the Amlogic A1 SoC and used in peripheral mode.
 > 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 > ---
->  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
 
