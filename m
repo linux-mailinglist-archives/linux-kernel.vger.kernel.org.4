@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E356EB1A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831E86EB1A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbjDUS2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S233133AbjDUS3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbjDUS2h (ORCPT
+        with ESMTP id S232989AbjDUS3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:28:37 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223111BD5;
-        Fri, 21 Apr 2023 11:28:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1682101673; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=SaSBoPob1vx8UxWGw/1V+TbNRkGJAsK90tRye9/VlpgU8VwLnDSHghVoWUYgAjhPjoRrCWPMCItu6Twjq/fMouX8cle3IP85FsAzQ+fuTOMJmV5hyfaI60KAaEpIB/vcn4xbhatpIi6wyGmnthH1/wbL4H8s7U2zI4yryNVrGJw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1682101673; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=HhtGCpgs8VG3ou8855pH8L7tkz77AnXTHtobCoUAuVM=; 
-        b=jDUZmxX2h5DWOd56WLqqY9Owk6FnqPIR/pjpPBoRhXGffhpEG2g6jacEeok7CPfMWcXKqXOzA3fnFRfr7ixvriIPCROSr12kBjLl+wwxcdmvK4iU4832VvBUlD6ZpN+GV/UISRD/tKMd2OnKwmjglhADyikmXLq165b5dpL6p0U=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682101673;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=HhtGCpgs8VG3ou8855pH8L7tkz77AnXTHtobCoUAuVM=;
-        b=Y4ageSokWBom/G2ZCmFb/b81B/hbHdFJvx36UnHpALK+9EHjrIBm1URAAg1Ra1hW
-        zPny3BfiOWOHfbi26F2qoXjgHI4nSL9KeR0quy6dEeAEPYHP63eaiDKdgtiimB8c9Tv
-        gRdrOTcPG0Ix59uu3nHkY8IwbIQc9FTHmFcxDIAc=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1682101672038904.708571478262; Fri, 21 Apr 2023 11:27:52 -0700 (PDT)
-Message-ID: <6493c52f-247c-c9c0-8352-4b312b7e67e4@arinc9.com>
-Date:   Fri, 21 Apr 2023 21:27:43 +0300
+        Fri, 21 Apr 2023 14:29:14 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F92E1BD5;
+        Fri, 21 Apr 2023 11:29:13 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8C7B35C00C9;
+        Fri, 21 Apr 2023 14:29:12 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 21 Apr 2023 14:29:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1682101752; x=1682188152; bh=E1
+        giA72jTN/HCoY+ZkODXi5a5cgWitw0+lONQS3/t7A=; b=cLCvpeRM5lx2n8YJEv
+        ctpJlrZd/cvTHHyzMCqw1BVqTcXVgeLCqb6QV1QZ0tmVSCw9Hokf234+XqSzm4wE
+        8ZE2nK2wllZNzlTioQ86W4TDsy24scnOtD3hOgN0i3sihzKtD/okV26x7RMy9Bd0
+        2LXLm7wPcpVpII3aB9gwV7jKqUblefDZ83PxTFnb1EHAHQggvFodY38vkpyMRptU
+        hl0PYvUz/2O8jpnRSYxgPwgQGxXBJv2NDPISJg1Bh/F/2iUTViHO30IulUGDPCCy
+        Z8n7wWABxBx8tPwzyZv+kYdZ3sRfOpFf9kCDyQmAVjQhC3u9TmI3DbQvqjNzdC0x
+        g0OQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682101752; x=1682188152; bh=E1giA72jTN/HC
+        oY+ZkODXi5a5cgWitw0+lONQS3/t7A=; b=XIrOUyfO9vgiYaLiAwjPy6D6dkCoa
+        284FdZQk/VS33jzayeoEjODvPto3BtKkfK70YwVOCM2JSOMn75m1dCaqYnLonpC3
+        9l5MIAw/lEGNYqSmWOPgvPg7EwkCcuIXJmxOeQUxnkwBVJcgugyAAd1ThFSemUbR
+        6Hqy95yY9FGhXXuago4M6ZZKvk2fpnGwEi/ttra1jyu+Z7uefg/A0ULK7lcOcilI
+        Kjrwf6Zb16O5X4zZv2iaYMNJbRIC8Oq+agK1Ke/2HXtUuQ2K1gKENt8ONx5a3htl
+        nlsAz9A8jPMF8dMPtv/L5qnyuCMMxN8zqAzpb3arJMG4eGGB7CWOIloqQ==
+X-ME-Sender: <xms:-NVCZJ1y9aVR_c2-q74uNpgqQQIr4t699w2AZhqOzF6hB3vvFL0Olw>
+    <xme:-NVCZAH3LEUyx7er7Xqd1PCEpJqR8mCpiOSdEwl-n_4r8_mSyJvkxUQMe6Rwxk53h
+    MynYdHG-vSvBpvUffM>
+X-ME-Received: <xmr:-NVCZJ5pXGSRP5sW3a08clyDOmzstPkj0c4movDV16kxcaNiRpHt9YS-2uWnqQ7LkXov430R-wH_h4KRxHv33W4uJ6WOIZi_VRySJQf2VKw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
+    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
+    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
+    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:-NVCZG1YyGj4YgZUYhedoOMlBVfL44meJBCxX7zwKb3AwiWd6aQ3qQ>
+    <xmx:-NVCZMFYf-PDrJWxacrKl9YQqn1WOtd2h_N3L0Ipw-uFeEQeTgspBg>
+    <xmx:-NVCZH_MyPcAEHIY_wVcMcgN6VxV-l6kIJ8aLexBsK6hoJDXrynoRQ>
+    <xmx:-NVCZJdmIt5oZlIXlfJZ1g609Ohse9_1NSdEJhW0c04NsWiZWbgJYQ>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 21 Apr 2023 14:29:10 -0400 (EDT)
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
+ <20230418152849.505124-2-david@redhat.com>
+ <qvqwr0sei6sl.fsf@devbig1114.prn1.facebook.com>
+ <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
+ <f809162e-4adc-cf9b-35f4-0f1b098ad283@redhat.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 1/3] mm/ksm: unmerge and clear VM_MERGEABLE when
+ setting PR_SET_MEMORY_MERGE=0
+Date:   Fri, 21 Apr 2023 11:28:49 -0700
+In-reply-to: <f809162e-4adc-cf9b-35f4-0f1b098ad283@redhat.com>
+Message-ID: <qvqwwn25rswa.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH net-next 02/22] net: dsa: mt7530: use
- p5_interface_select as data type for p5_intf_sel
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230421143648.87889-1-arinc.unal@arinc9.com>
- <20230421143648.87889-3-arinc.unal@arinc9.com>
- <ZEK4gVx-WQv0j2cR@makrotopia.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <ZEK4gVx-WQv0j2cR@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.04.2023 19:23, Daniel Golle wrote:
-> On Fri, Apr 21, 2023 at 05:36:28PM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Use the p5_interface_select enumeration as the data type for the
->> p5_intf_sel field. This ensures p5_intf_sel can only take the values
->> defined in the p5_interface_select enumeration.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   drivers/net/dsa/mt7530.h | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
->> index 845f5dd16d83..703f8a528317 100644
->> --- a/drivers/net/dsa/mt7530.h
->> +++ b/drivers/net/dsa/mt7530.h
->> @@ -674,13 +674,13 @@ struct mt7530_port {
->>   };
->>   
->>   /* Port 5 interface select definitions */
->> -enum p5_interface_select {
->> -	P5_DISABLED = 0,
->> +typedef enum {
-> 
-> We usually avoid adding typedef in kernel code. If the purpose is
-> just to be more verbose in the struct definition, you can as well
-> also just use 'enum p5_interface_select as type in the struct.
-> 
->> +	P5_DISABLED,
->>   	P5_INTF_SEL_PHY_P0,
->>   	P5_INTF_SEL_PHY_P4,
->>   	P5_INTF_SEL_GMAC5,
->>   	P5_INTF_SEL_GMAC5_SGMII,
->> -};
->> +} p5_interface_select;
->>   
->>   struct mt7530_priv;
->>   
->> @@ -768,7 +768,7 @@ struct mt7530_priv {
->>   	bool			mcm;
->>   	phy_interface_t		p6_interface;
->>   	phy_interface_t		p5_interface;
->> -	unsigned int		p5_intf_sel;
->> +	p5_interface_select	p5_intf_sel;
-> 
-> enum p5_interface_select	p5_intf_sel;
 
-Will do, thanks.
+David Hildenbrand <david@redhat.com> writes:
 
-Arınç
+>>> I understand we want to keep the name "symmetric" with
+>>> ksm_enable_merge_any, but it also unmerges the ksm pages. Do we want to
+>>> reflect that in the function name?
+>> ksm_disable_merge_any_umerge() is suboptimal.
+>> As ksm_disable_merge_any() now reverts what ksm_enable_merge_any() ended
+>> up doing, I think it's just fine.
+>> (it would be a different story if we'd be using "set" / "clear"
+>> terminology instead of "enable" / "disable").
+>> We can describe that in the comment.
+>>
+>>>
+>>> Can we add a comment for the function?
+>> Can do for symmetry with ksm_enable_merge_any().
+>>
+>
+> +/**
+> + * ksm_disable_merge_any - Disable merging on all compatible VMA's of the mm,
+> + *                        previously enabled via ksm_enable_merge_any().
+> + *
+> + * Disabling merging implies unmerging any merged pages, like setting
+> + * MADV_UNMERGEABLE would. If unmerging fails, the whole operation fails and
+> + * merging on all compatible VMA's remains enabled.
+> + *
+> + * @mm: Pointer to mm
+> + *
+> + * Returns 0 on success, otherwise error code
+> + */
+
+
+LGTM
+
+Acked-by: Stefan Roesch <shr@devkernel.io>
