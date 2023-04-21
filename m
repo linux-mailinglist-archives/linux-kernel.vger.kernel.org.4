@@ -2,130 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA646EA745
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110056EA74A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjDUJjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S231366AbjDUJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbjDUJj2 (ORCPT
+        with ESMTP id S232035AbjDUJjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:39:28 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02858AF00;
-        Fri, 21 Apr 2023 02:39:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PpOtlFCVsCkIaKMUhh/nNr2VDPOrqWs03F5CgClBgcgyiOyN96ektoYXSk6vcO8bHjQ4/+nsADYcbXaRUdrUcgfTdgG5lcS37/AQ3SCx68apPtDlwuHUvfitsCKLhzseuvXtkvk01LCFTJmb8/VRbLjKMKGLeIwCvyGw5jT3EYN0BNEJI5gF2yVJysoaO7KOEohlgW4aDUYKNeisvdBNJA3BhmYGQflItBcO0IwP42HSajmpKsisqFWZVfqjpwX45f81foIqwGsChd/0rWl/PlFqhF3LT28SBC3vxng/yeROUyBpXOhDp8gkixVPPF+ojERX+oh7lAVKrZSjWUxojw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cUE16gZL4YOpOMQUR9+mQynDfKjPK3s+tSBTXAoD6TI=;
- b=eQJo1breDajJB4XDcoEmkm1cNKRqZFwxvLN8bDCXoO9jkcAYFEZzELM2jkXyWJEOYbwtA7iSI/+8C9iM6juYVXdnICNzcJ8+Y8MnVvSGr+wbFySrswJfnR4ZLf2LWt0shffP2QZJWjhjJAeobYXICHbb5YkeWw+7UWOGn7eVAq7U6O6kptxW+vKXKx0dPJBpKZ6eaGIniYvhueILMCzjHs0Bryi5eIB7OJTQe774wwK9CH+4NUfhBVZ8685TLHKdPps+b7ofFnOQW/YyWgHxtFxxBxpHAQ1IwTHZrSqngenaqLGUmA2VjBJ4v9zUrnjB5JYjH488LEmF25VdMSjcMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cUE16gZL4YOpOMQUR9+mQynDfKjPK3s+tSBTXAoD6TI=;
- b=KQlop4/FDJ2krVzagFYavyF6thKuOhl+xJ2iNid3O4uBL2E+thWTQchfoCp0IsuZUN4mKO4MlNeRjr/iecO1ps+TgNN+cz+ayZlWZziavg+TzaX+WuYVf61cw934VicZnz8O0UaKZfpE179NDNEcNVnN8Sc9ic5rEA1FkhkYM8jOjueXf/icP1YYEF8xV2HEOD41piFJMggZUZY9RGGEClCvg9keR5ryK2S9NxhoD/PI+duxBxfJH42TEEGqFobTglawuRu7hXU3lANVzdKBsbGw328u3/kLJK4nOzMeMI4mISmdXGPsEeaCAK/FqvYwZhC2mxDD9AaSqqcD7tobXA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MW4PR12MB7381.namprd12.prod.outlook.com (2603:10b6:303:219::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 09:39:14 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::3c6e:eaf0:e09:8fa3]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::3c6e:eaf0:e09:8fa3%4]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
- 09:39:14 +0000
-Message-ID: <92bc772c-0cb9-d16d-65a3-a9bf1c260fb7@nvidia.com>
-Date:   Fri, 21 Apr 2023 10:39:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Patch V10 3/3] spi: tegra210-quad: Enable TPM wait polling
-Content-Language: en-US
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, jsnitsel@redhat.com,
-        robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     thierry.reding@gmail.com, skomatineni@nvidia.com,
-        ldewangan@nvidia.com
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-4-kyarlagadda@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20230421091309.2672-4-kyarlagadda@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P302CA0011.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:2c2::7) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Fri, 21 Apr 2023 05:39:53 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB019768;
+        Fri, 21 Apr 2023 02:39:44 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8b62cfaceso12864641fa.2;
+        Fri, 21 Apr 2023 02:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682069983; x=1684661983;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H5bxwGDVTg5wftCBmxT7+bRT0famiMimdj+S5kR6sBQ=;
+        b=fFdN5grm5Q8CjZBqI4/0OceG/rPiyuOkmpq+jROaN24YqzEk3Rb9IKqGsC4wJLBU5m
+         3Boaf+7RVVqSp1PTLo5oOOoqL+g6Lvsf5IIJd4b0y7JL84Bss6dK7emKNR+4GplumrGB
+         LJAQf4jwcQ2QfhWzSFk5nm2mHA9g1UXSNLUrUznU2I0KOTA8N91+PebhUpnN8L22qsIf
+         /uvrt6EG2JQUF51mMwF59yOdmepWiZFWT3lbsJ1MeUMTn54DroovYI3ioSEH5JW774VW
+         0F7Zb2+MTzI0zeb0HpYaYaHZBhG9YMoZ/E9U+MXtohkzIyWnB+n+l0KmdZGI6NqOHQtn
+         zl7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682069983; x=1684661983;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H5bxwGDVTg5wftCBmxT7+bRT0famiMimdj+S5kR6sBQ=;
+        b=j4rIqfflUakc9UVGcfrMBK2dXPvksCqnPfeizYJvFJwfdJlw1dpz1H0tpwKxX8/Mdo
+         qjWnfG1MuFo0qmAFpyaDOskx31JNK4Qnrlbxu2a2heUINTsdOC93GfU3qZsLqmAQkwlY
+         /x3kqHEhAbN4VzQLZB2fTWvjYgdbNiVwegsEyQdkV48SjP1ZAWsJKBCafhzxS1LG2nkx
+         /GLyihGryoI3IQa+VVuv5XK8Zn7Bc1yL2/CDxVZPOEes3Z+wC/+BrTxyb0HG3rTHwz0p
+         o/g8/a3lIKlyb+Frsk0hGpHn6w//66v4Vn6N2GMkSS5y9+oKSv/r4q5qa1GZUyjkR2PL
+         DxPg==
+X-Gm-Message-State: AAQBX9colD3W0Cp+rESMLAoX7nABaQLwqc7UGx6cWMGwkOe8vPHnbNEl
+        Bnbvwmu6CsWyiTYsFw1wOTE=
+X-Google-Smtp-Source: AKy350ZhNWgRI1Yo9/Rq1hN9WTuyIhwrteM/XYEHBzjlzuk6cWyyG1XQtns5hbEQdQWQUB0NGsk6Vw==
+X-Received: by 2002:a2e:a30c:0:b0:2a7:6e2e:20e0 with SMTP id l12-20020a2ea30c000000b002a76e2e20e0mr420225lje.7.1682069982574;
+        Fri, 21 Apr 2023 02:39:42 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id h18-20020a2e9012000000b002a7a5201bfdsm560250ljg.80.2023.04.21.02.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 02:39:41 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 12:39:36 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: [PATCH v1 2/3] iio: light: ROHM BU27008 color sensor
+Message-ID: <28ace0e26267df5618fbd23625425292391ad7f0.1682067567.git.mazziesaccount@gmail.com>
+References: <cover.1682067567.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MW4PR12MB7381:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0be4cf27-354e-43a5-b1da-08db424c44e9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JMA5yJPJvE1MvXEyltFuWA1cO+p7h86rElJjn5Yic/q+FzNKaILvuXmu3nRiG+p//K7ByRGGcJb8x9jcp9ILI+Pp9tE8QRj28grC6hHLrAgvdAx/fxRDJlptu4xunyCzQT2Ahazqez9DyiUDHH88JhEUz9P7R4iNmP2KN6jYMqcYYS2SLoXkOMcwryFi+ErFH69R/G9wEH+iGQtgVPu/1yUDXpA0n+fqO7kkJnVBG4UbbXw+aOYX5N58MbF63xCjYfKsj5/yWW0l9u7q6OjsPO2orwQV9/RrR6BuSRuZnwtuYsfeNlBTaDamYnhA0Aub51xneVn62zwCvuvuBB/i/tXYW6fuqYcUiVHd8zjuZyemHliKs47fqacMVx/X2XpxJ07NF0yq1jEmzMrYjVhrzA+Ug1evHXP3g2akHgmnVOoEXSxc40W32ufJQAx0nqsoJLRg3MknFvA43mbjOAH6UKX1xIRzoa5MnkXD4rpvyYt379wbWb0B0WTSsgMUJoioL332owUQPAtqDygbO71g4bVlEy1VFpekuI+ytVdm5hrdswG/xqpaLZpHpTzu86osQ2LdzRtLHGpNgQ4hsaCBz19AhjtQT5v71sQgG0tmk01WzjNMAyxPpPHtGSn/1GmU811CJhdeM8/G04danr8Pr590qsvBEA9aN/hkUibvMMA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(396003)(376002)(136003)(451199021)(41300700001)(66476007)(66946007)(66556008)(316002)(107886003)(4326008)(478600001)(8936002)(8676002)(83380400001)(7416002)(2616005)(5660300002)(6512007)(53546011)(6506007)(186003)(31686004)(6666004)(36756003)(6486002)(2906002)(38100700002)(921005)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VDBTQWpSWUFzakFuRkNnVUMxUjV1dmdhdEUvSHE4VWtmM3ZaSUM1NnpKTkEx?=
- =?utf-8?B?VmVxVkhwWUh1dXJjOWljZGEvNEJLNDREWjF3UFlFOEhrc01DSktNcHdaalNj?=
- =?utf-8?B?OTJUNHhGeDdpa3Y1aTFYK2VNaWJUbDVlditxdTYyK2RQbkY5RVZ3YTdhd09N?=
- =?utf-8?B?REE0alBnZDRlaTlXMW1vakIxYW50K09MVEIzdk1pcXdIaEo0U3lzclVwR2tI?=
- =?utf-8?B?QUlzNDg0a3FTNzRJVkxRanFSa1lqUVZQOVl3MzNjK2ZhNFpvVzI5QjQ5bjVs?=
- =?utf-8?B?QnBHT21jZkpmSGhoOGpWcDA4V1ZqNjZ2VTFNcnVKTnV4bTdEQVQvM2l0QmJL?=
- =?utf-8?B?YStyTDhhWDVYVjNSQXM4L3E0UktSd0x6c3pMUUw0bkRzWUdwb2hlUWY4bVp5?=
- =?utf-8?B?OGhYVTQwNkF4WHovcnNzZjBWZjdKOHVYTHpqenYzUlF6VzUzbUZJOXNqdDl0?=
- =?utf-8?B?c29nS0I1NGc4em9KT2ZxdWRBUVhFcFFJbVZNRFo0MnpFNjZrYlNxL21YKzd3?=
- =?utf-8?B?TFNoMGpwNjZFS3NCRHlzSldoTGtBUHZEdmpzZVJlVHVGTk9CVDVWT1pNMlhH?=
- =?utf-8?B?ekIyNkkzbkNCZ1Zidm5GaGh5TXpzT3NCellqSWJ2UE44Z1daMjJ1QTloM0x2?=
- =?utf-8?B?Z3N6NUxYZDZUOGpDdTFwZHhuTFVNb2lPblczYUhMSldWZHppZlpDOWlGTjh6?=
- =?utf-8?B?UGlseXBDQUt2U0F1em9DVzFYNTg3Z1pQUGxHTXFySjVRSldCMUJFbWFmaVdx?=
- =?utf-8?B?RFFLelRZYWFtcFl5a3VZc3BCcEpoYTRKVFlwZkdHblNiMXdsNU1LV2hZYkMy?=
- =?utf-8?B?U1laT0FIQ0dJVExyb0lOUWo1Nk04ZGE3T1I5LzVwZ0ovcnpyTGhTTXR6T1c1?=
- =?utf-8?B?YzgzZE5qR2MxeDUydnFIUFVqdkIwRVp3N0swWjZ4SW0rdFBDN3BBU01oT3Nu?=
- =?utf-8?B?MVI5d1pmNGx5TjkwWTBKMU8wMEVULzVCdHJ3SWFYN252VWJiOVZtREIzb0Z3?=
- =?utf-8?B?bVk1RUpReWRJUGllTFZ3b3VsdUxRNUh0RVYzaWFTU1kyZ0ZOc3o4TGhrWWI3?=
- =?utf-8?B?UURjTktEZmprTE9LcDRoektqMnJNVnkyNW9CS0tWbFdhdHlaUmIvWDI1RVc0?=
- =?utf-8?B?Vm5EQUZuU3hibzNhTzJLUGcvbkJPUzFOTGM4YWwzd1NRZCtFTHJoMEQvbHY1?=
- =?utf-8?B?dXBnMHRjT1dBK1NKb3RmZkpubEJCSk41UTQ3K3ZzOE5JU0M2TjFYK29hRVlS?=
- =?utf-8?B?a1E3b1hxMTVieWsrRmYrRE5ZbTNXSjc4TUJGQnd4TU1aQnJCSU9mUmY0cGtR?=
- =?utf-8?B?YVdBaDEwb3NIZHNBQ3R2SVdWR1lqSnIzRE8yUUphWXYrNXRYVjgzY0dWMW4y?=
- =?utf-8?B?WFNQeWIrOEJZZFVOUGxBYXVsblNRa2FPQVNrTEpFcFBCY2JGSjB0WXpadlQx?=
- =?utf-8?B?RnhKbXdUZXZvaXZIQUMwYzlyTmZVU1BMSytiei9CanlVZVFHdEFOQ3NBdDVh?=
- =?utf-8?B?d1EvNlRQVVFUc1JBWFpRdnpUaHlGN2lJdlh4WDJtNnpCK3FiV3JSMytRbWRk?=
- =?utf-8?B?dkFDQ0Q5RStzMjVLYkpCbDlRRFFrU3Y5YmVzcnEwTUpEWHNod3pZdU9XV0g1?=
- =?utf-8?B?dG9VU3FWN2hwUjBaWERUQnFZNi9DUmFVL3NqV09YZ2ZlWndZWEl3SVc3dGJ1?=
- =?utf-8?B?cHhiVGhFeHM3VHJiRFpDQzlLRjRxU2Q3YStZclNpdWxJRHZETTdUM0ZIL3hH?=
- =?utf-8?B?R2JuVXVDTlQwTUhlSTUwSjhQOTJ0S2xubXdyZHFtRDNBMEtaSmk4VWdSSW1M?=
- =?utf-8?B?RmJUWnR2WWlLSFNCdVV0K00ycXZ4TGZ0U3ZGOHdYQURZWC9wc2FWd0dVRndY?=
- =?utf-8?B?RzNDcW1CNlpFZW5YSStObTJjN2dST1RIRmdxNFRCOGJnY2xjNVVRekQxMjdF?=
- =?utf-8?B?THFBcTEzRUJFUjBEQ0V3cndHeThVcTdac0M2cDFFZm13cDk5QWVZcmM3Yysr?=
- =?utf-8?B?MEdTNWlpenJkRkQ5V3NoNjZVeHpIMEMwemVVRTR3TFpyZFM0dW16L3AzZ0dV?=
- =?utf-8?B?dm4wN3BSL2RTOTFGWEJxNG5UZWpvTHVhTGlPamM5VDlnUGd3K09MUVRsRThk?=
- =?utf-8?B?alpKVWNJV1owN0tHaGppeWdnS3c4RDEyUGlRT0pyYWtDdm1vWjFBN2o4Y0d0?=
- =?utf-8?Q?IewYEkyPlqvPZlVJUj29ELatheekAQEfSbjnpzGuHjKI?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0be4cf27-354e-43a5-b1da-08db424c44e9
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 09:39:14.7580
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G0yMqc9p6LY4FabgYxI6Fd43c6BPeiObyW0ORlAtWWnO4tATK9UI7W+TkGNeJbb9vceuvDg1J82ozVpfq8x/rQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7381
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZqkBKqJnGSMAz1r/"
+Content-Disposition: inline
+In-Reply-To: <cover.1682067567.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -133,98 +81,1141 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 21/04/2023 10:13, Krishna Yarlagadda wrote:
-> Trusted Platform Module requires flow control. As defined in TPM
-> interface specification, client would drive MISO line at same cycle as
-> last address bit on MOSI.
-> Tegra234 and Tegra241 QSPI controllers have TPM wait state detection
-> feature which is enabled for TPM client devices reported in SPI device
-> mode bits.
-> 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->   drivers/spi/spi-tegra210-quad.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-> index bea376acea1f..fbd14dd7be44 100644
-> --- a/drivers/spi/spi-tegra210-quad.c
-> +++ b/drivers/spi/spi-tegra210-quad.c
-> @@ -142,6 +142,7 @@
->   
->   #define QSPI_GLOBAL_CONFIG			0X1a4
->   #define QSPI_CMB_SEQ_EN				BIT(0)
-> +#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
->   
->   #define QSPI_CMB_SEQ_ADDR			0x1a8
->   #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-> @@ -164,6 +165,7 @@
->   struct tegra_qspi_soc_data {
->   	bool has_dma;
->   	bool cmb_xfer_capable;
-> +	bool supports_tpm;
->   	unsigned int cs_count;
->   };
->   
-> @@ -1065,6 +1067,12 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
->   
->   	/* Enable Combined sequence mode */
->   	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-> +	if (spi->mode & SPI_TPM_HW_FLOW) {
-> +		if (tqspi->soc_data->supports_tpm)
-> +			val |= QSPI_TPM_WAIT_POLL_EN;
-> +		else
-> +			return -EIO;
-> +	}
->   	val |= QSPI_CMB_SEQ_EN;
->   	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
->   	/* Process individual transfer list */
-> @@ -1196,6 +1204,8 @@ static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
->   	/* Disable Combined sequence mode */
->   	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
->   	val &= ~QSPI_CMB_SEQ_EN;
-> +	if (tqspi->soc_data->supports_tpm)
-> +		val &= ~QSPI_TPM_WAIT_POLL_EN;
->   	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
->   	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
->   		struct spi_transfer *xfer = transfer;
-> @@ -1454,24 +1464,28 @@ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
->   static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
->   	.has_dma = true,
->   	.cmb_xfer_capable = false,
-> +	.supports_tpm = false,
->   	.cs_count = 1,
->   };
->   
->   static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
->   	.has_dma = true,
->   	.cmb_xfer_capable = true,
-> +	.supports_tpm = false,
->   	.cs_count = 1,
->   };
->   
->   static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
->   	.has_dma = false,
->   	.cmb_xfer_capable = true,
-> +	.supports_tpm = true,
->   	.cs_count = 1,
->   };
->   
->   static struct tegra_qspi_soc_data tegra241_qspi_soc_data = {
->   	.has_dma = false,
->   	.cmb_xfer_capable = true,
-> +	.supports_tpm = true,
->   	.cs_count = 4,
->   };
->   
+--ZqkBKqJnGSMAz1r/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+and IR) with four configurable channels. Red and green being always
+available and two out of the rest three (blue, clear, IR) can be
+selected to be simultaneously measured. Typical application is adjusting
+LCD backlight of TVs, mobile phones and tablet PCs.
+
+Add initial support for the ROHM BU27008 color sensor.
+ - raw_read() of RGB and clear channels
+ - triggered buffer w/ DRDY interrtupt
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+ drivers/iio/light/Kconfig        |   14 +
+ drivers/iio/light/Makefile       |    1 +
+ drivers/iio/light/rohm-bu27008.c | 1028 ++++++++++++++++++++++++++++++
+ 3 files changed, 1043 insertions(+)
+ create mode 100644 drivers/iio/light/rohm-bu27008.c
+
+diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
+index 6fa31fcd71a1..7888fc439b2f 100644
+--- a/drivers/iio/light/Kconfig
++++ b/drivers/iio/light/Kconfig
+@@ -289,6 +289,20 @@ config JSA1212
+ 	  To compile this driver as a module, choose M here:
+ 	  the module will be called jsa1212.
+=20
++config ROHM_BU27008
++	tristate "ROHM BU27008 color (RGB+C/IR) sensor"
++	depends on I2C
++	select REGMAP_I2C
++	select IIO_GTS_HELPER
++	help
++	  Enable support for the ROHM BU27008 color sensor.
++	  The ROHM BU27008 is a sensor with 5 photodiodes (red, green,
++	  blue, clear and IR) with four configurable channels. Red and
++	  green being always available and two out of the rest three
++	  (blue, clear, IR) can be selected to be simultaneously measured.
++	  Typical application is adjusting LCD backlight of TVs,
++	  mobile phones and tablet PCs.
++
+ config ROHM_BU27034
+ 	tristate "ROHM BU27034 ambient light sensor"
+ 	depends on I2C
+diff --git a/drivers/iio/light/Makefile b/drivers/iio/light/Makefile
+index 985f6feaccd4..881173952301 100644
+--- a/drivers/iio/light/Makefile
++++ b/drivers/iio/light/Makefile
+@@ -39,6 +39,7 @@ obj-$(CONFIG_NOA1305)		+=3D noa1305.o
+ obj-$(CONFIG_OPT3001)		+=3D opt3001.o
+ obj-$(CONFIG_PA12203001)	+=3D pa12203001.o
+ obj-$(CONFIG_ROHM_BU27034)	+=3D rohm-bu27034.o
++obj-$(CONFIG_ROHM_BU27008)	+=3D rohm-bu27008.o
+ obj-$(CONFIG_RPR0521)		+=3D rpr0521.o
+ obj-$(CONFIG_SI1133)		+=3D si1133.o
+ obj-$(CONFIG_SI1145)		+=3D si1145.o
+diff --git a/drivers/iio/light/rohm-bu27008.c b/drivers/iio/light/rohm-bu27=
+008.c
+new file mode 100644
+index 000000000000..6fca193eeb9e
+--- /dev/null
++++ b/drivers/iio/light/rohm-bu27008.c
+@@ -0,0 +1,1028 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * BU27008 ROHM Colour Sensor
++ *
++ * Copyright (c) 2023, ROHM Semiconductor.
++ */
++
++#include <linux/bits.h>
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/units.h>
++
++#include <linux/iio/iio.h>
++#include <linux/iio/iio-gts-helper.h>
++#include <linux/iio/trigger.h>
++#include <linux/iio/trigger_consumer.h>
++#include <linux/iio/triggered_buffer.h>
++
++#define BU27008_REG_SYSTEM_CONTROL	0x40
++#define BU27008_MASK_SW_RESET		BIT(7)
++#define BU27008_MASK_PART_ID		GENMASK(5, 0)
++#define BU27008_ID			0x1a
++#define BU27008_REG_MODE_CONTROL1	0x41
++#define BU27008_MASK_MEAS_MODE		GENMASK(2, 0)
++#define BU27008_MASK_CHAN_SEL		GENMASK(3, 2)
++
++#define BU27008_BLUE2_CLEAR3		0x0
++#define BU27008_CLEAR2_IR3		0x1
++#define BU27008_BLUE2_IR3		0x2
++
++#define BU27008_REG_MODE_CONTROL2	0x42
++#define BU27008_MASK_RGBC_GAIN		GENMASK(7, 3)
++#define BU27008_MASK_IR_GAIN_LO		GENMASK(2, 0)
++#define BU27008_SHIFT_IR_GAIN		3
++
++#define BU27008_REG_MODE_CONTROL3	0x43
++#define BU27008_MASK_VALID		BIT(7)
++#define BU27008_MASK_INT_EN		BIT(1)
++#define BU27008_MASK_MEAS_EN		BIT(0)
++
++#define BU27008_REG_DATA0_LO		0x50
++#define BU27008_REG_DATA1_LO		0x52
++#define BU27008_REG_DATA2_LO		0x54
++#define BU27008_REG_DATA3_LO		0x56
++#define BU27008_REG_DATA3_HI		0x57
++#define BU27008_REG_MANUFACTURER_ID	0x92
++#define BU27008_REG_MAX BU27008_REG_MANUFACTURER_ID
++
++enum {
++	BU27008_RED,	/* Always data0 */
++	BU27008_GREEN,	/* Always data1 */
++	BU27008_BLUE,	/* data2, configurable (blue / clear) */
++	BU27008_CLEAR,	/* data2 or data3 */
++	BU27008_IR,	/* data3 */
++	BU27008_NUM_CHANS
++};
++
++enum {
++	BU27008_DATA0, /* Always RED */
++	BU27008_DATA1, /* Always GREEN */
++	BU27008_DATA2, /* Blue or Clear */
++	BU27008_DATA3, /* IR or Clear */
++	BU27008_NUM_HW_CHANS
++};
++
++/* We can always measure red and green at same time */
++#define ALWAYS_SCANNABLE (BIT(BU27008_RED) | BIT(BU27008_GREEN))
++
++#define BU27008_CHAN_DATA_SIZE		2 /* Each channel has 16bits of data */
++#define BU27008_BUF_DATA_SIZE (BU27008_NUM_CHANS * BU27008_CHAN_DATA_SIZE)
++#define BU27008_HW_DATA_SIZE (BU27008_NUM_HW_CHANS * BU27008_CHAN_DATA_SIZ=
+E)
++#define NUM_U16_IN_TSTAMP (sizeof(s64) / sizeof(u16))
++
++static const unsigned long bu27008_scan_masks[] =3D {
++	ALWAYS_SCANNABLE | BIT(BU27008_CLEAR) | BIT(BU27008_IR),
++	ALWAYS_SCANNABLE | BIT(BU27008_CLEAR) | BIT(BU27008_BLUE),
++	ALWAYS_SCANNABLE | BIT(BU27008_BLUE) | BIT(BU27008_IR),
++	0
++};
++
++/*
++ * Available scales with gain 1x - 1024x, timings 55, 100, 200, 400 mS
++ * Time impacts to gain: 1x, 2x, 4x, 8x.
++ *
++ * =3D> Max total gain is HWGAIN * gain by integration time (8 * 1024) =3D=
+ 8192
++ *
++ * Max amplification is (HWGAIN * MAX integration-time multiplier) 1024 * 8
++ * =3D 8192. With NANO scale we get rid of accuracy loss when we start wit=
+h the
++ * scale 16.0 for HWGAIN1, INT-TIME 55 mS. This way the nano scale for MAX
++ * total gain 8192 will be 1953125
++ */
++#define BU27008_SCALE_1X 16
++
++/* See the data sheet for the "Gain Setting" table */
++#define BU27008_GSEL_1X		0x00
++#define BU27008_GSEL_4X		0x08
++#define BU27008_GSEL_8X		0x09
++#define BU27008_GSEL_16X	0x0a
++#define BU27008_GSEL_32X	0x0b
++#define BU27008_GSEL_64X	0x0c
++#define BU27008_GSEL_256X	0x18
++#define BU27008_GSEL_512X	0x19
++#define BU27008_GSEL_1024X	0x1a
++
++static const struct iio_gain_sel_pair bu27008_gains[] =3D {
++	GAIN_SCALE_GAIN(1, BU27008_GSEL_1X),
++	GAIN_SCALE_GAIN(4, BU27008_GSEL_4X),
++	GAIN_SCALE_GAIN(8, BU27008_GSEL_8X),
++	GAIN_SCALE_GAIN(16, BU27008_GSEL_16X),
++	GAIN_SCALE_GAIN(32, BU27008_GSEL_32X),
++	GAIN_SCALE_GAIN(64, BU27008_GSEL_64X),
++	GAIN_SCALE_GAIN(256, BU27008_GSEL_256X),
++	GAIN_SCALE_GAIN(512, BU27008_GSEL_512X),
++	GAIN_SCALE_GAIN(1024, BU27008_GSEL_1024X),
++};
++
++static const struct iio_gain_sel_pair bu27008_gains_ir[] =3D {
++	GAIN_SCALE_GAIN(2, BU27008_GSEL_1X),
++	GAIN_SCALE_GAIN(4, BU27008_GSEL_4X),
++	GAIN_SCALE_GAIN(8, BU27008_GSEL_8X),
++	GAIN_SCALE_GAIN(16, BU27008_GSEL_16X),
++	GAIN_SCALE_GAIN(32, BU27008_GSEL_32X),
++	GAIN_SCALE_GAIN(64, BU27008_GSEL_64X),
++	GAIN_SCALE_GAIN(256, BU27008_GSEL_256X),
++	GAIN_SCALE_GAIN(512, BU27008_GSEL_512X),
++	GAIN_SCALE_GAIN(1024, BU27008_GSEL_1024X),
++};
++
++#define BU27008_MEAS_MODE_100MS		0x00
++#define BU27008_MEAS_MODE_55MS		0x01
++#define BU27008_MEAS_MODE_200MS		0x02
++#define BU27008_MEAS_MODE_400MS		0x04
++
++static const struct iio_itime_sel_mul bu27008_itimes[] =3D {
++	GAIN_SCALE_ITIME_US(400000, BU27008_MEAS_MODE_400MS, 8),
++	GAIN_SCALE_ITIME_US(200000, BU27008_MEAS_MODE_200MS, 4),
++	GAIN_SCALE_ITIME_US(100000, BU27008_MEAS_MODE_100MS, 2),
++	GAIN_SCALE_ITIME_US(55000, BU27008_MEAS_MODE_55MS, 1),
++};
++
++/*
++ * All the RGBC channels share the same gain.
++ * IR gain can be fine-tuned from the gain set for the RGBC by 2 bit, but =
+this
++ * would yield quite complex gain setting. Especially since not all bit
++ * compinations are supported. And in any case setting GAIN for RGBC will
++ * always also change the IR-gain.
++ *
++ * On top of this, the selector '0' which corresponds to hw-gain 1X on RGB=
+C,
++ * corresponds to gain 2X on IR. Rest of the selctors correspond to same g=
+ains
++ * though. This, however, makes it not possible to use shared gain for all
++ * RGBC and IR settings even though they are all changed at the one go.
++ */
++#define BU27008_CHAN(color, data, separate_avail)				\
++{										\
++	.type =3D IIO_INTENSITY,							\
++	.modified =3D 1,								\
++	.channel2 =3D IIO_MOD_LIGHT_##color,					\
++	.info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |				\
++			      BIT(IIO_CHAN_INFO_SCALE),				\
++	.info_mask_separate_available =3D (separate_avail),			\
++	.info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_INT_TIME),			\
++	.info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_INT_TIME),	\
++	.address =3D BU27008_REG_##data##_LO,					\
++	.scan_index =3D BU27008_##color,						\
++	.scan_type =3D {								\
++		.sign =3D 's',							\
++		.realbits =3D 16,							\
++		.storagebits =3D 16,						\
++		.endianness =3D IIO_LE,						\
++	},									\
++}
++
++/* For raw reads we always configure DATA3 for CLEAR */
++static const struct iio_chan_spec bu27008_channels[] =3D {
++	BU27008_CHAN(RED, DATA0, BIT(IIO_CHAN_INFO_SCALE)),
++	BU27008_CHAN(GREEN, DATA1, BIT(IIO_CHAN_INFO_SCALE)),
++	BU27008_CHAN(BLUE, DATA2, BIT(IIO_CHAN_INFO_SCALE)),
++	BU27008_CHAN(CLEAR, DATA2, BIT(IIO_CHAN_INFO_SCALE)),
++	/*
++	 * We don't allow setting scale for IR (because of shared gain bits).
++	 * Hence we don't advertise available ones either.
++	 */
++	BU27008_CHAN(IR, DATA3, 0),
++	IIO_CHAN_SOFT_TIMESTAMP(BU27008_NUM_CHANS),
++};
++
++struct bu27008_data {
++	struct regmap *regmap;
++	struct iio_trigger *trig;
++	struct device *dev;
++	struct iio_gts gts;
++	struct iio_gts gts_ir;
++	int64_t timestamp, old_timestamp;
++	int irq;
++
++	/*
++	 * Prevent changing gain/time config when scale is read/written.
++	 * Prevent changing gain/time when raw data is read.
++	 */
++	struct mutex mutex;
++	bool trigger_enabled;
++
++	__le16 buffer[BU27008_NUM_CHANS];
++
++	struct {
++		__le16 channels[BU27008_NUM_CHANS];
++		s64 ts __aligned(8);
++	} scan;
++};
++
++static const struct regmap_range bu27008_volatile_ranges[] =3D {
++	{
++		.range_min =3D BU27008_REG_SYSTEM_CONTROL,	/* SWRESET */
++		.range_max =3D BU27008_REG_SYSTEM_CONTROL,
++	}, {
++		.range_min =3D BU27008_REG_MODE_CONTROL3,		/* VALID */
++		.range_max =3D BU27008_REG_MODE_CONTROL3,
++	}, {
++		.range_min =3D BU27008_REG_DATA0_LO,		/* DATA */
++		.range_max =3D BU27008_REG_DATA3_HI,
++	},
++};
++
++static const struct regmap_access_table bu27008_volatile_regs =3D {
++	.yes_ranges =3D &bu27008_volatile_ranges[0],
++	.n_yes_ranges =3D ARRAY_SIZE(bu27008_volatile_ranges),
++};
++
++static const struct regmap_range bu27008_read_only_ranges[] =3D {
++	{
++		.range_min =3D BU27008_REG_DATA0_LO,
++		.range_max =3D BU27008_REG_DATA3_HI,
++	}, {
++		.range_min =3D BU27008_REG_MANUFACTURER_ID,
++		.range_max =3D BU27008_REG_MANUFACTURER_ID,
++	}
++};
++
++static const struct regmap_access_table bu27008_ro_regs =3D {
++	.no_ranges =3D &bu27008_read_only_ranges[0],
++	.n_no_ranges =3D ARRAY_SIZE(bu27008_read_only_ranges),
++};
++
++static const struct regmap_config bu27008_regmap =3D {
++	.reg_bits =3D 8,
++	.val_bits =3D 8,
++	.max_register =3D BU27008_REG_MAX,
++	.cache_type =3D REGCACHE_RBTREE,
++	.volatile_table =3D &bu27008_volatile_regs,
++	.wr_table =3D &bu27008_ro_regs,
++};
++
++#define BU27008_MAX_VALID_RESULT_WAIT_US	50000
++#define BU27008_VALID_RESULT_WAIT_QUANTA_US	1000
++
++static int bu27008_chan_read_data(struct bu27008_data *data, int reg, int =
+*val)
++{
++	int ret, valid;
++	__le16 tmp;
++
++	ret =3D regmap_read_poll_timeout(data->regmap, BU27008_REG_MODE_CONTROL3,
++				       valid, (valid & BU27008_MASK_VALID),
++				       BU27008_VALID_RESULT_WAIT_QUANTA_US,
++				       BU27008_MAX_VALID_RESULT_WAIT_US);
++	if (ret)
++		return ret;
++
++	ret =3D regmap_bulk_read(data->regmap, reg, &tmp, sizeof(tmp));
++	if (ret)
++		dev_err(data->dev, "Reading channel data failed\n");
++
++	*val =3D le16_to_cpu(tmp);
++
++	return ret;
++}
++
++static int bu27008_get_gain(struct bu27008_data *data, struct iio_gts *gts=
+, int *gain)
++{
++	int ret, sel;
++
++	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL2, &sel);
++	if (ret)
++		return ret;
++
++	sel =3D FIELD_GET(BU27008_MASK_RGBC_GAIN, sel);
++
++	ret =3D iio_gts_find_gain_by_sel(gts, sel);
++
++	if (ret < 0) {
++		dev_err(data->dev, "unknown gain value 0x%x\n", sel);
++
++		return ret;
++	}
++
++	*gain =3D ret;
++
++	return 0;
++}
++
++static int bu27008_write_gain_sel(struct bu27008_data *data, int sel)
++{
++	int regval;
++
++	regval =3D FIELD_PREP(BU27008_MASK_RGBC_GAIN, sel);
++
++	/*
++	 * We do always set also the LOW bits of IR-gain because othervice we
++	 * would risk resulting an invalid GAIN register value.
++	 *
++	 * We could allow setting separate gains for RGBC and IR when the
++	 * values were such that HW could support both gain settings.
++	 * Eg, when the shared bits were same for both gain values.
++	 *
++	 * This, however, has a negligible benefit compared to the increased
++	 * software complexity when we would need to go through the gains
++	 * for both channels separately when the integration time changes.
++	 * This would end up with nasty logic for computing gain values for
++	 * both channels - and rejecting them if shared bits changed.
++	 *
++	 * We should then build the logic by guessing what a user prefers.
++	 * RGBC or IR gains correctly set while other jumps to odd value?
++	 * Maybe look-up a value where both gains are somehow optimized
++	 * <what this somehow is, is ATM unknown to us>. Or maybe user would
++	 * expect us to reject changes when optimal gains can't be set to both
++	 * channels w/given integration time. At best that would result
++	 * solution that works well for a very specific subset of
++	 * configurations but causes unexpected corner-cases.
++	 *
++	 * So, we keep it simple. Always set same selector to IR and RGBC.
++	 * We disallow setting IR (as I expect that most of the users are
++	 * interested in RGBC). This way we can show the user that the scales
++	 * for RGBC and IR channels are different (1X Vs 2X with sel 0) while
++	 * still keeping the operation deterministic.
++	 */
++	regval |=3D FIELD_PREP(BU27008_MASK_IR_GAIN_LO, sel);
++
++	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL2,
++				  BU27008_MASK_RGBC_GAIN, regval);
++}
++
++static int bu27008_set_gain(struct bu27008_data *data, int gain)
++{
++	int ret;
++
++	ret =3D iio_gts_find_sel_by_gain(&data->gts, gain);
++	if (ret < 0)
++		return ret;
++
++	return bu27008_write_gain_sel(data, ret);
++}
++
++static int bu27008_get_int_time_sel(struct bu27008_data *data, int *sel)
++{
++	int ret, val;
++
++	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL1, &val);
++	*sel =3D FIELD_GET(BU27008_MASK_MEAS_MODE, val);
++
++	return ret;
++}
++
++static int bu27008_set_int_time_sel(struct bu27008_data *data, int sel)
++{
++	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL1,
++				  BU27008_MASK_MEAS_MODE, sel);
++}
++
++static int bu27008_get_int_time(struct bu27008_data *data)
++{
++	int ret, sel;
++
++	ret =3D bu27008_get_int_time_sel(data, &sel);
++	if (ret)
++		return ret;
++
++	return iio_gts_find_int_time_by_sel(&data->gts,
++					    sel & BU27008_MASK_MEAS_MODE);
++}
++
++static int _bu27008_get_scale(struct bu27008_data *data, bool ir, int *val,
++			      int *val2)
++{
++	struct iio_gts *gts;
++	int gain, ret;
++
++	if (ir)
++		gts =3D &data->gts_ir;
++	else
++		gts =3D &data->gts;
++
++	ret =3D bu27008_get_gain(data, gts, &gain);
++	if (ret)
++		return ret;
++
++	ret =3D bu27008_get_int_time(data);
++	if (ret < 0)
++		return ret;
++
++	return iio_gts_get_scale(gts, gain, ret, val, val2);
++}
++
++static int bu27008_get_scale(struct bu27008_data *data, bool ir, int *val,
++			     int *val2)
++{
++	int ret;
++
++	mutex_lock(&data->mutex);
++	ret =3D _bu27008_get_scale(data, ir, val, val2);
++	mutex_unlock(&data->mutex);
++
++	return ret;
++}
++
++static int bu27008_set_int_time(struct bu27008_data *data, int time)
++{
++	int ret;
++
++	ret =3D iio_gts_find_sel_by_int_time(&data->gts, time);
++	if (ret < 0)
++		return ret;
++
++	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL1,
++				  BU27008_MASK_MEAS_MODE, ret);
++}
++
++/* Try to change the time so that the scale is maintained */
++static int bu27008_try_set_int_time(struct bu27008_data *data, int int_tim=
+e_new)
++{
++	int ret, old_time_sel, new_time_sel,  old_gain, new_gain;
++
++	mutex_lock(&data->mutex);
++
++	ret =3D bu27008_get_int_time_sel(data, &old_time_sel);
++	if (ret < 0)
++		goto unlock_out;
++
++	if (!iio_gts_valid_time(&data->gts, int_time_new)) {
++		dev_dbg(data->dev, "Unsupported integration time %u\n",
++			int_time_new);
++
++		ret =3D -EINVAL;
++		goto unlock_out;
++	}
++	new_time_sel =3D iio_gts_find_sel_by_int_time(&data->gts, int_time_new);
++	if (new_time_sel =3D=3D old_time_sel) {
++		ret =3D 0;
++		goto unlock_out;
++	}
++
++	ret =3D bu27008_get_gain(data, &data->gts, &old_gain);
++	if (ret)
++		goto unlock_out;
++
++	ret =3D iio_gts_find_new_gain_sel_by_old_gain_time(&data->gts, old_gain,
++				old_time_sel, new_time_sel, &new_gain);
++	if (ret) {
++		int scale1, scale2;
++		bool ok;
++
++		_bu27008_get_scale(data, false, &scale1, &scale2);
++		dev_dbg(data->dev,
++			"Can't support time %u with current scale %u %u\n",
++			int_time_new, scale1, scale2);
++
++		if (new_gain < 0)
++			goto unlock_out;
++
++		/*
++		 * If caller requests for integration time change and we
++		 * can't support the scale - then the caller should be
++		 * prepared to 'pick up the pieces and deal with the
++		 * fact that the scale changed'.
++		 */
++		ret =3D iio_find_closest_gain_low(&data->gts, new_gain, &ok);
++		if (!ok)
++			dev_dbg(data->dev, "optimal gain out of range\n");
++
++		if (ret < 0) {
++			dev_dbg(data->dev,
++				 "Total gain increase. Risk of saturation");
++			ret =3D iio_gts_get_min_gain(&data->gts);
++			if (ret < 0)
++				goto unlock_out;
++		}
++		new_gain =3D ret;
++		dev_dbg(data->dev, "scale changed, new gain %u\n", new_gain);
++	}
++
++	ret =3D bu27008_set_gain(data, new_gain);
++	if (ret)
++		goto unlock_out;
++
++	ret =3D bu27008_set_int_time(data, int_time_new);
++
++unlock_out:
++	mutex_unlock(&data->mutex);
++
++	return ret;
++}
++
++static int bu27008_meas_set(struct bu27008_data *data, bool enable)
++{
++	if (enable)
++		return regmap_set_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
++				       BU27008_MASK_MEAS_EN);
++
++	return regmap_clear_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
++				 BU27008_MASK_MEAS_EN);
++}
++
++static int bu27008_chan_cfg(struct bu27008_data *data,
++			    struct iio_chan_spec const *chan)
++{
++	int chan_sel;
++
++	if (chan->scan_index =3D=3D BU27008_BLUE)
++		chan_sel =3D BU27008_BLUE2_CLEAR3;
++	else
++		chan_sel =3D BU27008_CLEAR2_IR3;
++
++	chan_sel =3D FIELD_PREP(BU27008_MASK_CHAN_SEL, chan_sel);
++
++	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
++				  BU27008_MASK_CHAN_SEL, chan_sel);
++}
++
++static int bu27008_read_one(struct bu27008_data *data, struct iio_dev *ide=
+v,
++			    struct iio_chan_spec const *chan, int *val, int *val2)
++{
++	int ret, int_time;
++
++	ret =3D bu27008_chan_cfg(data, chan);
++	if (ret)
++		return ret;
++
++	ret =3D bu27008_meas_set(data, true);
++	if (ret)
++		return ret;
++
++	int_time =3D bu27008_get_int_time(data);
++	if (int_time < 0)
++		int_time =3D 400000;
++
++	msleep((int_time + 500) / 1000);
++
++	ret =3D bu27008_chan_read_data(data, chan->address, val);
++	if (!ret)
++		ret =3D IIO_VAL_INT;
++
++	if (bu27008_meas_set(data, false))
++		dev_warn(data->dev, "measurement disabling failed\n");
++
++	return ret;
++}
++
++static int bu27008_read_raw(struct iio_dev *idev,
++			   struct iio_chan_spec const *chan,
++			   int *val, int *val2, long mask)
++{
++	struct bu27008_data *data =3D iio_priv(idev);
++	int busy, ret;
++
++	switch (mask) {
++	case IIO_CHAN_INFO_RAW:
++	{
++		busy =3D iio_device_claim_direct_mode(idev);
++		if (busy)
++			return -EBUSY;
++
++		mutex_lock(&data->mutex);
++		ret =3D bu27008_read_one(data, idev, chan, val, val2);
++		mutex_unlock(&data->mutex);
++
++		iio_device_release_direct_mode(idev);
++
++		return ret;
++	}
++	case IIO_CHAN_INFO_SCALE:
++		ret =3D bu27008_get_scale(data, chan->scan_index =3D=3D BU27008_IR,
++					val, val2);
++		if (ret)
++			return ret;
++
++		return IIO_VAL_INT_PLUS_NANO;
++
++	case IIO_CHAN_INFO_INT_TIME:
++		ret =3D bu27008_get_int_time(data);
++		if (ret < 0)
++			return ret;
++
++		*val =3D 0;
++		*val2 =3D ret;
++
++		return IIO_VAL_INT_PLUS_MICRO;
++
++	default:
++		return -EINVAL;
++	}
++}
++
++static int bu27008_set_scale(struct bu27008_data *data,
++			     struct iio_chan_spec const *chan,
++			     int val, int val2)
++{
++	int ret, gain_sel, time_sel, i;
++
++	if (chan->scan_index =3D=3D BU27008_IR)
++		return -EINVAL;
++
++	mutex_lock(&data->mutex);
++
++	ret =3D bu27008_get_int_time_sel(data, &time_sel);
++	if (ret < 0)
++		goto unlock_out;
++
++
++	ret =3D iio_gts_find_gain_sel_for_scale_using_time(&data->gts, time_sel,
++						val, val2 * 1000, &gain_sel);
++	if (ret) {
++		/* Could not support new scale with existing int-time */
++		int new_time_sel;
++
++		for (i =3D 0; i < data->gts.num_itime; i++) {
++			new_time_sel =3D data->gts.itime_table[i].sel;
++			ret =3D iio_gts_find_gain_sel_for_scale_using_time(
++				&data->gts, new_time_sel, val, val2 * 1000,
++				&gain_sel);
++			if (!ret)
++				break;
++		}
++		if (i =3D=3D data->gts.num_itime) {
++			dev_err(data->dev, "Can't support scale %u %u\n", val,
++				val2);
++
++			ret =3D -EINVAL;
++			goto unlock_out;
++		}
++
++		ret =3D bu27008_set_int_time_sel(data, new_time_sel);
++		if (ret)
++			goto unlock_out;
++	}
++
++	ret =3D bu27008_write_gain_sel(data, gain_sel);
++
++unlock_out:
++	mutex_unlock(&data->mutex);
++
++	return ret;
++}
++
++static int bu27008_write_raw(struct iio_dev *idev,
++			     struct iio_chan_spec const *chan,
++			     int val, int val2, long mask)
++{
++	struct bu27008_data *data =3D iio_priv(idev);
++	int ret;
++
++	/*
++	 * We should not allow changing scale when measurement is ongoing.
++	 * This could make values in buffer inconsistent.
++	 */
++	ret =3D iio_device_claim_direct_mode(idev);
++	if (ret)
++		return ret;
++
++	switch (mask) {
++	case IIO_CHAN_INFO_SCALE:
++		ret =3D bu27008_set_scale(data, chan, val, val2);
++		break;
++	case IIO_CHAN_INFO_INT_TIME:
++		if (val)
++			ret =3D -EINVAL;
++		else
++			ret =3D bu27008_try_set_int_time(data, val2);
++		break;
++	default:
++		ret =3D -EINVAL;
++		break;
++	}
++	iio_device_release_direct_mode(idev);
++
++	return ret;
++}
++
++static int bu27008_validate_trigger(struct iio_dev *idev,
++				   struct iio_trigger *trig)
++{
++	struct bu27008_data *data =3D iio_priv(idev);
++
++	if (data->trig !=3D trig)
++		return -EINVAL;
++
++	return 0;
++}
++
++static int bu27008_read_avail(struct iio_dev *idev,
++			      struct iio_chan_spec const *chan, const int **vals,
++			      int *type, int *length, long mask)
++{
++	struct bu27008_data *data =3D iio_priv(idev);
++
++	switch (mask) {
++	case IIO_CHAN_INFO_INT_TIME:
++		return iio_gts_avail_times(&data->gts, vals, type, length);
++	case IIO_CHAN_INFO_SCALE:
++		if (chan->channel2 =3D=3D IIO_MOD_LIGHT_IR)
++			return iio_gts_all_avail_scales(&data->gts_ir, vals,
++							type, length);
++		return iio_gts_all_avail_scales(&data->gts, vals, type, length);
++	default:
++		return -EINVAL;
++	}
++}
++
++static const struct iio_info bu27008_info =3D {
++	.read_raw =3D &bu27008_read_raw,
++	.write_raw =3D &bu27008_write_raw,
++	.read_avail =3D &bu27008_read_avail,
++	.validate_trigger =3D bu27008_validate_trigger,
++};
++
++static int bu27008_chip_init(struct bu27008_data *data)
++{
++	int ret;
++
++	/* Reset */
++	ret =3D regmap_update_bits(data->regmap, BU27008_REG_SYSTEM_CONTROL,
++			   BU27008_MASK_SW_RESET, BU27008_MASK_SW_RESET);
++	if (ret)
++		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
++
++	msleep(1);
++
++	return ret;
++}
++
++static int bu27008_set_drdy_irq(struct bu27008_data *data, bool state)
++{
++	if (state)
++		return regmap_set_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
++					BU27008_MASK_INT_EN);
++	return regmap_clear_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
++				 BU27008_MASK_INT_EN);
++}
++
++static int bu27008_trigger_set_state(struct iio_trigger *trig,
++				     bool state)
++{
++	struct bu27008_data *data =3D iio_trigger_get_drvdata(trig);
++	int ret =3D 0;
++
++	mutex_lock(&data->mutex);
++
++	if (data->trigger_enabled !=3D state) {
++		data->trigger_enabled =3D state;
++		ret =3D bu27008_set_drdy_irq(data, state);
++		if (ret)
++			dev_err(data->dev, "Failed to set trigger state\n");
++	}
++	mutex_unlock(&data->mutex);
++
++	return ret;
++}
++
++static const struct iio_trigger_ops bu27008_trigger_ops =3D {
++	.set_trigger_state =3D bu27008_trigger_set_state,
++};
++
++static irqreturn_t bu27008_irq_handler(int irq, void *private)
++{
++	struct iio_dev *idev =3D private;
++	struct bu27008_data *data =3D iio_priv(idev);
++
++	data->old_timestamp =3D data->timestamp;
++	data->timestamp =3D iio_get_time_ns(idev);
++
++	if (data->trigger_enabled)
++		return IRQ_WAKE_THREAD;
++
++	return IRQ_NONE;
++}
++
++static irqreturn_t bu27008_trigger_handler(int irq, void *p)
++{
++	struct iio_poll_func *pf =3D p;
++	struct iio_dev *idev =3D pf->indio_dev;
++	struct bu27008_data *data =3D iio_priv(idev);
++	__le16 raw[BU27008_NUM_CHANS + NUM_U16_IN_TSTAMP];
++	int ret, dummy;
++
++	memset(&raw, 0, sizeof(raw));
++
++	/*
++	 * After some measurements, it seems reading the
++	 * BU27008_REG_MODE_CONTROL3 debounces the IRQ line
++	 */
++	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL3, &dummy);
++	if (ret < 0)
++		goto err_read;
++
++	ret =3D regmap_bulk_read(data->regmap, BU27008_REG_DATA0_LO, data->buffer,
++			       BU27008_HW_DATA_SIZE);
++	if (ret < 0)
++		goto err_read;
++
++	/* Red and green are always in dedicated channels. */
++	if (*idev->active_scan_mask & BIT(BU27008_RED))
++		raw[BU27008_RED] =3D data->buffer[BU27008_RED];
++	if (*idev->active_scan_mask & BIT(BU27008_GREEN))
++		raw[BU27008_GREEN] =3D data->buffer[BU27008_GREEN];
++
++	/*
++	 * We need to check the scan mask to determine which of the
++	 * BLUE/CLEAR/IR are enabled so we know which channel is used to
++	 * measure which data.
++	 */
++	if (*idev->active_scan_mask & BIT(BU27008_BLUE)) {
++		raw[BU27008_BLUE] =3D data->buffer[BU27008_DATA2];
++
++		if (*idev->active_scan_mask & BIT(BU27008_CLEAR))
++			raw[BU27008_CLEAR] =3D data->buffer[BU27008_DATA3];
++	} else {
++		if (*idev->active_scan_mask & BIT(BU27008_CLEAR))
++			raw[BU27008_CLEAR] =3D data->buffer[BU27008_DATA2];
++	}
++	if (*idev->active_scan_mask & BIT(BU27008_IR))
++		raw[BU27008_IR] =3D data->buffer[BU27008_DATA3];
++
++	iio_push_to_buffers_with_timestamp(idev, raw, pf->timestamp);
++err_read:
++	iio_trigger_notify_done(idev->trig);
++
++	return IRQ_HANDLED;
++}
++
++static irqreturn_t bu27008_irq_thread_handler(int irq, void *private)
++{
++	struct iio_dev *idev =3D private;
++	struct bu27008_data *data =3D iio_priv(idev);
++	irqreturn_t ret =3D IRQ_NONE;
++
++	mutex_lock(&data->mutex);
++	if (data->trigger_enabled) {
++		iio_trigger_poll_nested(data->trig);
++		ret =3D IRQ_HANDLED;
++	}
++	mutex_unlock(&data->mutex);
++
++	return ret;
++}
++
++static int bu27008_buffer_preenable(struct iio_dev *idev)
++{
++	struct bu27008_data *data =3D iio_priv(idev);
++	int chan_sel, ret;
++
++	/* Configure channel selection */
++	if (*idev->active_scan_mask & BIT(BU27008_BLUE)) {
++		if (*idev->active_scan_mask & BIT(BU27008_CLEAR))
++			chan_sel =3D BU27008_BLUE2_CLEAR3;
++		else
++			chan_sel =3D BU27008_BLUE2_IR3;
++	} else {
++		chan_sel =3D BU27008_CLEAR2_IR3;
++	}
++
++	chan_sel =3D FIELD_PREP(BU27008_MASK_CHAN_SEL, chan_sel);
++
++	ret =3D regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
++				 BU27008_MASK_CHAN_SEL, chan_sel);
++	if (ret)
++		return ret;
++
++	return bu27008_meas_set(data, true);
++}
++
++static int bu27008_buffer_postdisable(struct iio_dev *idev)
++{
++	struct bu27008_data *data =3D iio_priv(idev);
++
++	return bu27008_meas_set(data, false);
++}
++
++static const struct iio_buffer_setup_ops bu27008_buffer_ops =3D {
++	.preenable =3D bu27008_buffer_preenable,
++	.postdisable =3D bu27008_buffer_postdisable,
++};
++
++static int bu27008_probe(struct i2c_client *i2c)
++{
++	struct device *dev =3D &i2c->dev;
++	struct iio_trigger *indio_trig;
++	struct bu27008_data *data;
++	struct regmap *regmap;
++	unsigned int part_id, reg;
++	struct iio_dev *idev;
++	char *name;
++	int ret;
++
++	if (!i2c->irq) {
++		dev_err(dev, "No IRQ configured\n");
++		return -EINVAL;
++	}
++
++	regmap =3D devm_regmap_init_i2c(i2c, &bu27008_regmap);
++	if (IS_ERR(regmap))
++		return dev_err_probe(dev, PTR_ERR(regmap),
++				     "Failed to initialize Regmap\n");
++
++	idev =3D devm_iio_device_alloc(dev, sizeof(*data));
++	if (!idev)
++		return -ENOMEM;
++
++	ret =3D devm_regulator_get_enable(dev, "vdd");
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to get regulator\n");
++
++	data =3D iio_priv(idev);
++
++	ret =3D regmap_read(regmap, BU27008_REG_SYSTEM_CONTROL, &reg);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to access sensor\n");
++
++	part_id =3D FIELD_GET(BU27008_MASK_PART_ID, reg);
++
++	if (part_id !=3D BU27008_ID)
++		dev_warn(dev, "unknown device 0x%x\n", part_id);
++
++	ret =3D devm_iio_init_iio_gts(dev, BU27008_SCALE_1X, 0, bu27008_gains,
++				    ARRAY_SIZE(bu27008_gains), bu27008_itimes,
++				    ARRAY_SIZE(bu27008_itimes), &data->gts);
++	if (ret)
++		return ret;
++
++	ret =3D devm_iio_init_iio_gts(dev, BU27008_SCALE_1X, 0, bu27008_gains_ir,
++				    ARRAY_SIZE(bu27008_gains_ir), bu27008_itimes,
++				    ARRAY_SIZE(bu27008_itimes), &data->gts_ir);
++	if (ret)
++		return ret;
++
++	mutex_init(&data->mutex);
++	data->regmap =3D regmap;
++	data->dev =3D dev;
++	data->irq =3D i2c->irq;
++
++	idev->channels =3D bu27008_channels;
++	idev->num_channels =3D ARRAY_SIZE(bu27008_channels);
++	idev->name =3D "bu27008";
++	idev->info =3D &bu27008_info;
++	idev->modes =3D INDIO_DIRECT_MODE | INDIO_BUFFER_SOFTWARE;
++	idev->available_scan_masks =3D bu27008_scan_masks;
++
++	ret =3D bu27008_chip_init(data);
++	if (ret)
++		return ret;
++	ret =3D devm_iio_triggered_buffer_setup_ext(dev, idev,
++						  &iio_pollfunc_store_time,
++						  bu27008_trigger_handler,
++						  IIO_BUFFER_DIRECTION_IN,
++						  &bu27008_buffer_ops,
++						  NULL);
++	if (ret)
++		return dev_err_probe(data->dev, ret,
++				     "iio_triggered_buffer_setup_ext FAIL\n");
++
++	indio_trig =3D devm_iio_trigger_alloc(dev, "%sdata-rdy-dev%d", idev->name,
++					    iio_device_id(idev));
++	if (!indio_trig)
++		return -ENOMEM;
++
++	data->trig =3D indio_trig;
++
++	indio_trig->ops =3D &bu27008_trigger_ops;
++	iio_trigger_set_drvdata(indio_trig, data);
++
++	/*
++	 * No need to check for NULL. request_threaded_irq() defaults to
++	 * dev_name() should the alloc fail.
++	 */
++	name =3D devm_kasprintf(data->dev, GFP_KERNEL, "%s-bu27008",
++			      dev_name(data->dev));
++
++	ret =3D devm_request_threaded_irq(data->dev, i2c->irq, bu27008_irq_handle=
+r,
++					&bu27008_irq_thread_handler,
++					IRQF_ONESHOT, name, idev);
++	if (ret)
++		return dev_err_probe(data->dev, ret, "Could not request IRQ\n");
++
++
++	ret =3D devm_iio_trigger_register(dev, indio_trig);
++	if (ret)
++		return dev_err_probe(data->dev, ret,
++				     "Trigger registration failed\n");
++
++	ret =3D devm_iio_device_register(data->dev, idev);
++	if (ret < 0)
++		return dev_err_probe(dev, ret,
++				     "Unable to register iio device\n");
++
++	return ret;
++}
++
++static const struct of_device_id bu27008_of_match[] =3D {
++	{ .compatible =3D "rohm,bu27008", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, bu27008_of_match);
++
++static struct i2c_driver bu27008_i2c_driver =3D {
++	.driver =3D {
++		.name =3D "bu27008",
++		.of_match_table =3D bu27008_of_match,
++	},
++	.probe_new =3D bu27008_probe,
++};
++module_i2c_driver(bu27008_i2c_driver);
++
++MODULE_DESCRIPTION("ROHM BU27008 colour sensor driver");
++MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_GTS_HELPER);
+--=20
+2.40.0
 
 
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-The Tegra change looks good to me, assuming that everyone is happy with 
-the other patches in the series.
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
-Jon
+--ZqkBKqJnGSMAz1r/
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-nvpublic
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRCWdgACgkQeFA3/03a
+ocWaZwgAjQZrWhAhXiM/mBYKD/cRTNw4qGct1xc5T26/5uWPRFA5bWsFx68oVrsn
+KrcvPqtAOkimR347EhOSzNuJ6xrdhF+T7NIff5e+8m2gJ3UXHf9GLNrVQMTi/wuW
+KL8QCLj6IPLalkFPaNS5GrxWiC1LFpVH+BSnNTC668KPSZIo9Ha/uwskMJAKvK1w
+nrEk/WfwJrQbtruXdyLcWI8FoYaMd+RC9lENQTia/pClp4BStgbWOy9RecVpVKMp
+8UtKGE6JdJgt8iQBV5lGNuPPOy6E9SauzJzdOs74gfdq3ARivWGcMd2dfUUZMnAL
+0m5OE+ulRYz8MXvZRwhBqoW02eVTrA==
+=B29b
+-----END PGP SIGNATURE-----
+
+--ZqkBKqJnGSMAz1r/--
