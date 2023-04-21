@@ -2,169 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20E36EAC98
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79416EAC9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 16:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbjDUORW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 10:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S232135AbjDUOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 10:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjDUORU (ORCPT
+        with ESMTP id S232389AbjDUORt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:20 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8DB93DE
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:17 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3ef38864360so20415591cf.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:17 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:49 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8654493DE
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:47 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f87c0a000so27619907b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 07:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682086637; x=1684678637;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijNYMVjlbJrZCaV78UXYGLc3DOZur5hhO7MmLiMh8Og=;
-        b=1MoarXjdhobUU86WqZanZo18cI5xugUCVCqCEndho+J97fcXVGnhQG4rpqItWwBKRE
-         pnu+PQ1Q+g5aCGhrqqbN5imC4WEXG17/s9M9M1lNc9awQfYxSMpHDXHoj9hCKtfITqpY
-         E8RzhCarbtSuTtlLFKq54rQmN+WoH2JcWT3Ys7slP0oU4QXGXYvCMTTsmlXH/reFlB4Y
-         S7IR/cWPx9kH+LvSEeM6TfB/5lq2Ep+r02xYaxh4H5g6mTmSBmlfg5KpOt1ql8xpyAYy
-         Pq6HQhvtSGzjNcjlGkkQhm5MjHI0Ik8kd/LO8Wo5fdGOm1SPO0R/ZKjEhr98JR8g9uFa
-         0nCA==
+        d=google.com; s=20221208; t=1682086666; x=1684678666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ehmzwOW4Qc9gQvpwM/ZZofEU4OqXe1UUgzo44mFis=;
+        b=jQ/EfbElWOoD7Q5RcZ9PEMa2xeB33n91soMxfAboXtG9IdbuenydvfqGJRJs173o0i
+         vupY0UegJS39vUDZPWg//Oym1AxFL0seSvyqJuJ2iCaBeWL8/gw7JMqp4PQ7JqaqcVXN
+         iNIK16Y8y4rXoL54RmLqFH1ccS7vUP4c6UAmjsYbFOzVDuRQ9s7pTGXMPN+J00WMZlh/
+         dkBxnZoW2ygD8DRNK6Rn+6P0ltnrb6sIgfoNbyE0Ov4dTaBIn6WtKU0bQDqeRL8gbvhA
+         /vwQxur+PunJsSaBWZDh+8oiYEaDyLaOgE7fzoSNYbg7eGhEH2OnC/ShEbI1U1+eZhx8
+         QppA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086637; x=1684678637;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ijNYMVjlbJrZCaV78UXYGLc3DOZur5hhO7MmLiMh8Og=;
-        b=aN1zJzTzc970+fSqoljV+lsll+YTQ3nZ9GPKkSxd422d9oQsW9PqkwWMcBaQF8GxEu
-         +74sd8DKGypXJFv2oE5EP4Jd3ksdj8Epy+8NPwKBiClrJOcjHk4uh5c6Fzuf8x3IBCUS
-         IVJV+M9Za5lQnYX7AYD9H5bRoqKCOsn3mgW8w+5cTRgwY7OBlPCjXCuzWXLb7aQJwztB
-         OpmXRE+3FOYuBux3WO84B6ioZV5g1lVie+tWVanvuNrGzFz63cX8oX6p2QCAPb7jVwny
-         Ws5wyGQ8v3pk6NwjkvbuOdm7JDKPp95uLhTR0guImJyBUUvgsRIW+QfGU+1TG3bRQVVm
-         DgDw==
-X-Gm-Message-State: AAQBX9dzFp0IIaMadJD3wiNnmWC+/tPj25UWcD+LX5xXGq1LdMJGRJyk
-        C7zxi7B4sXJ7eqYa36zf9GmWyA==
-X-Google-Smtp-Source: AKy350YR+XIBm2Qr27pDAHIa3M+HB+PNKY0FDb8TOcQDtECfUzFoFsx0E+crk5sbOnQvyLyT3L1deg==
-X-Received: by 2002:ac8:5a15:0:b0:3e1:90e4:c20 with SMTP id n21-20020ac85a15000000b003e190e40c20mr9052657qta.66.1682086636949;
-        Fri, 21 Apr 2023 07:17:16 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:6f0d])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05622a050d00b003ef38277445sm1354605qtx.16.2023.04.21.07.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 07:17:16 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 10:17:15 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 02/26] mm: compaction: avoid GFP_NOFS deadlocks
-Message-ID: <20230421141715.GA320347@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-3-hannes@cmpxchg.org>
- <20230421122743.d7xfvzyhiunbphh3@techsingularity.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421122743.d7xfvzyhiunbphh3@techsingularity.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682086666; x=1684678666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ehmzwOW4Qc9gQvpwM/ZZofEU4OqXe1UUgzo44mFis=;
+        b=WJfYWDaXt/0BzL6RJS/DtX7Cdq7lJjeXuMOJaYxUfNpEyQDdPuNNa8fE8QqUbafqW7
+         jAvhqrCYjo9nlWzIF3+PjThZFUz9Y+I90wyJ4W7+s9H2e2A4JfWPRCEpfuc1yt908MgZ
+         plCetMcUhG1KU1QLbe+7yVmDNcX14lg6ha5gQFjZM+2tsjMFNK7DG1+J4FCy0Z2vnYvM
+         j3DUSYjBXHovYNl1IMjlD3iaFx58B989hgU/U9UfbGRThDRQ1m9M9J0TIhEZ8cfovksj
+         9a6lZH5f07xfpdwZY2GWoklGU1SxtYLt0cg0s1YKMNN17omcMK++bUe3UAot384MsAdN
+         VSFg==
+X-Gm-Message-State: AAQBX9eSwlOCasS39irAykfitlmpTflJjhODQUY5APN44iu4HddXmWpi
+        CR+u76FZ9f/auf3Ow6u45BOboSFhNJe+uVf7Pg==
+X-Google-Smtp-Source: AKy350bGSojqd0RF8hFVJ3f1aMQaH6BbLkjOI4vRi/ZfKEmx8aOtAggSlmMc650/M/hrY1VHYKP2C4yWp1Cj3Omwyg==
+X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
+ (user=peternewman job=sendgmr) by 2002:a81:b725:0:b0:555:f33e:e346 with SMTP
+ id v37-20020a81b725000000b00555f33ee346mr1484199ywh.6.1682086666823; Fri, 21
+ Apr 2023 07:17:46 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:15 +0200
+In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
+Mime-Version: 1.0
+References: <20230421141723.2405942-1-peternewman@google.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230421141723.2405942-2-peternewman@google.com>
+Subject: [PATCH v1 1/9] selftests/resctrl: Verify all RMIDs count together
+From:   Peter Newman <peternewman@google.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Babu Moger <babu.moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Morse <james.morse@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 01:27:43PM +0100, Mel Gorman wrote:
-> On Tue, Apr 18, 2023 at 03:12:49PM -0400, Johannes Weiner wrote:
-> > During stress testing, two deadlock scenarios were observed:
-> > 
-> > 1. One GFP_NOFS allocation was sleeping on too_many_isolated(), and
-> >    all CPUs were busy with compactors that appeared to be spinning on
-> >    buffer locks.
-> > 
-> >    Give GFP_NOFS compactors additional isolation headroom, the same
-> >    way we do during reclaim, to eliminate this deadlock scenario.
-> > 
-> > 2. In a more pernicious scenario, the GFP_NOFS allocation was
-> >    busy-spinning in compaction, but seemingly never making
-> >    progress. Upon closer inspection, memory was dominated by file
-> >    pages, which the fs compactor isn't allowed to touch. The remaining
-> >    anon pages didn't have the contiguity to satisfy the request.
-> > 
-> >    Allow GFP_NOFS allocations to bypass watermarks when compaction
-> >    failed at the highest priority.
-> > 
-> > While these deadlocks were encountered only in tests with the
-> > subsequent patches (which put a lot more demand on compaction), in
-> > theory these problems already exist in the code today. Fix them now.
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> 
-> Definitely needs to be split out.
+AMD CPUs in particular implement fewer monitors than RMIDs, so add a
+test case to see if a large number of monitoring groups can be measured
+together.
 
-Will do.
+Signed-off-by: Peter Newman <peternewman@google.com>
+---
+ tools/testing/selftests/resctrl/test_rmids.sh | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100755 tools/testing/selftests/resctrl/test_rmids.sh
 
-> >  mm/compaction.c | 15 +++++++++++++--
-> >  mm/page_alloc.c | 10 +++++++++-
-> >  2 files changed, 22 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/mm/compaction.c b/mm/compaction.c
-> > index 8238e83385a7..84db84e8fd3a 100644
-> > --- a/mm/compaction.c
-> > +++ b/mm/compaction.c
-> > @@ -745,8 +745,9 @@ isolate_freepages_range(struct compact_control *cc,
-> >  }
-> >  
-> >  /* Similar to reclaim, but different enough that they don't share logic */
-> > -static bool too_many_isolated(pg_data_t *pgdat)
-> > +static bool too_many_isolated(struct compact_control *cc)
-> >  {
-> > +	pg_data_t *pgdat = cc->zone->zone_pgdat;
-> >  	bool too_many;
-> >  
-> >  	unsigned long active, inactive, isolated;
-> > @@ -758,6 +759,16 @@ static bool too_many_isolated(pg_data_t *pgdat)
-> >  	isolated = node_page_state(pgdat, NR_ISOLATED_FILE) +
-> >  			node_page_state(pgdat, NR_ISOLATED_ANON);
-> >  
-> > +	/*
-> > +	 * GFP_NOFS callers are allowed to isolate more pages, so they
-> > +	 * won't get blocked by normal direct-reclaimers, forming a
-> > +	 * circular deadlock. GFP_NOIO won't get here.
-> > +	 */
-> > +	if (cc->gfp_mask & __GFP_FS) {
-> > +		inactive >>= 3;
-> > +		active >>= 3;
-> > +	}
-> > +
-> 
-> This comment needs to explain why GFP_NOFS gets special treatment
-> explaning that a GFP_NOFS context may not be able to migrate pages and
-> why.
+diff --git a/tools/testing/selftests/resctrl/test_rmids.sh b/tools/testing/selftests/resctrl/test_rmids.sh
+new file mode 100755
+index 000000000000..475e69c0217e
+--- /dev/null
++++ b/tools/testing/selftests/resctrl/test_rmids.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++cd /sys/fs/resctrl
++
++grep -q mbm_total_bytes info/L3_MON/mon_features || {
++	echo "MBM required"
++	exit 4
++}
++
++which perf > /dev/null || {
++	echo "perf tool required"
++	exit 4
++}
++
++num_rmids=$(cat info/L3_MON/num_rmids)
++
++count=0
++
++result=0
++
++# use as many RMIDs as possible, up to the number of RMIDs
++for i in `seq $num_rmids`; do
++	mkdir mon_groups/_test_m$((count+1)) 2> /dev/null || break
++	if [[ -d mon_groups/_test_m$((count+1))/mon_data ]]; then
++		count=$((count+1))
++	else
++		break;
++	fi
++done
++
++echo "Created $count monitoring groups."
++
++if [[ $count -eq 0 ]]; then
++	echo "need monitoring groups to continue."
++	exit 4
++fi
++
++declare -a bytes_array
++
++unavailable=0
++unavailable0=0
++
++for i in `seq $count`; do
++	bytes_array[$i]=$(cat mon_groups/_test_m${i}/mon_data/mon_L3_00/mbm_total_bytes)
++
++	if [[ "${bytes_array[$i]}" = "Unavailable" ]]; then
++		unavailable0=$((unavailable0 + 1))
++	fi
++done
++
++for i in `seq $count`; do
++	echo $$ > mon_groups/_test_m${i}/tasks
++	taskset 0x1 perf bench mem memcpy -s 100MB -f default > /dev/null
++done
++echo $$ > tasks
++
++# zero non-integer values
++declare -i bytes bytes0
++
++success_count=0
++
++for i in `seq $count`; do
++	raw_bytes=$(cat mon_groups/_test_m${i}/mon_data/mon_L3_00/mbm_total_bytes)
++	raw_bytes0=${bytes_array[$i]}
++
++	# coerce the value to an integer for math
++	bytes=$raw_bytes
++	bytes0=$raw_bytes0
++
++	echo -n "g${i}: mbm_total_bytes: $raw_bytes0 -> $raw_bytes"
++
++	if [[ "$raw_bytes" = "Unavailable" ]]; then
++		unavailable=$((unavailable + 1))
++	fi
++
++	if [[ $bytes -gt $bytes0 ]]; then
++		success_count=$((success_count+1))
++		echo ""
++	else
++		echo " (FAIL)"
++		result=1
++	fi
++done
++
++first=$((count-unavailable0))
++second=$((count-unavailable))
++echo "$count groups, $first returned counts in first pass, $second in second"
++echo "successfully measured bandwidth from ${success_count}/${count} groups"
++
++rmdir mon_groups/_test_m*
++
++exit $result
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
-Fair point, I'll expand on that.
-
-> As a follow-up, if GFP_NOFS cannot deal with the majority of the
-> migration contexts then it should bail out of compaction entirely. The
-> changelog doesn't say why but maybe SYNC_LIGHT is the issue?
-
-It's this condition in isolate_migratepages_block():
-
-		/*
-		 * Only allow to migrate anonymous pages in GFP_NOFS context
-		 * because those do not depend on fs locks.
-		 */
-		if (!(cc->gfp_mask & __GFP_FS) && mapping)
-			goto isolate_fail_put;
-
-In terms of bailing even earlier: We do have per-zone file and anon
-counts that could be consulted. However, the real problem is
-interleaving of anon and file. Even if only 10% of the zone is anon,
-it could still be worth trying to compact if they're relatively
-contiguous. OTOH 50% anon could be uncompactable if every block also
-contains at least one file. We don't know until we actually scan. I'm
-hesitant to give allocations premature access to the last reserves.
-
-What might work is for NOFS contexts to test if anon is low up front
-and shortcutting directly to the highest priority (SYNC_FULL). One
-good faith scan attempt at least before touching the reserves.
