@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E156EA7BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E2F6EA7B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjDUJ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S231138AbjDUJ7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjDUJ7R (ORCPT
+        with ESMTP id S230317AbjDUJ7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:59:17 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51B8AF38;
-        Fri, 21 Apr 2023 02:59:15 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33L9Zl95013077;
-        Fri, 21 Apr 2023 09:58:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=mH1yRwdyfBGlx7ue1iz6rfx3JzGxQNBiTPZdXuAKA20=;
- b=gnXAnoEu3DjamoQMVwxHSzwbt4OWXcBgneGzmScoe0XZubpD0XNvTGOFbBglCf9i4v3b
- xt8qhwymRk432lsTO2Zdu5ueuCyXRTPqDdvP+zZPFVS19jb+/Ius3hdwWxUXSxEa9F6w
- BxNpswsJzdOUu3sgpDcbSEWIjkRaEwfHLSkVktKAvP7B92CTVuGuHfVU//P76QOFiP3d
- SgM+LFbVsHxfg6/SkP/hky3+t29L40GqU8gi1vYfEqNtjtA51OTnUrcsOtkTc9Ttx+4C
- /eNOHxHBtfHVn26rJTHiiYWs/xnlUzrHpoZHSba4SYmCmEnIckseagv8OfJBJQ9uiYWl ZQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3dcmh9cc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 09:58:50 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33L9wnt1026221
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 09:58:49 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 21 Apr 2023 02:58:43 -0700
-Date:   Fri, 21 Apr 2023 15:28:39 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
- PHY
-Message-ID: <20230421095838.GA5813@varda-linux.qualcomm.com>
-References: <cover.1680693149.git.quic_varada@quicinc.com>
- <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
- <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
- <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
+        Fri, 21 Apr 2023 05:59:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D65FAD0B;
+        Fri, 21 Apr 2023 02:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682071146; x=1713607146;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rAFsYIkaIU7P/XAdE8H660r0J/Gv+OzxiWnAIJBjL0Q=;
+  b=jTypmE8KVHIk85mijDvlcoQEs9nP/67rMSAW6cAjZeUegqdF8iFUe8pi
+   hSq1sFg72Sc1jkVCygeJkuPppQ60XK/bnp7EXWbnmenOv/igpnsFCMbgp
+   EKLUDMuizVVYiqLvw16337PVi1bkAcMEOe1nz1bdVdMayoFNvQqVhJbd/
+   8rP8lbjw4X9xTQFbI3vaQgjPHkuEhtSQvWtjVulWZ1+wLYSsLVThNk8lG
+   NMaBD0G34eaR8Wlpwh8G+H9QHL/iOx8zj9GHSgeZq0puw8Q4NQnqTLGwk
+   xfIuugly9/jzkpCyqAiB3D47lPzc9sBQEsVW98f3OLnD6hcTnCa/Om/H+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="334834622"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="334834622"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:59:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="803680543"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="803680543"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Apr 2023 02:59:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ppnXi-003652-2Y;
+        Fri, 21 Apr 2023 12:59:02 +0300
+Date:   Fri, 21 Apr 2023 12:59:02 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 1/1] PCI: of: Propagate firmware node by calling
+ device_set_node()
+Message-ID: <ZEJeZh8CCPc7xqr9@smile.fi.intel.com>
+References: <20230421092945.66176-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HkjpSBWiKHcIpBqiN8ceaiazLMOuKFFz
-X-Proofpoint-GUID: HkjpSBWiKHcIpBqiN8ceaiazLMOuKFFz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_03,2023-04-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 phishscore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 suspectscore=0 clxscore=1011 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304210085
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20230421092945.66176-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,56 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:05:11AM +0200, Johan Hovold wrote:
-> On Thu, Apr 06, 2023 at 09:41:49AM +0200, Krzysztof Kozlowski wrote:
-> > On 05/04/2023 13:41, Varadarajan Narayanan wrote:
-> > > Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
-> > >
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > >  Changes in v8:
-> > > 	- Update clock names for ipq9574
-> > >
-> > >  Changes in v6:
-> > > 	- Made power-domains optional
-> > >
-> > > Note: In the earlier patch sets, had used the (legacy)
-> > > specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
-> > > to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> > > ---
-> > >  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
-> > >  1 file changed, 37 insertions(+), 6 deletions(-)
->
-> > > +        clock-names:
-> > > +          items:
-> > > +            - const: aux
-> > > +            - const: ref
-> > > +            - const: com_aux
-> >
-> > Can anyone explain me why do we name these (here and other Qualcomm
-> > bindings) based on clock name, not input? Just because different clock
-> > is fed to the block, does not necessarily mean the input should be named
-> > differently.
->
-> I guess part of the answer is that this has just been copied from the
-> vendor dts and (almost) no one but Qualcomm has access to the
-> documentation. What would the input names be here?
->
-> Also note that there are SoCs that enable both 'cfg_ahb' and 'com_aux'
-> (e.g. sc7180).
+On Fri, Apr 21, 2023 at 12:29:45PM +0300, Andy Shevchenko wrote:
+> Insulate pci_set_of_node() and pci_set_bus_of_node() from possible
+> changes to fwnode_handle implementation by using device_set_node()
+> instead of open-coding dev->dev.fwnode assignments.
 
-The clock name definitions are auto-generated based on the clock
-tree definitions provided by the h/w team. We followed the naming
-pattern done in the previous SoCs.
+Sorry, this version needs to be discarded. It has a non-squashed change and
+hence can't be compiled.
 
-Thanks
-Varada
 
->
-> > > +            - const: pipe
-> > > +
-> > >  examples:
-> > >    - |
-> > >      #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
->
-> Johan
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
