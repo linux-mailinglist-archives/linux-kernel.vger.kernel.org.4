@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDC66EA3B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611CE6EA3BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjDUGTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 02:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S229847AbjDUGTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 02:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjDUGSx (ORCPT
+        with ESMTP id S229793AbjDUGSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 02:18:53 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBD22123;
-        Thu, 20 Apr 2023 23:18:45 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33L6IRw14024623, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33L6IRw14024623
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 21 Apr 2023 14:18:27 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 21 Apr 2023 14:18:27 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 21 Apr 2023 14:18:26 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Fri, 21 Apr 2023 14:18:26 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Date:   Fri, 21 Apr 2023 14:18:24 +0800
-Message-ID: <20230421061825.2233-2-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230421061825.2233-1-stanley_chang@realtek.com>
-References: <20230421061825.2233-1-stanley_chang@realtek.com>
+        Fri, 21 Apr 2023 02:18:54 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFA8358B;
+        Thu, 20 Apr 2023 23:18:50 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DAFE510A;
+        Fri, 21 Apr 2023 08:18:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1682057919;
+        bh=54AEpK2Lhks/cVE8toCu23zDhRa6jQHC/5KdhVgYezI=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=Va3dxkvsdQ0eQN9H8oz9zrTcH3cjJzFk73BL8dfCFTpDK8wpKkwCm9y5HG9EeGGa+
+         O6RL2BPT2azgOJAV6lrlpVqNTrLkByDqNa5qqzt39xVf+QgtJXSRcRvkZlXcSQWhda
+         Fxwcf2ziNwo+tcdcDPzHc35JdJy4rzFp3JCBgIJQ=
+Message-ID: <9130e2da-dcd1-e6aa-ed0a-935f79727f84@ideasonboard.com>
+Date:   Fri, 21 Apr 2023 09:18:42 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III
+ Deserializer
+To:     Wolfram Sang <wsa@kernel.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
+ <ZD6VwpRya6SGBAt5@shikoro>
+ <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
+ <ZEGItAqsvNGQm1l+@shikoro>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZEGItAqsvNGQm1l+@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
-the global register start address
+On 20/04/2023 21:47, Wolfram Sang wrote:
+> Hi Tomi,
+> 
+>> How does this sound:
+>>
+>> - If "i2c-alias-pool" is present in the DT data of the device passed to
+>> i2c_atr_new(), i2c_atr_new() will parse the property. i2c-atr.c will export
+>> functions to get a new alias and to release a previously reserved alias. The
+>> driver can use those functions in attach/detach_client() callbacks. In other
+>> words, the alias pool management wouldn't be fully automatic inside the
+>> i2c-atr, but it would provide helpers for the driver to do the common work.
+>>
+>> - If "i2c-alias-pool" is not present, i2c-atr.c will behave as it does now,
+>> and expects the driver to manage the aliases.
+> 
+> So, how does a driver manage the aliases without a pool of available
+> addresses? I can't imagine another way right now.
+> 
+> In general, your above proposal sounds good to me. With my lack of
+> imagination regarding a different alias handling, I could also see that
+> i2c-atr already provides the alias to the attach callback. But if you
+> teach me another way of alias handling, then I could agree that your
+> proposal makes sense as is.
 
-The RTK DHC SoCs were designed the global register address offset at
-0x8100. The default address offset is constant at DWC3_GLOBALS_REGS_START
-(0xc100). Therefore, add the property of device-tree to adjust this
-address offset.
+Oh, my imagination doesn't go so far to give you concrete examples. If 
+the driver has to do runtime decisions on the pool, a fixed pool handled 
+by the i2c-atr won't work. But why exactly would there be runtime events 
+affecting the pool... I don't know.
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
- v2 to v3 change:
-1.  Fix the dtschema validation error.
+Maybe that doesn't matter here. We can start with the i2c-atr providing 
+the alias to the attach callback, and if we ever need something else, 
+the (kernel internal) API can be changed accordingly. The DT bindings 
+should be fine in either case.
 
- v1 to v2 change:
-1. Change the name of the property "snps,global-regs-starting-offset".
-2. Adjust the format of comment.
-3. Add initial value of the global_regs_starting_offset
-4. Remove the log of dev_info.
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..4f83fa8cb6cb 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -359,6 +359,14 @@ properties:
-     items:
-       enum: [1, 4, 8, 16, 32, 64, 128, 256]
- 
-+  snps,global-regs-starting-offset:
-+    description:
-+      value for remapping global register start address. For some dwc3
-+      controller, the dwc3 global register start address is not at
-+      default DWC3_GLOBALS_REGS_START (0xc100). This property is added to
-+      adjust the address.
-+    $ref: '/schemas/types.yaml#/definitions/uint32'
-+
-   port:
-     $ref: /schemas/graph.yaml#/properties/port
-     description:
--- 
-2.34.1
+  Tomi
 
