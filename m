@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A636EA80D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C706EA80E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjDUKPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S231342AbjDUKPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjDUKOk (ORCPT
+        with ESMTP id S231478AbjDUKOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:14:40 -0400
+        Fri, 21 Apr 2023 06:14:42 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706FCC16B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:14:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5F1BBA4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:14:41 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 236311FDDE;
-        Fri, 21 Apr 2023 10:14:38 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1AD021FDDD;
+        Fri, 21 Apr 2023 10:14:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682072078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1682072080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zE4KUQItN/3/UV4PaOZpW67hAUQM7k7JGXQXpSUX7jM=;
-        b=LxPC06RfpZaf/PV59ic/kcvwI8MQ/gLjs6JkYCNJ/RNb4xRaG70GAN+PGm+8H+ryznSgpc
-        YrF8dckTbYzILZ5H8nPsp0rNBoS1mIsN58UGleQbLSkmKQt45pkJxWA4xeNLFKhm3E6CSB
-        bgDU8rZ29b2J1dRT10rROtiAB8ISjTE=
+        bh=MPdsIHAkF3dojDaKePRBYhF7VPy8HOJoJzQ2IPR70Ow=;
+        b=DdqlQbKRzrk0ecb+luhX0blRgkUDuGYm7WDDLDbPi4vbYnYkhLJT1pTwGhsTuvYWAEJqri
+        kt5QbY3sB5G4gVZ9eIoQ6+DLmEsMikliivsd9cqxZT4qwbGlwF7i+ONMsDKtZ/Y2fep0fG
+        7oIwPv7A4PDhJeFJjeNvR+3jlGc4xXY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682072078;
+        s=susede2_ed25519; t=1682072080;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zE4KUQItN/3/UV4PaOZpW67hAUQM7k7JGXQXpSUX7jM=;
-        b=TfOtgFn8V7n2eVcwCSKoDkdsIoC3KMz6ZTBfi4H+A0+FegXVYPQtLSIWwe1Nz6zW8lDvXx
-        1QolS+TvzBBDJnBQ==
+        bh=MPdsIHAkF3dojDaKePRBYhF7VPy8HOJoJzQ2IPR70Ow=;
+        b=x4vnIpaKeT0Oe6Mjy4yVpvO3QSsS3+iLzk0GjWPcysPnP0FWH94mz8RNdbfDyx1Ki8iouK
+        v40Oc8hZwlD9BJBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 542F01390E;
-        Fri, 21 Apr 2023 10:14:37 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BABC11390E;
+        Fri, 21 Apr 2023 10:14:38 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id GNpvEQ1iQmRNaAAAMHmgww
-        (envelope-from <osalvador@suse.de>); Fri, 21 Apr 2023 10:14:37 +0000
+        id UDFAKg5iQmRNaAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Fri, 21 Apr 2023 10:14:38 +0000
 From:   Oscar Salvador <osalvador@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -61,9 +61,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrey Konovalov <andreyknvl@gmail.com>,
         Alexander Potapenko <glider@google.com>,
         Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH v4 2/3] mm, page_owner: Add page_owner_stacks file to print out only stacks and their counte
-Date:   Fri, 21 Apr 2023 12:14:14 +0200
-Message-Id: <20230421101415.5734-3-osalvador@suse.de>
+Subject: [PATCH v4 3/3] mm,page_owner: Filter out stacks by a threshold counter
+Date:   Fri, 21 Apr 2023 12:14:15 +0200
+Message-Id: <20230421101415.5734-4-osalvador@suse.de>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230421101415.5734-1-osalvador@suse.de>
 References: <20230421101415.5734-1-osalvador@suse.de>
@@ -79,174 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We might be only interested in knowing about stacks <-> count
-relationship, so instead of having to fiddle with page_owner
-output and screen through pfns, let us add a new file called
-'page_owner_stacks' that does just that.
-By cating such file, we will get all the stacktraces followed by
-its counter, so we can have a more global view.
+We want to be able to filter out the output on a threshold basis,
+in this way we can get rid of a lot of noise and focus only on those
+stacks which have an allegedly high counter.
 
-Signed-off-by: Oscar Salvador <osalvador@suse.de
+We can control the threshold value by a new file called
+'page_owner_threshold', which is 0 by default.
+
+Signed-off-by: Oscar Salvador <osalvador@suse.de>
 ---
- include/linux/stackdepot.h |  6 ++++
- lib/stackdepot.c           | 73 ++++++++++++++++++++++++++++++++++++++
- mm/page_owner.c            | 28 +++++++++++++++
- 3 files changed, 107 insertions(+)
+ include/linux/stackdepot.h |  3 +++
+ lib/stackdepot.c           | 17 ++++++++++++++++-
+ mm/page_owner.c            |  5 +++++
+ 3 files changed, 24 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index b94d33312839..e1d05d9adcd1 100644
+index e1d05d9adcd1..c6b54199ea26 100644
 --- a/include/linux/stackdepot.h
 +++ b/include/linux/stackdepot.h
-@@ -116,6 +116,12 @@ depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
- 					     gfp_t gfp_flags,
- 					     bool counter);
- 
-+#ifdef CONFIG_PAGE_OWNER
-+void *stack_start(struct seq_file *m, loff_t *ppos);
-+void *stack_next(struct seq_file *m, void *v, loff_t *ppos);
-+int stack_print(struct seq_file *m, void *v);
-+#endif
+@@ -120,6 +120,9 @@ depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
+ void *stack_start(struct seq_file *m, loff_t *ppos);
+ void *stack_next(struct seq_file *m, void *v, loff_t *ppos);
+ int stack_print(struct seq_file *m, void *v);
 +
++int page_owner_threshold_get(void *data, u64 *val);
++int page_owner_threshold_set(void *data, u64 val);
+ #endif
+ 
  /**
-  * stack_depot_fetch - Fetch a stack trace from stack depot
-  *
 diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index e99f4ef218ef..d0a4e6ac0bc9 100644
+index d0a4e6ac0bc9..2f1a41f0ae4f 100644
 --- a/lib/stackdepot.c
 +++ b/lib/stackdepot.c
-@@ -28,6 +28,8 @@
- #include <linux/types.h>
- #include <linux/memblock.h>
- #include <linux/kasan-enabled.h>
-+#include <linux/seq_file.h>
-+#include <linux/debugfs.h>
- 
- #define DEPOT_HANDLE_BITS (sizeof(depot_stack_handle_t) * 8)
- 
-@@ -499,6 +501,77 @@ static struct stack_record *stack_depot_getstack(depot_stack_handle_t handle)
- 	return stack;
+@@ -502,6 +502,9 @@ static struct stack_record *stack_depot_getstack(depot_stack_handle_t handle)
  }
  
-+#ifdef CONFIG_PAGE_OWNER
-+void *stack_start(struct seq_file *m, loff_t *ppos)
+ #ifdef CONFIG_PAGE_OWNER
++
++static unsigned long page_owner_stack_threshold = 0;
++
+ void *stack_start(struct seq_file *m, loff_t *ppos)
+ {
+ 	unsigned long *table = m->private;
+@@ -557,7 +560,7 @@ int stack_print(struct seq_file *m, void *v)
+ 
+ 	if (!stack->size || stack->size < 0 ||
+ 	    stack->size > PAGE_SIZE || stack->handle.valid != 1 ||
+-	    refcount_read(&stack->count) < 1)
++	    refcount_read(&stack->count) < page_owner_stack_threshold)
+ 		return 0;
+ 
+ 	buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
+@@ -570,6 +573,18 @@ int stack_print(struct seq_file *m, void *v)
+ 
+         return 0;
+ }
++
++int page_owner_threshold_get(void *data, u64 *val)
 +{
-+	unsigned long *table = m->private;
-+	struct stack_record **stacks, *stack;
-+
-+	/* First time */
-+	if (*ppos == 0)
-+		*table = 0;
-+
-+	if (*ppos == -1UL)
-+		return NULL;
-+
-+	stacks = &stack_table[*table];
-+	stack = (struct stack_record *)stacks;
-+
-+	return stack;
-+}
-+
-+void *stack_next(struct seq_file *m, void *v, loff_t *ppos)
-+{
-+	unsigned long *table = m->private;
-+	unsigned long nr_table = *table;
-+	struct stack_record *next = NULL, *stack = v, **stacks;
-+	unsigned long stack_table_entries = stack_hash_mask + 1;
-+
-+	if (!stack) {
-+new_table:
-+		/* New table */
-+		nr_table++;
-+		if (nr_table >= stack_table_entries)
-+			goto out;
-+		stacks = &stack_table[nr_table];
-+		stack = (struct stack_record *)stacks;
-+		next = stack;
-+	} else {
-+		next = stack->next;
-+	}
-+
-+	if (!next)
-+		goto new_table;
-+
-+out:
-+	*table = nr_table;
-+	*ppos = (nr_table >= stack_table_entries) ? -1UL : *ppos + 1;
-+	return next;
-+}
-+
-+int stack_print(struct seq_file *m, void *v)
-+{
-+	char *buf;
-+	int ret = 0;
-+	struct stack_record *stack =v;
-+
-+	if (!stack->size || stack->size < 0 ||
-+	    stack->size > PAGE_SIZE || stack->handle.valid != 1 ||
-+	    refcount_read(&stack->count) < 1)
-+		return 0;
-+
-+	buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
-+	ret += stack_trace_snprint(buf, PAGE_SIZE, stack->entries, stack->size, 0);
-+	scnprintf(buf + ret, PAGE_SIZE - ret, "stack count: %d\n\n",
-+		  refcount_read(&stack->count));
-+	seq_printf(m, buf);
-+	seq_puts(m, "\n\n");
-+	kfree(buf);
-+
++        *val = page_owner_stack_threshold;
 +        return 0;
 +}
-+#endif
 +
++int page_owner_threshold_set(void *data, u64 val)
++{
++        page_owner_stack_threshold = val;
++        return 0;
++}
+ #endif
+ 
  unsigned int stack_depot_fetch(depot_stack_handle_t handle,
- 			       unsigned long **entries)
- {
 diff --git a/mm/page_owner.c b/mm/page_owner.c
-index b6637524e442..b191ad1d41f9 100644
+index b191ad1d41f9..daec789b0b50 100644
 --- a/mm/page_owner.c
 +++ b/mm/page_owner.c
-@@ -718,6 +718,31 @@ static const struct file_operations proc_page_owner_operations = {
- 	.llseek		= lseek_page_owner,
+@@ -743,6 +743,9 @@ const struct file_operations page_owner_stack_operations = {
+ 	.release        = seq_release,
  };
  
-+static void stack_stop(struct seq_file *m, void *v)
-+{
-+	return;
-+}
-+
-+static const struct seq_operations page_owner_stack_op = {
-+	.start  = stack_start,
-+	.next   = stack_next,
-+	.stop   = stack_stop,
-+	.show   = stack_print
-+};
-+
-+static int page_owner_stack_open(struct inode *inode, struct file *file)
-+{
-+	return seq_open_private(file, &page_owner_stack_op,
-+				sizeof(unsigned long));
-+}
-+
-+const struct file_operations page_owner_stack_operations = {
-+	.open           = page_owner_stack_open,
-+	.read           = seq_read,
-+	.llseek         = seq_lseek,
-+	.release        = seq_release,
-+};
++DEFINE_SIMPLE_ATTRIBUTE(proc_page_owner_threshold, &page_owner_threshold_get,
++			&page_owner_threshold_set, "%lu");
 +
  static int __init pageowner_init(void)
  {
  	if (!static_branch_unlikely(&page_owner_inited)) {
-@@ -728,6 +753,9 @@ static int __init pageowner_init(void)
- 	debugfs_create_file("page_owner", 0400, NULL, NULL,
- 			    &proc_page_owner_operations);
+@@ -755,6 +758,8 @@ static int __init pageowner_init(void)
  
-+	debugfs_create_file("page_owner_stacks", S_IRUSR, NULL, NULL,
-+			     &page_owner_stack_operations);
-+
+ 	debugfs_create_file("page_owner_stacks", S_IRUSR, NULL, NULL,
+ 			     &page_owner_stack_operations);
++	debugfs_create_file("page_owner_threshold", 0600, NULL, NULL,
++			    &proc_page_owner_threshold);
+ 
  	return 0;
  }
- late_initcall(pageowner_init)
 -- 
 2.35.3
 
