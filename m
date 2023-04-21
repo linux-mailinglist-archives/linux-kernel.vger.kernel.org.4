@@ -2,176 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250EF6EB3AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC406EB3B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbjDUVc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 17:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S233372AbjDUVhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 17:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjDUVcU (ORCPT
+        with ESMTP id S229821AbjDUVhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 17:32:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4922705
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 14:32:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682112735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y70ANqKTzeTjGgvJyEnU2TbSMwNx98UPV9QFdT+z/F8=;
-        b=kKcG/qEeFl1cwvNsJdRCnuh+fadQl6xlHTYxtxvpEUF5AiKUa9uWgDLzXw9kRDvLYMYYsh
-        yaBVoUzEErvPBbtWTgjQL9lI9meskjW0A5IyWKVDIyUPA8r/3thoZAHWVhIX0l86H5YmF5
-        4CeyedQeOVmnUFt6jLvnDBicmDPKj6vbRXaEVlq8bFkHMD0LJCvVpx9eeZLyS2NERg/mPH
-        aETFm+aS5sUIkbeUep6ZYMsJh7LfEXEVw2Jw7FVAqO4FFy88+mXXIjhigGHXzVf81UM2Zp
-        K6GriGvogzsoKZ28NOFeMD4wtRI80t1DblM/qpuAJV/ZaBfWd1D9Q+f3FE/R3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682112735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y70ANqKTzeTjGgvJyEnU2TbSMwNx98UPV9QFdT+z/F8=;
-        b=1Rl/A9DSViA2U1dItlGCCseR/rT5eZMQZRnP33gGm6a6PYA9hJAJcjqMG6Am69a8qzwevq
-        LmEoCCs+z08h/tBw==
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Victor Hassan <victor@allwinnertech.com>, fweisbec@gmail.com,
-        mingo@kernel.org, jindong.yue@nxp.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tick/broadcast: Do not set oneshot_mask except
- was_periodic was true
-In-Reply-To: <ZD/uWdz7dKLKlUqH@localhost.localdomain>
-References: <20230412003425.11323-1-victor@allwinnertech.com>
- <87sfd0yi4g.ffs@tglx> <ZD/uWdz7dKLKlUqH@localhost.localdomain>
-Date:   Fri, 21 Apr 2023 23:32:15 +0200
-Message-ID: <87jzy42a74.ffs@tglx>
+        Fri, 21 Apr 2023 17:37:02 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CDC113;
+        Fri, 21 Apr 2023 14:37:01 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-18665c1776dso1897428fac.2;
+        Fri, 21 Apr 2023 14:37:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682113021; x=1684705021;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wGdrdfDi3Lq6WvVDhiuJ7kQri9Uadj4krtd1AJ3qJwk=;
+        b=OGGYrq6deeaKGnApJ3OrX+fBjsTAzgi+z3SVVPk1r5T5awKUohUNL13Ygb55KFEGbX
+         CvvnFvZceALUgnEgJsQUZJdxMN2j4jTxTCYoMP9uB098zhcpUxNT0n2jznDp6N8cW6/N
+         f5kKrgsJ6X6S8rJ0kuFyrqvPiiVDq+CZgMKteKjbWMdLP83DVS/hU7pFQtq5ywf36O6I
+         FH5i2I+2EuBKVmVtDYAwO/opS7lYFuuVt0GcaJVvn9VxKx9w68i6obsZ63n0H7us2E99
+         +YS2cKBd74AZ6UhGKdBaD3HeS5ZFNNgpYpU25fzOsb1l9SucZgxbJsBlbRds+zKKuUxZ
+         vTfA==
+X-Gm-Message-State: AAQBX9dCaym5mY9xRtPsxUJ5E39lAYdYL4gVlL5mdfvDFdtXsOaSYUVG
+        1onuaJ/4RKa+Fx2B4ef6IXeK3jL98A==
+X-Google-Smtp-Source: AKy350b66fHcYy0v/TQundiSahCAnJ1NbesgLLJNdtRNbXFMyCG3ZlpmEHSwtYMpYVhku12BwUI3Hw==
+X-Received: by 2002:a05:6871:84:b0:17f:e13:9c96 with SMTP id u4-20020a056871008400b0017f0e139c96mr5263310oaa.51.1682113020868;
+        Fri, 21 Apr 2023 14:37:00 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 26-20020a056870135a00b001765b2f6c53sm2180223oac.9.2023.04.21.14.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 14:37:00 -0700 (PDT)
+Received: (nullmailer pid 1799330 invoked by uid 1000);
+        Fri, 21 Apr 2023 21:36:59 -0000
+Date:   Fri, 21 Apr 2023 16:36:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     zev@bewilderbeest.net, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Add support for multiple
+ supplies
+Message-ID: <20230421213659.GA1786000-robh@kernel.org>
+References: <20230420192402.3695265-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420192402.3695265-1-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19 2023 at 15:36, Frederic Weisbecker wrote:
-> Le Sat, Apr 15, 2023 at 11:01:51PM +0200, Thomas Gleixner a =C3=A9crit :
->> @@ -1020,48 +1021,89 @@ static inline ktime_t tick_get_next_peri
->>  /**
->>   * tick_broadcast_setup_oneshot - setup the broadcast device
->>   */
->> -static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
->> +static void tick_broadcast_setup_oneshot(struct clock_event_device *bc,
->> +					 bool from_periodic)
->>  {
->>  	int cpu =3D smp_processor_id();
->> +	ktime_t nexttick =3D 0;
->>=20=20
->>  	if (!bc)
->>  		return;
->>=20=20
->>  	/* Set it up only once ! */
->> -	if (bc->event_handler !=3D tick_handle_oneshot_broadcast) {
->> -		int was_periodic =3D clockevent_state_periodic(bc);
->> -
->> -		bc->event_handler =3D tick_handle_oneshot_broadcast;
->> -
->> +	if (bc->event_handler =3D=3D tick_handle_oneshot_broadcast) {
->>  		/*
->> -		 * We must be careful here. There might be other CPUs
->> -		 * waiting for periodic broadcast. We need to set the
->> -		 * oneshot_mask bits for those and program the
->> -		 * broadcast device to fire.
->> +		 * The CPU which switches from periodic to oneshot mode
->> +		 * sets the broadcast oneshot bit for all other CPUs which
->> +		 * are in the general (periodic) broadcast mask to ensure
->> +		 * that CPUs which wait for the periodic broadcast are
->> +		 * woken up.
->> +		 *
->> +		 * Clear the bit for the local CPU as the set bit would
->> +		 * prevent the first tick_broadcast_enter() after this CPU
->> +		 * switched to oneshot state to program the broadcast
->> +		 * device.
->>  		 */
->> +		tick_broadcast_clear_oneshot(cpu);
->
-> So this path is reached when we setup/exchange a new tick device
-> on a CPU after the broadcast device has been set to oneshot, right?
->
-> Why does it have a specific treatment? Is it for optimization? Or am I
-> missing a correctness based reason?
+On Thu, Apr 20, 2023 at 09:24:01PM +0200, Naresh Solanki wrote:
+> Add optional DT property 'regulator-supplies' to handle connectors with
+> multiple supplies.
+> If this property is present, it will determine all regulator supplies.
+> Otherwise, the 'vout' supply will be used as a fallback.
+> 
+> This change improves support for connector like PCIe connectors on
+> mainboards that can be powered by 12V and 3.3V supplies.
+> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ...
+> Change in V2:
+> - Added example
+> - Update property type & description.
+> - Improve commit message
+> ---
+>  .../bindings/regulator/regulator-output.yaml  | 21 ++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/regulator-output.yaml b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+> index 078b37a1a71a..a9dce26991ff 100644
+> --- a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+> @@ -21,13 +21,22 @@ properties:
+>    compatible:
+>      const: regulator-output
+>  
+> -  vout-supply:
+> +  regulator-supplies:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+>      description:
+> -      Phandle of the regulator supplying the output.
+> +      Optional property that specifies supply names provided by
+> +      the regulator. Defaults to "vout" if not specified. The
+> +      array contains a list of supply names.
+> +      Each supply name corresponds to a phandle in the
+> +      patternProperties.
+> +
+> +patternProperties:
+> +  ".*-supply":
+> +    description:
+> +      Specifies the phandle for various supplies
 
-This path is taken during the switch from periodic to oneshot mode. The
-way how this works is:
+While you say use 'vout-supply' for a single supply, nothing enforces 
+that anymore.
 
-boot()
-  setup_periodic()
-    setup_periodic_broadcast()
+>  
+>  required:
+>    - compatible
+> -  - vout-supply
+>  
+>  additionalProperties: false
+>  
+> @@ -37,3 +46,9 @@ examples:
+>            compatible = "regulator-output";
+>            vout-supply = <&output_reg>;
+>        };
+> +      out2 {
+> +          compatible = "regulator-output";
+> +          regulator-supplies = "sw0", "sw1";
+> +          sw0-supply = <&out2_sw0>;
+> +          sw1-supply = <&out2_sw1>;
 
-  // From here on everything depends on the periodic broadcasting
+Names in the consumer are relative to the consumer. You appear to be 
+naming these by the supplier. Just add vout[0-9]-supply and iterate over 
+that name in the driver. Then you don't need "regulator-supplies". 
+Really, you never did. You could just find all properties ending in 
+"-supply".
 
-  highres_clocksource_becomes_available()
-    tick_clock_notify() <- Set's the .check_clocks bit on all CPUs
-
-Now the first CPU which observes that bit switches to oneshot mode, but
-the other CPUs might be waiting for the periodic broadcast at that
-point. So the periodic to oneshot transition does:
-
-  		cpumask_copy(tmpmask, tick_broadcast_mask);
-		/* Remove the local CPU as it is obviously not idle */
-  		cpumask_clear_cpu(cpu, tmpmask);
-		cpumask_or(tick_broadcast_oneshot_mask, tick_broadcast_oneshot_mask, tmpm=
-ask);
-
-I.e. it makes sure that _ALL_ not yet converted CPUs will get woken up
-by the new oneshot broadcast handler.=20
-
-Now when the other CPUs will observe the check_clock bit after that they
-need to clear their bit in the oneshot mask while switching themself
-from periodic to oneshot one otherwise the next tick_broadcast_enter()
-would do nothing. That's all serialized by broadcast lock, so no race.
-
-But that has nothing to do with switching the underlying clockevent
-device. At that point all CPUs are already in oneshot mode and
-tick_broadcast_oneshot_mask is correct.
-
-So that will take the other code path:
-
-    if (bc->event_handler =3D=3D tick_handle_oneshot_broadcast) {
-       // not taken because the new device is not yet set up
-       return;
-    }
-
-    if (from_periodic) {
-       // not taken because the switchover already happened
-       // Here is where the cpumask magic happens
-    }
-=20=20=20=20
-> For the case where the other CPUs have already installed their
-> tick devices and if that function is called with from_periodic=3Dtrue,
-> the other CPUs will notice the oneshot change on their next call to
-> tick_broadcast_enter() thanks to the lock, right? So the tick broadcast
-> will keep firing until all CPUs have been through idle once and called
-> tick_broadcast_exit(), right? Because only them can clear themselves
-> from tick_broadcast_oneshot_mask, am I understanding this correctly?
-
-No. See above. It's about the check_clock bit handling on the other
-CPUs.
-
-It seems I failed miserably to explain that coherently with the tons of
-comments added. Hrmpf :(
-
-> I'm trying to find the opportunity for a race with dev->next_event
-> being seen as too far ahead in the future but can't manage so far...
-
-There is none :)
-
-Thanks,
-
-        tglx
+Rob
