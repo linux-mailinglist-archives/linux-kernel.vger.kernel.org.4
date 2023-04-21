@@ -2,83 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8010B6EB19A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537046EB19E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbjDUS1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S233027AbjDUS2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDUS1S (ORCPT
+        with ESMTP id S232989AbjDUS2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:27:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A24210F2;
-        Fri, 21 Apr 2023 11:27:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA2C365251;
-        Fri, 21 Apr 2023 18:27:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAB3C433A1;
-        Fri, 21 Apr 2023 18:27:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cy2E2wei"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1682101630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3FB3B43eYjyBAM7IDYJSH0nqffg9h/A3cKDOQDAa8U0=;
-        b=cy2E2weiOUbZb+vT2a6PJMO6rkRoCYHmSZl2wIfSUJmlXrwKWVGMFXPRwuTqCkTIW1IymQ
-        0a4Lu7ZypmvfhJKzoPoNB3A1Nb/yLBX1S6MwO7GnrA+M/TOza15aqV92kszkfZrEWMcSDs
-        D5t3QmLEKXiaZGRM+vj3dzLDLV97Pqs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 37ed0a3f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 21 Apr 2023 18:27:09 +0000 (UTC)
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-771d9ec5aa5so8282189241.0;
-        Fri, 21 Apr 2023 11:27:09 -0700 (PDT)
-X-Gm-Message-State: AAQBX9faTkOKB2wo0j/t++ZmoVG40czCD8XxW0N2L0WgizI0+RDwSl3v
-        FSXG+QHk/lIWFeV1pY0dBvhz5OvVgaG8PR4bGjI=
-X-Google-Smtp-Source: AKy350Zha+rMVky/6DSggH+0NpteQqjJJloUu7qVQUIBSeFSBoua6JVr0i++DO9cdKalbSrUG3+c2kWyp7o5GrZMfqw=
-X-Received: by 2002:a05:6102:1629:b0:430:b1f:56dc with SMTP id
- cu41-20020a056102162900b004300b1f56dcmr3773848vsb.1.1682101627919; Fri, 21
- Apr 2023 11:27:07 -0700 (PDT)
+        Fri, 21 Apr 2023 14:28:02 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C519A1;
+        Fri, 21 Apr 2023 11:28:00 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id A18465C00CA;
+        Fri, 21 Apr 2023 14:27:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 21 Apr 2023 14:27:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1682101676; x=1682188076; bh=1x
+        lLdlOEPewjSa9H68FV8Q5PO9B90Oygi7b4UAbYuQc=; b=P0wYN+pJ1GfvlJDlIK
+        3HaP8g8yxh54ko7FtDNoDaJ2UbAHZEH6f/Q++W6+apsYdWGtFEWE+VFQXClEsVG0
+        cNC/sNVd7/oMjY/xFtIAWOJvmZ7uXQ3mbJVWBHrrjEx3NEiwyXlrYfFrx4cv6pDx
+        VHBa48YtKHzwfxpnI4JwohAAQtDQDSVVXx3QUmBAY7B+68+wZhG/dLvNn0OnsREa
+        qjko2RCCZp7nO9MKyb0UCfHlnuT0PwJTFQfwhCSCs45y7Jxi3w6bnMbx8tbwVJ+3
+        //HYMjrxXN9VmmIBgsf8diCnZkCyjN3KiEiba50EMyFCX6mLalVggfzcTxbFQiYz
+        Lytw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682101676; x=1682188076; bh=1xlLdlOEPewjS
+        a9H68FV8Q5PO9B90Oygi7b4UAbYuQc=; b=YTbnAZJ3qUMiRj76RGU6xiJMr7F8Z
+        AkF4d4qdl55apNKQF1ibg7v+FTxNs6LEJ9T/CbhXqMm/CMr0JUPsGdGAWF/cq1n4
+        hdoa6M0lt7boS8FLRptsOOIxImYCjFW8X9zq0pzlUlPuvbO8jWhlu7IAumUoDL66
+        qPBnyF2O0qu3+eKvQDofPbKIcJxXx7Vd0ivDUBvs9vBJAhlWOK1cWnup0gDjoYZS
+        h8IXrSxl6vOW0PEIz+/bZERGinxio39/2lX8YmfR8N9mQat+4+V3G24GUH/f4JCM
+        ZhJu46SbqRu3jmGtCF3l1bDmHnLHOFm9RUaS0AiHZtwdl0+ofXuNUEK5A==
+X-ME-Sender: <xms:q9VCZCFDX2nqX67ccz6mq1jOzR_AMacb5lcdq5NNHqkuLc3FbSfYSw>
+    <xme:q9VCZDVXQTxIZCG0loGHeTRP5Q4y_FCfIYkj1kRq-oMsIjPR5cLqZLWopyE52ma_Y
+    RAwezAEAyhyTkOKUxo>
+X-ME-Received: <xmr:q9VCZMIXaK428S5JbttqSvA3CLOiVtzsGyu9Uq5cGBDezl-8UN-jCAiqdY1pNdbsbZ8Qw0SvXWigkQe0O6tdGCfnSg9YPtHNSQ61RVgkTrQ0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
+    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
+    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
+    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:rNVCZMHVZS-4pncHd9-02mz0hAwf0CGUjbWL3hNW6AshGaj9kybLCg>
+    <xmx:rNVCZIUtl1QWh3zeGrKmIctWOfETI1j93FF58B4EwRfQ2D1V_xxXcA>
+    <xmx:rNVCZPN7xqRHXuvJcK01DNR4CQUHk5_viNRdAndV--AkHsVzceDCkw>
+    <xmx:rNVCZJuMXQ7scwPUwjssuOK1J9USlnK-U41WGOH4io698Rs2VCTkrQ>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 21 Apr 2023 14:27:54 -0400 (EDT)
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
+ <20230418152849.505124-4-david@redhat.com>
+ <qvqwildqi62z.fsf@devbig1114.prn1.facebook.com>
+ <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code
+ to KSM code
+Date:   Fri, 21 Apr 2023 11:27:23 -0700
+In-reply-to: <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
+Message-ID: <qvqw1qkdt7iw.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:6196:0:b0:75c:e750:ab with HTTP; Fri, 21 Apr 2023
- 11:27:07 -0700 (PDT)
-In-Reply-To: <ZEKlzaQhjd8sbE7I@kernel.org>
-References: <Y60RoP77HnwaukEA@zx2c4.com> <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com> <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
- <ZBBmVhwsTf/URoqs@kernel.org> <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
- <ZBBxMl5rVjY9FGS9@kernel.org> <ZBBxxftnXHVOjm92@kernel.org>
- <ZBB8R9H3CyQnNfCt@zx2c4.com> <ZBCDeleGG/fFlkt+@kernel.org> <ZEKlzaQhjd8sbE7I@kernel.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 21 Apr 2023 20:27:07 +0200
-X-Gmail-Original-Message-ID: <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
-Message-ID: <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Did you use the patch I sent you and suspend and resume according to
-the instructions I gave you? If not, I don't have much to add.
+
+David Hildenbrand <david@redhat.com> writes:
+
+> [...]
+>
+>>> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+>>> index 0949811761e6..dfe905c7bd8e 100644
+>>> --- a/arch/s390/mm/gmap.c
+>>> +++ b/arch/s390/mm/gmap.c
+>>> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
+>>>
+>>>   int gmap_mark_unmergeable(void)
+>>>   {
+>>> -	struct mm_struct *mm = current->mm;
+>>> -	struct vm_area_struct *vma;
+>>> -	unsigned long vm_flags;
+>>> -	int ret;
+>>> -	VMA_ITERATOR(vmi, mm, 0);
+>>> -
+>>>   	/*
+>>>   	 * Make sure to disable KSM (if enabled for the whole process or
+>>>   	 * individual VMAs). Note that nothing currently hinders user space
+>>>   	 * from re-enabling it.
+>>>   	 */
+>>> -	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>>> -
+>>> -	for_each_vma(vmi, vma) {
+>>> -		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
+>>> -		vm_flags = vma->vm_flags;
+>>> -		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
+>>> -				  MADV_UNMERGEABLE, &vm_flags);
+>>> -		if (ret)
+>>> -			return ret;
+>>> -		vm_flags_reset(vma, vm_flags);
+>>> -	}
+>>> -	mm->def_flags &= ~VM_MERGEABLE;
+>>>
+>>
+>
+> Hi Stefan,
+>
+>> This clears the def_flags struct member, however, in ksm_disable() we
+>> clear the __flags struct member. Is this a problem?
+>
+> The patch description contains a comment regarding def_flags: "The existing
+> "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
+> because def_flags should never include VM_MERGEABLE."
+>
+> We keep clearing the MADV_UNMERGEABLE flag from MADV_UNMERGEABLE. In the old
+> code, ksm_madvise() would have cleared it from local vm_flags and
+> vm_flags_reset() would have modified vma->vm_flags. Now we clear it directly via
+> vm_flags_clear(vma, VM_MERGEABLE);
+>
+>
+> Long story short, the mm->def_flags code as wrong and most probably copied from
+> thp_split_mm() where we do:
+> 	mm->def_flags |= VM_NOHUGEPAGE;
+> Which makes more sense.
+>
+> Thanks!
+
+Thanks for the explanation.
+
+Acked-by: Stefan Roesch <shr@devkernel.io>
