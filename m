@@ -2,86 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0296EA8DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1846E6EA8E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjDULKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S231208AbjDULLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDULKW (ORCPT
+        with ESMTP id S229657AbjDULLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E4DA253;
-        Fri, 21 Apr 2023 04:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B459364FA4;
-        Fri, 21 Apr 2023 11:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C6DAC4339B;
-        Fri, 21 Apr 2023 11:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682075420;
-        bh=GzRtt8+niVYDbAje/9BY1kw/Tle5l8+d6eUWBp+zJjk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XGSy0kUc2IRhz4mlvdvsrvDOTbrRiVYBHqADaAm+PcK6ym03vQLmHj0yXRAV/m+57
-         JuVu5Ipc9YWPohxSSZR7CMxKvJsN92Ivse4w7s2Xp63VcxOJW2vuVyLFW84d/MhgZD
-         UZ8qssquMIjhlnsWwBzEPn/Iw6ZakxjWRVO7/CXOr/5kOKdlXPT8XjqH9hfEqCqYvM
-         fWxe/+vGgvN88eUhLwuSjkDcBGKvxQYRuRTUBZYJ03onl1+RlSJu2HcE3zIc8nfKC+
-         pazhhGOfUX760cssrua/y3iYdbOLxjYiJ6k7ZjNV7+10eWzr6J3maKPN89FmgISTb/
-         5t7FakDlzuU4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03ACEC395EA;
-        Fri, 21 Apr 2023 11:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 21 Apr 2023 07:11:33 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65DA5E4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:11:32 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b4a64c72bso1785885b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682075491; x=1684667491;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LJ4eKElwcXuAb6zZfl+qVzBQVUqclnD1hUAJWdjMu78=;
+        b=l9Cq+zu1tu3PWplXH9Uj+nBZKyq3Rnk2OdYC4CsMxNwxy1eLaZNZQXRZalzD/SaNF8
+         O7qI0bCblAILe+N6lNiuhXsyfK46Q6dt3FcSeKctUFp+66jAkg7b5tvMvDUUJPYAEeUX
+         EWp/H37UdqKNTDzMK0c7LEh0zDkZlLmhDVjjA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682075491; x=1684667491;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LJ4eKElwcXuAb6zZfl+qVzBQVUqclnD1hUAJWdjMu78=;
+        b=ic4E9U4L23tmccpdbjjlvINih706uNM3tfvMqqFJVIrad8mJBu90MicENgwsn3JK+E
+         Dwpb52hqF2m+6FkhVXMxecbL112+/PDEwKcBUT9kioJJ7p7NhFbF89BimO/r1RIOvs8P
+         BL8EEx5MNuvEoFktQFVMYO+jwY9cY/FBKwLP+lviAeOeZpzmULaJ+/kAnNPBlPwWSUT2
+         ljVf9PQWsoMq2NtmFNWcYa56yJg0quwwlp5ymfiJIJ+C/GuxXPVgehxiQr8F41A6V0IR
+         0sLknH3EkUmhkmk4VfND5GUXYgL09Qo/PqG9rXAyIj8xw6OjBc057q7lqFL2Sy8e5oFg
+         zIwA==
+X-Gm-Message-State: AAQBX9fVrqEV1xK8T+2ISbuP3SYMAVFg/LCAidFmclxhDZ5qB7svkObV
+        txithJeXusL/gClU/IGg7FbT+A==
+X-Google-Smtp-Source: AKy350YjnNhyz/5DJTFMIFsnSfoBoVKhugxroxKYawrehd6/D9CSJXkJCdAySnCEcB05FVhuF+9sqg==
+X-Received: by 2002:a05:6a00:15ce:b0:63d:3411:f9e3 with SMTP id o14-20020a056a0015ce00b0063d3411f9e3mr6904730pfu.19.1682075491514;
+        Fri, 21 Apr 2023 04:11:31 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:47fa:fa8d:a971:f6ac])
+        by smtp.gmail.com with ESMTPSA id x4-20020a628604000000b00639fc7124c2sm2840983pfd.148.2023.04.21.04.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 04:11:31 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Subject: [PATCH] clk: mediatek: Enable all MT8192 clocks by default
+Date:   Fri, 21 Apr 2023 19:11:25 +0800
+Message-ID: <20230421111125.2397368-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v9] net/packet: support mergeable feature of virtio
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168207542000.21404.15938428984944516141.git-patchwork-notify@kernel.org>
-Date:   Fri, 21 Apr 2023 11:10:20 +0000
-References: <20230419072420.315079-1-amy.saq@antgroup.com>
-In-Reply-To: <20230419072420.315079-1-amy.saq@antgroup.com>
-To:     =?utf-8?b?5rKI5a6J55CqKOWHm+eOpSkgPGFteS5zYXFAYW50Z3JvdXAuY29tPg==?=@ci.codeaurora.org
-Cc:     linux-kernel@vger.kernel.org, henry.tjf@antgroup.com,
-        willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Currently the base MT8192 clock drivers are enabled by default, but all
+the other clock drivers need to be enabled by hand. This is extremely
+confusing and inconvenient for end users. For the MT8192 platform to be
+useful, most if not all the clock drivers driving the hardware blocks
+need to be enabled.
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+Enable them by default whenever MT8192 base clock driver is enabled.
 
-On Wed, 19 Apr 2023 15:24:16 +0800 you wrote:
-> From: Jianfeng Tan <henry.tjf@antgroup.com>
-> 
-> Packet sockets, like tap, can be used as the backend for kernel vhost.
-> In packet sockets, virtio net header size is currently hardcoded to be
-> the size of struct virtio_net_hdr, which is 10 bytes; however, it is not
-> always the case: some virtio features, such as mrg_rxbuf, need virtio
-> net header to be 12-byte long.
-> 
-> [...]
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/clk/mediatek/Kconfig | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Here is the summary with links:
-  - [v9] net/packet: support mergeable feature of virtio
-    https://git.kernel.org/netdev/net-next/c/dfc39d4026fb
-
-You are awesome, thank you!
+diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+index 99e67c07e638..48b42d11111c 100644
+--- a/drivers/clk/mediatek/Kconfig
++++ b/drivers/clk/mediatek/Kconfig
+@@ -781,72 +781,84 @@ config COMMON_CLK_MT8192
+ config COMMON_CLK_MT8192_AUDSYS
+ 	tristate "Clock driver for MediaTek MT8192 audsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 audsys clocks.
+ 
+ config COMMON_CLK_MT8192_CAMSYS
+ 	tristate "Clock driver for MediaTek MT8192 camsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 camsys and camsys_raw clocks.
+ 
+ config COMMON_CLK_MT8192_IMGSYS
+ 	tristate "Clock driver for MediaTek MT8192 imgsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 imgsys and imgsys2 clocks.
+ 
+ config COMMON_CLK_MT8192_IMP_IIC_WRAP
+ 	tristate "Clock driver for MediaTek MT8192 imp_iic_wrap"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 imp_iic_wrap clocks.
+ 
+ config COMMON_CLK_MT8192_IPESYS
+ 	tristate "Clock driver for MediaTek MT8192 ipesys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 ipesys clocks.
+ 
+ config COMMON_CLK_MT8192_MDPSYS
+ 	tristate "Clock driver for MediaTek MT8192 mdpsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 mdpsys clocks.
+ 
+ config COMMON_CLK_MT8192_MFGCFG
+ 	tristate "Clock driver for MediaTek MT8192 mfgcfg"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 mfgcfg clocks.
+ 
+ config COMMON_CLK_MT8192_MMSYS
+ 	tristate "Clock driver for MediaTek MT8192 mmsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 mmsys clocks.
+ 
+ config COMMON_CLK_MT8192_MSDC
+ 	tristate "Clock driver for MediaTek MT8192 msdc"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 msdc and msdc_top clocks.
+ 
+ config COMMON_CLK_MT8192_SCP_ADSP
+ 	tristate "Clock driver for MediaTek MT8192 scp_adsp"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 scp_adsp clocks.
+ 
+ config COMMON_CLK_MT8192_VDECSYS
+ 	tristate "Clock driver for MediaTek MT8192 vdecsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 vdecsys and vdecsys_soc clocks.
+ 
+ config COMMON_CLK_MT8192_VENCSYS
+ 	tristate "Clock driver for MediaTek MT8192 vencsys"
+ 	depends on COMMON_CLK_MT8192
++	default COMMON_CLK_MT8192
+ 	help
+ 	  This driver supports MediaTek MT8192 vencsys clocks.
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.40.0.634.g4ca3ef3211-goog
 
