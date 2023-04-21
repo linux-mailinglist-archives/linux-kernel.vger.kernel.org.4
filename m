@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D1A6EA26E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632896EA271
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 05:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjDUDog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 23:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S233468AbjDUDrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 23:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDUDoc (ORCPT
+        with ESMTP id S229521AbjDUDrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 23:44:32 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64520E57;
-        Thu, 20 Apr 2023 20:44:31 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4ec81436975so1200220e87.0;
-        Thu, 20 Apr 2023 20:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682048669; x=1684640669;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vy9R4yyUoP7BX/FYodocgkN9ttU7PdKqko73E36Oc78=;
-        b=NmqWYY3FIF1BLQvy6wOdhFYGCX4rYgMDFsHGg1J2ji/wRK9duWCh84kBiAWUrDnOCf
-         MhgPrgvbw4aMAkTp3sz8VL5hwPcW2aoCTF4z/8S5vCvVDGIc4EjNXFHRyYdNVS1AUk8j
-         CTQ8QmU6HogxpfGYW1u5jmDuFxtkQj25atVljUdiFgcvU5KyGqRWImQozi5R0klnsVQD
-         nkKuu5NqgwxxSbVBiaHPDUiv2WBBfUheSskcN0qeWOUUSSKSiC48K04p/XfB+lV41qyq
-         rqalaawwFHL5BaVt37E4u/skVgWGFeomIZ6/Akp5Oq7NPy5b226T5ZAqX7kzTG6bMQrM
-         n4yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682048669; x=1684640669;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vy9R4yyUoP7BX/FYodocgkN9ttU7PdKqko73E36Oc78=;
-        b=fJ7egiAlAorGWQcqmeEK2IYiaLx0tFBno+SAwrh1LF+Okk8F1fmBh9pod5FYSpFped
-         wwi0PFvGEh+4i2id7M2c5svbJor+EIEB1UYDdLMHF09AgsS7+tZWRluXDa4RMdAiQFH4
-         nduEybAwTAvZiZEroVs46c0jT4pOFMmGy7ShxSL/Xa2Djl3+N2QPnPIQp+eaIy3+ZFCI
-         YGuyZ1XMzrEMNAtiV//gVlr4yFP0GjOMnI5RJBBced/UBiaUU7ekaoTt22kid0IFlUCj
-         5liijFmDr+bCThW6MgK7U/Gi7KQZ9U5McwHR8q7ttMowZzb6kEdekohK2jOJI6Mja9EF
-         fC1g==
-X-Gm-Message-State: AAQBX9d24rjj1OfmjCdBbIcQdIu+mP7bKE7nwq+IXz6V13Mcwbk3TpvP
-        vCwTJxUX3sQLOkLKqmmL3Wc=
-X-Google-Smtp-Source: AKy350YqRtokS7FKci5QWqOumjOwN5erQQb8osQ8vB8JG/KTzSd8nTQqyvCTC+CWiPsUl1ArbcBIPw==
-X-Received: by 2002:a19:ee12:0:b0:4e9:5f8e:315a with SMTP id g18-20020a19ee12000000b004e95f8e315amr696371lfb.65.1682048669510;
-        Thu, 20 Apr 2023 20:44:29 -0700 (PDT)
-Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id j8-20020ac253a8000000b004eed73f6db8sm421199lfh.12.2023.04.20.20.44.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 20:44:29 -0700 (PDT)
-Message-ID: <6caba41c-3db2-90c4-e1f7-2392162e2b0a@gmail.com>
-Date:   Fri, 21 Apr 2023 06:44:28 +0300
+        Thu, 20 Apr 2023 23:47:41 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB951FC0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 20:47:36 -0700 (PDT)
+X-UUID: 3da494fedff711edb6b9f13eb10bd0fe-20230421
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9fA4Q8Eu/7r79+HGr+WgcfxZUyDhzDjsfyrl60cGNPw=;
+        b=Kn+c0UUocb5x4sQmKbZafj4CMN/YtG+1dGJO1uomfLVho/KPIgdMcWn6P+a7m2ptvA+m+KNymg5pVikkP4Lj6m3EYRVGkJPW8nP25wSeQoO8foqu9ZH26pVa0+GHdKcbf5ePd0v/l5GeDJZLnLItcZ7h8AuXknmaRfRXKp01P8w=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:2f1a9738-c871-4ba4-a4f8-949559ec3d4e,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.22,REQID:2f1a9738-c871-4ba4-a4f8-949559ec3d4e,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:120426c,CLOUDID:d8680ba2-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:230421114731BRI4OOTO,BulkQuantity:0,Recheck:0,SF:48|38|29|28|17|19,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 3da494fedff711edb6b9f13eb10bd0fe-20230421
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <walter.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1517359952; Fri, 21 Apr 2023 11:47:30 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 21 Apr 2023 11:47:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 21 Apr 2023 11:47:28 +0800
+From:   <walter.chang@mediatek.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+CC:     <wsd_upstream@mediatek.com>, <stanley.chu@mediatek.com>,
+        <Chun-hung.Wu@mediatek.com>, <Freddy.Hsin@mediatek.com>,
+        <walter.chang@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH linux-next v4 0/4] Support timer drivers as loadable modules
+Date:   Fri, 21 Apr 2023 11:46:45 +0800
+Message-ID: <20230421034649.15247-1-walter.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, en-GB
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1682019544.git.mehdi.djait.k@gmail.com>
- <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v2 2/5] iio: accel: kionix-kx022a: Warn on failed matches
- and assume compatibility
-In-Reply-To: <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,51 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 23:22, Mehdi Djait wrote:
-> Avoid error returns on a failure to match and instead just warn with
-> assumption that we have a correct dt-binding telling us that
-> some new device with a different ID is backwards compatible.
-> 
-> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
-> ---
-> v2:
-> - no changes, this patch is introduced in the v2
-> 
->   drivers/iio/accel/kionix-kx022a.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
-> index f98393d74666..70530005cad3 100644
-> --- a/drivers/iio/accel/kionix-kx022a.c
-> +++ b/drivers/iio/accel/kionix-kx022a.c
-> @@ -1038,9 +1038,7 @@ int kx022a_probe_internal(struct device *dev)
->   		return dev_err_probe(dev, ret, "Failed to access sensor\n");
->   
->   	if (chip_id != KX022A_ID) {
-> -		dev_err(dev, "unsupported device 0x%x\n", chip_id);
-> -		return -EINVAL;
-> -	}
-> +		dev_warn(dev, "unsupported device 0x%x\n", chip_id);
+From: Walter Chang <walter.chang@mediatek.com>
 
-Just a 'nit' - no need to re-spin the series for this if there is no 
-other changes requested.
+This set of patches aims to make SoC related timer drivers, such as 
+timer-mediatek.c become loadable modules for the Generic Kernel Image
+(GKI).
 
-Maybe a slightly better wording here would be "unknown device"? If I am 
-not mistaken the code proceeds because device is assumed to be supported.
+This driver registers an always-on timer as tick_broadcast_device on 
+MediaTek SoCs. If the system does not load this module at startup, 
+system will also boot normally by using built-in `bc_hrtimer` instead.
+Besides, the previous experiment [1] indicates that the SYST/GPT, in 
+combination with a loadable module, is fully operational.
 
-Jonathan, do you think this change is worth backporting? If yes, then we 
-might need a Fixes tag.
+The first three patches export functions and remove __init markings to 
+support loadable timer modules.
 
-Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
+The fourth patch makes timer-mediatek.c become loadable module for GKI.
 
->   
->   	irq = fwnode_irq_get_byname(fwnode, "INT1");
->   	if (irq > 0) {
+[1]
+https://lore.kernel.org/all/32777456f8e0f98e4cd5b950f421d21f71b149cf.camel@mediatek.com/#t
+
+[v4]
+- Fix review comments pointed by Angelo
+
+[v3]
+- Rebase on linux-next
+
+[v2]
+- Convert timer-mediatek.c driver to loadable module
+
+Chun-Hung Wu (4):
+  time/sched_clock: Export sched_clock_register()
+  clocksource/drivers/mmio: Export clocksource_mmio_init()
+  clocksource/drivers/timer-of: Remove __init markings
+  clocksource/drivers/timer-mediatek: Make timer-mediatek become
+    loadable module
+
+ drivers/clocksource/Kconfig          |  2 +-
+ drivers/clocksource/mmio.c           |  8 ++++---
+ drivers/clocksource/timer-mediatek.c | 33 ++++++++++++++++++++++++++++
+ drivers/clocksource/timer-of.c       | 23 +++++++++----------
+ drivers/clocksource/timer-of.h       |  6 ++---
+ kernel/time/sched_clock.c            |  4 ++--
+ 6 files changed, 56 insertions(+), 20 deletions(-)
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.18.0
 
