@@ -2,144 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A6C6EA63C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37206EA642
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjDUIut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S231278AbjDUIw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjDUIuc (ORCPT
+        with ESMTP id S231128AbjDUIwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:50:32 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9D49ED7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:50:29 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ppmTJ-0003x6-Gm; Fri, 21 Apr 2023 10:50:25 +0200
-Message-ID: <8a182d08-d09c-14ed-3075-c40d264916e6@leemhuis.info>
-Date:   Fri, 21 Apr 2023 10:50:24 +0200
+        Fri, 21 Apr 2023 04:52:15 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FED49C2;
+        Fri, 21 Apr 2023 01:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=tOxdMweqEhzzQd6U0UFjOD8V2exqXtME9rvBuP7V5XA=;
+        t=1682067134; x=1683276734; b=vSW3Swd5fU4OhP+pubbeSgZnF6NB1Sm/0pHXb01/1jjjekR
+        T6axdU1n0WDw1v0CNyac3Fh+l73PWajuPLESk0kfjhctGaSiimzjlghtisbtOa8au1y3ORxjrkQZ0
+        9xWpjGdT9z9MgxLZPD3hc1NjYRmb7zMLYVm7/m7tEt9TmuIPPfnju2vqUdDJZbO60rcBZlLyTqlCW
+        S6GT9p51yqAQyDuqISr+wDZeryrcA/6uBFUYlgM3Usg+IhWZddDIS3rrpma1/+XRmfyzhfd3rBjZu
+        lbga9crMALWZv4W5Vro9CcDPGD7LY9PAi/z898mS3/iiugyvGXQaT47wQyb1NCXg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1ppmUx-004MaO-2n;
+        Fri, 21 Apr 2023 10:52:08 +0200
+Message-ID: <6478bd117b17e004df371bd84342c2e378adf566.camel@sipsolutions.net>
+Subject: Re: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     maxime@cerno.tech, Stephen Boyd <sboyd@kernel.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sadiya Kazi <sadiyakazi@google.com>
+Date:   Fri, 21 Apr 2023 10:52:06 +0200
+In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
+References: <20230421040218.2156548-1-davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Subject: Re: Linux regressions report for mainline [2023-04-16]
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-To:     dsterba@suse.cz,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Neal Gompa <neal@gompa.dev>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org,
-        Rafael Wysocki <rafael@kernel.org>, Chris Mason <clm@meta.com>,
-        Boris Burkov <boris@bur.io>
-References: <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
- <20230418213228.1273218-1-neal@gompa.dev>
- <d1b7b62d-bec8-e290-d12c-0b641ab382dd@leemhuis.info>
- <20230420192156.GY19619@suse.cz>
-Content-Language: en-US, de-DE
-In-Reply-To: <20230420192156.GY19619@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1682067030;b37b32c7;
-X-HE-SMSGID: 1ppmTJ-0003x6-Gm
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.04.23 21:21, David Sterba wrote:
-> On Wed, Apr 19, 2023 at 07:03:31AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
->> On 18.04.23 23:32, Neal Gompa wrote:
->>>
->>> I'm the guy that sort of kickstarted this whole thing a year ago.
->>> >From my perspective in Fedora-land, we've been running automatic
->>> weekly fstrim on every Fedora system for three years now[1] and
->>> have not received any complaints about SSDs pushing daises from
->>> that.
->>>
->>> When we started discussing btrfs discard=async within Fedora
->>> two years ago[2], I started soliciting feedback and information
->>> from the Btrfs developers I was regularly working with at the time.
->>>
->>> Last year, I had a face-to-face with Chris Mason and we discussed
->>> the idea in depth and decided to go for this, based on both Fedora's
->>> data with consumer disks and Facebook's data with their datacenters.
->>>
->>> The only real surprise we had was the so-called "discard storm",
->>> which Boris Burkov made adjustments to resolve a couple weeks ago[3].
->>> [...]
->>> [3]: https://lore.kernel.org/linux-btrfs/cover.1680723651.git.boris@bur.io/T/#t
->>
->> Wait, what? Argh. Sorry, if I had seen that patch, I wouldn't have
->> brought this up in my report at all. I missed it, as I wasn't CCed; and
->> regzbot missed it, because the patch uses a odd format for the lore link
->> (but not totally uncommon, will change regzbot to ensure that doesn't
->> happen again).
+SGksCgpPbiBGcmksIDIwMjMtMDQtMjEgYXQgMTI6MDIgKzA4MDAsIERhdmlkIEdvdyB3cm90ZToK
+PiBLVW5pdCB0ZXN0cyBydW4gaW4gYSBrdGhyZWFkLCB3aXRoIHRoZSBjdXJyZW50LT5rdW5pdF90
+ZXN0IHBvaW50ZXIgc2V0Cj4gdG8gdGhlIHRlc3QncyBjb250ZXh0LiBUaGlzIGFsbG93cyB0aGUg
+a3VuaXRfZ2V0X2N1cnJlbnRfdGVzdCgpIGFuZAo+IGt1bml0X2ZhaWxfY3VycmVudF90ZXN0KCkg
+bWFjcm9zIHRvIHdvcmsuIE5vcm1hbGx5LCB0aGlzIHBvaW50ZXIgaXMKPiBzdGlsbCB2YWxpZCBk
+dXJpbmcgdGVzdCBzaHV0ZG93biAoaS5lLiwgdGhlIHN1aXRlLT5leGl0IGZ1bmN0aW9uLCBhbmQK
+PiBhbnkgcmVzb3VyY2UgY2xlYW51cCkuIEhvd2V2ZXIsIGlmIHRoZSB0ZXN0IGhhcyBleGl0ZWQg
+ZWFybHkgKGUuZy4sIGR1ZQo+IHRvIGEgZmFpbGVkIGFzc2VydGlvbiksIHRoZSBjbGVhbnVwIGlz
+IGRvbmUgaW4gdGhlIHBhcmVudCBLVW5pdCB0aHJlYWQsCj4gd2hpY2ggZG9lcyBub3QgaGF2ZSBh
+biBhY3RpdmUgY29udGV4dC4KPiAKPiBJbnN0ZWFkLCBpbiB0aGUgZXZlbnQgdGVzdCB0ZXJtaW5h
+dGVzIGVhcmx5LCBydW4gdGhlIHRlc3QgZXhpdCBhbmQKPiBjbGVhbnVwIGZyb20gYSBuZXcgJ2Ns
+ZWFudXAnIGt0aHJlYWQsIHdoaWNoIHNldHMgY3VycmVudC0+a3VuaXRfdGVzdCwKPiBhbmQgYmV0
+dGVyIGlzb2xhdGVzIHRoZSByZXN0IG9mIEtVbml0IGZyb20gaXNzdWVzIHdoaWNoIGFyaXNlIGlu
+IHRlc3QKPiBjbGVhbnVwLgo+IAo+IElmIGEgdGVzdCBjbGVhbnVwIGZ1bmN0aW9uIGl0c2VsZiBh
+Ym9ydHMgKGUuZy4sIGR1ZSB0byBhbiBhc3NlcnRpb24KPiBmYWlsaW5nKSwgdGhlcmUgd2lsbCBi
+ZSBubyBmdXJ0aGVyIGF0dGVtcHRzIHRvIGNsZWFuIHVwOiBhbiBlcnJvciB3aWxsCj4gYmUgbG9n
+Z2VkIGFuZCB0aGUgdGVzdCBmYWlsZWQuIEZvciBleGFtcGxlOgo+IMKgwqDCoMKgwqDCoMKgwqAg
+IyBleGFtcGxlX3NpbXBsZV90ZXN0OiB0ZXN0IGFib3J0ZWQgZHVyaW5nIGNsZWFudXAuIGNvbnRp
+bnVpbmcgd2l0aG91dCBjbGVhbmluZyB1cAo+IAo+IFRoaXMgc2hvdWxkIGFsc28gbWFrZSBpdCBl
+YXNpZXIgdG8gZ2V0IGFjY2VzcyB0byB0aGUgS1VuaXQgY29udGV4dCwKPiBwYXJ0aWN1bGFybHkg
+ZnJvbSB3aXRoaW4gcmVzb3VyY2UgY2xlYW51cCBmdW5jdGlvbnMsIHdoaWNoIG1heSwgZm9yCj4g
+ZXhhbXBsZSwgbmVlZCBhY2Nlc3MgdG8gZGF0YSBpbiB0ZXN0LT5wcml2Lgo+IAo+IFNpZ25lZC1v
+ZmYtYnk6IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xlLmNvbT4KCkdyZWF0ISBMb29rcyBnb29k
+IHRvIG1lLgoKUmV2aWV3ZWQtYnk6IEJlbmphbWluIEJlcmcgPGJlbmphbWluLmJlcmdAaW50ZWwu
+Y29tPgoKPiAtLS0KPiAKPiBUaGlzIGlzIGFuIHVwZGF0ZWQgdmVyc2lvbiBvZiAvIHJlcGxhY2Vt
+ZW50IG9mICJrdW5pdDogU2V0IHRoZSBjdXJyZW50Cj4gS1VuaXQgY29udGV4dCB3aGVuIGNsZWFu
+aW5nIHVwIiwgd2hpY2ggaW5zdGVhZCBjcmVhdGVzIGEgbmV3IGt0aHJlYWQKPiBmb3IgY2xlYW51
+cCB0YXNrcyBpZiB0aGUgb3JpZ2luYWwgdGVzdCBrdGhyZWFkIGlzIGFib3J0ZWQuIFRoaXMgcHJv
+dGVjdHMKPiB1cyBmcm9tIGZhaWxlZCBhc3NlcnRpb25zIGR1cmluZyBjbGVhbnVwLCBpZiB0aGUg
+dGVzdCBleGl0ZWQgZWFybHkuCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MjoKPiBodHRwczovL2xvcmUu
+a2VybmVsLm9yZy9saW51eC1rc2VsZnRlc3QvMjAyMzA0MTkwODU0MjYuMTY3MTcwMy0xLWRhdmlk
+Z293QGdvb2dsZS5jb20vCj4gLSBBbHdheXMgcnVuIGNsZWFudXAgaW4gaXRzIG93biBrdGhyZWFk
+Cj4gwqAgLSBUaGVyZWZvcmUsIG5ldmVyIGF0dGVtcHQgdG8gcmUtcnVuIGl0IGlmIGl0IGV4aXRz
+Cj4gwqAgLSBUaGFua3MsIEJlbmphbWluLgo+IENoYW5nZXMgc2luY2UgdjE6Cj4gaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvbGludXgta3NlbGZ0ZXN0LzIwMjMwNDE1MDkxNDAxLjY4MTM5NS0xLWRh
+dmlkZ293QGdvb2dsZS5jb20vCj4gLSBNb3ZlIGNsZWFudXAgZXhlY3V0aW9uIHRvIGFub3RoZXIg
+a3RocmVhZAo+IMKgIC0gKFRoYW5rcywgQmVuamFtaW4sIGZvciBwb2ludGluZyBvdXQgdGhlIGFz
+c2VydGlvbiBpc3N1ZXMpCj4gCj4gLS0tCj4gwqBsaWIva3VuaXQvdGVzdC5jIHwgNTUgKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tCj4gwqAxIGZpbGUgY2hh
+bmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEv
+bGliL2t1bml0L3Rlc3QuYyBiL2xpYi9rdW5pdC90ZXN0LmMKPiBpbmRleCBlMjkxMGIyNjExMTIu
+LjIwMjVlNTE5NDFlNiAxMDA2NDQKPiAtLS0gYS9saWIva3VuaXQvdGVzdC5jCj4gKysrIGIvbGli
+L2t1bml0L3Rlc3QuYwo+IEBAIC00MTksMTAgKzQxOSw1MCBAQCBzdGF0aWMgdm9pZCBrdW5pdF90
+cnlfcnVuX2Nhc2Uodm9pZCAqZGF0YSkKPiDCoMKgwqDCoMKgwqDCoMKgICogdGhyZWFkIHdpbGwg
+cmVzdW1lIGNvbnRyb2wgYW5kIGhhbmRsZSBhbnkgbmVjZXNzYXJ5IGNsZWFuIHVwLgo+IMKgwqDC
+oMKgwqDCoMKgwqAgKi8KPiDCoMKgwqDCoMKgwqDCoMKga3VuaXRfcnVuX2Nhc2VfaW50ZXJuYWwo
+dGVzdCwgc3VpdGUsIHRlc3RfY2FzZSk7Cj4gLcKgwqDCoMKgwqDCoMKgLyogVGhpcyBsaW5lIG1h
+eSBuZXZlciBiZSByZWFjaGVkLiAqLwo+ICt9Cj4gKwo+ICtzdGF0aWMgdm9pZCBrdW5pdF90cnlf
+cnVuX2Nhc2VfY2xlYW51cCh2b2lkICpkYXRhKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0
+IGt1bml0X3RyeV9jYXRjaF9jb250ZXh0ICpjdHggPSBkYXRhOwo+ICvCoMKgwqDCoMKgwqDCoHN0
+cnVjdCBrdW5pdCAqdGVzdCA9IGN0eC0+dGVzdDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3Vu
+aXRfc3VpdGUgKnN1aXRlID0gY3R4LT5zdWl0ZTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgY3VycmVu
+dC0+a3VuaXRfdGVzdCA9IHRlc3Q7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqBrdW5pdF9ydW5fY2Fz
+ZV9jbGVhbnVwKHRlc3QsIHN1aXRlKTsKPiDCoH0KPiDCoAo+ICtzdGF0aWMgdm9pZCBrdW5pdF9j
+YXRjaF9ydW5fY2FzZV9jbGVhbnVwKHZvaWQgKmRhdGEpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBz
+dHJ1Y3Qga3VuaXRfdHJ5X2NhdGNoX2NvbnRleHQgKmN0eCA9IGRhdGE7Cj4gK8KgwqDCoMKgwqDC
+oMKgc3RydWN0IGt1bml0ICp0ZXN0ID0gY3R4LT50ZXN0Owo+ICvCoMKgwqDCoMKgwqDCoGludCB0
+cnlfZXhpdF9jb2RlID0ga3VuaXRfdHJ5X2NhdGNoX2dldF9yZXN1bHQoJnRlc3QtPnRyeV9jYXRj
+aCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoC8qIEl0IGlzIGFsd2F5cyBhIGZhaWx1cmUgaWYgY2xl
+YW51cCBhYm9ydHMuICovCj4gK8KgwqDCoMKgwqDCoMKga3VuaXRfc2V0X2ZhaWx1cmUodGVzdCk7
+Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICh0cnlfZXhpdF9jb2RlKSB7Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+IFRlc3QgY2FzZSBjb3VsZCBub3QgZmluaXNoLCB3ZSBoYXZlIG5vIGlkZWEgd2hhdCBzdGF0ZSBp
+dCBpcwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBpbiwgc28gZG9uJ3QgZG8g
+Y2xlYW4gdXAuCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAodHJ5X2V4aXRfY29kZSA9PSAtRVRJTUVET1VUKSB7
+Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBrdW5pdF9l
+cnIodGVzdCwgInRlc3QgY2FzZSBjbGVhbnVwIHRpbWVkIG91dFxuIik7Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+IFVua25vd24gaW50ZXJuYWwgZXJyb3Igb2NjdXJyZWQgcHJldmVudGluZyB0ZXN0IGNhc2UgZnJv
+bQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBydW5uaW5nLCBzbyB0aGVyZSBp
+cyBub3RoaW5nIHRvIGNsZWFuIHVwLgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+Ki8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfSBlbHNlIHsKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGt1bml0X2Vycih0ZXN0LCAiaW50
+ZXJuYWwgZXJyb3Igb2NjdXJyZWQgZHVyaW5nIHRlc3QgY2FzZSBjbGVhbnVwOiAlZFxuIiwKPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB0cnlfZXhpdF9jb2RlKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+fQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm47Cj4gK8KgwqDCoMKgwqDC
+oMKgfQo+ICsKPiArwqDCoMKgwqDCoMKgwqBrdW5pdF9lcnIodGVzdCwgInRlc3QgYWJvcnRlZCBk
+dXJpbmcgY2xlYW51cC4gY29udGludWluZyB3aXRob3V0IGNsZWFuaW5nIHVwXG4iKTsKPiArfQo+
+ICsKPiArCj4gwqBzdGF0aWMgdm9pZCBrdW5pdF9jYXRjaF9ydW5fY2FzZSh2b2lkICpkYXRhKQo+
+IMKgewo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3VuaXRfdHJ5X2NhdGNoX2NvbnRleHQgKmN0
+eCA9IGRhdGE7Cj4gQEAgLTQ0OCwxMiArNDg4LDYgQEAgc3RhdGljIHZvaWQga3VuaXRfY2F0Y2hf
+cnVuX2Nhc2Uodm9pZCAqZGF0YSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0K
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybjsKPiDCoMKgwqDCoMKgwqDC
+oMKgfQo+IC0KPiAtwqDCoMKgwqDCoMKgwqAvKgo+IC3CoMKgwqDCoMKgwqDCoCAqIFRlc3QgY2Fz
+ZSB3YXMgcnVuLCBidXQgYWJvcnRlZC4gSXQgaXMgdGhlIHRlc3QgY2FzZSdzIGJ1c2luZXNzIGFz
+IHRvCj4gLcKgwqDCoMKgwqDCoMKgICogd2hldGhlciBpdCBmYWlsZWQgb3Igbm90LCB3ZSBqdXN0
+IG5lZWQgdG8gY2xlYW4gdXAuCj4gLcKgwqDCoMKgwqDCoMKgICovCj4gLcKgwqDCoMKgwqDCoMKg
+a3VuaXRfcnVuX2Nhc2VfY2xlYW51cCh0ZXN0LCBzdWl0ZSk7Cj4gwqB9Cj4gwqAKPiDCoC8qCj4g
+QEAgLTQ3OCw2ICs1MTIsMTMgQEAgc3RhdGljIHZvaWQga3VuaXRfcnVuX2Nhc2VfY2F0Y2hfZXJy
+b3JzKHN0cnVjdCBrdW5pdF9zdWl0ZSAqc3VpdGUsCj4gwqDCoMKgwqDCoMKgwqDCoGNvbnRleHQu
+dGVzdF9jYXNlID0gdGVzdF9jYXNlOwo+IMKgwqDCoMKgwqDCoMKgwqBrdW5pdF90cnlfY2F0Y2hf
+cnVuKHRyeV9jYXRjaCwgJmNvbnRleHQpOwo+IMKgCj4gK8KgwqDCoMKgwqDCoMKgLyogTm93IHJ1
+biB0aGUgY2xlYW51cCAqLwo+ICvCoMKgwqDCoMKgwqDCoGt1bml0X3RyeV9jYXRjaF9pbml0KHRy
+eV9jYXRjaCwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHRlc3QsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBrdW5pdF90cnlfcnVuX2Nhc2VfY2xlYW51cCwKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGt1bml0X2NhdGNo
+X3J1bl9jYXNlX2NsZWFudXApOwo+ICvCoMKgwqDCoMKgwqDCoGt1bml0X3RyeV9jYXRjaF9ydW4o
+dHJ5X2NhdGNoLCAmY29udGV4dCk7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAvKiBQcm9wYWdhdGUg
+dGhlIHBhcmFtZXRlciByZXN1bHQgdG8gdGhlIHRlc3QgY2FzZS4gKi8KPiDCoMKgwqDCoMKgwqDC
+oMKgaWYgKHRlc3QtPnN0YXR1cyA9PSBLVU5JVF9GQUlMVVJFKQo+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgdGVzdF9jYXNlLT5zdGF0dXMgPSBLVU5JVF9GQUlMVVJFOwoK
 
-[for the record: I noticed the odd format was not the real problem; see
-below]
-
-> I'd need pay more attention when the regression tracking process is
-> involved in case there are more patch versions floating around. People
-> usually don't "CC enough" so that you have the regzbot in place helps
-> to track the state.
-
-First off: Sorry again for the trouble I caused.
-
-Yes, a CC would have prevent it, as then I (aka the "human fallback")
-would have seen the patch and noticed that regzbot missed something.
-
-But normally it should have worked fine without the CC. In this case it
-just didn't due to a bug in regzbot: the msg-id of the tracked report
-contains slashes and it seems something in the url en/decoding within
-regzbot went wrong somewhere. IOW: the fix in next (2e55571fddf ("btrfs:
-set default discard iops_limit to 1000")) is fine the way it is from
-regzbot point of view and I have to fix regzbot.
-
->> P.S.: /me meanwhile yet again wonders if we should tell people to add a
->> "CC: <regressions@lists.linux.dev>" on patches fixing regressions. Then
->> in this case I would have become aware of the patch. And it makes it
->> obvious for anybody handling patches that the patch is fixing a
->> regression. But whatever, might not be worth it.
-> 
-> I'm not sure if it would fit how regzbot workflow works, but syzbot
-> provides links with the reports and then changes the state when the
-> patch is committed containing the links.
-
-You can't see it on the lists and only it regzbot web-ui, but regzbot
-works similarly: it marks a regression as "fix incoming" when it notices
-the fix hit linux-next.
-
-> I don't see anything similar in
-> the process/handling-regression document. If the "Link: <report>" is
-> sufficient
-
-It is, but maybe handling-regressions should point that out more
-clearly. It currently is more implicit: "These tags are also crucial for
-tools and scripts used by other kernel developers or Linux
-distributions; one of these tools is regzbot, which heavily relies on
-the “Link:” tags to associate reports for regression with changes
-resolving them."
-
-> then it should work already but there's no guarantee that the
-> submitted patches would contain that. I add links to the committed
-> versions
-
-Thx for that, as the one Boris initially used[1] in the submission[2] is
-not easily to resolve.
-
-[1]
-https://lore.kernel.org/linux-btrfs/ZCxKc5ZzP3Np71IC@infradead.org/T/#m6ebdeb475809ed7714b21b8143103fb7e5a966da
-[2]
-https://lore.kernel.org/linux-btrfs/cover.1680723651.git.boris@bur.io/T/#me406ebc5dc35e7fdbb59aece2158ac1a86b0c11b
-
-> but then you'd need to scan at least linux-next. In any case
-> with the regzbot it's fixable.
-
-Ciao, Thorsten
