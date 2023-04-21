@@ -2,87 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801A86EB30B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B4B6EB30E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjDUUuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 16:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S231598AbjDUUxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 16:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDUUuw (ORCPT
+        with ESMTP id S229543AbjDUUxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 16:50:52 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78041FCE;
-        Fri, 21 Apr 2023 13:50:50 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6a606135408so2272411a34.0;
-        Fri, 21 Apr 2023 13:50:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682110250; x=1684702250;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mXtCjLr6e0ACopDROp6u8nUQuHmLJz4px5GPfgN7eBs=;
-        b=TUaO0wl8KaFHrcF1Lj21f1zJ5mly5IVwmjyLPjGpv8SBL180QIdPBhhFUYyiky4JUr
-         ZvvTM4935larbI6j+beSwZ0K4dxr1ALUgaPhevsUL8B0NyJmBjwPmsnGb+PYmpJZbCvx
-         7J3RASs80R0nC27nq/M/BavElF7r7XgfbSAQUZt4TFUfIxR5Yc1fUROrkyO1Qd/Fy9ag
-         JyGkoJMuz6TixS5d/PXiORdrh98uiug9/XE8bEcNu5V/kjQgrw7/76giacfPyyjh3RTA
-         PcdXYW3h1amF1IIsWeTWRYw5JZaC77TzV/JQhG4CTyBrTydfOcuKBz2ava5+yliJiu30
-         bM8Q==
-X-Gm-Message-State: AAQBX9eG05GlcExWdPTt/DB1OzoUnAclYaTd9QUN6N6aO7u61pXmKoOF
-        0t2uCnDXSXswMOJnd02QMA==
-X-Google-Smtp-Source: AKy350bPLU6VfMLXu2FkytWiKxId89Rd2v0v24jbsfIKHmbVrFRwKEmRaexmkc8JvSdGQcxb3jpkAg==
-X-Received: by 2002:a9d:6348:0:b0:69f:7d3:6eae with SMTP id y8-20020a9d6348000000b0069f07d36eaemr3194982otk.7.1682110250073;
-        Fri, 21 Apr 2023 13:50:50 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i15-20020a9d624f000000b0069fb8bfb4f3sm2071766otk.77.2023.04.21.13.50.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 13:50:49 -0700 (PDT)
-Received: (nullmailer pid 1745210 invoked by uid 1000);
-        Fri, 21 Apr 2023 20:50:48 -0000
-Date:   Fri, 21 Apr 2023 15:50:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Fri, 21 Apr 2023 16:53:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81961FD5;
+        Fri, 21 Apr 2023 13:53:08 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 13317660327C;
+        Fri, 21 Apr 2023 21:53:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682110387;
+        bh=fnT9RDQavvIKBkmdeIY564q2m/UajYumE4RK3iuUElc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PnIU0vlo5rtx9wiuXhFSN4epaUL3RfZISYxZuHDKXz0WogABPf3NvgRNS8FTcOf4C
+         y2jxn/0Ux3d8ERo0JuLzuvh9hbphi2cc1ItOkrfWRQUDqyQx15qKKrn2clT0iIcht7
+         BYxrPzWZnNtgqrBeTNgSdT4EuGo0LHcowv/VgWglY4iBppyjWYz8gcnykY0kHbJXJS
+         MsqJTDEkvDEQn+Qyh5x8XYNv6gcA4aoqN6TsbWtTY++h2P1ce4cwbqGgG5kFEXm4gM
+         D189oWQURbDxbOljpGo2Zm1whXenUSayDykvIHESNbY4T6W3TZ/MdIbHKlMemOeBo1
+         yRdnUjILMGwsw==
+Date:   Fri, 21 Apr 2023 16:53:01 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, phone-devel@vger.kernel.org
-Subject: Re: [PATCH] media: dt-bindings: ov2685: Correct data-lanes attribute
-Message-ID: <168211024600.1745117.14232716289484936971.robh@kernel.org>
-References: <20230419-ov2685-dtschema-fixup-v1-1-c850a34b3a26@z3ntu.xyz>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 1/5] arm64: dts: mediatek: cherry: Add platform thermal
+ configuration
+Message-ID: <5ede9421-54d6-4dda-91af-2acbf46c2d3e@notapiano>
+References: <20230420094433.42794-1-angelogioacchino.delregno@collabora.com>
+ <20230420094433.42794-2-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5GuEQMxYTKrnia1ipYHLt_B2h6By7EejE7MjCypfavnFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230419-ov2685-dtschema-fixup-v1-1-c850a34b3a26@z3ntu.xyz>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGXv+5GuEQMxYTKrnia1ipYHLt_B2h6By7EejE7MjCypfavnFg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 03:37:52PM +0800, Chen-Yu Tsai wrote:
+> On Thu, Apr 20, 2023 at 5:45 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+> >
+> > This platform has three auxiliary NTC thermistors, connected to the
+> > SoC's ADC pins. Enable the auxadc in order to be able to read the
+> > ADC values, add a generic-adc-thermal LUT for each and finally assign
+> > them to the SoC's thermal zones.
+> >
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > ---
+> >  .../boot/dts/mediatek/mt8195-cherry.dtsi      | 105 ++++++++++++++++++
+> >  1 file changed, 105 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> > index 8ac80a136c37..0820e9ba3829 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> > @@ -114,6 +114,77 @@ ppvar_sys: regulator-ppvar-sys {
+> >                 regulator-boot-on;
+> >         };
+> >
+> > +       /* Murata NCP03WF104F05RL */
+> > +       tboard_thermistor1: thermal-sensor-t1 {
+> > +               compatible = "generic-adc-thermal";
+> > +               #thermal-sensor-cells = <0>;
+> > +               io-channels = <&auxadc 0>;
+> > +               io-channel-names = "sensor-channel";
+> > +               temperature-lookup-table = <    (-10000) 1553
+> > +                                               (-5000) 1485
+> > +                                               0 1406
+> > +                                               5000 1317
+> > +                                               10000 1219
+> > +                                               15000 1115
+> > +                                               20000 1007
+> > +                                               25000 900
+> > +                                               30000 796
+> > +                                               35000 697
+> > +                                               40000 605
+> > +                                               45000 523
+> > +                                               50000 449
+> > +                                               55000 384
+> > +                                               60000 327
+> > +                                               65000 279
+> > +                                               70000 237
+> > +                                               75000 202
+> > +                                               80000 172
+> > +                                               85000 147
+> > +                                               90000 125
+> > +                                               95000 107
+> > +                                               100000 92
+> > +                                               105000 79
+> > +                                               110000 68
+> > +                                               115000 59
+> > +                                               120000 51
+> > +                                               125000 44>;
+> > +       };
+> > +
+> > +       tboard_thermistor2: thermal-sensor-t2 {
+> > +               compatible = "generic-adc-thermal";
+> > +               #thermal-sensor-cells = <0>;
+> > +               io-channels = <&auxadc 1>;
+> > +               io-channel-names = "sensor-channel";
+> > +               temperature-lookup-table = <    (-10000) 1553
+> > +                                               (-5000) 1485
+> > +                                               0 1406
+> > +                                               5000 1317
+> > +                                               10000 1219
+> > +                                               15000 1115
+> > +                                               20000 1007
+> > +                                               25000 900
+> > +                                               30000 796
+> > +                                               35000 697
+> > +                                               40000 605
+> > +                                               45000 523
+> > +                                               50000 449
+> > +                                               55000 384
+> > +                                               60000 327
+> > +                                               65000 279
+> > +                                               70000 237
+> > +                                               75000 202
+> > +                                               80000 172
+> > +                                               85000 147
+> > +                                               90000 125
+> > +                                               95000 107
+> > +                                               100000 92
+> > +                                               105000 79
+> > +                                               110000 68
+> > +                                               115000 59
+> > +                                               120000 51
+> > +                                               125000 44>;
+> > +       };
+> > +
+> >         usb_vbus: regulator-5v0-usb-vbus {
+> >                 compatible = "regulator-fixed";
+> >                 regulator-name = "usb-vbus";
+> > @@ -260,6 +331,10 @@ &gpu {
+> >         mali-supply = <&mt6315_7_vbuck1>;
+> >  };
+> >
+> > +&auxadc {
+> > +       status = "okay";
+> > +};
+> > +
+> >  &i2c0 {
+> >         status = "okay";
+> >
+> > @@ -1098,6 +1173,36 @@ mt6315_7_vbuck1: vbuck1 {
+> >         };
+> >  };
+> >
+> > +&thermal_zones {
+> > +       soc_area_ntc {
 
-On Wed, 19 Apr 2023 17:58:27 +0200, Luca Weiss wrote:
-> When adapting the original doc conversion to support 2 lanes, minItems
-> should've been added as well since the sensor supports either 1 or 2
-> lanes. Add minItems to make the validation happy again.
+Not sure if that's what's causing the issue, but the thermal zone name should
+end with -thermal as per the binding. Also note that it needs to be under 20
+characters otherwise it will fail to be registered with -22 like below.
+(Also, node names shouldn't contain underscore)
+
+Thanks,
+Nícolas
+
+> > +               polling-delay = <1000>;
+> > +               polling-delay-passive = <250>;
+> > +               thermal-sensors = <&tboard_thermistor1>;
+> > +
+> > +               trips {
+> > +                       trip-crit {
+> > +                               temperature = <95000>;
+> > +                               hysteresis = <2000>;
+> > +                               type = "critical";
+> > +                       };
+> > +               };
+> > +       };
+> > +
+> > +       pmic_area_ntc {
+> > +               polling-delay = <1000>;
+> > +               polling-delay-passive = <0>;
+> > +               thermal-sensors = <&tboard_thermistor2>;
+> > +
+> > +               trips {
+> > +                       trip-crit {
+> > +                               temperature = <95000>;
+> > +                               hysteresis = <2000>;
+> > +                               type = "critical";
+> > +                       };
+> > +               };
+> > +       };
 > 
-> Fixes: 8d561d78aeab ("media: dt-bindings: ov2685: convert to dtschema")
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> I'm still getting:
 > 
-
-Acked-by: Rob Herring <robh@kernel.org>
-
+> thermal_sys: Failed to find 'trips' node
+> thermal_sys: Failed to find trip points for thermal-sensor-t1 id=0
+> generic-adc-thermal thermal-sensor-t1: Thermal zone sensor register failed: -22
+> generic-adc-thermal: probe of thermal-sensor-t1 failed with error -22
+> thermal_sys: Failed to find 'trips' node
+> thermal_sys: Failed to find trip points for thermal-sensor-t2 id=0
+> generic-adc-thermal thermal-sensor-t2: Thermal zone sensor register failed: -22
+> generic-adc-thermal: probe of thermal-sensor-t2 failed with error -22
+> thermal_sys: Failed to find 'trips' node
+> thermal_sys: Failed to find trip points for thermal-sensor-t3 id=0
+> generic-adc-thermal thermal-sensor-t3: Thermal zone sensor register failed: -22
+> generic-adc-thermal: probe of thermal-sensor-t3 failed with error -22
+> 
+> 
+> 
+> > +};
+> > +
+> >  &u3phy0 {
+> >         status = "okay";
+> >  };
+> > --
+> > 2.40.0
+> >
+> >
