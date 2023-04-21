@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC5C6EB05D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B666EB05E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjDURNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S233366AbjDURPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjDURNX (ORCPT
+        with ESMTP id S232848AbjDURPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:13:23 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A968E79;
-        Fri, 21 Apr 2023 10:13:22 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b733fd00bso2099273b3a.0;
-        Fri, 21 Apr 2023 10:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682097201; x=1684689201;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wtv/plYjg6t5+KIhqn4HLpoeS3qH6YTzNA/OWZvr4S0=;
-        b=FjEVhsbuInMEEPWXdLhRhcGP7c0Mf3zoia/8MpkI3FFi8bXXeWe4n6ptt+1a4zdrg5
-         FNqYWJH1xCmVEZhstLN2AY9j/okpz1gYfJeSgdtNavogVsNgAQ5R8ZrEmOeH9LRu9LZ8
-         FkvW9GQk6BZqdH44lftdYbIwBPC3Z4QCmMjJg12Yt7CJ2UvD21aHSDyI6cqr0NPtz2Od
-         xglJwazptN44LPeHcJJjTDu2mrW5MEeUfV5ul8U1vlx9SIjIlN0N5LeTPodvIpPNG7HS
-         NY6kGx+cCheUAowDO9nGtRHddThNXORJLc8DkvNUmRM7XeJCoOhtQsFLA2muTX8IIU0T
-         IFRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682097201; x=1684689201;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wtv/plYjg6t5+KIhqn4HLpoeS3qH6YTzNA/OWZvr4S0=;
-        b=H2KVl4tz8/8w2stM+fbx9KxKAqSMNrfSyfmmTtjh6Nj0FsegR/+1rKQayTecX1GVsy
-         NouaPcaaL7rEJEecTQUmK3JVGSvNUd0HE8+Q8Zc262dF7ZiacGpDTJA8mciskbV7dF8O
-         dJABDmin8b62Y8bytgy/0av3tsi01xDdT7FYY/t8SYLHVUNs8oefH6kUHHSi5x5SV6Bf
-         WDKbRJ5LHUgpJY0p11Tdlc5aUGNn2TxR61vlTJekNb2bEUkxDKnVrHanNqsSxRQJ32q3
-         0SmoonUPe6zwlREpV30+wsrRn+jvg00mg0eNy1Z/bBgi70bJmUaFWq+G5+BQFv/bVg1j
-         kkgA==
-X-Gm-Message-State: AAQBX9f3l5NnFYFoaMvRc+KgKS064OA5ps126k/v3T8d6SImXzqRfVdO
-        jCzKiagrx50MuuU/IP/+Obc=
-X-Google-Smtp-Source: AKy350aW0P/FC8UFKP2uDVDZSV2ognzE+Ons42k3+QvxKksi2a70BP+43x0RqhleMO7/CgeLtZL1Fw==
-X-Received: by 2002:a17:90a:9708:b0:22c:59c3:8694 with SMTP id x8-20020a17090a970800b0022c59c38694mr5906384pjo.44.1682097201450;
-        Fri, 21 Apr 2023 10:13:21 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y18-20020a17090aa41200b00244991b3f7asm5549150pjp.1.2023.04.21.10.13.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 10:13:20 -0700 (PDT)
-Message-ID: <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
-Date:   Fri, 21 Apr 2023 10:13:12 -0700
+        Fri, 21 Apr 2023 13:15:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C018F0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:15:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AtvmO0xGmo7IvM4Hiwzxf0iWjctxbr+KbWVfxmqqbpw=; b=XW4oII0OralIKyM9phqGrPcDcA
+        8wYmtVd4VW+lvJPATf7K1MSjFcz09leqd4DPDTvsL47GEbXQ5wl6AWrRrfw98Tv4ltULf88th5JoQ
+        7UnEkakK8cfuMk+E1pTHmDEPMLdS88PbXjJTDdnUB/mzPORk0ZpSVvDyktDC1opIOM+DQKSpmMO7c
+        crni9qfeNnVe/iCP10Y4khF4ylh61qgKv5ELwJTy4D6g7glkRhAkrQniQCy7+3Y+SkCEMTWf5Mvil
+        yDKZPgphuZbPOECyzvZE8W1pD7xwc3273QUKog9Xe0RMzBBxUSE3qCo3EcvyHJrdmocV3iMsFgdMA
+        MI+8Cw6w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ppuLJ-00FRSI-EX; Fri, 21 Apr 2023 17:14:41 +0000
+Date:   Fri, 21 Apr 2023 18:14:41 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
+        Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 00/26] mm: reliable huge page allocator
+Message-ID: <ZELEgRG5DwmcMB/T@casper.infradead.org>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <ZD9qATZcdyW/UGgI@casper.infradead.org>
+ <20230421161156.5jnipnfs4svwwzee@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
- compilation
-Content-Language: en-US
-To:     Dhruva Gole <d-gole@ti.com>, Mark Brown <broonie@kernel.org>
-Cc:     Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
-References: <20230420121615.967487-1-d-gole@ti.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230420121615.967487-1-d-gole@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421161156.5jnipnfs4svwwzee@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 05:16, Dhruva Gole wrote:
-> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
-> it may introduce build issues with certain configs where it maybe disabled
-> This is because if above config is not enabled the suspend-resume
-> functions are never part of the code but the bcm63xx_spi_pm_ops struct
-> still inits them to non-existent suspend-resume functions.
+On Fri, Apr 21, 2023 at 05:11:56PM +0100, Mel Gorman wrote:
+> It was considered once upon a time and comes up every so often as variants
+> of a "sticky" pageblock pageblock bit that prevents mixing. The risks was
+> ending up in a context where memory within a suitable pageblock cannot
+> be freed and all of the available MOVABLE pageblocks have at least one
+> pinned page that cannot migrate from the allocating context. It can also
+> potentially hit a case where the majority of memory is UNMOVABLE pageblocks,
+> each of which has a single pagetable page that cannot be freed without an
+> OOM kill. Variants of issues like this would manifestas an OOM kill with
+> plenty of memory free bug or excessive CPu usage on reclaim or compaction.
 > 
-> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
-> 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
->   drivers/spi/spi-bcm63xx.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
-> index 96633a0051b1..99395932074c 100644
-> --- a/drivers/spi/spi-bcm63xx.c
-> +++ b/drivers/spi/spi-bcm63xx.c
-> @@ -617,7 +617,6 @@ static void bcm63xx_spi_remove(struct platform_device *pdev)
->   	clk_disable_unprepare(bs->clk);
->   }
->   
-> -#ifdef CONFIG_PM_SLEEP
->   static int bcm63xx_spi_suspend(struct device *dev)
+> It doesn't kill the idea of the series at all but it puts a lot of emphasis
+> in splitting the series by low-risk and high-risk. Maybe to the extent where
+> the absolute protection against mixing can be broken in OOM situations,
+> kernel command line or sysctl.
 
-Don't we need a __maybe_unused here?
--- 
-Florian
+Has a variant been previously considered where MOVABLE allocations are
+allowed to come from UNMOVABLE blocks?  After all, MOVABLE allocations
+are generally, well, movable.  So an UNMOVABLE allocation could try to
+migrate pages from a MIXED pageblock in order to turn the MIXED pageblock
+back into an UNMOVABLE pageblock.
 
+This might work better in practice because GFP_NOFS allocations tend
+to also be MOVABLE, so allowing them to take up some of the UNMOVABLE
+space temporarily feels like a get-out-of-OOM card.
+
+(I've resisted talking about plans to make page table pages movable
+because I don't think that's your point; that's just an example of a
+currently-unmovable allocation, right?)
+
+I mention this in part because on my laptop, ZONE_DMA is almost unused:
+
+Node 0, zone      DMA      0      0      0      0      0      0      0      0      1      2      2
+Node 0, zone    DMA32   1685   1345   1152    554    424    212    104     40      2      0      0
+Node 0, zone   Normal   6959   3530   1893   1862    629    483    107     10      0      0      0
+
+That's 2 order-10 (=8MB), 2 order-9 (=4MB) and 1 order8 (=1MB) for a
+total of 13MB of memory.  That's insignificant to a 16GB laptop, but on
+smaller machines, it might be worth allowing MOVABLE allocations to come
+from ZONE_DMA on the grounds that they can be easily freed if anybody
+ever allocated from ZONE_DMA.
