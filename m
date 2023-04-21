@@ -2,231 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB42C6EA35C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C0A6EA35F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbjDUFwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S233445AbjDUFxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 01:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbjDUFwi (ORCPT
+        with ESMTP id S229515AbjDUFx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:52:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3001BF3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682056315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5I7evANVAfJwuk/ANSR7cqv4R/exMlo0YUcDm4ZAsZk=;
-        b=UtxCWy8koms1qCGcMDK9fq4UEboxvZwC4G+44dKwwH8HP9mjQmvj0O3OBdbvhHzmy6QCBv
-        QztgHpLY532/EggarORuBZly/Me9hxOImipg8hBYUFHp11Dxh2TsFOeKvf0F6yWVx+nTSa
-        tC6pLmGKCrG+rQ2AXTupP/NFQU+kVmw=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-656-1ZYTnbiIPByVyxnr6-gRhg-1; Fri, 21 Apr 2023 01:51:53 -0400
-X-MC-Unique: 1ZYTnbiIPByVyxnr6-gRhg-1
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-38bedafc58dso591253b6e.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:51:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682056313; x=1684648313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5I7evANVAfJwuk/ANSR7cqv4R/exMlo0YUcDm4ZAsZk=;
-        b=fw7jnSKbZurRplW+FYAqtNg4T5fiwg8APlEt403whaf2mi23dWW0AqKCoX5pqnByeG
-         40KB8iO0BBntFYRO360IamUC+SNJ2kHXOkcwbosBHyUTsh1UhLXVleXSEc3vuam0S+53
-         R1z7M1xnSKGtfJVg5zSDlgJg+1da9bef+PWZKZ3wNeTjnywmIEoZjd+MYhWdEnzNmZSV
-         OF8LukSd3RcaW8CUM7MtvB/Wv2ri/trlMDstcJXN5NnerNsxG6c4QPunQyvqC0OFa0/h
-         7JutvCoR7TsMvoPvlk3Rkzx4QqDINtJ/PcpZJGyU8YZ9JXY9ca0owo7Bs4zVPZmHzGvu
-         GvrQ==
-X-Gm-Message-State: AAQBX9fm/ecT6zgMFfWPkDruWzs7gtZ5g0Q0x8NcDhConzv/9EF16E0H
-        Pu5T8gBBjhFEClWKMdRMQB8VfZJKpZp0M4wxCxZCr3NQu2vur3jZj0kTNHqratBgdLBgNg60qB/
-        q48ntXJqZFAiyfS1asPSTam4IiDwb4D26L92l2XnG
-X-Received: by 2002:a05:6808:16ab:b0:38c:17a7:5b7b with SMTP id bb43-20020a05680816ab00b0038c17a75b7bmr2056929oib.19.1682056313004;
-        Thu, 20 Apr 2023 22:51:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bchGp1g3M4Oxp2OMGsAtahE5jQNn822SVg525TzI2VQbnv6N9KJLpXdXFbYWo5pLOIS/diFH+MGlS5GPILS4Q=
-X-Received: by 2002:a05:6808:16ab:b0:38c:17a7:5b7b with SMTP id
- bb43-20020a05680816ab00b0038c17a75b7bmr2056923oib.19.1682056312733; Thu, 20
- Apr 2023 22:51:52 -0700 (PDT)
+        Fri, 21 Apr 2023 01:53:29 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D762722
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:53:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fqN/owMvn3a3+EIOfxZ4iBDxxzIQfkyWAyOhksPJsTNyl9KECTKlcCZRl5Vbugwnhj8PIyhwDE+oguihJViZiRXnyiTCc7ITGr4PSWayhu2eYxVb2q5xpE5JHuha0+CkZ0AKHq8Pzheh5Mv1GAH0WJYz83p/lB6dv96twiqHvAokruDnnwzmfzxNUJq0bI5Ahf+yy9DSaQMwF7QLcTcpzijdRsP54BJjqb60c4IylQz5yeZxZNhnSc5VLWA6B8tSEK4L9UeAeZnmgFI/KfPLQMMKRH1BoS349/xtJi0Hrt+sXzuoHSN6BgCCIw9s9W8s89/v43OpupzvGo64E41Tjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SITf7rCUoHHdaiaM3toRiQ3gftc+eSQ5mJFBtlx1kYo=;
+ b=SyLvkvJ32hYAkLrTNZvXW8AZiOnBN1JHVqJULP7gaywznOUGqdo+W3m10RfHRy9WBKRjPzqmgRM7nvnQ8Ux06sAwGbCkN5IbdrDcOGyGgogUkTAeczFClb0H8JZR0StIpqv98TiiM24csdjqwA0iiqpWZ9Zdm4Ymj4hSsf7c0nw8M09ekfAJ7VZR28AtqTG6u95jTOlfM2mSSl2h8jLlzhvWG+IcqJ+mW2rH2+6y++hJu0mVd0nZVX/9FB+RwWq7iY5rkjloARk8I3k3hD1E/SkfRSYlBOer48/6eh9PH+Yt4eZXrdYSdbEJMmh7HYH4V7D+wVsRGJwMTInBI4wUwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SITf7rCUoHHdaiaM3toRiQ3gftc+eSQ5mJFBtlx1kYo=;
+ b=hy5dNoT//7Je/p6+Qe4QZkjSfQN2MEekqE4O1P1Exyef3DKMNjoaR3DVFFLdSEWtcyKazNlx6IP7pzp61qeEymkFko6iE9hsYBgafVTOM+4DJHxSpUOLWOktUTurc7UKGm30Djo7Yt7krGf0oynXTe8Xeqf0iQcsXfV3D9SzOss=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DM8PR01MB6824.prod.exchangelabs.com (2603:10b6:8:23::24) by
+ BN8PR01MB5588.prod.exchangelabs.com (2603:10b6:408:b4::26) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.11; Fri, 21 Apr 2023 05:53:07 +0000
+Received: from DM8PR01MB6824.prod.exchangelabs.com
+ ([fe80::5cf:2baf:f5ab:ac87]) by DM8PR01MB6824.prod.exchangelabs.com
+ ([fe80::5cf:2baf:f5ab:ac87%5]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
+ 05:53:07 +0000
+From:   Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mike.leach@linaro.org, suzuki.poulose@arm.com
+Cc:     mathieu.poirier@linaro.org, acme@kernel.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
+        scclevenger@os.amperecomputing.com,
+        gankulkarni@os.amperecomputing.com
+Subject: [PATCH V2] perf cs-etm: Add fix for coresight trace for any range of CPUs
+Date:   Thu, 20 Apr 2023 22:52:53 -0700
+Message-Id: <20230421055253.83912-1-gankulkarni@os.amperecomputing.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH0PR03CA0291.namprd03.prod.outlook.com
+ (2603:10b6:610:e6::26) To DM8PR01MB6824.prod.exchangelabs.com
+ (2603:10b6:8:23::24)
 MIME-Version: 1.0
-References: <20230419134329.346825-1-maxime.coquelin@redhat.com>
- <CACGkMEuiHqPkqYk1ZG3RZXLjm+EM3bmR0v1T1yH-ADEazOwTMA@mail.gmail.com> <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com>
-In-Reply-To: <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 21 Apr 2023 13:51:41 +0800
-Message-ID: <CACGkMEuWpHokhwvJ5cF41_C=ezqFhoOyUOposdZ5+==A642OmQ@mail.gmail.com>
-Subject: Re: [RFC 0/2] vduse: add support for networking devices
-To:     Maxime Coquelin <maxime.coquelin@redhat.com>
-Cc:     xieyongji@bytedance.com, mst@redhat.com, david.marchand@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR01MB6824:EE_|BN8PR01MB5588:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43c47bd1-9d1e-413c-af27-08db422cadf5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: h+pBdETo17FZZNflUBY/0FgUmvjRoaYiQ1ZnP3ognskf5nxMm1AZfHfojzFYC2t5+7c+D8yJo0AoZhY+OfCi2GzJYMPPKxQkuyytFcuQp3saU1Yp+ZS3r6T30wMqbH911RREbFhZAUg+plITMf9ISzezWOHY7jREb8fl9XR0GXum1H0dG4kgi6UZYDR5L9q2koamFFj7X2dn8UsYgawcj2mnI8oPJ6hSUBWvn5/Vlw69/4HwBERafPVgxdvg80EepcLIadNKRFXEYAV3f9ITwz5msZg2fM4EP9bEWU/oN+k3O6pNUihrIvgWxEnUj2jZjxNxu+pN34Lz4eCt66pKdkfeRzgZcFkHj6XswTZtG9reLX442jMwnmQ+FUzpaRZTr6Kh1I96+9hFejjy3KaoDTMoaBO4Id9aXrAe5Z9haRytCXNi4CpTa2bid2W7MMM9keAwI3g0ZnHxyQ8RLZXyVygTKhZCd+ak23l9O7sX1OzeEZv/Pu1r9koSwYOcprHqTUu0ZQQCHwOUGpGjiuIZgHyeKfnK9v3ukipCek3Mj3AReGouKQqqG30ov6+YJy/2e3z2RDAmCVwZFCJleY3Rp4Y1GjE4lVpsLTLRFzQ6eq4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR01MB6824.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(396003)(136003)(39850400004)(451199021)(966005)(107886003)(316002)(66556008)(66476007)(66946007)(4326008)(6486002)(52116002)(6666004)(86362001)(478600001)(5660300002)(2616005)(8676002)(8936002)(2906002)(83380400001)(38100700002)(38350700002)(41300700001)(1076003)(26005)(186003)(6506007)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ev/MhtW3EBWD5g+NRPtDtRztiBvDk8GIF6iYLkED6xd8BHwxKDxc9ySEMpzq?=
+ =?us-ascii?Q?9+Q0+uu23z+lACl8lOa9PRyoC/l98VYR+cIUx2pV6soE4eJCOgdRpcf7SZYC?=
+ =?us-ascii?Q?tyWJ6pZzAzoIcKSOwOZ+LTkTFtHTY44NGx7qwVpKJSSNYwh5n79vrKMpE9hJ?=
+ =?us-ascii?Q?A1K0berageVmlyiQUH+4o+NFf5JzYZ/C9+eJT7qriSi3TTNFPVh7wXE1XK+q?=
+ =?us-ascii?Q?EOKqsEoUmDbgBruGc2NBozybYT7qSVvCOaaIwC55aSFFyi49WhT5jWws3huz?=
+ =?us-ascii?Q?RB3K8mGkRohJ6z/Qe7IlsUJWiqpBnzUKibZVSM6AoeM07k4rB7o0gTkD2p4e?=
+ =?us-ascii?Q?I1u8rfkYssuzLBS2LlZaLR0gRTO4k/SnHiyz2/RIy88My3vEgb9519O7vjko?=
+ =?us-ascii?Q?xdAf4cbJomm0pXG88BLwa73L5uwE1nnBcS2EPimHr4LmoUbfKbCaD7HC/RIW?=
+ =?us-ascii?Q?vPf4VvnukxC2nnM5f1Au5+y5r94HwZMtlL5d45wHzKQwAsS0n7R43A7rKtnA?=
+ =?us-ascii?Q?GWC/Pg22KZMzS9oZWiT1UbBoWxbvM7unNU3BllLz1ABmZhe459QA9bCybl93?=
+ =?us-ascii?Q?n+E3NdtYgmiJhagJnNx2B+/ITT7J27JwGh0QX0GH+n6UsyEQrQCXaVVU3qaI?=
+ =?us-ascii?Q?Skgt9xwpXLg50rSOOcQRLaiROBsDp19UmtW9+hlGMzKYKLjLPWgel4p32Vfe?=
+ =?us-ascii?Q?lwZrEvq54ZNwoWNtO4k72wDJ5liGUNLMCunTWhqkHeoibs3S5FDcC8peWVE3?=
+ =?us-ascii?Q?hVmgisQWa3i6lpqKFO8f75rFI4Z2V8Bzw5cAo6R8HK44AH7y9ukbncl3krmI?=
+ =?us-ascii?Q?nYZosPNWx2fihvbPm9e7wL1YVfZsRDFmYx/aiPy7EZtV83XPdwUdEUn9BzAv?=
+ =?us-ascii?Q?NyQHmUkjpwIGzWlsDUmFM5FUVVSovnpDjRGdoDq/XasL5ayiQwJKkqYC9hh2?=
+ =?us-ascii?Q?zmpBm67Rn1NFUiEWyxKeUxXXIkxrou3rP/Xcm4UGPdIqo/1xNsNfyoepCUzU?=
+ =?us-ascii?Q?Yk241wj8jAlRYrkf9JAnwIB3ufHNVTwk/p8hUt5FAqj0Jh53HFxp8AJ9vsSv?=
+ =?us-ascii?Q?LLnOM/uCkLgpYHspgADaUTblIF3bpZ/Jdst3QWWiy9iJcybPo1spCd8WZg4l?=
+ =?us-ascii?Q?uHEydYiQJbUxwPwURZ8ftz2qXE8xPal9ZxgQy1JZp3zwm3oq5Xckvj/c5/Wv?=
+ =?us-ascii?Q?ZUbYjKu+xqZDmu21WeGBavBAO09ZnmgJwOdrBog4r9q7tJEvHwaG+ig/PvAT?=
+ =?us-ascii?Q?4ORXwLFzXzBfeRLOxDYTfbxxKjuu7oEAEZakMFKu0U5NSEqrLP9dQtzHqj8e?=
+ =?us-ascii?Q?h6dnziJIS7WI7RTUzj8GZBpKSSdvCpjbqZE85zaEu9F1yXH5Y8oUlOxF1ymv?=
+ =?us-ascii?Q?xdU6YewB8mFf6sQ0rK76yo85rZ3RPAKJE4DgNffpZv9hoPWlG79wrVtF0Jvp?=
+ =?us-ascii?Q?6xU3+DF3ftPLSLoedVMKM5qnem2XbJr9aqgp85ctHr2LU9VPKZ0OuG1dN/PF?=
+ =?us-ascii?Q?aFx+k23Oi7GSwdVAFiz8G1de/DdJWrhOh82T4vm70/w5YQ+5lAElVgmze2/p?=
+ =?us-ascii?Q?nflpNkj7hrcYSiGrtfXDPTDHwlEsv2UPNcMd7iHzbDtqsY2eTyXrE8g8rL7g?=
+ =?us-ascii?Q?g213iS6C0Y/QkYHXRvcT72o=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43c47bd1-9d1e-413c-af27-08db422cadf5
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR01MB6824.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 05:53:06.9535
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kw6QIaJdzDF3bxDJpXQOVmucxl2yr1arhWXHJrT+ibCgabxJVb3DIQFyfgKPmMiQFqHKLlOEdL5Nx1ttkHB43F+fUOEdZYtSsPbZKm1C44SE90Jn1liXUUgdKEfQlycV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR01MB5588
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 10:16=E2=80=AFPM Maxime Coquelin
-<maxime.coquelin@redhat.com> wrote:
->
->
->
-> On 4/20/23 06:34, Jason Wang wrote:
-> > On Wed, Apr 19, 2023 at 9:43=E2=80=AFPM Maxime Coquelin
-> > <maxime.coquelin@redhat.com> wrote:
-> >>
-> >> This small series enables virtio-net device type in VDUSE.
-> >> With it, basic operation have been tested, both with
-> >> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
-> >> adding VDUSE support [0] using split rings layout.
-> >>
-> >> Control queue support (and so multiqueue) has also been
-> >> tested, but require a Kernel series from Jason Wang
-> >> relaxing control queue polling [1] to function reliably.
-> >>
-> >> Other than that, we have identified a few gaps:
-> >>
-> >> 1. Reconnection:
-> >>   a. VDUSE_VQ_GET_INFO ioctl() returns always 0 for avail
-> >>      index, even after the virtqueue has already been
-> >>      processed. Is that expected? I have tried instead to
-> >>      get the driver's avail index directly from the avail
-> >>      ring, but it does not seem reliable as I sometimes get
-> >>      "id %u is not a head!\n" warnings. Also such solution
-> >>      would not be possible with packed ring, as we need to
-> >>      know the wrap counters values.
-> >
-> > Looking at the codes, it only returns the value that is set via
-> > set_vq_state(). I think it is expected to be called before the
-> > datapath runs.
-> >
-> > So when bound to virtio-vdpa, it is expected to return 0. But we need
-> > to fix the packed virtqueue case, I wonder if we need to call
-> > set_vq_state() explicitly in virtio-vdpa before starting the device.
-> >
-> > When bound to vhost-vdpa, Qemu will call VHOST_SET_VRING_BASE which
-> > will end up a call to set_vq_state(). Unfortunately, it doesn't
-> > support packed ring which needs some extension.
-> >
-> >>
-> >>   b. Missing IOCTLs: it would be handy to have new IOCTLs to
-> >>      query Virtio device status,
-> >
-> > What's the use case of this ioctl? It looks to me userspace is
-> > notified on each status change now:
-> >
-> > static int vduse_dev_set_status(struct vduse_dev *dev, u8 status)
-> > {
-> >          struct vduse_dev_msg msg =3D { 0 };
-> >
-> >          msg.req.type =3D VDUSE_SET_STATUS;
-> >          msg.req.s.status =3D status;
-> >
-> >          return vduse_dev_msg_sync(dev, &msg);
-> > }
->
-> The idea was to be able to query the status at reconnect time, and
-> neither having to assume its value nor having to store its value in a
-> file (the status could change while the VDUSE application is stopped,
-> but maybe it would receive the notification at reconnect).
+The current implementation supports coresight trace decode for a range
+of CPUs, if the first CPU is CPU0.
 
-I see.
+Perf report segfaults, if tried for sparse CPUs list and also for
+any range of CPUs(non zero first CPU).
 
->
-> I will prototype using a tmpfs file to save needed information, and see
-> if it works.
+Adding a fix to perf report for any range of CPUs and for sparse list.
 
-It might work but then the API is not self contained. Maybe it's
-better to have a dedicated ioctl.
+Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+---
 
->
-> >> and retrieve the config
-> >>      space set at VDUSE_CREATE_DEV time.
-> >
-> > In order to be safe, VDUSE avoids writable config space. Otherwise
-> > drivers could block on config writing forever. That's why we don't do
-> > it now.
->
-> The idea was not to make the config space writable, but just to be able
-> to fetch what was filled at VDUSE_CREATE_DEV time.
->
-> With the tmpfs file, we can avoid doing that and just save the config
-> space there.
+V2:
+	Updated with review comments.
+	Fixed for sparse list of CPUs also.
 
-Same as the case for status.
+V1:
+	[1] https://lore.kernel.org/lkml/20230419172101.78638-1-gankulkarni@os.amperecomputing.com/
 
-Thanks
+ tools/perf/util/cs-etm.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
->
-> > We need to harden the config write before we can proceed to this I thin=
-k.
-> >
-> >>
-> >> 2. VDUSE application as non-root:
-> >>    We need to run the VDUSE application as non-root. There
-> >>    is some race between the time the UDEV rule is applied
-> >>    and the time the device starts being used. Discussing
-> >>    with Jason, he suggested we may have a VDUSE daemon run
-> >>    as root that would create the VDUSE device, manages its
-> >>    rights and then pass its file descriptor to the VDUSE
-> >>    app. However, with current IOCTLs, it means the VDUSE
-> >>    daemon would need to know several information that
-> >>    belongs to the VDUSE app implementing the device such
-> >>    as supported Virtio features, config space, etc...
-> >>    If we go that route, maybe we should have a control
-> >>    IOCTL to create the device which would just pass the
-> >>    device type. Then another device IOCTL to perform the
-> >>    initialization. Would that make sense?
-> >
-> > I think so. We can hear from others.
-> >
-> >>
-> >> 3. Coredump:
-> >>    In order to be able to perform post-mortem analysis, DPDK
-> >>    Vhost library marks pages used for vrings and descriptors
-> >>    buffers as MADV_DODUMP using madvise(). However with
-> >>    VDUSE it fails with -EINVAL. My understanding is that we
-> >>    set VM_DONTEXPAND flag to the VMAs and madvise's
-> >>    MADV_DODUMP fails if it is present. I'm not sure to
-> >>    understand why madvise would prevent MADV_DODUMP if
-> >>    VM_DONTEXPAND is set. Any thoughts?
-> >
-> > Adding Peter who may know the answer.
->
-> Thanks!
-> Maxime
->
-> > Thanks
-> >
-> >>
-> >> [0]: https://patchwork.dpdk.org/project/dpdk/list/?series=3D27594&stat=
-e=3D%2A&archive=3Dboth
-> >> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0W=
-vjGRr3whU+QasUg@mail.gmail.com/T/
-> >>
-> >> Maxime Coquelin (2):
-> >>    vduse: validate block features only with block devices
-> >>    vduse: enable Virtio-net device type
-> >>
-> >>   drivers/vdpa/vdpa_user/vduse_dev.c | 11 +++++++----
-> >>   1 file changed, 7 insertions(+), 4 deletions(-)
-> >>
-> >> --
-> >> 2.39.2
-> >>
-> >
->
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 8dd81ddd9e4e..2003717f5779 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -275,6 +275,25 @@ static int cs_etm__metadata_set_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
+ 		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+ 	})
+ 
++/*
++ * Get a metadata for a specific cpu from an array.
++ *
++ */
++static u64 *get_cpu_data(struct cs_etm_auxtrace *etm, int cpu)
++{
++	int i;
++	u64 *metadata = NULL;
++
++	for (i = 0; i < etm->num_cpu; i++) {
++		if (etm->metadata[i][CS_ETM_CPU] == (u64)cpu) {
++			metadata = etm->metadata[i];
++			break;
++		}
++	}
++
++	return metadata;
++}
++
+ /*
+  * Handle the PERF_RECORD_AUX_OUTPUT_HW_ID event.
+  *
+@@ -344,8 +363,11 @@ static int cs_etm__process_aux_output_hw_id(struct perf_session *session,
+ 		return 0;
+ 	}
+ 
++	cpu_data = get_cpu_data(etm, cpu);
++	if (cpu_data == NULL)
++		return err;
++
+ 	/* not one we've seen before - lets map it */
+-	cpu_data = etm->metadata[cpu];
+ 	err = cs_etm__map_trace_id(trace_chan_id, cpu_data);
+ 	if (err)
+ 		return err;
+-- 
+2.39.2
 
