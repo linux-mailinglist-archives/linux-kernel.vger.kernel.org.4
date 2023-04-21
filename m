@@ -2,925 +2,535 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C74F6EB33C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54D56EB340
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbjDUU7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 16:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S233008AbjDUVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 17:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjDUU6t (ORCPT
+        with ESMTP id S232243AbjDUVAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 16:58:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA193A9C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:58:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8582C63837
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 20:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BC6C433D2;
-        Fri, 21 Apr 2023 20:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682110700;
-        bh=muLhylH6QNz7jtR/ivZgBEbZy7py1SfPe42/4ZCKn+8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LyTzJOe2ryNwyDrYhhHjtsZFI3RTzXuWK68DvaafRZ3HpO+mk+qKamwGwNaILY0tY
-         PUF6LZ8c9G5s6oGHGQ8InmtxcWOeuAcH4E9cOrbuvsviIuV08mpmi/EKe70dNSN1Xp
-         RFfkMLSHVNK2SQ6808mGspWNBfgxfE6iRAOJ4R286BuHPgO2i6k297bAPKEcNPXWSy
-         DHrJIxmubinJkjQzMJ7+2lRoKwHDRjWXJStemczEiFx54YQJUsJlt2e2eo5nHkPUJg
-         iWllXcVMdXrBqUAL/VSvfZfMelm2Jvh0mHefSMQbiY9a09Z8pEPdQwKdK6dU37o2it
-         cVQwrAN+QXzig==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marco Elver <elver@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org
-Subject: [PATCH] [v2] kasan: use internal prototypes matching gcc-13 builtins
-Date:   Fri, 21 Apr 2023 22:56:37 +0200
-Message-Id: <20230421205754.106794-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 21 Apr 2023 17:00:15 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BA51FF7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 14:00:10 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4eca0563b31so2175426e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 14:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682110808; x=1684702808;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ttjUAsyIVXcv8+Ww15Ry/DaLHN6d5Gt5imb4QRwoRQU=;
+        b=oK6490hXU4kt7SDs7vhSq2SCYPR8nyDFDWXsQK2vWpmAdU7x/2J+S0CUpRM5soO/HZ
+         iAldwq/k0MT+9Ne8TC7V+F0BSCSREu2lKYoFXE5Ejo8yaAe1R1oqfVtw6fHignXSupuq
+         u+DHSoW7rvig8boNnFQcimNaiuUuIc+ii94HMn4qhjgS3biQfN4I4SQw0G/MIbON+3ZM
+         10tTikfiUxHL9BAloo5iVK7QmqDhAKNGMUrR8rdEwH5cF7rITcSvQnx8cpyUTiQ4xqY2
+         G0MWn2b0j3rnFLRLrRg3gz1mw5+GWkPWdItzOJSYsnCSNEEftJfCw6lCoWFYtGQjjCcn
+         aO9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682110808; x=1684702808;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ttjUAsyIVXcv8+Ww15Ry/DaLHN6d5Gt5imb4QRwoRQU=;
+        b=K8mclSRMtU9GV0K0VhkfWUGh5VHM6lW0EMQB1VVMMoWNPNjHp//Ej+T+8INGgLsdrR
+         iQq58s6VeGRHQhlSX2bvN0oaO7iUzWlMYWGblp0ul331hdAoC0RaPWvFyAcJqRNxR5ts
+         OZLaqY+YaKLT1KIHswtjvLsQR/bv8/JXODtERMlLGkFlPa2WxCiBb8StD42s01vvkRX3
+         W3s1ovh/eAU1GuZkaAHyiSG/heAHBWI5WINX0Hz4AFFcylmMAPLiZxqa2b7iwHPA/oKc
+         UEq9woDp0IEBUUnzbAhCsNUldU2Ms2awI0fFRitPnaAlwFVs0Kz3gV3NcC3Ao06EIvCv
+         21Lw==
+X-Gm-Message-State: AAQBX9cnXiWaBl5NUUKIM7tMKKr2CF20ksyqAYQvF01B9z/pLcM54U0r
+        49F8WegcIKYqf1iCQI0UZWfdAQ==
+X-Google-Smtp-Source: AKy350YzZ74Qo5IsRYaGRsyWPY7IUWSOAgymHOHnb7bG1G5KLjnfHIlt70SOh8qAy6IteSTWfUspEQ==
+X-Received: by 2002:a05:6512:61:b0:4ef:5a59:12f6 with SMTP id i1-20020a056512006100b004ef5a5912f6mr966713lfo.16.1682110808295;
+        Fri, 21 Apr 2023 14:00:08 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x25-20020ac259d9000000b004ec89319b03sm673190lfn.211.2023.04.21.14.00.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 14:00:07 -0700 (PDT)
+Message-ID: <9f234b53-89f6-bfd1-211f-d1f55295c321@linaro.org>
+Date:   Sat, 22 Apr 2023 00:00:07 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] phy: qcom-qmp-pcie: Add support for IPQ9574 g3x1 and
+ g3x2 PCIEs
+Content-Language: en-GB
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
+References: <20230421124150.21190-1-quic_devipriy@quicinc.com>
+ <20230421124150.21190-3-quic_devipriy@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230421124150.21190-3-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 21/04/2023 15:41, Devi Priya wrote:
+> Add support for a single-lane and two-lane PCIe PHYs
+> found on Qualcomm IPQ9574 platform.
+> Also, add the definitions for missing register offsets.
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>   Changes in V1:
+> 	- Updated the hex values to lowercase
+> 
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 332 ++++++++++++++++++
+>   .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h   |  26 +-
+>   .../phy/qualcomm/phy-qcom-qmp-qserdes-pll.h   |   3 +
+>   3 files changed, 355 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> index df505279edfd..ff92b121b113 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> @@ -515,6 +515,250 @@ static const struct qmp_phy_init_tbl ipq8074_pcie_gen3_pcs_misc_tbl[] = {
+>   	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
+>   };
+>   
+> +static const struct qmp_phy_init_tbl ipq9574_gen3x1_pcie_serdes_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CLKBUFLR_EN, 0x18),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CTRL_BY_PSM, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x31),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_IVCO, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TRIM, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CMN_CONFIG, 0x06),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP_EN, 0x42),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_RESETSM_CNTRL, 0x20),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_MAP, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER1, 0xff),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER2, 0x3f),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x30),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x21),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE0, 0x68),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE0, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE0, 0xaa),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE0, 0xab),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE0, 0x14),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE0, 0xd4),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE0, 0x09),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE0, 0x16),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE0, 0x28),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE0, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE0, 0xa0),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE0, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE0, 0x24),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x20),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x32),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYS_CLK_CTRL, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_BUF_ENABLE, 0x07),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_EN_SEL, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TIMER, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE1, 0x53),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE1, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE1, 0x55),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE1, 0x55),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE1, 0x29),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE1, 0xaa),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE1, 0x09),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE1, 0x16),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE1, 0x28),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE1, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE1, 0xa0),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE1, 0x03),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE1, 0xb4),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV_MODE1, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_EN_CENTER, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER1, 0x7d),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER2, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER1, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER2, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE0, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE0, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE1, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE1, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE0, 0x19),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE1, 0x28),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x90),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x89),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x10),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_gen3x2_pcie_serdes_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CLKBUFLR_EN, 0x18),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CTRL_BY_PSM, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x31),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_IVCO, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TRIM, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CMN_CONFIG, 0x06),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP_EN, 0x42),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_RESETSM_CNTRL, 0x20),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_MAP, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER1, 0xff),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER2, 0x3f),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x30),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x21),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE0, 0x68),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE0, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE0, 0xaa),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE0, 0xab),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE0, 0x14),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE0, 0xd4),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE0, 0x09),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE0, 0x16),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE0, 0x28),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE0, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE0, 0xa0),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE0, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE0, 0x24),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x32),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYS_CLK_CTRL, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_BUF_ENABLE, 0x07),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_EN_SEL, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TIMER, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE1, 0x53),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE1, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE1, 0x55),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE1, 0x55),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE1, 0x29),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE1, 0xaa),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE1, 0x09),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE1, 0x16),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE1, 0x28),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE1, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE1, 0xa0),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE1, 0x03),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE1, 0xb4),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV_MODE1, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_EN_CENTER, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER1, 0x7d),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER2, 0x01),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER1, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER2, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE0, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE0, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE1, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE1, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE0, 0x19),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE1, 0x28),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x90),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x89),
+> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x10),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_pcie_tx_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_RCV_DETECT_LVL_2, 0x12),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_HIGHZ_DRVR_EN, 0x10),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_LANE_MODE_1, 0x06),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_pcie_rx_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_SIGDET_CNTRL, 0x03),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_SIGDET_ENABLES, 0x1c),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_SIGDET_DEGLITCH_CNTRL, 0x14),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL2, 0x61),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL3, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL4, 0x1e),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_DFE_EN_TIMER, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_FO_GAIN, 0x0c),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_SO_GAIN, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_SO_SATURATION_AND_ENABLE, 0x7f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_PI_CONTROLS, 0x70),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL1, 0x73),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL2, 0x80),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_LOW, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH2, 0xc8),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH3, 0x09),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH4, 0xb1),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_LOW, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH2, 0xc8),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH3, 0x09),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH4, 0xb1),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_LOW, 0xf0),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH, 0x02),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH2, 0x2f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH3, 0xd3),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH4, 0x40),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_IDAC_TSETTLE_HIGH, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_IDAC_TSETTLE_LOW, 0xc0),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_gen3x1_pcie_pcs_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_DCC_CAL_CONFIG, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_SIGDET_LVL, 0xaa),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_REFGEN_REQ_CONFIG1, 0x0d),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_G12S1_TXDEEMPH_M3P5DB, 0x10),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_gen3x1_pcie_pcs_misc_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_ACTIONS, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_POWER_STATE_CONFIG2, 0x0d),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_EQ_CONFIG1, 0x14),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_EQ_CONFIG1, 0x10),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_EQ_CONFIG2, 0x0b),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_PRESET_P10_PRE, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_PRESET_P10_POST, 0x58),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_POWER_STATE_CONFIG4, 0x07),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_CONFIG2, 0x52),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_INT_AUX_CLK_CONFIG1, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2, 0x50),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4, 0x1a),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x06),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6, 0x03),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_gen3x2_pcie_pcs_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_REFGEN_REQ_CONFIG1, 0x0d),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_G12S1_TXDEEMPH_M3P5DB, 0x10),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_DCC_CAL_CONFIG, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_SIGDET_LVL, 0xaa),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl ipq9574_gen3x2_pcie_pcs_misc_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_ACTIONS, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG2, 0x1d),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_EQ_CONFIG1, 0x14),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_EQ_CONFIG1, 0x10),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_EQ_CONFIG2, 0x0b),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_PRESET_P10_PRE, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_PRESET_P10_POST, 0x58),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG4, 0x07),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG1, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG2, 0x52),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG4, 0x19),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_INT_AUX_CLK_CONFIG1, 0x00),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2, 0x49),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4, 0x2a),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x02),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6, 0x03),
+> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
+> +};
 
-gcc-13 warns about function definitions for builtin interfaces
-that have a different prototype, e.g.:
+So, it uses QSERDES registers from allegedly v2, TX and RX of v4 and 
+then PCS_PCIE from v5. This doesn't sound correct.
 
-In file included from kasan_test.c:31:
-kasan.h:574:6: error: conflicting types for built-in function '__asan_register_globals'; expected 'void(void *, long int)' [-Werror=builtin-declaration-mismatch]
-  574 | void __asan_register_globals(struct kasan_global *globals, size_t size);
-kasan.h:577:6: error: conflicting types for built-in function '__asan_alloca_poison'; expected 'void(void *, long int)' [-Werror=builtin-declaration-mismatch]
-  577 | void __asan_alloca_poison(unsigned long addr, size_t size);
-kasan.h:580:6: error: conflicting types for built-in function '__asan_load1'; expected 'void(void *)' [-Werror=builtin-declaration-mismatch]
-  580 | void __asan_load1(unsigned long addr);
-kasan.h:581:6: error: conflicting types for built-in function '__asan_store1'; expected 'void(void *)' [-Werror=builtin-declaration-mismatch]
-  581 | void __asan_store1(unsigned long addr);
-kasan.h:643:6: error: conflicting types for built-in function '__hwasan_tag_memory'; expected 'void(void *, unsigned char,  long int)' [-Werror=builtin-declaration-mismatch]
-  643 | void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size);
+> +
+>   static const struct qmp_phy_init_tbl sdm845_qmp_pcie_serdes_tbl[] = {
+>   	QMP_PHY_INIT_CFG(QSERDES_V3_COM_BIAS_EN_CLKBUFLR_EN, 0x14),
+>   	QMP_PHY_INIT_CFG(QSERDES_V3_COM_CLK_SELECT, 0x30),
+> @@ -2042,6 +2286,10 @@ static const char * const ipq8074_pciephy_clk_l[] = {
+>   	"aux", "cfg_ahb",
+>   };
+>   
+> +static const char * const ipq9574_pciephy_clk_l[] = {
+> +	"aux", "cfg_ahb", "anoc_lane", "snoc_lane",
+> +};
+> +
+>   static const char * const msm8996_phy_clk_l[] = {
+>   	"aux", "cfg_ahb", "ref",
+>   };
+> @@ -2072,6 +2320,24 @@ static const char * const sdm845_pciephy_reset_l[] = {
+>   	"phy",
+>   };
+>   
+> +static const struct qmp_pcie_offsets qmp_pcie_offsets_3x1_ipq9574 = {
+> +	.serdes         = 0,
+> +	.tx             = 0x0200,
+> +	.rx             = 0x0400,
+> +	.pcs            = 0x0800,
+> +	.pcs_misc       = 0x0c00,
+> +};
+> +
+> +static const struct qmp_pcie_offsets qmp_pcie_offsets_3x2_ipq9574 = {
+> +	.serdes		= 0,
+> +	.tx		= 0x0200,
+> +	.rx		= 0x0400,
+> +	.tx2		= 0x0600,
+> +	.rx2		= 0x0800,
+> +	.pcs		= 0x1000,
+> +	.pcs_misc	= 0x1400,
+> +};
+> +
+>   static const struct qmp_pcie_offsets qmp_pcie_offsets_v5 = {
+>   	.serdes		= 0,
+>   	.pcs		= 0x0200,
+> @@ -2174,6 +2440,66 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
+>   	.phy_status		= PHYSTATUS,
+>   };
+>   
+> +static const struct qmp_phy_cfg ipq9574_gen3x1_pciephy_cfg = {
+> +	.lanes			= 1,
+> +
+> +	.offsets		= &qmp_pcie_offsets_3x1_ipq9574,
+> +
+> +	.tbls = {
+> +		.serdes		= ipq9574_gen3x1_pcie_serdes_tbl,
+> +		.serdes_num	= ARRAY_SIZE(ipq9574_gen3x1_pcie_serdes_tbl),
+> +		.tx		= ipq9574_pcie_tx_tbl,
+> +		.tx_num		= ARRAY_SIZE(ipq9574_pcie_tx_tbl),
+> +		.rx		= ipq9574_pcie_rx_tbl,
+> +		.rx_num		= ARRAY_SIZE(ipq9574_pcie_rx_tbl),
+> +		.pcs		= ipq9574_gen3x1_pcie_pcs_tbl,
+> +		.pcs_num	= ARRAY_SIZE(ipq9574_gen3x1_pcie_pcs_tbl),
+> +		.pcs_misc	= ipq9574_gen3x1_pcie_pcs_misc_tbl,
+> +		.pcs_misc_num	= ARRAY_SIZE(ipq9574_gen3x1_pcie_pcs_misc_tbl),
+> +	},
+> +	.clk_list		= ipq9574_pciephy_clk_l,
+> +	.num_clks		= ARRAY_SIZE(ipq9574_pciephy_clk_l),
+> +	.reset_list		= ipq8074_pciephy_reset_l,
+> +	.num_resets		= ARRAY_SIZE(ipq8074_pciephy_reset_l),
+> +	.vreg_list		= NULL,
+> +	.num_vregs		= 0,
+> +	.regs			= pciephy_v4_regs_layout,
+> +
+> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+> +	.phy_status		= PHYSTATUS,
+> +	.pipe_clock_rate	= 250000000,
+> +};
+> +
+> +static const struct qmp_phy_cfg ipq9574_gen3x2_pciephy_cfg = {
+> +	.lanes			= 2,
+> +
+> +	.offsets		= &qmp_pcie_offsets_3x2_ipq9574,
+> +
+> +	.tbls = {
+> +		.serdes		= ipq9574_gen3x2_pcie_serdes_tbl,
+> +		.serdes_num	= ARRAY_SIZE(ipq9574_gen3x2_pcie_serdes_tbl),
+> +		.tx		= ipq9574_pcie_tx_tbl,
+> +		.tx_num		= ARRAY_SIZE(ipq9574_pcie_tx_tbl),
+> +		.rx		= ipq9574_pcie_rx_tbl,
+> +		.rx_num		= ARRAY_SIZE(ipq9574_pcie_rx_tbl),
+> +		.pcs		= ipq9574_gen3x2_pcie_pcs_tbl,
+> +		.pcs_num	= ARRAY_SIZE(ipq9574_gen3x2_pcie_pcs_tbl),
+> +		.pcs_misc	= ipq9574_gen3x2_pcie_pcs_misc_tbl,
+> +		.pcs_misc_num	= ARRAY_SIZE(ipq9574_gen3x2_pcie_pcs_misc_tbl),
+> +	},
+> +	.clk_list		= ipq9574_pciephy_clk_l,
+> +	.num_clks		= ARRAY_SIZE(ipq9574_pciephy_clk_l),
+> +	.reset_list		= ipq8074_pciephy_reset_l,
+> +	.num_resets		= ARRAY_SIZE(ipq8074_pciephy_reset_l),
+> +	.vreg_list		= NULL,
+> +	.num_vregs		= 0,
+> +	.regs			= pciephy_v4_regs_layout,
+> +
+> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+> +	.phy_status		= PHYSTATUS,
+> +	.pipe_clock_rate	= 250000000,
+> +};
+> +
+>   static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
+>   	.lanes			= 1,
+>   
+> @@ -3374,6 +3700,12 @@ static const struct of_device_id qmp_pcie_of_match_table[] = {
+>   	}, {
+>   		.compatible = "qcom,ipq8074-qmp-pcie-phy",
+>   		.data = &ipq8074_pciephy_cfg,
+> +	}, {
+> +		.compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy",
+> +		.data = &ipq9574_gen3x1_pciephy_cfg,
+> +	}, {
+> +		.compatible = "qcom,ipq9574-qmp-gen3x2-pcie-phy",
+> +		.data = &ipq9574_gen3x2_pciephy_cfg,
+>   	}, {
+>   		.compatible = "qcom,msm8998-qmp-pcie-phy",
+>   		.data = &msm8998_pciephy_cfg,
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h
+> index a469ae2a10a1..5f002b150cea 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h
+> @@ -8,11 +8,25 @@
+>   #define QCOM_PHY_QMP_PCS_PCIE_V5_H_
+>   
+>   /* Only for QMP V5 PHY - PCS_PCIE registers */
+> -#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG2		0x0c
+> -#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG4		0x14
+> -#define QPHY_V5_PCS_PCIE_ENDPOINT_REFCLK_DRIVE		0x20
+> -#define QPHY_V5_PCS_PCIE_INT_AUX_CLK_CONFIG1		0x54
+> -#define QPHY_V5_PCS_PCIE_OSC_DTCT_ACTIONS		0x94
+> -#define QPHY_V5_PCS_PCIE_EQ_CONFIG2			0xa8
 
-The two problems are:
+This is not reviewable. Please do not mix changing alignment of existing 
+registers together with adding new names.
 
- - Addresses are passes as 'unsigned long' in the kernel, but gcc-13
-   expects a 'void *'.
+> +#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG2			0x0c
+> +#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG4			0x14
+> +#define QPHY_V5_PCS_PCIE_ENDPOINT_REFCLK_DRIVE			0x20
+> +#define QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L		0x44
+> +#define QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H		0x48
+> +#define QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L		0x4c
+> +#define QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H		0x50
+> +#define QPHY_V5_PCS_PCIE_INT_AUX_CLK_CONFIG1			0x54
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG1			0x5c
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG2			0x60
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG4			0x68
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2			0x7c
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4			0x84
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5			0x88
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6			0x8c
+> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_ACTIONS			0x94
+> +#define QPHY_V5_PCS_PCIE_EQ_CONFIG1				0xa4
+> +#define QPHY_V5_PCS_PCIE_EQ_CONFIG2				0xa8
+> +#define QPHY_V5_PCS_PCIE_PRESET_P10_PRE				0xc0
+> +#define QPHY_V5_PCS_PCIE_PRESET_P10_POST			0xe4
+>   
+>   #endif
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h
+> index ad326e301a3a..231e59364e31 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h
+> @@ -8,6 +8,9 @@
+>   
+>   /* QMP V2 PHY for PCIE gen3 ports - QSERDES PLL registers */
+>   #define QSERDES_PLL_BG_TIMER				0x00c
+> +#define QSERDES_PLL_SSC_EN_CENTER			0x010
+> +#define QSERDES_PLL_SSC_ADJ_PER1			0x014
+> +#define QSERDES_PLL_SSC_ADJ_PER2			0x018
+>   #define QSERDES_PLL_SSC_PER1				0x01c
+>   #define QSERDES_PLL_SSC_PER2				0x020
+>   #define QSERDES_PLL_SSC_STEP_SIZE1_MODE0		0x024
 
- - sizes meant to use a signed ssize_t rather than size_t.
-
-Change all the prototypes to match these.  Using 'void *' consistently
-for addresses gets rid of a couple of type casts, so push that down to
-the leaf functions where possible.
-
-This now passes all randconfig builds on arm, arm64 and x86, but I have
-not tested it on the other architectures that support kasan, since they
-tend to fail randconfig builds in other ways. This might fail if any
-of the 32-bit architectures expect a 'long' instead of 'int' for the
-size argument.
-
-The __asan_allocas_unpoison() function prototype is somewhat weird,
-since it uses a pointer for 'stack_top' and an size_t for 'stack_bottom'.
-This looks like it is meant to be 'addr' and 'size' like the others,
-but the implementation clearly treats them as 'top' and 'bottom'.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: Remove custom size type that turned out to be unnecessary after all
----
- arch/arm64/kernel/traps.c |   2 +-
- arch/arm64/mm/fault.c     |   2 +-
- include/linux/kasan.h     |   2 +-
- mm/kasan/common.c         |   2 +-
- mm/kasan/generic.c        |  72 ++++++++---------
- mm/kasan/kasan.h          | 160 +++++++++++++++++++-------------------
- mm/kasan/report.c         |  17 ++--
- mm/kasan/report_generic.c |  12 +--
- mm/kasan/report_hw_tags.c |   2 +-
- mm/kasan/report_sw_tags.c |   2 +-
- mm/kasan/shadow.c         |  36 ++++-----
- mm/kasan/sw_tags.c        |  20 ++---
- 12 files changed, 164 insertions(+), 165 deletions(-)
-
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 35a95b78b14f..3f5a21e5968e 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -1044,7 +1044,7 @@ static int kasan_handler(struct pt_regs *regs, unsigned long esr)
- 	bool recover = esr & KASAN_ESR_RECOVER;
- 	bool write = esr & KASAN_ESR_WRITE;
- 	size_t size = KASAN_ESR_SIZE(esr);
--	u64 addr = regs->regs[0];
-+	void *addr = (void *)regs->regs[0];
- 	u64 pc = regs->pc;
- 
- 	kasan_report(addr, size, write, pc);
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index f4418382be98..940391ec5e1e 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -317,7 +317,7 @@ static void report_tag_fault(unsigned long addr, unsigned long esr,
- 	 * find out access size.
- 	 */
- 	bool is_write = !!(esr & ESR_ELx_WNR);
--	kasan_report(addr, 0, is_write, regs->pc);
-+	kasan_report((void *)addr, 0, is_write, regs->pc);
- }
- #else
- /* Tag faults aren't enabled without CONFIG_KASAN_HW_TAGS. */
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index f7ef70661ce2..819b6bc8ac08 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -343,7 +343,7 @@ static inline void *kasan_reset_tag(const void *addr)
-  * @is_write: whether the bad access is a write or a read
-  * @ip: instruction pointer for the accessibility check or the bad access itself
-  */
--bool kasan_report(unsigned long addr, size_t size,
-+bool kasan_report(const void *addr, size_t size,
- 		bool is_write, unsigned long ip);
- 
- #else /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index b376a5d055e5..256930da578a 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -445,7 +445,7 @@ void * __must_check __kasan_krealloc(const void *object, size_t size, gfp_t flag
- bool __kasan_check_byte(const void *address, unsigned long ip)
- {
- 	if (!kasan_byte_accessible(address)) {
--		kasan_report((unsigned long)address, 1, false, ip);
-+		kasan_report(address, 1, false, ip);
- 		return false;
- 	}
- 	return true;
-diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-index e5eef670735e..224d161a5a22 100644
---- a/mm/kasan/generic.c
-+++ b/mm/kasan/generic.c
-@@ -40,39 +40,39 @@
-  * depending on memory access size X.
-  */
- 
--static __always_inline bool memory_is_poisoned_1(unsigned long addr)
-+static __always_inline bool memory_is_poisoned_1(const void *addr)
- {
--	s8 shadow_value = *(s8 *)kasan_mem_to_shadow((void *)addr);
-+	s8 shadow_value = *(s8 *)kasan_mem_to_shadow(addr);
- 
- 	if (unlikely(shadow_value)) {
--		s8 last_accessible_byte = addr & KASAN_GRANULE_MASK;
-+		s8 last_accessible_byte = (unsigned long)addr & KASAN_GRANULE_MASK;
- 		return unlikely(last_accessible_byte >= shadow_value);
- 	}
- 
- 	return false;
- }
- 
--static __always_inline bool memory_is_poisoned_2_4_8(unsigned long addr,
-+static __always_inline bool memory_is_poisoned_2_4_8(const void *addr,
- 						unsigned long size)
- {
--	u8 *shadow_addr = (u8 *)kasan_mem_to_shadow((void *)addr);
-+	u8 *shadow_addr = (u8 *)kasan_mem_to_shadow(addr);
- 
- 	/*
- 	 * Access crosses 8(shadow size)-byte boundary. Such access maps
- 	 * into 2 shadow bytes, so we need to check them both.
- 	 */
--	if (unlikely(((addr + size - 1) & KASAN_GRANULE_MASK) < size - 1))
-+	if (unlikely((((unsigned long)addr + size - 1) & KASAN_GRANULE_MASK) < size - 1))
- 		return *shadow_addr || memory_is_poisoned_1(addr + size - 1);
- 
- 	return memory_is_poisoned_1(addr + size - 1);
- }
- 
--static __always_inline bool memory_is_poisoned_16(unsigned long addr)
-+static __always_inline bool memory_is_poisoned_16(const void *addr)
- {
--	u16 *shadow_addr = (u16 *)kasan_mem_to_shadow((void *)addr);
-+	u16 *shadow_addr = (u16 *)kasan_mem_to_shadow(addr);
- 
- 	/* Unaligned 16-bytes access maps into 3 shadow bytes. */
--	if (unlikely(!IS_ALIGNED(addr, KASAN_GRANULE_SIZE)))
-+	if (unlikely(!IS_ALIGNED((unsigned long)addr, KASAN_GRANULE_SIZE)))
- 		return *shadow_addr || memory_is_poisoned_1(addr + 15);
- 
- 	return *shadow_addr;
-@@ -120,26 +120,25 @@ static __always_inline unsigned long memory_is_nonzero(const void *start,
- 	return bytes_is_nonzero(start, (end - start) % 8);
- }
- 
--static __always_inline bool memory_is_poisoned_n(unsigned long addr,
--						size_t size)
-+static __always_inline bool memory_is_poisoned_n(const void *addr, size_t size)
- {
- 	unsigned long ret;
- 
--	ret = memory_is_nonzero(kasan_mem_to_shadow((void *)addr),
--			kasan_mem_to_shadow((void *)addr + size - 1) + 1);
-+	ret = memory_is_nonzero(kasan_mem_to_shadow(addr),
-+			kasan_mem_to_shadow(addr + size - 1) + 1);
- 
- 	if (unlikely(ret)) {
--		unsigned long last_byte = addr + size - 1;
--		s8 *last_shadow = (s8 *)kasan_mem_to_shadow((void *)last_byte);
-+		const void *last_byte = addr + size - 1;
-+		s8 *last_shadow = (s8 *)kasan_mem_to_shadow(last_byte);
- 
- 		if (unlikely(ret != (unsigned long)last_shadow ||
--			((long)(last_byte & KASAN_GRANULE_MASK) >= *last_shadow)))
-+			(((long)last_byte & KASAN_GRANULE_MASK) >= *last_shadow)))
- 			return true;
- 	}
- 	return false;
- }
- 
--static __always_inline bool memory_is_poisoned(unsigned long addr, size_t size)
-+static __always_inline bool memory_is_poisoned(const void *addr, size_t size)
- {
- 	if (__builtin_constant_p(size)) {
- 		switch (size) {
-@@ -159,7 +158,7 @@ static __always_inline bool memory_is_poisoned(unsigned long addr, size_t size)
- 	return memory_is_poisoned_n(addr, size);
- }
- 
--static __always_inline bool check_region_inline(unsigned long addr,
-+static __always_inline bool check_region_inline(const void *addr,
- 						size_t size, bool write,
- 						unsigned long ret_ip)
- {
-@@ -172,7 +171,7 @@ static __always_inline bool check_region_inline(unsigned long addr,
- 	if (unlikely(addr + size < addr))
- 		return !kasan_report(addr, size, write, ret_ip);
- 
--	if (unlikely(!addr_has_metadata((void *)addr)))
-+	if (unlikely(!addr_has_metadata(addr)))
- 		return !kasan_report(addr, size, write, ret_ip);
- 
- 	if (likely(!memory_is_poisoned(addr, size)))
-@@ -181,7 +180,7 @@ static __always_inline bool check_region_inline(unsigned long addr,
- 	return !kasan_report(addr, size, write, ret_ip);
- }
- 
--bool kasan_check_range(unsigned long addr, size_t size, bool write,
-+bool kasan_check_range(const void *addr, size_t size, bool write,
- 					unsigned long ret_ip)
- {
- 	return check_region_inline(addr, size, write, ret_ip);
-@@ -221,36 +220,37 @@ static void register_global(struct kasan_global *global)
- 		     KASAN_GLOBAL_REDZONE, false);
- }
- 
--void __asan_register_globals(struct kasan_global *globals, size_t size)
-+void __asan_register_globals(void *ptr, ssize_t size)
- {
- 	int i;
-+	struct kasan_global *globals = ptr;
- 
- 	for (i = 0; i < size; i++)
- 		register_global(&globals[i]);
- }
- EXPORT_SYMBOL(__asan_register_globals);
- 
--void __asan_unregister_globals(struct kasan_global *globals, size_t size)
-+void __asan_unregister_globals(void *ptr, ssize_t size)
- {
- }
- EXPORT_SYMBOL(__asan_unregister_globals);
- 
- #define DEFINE_ASAN_LOAD_STORE(size)					\
--	void __asan_load##size(unsigned long addr)			\
-+	void __asan_load##size(void *addr)				\
- 	{								\
- 		check_region_inline(addr, size, false, _RET_IP_);	\
- 	}								\
- 	EXPORT_SYMBOL(__asan_load##size);				\
- 	__alias(__asan_load##size)					\
--	void __asan_load##size##_noabort(unsigned long);		\
-+	void __asan_load##size##_noabort(void *);			\
- 	EXPORT_SYMBOL(__asan_load##size##_noabort);			\
--	void __asan_store##size(unsigned long addr)			\
-+	void __asan_store##size(void *addr)				\
- 	{								\
- 		check_region_inline(addr, size, true, _RET_IP_);	\
- 	}								\
- 	EXPORT_SYMBOL(__asan_store##size);				\
- 	__alias(__asan_store##size)					\
--	void __asan_store##size##_noabort(unsigned long);		\
-+	void __asan_store##size##_noabort(void *);			\
- 	EXPORT_SYMBOL(__asan_store##size##_noabort)
- 
- DEFINE_ASAN_LOAD_STORE(1);
-@@ -259,24 +259,24 @@ DEFINE_ASAN_LOAD_STORE(4);
- DEFINE_ASAN_LOAD_STORE(8);
- DEFINE_ASAN_LOAD_STORE(16);
- 
--void __asan_loadN(unsigned long addr, size_t size)
-+void __asan_loadN(void *addr, ssize_t size)
- {
- 	kasan_check_range(addr, size, false, _RET_IP_);
- }
- EXPORT_SYMBOL(__asan_loadN);
- 
- __alias(__asan_loadN)
--void __asan_loadN_noabort(unsigned long, size_t);
-+void __asan_loadN_noabort(void *, ssize_t);
- EXPORT_SYMBOL(__asan_loadN_noabort);
- 
--void __asan_storeN(unsigned long addr, size_t size)
-+void __asan_storeN(void *addr, ssize_t size)
- {
- 	kasan_check_range(addr, size, true, _RET_IP_);
- }
- EXPORT_SYMBOL(__asan_storeN);
- 
- __alias(__asan_storeN)
--void __asan_storeN_noabort(unsigned long, size_t);
-+void __asan_storeN_noabort(void *, ssize_t);
- EXPORT_SYMBOL(__asan_storeN_noabort);
- 
- /* to shut up compiler complaints */
-@@ -284,7 +284,7 @@ void __asan_handle_no_return(void) {}
- EXPORT_SYMBOL(__asan_handle_no_return);
- 
- /* Emitted by compiler to poison alloca()ed objects. */
--void __asan_alloca_poison(unsigned long addr, size_t size)
-+void __asan_alloca_poison(void *addr, ssize_t size)
- {
- 	size_t rounded_up_size = round_up(size, KASAN_GRANULE_SIZE);
- 	size_t padding_size = round_up(size, KASAN_ALLOCA_REDZONE_SIZE) -
-@@ -295,7 +295,7 @@ void __asan_alloca_poison(unsigned long addr, size_t size)
- 			KASAN_ALLOCA_REDZONE_SIZE);
- 	const void *right_redzone = (const void *)(addr + rounded_up_size);
- 
--	WARN_ON(!IS_ALIGNED(addr, KASAN_ALLOCA_REDZONE_SIZE));
-+	WARN_ON(!IS_ALIGNED((unsigned long)addr, KASAN_ALLOCA_REDZONE_SIZE));
- 
- 	kasan_unpoison((const void *)(addr + rounded_down_size),
- 			size - rounded_down_size, false);
-@@ -307,18 +307,18 @@ void __asan_alloca_poison(unsigned long addr, size_t size)
- EXPORT_SYMBOL(__asan_alloca_poison);
- 
- /* Emitted by compiler to unpoison alloca()ed areas when the stack unwinds. */
--void __asan_allocas_unpoison(const void *stack_top, const void *stack_bottom)
-+void __asan_allocas_unpoison(void *stack_top, ssize_t stack_bottom)
- {
--	if (unlikely(!stack_top || stack_top > stack_bottom))
-+	if (unlikely(!stack_top || stack_top > (void *)stack_bottom))
- 		return;
- 
--	kasan_unpoison(stack_top, stack_bottom - stack_top, false);
-+	kasan_unpoison(stack_top, (void *)stack_bottom - stack_top, false);
- }
- EXPORT_SYMBOL(__asan_allocas_unpoison);
- 
- /* Emitted by the compiler to [un]poison local variables. */
- #define DEFINE_ASAN_SET_SHADOW(byte) \
--	void __asan_set_shadow_##byte(const void *addr, size_t size)	\
-+	void __asan_set_shadow_##byte(const void *addr, ssize_t size)	\
- 	{								\
- 		__memset((void *)addr, 0x##byte, size);			\
- 	}								\
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index cd846ca34f44..b799f11e45dc 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -198,13 +198,13 @@ enum kasan_report_type {
- struct kasan_report_info {
- 	/* Filled in by kasan_report_*(). */
- 	enum kasan_report_type type;
--	void *access_addr;
-+	const void *access_addr;
- 	size_t access_size;
- 	bool is_write;
- 	unsigned long ip;
- 
- 	/* Filled in by the common reporting code. */
--	void *first_bad_addr;
-+	const void *first_bad_addr;
- 	struct kmem_cache *cache;
- 	void *object;
- 	size_t alloc_size;
-@@ -311,7 +311,7 @@ static __always_inline bool addr_has_metadata(const void *addr)
-  * @ret_ip: return address
-  * @return: true if access was valid, false if invalid
-  */
--bool kasan_check_range(unsigned long addr, size_t size, bool write,
-+bool kasan_check_range(const void *addr, size_t size, bool write,
- 				unsigned long ret_ip);
- 
- #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
-@@ -323,7 +323,7 @@ static __always_inline bool addr_has_metadata(const void *addr)
- 
- #endif /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
- 
--void *kasan_find_first_bad_addr(void *addr, size_t size);
-+const void *kasan_find_first_bad_addr(const void *addr, size_t size);
- size_t kasan_get_alloc_size(void *object, struct kmem_cache *cache);
- void kasan_complete_mode_report_info(struct kasan_report_info *info);
- void kasan_metadata_fetch_row(char *buffer, void *row);
-@@ -346,7 +346,7 @@ void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object);
- static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object) { }
- #endif
- 
--bool kasan_report(unsigned long addr, size_t size,
-+bool kasan_report(const void *addr, size_t size,
- 		bool is_write, unsigned long ip);
- void kasan_report_invalid_free(void *object, unsigned long ip, enum kasan_report_type type);
- 
-@@ -571,82 +571,82 @@ void kasan_restore_multi_shot(bool enabled);
-  */
- 
- asmlinkage void kasan_unpoison_task_stack_below(const void *watermark);
--void __asan_register_globals(struct kasan_global *globals, size_t size);
--void __asan_unregister_globals(struct kasan_global *globals, size_t size);
-+void __asan_register_globals(void *globals, ssize_t size);
-+void __asan_unregister_globals(void *globals, ssize_t size);
- void __asan_handle_no_return(void);
--void __asan_alloca_poison(unsigned long addr, size_t size);
--void __asan_allocas_unpoison(const void *stack_top, const void *stack_bottom);
--
--void __asan_load1(unsigned long addr);
--void __asan_store1(unsigned long addr);
--void __asan_load2(unsigned long addr);
--void __asan_store2(unsigned long addr);
--void __asan_load4(unsigned long addr);
--void __asan_store4(unsigned long addr);
--void __asan_load8(unsigned long addr);
--void __asan_store8(unsigned long addr);
--void __asan_load16(unsigned long addr);
--void __asan_store16(unsigned long addr);
--void __asan_loadN(unsigned long addr, size_t size);
--void __asan_storeN(unsigned long addr, size_t size);
--
--void __asan_load1_noabort(unsigned long addr);
--void __asan_store1_noabort(unsigned long addr);
--void __asan_load2_noabort(unsigned long addr);
--void __asan_store2_noabort(unsigned long addr);
--void __asan_load4_noabort(unsigned long addr);
--void __asan_store4_noabort(unsigned long addr);
--void __asan_load8_noabort(unsigned long addr);
--void __asan_store8_noabort(unsigned long addr);
--void __asan_load16_noabort(unsigned long addr);
--void __asan_store16_noabort(unsigned long addr);
--void __asan_loadN_noabort(unsigned long addr, size_t size);
--void __asan_storeN_noabort(unsigned long addr, size_t size);
--
--void __asan_report_load1_noabort(unsigned long addr);
--void __asan_report_store1_noabort(unsigned long addr);
--void __asan_report_load2_noabort(unsigned long addr);
--void __asan_report_store2_noabort(unsigned long addr);
--void __asan_report_load4_noabort(unsigned long addr);
--void __asan_report_store4_noabort(unsigned long addr);
--void __asan_report_load8_noabort(unsigned long addr);
--void __asan_report_store8_noabort(unsigned long addr);
--void __asan_report_load16_noabort(unsigned long addr);
--void __asan_report_store16_noabort(unsigned long addr);
--void __asan_report_load_n_noabort(unsigned long addr, size_t size);
--void __asan_report_store_n_noabort(unsigned long addr, size_t size);
--
--void __asan_set_shadow_00(const void *addr, size_t size);
--void __asan_set_shadow_f1(const void *addr, size_t size);
--void __asan_set_shadow_f2(const void *addr, size_t size);
--void __asan_set_shadow_f3(const void *addr, size_t size);
--void __asan_set_shadow_f5(const void *addr, size_t size);
--void __asan_set_shadow_f8(const void *addr, size_t size);
--
--void *__asan_memset(void *addr, int c, size_t len);
--void *__asan_memmove(void *dest, const void *src, size_t len);
--void *__asan_memcpy(void *dest, const void *src, size_t len);
--
--void __hwasan_load1_noabort(unsigned long addr);
--void __hwasan_store1_noabort(unsigned long addr);
--void __hwasan_load2_noabort(unsigned long addr);
--void __hwasan_store2_noabort(unsigned long addr);
--void __hwasan_load4_noabort(unsigned long addr);
--void __hwasan_store4_noabort(unsigned long addr);
--void __hwasan_load8_noabort(unsigned long addr);
--void __hwasan_store8_noabort(unsigned long addr);
--void __hwasan_load16_noabort(unsigned long addr);
--void __hwasan_store16_noabort(unsigned long addr);
--void __hwasan_loadN_noabort(unsigned long addr, size_t size);
--void __hwasan_storeN_noabort(unsigned long addr, size_t size);
--
--void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size);
--
--void *__hwasan_memset(void *addr, int c, size_t len);
--void *__hwasan_memmove(void *dest, const void *src, size_t len);
--void *__hwasan_memcpy(void *dest, const void *src, size_t len);
--
--void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-+void __asan_alloca_poison(void *, ssize_t size);
-+void __asan_allocas_unpoison(void *stack_top, ssize_t stack_bottom);
-+
-+void __asan_load1(void *);
-+void __asan_store1(void *);
-+void __asan_load2(void *);
-+void __asan_store2(void *);
-+void __asan_load4(void *);
-+void __asan_store4(void *);
-+void __asan_load8(void *);
-+void __asan_store8(void *);
-+void __asan_load16(void *);
-+void __asan_store16(void *);
-+void __asan_loadN(void *, ssize_t size);
-+void __asan_storeN(void *, ssize_t size);
-+
-+void __asan_load1_noabort(void *);
-+void __asan_store1_noabort(void *);
-+void __asan_load2_noabort(void *);
-+void __asan_store2_noabort(void *);
-+void __asan_load4_noabort(void *);
-+void __asan_store4_noabort(void *);
-+void __asan_load8_noabort(void *);
-+void __asan_store8_noabort(void *);
-+void __asan_load16_noabort(void *);
-+void __asan_store16_noabort(void *);
-+void __asan_loadN_noabort(void *, ssize_t size);
-+void __asan_storeN_noabort(void *, ssize_t size);
-+
-+void __asan_report_load1_noabort(void *);
-+void __asan_report_store1_noabort(void *);
-+void __asan_report_load2_noabort(void *);
-+void __asan_report_store2_noabort(void *);
-+void __asan_report_load4_noabort(void *);
-+void __asan_report_store4_noabort(void *);
-+void __asan_report_load8_noabort(void *);
-+void __asan_report_store8_noabort(void *);
-+void __asan_report_load16_noabort(void *);
-+void __asan_report_store16_noabort(void *);
-+void __asan_report_load_n_noabort(void *, ssize_t size);
-+void __asan_report_store_n_noabort(void *, ssize_t size);
-+
-+void __asan_set_shadow_00(const void *addr, ssize_t size);
-+void __asan_set_shadow_f1(const void *addr, ssize_t size);
-+void __asan_set_shadow_f2(const void *addr, ssize_t size);
-+void __asan_set_shadow_f3(const void *addr, ssize_t size);
-+void __asan_set_shadow_f5(const void *addr, ssize_t size);
-+void __asan_set_shadow_f8(const void *addr, ssize_t size);
-+
-+void *__asan_memset(void *addr, int c, ssize_t len);
-+void *__asan_memmove(void *dest, const void *src, ssize_t len);
-+void *__asan_memcpy(void *dest, const void *src, ssize_t len);
-+
-+void __hwasan_load1_noabort(void *);
-+void __hwasan_store1_noabort(void *);
-+void __hwasan_load2_noabort(void *);
-+void __hwasan_store2_noabort(void *);
-+void __hwasan_load4_noabort(void *);
-+void __hwasan_store4_noabort(void *);
-+void __hwasan_load8_noabort(void *);
-+void __hwasan_store8_noabort(void *);
-+void __hwasan_load16_noabort(void *);
-+void __hwasan_store16_noabort(void *);
-+void __hwasan_loadN_noabort(void *, ssize_t size);
-+void __hwasan_storeN_noabort(void *, ssize_t size);
-+
-+void __hwasan_tag_memory(void *, u8 tag, ssize_t size);
-+
-+void *__hwasan_memset(void *addr, int c, ssize_t len);
-+void *__hwasan_memmove(void *dest, const void *src, ssize_t len);
-+void *__hwasan_memcpy(void *dest, const void *src, ssize_t len);
-+
-+void kasan_tag_mismatch(void *addr, unsigned long access_info,
- 			unsigned long ret_ip);
- 
- #endif /* __MM_KASAN_KASAN_H */
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 892a9dc9d4d3..84d9f3b37014 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -211,7 +211,7 @@ static void start_report(unsigned long *flags, bool sync)
- 	pr_err("==================================================================\n");
- }
- 
--static void end_report(unsigned long *flags, void *addr)
-+static void end_report(unsigned long *flags, const void *addr)
- {
- 	if (addr)
- 		trace_error_report_end(ERROR_DETECTOR_KASAN,
-@@ -450,8 +450,8 @@ static void print_memory_metadata(const void *addr)
- 
- static void print_report(struct kasan_report_info *info)
- {
--	void *addr = kasan_reset_tag(info->access_addr);
--	u8 tag = get_tag(info->access_addr);
-+	void *addr = kasan_reset_tag((void *)info->access_addr);
-+	u8 tag = get_tag((void *)info->access_addr);
- 
- 	print_error_description(info);
- 	if (addr_has_metadata(addr))
-@@ -468,12 +468,12 @@ static void print_report(struct kasan_report_info *info)
- 
- static void complete_report_info(struct kasan_report_info *info)
- {
--	void *addr = kasan_reset_tag(info->access_addr);
-+	void *addr = kasan_reset_tag((void *)info->access_addr);
- 	struct slab *slab;
- 
- 	if (info->type == KASAN_REPORT_ACCESS)
- 		info->first_bad_addr = kasan_find_first_bad_addr(
--					info->access_addr, info->access_size);
-+					(void *)info->access_addr, info->access_size);
- 	else
- 		info->first_bad_addr = addr;
- 
-@@ -544,11 +544,10 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_ty
-  * user_access_save/restore(): kasan_report_invalid_free() cannot be called
-  * from a UACCESS region, and kasan_report_async() is not used on x86.
-  */
--bool kasan_report(unsigned long addr, size_t size, bool is_write,
-+bool kasan_report(const void *addr, size_t size, bool is_write,
- 			unsigned long ip)
- {
- 	bool ret = true;
--	void *ptr = (void *)addr;
- 	unsigned long ua_flags = user_access_save();
- 	unsigned long irq_flags;
- 	struct kasan_report_info info;
-@@ -562,7 +561,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
- 
- 	memset(&info, 0, sizeof(info));
- 	info.type = KASAN_REPORT_ACCESS;
--	info.access_addr = ptr;
-+	info.access_addr = addr;
- 	info.access_size = size;
- 	info.is_write = is_write;
- 	info.ip = ip;
-@@ -571,7 +570,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
- 
- 	print_report(&info);
- 
--	end_report(&irq_flags, ptr);
-+	end_report(&irq_flags, (void *)addr);
- 
- out:
- 	user_access_restore(ua_flags);
-diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
-index 87d39bc0a673..51a1e8a8877f 100644
---- a/mm/kasan/report_generic.c
-+++ b/mm/kasan/report_generic.c
-@@ -30,9 +30,9 @@
- #include "kasan.h"
- #include "../slab.h"
- 
--void *kasan_find_first_bad_addr(void *addr, size_t size)
-+const void *kasan_find_first_bad_addr(const void *addr, size_t size)
- {
--	void *p = addr;
-+	const void *p = addr;
- 
- 	if (!addr_has_metadata(p))
- 		return p;
-@@ -362,14 +362,14 @@ void kasan_print_address_stack_frame(const void *addr)
- #endif /* CONFIG_KASAN_STACK */
- 
- #define DEFINE_ASAN_REPORT_LOAD(size)                     \
--void __asan_report_load##size##_noabort(unsigned long addr) \
-+void __asan_report_load##size##_noabort(void *addr) \
- {                                                         \
- 	kasan_report(addr, size, false, _RET_IP_);	  \
- }                                                         \
- EXPORT_SYMBOL(__asan_report_load##size##_noabort)
- 
- #define DEFINE_ASAN_REPORT_STORE(size)                     \
--void __asan_report_store##size##_noabort(unsigned long addr) \
-+void __asan_report_store##size##_noabort(void *addr) \
- {                                                          \
- 	kasan_report(addr, size, true, _RET_IP_);	   \
- }                                                          \
-@@ -386,13 +386,13 @@ DEFINE_ASAN_REPORT_STORE(4);
- DEFINE_ASAN_REPORT_STORE(8);
- DEFINE_ASAN_REPORT_STORE(16);
- 
--void __asan_report_load_n_noabort(unsigned long addr, size_t size)
-+void __asan_report_load_n_noabort(void *addr, ssize_t size)
- {
- 	kasan_report(addr, size, false, _RET_IP_);
- }
- EXPORT_SYMBOL(__asan_report_load_n_noabort);
- 
--void __asan_report_store_n_noabort(unsigned long addr, size_t size)
-+void __asan_report_store_n_noabort(void *addr, ssize_t size)
- {
- 	kasan_report(addr, size, true, _RET_IP_);
- }
-diff --git a/mm/kasan/report_hw_tags.c b/mm/kasan/report_hw_tags.c
-index 32e80f78de7d..065e1b2fc484 100644
---- a/mm/kasan/report_hw_tags.c
-+++ b/mm/kasan/report_hw_tags.c
-@@ -15,7 +15,7 @@
- 
- #include "kasan.h"
- 
--void *kasan_find_first_bad_addr(void *addr, size_t size)
-+const void *kasan_find_first_bad_addr(const void *addr, size_t size)
- {
- 	/*
- 	 * Hardware Tag-Based KASAN only calls this function for normal memory
-diff --git a/mm/kasan/report_sw_tags.c b/mm/kasan/report_sw_tags.c
-index 8b1f5a73ee6d..689e94f9fe3c 100644
---- a/mm/kasan/report_sw_tags.c
-+++ b/mm/kasan/report_sw_tags.c
-@@ -30,7 +30,7 @@
- #include "kasan.h"
- #include "../slab.h"
- 
--void *kasan_find_first_bad_addr(void *addr, size_t size)
-+const void *kasan_find_first_bad_addr(const void *addr, size_t size)
- {
- 	u8 tag = get_tag(addr);
- 	void *p = kasan_reset_tag(addr);
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index c8b86f3273b5..3e62728ae25d 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -28,13 +28,13 @@
- 
- bool __kasan_check_read(const volatile void *p, unsigned int size)
- {
--	return kasan_check_range((unsigned long)p, size, false, _RET_IP_);
-+	return kasan_check_range((void *)p, size, false, _RET_IP_);
- }
- EXPORT_SYMBOL(__kasan_check_read);
- 
- bool __kasan_check_write(const volatile void *p, unsigned int size)
- {
--	return kasan_check_range((unsigned long)p, size, true, _RET_IP_);
-+	return kasan_check_range((void *)p, size, true, _RET_IP_);
- }
- EXPORT_SYMBOL(__kasan_check_write);
- 
-@@ -50,7 +50,7 @@ EXPORT_SYMBOL(__kasan_check_write);
- #undef memset
- void *memset(void *addr, int c, size_t len)
- {
--	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
-+	if (!kasan_check_range(addr, len, true, _RET_IP_))
- 		return NULL;
- 
- 	return __memset(addr, c, len);
-@@ -60,8 +60,8 @@ void *memset(void *addr, int c, size_t len)
- #undef memmove
- void *memmove(void *dest, const void *src, size_t len)
- {
--	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
--	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, false, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, true, _RET_IP_))
- 		return NULL;
- 
- 	return __memmove(dest, src, len);
-@@ -71,17 +71,17 @@ void *memmove(void *dest, const void *src, size_t len)
- #undef memcpy
- void *memcpy(void *dest, const void *src, size_t len)
- {
--	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
--	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, false, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, true, _RET_IP_))
- 		return NULL;
- 
- 	return __memcpy(dest, src, len);
- }
- #endif
- 
--void *__asan_memset(void *addr, int c, size_t len)
-+void *__asan_memset(void *addr, int c, ssize_t len)
- {
--	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
-+	if (!kasan_check_range(addr, len, true, _RET_IP_))
- 		return NULL;
- 
- 	return __memset(addr, c, len);
-@@ -89,10 +89,10 @@ void *__asan_memset(void *addr, int c, size_t len)
- EXPORT_SYMBOL(__asan_memset);
- 
- #ifdef __HAVE_ARCH_MEMMOVE
--void *__asan_memmove(void *dest, const void *src, size_t len)
-+void *__asan_memmove(void *dest, const void *src, ssize_t len)
- {
--	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
--	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, false, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, true, _RET_IP_))
- 		return NULL;
- 
- 	return __memmove(dest, src, len);
-@@ -100,10 +100,10 @@ void *__asan_memmove(void *dest, const void *src, size_t len)
- EXPORT_SYMBOL(__asan_memmove);
- #endif
- 
--void *__asan_memcpy(void *dest, const void *src, size_t len)
-+void *__asan_memcpy(void *dest, const void *src, ssize_t len)
- {
--	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
--	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, false, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, true, _RET_IP_))
- 		return NULL;
- 
- 	return __memcpy(dest, src, len);
-@@ -111,13 +111,13 @@ void *__asan_memcpy(void *dest, const void *src, size_t len)
- EXPORT_SYMBOL(__asan_memcpy);
- 
- #ifdef CONFIG_KASAN_SW_TAGS
--void *__hwasan_memset(void *addr, int c, size_t len) __alias(__asan_memset);
-+void *__hwasan_memset(void *addr, int c, ssize_t len) __alias(__asan_memset);
- EXPORT_SYMBOL(__hwasan_memset);
- #ifdef __HAVE_ARCH_MEMMOVE
--void *__hwasan_memmove(void *dest, const void *src, size_t len) __alias(__asan_memmove);
-+void *__hwasan_memmove(void *dest, const void *src, ssize_t len) __alias(__asan_memmove);
- EXPORT_SYMBOL(__hwasan_memmove);
- #endif
--void *__hwasan_memcpy(void *dest, const void *src, size_t len) __alias(__asan_memcpy);
-+void *__hwasan_memcpy(void *dest, const void *src, ssize_t len) __alias(__asan_memcpy);
- EXPORT_SYMBOL(__hwasan_memcpy);
- #endif
- 
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index 30da65fa02a1..220b5d4c6876 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -70,8 +70,8 @@ u8 kasan_random_tag(void)
- 	return (u8)(state % (KASAN_TAG_MAX + 1));
- }
- 
--bool kasan_check_range(unsigned long addr, size_t size, bool write,
--				unsigned long ret_ip)
-+bool kasan_check_range(const void *addr, size_t size, bool write,
-+			unsigned long ret_ip)
- {
- 	u8 tag;
- 	u8 *shadow_first, *shadow_last, *shadow;
-@@ -133,12 +133,12 @@ bool kasan_byte_accessible(const void *addr)
- }
- 
- #define DEFINE_HWASAN_LOAD_STORE(size)					\
--	void __hwasan_load##size##_noabort(unsigned long addr)		\
-+	void __hwasan_load##size##_noabort(void *addr)			\
- 	{								\
--		kasan_check_range(addr, size, false, _RET_IP_);	\
-+		kasan_check_range(addr, size, false, _RET_IP_);		\
- 	}								\
- 	EXPORT_SYMBOL(__hwasan_load##size##_noabort);			\
--	void __hwasan_store##size##_noabort(unsigned long addr)		\
-+	void __hwasan_store##size##_noabort(void *addr)			\
- 	{								\
- 		kasan_check_range(addr, size, true, _RET_IP_);		\
- 	}								\
-@@ -150,25 +150,25 @@ DEFINE_HWASAN_LOAD_STORE(4);
- DEFINE_HWASAN_LOAD_STORE(8);
- DEFINE_HWASAN_LOAD_STORE(16);
- 
--void __hwasan_loadN_noabort(unsigned long addr, unsigned long size)
-+void __hwasan_loadN_noabort(void *addr, ssize_t size)
- {
- 	kasan_check_range(addr, size, false, _RET_IP_);
- }
- EXPORT_SYMBOL(__hwasan_loadN_noabort);
- 
--void __hwasan_storeN_noabort(unsigned long addr, unsigned long size)
-+void __hwasan_storeN_noabort(void *addr, ssize_t size)
- {
- 	kasan_check_range(addr, size, true, _RET_IP_);
- }
- EXPORT_SYMBOL(__hwasan_storeN_noabort);
- 
--void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size)
-+void __hwasan_tag_memory(void *addr, u8 tag, ssize_t size)
- {
--	kasan_poison((void *)addr, size, tag, false);
-+	kasan_poison(addr, size, tag, false);
- }
- EXPORT_SYMBOL(__hwasan_tag_memory);
- 
--void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-+void kasan_tag_mismatch(void *addr, unsigned long access_info,
- 			unsigned long ret_ip)
- {
- 	kasan_report(addr, 1 << (access_info & 0xf), access_info & 0x10,
 -- 
-2.39.2
+With best wishes
+Dmitry
 
