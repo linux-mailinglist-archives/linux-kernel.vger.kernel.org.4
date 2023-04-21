@@ -2,184 +2,508 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C0A6EA35F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 07:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDA16EA38F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbjDUFxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 01:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S229769AbjDUGNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 02:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDUFx3 (ORCPT
+        with ESMTP id S229625AbjDUGM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 01:53:29 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D762722
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 22:53:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fqN/owMvn3a3+EIOfxZ4iBDxxzIQfkyWAyOhksPJsTNyl9KECTKlcCZRl5Vbugwnhj8PIyhwDE+oguihJViZiRXnyiTCc7ITGr4PSWayhu2eYxVb2q5xpE5JHuha0+CkZ0AKHq8Pzheh5Mv1GAH0WJYz83p/lB6dv96twiqHvAokruDnnwzmfzxNUJq0bI5Ahf+yy9DSaQMwF7QLcTcpzijdRsP54BJjqb60c4IylQz5yeZxZNhnSc5VLWA6B8tSEK4L9UeAeZnmgFI/KfPLQMMKRH1BoS349/xtJi0Hrt+sXzuoHSN6BgCCIw9s9W8s89/v43OpupzvGo64E41Tjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SITf7rCUoHHdaiaM3toRiQ3gftc+eSQ5mJFBtlx1kYo=;
- b=SyLvkvJ32hYAkLrTNZvXW8AZiOnBN1JHVqJULP7gaywznOUGqdo+W3m10RfHRy9WBKRjPzqmgRM7nvnQ8Ux06sAwGbCkN5IbdrDcOGyGgogUkTAeczFClb0H8JZR0StIpqv98TiiM24csdjqwA0iiqpWZ9Zdm4Ymj4hSsf7c0nw8M09ekfAJ7VZR28AtqTG6u95jTOlfM2mSSl2h8jLlzhvWG+IcqJ+mW2rH2+6y++hJu0mVd0nZVX/9FB+RwWq7iY5rkjloARk8I3k3hD1E/SkfRSYlBOer48/6eh9PH+Yt4eZXrdYSdbEJMmh7HYH4V7D+wVsRGJwMTInBI4wUwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SITf7rCUoHHdaiaM3toRiQ3gftc+eSQ5mJFBtlx1kYo=;
- b=hy5dNoT//7Je/p6+Qe4QZkjSfQN2MEekqE4O1P1Exyef3DKMNjoaR3DVFFLdSEWtcyKazNlx6IP7pzp61qeEymkFko6iE9hsYBgafVTOM+4DJHxSpUOLWOktUTurc7UKGm30Djo7Yt7krGf0oynXTe8Xeqf0iQcsXfV3D9SzOss=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM8PR01MB6824.prod.exchangelabs.com (2603:10b6:8:23::24) by
- BN8PR01MB5588.prod.exchangelabs.com (2603:10b6:408:b4::26) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.11; Fri, 21 Apr 2023 05:53:07 +0000
-Received: from DM8PR01MB6824.prod.exchangelabs.com
- ([fe80::5cf:2baf:f5ab:ac87]) by DM8PR01MB6824.prod.exchangelabs.com
- ([fe80::5cf:2baf:f5ab:ac87%5]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
- 05:53:07 +0000
-From:   Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mike.leach@linaro.org, suzuki.poulose@arm.com
-Cc:     mathieu.poirier@linaro.org, acme@kernel.org,
-        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
-        scclevenger@os.amperecomputing.com,
-        gankulkarni@os.amperecomputing.com
-Subject: [PATCH V2] perf cs-etm: Add fix for coresight trace for any range of CPUs
-Date:   Thu, 20 Apr 2023 22:52:53 -0700
-Message-Id: <20230421055253.83912-1-gankulkarni@os.amperecomputing.com>
-X-Mailer: git-send-email 2.38.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH0PR03CA0291.namprd03.prod.outlook.com
- (2603:10b6:610:e6::26) To DM8PR01MB6824.prod.exchangelabs.com
- (2603:10b6:8:23::24)
+        Fri, 21 Apr 2023 02:12:57 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC4E7693
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 23:12:48 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 4ABBF5FD2C;
+        Fri, 21 Apr 2023 09:02:06 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682056926;
+        bh=UNKitzjIQakgBonXVELOCv68ix7ziiu35XOP3yv4rH8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=NbkjTod3idBzxgp5ai7HDBcJZ/xGU9idsggYn+NIJ35sNrY6290wfZn5Jk+1Sw0mC
+         WU4vUIYj4wH1DpPzOpTsVgKWVi7cHYcrP089McaEqgf7WFykLku0yEny3A5ZcHAklg
+         oMogDqlX/rokOjGqsAnhXY0WM6D3/iwhtew1FhFs+4hHjtvgVgbAIl8VerVu31JZTJ
+         /3MsK6GnD5ldePbIMz4vxFBDGgWsFslSw/F5PVa8V95zxeWyBH0wLDAkxG9B0Qj7S0
+         gdnPfMlNEDttxcz2HBK4C9RfFBpiCM7pFFbsu8r3ethd++Gk8PSrCgVu3+HE+XAesu
+         WOb9hSt6CDlfg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 21 Apr 2023 09:02:03 +0300 (MSK)
+Message-ID: <84ec9ff6-409e-7f85-11d3-9a01b88b4bab@sberdevices.ru>
+Date:   Fri, 21 Apr 2023 08:57:55 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR01MB6824:EE_|BN8PR01MB5588:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43c47bd1-9d1e-413c-af27-08db422cadf5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h+pBdETo17FZZNflUBY/0FgUmvjRoaYiQ1ZnP3ognskf5nxMm1AZfHfojzFYC2t5+7c+D8yJo0AoZhY+OfCi2GzJYMPPKxQkuyytFcuQp3saU1Yp+ZS3r6T30wMqbH911RREbFhZAUg+plITMf9ISzezWOHY7jREb8fl9XR0GXum1H0dG4kgi6UZYDR5L9q2koamFFj7X2dn8UsYgawcj2mnI8oPJ6hSUBWvn5/Vlw69/4HwBERafPVgxdvg80EepcLIadNKRFXEYAV3f9ITwz5msZg2fM4EP9bEWU/oN+k3O6pNUihrIvgWxEnUj2jZjxNxu+pN34Lz4eCt66pKdkfeRzgZcFkHj6XswTZtG9reLX442jMwnmQ+FUzpaRZTr6Kh1I96+9hFejjy3KaoDTMoaBO4Id9aXrAe5Z9haRytCXNi4CpTa2bid2W7MMM9keAwI3g0ZnHxyQ8RLZXyVygTKhZCd+ak23l9O7sX1OzeEZv/Pu1r9koSwYOcprHqTUu0ZQQCHwOUGpGjiuIZgHyeKfnK9v3ukipCek3Mj3AReGouKQqqG30ov6+YJy/2e3z2RDAmCVwZFCJleY3Rp4Y1GjE4lVpsLTLRFzQ6eq4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR01MB6824.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(396003)(136003)(39850400004)(451199021)(966005)(107886003)(316002)(66556008)(66476007)(66946007)(4326008)(6486002)(52116002)(6666004)(86362001)(478600001)(5660300002)(2616005)(8676002)(8936002)(2906002)(83380400001)(38100700002)(38350700002)(41300700001)(1076003)(26005)(186003)(6506007)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ev/MhtW3EBWD5g+NRPtDtRztiBvDk8GIF6iYLkED6xd8BHwxKDxc9ySEMpzq?=
- =?us-ascii?Q?9+Q0+uu23z+lACl8lOa9PRyoC/l98VYR+cIUx2pV6soE4eJCOgdRpcf7SZYC?=
- =?us-ascii?Q?tyWJ6pZzAzoIcKSOwOZ+LTkTFtHTY44NGx7qwVpKJSSNYwh5n79vrKMpE9hJ?=
- =?us-ascii?Q?A1K0berageVmlyiQUH+4o+NFf5JzYZ/C9+eJT7qriSi3TTNFPVh7wXE1XK+q?=
- =?us-ascii?Q?EOKqsEoUmDbgBruGc2NBozybYT7qSVvCOaaIwC55aSFFyi49WhT5jWws3huz?=
- =?us-ascii?Q?RB3K8mGkRohJ6z/Qe7IlsUJWiqpBnzUKibZVSM6AoeM07k4rB7o0gTkD2p4e?=
- =?us-ascii?Q?I1u8rfkYssuzLBS2LlZaLR0gRTO4k/SnHiyz2/RIy88My3vEgb9519O7vjko?=
- =?us-ascii?Q?xdAf4cbJomm0pXG88BLwa73L5uwE1nnBcS2EPimHr4LmoUbfKbCaD7HC/RIW?=
- =?us-ascii?Q?vPf4VvnukxC2nnM5f1Au5+y5r94HwZMtlL5d45wHzKQwAsS0n7R43A7rKtnA?=
- =?us-ascii?Q?GWC/Pg22KZMzS9oZWiT1UbBoWxbvM7unNU3BllLz1ABmZhe459QA9bCybl93?=
- =?us-ascii?Q?n+E3NdtYgmiJhagJnNx2B+/ITT7J27JwGh0QX0GH+n6UsyEQrQCXaVVU3qaI?=
- =?us-ascii?Q?Skgt9xwpXLg50rSOOcQRLaiROBsDp19UmtW9+hlGMzKYKLjLPWgel4p32Vfe?=
- =?us-ascii?Q?lwZrEvq54ZNwoWNtO4k72wDJ5liGUNLMCunTWhqkHeoibs3S5FDcC8peWVE3?=
- =?us-ascii?Q?hVmgisQWa3i6lpqKFO8f75rFI4Z2V8Bzw5cAo6R8HK44AH7y9ukbncl3krmI?=
- =?us-ascii?Q?nYZosPNWx2fihvbPm9e7wL1YVfZsRDFmYx/aiPy7EZtV83XPdwUdEUn9BzAv?=
- =?us-ascii?Q?NyQHmUkjpwIGzWlsDUmFM5FUVVSovnpDjRGdoDq/XasL5ayiQwJKkqYC9hh2?=
- =?us-ascii?Q?zmpBm67Rn1NFUiEWyxKeUxXXIkxrou3rP/Xcm4UGPdIqo/1xNsNfyoepCUzU?=
- =?us-ascii?Q?Yk241wj8jAlRYrkf9JAnwIB3ufHNVTwk/p8hUt5FAqj0Jh53HFxp8AJ9vsSv?=
- =?us-ascii?Q?LLnOM/uCkLgpYHspgADaUTblIF3bpZ/Jdst3QWWiy9iJcybPo1spCd8WZg4l?=
- =?us-ascii?Q?uHEydYiQJbUxwPwURZ8ftz2qXE8xPal9ZxgQy1JZp3zwm3oq5Xckvj/c5/Wv?=
- =?us-ascii?Q?ZUbYjKu+xqZDmu21WeGBavBAO09ZnmgJwOdrBog4r9q7tJEvHwaG+ig/PvAT?=
- =?us-ascii?Q?4ORXwLFzXzBfeRLOxDYTfbxxKjuu7oEAEZakMFKu0U5NSEqrLP9dQtzHqj8e?=
- =?us-ascii?Q?h6dnziJIS7WI7RTUzj8GZBpKSSdvCpjbqZE85zaEu9F1yXH5Y8oUlOxF1ymv?=
- =?us-ascii?Q?xdU6YewB8mFf6sQ0rK76yo85rZ3RPAKJE4DgNffpZv9hoPWlG79wrVtF0Jvp?=
- =?us-ascii?Q?6xU3+DF3ftPLSLoedVMKM5qnem2XbJr9aqgp85ctHr2LU9VPKZ0OuG1dN/PF?=
- =?us-ascii?Q?aFx+k23Oi7GSwdVAFiz8G1de/DdJWrhOh82T4vm70/w5YQ+5lAElVgmze2/p?=
- =?us-ascii?Q?nflpNkj7hrcYSiGrtfXDPTDHwlEsv2UPNcMd7iHzbDtqsY2eTyXrE8g8rL7g?=
- =?us-ascii?Q?g213iS6C0Y/QkYHXRvcT72o=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43c47bd1-9d1e-413c-af27-08db422cadf5
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR01MB6824.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 05:53:06.9535
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kw6QIaJdzDF3bxDJpXQOVmucxl2yr1arhWXHJrT+ibCgabxJVb3DIQFyfgKPmMiQFqHKLlOEdL5Nx1ttkHB43F+fUOEdZYtSsPbZKm1C44SE90Jn1liXUUgdKEfQlycV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR01MB5588
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/5] mtd: rawnand: meson: fix NAND access for
+ read/write
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+ <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
+ <889cf54e-584c-9bee-2106-633155897324@amlogic.com>
+ <3f247cbe-2798-4871-82a5-5124142fdcc5@sberdevices.ru>
+ <4f552f57-c31e-985c-82be-081dff38d377@sberdevices.ru>
+ <dc690524-51d5-7bb9-a106-fa153c4e6250@amlogic.com>
+ <68f3bea8-4b79-db48-172f-712dcabce65b@sberdevices.ru>
+ <d3d5cf52-cf1e-31d1-46c5-d1df06c61fb3@amlogic.com>
+ <ac6d67ce-54e3-83f4-fef4-fb93bdef2515@sberdevices.ru>
+ <6c573ffd-55a1-6a39-1ca1-c2681e0e960d@amlogic.com>
+ <44dd5bcc-2b98-d402-7e8f-5e2d4babf898@sberdevices.ru>
+ <ed74240c-5028-c151-7904-c437b87c5f2a@sberdevices.ru>
+ <3f96eab3-5350-e0fe-7475-cf7845abdc60@amlogic.com>
+Content-Language: en-US
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <3f96eab3-5350-e0fe-7475-cf7845abdc60@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/21 02:03:00 #21134773
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation supports coresight trace decode for a range
-of CPUs, if the first CPU is CPU0.
 
-Perf report segfaults, if tried for sparse CPUs list and also for
-any range of CPUs(non zero first CPU).
 
-Adding a fix to perf report for any range of CPUs and for sparse list.
+On 20.04.2023 17:22, Liang Yang wrote:
+> Hi Arseniy,
+> 
+> Sorry, I am busy on other things and will try it on AXG platform in next week.
 
-Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
----
+Hello Liang!
 
-V2:
-	Updated with review comments.
-	Fixed for sparse list of CPUs also.
+Sure, no problem
 
-V1:
-	[1] https://lore.kernel.org/lkml/20230419172101.78638-1-gankulkarni@os.amperecomputing.com/
+Thanks, Arseniy
 
- tools/perf/util/cs-etm.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 8dd81ddd9e4e..2003717f5779 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -275,6 +275,25 @@ static int cs_etm__metadata_set_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
- 		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
- 	})
- 
-+/*
-+ * Get a metadata for a specific cpu from an array.
-+ *
-+ */
-+static u64 *get_cpu_data(struct cs_etm_auxtrace *etm, int cpu)
-+{
-+	int i;
-+	u64 *metadata = NULL;
-+
-+	for (i = 0; i < etm->num_cpu; i++) {
-+		if (etm->metadata[i][CS_ETM_CPU] == (u64)cpu) {
-+			metadata = etm->metadata[i];
-+			break;
-+		}
-+	}
-+
-+	return metadata;
-+}
-+
- /*
-  * Handle the PERF_RECORD_AUX_OUTPUT_HW_ID event.
-  *
-@@ -344,8 +363,11 @@ static int cs_etm__process_aux_output_hw_id(struct perf_session *session,
- 		return 0;
- 	}
- 
-+	cpu_data = get_cpu_data(etm, cpu);
-+	if (cpu_data == NULL)
-+		return err;
-+
- 	/* not one we've seen before - lets map it */
--	cpu_data = etm->metadata[cpu];
- 	err = cs_etm__map_trace_id(trace_chan_id, cpu_data);
- 	if (err)
- 		return err;
--- 
-2.39.2
-
+> 
+> On 2023/4/20 3:43, Arseniy Krasnov wrote:
+>> [ EXTERNAL EMAIL ]
+>>
+>> On 17.04.2023 17:10, Arseniy Krasnov wrote:
+>>>
+>>>
+>>> On 17.04.2023 16:54, Liang Yang wrote:
+>>>> Hi Arseniy,
+>>>>
+>>>> On 2023/4/17 14:47, Arseniy Krasnov wrote:
+>>>>> [ EXTERNAL EMAIL ]
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 13.04.2023 08:57, Liang Yang wrote:
+>>>>>> Hi Arseniy,
+>>>>>>
+>>>>>> On 2023/4/13 13:10, Arseniy Krasnov wrote:
+>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> On 12.04.2023 16:30, Liang Yang wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> On 2023/4/12 20:03, Arseniy Krasnov wrote:
+>>>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 12.04.2023 13:24, Arseniy Krasnov wrote:
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> On 12.04.2023 12:37, Liang Yang wrote:
+>>>>>>>>>>> Hi Arseniy,
+>>>>>>>>>>>
+>>>>>>>>>>> Thanks for pointing out this problem. also comment inline.
+>>>>>>>>>>>
+>>>>>>>>>>> On 2023/4/12 14:16, Arseniy Krasnov wrote:
+>>>>>>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>>>>>>
+>>>>>>>>>>>> This fixes read/write functionality. New command sequences were ported
+>>>>>>>>>>>> from old vendor's driver. Without this patch driver works unstable. This
+>>>>>>>>>>>> change is tested with 'nanddump'/'nandwrite' utilities and mounting
+>>>>>>>>>>>> JFFS2 filesystem on AXG family (A113X SoC).
+>>>>>>>>>>>>
+>>>>>>>>>>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>>>>>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>       drivers/mtd/nand/raw/meson_nand.c | 116 ++++++++++++++++++++++++++----
+>>>>>>>>>>>>       1 file changed, 101 insertions(+), 15 deletions(-)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>>>>> index 074e14225c06..256c37c76526 100644
+>>>>>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>>>>> @@ -26,6 +26,7 @@
+>>>>>>>>>>>>       #define NFC_CMD_IDLE        (0xc << 14)
+>>>>>>>>>>>>       #define NFC_CMD_CLE        (0x5 << 14)
+>>>>>>>>>>>>       #define NFC_CMD_ALE        (0x6 << 14)
+>>>>>>>>>>>> +#define NFC_CMD_DRD        (0x8 << 14)
+>>>>>>>>>>>>       #define NFC_CMD_ADL        ((0 << 16) | (3 << 20))
+>>>>>>>>>>>>       #define NFC_CMD_ADH        ((1 << 16) | (3 << 20))
+>>>>>>>>>>>>       #define NFC_CMD_AIL        ((2 << 16) | (3 << 20))
+>>>>>>>>>>>> @@ -84,6 +85,7 @@
+>>>>>>>>>>>>         #define DMA_BUSY_TIMEOUT    0x100000
+>>>>>>>>>>>>       #define CMD_FIFO_EMPTY_TIMEOUT    1000
+>>>>>>>>>>>> +#define DEVICE_READY_TIMEOUT    1000
+>>>>>>>>>>>>         #define MAX_CE_NUM        2
+>>>>>>>>>>>>       @@ -255,8 +257,26 @@ static void meson_nfc_select_chip(struct nand_chip *nand, int chip)
+>>>>>>>>>>>>           }
+>>>>>>>>>>>>       }
+>>>>>>>>>>>>       +static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
+>>>>>>>>>>>> +                     unsigned int timeout_ms)
+>>>>>>>>>>>> +{
+>>>>>>>>>>>> +    u32 cmd_size = 0;
+>>>>>>>>>>>> +    int ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    /* wait cmd fifo is empty */
+>>>>>>>>>>>> +    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
+>>>>>>>>>>>> +                     !NFC_CMD_GET_SIZE(cmd_size),
+>>>>>>>>>>>> +                     10, timeout_ms * 1000);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        dev_err(nfc->dev, "wait for empty CMD FIFO timed out\n");
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    return ret;
+>>>>>>>>>>>> +}
+>>>>>>>>>>>> +
+>>>>>>>>>>>>       static void meson_nfc_cmd_idle(struct meson_nfc *nfc, u32 time)
+>>>>>>>>>>>>       {
+>>>>>>>>>>>> +    meson_nfc_wait_cmd_finish(nfc, 0);
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           writel(nfc->param.chip_select | NFC_CMD_IDLE | (time & 0x3ff),
+>>>>>>>>>>>>                  nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>>       }
+>>>>>>>>>>>> @@ -308,23 +328,9 @@ static void meson_nfc_drain_cmd(struct meson_nfc *nfc)
+>>>>>>>>>>>>            */
+>>>>>>>>>>>>           meson_nfc_cmd_idle(nfc, 0);
+>>>>>>>>>>>>           meson_nfc_cmd_idle(nfc, 0);
+>>>>>>>>>>>> +    meson_nfc_wait_cmd_finish(nfc, 1000);
+>>>>>>>>>>>>       }
+>>>>>>>>>>>>       -static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
+>>>>>>>>>>>> -                     unsigned int timeout_ms)
+>>>>>>>>>>>> -{
+>>>>>>>>>>>> -    u32 cmd_size = 0;
+>>>>>>>>>>>> -    int ret;
+>>>>>>>>>>>> -
+>>>>>>>>>>>> -    /* wait cmd fifo is empty */
+>>>>>>>>>>>> -    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
+>>>>>>>>>>>> -                     !NFC_CMD_GET_SIZE(cmd_size),
+>>>>>>>>>>>> -                     10, timeout_ms * 1000);
+>>>>>>>>>>>> -    if (ret)
+>>>>>>>>>>>> -        dev_err(nfc->dev, "wait for empty CMD FIFO time out\n");
+>>>>>>>>>>>> -
+>>>>>>>>>>>> -    return ret;
+>>>>>>>>>>>> -}
+>>>>>>>>>>>>         static int meson_nfc_wait_dma_finish(struct meson_nfc *nfc)
+>>>>>>>>>>>>       {
+>>>>>>>>>>>> @@ -631,6 +637,48 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+>>>>>>>>>>>>           return 0;
+>>>>>>>>>>>>       }
+>>>>>>>>>>>>       +static uint8_t meson_nfc_read_byte(struct nand_chip *nand)
+>>>>>>>>>>>> +{
+>>>>>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    writel(NFC_CMD_DRD, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>> +    meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>>>>>>>>>>>> +    meson_nfc_drain_cmd(nfc);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    return readl(nfc->reg_base + NFC_REG_BUF);
+>>>>>>>>>>>> +}
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +static int meson_nfc_wait_dev_ready(struct nand_chip *nand)
+>>>>>>>>>>>> +{
+>>>>>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>>>>>>>>> +    u32 cs = nfc->param.chip_select;
+>>>>>>>>>>>> +    unsigned long cnt = 0;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    meson_nfc_drain_cmd(nfc);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_STATUS, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    /* 10 ms. */
+>>>>>>>>>>>> +    while (cnt < DEVICE_READY_TIMEOUT) {
+>>>>>>>>>>>> +        uint8_t status;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        status = meson_nfc_read_byte(nand);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        if (status & NAND_STATUS_READY)
+>>>>>>>>>>>> +            break;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        usleep_range(10, 11);
+>>>>>>>>>>>> +        cnt++;
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    if (cnt == DEVICE_READY_TIMEOUT) {
+>>>>>>>>>>>> +        dev_err(nfc->dev, "device ready timeout\n");
+>>>>>>>>>>>> +        return -ETIMEDOUT;
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    return 0;
+>>>>>>>>>>>> +}
+>>>>>>>>>>>> +
+>>>>>>>>>>>>       static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>>>>>>>>>                           int page, int raw)
+>>>>>>>>>>>>       {
+>>>>>>>>>>>> @@ -643,6 +691,10 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>>>>>>>>>           u32 cmd;
+>>>>>>>>>>>>           int ret;
+>>>>>>>>>>>>       +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           meson_nfc_select_chip(nand, nand->cur_cs);
+>>>>>>>>>>>>             data_len =  mtd->writesize + mtd->oobsize;
+>>>>>>>>>>>> @@ -667,12 +719,20 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>>>>>>>>>                            NFC_CMD_SCRAMBLER_DISABLE);
+>>>>>>>>>>>>           }
+>>>>>>>>>>>>       +    ret = meson_nfc_wait_dma_finish(nfc);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+>>>>>>>>>>>>           writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>>           meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
+>>>>>>>>>>>>             meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+>>>>>>>>>>>>       +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           return ret;
+>>>>>>>>>>>>       }
+>>>>>>>>>>>>       @@ -720,6 +780,21 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
+>>>>>>>>>>>>           } while (!ret);
+>>>>>>>>>>>>       }
+>>>>>>>>>>>>       +static inline int meson_nfc_send_read(struct nand_chip *nand)
+>>>>>>>>>>>> +{
+>>>>>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>>>>>>>>> +    u32 cs = nfc->param.chip_select;
+>>>>>>>>>>>> +    int ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +    return 0;
+>>>>>>>>>>>> +}
+>>>>>>>>>>>> +
+>>>>>>>>>>>
+>>>>>>>>>>> it already calls meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute(). Could you implements this in meson_nfc_queue_rb()? and we can use the irq method.
+>>>>>>>>>>> also without Ready/Busy pin, the meson_nfc_queue_rb() should change like below:
+>>>>>>>>>>>         ......
+>>>>>>>>>>>         #define NFC_CMD_RB_INT    ((0xb << 10) | BIT(18))
+>>>>>>>>>
+>>>>>>>>> Sorry, I can see this define as (and it is used in the driver):
+>>>>>>>>> #define NFC_CMD_RB_INT          BIT(14)
+>>>>>>>>>
+>>>>>>>>> in drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>>
+>>>>>>>>> Which one is correct ?
+>>>>>>>>
+>>>>>>>> we need to modify the define 'NFC_CMD_RB_INT' as ((0xb << 10) | BIT(18)).
+>>>>>>>>
+>>>>>>>
+>>>>>>> Ok, NFC_CMD_RB_INT - it is "Ready/Busy_Interrupt" ? You suppose that currently it is
+>>>>>>> defined incorrectly, so irq waiting does not work?
+>>>>>>
+>>>>>> Previous defined BIT(14) is for having the external Ready/Busy pin of the NAND device connected to the controller. the new define is for reading status by sending read status(70H) command and read status from the data bus(checking the IO6). the both can work on AXG soc.
+>>>>>> when the controller RB command is sent, the controller automatically checks the level of external Ready/Busy pin or the data bus(IO6) periodicity. and generate the irq signal if status is ready.
+>>>>>>
+>>>>>>>
+>>>>>>> Thanks, Arseniy
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Thanks, Arseniy
+>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>         meson_nfc_cmd_idle(nfc, 0);
+>>>>>>>>>>>         cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>>>>>>>>>>>         writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>         meson_nfc_cmd_idle(nfc, 5);
+>>>>>>>>>>>         cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
+>>>>>>>>>>>         writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>
+>>>>>>>>>>>         ret = wait_for_completion_timeout(&nfc->completion,
+>>>>>>>>>>>                           msecs_to_jiffies(timeout_ms));
+>>>>>>>>>>>         if (ret == 0)
+>>>>>>>>>>>             ret = -1;
+>>>>>>>>>>>
+>>>>>>>>>>>         writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>>>         ......
+>>>>>>>>>>>
+>>>>>
+>>>>> Hello Liang!
+>>>>>
+>>>>> I've got small questions to clarify Your comment. You suggest two thing IIUC:
+>>>>>
+>>>>> 1) Send NAND_CMD_READ0 from 'meson_nfc_queue_rb()'. This means that extra argument is needed to
+>>>>> 'meson_nfc_queue_rb()' which shows that read operation is going to be performed. We can't send
+>>>>> NAND_CMD_READ0 for write operation?
+>>>>
+>>>> it is ok to me. but does NAND_CMD_READ0 really need to send in the controller driver? i don't find the other controller drivers have to send it for the old vendor NAND device.
+>>>
+>>> Hm, I found this command in the old driver. For example without it I get the following error:
+>>>
+>>> # nanddump -c -s 0 -l 2048 /dev/mtd0 --oob
+>>> ECC failed: 3975
+>>> ECC corrected: 47
+>>> Number of bad blocks: 10
+>>> Number of bbt blocks: 0
+>>> Block size 131072, page size 2048, OOB size 64
+>>> Dumping data starting at 0x00000000 and ending at 0x00000800...
+>>>
+>>> But data is not corrupted and seems ok. With this extra NAND_CMD_READ0 everything is ok - data is still valid and
+>>> there are no ECC errors.
+>>>
+>>>>
+>>>>>
+>>>>> 2) About code and define above, I tried to replace current body of 'meson_nfc_queue_rb()', but it
+>>>>> didn't work. May be I did it wrong, because what to do with 'meson_nfc_wait_dev_ready()' and it's
+>>>>> call sites? It must be removed? Could You please explain Your idea in more details? I'm asking You
+>>>>> because I don't have doc for this NAND controller, so it is very difficult to me to add valid
+>>>>> logic to this driver without any references
+>>>>
+>>>> Could you please try the following? i have tested it on another SOC (not axg).
+>>>>
+>>>> static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>>>> {
+>>>>      u32 cmd, cfg;
+>>>>      int ret = 0;
+>>>>
+>>>>      meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>>>>      meson_nfc_drain_cmd(nfc);
+>>>>      meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+>>>>
+>>>>      cfg = readl(nfc->reg_base + NFC_REG_CFG);
+>>>>      cfg |= NFC_RB_IRQ_EN;
+>>>>      writel(cfg, nfc->reg_base + NFC_REG_CFG);
+>>>>
+>>>>      reinit_completion(&nfc->completion);
+>>>>
+>>>>      meson_nfc_cmd_idle(nfc, 0);
+>>>>      cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>>>>      writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>      meson_nfc_cmd_idle(nfc, 5);
+>>>>      cmd = NFC_CMD_RB | NFC_CMD_RB_INT
+>>>>          | nfc->param.chip_select | nfc->timing.tbers_max;
+>>>>      writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>      meson_nfc_drain_cmd(nfc);
+>>>>
+>>>>      ret = wait_for_completion_timeout(&nfc->completion,
+>>>>                        msecs_to_jiffies(timeout_ms));
+>>>>      if (ret == 0)
+>>>>          ret = -1;
+>>>>
+>>>>      writel(1 << 31, nfc->reg_base + NFC_REG_CMD);
+>>>>
+>>>>      return ret;
+>>>> }
+>>>
+>>> Ok! Thanks, I'll try it!
+>>>
+>>> Thanks, Arseniy
+>>
+>> Hello @Liang, I tried this code, seems with this implementation NAND driver works very slow,
+>> here is for example output buring bad blocks lookup:
+>>
+>> [    2.060835] Scanning device for bad blocks
+>> [    3.350085] Bad eraseblock 20 at 0x000000280000
+>> [    3.536389] Freeing initrd memory: 11808K
+>> [   39.133952] Bad eraseblock 581 at 0x0000048a0000
+>> [   44.837917] Bad eraseblock 671 at 0x0000053e0000
+>> [   45.677964] Bad eraseblock 685 at 0x0000055a0000
+>> [   83.637917] Bad eraseblock 1279 at 0x000009fe0000
+>> [  132.833318] modprobe (56) used greatest stack depth: 12672 bytes left
+>>
+>>
+>> Take a look at timeouts. I used Your variant of 'meson_nfc_queue_rb()' from above,
+>> #define NFC_CMD_RB_INT is ((0xb << 10) | BIT(18)). I tested it with my ports of
+>> of dev ready calls from the old vendor's driver.
+>>
+>> Thanks, Arseniy
+>>
+>>>
+>>>>
+>>>> also we need to check and return the return value for meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute() and meson_nfc_write_page_sub().
+>>>>
+>>>>>
+>>>>> May be I can send v2 patchset for review without this change, as v2 already includes udpate for OOB
+>>>>> handling which is I think more critical?
+>>>>>
+>>>>
+>>>> sure, it is up to you. it is more important, thanks again.
+>>>>
+>>>>> Thanks, Arseniy
+>>>>>
+>>>>>>>>>>
+>>>>>>>>>>         Thanks for reply! I'll try this code! One more question about OOB processing in this
+>>>>>>>>>> driver (as You are author of it):
+>>>>>>>>>>
+>>>>>>>>>>        OOB size is 64 bytes, but for example if I have 1K ECC, 2 bytes user bytes and 14
+>>>>>>>>>>        bytes for ECC code for each 1K. In this case I have access to only 32 bytes of OOB:
+>>>>>>>>>>        2 x (2 user bytes + 14 ECC bytes). Correct me if i'm wrong, but rest of OOB (next
+>>>>>>>>>>        32 bytes) become unavailable (in both raw and ECC modes) ?
+>>>>>>>>>>
+>>>>>>>>>> Thanks, Arseniy
+>>>>>>>>>>
+>>>>>>>>>>>>       static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>>>>>>>>>                          int page, int raw)
+>>>>>>>>>>>>       {
+>>>>>>>>>>>> @@ -734,10 +809,18 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>>>>>>>>>           data_len =  mtd->writesize + mtd->oobsize;
+>>>>>>>>>>>>           info_len = nand->ecc.steps * PER_INFO_BYTE;
+>>>>>>>>>>>>       +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           ret = meson_nfc_rw_cmd_prepare_and_execute(nand, page, DIRREAD);
+>>>>>>>>>>>>           if (ret)
+>>>>>>>>>>>>               return ret;
+>>>>>>>>>>>>       +    ret = meson_nfc_send_read(nand);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           ret = meson_nfc_dma_buffer_setup(nand, meson_chip->data_buf,
+>>>>>>>>>>>>                            data_len, meson_chip->info_buf,
+>>>>>>>>>>>>                            info_len, DMA_FROM_DEVICE);
+>>>>>>>>>>>> @@ -754,6 +837,9 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>>>>>>>>>           }
+>>>>>>>>>>>>             ret = meson_nfc_wait_dma_finish(nfc);
+>>>>>>>>>>>> +    if (ret)
+>>>>>>>>>>>> +        return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>           meson_nfc_check_ecc_pages_valid(nfc, nand, raw);
+>>>>>>>>>>>>             meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_FROM_DEVICE);
+>>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>
+>>>>>>
+>>>>>
