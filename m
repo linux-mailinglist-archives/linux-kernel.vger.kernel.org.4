@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9674F6EA3F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC3B6EA3F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjDUGrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 02:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S230152AbjDUGqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 02:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjDUGrF (ORCPT
+        with ESMTP id S229540AbjDUGqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 02:47:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A414EE3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 23:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682059624; x=1713595624;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=GVrdmfaOJ8LgmgQ7cFs6j/XJvkFAHodlEd2c9Y8HU1k=;
-  b=UWN1DpshORi1AyHL8MFIFlU41T1zVXIROk5nM/yQHL0vEK65IfpQfWlW
-   0lzh2uG2TrlH9De5nJZ+vemIdORpBvqZ3vGtdAequFhMUjW2XwscHpBD/
-   M0kn1amQ0ACLet/pl/LQtL+8Hw4nHNHQnmZxAAsdwAGKUpmQbZR8s3ORe
-   SGub54krTw3P1XqZTiXZ0PI5DkSwELK3KsQq0bv/mAyeoASKJdkphhh4Q
-   Df6uVOm/r5hlq6PwHPIMz+KGYWrIxfonEziMeqSPn7LKKaUnyTI/sJ/ZC
-   TQl9J5ziAk1GzDhzI2/Hgk8IG3f7pPf1rH/uaefWHrn2wJnt4+4bEkX6q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="408868292"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="408868292"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 23:47:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="694868869"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="694868869"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 23:47:02 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: Re: [PATCHv2] mm: skip CMA pages when they are not available
-References: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com>
-Date:   Fri, 21 Apr 2023 14:45:53 +0800
-In-Reply-To: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com>
-        (zhaoyang huang's message of "Thu, 20 Apr 2023 16:32:57 +0800")
-Message-ID: <87v8hpspge.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 21 Apr 2023 02:46:21 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE34F4C34
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 23:46:19 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-77858d8dcb5so5453628241.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 23:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682059579; x=1684651579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c8rGJOc85qIlsCEw2pQTROCuUhgxQbJfAVwawiJ5nNY=;
+        b=VUlajZafzyZ/QAZ2etTEDkTYnUMuKwu8jBdsx5O8omch76Ox0jh2Cjvu2tY5/cuZo6
+         ZUU3MEY7hDyOC9nmKFkojb3FJp2tN1l4SmRCENFxE/RrqM/KB2Orc4bmDjzJ8nrvZ1j2
+         I513zQ6Gu/dAOqam4KJCl84lP+hQhRDkdxxbg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682059579; x=1684651579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c8rGJOc85qIlsCEw2pQTROCuUhgxQbJfAVwawiJ5nNY=;
+        b=PIT8F1eIhmF90o1Ik/HC9kymP49ISl2r+JHtaL4AUVDgtewLUCAALaVfvTQxgeXaev
+         D+PN+HRRPmNdRNNM4sCVQZXw01W5IEJEtkptpfPiEkc+6fR5hr4F5xAQ9VAL5sPNMclR
+         vv/rIZZ43jRSTB+IKcOrjXP9kF8Oe561HhfI4juRZRYn2rQ4gmyyIDx74IYQmCqTTxmc
+         /CgEgzUNSXCIi9fB/dIOK52wvnfHG4kqLNLf9AID4LG0Br/ArZeulcBducLxzJOYie41
+         rvBwIHroKel/bkleibLRh4uitgdYWj6fpmXZaEwHeFLdCkRbsYdS/y5JBQAPs4jfoSdc
+         gtfg==
+X-Gm-Message-State: AAQBX9drpHLAJ4CRcPcowsF36RW8vAWT8SW+79AqJUbRJNXAa1q0sNzF
+        32M1GEwukDL9YmsnhjepiPh4UWddYNIpVmPqKgGMdw==
+X-Google-Smtp-Source: AKy350br7yCL1OJ1XJzVtNg1OFPeo3p9YhQpUa8cOHRZlJ8ebufKSznYUo1MYTqbjlZM+QmiW/h15w5lwrtnnSAOKp0=
+X-Received: by 2002:a1f:784a:0:b0:446:adde:f761 with SMTP id
+ t71-20020a1f784a000000b00446addef761mr548850vkc.7.1682059579067; Thu, 20 Apr
+ 2023 23:46:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230420094433.42794-1-angelogioacchino.delregno@collabora.com> <20230420094433.42794-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230420094433.42794-3-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 21 Apr 2023 14:46:08 +0800
+Message-ID: <CAGXv+5EtCdpXtq6q2Cv+QAZPUE6yJiSZhngSc0sftz-_uDrZXw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] arm64: dts: mediatek: cherry: Assign dp-intf aliases
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,80 +69,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"zhaoyang.huang" <zhaoyang.huang@unisoc.com> writes:
-
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Thu, Apr 20, 2023 at 5:45=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> This patch fixes unproductive reclaiming of CMA pages by skipping them when they
-> are not available for current context. It is arise from bellowing OOM issue, which
-> caused by large proportion of MIGRATE_CMA pages among free pages. There has been
-> commit(168676649) to fix it by trying CMA pages first instead of fallback in
-> rmqueue. I would like to propose another one from reclaiming perspective.
+> On Cherry boards, the IP at 0x1c015000 (dp_intf0) is used as primary
+> dp-intf, while the other at 0x1c113000 (dp_intf1) is used as secondary:
+> assign them to dp-intf{0,1} aliases respectively.
 >
-> 04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allocation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=(null),cpuset=foreground,mems_allowed=0
-> 0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C) 0*1024kB 0*2048kB 0*4096kB = 35848kB
-> 0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H) 0*1024kB 0*2048kB 0*4096kB = 3236kB
-> 	......
-> 041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate memory on node -1, gfp=0xa20(GFP_ATOMIC)
-> 041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object size: 64, buffer size: 64, default order: 0, min order: 0
-> 041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 3392, free: 0
-
-From the above description, you are trying to resolve an issue that has
-been resolved already.  If so, why do we need your patch?  What is the
-issue it try to resolve in current upstream kernel?
-
-At the first glance, I don't think your patch doesn't make sense.  But
-you really need to show the value of the patch.
-
-Best Regards,
-Huang, Ying
-
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 > ---
-> v2: update commit message and fix build error when CONFIG_CMA is not set
-> ---
-> ---
->  mm/vmscan.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
+>  arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi | 2 ++
+
+This should be applied at the SoC level. The display pipeline is fixed in
+MMSYS, so it applies to all MT8195 devices.
+
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index bd6637f..19fb445 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
->  	unsigned long nr_skipped[MAX_NR_ZONES] = { 0, };
->  	unsigned long skipped = 0;
->  	unsigned long scan, total_scan, nr_pages;
-> +	bool cma_cap = true;
-> +	struct page *page;
->  	LIST_HEAD(folios_skipped);
->  
->  	total_scan = 0;
->  	scan = 0;
-> +	if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
-> +		&& (gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE))
-> +		cma_cap = false;
-> +
->  	while (scan < nr_to_scan && !list_empty(src)) {
->  		struct list_head *move_to = src;
->  		struct folio *folio;
-> @@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
->  		nr_pages = folio_nr_pages(folio);
->  		total_scan += nr_pages;
->  
-> -		if (folio_zonenum(folio) > sc->reclaim_idx) {
-> +		page = &folio->page;
-> +
-> +		if ((folio_zonenum(folio) > sc->reclaim_idx)
-> +#ifdef CONFIG_CMA
-> +			|| (get_pageblock_migratetype(page) == MIGRATE_CMA && !cma_cap)
-> +#endif
-> +		) {
->  			nr_skipped[folio_zonenum(folio)] += nr_pages;
->  			move_to = &folios_skipped;
->  			goto move;
->  		}
-> -
->  		/*
->  		 * Do not count skipped folios because that makes the function
->  		 * return with no isolated folios if the LRU mostly contains
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64=
+/boot/dts/mediatek/mt8195-cherry.dtsi
+> index 0820e9ba3829..918380697a9a 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> @@ -10,6 +10,8 @@
+>
+>  / {
+>         aliases {
+> +               dp-intf0 =3D &dp_intf0;
+> +               dp-intf1 =3D &dp_intf1;
+>                 i2c0 =3D &i2c0;
+>                 i2c1 =3D &i2c1;
+>                 i2c2 =3D &i2c2;
+> --
+> 2.40.0
+>
+>
