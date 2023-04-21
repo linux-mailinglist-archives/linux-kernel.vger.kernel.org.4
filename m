@@ -2,85 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196606EB469
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03F96EB46C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjDUWGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S233530AbjDUWHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbjDUWFy (ORCPT
+        with ESMTP id S229656AbjDUWHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:05:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2615630C1;
-        Fri, 21 Apr 2023 15:05:53 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LLSlo2026114;
-        Fri, 21 Apr 2023 22:05:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bTuKtHGTeLnEy77rrZuzHq6grMBEthzjY0RdJSovizQ=;
- b=gezY9NUmYUYqiMwkfJ71cGd5NtST1Y7lCHbSm+E1p8S5eBEK2KJqJGYgqVXpLtLNuLai
- 9B65qbgaJo15gCja8zhSf8Rx95NopZAxVGQWJSwbRuuue4qa0m01kjEiCDoZ0SyWO2Qk
- ZBEWAj2P7UZZdqZKLcZ/KQvBms6WgSrAB0bkfGeFw+i4jkYejR3A6PQ8RlbTJj+Ocm/t
- GXvaoJoEyf9GSKNYlo2GzfeOfJPhJXREdNcN3faX6NMmeXF1C4T9KC58i6hMTEG4TSaC
- QZXvKEWZZ55d2W/uV+hsj10YRklyx7/UhtZlIbmIDydH1j8mvZtHjPsC3rnqUKQ05A0g IQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3tmqs7cj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 22:05:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LM5fvF009059
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 22:05:41 GMT
-Received: from [10.110.0.180] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
- 2023 15:05:40 -0700
-Message-ID: <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
-Date:   Fri, 21 Apr 2023 15:05:39 -0700
+        Fri, 21 Apr 2023 18:07:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0F4172A;
+        Fri, 21 Apr 2023 15:07:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48F216183D;
+        Fri, 21 Apr 2023 22:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF7B6C433D2;
+        Fri, 21 Apr 2023 22:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682114863;
+        bh=pDVibJhWt9LWG5jQ982Dyc+TkQMXFvLmet6bPhbcktY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gxZ0nicrjFY6j9AYM+POfkfJscGG0Y6W8XNTVuGvspBoH4cgv68pEXcvDlNCw8otO
+         Hk/QhQ8L2jeiflF0k7ZW8yIWQBj4dP+s2sFbbV+jHg5qmRnGuj6j+BC3NBo23WjX5E
+         JSECn+/0hSHjpUSAInyNoaXSOxJTUPs/RqHZNTIw5k5wvWgeU7u9l28Mkby1B6ZZGo
+         hTcRqxYlRQsOyQYcNW15GdYKVQPoeDicdqGlugn1VW/b+TgJ75FIslyO7OZ7URsywb
+         IxoUKpNxdWFxk0Z4d+lenNwXa90YBIuA92gE5OtxVaDNGP2Vh0aniz1jptqJVpd0er
+         w9nd5/qYhRbIQ==
+Message-ID: <c9348be9-7b9e-ebf8-b787-e6b3e0724b4a@kernel.org>
+Date:   Sat, 22 Apr 2023 07:07:41 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
- chipsets
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drivers/ata: Improve performance and readability
+To:     Yahu Gao <yahu.gao@outlook.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yahu Gao <gaoyh12@lenovo.com>, Jiwei Sun <sunjw10@lenovo.com>
+References: <OS3P286MB06322266ED2913AF0F6172219E609@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
- <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
- <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oCjwfEqMgOxWu08l3yMN7gwYqwWBmTMi
-X-Proofpoint-ORIG-GUID: oCjwfEqMgOxWu08l3yMN7gwYqwWBmTMi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=940 spamscore=0 adultscore=0
- impostorscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304210193
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <OS3P286MB06322266ED2913AF0F6172219E609@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,124 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/21/23 21:54, Yahu Gao wrote:
+> From: Yahu Gao <gaoyh12@lenovo.com>
+> 
 
-On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
-> On 21/04/2023 02:25, Kuogee Hsieh wrote:
->> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>
->> Add DSC 1.2 hardware blocks to the catalog with necessary
->> sub-block and feature flag information.
->> Each display compression engine (DCE) contains dual hard
->> slice DSC encoders so both share same base address but with
->> its own different sub block address.
->
-> Please correct line wrapping. 72-75 is usually the preferred width
->
->>
->> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h  | 19 
->> +++++++++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h  | 11 +++++++++++
->>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h    | 21 
->> +++++++++++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h  | 19 
->> +++++++++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h  | 19 
->> +++++++++++++++++++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c      | 12 ++++++++++--
->>   6 files changed, 99 insertions(+), 2 deletions(-)
->>
->
->
-> [I commented on sm8550, it applies to all the rest of platforms]
->
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->> index 9e40303..72a7bcf 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
->> sm8550_merge_3d[] = {
->>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
->>   };
->>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
->> +    .enc = {.base = 0x100, .len = 0x100},
->> +    .ctl = {.base = 0xF00, .len = 0x10},
->> +};
->> +
->> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
->> +    .enc = {.base = 0x200, .len = 0x100},
->> +    .ctl = {.base = 0xF80, .len = 0x10},
->> +};
->
-> Please keep sblk in dpu_hw_catalog for now.
->
->> +
->> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
->> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, sm8550_dsc_sblk_0),
->> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, sm8550_dsc_sblk_1),
->
-> Is there a reason why index in "dsc_N" doesn't match the DSC_n which 
-> comes next to it?
+The patch title should start with:
 
-usually each DCE (display compression engine) contains two hard slice 
-encoders.
+ata: libata-core: ...
 
-DSC_0 and DSC_1 (index) is belong to dsc_0.
+And let's be honest here: this is not the hot path and you are optimizing a
+single "if" condition for a series of commands that will take 10s of ms to
+execute. So this is *not* about performance. So update the patch title please.
 
-If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
+> Replace conditions of avoid issuing [P]IDENTIFY to PMP.
+> 
+> Reviewed-by: Jiwei Sun <sunjw10@lenovo.com>
+> Signed-off-by: Yahu Gao <gaoyh12@lenovo.com>
+> 
+> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+> index 14c17c3bda4e..53f65d751189 100644
+> --- a/drivers/ata/libata-core.c
+> +++ b/drivers/ata/libata-core.c
+> @@ -3802,11 +3802,7 @@ int ata_dev_revalidate(struct ata_device *dev, unsigned int new_class,
+>  		return -ENODEV;
+>  
+>  	/* fail early if !ATA && !ATAPI to avoid issuing [P]IDENTIFY to PMP */
+> -	if (ata_class_enabled(new_class) &&
+> -	    new_class != ATA_DEV_ATA &&
+> -	    new_class != ATA_DEV_ATAPI &&
+> -	    new_class != ATA_DEV_ZAC &&
+> -	    new_class != ATA_DEV_SEMB) {
+> +	if (new_class == ATA_DEV_PMP) {
 
->
->> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
->> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
->> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
->> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
->> +};
->> +
->>   static const struct dpu_intf_cfg sm8550_intf[] = {
->>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
->> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>       /* TODO TE sub-blocks for intf1 & intf2 */
->> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
->>       .dspp = sm8550_dspp,
->>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
->>       .pingpong = sm8550_pp,
->> +    .dsc = sm8550_dsc,
->> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
->>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
->>       .merge_3d = sm8550_merge_3d,
->>       .intf_count = ARRAY_SIZE(sm8550_intf),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 03f162a..be08158 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -1,6 +1,6 @@
->>   // SPDX-License-Identifier: GPL-2.0-only
->>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
->> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All 
->> rights reserved.
->>    */
->>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
->> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
->> sc7280_pp_sblk = {
->>       {\
->>       .name = _name, .id = _id, \
->>       .base = _base, .len = 0x140, \
->> -    .features = _features, \
->> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
->> +    }
->> +
->> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
->> +    {\
->> +    .name = _name, .id = _id, \
->> +    .base = _base, .len = _len, \
->> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
->> +    .sblk = &_sblk, \
->>       }
->> /*************************************************************
->
+Using a switch-case here may actually make things even more readable.
+
+>  		ata_dev_info(dev, "class mismatch %u != %u\n",
+>  			     dev->class, new_class);
+>  		rc = -ENODEV;
+
