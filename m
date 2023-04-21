@@ -2,535 +2,792 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54D56EB340
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832D76EB349
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 23:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbjDUVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 17:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S233371AbjDUVFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 17:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjDUVAP (ORCPT
+        with ESMTP id S231535AbjDUVFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 17:00:15 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BA51FF7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 14:00:10 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4eca0563b31so2175426e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 14:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682110808; x=1684702808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ttjUAsyIVXcv8+Ww15Ry/DaLHN6d5Gt5imb4QRwoRQU=;
-        b=oK6490hXU4kt7SDs7vhSq2SCYPR8nyDFDWXsQK2vWpmAdU7x/2J+S0CUpRM5soO/HZ
-         iAldwq/k0MT+9Ne8TC7V+F0BSCSREu2lKYoFXE5Ejo8yaAe1R1oqfVtw6fHignXSupuq
-         u+DHSoW7rvig8boNnFQcimNaiuUuIc+ii94HMn4qhjgS3biQfN4I4SQw0G/MIbON+3ZM
-         10tTikfiUxHL9BAloo5iVK7QmqDhAKNGMUrR8rdEwH5cF7rITcSvQnx8cpyUTiQ4xqY2
-         G0MWn2b0j3rnFLRLrRg3gz1mw5+GWkPWdItzOJSYsnCSNEEftJfCw6lCoWFYtGQjjCcn
-         aO9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682110808; x=1684702808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttjUAsyIVXcv8+Ww15Ry/DaLHN6d5Gt5imb4QRwoRQU=;
-        b=K8mclSRMtU9GV0K0VhkfWUGh5VHM6lW0EMQB1VVMMoWNPNjHp//Ej+T+8INGgLsdrR
-         iQq58s6VeGRHQhlSX2bvN0oaO7iUzWlMYWGblp0ul331hdAoC0RaPWvFyAcJqRNxR5ts
-         OZLaqY+YaKLT1KIHswtjvLsQR/bv8/JXODtERMlLGkFlPa2WxCiBb8StD42s01vvkRX3
-         W3s1ovh/eAU1GuZkaAHyiSG/heAHBWI5WINX0Hz4AFFcylmMAPLiZxqa2b7iwHPA/oKc
-         UEq9woDp0IEBUUnzbAhCsNUldU2Ms2awI0fFRitPnaAlwFVs0Kz3gV3NcC3Ao06EIvCv
-         21Lw==
-X-Gm-Message-State: AAQBX9cnXiWaBl5NUUKIM7tMKKr2CF20ksyqAYQvF01B9z/pLcM54U0r
-        49F8WegcIKYqf1iCQI0UZWfdAQ==
-X-Google-Smtp-Source: AKy350YzZ74Qo5IsRYaGRsyWPY7IUWSOAgymHOHnb7bG1G5KLjnfHIlt70SOh8qAy6IteSTWfUspEQ==
-X-Received: by 2002:a05:6512:61:b0:4ef:5a59:12f6 with SMTP id i1-20020a056512006100b004ef5a5912f6mr966713lfo.16.1682110808295;
-        Fri, 21 Apr 2023 14:00:08 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id x25-20020ac259d9000000b004ec89319b03sm673190lfn.211.2023.04.21.14.00.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 14:00:07 -0700 (PDT)
-Message-ID: <9f234b53-89f6-bfd1-211f-d1f55295c321@linaro.org>
-Date:   Sat, 22 Apr 2023 00:00:07 +0300
+        Fri, 21 Apr 2023 17:05:22 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A61FD8;
+        Fri, 21 Apr 2023 14:05:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HPiGmkaY2/UL1ViPDpmnUn6ejgp8cIc5RjvjZzo4CrnJY5Do28Utl6DNtmSyONehzBw6CACxT2DWGjg3gX4l8Duj0BvZlZBEpk4LsEhlnnd6aBReU8p/oMvNeeV6HhvAWSAAl8D6yGvXeG16CZCbUwaxteNFN5um8hu/AoLjHt7Em2WeyeDLRBnhFT9pAaSddUS/s7MCrT9XiZPE3R6OK52eQ7N6z7CjYT/lOIOPB24ySYVlVlJ2Iuq4r1Adf2Sii/YQFJEt+P8rV06bjpV4V57pFIZcr2d7WYWuwX3tm4D7E6gLbnN58AMC+1vSWurbc602xF7u7j7XQMN7Rh6ESg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4RGpCDSv2L0PdNaAycCnY51gVUlTvbZ4VAj74VcSzWk=;
+ b=cmfRgPUwJONNM5EwC7QYrdna8rHU0p7CFJvj+CRt1aWrVa5NjjNRv98u2ic2wNKHTF30SxlDTDKv97+yBAq5dVBfSIzwh1PfamzpoxQsu1MoSnGtZOUDijDuSq4XmhvKau0/6m2OSI5g/1kHr51e22TMF1/y+JrsID8KKTCXgIpsGA9YYpUkhu+k8PfyeAoERKFP1kbXdxIyPMzBtLaqzGnrNlIg4jv6SungymOQZdK60ezTstEBggICR3e52eW4QFChZyeNdFDbDT4uQD7W7Ry1AdoayOPMZQiR2E1MQ5o2lQjaxqY7sW2wr13cvXKuzwCSWGhtUZp5B8VnBXkbuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4RGpCDSv2L0PdNaAycCnY51gVUlTvbZ4VAj74VcSzWk=;
+ b=lLFMFfBQ78yNVbokit1EDx+fzPmGgfkTnCoQ8oNJsfS/5TNSzwRf+/6F9i1nwZSnxv6xr3Ohf1pj7vIsng7o4/v2HTenC4vBZwZ6XrKW1Lz3gIKfW2VatLeiazLm9+0ZsVuFJrAzBBhEg+D5QTzaiuf2vXnPPFlXVekN/ly4znM=
+Received: from DS7PR03CA0243.namprd03.prod.outlook.com (2603:10b6:5:3b3::8) by
+ DM6PR12MB4249.namprd12.prod.outlook.com (2603:10b6:5:223::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.22; Fri, 21 Apr 2023 21:05:17 +0000
+Received: from DM6NAM11FT071.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b3:cafe::2c) by DS7PR03CA0243.outlook.office365.com
+ (2603:10b6:5:3b3::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.25 via Frontend
+ Transport; Fri, 21 Apr 2023 21:05:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT071.mail.protection.outlook.com (10.13.173.48) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.27 via Frontend Transport; Fri, 21 Apr 2023 21:05:17 +0000
+Received: from platform-dev1.pensando.io (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 21 Apr 2023 16:05:13 -0500
+From:   Brad Larson <blarson@amd.com>
+To:     <robh@kernel.org>
+CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
+        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
+        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
+        <brijeshkumar.singh@amd.com>, <broonie@kernel.org>,
+        <catalin.marinas@arm.com>, <davidgow@google.com>,
+        <devicetree@vger.kernel.org>, <fancer.lancer@gmail.com>,
+        <gerg@linux-m68k.org>, <gsomlo@gmail.com>, <krzk@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
+        <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
+        <p.zabel@pengutronix.de>, <piotrs@cadence.com>,
+        <rdunlap@infradead.org>, <samuel@sholland.org>,
+        <skhan@linuxfoundation.org>, <suravee.suthikulpanit@amd.com>,
+        <thomas.lendacky@amd.com>, <tonyhuang.sunplus@gmail.com>,
+        <ulf.hansson@linaro.org>, <vaishnav.a@ti.com>, <will@kernel.org>,
+        <yamada.masahiro@socionext.com>
+Subject: [PATCH v14 08/15] arm64: dts: Add AMD Pensando Elba SoC support
+Date:   Fri, 21 Apr 2023 14:05:05 -0700
+Message-ID: <20230421210505.60815-1-blarson@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230411135518.GA2952600-robh@kernel.org>
+References: <20230411135518.GA2952600-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] phy: qcom-qmp-pcie: Add support for IPQ9574 g3x1 and
- g3x2 PCIEs
-Content-Language: en-GB
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
-References: <20230421124150.21190-1-quic_devipriy@quicinc.com>
- <20230421124150.21190-3-quic_devipriy@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230421124150.21190-3-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT071:EE_|DM6PR12MB4249:EE_
+X-MS-Office365-Filtering-Correlation-Id: 09644065-cf35-4b50-7e40-08db42ac1bd0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 86z1uIw1Vq5oGcLueSAnmYkZMPlMVLZ9XgfNXuetqEdu/o4c6QBFQdfoiFfntJYlcJtr9Jl38xm2QcC5omCuE/EJhgekiaO/oymxx5Jvms7UzMAyAo303D7XateTEh+NJFWvum9cXFp02lAsMIOU7O4mg+jOBzNn+JECncfeqdpEHc4ZBqIdQMQJ+ckZZ3WgulfQE3cfGOwmMYipwXBE+P+tJiLUigOiySZgvvPOXbHVShei/USI3pPu5wmjRX/xDx9/wAcVaGTFu0TrSAKuKgBEqdgqKVHjdBGl+fdqyqs1vHCTaI5NM/nrnMzHbn5vOXliQio/ZRV98lLUFI/AUogYV215SPTGNHRBh1BaZJOy89eJZMZCjclxZYgDkqn1p2+8MV46WzzKDsvfzUOn5xNqLXcE5meJroaFznFN8frRkKpR6X8r0Ut/mHjp51jGEjkKk3sqh7McvCFkPJ/ndwNHiEqvIRdzCgl5hoDNq/eLdY32Hv+92JlTXcpQCINgkj7V2akANp2jNeF71bJXxDhPIMPzVcQZyZg5HXVQw2wWwmwc/r94a5a4SuBkW+N771MqdpQLB/ulv5V7bggeoJBU09dQMdlFL10mk22k8qWUwXH9uUJ4GfGYyYZxsN2AeXs4s6/uXbOcw+TGbaghGtzEssyoPLC5lH3bjCmIl7VTzS0kNXuCnrFos3s3zrTcw9vPIgyE9G1ihr7L0fitHT/v7P+P1PtIsEQzSZTu7sY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199021)(46966006)(40470700004)(36840700001)(16526019)(6666004)(82740400003)(186003)(40480700001)(36860700001)(54906003)(2616005)(336012)(1076003)(6916009)(4326008)(426003)(83380400001)(26005)(70206006)(47076005)(478600001)(70586007)(316002)(81166007)(356005)(7406005)(41300700001)(7416002)(5660300002)(40460700003)(2906002)(8676002)(30864003)(8936002)(36756003)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 21:05:17.0732
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09644065-cf35-4b50-7e40-08db42ac1bd0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT071.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4249
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 15:41, Devi Priya wrote:
-> Add support for a single-lane and two-lane PCIe PHYs
-> found on Qualcomm IPQ9574 platform.
-> Also, add the definitions for missing register offsets.
-> 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
->   Changes in V1:
-> 	- Updated the hex values to lowercase
-> 
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 332 ++++++++++++++++++
->   .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h   |  26 +-
->   .../phy/qualcomm/phy-qcom-qmp-qserdes-pll.h   |   3 +
->   3 files changed, 355 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index df505279edfd..ff92b121b113 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -515,6 +515,250 @@ static const struct qmp_phy_init_tbl ipq8074_pcie_gen3_pcs_misc_tbl[] = {
->   	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
->   };
->   
-> +static const struct qmp_phy_init_tbl ipq9574_gen3x1_pcie_serdes_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CLKBUFLR_EN, 0x18),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CTRL_BY_PSM, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x31),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_IVCO, 0x0f),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TRIM, 0x0f),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CMN_CONFIG, 0x06),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP_EN, 0x42),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_RESETSM_CNTRL, 0x20),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_MAP, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER1, 0xff),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER2, 0x3f),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x30),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x21),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE0, 0x68),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE0, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE0, 0xaa),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE0, 0xab),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE0, 0x14),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE0, 0xd4),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE0, 0x09),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE0, 0x16),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE0, 0x28),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE0, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE0, 0xa0),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE0, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE0, 0x24),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x20),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x32),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYS_CLK_CTRL, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_BUF_ENABLE, 0x07),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_EN_SEL, 0x08),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TIMER, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE1, 0x53),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE1, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE1, 0x55),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE1, 0x55),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE1, 0x29),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE1, 0xaa),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE1, 0x09),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE1, 0x16),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE1, 0x28),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE1, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE1, 0xa0),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE1, 0x03),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE1, 0xb4),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV_MODE1, 0x08),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_EN_CENTER, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER1, 0x7d),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER2, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER1, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER2, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE0, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE0, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE1, 0x08),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE1, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE0, 0x19),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE1, 0x28),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x90),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x89),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x10),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_gen3x2_pcie_serdes_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CLKBUFLR_EN, 0x18),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BIAS_EN_CTRL_BY_PSM, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x31),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_IVCO, 0x0f),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TRIM, 0x0f),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CMN_CONFIG, 0x06),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP_EN, 0x42),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_RESETSM_CNTRL, 0x20),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_MAP, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER1, 0xff),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE_TIMER2, 0x3f),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x30),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x21),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE0, 0x68),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE0, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE0, 0xaa),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE0, 0xab),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE0, 0x14),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE0, 0xd4),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE0, 0x09),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE0, 0x16),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE0, 0x28),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE0, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE0, 0xa0),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE0, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE0, 0x24),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_SELECT, 0x32),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYS_CLK_CTRL, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_BUF_ENABLE, 0x07),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SYSCLK_EN_SEL, 0x08),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_BG_TIMER, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DEC_START_MODE1, 0x53),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START3_MODE1, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START2_MODE1, 0x55),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_DIV_FRAC_START1_MODE1, 0x55),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP2_MODE1, 0x29),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_LOCK_CMP1_MODE1, 0xaa),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CP_CTRL_MODE1, 0x09),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_RCTRL_MODE1, 0x16),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_PLL_CCTRL_MODE1, 0x28),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN1_MODE1, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_INTEGLOOP_GAIN0_MODE1, 0xa0),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE2_MODE1, 0x03),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_VCO_TUNE1_MODE1, 0xb4),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SVS_MODE_CLK_SEL, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORE_CLK_EN, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CORECLK_DIV_MODE1, 0x08),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_EN_CENTER, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER1, 0x7d),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_PER2, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER1, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_ADJ_PER2, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE0, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE0, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE1_MODE1, 0x08),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_SSC_STEP_SIZE2_MODE1, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE0, 0x19),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_EP_DIV_MODE1, 0x28),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x90),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_HSCLK_SEL, 0x89),
-> +	QMP_PHY_INIT_CFG(QSERDES_PLL_CLK_ENABLE1, 0x10),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_pcie_tx_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_RCV_DETECT_LVL_2, 0x12),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_HIGHZ_DRVR_EN, 0x10),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_TX_LANE_MODE_1, 0x06),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_pcie_rx_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_SIGDET_CNTRL, 0x03),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_SIGDET_ENABLES, 0x1c),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_SIGDET_DEGLITCH_CNTRL, 0x14),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL2, 0x61),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL3, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL4, 0x1e),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_DFE_EN_TIMER, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_FO_GAIN, 0x0c),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_SO_GAIN, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_SO_SATURATION_AND_ENABLE, 0x7f),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_UCDR_PI_CONTROLS, 0x70),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL1, 0x73),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_EQU_ADAPTOR_CNTRL2, 0x80),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_LOW, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH2, 0xc8),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH3, 0x09),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_10_HIGH4, 0xb1),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_LOW, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH2, 0xc8),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH3, 0x09),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_01_HIGH4, 0xb1),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_LOW, 0xf0),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH, 0x02),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH2, 0x2f),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH3, 0xd3),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_MODE_00_HIGH4, 0x40),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_IDAC_TSETTLE_HIGH, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_V4_RX_RX_IDAC_TSETTLE_LOW, 0xc0),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_gen3x1_pcie_pcs_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_DCC_CAL_CONFIG, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_SIGDET_LVL, 0xaa),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_REFGEN_REQ_CONFIG1, 0x0d),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_G12S1_TXDEEMPH_M3P5DB, 0x10),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_gen3x1_pcie_pcs_misc_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_ACTIONS, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_POWER_STATE_CONFIG2, 0x0d),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_EQ_CONFIG1, 0x14),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_EQ_CONFIG1, 0x10),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_EQ_CONFIG2, 0x0b),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_PRESET_P10_PRE, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_PRESET_P10_POST, 0x58),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_POWER_STATE_CONFIG4, 0x07),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_CONFIG2, 0x52),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_INT_AUX_CLK_CONFIG1, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2, 0x50),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4, 0x1a),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x06),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6, 0x03),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_gen3x2_pcie_pcs_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_REFGEN_REQ_CONFIG1, 0x0d),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_G12S1_TXDEEMPH_M3P5DB, 0x10),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_DCC_CAL_CONFIG, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_SIGDET_LVL, 0xaa),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl ipq9574_gen3x2_pcie_pcs_misc_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_ACTIONS, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG2, 0x1d),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L, 0x01),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_EQ_CONFIG1, 0x14),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_EQ_CONFIG1, 0x10),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_EQ_CONFIG2, 0x0b),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_PRESET_P10_PRE, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_PRESET_P10_POST, 0x58),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG4, 0x07),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG1, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG2, 0x52),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG4, 0x19),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_INT_AUX_CLK_CONFIG1, 0x00),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2, 0x49),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4, 0x2a),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x02),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6, 0x03),
-> +	QMP_PHY_INIT_CFG(QPHY_V5_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
-> +};
+Add AMD Pensando common and Elba SoC specific device nodes
 
-So, it uses QSERDES registers from allegedly v2, TX and RX of v4 and 
-then PCS_PCIE from v5. This doesn't sound correct.
+Signed-off-by: Brad Larson <blarson@amd.com>
+---
 
-> +
->   static const struct qmp_phy_init_tbl sdm845_qmp_pcie_serdes_tbl[] = {
->   	QMP_PHY_INIT_CFG(QSERDES_V3_COM_BIAS_EN_CLKBUFLR_EN, 0x14),
->   	QMP_PHY_INIT_CFG(QSERDES_V3_COM_CLK_SELECT, 0x30),
-> @@ -2042,6 +2286,10 @@ static const char * const ipq8074_pciephy_clk_l[] = {
->   	"aux", "cfg_ahb",
->   };
->   
-> +static const char * const ipq9574_pciephy_clk_l[] = {
-> +	"aux", "cfg_ahb", "anoc_lane", "snoc_lane",
-> +};
-> +
->   static const char * const msm8996_phy_clk_l[] = {
->   	"aux", "cfg_ahb", "ref",
->   };
-> @@ -2072,6 +2320,24 @@ static const char * const sdm845_pciephy_reset_l[] = {
->   	"phy",
->   };
->   
-> +static const struct qmp_pcie_offsets qmp_pcie_offsets_3x1_ipq9574 = {
-> +	.serdes         = 0,
-> +	.tx             = 0x0200,
-> +	.rx             = 0x0400,
-> +	.pcs            = 0x0800,
-> +	.pcs_misc       = 0x0c00,
-> +};
-> +
-> +static const struct qmp_pcie_offsets qmp_pcie_offsets_3x2_ipq9574 = {
-> +	.serdes		= 0,
-> +	.tx		= 0x0200,
-> +	.rx		= 0x0400,
-> +	.tx2		= 0x0600,
-> +	.rx2		= 0x0800,
-> +	.pcs		= 0x1000,
-> +	.pcs_misc	= 0x1400,
-> +};
-> +
->   static const struct qmp_pcie_offsets qmp_pcie_offsets_v5 = {
->   	.serdes		= 0,
->   	.pcs		= 0x0200,
-> @@ -2174,6 +2440,66 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
->   	.phy_status		= PHYSTATUS,
->   };
->   
-> +static const struct qmp_phy_cfg ipq9574_gen3x1_pciephy_cfg = {
-> +	.lanes			= 1,
-> +
-> +	.offsets		= &qmp_pcie_offsets_3x1_ipq9574,
-> +
-> +	.tbls = {
-> +		.serdes		= ipq9574_gen3x1_pcie_serdes_tbl,
-> +		.serdes_num	= ARRAY_SIZE(ipq9574_gen3x1_pcie_serdes_tbl),
-> +		.tx		= ipq9574_pcie_tx_tbl,
-> +		.tx_num		= ARRAY_SIZE(ipq9574_pcie_tx_tbl),
-> +		.rx		= ipq9574_pcie_rx_tbl,
-> +		.rx_num		= ARRAY_SIZE(ipq9574_pcie_rx_tbl),
-> +		.pcs		= ipq9574_gen3x1_pcie_pcs_tbl,
-> +		.pcs_num	= ARRAY_SIZE(ipq9574_gen3x1_pcie_pcs_tbl),
-> +		.pcs_misc	= ipq9574_gen3x1_pcie_pcs_misc_tbl,
-> +		.pcs_misc_num	= ARRAY_SIZE(ipq9574_gen3x1_pcie_pcs_misc_tbl),
-> +	},
-> +	.clk_list		= ipq9574_pciephy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(ipq9574_pciephy_clk_l),
-> +	.reset_list		= ipq8074_pciephy_reset_l,
-> +	.num_resets		= ARRAY_SIZE(ipq8074_pciephy_reset_l),
-> +	.vreg_list		= NULL,
-> +	.num_vregs		= 0,
-> +	.regs			= pciephy_v4_regs_layout,
-> +
-> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-> +	.phy_status		= PHYSTATUS,
-> +	.pipe_clock_rate	= 250000000,
-> +};
-> +
-> +static const struct qmp_phy_cfg ipq9574_gen3x2_pciephy_cfg = {
-> +	.lanes			= 2,
-> +
-> +	.offsets		= &qmp_pcie_offsets_3x2_ipq9574,
-> +
-> +	.tbls = {
-> +		.serdes		= ipq9574_gen3x2_pcie_serdes_tbl,
-> +		.serdes_num	= ARRAY_SIZE(ipq9574_gen3x2_pcie_serdes_tbl),
-> +		.tx		= ipq9574_pcie_tx_tbl,
-> +		.tx_num		= ARRAY_SIZE(ipq9574_pcie_tx_tbl),
-> +		.rx		= ipq9574_pcie_rx_tbl,
-> +		.rx_num		= ARRAY_SIZE(ipq9574_pcie_rx_tbl),
-> +		.pcs		= ipq9574_gen3x2_pcie_pcs_tbl,
-> +		.pcs_num	= ARRAY_SIZE(ipq9574_gen3x2_pcie_pcs_tbl),
-> +		.pcs_misc	= ipq9574_gen3x2_pcie_pcs_misc_tbl,
-> +		.pcs_misc_num	= ARRAY_SIZE(ipq9574_gen3x2_pcie_pcs_misc_tbl),
-> +	},
-> +	.clk_list		= ipq9574_pciephy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(ipq9574_pciephy_clk_l),
-> +	.reset_list		= ipq8074_pciephy_reset_l,
-> +	.num_resets		= ARRAY_SIZE(ipq8074_pciephy_reset_l),
-> +	.vreg_list		= NULL,
-> +	.num_vregs		= 0,
-> +	.regs			= pciephy_v4_regs_layout,
-> +
-> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-> +	.phy_status		= PHYSTATUS,
-> +	.pipe_clock_rate	= 250000000,
-> +};
-> +
->   static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
->   	.lanes			= 1,
->   
-> @@ -3374,6 +3700,12 @@ static const struct of_device_id qmp_pcie_of_match_table[] = {
->   	}, {
->   		.compatible = "qcom,ipq8074-qmp-pcie-phy",
->   		.data = &ipq8074_pciephy_cfg,
-> +	}, {
-> +		.compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy",
-> +		.data = &ipq9574_gen3x1_pciephy_cfg,
-> +	}, {
-> +		.compatible = "qcom,ipq9574-qmp-gen3x2-pcie-phy",
-> +		.data = &ipq9574_gen3x2_pciephy_cfg,
->   	}, {
->   		.compatible = "qcom,msm8998-qmp-pcie-phy",
->   		.data = &msm8998_pciephy_cfg,
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h
-> index a469ae2a10a1..5f002b150cea 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h
-> @@ -8,11 +8,25 @@
->   #define QCOM_PHY_QMP_PCS_PCIE_V5_H_
->   
->   /* Only for QMP V5 PHY - PCS_PCIE registers */
-> -#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG2		0x0c
-> -#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG4		0x14
-> -#define QPHY_V5_PCS_PCIE_ENDPOINT_REFCLK_DRIVE		0x20
-> -#define QPHY_V5_PCS_PCIE_INT_AUX_CLK_CONFIG1		0x54
-> -#define QPHY_V5_PCS_PCIE_OSC_DTCT_ACTIONS		0x94
-> -#define QPHY_V5_PCS_PCIE_EQ_CONFIG2			0xa8
+v14 changes:
+- Fix dtbs_check l2-cache* property issue by adding required
+  cache-level and cache-unified properties
+- Observed the issue after updating dtschema from 2023.1 to 2023.4
+  and yamllint from 1.26.3 to 1.30.0
 
-This is not reviewable. Please do not mix changing alignment of existing 
-registers together with adding new names.
+v11 changes:
+- Delete reset-names
+- Fix spi0 compatible to be specific 'amd,pensando-elba-ctrl'
 
-> +#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG2			0x0c
-> +#define QPHY_V5_PCS_PCIE_POWER_STATE_CONFIG4			0x14
-> +#define QPHY_V5_PCS_PCIE_ENDPOINT_REFCLK_DRIVE			0x20
-> +#define QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L		0x44
-> +#define QPHY_V5_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H		0x48
-> +#define QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L		0x4c
-> +#define QPHY_V5_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H		0x50
-> +#define QPHY_V5_PCS_PCIE_INT_AUX_CLK_CONFIG1			0x54
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG1			0x5c
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG2			0x60
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_CONFIG4			0x68
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2			0x7c
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4			0x84
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5			0x88
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6			0x8c
-> +#define QPHY_V5_PCS_PCIE_OSC_DTCT_ACTIONS			0x94
-> +#define QPHY_V5_PCS_PCIE_EQ_CONFIG1				0xa4
-> +#define QPHY_V5_PCS_PCIE_EQ_CONFIG2				0xa8
-> +#define QPHY_V5_PCS_PCIE_PRESET_P10_PRE				0xc0
-> +#define QPHY_V5_PCS_PCIE_PRESET_P10_POST			0xe4
->   
->   #endif
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h
-> index ad326e301a3a..231e59364e31 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-pll.h
-> @@ -8,6 +8,9 @@
->   
->   /* QMP V2 PHY for PCIE gen3 ports - QSERDES PLL registers */
->   #define QSERDES_PLL_BG_TIMER				0x00c
-> +#define QSERDES_PLL_SSC_EN_CENTER			0x010
-> +#define QSERDES_PLL_SSC_ADJ_PER1			0x014
-> +#define QSERDES_PLL_SSC_ADJ_PER2			0x018
->   #define QSERDES_PLL_SSC_PER1				0x01c
->   #define QSERDES_PLL_SSC_PER2				0x020
->   #define QSERDES_PLL_SSC_STEP_SIZE1_MODE0		0x024
+v9 changes:
+- Single node for spi0 system-controller and squash
+  the reset-controller child into parent
 
+---
+ arch/arm64/boot/dts/amd/Makefile              |   1 +
+ arch/arm64/boot/dts/amd/elba-16core.dtsi      | 197 ++++++++++++++++++
+ arch/arm64/boot/dts/amd/elba-asic-common.dtsi |  80 +++++++
+ arch/arm64/boot/dts/amd/elba-asic.dts         |  28 +++
+ arch/arm64/boot/dts/amd/elba-flash-parts.dtsi | 106 ++++++++++
+ arch/arm64/boot/dts/amd/elba.dtsi             | 191 +++++++++++++++++
+ 6 files changed, 603 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amd/elba-16core.dtsi
+ create mode 100644 arch/arm64/boot/dts/amd/elba-asic-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/amd/elba-asic.dts
+ create mode 100644 arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
+ create mode 100644 arch/arm64/boot/dts/amd/elba.dtsi
+
+diff --git a/arch/arm64/boot/dts/amd/Makefile b/arch/arm64/boot/dts/amd/Makefile
+index 68103a8b0ef5..8502cc2afbc5 100644
+--- a/arch/arm64/boot/dts/amd/Makefile
++++ b/arch/arm64/boot/dts/amd/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_PENSANDO) += elba-asic.dtb
+ dtb-$(CONFIG_ARCH_SEATTLE) += amd-overdrive-rev-b0.dtb amd-overdrive-rev-b1.dtb
+diff --git a/arch/arm64/boot/dts/amd/elba-16core.dtsi b/arch/arm64/boot/dts/amd/elba-16core.dtsi
+new file mode 100644
+index 000000000000..f9f9f5fd5f69
+--- /dev/null
++++ b/arch/arm64/boot/dts/amd/elba-16core.dtsi
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++/*
++ * Copyright 2020-2022 Advanced Micro Devices, Inc.
++ */
++
++/ {
++	cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		cpu-map {
++			cluster0 {
++				core0 { cpu = <&cpu0>; };
++				core1 { cpu = <&cpu1>; };
++				core2 { cpu = <&cpu2>; };
++				core3 { cpu = <&cpu3>; };
++			};
++
++			cluster1 {
++				core0 { cpu = <&cpu4>; };
++				core1 { cpu = <&cpu5>; };
++				core2 { cpu = <&cpu6>; };
++				core3 { cpu = <&cpu7>; };
++			};
++
++			cluster2 {
++				core0 { cpu = <&cpu8>; };
++				core1 { cpu = <&cpu9>; };
++				core2 { cpu = <&cpu10>; };
++				core3 { cpu = <&cpu11>; };
++			};
++
++			cluster3 {
++				core0 { cpu = <&cpu12>; };
++				core1 { cpu = <&cpu13>; };
++				core2 { cpu = <&cpu14>; };
++				core3 { cpu = <&cpu15>; };
++			};
++		};
++
++		/* CLUSTER 0 */
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x0>;
++			next-level-cache = <&l2_0>;
++			enable-method = "psci";
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x1>;
++			next-level-cache = <&l2_0>;
++			enable-method = "psci";
++		};
++
++		cpu2: cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x2>;
++			next-level-cache = <&l2_0>;
++			enable-method = "psci";
++		};
++
++		cpu3: cpu@3 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x3>;
++			next-level-cache = <&l2_0>;
++			enable-method = "psci";
++		};
++
++		l2_0: l2-cache0 {
++			compatible = "cache";
++			cache-unified;
++			cache-level = <2>;
++		};
++
++		/* CLUSTER 1 */
++		cpu4: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x100>;
++			next-level-cache = <&l2_1>;
++			enable-method = "psci";
++		};
++
++		cpu5: cpu@101 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x101>;
++			next-level-cache = <&l2_1>;
++			enable-method = "psci";
++		};
++
++		cpu6: cpu@102 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x102>;
++			next-level-cache = <&l2_1>;
++			enable-method = "psci";
++		};
++
++		cpu7: cpu@103 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x103>;
++			next-level-cache = <&l2_1>;
++			enable-method = "psci";
++		};
++
++		l2_1: l2-cache1 {
++			compatible = "cache";
++			cache-unified;
++			cache-level = <2>;
++		};
++
++		/* CLUSTER 2 */
++		cpu8: cpu@200 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x200>;
++			next-level-cache = <&l2_2>;
++			enable-method = "psci";
++		};
++
++		cpu9: cpu@201 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x201>;
++			next-level-cache = <&l2_2>;
++			enable-method = "psci";
++		};
++
++		cpu10: cpu@202 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x202>;
++			next-level-cache = <&l2_2>;
++			enable-method = "psci";
++		};
++
++		cpu11: cpu@203 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x203>;
++			next-level-cache = <&l2_2>;
++			enable-method = "psci";
++		};
++
++		l2_2: l2-cache2 {
++			compatible = "cache";
++			cache-unified;
++			cache-level = <2>;
++		};
++
++		/* CLUSTER 3 */
++		cpu12: cpu@300 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x300>;
++			next-level-cache = <&l2_3>;
++			enable-method = "psci";
++		};
++
++		cpu13: cpu@301 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x301>;
++			next-level-cache = <&l2_3>;
++			enable-method = "psci";
++		};
++
++		cpu14: cpu@302 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x302>;
++			next-level-cache = <&l2_3>;
++			enable-method = "psci";
++		};
++
++		cpu15: cpu@303 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a72";
++			reg = <0 0x303>;
++			next-level-cache = <&l2_3>;
++			enable-method = "psci";
++		};
++
++		l2_3: l2-cache3 {
++			compatible = "cache";
++			cache-unified;
++			cache-level = <2>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/amd/elba-asic-common.dtsi b/arch/arm64/boot/dts/amd/elba-asic-common.dtsi
+new file mode 100644
+index 000000000000..1a615788f54e
+--- /dev/null
++++ b/arch/arm64/boot/dts/amd/elba-asic-common.dtsi
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++/*
++ * Copyright 2020-2022 Advanced Micro Devices, Inc.
++ */
++
++&ahb_clk {
++	clock-frequency = <400000000>;
++};
++
++&emmc_clk {
++	clock-frequency = <200000000>;
++};
++
++&flash_clk {
++	clock-frequency = <400000000>;
++};
++
++&ref_clk {
++	clock-frequency = <156250000>;
++};
++
++&qspi {
++	status = "okay";
++
++	flash0: flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <40000000>;
++		spi-rx-bus-width = <2>;
++		m25p,fast-read;
++		cdns,read-delay = <0>;
++		cdns,tshsl-ns = <0>;
++		cdns,tsd2d-ns = <0>;
++		cdns,tchsh-ns = <0>;
++		cdns,tslch-ns = <0>;
++	};
++};
++
++&gpio0 {
++	status = "okay";
++};
++
++&emmc {
++	bus-width = <8>;
++	cap-mmc-hw-reset;
++	resets = <&rstc 0>;
++	status = "okay";
++};
++
++&wdt0 {
++	status = "okay";
++};
++
++&i2c0 {
++	clock-frequency = <100000>;
++	status = "okay";
++
++	rtc@51 {
++		compatible = "nxp,pcf85263";
++		reg = <0x51>;
++	};
++};
++
++&spi0 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	num-cs = <4>;
++	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
++		   <&porta 7 GPIO_ACTIVE_LOW>;
++	status = "okay";
++
++	rstc: system-controller@0 {
++		compatible = "amd,pensando-elba-ctrl";
++		reg = <0>;
++		spi-max-frequency = <12000000>;
++		interrupt-parent = <&porta>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++		#reset-cells = <1>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/amd/elba-asic.dts b/arch/arm64/boot/dts/amd/elba-asic.dts
+new file mode 100644
+index 000000000000..c3f4da2f7449
+--- /dev/null
++++ b/arch/arm64/boot/dts/amd/elba-asic.dts
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++/*
++ * Device Tree file for AMD Pensando Elba Board.
++ *
++ * Copyright 2020-2022 Advanced Micro Devices, Inc.
++ */
++
++/dts-v1/;
++
++#include "elba.dtsi"
++#include "elba-16core.dtsi"
++#include "elba-asic-common.dtsi"
++#include "elba-flash-parts.dtsi"
++
++/ {
++	model = "AMD Pensando Elba Board";
++	compatible = "amd,pensando-elba-ortano", "amd,pensando-elba";
++
++	aliases {
++		serial0 = &uart0;
++		spi0 = &spi0;
++		spi1 = &qspi;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++};
+diff --git a/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
+new file mode 100644
+index 000000000000..734893fef2c3
+--- /dev/null
++++ b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
+@@ -0,0 +1,106 @@
++// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++/*
++ * Copyright 2020-2022 Advanced Micro Devices, Inc.
++ */
++
++&flash0 {
++	partitions {
++		compatible = "fixed-partitions";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		partition@0 {
++			label = "flash";
++			reg = <0x10000 0xfff0000>;
++		};
++
++		partition@f0000 {
++			label = "golduenv";
++			reg = <0xf0000 0x10000>;
++		};
++
++		partition@100000 {
++			label = "boot0";
++			reg = <0x100000 0x80000>;
++		};
++
++		partition@180000 {
++			label = "golduboot";
++			reg = <0x180000 0x200000>;
++		};
++
++		partition@380000 {
++			label = "brdcfg0";
++			reg = <0x380000 0x10000>;
++		};
++
++		partition@390000 {
++			label = "brdcfg1";
++			reg = <0x390000 0x10000>;
++		};
++
++		partition@400000 {
++			label = "goldfw";
++			reg = <0x400000 0x3c00000>;
++		};
++
++		partition@4010000 {
++			label = "fwmap";
++			reg = <0x4010000 0x20000>;
++		};
++
++		partition@4030000 {
++			label = "fwsel";
++			reg = <0x4030000 0x20000>;
++		};
++
++		partition@4090000 {
++			label = "bootlog";
++			reg = <0x4090000 0x20000>;
++		};
++
++		partition@40b0000 {
++			label = "panicbuf";
++			reg = <0x40b0000 0x20000>;
++		};
++
++		partition@40d0000 {
++			label = "uservars";
++			reg = <0x40d0000 0x20000>;
++		};
++
++		partition@4200000 {
++			label = "uboota";
++			reg = <0x4200000 0x400000>;
++		};
++
++		partition@4600000 {
++			label = "ubootb";
++			reg = <0x4600000 0x400000>;
++		};
++
++		partition@4a00000 {
++			label = "mainfwa";
++			reg = <0x4a00000 0x1000000>;
++		};
++
++		partition@5a00000 {
++			label = "mainfwb";
++			reg = <0x5a00000 0x1000000>;
++		};
++
++		partition@6a00000 {
++			label = "diaguboot";
++			reg = <0x6a00000 0x400000>;
++		};
++
++		partition@8000000 {
++			label = "diagfw";
++			reg = <0x8000000 0x7fe0000>;
++		};
++
++		partition@ffe0000 {
++			label = "ubootenv";
++			reg = <0xffe0000 0x10000>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/amd/elba.dtsi b/arch/arm64/boot/dts/amd/elba.dtsi
+new file mode 100644
+index 000000000000..674890cf2a34
+--- /dev/null
++++ b/arch/arm64/boot/dts/amd/elba.dtsi
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++/*
++ * Copyright 2020-2022 Advanced Micro Devices, Inc.
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include "dt-bindings/interrupt-controller/arm-gic.h"
++
++/ {
++	model = "Elba ASIC Board";
++	compatible = "amd,pensando-elba";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	dma-coherent;
++
++	ahb_clk: oscillator0 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++	};
++
++	emmc_clk: oscillator2 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++	};
++
++	flash_clk: oscillator3 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++	};
++
++	ref_clk: oscillator4 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++	};
++
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	pmu {
++		compatible = "arm,cortex-a72-pmu";
++		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	soc: soc {
++		compatible = "simple-bus";
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		i2c0: i2c@400 {
++			compatible = "snps,designware-i2c";
++			reg = <0x0 0x400 0x0 0x100>;
++			clocks = <&ahb_clk>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			i2c-sda-hold-time-ns = <480>;
++			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
++
++		wdt0: watchdog@1400 {
++			compatible = "snps,dw-wdt";
++			reg = <0x0 0x1400 0x0 0x100>;
++			clocks = <&ahb_clk>;
++			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
++
++		qspi: spi@2400 {
++			compatible = "amd,pensando-elba-qspi", "cdns,qspi-nor";
++			reg = <0x0 0x2400 0x0 0x400>,
++			      <0x0 0x7fff0000 0x0 0x1000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&flash_clk>;
++			cdns,fifo-depth = <1024>;
++			cdns,fifo-width = <4>;
++			cdns,trigger-address = <0x7fff0000>;
++			status = "disabled";
++		};
++
++		spi0: spi@2800 {
++			compatible = "amd,pensando-elba-spi";
++			reg = <0x0 0x2800 0x0 0x100>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			amd,pensando-elba-syscon = <&syscon>;
++			clocks = <&ahb_clk>;
++			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
++			num-cs = <2>;
++			status = "disabled";
++		};
++
++		gpio0: gpio@4000 {
++			compatible = "snps,dw-apb-gpio";
++			reg = <0x0 0x4000 0x0 0x78>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			porta: gpio-port@0 {
++				compatible = "snps,dw-apb-gpio-port";
++				reg = <0>;
++				gpio-controller;
++				#gpio-cells = <2>;
++				ngpios = <8>;
++				interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
++				interrupt-controller;
++				interrupt-parent = <&gic>;
++				#interrupt-cells = <2>;
++			};
++
++			portb: gpio-port@1 {
++				compatible = "snps,dw-apb-gpio-port";
++				reg = <1>;
++				gpio-controller;
++				#gpio-cells = <2>;
++				ngpios = <8>;
++			};
++		};
++
++		uart0: serial@4800 {
++			compatible = "ns16550a";
++			reg = <0x0 0x4800 0x0 0x100>;
++			clocks = <&ref_clk>;
++			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
++			reg-shift = <2>;
++			reg-io-width = <4>;
++		};
++
++		gic: interrupt-controller@800000 {
++			compatible = "arm,gic-v3";
++			reg = <0x0 0x800000 0x0 0x200000>,	/* GICD */
++			      <0x0 0xa00000 0x0 0x200000>,	/* GICR */
++			      <0x0 0x60000000 0x0 0x2000>,	/* GICC */
++			      <0x0 0x60010000 0x0 0x1000>,	/* GICH */
++			      <0x0 0x60020000 0x0 0x2000>;	/* GICV */
++			#address-cells = <2>;
++			#size-cells = <2>;
++			#interrupt-cells = <3>;
++			ranges;
++			interrupt-controller;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++
++			/*
++			 * Elba specific pre-ITS is enabled using the
++			 * existing property socionext,synquacer-pre-its
++			 */
++			gic_its: msi-controller@820000 {
++				compatible = "arm,gic-v3-its";
++				reg = <0x0 0x820000 0x0 0x10000>;
++				msi-controller;
++				#msi-cells = <1>;
++				socionext,synquacer-pre-its =
++							<0xc00000 0x1000000>;
++			};
++		};
++
++		emmc: mmc@30440000 {
++			compatible = "amd,pensando-elba-sd4hc", "cdns,sd4hc";
++			reg = <0x0 0x30440000 0x0 0x10000>,
++			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
++			clocks = <&emmc_clk>;
++			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
++			cdns,phy-input-delay-sd-highspeed = <0x4>;
++			cdns,phy-input-delay-legacy = <0x4>;
++			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
++			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
++			mmc-ddr-1_8v;
++			status = "disabled";
++		};
++
++		syscon: syscon@307c0000 {
++			compatible = "amd,pensando-elba-syscon", "syscon";
++			reg = <0x0 0x307c0000 0x0 0x3000>;
++		};
++	};
++};
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-With best wishes
-Dmitry
+2.17.1
 
