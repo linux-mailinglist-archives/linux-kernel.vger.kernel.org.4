@@ -2,124 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DDA6EA19B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307006EA198
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 04:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjDUCZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 22:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S233426AbjDUCZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 22:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjDUCZv (ORCPT
+        with ESMTP id S231488AbjDUCZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:25:51 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2033C34;
-        Thu, 20 Apr 2023 19:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y1bbQJ7Lqx3xWtWj+CoARcsmEeD4ylMi8y4fbkOFWk8=; b=DeFQt246yzDgknT7FPn5/XxNHH
-        GbHy6KiFEA5Tpu+HGgzHFmYW6agusVPC+Emv9k35KuYlk5KaiTns4veWfFAMpD02EDxICWXt7Lb3P
-        mOgDGDx7nXcayyFH1e4C79FDwu6xJ7chrQsyQWIr+ZQVvfAyNxzqS8P6Hd4CxEU9k7XIY7l1BriHu
-        kL0LJluVR6A8lXvQWSoZI3TJAEZJcr0ySA7Y0mSYO+KpSzZYiUXKVg39tQa7RV7W6URmB51nn/SCp
-        2WvIch7hLU6utswkEYV/li0kV+NUdjYJSP/EsUGZL660FCkOw55v6kmA5GxGStfVseujlNodizJbk
-        gki8B+Mw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ppgSj-00B37o-1L;
-        Fri, 21 Apr 2023 02:25:25 +0000
-Date:   Fri, 21 Apr 2023 03:25:25 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v18 09/15] iov_iter: Kill ITER_PIPE
-Message-ID: <20230421022525.GX3390869@ZenIV>
-References: <20230314220757.3827941-1-dhowells@redhat.com>
- <20230314220757.3827941-10-dhowells@redhat.com>
- <20230420222231.GT3390869@ZenIV>
- <20230420223657.GV3390869@ZenIV>
- <20230421011145.GW3390869@ZenIV>
+        Thu, 20 Apr 2023 22:25:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F822D4C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 19:25:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 025EB64D18
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3561AC433D2;
+        Fri, 21 Apr 2023 02:25:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682043948;
+        bh=gv2fcUr9k+SVhnNR60lQ152rJtcbuooIqSiLervPK+U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jxHs3XH9pzIAJ2mAwpNj6y4McYEsggAhz+PNhiDSJ2cvcSm2eKO8HPryRqJbF7xp0
+         dR11YyKS1MwkKHT3iuYzLJ00l5sIm9hjR1lHjRx8XiPOjRzfeHf05aqX+QDrl+G9jK
+         8KPzzyIsXxxjkbYrRpIEL1ekEPbyUl4RhG/+KuO02o23i4yZEGp9Uv/J/CpOgMpcYr
+         VrHKEEs8bz9Har1Bspj6Z5AW6tgHqfSZYocp1yxv+7iwC248yEb0swbfkdA8HQaDWb
+         rD2n2eFqloFZFicWmHP8ve92ocHV7sCKhaZUYQgBtvZbvnhHKU2xUR/7qQqSmwriom
+         tv5hsCQv0/0dg==
+Message-ID: <7735439b-7f9d-3344-8c7a-6d5ad2a6712b@kernel.org>
+Date:   Fri, 21 Apr 2023 10:25:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421011145.GW3390869@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [f2fs-dev] [PATCH] f2fs: allocate node blocks for atomic write
+ block replacement
+Content-Language: en-US
+To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+References: <20230418174201.3274634-1-daeho43@gmail.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230418174201.3274634-1-daeho43@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:11:45AM +0100, Al Viro wrote:
-> On Thu, Apr 20, 2023 at 11:36:57PM +0100, Al Viro wrote:
+On 2023/4/19 1:42, Daeho Jeong wrote:
+> From: Daeho Jeong <daehojeong@google.com>
 > 
-> > Don't get me wrong - I'd love to kill ITER_PIPE off; it's just that tons
-> > of ->splice_read() duplicating the corresponding ->read_iter() up to the
-> > point where it would call generic_file_read_iter(), modulo ignoring
-> > O_DIRECT case and then calling filemap_splice_read() instead...  Painful
-> > and asking for trouble down the road.
+> When a node block is missing for atomic write block replacement, we need
+> to allocate it in advance of the replacement.
+
+Miss a fixes line?
+
+Otherwise it looks good to me.
+
+Thanks,
+
 > 
-> FWIW, broken in this series:
-> 	* a bunch of 9p variants (those could probably switch to direct)
-> 	* afs
-> 	* ceph (very likely)
-> 	* ecryptfs (atime propagation)
-> 	* dax on various filesystems (probably)
-> 	* f2fs
-> 	* gfs2
-> 	* nfs
-> 	* ocfs2
-> 	* orangefs
-> 	* xfs
-> 	* zonefs (probably)
-> 	* splice from UDP sockets, unless I'm misreading something.
-> Your sock_splice_read() still falls back to generic_file_splice_read(),
-> rather than to direct_splice_read() and sockets don't have O_DIRECT
-> in flags.  Neither do they have associated page cache ;-)
+> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> ---
+>   fs/f2fs/segment.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Sure, we could provide a bunch of ->splice_read(), but then we'd have to make
-> sure that all subsequent changes to matching ->read_iter() get duplicated -
-> unless they are on O_DIRECT-only paths, that is...
-
-OK, how about the following modification of ITER_PIPE?
-	* buffers might extend past the current position
-	* buffers (as now) are either data or zero-copy ones.
-	* advance past the end of data => allocate data-type buffers
-and fill with zeroes.
-	* copying data to area prior to the end of buffers => each
-zero-copy-type buffer is converted to a data one; data is copied,
-but WTF else can you do?  If there's a page borrowed from page
-cache, we can't change its contents anyway.
-	* zero-copy of a page into an area overlapping the existing
-buffers => treat as data copy for the overlapping part and zero-copy
-the rest (if any) in normal fashion.
-	* iov_iter_get_pages(): convert everything involved into
-data-type buffers first, then give caller references to that.
-Zero-fill new pages (if any).
-	* iov_iter_revert() does *NOT* truncate anything
-	* truncation of stuff past the current position is done by
-generic_file_splice_read() not only in error case, but on success
-as well - starting at the end of actually read data, of course.
-
-That would make for seekable ITER_PIPE, with zero-copy working for
-normal cases.  I agree that O_DIRECT would probably be better off
-with ITER_BVEC.
-
-Comments?
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index c35476b3c075..0e1e29800934 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -217,7 +217,7 @@ static int __replace_atomic_write_block(struct inode *inode, pgoff_t index,
+>   
+>   retry:
+>   	set_new_dnode(&dn, inode, NULL, NULL, 0);
+> -	err = f2fs_get_dnode_of_data(&dn, index, LOOKUP_NODE_RA);
+> +	err = f2fs_get_dnode_of_data(&dn, index, ALLOC_NODE);
+>   	if (err) {
+>   		if (err == -ENOMEM) {
+>   			f2fs_io_schedule_timeout(DEFAULT_IO_TIMEOUT);
