@@ -2,262 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD68A6EA6A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3284B6EA6B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 11:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjDUJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 05:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S231165AbjDUJOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 05:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjDUJNV (ORCPT
+        with ESMTP id S230033AbjDUJOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:13:21 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C141998
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:20 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f109b1808so229725066b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 02:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682068398; x=1684660398;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xxxa39sRYsIqUGyxDA0sj3TJcO5atZMPoDeI65I6qiA=;
-        b=UD8IgWBqREhpJJAyEJjTmgocAe8i1Yzp1Ysg5Qcf6sZYHjL8eCs1ZF44BC5lyUsf+r
-         tCSHj/PvyuUckcDSlN++V+4lc+u0wOEZBegwINUCrYAM0hhOTUrgeoEvw8Z6rCaFF3ag
-         1FKRcT+vLlqB2mf7TnCbEptPqY/d3+FwcQzLNUHouYwCJ8ApmiMkjDJ63YWuq3M1r2Yg
-         hWQtGgmh8nn+BO+6HWjCmrO8CgXd4orNf4CP6P7+eshAqZfhVjwUodxzdpzrXBmZQItI
-         YyLoe/m4jWvgdDbaD9y8ujRCxGNVZonumwXuVRfTWz3kBH/STuVV2+8rIpqaa1u9YhI5
-         z/cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682068398; x=1684660398;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xxxa39sRYsIqUGyxDA0sj3TJcO5atZMPoDeI65I6qiA=;
-        b=YntA+xRsB45swb6M5wVYS+R2Ed7mpIM4j8RovgqAWoAwdkMn4tRVcgsYyh/YleO4oR
-         JWX01FNl8yLPH8K7IOhLeEOS/KUkEEHTZWtUI4cVqTUI45DB4EXGU/4jOUApQaWwfE0d
-         hRqeKCiWYnml946LHcjz20MDKrocV59REVXcAw+mpLMLktEmiyMIvLWoe3mzEHvMh1el
-         zwW4UsL9b2L4D4B7LwMFmzgF/R9GUg4TPdXFrCKoRbgsKdtEyQW2IC5JIEepPowUyOU0
-         bZ1fkQH1z9t+Kcme7TnR2P7Dy2V64pYWrG1P+NlBFHaOKCFVhBk3V7vUwxypH7RbpuFj
-         u8KA==
-X-Gm-Message-State: AAQBX9ddmJyi6aZMhNdmqzG7MSAH5bFKswX1RFiFuGBjGHCdK+2HcA6m
-        3FeuHQyHF55Sr4/IYwDtGAfyI75vYDsLX48H
-X-Google-Smtp-Source: AKy350Z51fHEnOiBFDpJWjgPvurG7DtFxu7CEeEObtuo/rubpZjMoHFef84+2ho8sa9l5xZn4+nsvQ==
-X-Received: by 2002:a17:906:269b:b0:94e:4fe5:613a with SMTP id t27-20020a170906269b00b0094e4fe5613amr1595454ejc.25.1682068398437;
-        Fri, 21 Apr 2023 02:13:18 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id lc21-20020a170906dff500b0094ef10eceb3sm1766775ejc.185.2023.04.21.02.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 02:13:18 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Fri, 21 Apr 2023 11:13:06 +0200
-Subject: [PATCH RFC v2 1/2] regulator: add properties to disable monitoring
- on actions
+        Fri, 21 Apr 2023 05:14:01 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10hn2229.outbound.protection.outlook.com [52.100.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F84BAF0F;
+        Fri, 21 Apr 2023 02:13:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NoJ/uR/xTJXp2ZJMPT4c8KrUTf0784pEHeO0xapyzV6QbDLa8i/eQCP1phZSAYxC/2wRmtgj5+xdJ0duNRmw01FYNSIxnsk9OiZxVYJMBYvOG8N5XokMLUd2mhLGSuTDa9okTLfqp7eot/CnCoRUzCsDV0QZVtdrBkia0CtKeF8z3UStMdDKAF/FRwKIkGOmh57cdNQ4xEAQiTKzwMhEBU7vyVS0AVqn2UcPpFAxjsmUGAhZRV7yseJE0lqSWGapzxB4dKmoV1YkJBgUz9hHfWlOQ4B3yhVFrpzmdSA5CBtG6wPquugz8zMiET920al2aEMMUbqp/v1TCFyiUl/lNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JDEXG2aOGP5HfveanhYkpEt+gV88x/8/T+EHM12vP5o=;
+ b=S0Ur78eGoI3Ziq+qcc2Q5eF/9k4faIrClRJQppbPW2D8W0hGgzl3cyfVFDVlkdhH7HBUQSXPaRqngQDB7V5/8mwG2NevCYKXN9kIb9oUQuyKXxtgbv27sGZ6bZkFAWC2VxJtkMREGGWtWRVEI+btWayq7gTA+KqXX/3y8t+rXDGS7JNTKjpGxyzaabIGZFSkSueGVNQXVa4Z+XiNI+S2hGabS7mo/tknTM39fTIq5WXEjkRsF9ey8L/Itr/zpx/47sNSMnjEhyXXNk/fSxnImksGoDqmhaxQvX2aVNVN4sWDfvw9MzhV32US196LQc8+5FfKyEEKpfrmc0eyrN6bLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JDEXG2aOGP5HfveanhYkpEt+gV88x/8/T+EHM12vP5o=;
+ b=mtHKhxoeYEqfRA4u/WPviNer5bMIiPKSSoX97CAIii7iR56MwdNffqHBTAS7qNaf9i3S73ZKsZxsRI0MFCClUAiCsb3QL5qUA1S+QT0YxhkM9MHtKzBJ7In3JkWYVicowBF1NpJz3NUz5WXshIm1ns8v3ZMTQC/F/DKmezBZTT4jXwvzYyD7qEQk24wyZhJINp7mlIRr99W0S+tlZNtQHzIj/aGJzHukFJEfXLgFVjXIn+Zp8Bwg+2tRy4YyGAkx+Uabf4eEQPuEgdMMgxtJBZN8eWaQklRfEgCfmlKhZzawqoWlPvPXkll8YPmj0OPJO8W+VD4lVpYdcenf/FLS4Q==
+Received: from MW4PR04CA0353.namprd04.prod.outlook.com (2603:10b6:303:8a::28)
+ by MW5PR12MB5683.namprd12.prod.outlook.com (2603:10b6:303:1a0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
+ 2023 09:13:41 +0000
+Received: from CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8a:cafe::7) by MW4PR04CA0353.outlook.office365.com
+ (2603:10b6:303:8a::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.27 via Frontend
+ Transport; Fri, 21 Apr 2023 09:13:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CO1NAM11FT115.mail.protection.outlook.com (10.13.174.211) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.27 via Frontend Transport; Fri, 21 Apr 2023 09:13:41 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 21 Apr 2023
+ 02:13:34 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Fri, 21 Apr 2023 02:13:33 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Fri, 21 Apr 2023 02:13:29 -0700
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <jsnitsel@redhat.com>, <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <jarkko@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [Patch V10 1/3] spi: Add TPM HW flow flag
+Date:   Fri, 21 Apr 2023 14:43:07 +0530
+Message-ID: <20230421091309.2672-2-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-dynamic-vmon-v2-1-c303bcc75ebc@skidata.com>
-References: <20230419-dynamic-vmon-v2-0-c303bcc75ebc@skidata.com>
-In-Reply-To: <20230419-dynamic-vmon-v2-0-c303bcc75ebc@skidata.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, support.opensource@diasemi.com
-Cc:     DLG-Adam.Ward.opensource@dm.renesas.com,
-        linux-kernel@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT115:EE_|MW5PR12MB5683:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98ce3719-bf10-4a3f-1449-08db4248b336
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IT5HhZyCJJcu+IdTMyWB+tFy94erBtNhz5VdM98Rxjxo2tQRhOPs0m9YdxiByKLRT135AqVH3clxtH0I2YrLUpk6J8pv2mgwYyO+QQwVYkibNnPJM1Po15QPGS8NODU7xlYH1drl1aHRAKKiqLwHHCr9edOM4A3j60AwtTFPbENbA0PxEppmbrhQEtT8NmBYKCZ7kyoilHDKxR5+fihMd60MPlkmX2vKlW5KGc+SvYEPmaHXvPZVEgH3brz7twa6GtKD4qfUxhKUAVc5I1/19YE7MlIRSe4VSDxV8QrqMidOpg0MLK2SROfw2LhrVFbc9Qw6tCM4b9maeHI8qnuDMtPB8H+7gdVBFi3+c9CYSt9FbrMCeBDwZyf96DTknj7Y4Wxt1kQuvs7CB87IpkbrnxhQbqLg4xaVsVTo3EA0cdDIkDtnOfXSgiI2akOOiEQrSpWHXa4KATCi0+JP9iaLKWC0UowK2MCjFJ3wK6zpavkHyrcahkKUdAen+tGsvIg+HGAu7hj3grgGZN83bJvoyrjeiU8gyH89udxM/aM20+zZAvfySF9cLGtFPY4I8R7yCKzUaTzaQjtJaIa+gMyUMF3PXlYSA0SnLY5TNu+sQrG7qLTfN86QXr9+iub8ryUfhdEGNGRtEXMqmBK9/r+FVwyKSa6GMU3PLQyGG4HpZwMmHvWIBLAvPMxqYB+AlkGxX8xIW74YBTJ9dun2VpkvzZW9zr0nZEeHXg/+uyx3umbJiDR02CmBf23XuQO1e1hvjofieXRkz1Sl7xsXfa4SWRI8YPujEJPKLnKvo6kYtRdqvYESplCEY4IjehIIKGZrDrFXYHp8K7o0FIOzUjdU6Za4uYrakBKtNmotKDUFnFO38ehCtAJjgMyQjS/3RzdRBXrAQhaKNThY/LoIsKTbv6DZfTAbexyfZjqn6wc/OEk=
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(396003)(136003)(451199021)(5400799015)(36840700001)(46966006)(40470700004)(966005)(40460700003)(107886003)(70586007)(70206006)(4326008)(316002)(110136005)(7696005)(40480700001)(6666004)(86362001)(54906003)(82310400005)(478600001)(34020700004)(5660300002)(36756003)(7416002)(2616005)(8676002)(8936002)(356005)(7636003)(921005)(82740400003)(2906002)(83380400001)(47076005)(336012)(426003)(36860700001)(41300700001)(1076003)(26005)(186003)(2101003)(83996005)(12100799030);DIR:OUT;SFP:1501;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 09:13:41.4020
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98ce3719-bf10-4a3f-1449-08db4248b336
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5683
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+TPM specification [1] defines flow control over SPI. Client device can
+insert a wait state on MISO when address is transmitted by controller
+on MOSI. Detecting the wait state in software is only possible for
+full duplex controllers. For controllers that support only half-
+duplex, the wait state detection needs to be implemented in hardware.
 
-These are useful when the state of the regulator might change during
-runtime, but the monitors state (in hardware) are not implicitly changed
-with the change of the regulator state or mode (in hardware). Also, when
-the monitors should be disabled while ramping after a set_value().
+Add a flag SPI_TPM_HW_FLOW for TPM device to set when software flow
+control is not possible and hardware flow control is expected from
+SPI controller.
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+Reference:
+[1] https://trustedcomputinggroup.org/resource/pc-client-platform-tpm
+-profile-ptp-specification/
+
+Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 ---
- drivers/regulator/core.c         | 64 ++++++++++++++++++++++++++++++++++++----
- include/linux/regulator/driver.h | 10 +++++++
- 2 files changed, 68 insertions(+), 6 deletions(-)
+ include/linux/spi/spi.h | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 4fcd36055b02..5052e1da85a7 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -1360,7 +1360,7 @@ static int notif_set_limit(struct regulator_dev *rdev,
- 
- static int handle_notify_limits(struct regulator_dev *rdev,
- 			int (*set)(struct regulator_dev *, int, int, bool),
--			struct notification_limit *limits)
-+			const struct notification_limit *limits)
- {
- 	int ret = 0;
- 
-@@ -1385,6 +1385,29 @@ static int handle_notify_limits(struct regulator_dev *rdev,
- 
- 	return ret;
- }
-+
-+static const struct notification_limit disable_limits = {
-+	.prot = REGULATOR_NOTIF_LIMIT_DISABLE,
-+	.err = REGULATOR_NOTIF_LIMIT_DISABLE,
-+	.warn = REGULATOR_NOTIF_LIMIT_DISABLE,
-+};
-+
-+static int monitors_set_state(struct regulator_dev *rdev, bool enable)
-+{
-+	const struct regulation_constraints *reg_c = rdev->constraints;
-+	const struct regulator_ops *ops = rdev->desc->ops;
-+	int ret = 0;
-+
-+	/* only set the state if monitoring is activated in the device-tree. */
-+	if (reg_c->over_voltage_detection)
-+		ret = handle_notify_limits(rdev, ops->set_over_voltage_protection,
-+					   enable ? &reg_c->over_voltage_limits : &disable_limits);
-+	if (!ret && reg_c->under_voltage_detection)
-+		ret = handle_notify_limits(rdev, ops->set_under_voltage_protection,
-+					   enable ? &reg_c->under_voltage_limits : &disable_limits);
-+	return ret;
-+}
-+
- /**
-  * set_machine_constraints - sets regulator constraints
-  * @rdev: regulator source
-@@ -1512,7 +1535,7 @@ static int set_machine_constraints(struct regulator_dev *rdev)
- 			  "IC does not support requested over-current limits\n");
- 	}
- 
--	if (rdev->constraints->over_voltage_detection)
-+	if (rdev->constraints->over_voltage_detection && !rdev->desc->mon_disable_while_reg_off)
- 		ret = handle_notify_limits(rdev,
- 					   ops->set_over_voltage_protection,
- 					   &rdev->constraints->over_voltage_limits);
-@@ -1526,7 +1549,7 @@ static int set_machine_constraints(struct regulator_dev *rdev)
- 			  "IC does not support requested over voltage limits\n");
- 	}
- 
--	if (rdev->constraints->under_voltage_detection)
-+	if (rdev->constraints->under_voltage_detection && !rdev->desc->mon_disable_while_reg_off)
- 		ret = handle_notify_limits(rdev,
- 					   ops->set_under_voltage_protection,
- 					   &rdev->constraints->under_voltage_limits);
-@@ -2734,7 +2757,10 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
- 
- 	trace_regulator_enable_complete(rdev_get_name(rdev));
- 
--	return 0;
-+	if (rdev->desc->mon_disable_while_reg_off)
-+		ret = monitors_set_state(rdev, true);
-+
-+	return ret;
- }
- 
- /**
-@@ -2893,7 +2919,12 @@ EXPORT_SYMBOL_GPL(regulator_enable);
- 
- static int _regulator_do_disable(struct regulator_dev *rdev)
- {
--	int ret;
-+	int ret = 0;
-+
-+	if (rdev->desc->mon_disable_while_reg_off)
-+		ret = monitors_set_state(rdev, false);
-+	if (ret)
-+		return ret;
- 
- 	trace_regulator_disable(rdev_get_name(rdev));
- 
-@@ -3537,7 +3568,7 @@ static int _regulator_set_voltage_time(struct regulator_dev *rdev,
- static int _regulator_do_set_voltage(struct regulator_dev *rdev,
- 				     int min_uV, int max_uV)
- {
--	int ret;
-+	int ret = 0;
- 	int delay = 0;
- 	int best_val = 0;
- 	unsigned int selector;
-@@ -3545,6 +3576,11 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
- 	const struct regulator_ops *ops = rdev->desc->ops;
- 	int old_uV = regulator_get_voltage_rdev(rdev);
- 
-+	if (rdev->desc->mon_disable_while_reg_set)
-+		ret = monitors_set_state(rdev, false);
-+	if (ret)
-+		return ret;
-+
- 	trace_regulator_set_voltage(rdev_get_name(rdev), min_uV, max_uV);
- 
- 	min_uV += rdev->constraints->uV_offset;
-@@ -3636,6 +3672,10 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
- out:
- 	trace_regulator_set_voltage_complete(rdev_get_name(rdev), best_val);
- 
-+	if (rdev->desc->mon_disable_while_reg_set)
-+		/* TODO: ignore return value here when ret already !0? */
-+		ret = monitors_set_state(rdev, true);
-+
- 	return ret;
- }
- 
-@@ -4545,7 +4585,19 @@ int regulator_set_mode(struct regulator *regulator, unsigned int mode)
- 	if (ret < 0)
- 		goto out;
- 
-+	if (mode & rdev->desc->mon_unsupported_reg_modes)
-+		ret = monitors_set_state(rdev, false);
-+	if (ret)
-+		goto out;
-+
- 	ret = rdev->desc->ops->set_mode(rdev, mode);
-+	if (ret)
-+		goto out;
-+
-+	if (mode & ~rdev->desc->mon_unsupported_reg_modes)
-+		/* TODO: if set_mode fails, we stay unmonitored */
-+		ret = monitors_set_state(rdev, true);
-+
- out:
- 	regulator_unlock(rdev);
- 	return ret;
-diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
-index d3b4a3d4514a..2fdc2c78e4bd 100644
---- a/include/linux/regulator/driver.h
-+++ b/include/linux/regulator/driver.h
-@@ -357,6 +357,12 @@ enum regulator_type {
-  *                     the regulator was actually enabled. Max upto enable_time.
-  *
-  * @of_map_mode: Maps a hardware mode defined in a DeviceTree to a standard mode
-+ *
-+ * @mon_disable_while_reg_off: Disables regulator's monitors while it is off.
-+ * @mon_disable_while_reg_set: Disables regulator's monitors while it is changing its value.
-+ * @mon_unsupported_reg_modes: Disables regulator's monitors before an unsupported mode is entered.
-+ *                             Unsupported REGULATOR_MODE_* are OR'ed. REGULATOR_MODE_INVALID means
-+ *                             all modes can be monitored.
-  */
- struct regulator_desc {
- 	const char *name;
-@@ -431,6 +437,10 @@ struct regulator_desc {
- 	unsigned int poll_enabled_time;
- 
- 	unsigned int (*of_map_mode)(unsigned int mode);
-+
-+	unsigned int mon_disable_while_reg_off;
-+	unsigned int mon_disable_while_reg_set;
-+	unsigned int mon_unsupported_reg_modes;
- };
- 
- /**
-
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 873ced6ae4ca..cfe42f8cd7a4 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -184,8 +184,18 @@ struct spi_device {
+ 	u8			chip_select;
+ 	u8			bits_per_word;
+ 	bool			rt;
+-#define SPI_NO_TX	BIT(31)		/* No transmit wire */
+-#define SPI_NO_RX	BIT(30)		/* No receive wire */
++#define SPI_NO_TX		BIT(31)		/* No transmit wire */
++#define SPI_NO_RX		BIT(30)		/* No receive wire */
++	/*
++	 * TPM specification defines flow control over SPI. Client device
++	 * can insert a wait state on MISO when address is transmitted by
++	 * controller on MOSI. Detecting the wait state in software is only
++	 * possible for full duplex controllers. For controllers that support
++	 * only half-duplex, the wait state detection needs to be implemented
++	 * in hardware. TPM devices would set this flag when hardware flow
++	 * control is expected from SPI controller.
++	 */
++#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM HW flow control */
+ 	/*
+ 	 * All bits defined above should be covered by SPI_MODE_KERNEL_MASK.
+ 	 * The SPI_MODE_KERNEL_MASK has the SPI_MODE_USER_MASK counterpart,
+@@ -195,7 +205,7 @@ struct spi_device {
+ 	 * These bits must not overlap. A static assert check should make sure of that.
+ 	 * If adding extra bits, make sure to decrease the bit index below as well.
+ 	 */
+-#define SPI_MODE_KERNEL_MASK	(~(BIT(30) - 1))
++#define SPI_MODE_KERNEL_MASK	(~(BIT(29) - 1))
+ 	u32			mode;
+ 	int			irq;
+ 	void			*controller_state;
 -- 
-2.34.1
+2.17.1
 
