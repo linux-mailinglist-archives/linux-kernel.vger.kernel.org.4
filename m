@@ -2,146 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603FD6EB063
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BFA6EB081
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjDURQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S233301AbjDURXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjDURP6 (ORCPT
+        with ESMTP id S233353AbjDURWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:15:58 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B4FF0;
-        Fri, 21 Apr 2023 10:15:56 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4edb9039a4cso1946092e87.3;
-        Fri, 21 Apr 2023 10:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682097355; x=1684689355;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=19W3G3W6cWz8Mtt5/t2079hKyw4xMXf5e8wPFhIjWhc=;
-        b=bYXZd2Ght5UbrrL3pHg/rnjL4qFVMJo8Kj9VJsMEYFM0rcqY5y5jmsYhWJbgnEoWCv
-         zfw6J6xZisgZk/yKuLtJzP80nnqoFYapU0LgL+GvTFlstGZjzDDSQ7vQWhes4UkWW0qP
-         3gqptwpgLDXnnhARgIBs3VzdH6nGDtUZatJPqvfHhJUdLEJq2LpCDGMWUDu1hMn2A1og
-         rnoLm4o2DhR5TTP+IWbFqBtau+VVGXxE4ocXPBQ2rcY94t9gDSs2M1O/sarnRhagtwdt
-         A3FSme5ttcNU6GVnAVWCxrLLiCQ9BPEH0/fY0seFYfKxXCqBOpgPtzu1Hfu9WtSg3GcG
-         nS4w==
+        Fri, 21 Apr 2023 13:22:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B230FB
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682097719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F5BUIZCZG7tWuEnNiXnezg1wpCr6XGmaYZLZ1JJftNg=;
+        b=aVxfAhIzrWMhRJdQ1VTgCvGDg170bNeTigAFY2AJin4yZic4o5CkNaQ8gqN6Sg9vTZxQhi
+        S1sXize2V/8GjJVd4IdeYoupOCnse30q0F+8G4FI8jCvvhRUJ1/kmRA7l6VvMRQCWO3kmL
+        etrVq7nXNkMWjmyaQa4LM/TXFtOHJxA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-310-HyJcUf92O-qYIE-g8ck6Pw-1; Fri, 21 Apr 2023 13:21:41 -0400
+X-MC-Unique: HyJcUf92O-qYIE-g8ck6Pw-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f1763fac8bso13102235e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:21:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682097355; x=1684689355;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=19W3G3W6cWz8Mtt5/t2079hKyw4xMXf5e8wPFhIjWhc=;
-        b=GBwaKW5sNmiRV66fJb5Ir7vOUnyPbLpyYGqKgaBO/zCb3fTSUcwMXEF2GPzv7PwqNw
-         FOM346znS+g5sQPtvwhYlvmPP/2nZYmYDTla+rfnNl2MGl4cNh8d5yajoxxbmvCshU3v
-         jacLAmnvF7sDXVGBvc6WI3udzAAnY1KxjSCKS7MjytDBy3rxj+8hFilp8ZFqrZ+7/fKG
-         TAcp0ook+QMqwgT6woJX5YT5ypUvCkLnTxz9i52It+fpqXCgvpN541CtpauIuf3StBQQ
-         lNv2XD/rb9lCmbeSU77RL3YFq/lubktao3RiK+q8Rj1pmzkrYYAeDHqjse0Fz+CMFQJG
-         Pm3Q==
-X-Gm-Message-State: AAQBX9cqaz+JTpoC7fSBAGe8QePfPC5uAMdW5bh40p+6YAB+pWcwlEDu
-        51Z4u/oaGWcke+ges0mxhj8=
-X-Google-Smtp-Source: AKy350a3To+SLDun2WAQLm83TlFNcG/hziHEYIX0LLlSy2XZMz7gvV+IJ9cSL9P+zQXY3pbeQv12ag==
-X-Received: by 2002:ac2:4c08:0:b0:4ed:d2be:37e5 with SMTP id t8-20020ac24c08000000b004edd2be37e5mr1781340lfq.7.1682097354741;
-        Fri, 21 Apr 2023 10:15:54 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac244af000000b004d5a6dcb94fsm620295lfm.33.2023.04.21.10.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 10:15:54 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 20:15:52 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "manugautam@google.com" <manugautam@google.com>,
-        "rohitner@google.com" <rohitner@google.com>
-Subject: Re: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
-Message-ID: <20230421171552.qvunrlxxpqusd5h3@mobilestation>
-References: <20230420055131.2048959-1-joychakr@google.com>
- <20230420055131.2048959-6-joychakr@google.com>
- <20230421085354.34dwrgr3enlxqhtc@mobilestation>
- <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
- <969a083998224016947f5e77218f4587@AcuMS.aculab.com>
- <20230421164838.52euobr5ohfyxxti@mobilestation>
- <CAOSNQF14TcJCU3BBvkL7PuokNXAczTyU=0mOisujBCYNNc2rZA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1682097699; x=1684689699;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F5BUIZCZG7tWuEnNiXnezg1wpCr6XGmaYZLZ1JJftNg=;
+        b=iGzfwRwGojfopmqXXjS1TS14HiC6Ousr7RzEtJKcmzkj7XoY8jAi0QRiGPoplRt/TX
+         qJCg6weOT4IxwIDu30tTkWC7sTCsU2THHQnqbPftZp13L493R86M6xhoMn6DAWDugbuJ
+         aBjGHpoSzoWguQH23+f5+THmQD+SB5d5a5ED9vIF7mz5Fbhk3SpEiAeqdgnoPA9t8KzC
+         RwBHWdtnRpuIa7uZurFEIPo2LTqCmaiOdPgWfRbf7as+3q/60PwGd5p6LviD8SK4djVk
+         GuFeg58vJJcpcen3wFSYbKFtzoU44nShpCDBwkI+pA6yvvd/vaWlvr0cjIxRgpG+hp8k
+         Tkpw==
+X-Gm-Message-State: AAQBX9cNc562slVJdbA/V5np1reYIU0AhpRmbcAyeDbnK5VFScjdMgJb
+        2e8xR1AtbZI0LYps/nLFvzLeduhfT5V4h0fXMOM9m71JikbctL0UqdoeZpM9Ngqy3PqnUIqENl/
+        wjjQlleKxj7Shl+NGz/ENJwbv
+X-Received: by 2002:a05:600c:2306:b0:3f1:72ec:4016 with SMTP id 6-20020a05600c230600b003f172ec4016mr2580970wmo.0.1682097699584;
+        Fri, 21 Apr 2023 10:21:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aFn+YAjtfSjCVKeXGhCWAiZWMdwsuDncB3Nwm1fVnTmqMnOAjnMKFGp80Ll5DTm/pP7pP0nA==
+X-Received: by 2002:a05:600c:2306:b0:3f1:72ec:4016 with SMTP id 6-20020a05600c230600b003f172ec4016mr2580947wmo.0.1682097699200;
+        Fri, 21 Apr 2023 10:21:39 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c717:6a00:e38f:c852:dc11:9146? (p200300cbc7176a00e38fc852dc119146.dip0.t-ipconnect.de. [2003:cb:c717:6a00:e38f:c852:dc11:9146])
+        by smtp.gmail.com with ESMTPSA id g10-20020a7bc4ca000000b003f171234a08sm5302275wmk.20.2023.04.21.10.21.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 10:21:38 -0700 (PDT)
+Message-ID: <f809162e-4adc-cf9b-35f4-0f1b098ad283@redhat.com>
+Date:   Fri, 21 Apr 2023 19:21:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOSNQF14TcJCU3BBvkL7PuokNXAczTyU=0mOisujBCYNNc2rZA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 1/3] mm/ksm: unmerge and clear VM_MERGEABLE when
+ setting PR_SET_MEMORY_MERGE=0
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Stefan Roesch <shr@devkernel.io>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
+ <20230418152849.505124-2-david@redhat.com>
+ <qvqwr0sei6sl.fsf@devbig1114.prn1.facebook.com>
+ <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
+Organization: Red Hat
+In-Reply-To: <d476d75d-74a8-9cad-a60e-4b5ecb149719@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:40:44PM +0530, Joy Chakraborty wrote:
-> On Fri, Apr 21, 2023 at 10:18 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > On Fri, Apr 21, 2023 at 04:39:30PM +0000, David Laight wrote:
-> > > From: Joy Chakraborty
-> > > > Sent: 21 April 2023 10:22
-> > > ...
-> > > > Sure, I can make the following change in the formatting and send the
-> > > > patch series:
-> > > >          dws->n_bytes =
-> > > >                  roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word,
-> > > >                                                  BITS_PER_BYTE));
-> > >
-> >
-> > > Won't checkpatch bleat about that?
-> >
-> > Why would it?
+>> I understand we want to keep the name "symmetric" with
+>> ksm_enable_merge_any, but it also unmerges the ksm pages. Do we want to
+>> reflect that in the function name?
 > 
-> I ran checkpatch on this and it seems to be fine with minor spacing changes.
-
-What spacing do you mean? No problem with the change as is:
-[fancer@mobilestation] kernel $ git show HEAD | grep -A1 -B2 roundup_pow_of_two
--	dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
-+	dws->n_bytes =
-+		roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word,
-+						BITS_PER_BYTE));
-[fancer@mobilestation] kernel $ ./scripts/checkpatch.pl --git HEAD
-total: 0 errors, 0 warnings, 10 lines checked
-
-Commit e18b699257db ("spi: dw: Round of n_bytes to power of 2") has no obvious style problems and is ready for submission.
-
--Serge(y)
-
+> ksm_disable_merge_any_umerge() is suboptimal.
 > 
-> >
-> > >
-> > > Is it ever actually valid for the caller to provide a
-> > > value that isn't 8, 16 or 32 ?
-> >
-> > Judging by this
-> > https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/spi/spi.c#L3630
-> > it is. SPI-controller also supports word lengths within the
-> > pre-synthesized range. So it's up to the SPI-peripherals and their
-> > protocols what word length to select.
-> >
-> > -Serge(y)
-> >
-> > >
-> > > I'm sure it looked as though some other lengths/counts
-> > > where likely to go badly wrong.
-> > >
-> > > I know there are times when it is useful to bit-bang 'odd'
-> > > numbers of bits - like command+address+delay for fast reads
-> > > but that is a sub-32bit transfer so (at least somewhere)
-> > > is 1 word but not all the bits.
-> > >
-> > >       David
-> > >
-> > > -
-> > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> > > Registration No: 1397386 (Wales)
+> As ksm_disable_merge_any() now reverts what ksm_enable_merge_any() ended
+> up doing, I think it's just fine.
+> 
+> (it would be a different story if we'd be using "set" / "clear"
+> terminology instead of "enable" / "disable").
+> 
+> We can describe that in the comment.
+> 
+>>
+>> Can we add a comment for the function?
+> 
+> Can do for symmetry with ksm_enable_merge_any().
+> 
+
++/**
++ * ksm_disable_merge_any - Disable merging on all compatible VMA's of the mm,
++ *                        previously enabled via ksm_enable_merge_any().
++ *
++ * Disabling merging implies unmerging any merged pages, like setting
++ * MADV_UNMERGEABLE would. If unmerging fails, the whole operation fails and
++ * merging on all compatible VMA's remains enabled.
++ *
++ * @mm: Pointer to mm
++ *
++ * Returns 0 on success, otherwise error code
++ */
+
+
+-- 
+Thanks,
+
+David / dhildenb
+
