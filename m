@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEA56EA55F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BACC76EA568
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 09:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjDUHzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 03:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        id S231602AbjDUH5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 03:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjDUHyv (ORCPT
+        with ESMTP id S231590AbjDUH46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 03:54:51 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60349764
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:54:47 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4eca19c3430so1391332e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682063686; x=1684655686;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6Wh8weJt8MJNcMpPGqSo6AWzC32rS1+vzeDVd0dv2ds=;
-        b=XPy9s7e65qNm1qT8IKSzdOZynHmkmK2kk+w8/KWnOOgWpy3HBEWVT5FUMIj3jFRbxk
-         khx7teJtwYgv9RvV59C35bLiVrLQXxfGwRCTVC23bGyfQv6joyZK2Zbrq877pxVezv/g
-         9TVLnWT8/FW68M19ulsbjB1lcYQeYdLTKBF7zTaELfhXhknMl6N0zayIovgS3v3vWj7z
-         ruTlMEd8cZ+EpYh0hUmDdULpDm4YfhDkPN7aVMjMabbXfMr7x2pHgkJzTTWU9Z8dWfCP
-         cdKHq0Tt56ykzAq7CMdPSppF42JipVMrL3cViihUgLrjsdFFDihEAzb8zGOTQBcpRY+L
-         nWpA==
+        Fri, 21 Apr 2023 03:56:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645809757
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682063726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ESPESgM91xh/lMsc1yOsPFi1GlFz8zsJkocCN9t7IWU=;
+        b=VoDOK/i26y65nCcrGxweY/v3Ybw5iRgOjrDQKEpTaCh4DXTG7oC5BVAJoJN49VlouYTnMq
+        TO+jwAumYD3Z+ES2LEhMij06Wrr/KpvsDYFLcKRZMDMDxUYK7GkHrlYee5WIvi0XZoVoVu
+        Esm1vpleelfjAbKw9LLSp4PNjQpWlIM=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-102-geQtMnhQMS-ZxFwOTZgCKg-1; Fri, 21 Apr 2023 03:55:25 -0400
+X-MC-Unique: geQtMnhQMS-ZxFwOTZgCKg-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-5066c9c2ed6so1572050a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 00:55:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682063686; x=1684655686;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1682063723; x=1684655723;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Wh8weJt8MJNcMpPGqSo6AWzC32rS1+vzeDVd0dv2ds=;
-        b=a3JQwgAhZB1/pfdwHWumAkEI7wZ/+PpkwgRVAyQ67cZdPEPjUXPlnp98NWl3UgqOdv
-         +6VnRqKc1ekTUzluRnkQ6F/TgjdYTVlQ0h/L0VgJieUYLlAks5gmueOvXJeMgalS4kti
-         qgfdc78kexNa2ywe5QrJ0V/4PDCBaYtQm0AL50ZWoV08PT/FKCUgxwiijhDQqWtmnnP1
-         Gx2r4I2LKE4FnQu+PY8m+SBwrCvt+59E8rT7qM8zZJ1/BoO6VwkLE5B96ZEHGarH2dZg
-         QbcsMHsSbWzs4mxMafbRLH2o3BVu5AhtI4qaANjbHwyFrLarXFJv1x8ZK0ar31fZGYZr
-         vuTg==
-X-Gm-Message-State: AAQBX9dAzF86YiNYTGXyKPai2IgKgBj7CW3sJX/hUrpV02gpHgpDOvVg
-        l+E4JCGrrIwVPKs6oJT1DDpE6w==
-X-Google-Smtp-Source: AKy350aI/gfjWYMEX8FEBnMG6f3jPDPE7j076Zv9ZCwKRsCe4qJ2vPd/M/ZRqyYyhzSMb6wODl0MSA==
-X-Received: by 2002:a05:6512:64:b0:4ee:d8f3:1398 with SMTP id i4-20020a056512006400b004eed8f31398mr1149093lfo.68.1682063685701;
-        Fri, 21 Apr 2023 00:54:45 -0700 (PDT)
-Received: from rayden (81-236-179-152-no272.tbcn.telia.com. [81.236.179.152])
-        by smtp.gmail.com with ESMTPSA id e7-20020ac25467000000b004d4d7fb0e07sm470622lfn.216.2023.04.21.00.54.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 00:54:45 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 09:54:43 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] Fix uninitialized variable in OP-TEE driver for v6.3
-Message-ID: <20230421075443.GA3136581@rayden>
+        bh=ESPESgM91xh/lMsc1yOsPFi1GlFz8zsJkocCN9t7IWU=;
+        b=S2AKR6fSetdyhD9qcUzm2wKkNkEV7i7MEuPuOJEOs5SGrhiRdHNp9S1A/Yu73kdnSp
+         UtT1ONjr92SIIlRiyF8lk5ugaLxEXaJmeKI456jQysBlif54YFbIcbhmGZTxcGApgoRn
+         ROTh3hPqGwGl/zRAkrnLED8qFrFCFUecLuUpxkugodeLUWOUPjpEq5Q6insDb78mdu1w
+         xuMPJxTumITfRvgbhVQRALfBJ9fOTl8QHI1R/MVA4farvhw8ZRVvcC1EMmiKKEK9KKyB
+         wvfOgHlyXPSZbh7C0XTeYmqTD3pjBaP4/NIGztFswFQs4eetd6So3ZdIkQ0u5C4aRDYN
+         85Ew==
+X-Gm-Message-State: AAQBX9cCLNsOEsfQhnLqhczLWMtZPeRLuKB40ZsNXTKIbd3Q63+6txGX
+        ngHhmAb4auZ6uENRHhXb7AXD6txg427Xv3Tl59GYwhcbgAVYlpZMNRk75UUwVDvTWTJaOqQ6Th3
+        Aywtv1Xv9VeJoXvAAv1NcSjTx
+X-Received: by 2002:aa7:de92:0:b0:504:a2c8:ea60 with SMTP id j18-20020aa7de92000000b00504a2c8ea60mr3870174edv.35.1682063723518;
+        Fri, 21 Apr 2023 00:55:23 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YJgL61ShkQoLQ//neSduz5Vb3bvnQFRw0O5sty7xGAP4DjPX2wDuYK66FDTSaxFjHLfrDj/w==
+X-Received: by 2002:aa7:de92:0:b0:504:a2c8:ea60 with SMTP id j18-20020aa7de92000000b00504a2c8ea60mr3870164edv.35.1682063723249;
+        Fri, 21 Apr 2023 00:55:23 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id x3-20020aa7cd83000000b004fbf6b35a56sm1588535edv.76.2023.04.21.00.55.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 00:55:22 -0700 (PDT)
+Message-ID: <fef45f01-81ee-c973-3d4f-86d537df98b6@redhat.com>
+Date:   Fri, 21 Apr 2023 09:55:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 0/6] iio: st_sensors: Add lsm303d support
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Marius Hoch <mail@mariushoch.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230415231130.115094-1-mail@mariushoch.de>
+ <3eb3de24-41b4-9566-9b11-a12d21904793@redhat.com>
+In-Reply-To: <3eb3de24-41b4-9566-9b11-a12d21904793@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+Hi Marius,
 
-Please pull this small patch fixing an unintialized variable in the
-OP-TEE driver. The error has been reported recently by the kernel test
-robot.
+On 4/16/23 22:19, Hans de Goede wrote:
 
-I realize that this is late for v6.3, please queue this for v6.4 instead
-if v6.3 isn't possible.
+<snip>
 
-Thanks,
-Jens
+> 2: There are some other unsupported sensors on these models too,
+> perhaps you are interested in adding support for these too?
+> 
+> Here are my personal notes on this:
+>  -Light sensor should work with drivers/iio/light/al3320a.c
+>   https://github.com/JideTechnology/remixos-kernel/commit/c52d55b4bd907e87b7b115b3943219f3e089a77a
+> 
+>  -MXM1120 HALL sensor, have datasheet, measures angle of kickstand thingie, use
+>   for SW_TABLET_MODE. Do a pdx86 driver just for the Tab 2 which checks that the
+>   kick stand is out *and* the BT keyboard is paired, in that case report
+>   SW_TABLET_MODE=0, in all other cases report SW_TABLET_MODE=1 ??
+>   For the commit msg:
+>   Datasheet available here: http://haechitech.com/tech-support/
+>   Requires creating an account, once you have an account you can immediately download
+>   the provided datasheets (or let me know if you want me to email you a copy)
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+A quick follow up on this, since you said you were going to take a look.
 
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+I think with the way bluetooth works under Linux, with a bunch of the work
+being done in userspace that figuring out if the BT keyboard is paired is
+not going to work in kernelspace. So I think the best we can do here is
+simply export the angle of the kickstand as an iio angle sensor.
 
-are available in the Git repository at:
+Regards,
 
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-async-notif-fix-for-v6.3
+Hans
 
-for you to fetch changes up to 654d0310007146fae87b0c1a68f81e53ad519b14:
 
-  optee: fix uninited async notif value (2023-04-20 14:52:25 +0200)
-
-----------------------------------------------------------------
-Fixes an uninitialized variable in OP-TEE driver
-
-----------------------------------------------------------------
-Etienne Carriere (1):
-      optee: fix uninited async notif value
-
- drivers/tee/optee/smc_abi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
