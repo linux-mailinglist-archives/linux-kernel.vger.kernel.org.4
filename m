@@ -2,484 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FD36EA154
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 03:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EBD6EA157
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 03:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjDUB4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 21:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S232930AbjDUB6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 21:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjDUB4k (ORCPT
+        with ESMTP id S229660AbjDUB6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 21:56:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B584F138
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 18:56:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41B4F64CBC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BDCC433D2;
-        Fri, 21 Apr 2023 01:56:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682042197;
-        bh=CVONqI/qGxtC/SkjPCW9ne20cx294gpzHqTEJF3W3s0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bw8I8wENdVGGoIA0ZLsuvvmHjCt6yWVTQPDtOf2OhnBpNQaSr4JTD/3Rre2xQrxuA
-         ZZl9VLjWrdjfSAcU+0Xza1SOFv0rkKW+IPzfOgdhPTRmSsqQQXUdzpZNIyBP/n+ox5
-         QnNAw9U6rgvx0v74O2e+oYTOlJgBC8hqZPCuHvc2ddhjzt224i4v/kk2drauyW15Wq
-         jpEcdxx24rfZS5JPSu8UI+W0cso3Cs7UjW3L2yGhtyYwCreGfmaeJKmem5a20XLl6R
-         bKw75JPMeq1c3X/Aoew5KBEAGqF9ItiKnIut4UB132Z80qVyOqgnDhpR9lpeINok7h
-         DR8+mSGOaml0Q==
-Message-ID: <4656fe9c-cacb-1e52-1a3c-b549bac899c8@kernel.org>
-Date:   Fri, 21 Apr 2023 09:56:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8] f2fs: support errors=remount-ro|continue|panic
- mountoption
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-References: <20230408123153.954480-1-chao@kernel.org>
- <ZEBM5X5ngeomrWK9@google.com>
- <8cf87712-e392-bc51-08c9-f4c1096d4948@kernel.org>
- <ZEFprx0Xbv0Ol36A@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZEFprx0Xbv0Ol36A@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 20 Apr 2023 21:58:30 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEACF183
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 18:58:29 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 52B635C01C1;
+        Thu, 20 Apr 2023 21:58:27 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Thu, 20 Apr 2023 21:58:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682042307; x=1682128707; bh=xU
+        AZyNdG+JjO3VI3lilfJ4OkHzwV6FlCSaYK+jkyBLU=; b=SFiUs2RUqjEY+paB1V
+        c9YuPX4X0hGuVuxgfWxdUEnxr712U5djrjYQUQRI5lPalZd8ZMbtH8enfGk7vl2W
+        4ypuF2nylPWI3Z+arGzsQXCoMwX5EX8h7hluGeFGW0A1Zw+32atV6cBrQ6V3+MXH
+        NL6PPTPx7QPtuBP+nTGMsHFWwKRsjLs4MFDdn+m6ws/tTn0kVYAVoPMMOXE66Znh
+        eoXa03U3xlMIpp1TFzgZwOUTagHnQ2jZEoymw6mf2li7yxrZVlRgqfI3plSw/2j8
+        vaI68SimrLi9hB92/mbT3w7L4vPsb/wrqfKXPx5fFdv2MfRqax0DdUAlK+YaH7Kn
+        AJ6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682042307; x=1682128707; bh=xUAZyNdG+JjO3
+        VI3lilfJ4OkHzwV6FlCSaYK+jkyBLU=; b=PxDoaUAOZc7aLv+qZ0XpARiL1Enum
+        4TPr03XdXFp9wQ/2pP3YCWPBoHQM8Jvf1PU09JCM7nEtiUNhSMYZqRnTvjdlZ4i+
+        ysE40BVyUhMZwfjMbI45UplPZ8scLyMdS7vmLtNaGYBtY2CypOsgQ/aBshaZ/NgU
+        /Lw3dhTfyYKY+4HI1y7SIpxzv/jqAnAcIe6a71JZn8ZG63uWZNX5VMhTGFXRMTq5
+        wF1rJ79WAs4R/WnzBZKNEwbP+yjmTxpnGJd16wUAudq8Tfqk5qfbOUOoR16ugvBA
+        vkzSfYN7Q5p1q3UddmlgxduoWE/im1T1uPtYRkI3lV4zx9cMZbyx2K0Yw==
+X-ME-Sender: <xms:wu1BZOv4cgeshDILQhNPRdrMFNeijBR68tYB5ZqHjNop38Jp3Qen-g>
+    <xme:wu1BZDc6MQJYbX_zTkFRZ9wUS1BWfJzEte7vZdvL6BYbBM48o6pbJZaWKmzK6ezYP
+    R02ebmXB2Q08e6puQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtfedgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepofgfggfkjghffffhvfev
+    ufgtsehttdertderredtnecuhfhrohhmpedftehnughrvgifucflvghffhgvrhihfdcuoe
+    grnhgurhgvfiesrghjrdhiugdrrghuqeenucggtffrrghtthgvrhhnpeekvdelkeeiiedv
+    teejvdffteetgeduudeiteejtdeigfffveeitdekfedtgfelleenucffohhmrghinhepsh
+    houhhrtggvfhhorhhgvgdrnhgvthenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:wu1BZJyLV33AXMVWF3pTi-xKtR9q9vzaP3-qDvRinb_6VU6MkD3Rzw>
+    <xmx:wu1BZJMFaEZxpEUU6otNXB1q-GnsR_VV3piUUKEdGvUFY52TIJ16Uw>
+    <xmx:wu1BZO81FEkYl2n33aHqy25Rc_ntLY8QFN7QHGtOwxqn7Swn7727Rw>
+    <xmx:w-1BZFZgJSVDmeSN8p8BbqdsUMk4Cm5njRzywsfRW290xsuH1uoB8g>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 742C71700089; Thu, 20 Apr 2023 21:58:26 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <996b59f0-ea87-4008-a908-35b29b550b1b@app.fastmail.com>
+In-Reply-To: <ZEEr0r/6/lLiwlsy@minyard.net>
+References: <20230419150032.3483229-1-govert.overgaauw@prodrive-technologies.com>
+ <ZEEr0r/6/lLiwlsy@minyard.net>
+Date:   Fri, 21 Apr 2023 11:28:05 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Corey Minyard" <minyard@acm.org>,
+        "Govert Overgaauw" <govert.overgaauw@prodrive-technologies.com>,
+        vernon.mauery@linux.intel.com
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, "Zev Weiss" <zev@bewilderbeest.net>
+Subject: Re: [Openipmi-developer] [PATCH] ipmi: ipmi-bmc: Improve errno returned to
+ userspace
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/21 0:34, Jaegeuk Kim wrote:
-> On 04/20, Chao Yu wrote:
->> On 2023/4/20 4:19, Jaegeuk Kim wrote:
->>> On 04/08, Chao Yu wrote:
->>>> This patch supports errors=remount-ro|continue|panic mount option,
->>>> by default it uses "remount-ro" mode.
->>>>
->>>> Signed-off-by: Chao Yu <chao@kernel.org>
->>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>>> ---
->>>> v8:
->>>> - record stop reason synchronously if it's from ioctl shutdown interface
->>>> - fix typo in doc and commit message.
->>>> - use f2fs_hw_is_readonly() instead of bdev_read_only()
->>>>    Documentation/filesystems/f2fs.rst |   5 ++
->>>>    fs/f2fs/checkpoint.c               |   7 +-
->>>>    fs/f2fs/f2fs.h                     |  20 ++++-
->>>>    fs/f2fs/file.c                     |   5 --
->>>>    fs/f2fs/gc.c                       |   2 +-
->>>>    fs/f2fs/super.c                    | 134 ++++++++++++++++++++++++++---
->>>>    6 files changed, 149 insertions(+), 24 deletions(-)
->>>>
->>>> diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
->>>> index 2055e72871fe..ba4c02fad647 100644
->>>> --- a/Documentation/filesystems/f2fs.rst
->>>> +++ b/Documentation/filesystems/f2fs.rst
->>>> @@ -351,6 +351,11 @@ age_extent_cache	 Enable an age extent cache based on rb-tree. It records
->>>>    			 data block update frequency of the extent per inode, in
->>>>    			 order to provide better temperature hints for data block
->>>>    			 allocation.
->>>> +errors=%s		 Specify f2fs behavior on critical errors. This supports modes:
->>>> +			 "panic", "continue" and "remount-ro", respectively, trigger
->>>> +			 panic immediately, continue without doing anything, and remount
->>>> +			 the partition in read-only mode. By default it uses "remount-ro"
->>>> +			 mode.
->>>>    ======================== ============================================================
->>>>    Debugfs Entries
->>>> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
->>>> index 73ae4e85e70d..e6b266bb9ce0 100644
->>>> --- a/fs/f2fs/checkpoint.c
->>>> +++ b/fs/f2fs/checkpoint.c
->>>> @@ -30,12 +30,9 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
->>>>    						unsigned char reason)
->>>>    {
->>>>    	f2fs_build_fault_attr(sbi, 0, 0);
->>>> -	set_ckpt_flags(sbi, CP_ERROR_FLAG);
->>>> -	if (!end_io) {
->>>> +	if (!end_io)
->>>>    		f2fs_flush_merged_writes(sbi);
->>>> -
->>>> -		f2fs_handle_stop(sbi, reason);
->>>> -	}
->>>> +	f2fs_handle_critical_error(sbi, reason, end_io);
->>>>    }
->>>>    /*
->>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->>>> index ac4942f8e83e..7d9c5a65f974 100644
->>>> --- a/fs/f2fs/f2fs.h
->>>> +++ b/fs/f2fs/f2fs.h
->>>> @@ -162,6 +162,7 @@ struct f2fs_mount_info {
->>>>    	int fs_mode;			/* fs mode: LFS or ADAPTIVE */
->>>>    	int bggc_mode;			/* bggc mode: off, on or sync */
->>>>    	int memory_mode;		/* memory mode */
->>>> +	int errors;			/* errors parameter */
->>>>    	int discard_unit;		/*
->>>>    					 * discard command's offset/size should
->>>>    					 * be aligned to this unit: block,
->>>> @@ -1370,6 +1371,12 @@ enum {
->>>>    	MEMORY_MODE_LOW,	/* memory mode for low memry devices */
->>>>    };
->>>> +enum errors_option {
->>>> +	MOUNT_ERRORS_READONLY,	/* remount fs ro on errors */
->>>> +	MOUNT_ERRORS_CONTINUE,	/* continue on errors */
->>>> +	MOUNT_ERRORS_PANIC,	/* panic on errors */
->>>> +};
->>>> +
->>>>    static inline int f2fs_test_bit(unsigned int nr, char *addr);
->>>>    static inline void f2fs_set_bit(unsigned int nr, char *addr);
->>>>    static inline void f2fs_clear_bit(unsigned int nr, char *addr);
->>>> @@ -1786,8 +1793,14 @@ struct f2fs_sb_info {
->>>>    	struct workqueue_struct *post_read_wq;	/* post read workqueue */
->>>> -	unsigned char errors[MAX_F2FS_ERRORS];	/* error flags */
->>>> -	spinlock_t error_lock;			/* protect errors array */
->>>> +	/*
->>>> +	 * If we are in irq context, let's update error information into
->>>> +	 * on-disk superblock in the work.
->>>> +	 */
->>>> +	struct work_struct s_error_work;
->>>> +	unsigned char errors[MAX_F2FS_ERRORS];		/* error flags */
->>>> +	unsigned char stop_reason[MAX_STOP_REASON];	/* stop reason */
->>>> +	spinlock_t error_lock;			/* protect errors/stop_reason array */
->>>>    	bool error_dirty;			/* errors of sb is dirty */
->>>>    	struct kmem_cache *inline_xattr_slab;	/* inline xattr entry */
->>>> @@ -3522,8 +3535,9 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
->>>>    int f2fs_quota_sync(struct super_block *sb, int type);
->>>>    loff_t max_file_blocks(struct inode *inode);
->>>>    void f2fs_quota_off_umount(struct super_block *sb);
->>>> -void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason);
->>>>    void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag);
->>>> +void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
->>>> +							bool irq_context);
->>>>    void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error);
->>>>    int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
->>>>    int f2fs_sync_fs(struct super_block *sb, int sync);
->>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->>>> index 14e9a20e68df..10743e864d57 100644
->>>> --- a/fs/f2fs/file.c
->>>> +++ b/fs/f2fs/file.c
->>>> @@ -2221,7 +2221,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
->>>>    				ret = 0;
->>>>    				f2fs_stop_checkpoint(sbi, false,
->>>>    						STOP_CP_REASON_SHUTDOWN);
->>>> -				set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
->>>>    				trace_f2fs_shutdown(sbi, in, ret);
->>>>    			}
->>>>    			return ret;
->>>> @@ -2234,7 +2233,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
->>>>    		if (ret)
->>>>    			goto out;
->>>>    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
->>>> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
->>>>    		thaw_bdev(sb->s_bdev);
->>>>    		break;
->>>>    	case F2FS_GOING_DOWN_METASYNC:
->>>> @@ -2243,16 +2241,13 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
->>>>    		if (ret)
->>>>    			goto out;
->>>>    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
->>>> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
->>>>    		break;
->>>>    	case F2FS_GOING_DOWN_NOSYNC:
->>>>    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
->>>> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
->>>>    		break;
->>>>    	case F2FS_GOING_DOWN_METAFLUSH:
->>>>    		f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_META_IO);
->>>>    		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
->>>> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
->>>>    		break;
->>>>    	case F2FS_GOING_DOWN_NEED_FSCK:
->>>>    		set_sbi_flag(sbi, SBI_NEED_FSCK);
->>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->>>> index f1d0dd9c5a6c..6dc2bc710ba8 100644
->>>> --- a/fs/f2fs/gc.c
->>>> +++ b/fs/f2fs/gc.c
->>>> @@ -59,7 +59,7 @@ static int gc_thread_func(void *data)
->>>>    		if (gc_th->gc_wake)
->>>>    			gc_th->gc_wake = false;
->>>> -		if (try_to_freeze()) {
->>>> +		if (try_to_freeze() || f2fs_readonly(sbi->sb)) {
->>>>    			stat_other_skip_bggc_count(sbi);
->>>>    			continue;
->>>>    		}
->>>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
->>>> index 23574894e170..1573bf123197 100644
->>>> --- a/fs/f2fs/super.c
->>>> +++ b/fs/f2fs/super.c
->>>> @@ -164,6 +164,7 @@ enum {
->>>>    	Opt_discard_unit,
->>>>    	Opt_memory_mode,
->>>>    	Opt_age_extent_cache,
->>>> +	Opt_errors,
->>>>    	Opt_err,
->>>>    };
->>>> @@ -243,6 +244,7 @@ static match_table_t f2fs_tokens = {
->>>>    	{Opt_discard_unit, "discard_unit=%s"},
->>>>    	{Opt_memory_mode, "memory=%s"},
->>>>    	{Opt_age_extent_cache, "age_extent_cache"},
->>>> +	{Opt_errors, "errors=%s"},
->>>>    	{Opt_err, NULL},
->>>>    };
->>>> @@ -1268,6 +1270,25 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
->>>>    		case Opt_age_extent_cache:
->>>>    			set_opt(sbi, AGE_EXTENT_CACHE);
->>>>    			break;
->>>> +		case Opt_errors:
->>>> +			name = match_strdup(&args[0]);
->>>> +			if (!name)
->>>> +				return -ENOMEM;
->>>> +			if (!strcmp(name, "remount-ro")) {
->>>> +				F2FS_OPTION(sbi).errors =
->>>> +						MOUNT_ERRORS_READONLY;
->>>> +			} else if (!strcmp(name, "continue")) {
->>>> +				F2FS_OPTION(sbi).errors =
->>>> +						MOUNT_ERRORS_CONTINUE;
->>>> +			} else if (!strcmp(name, "panic")) {
->>>> +				F2FS_OPTION(sbi).errors =
->>>> +						MOUNT_ERRORS_PANIC;
->>>> +			} else {
->>>> +				kfree(name);
->>>> +				return -EINVAL;
->>>> +			}
->>>> +			kfree(name);
->>>> +			break;
->>>>    		default:
->>>>    			f2fs_err(sbi, "Unrecognized mount option \"%s\" or missing value",
->>>>    				 p);
->>>> @@ -1623,6 +1644,9 @@ static void f2fs_put_super(struct super_block *sb)
->>>>    	f2fs_destroy_node_manager(sbi);
->>>>    	f2fs_destroy_segment_manager(sbi);
->>>> +	/* flush s_error_work before sbi destroy */
->>>> +	flush_work(&sbi->s_error_work);
->>>> +
->>>>    	f2fs_destroy_post_read_wq(sbi);
->>>>    	kvfree(sbi->ckpt);
->>>> @@ -2053,6 +2077,13 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
->>>>    	else if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_LOW)
->>>>    		seq_printf(seq, ",memory=%s", "low");
->>>> +	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_READONLY)
->>>> +		seq_printf(seq, ",errors=%s", "remount-ro");
->>>> +	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE)
->>>> +		seq_printf(seq, ",errors=%s", "continue");
->>>> +	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC)
->>>> +		seq_printf(seq, ",errors=%s", "panic");
->>>> +
->>>>    	return 0;
->>>>    }
->>>> @@ -2081,6 +2112,7 @@ static void default_options(struct f2fs_sb_info *sbi)
->>>>    	}
->>>>    	F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_ON;
->>>>    	F2FS_OPTION(sbi).memory_mode = MEMORY_MODE_NORMAL;
->>>> +	F2FS_OPTION(sbi).errors = MOUNT_ERRORS_READONLY;
->>>
->>> Was the default MOUNT_ERRORS_CONTINUE?
->>
->> Okay, let me revise in v9.
->>
->> Please note that main difference between continue mode and readonly mode once
->> cp_error is set:
->>
->> 		continue mode		readonly mode
->> access ops:	Normal			Normal
->> modify ops:	-EIO			-EROFS
->> mount option	rw			ro
-> 
-> Could you please add the difference of all the modes in patch description?
-> 
-> I think it'd be good to add:
-> 1. access ops
-> 2. syscall errors
-> 3. mount option
-> 4. pending data writes
-> 5. pending node writes
-> 6. pending meta writes
+Hi Corey,
 
-Sure, I'd like to add below description into f2fs.rst, any comments?
+On Thu, 20 Apr 2023, at 21:40, Corey Minyard wrote:
+> Andrew, what do you think?
 
-			 			continue	remount-ro	panic
-			 access ops		normal		noraml		N/A
-			 syscall errors		-EIO		-EROFS		N/A
-			 mount option		rw		ro		N/A
-			 pending dir write	keep		keep		N/A
-			 pending nondir write	drop		drop		N/A
-			 pending node write	drop		drop		N/A
-			 pending meta write	keep		keep		N/A
+I'm a bit short on details of the IPMI KCS state machine and expectations of userspace in this exact case.
 
-Thanks,
+I've added Vernon who is one of the IPMI maintainers for OpenBMC.
 
-> 
-> 
->>
->> Thanks,
->>
->>>
->>>>    	sbi->sb->s_flags &= ~SB_INLINECRYPT;
->>>> @@ -2282,6 +2314,9 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
->>>>    	if (err)
->>>>    		goto restore_opts;
->>>> +	/* flush outstanding errors before changing fs state */
->>>> +	flush_work(&sbi->s_error_work);
->>>> +
->>>>    	/*
->>>>    	 * Previous and new state of filesystem is RO,
->>>>    	 * so skip checking GC and FLUSH_MERGE conditions.
->>>> @@ -3931,45 +3966,60 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
->>>>    	return err;
->>>>    }
->>>> -void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason)
->>>> +static void save_stop_reason(struct f2fs_sb_info *sbi, unsigned char reason)
->>>> +{
->>>> +	unsigned long flags;
->>>> +
->>>> +	spin_lock_irqsave(&sbi->error_lock, flags);
->>>> +	if (sbi->stop_reason[reason] < GENMASK(BITS_PER_BYTE - 1, 0))
->>>> +		sbi->stop_reason[reason]++;
->>>> +	spin_unlock_irqrestore(&sbi->error_lock, flags);
->>>> +}
->>>> +
->>>> +static void f2fs_record_stop_reason(struct f2fs_sb_info *sbi)
->>>>    {
->>>>    	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
->>>> +	unsigned long flags;
->>>>    	int err;
->>>>    	f2fs_down_write(&sbi->sb_lock);
->>>> -	if (raw_super->s_stop_reason[reason] < GENMASK(BITS_PER_BYTE - 1, 0))
->>>> -		raw_super->s_stop_reason[reason]++;
->>>> +	spin_lock_irqsave(&sbi->error_lock, flags);
->>>> +	memcpy(raw_super->s_stop_reason, sbi->stop_reason, MAX_STOP_REASON);
->>>> +	spin_unlock_irqrestore(&sbi->error_lock, flags);
->>>>    	err = f2fs_commit_super(sbi, false);
->>>> -	if (err)
->>>> -		f2fs_err(sbi, "f2fs_commit_super fails to record reason:%u err:%d",
->>>> -								reason, err);
->>>> +
->>>>    	f2fs_up_write(&sbi->sb_lock);
->>>> +	if (err)
->>>> +		f2fs_err(sbi, "f2fs_commit_super fails to record err:%d", err);
->>>>    }
->>>>    void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag)
->>>>    {
->>>> -	spin_lock(&sbi->error_lock);
->>>> +	unsigned long flags;
->>>> +
->>>> +	spin_lock_irqsave(&sbi->error_lock, flags);
->>>>    	if (!test_bit(flag, (unsigned long *)sbi->errors)) {
->>>>    		set_bit(flag, (unsigned long *)sbi->errors);
->>>>    		sbi->error_dirty = true;
->>>>    	}
->>>> -	spin_unlock(&sbi->error_lock);
->>>> +	spin_unlock_irqrestore(&sbi->error_lock, flags);
->>>>    }
->>>>    static bool f2fs_update_errors(struct f2fs_sb_info *sbi)
->>>>    {
->>>> +	unsigned long flags;
->>>>    	bool need_update = false;
->>>> -	spin_lock(&sbi->error_lock);
->>>> +	spin_lock_irqsave(&sbi->error_lock, flags);
->>>>    	if (sbi->error_dirty) {
->>>>    		memcpy(F2FS_RAW_SUPER(sbi)->s_errors, sbi->errors,
->>>>    							MAX_F2FS_ERRORS);
->>>>    		sbi->error_dirty = false;
->>>>    		need_update = true;
->>>>    	}
->>>> -	spin_unlock(&sbi->error_lock);
->>>> +	spin_unlock_irqrestore(&sbi->error_lock, flags);
->>>>    	return need_update;
->>>>    }
->>>> @@ -3993,6 +4043,66 @@ void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
->>>>    	f2fs_up_write(&sbi->sb_lock);
->>>>    }
->>>> +static bool system_going_down(void)
->>>> +{
->>>> +	return system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF
->>>> +		|| system_state == SYSTEM_RESTART;
->>>> +}
->>>> +
->>>> +void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
->>>> +							bool irq_context)
->>>> +{
->>>> +	struct super_block *sb = sbi->sb;
->>>> +	bool shutdown = reason == STOP_CP_REASON_SHUTDOWN;
->>>> +	bool continue_fs = !shutdown &&
->>>> +			F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE;
->>>> +
->>>> +	set_ckpt_flags(sbi, CP_ERROR_FLAG);
->>>> +
->>>> +	if (!f2fs_hw_is_readonly(sbi)) {
->>>> +		save_stop_reason(sbi, reason);
->>>> +
->>>> +		if (irq_context && !shutdown)
->>>> +			schedule_work(&sbi->s_error_work);
->>>> +		else
->>>> +			f2fs_record_stop_reason(sbi);
->>>> +	}
->>>> +
->>>> +	/*
->>>> +	 * We force ERRORS_RO behavior when system is rebooting. Otherwise we
->>>> +	 * could panic during 'reboot -f' as the underlying device got already
->>>> +	 * disabled.
->>>> +	 */
->>>> +	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC &&
->>>> +				!shutdown && !system_going_down() &&
->>>> +				!is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN))
->>>> +		panic("F2FS-fs (device %s): panic forced after error\n",
->>>> +							sb->s_id);
->>>> +
->>>> +	if (shutdown)
->>>> +		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
->>>> +
->>>> +	/* continue filesystem operators if errors=continue */
->>>> +	if (continue_fs || f2fs_readonly(sb))
->>>> +		return;
->>>> +
->>>> +	f2fs_warn(sbi, "Remounting filesystem read-only");
->>>> +	/*
->>>> +	 * Make sure updated value of ->s_mount_flags will be visible before
->>>> +	 * ->s_flags update
->>>> +	 */
->>>> +	smp_wmb();
->>>> +	sb->s_flags |= SB_RDONLY;
->>>> +}
->>>> +
->>>> +static void f2fs_record_error_work(struct work_struct *work)
->>>> +{
->>>> +	struct f2fs_sb_info *sbi = container_of(work,
->>>> +					struct f2fs_sb_info, s_error_work);
->>>> +
->>>> +	f2fs_record_stop_reason(sbi);
->>>> +}
->>>> +
->>>>    static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
->>>>    {
->>>>    	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
->>>> @@ -4223,7 +4333,9 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
->>>>    	sb->s_fs_info = sbi;
->>>>    	sbi->raw_super = raw_super;
->>>> +	INIT_WORK(&sbi->s_error_work, f2fs_record_error_work);
->>>>    	memcpy(sbi->errors, raw_super->s_errors, MAX_F2FS_ERRORS);
->>>> +	memcpy(sbi->stop_reason, raw_super->s_stop_reason, MAX_STOP_REASON);
->>>>    	/* precompute checksum seed for metadata */
->>>>    	if (f2fs_sb_has_inode_chksum(sbi))
->>>> @@ -4620,6 +4732,8 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
->>>>    	f2fs_destroy_segment_manager(sbi);
->>>>    stop_ckpt_thread:
->>>>    	f2fs_stop_ckpt_thread(sbi);
->>>> +	/* flush s_error_work before sbi destroy */
->>>> +	flush_work(&sbi->s_error_work);
->>>>    	f2fs_destroy_post_read_wq(sbi);
->>>>    free_devices:
->>>>    	destroy_device_list(sbi);
->>>> -- 
->>>> 2.36.1
+I've also added Zev who's an interested party, and openbmc@ for good measure.
+
+Andrew
+
+>
+> -corey
+>
+> On Wed, Apr 19, 2023 at 05:00:32PM +0200, Govert Overgaauw via 
+> Openipmi-developer wrote:
+>> While the KCS driver is not in KCS_PHASE_WAIT_READ state it returns
+>> -EINVAL to userspace on a write call. change this to -EAGAIN to indicate
+>> that the error is related to the state and not the argument.
+>> 
+>> Signed-off-by: Govert Overgaauw <govert.overgaauw@prodrive-technologies.com>
+>> ---
+>>  drivers/char/ipmi/kcs_bmc_cdev_ipmi.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
+>> index cf670e891966..4c7400faf333 100644
+>> --- a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
+>> +++ b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
+>> @@ -405,7 +405,7 @@ static ssize_t kcs_bmc_ipmi_write(struct file *filp, const char __user *buf,
+>>  		kcs_bmc_write_data(priv->client.dev, priv->data_out[0]);
+>>  		ret = count;
+>>  	} else {
+>> -		ret = -EINVAL;
+>> +		ret = -EAGAIN;
+>>  	}
+>>  	spin_unlock_irq(&priv->lock);
+>>  
+>> -- 
+>> 2.30.2
+>> 
+>> 
+>> 
+>> _______________________________________________
+>> Openipmi-developer mailing list
+>> Openipmi-developer@lists.sourceforge.net
+>> https://lists.sourceforge.net/lists/listinfo/openipmi-developer
