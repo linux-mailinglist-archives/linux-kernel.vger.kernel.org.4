@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7976EB47A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D95F6EB47E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbjDUWNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        id S233774AbjDUWNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbjDUWN2 (ORCPT
+        with ESMTP id S233777AbjDUWN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:13:28 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01751BD8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:13:26 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b70f0b320so3675036b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:13:26 -0700 (PDT)
+        Fri, 21 Apr 2023 18:13:29 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB001FF0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:13:28 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b4a64c72bso2269470b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682115205; x=1684707205;
+        d=chromium.org; s=google; t=1682115208; x=1684707208;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q5AkNpnnC51XtdBu29L1YvEWhYLiet10/hNPEtnlk4k=;
-        b=G4PoB7ojaq05ZoUvu0bGhZVqKkk7zuFsPAQngKsh3YkvxtolTqu1sE5QemG7mwI9bC
-         +lav55U9fdGkURLbrLnJpkwmFYqt+QPV1H3FtmqsyKCWezQ4MHw4sDrMDuq7BBrcauHj
-         vF1OEuZHKgdoBCROSFAfcnRZzV8U5N65M2Rkk=
+        bh=u93zuMvcW9crJ3xx/ibodoPbhN86+1UwtbTmDpeZKPY=;
+        b=AkSpP2B6MEWZUl0frTvsfsvLWFK8V1GAoZ0xgM/K0816fyASmzFYyukMou4sJkPvvQ
+         x8m+0LZ0Kley490iLqLstsoKAwAWY4snWPkkl+IHwzXeFi5Wamq/VJvtD6G0iFq0oHV0
+         OAD4MLYCsMD/2Dj11rG/SZNFI7U3EbP8CQc1w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682115205; x=1684707205;
+        d=1e100.net; s=20221208; t=1682115208; x=1684707208;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q5AkNpnnC51XtdBu29L1YvEWhYLiet10/hNPEtnlk4k=;
-        b=BnKNXc8X4BwgpevIwREcDFnxXtiTPxh6ojULDK3BuLY9sWf1a+8vbmy9G6QXW+j4Nl
-         /ap0QrZo4MlFW9sJkawxSbTrkVN+Aq9drO3CEGeUSQRe71UzDZPXB9gkv6EoBfnvdqsy
-         GANeOighzDVRkI/WqFZux8BAp5oMpGSGdQt8KXUTwy2O0ljOgReRhrQ1xsZsI5+bruJN
-         B9jWqpYct1noeEh4EuMSEwy5sr4f17h/jO/JcddvwxxLFf6hz+ZOtmoOgdLBOeIrgSR4
-         GEFxONbxQ9KNVtL1Uk4GsR7c4akffSime6o3oag9iWtMf1MgqVbEnaEGEW6fTqGubi3V
-         lFdQ==
-X-Gm-Message-State: AAQBX9c4WBSFSIQcbqIhjjLWLVj368CtgZKR6XMObDXzhJ88Y5dSfIHQ
-        1HpYk9q9iq16AwGztijZ4YjuOw==
-X-Google-Smtp-Source: AKy350Zf5b8NMr8PvbXnnwZSXrydNzrK4lJ4UsMs/fDtsJnXPPkwv+LxUNSlTubSDT1jS6eyThlL9A==
-X-Received: by 2002:a05:6a00:1393:b0:63f:15cc:9c1a with SMTP id t19-20020a056a00139300b0063f15cc9c1amr6134194pfg.1.1682115205182;
-        Fri, 21 Apr 2023 15:13:25 -0700 (PDT)
+        bh=u93zuMvcW9crJ3xx/ibodoPbhN86+1UwtbTmDpeZKPY=;
+        b=FRhlM0nVlmuXXyJQGkf1Ih4s90Pp4BtZOU16pR0mFCgX0NfKb2WtjEo2oX/u0w6+CA
+         xGfjktjkNRBN1Xnbqzpehv/GrYEpy5d/iwkR82i7bxCMQ18Yv1XgbwXA7+GG8/6aMvKc
+         HDYu9O0cvaRW9xL28LuKpg7q9r9fW6xD/Tag5P3rShYQMmcxuVO27SBSbGd1MRRTva0E
+         9SM61PhW8GONeAg7E3PwM2wv3mUbXgO8ZrioYnPJU4GHH6a9WXZ5D8AzOhwUAbEk8aH8
+         oMATWCSTrCvCU76W3zq8KDayaJzbkm1S3/2yY1PW+rBHHN+9eKOgbTXb1ObJpcBl2aF6
+         DdBw==
+X-Gm-Message-State: AAQBX9f24o8zIh9Y0sLZvJfyEFPzhvHgfqvbpY0EGAUrHpMAhkbIJ6CA
+        K67/mKyq4zA/PC1Qr3zbBa3nNA==
+X-Google-Smtp-Source: AKy350YerkDyIlCdlYz+2bbDYDMPvivuf/02m3z67Um6oKR/8X1Rqic07nKJ4+CvFtUj6ZUAdN+jUw==
+X-Received: by 2002:a05:6a00:2196:b0:63a:5bcd:e580 with SMTP id h22-20020a056a00219600b0063a5bcde580mr8793160pfi.9.1682115207703;
+        Fri, 21 Apr 2023 15:13:27 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:87cc:9018:e569:4a27])
-        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm3424715pfb.104.2023.04.21.15.13.22
+        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm3424715pfb.104.2023.04.21.15.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 15:13:24 -0700 (PDT)
+        Fri, 21 Apr 2023 15:13:26 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Mel Gorman <mgorman@techsingularity.net>,
@@ -56,24 +56,10 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Yu Zhao <yuzhao@google.com>, linux-fsdevel@vger.kernel.org,
         Matthew Wilcox <willy@infradead.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jan Kara <jack@suse.cz>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>, Zhang Yi <yi.zhang@huawei.com>
-Subject: [PATCH v2 2/4] buffer: Add lock_buffer_timeout()
-Date:   Fri, 21 Apr 2023 15:12:46 -0700
-Message-ID: <20230421151135.v2.2.Ie146eec4d41480ebeb15f0cfdfb3bc9095e4ebd9@changeid>
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH v2 3/4] migrate_pages: Don't wait forever locking pages in MIGRATE_SYNC_LIGHT
+Date:   Fri, 21 Apr 2023 15:12:47 -0700
+Message-ID: <20230421151135.v2.3.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 In-Reply-To: <20230421221249.1616168-1-dianders@chromium.org>
 References: <20230421221249.1616168-1-dianders@chromium.org>
@@ -89,134 +75,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a variant of lock_buffer() that can timeout. This is useful to
-avoid unbounded waits for the page lock in kcompactd.
+The MIGRATE_SYNC_LIGHT mode is intended to block for things that will
+finish quickly but not for things that will take a long time. Exactly
+how long is too long is not well defined, but waits of tens of
+milliseconds is likely non-ideal.
 
+Waiting on the folio lock in isolate_movable_page() is something that
+usually is pretty quick, but is not officially bounded. Nothing stops
+another process from holding a folio lock while doing an expensive
+operation. Having an unbounded wait like this is not within the design
+goals of MIGRATE_SYNC_LIGHT.
+
+When putting a Chromebook under memory pressure (opening over 90 tabs
+on a 4GB machine) it was fairly easy to see delays waiting for the
+lock of > 100 ms. While the laptop wasn't amazingly usable in this
+state, it was still limping along and this state isn't something
+artificial. Sometimes we simply end up with a lot of memory pressure.
+
+Putting the same Chromebook under memory pressure while it was running
+Android apps (though not stressing them) showed a much worse result
+(NOTE: this was on a older kernel but the codepaths here are
+similar). Android apps on ChromeOS currently run from a 128K-block,
+zlib-compressed, loopback-mounted squashfs disk. If we get a page
+fault from something backed by the squashfs filesystem we could end up
+holding a folio lock while reading enough from disk to decompress 128K
+(and then decompressing it using the somewhat slow zlib algorithms).
+That reading goes through the ext4 subsystem (because it's a loopback
+mount) before eventually ending up in the block subsystem. This extra
+jaunt adds extra overhead. Without much work I could see cases where
+we ended up blocked on a folio lock for over a second. With more
+more extreme memory pressure I could see up to 25 seconds.
+
+Let's bound the amount of time we can wait for the folio lock. The
+SYNC_LIGHT migration mode can already handle failure for things that
+are slow, so adding this timeout in is fairly straightforward.
+
+With this timeout, it can be seen that kcompactd can move on to more
+productive tasks if it's taking a long time to acquire a lock.
+
+NOTE: The reason I stated digging into this isn't because some
+benchmark had gone awry, but because we've received in-the-field crash
+reports where we have a hung task waiting on the page lock (which is
+the equivalent code path on old kernels). While the root cause of
+those crashes is likely unrelated and won't be fixed by this patch,
+analyzing those crash reports did point out this unbounded wait and it
+seemed like something good to fix.
+
+ALSO NOTE: the timeout mechanism used here uses "jiffies" and we also
+will retry up to 7 times. That doesn't give us much accuracy in
+specifying the timeout. On 1000 Hz machines we'll end up timing out in
+7-14 ms. On 100 Hz machines we'll end up in 70-140 ms. Given that we
+don't have a strong definition of how long "too long" is, this is
+probably OK.
+
+Suggested-by: Mel Gorman <mgorman@techsingularity.net>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
 Changes in v2:
-- "Add lock_buffer_timeout()" new for v2.
+- Keep unbounded delay in "SYNC", delay with a timeout in "SYNC_LIGHT"
 
- fs/buffer.c                 |  7 +++++++
- include/linux/buffer_head.h | 10 ++++++++++
- include/linux/wait_bit.h    | 24 ++++++++++++++++++++++++
- kernel/sched/wait_bit.c     | 14 ++++++++++++++
- 4 files changed, 55 insertions(+)
+ mm/migrate.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index 9e1e2add541e..fcd19c270024 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -71,6 +71,13 @@ void __lock_buffer(struct buffer_head *bh)
- }
- EXPORT_SYMBOL(__lock_buffer);
+diff --git a/mm/migrate.c b/mm/migrate.c
+index db3f154446af..60982df71a93 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -58,6 +58,23 @@
  
-+int __lock_buffer_timeout(struct buffer_head *bh, unsigned long timeout)
+ #include "internal.h"
+ 
++/* Returns the schedule timeout for a non-async mode */
++static long timeout_for_mode(enum migrate_mode mode)
 +{
-+	return wait_on_bit_lock_io_timeout(&bh->b_state, BH_Lock,
-+					   TASK_UNINTERRUPTIBLE, timeout);
-+}
-+EXPORT_SYMBOL(__lock_buffer_timeout);
++	/*
++	 * We'll always return 1 jiffy as the timeout. Since all places using
++	 * this timeout are in a retry loop this means that the maximum time
++	 * we might block is actually NR_MAX_MIGRATE_SYNC_RETRY jiffies.
++	 * If a jiffy is 1 ms that's 7 ms, though with the accuracy of the
++	 * timeouts it often ends up more like 14 ms; if a jiffy is 10 ms
++	 * that's 70-140 ms.
++	 */
++	if (mode == MIGRATE_SYNC_LIGHT)
++		return 1;
 +
- void unlock_buffer(struct buffer_head *bh)
++	return MAX_SCHEDULE_TIMEOUT;
++}
++
+ bool isolate_movable_page(struct page *page, isolate_mode_t mode)
  {
- 	clear_bit_unlock(BH_Lock, &bh->b_state);
-diff --git a/include/linux/buffer_head.h b/include/linux/buffer_head.h
-index 8f14dca5fed7..2bae464f89d5 100644
---- a/include/linux/buffer_head.h
-+++ b/include/linux/buffer_head.h
-@@ -237,6 +237,7 @@ struct buffer_head *alloc_buffer_head(gfp_t gfp_flags);
- void free_buffer_head(struct buffer_head * bh);
- void unlock_buffer(struct buffer_head *bh);
- void __lock_buffer(struct buffer_head *bh);
-+int __lock_buffer_timeout(struct buffer_head *bh, unsigned long timeout);
- int sync_dirty_buffer(struct buffer_head *bh);
- int __sync_dirty_buffer(struct buffer_head *bh, blk_opf_t op_flags);
- void write_dirty_buffer(struct buffer_head *bh, blk_opf_t op_flags);
-@@ -400,6 +401,15 @@ static inline void lock_buffer(struct buffer_head *bh)
- 		__lock_buffer(bh);
- }
+ 	struct folio *folio = folio_get_nontail_page(page);
+@@ -1162,7 +1179,8 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+ 		if (current->flags & PF_MEMALLOC)
+ 			goto out;
  
-+static inline int lock_buffer_timeout(struct buffer_head *bh,
-+				      unsigned long timeout)
-+{
-+	might_sleep();
-+	if (!trylock_buffer(bh))
-+		return __lock_buffer_timeout(bh, timeout);
-+	return 0;
-+}
-+
- static inline struct buffer_head *getblk_unmovable(struct block_device *bdev,
- 						   sector_t block,
- 						   unsigned size)
-diff --git a/include/linux/wait_bit.h b/include/linux/wait_bit.h
-index 7725b7579b78..33f0f60b1c8c 100644
---- a/include/linux/wait_bit.h
-+++ b/include/linux/wait_bit.h
-@@ -30,6 +30,7 @@ void wake_up_bit(void *word, int bit);
- int out_of_line_wait_on_bit(void *word, int, wait_bit_action_f *action, unsigned int mode);
- int out_of_line_wait_on_bit_timeout(void *word, int, wait_bit_action_f *action, unsigned int mode, unsigned long timeout);
- int out_of_line_wait_on_bit_lock(void *word, int, wait_bit_action_f *action, unsigned int mode);
-+int out_of_line_wait_on_bit_lock_timeout(void *word, int, wait_bit_action_f *action, unsigned int mode, unsigned long timeout);
- struct wait_queue_head *bit_waitqueue(void *word, int bit);
- extern void __init wait_bit_init(void);
+-		folio_lock(src);
++		if (folio_lock_timeout(src, timeout_for_mode(mode)))
++			goto out;
+ 	}
+ 	locked = true;
  
-@@ -208,6 +209,29 @@ wait_on_bit_lock_io(unsigned long *word, int bit, unsigned mode)
- 	return out_of_line_wait_on_bit_lock(word, bit, bit_wait_io, mode);
- }
- 
-+/**
-+ * wait_on_bit_lock_io_timeout - wait_on_bit_lock_io() with a timeout
-+ * @word: the word being waited on, a kernel virtual address
-+ * @bit: the bit of the word being waited on
-+ * @mode: the task state to sleep in
-+ * @timeout: the timeout in jiffies; %MAX_SCHEDULE_TIMEOUT means wait forever
-+ *
-+ * Returns zero if the bit was (eventually) found to be clear and was
-+ * set.  Returns non-zero if a timeout happened or a signal was delivered to
-+ * the process and the @mode allows that signal to wake the process.
-+ */
-+static inline int
-+wait_on_bit_lock_io_timeout(unsigned long *word, int bit, unsigned mode,
-+			    unsigned long timeout)
-+{
-+	might_sleep();
-+	if (!test_and_set_bit(bit, word))
-+		return 0;
-+	return out_of_line_wait_on_bit_lock_timeout(word, bit,
-+						    bit_wait_io_timeout,
-+						    mode, timeout);
-+}
-+
- /**
-  * wait_on_bit_lock_action - wait for a bit to be cleared, when wanting to set it
-  * @word: the word being waited on, a kernel virtual address
-diff --git a/kernel/sched/wait_bit.c b/kernel/sched/wait_bit.c
-index 0b1cd985dc27..629acd1c6c79 100644
---- a/kernel/sched/wait_bit.c
-+++ b/kernel/sched/wait_bit.c
-@@ -118,6 +118,20 @@ int __sched out_of_line_wait_on_bit_lock(void *word, int bit,
- }
- EXPORT_SYMBOL(out_of_line_wait_on_bit_lock);
- 
-+int __sched out_of_line_wait_on_bit_lock_timeout(void *word, int bit,
-+						 wait_bit_action_f *action,
-+						 unsigned mode,
-+						 unsigned long timeout)
-+{
-+	struct wait_queue_head *wq_head = bit_waitqueue(word, bit);
-+	DEFINE_WAIT_BIT(wq_entry, word, bit);
-+
-+	wq_entry.key.timeout = jiffies + timeout;
-+
-+	return __wait_on_bit_lock(wq_head, &wq_entry, action, mode);
-+}
-+EXPORT_SYMBOL(out_of_line_wait_on_bit_lock_timeout);
-+
- void __wake_up_bit(struct wait_queue_head *wq_head, void *word, int bit)
- {
- 	struct wait_bit_key key = __WAIT_BIT_KEY_INITIALIZER(word, bit);
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
