@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7D56EA3B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDC66EA3B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 08:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDUGTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 02:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
+        id S229769AbjDUGTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 02:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDUGSx (ORCPT
+        with ESMTP id S229627AbjDUGSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Apr 2023 02:18:53 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE67A2729;
-        Thu, 20 Apr 2023 23:18:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBD22123;
+        Thu, 20 Apr 2023 23:18:45 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33L6IPuxC024547, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33L6IRw14024623, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33L6IPuxC024547
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33L6IRw14024623
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 21 Apr 2023 14:18:26 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+        Fri, 21 Apr 2023 14:18:27 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
  RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 21 Apr 2023 14:18:26 +0800
+ 15.1.2375.32; Fri, 21 Apr 2023 14:18:27 +0800
 Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 21 Apr 2023 14:18:25 +0800
+ 15.1.2375.7; Fri, 21 Apr 2023 14:18:26 +0800
 Received: from localhost.localdomain (172.21.252.101) by
  RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Fri, 21 Apr 2023 14:18:25 +0800
+ 15.1.2507.17 via Frontend Transport; Fri, 21 Apr 2023 14:18:26 +0800
 From:   Stanley Chang <stanley_chang@realtek.com>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 CC:     Stanley Chang <stanley_chang@realtek.com>,
@@ -40,14 +40,16 @@ CC:     Stanley Chang <stanley_chang@realtek.com>,
         "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 1/2] usb: dwc3: core: add support for remapping global register start address
-Date:   Fri, 21 Apr 2023 14:18:23 +0800
-Message-ID: <20230421061825.2233-1-stanley_chang@realtek.com>
+Subject: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
+Date:   Fri, 21 Apr 2023 14:18:24 +0800
+Message-ID: <20230421061825.2233-2-stanley_chang@realtek.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230421061825.2233-1-stanley_chang@realtek.com>
+References: <20230421061825.2233-1-stanley_chang@realtek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
+X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
 X-KSE-AntiSpam-Interceptor-Info: fallback
 X-KSE-Antivirus-Interceptor-Info: fallback
 X-KSE-AntiSpam-Interceptor-Info: fallback
@@ -63,6 +65,9 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
+
+Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
+the global register start address
 
 The RTK DHC SoCs were designed the global register address offset at
 0x8100. The default address offset is constant at DWC3_GLOBALS_REGS_START
@@ -80,35 +85,28 @@ Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 3. Add initial value of the global_regs_starting_offset
 4. Remove the log of dev_info.
 ---
- drivers/usb/dwc3/core.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 476b63618511..8c1d1afbdc65 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1785,6 +1785,21 @@ static int dwc3_probe(struct platform_device *pdev)
- 	dwc_res = *res;
- 	dwc_res.start += DWC3_GLOBALS_REGS_START;
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index be36956af53b..4f83fa8cb6cb 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -359,6 +359,14 @@ properties:
+     items:
+       enum: [1, 4, 8, 16, 32, 64, 128, 256]
  
-+	/*
-+	 * For some dwc3 controller, the dwc3 global register start address is
-+	 * not at DWC3_GLOBALS_REGS_START (0xc100).
-+	 */
-+	if (dev->of_node) {
-+		int global_regs_starting_offset = 0;
++  snps,global-regs-starting-offset:
++    description:
++      value for remapping global register start address. For some dwc3
++      controller, the dwc3 global register start address is not at
++      default DWC3_GLOBALS_REGS_START (0xc100). This property is added to
++      adjust the address.
++    $ref: '/schemas/types.yaml#/definitions/uint32'
 +
-+		device_property_read_u32(dev, "snps,global-regs-starting-offset",
-+			    &global_regs_starting_offset);
-+		if (global_regs_starting_offset) {
-+			dwc_res.start -= DWC3_GLOBALS_REGS_START;
-+			dwc_res.start += global_regs_starting_offset;
-+		}
-+	}
-+
- 	regs = devm_ioremap_resource(dev, &dwc_res);
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
+   port:
+     $ref: /schemas/graph.yaml#/properties/port
+     description:
 -- 
 2.34.1
 
