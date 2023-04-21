@@ -2,168 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF0C6EB041
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627C96EB02C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 19:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjDURIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 13:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S232671AbjDURHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 13:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjDURIp (ORCPT
+        with ESMTP id S232494AbjDURHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:08:45 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020020.outbound.protection.outlook.com [52.101.61.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67652D56;
-        Fri, 21 Apr 2023 10:08:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lvH3/riMhqTqmpeSKabzGExQw/rkSfJcl7yNDYrx0DwcHtqjqD6POsx8HdkXYHucYN0SndRroKqLa2wH2w9w3vQTKaAjrnGd0f+zurO/vnyTM/gKvaGWlz8x7aMkBfXcp0grrbxyvWyj3PWYoeO2ZVe7bB9XQwJs+9F01fzQA4qmVbdnBa+w5dj9I++s5AGVErMJj80KzFB8B3k+D5XQkLKiZ/mcR4VwTzo9S1Mcyi085OatZapaAk3OjmQX0BWGDT/gR2xSZArmPj25wGMjVfd23Xtv2opqcZtN3jsakI9nzEe60mMLEhL/LREexdhMoeLQev/lP5XeyDsRQ+75kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k1HmhJxV6cmUgswVaDI/a//1gqwtqv777RmGSU5xq7I=;
- b=MfDWTYDEMgx+2m/+gX+Lcc4uwsduwlAjBO2Y+e5bqc41XGpLob4ui3kjXsYk7qad/UdZKvYkr985R9XGIjM+hQos9507boWqj1N4X3vfHT2vjr2VRtSqkRcPsoNmrULKMvXDb637/Z9ho7tWMLMC3Gy93Uw5DY4Fu9wzPpZXDCoriPea3oQT3RPPwevak84/gXziR75JqTbLpG3y8dA5wtM3HTuCZgnjg6S04/A15cP1omWQAqVt1KheNAnjcv9WJVDzMwmhZ2Kpo6428gjBxG1iFxgjC+O7Pq7PbaDBsHCDxOkqbD9eST2Bf3ls1LXX5arV/BhCCz8FJ5mcK3+m/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k1HmhJxV6cmUgswVaDI/a//1gqwtqv777RmGSU5xq7I=;
- b=SREZIXHHMM8LuERNkIXC28+cP3oRLsNs+jKUZ5e0eLbEW+gpl8hsi8qAAzZyYlSM5GnR++/4mCnn2bjyAZMe4ljZoiMuyNYTMv28I6BjeIW6KLClRv0jJpe/AL6bragv4X1x6wr6AQtUz3If2OGX2vOm18JE0DHA5nzvOABGfrM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
- by CO1PR21MB1316.namprd21.prod.outlook.com (2603:10b6:303:153::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.11; Fri, 21 Apr
- 2023 17:08:02 +0000
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::3e5b:6d93:ceab:b4c6]) by BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::3e5b:6d93:ceab:b4c6%4]) with mapi id 15.20.6340.015; Fri, 21 Apr 2023
- 17:08:02 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
-Cc:     haiyangz@microsoft.com, decui@microsoft.com, kys@microsoft.com,
-        paulros@microsoft.com, olaf@aepfle.de, vkuznets@redhat.com,
-        davem@davemloft.net, wei.liu@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, leon@kernel.org,
-        longli@microsoft.com, ssengar@linux.microsoft.com,
-        linux-rdma@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
-        sharmaajay@microsoft.com, hawk@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next, 2/2] net: mana: Check if netdev/napi_alloc_frag returns single page
-Date:   Fri, 21 Apr 2023 10:06:58 -0700
-Message-Id: <1682096818-30056-3-git-send-email-haiyangz@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1682096818-30056-1-git-send-email-haiyangz@microsoft.com>
-References: <1682096818-30056-1-git-send-email-haiyangz@microsoft.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0102.namprd03.prod.outlook.com
- (2603:10b6:303:b7::17) To BY5PR21MB1443.namprd21.prod.outlook.com
- (2603:10b6:a03:21f::18)
+        Fri, 21 Apr 2023 13:07:15 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62431BC
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:07:03 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec8143400aso1979406e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 10:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682096822; x=1684688822;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nsVxuLXGb/HmPw4+8d4rfb4M9t507exbwNDKA5TIVj0=;
+        b=HrNG838xCe/plUz92VSGxl/e4w2Pd1PcZs5KToy+urCwSP7bumfAbId236f4ii3Cr2
+         ZEyJ52y41H0aFtjXZbEWFTUdugvGiTwjGEAKroJc19BY4I4HQtNmxd5Hu5dDldNe64IU
+         joL6owyMglGtfqIJFPaHxmAvreliuUZ2pmhC3wV+sEpu/t63h+Denl8lm6KxJGTHOg2E
+         AmYfQttbiLsz28aV12KXZLUi0C0oeMhZ1U6Jf/HIOd6UYJUZvmHZy+UtWWAOW/i6efvR
+         sRs+cXOKy36HxpMv6kLBv4jLMgSG/A0ULmXen7Fq4G8E3i/v6/OCY09DSWzBGrxo8Jy3
+         UCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682096822; x=1684688822;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsVxuLXGb/HmPw4+8d4rfb4M9t507exbwNDKA5TIVj0=;
+        b=gmYQ/9RBj+QkBOsCyjtys7iJMFmvq70tzaoZpWovrrd8/i0jw3S4ezFEsR0YxJ3cUc
+         pyYYwGg2JG9O/B84LtXvAx9X3RaFFW/2FzwToF7YyUm/WijnAFVyhxGVtMsdp/hkTWzd
+         JYtWTZ5b1kBloD8mn4saWzT2Tmwcacxsw0czJy+1MQerg0vhoBgefhkoyG41ti7diILV
+         OTFg4DTW9ungS7O2IFbn5zoRktzBXkS8GnnvO2yYhkdG9cPGwNaUEtjL8zZae0Df12xg
+         YekZPIeIK0w+6FFDO/2hpe6gEdswHMsnnfd95YmCeei4qpqQYp+SfbfBTcGn3JpA8xcO
+         q9TA==
+X-Gm-Message-State: AAQBX9cs+nmnublTkBFucRvUFJSVLWHZwBrkK/1TenHbSIEqbVp1Cg8e
+        jWCeOPAOl4ODk7xcMgT96W6Jig==
+X-Google-Smtp-Source: AKy350bmI8zPG+zpUhZ0o7e9UHzK1WMARz2ilni8s0oJ+vuQJEaH/EH2o7WV5UWwWtdWpkO+jf8JFA==
+X-Received: by 2002:ac2:4821:0:b0:4e8:221f:5886 with SMTP id 1-20020ac24821000000b004e8221f5886mr1532394lft.19.1682096821884;
+        Fri, 21 Apr 2023 10:07:01 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x24-20020a19f618000000b004db3e7dfb8csm616096lfe.189.2023.04.21.10.07.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 10:07:01 -0700 (PDT)
+Message-ID: <bc723ffd-73cd-0339-c2aa-42b3db5a3560@linaro.org>
+Date:   Fri, 21 Apr 2023 20:07:00 +0300
 MIME-Version: 1.0
-Sender: LKML haiyangz <lkmlhyz@microsoft.com>
-X-MS-Exchange-MessageSentRepresentingType: 2
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|CO1PR21MB1316:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a78a2f4-ef35-4113-78c7-08db428af71a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Wba/7GADcIhlqE372dLxFMN2Ro2+btQwLEUSRjv4tZACp5rhgjQ23Yrk3zVREnVw8i2ssoKY7mivMJLYPTQgWeeB0jiKuQRBrA9BW/zt/Q3wiiDMeTFt5xT3jnCubC+lI4jPdJIBVR24wz1tBsFfeRvAQeZDdLe5Iy9J/ElyE+y9lgTB4ZkwE7AvGJv2HpkyYO4dV8dhFzpw5kq6Bl40R2WoNaZuWOTCOt4dvdRIYoIqhhg+j1aVdGbVigawF1zJC/GGZ1lOrdW6yyeX/uHf3Mc+EgvLwCPNNjDua287612XHECZR1DhKHh9wZHfLBUa83nxfcR/RCwjn9VkEv+aRegeopXVd6evIMqgo+gHSsQzn0NFxA5ZBkaOWujqfWZGdXG1D2696eLHL9IjVcUnptJC+L/TBQ55Qty70IDLxAQ5oAWFH62MvSD2gPY2on4+3FadWG7eQVmNCbWkv0VsOYYqxxzzHPAtskZHbLD8agbl9PxJSmFE8hCov6g4jBE6ucoOjmeYwsh2BLJSnEUQzFR2hk2fhW4WRDMVBo7b4fWRIX7Ek8nlsBdiZnRzqQvVBGcyj6OtqBpPGKWa0xCFs97NJtmrj1TXhTfSVebVXDNc30EdRyChMzcfWBQf/I/KSjsCAqkXCv08v9YEJoOjoF8SguU9HaLFJsMNzqV/IDk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(366004)(39860400002)(451199021)(4326008)(66946007)(7846003)(66556008)(786003)(66476007)(316002)(36756003)(6506007)(26005)(82960400001)(38350700002)(38100700002)(82950400001)(6512007)(2616005)(186003)(83380400001)(5660300002)(41300700001)(8676002)(8936002)(478600001)(52116002)(10290500003)(6666004)(6486002)(7416002)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?76mTHPZBkMQoZMTX4AhCw/ko7perv+ya4Tlc+mGY4Od3b6j8lniZm1C53edd?=
- =?us-ascii?Q?c3LAF7USQlAYSBAHEo7EFwrFU8/FS8jakWWT+RdWOJ/b0PLIh9zxp6IRKpdX?=
- =?us-ascii?Q?ofu4eIhu8pLlovu4+3iQ3W6pQC3N+lRR+Gncwv54BhVSkYRFr82YfAjGpUKI?=
- =?us-ascii?Q?m+XUI8EvWAZgRBxsE5kr6HPCNZwHqRy72EIYbasOMORfIRxOF2pauOcDMB8S?=
- =?us-ascii?Q?WPsnARrXjzvI3fRPNUidIZmfC0vicj2X9DSse63/hyLZ47rJMvPLKusU4/3D?=
- =?us-ascii?Q?Ayu0/D30fjjYbzvJ37/N20Ru/+s35ZmWUrFIkazRLaKCdA1hrRwvINL7k8U7?=
- =?us-ascii?Q?3+Kpvrwg2iHaH33PdUSOEWJ05mICZGCFIGK5nOTjPm92dTEwMGEn+RrTbLFn?=
- =?us-ascii?Q?F5k4DpAwW+vX7H3axggP/6g3OImw+zHdDaDfbD6kBBB1d/X5oeW+F1hX/j7G?=
- =?us-ascii?Q?2JOIwd89jSqBh3XXmlSSUS8hOCXvNBPQEhikFk/svqgrjGKG4uUMwN5myJCy?=
- =?us-ascii?Q?ED32gNSSjtYvz3mDVPpfxqNqOA9qMxzUONVgBVrUV+kTGddIClrVdi0H2CIw?=
- =?us-ascii?Q?8e+WijSc2ia1bHYJA3o70AiuKs5C2VcTfEQ7CQ1U8nYul9ckgIeLonXTz6mn?=
- =?us-ascii?Q?lhu7XudA7IFVOR9minuBNnlc4HnB2+YwyWyZ253J9SjNWqq7GaobaI2ZUZAj?=
- =?us-ascii?Q?/yvVuyK6Jgb7hsJe5wcgMMhfjqj4CTrM3gJtnG+AYXhvz9llLw3IOf7h1y1E?=
- =?us-ascii?Q?pXUx+EyDV3+0KbhiNg7fd3Xt78QUl3smrFPnO+HEDQ39YTvtC1iqU/l8EAn+?=
- =?us-ascii?Q?0B/YaLd3SMGfsIzYERNRMBI1f8tpLX/Y9zpTbSdmfP8GZA93Q+lSBZ1iyZEp?=
- =?us-ascii?Q?J2pi2WRC6MwpctfV7hUYNgOyQHgL0R7dXa0pvN/mmrgk0NcwhVrZyaPoR7It?=
- =?us-ascii?Q?WinbrEuPfKpwK6e7YiXAI7MwWuJboZC8gvGXFytbeDuexvqC3YFyJo3f5GzT?=
- =?us-ascii?Q?ase0r8Swu07tr5O1bY1Vcm/RzN8JQ+arDHT7SxIjfrsjf/EixIx5tD2YwqiO?=
- =?us-ascii?Q?uiuxGBZ3x0W9ofp6rXLs6Tgw3FnIO624hDCVQTQYYgViUudcCLVS4inMo8yL?=
- =?us-ascii?Q?SDlT7HQiczWzRwmPdxeeiYg/WdgWzKtsvr6a97g4JKsvf0sxiq7eUud9j209?=
- =?us-ascii?Q?AKC0JIGWkUWt4RZ4rcdBwqqEFEUyJgTBLZEvLaHia6/vCLgqJcQh6YQqPsMy?=
- =?us-ascii?Q?I8xYwOsC77EcE9qPwmC4htEST5BGQs6GaPSTRSTMQxF6JKYjrWRx/EYTkI9J?=
- =?us-ascii?Q?WoPKEZ4wRN15mS9oGARnzhaVtTxzkUa3tSikOrLhjxY6xa1Tv1awKzjk6uT1?=
- =?us-ascii?Q?kzSn85Nt3NjDcgAeuDMTtBrz5LQzVeujinZUO/YDlY7AwRoXx9mT8J/pZL/K?=
- =?us-ascii?Q?dgNoYKF71bGviCoG44QVtTbhv/SfHvK1Px4ih3qbwqgJELqKvVUbbgomozqu?=
- =?us-ascii?Q?yZYaqsuh/9egvHXuZgcKjPXHofHSK2n1vI2H5ARC/6syqSYiAJByhbEa16bF?=
- =?us-ascii?Q?ZWtGAt18O1P6ze9DgrkYXXrM3nQl+h7fSx49WSsD?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a78a2f4-ef35-4113-78c7-08db428af71a
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 17:08:02.2854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0V3mpMbzuAt4yHlJy7q8xx4Ro+przExRNcllL+IsMVGqAVfOb43c9vkbeF2UjrEKuWHKVoY7Iqze/71OYjGTrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR21MB1316
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/3] DRM: Create new Content Protection connector
+ property
+Content-Language: en-GB
+To:     Mark Yacoub <markyacoub@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     seanpaul@chromium.org, dianders@chromium.org,
+        linux-kernel@vger.kernel.org
+References: <20230421162749.360777-1-markyacoub@google.com>
+ <20230421162749.360777-3-markyacoub@google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230421162749.360777-3-markyacoub@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-netdev/napi_alloc_frag() may fall back to single page which is smaller
-than the requested size.
-Add error checking to avoid memory overwritten.
+On 21/04/2023 19:27, Mark Yacoub wrote:
+> From: Mark Yacoub <markyacoub@chromium.org>
 
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
----
- drivers/net/ethernet/microsoft/mana/mana_en.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Nit: is there a reason for this header? My first impression is that it 
+matches your outgoing name & email address and as such is not necessary.
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index db2887e25714..06d6292e09b3 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -553,6 +553,14 @@ static int mana_pre_alloc_rxbufs(struct mana_port_context *mpc, int new_mtu)
- 			va = netdev_alloc_frag(mpc->rxbpre_alloc_size);
- 			if (!va)
- 				goto error;
-+
-+			page = virt_to_head_page(va);
-+			/* Check if the frag falls back to single page */
-+			if (compound_order(page) <
-+			    get_order(mpc->rxbpre_alloc_size)) {
-+				put_page(page);
-+				goto error;
-+			}
- 		} else {
- 			page = dev_alloc_page();
- 			if (!page)
-@@ -1504,6 +1512,13 @@ static void *mana_get_rxfrag(struct mana_rxq *rxq, struct device *dev,
- 
- 		if (!va)
- 			return NULL;
-+
-+		page = virt_to_head_page(va);
-+		/* Check if the frag falls back to single page */
-+		if (compound_order(page) < get_order(rxq->alloc_size)) {
-+			put_page(page);
-+			return NULL;
-+		}
- 	} else {
- 		page = dev_alloc_page();
- 		if (!page)
+Nit#2: subject should mention 'Key', as you are creating a property for 
+the key.
+
+> 
+> [Why]
+> To enable Protected Content, some drivers require a key to be injected
+> from user space to enable HDCP on the connector.
+> 
+> [How]
+> Create new "Content Protection Property" of type "Blob"
+
+Generic observation is that the ability to inject HDCP keys manually 
+seems to be quite unique to your hardware. As such, I think the debugfs 
+or sysfs suits better in comparison to the DRM property.
+
+> 
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> ---
+>   drivers/gpu/drm/drm_atomic_uapi.c | 9 +++++++++
+>   include/drm/drm_connector.h       | 6 ++++++
+>   include/drm/drm_mode_config.h     | 6 ++++++
+>   3 files changed, 21 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+> index d867e7f9f2cd5..e20bc57cdb05c 100644
+> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> @@ -749,6 +749,11 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
+>   		state->content_protection = val;
+>   	} else if (property == config->hdcp_content_type_property) {
+>   		state->hdcp_content_type = val;
+> +	} else if (property == config->content_protection_key_property) {
+> +		ret = drm_atomic_replace_property_blob_from_id(
+> +			dev, &state->content_protection_key, val, -1, -1,
+> +			&replaced);
+> +		return ret;
+>   	} else if (property == connector->colorspace_property) {
+>   		state->colorspace = val;
+>   	} else if (property == config->writeback_fb_id_property) {
+> @@ -843,6 +848,10 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
+>   		*val = state->content_protection;
+>   	} else if (property == config->hdcp_content_type_property) {
+>   		*val = state->hdcp_content_type;
+> +	} else if (property == config->content_protection_key_property) {
+> +		*val = state->content_protection_key ?
+> +			       state->content_protection_key->base.id :
+> +			       0;
+>   	} else if (property == config->writeback_fb_id_property) {
+>   		/* Writeback framebuffer is one-shot, write and forget */
+>   		*val = 0;
+> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> index 7b5048516185c..2fbe51272bfeb 100644
+> --- a/include/drm/drm_connector.h
+> +++ b/include/drm/drm_connector.h
+> @@ -896,6 +896,12 @@ struct drm_connector_state {
+>   	 */
+>   	unsigned int content_protection;
+>   
+> +	/**
+> +	 * @content_protection_key: DRM blob property for holding the Content
+> +	 * Protection Key injected from user space.
+> +	 */
+> +	struct drm_property_blob *content_protection_key;
+> +
+>   	/**
+>   	 * @colorspace: State variable for Connector property to request
+>   	 * colorspace change on Sink. This is most commonly used to switch
+> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+> index e5b053001d22e..615d1e5f57562 100644
+> --- a/include/drm/drm_mode_config.h
+> +++ b/include/drm/drm_mode_config.h
+> @@ -887,6 +887,12 @@ struct drm_mode_config {
+>   	 */
+>   	struct drm_property *hdcp_content_type_property;
+>   
+> +	/**
+> +	 * @content_protection_key_property: DRM blob property that receives the
+> +	 * content protection key from user space to be injected into the kernel.
+> +	 */
+> +	struct drm_property *content_protection_key_property;
+> +
+>   	/* dumb ioctl parameters */
+>   	uint32_t preferred_depth, prefer_shadow;
+>   
+
 -- 
-2.25.1
+With best wishes
+Dmitry
 
