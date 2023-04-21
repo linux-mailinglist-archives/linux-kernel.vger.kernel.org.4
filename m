@@ -2,161 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2516EA8F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B44B6EA903
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjDULRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S230390AbjDULUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjDULRH (ORCPT
+        with ESMTP id S229520AbjDULUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:17:07 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AC2B442;
-        Fri, 21 Apr 2023 04:17:05 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2a8bae45579so13994201fa.0;
-        Fri, 21 Apr 2023 04:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682075824; x=1684667824;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7smVzolvmuXjKYHquqsWt5Blfp2EklwJ1O9Q+DVvQpo=;
-        b=oWhloOpnZkyb7vjNIUp91/AvMUH6OR9USH0nHGo/cDolwn3hd0r4Yq9qCXxcn8Xoba
-         kWwu3CaARkDXqxTMl8fYnMMKKmyuMsjTO25HA3ZvUuUdSswmTLsCxXwDyFNwQIDD4ws9
-         MpnE/rujLD6qyqBcjPsOy5bse6u8yA95HxIxPae+KRGJmpQURbxwmua9xao/90oYj5Gz
-         qnpOx2oxxb4ffBTvwnDowuX2vYpgS0MPvBI/YaWh8JPc0+WvId7oAxKvPo6ljvZWgeFU
-         5P20E7BpWigwZauXDywvITNTxLl1OglHJcD3lTdfeYC9xCfw63YnYRuuZOLM9BuRyWTy
-         zi5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682075824; x=1684667824;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7smVzolvmuXjKYHquqsWt5Blfp2EklwJ1O9Q+DVvQpo=;
-        b=K1Th/ZesTiLqauSsfEBSR++EOKsekS53qIYeO7kBkoiJnAQK2nZRe8UmcqGJQQKjWr
-         q6Mzx/tET/3R2bi/9J15pDTqF0utqhZc8eqrYkPup7klz7baTKH+Xr6hegXmvKaFOvzd
-         hkANMjk8vX/rHxNBo48mbwkr/8lbk8oKsRjnucXIJGkRiuF4r9TB7K7IJz0yYu4rupSI
-         VlIU+U06W7sjK2I/wnBRcKAinKxvYLhGUkj88nZeLndrERBnMb/Uaz5Vq5ANqRNUNmZV
-         Ivll1HNQSE7PBRGt2rk+1l6AKxv8eVATwGRBFsSJ9ibzXgB5oapfhBksIkQmVQEhAh/H
-         FUig==
-X-Gm-Message-State: AAQBX9feYZedPAgrbl0+ufFNKuwUic8+nZ9inxiQw0TxwGQMAle7Xkji
-        o33AYlUsddt/Miibe6sUfdFXKAi6VUI=
-X-Google-Smtp-Source: AKy350Zo1onIpBXq/ZJpowspPX9kOVBC3lUAc4i3kAlBZ4iVrdfBRJ8R01TXn75UK+LwT3wL7vZjXQ==
-X-Received: by 2002:a2e:8802:0:b0:299:ac26:f781 with SMTP id x2-20020a2e8802000000b00299ac26f781mr634058ljh.18.1682075823533;
-        Fri, 21 Apr 2023 04:17:03 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id o14-20020a2e730e000000b002a8d41c8ebdsm585220ljc.122.2023.04.21.04.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 04:17:03 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 14:17:01 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com
-Subject: Re: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
-Message-ID: <20230421111701.cutsclcc5uhputeh@mobilestation>
-References: <20230420055131.2048959-1-joychakr@google.com>
- <20230420055131.2048959-6-joychakr@google.com>
- <20230421085354.34dwrgr3enlxqhtc@mobilestation>
- <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
+        Fri, 21 Apr 2023 07:20:20 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB18186;
+        Fri, 21 Apr 2023 04:20:18 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33LBJeXmA015562, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33LBJeXmA015562
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Fri, 21 Apr 2023 19:19:40 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 21 Apr 2023 19:19:41 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 21 Apr 2023 19:19:40 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Fri, 21 Apr 2023 19:19:40 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1] usb: phy: add usb phy notify port status API
+Thread-Topic: [PATCH v1] usb: phy: add usb phy notify port status API
+Thread-Index: AQHZdCfF18CT8wCSd0W6JiweSZ5Lg6805bGAgACHUUD//6flgIAAhuoQ
+Date:   Fri, 21 Apr 2023 11:19:40 +0000
+Message-ID: <eecf54cdc06a4e3690e2cad62a8d4596@realtek.com>
+References: <20230421080333.18681-1-stanley_chang@realtek.com>
+ <ZEJHLR27pVwVI3_J@kroah.com> <efd6e621210a407db9c153712f362366@realtek.com>
+ <ZEJux2KTnGw-WE1A@kroah.com>
+In-Reply-To: <ZEJux2KTnGw-WE1A@kroah.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:51:58PM +0530, Joy Chakraborty wrote:
-> On Fri, Apr 21, 2023 at 2:23 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > On Thu, Apr 20, 2023 at 05:51:31AM +0000, Joy Chakraborty wrote:
-> > > n_bytes variable in the driver represents the number of bytes per word
-> > > that needs to be sent/copied to fifo. Bits/word can be between 8 and 32
-> > > bits from the client but in memory they are a power of 2, same is mentioned
-> > > in spi.h header:
-> > > "
-> > >  * @bits_per_word: Data transfers involve one or more words; word sizes
-> > >  *    like eight or 12 bits are common.  In-memory wordsizes are
-> > >  *    powers of two bytes (e.g. 20 bit samples use 32 bits).
-> > >  *    This may be changed by the device's driver, or left at the
-> > >  *    default (0) indicating protocol words are eight bit bytes.
-> > >  *    The spi_transfer.bits_per_word can override this for each transfer.
-> > > "
-> > >
-> > > Hence, round of n_bytes to a power of 2 to avoid values like 3 which
-> > > would generate unalligned/odd accesses to memory/fifo.
-> > >
-> > > Fixes: a51acc2400d4 ("spi: dw: Add support for 32-bits max xfer size")
-> > > Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> > > Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> > > ---
-> > >  drivers/spi/spi-dw-core.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> > > index c3bfb6c84cab..a6486db46c61 100644
-> > > --- a/drivers/spi/spi-dw-core.c
-> > > +++ b/drivers/spi/spi-dw-core.c
-> > > @@ -426,7 +426,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
-> > >       int ret;
-> > >
-> > >       dws->dma_mapped = 0;
-> >
-> > > -     dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
-> > > +     dws->n_bytes = roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE));
-> >
-> > Almost 100 symbols looks too bulky. Moreover single-lined nested call
-> > makes things a bit harder to read. What about formatting it up like
-> > this?
-> >
-> >         dws->n_bytes =
-> >                 roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word,
-> >                                                 BITS_PER_BYTE));
-> >
-> >         or like this:
-> >
-> >         dws->n_bytes = roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word,
-> >                                                        BITS_PER_BYTE));
-> >
-> > Splitting the line into chunks will simplify the visual
-> > differentiation between the outer and inner calls.
-> >
-> > * Note even though the 80-char columns limit isn't that strict rule
-> > now, but it's still preferable unless exceeding the limit significantly
-> > increases readability. The update you suggest doesn't seem like the case
-> > which would improve the readability.
-> >
-> 
-> Sure, I can make the following change in the formatting and send the
-> patch series:
->          dws->n_bytes =
->                  roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word,
->                                                  BITS_PER_BYTE));
-
-Ok. Thanks in advance.
-
--Serge(y)
-
-> 
-> Thanks
-> Joy
-> > -Serge(y)
-> >
-> > >       dws->tx = (void *)transfer->tx_buf;
-> > >       dws->tx_len = transfer->len / dws->n_bytes;
-> > >       dws->rx = transfer->rx_buf;
-> > > --
-> > > 2.40.0.634.g4ca3ef3211-goog
-> > >
+PiA+ID4gV2UgY2FuIG5vdCBhZGQgY2FsbGJhY2tzIGluIHRoZSBrZXJuZWwgdGhhdCBhcmUgbm90
+IGFjdHVhbGx5IHVzZWQsDQo+ID4gPiBvdGhlcndpc2UgdGhleSB3aWxsIGp1c3QgYmUgaW5zdGFu
+dGx5IHJlbW92ZWQuDQo+ID4gPg0KPiA+ID4gUGxlYXNlIHN1Ym1pdCBhbnkgZHJpdmVycyB0aGF0
+IG5lZWQgdGhpcyBjaGFuZ2UgYXQgdGhlIHNhbWUgdGltZSBzbw0KPiA+ID4gdGhhdCB3ZSBjYW4g
+dmVyaWZ5IHRoYXQgdGhlIGNhbGxiYWNrIGlzIGFjdHVhbGx5IGNvcnJlY3QgYW5kIG5lZWRlZCwN
+Cj4gPiA+IG90aGVyd2lzZSB3ZSBjYW4gbm90IHRha2UgdGhpcyBjaGFuZ2UuDQo+ID4gPg0KPiA+
+DQo+ID4gSW4gdGhpcyBzdGFnZSwgd2UgdXNiIHBoeSBkcml2ZXIgaXMgbm90IGF0IGxpbnV4IHVw
+c3RyZWFtLg0KPiANCj4gVGhlbiBvYnZpb3VzbHkgd2UgY2FuIG5vdCB0YWtlIHRoaXMgY2hhbmdl
+IChub3Igd291bGQgeW91IHdhbnQgdXMgdG8uKQ0KDQpJIHdpbGwgcHJlcGFyZSBhIGNvbXBsZXRl
+IGRyaXZlciBmb3IgcmV2aWV3Lg0KDQo+ID4gRm9yIHRoZSBhbmRyb2lkIEdLSSwgd2UgaGF2ZSB0
+byBhZGQgdGhpcyBjYWxsYmFjayB0byB1cHN0cmVhbSBvciB1c2UgdGhlDQo+IHZlbmRvciBob29r
+IG9mIGFuZHJvaWQuDQo+ID4gSSB3aWxsIHBsYW4gdG8gdXBzdHJlYW0gdGhlIHJlYWx0ZWsgdXNi
+IHBoeSBkcml2ZXIuDQo+IA0KPiBBcyB5b3UgYWxyZWFkeSBoYXZlIHRoaXMgZHJpdmVyLCB3aHkg
+bm90IHNlbmQgaXQgdG8gdXMgbm93Pw0KPiANCk5vdyB0aGUgZHJpdmVyIGRvZXNuJ3QgbWF0Y2gg
+dGhlIGNvZGluZyBzdHlsZS4NCkFmdGVyIEkgcmVmYWN0b3IgaXQsIEkgd2lsbCBzZW5kIHRoaXMg
+ZHJpdmVyIHVwc3RyZWFtLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
