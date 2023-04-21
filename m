@@ -2,206 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC066EA0AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 02:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA70E6EA0AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 02:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbjDUAgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 20:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S233189AbjDUAgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 20:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233110AbjDUAg1 (ORCPT
+        with ESMTP id S233174AbjDUAgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 20:36:27 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4877949F6;
-        Thu, 20 Apr 2023 17:36:26 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33L0aGMo005655;
-        Fri, 21 Apr 2023 00:36:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UKQgIUDwzDOzUPk2VjzlD8UR5C6Y0PvdeSSx8f1Y0J0=;
- b=U5X7s20kIDyVFaT4EnoF/LQGXWa96SUNaEZlHrgPMhrf8FDALvN+WKMymWCpgGNW6LMl
- UtAScKvtvpEOOMxxNjoj662gGonf7Sb4i+4YwwQ6SnDqH7YNKU4U7RQxxYsV9GwAuAAW
- BgM9IX/XY92cu3crSHOK7oRlc1ywr+2bOYWB90lSmf0UjfGmQo+iSjATBdurI60MvXsZ
- yCsXQJbtls1bqNTtdO4IiicmnsqhDGN71X+EXcQyl+0vrnJFBJUtpgZ3BuJsaL5wWHp9
- ax1SSqPnSnkZbwfPygg3ZyhukSb/gO6pUdjXsFtYakZi3PuTRNOCvswswD4ZQEv+46ae tQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3dcmg8sd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 00:36:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33L0aEQD031844
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 00:36:14 GMT
-Received: from [10.110.74.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 20 Apr
- 2023 17:36:13 -0700
-Message-ID: <43859b23-a324-b743-83b7-4f00c78170b5@quicinc.com>
-Date:   Thu, 20 Apr 2023 17:36:12 -0700
+        Thu, 20 Apr 2023 20:36:36 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2A465AB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 17:36:33 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3e6aa05714bso14205461cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 17:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682037392; x=1684629392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SsVjJ4SkHhpAcJ2qMCfs0/jsmBQOUMoCMr/YEOhqf00=;
+        b=LVkhB7fmYHzbjISrJz1LWFnsU3aY3gtxk39iUKqM2fFk0JneQmJPPI2r764uWQc3ub
+         hyitBAhiMcSh9fx1n+tUwI6YtYrCH+9DZk4mZpqPr56giJPWSUM8qDS0Q66Y9UBVr+f9
+         iCfABZBtFj33ZCQkDyvJ9SZCPW/J7F8IgoL4U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682037392; x=1684629392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SsVjJ4SkHhpAcJ2qMCfs0/jsmBQOUMoCMr/YEOhqf00=;
+        b=LCnUn1d04TU7qiC3g3tcwL5X767yI0ITV01N1eoUadTM3NfHyMztpHD/XF4aVQSsU+
+         s9FWacTbn67myfNZwmkx310mtDrb310OZpVz8EpA17lqVugy5hNIRwCAOQ5pTmOVswN0
+         Xa46swVzK09paO5Sv+hj5yiLDgDm9DqZH8SkG8Gtvn7wB7n4eDarmLcrnjbAiG9RLuwM
+         7ufmj1FXd61dycziLasRQvSk8H+3jHd5BDRKxVT4CA13jEeLnSVBpiQ8ZL3asT4C5w0U
+         S38W5DIymu5gmW4aozZ/sdbIuZUG9q42ZJuMIxzamwRWzcm4tS/BDztGt6qq2nwac5nv
+         1E4Q==
+X-Gm-Message-State: AAQBX9eHK3nfbQ/PFyttT4KcM+g/I0Q618CpVKctn+/KZzRO87B9Y32h
+        lZ+KvwfBWUjUcqtJlho2AoiEnFkNr/9RVMxIqW8=
+X-Google-Smtp-Source: AKy350brmLyzLO7E8rCN23IbhgFtIOlc1whcf/3OHDj57+yAKOgumjUREv+w5O30iGBKkY79C3oVTA==
+X-Received: by 2002:a05:622a:11cb:b0:3ef:52ac:10c5 with SMTP id n11-20020a05622a11cb00b003ef52ac10c5mr5581586qtk.35.1682037391761;
+        Thu, 20 Apr 2023 17:36:31 -0700 (PDT)
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com. [209.85.160.171])
+        by smtp.gmail.com with ESMTPSA id bj11-20020a05620a190b00b0074e21c3bc8asm843274qkb.126.2023.04.20.17.36.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 17:36:31 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-3ef31924c64so974111cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 17:36:31 -0700 (PDT)
+X-Received: by 2002:ac8:5fd1:0:b0:3ef:404a:b291 with SMTP id
+ k17-20020ac85fd1000000b003ef404ab291mr66942qta.7.1682037390531; Thu, 20 Apr
+ 2023 17:36:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 3/5] drm/msm/dpu: save dpu topology configuration
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
- <1682033114-28483-4-git-send-email-quic_khsieh@quicinc.com>
- <897af051-aed4-938a-5ab1-c44c967ab02d@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <897af051-aed4-938a-5ab1-c44c967ab02d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: dZoQF6EaxQjxm3_wDYc2ly7hqZ_1UWkV
-X-Proofpoint-GUID: dZoQF6EaxQjxm3_wDYc2ly7hqZ_1UWkV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_17,2023-04-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 phishscore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 suspectscore=0 clxscore=1015 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304210002
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230413182313.RFC.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
+ <87v8hz17o9.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAD=FV=XPBaGGLJVG9UGoJss6EU5=esqyt=aWsp2nOm2YcVOc8g@mail.gmail.com>
+ <87ildvwbr5.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAD=FV=WCWWuGO7D9X6By-fQ0ZB63iDsAvcPwza-F6tbA-Z_M6w@mail.gmail.com>
+ <e5237b55-50eb-2a93-78cf-79421164f1fd@suse.cz> <20230420102304.7wdquge2b7r3xerj@techsingularity.net>
+In-Reply-To: <20230420102304.7wdquge2b7r3xerj@techsingularity.net>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 20 Apr 2023 17:36:18 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VSVzc62X3Lr7-QJ7dfePV=UDm5zNrUK-3JtP-U=Yr-mA@mail.gmail.com>
+Message-ID: <CAD=FV=VSVzc62X3Lr7-QJ7dfePV=UDm5zNrUK-3JtP-U=Yr-mA@mail.gmail.com>
+Subject: Re: [RFC PATCH] migrate_pages: Never block waiting for the page lock
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On Thu, Apr 20, 2023 at 3:23=E2=80=AFAM Mel Gorman <mgorman@techsingularity=
+.net> wrote:
+>
+> On Tue, Apr 18, 2023 at 11:17:23AM +0200, Vlastimil Babka wrote:
+> > > Actually, the more I think about it the more I think the right answer
+> > > is to keep kcompactd as using MIGRATE_SYNC_LIGHT and make
+> > > MIGRATE_SYNC_LIGHT not block on the folio lock. kcompactd can accept
+> > > some blocking but we don't want long / unbounded blocking. Reading th=
+e
+> > > comments for MIGRATE_SYNC_LIGHT, this also seems like it fits pretty
+> > > well. MIGRATE_SYNC_LIGHT says that the stall time of writepage() is
+> > > too much. It's entirely plausible that someone else holding the lock
+> > > is doing something as slow as writepage() and thus waiting on the loc=
+k
+> > > can be just as bad for latency.
+> >
+> > +Cc Mel for potential insights. Sounds like a good compromise at first
+> > glance, but it's a tricky area.
+> > Also there are other callers of migration than compaction, and we shoul=
+d
+> > make sure we are not breaking them unexpectedly.
+> >
+>
+> It's tricky because part of the point of SYNC_LIGHT was to block on
+> some operations but not for too long. writepage was considered to be an
+> exception because it can be very slow for a variety of reasons. I think
+> At the time that writeback from reclaim context was possible and it was
+> very inefficient, more more inefficient than reads.  Storage can also be
+> very slow (e.g. USB stick plugged in) and there can be large differences
+> between read/write performance (SMR, some ssd etc). Pages read were gener=
+ally
+> clean and could be migrated, pages for write may be redirtied etc. It was
+> assumed that while both read/write could lock the page for a long time,
+> write had worse hold times and most other users of lock page were transie=
+nt.
+
+I think some of the slowness gets into the complex ways that systems
+like ChromeOS are currently working. As mentioned in the commit
+message of my RFC patch, ChromeOS currently runs Android programs out
+of a 128K-block, zlib-compressed squashfs disk. That squashfs disk is
+actually a loopback mounted file on the main ext2 filesystem which is
+stored on something like eMMC.
+
+If I understand the everything correctly, if we get a page fault on
+memory backed by this squashfs filesystem, then we can end up holding
+a page/folio lock and then trying to read a pile of pages (enough to
+decompress the whole 128K block). ...but we don't read them directly,
+we instead block on ext4 which might need to allocate memory and then
+finally blocks on the block driver completing the task. This whole
+sequence of things is not necessarily fast. I think this is
+responsible for some of the very large numbers that were part of my
+original patch description.
+
+Without the above squashfs setup, we can still run into slow times but
+not quite as bad. I tried running a ChromeOS "memory pressure" test
+against a mainline kernel plus _just_ the browser (Android disabled).
+The test eventually opened over 90 tabs on my 4GB system and the
+system got pretty janky, but still barely usable. While running the
+test, I saw dozens of cases of folio_lock() taking over 10 ms and
+quite a few (~10?) of it taking over 100 ms. The peak I saw was
+~380ms. I also happened to time buffer locking. That was much less bad
+with the worst case topping out at ~70ms. I'm not sure what timeout
+you'd consider to be bad. 10 ms? 20 ms?
+
+Also as a side note: I ran the same memory pressure but _with_ Android
+running (though it doesn't actually stress Android, it's just running
+in the background). To do this I had to run a downstream kernel. Here
+it was easy to see a ~1.7 ms wait on the page lock without any
+ridiculous amount of stressing. ...and a ~1.5 second wait for the
+buffer lock, too.
 
 
-On 4/20/2023 5:12 PM, Dmitry Baryshkov wrote:
-> On 21/04/2023 02:25, Kuogee Hsieh wrote:
->> At current implementation, topology configuration is thrown away after
->> dpu_rm_reserve(). This patch save the topology so that it can be used
->> for DSC related calculation later.
-> 
-> Please take a look at 
-> https://patchwork.freedesktop.org/patch/527960/?series=115283&rev=2 .
+> A compromise for SYNC_LIGHT or even SYNC on lock page would be to try
+> locking with a timeout. I don't think there is a specific helper but it
+> should be possible to trylock, wait on the folio_waitqueue and attempt
+> once to get the lock again. I didn't look very closely but it would
+> doing something similar to folio_wait_bit_common() with
+> io_schedule_timeout instead of io_schedule. This will have false
+> positives because the folio waitqueue may be woken for unrelated pages
+> and obviously it can race with other wait queues.
+>
+> kcompactd is an out-of-line wait and can afford to wait for a long time
+> without user-visible impact but 120 seconds or any potentially unbounded
+> length of time is ridiculous and unhelpful. I would still be wary about
+> adding new sync modes or making major modifications to kcompactd because
+> detecting application stalls due to a kcompactd modification is difficult=
+.
 
-Let the review of this series go on and lets try to get the acks on the 
-non-topology related pieces. I think 2/5 patches in this series are 
-conflicting in the design. We will resolve that in a weeks time. 
-Meanwhile, I think we can keep the reviews / versions going on the rest.
+OK, I'll give this a shot. It doesn't look too hard, but we'll see.
 
-I think we can move patch 5 of this series to patch 3. That way we get 
-acks on patches 1-3 and patches 4 & 5 which deal with topology are dealt 
-with together with virtual planes.
 
-I will review virtual planes next week and we will decide the best 
-course of action. Moving resource allocation to CRTC needs to be thought 
-of a bit deeper for DSC as that one is directly tied to encoder.
+> There is another approach -- kcompactd or proactive under heavy memory
+> pressure is probably a waste of CPU time and resources and should
+> avoid or minimise effort when under pressure. While direct compaction
+> can capture a page for immediate use, kcompactd and proactive reclaim
+> are just shuffling memory around for *potential* users and may be making
+> the overall memory pressure even worse. If memory pressure detection was
+> better and proactive/kcompactd reclaim bailed then the unbounded time to
+> lock a page is mitigated or completely avoided.
 
-> 
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 32 
->> ++++++++++++++---------------
->>   1 file changed, 16 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> index ecb87bc..2fdacf1 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> @@ -542,13 +542,13 @@ bool dpu_encoder_use_dsc_merge(struct 
->> drm_encoder *drm_enc)
->>       return (num_dsc > 0) && (num_dsc > intf_count);
->>   }
->> -static struct msm_display_topology dpu_encoder_get_topology(
->> +static void dpu_encoder_get_topology(
->>               struct dpu_encoder_virt *dpu_enc,
->>               struct dpu_kms *dpu_kms,
->>               struct drm_display_mode *mode,
->> -            struct drm_crtc_state *crtc_state)
->> +            struct drm_crtc_state *crtc_state,
->> +            struct msm_display_topology *topology)
->>   {
->> -    struct msm_display_topology topology = {0};
->>       int i, intf_count = 0;
->>       for (i = 0; i < MAX_PHYS_ENCODERS_PER_VIRTUAL; i++)
->> @@ -567,16 +567,16 @@ static struct msm_display_topology 
->> dpu_encoder_get_topology(
->>        * Add dspps to the reservation requirements if ctm is requested
->>        */
->>       if (intf_count == 2)
->> -        topology.num_lm = 2;
->> +        topology->num_lm = 2;
->>       else if (!dpu_kms->catalog->caps->has_3d_merge)
->> -        topology.num_lm = 1;
->> +        topology->num_lm = 1;
->>       else
->> -        topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
->> +        topology->num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 
->> : 1;
->>       if (crtc_state->ctm)
->> -        topology.num_dspp = topology.num_lm;
->> +        topology->num_dspp = topology->num_lm;
->> -    topology.num_intf = intf_count;
->> +    topology->num_intf = intf_count;
->>       if (dpu_enc->dsc) {
->>           /*
->> @@ -585,12 +585,10 @@ static struct msm_display_topology 
->> dpu_encoder_get_topology(
->>            * this is power optimal and can drive up to (including) 4k
->>            * screens
->>            */
->> -        topology.num_dsc = 2;
->> -        topology.num_lm = 2;
->> -        topology.num_intf = 1;
->> +        topology->num_dsc = 2;
->> +        topology->num_lm = 2;
->> +        topology->num_intf = 1;
->>       }
->> -
->> -    return topology;
->>   }
->>   static int dpu_encoder_virt_atomic_check(
->> @@ -602,7 +600,7 @@ static int dpu_encoder_virt_atomic_check(
->>       struct msm_drm_private *priv;
->>       struct dpu_kms *dpu_kms;
->>       struct drm_display_mode *adj_mode;
->> -    struct msm_display_topology topology;
->> +    struct msm_display_topology *topology;
->>       struct dpu_global_state *global_state;
->>       int i = 0;
->>       int ret = 0;
->> @@ -639,7 +637,9 @@ static int dpu_encoder_virt_atomic_check(
->>           }
->>       }
->> -    topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, 
->> crtc_state);
->> +    topology = &dpu_enc->topology;
->> +    memset(topology, 0, sizeof (*topology));
->> +    dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, crtc_state, 
->> topology);
->>       /*
->>        * Release and Allocate resources on every modeset
->> @@ -650,7 +650,7 @@ static int dpu_encoder_virt_atomic_check(
->>           if (!crtc_state->active_changed || crtc_state->enable)
->>               ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
->> -                    drm_enc, crtc_state, topology);
->> +                    drm_enc, crtc_state, *topology);
->>       }
->>       trace_dpu_enc_atomic_check_flags(DRMID(drm_enc), adj_mode->flags);
-> 
+I probably won't try to take this on, though it does sound like a good
+idea for future research.
