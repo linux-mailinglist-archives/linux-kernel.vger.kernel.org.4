@@ -2,179 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D876EB48A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7E76EB48D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbjDUWP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S233393AbjDUWQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 18:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjDUWPv (ORCPT
+        with ESMTP id S229501AbjDUWQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:15:51 -0400
-Received: from sonic310-12.consmr.mail.ir2.yahoo.com (sonic310-12.consmr.mail.ir2.yahoo.com [77.238.177.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B3D1FD6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682115345; bh=vlrrEUrOlr+NnmH8pdUCmslF6pUjXPsIBzdOdD1OH78=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=cskDMgU0WS1m6ik+KUXE4gW7aF1273dyWctiNIP6MRe8tn9KTx11Sk7zzftPuUo5/6synVauVzBG6yFcYpe5ok9iPSleVRbbQTeeam4QQh6lCZzlg2QUka2EN7FdHRseM5vzy8Q/XNJLHkAY+L+zyPW1wOXh9aCNEOwJlnC2hH2XGdTpp5yoJLftM3zHVKkA+xO4sRaR0zyKdrWrJsrODWtMmbZVzakS4Yz/J3uOW4VNs4DHK0Jz8skllqy0n8e7CTzxHDGQwwZMR23gj/+TMibsdT94NtZHO6Kfuf/UKJMMPTtrF5Bk+TNNQiyCDUe9DoGFnsNbDf9yCZ6ldcXVDg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682115345; bh=CxKk12C/e9xxm75YyWOfNruRGN3iqGn7YTfQAUWqrBG=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=gxjicStGTD1X+o4kimeaDHoUsclzVln63SVVsbcjo/QYvKu7nnZjc6QogRHWMLDH/6Dd0l9EyuWKDjQog9Z/cuhpjFncIg1UNarPTh0foMT+UokhmSqDY1XoHVtC2dizKPz10akCtmJwkFJnZMpxJIMfnUAYitQT7cpgIcUOp4LtLyQrVfhq3hWJrY0s49k5JqowJAxI3DIrTTVXOGyfBL5TIqSTgu0Un/UiLjWFoEdpbn/rTl+AnK4qwTgxTTKGB1EkPqVSgbISPG1Ef2xggakivJPPU4LsfVdwUdXlF+3TqK4HTsSZ/VnY/14jkVR9MdXuWk3lciTksh3uxtMX7g==
-X-YMail-OSG: x2lSVlUVM1n8inY4xrcllWJ..bmoqnY1Patz5IANS0BaEA2Ez4xM.ZaSghA2Zzw
- xxAmXKa1t.asl2aP0N9hkPtAaxx3meQtaRHFVsm3TMQJSci0TylSCrBitgFpPeJ1gwdV0JRExL70
- wwEabtj4YGJmiVQxmvnKkCnLJUNOkYDfxVeaPjJsmZT1K_gFsQ4WNYP_8zIo93BbhynnNZghMK5U
- f.ZQQ9y5MaCoS.o04nkRrR3MjgCO3EwzWOVC.lKJhOG8O3rgXqIoq48iONn_eq3S1y6PmzO3DZli
- AjnJxSb49UC3xZ15HOoL6CdEkQVCxBAule3ivR7VkbIDgLp78bwOm9pqFLJ9drG4mPXUMASMo5nt
- 2GEwx_Kxggg2d_E589czsxWUy.lWNSbCUEnIAWslWqbsjA0E86.b3X3SL2nh9RkCGv65zNJhEhze
- 9RBy1kjZPz1FjEIi89L9Q5icpQFvEmLveJHIGt1rQ9muoZEQS6gg8mbYjWz47KEa51Oi94EvL9NQ
- MV9qxjFvPVNSMc.N8oArZPLNN8D_DE3kVxiIVysD7v2mxqshh5WBZW_AN8JLM1WUOtLIQYIb_KGK
- uPAP2EFT5soFUY_m43r4ZXM521Oy3_H1y2j9PZJTMricSr8uOEd4YmS3RBo8R2npWZ0Kcw64DChx
- EOAjn2NUOopfB3PNizCOnfVKMKlF3OUVytNhyyW8qdf6XVBdSJtnHzM.pDY0POlUH2AC3UbvxxhW
- R2EJmLnu0IJll_VQ0bhi5dc5BEiIksc0DlCfBgn1VeU495bfw0vjGNRDSlHNm7xAPcIkPvRu_XK6
- k61SS2XhfB6po3Qjy81YV2wLeRGhwd_D.VKmuDEUJzwTgXsigja2B84R6olRIzdMD7Xg2sNMMrb2
- gQIJ0EV48iMe57qkibnKXwO2rwDnAzpNTu67VigakDyOIZaJrmMKdTBk_PzLH0BoPTY_BAVIgC6R
- r7xsgNcqu6B7mfY_fc1NWVvf3looQdw_Z0gdWJ_pzyHJEfro9IVSE2EktvibDdfoQGjHbFNSjbo.
- T9K7KFB9WTLrJGgYwKYiQQFeFL0AgLyMwOWFB0M4GawzLyUALpjBRy9tfFRyQQcTxFVLkD4FdK7h
- dQKxdTOesvdgqx7k0pRCAiw_WYrjvLSfICtKW1f4TLlSJDuKeW47X_rfQJVCz_8csEURY56J97MB
- QQePCyYsqMLSVOmXMyizXiBCnu4oS9bAPrKtVTAst.FMtPnaFuDX6iocv7NiUVr.HTBQet3sJUJI
- EiYoNks1VHanCKjh1m2JoE_EjGSMHfyVrY379_Ofhyga99_VWTJ_J_WM38.R6VTna5VOxLtG0ISd
- AR75gSvfbSrb8Unx8W1LxmeOAkQ0pEdw7CMBBwzM5uFeJiah2ZM8pwns1OuvXDRxDSnBBTJOyYu1
- JinItqmZL6zvappmJzvB6IMrOSiq80nn3wPVGsflzsUOyHdWmaqymmFU1Ra9XcSIS1plllOS27MF
- Ctl7NQJppvNrKwgAY3SLoR9pHsbcMJ6WsXwEszHSQ6pLjHCTwmNvRPNFYMZqDc4rXkraN0hKq16A
- hC9x.i_bcqZ6tkGZmPYzbWhhbIqpg0WCL7rOpQX86NDUdNed7A3mKx_tz.6P13RhdIgPADqtu8r5
- c16rA8BRbge1zuvtface.2ANq2UybEOhpNzsaDFsciKw3ehanIZUhPhG2b2IMXKQDq_pr0PS52.U
- P2xMttvfC_.LW0Snw8A2ekMTF1xxONuFc2ZZdrWNt8tcQj6LugG6QQGNBcMyB.aMYVcmkX4U58UN
- s689Ju.dDrgQD.df7glfQR4IMVgNivIaa3iVzh_6IthxRhUZ6FxHBFsi4xc4ua0WOkqvjUtV3GXJ
- BQqX85jU0GardPkTdPunwH0MA198Mf55A6YigV4Y1pOEJSafm8raN2bXcmXxdYMlrjgNxFCRnwuO
- xjm3tHUwtqIgAhPq44qncUPYxhegYhKG8_amRr6HBaV04dYWTNDXx5UAxMOsSW4t48hoa.NBz9Ra
- dWk5UxipUhKKZgxY0JeEO7nsfT_i.OGSEeJWSdc.IgsCYc_.NPAgPAp81eO70_qyKRZgnIxhhxkO
- bycl1pt_grznxLTAQp..oqernvEvNRK0UQifB3xxTOvqLIXPLQIenpGi5ZCsAW.fkNFngYmvMxTx
- UraT2TopOeg84o9mdW8KrbG31iEL9QREXMeCV3WQ3PQqlv.JcRnjrHZT1a.sHqkeSyOBdv_3m_IU
- Nmnn8CWA7Vv5JIw8Udaxoe_9vBTzmT6ZfNH1AnD5Cu1i70zrze6hxqtg.o_K0R5tXxJ8cGmp_AJb
- jV5_kZwLgsoKEpz0lTAE8Zk2jSj6tduI-
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: a51a23c0-e59b-4bb1-be35-c39055579abd
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Fri, 21 Apr 2023 22:15:45 +0000
-Received: by hermes--production-ir2-74cd8fc864-qfvhg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2e060f003d23e997f171b19fed8c03ba;
-          Fri, 21 Apr 2023 22:15:44 +0000 (UTC)
-Message-ID: <bf1dc565-a8d7-7e1d-477e-f9662f2884c4@rocketmail.com>
-Date:   Sat, 22 Apr 2023 00:15:42 +0200
+        Fri, 21 Apr 2023 18:16:43 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66330172A
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:16:42 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-504efe702d5so3156640a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682115401; x=1684707401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G1jVNptPN3rB+wt6qDz/5duS77+OHrnKVNsYYbyonc4=;
+        b=JVSDj8NElTBQ4qKlgbF9PNjReZsDCBWQ4c3ypje+x+1Prxsz2dEBI66BU56GbcWuiY
+         Gq3X/WREC7l8Y9J9xn1KQAXzdvGtOAZnr6UBA6z8o2DU5Ea7awmU3r8Gqy2sympr0+HL
+         N6n1Ejy7gQ2IVayuMOiieA3Qj2D8wJyewpbaW+jebzLSeJFlhPGJZxnwHoVkAKe2ERUM
+         lR+Ar/7BL59+wjXsf9Bj147BVDZcJECjqM1GP+cyS839Nr97sox8ENIWLkcTqwo0Gzkk
+         yX7ZE/L5sSs92VBu/owTCdSmlnzZIrtlj/+pSngvPmdg6wWCrf8nYp9LnFYj9u3TvCzO
+         I45g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682115401; x=1684707401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G1jVNptPN3rB+wt6qDz/5duS77+OHrnKVNsYYbyonc4=;
+        b=NNHQmsY4kSMiPZ6RH6grUFna6/yo70Ig5puWwk9JysJ7ceCEkNkKo49LeBlN+fY52p
+         lGQQN8XRM6Nk4ThVf0d0I/9yU1hmYSxR3WCmMMGd/8CUPM0sKj6Poxin5ZKjy8mrh/WV
+         RBLxCche9tBYK7XRnjg2o23w7aO4BS+sumr/87BMeceAI5aHUOzLd0+WbG+oH+XJeX+6
+         ZDL4eKppXDFtPePEW3I+ra0NF0uZKbXJRNBWoD3EiKaNVeUp5IucimwUZ7Dsrs3Hf1Lw
+         zny/C/FSwqxQkgVWueSGnXnXQpZiiyVlXdxRd8zANqOvTP8avvxWdM9tB7ZEVOUtD+/+
+         heqw==
+X-Gm-Message-State: AAQBX9dc4GdqTPFCQLj/4npmYQVXtKkeE+Z0N613G9hpCHrchsAbEfCj
+        dL3vh5kBqZmdaTtoinp7MU6rMav4zYJCnUnQhjcxbQ==
+X-Google-Smtp-Source: AKy350bpBiMOLI1NQijcFjuvgCreZEmwVpjET7RbozpVgWAdtHlid4hL1py+/tnoNp1HVYYOGdi9kwCnJ02yWoobEqk=
+X-Received: by 2002:a05:6402:211:b0:504:8929:71ca with SMTP id
+ t17-20020a056402021100b00504892971camr5475692edv.6.1682115400657; Fri, 21 Apr
+ 2023 15:16:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
- regulator and charger
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1681646904.git.jahau@rocketmail.com>
- <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
- <CACRpkdZEtG=OjTECDO=SvFk89MqL10sKKMOABPEs-xxYv1hmqw@mail.gmail.com>
- <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com>
- <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
- <CACRpkdaYaE+1GKNv5SczC+Xn8UuBonZcW4RSdbsU53HWTR_tTg@mail.gmail.com>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <CACRpkdaYaE+1GKNv5SczC+Xn8UuBonZcW4RSdbsU53HWTR_tTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <00000000000058b63f05f9d98811@google.com> <20230421174054.3434533-1-roman.gushchin@linux.dev>
+In-Reply-To: <20230421174054.3434533-1-roman.gushchin@linux.dev>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 21 Apr 2023 15:16:02 -0700
+Message-ID: <CAJD7tkZRLsubybPesf65t1ATEksTtif8uztAFZ-gVmYCnjw0Bg@mail.gmail.com>
+Subject: Re: [PATCH] mm: kmem: fix a NULL pointer dereference in obj_stock_flush_required()
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTGludXMsDQoNCk9uIDIxLjA0LjIzIDExOjIwLCBMaW51cyBXYWxsZWlqIHdyb3RlOg0K
-PiBPbiBUaHUsIEFwciAyMCwgMjAyMyBhdCAxMToxNuKAr1BNIEpha29iIEhhdXNlciA8amFo
-YXVAcm9ja2V0bWFpbC5jb20+IHdyb3RlOg0KLi4uDQo+PiBJIGFncmVlIHRvIHlvdSB0aGF0
-IGFjdHVhbGx5IHRoZSBwaHlzaWNhbCBiYXR0ZXJ5IGlzIGRldGVybWluaW5nIGhvdw0KPj4g
-dGhlc2UgdmFsdWVzIHNob3VsZCBiZSBzZXQuIEluIHRoZSBlbmQsIGFzIGZhciBhcyBJIGNh
-biBzZWUsIGl0IGlzIGENCj4+IHJlcHJlc2VudGF0aW9uIHRoaW5nIGluIHRoZSBkZXZpY2V0
-cmVlLiBBdCBsZWFzdCBpbiBvdXIgY2FzZSBoZXJlLg0KPiANCj4gVGhlIERUIGJpbmRpbmdz
-IHNob3VsZCByZWZsZWN0IHRoZSBoYXJkd2FyZSwgYW5kIG5vdCB3aGF0IHNvbWUNCj4gb3Ig
-YW55IGRyaXZlciAid291bGQgbGlrZSB0byBzZWUiICh0byBtYWtlIGl0cyBsaWZlIGVhc2ll
-ci4uLikNCj4gDQo+IEFzIHRoZXNlIHRoaW5ncyBhcmUgcHJvZ3JhbW1lZCBpbnRvIHJlZ2lz
-dGVycywgY2xlYXJseSB0aGUNCj4gaGFyZHdhcmUgaXMgYWRvcHRhYmxlIGZvciBkaWZmZXJl
-bnQgYmF0dGVyaWVzLCBhbmQgdGhlIHB1cnBvc2UNCj4gb2YgdGhlc2UgcmVnaXN0ZXJzIGlz
-IHRvIHN1cHBvcnQgZGlmZmVyZW50IGJhdHRlcmllcy4gRXJnbzogdGhleQ0KPiBiZWxvbmcg
-aW4gYSBiYXR0ZXJ5IG5vZGUuDQo+IA0KPj4gTm90IHN1cmUgaG93IHRvIHByb2NlZWQgaGVy
-ZS4gSSB3b3VsZCBzdGljayB0byB0aGUgY3VycmVudA0KPj4gaW1wbGVtZW50YXRpb24uIElm
-IHNvbWVvbmUgc3Ryb25nbHkgcHJlZmVycyB0aGUgImJhdHRlcnkiIHJlcHJlc2VudGF0aW9u
-DQo+PiBzdHlsZSwgSSdtIG9wZW4gdG8gc3dpdGNoIHRvIHRoaXMuDQo+IA0KPiBBZ2FpbiB0
-aGlzIGlzIG5vdCBhbiBpbXBsZW1lbnRhdGlvbiBidXQgYSBoYXJkd2FyZSBkZXNjcmlwdGlv
-bi4NCj4gDQo+IEl0IHNob3VsZCB1c2UgYSBwaGFuZGxlIHRvIGEgbW9udG9yZWQtYmF0dGVy
-eSBhbmQgZm9sbG93IHRoYXQgdG8NCj4gcmVhZCB0aGUgYmF0dGVyeSBwcm9wZXJ0aWVzLg0K
-DQpPSywgdGhpcyBpcyBleHByZXNzaW5nIGEgc3Ryb25nIHByZWZlcmVuY2UuIEnigJlsbCBz
-d2l0Y2ggdG8gdGhlICJiYXR0ZXJ5IiANCm5vZGUgaW4gdjMuDQoNCj4+IEhvd2V2ZXIsIEkn
-bSBub3Qgc3VyZSBob3cgdGhlIGR0LWJpbmRpbmdzIHdvdWxkIGxvb2sgbGlrZSBpbiB0aGF0
-IGNhc2UuDQo+IA0KPiBKdXN0IGxpa2UgeW91IHNrZXRjaGVkIGFib3ZlLCBqdXN0IHJldXNl
-IHNpbXBsZS1iYXR0ZXJ5IGlmIHRoZSBiYXR0ZXJ5DQo+IGlzIGhhcmRjb2RlZCBpbnRvIHRo
-ZSBwbGF0Zm9ybSwgc3VjaCBhcyBzb2xkZXJlZCBpbiBvciBoYXMgYSBmb3JtDQo+IGZhY3Rv
-ciBzdWNoIHRoYXQgbm8gZGlmZmVyZW50IGJhdHRlcnkgY2FuIGJlIGZpdHRlZC4NCj4gDQo+
-PiBUaG9zZSBiYXR0ZXJ5IHByb3BlcnRpZXMgd291bGQgbm90IGJlIHBhcnQgb2YgdGhlIFJU
-NTAzMyBub2RlLCB0aHVzIHRoZXkNCj4+IGJhc2ljYWxseSB3b3VsZCBub3QgYmUgcGFydCBv
-ZiB0aGUgUlQ1MDMzIGRvY3VtZW50YXRpb24uIEFnYWluIEkgdGhpbmsNCj4+IGl0IG1ha2Vz
-IHNlbnNlIHRvIGhhbmRsZSB0aG9zZSBwcm9wZXJ0aWVzIHdpdGhpbiB0aGUgY2hhcmdlciBu
-b2RlIGFzDQo+PiAiY2hhcmdlciBzZXR0aW5ncyIgcHJvcGVydGllcy4NCj4gDQo+IFdoeT8N
-Cj4gDQo+IFRoaXMgaXMgbGlrZSBzYXlpbmcgdGhhdCB0aGUgbnVtYmVyIG9mIHBpeGVscyBv
-biB5b3VyIG1vbml0b3Igc2hvdWxkDQo+IGJlIHBhcnQgb2YgdGhlIGdyYXBoaWNzIGNhcmQg
-RFQgbm9kZSBhcyAiY29uZmlndXJhdGlvbiIuIEFuZCB3ZQ0KPiBjbGVhcmx5IGRvIG5vdCBk
-byB0aGF0Lg0KDQpUaGUgY2hhcmdlciBkcml2ZXIgbmVlZHMgZml2ZSBwYXJhbWV0ZXJzLiBB
-bmQgdGhlIHBlcnNvbiB3cml0aW5nIHRoZSBkdHMgDQpmaWxlIHNob3VsZCBrbm93IGFib3V0
-IHdoYXQgcmFuZ2UgYW5kIGdyYW51bGFyaXR5IGlzIHBvc3NpYmxlIGZvciB0aG9zZSANCnZh
-bHVlcy4gVGhpcyBpbmZvcm1hdGlvbiBjb3VsZCBiZSBwdXQgaW50byB0aGUgZGVzY3JpcHRp
-b24gb2YgdGhlIA0KIm1vbml0b3JlZC1iYXR0ZXJ5IiwgYXMgc2hvd24gYmVsb3csIGJ1dCB0
-aGF0J3MgbGVzcyBzdHJpY3QgYW5kIGNsZWFyIGFzIA0KaXQgaXMgY3VycmVudGx5IGluIHBh
-dGNoIDkuDQoNCiAgICAgdGl0bGU6IFJpY2h0ZWsgUlQ1MDMzIFBJTUMgQmF0dGVyeSBDaGFy
-Z2VyDQoNCiAgICAgbWFpbnRhaW5lcnM6DQogICAgICAgLSBKYWtvYiBIYXVzZXIgPGphaGF1
-QHJvY2tldG1haWwuY29tPg0KDQogICAgIGRlc2NyaXB0aW9uOg0KICAgICAgIFRoZSBiYXR0
-ZXJ5IGNoYXJnZXIgb2YgdGhlIG11bHRpZnVuY3Rpb24gZGV2aWNlIFJUNTAzMyBoYXMgdG8g
-YmUNCiAgICAgICBpbnN0YW50aWF0ZWQgdW5kZXIgc3ViLW5vZGUgbmFtZWQgImNoYXJnZXIi
-IHVzaW5nIHRoZSBmb2xsb3dpbmcNCiAgICAgICBmb3JtYXQuDQoNCiAgICAgcHJvcGVydGll
-czoNCiAgICAgICBjb21wYXRpYmxlOg0KICAgICAgICAgY29uc3Q6IHJpY2h0ZWsscnQ1MDMz
-LWNoYXJnZXINCg0KICAgICAgIG1vbml0b3JlZC1iYXR0ZXJ5Og0KICAgICAgICAgZGVzY3Jp
-cHRpb246IHwNCiAgICAgICAgICAgUGhhbmRsZSB0byB0aGUgbW9uaXRvcmVkIGJhdHRlcnkg
-YWNjb3JkaW5nIHRvIGJhdHRlcnkueWFtbC4NCiAgICAgICAgICAgVGhlIGJhdHRlcnkgbm9k
-ZSBuZWVkcyB0byBjb250YWluIGZpdmUgcGFyYW1ldGVycy4NCg0KICAgICAgICAgICBwcmVj
-aGFyZ2UtY3VycmVudC1taWNyb2FtcDoNCiAgICAgICAgICAgQ3VycmVudCBvZiBwcmUtY2hh
-cmdlIG1vZGUuIFRoZSBwcmUtY2hhcmdlIGN1cnJlbnQgbGV2ZWxzIGFyZQ0KICAgICAgICAg
-ICAzNTAgbUEgdG8gNjUwIG1BIHByb2dyYW1tZWQgYnkgSTJDIHBlciAxMDAgbUEuDQoNCiAg
-ICAgICAgICAgY29uc3RhbnQtY2hhcmdlLWN1cnJlbnQtbWF4LW1pY3JvYW1wOg0KICAgICAg
-ICAgICBDdXJyZW50IG9mIGZhc3QtY2hhcmdlIG1vZGUuIFRoZSBmYXN0LWNoYXJnZSBjdXJy
-ZW50IGxldmVscw0KICAgICAgICAgICBhcmUgNzAwIG1BIHRvIDIwMDAgbUEgcHJvZ3JhbW1l
-ZCBieSBJMkMgcGVyIDEwMCBtQS4NCg0KICAgICAgICAgICBjaGFyZ2UtdGVybS1jdXJyZW50
-LW1pY3JvYW1wOg0KICAgICAgICAgICBUaGlzIHByb3BlcnR5IGlzIGVuZCBvZiBjaGFyZ2Ug
-Y3VycmVudC4gSXRzIGxldmVsIHJhbmdlcyBmcm9tDQogICAgICAgICAgIDE1MCBtQSB0byA2
-MDAgbUEuIEJldHdlZW4gMTUwIG1BIGFuZCAzMDAgbUEgaW4gNTAgbUEgc3RlcHMsDQogICAg
-ICAgICAgIGJldHdlZW4gMzAwIG1BIGFuZCA2MDAgbUEgaW4gMTAwIG1BIHN0ZXBzLg0KDQog
-ICAgICAgICAgIHByZWNoYXJnZS11cHBlci1saW1pdC1taWNyb3ZvbHQ6DQogICAgICAgICAg
-IFZvbHRhZ2Ugb2YgcHJlLWNoYXJnZSBtb2RlLiBJZiB0aGUgYmF0dGVyeSB2b2x0YWdlIGlz
-IGJlbG93DQogICAgICAgICAgIHRoZSBwcmUtY2hhcmdlIHRocmVzaG9sZCB2b2x0YWdlLCB0
-aGUgY2hhcmdlciBpcyBpbiBwcmUtY2hhcmdlDQogICAgICAgICAgIG1vZGUgd2l0aCBwcmUt
-Y2hhcmdlIGN1cnJlbnQuIEl0cyBsZXZlbHMgYXJlIDIuMyBWIHRvIDMuOCBWDQogICAgICAg
-ICAgIHByb2dyYW1tZWQgYnkgSTJDIHBlciAwLjEgVi4NCg0KICAgICAgICAgICBjb25zdGFu
-dC1jaGFyZ2Utdm9sdGFnZS1tYXgtbWljcm92b2x0Og0KICAgICAgICAgICBCYXR0ZXJ5IHJl
-Z3VsYXRpb24gdm9sdGFnZSBvZiBjb25zdGFudCB2b2x0YWdlIG1vZGUuIFRoaXMNCiAgICAg
-ICAgICAgdm9sdGFnZSBsZXZlbHMgZnJvbSAzLjY1IFYgdG8gNC40IFYgYnkgSTJDIHBlciAw
-LjAyNSBWLg0KDQogICAgICAgZXh0Y29uOg0KICAgICAgICAgZGVzY3JpcHRpb246DQogICAg
-ICAgICAgIFBoYW5kbGUgdG8gdGhlIGV4dGNvbiBkZXZpY2UuDQogICAgICAgICBtYXhJdGVt
-czogMQ0KDQogICAgIHJlcXVpcmVkOg0KICAgICAgIC0gbW9uaXRvcmVkLWJhdHRlcnkNCg0K
-ICAgICBhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCg0KICAgICBleGFtcGxlczoNCiAg
-ICAgICAtIHwNCg0KICAgICAgICAgY2hhcmdlciB7DQogICAgICAgICAgICAgY29tcGF0aWJs
-ZSA9ICJyaWNodGVrLHJ0NTAzMy1jaGFyZ2VyIjsNCiAgICAgICAgICAgICBtb25pdG9yZWQt
-YmF0dGVyeSA9IDwmYmF0dGVyeT47DQogICAgICAgICAgICAgZXh0Y29uID0gPCZtdWljPjsN
-CiAgICAgICAgIH07DQoNCktpbmQgcmVnYXJkcywNCkpha29iDQo=
+On Fri, Apr 21, 2023 at 10:41=E2=80=AFAM Roman Gushchin
+<roman.gushchin@linux.dev> wrote:
+>
+> KCSAN found an issue in obj_stock_flush_required():
+> stock->cached_objcg can be reset between the check and dereference:
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
+>
+> write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
+>  drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
+>  refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
+>  obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
+>  memcg_slab_free_hook mm/slab.h:587 [inline]
+>  __cache_free mm/slab.c:3373 [inline]
+>  __do_kmem_cache_free mm/slab.c:3577 [inline]
+>  kmem_cache_free+0x105/0x280 mm/slab.c:3602
+>  __d_free fs/dcache.c:298 [inline]
+>  dentry_free fs/dcache.c:375 [inline]
+>  __dentry_kill+0x422/0x4a0 fs/dcache.c:621
+>  dentry_kill+0x8d/0x1e0
+>  dput+0x118/0x1f0 fs/dcache.c:913
+>  __fput+0x3bf/0x570 fs/file_table.c:329
+>  ____fput+0x15/0x20 fs/file_table.c:349
+>  task_work_run+0x123/0x160 kernel/task_work.c:179
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
+>  exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
+>  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
+>  obj_stock_flush_required mm/memcontrol.c:3319 [inline]
+>  drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
+>  try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
+>  try_charge mm/memcontrol.c:2837 [inline]
+>  mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
+>  sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
+>  sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
+>  udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
+>  udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
+>  sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
+>  __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
+>  __do_sys_setsockopt net/socket.c:2282 [inline]
+>  __se_sys_setsockopt net/socket.c:2279 [inline]
+>  __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> value changed: 0xffff8881382d52c0 -> 0xffff888138893740
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller-00=
+387-g534293368afa #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 03/02/2023
+>
+> Fix it by reading the cached_objcg with READ_ONCE().
+
+IIUC reading an outdated objcg is fine here, and the real problem is a
+potential NULL dereference, which isn't shown by this report. Is this
+correct?
+
+>
+> Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
+> Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> Link: https://lore.kernel.org/linux-mm/CACT4Y+ZfucZhM60YPphWiCLJr6+SGFhT+=
+jjm8k1P-a_8Kkxsjg@mail.gmail.com/T/#t
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>  mm/memcontrol.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 5abffe6f8389..9426a1ddc190 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -3314,10 +3314,11 @@ static struct obj_cgroup *drain_obj_stock(struct =
+memcg_stock_pcp *stock)
+>  static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
+>                                      struct mem_cgroup *root_memcg)
+>  {
+> +       struct obj_cgroup *objcg =3D READ_ONCE(stock->cached_objcg);
+>         struct mem_cgroup *memcg;
+>
+> -       if (stock->cached_objcg) {
+> -               memcg =3D obj_cgroup_memcg(stock->cached_objcg);
+> +       if (objcg) {
+> +               memcg =3D obj_cgroup_memcg(objcg);
+>                 if (memcg && mem_cgroup_is_descendant(memcg, root_memcg))
+>                         return true;
+>         }
+> --
+> 2.40.0
+>
+>
