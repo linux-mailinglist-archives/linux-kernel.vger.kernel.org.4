@@ -2,75 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979E06EB170
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779996EB174
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjDUSP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 14:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S232400AbjDUSSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjDUSPX (ORCPT
+        with ESMTP id S229532AbjDUSSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:15:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3A2127;
-        Fri, 21 Apr 2023 11:15:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E93E64E43;
-        Fri, 21 Apr 2023 18:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0B84C433D2;
-        Fri, 21 Apr 2023 18:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682100921;
-        bh=AJswIoPQK4jl9psU0GdM/Vpu2uMzvXFWvHDFwIEmotA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=IDuOOodLgG8JHoVEZxK4xmdXhtX6xRv9fSzCXJhZ3h7nMqmsx9oiygXlPFEz0a1Oa
-         f2AfM7gn79S7aAUxmcDGE9lzb1qDLFENqGHgrNHz9szdX9LjJLWUWQFmb/FVbdc2z+
-         W+watTykxuUEeUdyMwW/F/taqndKLUWPFUvpPzMGwZBs7ehCUNOuKYJAiPtNd/TWWO
-         QbH1LfZInmcMcsQs3PMFUc3W1G9Is7CIJB49V4MPxNEzWe1vo4eRQyIahwiNNSNeC5
-         5PGXmNM/CJ7+tPibCW2GzDkMU46VZsHHXq8v1IAm4/T42FWx9U3C0QFqv4x5wW83pM
-         Wsxe8C+UYL8bA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9D056E270DA;
-        Fri, 21 Apr 2023 18:15:21 +0000 (UTC)
-Subject: Re: [GIT PULL] Btrfs fixes for 6.3-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <cover.1682088075.git.dsterba@suse.com>
-References: <cover.1682088075.git.dsterba@suse.com>
-X-PR-Tracked-List-Id: <linux-btrfs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <cover.1682088075.git.dsterba@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.3-rc7-tag
-X-PR-Tracked-Commit-Id: ef9cddfe57d86aac6b509b550136395669159b30
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c337b23f32c87320dffd389e4f0f793db35f0a9b
-Message-Id: <168210092163.26173.4961431818128675021.pr-tracker-bot@kernel.org>
-Date:   Fri, 21 Apr 2023 18:15:21 +0000
-To:     David Sterba <dsterba@suse.com>
-Cc:     torvalds@linux-foundation.org, David Sterba <dsterba@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 21 Apr 2023 14:18:32 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC08E5C;
+        Fri, 21 Apr 2023 11:18:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682101061; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=NvW5PMzboN2oljS2TRbMemAjQYPKqEcFN3hDVO00r1N95UKaOXWZ/XTJ56LXyt9nVa7/Rsy3Ydvhmex4gK2Tl20qMw44mKPJK3m1WUXgTyMXdV+UWilycNUoJICVnhPrdUFYQwjcdveglA0KELbCwOL2ahuYUqVzZSFKdXzlxBw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682101061; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=xWWFChmQ+UHotcIY2z7pe6hhMlP2w1vAmQsTuIvSeco=; 
+        b=SRNDDXJeyyQUqeqDQWDX1zLXmIJN5WsmZnFhEQ8yL9KLL3iYoY1oUhOscbt1KWBpEqp+0ma0yMqA0L3To2ubSydwgiY3tTAEB6I5Gtka/3KPJ3IAU+E6+YLQqw9XYpLe6WnHiYWdtpfqp7+e/FofIpPY4oZ21hx2I/LOjOLw+bA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682101061;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=xWWFChmQ+UHotcIY2z7pe6hhMlP2w1vAmQsTuIvSeco=;
+        b=X2yZE7JrO3Sy0316LrOgMRPbSRIHbgD1987AfCMgY93+kqXnt7E4PxKdhLfGZkGw
+        i6YFpGXSo44a5tgAkOEUUSNqxuHWnafyRTG6dAC1fDmP9h55NpitPP3Ppzo8EYGKg+f
+        Z0fxWsNAqA2v5dvZsumy9eJ2mykwldIVhkmrI33c=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1682101060291324.7908655036442; Fri, 21 Apr 2023 11:17:40 -0700 (PDT)
+Message-ID: <810aa47b-7007-7d53-9a23-c2d17d43d8a8@arinc9.com>
+Date:   Fri, 21 Apr 2023 21:17:31 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH net-next 08/22] net: dsa: mt7530: change
+ p{5,6}_interface to p{5,6}_configured
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230421143648.87889-1-arinc.unal@arinc9.com>
+ <20230421143648.87889-9-arinc.unal@arinc9.com>
+ <ZELH2RlYLPjJGx6Y@makrotopia.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZELH2RlYLPjJGx6Y@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 21 Apr 2023 17:21:31 +0200:
+On 21.04.2023 20:28, Daniel Golle wrote:
+> On Fri, Apr 21, 2023 at 05:36:34PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> The idea of p5_interface and p6_interface pointers is to prevent
+>> mt753x_mac_config() from running twice for MT7531, as it's already run with
+>> mt753x_cpu_port_enable() from mt7531_setup_common(), if the port is used as
+>> a CPU port.
+>>
+>> Change p5_interface and p6_interface to p5_configured and p6_configured.
+>> Make them boolean.
+>>
+>> Do not set them for any other reason.
+>>
+>> The priv->p5_intf_sel check is useless as in this code path, it will always
+>> be P5_INTF_SEL_GMAC5.
+>>
+>> There was also no need to set priv->p5_interface and priv->p6_interface to
+>> PHY_INTERFACE_MODE_NA on mt7530_setup() and mt7531_setup() as they would
+>> already be set to that when "priv" is allocated. The pointers were of the
+>> phy_interface_t enumeration type, and the first element of the enum is
+>> PHY_INTERFACE_MODE_NA. There was nothing in between that would change this
+>> beforehand.
+>>
+>> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> NACK. This assumes that a user port is configured exactly once.
+> However, interface mode may change because of mode-changing PHYs (e.g.
+> often using Cisco SGMII for 10M/100M/1000M but using 2500Base-X for
+> 2500M, ie. depending on actual link speed).
+> 
+> Also when using SFP modules (which can be hotplugged) the interface
+> mode may change after initially setting up the driver, e.g. when SFP
+> driver is loaded or a module is plugged or replaced.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.3-rc7-tag
+I'm not sure I understand. pX_configured would be set to true only when 
+the port is used as a CPU port. mt753x_mac_config() should run for user 
+or DSA ports more than once, if needed.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c337b23f32c87320dffd389e4f0f793db35f0a9b
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Arınç
