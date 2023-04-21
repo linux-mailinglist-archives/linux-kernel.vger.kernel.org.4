@@ -2,130 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFE56EA800
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F566EA843
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 12:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjDUKMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 06:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S229572AbjDUKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 06:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjDUKMh (ORCPT
+        with ESMTP id S229712AbjDUKW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 06:12:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01E8CC1D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682071925; x=1713607925;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4aafpviBjMdmVl1tYI74mrfUxpftsvqb24MJnMScOZQ=;
-  b=MEkW8s+bRPJnpDWDSDV/RVWZkBLc1vLXJA8UL9zAkq6ewRLFkboZkYTY
-   nH7iNaV4Q5LJBUCa90aZcyIlAaU1tUEWIy/2Iw2oLwYP3e3Gh1Y5pT8Ff
-   g2MM9KfZf9qdz1DVDJkJA+2AF2qctKBwxlOsX0h4D9LjQjZ/veZjmSGBq
-   uhshJsppGi13r3Njk/s3gnz/MmDvGbB0yvYkwIDXHGqpWgP1/BaofnFmq
-   h+66XxdHHHWoh8bYcY/4ykWDtI8xClaOIhFeIebUiJUyPZ1o3wSBpvkfK
-   Sj/okK3L1MSD773/Yvz5tdHOCfAlEyQhcwH3Ts/glVqfib7kjw8GJmuAr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="330158026"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="330158026"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 03:11:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="938429236"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="938429236"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Apr 2023 03:11:11 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppnjS-000gWG-2y;
-        Fri, 21 Apr 2023 10:11:10 +0000
-Date:   Fri, 21 Apr 2023 18:11:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame
- size (1344) exceeds limit (1280) in 'atags_to_fdt'
-Message-ID: <202304211812.XJkXpaNm-lkp@intel.com>
+        Fri, 21 Apr 2023 06:22:57 -0400
+X-Greylist: delayed 589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 03:22:15 PDT
+Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED61BC0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 03:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
+        t=1682071923; bh=9LouxiBlmrmKuY4D4L114DxgCvo/TJdTAEmNocqna70=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=I7oHR8CUHrXpp00K5C88NdBdNLJvY/3rRPV2L72jQGXvRDpfRnOiaS45iy3QGPHzH
+         xQXs68VeBtcIgg6C57mS/JbpMmOTIW924gBAwRruZZckAzGMxYNxC5YXU5uHwGhidj
+         H4z+5bMizkzElg4vMfNRRVFMsSvpuK5hUNEf48DQkj7Waq5KLl5Mv6z/9iQ6/QL+To
+         6aeWIum9Z8yHnr6rblJcVt/8Znt64xPK0uN32J1YAfSRqHo+CppuNUROvFD+VSAca8
+         rTTsS/OvrnroQklZPb+xp98mM6utnWRlJmjDC9Np1FLBYNh6iDtBmmag3wSy5Wlqzg
+         iUikfYHNQRzQA==
+Received: from localhost.localdomain (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id 71B741801D9;
+        Fri, 21 Apr 2023 10:11:59 +0000 (UTC)
+From:   Xueming Feng <kuro@kuroa.me>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xueming Feng <kuro@kuroa.me>
+Subject: [PATCH] Dump map id instead of value for map_of_maps types
+Date:   Fri, 21 Apr 2023 18:11:54 +0800
+Message-Id: <20230421101154.23690-1-kuro@kuroa.me>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: wVywTRvN0KikguucsLYVn11XDAQRkNGT
+X-Proofpoint-ORIG-GUID: wVywTRvN0KikguucsLYVn11XDAQRkNGT
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.572,17.11.64.514.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F01:2022-06-21=5F01,2020-02-14=5F11,2022-02-23?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=862
+ adultscore=0 bulkscore=0 spamscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 clxscore=1030 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2304210088
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+When using `bpftool map dump` in plain format, it is usually
+more convenient to show the inner map id instead of raw value.
+Changing this behavior would help with quick debugging with
+`bpftool`, without disruption scripted behavior. Since user
+could dump the inner map with id, but need to convert value.
 
-FYI, the error/warning still remains.
+Signed-off-by: Xueming Feng <kuro@kuroa.me>
+---
+ tools/bpf/bpftool/main.c | 16 ++++++++++++++++
+ tools/bpf/bpftool/main.h |  1 +
+ tools/bpf/bpftool/map.c  |  9 +++++++--
+ 3 files changed, 24 insertions(+), 2 deletions(-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2af3e53a4dc08657f1b46f97f04ff4a0ab3cad8d
-commit: 672513bf583157cc088a32e75bd850dd9f81564c ARM: decompressor: disable stack protector
-date:   1 year, 5 months ago
-config: arm-randconfig-r046-20230420 (https://download.01.org/0day-ci/archive/20230421/202304211812.XJkXpaNm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=672513bf583157cc088a32e75bd850dd9f81564c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 672513bf583157cc088a32e75bd850dd9f81564c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211812.XJkXpaNm-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: no previous prototype for function 'atags_to_fdt' [-Wmissing-prototypes]
-   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
-       ^
-   arch/arm/boot/compressed/atags_to_fdt.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
-   ^
-   static 
->> arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame size (1344) exceeds limit (1280) in 'atags_to_fdt' [-Wframe-larger-than]
-   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
-       ^
-   52/1344 (3.87%) spills, 1292/1344 (96.13%) variables
-   2 warnings generated.
-
-
-vim +/atags_to_fdt +129 arch/arm/boot/compressed/atags_to_fdt.c
-
-31d0b9f9982f8e Ben Dooks          2018-10-12  120  
-b90b9a38251e9c Nicolas Pitre      2011-09-13  121  /*
-b90b9a38251e9c Nicolas Pitre      2011-09-13  122   * Convert and fold provided ATAGs into the provided FDT.
-b90b9a38251e9c Nicolas Pitre      2011-09-13  123   *
-4716e2e34a22a8 Geert Uytterhoeven 2021-05-19  124   * Return values:
-b90b9a38251e9c Nicolas Pitre      2011-09-13  125   *    = 0 -> pretend success
-b90b9a38251e9c Nicolas Pitre      2011-09-13  126   *    = 1 -> bad ATAG (may retry with another possible ATAG pointer)
-b90b9a38251e9c Nicolas Pitre      2011-09-13  127   *    < 0 -> error from libfdt
-b90b9a38251e9c Nicolas Pitre      2011-09-13  128   */
-b90b9a38251e9c Nicolas Pitre      2011-09-13 @129  int atags_to_fdt(void *atag_list, void *fdt, int total_space)
-
-:::::: The code at line 129 was first introduced by commit
-:::::: b90b9a38251e9c89c34179eccde57411ceb5f1aa ARM: zImage: allow supplementing appended DTB with traditional ATAG data
-
-:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
-:::::: CC: Nicolas Pitre <nico@fluxnic.net>
-
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 08d0ac543c67..d297200c91f7 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -251,6 +251,22 @@ int detect_common_prefix(const char *arg, ...)
+ 	return 0;
+ }
+ 
++void fprint_uint(FILE *f, void *arg, unsigned int n)
++{
++	unsigned char *data = arg;
++	unsigned int data_uint = 0;
++
++	for (unsigned int i = 0; i < n && i < 4; i++) {
++	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++		data_uint |= data[i] << (i * 8);
++	#else
++		data_uint |= data[i] << ((n - i - 1) * 8);
++	#endif
++	}
++
++	fprintf(f, "%d", data_uint);
++}
++
+ void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
+ {
+ 	unsigned char *data = arg;
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 0ef373cef4c7..7488ef38e7a9 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
+ 
+ bool is_prefix(const char *pfx, const char *str);
+ int detect_common_prefix(const char *arg, ...);
++void fprint_uint(FILE *f, void *arg, unsigned int n);
+ void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+ void usage(void) __noreturn;
+ 
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index aaeb8939e137..638bd8de8135 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+ 		}
+ 
+ 		if (info->value_size) {
+-			printf("value:%c", break_names ? '\n' : ' ');
+-			fprint_hex(stdout, value, info->value_size, " ");
++			if (map_is_map_of_maps(info->type)) {
++				printf("id:%c", break_names ? '\n' : ' ');
++				fprint_uint(stdout, value, info->value_size);
++			} else {
++				printf("value:%c", break_names ? '\n' : ' ');
++				fprint_hex(stdout, value, info->value_size, " ");
++			}
+ 		}
+ 
+ 		printf("\n");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.37.1 (Apple Git-137.1)
+
