@@ -2,239 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A99F6EABC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027A96EABC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 15:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbjDUNgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 09:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S232470AbjDUNh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 09:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjDUNgD (ORCPT
+        with ESMTP id S231285AbjDUNh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 09:36:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BA3E6B;
-        Fri, 21 Apr 2023 06:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682084162; x=1713620162;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=zf1MUQu1TV5ZdqwNqDZuluCCIpLkRf3GKXcIf2elivU=;
-  b=de6ng3svoT6QSa19R3VKaVzzTg5RWvqMpBNK6/2iZZh2KZXuk54aNYRC
-   x5X1v2YGQMcr3B/CWmEl5ECDq2wa8jVjYxl/p53FAqNazrqtFEtr0qnTl
-   ivGOUT3piJWNOS3tAR2fi08redmLjX4h28Qxcbrk52/Fal3Gd5Narfok7
-   3XaV8WZVM0r2SBKFfdA9zwFa/ZqsC/sle1sfMoB6ycEfKkjYvDwukphL5
-   Ij/7okHBxaNvVcJxi0FcAQfp3VCRhpf75Bo/B8uG7kcGj8gOOg2zEvplR
-   kEEKgEJXpFvao+WoofBz/P65KA57ZEWush2+GK0rn2qqHpOs4iIbvy2AH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325592542"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="325592542"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 06:36:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="722742612"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="722742612"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2023 06:36:01 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 06:36:01 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 06:36:01 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 06:36:01 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 21 Apr 2023 06:36:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hcR5gq/ylQX6lMc1KVJNCbmJetqg7KOIARZWhTzbILv8cEQhj+GPKWgTTxD8K3ppA/AgOGaaKSRZ7qci4LBVeVif/E7PHt8iyQKr0i4kR67w2kvYcRQ5mGrCburPpBpXnUwwY1H6K2gigi9enzKToa/INAdVIuV7zBSZzIVfyis+oValfsa/JO/xrhArKcJd+mDSKDtv0yXEvD3JnQT09y3w7OYsMHA8UPQJ3Brqz0es49pJXPmXQvl5U/0YtLkn0Q/1eX2KiKpqsypIcRatE3CcobnzQXnflgZVkIJXT5cIZS+v/VWzXNcQrVRk1rxvk3OySVBeEuBTm5lYTRoNeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wm0/VGSo0RKT4qkZGgtlMYJI95zmhsecUF1dn8t41Ls=;
- b=lFSnZCaWM6V3cYMA/5B51hrYAPBMfPHqiOj07FE7rRxM/0JMibDBb3QTFwb2G7DT5W/Sa483aAAqkyLMd/Ix5l4h+wW5IrWgH4pwBuHu3ste7zvBJ/DQ02ht5JuJL9aTISo5w56CdXAwPPt7dnuYgOB5hWk1HJTuhHOZLqabYRMnydV/RXYOEpVLRp5enuiwkcWANUZtm2Vv4tCoQaf/TB/C1BWs1R2s+9RlRXpHuTSnfgi2koTEiHiELCmRu9gRX4xQ3NcDaaVU3VqcrMoaqIwpoEcQp3rkKj4x2bJDIItQ16CBdfi/9hu8vw+8Mb7/3mzciZd8pLMRrMp3tlqsFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by MW4PR11MB6837.namprd11.prod.outlook.com (2603:10b6:303:221::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 21 Apr
- 2023 13:35:58 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::4c38:d223:b2ac:813e]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::4c38:d223:b2ac:813e%5]) with mapi id 15.20.6319.022; Fri, 21 Apr 2023
- 13:35:58 +0000
-Message-ID: <714b6bd0-014f-a5ab-af02-d4d9e4390454@intel.com>
-Date:   Fri, 21 Apr 2023 15:34:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net-next v2] lan966x: Don't use xdp_frame when action is
- XDP_TX
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <richardcochran@gmail.com>,
-        <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>,
-        <maciej.fijalkowski@intel.com>
-References: <20230421131422.3530159-1-horatiu.vultur@microchip.com>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <20230421131422.3530159-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0183.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::11) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Fri, 21 Apr 2023 09:37:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35458900D;
+        Fri, 21 Apr 2023 06:37:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C488464D73;
+        Fri, 21 Apr 2023 13:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C51C433D2;
+        Fri, 21 Apr 2023 13:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682084274;
+        bh=ISek3mBnmrk/v8xm97ePpRSrFcxal1t9l018us4X0l0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MY8xjcw6d9YBvc53sBrvxuVcFNTnlBVTR7RY9vPoERVQpGFYzfK7hntaC43nwxw+9
+         LvNBGl/K5U5Ve9JQLsY+YuZRxYxrgL71CZE4In4w+pz29ewlQeghQ1BxwBoX++RQDY
+         lwOOfewD7VyyOThGvAQcumOhT3e1X/FTsgbS53drq3ZXeyd2Y6updhYa8HWqUh4aEN
+         FAjKS6ihzLQMz18q/JH0vzClVVneGL8Wb7it1kT4iylwgLX5YedR78v0qk02POQeaQ
+         txwu8ovInpz411UZDd9TlvQpQdQ2R/ugCZvqvRVs7YkM3doVu0rOURcTKNRYH7rHnZ
+         9cJ1NTJcVUuaQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [GIT PULL] fork: user workers & vhost
+Date:   Fri, 21 Apr 2023 15:37:12 +0200
+Message-Id: <20230421-satzglied-cybernaut-b2b652a46bfa@brauner>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|MW4PR11MB6837:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09b1e13a-7cec-41a6-004c-08db426d56bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hg+y2kF+g9FuOK6QYTYbXU/I5D9DyZj/+FVMPJcfN4o0HuCZm4T3wKEwvb460c6wJ/uO+TWbGR7v3OPFkPbCgcYS7Kk0MvIGCcCAOHQ2a6NYDzw5fnN6hheIYC5UeQSiyFvCibjsQOO7kmL2MTmlmaYLLIYQgZzedWp/zUvt4hXbH1lfvenjpqDBZnn5UYx8RpFBWUXVSfa2ZpZ8yiuEVvOXTDvFg4537C1YhjvVQSLeCXPb6bY53XxVU2FTzB6WExjMGAG4ncy07CW4nUSfNGZJxKbYn6PPVnTt13sXOlMPFpv+Ay2LX+7ke1mGU1RLCK9Cetrvf/dloSiLVBeSirnrYjP7J63GBl2Nw/RhM4ZcGwsauxucC7UYaaaYLodby8lkVHoimQsaqFWy7SV2CfFgGbzVE81G8ziqYQVzC1qxZotI+epdqm8KojolXta/EhZcC4d0FAmm0lsx+99Wjdwk4pl6FlW2yStkLH8FLUijaibZf7icDRaYJlQ0UvQXWBJdR+gtp6+Xo1aJF/kKbDm5+iyzqJD/o97u/DybqCu59oUbNTi0RUlKaH7p4ir0u+kaMHQ4sT5ug7ID5UO8pQtND5uLRD9TAWblsA9RIy+nKKEHBUfAvxHg9z90h/YOCXdiNVZd6bhZVDpPhbsvkg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(346002)(39860400002)(376002)(136003)(451199021)(4326008)(66476007)(6916009)(316002)(66946007)(66556008)(478600001)(6666004)(6486002)(8936002)(41300700001)(8676002)(5660300002)(2906002)(7416002)(86362001)(82960400001)(31696002)(36756003)(38100700002)(2616005)(6512007)(6506007)(26005)(186003)(107886003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGNpM2FDRnhtZHhTeUJBOW1DenNvYXhacVZwYXltVXg4cXpqU1dBWFJPakhB?=
- =?utf-8?B?S0YzWVE1ZElPYWQ4b0ZuUmU3N1NQdFIzRnpBL2wvSEk4a29aUXV2NGpRSmVz?=
- =?utf-8?B?YlBqL0p6YWNJTWE4ZmlSQVdYWU92MTc4Mmgwbkt0UUpRbUkxR0tRbEk4U2Ra?=
- =?utf-8?B?U0hiUWJuZWZ1am1lZ3BBYjhPY2haRHlZNytIdVlnWmFPektZVWUwV2dLbmNz?=
- =?utf-8?B?dGJoRVJjTlBpZ1lwODljZVZFZm5kNitia29OWllRWjhaaStKWXVhVm9jY21v?=
- =?utf-8?B?UmhhQUxicWo2blRvZlNUMWlOenBGdTc5cGphMENHSFBzSVRpaWVPTkFESXVp?=
- =?utf-8?B?U09pd3NETzY1UFFKLzJpek55aEdkcXpVMStPYzFjUTFiQlpzTWkzNXFFWlJr?=
- =?utf-8?B?bzh6eXo3Q20vTlpsUHlxNWtvazR6cEs4cUJoVlJibUljVG5UbDJ0QVR6cmxP?=
- =?utf-8?B?aGU0WHRrYkU3NXJ3SFViL3c2K3pLbmF4WTlFczVjN1ZQQTZoNUF3Q2xMZnp0?=
- =?utf-8?B?NytjcWVwaHAvdENVWktIZHNpRHNiOUxxbkpqL0RoZ2NaamlSV09DN2IxOEFi?=
- =?utf-8?B?WG9GOVRMS295WHNYUVUyNkk0Q3Z4UThtN1dMNFlOMXpyUjdzL09FS3ovRERR?=
- =?utf-8?B?ajlHMHZscThJUzVucklPd2hTZld6Z09XTFdDVFRvWkl1R3ZncVNaQmRBOWs2?=
- =?utf-8?B?WFZNV2hVYk5LNDE1YW9tZ2lSSWFyQURIMTExQzAxL3N5Mm1nTHB1dndJWnVZ?=
- =?utf-8?B?enpQNkVXaGo1SXR6NmllR3o5Y0ZSZ0thMGcxZXhUV0dNQlNOTExCVjdjQWhS?=
- =?utf-8?B?MGFGRVlydjUxYVp5c2k0QXh4VnZtTGxhcEQxeU1BUlFOY004bW1QeGplZFNv?=
- =?utf-8?B?VkZ5c2h0eUcwQUw0cXQyVkdYcDFNdTZiL3RiaGFhLytSQWxrbk40ZkxBQXdp?=
- =?utf-8?B?V05GejlnbnlaR1RSWm1XeDJhajV5WlJkMk11TUZQUWczUFNhajZ1Zll4Qzc1?=
- =?utf-8?B?akpBcjl3N2R2dHdNajlJZmZRSzBtQ3IrcjNKdUFRYXZmYVZXMnB2OTJBNmR4?=
- =?utf-8?B?cmNWNW50NnlMQ3kyQTQyTGJaQnd0anNEengrQ2ZvemxucUwxNnRxZ3p1dWc2?=
- =?utf-8?B?RTNOM3hZUnhZbWw5bXVZMVJqR0luTUdDN0tVc1B0bnh1NHJjeGcrNlJEcFRD?=
- =?utf-8?B?d3lGdTJmQW1qK0lVRW1BbVdGVVhBVVM5ajRhcHBpazhiZkNKdmZqNk85NnVQ?=
- =?utf-8?B?Vm43MSthUVpTQk50akpiRW1DT1pYTEYxai9LVDBOdFdqYWhFOHNaaTFyNW5I?=
- =?utf-8?B?NkZYSVBYQzVGc1lIRVUvaU93L1hFYWhTNldlaXBTMEU0ejV3Z0JiWGJmMWgw?=
- =?utf-8?B?aHVLc3ZkS3Z1THZQSnRTL3I2Qm1ZTWpwYXYzWDJaYkVudFMrUk92ZXNiUUh0?=
- =?utf-8?B?MHRwU1hPU1NrcG93emhFS05ITFFGRlVmcWNQcmxieTFhVWROL284QUczYUl4?=
- =?utf-8?B?WDUvMzhhdjFlMzZIbm9rdzVVZG9IUGthMUdMWUFicUhSYjJIcnRPSE5ML0tR?=
- =?utf-8?B?bjVrdG5rOStWQW5GcEcyaithelhrZ1AyaittZUs2ZkJRYkJMVUkwMUFFQlQ2?=
- =?utf-8?B?SStVU000am41R2hDenJwZ2NkdmhLMTdjZVlINWVBZnMvQ2h2a3JwdjNIaC9K?=
- =?utf-8?B?ZHJLRk80ZWtqeFpmOFlJS2Iyd1QrUmhoMUdCK0JhWmt3dGU0L1lmSjFGYXZY?=
- =?utf-8?B?Y0ZCOExVMTFrUVY1VnRVTWJXbzZIMFpYSjhNZEVBTm9IK2RXbVJhN2tMdXp4?=
- =?utf-8?B?em44N2NPNDlubWViY1dPTjdnUVliMGl2NnhqWFRHOGZIcnA4RU1rSEtyYWdL?=
- =?utf-8?B?WnlNT2lEdHhuQy9hYnVuQVJxeGROQkl3bXEvZkhtZ2p0dVRESFpjQTZlV0dV?=
- =?utf-8?B?QUM3RnYrUkNwOHJSSTdkb0JMajRrME1EOWVVa00vdHNycDJ3R3RxTlQ3dHI0?=
- =?utf-8?B?bTZJWEhXblN3MlVnOUlBYklFNVNhbk9HTlBkZ2NJOStiaVVNWU5VL3JQUGxy?=
- =?utf-8?B?a1lKcEpYaTQvdis3d0FiWGJSSFNuTTNDNzc2cE5LMlBPR0RvdWN2TkNCbHZv?=
- =?utf-8?B?L1lkWTVMMHJ2L0pmcW1hRWtlRzJrNFlNWDVOSUd4S3Q2THc0UzFZZUl6aTA2?=
- =?utf-8?B?UGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09b1e13a-7cec-41a6-004c-08db426d56bd
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2023 13:35:58.0868
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i/VcM3TQFzFQ9WSyN7u84wL+TYBbuS+9+NJn38ABRXt5wLZHmz0hpUV2IKZUZ2YPB9A7DaBEbbtUKHJWMJIaXMDmnydM3Cazq5Uo0+CWFGY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6837
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4973; i=brauner@kernel.org; h=from:subject:message-id; bh=3MrRKpKniv5TWBvrsE8XXXNmyDHvC5zHG1I4z4nBGAo=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ4TWS+k2s7vUTK/WOAaZP7dZun4VGS81+ePnWxutT1j8Qf 0bBdHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPRjWFkWHtrapLmpsXhn1oUnreL2J sGn104QbIpfnWV/MxTz9+eEWZk2Ji70deo9HB0wSQfGYka11uPJafL1esucRC1sWcSfl7GAAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Fri, 21 Apr 2023 15:14:22 +0200
+Hey Linus,
 
-> When the action of an xdp program was XDP_TX, lan966x was creating
-> a xdp_frame and use this one to send the frame back. But it is also
-> possible to send back the frame without needing a xdp_frame, because
-> it is possible to send it back using the page.
-> And then once the frame is transmitted is possible to use directly
-> page_pool_recycle_direct as lan966x is using page pools.
-> This would save some CPU usage on this path, which results in higher
-> number of transmitted frames. Bellow are the statistics:
-> Frame size:    Improvement:
-> 64                ~8%
-> 256              ~11%
-> 512               ~8%
+/* Summary */
+This contains the work generalizing the ability to create a kernel
+worker from a userspace process. Such user workers will run with the
+same credentials as the userspace process they were created from
+providing stronger security and accounting guarantees than the
+traditional override_creds() approach ever could've hoped for.
 
-Nice bump, esp. for 256 }:>
+The original work was heavily based and optimzed for the needs of
+io_uring which was the first user. However, as it quickly turned out the
+ability to create user workers inherting properties from a userspace
+process is generally useful.
 
-> 1000              ~0%
-> 1500              ~0%
+The vhost subsystem currently creates workers using the kthread api. The
+consequences of using the kthread api are that RLIMITs don't work
+correctly as they are inherited from khtreadd. This leads to bugs
+where more workers are created than would be allowed by the RLIMITs of
+the userspace process in lieu of which workers are created.
 
-[...]
+Problems like this disappear with user workers created from the
+userspace processes for which they perform the work. In addition,
+providing this api allows vhost to remove additional complexity. For
+example, cgroup and mm sharing will just work out of the box with user
+workers based on the relevant userspace process instead of manually
+ensuring the correct cgroup and mm contexts are used.
 
-> @@ -699,15 +701,14 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
->  	tx->last_in_use = next_to_use;
->  }
->  
-> -int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
-> -			   struct xdp_frame *xdpf,
-> -			   struct page *page,
-> -			   bool dma_map)
-> +int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
->  {
->  	struct lan966x *lan966x = port->lan966x;
->  	struct lan966x_tx_dcb_buf *next_dcb_buf;
->  	struct lan966x_tx *tx = &lan966x->tx;
-> +	struct xdp_frame *xdpf;
->  	dma_addr_t dma_addr;
-> +	struct page *page;
->  	int next_to_use;
->  	__be32 *ifh;
->  	int ret = 0;
-> @@ -722,8 +723,19 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
->  		goto out;
->  	}
->  
-> +	/* Fill up the buffer */
-> +	next_dcb_buf = &tx->dcbs_buf[next_to_use];
-> +	next_dcb_buf->use_skb = false;
-> +	next_dcb_buf->xdp_ndo = !len;
-> +	next_dcb_buf->len = len + IFH_LEN_BYTES;
+So the vhost subsystem should simply be made to use the same mechanism
+as io_uring. To this end the original mechanism used for
+create_io_thread() is generalized into user workers:
 
-Is it intended that for .ndo_xdp_xmit cases this field will equal just
-%IFH_LEN_BYTES as @len is zero?
+* Introduce PF_USER_WORKER as a generic indicator that a given task is a
+  user worker, i.e., a kernel task that was created from a userspace
+  process. Now a PF_IO_WORKER thread is just a specialized version of
+  PF_USER_WORKER. So io_uring io workers raise both flags.
+* Make copy_process() available to core kernel code.
+* Extend struct kernel_clone_args with the following bitfields allowing
+  to indicate to copy_process():
+  * to create a user worker (raise PF_USER_WORKER)
+  * to not inherit any files from the userspace process
+  * to ignore signals
 
-> +	next_dcb_buf->used = true;
-> +	next_dcb_buf->ptp = false;
-> +	next_dcb_buf->dev = port->dev;
-> +
->  	/* Generate new IFH */
-> -	if (dma_map) {
-> +	if (!len) {
-> +		xdpf = ptr;
-> +
->  		if (xdpf->headroom < IFH_LEN_BYTES) {
->  			ret = NETDEV_TX_OK;
->  			goto out;
-[...]
+After all generic changes are in place the vhost subsystem implements a
+new dedicated vhost api based on user workers. Finally, vhost is
+switched to rely on the new api moving it off of kthreads.
 
-Thanks,
-Olek
+Thanks to Mike for sticking it out and making it through this rather
+arduous journey.
+
+/* Testing */
+clang: Ubuntu clang version 15.0.6
+gcc: (Ubuntu 12.2.0-3ubuntu1) 12.2.0
+
+All patches are based on 6.3-rc1 and have been sitting in linux-next.
+No build failures or warnings were observed. All old and new tests in
+fstests, selftests, and LTP pass without regressions.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with
+current mainline.
+
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/v6.4/kernel.user_worker
+
+for you to fetch changes up to 6e890c5d5021ca7e69bbe203fde42447874d9a82:
+
+  vhost: use vhost_tasks for worker threads (2023-03-23 12:45:37 +0100)
+
+Please consider pulling these changes from the signed v6.4/kernel.user_worker tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+v6.4/kernel.user_worker
+
+----------------------------------------------------------------
+Mike Christie (11):
+      csky: Remove kernel_thread declaration
+      kernel: Allow a kernel thread's name to be set in copy_process
+      kthread: Pass in the thread's name during creation
+      kernel: Make io_thread and kthread bit fields
+      fork/vm: Move common PF_IO_WORKER behavior to new flag
+      fork: add kernel_clone_args flag to not dup/clone files
+      fork: Add kernel_clone_args flag to ignore signals
+      fork: allow kernel code to call copy_process
+      vhost_task: Allow vhost layer to use copy_process
+      vhost: move worker thread fields to new struct
+      vhost: use vhost_tasks for worker threads
+
+ MAINTAINERS                       |   2 +
+ arch/csky/include/asm/processor.h |   2 -
+ drivers/vhost/Kconfig             |   5 ++
+ drivers/vhost/vhost.c             | 124 ++++++++++++++++++--------------------
+ drivers/vhost/vhost.h             |  11 +++-
+ include/linux/sched.h             |   2 +-
+ include/linux/sched/task.h        |  13 +++-
+ include/linux/sched/vhost_task.h  |  23 +++++++
+ init/main.c                       |   2 +-
+ kernel/Makefile                   |   1 +
+ kernel/fork.c                     |  25 ++++++--
+ kernel/kthread.c                  |  33 ++++------
+ kernel/vhost_task.c               | 117 +++++++++++++++++++++++++++++++++++
+ mm/vmscan.c                       |   4 +-
+ 14 files changed, 263 insertions(+), 101 deletions(-)
+ create mode 100644 include/linux/sched/vhost_task.h
+ create mode 100644 kernel/vhost_task.c
