@@ -2,173 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B111E6EA949
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B2A6EA956
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 13:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbjDULgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 07:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S232031AbjDULg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 07:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjDULft (ORCPT
+        with ESMTP id S231675AbjDULgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 07:35:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7E6CC00
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 04:35:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 52B0A219BB;
-        Fri, 21 Apr 2023 11:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682076936; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVGdVu420a3TS41SJqRbrZn72Qum9ITPdCfb8Uoghas=;
-        b=w1cLP3eOBWwEefXgEfYr927TtJuWxjQ1QWMxGDBL7pJMT/GwB651LRnpEFyCy9mJzkdJ1g
-        2RSp3OzIg2bBDeC9Rzbxjie7k+sd/cA5fZLXs72sVAbvfEkMU1YR3YY+xctrCSsZAVVrSK
-        nHPgnZHUMk/4FMY+NpvXSFPSDiIAalA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682076936;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVGdVu420a3TS41SJqRbrZn72Qum9ITPdCfb8Uoghas=;
-        b=WF7P4a02TdpV1pq4O+EiDRAdDHhI235poiEVRKJB1JtmFttuPP8AnCOaaN5gLorNex2xrG
-        QQR/WPVAbOnrWzCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23A8B13456;
-        Fri, 21 Apr 2023 11:35:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UR3HBwh1QmRUGAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 21 Apr 2023 11:35:36 +0000
-Message-ID: <d8d22c77-1bde-774f-aa6e-41234ffa6e8d@suse.de>
-Date:   Fri, 21 Apr 2023 13:35:35 +0200
+        Fri, 21 Apr 2023 07:36:25 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C636CCC0E;
+        Fri, 21 Apr 2023 04:35:54 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id F1E15600F2;
+        Fri, 21 Apr 2023 13:35:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682076952; bh=IGXmsfuT92LLRa2whQYPoOabsM4yoa1huIum4sr6paY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UMUmw7H1tbiK8/TCoS9hO9JwdWIZGWB/ELhzbpo0lTr/Fup5TWgNOaa2z8ESkMo4U
+         kZfW0bZIU+ujtyaEjLS8YhAEbECelrsHHcU1c8LVW4N+oTPeB0i72GbgSbcY65/CxJ
+         yjq+f5/BGlRbUQg+qJOFVmzq/xKpPRdfDNkuyAm6Lz6hmmZBQXBLnUPClsvMDnVMor
+         i0//xHJ2KFNQXpzVQTJfEHnVA0mBnB9WiYVWkZosXBs+p0/4Ye5RNaPrRmUwDm9Qnv
+         JZHsbByfpB8YEovdesZk5gq5z2sNuY5CVYVu6CJIx8b2DLCn9oaPD/jbYtA2mgLoGg
+         W2q/Ic5T7dAFg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fIc5lsbTSreK; Fri, 21 Apr 2023 13:35:49 +0200 (CEST)
+Received: from [10.0.1.117] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id 07681600E9;
+        Fri, 21 Apr 2023 13:35:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682076949; bh=IGXmsfuT92LLRa2whQYPoOabsM4yoa1huIum4sr6paY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=xRxG1emW3QdvM8PKii4T+o7xqJ+LY1OYWGsJndx8RMTTwfNsc26dDz7AL/n+bpaRC
+         hTDcraBZWaCwAlQ7x+G9JHgj11uEiE6Rj1Eu5heiTEZ9GZ35KjDKo4VksHr1wj4cc+
+         9ijqxGiGLPIbPQ84z+dEL7GFRtFzvZ87pnf+1qLLpLXqWvB9EfjQdG9EPo+KZpK9QD
+         AAd5WdL2yxc/NAyvLDBmzsQ9GI0kqmhpQ0V5swTvNlUQ8HgzrXRL+lwhjT6V0KHaGN
+         jbba9/wpfB4ePfOmyDkBxqH0D8dfwPxjb//PT9ryyPhdYEVZo0dWeBmzwef21ffQXE
+         AyRD5HcHYxN7g==
+Message-ID: <060ff7a3-126f-3da5-4d93-0139e8fc4a9b@alu.unizg.hr>
+Date:   Fri, 21 Apr 2023 13:35:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
-Content-Language: en-US
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20230420155705.21463-1-pa@panix.com>
- <c4c09a67-6897-751c-c091-6e33f48542cc@leemhuis.info>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <c4c09a67-6897-751c-c091-6e33f48542cc@leemhuis.info>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------D3QSux1f8bYK9aNStya37xMH"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [BUG] [FIXED: TESTED] kmemleak in rtnetlink_rcv() triggered by
+ selftests/drivers/net/team in build cdc9718d5e59
+Content-Language: en-US, hr
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
+        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>
+References: <78a8a03b-6070-3e6b-5042-f848dab16fb8@alu.unizg.hr>
+ <ZDLyZX545Cw+aLhE@shredder>
+ <67b3fa90-ad29-29f1-e6f3-fb674d255a1e@alu.unizg.hr>
+ <7650b2eb-0aee-a2b0-2e64-c9bc63210f67@alu.unizg.hr>
+ <ZDhHvUrkua8gLMfZ@shredder>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZDhHvUrkua8gLMfZ@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------D3QSux1f8bYK9aNStya37xMH
-Content-Type: multipart/mixed; boundary="------------7lUGiFKn1azxFZlP2XRHGD3S";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Linux regressions mailing list <regressions@lists.linux.dev>,
- Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
- Javier Martinez Canillas <javierm@redhat.com>, linux-kernel@vger.kernel.org,
- Hans de Goede <hdegoede@redhat.com>, Ard Biesheuvel <ardb@kernel.org>
-Message-ID: <d8d22c77-1bde-774f-aa6e-41234ffa6e8d@suse.de>
-Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
-References: <20230420155705.21463-1-pa@panix.com>
- <c4c09a67-6897-751c-c091-6e33f48542cc@leemhuis.info>
-In-Reply-To: <c4c09a67-6897-751c-c091-6e33f48542cc@leemhuis.info>
+On 13.4.2023. 20:19, Ido Schimmel wrote:
+> On Mon, Apr 10, 2023 at 07:34:09PM +0200, Mirsad Goran Todorovac wrote:
+>> I've ran "make kselftest" with vanilla torvalds tree 6.3-rc5 + your patch.
+>>
+>> It failed two lines after "enslaved device client - ns-A IP" which passed OK.
+>>
+>> Is this hang for 5 hours in selftests: net: fcnal-test.sh test, at the line
+>> (please see to the end):
+> 
+> It's not clear to me if the test failed for you or just got stuck. The
+> output below is all "[ OK ]".
+> 
+> I ran the test with my patch and got:
+> 
+> Tests passed: 875
+> Tests failed:   5
+> 
+> I don't believe the failures are related to my patch given the test
+> doesn't use bonding.
+> 
+> See more below.
+> 
+>>
+>> # ###########################################################################
+>> # IPv4 address binds
+>> # ###########################################################################
+>> #
+>> #
+>> # #################################################################
+>> # No VRF
+>> #
+>> # SYSCTL: net.ipv4.ping_group_range=0 2147483647
+>> #
+>> # TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
+>> # TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
+>> # TEST: Raw socket bind to local address - ns-A loopback IP                     [ OK ]
+>> # TEST: Raw socket bind to local address after device bind - ns-A loopback IP   [ OK ]
+>> # TEST: Raw socket bind to nonlocal address - nonlocal IP                       [ OK ]
+>> # TEST: TCP socket bind to nonlocal address - nonlocal IP                       [ OK ]
+>> # TEST: ICMP socket bind to nonlocal address - nonlocal IP                      [ OK ]
+>> # TEST: ICMP socket bind to broadcast address - broadcast                       [ OK ]
+>> # TEST: ICMP socket bind to multicast address - multicast                       [ OK ]
+>> # TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
+>> # TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
+>> #
+>> # #################################################################
+>> # With VRF
+>> #
+>> # SYSCTL: net.ipv4.ping_group_range=0 2147483647
+>> #
+>> # TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
+>> # TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
+>> # TEST: Raw socket bind to local address after VRF bind - ns-A IP               [ OK ]
+>> # TEST: Raw socket bind to local address - VRF IP                               [ OK ]
+>> # TEST: Raw socket bind to local address after device bind - VRF IP             [ OK ]
+>> # TEST: Raw socket bind to local address after VRF bind - VRF IP                [ OK ]
+>> # TEST: Raw socket bind to out of scope address after VRF bind - ns-A loopback IP  [ OK ]
+>> # TEST: Raw socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
+>> # TEST: TCP socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
+>> # TEST: ICMP socket bind to nonlocal address after VRF bind - nonlocal IP       [ OK ]
+>> # TEST: ICMP socket bind to broadcast address after VRF bind - broadcast        [ OK ]
+>> # TEST: ICMP socket bind to multicast address after VRF bind - multicast        [ OK ]
+>> # TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
+>> # TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
+>> # TEST: TCP socket bind to local address - VRF IP                               [ OK ]
+>> # TEST: TCP socket bind to local address after device bind - VRF IP             [ OK ]
+>> # TEST: TCP socket bind to invalid local address for VRF - ns-A loopback IP     [ OK ]
+>> # TEST: TCP socket bind to invalid local address for device bind - ns-A loopback IP  [ OK ]
+>> #
+>> # ###########################################################################
+>> # Run time tests - ipv4
+>> # ###########################################################################
+>> #
+>> # TEST: Device delete with active traffic - ping in - ns-A IP                   [ OK ]
+>> # TEST: Device delete with active traffic - ping in - VRF IP                    [ OK ]
+>> # TEST: Device delete with active traffic - ping out - ns-B IP                  [ OK ]
+>> # TEST: TCP active socket, global server - ns-A IP                              [ OK ]
+>> # TEST: TCP active socket, global server - VRF IP                               [ OK ]
+>> # TEST: TCP active socket, VRF server - ns-A IP                                 [ OK ]
+>> # TEST: TCP active socket, VRF server - VRF IP                                  [ OK ]
+>> # TEST: TCP active socket, enslaved device server - ns-A IP                     [ OK ]
+>> # TEST: TCP active socket, VRF client - ns-A IP                                 [ OK ]
+>> # TEST: TCP active socket, enslaved device client - ns-A IP                     [ OK ]
+>> # TEST: TCP active socket, global server, VRF client, local - ns-A IP           [ OK ]
+>> # TEST: TCP active socket, global server, VRF client, local - VRF IP            [ OK ]
+>> # TEST: TCP active socket, VRF server and client, local - ns-A IP               [ OK ]
+>> # TEST: TCP active socket, VRF server and client, local - VRF IP                [ OK ]
+>> # TEST: TCP active socket, global server, enslaved device client, local - ns-A IP  [ OK ]
+>> # TEST: TCP active socket, VRF server, enslaved device client, local - ns-A IP  [ OK ]
+>> # TEST: TCP active socket, enslaved device server and client, local - ns-A IP   [ OK ]
+>> # TEST: TCP passive socket, global server - ns-A IP                             [ OK ]
+>> # TEST: TCP passive socket, global server - VRF IP                              [ OK ]
+>> # TEST: TCP passive socket, VRF server - ns-A IP                                [ OK ]
+>> # TEST: TCP passive socket, VRF server - VRF IP                                 [ OK ]
+>> # TEST: TCP passive socket, enslaved device server - ns-A IP                    [ OK ]
+>> # TEST: TCP passive socket, VRF client - ns-A IP                                [ OK ]
+>> # TEST: TCP passive socket, enslaved device client - ns-A IP                    [ OK ]
+>> # TEST: TCP passive socket, global server, VRF client, local - ns-A IP          [ OK ]
+>>
+>> Hope this helps.
+>>
+>> I also have a iwlwifi DEADLOCK and I don't know if these should be reported independently.
+>> (I don't think it is related to the patch.)
+> 
+> If the test got stuck, then it might be related to the deadlock in
+> iwlwifi. Try running the test without iwlwifi and see if it helps. If
+> not, I suggest starting a different thread about this issue.
+> 
+> Will submit the bonding patch over the weekend.
 
---------------7lUGiFKn1azxFZlP2XRHGD3S
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Tested it again, with only the net selftest subtree:
 
-SGkNCg0KQW0gMjEuMDQuMjMgdW0gMTM6MzIgc2NocmllYiBMaW51eCByZWdyZXNzaW9uIHRy
-YWNraW5nIChUaG9yc3RlbiBMZWVtaHVpcyk6DQo+IE9uIDIwLjA0LjIzIDE3OjU3LCBQaWVy
-cmUgQXNzZWxpbiB3cm90ZToNCj4+IFNvbWUgbGVnYWN5IEJJT1NlcyByZXBvcnQgbm8gcmVz
-ZXJ2ZWQgYml0cyBpbiB0aGVpciAzMi1iaXQgcmdiIG1vZGUsDQo+PiBicmVha2luZyB0aGUg
-Y2FsY3VsYXRpb24gb2YgYml0c19wZXJfcGl4ZWwgaW4gY29tbWl0IGYzNWNkM2ZhNzcyOQ0K
-Pj4gKCJmaXJtd2FyZS9zeXNmYjogRml4IEVGSS9WRVNBIGZvcm1hdCBzZWxlY3Rpb24iKS4g
-IEhvd2V2ZXIgdGhleSByZXBvcnQNCj4+IGxmYl9kZXB0aCBjb3JyZWN0bHkgZm9yIHRob3Nl
-IG1vZGVzLiAgS2VlcCB0aGUgY29tcHV0YXRpb24gYnV0DQo+PiBzZXQgYml0c19wZXJfcGl4
-ZWwgdG8gbGZiX2RlcHRoIGlmIHRoZSBsYXR0ZXIgaXMgbGFyZ2VyLg0KPj4NCj4+IHYyIGZp
-eGVzIHRoZSB3YXJuaW5ncyBmcm9tIGEgbWF4MygpIG1hY3JvIHdpdGggYXJndW1lbnRzIG9m
-IGRpZmZlcmVudA0KPj4gdHlwZXM7ICBzcGxpdCB0aGUgYml0c19wZXJfcGl4ZWwgYXNzaWdu
-bWVudCB0byBhdm9pZCB1Z2x5ZmluZyB0aGUgY29kZQ0KPj4gd2l0aCB0b28gbWFueSBjYXN0
-cy4NCj4+DQo+PiB2MyBmaXhlcyBzcGFjZSBhbmQgZm9ybWF0dGluZyBibGlwcyBwb2ludGVk
-IG91dCBieSBKYXZpZXIsIGFuZCBjaGFuZ2UNCj4+IHRoZSBiaXRfcGVyX3BpeGVsIGFzc2ln
-bm1lbnQgYmFjayB0byBhIHNpbmdsZSBzdGF0ZW1lbnQgdXNpbmcgdHdvIGNhc3RzLg0KPj4N
-Cj4+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvNFBzbTZCNkxxa3oxUVhNQHBh
-bml4My5wYW5peC5jb20NCj4+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAy
-MzA0MTIxNTAyMjUuMzc1NzIyMy0xLWphdmllcm1AcmVkaGF0LmNvbQ0KPj4gTGluazogaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvZHJpLWRldmVsLzIwMjMwNDE4MTgzMzI1LjIzMjctMS1w
-YUBwYW5peC5jb20vVC8jdQ0KPj4gTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvZHJp
-LWRldmVsLzIwMjMwNDE5MDQ0ODM0LjEwODE2LTEtcGFAcGFuaXguY29tL1QvI3UNCj4+IEZp
-eGVzOiBmMzVjZDNmYTc3MjkgKCJmaXJtd2FyZS9zeXNmYjogRml4IEVGSS9WRVNBIGZvcm1h
-dCBzZWxlY3Rpb24iKQ0KPj4gU2lnbmVkLW9mZi1ieTogUGllcnJlIEFzc2VsaW4gPHBhQHBh
-bml4LmNvbT4NCj4gDQo+IExpbnVzIG1pZ2h0IHJlbGVhc2UgdGhlIGZpbmFsIHRoaXMgd2Vl
-a2VuZCBhbmQgdGhpcyBpcyBhbW9uZyB0aGUgbGFzdA0KPiBmZXcgNi4zIHJlZ3Jlc3Npb25z
-IEkgdHJhY2suIEhlbmNlIHBsZWFzZSBhbGxvdyBtZSB0byBhc2s6DQo+IA0KPiBQaWVycmUs
-IFRvbWFzLCBKYXZpZXIsIGV0LiBhbDogaG93IG1hbnkgImxlZ2FjeSBCSU9TZXMiIGRvIHdl
-IHN1c3BlY3QNCj4gYXJlIGFmZmVjdGVkIGJ5IHRoaXM/IFNvIG1hbnkgdGhhdCBpdCBtaWdo
-dCBiZSB3b3J0aCBkZWxheWluZyB0aGUNCj4gcmVsZWFzZSBieSBvbmUgd2Vlaz8gQW5kIGlu
-IGNhc2UgZXZlcnlib2R5IGludm9sdmVkIG1pZ2h0IGFncmVlIHRoYXQNCj4gdGhpcyBwYXRj
-aCBpcyByZWFkeSBieSB0b2RheSBvciB0b21vcnJvdzogbWlnaHQgaXQgYmUgd29ydGggYXNr
-aW5nIExpbnVzDQo+IHRvIG1lcmdlIHRoaXMgcGF0Y2ggZGlyZWN0bHlbMV0/DQo+IA0KPiBb
-RldJVywgSSBoaWdobHkgc3VzcGVjdCB0aGUgYW5zd2VyIHRvIHRoZSBsYXN0IHR3byBxdWVz
-dGlvbnMgaXMgIm5vLA0KPiB0aGF0J3MgZGVmaW5pdGVseSBub3Qgd29ydGggaXMiLCBqdXN0
-IHdhbnRlZCB0byBjb25maXJtXQ0KDQpJTUhPIGl0J3MgYSBmYWlybHkgb2JzY3VyZSBidWcg
-YW5kIGNlcnRhaW5seSBub3QgYSByZWxlYXNlIGJsb2NrZXIuIEknbGwgDQpzZW5kIGl0IHRo
-cm91Z2ggdGhlIHJlZ3VsYXIgY2hhbm5lbHMgb2YgdGhlIERSTSBzdWJzeXN0ZW0uDQoNCkJl
-c3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IENpYW8sIFRob3JzdGVuICh3ZWFyaW5nIGhp
-cyAndGhlIExpbnV4IGtlcm5lbCdzIHJlZ3Jlc3Npb24gdHJhY2tlcicgaGF0KQ0KPiAtLQ0K
-PiBFdmVyeXRoaW5nIHlvdSB3YW5uYSBrbm93IGFib3V0IExpbnV4IGtlcm5lbCByZWdyZXNz
-aW9uIHRyYWNraW5nOg0KPiBodHRwczovL2xpbnV4LXJlZ3RyYWNraW5nLmxlZW1odWlzLmlu
-Zm8vYWJvdXQvI3RsZHINCj4gSWYgSSBkaWQgc29tZXRoaW5nIHN0dXBpZCwgcGxlYXNlIHRl
-bGwgbWUsIGFzIGV4cGxhaW5lZCBvbiB0aGF0IHBhZ2UuDQo+IA0KPiBbMV0geWVzLCB0aGF0
-J3MgYSB0aGluZyB3ZSBkbzoNCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL0NBSGst
-PXdpc19xUXk0b0ROeW5OS2k1YjdRaG9zbXh0b2oxanhvNXdtQjZTUlV3UVVCUUBtYWlsLmdt
-YWlsLmNvbS8NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vu
-c3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3Rldiwg
-QW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2
-ODA5IChBRyBOdWVybmJlcmcpDQo=
+tools/testing/selftests/Makefile:
+TARGETS += drivers/net/bonding
+TARGETS += drivers/net/team
+TARGETS += net
+TARGETS += net/af_unix
+TARGETS += net/forwarding
+TARGETS += net/hsr
+# TARGETS += net/mptcp
+TARGETS += net/openvswitch
+TARGETS += netfilter
 
---------------7lUGiFKn1azxFZlP2XRHGD3S--
+and it failed to reproduce the hang. (NOTE: In fact, it was only a script stall forever,
+not a "kill -9 <PID>" non-killable process.)
 
---------------D3QSux1f8bYK9aNStya37xMH
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+With or without iwlwifi module, now it appears to work as a standalone test.
 
------BEGIN PGP SIGNATURE-----
+The problem might indeed be a spurious lockup in iwlwifi. I've noticed an attempt to
+lock a locked lock from within the interrupt in the journalctl logs, but I am really
+not that familiar with the iwlwifi driver's code ... It is apparently not a deterministic
+error bound to repeat with every test.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRCdQcFAwAAAAAACgkQlh/E3EQov+Aj
-AA//aJVtYDQx6U4bn0pAuyHbSPfNL+kICdSb3aJwe75gPRuDGelSjpCqKGcfWPwTH6QhtMhFZEGM
-PtNOdCLfEjnrSYyOiJLS9/3ELBdHDnNkrDkPMK/j/Mq7I9gO79+97O61hVSwK/262Kn9aFSnPia1
-muRwO789TvNVwnwD0106von+MM0nTzccqrK00+85fksC3NNN2g9PcN5Hz0URhcoEjoNt/BmJkfSs
-lxeOBtlaKlRyUyCMOBJBaod3dBhACJHDFdyosJ0b2U2O8Y/7t2wKV4R/zxr3EEQvSwyawTf0kmEe
-Fj3MKiKRPFqbePWdOlMURKB3j7RjdMJC41YUfGmpLsTDYL8cVGRZW7lOoHXTgTFNmLfe62nWqpYW
-QvX7rWbNTgrhzRJFXvIIieBJ4h40Vupa2QgYktylceBdksYXqEhj+chdSIvj0PfREcjdFDo/yPZZ
-9YVDhA5aVLg7OrVZBmABJyTHp8Ecy3qrbT8GaAY5X4+MKe7rJm00n6tZQciar21JLlf0wy91Kp4y
-mP5oMBOSYESStl6dhdmHz7asNyM11iQvd1bNt8CvM1bZZJtFo6TTt3iP1sUfDSZU12BbyUCFy1+m
-hDE8uDErpFxsdnul9sUhRnNLdKMrzucE+1iBB4+6lWmHyhvWVfGbNZ33252YjNJuh7kR9S4ueeGi
-EWk=
-=2DIT
------END PGP SIGNATURE-----
+I reckon the tests prior to the net subtree have done something to my kernel but thus far
+I could not isolate the culprit test.
 
---------------D3QSux1f8bYK9aNStya37xMH--
+# tools/testing/selftests/net/fcnal-test.sh alone passes OK.
+
+> Thanks for testing
+
+Not at all. I apologise for the false alarm.
+
+Thanks for patching at such short notice.
+
+The patch closes the memory leak, and the latest change was obviously the most suspected one,
+but now it doesn't seem so.
+
+It would require more work to isolate the particular test that caused the hang, but I don't
+know if I have enough resources, mainly the time. And the guiding idea that I am going in the
+right direction. :-/
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
