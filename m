@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3066EAF56
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADA16EAF59
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 18:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjDUQim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 12:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S232968AbjDUQji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 12:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbjDUQik (ORCPT
+        with ESMTP id S231448AbjDUQjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:38:40 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E241B8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:38:39 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so13805150a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682095117; x=1684687117;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f37z8CaRZJ71kt5G3XjzfdmlNPZE2d/uOWK39okAU54=;
-        b=Yh+uT6I/cylCmOik3uAz+q7RnLYjpKL0xi2y7M3WWvKnZ/zvaMgljyj90TsRzp/sag
-         6dWZEKjPfLlrTh7Lhuo7ZAueaUYXJ6CEM1ALziDuumr8u5OEQKYQpl7l5KpMYGBks1nr
-         Fu9UDEx2uKV0YzlYyxW/USkR4ZDz96BoY1HkzGMbuTNLKPyyVF+1XSQSX4P5Z3GnJCEQ
-         Hh1zHpOslffWEC4w8LonVQU/udxu9P1Yd2H57zHY27SITEzj74L+Ep5vxDlBdVhWiwL/
-         mtGcg1ZSav168p+nsNz6gDRCcvmiNE3U6G1ve0WjR9N0v7BBrOvZCtpetCRaXpNrTVUG
-         So7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682095117; x=1684687117;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f37z8CaRZJ71kt5G3XjzfdmlNPZE2d/uOWK39okAU54=;
-        b=cozvWYM9n2Y/M+yzjxv82ygij/k1edpC353ISCM26ifH4JH+DLMY+pomyd45tCuXPW
-         pYmJHdGmD3IslUuhSf4h6zScWXcMkZAZ9t87bVKh0xeowhgrJmczwhIeaE5eMpUrpfOu
-         vrVb29s/EON9b8+zTL+sLErPdVMsfK9AOrLjjSFKLXmbSObeX/9beUu3dMP7m+d9vpWM
-         efW/tJ91zw/O9KjXNLTtvQXONsZklS4X8SZn1ZZaIY0D262xFm1E4gSKR8YZXvWJB2jt
-         hsKC5Jre8HakzsSDTwxbj6xktS/InM/5YCzoULk+UY0zTSl5hrw8nGZEWRth0HsFOP8b
-         xZ1w==
-X-Gm-Message-State: AAQBX9fTXCMPv0umBKITZaNhF0GGh7SnBlNFER842vPgMUNMwVw8lDOJ
-        PvNBfeCZJ/UP6wqjH1ibBh+4mA==
-X-Google-Smtp-Source: AKy350Y5t2Mc35ymMsh34woQ4uOvfYlOh9Dztn2hRVclw2MWmuBmIVK6FrtfRIKhUxRdQZI2OGeFeg==
-X-Received: by 2002:a17:906:a007:b0:933:4d47:55b7 with SMTP id p7-20020a170906a00700b009334d4755b7mr3158319ejy.2.1682095117535;
-        Fri, 21 Apr 2023 09:38:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
-        by smtp.gmail.com with ESMTPSA id 26-20020a170906101a00b0095729352bf3sm802923ejm.215.2023.04.21.09.38.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 09:38:37 -0700 (PDT)
-Message-ID: <246b2227-91c5-5425-7af4-b2d082f76fc9@linaro.org>
-Date:   Fri, 21 Apr 2023 18:38:36 +0200
+        Fri, 21 Apr 2023 12:39:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE9AE47
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 09:39:34 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-221-LzxJYqU5Ow-hxxu1l_t_zA-1; Fri, 21 Apr 2023 17:39:32 +0100
+X-MC-Unique: LzxJYqU5Ow-hxxu1l_t_zA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 21 Apr
+ 2023 17:39:30 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 21 Apr 2023 17:39:30 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joy Chakraborty' <joychakr@google.com>,
+        Serge Semin <fancer.lancer@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "manugautam@google.com" <manugautam@google.com>,
+        "rohitner@google.com" <rohitner@google.com>
+Subject: RE: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
+Thread-Topic: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
+Thread-Index: AQHZdDLD1iEgTrZDeE+sBNd9TfRPX6818oJA
+Date:   Fri, 21 Apr 2023 16:39:30 +0000
+Message-ID: <969a083998224016947f5e77218f4587@AcuMS.aculab.com>
+References: <20230420055131.2048959-1-joychakr@google.com>
+ <20230420055131.2048959-6-joychakr@google.com>
+ <20230421085354.34dwrgr3enlxqhtc@mobilestation>
+ <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
+In-Reply-To: <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/4] dt-bindings: riscv: Add item for StarFive JH7110
- audio board
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230420024118.22677-1-walker.chen@starfivetech.com>
- <20230420024118.22677-3-walker.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230420024118.22677-3-walker.chen@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 04:41, Walker Chen wrote:
-> Add bindings to describe the audio board that works in conjunction with
-> the VisionFive2 board.
-> 
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> ---
-
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+RnJvbTogSm95IENoYWtyYWJvcnR5DQo+IFNlbnQ6IDIxIEFwcmlsIDIwMjMgMTA6MjINCi4uLg0K
+PiBTdXJlLCBJIGNhbiBtYWtlIHRoZSBmb2xsb3dpbmcgY2hhbmdlIGluIHRoZSBmb3JtYXR0aW5n
+IGFuZCBzZW5kIHRoZQ0KPiBwYXRjaCBzZXJpZXM6DQo+ICAgICAgICAgIGR3cy0+bl9ieXRlcyA9
+DQo+ICAgICAgICAgICAgICAgICAgcm91bmR1cF9wb3dfb2ZfdHdvKERJVl9ST1VORF9VUCh0cmFu
+c2Zlci0+Yml0c19wZXJfd29yZCwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIEJJVFNfUEVSX0JZVEUpKTsNCg0KV29uJ3QgY2hlY2twYXRjaCBibGVh
+dCBhYm91dCB0aGF0Pw0KDQpJcyBpdCBldmVyIGFjdHVhbGx5IHZhbGlkIGZvciB0aGUgY2FsbGVy
+IHRvIHByb3ZpZGUgYQ0KdmFsdWUgdGhhdCBpc24ndCA4LCAxNiBvciAzMiA/DQoNCkknbSBzdXJl
+IGl0IGxvb2tlZCBhcyB0aG91Z2ggc29tZSBvdGhlciBsZW5ndGhzL2NvdW50cw0Kd2hlcmUgbGlr
+ZWx5IHRvIGdvIGJhZGx5IHdyb25nLg0KDQpJIGtub3cgdGhlcmUgYXJlIHRpbWVzIHdoZW4gaXQg
+aXMgdXNlZnVsIHRvIGJpdC1iYW5nICdvZGQnDQpudW1iZXJzIG9mIGJpdHMgLSBsaWtlIGNvbW1h
+bmQrYWRkcmVzcytkZWxheSBmb3IgZmFzdCByZWFkcw0KYnV0IHRoYXQgaXMgYSBzdWItMzJiaXQg
+dHJhbnNmZXIgc28gKGF0IGxlYXN0IHNvbWV3aGVyZSkNCmlzIDEgd29yZCBidXQgbm90IGFsbCB0
+aGUgYml0cy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
+bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
+cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
