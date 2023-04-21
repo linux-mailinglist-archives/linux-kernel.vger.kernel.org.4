@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B71A6EB2CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D766EB2E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 22:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233394AbjDUUPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 16:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S232918AbjDUU2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 16:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbjDUUPW (ORCPT
+        with ESMTP id S229591AbjDUU2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 16:15:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E82719;
-        Fri, 21 Apr 2023 13:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7jDGoKVRVE8/8Iw2EXqkPonvmAc0gvYRAzqps4fjwwg=; b=mr+zjn1yXtzKk4APmgRaOn77YC
-        qyrdJusW0V5fFBehp0H4LgJmcOzWB0HiZ/19FHS9XzMMBWYiQQiK2ov9vzahR7YBu95NK76q9JJZs
-        AkLKN4MUKm/MQ5+LZ/SLYHWNNTKsZIr04BKzck1FGkgdltQkKD7lNhCvCFoMTcFExtsIMgiMKVPre
-        m9Im6jnJmlKaq2x+wCYrcuNfTZjtNWDTsZNJmxJoZAgKC50KnsIBoeDx/zoi7hd2VV9XP++ihIvTA
-        tOEZ5yH+/ubaSmLHWmwzD23OC6iMGfb2/N5vqIvhKd4FYrTP8/q/0FOd4KBWDZDlc9qXT016NGn1F
-        NwwreEtg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ppxA3-00FZsC-AG; Fri, 21 Apr 2023 20:15:15 +0000
-Date:   Fri, 21 Apr 2023 21:15:15 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, hch@infradead.org,
-        djwong@kernel.org, minchan@kernel.org, senozhatsky@chromium.org,
-        patches@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        hare@suse.de, p.raghav@samsung.com, da.gomez@samsung.com,
-        kbusch@kernel.org
-Subject: Re: [PATCH 1/5] dm integrity: simplify by using PAGE_SECTORS_SHIFT
-Message-ID: <ZELu017UCTZWrCjv@casper.infradead.org>
-References: <20230421195807.2804512-1-mcgrof@kernel.org>
- <20230421195807.2804512-2-mcgrof@kernel.org>
+        Fri, 21 Apr 2023 16:28:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C101730
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 13:28:18 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682108896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JI7ghwB60oMagdu7Y4eAitqD3tX1oyMmnXoP24a20tM=;
+        b=0kLRQ1gf1Sdu2o1z8yEDN0c6EOY8Ae/lP/X2jXYKehyoWBCmWbZXfIgScKNTzJY7i56k2c
+        xSEXiIgIGf9o4PhnuxcZObn5v/CbaEnfu/PlUrxhu1rOtf2QaPqvGGJ3PISTLqMzYc74OB
+        6T54mn+wgtUbBUywAVteIj6F7wc3Z6E1+EiRjOMEoBr/Ofqwvo8lZ1Hsfzq4JDWhI3B7GA
+        oDBeGRpvbhkG0/SQOwszR4h4S6D1kZHdGReRn80HcSSSPiQefrAF/G7nTHISSHwKtVplDe
+        zeIGUMjyiJnt3WWgRfJLGbyqzXWW/3arxUEMe1SwA+YJbnIo5MCBqS8OOyOAxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682108896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JI7ghwB60oMagdu7Y4eAitqD3tX1oyMmnXoP24a20tM=;
+        b=ZsX6s4nMtJICTg8yewqdPARIQF02Q8zdfT+NRGplgu/YRrHnuWlQJ0BvABK0ULUW4lI6FA
+        XgpvRAK884bH4WBg==
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+In-Reply-To: <ZELADFhjWR2Swn3l@lothringen>
+References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
+ <ZELADFhjWR2Swn3l@lothringen>
+Date:   Fri, 21 Apr 2023 22:28:15 +0200
+Message-ID: <87pm7x0ylc.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421195807.2804512-2-mcgrof@kernel.org>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,10 +60,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 12:58:03PM -0700, Luis Chamberlain wrote:
-> -	*pl_index = sector >> (PAGE_SHIFT - SECTOR_SHIFT);
-> +	*pl_index = sector >> (PAGE_SECTORS_SHIFT);
+On Fri, Apr 21 2023 at 18:55, Frederic Weisbecker wrote:
+> On Fri, Apr 21, 2023 at 05:24:36PM +0200, Thomas Gleixner wrote:
+>> It's far from trivial because you'd need correlation between the
+>> interrupt entry and the enter to and return from arch_cpu_idle().
+>> 
+>> I fear manual inspection is the main tool here :(
+>
+> I thought so :)
+>
+> I'm already halfway through the architectures, then will come the cpuidle drivers...
 
-You could/should remove the () around PAGE_SECTORS_SHIFT
+For objtool covered architectures you might come up with some annotation
+which allows objtool to yell, when it discovers a local_irq_enable() or
+such at the wrong place.
 
-(throughout)
+Thanks,
+
+        tglx
