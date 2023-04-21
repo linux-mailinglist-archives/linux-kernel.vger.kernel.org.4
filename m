@@ -2,118 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796D16EA2A7
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDD36EA2A6
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 06:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjDUEVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 00:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
+        id S231646AbjDUEWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 00:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDUEVE (ORCPT
+        with ESMTP id S231208AbjDUEWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:21:04 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3094F525C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:21:03 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a6862e47b1so20393115ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682050862; x=1684642862;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TxBdc/PRX4p+DsSRUiF0vdFJbl++QpQEOpL7JwVgYcY=;
-        b=SWEaEBksyKx7gxjES2P61dY4k5teoEKck/LRwNV5ftXraREO8rSvwesqV9XWR4+wJP
-         URo3XJOWIvpBLHjgpGBf8lNj4DNY7VDshFi6+xlR3mvaKfa+y+1e3pzWl1BaqQvR53Bw
-         MtB1Vr+Ohi2VDK7hjq/IJMMCVUg6ZMPWxQa/f366pNKbBezK4T00swhEN3VWohQhDb+9
-         PBnMjxwDayWa+qXIGd9D3T9B7MXjdiXnWrdtNfitjvdjM8NvPPDhV994RxWq0E7bVsh6
-         hXH0EFymiMoQz2iAL5L09PEtywy5Qn+8EqIIgLP4dA4EsL0gXHDvxqmZ3DoLr4bvbcUL
-         uu/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682050862; x=1684642862;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TxBdc/PRX4p+DsSRUiF0vdFJbl++QpQEOpL7JwVgYcY=;
-        b=Honq+Q7Oh8KqmovBPYpX606mwbDjseaj7o1D61BJtuW9kED/JwwcFyWW9cWvWvRO8w
-         qM+egljBuUsct6vfm0ZAE+25UbpDUuUwYBJ3yMTGW7MgkQWxmmjw50FQw3NnuuJqLBgU
-         SFtL8HeDUKZJ9p9DYqOEpT+2pMDDgnzg7f8vd74fXqb3D20ri5I+1QQ7XLEaFeu7J56u
-         6KesyjC7d76vr53NRZHrpXCEVs69GMOtWARw8lFkglvv/4tvOfCgLx9To6EBZvfiLDiA
-         bU5UR3cCm+OzC6+adTEHtZKKVEGWAuumacnNSAU6wSR8opF7j42qa0USUude9Uvty6Av
-         6C2A==
-X-Gm-Message-State: AAQBX9fFn13FGnrWb99dAdVbu6fMpdX8QTSi3v8lSFP0GmoLa6qn20KL
-        X4wYY4KMN6dD/WFSY5cKnyQ=
-X-Google-Smtp-Source: AKy350bFHFTuoEpUJBX0H3NG2lSHihuB7T5W/Dp6+XyRJYjQpepGO9CALNTod8G2AwN9d/MAN0g90g==
-X-Received: by 2002:a17:902:c78a:b0:19c:d309:4612 with SMTP id w10-20020a170902c78a00b0019cd3094612mr3354823pla.6.1682050862500;
-        Thu, 20 Apr 2023 21:21:02 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-78.three.co.id. [180.214.232.78])
-        by smtp.gmail.com with ESMTPSA id g4-20020a1709026b4400b0019a6cce2060sm1831511plt.57.2023.04.20.21.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 21:21:01 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id F05E21067D5; Fri, 21 Apr 2023 11:20:58 +0700 (WIB)
-Date:   Fri, 21 Apr 2023 11:20:58 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     =?utf-8?B?QW5kcsOp?= Coelho <andrealbergaria@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: strings
-Message-ID: <ZEIPKhKNz7LnhM/q@debian.me>
-References: <8de1912e-8009-3c85-ece5-7ca7f03be42a@gmail.com>
+        Fri, 21 Apr 2023 00:22:45 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCF05FE6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 21:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682050963; x=1713586963;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=H9iJKcVIMytaSDCm2vBtv7QGVs8Ip4teKb26JClgYJM=;
+  b=IvrXnnmG80PM96SI97ZEtDhVF9/TV6/xr3UgRec17mH40uapyYnMr+d4
+   f+SBzNK0Y0nlD96JssWjqqzK079x1Zr/H0W5pqhJfv31u7Hxa2+gK0zxX
+   PI1K9qQMUUKOYuADUco+xkd7SNOQVHoSil3QLL5l3j6WOtiSfBIUJnqAk
+   mgzKrqieC3wA+mvwy7tlhD8bQfvTX6eSANezH0dV4Z7uC71XX526bNPDu
+   S2KDTjOE0x6zMOuvUmO3rYBTdUXRI7BJ2mq0bGriJab+eVLB6uaM6zqqp
+   I7eslMJUSY8kUHSCQZDc3hcgGamlZsdrQ6YvODKQ77rXFTiY/FqCbz5xc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="408849266"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="408849266"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:22:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021794073"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="1021794073"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:22:37 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>,
+        <mgorman@techsingularity.net>, <vbabka@suse.cz>, <mhocko@suse.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/page_alloc: consider pfn holes after pfn_valid() in
+ __pageblock_pfn_to_page()
+References: <62e231a8f2e50c04dcadc7a0cfaa6dea5ce1ec05.1681296022.git.baolin.wang@linux.alibaba.com>
+        <94bfa3cc-674e-25b0-e7e2-d74c970acef7@redhat.com>
+        <ac8bb4e9-e7f5-f9da-bca0-ac7ef6d68c23@linux.alibaba.com>
+        <87cz3zt3u6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com>
+Date:   Fri, 21 Apr 2023 12:21:28 +0800
+In-Reply-To: <52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com> (Baolin
+        Wang's message of "Thu, 20 Apr 2023 17:11:45 +0800")
+Message-ID: <874jp9uapj.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6RTX+Scp426zjo9r"
-Content-Disposition: inline
-In-Reply-To: <8de1912e-8009-3c85-ece5-7ca7f03be42a@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
---6RTX+Scp426zjo9r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 4/20/2023 3:22 PM, Huang, Ying wrote:
+>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+>> 
+>>> On 4/12/2023 7:25 PM, David Hildenbrand wrote:
+>>>> On 12.04.23 12:45, Baolin Wang wrote:
+>>>>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(),
+>>>>> which checks whether the given zone contains holes, and uses pfn_valid()
+>>>>> to check if the end pfn is valid. However pfn_valid() can not make sure
+>>>>> the end pfn is not a hole if the size of a pageblock is larger than the
+>>>>> size of a sub-mem_section, since the struct page getting by pfn_to_page()
+>>>>> may represent a hole or an unusable page frame, which may cause incorrect
+>>>>> zone contiguous is set.
+>>>>>
+>>>>> Though another user of pageblock_pfn_to_page() in compaction seems work
+>>>>> well now, it is better to avoid scanning or touching these offline pfns.
+>>>>> So like commit 2d070eab2e82 ("mm: consider zone which is not fully
+>>>>> populated to have holes"), we should also use pfn_to_online_page() for
+>>>>> the end pfn to make sure it is a valid pfn with usable page frame.
+>>>>> Meanwhile the pfn_valid() for end pfn can be dropped now.
+>>>>>
+>>>>> Moreover we've already used pfn_to_online_page() for start pfn to make
+>>>>> sure it is online and valid, so the pfn_valid() for the start pfn is
+>>>>> unnecessary, drop it.
+>>>> pageblocks are supposed to fall into a single memory section, so in
+>>>> mos > cases, if the start is online, so is the end.
+>>>
+>>> Yes, the granularity of memory hotplug is a mem_section.
+>>>
+>>> However, suppose the pageblock order is MAX_ORDER-1, and the size of a
+>>> sub-section is 2M, that means a pageblock will fall into 2 sub
+>>> mem-section, and if there is a hole in the zone, that means the 2nd
+>>> sub mem-section can be invalid without setting subsection_map bitmap.
+>>>
+>>> So the start is online can make sure the end pfn of a pageblock is
+>>> online, but a valid start pfn can not make sure the end pfn is valid
+>>> in the bitmap of ms->usage->subsection_map.
+>> arch_add_memory
+>>    add_pages
+>>      __add_pages
+>>        sparse_add_section /* set subsection_map */
+>> arch_add_memory() is only called by add_memory_resource() and
+>> pagemap_range() (called add_pages() too).  In add_memory_resource(),
+>> check_hotplug_memory_range() will enforce a strict hotplug range
+>> alignment requirement (128 MB on x86_64).  pagemap_range() are used for
+>> ZONE_DEVICE only.  That is, for normal memory, hotplug granularity is
+>> much larger than 2MB.
+>> IIUC, the situation you mentioned above is impossible.  Or do I miss
+>> something?
+>
+> Thanks for your input. Your example is correct, but this is not the
+> case I want to describe. My case is not about the memory hotplug,
+> instead about the early memory holes when initialzing the memory. Let
+> me try to describe explicity:
+>
+> First suppose the pageblock order is MAX_ORDER-1, and see below memory
+> layout as an example:
+>
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000001fa3c7ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7dfffff]
+>
+> Focus on the last memory range, and there is a hole for the range [mem
+> 0x0000001fa7590000-0x0000001fa7dfffff]. That means the last pageblock 
+> will contain the range from 0x1fa7c00000 to 0x1fa7ffffff, since the
+> pageblock must be 4M aligned. And in this page block, these pfns will 
+> fall into 2 sub-section (the sub-section size is 2M aligned).
+>
+> So, the 1st sub-section (indicates pfn range: 0x1fa7c00000 -
+> 0x1fa7dfffff ) in this pageblock is valid by 
+> free_area_init()--->subsection_map_init(), but the 2nd sub-section
+> (indicates pfn range: 0x1fa7e00000 - 0x1fa7ffffff ) in this pageblock
+> is not valid.
+>
+> The problem is, if we just check the pageblock start of the hole pfn
+> (such as 0x1fa7dfffff) to make sure the hole pfn (0x1fa7dfffff) is
+> also valid, which is NOT correct. So that is what I mean "the start is
+> online can make sure the end pfn of a pageblock is online, but a valid
+> start pfn can not make sure the end pfn is valid in the bitmap of 
+> ms->usage->subsection_map."
+>
+> Hope I make it clear. Does that make sense to you? Thanks.
 
-On Thu, Apr 20, 2023 at 03:58:47AM +0100, Andr=C3=A9 Coelho wrote:
-> greeting...if youre interessed in string algorihtm check
->=20
-> https://andrealbergaria.github.io/
->=20
+Thanks for your detailed description.  You are right, it's possible that
+the second subsection of a pageblock is a hole.
 
-Looks like above link is about hex arithmetic implemented using strings,
-right?
+It's good to remove unnecessary pfn_valid(start_pfn) check in your
+original patch.  But it appears unnecessary to replace
+pfn_valid(end_pfn) with pfn_to_online_page(end_pfn).  Yes, it's possible
+that there's a hole in a page block.  But it appears that this will not
+break anything.  Per my understanding, even if we had fixed this one,
+there may be other smaller memory holes in a pageblock represented as
+reserved pages.
 
-And the licensing is similar to Qt: it is opensource (GPLed), but there is
-a commercial offering for proprietary projects.
+Best Regards,
+Huang, Ying
 
-Also, on what use cases can your idea fit the kernel context? Or doesn't the
-kernel already have the implementation yet? Perhaps better implement as
-userspace library? If it is the case, I'd like to see actual patch series
-implementing your idea (see Documentation/process/submitting-patches.rst for
-how to submit your patch).
-
-Thanks!
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---6RTX+Scp426zjo9r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZEIPJAAKCRD2uYlJVVFO
-o8uRAP9T0kSMR+HnUlNw9lXuk5ShNttkExe7Pi87sqddcYmUUwEAippazfiDhPKu
-2aQJLNVsEbK3kqsriZmoCvBNPOzqUwk=
-=qYS2
------END PGP SIGNATURE-----
-
---6RTX+Scp426zjo9r--
+[snip]
