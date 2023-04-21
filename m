@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505C66EA5F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27756EA5DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 10:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjDUIe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 04:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S231691AbjDUIaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 04:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjDUIev (ORCPT
+        with ESMTP id S230047AbjDUIaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:34:51 -0400
-X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 01:34:48 PDT
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629475B8F;
-        Fri, 21 Apr 2023 01:34:48 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [106.117.98.24])
-        by mail-app4 (Coremail) with SMTP id cS_KCgCn+bFfSUJkjtmAAA--.53646S2;
-        Fri, 21 Apr 2023 16:29:28 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        dmitry.torokhov@gmail.com, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] Input: cyttsp4_core - change del_timer_sync() to timer_shutdown_sync()
-Date:   Fri, 21 Apr 2023 16:29:19 +0800
-Message-Id: <20230421082919.8471-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgCn+bFfSUJkjtmAAA--.53646S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17CF43AF13Ar13Kr1kAFb_yoW8tr18p3
-        y3Cr13Jw48GFWUtr17J3s7ZF95Cw15KFyUKF47Gws5Zrn3AryrAF1FyrWfGFW3JFZ8ZFn3
-        Jr4Fv3y5GF9Ykr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUIzuXUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwIMAWRBVNslyAAasR
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 21 Apr 2023 04:30:12 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E9386BC
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:30:10 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b992ed878ebso1208966276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 01:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682065809; x=1684657809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5klHMq64VIljoSVkOwPJ2cgj8nj1Si169hW4IY+bP4U=;
+        b=lrQhs+vo1k2UBUSg8IofSsZ0KVGmRL89oDZ8r7Zsg/81K9QtNTz6+xArvTE25AQkL9
+         BP0uHNf/IPGoUxcGQHCgqUORb2Gtr5OsXnQB9uJbd5eqCC/zfA5ZrCnP97clOCzTNa5d
+         mdD0NN1a6M7wE2U8hzBjrWffRXQWPMwKTYOh9O23KUEypN98MMGQhVbYBiZPKQwI0Ctw
+         pSXb56zGQtocA0R7fJxPCqoruGf80AFomCpYq0IDtzX+1vcZGVGjdTy4JS4OaVnPCD2s
+         gGD5i9mwhakqDnYpSsy858vGSBeCSAXzcSwkRjAcYDllLLMjU2Q16vs0pDIsEQwMeRvp
+         tEPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682065809; x=1684657809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5klHMq64VIljoSVkOwPJ2cgj8nj1Si169hW4IY+bP4U=;
+        b=hktCGAPjmFc6ekxmGvA0qyupm4YOzUrnXw7juOmdsRQWpkyUTJcdS3N+Qt3N0Z/Ls/
+         yEgBdFCwMFVIWj/OSkAVBh9z/+I5T3fpOY+EPQT5rthP/KyMqM/3+oxBAdKVltUwPzH7
+         v7Hx0oXfmEmJDWcgGU60vpgZytWCdD0aj74IrV8/dLeccHm6mnDP09WZ7M1quxRsm/oU
+         2JYHTshmAVwWj9DLB3wq6TKft67vXFHxoS5kPfnV4uR2Zr7uwKBGRx3CO47B37TOtz1I
+         G7bNrFTXd6SzKIqULbRQiKT1j7VI4/dsKlVeiT8OjfGCMvGYZinq+Gpmu1p8qqXe/Zlk
+         MR0Q==
+X-Gm-Message-State: AAQBX9eFF8lZDhR952Kk2v9VAsYVx4NKHaTwYP9m+6saL8KnjrJdzSCs
+        0OdjieUrwcLJE0S1WRkUDlE3LtkC0NnW5/iLM+W70w==
+X-Google-Smtp-Source: AKy350Zns/U+3vpNmpMzNn8WbDce9++folijXpvxedcLeNyjLrhBVN1M2j1Bs3JSk09cKtYRX5696eR1QSUH/+GFEPI=
+X-Received: by 2002:a25:46d4:0:b0:b8f:1cea:e064 with SMTP id
+ t203-20020a2546d4000000b00b8f1ceae064mr1238150yba.32.1682065809654; Fri, 21
+ Apr 2023 01:30:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
+In-Reply-To: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 21 Apr 2023 10:29:58 +0200
+Message-ID: <CACRpkdYgDC0QJhH4s1P2ga3W=xXqjovhsNS2i5nikgu_ikenKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] Add PMI632 PMIC and RGB LED on sdm632-fairphone-fp3
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The watchdog_timer can schedule tx_timeout_task and watchdog_work
-can also arm watchdog_timer. The process is shown below:
+On Tue, Apr 18, 2023 at 6:43=E2=80=AFPM Luca Weiss <luca@z3ntu.xyz> wrote:
 
------------ timer schedules work ------------
-cyttsp4_watchdog_timer() //timer handler
-  schedule_work(&cd->watchdog_work)
+> Add support for the PMI632 PMIC in the spmi-gpio & qcom-lpg driver, add
+> the dtsi for the PMIC and enable the notification LED on fairphone-fp3.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+(...)
+> Luca Weiss (8):
+>       dt-bindings: pinctrl: qcom,pmic-gpio: add PMI632
+>       pinctrl: qcom: spmi-gpio: Add PMI632 support
 
------------ work arms timer ------------
-cyttsp4_watchdog_work() //workqueue callback function
-  cyttsp4_start_wd_timer()
-    mod_timer(&cd->watchdog_timer, ...)
+Patches 1 & 2 are finished so I applied them to the pinctrl tree so
+Luca does not need to keep reiterating these for the next kernel cycle.
 
-Although del_timer_sync() and cancel_work_sync() are called in
-cyttsp4_remove(), the timer and workqueue could still be rearmed.
-As a result, the possible use after free bugs could happen. The
-process is shown below:
-
-  (cleanup routine)           |  (timer and workqueue routine)
-cyttsp4_remove()              | cyttsp4_watchdog_timer() //timer
-  cyttsp4_stop_wd_timer()     |   schedule_work()
-    del_timer_sync()          |
-                              | cyttsp4_watchdog_work() //worker
-                              |   cyttsp4_start_wd_timer()
-                              |     mod_timer()
-    cancel_work_sync()        |
-                              | cyttsp4_watchdog_timer() //timer
-                              |   schedule_work()
-    del_timer_sync()          |
-  kfree(cd) //FREE            |
-                              | cyttsp4_watchdog_work() // reschedule!
-                              |   cd-> //USE
-
-This patch changes del_timer_sync() to timer_shutdown_sync(),
-which could prevent rearming of the timer from the workqueue.
-
-Fixes: 17fb1563d69b ("Input: cyttsp4 - add core driver for Cypress TMA4XX touchscreen devices")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/input/touchscreen/cyttsp4_core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/input/touchscreen/cyttsp4_core.c b/drivers/input/touchscreen/cyttsp4_core.c
-index 0cd6f626ade..7cb26929dc7 100644
---- a/drivers/input/touchscreen/cyttsp4_core.c
-+++ b/drivers/input/touchscreen/cyttsp4_core.c
-@@ -1263,9 +1263,8 @@ static void cyttsp4_stop_wd_timer(struct cyttsp4 *cd)
- 	 * Ensure we wait until the watchdog timer
- 	 * running on a different CPU finishes
- 	 */
--	del_timer_sync(&cd->watchdog_timer);
-+	timer_shutdown_sync(&cd->watchdog_timer);
- 	cancel_work_sync(&cd->watchdog_work);
--	del_timer_sync(&cd->watchdog_timer);
- }
- 
- static void cyttsp4_watchdog_timer(struct timer_list *t)
--- 
-2.17.1
-
+Yours,
+Linus Walleij
