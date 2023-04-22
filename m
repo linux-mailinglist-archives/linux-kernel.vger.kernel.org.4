@@ -2,251 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4DA6EB623
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 02:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1D26EB625
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 02:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjDVAGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 20:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S232081AbjDVAIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 20:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbjDVAGH (ORCPT
+        with ESMTP id S232058AbjDVAIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 20:06:07 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B146212D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:06:01 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b980e16b27bso1404943276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682121960; x=1684713960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xO+YD26iSNYSmlzjnipo6n//XZnqdiZU5MbXowJFAto=;
-        b=Q9tFlYxp7N+1mxlzl25XZL2tPkhbxE7E+i6RzKw57sF0ZYGke+YtzMSsFk7NRtqVYA
-         tp7vnWOehv4rB6IgTMj2cApLYQ29VNz9DBcEvMVjjBMSqyMHBjDPRPDBgqiI4eNWTbeY
-         Ye8wqhl9VLEgKZexujdLyjyIWkALPRde0TRbtqQwUadnVe55IwF05aic1tn3XZviX9pN
-         1JjmzWe2zjnA9Nxv6CgZT2P9nJWhFNEBDOsm61Gezxxgi+VHvvoBQtl2W26GO+RXraY7
-         lMBP2AaDEFLMMOha30h+IKJkTcqT6nEPw56BC0aniVA8sYXFthEaeNhleJjYHpB66YLX
-         08OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682121960; x=1684713960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xO+YD26iSNYSmlzjnipo6n//XZnqdiZU5MbXowJFAto=;
-        b=hGX3ZMI5miw1OLeiQhx47KcMwlBYbKs3aBoeoIPM8pek+pXEfGAbFzItpB6RPfBLiw
-         xs03sHyqKYV8cii3ve9iCh3CwxEFE7gv0q+OCoNxV7Kf/Pv5KuXP86zc12KDlNnw9JqE
-         B99kxOa3G1Z3Fe4YuWdBoFobQp8sf3wPTzIgCHXoe1VfRIwL303dKSfDhIJnLqE1Vf82
-         Zry2KU5LjgzTzhHt7DvK3abgIYPwHbW+Fh4B7mBNeU4IzWZbYUfrL76FEudU0NiWmEm2
-         vxfFzSvuOirq/PvkNSdZu6n8MUaRVVG25tL/774Cw0fm9E+fjrBY2jCGTJhZvJHH5K3/
-         IcTA==
-X-Gm-Message-State: AAQBX9c6XAAl26q6M3chA3V0iRfE8muMtriX2cgkDw9nfVhh/Nn2wtte
-        PNVK5L+LHG9MsS/PrC2aU0x2ataY8aPgJoHmTdQkCQ==
-X-Google-Smtp-Source: AKy350Z08K5FgJgpv45/NNHDApgfPP7MHftNwuO+NiJhlwya5xRnHc1+3JSKhFhy3kz4H8xwhcCBrTYHNhl80xudzEM=
-X-Received: by 2002:a0d:d541:0:b0:54f:cbaf:36d with SMTP id
- x62-20020a0dd541000000b0054fcbaf036dmr2944127ywd.35.1682121960536; Fri, 21
- Apr 2023 17:06:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230421124938.21974-1-quic_devipriy@quicinc.com> <20230421124938.21974-7-quic_devipriy@quicinc.com>
-In-Reply-To: <20230421124938.21974-7-quic_devipriy@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 22 Apr 2023 03:05:44 +0300
-Message-ID: <CAA8EJpoqq=3o1K=yDaim=e11nEN5n+phJUSd1d5BT_VJkdv6xg@mail.gmail.com>
-Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
+        Fri, 21 Apr 2023 20:08:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222841FF1;
+        Fri, 21 Apr 2023 17:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682122085; x=1713658085;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=CQuW7Kaed/RU1vL2D4nTGYeALvDsICjl8KOwKlVTE0A=;
+  b=mkqmRBcj4XuqBCUDCdQO1qri06bQeVz11vfAX6o6tbMupkF7awGtavSF
+   TWMdrO1IlDkO9y+//i2/3Kan5ok1C5lAvsMe/RN9UJtUeQGmyHNC0D1bK
+   4PTXnxH9fhcExfXXVKkT6mU4GCkzt8XMEpI4PC+QjohyvC81gl0LVJaJe
+   GHS73ShAIWux34tdkdNofI732wglop4gOdyowfYquv9kue4GZ17KhI71B
+   7MiMRVKtvkWpzVuhDdfEFm6+CxxmsRdwNeBSjTBDT63pjzKrtHM3wduNt
+   3qpH3vdH27xgZLSK2c7D8si6W36hJqsQ7jjHzKLLfrH8yj19N0p0+j+L2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="334994304"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="334994304"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 17:08:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="685875093"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="685875093"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 21 Apr 2023 17:08:04 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 21 Apr 2023 17:08:03 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 21 Apr 2023 17:08:03 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 17:08:03 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 21 Apr 2023 17:08:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z1YWxHKuOgT/Z9jBORt1rI/J9CntNM0HijxF8hJixX3qFgKVWjt5QEVkfBWYpSl4kEtY6O9tKraEVc0DsuzD6B3Y3TkY/fXAVeQ5PT2FNod/QT2zuZrzGkEp7hEOrD0iPl0Ctnm3ZRaVXOu6LCuDI/TQAO4S40lcdCrL61umM6cOzEzGUlc8FiOaN06T/ODR5yU093H85Y6YpM7XopyHBMBynCE1H9K017j8ePqHD+JkFAYdxMEyrWvlOeXCDZlvSTE+2wKEDZ+WqFuE7Z8UAFbBEK/HoPyDmK6Y7b76spfQJd7Xz5WvCFC6ndruOlvQDLXwEwxWsGFLhZ5m/LGcmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HhLw3EjpzQAS5Fp7H+oY4KU+LGeSI5FSLcZUrxlDTnQ=;
+ b=joktwYoy+WKigD0ZgJ1FuSctpAFcGe1Jtd4HJKopB2JDqp8oJveiGotlEk1B+LKtl5newVbgqujkN05RoKqH2qmzNck5sKKPXjSZbutwMEYZqqX7Nghj5F2Hjc2tK0s6hoP1r1RcrD9dcyVt8AQEa4VV23wfYtoKQTjPVzwsWC4y8MA7lb7WVmf5K+ceJ8n7fl8vYbYwvq4zKmOH6anMFS1M7XAUD2ajENdcyFWjWz+nmKARnEXu90KwlXBsGs/ME4HfTJ6U4D2cXWIk2HzpQZ6+oSFDKRnSKFZRPy1IjvJopZ1FwBzLnc4oK2bO6JyAxm6mtOFSt9pnCdylMaiyag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by SJ0PR11MB5937.namprd11.prod.outlook.com (2603:10b6:a03:42c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Sat, 22 Apr
+ 2023 00:08:00 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::2854:770d:2a43:dbc6]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::2854:770d:2a43:dbc6%4]) with mapi id 15.20.6319.022; Sat, 22 Apr 2023
+ 00:07:59 +0000
+Message-ID: <a1c85bef-5f41-c49b-a012-1e75e69a3789@intel.com>
+Date:   Fri, 21 Apr 2023 17:07:55 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2 01/24] selftests/resctrl: Add resctrl.h into build deps
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        <linux-kselftest@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        "Shuah Khan" <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
+        "Sai Praneeth Prakhya" <sai.praneeth.prakhya@intel.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
+ <20230418114506.46788-2-ilpo.jarvinen@linux.intel.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20230418114506.46788-2-ilpo.jarvinen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR05CA0029.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::42) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SJ0PR11MB5937:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39ec07ee-ab29-4c38-d4a6-08db42c5a0f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fcbhB+zTYVCfQOZnyDJNsHN6O0cLeUt+viSAd7udrCDfHwyz5+DhxAZ/QYldp9f8sE0+uH01auPcNEScBFyVSRM1M56oiJkboCt7MgDtbgZSMjMPbwnuyvqXr40fPXkWkWxp3qKByJjqS+JrRHuS4doDedD8aJ2HMraaGdkrTzgYO6tmjpV/S7E2PpuKSFwdXDUVMh8nUkRiV85b8hedNk06OPJxhxl863rDJHPH4aYdJq6V9pkn/TQNOW/WEqaXtWOLn8xo1WECS19rVfhrCkRDTus/ZPcC4oZGemBugcGPK72LgYRxp5evvXGRqfps4/EQdjZxn8oNcZEaxEqMesw5NQScnPrKuDAkntj/PoXCYS/2EsDC/KKA1afewbbmKxspQ+U9SB3w7RVHVb5llMUEEppDuiZgucQm7lN3HHd5wq7t1SsY+BQzGVhCnYX4y83S74sU7Gq3FFdIKiUaV39jPoFu+xVM5iJdltRayjsVy6pHlceVhKTFkD4b6h1X7AWCgYo3ImXG8H4n+12GJdint8PoQOkElays/ANeq3jGKLBXz0DXPHxY1ABtebNfS4+QfquvfJ4yUl06NXse+GoGK75BkeLrP6MxMT0aG8KUNAfRJjz/psF0ikLPAK9olwE/nZK38lAyiOX5XAqrUw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199021)(66476007)(478600001)(5660300002)(66556008)(66946007)(82960400001)(8676002)(8936002)(38100700002)(316002)(110136005)(41300700001)(4326008)(186003)(53546011)(66574015)(83380400001)(2616005)(6666004)(6486002)(44832011)(6506007)(6512007)(26005)(31696002)(86362001)(36756003)(2906002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3loYWdxczBrOWdmeVR4MkQwRFl2Z1E0Um1CVllVcFlHYytFWHhwUE1RTWgv?=
+ =?utf-8?B?OW51WkQvSnppWE5QVnFNOWVMM2xzOFJzOUVjOXNDR1NnZmcxZnJCNnc0L2ZD?=
+ =?utf-8?B?cWhpZnFPTWx1Y0RNVEpDVVVGRG1vbjhmbHJCMUpacFk3VjFrYWpwd1ozeXBB?=
+ =?utf-8?B?S1FBUW1GTlpFQy82L0hFVTlaVlJlZDdIZmFnWWQ2UHNOT0tPQ0FOdWIxMGlF?=
+ =?utf-8?B?NEpoTWV2V0RLcG9wM2xpM0xrdmxqamhLeUpnVVQ4UzNqSkpKQS9jSUVSakMy?=
+ =?utf-8?B?cVl6anlOL1dYV1JaVW9mN1g3aFhHOTdMZFMyZ0p4MVljZUt2Nk9ZYnN3RTlx?=
+ =?utf-8?B?QmZXUWtjOUNxTWZGUUdDK1NyVzg2NnhGKzNvRVlQMWhvV1NJeXV3UWcweFB0?=
+ =?utf-8?B?U1Z5S0NhUHpENFZvVnROY2VockxXQ0FGb05TZEVlZHhhYlhncExNN1EzVTgr?=
+ =?utf-8?B?ZmplMjd5bkxvbmRpYlp5WVNMbVl0dENCbXJEYWViaGJJT0NKTFJxZllJTWdP?=
+ =?utf-8?B?T2RwQk1SNGxnd2F6cEUyNGpXa2w2UkJVK1VpZy9aZXpaRHlrY21xejU2Q2k0?=
+ =?utf-8?B?SXNLQThyWTJ0dUR1Y2tSb1NlcDlCUHVtSFVZQUtDR01qM3YxdDNpSWZWUmRq?=
+ =?utf-8?B?OCtRK2QzL1dYVTh6WkxadnV0WVg3WGRRdlNndy9MOEVUbExJSUFjY2dhMU1L?=
+ =?utf-8?B?YTRvdUJPSU5sMlNkcnRVUzV5WW9YWE00R1dQNXJiRVR0RDhDVzVkVk1LZDht?=
+ =?utf-8?B?eTJXRkp3T0Fia2VQQzkrUXNaOXdGdFBISjlueWJCOXFWUkNMVDcxNmZLNy85?=
+ =?utf-8?B?aUZReWVLbE5BVmNxS3gzblp0WDAxQ2JCQUk5SWxaeDh6aWtCbTBVMWxKUzdL?=
+ =?utf-8?B?bDJ1RHl5eU05ZHJ3ckYyWFpaNVVxT1hRTnhNTzloNVlhWlFtbUZHMU9kaWpD?=
+ =?utf-8?B?eVpiM2FGNW9sVmRIREVJRG03bENWczNGVjh5d04wbmVqU3l6THNOZmZvaWxT?=
+ =?utf-8?B?bmN1dVVjbHhzREV1c3pzZUZSMkFmYXB2eUlKS1VHTlVGeW9qN1IzYnpUTU5P?=
+ =?utf-8?B?S2lqY2hWR1BBYlZ6ZGtabEZHQUcvUUlTZVcvLzFVeGNrOGsza2t6VHVnMUFm?=
+ =?utf-8?B?V094YlA0VnpWQnFpZjR4MEUwdW9GZjkvSjZBSUZQOW12eEtiL3RWbCtJNWVt?=
+ =?utf-8?B?cVlrT1RPamJOaSt1RkxpOVQyWHlYS1VIK2Y1RW42SWxzZitZMVBOUjZTQ2dB?=
+ =?utf-8?B?RExGdEQvTFYwcUtvdlJ3Z1JLV0xQcHhkN090V1h0eWtkSFovczBpcVNySUhO?=
+ =?utf-8?B?NnE4R1gxd1djdmpFakNFZ3p4VmtKRFduRWprMDhWNlVMMEFLU3pRY0pqL2N2?=
+ =?utf-8?B?ZDgzMG1WU0VWSzA1OGtSV0NSMG13WjgwSUhiOWd2RUJ2QUw3Q0pLaGd1VXNi?=
+ =?utf-8?B?YkVjcTNHQklKVGhlOXV4bmwxSGpqaUZuWWZPWnB5MzU5bXQzK1lEL3BRS3Z5?=
+ =?utf-8?B?clQ0NGd6MGVIWWdWd2hDUWpwUDVrVk1FRXZ2SjE5Y3V2ZVJYakVLUWdHNjM1?=
+ =?utf-8?B?WHNRN2JtcTQxM3JaT1Avdkt5ZmNTRnBTcENRZ0UvbDdGWWNhZldOOFVUZzhr?=
+ =?utf-8?B?R0cvbnFRbENyZ1N4UERwczN4SWFua3JBZEtXbEc1NWx2T0JnM1dTTkRuTnh3?=
+ =?utf-8?B?aUJBQlNqc3ZBVktBSElKTDZUY3F3ak9jalNKVFpoS2x0aU04ZkpmcmxqcDkw?=
+ =?utf-8?B?LzdkTlAwcWhkR1hacjIvam5jOFFjUlFQdGNnMUdKT1A2ajhxMHo5eVZPZjh2?=
+ =?utf-8?B?STFaZi8xZjdjbTNjeDBMWkx0V2xqdVRvQWZ6UXVnakJweXJNbitseGNsN3hC?=
+ =?utf-8?B?ZUNyV29kM1hsSEdaeUdjRVkvb2lwb25JSEUrd2dycFA2c3BZR0hDeGhlMnR2?=
+ =?utf-8?B?K2lwUERnSUZ2Z2MyRkZTc1BCTk5mZEdQci9SNUt1ZnRUODZFQUVJaXdsREpP?=
+ =?utf-8?B?TnJ4S0l5V1B5WnhRdlJxMC8zY2o4dW9ud0xHTVVXTyt6akRXbEJockE1WDZr?=
+ =?utf-8?B?MlFOTE53UFh1MGd5RGZFUExwMm9zMjVvSnoyN2VUZTZKTldqL0RBNFRTM01o?=
+ =?utf-8?B?eHFhai9Gay9xVTBSeXIrbHI2RkNKRy9jTU9kREI1U1ZHZUpQQTlDbFJTV1BO?=
+ =?utf-8?B?ZkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39ec07ee-ab29-4c38-d4a6-08db42c5a0f6
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2023 00:07:58.3265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: arrfbAcX12kRHo8Nmz7QCrphNkj0K8RmME7JD9FL09Z25n+8bFOg3rvhSO08YDb+wKxw8YeeJ6Ca25qIBOAelGSYCK5iT2URQ8B5XCsRZX8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5937
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023 at 15:51, Devi Priya <quic_devipriy@quicinc.com> wrote:
->
-> The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
-> and two dual-lane based on SNPS core 5.70a
-> The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
-> Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
-> which reuses all the members of 'ops_2_9_0' except for the post_init
-> as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
-> and 1_27_0.
-> Also, modified get_resources of 'ops 2_9_0' to get the clocks
-> from the device tree and modelled the post init sequence as
-> a common function to avoid code redundancy.
->
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+Hi Ilpo,
+
+On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
+> Makefile only lists *.c as build dependecies for the restctrl_tests
+
+dependecies -> dependencies
+
+restctrl_tests -> resctrl_tests
+
+> executable which excludes resctrl.h.
+> 
+> Add *.h to wildcard() cover also resctrl.h.
+
+I find this a bit hard to parse. How about
+"Add *.h to wildcard() to include resctrl.h."
+
+(considering the problem statement indicates that
+resctrl.h was "excluded", having it now "included"
+seems to match)
+
+> 
+> Fixes: 591a6e8588fc ("selftests/resctrl: Add basic resctrl file system operations and data")
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  Changes in V3:
->         - Rebased on top of linux-next/master
->
->  drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
->  1 file changed, 43 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 4ab30892f6ef..3682ecdead1f 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -107,6 +107,7 @@
->
->  /* PARF_SLV_ADDR_SPACE_SIZE register value */
->  #define SLV_ADDR_SPACE_SZ                      0x10000000
-> +#define SLV_ADDR_SPACE_SZ_1_27_0               0x08000000
->
->  /* PARF_MHI_CLOCK_RESET_CTRL register fields */
->  #define AHB_CLK_EN                             BIT(0)
-> @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
->         struct reset_control *rst;
->  };
->
-> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS             5
->  struct qcom_pcie_resources_2_9_0 {
-> -       struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
-> +       struct clk_bulk_data *clks;
->         struct reset_control *rst;
-> +       int num_clks;
->  };
->
->  union qcom_pcie_resources {
-> @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
->         struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
->         struct dw_pcie *pci = pcie->pci;
->         struct device *dev = pci->dev;
-> -       int ret;
->
-> -       res->clks[0].id = "iface";
-> -       res->clks[1].id = "axi_m";
-> -       res->clks[2].id = "axi_s";
-> -       res->clks[3].id = "axi_bridge";
-> -       res->clks[4].id = "rchng";
-> -
-> -       ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
-> -       if (ret < 0)
-> -               return ret;
-> +       res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
-> +       if (res->clks < 0)
-> +               return res->num_clks;
->
->         res->rst = devm_reset_control_array_get_exclusive(dev);
->         if (IS_ERR(res->rst))
-> @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
->  {
->         struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
->
-> -       clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
-> +       clk_bulk_disable_unprepare(res->num_clks, res->clks);
->  }
->
->  static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
-> @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
->
->         usleep_range(2000, 2500);
->
-> -       return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
-> +       return clk_bulk_prepare_enable(res->num_clks, res->clks);
->  }
->
-> -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
->  {
->         struct dw_pcie *pci = pcie->pci;
->         u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->         u32 val;
->         int i;
->
-> -       writel(SLV_ADDR_SPACE_SZ,
-> -               pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> -
->         val = readl(pcie->parf + PARF_PHY_CTRL);
->         val &= ~PHY_TEST_PWR_DOWN;
->         writel(val, pcie->parf + PARF_PHY_CTRL);
-> @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
->         return 0;
->  }
->
-> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
-> +{
-> +       writel(SLV_ADDR_SPACE_SZ_1_27_0,
-> +              pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> +
-> +       qcom_pcie_post_init(pcie);
-> +
-> +       return 0;
-> +}
-> +
-> +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> +{
-> +       writel(SLV_ADDR_SPACE_SZ,
-> +              pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> +
-> +       qcom_pcie_post_init(pcie);
-> +
-> +       return 0;
-> +}
+>  tools/testing/selftests/resctrl/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
+> index 73d53257df42..2dc7da221795 100644
+> --- a/tools/testing/selftests/resctrl/Makefile
+> +++ b/tools/testing/selftests/resctrl/Makefile
+> @@ -7,4 +7,4 @@ TEST_GEN_PROGS := resctrl_tests
+>  
+>  include ../lib.mk
+>  
+> -$(OUTPUT)/resctrl_tests: $(wildcard *.c)
+> +$(OUTPUT)/resctrl_tests: $(wildcard *.c *.h)
 
-I'm not sure about moving the SLV_ADDR_SPACE_SIZE initialization from
-init() to post_init(). Probably a better solution might be to have two
-init() callbacks and to call the common function from both of them.
+How about a simpler *.[ch]? Seems like this pattern is
+popular in selftest code.
 
-> +
->  static int qcom_pcie_link_up(struct dw_pcie *pci)
->  {
->         u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
->         .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
->  };
->
-> +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
-> +static const struct qcom_pcie_ops ops_1_27_0 = {
-> +       .get_resources = qcom_pcie_get_resources_2_9_0,
-> +       .init = qcom_pcie_init_2_9_0,
-> +       .post_init = qcom_pcie_post_init_1_27_0,
-> +       .deinit = qcom_pcie_deinit_2_9_0,
-> +       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> +};
-> +
->  static const struct qcom_pcie_cfg cfg_1_0_0 = {
->         .ops = &ops_1_0_0,
->  };
-> @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
->         .ops = &ops_2_9_0,
->  };
->
-> +static const struct qcom_pcie_cfg cfg_1_27_0 = {
-> +       .ops = &ops_1_27_0,
-> +};
-> +
->  static const struct dw_pcie_ops dw_pcie_ops = {
->         .link_up = qcom_pcie_link_up,
->         .start_link = qcom_pcie_start_link,
-> @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->         { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
->         { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
->         { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
-> +       { .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
->         { .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
->         { .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
->         { .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
-> --
-> 2.17.1
->
+Reinette
 
-
--- 
-With best wishes
-Dmitry
