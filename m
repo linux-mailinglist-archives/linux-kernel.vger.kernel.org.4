@@ -2,103 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86086EB6E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 04:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AABE06EB6EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 04:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjDVCoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 22:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S229670AbjDVCy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 22:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVCoE (ORCPT
+        with ESMTP id S229451AbjDVCy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 22:44:04 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E761BDD;
-        Fri, 21 Apr 2023 19:44:03 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2a8a600bd05so22231251fa.2;
-        Fri, 21 Apr 2023 19:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682131441; x=1684723441;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dmYMBz/pk0DU4VGRxAFjF6yuTpyNNQBkmRkwo1EeINY=;
-        b=qTPJaFBm9gzL4Vm/5Trp3iFKH/6dzpEKYUwlEdLQIhkBuIJ1kc/TZemt6GAlP2mz4J
-         4QMWcFW/V5bo1AV4HL+t+d/0iEA4wko9d4EWGjrFXa+F9driga6b+bvGdfHHUd3sX6Ft
-         rbn4E+M4nzTOWcC9lf8jYyG1wUZFx6Ez7+546i/TVyiYYQKqBrdwhdoV8EUiy2NsOffq
-         BGcWGwAFoRIWwFleQXeaxS0IN0IHrMd/wggGwopwPy5q3Opov5DayzXhLhlMcT1x3RFt
-         SFGgh7smteFQ7dOC21v9XDeUTa/lyiKN7Dlr/muaTIHDURI+vE1lD61HlQzG1ySJqPmd
-         ywIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682131441; x=1684723441;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dmYMBz/pk0DU4VGRxAFjF6yuTpyNNQBkmRkwo1EeINY=;
-        b=HN4xRvg2bgowTZ00HmDyJj1/o0nWPzxE56r8NDTjO8xPTQdG8uOBlOznVtHrxnlR9j
-         BAs+UNxKSi/6QUXGbzVFiX0F3Ae5X+wO7SxKVtVty+MjJ7kXGCVKfmigBEtXbdsUwZli
-         /J4zYuy9jJUFe5QKw7bMSlsMGxYFHingyVI6m4r8bBdj7BUNnLe9CLt+Pz40BvOawvLx
-         4LRacahfNOsOkUYjRdhhojnRqiK08gRCNGLCF4fhz8jCfwxf7tR6it6By8po48VWB9Gj
-         7XtH7rMAmg9j6KclCLCgBX2PhJGSoDWlzEYkTQBgdI34cRz38sxn8IEX5vcW1qJnklxB
-         0Ltw==
-X-Gm-Message-State: AAQBX9f04BiRyWNjf+Y3D2RWENB1oNTUYChx3c5hasvQ8ue9Wx/K6o47
-        QAiyg6e+rfJMWYPqwa7pjmdDsmZuOgOYIeFWXic=
-X-Google-Smtp-Source: AKy350Ys4Ps/1P+uCixPXp3IPEKj+hO7XXuZq5a4Ux8qkst0rDv2fzjGEw12cBtJsI+RfyL4JZ3EVRm/UoKeICmTq+U=
-X-Received: by 2002:a2e:88cd:0:b0:2a8:b076:3877 with SMTP id
- a13-20020a2e88cd000000b002a8b0763877mr1001553ljk.10.1682131441387; Fri, 21
- Apr 2023 19:44:01 -0700 (PDT)
+        Fri, 21 Apr 2023 22:54:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EFD2123;
+        Fri, 21 Apr 2023 19:54:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=t7xpovDsoFsr+JoOWES8CRpdm1W02ysQAp56siLeCA4=; b=zZlZCU/uri+ahx2mt/eJosOTal
+        M0gHvixbDcgzWdwdDKRN9SbCqjMOF//1Zm3Y/CaKGEF07SAf34QTdKxXF/1on2BkFNJ/HS5S6RNlA
+        A8bU7SWnHOqDfnw/yD2N+JQNaFS7hpJvBDLls1eUeWB7qBllQTXINKtT7Bc2tPZIrQnoskEjb+e0u
+        cRV8ujqbvgjHlHfjUsSnlBQTthbdE4xUeTMYflUgmobMHt0T6UVHBBwEEwsNNh9sBhY6asb1wMoZ5
+        QVJl7xX/tkI017Tanmt8OUwOwGtqKfxTi3m4bgh9Ja1+X88ONfum5ztvvEt4uOpCbMBztVDG4u5RS
+        PqzZ0z2Q==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pq3Ok-00CH1Z-1c;
+        Sat, 22 Apr 2023 02:54:50 +0000
+Message-ID: <5a8effb3-e176-5a2f-4650-17765384e60c@infradead.org>
+Date:   Fri, 21 Apr 2023 19:54:49 -0700
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 21 Apr 2023 21:43:50 -0500
-Message-ID: <CAH2r5mu1-3LwONaQGR5B9XSWTupdvK9SSSk3Pm-V5bGZdFeCqQ@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/4] platform/x86: wmi: Add kernel doc comments
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230420233226.14561-1-W_Armin@gmx.de>
+ <20230420233226.14561-2-W_Armin@gmx.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230420233226.14561-2-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-6a8f57ae2eb07ab39a6f0ccad60c760743051026:
+Hi,
 
-  Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
+On 4/20/23 16:32, Armin Wolf wrote:
+> Add kernel doc comments useful for documenting the functions/structs
+> used to interact with the WMI driver core.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  drivers/platform/x86/wmi.c | 51 +++++++++++++++++++++++++++++++-------
+>  include/linux/wmi.h        | 41 +++++++++++++++++++++++++++---
+>  2 files changed, 80 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+> index d81319a502ef..e4b41dca70c7 100644
+> --- a/drivers/platform/x86/wmi.c
+> +++ b/drivers/platform/x86/wmi.c
+> @@ -248,7 +248,9 @@ static acpi_status get_event_data(const struct wmi_block *wblock, struct acpi_bu
+>   * @wdev: A wmi bus device from a driver
+>   * @length: Required buffer size
+>   *
+> - * Allocates memory needed for buffer, stores the buffer size in that memory
+> + * Allocates memory needed for buffer, stores the buffer size in that memory.
+> + *
+> + * Return: 0 on success or a negative error code for failure.
+>   */
+>  int set_required_buffer_size(struct wmi_device *wdev, u64 length)
+>  {
+> @@ -269,7 +271,9 @@ EXPORT_SYMBOL_GPL(set_required_buffer_size);
+>   * @in: Buffer containing input for the method call
+>   * @out: Empty buffer to return the method results
+>   *
+> - * Call an ACPI-WMI method
+> + * Call an ACPI-WMI method, the caller must free @out.
+> + *
+> + * Return: acpi_status signaling success or error.
+>   */
+>  acpi_status wmi_evaluate_method(const char *guid_string, u8 instance, u32 method_id,
+>  				const struct acpi_buffer *in, struct acpi_buffer *out)
+> @@ -294,7 +298,9 @@ EXPORT_SYMBOL_GPL(wmi_evaluate_method);
+>   * @in: Buffer containing input for the method call
+>   * @out: Empty buffer to return the method results
+>   *
+> - * Call an ACPI-WMI method
+> + * Call an ACPI-WMI method, the caller must free @out.
+> + *
+> + * Return: acpi_status signaling success or error.
+>   */
+>  acpi_status wmidev_evaluate_method(struct wmi_device *wdev, u8 instance, u32 method_id,
+>  				   const struct acpi_buffer *in, struct acpi_buffer *out)
+> @@ -411,7 +417,9 @@ static acpi_status __query_block(struct wmi_block *wblock, u8 instance,
+>   * @instance: Instance index
+>   * @out: Empty buffer to return the contents of the data block to
+>   *
+> - * Return the contents of an ACPI-WMI data block to a buffer
+> + * Query a ACPI-WMI block, the caller must free @out.
+> + *
+> + * Return: ACPI object containing the content of the WMI block.
+>   */
+>  acpi_status wmi_query_block(const char *guid_string, u8 instance,
+>  			    struct acpi_buffer *out)
+> @@ -427,6 +435,15 @@ acpi_status wmi_query_block(const char *guid_string, u8 instance,
+>  }
+>  EXPORT_SYMBOL_GPL(wmi_query_block);
+> 
+> +/**
+> + * wmidev_block_query - Return contents of a WMI block
+> + * @wdev: A wmi bus device from a driver
+> + * @instance: Instance index
+> + *
+> + * Query a ACPI-WMI block, the caller must free the result.
 
-are available in the Git repository at:
+      Query an ACPI-WMI block,
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc7-smb3-client-fixes
+> + *
+> + * Return: ACPI object containing the content of the WMI block.
+> + */
+>  union acpi_object *wmidev_block_query(struct wmi_device *wdev, u8 instance)
+>  {
+>  	struct acpi_buffer out = { ACPI_ALLOCATE_BUFFER, NULL };
+> @@ -445,7 +462,9 @@ EXPORT_SYMBOL_GPL(wmidev_block_query);
+>   * @instance: Instance index
+>   * @in: Buffer containing new values for the data block
+>   *
+> - * Write the contents of the input buffer to an ACPI-WMI data block
+> + * Write the contents of the input buffer to an ACPI-WMI data block.
+> + *
+> + * Return: acpi_status signaling success or error.
+>   */
+>  acpi_status wmi_set_block(const char *guid_string, u8 instance,
+>  			  const struct acpi_buffer *in)
+> @@ -555,6 +574,8 @@ static void wmi_notify_debug(u32 value, void *context)
+>   * @data: Data to be returned to handler when event is fired
+>   *
+>   * Register a handler for events sent to the ACPI-WMI mapper device.
+> + *
+> + * Return: acpi_status signaling success or error.
+>   */
+>  acpi_status wmi_install_notify_handler(const char *guid,
+>  				       wmi_notify_handler handler,
+> @@ -597,6 +618,8 @@ EXPORT_SYMBOL_GPL(wmi_install_notify_handler);
+>   * @guid: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417f2f49ba
+>   *
+>   * Unregister handler for events sent to the ACPI-WMI mapper device.
+> + *
+> + * Return: acpi_status signaling success or error.
+>   */
+>  acpi_status wmi_remove_notify_handler(const char *guid)
+>  {
+> @@ -641,9 +664,11 @@ EXPORT_SYMBOL_GPL(wmi_remove_notify_handler);
+>   * wmi_get_event_data - Get WMI data associated with an event
+>   *
+>   * @event: Event to find
+> - * @out: Buffer to hold event data. out->pointer should be freed with kfree()
+> + * @out: Buffer to hold event data
+> + *
+> + * Get extra data associated with an WMI event, the caller needs to free @out.
+>   *
+> - * Returns extra data associated with an event in WMI.
+> + * Return: acpi_status signaling success or error.
+>   */
+>  acpi_status wmi_get_event_data(u32 event, struct acpi_buffer *out)
+>  {
+> @@ -664,7 +689,9 @@ EXPORT_SYMBOL_GPL(wmi_get_event_data);
+>   * wmi_has_guid - Check if a GUID is available
+>   * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417f2f49ba
+>   *
+> - * Check if a given GUID is defined by _WDG
+> + * Check if a given GUID is defined by _WDG.
+> + *
+> + * Return: True if GUID is available, false otherwise.
+>   */
+>  bool wmi_has_guid(const char *guid_string)
+>  {
+> @@ -678,7 +705,7 @@ EXPORT_SYMBOL_GPL(wmi_has_guid);
+>   *
+>   * Find the _UID of ACPI device associated with this WMI GUID.
+>   *
+> - * Return: The ACPI _UID field value or NULL if the WMI GUID was not found
+> + * Return: The ACPI _UID field value or NULL if the WMI GUID was not found.
+>   */
+>  char *wmi_get_acpi_device_uid(const char *guid_string)
+>  {
+> @@ -1454,6 +1481,12 @@ int __must_check __wmi_driver_register(struct wmi_driver *driver,
+>  }
+>  EXPORT_SYMBOL(__wmi_driver_register);
+> 
+> +/**
+> + * wmi_driver_unregister() - Unregister a WMI driver
+> + * @driver: WMI driver to unregister
+> + *
+> + * Unregisters a WMI driver from the WMI bus.
+> + */
+>  void wmi_driver_unregister(struct wmi_driver *driver)
+>  {
+>  	driver_unregister(&driver->driver);
+> diff --git a/include/linux/wmi.h b/include/linux/wmi.h
+> index b88d7b58e61e..88f66b12eef9 100644
+> --- a/include/linux/wmi.h
+> +++ b/include/linux/wmi.h
+> @@ -13,25 +13,44 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <uapi/linux/wmi.h>
+> 
+> +/**
+> + * struct wmi_device - WMI device structure
+> + * @dev: Device associated with this WMI device
+> + * @setable: True for devices implementing the Set Control Method
 
-for you to fetch changes up to 023fc150a39ffe656da3e459ad801eb1c7fdfad9:
+private: fields are not normally documented in kernel-doc.
 
-  cifs: Reapply lost fix from commit 30b2b2196d6e (2023-04-18 21:26:09 -0500)
+> + *
+> + * This represents WMI devices discovered by the WMI driver core.
+> + */
+>  struct wmi_device {
+>  	struct device dev;
+> 
+> -	 /* True for data blocks implementing the Set Control Method */
+> +	/* private: used by the WMI driver core */
+>  	bool setable;
+>  };
+> 
+> -/* evaluate the ACPI method associated with this device */
+>  extern acpi_status wmidev_evaluate_method(struct wmi_device *wdev,
+>  					  u8 instance, u32 method_id,
+>  					  const struct acpi_buffer *in,
+>  					  struct acpi_buffer *out);
+> 
+> -/* Caller must kfree the result. */
+>  extern union acpi_object *wmidev_block_query(struct wmi_device *wdev,
+>  					     u8 instance);
+> 
+>  extern int set_required_buffer_size(struct wmi_device *wdev, u64 length);
+> 
+> +/**
+> + * struct wmi_driver - WMI driver structure
+> + * @driver: Driver model structure
+> + * @id_table: List of WMI GUIDs supported by this driver
+> + * @no_notify_data: WMI events provide no event data
+> + * @probe: Callback for device binding
+> + * @remove: Callback for device unbinding
+> + * @notify: Callback for receiving WMI events
+> + * @filter_callback: Callback for filtering device IOCTLs
+> + *
+> + * This represents WMI drivers which handle WMI devices.
+> + * @filter_callback is only necessary for drivers which
+> + * want to set up a WMI IOCTL interface.
+> + */
+>  struct wmi_driver {
+>  	struct device_driver driver;
+>  	const struct wmi_device_id *id_table;
+> @@ -47,8 +66,24 @@ struct wmi_driver {
+>  extern int __must_check __wmi_driver_register(struct wmi_driver *driver,
+>  					      struct module *owner);
+>  extern void wmi_driver_unregister(struct wmi_driver *driver);
+> +
+> +/**
+> + * wmi_driver_register() - Helper macro ro register a WMI driver
 
-----------------------------------------------------------------
-Three small smb3 client fixes
-- two important fixes for unbuffered read regression with the iov_iter
-changes (e.g. read soon after mount in some multichannel scenarios)
-- DFS prefix path fix (also for stable)
-----------------------------------------------------------------
-David Howells (2):
-      cifs: Fix unbuffered read
-      cifs: Reapply lost fix from commit 30b2b2196d6e
+s/ro/to/
 
-Paulo Alcantara (1):
-      cifs: avoid dup prefix path in dfs_get_automount_devname()
+> + * @driver: wmi_driver struct
+> + *
+> + * Helper macro for registering a WMI driver. It automatically passes
+> + * THIS_MODULE to the underlying function.
+> + */
+>  #define wmi_driver_register(driver) __wmi_driver_register((driver), THIS_MODULE)
+> 
+> +/**
+> + * module_wmi_driver() - Helper macro to register/unregister a WMI driver
+> + * @__wmi_driver: wmi_driver struct
+> + *
+> + * Helper macro for WMI drivers which do not do anything special in module
+> + * init/exit. This eliminates a lot of boilerplate. Each module may only
+> + * use this macro once, and calling it replaces module_init() and module_exit().
+> + */
+>  #define module_wmi_driver(__wmi_driver) \
+>  	module_driver(__wmi_driver, wmi_driver_register, \
+>  		      wmi_driver_unregister)
+> --
 
- fs/cifs/cifs_dfs_ref.c |  2 --
- fs/cifs/dfs.h          | 22 ++++++++++++++++++----
- fs/cifs/file.c         |  4 ----
- fs/cifs/smb2pdu.c      | 10 ++++++----
- 4 files changed, 24 insertions(+), 14 deletions(-)
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-
+Thanks.
 -- 
-Thanks,
-
-Steve
+~Randy
