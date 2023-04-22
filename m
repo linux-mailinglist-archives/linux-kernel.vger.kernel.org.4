@@ -2,71 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9863F6EBB62
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 22:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805E76EBB5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 22:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjDVU4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 16:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
+        id S229697AbjDVUzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 16:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDVU4W (ORCPT
+        with ESMTP id S229587AbjDVUzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 16:56:22 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2221610FD;
-        Sat, 22 Apr 2023 13:56:18 -0700 (PDT)
-Date:   Sat, 22 Apr 2023 22:50:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1682196660; bh=mf/Y9UC/Ll/EuFZXCOn4gWfN577y/uUXNOOmwZn7f+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HbhLY7X0tkYsGtl1IqEyqVH84wBg7GIpuKBbGAb3WMe7SwOHJ0f/dXLxSrTb5HZkO
-         ODuYeie2apT0QNnlnZHrscvv8MivBCkhgl6vLuRGfZHwq8/Abaoc1vJAKQCmtFnseV
-         sTngzQOGXJV3+5j/FhQ4e61GM5BQNOM8Oe24E/1g=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 01/14] HP BIOSCFG driver - Documentation
-Message-ID: <dc902d52-7186-4095-9be9-60c728a24f05@t-8ch.de>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-2-jorge.lopez2@hp.com>
+        Sat, 22 Apr 2023 16:55:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D47F10E5
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 13:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682196879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MmovEZDh3RRZ4TGij6AOUtYqNZkl+ysd7uj3ZrA1KLk=;
+        b=bHwpml5+n/vwwqHROKthWCuS0ywhYIXouRq/cU09Xcgu1RNn2tr2F9xylbo/1BmiPm8tRh
+        S+NgZRjdxeFkE1iNQH2xdAN6ppm2tC2bTRx+mqrU/IjeEC3rXS6aGChuouXv3TCyeAZAby
+        qY8MEv7dCvUazsDovOJMJ206sk9KJFw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-573-6F8RbvXvPe2iBIeR5XH5sQ-1; Sat, 22 Apr 2023 16:54:35 -0400
+X-MC-Unique: 6F8RbvXvPe2iBIeR5XH5sQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6D4D101A531;
+        Sat, 22 Apr 2023 20:54:34 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.192.6])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F7F6492B03;
+        Sat, 22 Apr 2023 20:54:21 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH mm-stable v2 0/3] mm/ksm: improve PR_SET_MEMORY_MERGE=0 handling and cleanup disabling KSM
+Date:   Sat, 22 Apr 2023 22:54:17 +0200
+Message-Id: <20230422205420.30372-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420165454.9517-2-jorge.lopez2@hp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 11:54:41-0500, Jorge Lopez wrote:
-> Based on the latest platform-drivers-x86.git/for-next
-> ---
->  .../testing/sysfs-class-firmware-attributes   | 98 ++++++++++++++++++-
->  1 file changed, 96 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-> index 4cdba3477176..73d7b8fbc0b2 100644
-> --- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
-> +++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-> @@ -22,6 +22,12 @@ Description:
->  			- integer: a range of numerical values
->  			- string
->  
-> +		HP specific types
-> +		-----------------
-> +			- ordered-list - a set of ordered list valid values
-> +			- sure-start - report audit logs read from BIOS
+This is a follow-up to [1]:
+	[PATCH v9 0/3] mm: process/cgroup ksm support
 
-In the treevie you sent the Sure_Start attribute does not have
-a "current_value".
-This indicated that it's not actually a firmware attribute but just some
-standalone sysfs attribute.
+which is now in mm-stable. Ideally we'd get at least patch #1 into the
+same kernel release as [1], so the semantics of setting
+PR_SET_MEMORY_MERGE=0 are unchanged between kernel versions.
 
-In this case it should not be documented here, but handled the same way
-as the SPM stuff.
+(1) Make PR_SET_MEMORY_MERGE=0 unmerge pages like setting MADV_UNMERGEABLE
+does, (2) add a selftest for it and (3) factor out disabling of KSM from
+s390/gmap code.
+
+v1 -> v2:
+- "mm/ksm: unmerge and clear VM_MERGEABLE when setting
+   PR_SET_MEMORY_MERGE=0"
+ -> Cleanup one if/else
+ -> Add doc for ksm_disable_merge_any()
+- Added ACKs
+
+[1] https://lkml.kernel.org/r/20230418051342.1919757-1-shr@devkernel.io
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stefan Roesch <shr@devkernel.io>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Shuah Khan <shuah@kernel.org>
+
+David Hildenbrand (3):
+  mm/ksm: unmerge and clear VM_MERGEABLE when setting
+    PR_SET_MEMORY_MERGE=0
+  selftests/ksm: ksm_functional_tests: add prctl unmerge test
+  mm/ksm: move disabling KSM from s390/gmap code to KSM code
+
+ arch/s390/mm/gmap.c                           | 20 +-----
+ include/linux/ksm.h                           |  7 ++
+ kernel/sys.c                                  | 12 +---
+ mm/ksm.c                                      | 70 +++++++++++++++++++
+ .../selftests/mm/ksm_functional_tests.c       | 46 ++++++++++--
+ 5 files changed, 121 insertions(+), 34 deletions(-)
+
+-- 
+2.40.0
+
