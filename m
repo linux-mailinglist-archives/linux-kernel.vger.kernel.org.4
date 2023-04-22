@@ -2,596 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28C66EBC04
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 00:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3E66EB9EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 17:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjDVWn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 18:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S229633AbjDVPMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 11:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDVWnz (ORCPT
+        with ESMTP id S229510AbjDVPL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 18:43:55 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517C326B5;
-        Sat, 22 Apr 2023 15:43:52 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 00:43:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1682203430; bh=0nBuXr0/0XsiDx6nJgKPyTZeTr+26GgYeqsOw8gB/PE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G3/CtKGLXmWkB0eW7J8gFMbfFooOiMdhkfDjnMBdg2L6f4dfAPYcTQBVWsc2VbMWz
-         SeZRHk3UKSougaFy8c2aWMVz3L9nOKrSkplPWpU63KUEuhJaoN6Ue2TlHuKfUVLe5+
-         UWM3z/JIgDIqOy5Ooaltcz7fzHm8IFNpZnoD5agE=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 04/14] HP BIOSCFG driver  - int-attributes
-Message-ID: <26f0a80e-d3f8-4d6c-83ff-d756abed7b6b@t-8ch.de>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-5-jorge.lopez2@hp.com>
+        Sat, 22 Apr 2023 11:11:58 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0551BE3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 08:11:55 -0700 (PDT)
+X-ASG-Debug-ID: 1682176311-1eb14e638841370001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id ljftPdxn0Gr5sTUK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sat, 22 Apr 2023 23:11:51 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 22 Apr
+ 2023 23:11:51 +0800
+Received: from [192.168.0.100] (115.171.114.112) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 22 Apr
+ 2023 23:11:49 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <235c2ebc-ca9b-8765-0914-fcd839f1e45c@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 192.168.0.100
+Date:   Sun, 23 Apr 2023 07:11:49 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420165454.9517-5-jorge.lopez2@hp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit
+ value
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit
+ value
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>, <stable@vger.kernel.org>
+References: <20230421174142.382602-1-WeitaoWang-oc@zhaoxin.com>
+ <a55aa38d-0fbf-4a95-a2b2-40821815275f@rowland.harvard.edu>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <a55aa38d-0fbf-4a95-a2b2-40821815275f@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [115.171.114.112]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1682176311
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 2276
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107774
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorge,
-
-one thing I noticed:
-
-When I recommended to cut down the driver to a minimal feature set I
-meant the minimal feature set currently known to the kernel.
-
-This would *not* be sufficient for your HP-specific agent software.
-Just the standard type attributes, ordered-list and authentication.
-
-But in the end it would most probably still be a faster path to a
-solution that *does* include the full featureset of your requirements.
-
-
-Also when fixing review comments please try to fix them everywhere where
-applicable. Most comments affect many parts of the code.
-
-On 2023-04-20 11:54:44-0500, Jorge Lopez wrote:
-> ---
-> Based on the latest platform-drivers-x86.git/for-next
-> ---
->  .../x86/hp/hp-bioscfg/int-attributes.c        | 474 ++++++++++++++++++
->  1 file changed, 474 insertions(+)
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
+On 2023/4/21 22:59, Alan Stern wrote:
+> On Sat, Apr 22, 2023 at 01:41:42AM +0800, Weitao Wang wrote:
+>> OverCurrent condition is not standardized in the UHCI spec.
+>> Zhaoxin UHCI controllers report OverCurrent bit active off.
+>> In order to handle OverCurrent condition correctly, the uhci-hcd
+>> driver needs to be told to expect the active-off behavior.
+>>
+>> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>> ---
+>> v1->v2
+>>   - Modify the description of this patch.
+>>   - Let Zhaoxin and VIA share a common oc_low flag
+>>
+>>   drivers/usb/host/uhci-pci.c | 9 +++++----
+>>   1 file changed, 5 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+>> index 3592f757fe05..034586911bb5 100644
+>> --- a/drivers/usb/host/uhci-pci.c
+>> +++ b/drivers/usb/host/uhci-pci.c
+>> @@ -119,11 +119,12 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+>>   
+>>   	uhci->rh_numports = uhci_count_ports(hcd);
+>>   
+>> -	/* Intel controllers report the OverCurrent bit active on.
+>> -	 * VIA controllers report it active off, so we'll adjust the
+>> -	 * bit value.  (It's not standardized in the UHCI spec.)
+>> +	/* Intel controllers report the OverCurrent bit active on.  VIA
+>> +	 * and ZHAOXIN controllers report it active off, so we'll adjust
+>> +	 * the bit value.  (It's not standardized in the UHCI spec.)
+>>   	 */
 > 
-> diff --git a/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
-> new file mode 100644
-> index 000000000000..d8ee39dac3f9
-> --- /dev/null
-> +++ b/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
-> @@ -0,0 +1,474 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Functions corresponding to integer type attributes under
-> + * BIOS Enumeration GUID for use with hp-bioscfg driver.
-> + *
-> + *  Copyright (c) 2022 Hewlett-Packard Inc.
-> + */
-> +
-> +#include "bioscfg.h"
-> +
-> +GET_INSTANCE_ID(integer);
-> +
-> +static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
-> +{
-> +	int instance_id = get_integer_instance_id(kobj);
-> +
-> +	if (instance_id < 0)
-> +		return instance_id;
+> The style we use now for multi-line comments is:
+> 
+> 	/*
+> 	 * Blah blah blah
+> 	 * blah blah blah
+> 	 */
+> 
+>> -	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
+>> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
+>> +		to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
+> 
+> The indentation level of the continuation line should be different from
+> the indentation of the statement below.  Otherwise it looks like the
+> continuation line is part of the conditional block.
+> 
+I see, Thanks for your careful examination. I'll change it later.
 
-Some attributes return -EIO here, some instance_id. This should be
-consistent.
+Best Regards,
+Weitao
 
-> +
-> +	return sysfs_emit(buf, "%d\n",
-> +			  bioscfg_drv.integer_data[instance_id].current_value);
-> +}
-> +
-> +/*
-> + * validate_integer_input() -
-> + * Validate input of current_value against lower and upper bound
-> + *
-> + * @instance_id: The instance on which input is validated
-> + * @buf: Input value
-> + */
-> +static int validate_integer_input(int instance_id, char *buf)
-> +{
-> +	int in_val;
-> +	int ret;
-> +
-> +
-> +	/* BIOS treats it as a read only attribute */
-> +	if (bioscfg_drv.integer_data[instance_id].common.is_readonly)
-> +		return -EIO;
-> +
-> +	ret = kstrtoint(buf, 10, &in_val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +
-> +	if (in_val < bioscfg_drv.integer_data[instance_id].lower_bound ||
-> +	    in_val > bioscfg_drv.integer_data[instance_id].upper_bound)
-> +		return -ERANGE;
-> +
-> +	/*
-> +	 * set pending reboot flag depending on
-> +	 * "RequiresPhysicalPresence" value
-> +	 */
-> +	if (bioscfg_drv.integer_data[instance_id].common.requires_physical_presence)
-> +		bioscfg_drv.pending_reboot = true;
-> +	return 0;
-> +}
-> +
-> +static void update_integer_value(int instance_id, char *attr_value)
-> +{
-> +	int in_val;
-> +	int ret;
-> +
-> +	ret = kstrtoint(attr_value, 10, &in_val);
-> +	if (ret == 0)
-> +		bioscfg_drv.integer_data[instance_id].current_value = in_val;
-
-If the error is not propagated there should be at least be a warning.
-
-> +}
-> +
-> +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, integer);
-> +static struct kobj_attribute integer_display_langcode =
-> +	__ATTR_RO(display_name_language_code);
-> +
-> +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, integer);
-> +static struct kobj_attribute integer_display_name =
-> +	__ATTR_RO(display_name);
-> +
-> +ATTRIBUTE_PROPERTY_STORE(current_value, integer);
-> +static struct kobj_attribute integer_current_val =
-> +	__ATTR_RW_MODE(current_value, 0644);
-> +
-> +ATTRIBUTE_N_PROPERTY_SHOW(lower_bound, integer);
-> +static struct kobj_attribute integer_lower_bound =
-> +	__ATTR_RO(lower_bound);
-> +
-> +ATTRIBUTE_N_PROPERTY_SHOW(upper_bound, integer);
-> +static struct kobj_attribute integer_upper_bound =
-> +	__ATTR_RO(upper_bound);
-> +
-> +ATTRIBUTE_N_COMMON_PROPERTY_SHOW(prerequisites_size, integer);
-> +static struct kobj_attribute  integer_prerequisites_size_val =
-> +	__ATTR_RO(prerequisites_size);
-> +
-> +ATTRIBUTE_V_COMMON_PROPERTY_SHOW(prerequisites, integer);
-> +static struct kobj_attribute  integer_prerequisites_val =
-> +	__ATTR_RO(prerequisites);
-> +
-> +ATTRIBUTE_N_PROPERTY_SHOW(scalar_increment, integer);
-> +static struct kobj_attribute integer_scalar_increment =
-> +	__ATTR_RO(scalar_increment);
-> +
-> +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-> +			 char *buf)
-> +{
-> +	return sysfs_emit(buf, "integer\n");
-> +}
-> +static struct kobj_attribute integer_type =
-> +	__ATTR_RO(type);
-> +
-> +static struct attribute *integer_attrs[] = {
-> +	&integer_display_langcode.attr,
-> +	&integer_display_name.attr,
-> +	&integer_current_val.attr,
-> +	&integer_lower_bound.attr,
-> +	&integer_upper_bound.attr,
-> +	&integer_scalar_increment.attr,
-> +	&integer_prerequisites_size_val.attr,
-> +	&integer_prerequisites_val.attr,
-> +	&integer_type.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group integer_attr_group = {
-> +	.attrs = integer_attrs,
-> +};
-> +
-> +int alloc_integer_data(void)
-> +{
-> +	int ret = 0;
-
-No need for the ret variable.
-
-> +
-> +	bioscfg_drv.integer_instances_count = get_instance_count(HP_WMI_BIOS_INTEGER_GUID);
-> +	bioscfg_drv.integer_data = kcalloc(bioscfg_drv.integer_instances_count,
-> +					   sizeof(struct integer_data), GFP_KERNEL);
-
-sizeof(bioscfg_drv.integer_data);
-
-> +
-> +	if (!bioscfg_drv.integer_data) {
-> +		bioscfg_drv.integer_instances_count = 0;
-> +		ret = -ENOMEM;
-> +	}
-> +	return ret;
-> +}
-> +
-> +/* Expected Values types associated with each element */
-> +static const acpi_object_type expected_integer_types[] = {
-> +	[NAME] = ACPI_TYPE_STRING,
-> +	[VALUE] = ACPI_TYPE_STRING,
-> +	[PATH] = ACPI_TYPE_STRING,
-> +	[IS_READONLY] = ACPI_TYPE_INTEGER,
-> +	[DISPLAY_IN_UI] = ACPI_TYPE_INTEGER,
-> +	[REQUIRES_PHYSICAL_PRESENCE] = ACPI_TYPE_INTEGER,
-> +	[SEQUENCE] = ACPI_TYPE_INTEGER,
-> +	[PREREQUISITES_SIZE] = ACPI_TYPE_INTEGER,
-> +	[PREREQUISITES] = ACPI_TYPE_STRING,
-> +	[SECURITY_LEVEL] = ACPI_TYPE_INTEGER,
-> +	[INT_LOWER_BOUND] = ACPI_TYPE_INTEGER,
-> +	[INT_UPPER_BOUND] = ACPI_TYPE_INTEGER,
-> +	[INT_SCALAR_INCREMENT] = ACPI_TYPE_INTEGER
-
-Trailing comma.
-
-> +};
-> +
-> +/*
-> + * populate_int_data() -
-> + * Populate all properties of an instance under integer attribute
-> + *
-> + * @integer_obj: ACPI object with integer data
-> + * @instance_id: The instance to enumerate
-> + * @attr_name_kobj: The parent kernel object
-> + */
-> +int populate_integer_package_data(union acpi_object *integer_obj,
-> +				  int instance_id,
-> +				  struct kobject *attr_name_kobj)
-> +{
-> +	bioscfg_drv.integer_data[instance_id].attr_name_kobj = attr_name_kobj;
-> +	populate_integer_elements_from_package(integer_obj,
-> +					       integer_obj->package.count,
-> +					       instance_id);
-> +	update_attribute_permissions(bioscfg_drv.integer_data[instance_id].common.is_readonly,
-> +				     &integer_current_val);
-> +	friendly_user_name_update(bioscfg_drv.integer_data[instance_id].common.path,
-> +				  attr_name_kobj->name,
-> +				  bioscfg_drv.integer_data[instance_id].common.display_name,
-> +				  sizeof(bioscfg_drv.integer_data[instance_id].common.display_name));
-> +	return sysfs_create_group(attr_name_kobj, &integer_attr_group);
-> +}
-> +
-> +int populate_integer_elements_from_package(union acpi_object *integer_obj,
-> +					   int integer_obj_count,
-> +					   int instance_id)
-> +{
-> +	char *str_value = NULL;
-> +	int value_len;
-> +	int ret = 0;
-> +	u32 size = 0;
-> +	u32 int_value;
-> +	int elem = 0;
-> +	int reqs;
-> +	int eloc;
-> +
-> +	if (!integer_obj)
-> +		return -EINVAL;
-> +
-> +	strscpy(bioscfg_drv.integer_data[instance_id].common.display_name_language_code,
-> +		LANG_CODE_STR,
-> +		sizeof(bioscfg_drv.integer_data[instance_id].common.display_name_language_code));
-> +
-> +	for (elem = 1, eloc = 1; elem < integer_obj_count; elem++, eloc++) {
-> +
-> +		/* ONLY look at the first INTEGER_ELEM_CNT elements */
-
-Why?
-
-> +		if (eloc == INTEGER_ELEM_CNT)
-> +			goto exit_integer_package;
-> +
-> +		switch (integer_obj[elem].type) {
-> +		case ACPI_TYPE_STRING:
-> +
-> +			if (elem != PREREQUISITES) {
-> +				ret = convert_hexstr_to_str(integer_obj[elem].string.pointer,
-> +							    integer_obj[elem].string.length,
-> +							    &str_value, &value_len);
-> +				if (ret)
-> +					continue;
-> +			}
-> +			break;
-> +		case ACPI_TYPE_INTEGER:
-> +			int_value = (u32)integer_obj[elem].integer.value;
-> +			break;
-> +		default:
-> +			pr_warn("Unsupported object type [%d]\n", integer_obj[elem].type);
-> +			continue;
-> +		}
-> +		/* Check that both expected and read object type match */
-> +		if (expected_integer_types[eloc] != integer_obj[elem].type) {
-> +			pr_err("Error expected type %d for elem  %d, but got type %d instead\n",
-> +			       expected_integer_types[eloc], elem, integer_obj[elem].type);
-> +			return -EIO;
-> +		}
-> +		/* Assign appropriate element value to corresponding field*/
-> +		switch (eloc) {
-> +		case VALUE:
-> +			ret = kstrtoint(str_value, 10, &int_value);
-> +			if (ret)
-> +				continue;
-> +
-> +			bioscfg_drv.integer_data[instance_id].current_value = int_value;
-> +			break;
-> +		case PATH:
-> +			strscpy(bioscfg_drv.integer_data[instance_id].common.path, str_value,
-> +				sizeof(bioscfg_drv.integer_data[instance_id].common.path));
-> +			break;
-> +		case IS_READONLY:
-> +			bioscfg_drv.integer_data[instance_id].common.is_readonly = int_value;
-> +			break;
-> +		case DISPLAY_IN_UI:
-> +			bioscfg_drv.integer_data[instance_id].common.display_in_ui = int_value;
-> +			break;
-> +		case REQUIRES_PHYSICAL_PRESENCE:
-> +			bioscfg_drv.integer_data[instance_id].common.requires_physical_presence = int_value;
-> +			break;
-> +		case SEQUENCE:
-> +			bioscfg_drv.integer_data[instance_id].common.sequence = int_value;
-> +			break;
-> +		case PREREQUISITES_SIZE:
-> +			bioscfg_drv.integer_data[instance_id].common.prerequisites_size = int_value;
-> +
-> +			if (int_value > MAX_PREREQUISITES_SIZE)
-> +				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-> +			/*
-> +			 * This HACK is needed to keep the expected
-> +			 * element list pointing to the right obj[elem].type
-> +			 * when the size is zero.  PREREQUISITES
-> +			 * object is omitted by BIOS when the size is
-> +			 * zero.
-> +			 */
-> +			if (int_value == 0)
-> +				eloc++;
-> +			break;
-> +		case PREREQUISITES:
-> +			size = bioscfg_drv.integer_data[instance_id].common.prerequisites_size;
-> +
-> +			for (reqs = 0; reqs < size && reqs < MAX_PREREQUISITES_SIZE; reqs++) {
-> +				if (elem >= integer_obj_count) {
-> +					pr_err("Error elem-objects package is too small\n");
-> +					return -EINVAL;
-> +				}
-> +
-> +				ret = convert_hexstr_to_str(integer_obj[elem + reqs].string.pointer,
-> +							    integer_obj[elem + reqs].string.length,
-> +							    &str_value, &value_len);
-> +
-> +				if (ret)
-> +					continue;
-> +
-> +				strscpy(bioscfg_drv.integer_data[instance_id].common.prerequisites[reqs],
-> +					str_value,
-> +					sizeof(bioscfg_drv.integer_data[instance_id].common.prerequisites[reqs]));
-> +				kfree(str_value);
-> +			}
-> +			break;
-> +
-> +		case SECURITY_LEVEL:
-> +			bioscfg_drv.integer_data[instance_id].common.security_level = int_value;
-> +			break;
-> +		case INT_LOWER_BOUND:
-> +			bioscfg_drv.integer_data[instance_id].lower_bound = int_value;
-> +			break;
-> +		case INT_UPPER_BOUND:
-> +			bioscfg_drv.integer_data[instance_id].upper_bound = int_value;
-> +			break;
-> +		case INT_SCALAR_INCREMENT:
-> +			bioscfg_drv.integer_data[instance_id].scalar_increment = int_value;
-> +			break;
-> +		default:
-> +			pr_warn("Invalid element: %d found in Integer attribute or data may be malformed\n", elem);
-> +			break;
-> +		}
-> +	}
-> +exit_integer_package:
-> +	kfree(str_value);
-> +	return 0;
-> +}
-> +
-> +
-> +/*
-> + * populate_integer_buffer_data() -
-> + * Populate all properties of an instance under integer attribute
-> + *
-> + * @buffer_ptr: Buffer pointer
-> + * @buffer_size: Buffer size
-> + * @instance_id: The instance to enumerate
-> + * @attr_name_kobj: The parent kernel object
-> + */
-> +int populate_integer_buffer_data(u8 *buffer_ptr, u32 *buffer_size, int instance_id,
-> +				 struct kobject *attr_name_kobj)
-> +{
-> +	bioscfg_drv.integer_data[instance_id].attr_name_kobj = attr_name_kobj;
-> +
-> +	/* Populate integer elements */
-> +	populate_integer_elements_from_buffer(buffer_ptr, buffer_size,
-> +					      instance_id);
-> +	update_attribute_permissions(bioscfg_drv.integer_data[instance_id].common.is_readonly,
-> +				     &integer_current_val);
-> +	friendly_user_name_update(bioscfg_drv.integer_data[instance_id].common.path,
-> +				  attr_name_kobj->name,
-> +				  bioscfg_drv.integer_data[instance_id].common.display_name,
-> +				  sizeof(bioscfg_drv.integer_data[instance_id].common.display_name));
-> +
-> +	return sysfs_create_group(attr_name_kobj, &integer_attr_group);
-> +}
-> +
-> +int populate_integer_elements_from_buffer(u8 *buffer_ptr, u32 *buffer_size,
-> +					  int instance_id)
-> +{
-> +	char *dst = NULL;
-> +	int elem;
-> +	int reqs;
-> +	int integer;
-> +	int size = 0;
-> +	int ret;
-> +	int dst_size = *buffer_size / sizeof(u16);
-> +
-> +	dst = kcalloc(dst_size, sizeof(char), GFP_KERNEL);
-> +	if (!dst)
-> +		return -ENOMEM;
-> +
-> +	elem = 0;
-> +	strscpy(bioscfg_drv.integer_data[instance_id].common.display_name_language_code,
-> +		LANG_CODE_STR,
-> +		sizeof(bioscfg_drv.integer_data[instance_id].common.display_name_language_code));
-> +
-> +	for (elem = 1; elem < 3; elem++) {
-> +
-> +		ret = get_string_from_buffer(&buffer_ptr, buffer_size, dst, dst_size);
-> +		if (ret < 0)
-> +			continue;
-> +
-> +		switch (elem) {
-> +		case VALUE:
-> +			ret = kstrtoint(dst, 10, &integer);
-> +			if (ret)
-> +				continue;
-> +
-> +			bioscfg_drv.integer_data[instance_id].current_value = integer;
-> +			break;
-> +		case PATH:
-> +			strscpy(bioscfg_drv.integer_data[instance_id].common.path, dst,
-> +				sizeof(bioscfg_drv.integer_data[instance_id].common.path));
-> +			break;
-> +		default:
-> +			pr_warn("Invalid element: %d found in Integer attribute or data may be malformed\n", elem);
-> +			break;
-> +		}
-> +	}
-> +
-> +	for (elem = 3; elem < INTEGER_ELEM_CNT; elem++) {
-
-This loop pattern seems weird to me.
-It is not obvious that the values are read in the order of the switch()
-branches from the buffer.
-
-Something more obvious would be:
-
-instance.common.is_readonly = read_int_from_buf(&buffer_ptr);
-instance.common.display_in_ui = read_int_from_buf(&buffer_ptr);
-instance.common.requires_physical_presence = read_int_from_buf(&buffer_ptr);
-
-This would make it clear that these are fields read in order from the
-buffer. Without having to also look at the numeric values of the
-defines.
-
-Furthermore it would make the code shorter and errorhandling would be
-clearer and the API similar to the netlink APIs.
-
-Or maybe with error reporting:
-
-ret = read_int_from_buf(&buffer_ptr, &instance.common.is_readonly);
-if (ret)
-    ...
-ret = read_int_from_buf(&buffer_ptr, &instance.common.display_in_ui);
-if (ret)
-    ...
-
-> +
-> +		if (elem != PREREQUISITES) {
-> +			ret = get_integer_from_buffer((int **)&buffer_ptr, buffer_size, (int *)&integer);
-> +			if (ret < 0)
-> +				continue;
-> +		}
-> +
-> +		switch (elem) {
-> +
-> +		case IS_READONLY:
-> +			bioscfg_drv.integer_data[instance_id].common.is_readonly = integer;
-> +			break;
-> +		case DISPLAY_IN_UI:
-> +			bioscfg_drv.integer_data[instance_id].common.display_in_ui = integer;
-> +			break;
-> +		case REQUIRES_PHYSICAL_PRESENCE:
-> +			bioscfg_drv.integer_data[instance_id].common.requires_physical_presence = integer;
-> +			break;
-> +		case SEQUENCE:
-> +			bioscfg_drv.integer_data[instance_id].common.sequence = integer;
-> +			break;
-> +		case PREREQUISITES_SIZE:
-> +			bioscfg_drv.integer_data[instance_id].common.prerequisites_size = integer;
-> +			size = integer;
-> +			if (size > MAX_PREREQUISITES_SIZE)
-> +				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-> +
-> +			// PREREQUISITES:
-> +			elem++;
-> +			for (reqs = 0; reqs < size && reqs  < MAX_PREREQUISITES_SIZE; reqs++) {
-> +				ret = get_string_from_buffer(&buffer_ptr, buffer_size, dst, dst_size);
-> +				if (ret < 0)
-> +					continue;
-> +
-> +				strscpy(bioscfg_drv.integer_data[instance_id].common.prerequisites[reqs],
-> +					dst,
-> +					sizeof(bioscfg_drv.integer_data[instance_id].common.prerequisites[reqs]));
-> +			}
-> +			break;
-> +
-> +		case SECURITY_LEVEL:
-> +			bioscfg_drv.integer_data[instance_id].common.security_level = integer;
-> +			break;
-> +		case INT_LOWER_BOUND:
-> +			bioscfg_drv.integer_data[instance_id].lower_bound = integer;
-> +			break;
-> +		case INT_UPPER_BOUND:
-> +			bioscfg_drv.integer_data[instance_id].upper_bound = integer;
-> +			break;
-> +		case INT_SCALAR_INCREMENT:
-> +			bioscfg_drv.integer_data[instance_id].scalar_increment = integer;
-> +			break;
-> +
-> +		default:
-> +			pr_warn("Invalid element: %d found in Integer attribute or data may be malformed\n", elem);
-> +			break;
-> +		}
-> +	}
-> +	kfree(dst);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * exit_integer_attributes() - Clear all attribute data
-> + *
-> + * Clears all data allocated for this group of attributes
-> + */
-> +void exit_integer_attributes(void)
-> +{
-> +	int instance_id;
-> +
-> +	for (instance_id = 0; instance_id < bioscfg_drv.integer_instances_count; instance_id++) {
-> +
-> +		struct kobject *attr_name_kobj = bioscfg_drv.integer_data[instance_id].attr_name_kobj;
-> +
-> +		if (attr_name_kobj)
-> +			sysfs_remove_group(attr_name_kobj, &integer_attr_group);
-> +	}
-> +	bioscfg_drv.integer_instances_count = 0;
-> +
-> +	kfree(bioscfg_drv.integer_data);
-> +	bioscfg_drv.integer_data = NULL;
-> +}
+> Alan Stern
+> 
+>>   		uhci->oc_low = 1;
+>>   
+>>   	/* HP's server management chip requires a longer port reset delay. */
+>> -- 
+>> 2.32.0
+>>
+> .
