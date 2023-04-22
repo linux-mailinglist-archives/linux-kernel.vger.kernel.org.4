@@ -2,245 +2,519 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140426EB659
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 02:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7EC6EB65F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 02:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbjDVARU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 20:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S233753AbjDVATS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 20:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbjDVARS (ORCPT
+        with ESMTP id S232120AbjDVATO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 20:17:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A834630E5;
-        Fri, 21 Apr 2023 17:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682122627; x=1713658627;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=QFEpkpTvzGW8gVGXv+0HLYdznJKVQ7e+N5ylV/YoTcc=;
-  b=aWuAFPDwkMHKsbdlnieNT1mGc9xzpmrIDzxeIp2ImaPX/X56GZoe1e2A
-   lJHzYD+/CSdKLQwQJXUfwfV0PauX8AxEPw3lxQ1YprqAmtqEpZTEl3Rl7
-   LmbnCj0r1LrDLWRunzq/DClDxkpnXkFY9/egb25nMiLne98GARos4gNEm
-   ANYgmyshox5iWNWT5TKZzqJmDc9wAM+bbBV7nCcOntucgo9clwVXEU02w
-   5w+0ITj1yvGQJh9rXnj/4sPzxRF7590uZR7zG/XjEnYknEXxzmTHPAdkL
-   Y0drb0r5yXXUCcpoM4oR6Ezs9dCDurgKXTZluDD09n8Bhal6UxEXLhQNZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="432383954"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="432383954"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 17:17:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="866854949"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="866854949"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 21 Apr 2023 17:17:06 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:17:06 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:17:06 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 17:17:06 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:17:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TswY/nmPP5v2rwX0WEm8QDUQW8IE/DyRnVFokGSXN/ZA/e+acoZH9fZ4dNun4Ou5hQexEr0eXJfRyFG/V0YC4B54+Fgsoi6uSxSag/tyi2Yt5nUWzKGOMGOVeWZ+Ism4lVgdeLxuigpSWPs6rc3lS7iQCGSpTK3DTNi50T7tnZ9evcbNr9sp5qJ51Tbv2CP35FEzrnlueoK3f4Zw7+E0Hu/xXOo3DRTCDSMDdvFPqrDx+7AB11ab0/Kzkyp9Ymc5wDvZYhWtrHYeVKGUP34ldvCLgFqSb3rwjKPdziI/2eYUMwJixwKGej+7nzFxJIHVKhYcCp4wJ43OAab9aJiOlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uGPa9hCv3/TpSRJDpIZW1K6k0nEkBz1D6Gc4aZyIhYE=;
- b=Wh5d+L4rtdzsuURbrfOoOemgwtVD3HjG7MKs219Hd86iHfv3wBFtD4UHOhpE+ZiDsheQHSH/eoc858SmpDzWjKu48kcEJbJEi9LL0/0B1mb/+83v8mXVeR8o6rvTgnhmIasucR5wdbjIXLa4OZJGjUQkHjER6kcGlTiXf5fzPZu0aAw4Vu/kGcO/xnoNfb53yTT+vc3sN82GlFcmGqcBmOfP0ZmpcOMWiknSIBRYG2JQVCDYBk/2Zk+d6SGsa2wmxY3/MTwYQx8udgDlr4EGLsUOzrwM8vE6oRoS30R5cDSEzsWQfwi/Nfi2viCm2DidYRnAPVZkS5XiclEJ9+zHEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by BN9PR11MB5227.namprd11.prod.outlook.com (2603:10b6:408:134::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Sat, 22 Apr
- 2023 00:17:04 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::2854:770d:2a43:dbc6]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::2854:770d:2a43:dbc6%4]) with mapi id 15.20.6319.022; Sat, 22 Apr 2023
- 00:17:04 +0000
-Message-ID: <c54c301e-ff18-90a6-3e68-d77d0df23b77@intel.com>
-Date:   Fri, 21 Apr 2023 17:17:01 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 15/24] selftests/resctrl: Refactor get_cbm_mask()
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        <linux-kselftest@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        "Shuah Khan" <shuah@kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
- <20230418114506.46788-16-ilpo.jarvinen@linux.intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230418114506.46788-16-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY3PR10CA0021.namprd10.prod.outlook.com
- (2603:10b6:a03:255::26) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Fri, 21 Apr 2023 20:19:14 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5930B10E9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:19:12 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54fb4c97d55so12663277b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682122751; x=1684714751;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ESHAo7g+MyXil/Szk2ev8aRxIS1miEenAzN6woVU7Lw=;
+        b=RS0Krm0pZvCyvF1mLoPggvbtgHHFsAfiIP02OwyFDMlTE/tYNKF0wr0VmrVMpA2sj3
+         nzDRyJad+kOWWKEmQN1HZ9Z3g9Ppq7JpHGAmt+6X5dKHUyHmZookXSBqPQ3nY9aY79/N
+         zU4irG/ErQ/RV2usZ1PWr30oy9S9Oif3Rbo39m8aqC/kwfyVb07872/HbO8Az7I8nWLX
+         Fic0apcOBgnSUV3PVJLk0iyvfLnp6OW/CdndfaWk7kI+fxhv8kzdqdar9/YbTF5UGbb0
+         RgeVIVEpjKV5BK/b/al0WOs3D9/axsr8wpvPva+egaNEo6M/kbqJ7q+PT20ajng2peCf
+         ii2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682122751; x=1684714751;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ESHAo7g+MyXil/Szk2ev8aRxIS1miEenAzN6woVU7Lw=;
+        b=Mi/GsklmKxY9N5WM9981VC6alwtVu2M+s6qBYBHGGv/2D9Ede2qDTkP3AjVR/Z4K6L
+         eSePAy0nplGCcRLD9QgpjCq8tTn04l3KhSt9wEz9mb1mIqRyXX9D+/UX53GFBF5H6yQw
+         964rBmlidLzdiCV5EtRuvqm8kVVGmYO4jZq0Q/C8uGNsKIsiXktTY9kNJPncQ9HRRv10
+         jwTG5QvC3SYFoOqynhMkvMI6NR9NM5KFHefpGXE1IUaJ6b8JNhVL2dVZhXXdTsLMRBMQ
+         3HPrdH4bLLFzqnNIUqNj30bOP8uLxOkagBNBbdS2mZKs9pbXmwFMrPFjx0KMZPZiNL8r
+         weXA==
+X-Gm-Message-State: AAQBX9dQlaYy1FvGKgcfkPXdLM6LhNtDKDne5LTPNVeyhGNgCk1BTEkA
+        m3mcF7ixgDvZIZG40E/RGe2tV2je6LyEDqjw9A/YCA==
+X-Google-Smtp-Source: AKy350bYi6sl1UOo+946VkOehVgt0eQvMyyMbFMwc7DtvoEky1L+WECf7Zv5EO/lnVVCi8/YpngujIDYsAraWyBmTX0=
+X-Received: by 2002:a0d:dd86:0:b0:556:106f:c0c0 with SMTP id
+ g128-20020a0ddd86000000b00556106fc0c0mr3581486ywe.41.1682122751404; Fri, 21
+ Apr 2023 17:19:11 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|BN9PR11MB5227:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c7e7db1-dd08-4da9-6d8e-08db42c6e64b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kuLiHlgPe0rpFN38xDVjiUxew2Vez/YRqvpoPMK7z2+LwmWuJl4JIHMqyYhKPGpuEpukzjM5lZLdhGaug1PpqnvrL19UWcCvRT3qjFt5Zc2a6+PT1uGWDaXruqcW2d7/4rjwnUth8UBVTxoXkTDeCbVjf4qy1LBPsIx8x29rgHNJHor8WA+4oS96nBQwKzUoBvfNjxBQe2LwmfEF97jXr4RB0r3GbCyZ4rZROk6WdzuafRC5ibGrjFEeUWW0UU+hiuU/yT/qXs1iEgEbw8mi0ONXcZ1gZGwMXDu1NuGzapXIWJ8ZwZrIfCEo1/8tIN7RFzJYnRGRzhopYfbYIVNARb+2rT49EBMTKZM68AXMwnc8Y1PdyoEM46SpT2933cb0l0v0xp8n1axImkRhscNK9I2j75rgQmFvHDlSo5sUD1/DieUddeQrXb8o+JKr3kwFBtFp0b4o+FJtEIAmg2+s1XpxhpngzewEm9OY7f5RlSzLsybKMWzIs+IjeyoE4PQZ7cVyfhEQLZeZQMoMpcwQgrBjNDglLatWEk96It4Be2T0U7Rd5eMWXfbkfK+/RdgTY/jDd8xqNcD4M2pZwf/zvgoko8wusX7r3lUMqGSJLEMrRJ2AKTosGBPITJ4meG/Vp0KHnloQSXAY1He1pWbQOw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199021)(2906002)(8936002)(8676002)(38100700002)(44832011)(5660300002)(36756003)(86362001)(66574015)(31696002)(6506007)(6486002)(6666004)(6512007)(26005)(110136005)(2616005)(31686004)(83380400001)(478600001)(4326008)(186003)(316002)(53546011)(82960400001)(66556008)(66476007)(66946007)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlpGY1lXTExzaGNmK0JkU2hPaWZEd1FqRHVJQWo0RE5IUzN2cVZNenFYSk0r?=
- =?utf-8?B?aHl3ZTdkK2tlalB2djI0RGJjcGdNVzByTWp4VC9CTjVzTm1kUzlzeGxRRnZK?=
- =?utf-8?B?U0pXcXRMVXZNSkRic1FIZDB2d3RnSHUzZEJZNHFlM1pjaU1CN2NuM0ZtbnIx?=
- =?utf-8?B?MmlPVVJvVzNIaFViWUx2QWtzaytJZGN3UTJUY3FsQSs2WmJRU1NqbFJuOVZB?=
- =?utf-8?B?RkJkS2N4eUp4VmgrTkhaNmt2UXB5YTNMdE5HdC9mZXhLRm1weCtKWjZ3VTEv?=
- =?utf-8?B?SU5ranR3R09odW95OGZtTDVRQmZxUEJwelhSci9HMGVDcVlBUC82eGZRZlBK?=
- =?utf-8?B?WGs3Nm9WTXI2Z0tDckZMVzhtT2VvTm43TXBxZTBobzF4YmhETkFxWDhySXRk?=
- =?utf-8?B?b2N3V0lITW50U005QzZESTIyanF0MEZlZDUzdG5lVTl5bDBVc0xHUCt0NVp4?=
- =?utf-8?B?OGw2NzFncVduQ20zVFNMTjRsUk1qSXpSU3dqYmlxV250NUw1NE84SVJEYTNN?=
- =?utf-8?B?ZzFiZ2tmcTAzSk1YSk1oWDRyU0NEL2sxY2NCbkZ0U1JpVEUwSXJGRXJWblB4?=
- =?utf-8?B?NUV0RnBvdHQ1WXQyTFR6OXVxUjNuY1ZXbjZTaW4zSS8zUEc3aHZ6cFdNK1V6?=
- =?utf-8?B?TmdNbTZaR00wTHFqUENldVZIc2NHZFJuN3ZYc29JSFdEV1N6V3JWc3IzaGdL?=
- =?utf-8?B?R2VWSHI2YXlrMWh4RSsvM0dteVF6UnFMbm9ScDNoNktBTDBXczIxTFFKekZT?=
- =?utf-8?B?MnlzMGI2cGFjaFlYdDlFa2phanlyV1pHRVlESjd0OGZwcHZZbVNOdEhFR3h0?=
- =?utf-8?B?bXBlUjFPdUU0d0lLMXFsR3BSMGNtSWVIT3lNeEFFZlZvM1lRMzdKbzc3RlEw?=
- =?utf-8?B?dXZJQVA0cUJSWWRXZ0hidGtqVG9GcmF2OEpYNlBGUDlQTFVCSUFkV3JaZ0dv?=
- =?utf-8?B?SXVTR20zWXY0VXRLVU9KOG5VRVFFeVFsd1JGNUdFRUJFNVQ5TFd0c0VLSysw?=
- =?utf-8?B?djJsU3o5RVh2ZnlTdlgzYktLRVhpemV2RnRDajgxcHM2U0JneXN1cU0rajdm?=
- =?utf-8?B?K2FMNFlMQmZBNDB4cmxsNTNzSEw2SFlBSFVnQm1YZGk0cDhxclNSaXhtRThE?=
- =?utf-8?B?N1NWelU3VGpLYlpPeVc5UnVyQnRJSWFuVlNiZHJpdWhYNFhLU3VJbC9VT0Vz?=
- =?utf-8?B?WDEvRWRXRlZqNk5rcG45WFhNbGNtdmxXUjhma0kwcWVJdU1QSHFYRFhLZnds?=
- =?utf-8?B?VEZkenN2dlhDQTJBVkkyOG1OQ1Q2QVdKaUFXYkNrekFDK3BIMXk4QWU4NWow?=
- =?utf-8?B?OWNNKzAzbUJNOTFzTEpPbjN2RHJHSktSQ0U5M0FPSm9UUWxPR1dwYkpTVU5t?=
- =?utf-8?B?Y0p0UElmQXRrQnFGT25Cc1BIa2FlaVpYTEVWbHBUQkJqMzVPbHJoWHc2dlB3?=
- =?utf-8?B?ZEVHcU93TVJURVhpcUNhYm54N1RPUU51d2x3VDVlL3FNd05tRE8rVHhweGtm?=
- =?utf-8?B?WEpobFdkck5jUm9yL0R3VVB0d1NWKzFYSjhvcEV0TExRMitpeFZUYjc2alpM?=
- =?utf-8?B?T2NzcGlyVTNWd1dNdWkzblJjSHphT2FUTjcvcFlWd1ltRisrVVUrZDRiWDZS?=
- =?utf-8?B?cExNTy82YzdXck9JRUhyZDFQVCtWSm96LzdhTkYycVN1QnhIWHBWT3dXU0xu?=
- =?utf-8?B?MThnWkQrVExRVTRmTUJKalFYOUVjMktVOVc1MThuRnk4QXVCZXY2MDNRbVhO?=
- =?utf-8?B?MFNWM3o1Tks1NXlrazFHcENmc2ZHaml0SEo2UzBlQ3lKWityUk9IMVFhcHRw?=
- =?utf-8?B?S1c3MWJvRHk1eDkweGl2dis0aVhTVllxRmdybVBGQTdhekNkbXErYVFDM3ht?=
- =?utf-8?B?bjliSXo5ZG44OXcvazE0akEyL0lSTmxvSkFRd1gxSkFGcVozRU93RklBbktO?=
- =?utf-8?B?M3RnQ1Y5R0dCV1BwR0drQW5qYWRpbUN0dks0WXlsZlcwd2psdEtpRFNaQk1S?=
- =?utf-8?B?WC9abTdscXJYemJyZzVta0RTYW5wN09JYU9PZmdMdmpFdmFTcTNhc2Z2QWdT?=
- =?utf-8?B?dUxiUDMxbFI5TzFLYkxJdTcyaWhxMnh5QlVkWGIyRlpUZWt3bUpORndyRVUz?=
- =?utf-8?B?K0dydm85WnpCNDVFQTNtdmdXWXFyanV5TlJtMVdjZUlUZ2Q4aFF5dVNmN0th?=
- =?utf-8?B?M0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c7e7db1-dd08-4da9-6d8e-08db42c6e64b
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2023 00:17:03.9552
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e9z5I+3ysstZxLwDOzF2kXwnRNPJ012ou7JSt3lPbDBuT9ipMoXDzVUU15PE57wofGxUlH56rOCwqx6RhVjzJg+mgLA+vfh97ZdncCSIDqI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5227
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com> <20230421124938.21974-5-quic_devipriy@quicinc.com>
+In-Reply-To: <20230421124938.21974-5-quic_devipriy@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 22 Apr 2023 03:19:00 +0300
+Message-ID: <CAA8EJppyro1wM3KmDU3DVjKCqXH5+KaNoT_7ObVuuYNMoZKpoA@mail.gmail.com>
+Subject: Re: [PATCH V3 4/6] arm64: dts: qcom: ipq9574: Add PCIe PHYs and
+ controller nodes
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilpo,
-
-On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
-> Callers of get_cbm_mask() are required to pass a string into which
-> the CBM bit mask is read into. Neither CAT nor CMT tests need the
-
-There is a double "into" above. Perhaps the second can be dropped?
-
-> mask as string but just convert it into an unsigned long value.
-> 
-> The bit mask reader can only read .../cbm_mask files.
-> 
-> Generalize the bit mask reading function into get_bit_mask() such that
-> it can be used to handle other files besides the .../cbm_mask and
-> handle the unsigned long conversion within within get_bit_mask() using
-> fscanf(). Alter get_cbm_mask() to construct the filename for
-> get_bit_mask().
-> 
-> Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+On Fri, 21 Apr 2023 at 15:50, Devi Priya <quic_devipriy@quicinc.com> wrote:
+>
+> Add PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
+> found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane Gen3
+> host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
+>
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 > ---
->  tools/testing/selftests/resctrl/cat_test.c  |  5 +--
->  tools/testing/selftests/resctrl/cmt_test.c  |  5 +--
->  tools/testing/selftests/resctrl/resctrl.h   |  2 +-
->  tools/testing/selftests/resctrl/resctrlfs.c | 50 +++++++++++++++------
->  4 files changed, 40 insertions(+), 22 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index a998e6397518..9bf5d05d9e74 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -18,7 +18,6 @@
->  #define MAX_DIFF		1000000
->  
->  static int count_of_bits;
-> -static char cbm_mask[256];
->  static unsigned long long_mask;
->  static unsigned long cache_size;
->  
-> @@ -101,12 +100,10 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->  	cache_size = 0;
->  
->  	/* Get default cbm mask for L3/L2 cache */
-> -	ret = get_cbm_mask(cache_type, cbm_mask);
-> +	ret = get_cbm_mask(cache_type, &long_mask);
->  	if (ret)
->  		return ret;
->  
-> -	long_mask = strtoul(cbm_mask, NULL, 16);
-> -
->  	/* Get L3/L2 cache size */
->  	ret = get_cache_size(cpu_no, cache_type, &cache_size);
->  	if (ret)
-> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> index 2d434c03cbba..ae54bbabbd91 100644
-> --- a/tools/testing/selftests/resctrl/cmt_test.c
-> +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> @@ -17,7 +17,6 @@
->  #define MAX_DIFF_PERCENT	15
->  
->  static int count_of_bits;
-> -static char cbm_mask[256];
->  static unsigned long long_mask;
->  static unsigned long cache_size;
->  
-> @@ -82,12 +81,10 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
->  	if (!validate_resctrl_feature_request(CMT_STR))
->  		return -1;
->  
-> -	ret = get_cbm_mask("L3", cbm_mask);
-> +	ret = get_cbm_mask("L3", &long_mask);
->  	if (ret)
->  		return ret;
+>  Changes in V3:
+>         - Fixed up the PCI I/O port ranges
+>
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 375 +++++++++++++++++++++++++-
+>  1 file changed, 370 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index e757b57957cf..953a839a1141 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -6,8 +6,8 @@
+>   * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>
+> -#include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+>
+>  / {
+> @@ -116,6 +116,58 @@
+>                 #size-cells = <1>;
+>                 ranges = <0 0 0 0xffffffff>;
+>
+> +               pcie0_phy: phy@84000 {
+> +                       compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> +                       reg = <0x00084000 0x1000>;
+> +
+> +                       clocks = <&gcc GCC_PCIE0_AUX_CLK>,
+> +                                <&gcc GCC_PCIE0_AHB_CLK>,
+> +                                <&gcc GCC_ANOC_PCIE0_1LANE_M_CLK>,
+> +                                <&gcc GCC_SNOC_PCIE0_1LANE_S_CLK>,
+> +                                <&gcc GCC_PCIE0_PIPE_CLK>;
+> +                       clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane", "pipe";
+> +
+> +                       assigned-clocks = <&gcc GCC_PCIE0_AUX_CLK>;
+> +                       assigned-clock-rates = <20000000>;
+> +
+> +                       resets = <&gcc GCC_PCIE0_PHY_BCR>,
+> +                                <&gcc GCC_PCIE0PHY_PHY_BCR>;
+> +                       reset-names = "phy", "common";
+> +
+> +                       #clock-cells = <0>;
+> +                       clock-output-names = "gcc_pcie0_pipe_clk_src";
+> +
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +
+> +               };
+> +
+> +               pcie2_phy: phy@8c000 {
+> +                       compatible = "qcom,ipq9574-qmp-gen3x2-pcie-phy";
+> +                       reg = <0x0008c000 0x2000>;
+> +
+> +                       clocks = <&gcc GCC_PCIE2_AUX_CLK>,
+> +                                <&gcc GCC_PCIE2_AHB_CLK>,
+> +                                <&gcc GCC_ANOC_PCIE2_2LANE_M_CLK>,
+> +                                <&gcc GCC_SNOC_PCIE2_2LANE_S_CLK>,
+> +                                <&gcc GCC_PCIE2_PIPE_CLK>;
+> +                       clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane", "pipe";
+> +
+> +                       assigned-clocks = <&gcc GCC_PCIE2_AUX_CLK>;
+> +                       assigned-clock-rates = <20000000>;
+> +
+> +                       resets = <&gcc GCC_PCIE2_PHY_BCR>,
+> +                                <&gcc GCC_PCIE2PHY_PHY_BCR>;
+> +                       reset-names = "phy", "common";
+> +
+> +                       #clock-cells = <0>;
+> +                       clock-output-names = "gcc_pcie2_pipe_clk_src";
+> +
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +
+> +               };
+> +
+>                 rng: rng@e3000 {
+>                         compatible = "qcom,prng-ee";
+>                         reg = <0x000e3000 0x1000>;
+> @@ -123,6 +175,58 @@
+>                         clock-names = "core";
+>                 };
+>
+> +               pcie3_phy: phy@f4000 {
+> +                       compatible = "qcom,ipq9574-qmp-gen3x2-pcie-phy";
+> +                       reg = <0x000f4000 0x2000>;
+> +
+> +                       clocks = <&gcc GCC_PCIE3_AUX_CLK>,
+> +                                <&gcc GCC_PCIE3_AHB_CLK>,
+> +                                <&gcc GCC_ANOC_PCIE3_2LANE_M_CLK>,
+> +                                <&gcc GCC_SNOC_PCIE3_2LANE_S_CLK>,
+> +                                <&gcc GCC_PCIE3_PIPE_CLK>;
+> +                       clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane", "pipe";
+> +
+> +                       assigned-clocks = <&gcc GCC_PCIE3_AUX_CLK>;
+> +                       assigned-clock-rates = <20000000>;
+> +
+> +                       resets = <&gcc GCC_PCIE3_PHY_BCR>,
+> +                                <&gcc GCC_PCIE3PHY_PHY_BCR>;
+> +                       reset-names = "phy", "common";
+> +
+> +                       #clock-cells = <0>;
+> +                       clock-output-names = "gcc_pcie3_pipe_clk_src";
+> +
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +
+> +               };
+> +
+> +               pcie1_phy: phy@fc000 {
+> +                       compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> +                       reg = <0x000fc000 0x1000>;
+> +
+> +                       clocks = <&gcc GCC_PCIE1_AUX_CLK>,
+> +                                <&gcc GCC_PCIE1_AHB_CLK>,
+> +                                <&gcc GCC_ANOC_PCIE1_1LANE_M_CLK>,
+> +                                <&gcc GCC_SNOC_PCIE1_1LANE_S_CLK>,
+> +                                <&gcc GCC_PCIE1_PIPE_CLK>;
+> +                       clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane", "pipe";
+> +
+> +                       assigned-clocks = <&gcc GCC_PCIE1_AUX_CLK>;
+> +                       assigned-clock-rates = <20000000>;
+> +
+> +                       resets = <&gcc GCC_PCIE1_PHY_BCR>,
+> +                                <&gcc GCC_PCIE1PHY_PHY_BCR>;
+> +                       reset-names = "phy", "common";
+> +
+> +                       #clock-cells = <0>;
+> +                       clock-output-names = "gcc_pcie1_pipe_clk_src";
+> +
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +
+> +               };
+> +
+>                 tlmm: pinctrl@1000000 {
+>                         compatible = "qcom,ipq9574-tlmm";
+>                         reg = <0x01000000 0x300000>;
+> @@ -146,10 +250,10 @@
+>                         reg = <0x01800000 0x80000>;
+>                         clocks = <&xo_board_clk>,
+>                                  <&sleep_clk>,
+> -                                <0>,
+> -                                <0>,
+> -                                <0>,
+> -                                <0>,
+> +                                <&pcie0_phy>,
+> +                                <&pcie1_phy>,
+> +                                <&pcie2_phy>,
+> +                                <&pcie3_phy>,
+>                                  <0>;
+>                         #clock-cells = <1>;
+>                         #reset-cells = <1>;
+> @@ -478,6 +582,267 @@
+>                                 status = "disabled";
+>                         };
+>                 };
+> +
+> +               pcie1: pci@10000000 {
+> +                       compatible = "qcom,pcie-ipq9574";
+> +                       reg =  <0x10000000 0xf1d>,
+> +                              <0x10000F20 0xa8>,
+> +                              <0x10001000 0x1000>,
+> +                              <0x000F8000 0x4000>,
+> +                              <0x10100000 0x1000>;
+> +                       reg-names = "dbi", "elbi", "atu", "parf", "config";
+> +                       device_type = "pci";
+> +                       linux,pci-domain = <2>;
+> +                       bus-range = <0x00 0xff>;
+> +                       num-lanes = <1>;
+> +                       #address-cells = <3>;
+> +                       #size-cells = <2>;
+> +
+> +                       ranges = <0x01000000 0x0 0x00000000 0x10200000 0x0 0x100000>,  /* I/O */
+> +                                <0x02000000 0x0 0x10300000 0x10300000 0x0 0x7d00000>; /* MEM */
+> +
+> +                       #interrupt-cells = <1>;
+> +                       interrupt-map-mask = <0 0 0 0x7>;
+> +                       interrupt-map = <0 0 0 1 &intc 0 35 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +                                       <0 0 0 2 &intc 0 49 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +                                       <0 0 0 3 &intc 0 84 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +                                       <0 0 0 4 &intc 0 85 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
 
-I think this is a good change. It does raise the question why long_mask
-is a global variable so I think it may make things go smoother if
-the patch making long_mask local is moved to be before this patch.
+No iommu-map?
 
-Reinette
+> +                       interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "global_irq";
+> +
+> +                       /* clocks and clock-names are used to enable the clock in CBCR */
+> +                       clocks = <&gcc GCC_PCIE1_AHB_CLK>,
+> +                                <&gcc GCC_PCIE1_AUX_CLK>,
+> +                                <&gcc GCC_PCIE1_AXI_M_CLK>,
+> +                                <&gcc GCC_PCIE1_AXI_S_CLK>,
+> +                                <&gcc GCC_PCIE1_AXI_S_BRIDGE_CLK>,
+> +                                <&gcc GCC_PCIE1_RCHNG_CLK>;
+> +                       clock-names = "ahb",
+> +                                     "aux",
+> +                                     "axi_m",
+> +                                     "axi_s",
+> +                                     "axi_bridge",
+> +                                     "rchng";
+> +
+> +                       resets = <&gcc GCC_PCIE1_PIPE_ARES>,
+> +                                <&gcc GCC_PCIE1_CORE_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE1_AXI_S_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE1_AXI_S_ARES>,
+> +                                <&gcc GCC_PCIE1_AXI_M_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE1_AXI_M_ARES>,
+> +                                <&gcc GCC_PCIE1_AUX_ARES>,
+> +                                <&gcc GCC_PCIE1_AHB_ARES>;
+> +                       reset-names = "pipe",
+> +                                     "sticky",
+> +                                     "axi_s_sticky",
+> +                                     "axi_s",
+> +                                     "axi_m_sticky",
+> +                                     "axi_m",
+> +                                     "aux",
+> +                                     "ahb";
+> +
+> +                       phys = <&pcie1_phy>;
+> +                       phy-names = "pciephy";
+> +                       msi-parent = <&v2m0>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               pcie3: pci@18000000 {
+> +                       compatible = "qcom,pcie-ipq9574";
+> +                       reg =  <0x18000000 0xf1d>,
+> +                              <0x18000F20 0xa8>,
+> +                              <0x18001000 0x1000>,
+> +                              <0x000F0000 0x4000>,
+> +                              <0x18100000 0x1000>;
+> +                       reg-names = "dbi", "elbi", "atu", "parf", "config";
+> +                       device_type = "pci";
+> +                       linux,pci-domain = <4>;
+> +                       bus-range = <0x00 0xff>;
+> +                       num-lanes = <2>;
+> +                       #address-cells = <3>;
+> +                       #size-cells = <2>;
+> +
+> +                       ranges = <0x01000000 0x0 0x00000000 0x18200000 0x0 0x100000>,  /* I/O */
+> +                                <0x02000000 0x0 0x18300000 0x18300000 0x0 0x7d00000>; /* MEM */
+> +
+> +                       #interrupt-cells = <1>;
+> +                       interrupt-map-mask = <0 0 0 0x7>;
+> +                       interrupt-map = <0 0 0 1 &intc 0 189 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +                                       <0 0 0 2 &intc 0 190 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +                                       <0 0 0 3 &intc 0 191 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +                                       <0 0 0 4 &intc 0 192 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +                       interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "global_irq";
+> +
+> +                       /* clocks and clock-names are used to enable the clock in CBCR */
+> +                       clocks = <&gcc GCC_PCIE3_AHB_CLK>,
+> +                                <&gcc GCC_PCIE3_AUX_CLK>,
+> +                                <&gcc GCC_PCIE3_AXI_M_CLK>,
+> +                                <&gcc GCC_PCIE3_AXI_S_CLK>,
+> +                                <&gcc GCC_PCIE3_AXI_S_BRIDGE_CLK>,
+> +                                <&gcc GCC_PCIE3_RCHNG_CLK>;
+> +                       clock-names = "ahb",
+> +                                     "aux",
+> +                                     "axi_m",
+> +                                     "axi_s",
+> +                                     "axi_bridge",
+> +                                     "rchng";
+> +
+> +                       resets = <&gcc GCC_PCIE3_PIPE_ARES>,
+> +                                <&gcc GCC_PCIE3_CORE_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE3_AXI_S_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE3_AXI_S_ARES>,
+> +                                <&gcc GCC_PCIE3_AXI_M_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE3_AXI_M_ARES>,
+> +                                <&gcc GCC_PCIE3_AUX_ARES>,
+> +                                <&gcc GCC_PCIE3_AHB_ARES>;
+> +                       reset-names = "pipe",
+> +                                     "sticky",
+> +                                     "axi_s_sticky",
+> +                                     "axi_s",
+> +                                     "axi_m_sticky",
+> +                                     "axi_m",
+> +                                     "aux",
+> +                                     "ahb";
+> +
+> +                       phys = <&pcie3_phy>;
+> +                       phy-names = "pciephy";
+> +                       msi-parent = <&v2m0>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               pcie2: pci@20000000 {
+> +                       compatible = "qcom,pcie-ipq9574";
+> +                       reg =  <0x20000000 0xf1d>,
+> +                              <0x20000F20 0xa8>,
+> +                              <0x20001000 0x1000>,
+> +                              <0x00088000 0x4000>,
+> +                              <0x20100000 0x1000>;
+> +                       reg-names = "dbi", "elbi", "atu", "parf", "config";
+> +                       device_type = "pci";
+> +                       linux,pci-domain = <3>;
+> +                       bus-range = <0x00 0xff>;
+> +                       num-lanes = <2>;
+> +                       #address-cells = <3>;
+> +                       #size-cells = <2>;
+> +
+> +                       ranges = <0x01000000 0x0 0x00000000 0x20200000 0x0 0x100000>,  /* I/O */
+> +                                <0x02000000 0x0 0x20300000 0x20300000 0x0 0x7d00000>; /* MEM */
+> +
+> +                       #interrupt-cells = <1>;
+> +                       interrupt-map-mask = <0 0 0 0x7>;
+> +                       interrupt-map = <0 0 0 1 &intc 0 164 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +                                       <0 0 0 2 &intc 0 165 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +                                       <0 0 0 3 &intc 0 186 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +                                       <0 0 0 4 &intc 0 187 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +                       interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "global_irq";
+> +
+> +                       /* clocks and clock-names are used to enable the clock in CBCR */
+> +                       clocks = <&gcc GCC_PCIE2_AHB_CLK>,
+> +                                <&gcc GCC_PCIE2_AUX_CLK>,
+> +                                <&gcc GCC_PCIE2_AXI_M_CLK>,
+> +                                <&gcc GCC_PCIE2_AXI_S_CLK>,
+> +                                <&gcc GCC_PCIE2_AXI_S_BRIDGE_CLK>,
+> +                                <&gcc GCC_PCIE2_RCHNG_CLK>;
+> +                       clock-names = "ahb",
+> +                                     "aux",
+> +                                     "axi_m",
+> +                                     "axi_s",
+> +                                     "axi_bridge",
+> +                                     "rchng";
+> +
+> +                       resets = <&gcc GCC_PCIE2_PIPE_ARES>,
+> +                                <&gcc GCC_PCIE2_CORE_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE2_AXI_S_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE2_AXI_S_ARES>,
+> +                                <&gcc GCC_PCIE2_AXI_M_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE2_AXI_M_ARES>,
+> +                                <&gcc GCC_PCIE2_AUX_ARES>,
+> +                                <&gcc GCC_PCIE2_AHB_ARES>;
+> +                       reset-names = "pipe",
+> +                                     "sticky",
+> +                                     "axi_s_sticky",
+> +                                     "axi_s",
+> +                                     "axi_m_sticky",
+> +                                     "axi_m",
+> +                                     "aux",
+> +                                     "ahb";
+> +
+> +                       phys = <&pcie2_phy>;
+> +                       phy-names = "pciephy";
+> +                       msi-parent = <&v2m0>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               pcie0: pci@28000000 {
+> +                       compatible = "qcom,pcie-ipq9574";
+> +                       reg =  <0x28000000 0xf1d>,
+> +                              <0x28000F20 0xa8>,
+> +                              <0x28001000 0x1000>,
+> +                              <0x00080000 0x4000>,
+> +                              <0x28100000 0x1000>;
+> +                       reg-names = "dbi", "elbi", "atu", "parf", "config";
+> +                       device_type = "pci";
+> +                       linux,pci-domain = <1>;
+> +                       bus-range = <0x00 0xff>;
+> +                       num-lanes = <1>;
+> +                       #address-cells = <3>;
+> +                       #size-cells = <2>;
+> +
+> +                       ranges = <0x01000000 0x0 0x00000000 0x28200000 0x0 0x100000>,  /* I/O */
+> +                                <0x02000000 0x0 0x28300000 0x28300000 0x0 0x7d00000>; /* MEM */
+> +
+> +                       #interrupt-cells = <1>;
+> +                       interrupt-map-mask = <0 0 0 0x7>;
+> +                       interrupt-map = <0 0 0 1 &intc 0 75 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +                                       <0 0 0 2 &intc 0 78 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +                                       <0 0 0 3 &intc 0 79 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +                                       <0 0 0 4 &intc 0 83 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +                       interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "global_irq";
+> +
+> +                       /* clocks and clock-names are used to enable the clock in CBCR */
+> +                       clocks = <&gcc GCC_PCIE0_AHB_CLK>,
+> +                                <&gcc GCC_PCIE0_AUX_CLK>,
+> +                                <&gcc GCC_PCIE0_AXI_M_CLK>,
+> +                                <&gcc GCC_PCIE0_AXI_S_CLK>,
+> +                                <&gcc GCC_PCIE0_AXI_S_BRIDGE_CLK>,
+> +                                <&gcc GCC_PCIE0_RCHNG_CLK>;
+> +                       clock-names = "ahb",
+> +                                     "aux",
+> +                                     "axi_m",
+> +                                     "axi_s",
+> +                                     "axi_bridge",
+> +                                     "rchng";
+> +
+> +                       resets = <&gcc GCC_PCIE0_PIPE_ARES>,
+> +                                <&gcc GCC_PCIE0_CORE_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE0_AXI_S_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE0_AXI_S_ARES>,
+> +                                <&gcc GCC_PCIE0_AXI_M_STICKY_ARES>,
+> +                                <&gcc GCC_PCIE0_AXI_M_ARES>,
+> +                                <&gcc GCC_PCIE0_AUX_ARES>,
+> +                                <&gcc GCC_PCIE0_AHB_ARES>;
+> +                       reset-names = "pipe",
+> +                                     "sticky",
+> +                                     "axi_s_sticky",
+> +                                     "axi_s",
+> +                                     "axi_m_sticky",
+> +                                     "axi_m",
+> +                                     "aux",
+> +                                     "ahb";
+> +
+> +                       phys = <&pcie0_phy>;
+> +                       phy-names = "pciephy";
+> +                       msi-parent = <&v2m0>;
+> +                       status = "disabled";
+> +               };
+> +
+>         };
+>
+>         timer {
+> --
+> 2.17.1
+>
+
+
+-- 
+With best wishes
+Dmitry
