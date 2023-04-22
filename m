@@ -2,99 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8366EB99F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 118AA6EB9A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjDVOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 10:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S229816AbjDVO1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 10:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVOVu (ORCPT
+        with ESMTP id S229451AbjDVO1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 10:21:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFCE72
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 07:21:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA7A360FC9
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 14:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2576C433EF;
-        Sat, 22 Apr 2023 14:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682173308;
-        bh=TaJ9j49RW2ngIjcRgCHX6c2dr/Lco/KmY+TYZiZHHDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UlT/Bkw/MdMrMbdnGiSFyZQDq+NKep8wtCLvyWlCVGDWzzF22JoDUvbnXC7DNS4eW
-         kvFl9K67SONZaPl5nI3cKe2YsyzWqvvmprOE8n+vi1Vo9O/9uq5C5+ytLRqNVsQu1+
-         pDJl+Rs080oamOU8W5O93zEQMvmc4c7GY8nW8nN4O5HOnDlYwrhozMjQD8+8Av6RjX
-         rV9QkAxOUlDeDC8Mhpey8q6V7wgaJzkqaKC51YdLPwrB14e/r3RLhxKGDUIrkqj7fp
-         v/kCrhXnk1d80Z8ncNBqlcTKhJnTQR962jd8wmnxRTTsh4voTC+GiDoUQv5mrAmES4
-         BKMdgsOEwEBKQ==
-Date:   Sat, 22 Apr 2023 16:21:45 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
-Message-ID: <ZEPteS82TbIhMQxe@lothringen>
-References: <ZEKDZEQmKExv0O7Q@lothringen>
- <87leil2r7v.ffs@tglx>
- <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
+        Sat, 22 Apr 2023 10:27:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9018A18E;
+        Sat, 22 Apr 2023 07:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682173638; x=1713709638;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZJUYAOJtumkx0anAvSi4mEUPinyG4AUgH/nrR7sE5DU=;
+  b=bQyocb5wLOcxdh3Ll7vqig+Zf7XF4NUiE6HZXUJkwZokehN6h+d5O19g
+   COg3+RuqK+y62O9Bsjk89fdkcKpW+l+gJ3DCQJZK2iXvTmLQRpGAo2AaC
+   EkufigbDa5H9C9XpKQ8mhvSzHiidfKB8zhBUMhGynXJnHD7dydOSkGpjR
+   0nIj6ovI1LameQA8L7NI/SWsrPjRdtSctwgfygcoyVsisE6CUnKO3CCjF
+   H75+xqOoFeZ0EktblozSU4GyVxwlu4oacyauhste3yV0ptb3Ka9h+MYJ3
+   2TVL/zXOr71qxQInuc2e1yAIQjgY8h65aka6GUIkx23fEe7Wrhe4Tgti9
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,218,1677567600"; 
+   d="scan'208";a="207795273"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Apr 2023 07:27:17 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sat, 22 Apr 2023 07:27:17 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Sat, 22 Apr 2023 07:27:14 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <aleksander.lobakin@intel.com>, <maciej.fijalkowski@intel.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v3] lan966x: Don't use xdp_frame when action is XDP_TX
+Date:   Sat, 22 Apr 2023 16:23:44 +0200
+Message-ID: <20230422142344.3630602-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 10:17:00AM +0200, Peter Zijlstra wrote:
-> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-> index 44ff1ff64260..5a102ff80de0 100644
-> --- a/arch/loongarch/kernel/genex.S
-> +++ b/arch/loongarch/kernel/genex.S
-> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
->  	ori	t0, t0, 0x1f
->  	xori	t0, t0, 0x1f
->  	bne	t0, t1, 1f
-> +	addi.d	t0, t0, 0x20
->  	LONG_S	t0, sp, PT_ERA
->  1:	move	a0, sp
->  	move	a1, sp
+When the action of an xdp program was XDP_TX, lan966x was creating
+a xdp_frame and use this one to send the frame back. But it is also
+possible to send back the frame without needing a xdp_frame, because
+it is possible to send it back using the page.
+And then once the frame is transmitted is possible to use directly
+page_pool_recycle_direct as lan966x is using page pools.
+This would save some CPU usage on this path, which results in higher
+number of transmitted frames. Bellow are the statistics:
+Frame size:    Improvement:
+64                ~8%
+256              ~11%
+512               ~8%
+1000              ~0%
+1500              ~0%
 
-But the interrupts are enabled in C from arch_cpu_idle(), which
-only then calls the ASM __arch_cpu_idle(). So if the interrupt happens
-somewhere in between the call, the rollback (or fast-forward now)
-doesn't apply.
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+v2->v3:
+- fix length issue when the XDP action is XDP_REDIRECT, this issue was
+  introduced in v2 of this patch series.
+- reduce the number of changes by moving back all the assignments to
+  next_dcb_buf
 
-I guess interrupts need to be re-enabled from ASM in the beginning
-of __arch_cpu_idle() so that it's part of the fast-forward region.
+v1->v2:
+- reduce number of arguments for the function lan966x_fdma_xmit_xdpf,
+  as some of them are mutual exclusive, and other can be replaced with
+  deduced from the other ones
+- update commit message and add statistics for the improvement
+---
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 35 ++++++++++++-------
+ .../ethernet/microchip/lan966x/lan966x_main.h |  6 ++--
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  | 10 ++----
+ 3 files changed, 28 insertions(+), 23 deletions(-)
 
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index b6de8e88c1bd..cd6aae441ad9 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -140,6 +140,7 @@ LEAF(__r4k_wait)
->  	ori	k0, 0x1f	/* 32 byte rollback region */
->  	xori	k0, 0x1f
->  	bne	k0, k1, \handler
-> +	addiu	k0, 0x20
->  	MTC0	k0, CP0_EPC
->  	.set pop
->  	.endm
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 2ed76bb61a731..bd72fbc2220f3 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -390,6 +390,7 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
+ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ {
+ 	struct lan966x_tx *tx = &lan966x->tx;
++	struct lan966x_rx *rx = &lan966x->rx;
+ 	struct lan966x_tx_dcb_buf *dcb_buf;
+ 	struct xdp_frame_bulk bq;
+ 	struct lan966x_db *db;
+@@ -432,7 +433,8 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ 			if (dcb_buf->xdp_ndo)
+ 				xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
+ 			else
+-				xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
++				page_pool_recycle_direct(rx->page_pool,
++							 dcb_buf->data.page);
+ 		}
+ 
+ 		clear = true;
+@@ -699,15 +701,14 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+ 	tx->last_in_use = next_to_use;
+ }
+ 
+-int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+-			   struct xdp_frame *xdpf,
+-			   struct page *page,
+-			   bool dma_map)
++int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ {
+ 	struct lan966x *lan966x = port->lan966x;
+ 	struct lan966x_tx_dcb_buf *next_dcb_buf;
+ 	struct lan966x_tx *tx = &lan966x->tx;
++	struct xdp_frame *xdpf;
+ 	dma_addr_t dma_addr;
++	struct page *page;
+ 	int next_to_use;
+ 	__be32 *ifh;
+ 	int ret = 0;
+@@ -722,8 +723,13 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 		goto out;
+ 	}
+ 
++	/* Get the next buffer */
++	next_dcb_buf = &tx->dcbs_buf[next_to_use];
++
+ 	/* Generate new IFH */
+-	if (dma_map) {
++	if (!len) {
++		xdpf = ptr;
++
+ 		if (xdpf->headroom < IFH_LEN_BYTES) {
+ 			ret = NETDEV_TX_OK;
+ 			goto out;
+@@ -743,11 +749,16 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 			goto out;
+ 		}
+ 
++		next_dcb_buf->data.xdpf = xdpf;
++		next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
++
+ 		/* Setup next dcb */
+ 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+ 					  xdpf->len + IFH_LEN_BYTES,
+ 					  dma_addr);
+ 	} else {
++		page = ptr;
++
+ 		ifh = page_address(page) + XDP_PACKET_HEADROOM;
+ 		memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
+ 		lan966x_ifh_set_bypass(ifh, 1);
+@@ -756,21 +767,21 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 		dma_addr = page_pool_get_dma_addr(page);
+ 		dma_sync_single_for_device(lan966x->dev,
+ 					   dma_addr + XDP_PACKET_HEADROOM,
+-					   xdpf->len + IFH_LEN_BYTES,
++					   len + IFH_LEN_BYTES,
+ 					   DMA_TO_DEVICE);
+ 
++		next_dcb_buf->data.page = page;
++		next_dcb_buf->len = len + IFH_LEN_BYTES;
++
+ 		/* Setup next dcb */
+ 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+-					  xdpf->len + IFH_LEN_BYTES,
++					  len + IFH_LEN_BYTES,
+ 					  dma_addr + XDP_PACKET_HEADROOM);
+ 	}
+ 
+ 	/* Fill up the buffer */
+-	next_dcb_buf = &tx->dcbs_buf[next_to_use];
+ 	next_dcb_buf->use_skb = false;
+-	next_dcb_buf->data.xdpf = xdpf;
+-	next_dcb_buf->xdp_ndo = dma_map;
+-	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
++	next_dcb_buf->xdp_ndo = !len;
+ 	next_dcb_buf->dma_addr = dma_addr;
+ 	next_dcb_buf->used = true;
+ 	next_dcb_buf->ptp = false;
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 757378516f1fd..27f272831ea5c 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -262,6 +262,7 @@ struct lan966x_tx_dcb_buf {
+ 	union {
+ 		struct sk_buff *skb;
+ 		struct xdp_frame *xdpf;
++		struct page *page;
+ 	} data;
+ 	u32 len;
+ 	u32 used : 1;
+@@ -593,10 +594,7 @@ int lan966x_ptp_setup_traps(struct lan966x_port *port, struct ifreq *ifr);
+ int lan966x_ptp_del_traps(struct lan966x_port *port);
+ 
+ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
+-int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+-			   struct xdp_frame *frame,
+-			   struct page *page,
+-			   bool dma_map);
++int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len);
+ int lan966x_fdma_change_mtu(struct lan966x *lan966x);
+ void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
+ void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index 2e6f486ec67d7..9ee61db8690b4 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -62,7 +62,7 @@ int lan966x_xdp_xmit(struct net_device *dev,
+ 		struct xdp_frame *xdpf = frames[i];
+ 		int err;
+ 
+-		err = lan966x_fdma_xmit_xdpf(port, xdpf, NULL, true);
++		err = lan966x_fdma_xmit_xdpf(port, xdpf, 0);
+ 		if (err)
+ 			break;
+ 
+@@ -76,7 +76,6 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ {
+ 	struct bpf_prog *xdp_prog = port->xdp_prog;
+ 	struct lan966x *lan966x = port->lan966x;
+-	struct xdp_frame *xdpf;
+ 	struct xdp_buff xdp;
+ 	u32 act;
+ 
+@@ -90,11 +89,8 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ 	case XDP_PASS:
+ 		return FDMA_PASS;
+ 	case XDP_TX:
+-		xdpf = xdp_convert_buff_to_frame(&xdp);
+-		if (!xdpf)
+-			return FDMA_DROP;
+-
+-		return lan966x_fdma_xmit_xdpf(port, xdpf, page, false) ?
++		return lan966x_fdma_xmit_xdpf(port, page,
++					      data_len - IFH_LEN_BYTES) ?
+ 		       FDMA_DROP : FDMA_TX;
+ 	case XDP_REDIRECT:
+ 		if (xdp_do_redirect(port->dev, &xdp, xdp_prog))
+-- 
+2.38.0
 
-The same seem to apply with interrupts being re-enabled by r4k_wait().
-
-Thanks.
