@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CEB6EBAAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 19:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D0B6EBA97
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 19:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjDVR3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 13:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S229704AbjDVRNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 13:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDVR3d (ORCPT
+        with ESMTP id S229451AbjDVRM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 13:29:33 -0400
-Received: from bues.ch (bues.ch [IPv6:2a01:138:9005::1:4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842E01BF7;
-        Sat, 22 Apr 2023 10:29:30 -0700 (PDT)
-Received: by bues.ch with esmtpsa (Exim 4.94.2)
-        (envelope-from <m@bues.ch>)
-        id 1pqH2e-0008h1-Tl; Sat, 22 Apr 2023 19:28:54 +0200
-Date:   Sat, 22 Apr 2023 19:28:20 +0200
-From:   Michael =?UTF-8?B?QsO8c2No?= <m@bues.ch>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Natalia Petrova <n.petrova@fintech.ru>
-Subject: Re: [PATCH v2] b43legacy: Add checking for null for
- ssb_get_devtypedata(dev)
-Message-ID: <20230422192820.59e8e423@barney>
-In-Reply-To: <95cff855-cb12-cf66-888f-b296a712d37d@lwfinger.net>
-References: <20230418142918.70510-1-n.zhandarovich@fintech.ru>
- <95cff855-cb12-cf66-888f-b296a712d37d@lwfinger.net>
+        Sat, 22 Apr 2023 13:12:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5331A2114;
+        Sat, 22 Apr 2023 10:12:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDD4560E9B;
+        Sat, 22 Apr 2023 17:12:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6153C433EF;
+        Sat, 22 Apr 2023 17:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682183577;
+        bh=dq2mWH2zsRT78Bh1KU9LpxGEzixDbvMmHZ0wzOfn++w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DA4/hLPyUXDRXZ3vSrh40L+CoA3JsasBezpy1VUg5TjyBPR5ViCWGQK3dPW8QaP99
+         r284UrX7cHhv3nwy9eB5Hf1Cb/zu0YvIKTo52O1KHh7TRLqg9DouCTbEgmTHC6LhWP
+         fMb8XMwwAhn1wBnRIK86ixAHR83/xmEA3NtETN7Ptj/IwyD6HRiIn9qLqk6IVJAyGm
+         +2VjXYAguZc4p7yitfckEVyqrGM6e4Scyf5n5T3s9Lmya3OlxofUesuJohW0InnQ7f
+         MCLMHnvgj7G1eT2QolYSfChljQm4qLlX/lttK2gUPddRHSPg5glZke30sIr4+Zwf/A
+         wzaG2oJg/Vt3w==
+Date:   Sat, 22 Apr 2023 18:28:33 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>
+Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] iio: accel: kionix-kx022a: Warn on failed
+ matches and assume compatibility
+Message-ID: <20230422182833.7fbf6aae@jic23-huawei>
+In-Reply-To: <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
+References: <cover.1682019544.git.mehdi.djait.k@gmail.com>
+        <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2UmYtPuo=8I_Omt_ytOLG9A";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,60 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2UmYtPuo=8I_Omt_ytOLG9A
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Thu, 20 Apr 2023 22:22:02 +0200
+Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
 
-On Fri, 21 Apr 2023 17:14:18 -0500
-Larry Finger <Larry.Finger@lwfinger.net> wrote:
-> > (err) goto out;
-> >   		wl =3D ssb_get_devtypedata(dev);
-> > -		B43legacy_WARN_ON(!wl);
-> > +		if (!wl) {
-> > +			B43legacy_WARN_ON(!wl);
-> > +			err =3D -ENODEV;
-> > +			goto out;
-> > +		}
-> >   	}
-> >   	err =3D b43legacy_one_core_attach(dev, wl);
-> >   	if (err) =20
->=20
-> I do not recall seeing v1. One additional nitpick: The latest
-> convention would have the subject as "wifi: b43legacy:...". Kalle may
-> be able to fix this on merging, but it not, a v3 might be required.
-> Otherwise, the patch is good.
->=20
-> Reviewed-by: Larry Finger <Larry.Finger@lwfinger.net>
+> Avoid error returns on a failure to match and instead just warn with
+> assumption that we have a correct dt-binding telling us that
+> some new device with a different ID is backwards compatible.
+> 
+> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> ---
+> v2:
+> - no changes, this patch is introduced in the v2
+> 
+>  drivers/iio/accel/kionix-kx022a.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
+> index f98393d74666..70530005cad3 100644
+> --- a/drivers/iio/accel/kionix-kx022a.c
+> +++ b/drivers/iio/accel/kionix-kx022a.c
+> @@ -1038,9 +1038,7 @@ int kx022a_probe_internal(struct device *dev)
+>  		return dev_err_probe(dev, ret, "Failed to access sensor\n");
+>  
+>  	if (chip_id != KX022A_ID) {
+> -		dev_err(dev, "unsupported device 0x%x\n", chip_id);
+> -		return -EINVAL;
+> -	}
+> +		dev_warn(dev, "unsupported device 0x%x\n", chip_id);
 
-No, it's not good. It's wrong. I already replied to it.
-wl can never be NULL here and the goto-out path is wrong (if there
-was a chance for it to trigger).
+Try building this ;)  You have remove the closing bracket but kept the opening
+one.
 
-Please drop this patch, Kalle.
+Jonathan
 
---=20
-Michael B=C3=BCsch
-https://bues.ch/
+>  
+>  	irq = fwnode_irq_get_byname(fwnode, "INT1");
+>  	if (irq > 0) {
 
---Sig_/2UmYtPuo=8I_Omt_ytOLG9A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEihRzkKVZOnT2ipsS9TK+HZCNiw4FAmREGTUACgkQ9TK+HZCN
-iw5QnxAAsP4FHvqBSFyCpRPrOwj512Kwf4RtO4TYNO/FC3zv09UAgjzILHDVJFDD
-nPmFfNaPsGiVqDUHTIfuPzBYFMdvDsZyibynDU4Fv24YFNXx9YkrytMAZH+Rzh6t
-4cID7MG82odxIJJP3ERs7vA0MX1HhD2cKR2BA2g6470gf1M1+EEqGt+xiu8Q09ja
-rJNpcZB616jmOd3kCxRtSmEVuksPZfVYFFm3Nj77MIUiO/DlIcn2abkFPDMGYpOf
-9GGCHTLc0DSTlZ2vTxmmnYQW/Jqhe6DAjjdY2v7OAN8Ma87VCKVWsCdjIKEhUSyf
-vKY8uxLK9mG5wE8NSD7MqKNALqBewpEcHJy9FyVsxPdq92FpbqfkQh8sWRZFPDC0
-kOT+Y9YqFaec9Ffe+jrISqN/lflkspnvCv4DJn2616NoaFa97zVMv43Oz+o5DYps
-H5TcuwMr/xGlXxHOTRYlxZUFPNMlarkkv6ZoXrhBJncjgZROTRvwjbzgsEeRSO1+
-OPUzTIIobbScYn3XNmNz85Ag8uBx/LrXqSW7F+N4dKyEhXs/EGXKjx/PnZIxSDNF
-s05UhkHRz6N624hRVSEIOS7R4HuZQxIg83usyAkhTT/o58UsHd9sjrK1Tv63m+wE
-XqbKdiC5cKgaN4Mhoeil2Cz6AZsSizVV4PYsAN7zGuk/iGOhC1Q=
-=vx0A
------END PGP SIGNATURE-----
-
---Sig_/2UmYtPuo=8I_Omt_ytOLG9A--
