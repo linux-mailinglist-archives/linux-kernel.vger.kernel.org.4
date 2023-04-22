@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C54F6EBAF7
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A5E6EBAFD
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjDVTT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 15:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S229739AbjDVT25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 15:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjDVTT5 (ORCPT
+        with ESMTP id S229621AbjDVT2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 15:19:57 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA46A172B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:19:55 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b9963a72fbfso440107276.3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:19:55 -0700 (PDT)
+        Sat, 22 Apr 2023 15:28:55 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14991E76
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:28:53 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fae5e9ec7so32603637b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1682191195; x=1684783195;
+        d=joelfernandes.org; s=google; t=1682191732; x=1684783732;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3OHJY4Fkh+i9IKg2K8qTc2zv9H9+ffmQTlvrABmh8bQ=;
-        b=tsV+XRz6vc6v28gtdYF8Gj99Qpo+XphroXPdLWtFBNnpBNNol6ARzQFBZAJLZYUc/9
-         mVicFywL0vgU7dZHJJ8b286loaHazmcmDh1GCUuCP+U/tei92lcLvifueeydbAcr5m0C
-         xE0xNy4X8A3TGTFVu+7F/jnmN9ZU+YHAPlh18=
+        bh=sCriSCxRgt6c54/aZMrPhGXLFhCTM5p0XMg6TzpIhbY=;
+        b=u1zJkinE0WZES7ZbULFAq8kl4b17EZY5F1OHn0mudgK6svMvuoOCAYesMwKC6SOxR7
+         JDAlHJI0vNv/xQBkPEsV7b0wSR/161efkefxsl/9owctBXvtKBYROtkl5gA+IWb7mLd9
+         G7hUvEo28+bNXV7BGpirnlPB56iw0AJ+DtUvI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682191195; x=1684783195;
+        d=1e100.net; s=20221208; t=1682191732; x=1684783732;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3OHJY4Fkh+i9IKg2K8qTc2zv9H9+ffmQTlvrABmh8bQ=;
-        b=T6F0phPtaWOlVdCdyLQ8TqZy6yxNr6NWEy60JrisaJEhH4PjlgYV77DqqN5TrvuJoG
-         ZlHzgpmguhcVafEDu4ltVpj9HAteTyCJeXDc+L6CsnCkQpuYyc0Sk8czWTV91C/u6r/N
-         3O6MPVEzGUh0RNPx5lKFGyuSYQ3ikTcaE3hQ/AkYCcJkVrsschhqPJvqMlCdAuEBDaHs
-         9qel2UDkYn1gW0mqPtCTSjUecJkNQ9ayT1Q1Kxtv3Fl6qHVoi8YycXxPybrlPPv7mGLY
-         o89FYT1tCt/FmdndFQxZDDGHHr/5hQxff/tnZaSGAQGjoelTtVoXiPSKfJatSmQolkRo
-         gMSw==
-X-Gm-Message-State: AAQBX9f/fSFNt6p2f5qxB0/ybZviiJAHZ+E70AbC9oNxXS33iYL3bdTz
-        EQmF9f+kBBmcmyXCYpRv/tz84Ns+DF7Z43dbArN5rw==
-X-Google-Smtp-Source: AKy350abbGfzNu9Ezn4OMBp5YhNGQ7AC6quo9KEVhw/AIwmIzl2/hq5vRDRnt/Z4h6Ejw/51Vx77DKi3Wrd7Zr6TarY=
-X-Received: by 2002:a81:6604:0:b0:54f:5419:2fa4 with SMTP id
- a4-20020a816604000000b0054f54192fa4mr4608890ywc.50.1682191194837; Sat, 22 Apr
- 2023 12:19:54 -0700 (PDT)
+        bh=sCriSCxRgt6c54/aZMrPhGXLFhCTM5p0XMg6TzpIhbY=;
+        b=YHEfNaiveGkzGGyj/zYnVYBictZlwim/FpH5oG3/k6teyDay+kQNDAEZ5qOCxGPH5d
+         72S6IaSf+fXELC9BTf7+z4RD2dmk0eFdlnNO0dRigjgw9z54pFRIy80BjxZKOHJdgyH9
+         GuyUcdM87MHNTTkD+pwH1r9kOw9FSGwjM7DT4/npSMkXP2P6E8vzrZ8bT6OGMHv/vN+4
+         lSwsNlrUU1f6Zv7wD3FTjAoD6tZKrBOtL/1ZBM2uU85O/1EUXxLKi9RuBIMP89ckg+C3
+         xkABZb+duAXyo8ubCXKxdke/sI8H3jJq9uo0/wM3sM9fo20mvkvPXiqIa1308l56dR5b
+         TPtA==
+X-Gm-Message-State: AAQBX9cfMijPVsZ8iz6VT+lFlLRwi4lUwi0PCogmv7CA+UCcgby6plWn
+        CY32GL57VoAD2UxWvEarJKJDdUadKQAtkIk6DYU5Fw==
+X-Google-Smtp-Source: AKy350YU3Dafxewi46eez9uCVfmHiwtrwjvUGKGw+0XUG+JvN/TpIgW8Bm/wSKo8AdnttnoFwBOUAc+u40ckO2Ik3x8=
+X-Received: by 2002:a0d:c4c3:0:b0:552:d36e:e6db with SMTP id
+ g186-20020a0dc4c3000000b00552d36ee6dbmr4261843ywd.6.1682191732207; Sat, 22
+ Apr 2023 12:28:52 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
 In-Reply-To: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
 From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sat, 22 Apr 2023 21:19:41 +0200
-Message-ID: <CAEXW_YQCugPs1bquaA4ZLdsM4S3hWv9OMNTt80tSvjCO0LwiHg@mail.gmail.com>
+Date:   Sat, 22 Apr 2023 21:28:39 +0200
+Message-ID: <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
 Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
 To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
 Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
@@ -62,15 +62,13 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
         NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-
-Hi Zhouyi,
 
 On Sat, Apr 22, 2023 at 2:47=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.com> =
 wrote:
@@ -127,35 +125,15 @@ c/0x170
 > My analysis and debugging may not be correct, but the bug is easily
 > reproducible.
 
-Could you provide the full kernel log? It is not clear exactly from
-your attachments, but I think this is a stack overflow issue as
-implied by the mention of __stack_chk_fail. One trick might be to turn
-on any available stack debug kernel config options, or check the
-kernel logs for any messages related to shortage of remaining stack
-space.
-
-Additionally, you could also find out where the kernel crash happened
-in C code following the below notes [1] I wrote (see section "Figuring
-out where kernel crashes happen in C code"). The notes are
-x86-specific but should be generally applicable (In the off chance
-you'd like to improve the notes, feel free to share them ;-)).
-
-Lastly, is it a specific kernel release from which you start seeing
-this issue? You should try git bisect if it is easily reproducible in
-a newer release, but goes away in an older one.
-
-I will also join you in your debug efforts soon though I am currently
-in between conferences.
-
-[1] https://gist.github.com/joelagnel/ae15c404facee0eb3ebb8aff0e996a68
+If this is a bug in the stack smashing protection as you seem to hint,
+I wonder if you see the issue with a specific gcc version and is a
+compiler-specific issue. It's hard to say, but considering this I
+think it's important for you to mention the compiler version in your
+report (along with kernel version, kernel logs etc.)
 
 thanks,
 
+- Joel
+
+
  - Joel
-
-
-
-
->
-> Thanks
-> Zhouyi
