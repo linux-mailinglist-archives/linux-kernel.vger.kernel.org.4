@@ -2,128 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21C56EB9AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E706EB9AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjDVOct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 10:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S229913AbjDVOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 10:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjDVOcr (ORCPT
+        with ESMTP id S229451AbjDVOgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 10:32:47 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E71726;
-        Sat, 22 Apr 2023 07:32:44 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so20268491a12.0;
-        Sat, 22 Apr 2023 07:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682173962; x=1684765962;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=99YDX/7qK2W322RAkYIogsdvoiSZC6dcO4nnOgE0Yyo=;
-        b=ZB2yO7V+VviFFwaU4aBE/vpz5FwYoSa+h0HUBE0qU/AShZGYTQpE+4lZmOgds1alHW
-         afhiqm6haQpQInYGWCAYvlM5H9b7/KSHLfJiUct5BZlzyT4WxO4aLg/VSXIwur5t9E7u
-         klogQQINI1oU57+YgfubJiMoZun+SKchav/ORXFAKX0esBEXS3azxI95JpsSA+wvPte0
-         uYbSNuOV4tqcavR1UXD/2RVyj+nd4/5YqRsG//nEvKGEFLpmoNgry7XrCDgfDbxE/wox
-         YmXepcrKiVDI2Vp4TJGDclcFZhqKt3Es1+HbXNFgfqP1WXz6KrO0o1iuQjGaNESUhcRP
-         L/mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682173962; x=1684765962;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=99YDX/7qK2W322RAkYIogsdvoiSZC6dcO4nnOgE0Yyo=;
-        b=lODNRu5YrYKDwk6Eqwkag2RUfnUHB7tV9EwX+sfdD4WZy4b6htRNq5ty/Es4GOm7H3
-         taLBMW8NJTfzKft1Fp2Ikst6GorbsOtLYP6ejgM7hdl/zSI9Hnzl7/oZpXha10zFE4vP
-         PZiavhh2AuPTABbHMrDiZU8/gds5NegmaaXIFJRjBra5Ui2ppDysjWKaGzKxlMq4ag6Q
-         cqO4gs8O6HVv+pXm2UCWvD9PPMelIyFqizennQEmXMyyIqoKHxe9P4KsJWZ7ge7Z1N09
-         2EIWErnqfv8bgHE69GDvv4zUE3fFdXjKF3dKxmA16YxFv9+9GEIsigw2rQ9kvyE//XJm
-         syBA==
-X-Gm-Message-State: AAQBX9c3PXZn6qPASZSU/HDDYisPz27PLFGKvPjcHreV+88mvNqOJB37
-        VgTvo6v/koef6OqwRzVGdsI=
-X-Google-Smtp-Source: AKy350ag+YkaszQoLJF85uoBsRlfKgZMpqx2xUlrkmBej+tzYfEcbXlftSXKRerq6HGjS1CWb+PkyQ==
-X-Received: by 2002:a17:906:cc52:b0:953:4bec:f350 with SMTP id mm18-20020a170906cc5200b009534becf350mr5336322ejb.23.1682173962546;
-        Sat, 22 Apr 2023 07:32:42 -0700 (PDT)
-Received: from [192.168.50.244] (83.11.224.11.ipv4.supernova.orange.pl. [83.11.224.11])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170906434400b0094f2dca017fsm3300437ejm.50.2023.04.22.07.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Apr 2023 07:32:41 -0700 (PDT)
-Message-ID: <6803ab6e-d7ed-cce1-013f-221878b4be2c@gmail.com>
-Date:   Sat, 22 Apr 2023 16:32:39 +0200
+        Sat, 22 Apr 2023 10:36:01 -0400
+Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8EC10E4;
+        Sat, 22 Apr 2023 07:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1682174157;
+        bh=rV+obqBV2YKvr1MLCeqn9cEsCuGUCv/eN8ByCFyFd0o=;
+        h=From:To:Cc:Subject:Date;
+        b=cfipC+FMoS4I0CbQVjfyqkeELQI0ILoPQFJgH6Tui2WJ487VR7r4XZf7VJ25dAIgD
+         5aprOXElaQfofA19ELIoWq3jjPmVtrjicr/BNUNTlogjyq4bmJ89uPBXinuMz+lNSC
+         nSSEe5Btahqb/1SPcU/VWoD6TytPONgdmJWF3oXo=
+Received: from rtoax.. ([111.199.190.121])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 8F7278F5; Sat, 22 Apr 2023 22:35:55 +0800
+X-QQ-mid: xmsmtpt1682174155tp1m27fmo
+Message-ID: <tencent_3E0341A1C9AC8FCB7915E7D791D117445707@qq.com>
+X-QQ-XMAILINFO: NhUkPfKlCtQw2r08/0nNmetDOkmWKFwsM6519DB8bTZ3b478RMp2L/YWkTkcA7
+         SdN9+kuyCMmR+hdxq99LYQIBh8G3SBJPVAkbG+Xo/BMV/mTpf5fKZ1RLkqjH3gBI4CHT4pI25j7N
+         pBpZnn+4TDkM2O+hPpukG2ZcunHYVRuit4bvMVkm3vplfNUX1TS6HJP5VBKghowY5JrlKpWoZnnO
+         cytYJrkn90M1Jh2ZAc6p33JhMS96Qc/p7PLgnD6fNY13RdX9rCRZzFDVKUwvRmJ+wjftrFrqbDbQ
+         Cdpj2ySLYb2xesJUtC2EySF2NTgobscnTwOdWr0jukv1xAXUXHcAQ38bZdeG7KlLDcJ2cCazUoT8
+         /poCy/7FCZcN7Ul2JHUPPA7G0w9IanT3jT5MX4+18pfyn06IY3ViuSHXE/0PnSTC1wHsV2dwjj5Z
+         XiUsRGedjVTqkJVCytKAIbkEjRr5XB2sw7gvG8m0Krn1lm5jfvTN6FP7CEg2/qdXn7ZX2HDDZ/wC
+         cHrdFxydsRo966SF7DS+ycWTyouJqCaxRGCnDBlFUUeQCHzWozlHp/+PMxBDsm8pcF+5PdxblHDG
+         oV6z3C/AywEeBIoXT9TFoLvUPDx6u4fAuej5an7YD1kDScF7WGzm4Dw29IUnBf/IFeqR5DaGT/BN
+         dOKHrDvlhntBi9KZkxFdSFxCYsHX0F/1gNohrksKR1YOQMCGYNKEBwIIaBJRl8URP6SCkcxllcwp
+         KPch8DM4UBpfhjYw2cKJkDO6HIXDdq+RHF12s4z+7XLNgzkWcLwwsWSvmlK05juOxSHHO2QoQ/g/
+         /cHYoBXkT9mKNRXNCm+xVSpd4LqwKki/dHgFmRF5ZXQf1u09jgt//YLA7HpWRabOoV+cr7rWWF5D
+         tM3Aahq5hLTWDZNWGPBBEfwFS1JhiUQjNaVimC4zNbqjsH0bznTZsR6hrTXiZwfA4JaLxxWxcY6P
+         csCSlYtWqtubXCkcjS0G3XKyfjzCrOUtntci0+ayChesTmlubRvgacsw2NUWOv191R3DP1TBMtu5
+         X6M9OKJA==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     william.gray@linaro.org
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-iio@vger.kernel.org (open list:COUNTER SUBSYSTEM)
+Subject: [PATCH v2] tools/counter: Add .gitignore
+Date:   Sat, 22 Apr 2023 22:35:53 +0800
+X-OQ-MSGID: <20230422143554.61364-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Artur Weber <aweber.kernel@gmail.com>
-Subject: Re: [PATCH v3 2/3] drm/panel: Add Samsung S6D7AA0 panel controller
- driver
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230416131632.31673-1-aweber.kernel@gmail.com>
- <20230416131632.31673-3-aweber.kernel@gmail.com>
- <CACRpkdaTmHASz25uzDoeZBG2=e7XRLK67DENfAtCbaFp+AYnYA@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CACRpkdaTmHASz25uzDoeZBG2=e7XRLK67DENfAtCbaFp+AYnYA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Rong Tao <rongtao@cestc.cn>
 
-thank you for the review.
+Ignore counter_example and include/linux/counter.h.
 
-On 20/04/2023 09:35, Linus Walleij wrote:
->> +static int s6d7aa0_on(struct s6d7aa0 *ctx)
->> +{
->> +       struct mipi_dsi_device *dsi = ctx->dsi;
->> +       struct device *dev = &dsi->dev;
->> +       int ret;
->> +
->> +       dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-> 
-> (...)
-> 
->> +static int s6d7aa0_off(struct s6d7aa0 *ctx)
->> +{
->> +       struct mipi_dsi_device *dsi = ctx->dsi;
->> +       struct device *dev = &dsi->dev;
->> +       int ret;
->> +
->> +       dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-> 
-> I haven't seen this mode flag MIPI_DSI_MODE_LPM set and
-> masked in other DSI panel drivers! Is this something we should
-> fix everywhere then? Or even something the core should be
-> doing?
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+v2: Ignore /include/linux/counter.h, instead of /include directory
+v1: https://lore.kernel.org/lkml/tencent_1625E21562D40C91CEE047E82E2BFC524305@qq.com/
+---
+ tools/counter/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 tools/counter/.gitignore
 
-These bits were included in a driver for a similar panel with the same
-controller in an MSM8916 close-to-mainline kernel fork[1]; that driver
-was generated with lmdpdg[2], which adds the LPM mode flag automatically
-based on some downstream DTS property. In this case, I left it in, since
-it didn't seem to break anything... but I just re-tested without it and
-it seems that it might've fixed some odd issues I'd get sometimes when
-going out of sleep mode. I'll get rid of it in the next version.
+diff --git a/tools/counter/.gitignore b/tools/counter/.gitignore
+new file mode 100644
+index 000000000000..9fd290d4bf43
+--- /dev/null
++++ b/tools/counter/.gitignore
+@@ -0,0 +1,2 @@
++/counter_example
++/include/linux/counter.h
+-- 
+2.40.0
 
-(I based my panel driver off that driver; now that I think about it, it
-might be worth mentioning somewhere in the copyright notice...?)
-
-Best regards
-Artur Weber
-
-[1]
-https://github.com/msm8916-mainline/linux/blob/msm8916/6.3-rc7/drivers/gpu/drm/panel/msm8916-generated/panel-samsung-s6d7aa0-lsl080al03.c
-[2]
-https://github.com/msm8916-mainline/linux-mdss-dsi-panel-driver-generator
