@@ -2,166 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87CF6EB8D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B151B6EB8DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjDVLih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 07:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S229668AbjDVLkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 07:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVLif (ORCPT
+        with ESMTP id S229451AbjDVLkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 07:38:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2411FCB
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 04:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qoA4LTGgkdfELsJdUxFAcbAY5ZKqxUA7mUBTTATjgqE=; b=AgjaKp4qXfGD0SQZvRj9dUQNd6
-        SqhDWKuIbF9evSKzi6+NaWLqsh+HdtSKH92wnyxIP9H9ZLQWiWR6voh/hWgVO69wwQfjDo7h6K4dI
-        9MurVPWrZGxdCJ9PjlmzAUwGD0XNIczRZZlKLmG81XKMR2FMdPPlAhWdGuUdFwXdkRQUgGuL4Jete
-        /1P863hIIZgrKVzxu82pjyoRfHaEVkxbZBNS/qVaQKGAwUGa7VH8xcE26QF1Dbq01NbLgm1+FpbyF
-        JK5Q9k6XmWiEXE/qYC17Lnkq5FQM5YH3iitZiRkUXO+5MMsYu3kvjS9rXySuQmDff+rS625j23dKi
-        okexRrLQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pqBZG-006EEZ-1z;
-        Sat, 22 Apr 2023 11:38:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 31C5E30035C;
-        Sat, 22 Apr 2023 13:38:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0DD8923BDA376; Sat, 22 Apr 2023 13:38:12 +0200 (CEST)
-Date:   Sat, 22 Apr 2023 13:38:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
-Message-ID: <20230422113811.GB1215777@hirez.programming.kicks-ass.net>
-References: <ZEKDZEQmKExv0O7Q@lothringen>
- <20230421142446.GA1185829@hirez.programming.kicks-ass.net>
- <ZEK+IeTYsauHLozy@lothringen>
- <20230422080814.GA1214746@hirez.programming.kicks-ass.net>
+        Sat, 22 Apr 2023 07:40:01 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD671FC8;
+        Sat, 22 Apr 2023 04:39:59 -0700 (PDT)
+Received: from [192.168.178.23] (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id E33A2C4126;
+        Sat, 22 Apr 2023 11:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1682163568; bh=4ON6nYYRMHx4lFKX8BnlCFsjoxRKgmTsvbLAUz+qINs=;
+        h=From:Date:Subject:To:Cc;
+        b=CEYAgVaXwuQTFIx91XxjNV1nHTigel1r7l1WYjmlmfv5BOyl7OFIyTXZY5FR74Yfk
+         4AajuuNOw8SzfGHcNzRXpLXiTXiitCLuu3Z4msV+qGrMGX0WUsvaXjEkArXOR4CxlC
+         +H0MSxyYK6QYJ0X6Izbo0U0jP2VzXTjLIUXgTeHY=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Sat, 22 Apr 2023 13:39:16 +0200
+Subject: [PATCH] arm64: dts: qcom: Add BLSP DMAs for I2C
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230422080814.GA1214746@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230422-msm8953-blsp-dma-v1-1-0024801bb587@z3ntu.xyz>
+X-B4-Tracking: v=1; b=H4sIAGPHQ2QC/x2N0QqDMAwAf0XyvICNSnW/MvbQapyBtpMGx0D89
+ 4U93sFxJyhXYYV7c0Llj6i8i4G7NTBvobwYZTEGaqlreyLMmsdp6DAm3XHJAZ3zPXk/DtNKYFk
+ MyhhrKPNmYTlSMrlXXuX7/zye1/UDrySB33cAAAA=
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4530; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=4ON6nYYRMHx4lFKX8BnlCFsjoxRKgmTsvbLAUz+qINs=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkQ8drwGpA4Flz3H1qKPic0J7y+WVA0qPL4rY9V
+ gTckqIVxEiJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZEPHawAKCRBy2EO4nU3X
+ VmP5D/9h8dtAS/7sHgOM12VeVGV3Sexu85JWFXgPoufs6wgQF7vccOa2gboX/MF9YBmOv2yWcqp
+ E0/n5qiRbV2G5xEYynqY93ktCFFrnWlGAXRuyR1PwalBd3kpGu1Avw/g1u3GuMrUuauDoqF1R+2
+ 13k9UoNep4mfCZ3jvdnF+8TvAhFDyqjKIwXBwgx1Gjv24u7XZUJ7mwLbP11ud1sslkA6c6FWPoU
+ o+IwU7fa6Nqz3eYkurs5/rWruFCXA6Fkfygr5uoe0kNorRQo8Rwsr5xKfwmzZG0HgFIQLm8Ie0W
+ sLLN8Uf9dXzZM7Y/d4m3yZJZuiAsn8/0cKds2YNpqWYodvDDC2Qy6GyQcMJk+XJjXcnMozXjO1J
+ 4x5oFqKZdj4NYbY6av5UK0a19H61Sd55x+iA4bQXGy57EaX1wDYpn12NthcrKHN/PfQ5rlkhw48
+ 4if9MiS/ow9Lw8Vjk8CBPuqR51z7//LJv/2uNNEiEzFCtMGZAlpT1htFMzd2DFGYFGjI8O0Fumq
+ AmG5RGgOXgdhhilhuJZPuLha5qSuhjVrC2PTa56kfby70MuPGuGCpD2gkikWu7bz+1OQctgSviW
+ 2bxKMkdF/rF2970T1HnnbepftrggrQmmqeFD8rUBLypc7octzwft8NZcpLaq9UKKSmb7MtbgMbD
+ ma7bZV0Po2j12sg==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 10:08:14AM +0200, Peter Zijlstra wrote:
-> On Fri, Apr 21, 2023 at 06:47:29PM +0200, Frederic Weisbecker wrote:
-> 
-> > > *HOWEVER*
-> > > 
-> > > intel_idle_irq() is affected -- except that we only (normally) use that
-> > > for very shallow idle states and it won't interact with NOHZ (because we
-> > > only disable the tick for deep idle states).
-> > 
-> > Well I don't know, that doesn't look comfortable... :)
-> > 
-> > Also why does it need to enable IRQs if ecx=1 ?
-> 
-> Supposedly this is some interrupt latency hack. See commit:
-> 
->   c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
+MSM8953 has two DMA controllers for the various I2C, SPI and UART
+busses. Add the nodes and configure all the I2C nodes so that the driver
+can use the DMA.
 
-Something like so perhaps...
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm64/boot/dts/qcom/msm8953.dtsi | 48 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
-index 778df05f8539..07a4072c43de 100644
---- a/arch/x86/include/asm/mwait.h
-+++ b/arch/x86/include/asm/mwait.h
-@@ -115,8 +115,14 @@ static __always_inline void mwait_idle_with_hints(unsigned long eax, unsigned lo
- 		}
+diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+index 602cb188a635..c9b589353918 100644
+--- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+@@ -1274,6 +1274,19 @@ opp-200000000 {
+ 			};
+ 		};
  
- 		__monitor((void *)&current_thread_info()->flags, 0, 0);
--		if (!need_resched())
--			__mwait(eax, ecx);
-+		if (!need_resched()) {
-+			if (ecx & 1) {
-+				__mwait(eax, ecx);
-+			} else {
-+				__sti_mwait(eax, ecx);
-+				raw_local_irq_disable();
-+			}
-+		}
- 	}
- 	current_clr_polling();
- }
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 938c17f25d94..4a823bd0f5e0 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -130,11 +130,12 @@ static unsigned int mwait_substates __initdata;
- #define MWAIT2flg(eax) ((eax & 0xFF) << 24)
++		blsp1_dma: dma-controller@7884000 {
++			compatible = "qcom,bam-v1.7.0";
++			reg = <0x07884000 0x1f000>;
++			interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "bam_clk";
++			num-channels = <12>;
++			#dma-cells = <1>;
++			qcom,ee = <0>;
++			qcom,num-ees = <4>;
++			qcom,controlled-remotely;
++		};
++
+ 		uart_0: serial@78af000 {
+ 			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
+ 			reg = <0x078af000 0x200>;
+@@ -1292,6 +1305,8 @@ i2c_1: i2c@78b5000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP1_QUP1_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
++			dmas = <&blsp1_dma 4>, <&blsp1_dma 5>;
++			dma-names = "tx", "rx";
  
- static __always_inline int __intel_idle(struct cpuidle_device *dev,
--					struct cpuidle_driver *drv, int index)
-+					struct cpuidle_driver *drv,
-+					int index, bool irqoff)
- {
- 	struct cpuidle_state *state = &drv->states[index];
- 	unsigned long eax = flg2MWAIT(state->flags);
--	unsigned long ecx = 1; /* break on interrupt flag */
-+	unsigned long ecx = 1*irqoff; /* break on interrupt flag */
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_1_default>;
+@@ -1310,6 +1325,8 @@ i2c_2: i2c@78b6000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
++			dmas = <&blsp1_dma 6>, <&blsp1_dma 7>;
++			dma-names = "tx", "rx";
  
- 	mwait_idle_with_hints(eax, ecx);
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_2_default>;
+@@ -1328,6 +1345,9 @@ i2c_3: i2c@78b7000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
++			dmas = <&blsp1_dma 8>, <&blsp1_dma 9>;
++			dma-names = "tx", "rx";
++
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_3_default>;
+ 			pinctrl-1 = <&i2c_3_sleep>;
+@@ -1345,6 +1365,9 @@ i2c_4: i2c@78b8000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
++			dmas = <&blsp2_dma 10>, <&blsp2_dma 11>;
++			dma-names = "tx", "rx";
++
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_4_default>;
+ 			pinctrl-1 = <&i2c_4_sleep>;
+@@ -1355,6 +1378,19 @@ i2c_4: i2c@78b8000 {
+ 			status = "disabled";
+ 		};
  
-@@ -158,19 +159,13 @@ static __always_inline int __intel_idle(struct cpuidle_device *dev,
- static __cpuidle int intel_idle(struct cpuidle_device *dev,
- 				struct cpuidle_driver *drv, int index)
- {
--	return __intel_idle(dev, drv, index);
-+	return __intel_idle(dev, drv, index, true);
- }
- 
- static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
- 				    struct cpuidle_driver *drv, int index)
- {
--	int ret;
--
--	raw_local_irq_enable();
--	ret = __intel_idle(dev, drv, index);
--	raw_local_irq_disable();
--
--	return ret;
-+	return __intel_idle(dev, drv, index, false);
- }
- 
- static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
-@@ -183,7 +178,7 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
- 	if (smt_active)
- 		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
- 
--	ret = __intel_idle(dev, drv, index);
-+	ret = __intel_idle(dev, drv, index, true);
- 
- 	if (smt_active)
- 		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-@@ -195,7 +190,7 @@ static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
- 				       struct cpuidle_driver *drv, int index)
- {
- 	fpu_idle_fpregs();
--	return __intel_idle(dev, drv, index);
-+	return __intel_idle(dev, drv, index, true);
- }
- 
- /**
++		blsp2_dma: dma-controller@7ac4000 {
++			compatible = "qcom,bam-v1.7.0";
++			reg = <0x07ac4000 0x1f000>;
++			interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "bam_clk";
++			num-channels = <12>;
++			#dma-cells = <1>;
++			qcom,ee = <0>;
++			qcom,num-ees = <4>;
++			qcom,controlled-remotely;
++		};
++
+ 		i2c_5: i2c@7af5000 {
+ 			compatible = "qcom,i2c-qup-v2.2.1";
+ 			reg = <0x07af5000 0x600>;
+@@ -1362,6 +1398,9 @@ i2c_5: i2c@7af5000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP2_QUP1_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP2_AHB_CLK>;
++			dmas = <&blsp2_dma 4>, <&blsp2_dma 5>;
++			dma-names = "tx", "rx";
++
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_5_default>;
+ 			pinctrl-1 = <&i2c_5_sleep>;
+@@ -1379,6 +1418,9 @@ i2c_6: i2c@7af6000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP2_QUP2_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP2_AHB_CLK>;
++			dmas = <&blsp2_dma 6>, <&blsp2_dma 7>;
++			dma-names = "tx", "rx";
++
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_6_default>;
+ 			pinctrl-1 = <&i2c_6_sleep>;
+@@ -1396,6 +1438,9 @@ i2c_7: i2c@7af7000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP2_QUP3_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP2_AHB_CLK>;
++			dmas = <&blsp2_dma 8>, <&blsp2_dma 9>;
++			dma-names = "tx", "rx";
++
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_7_default>;
+ 			pinctrl-1 = <&i2c_7_sleep>;
+@@ -1413,6 +1458,9 @@ i2c_8: i2c@7af8000 {
+ 			clock-names = "core", "iface";
+ 			clocks = <&gcc GCC_BLSP2_QUP4_I2C_APPS_CLK>,
+ 				 <&gcc GCC_BLSP2_AHB_CLK>;
++			dmas = <&blsp2_dma 10>, <&blsp2_dma 11>;
++			dma-names = "tx", "rx";
++
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&i2c_8_default>;
+ 			pinctrl-1 = <&i2c_8_sleep>;
+
+---
+base-commit: 347e9b4e41bfff51993807962eb1082f6d8ab439
+change-id: 20230422-msm8953-blsp-dma-1174277859f2
+
+Best regards,
+-- 
+Luca Weiss <luca@z3ntu.xyz>
+
