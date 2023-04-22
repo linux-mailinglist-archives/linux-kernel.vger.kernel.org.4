@@ -2,166 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C456EB7E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 09:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6511C6EB7E1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 09:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjDVHsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 03:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S229556AbjDVHn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 03:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVHsi (ORCPT
+        with ESMTP id S229504AbjDVHn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 03:48:38 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD211BDD;
-        Sat, 22 Apr 2023 00:48:36 -0700 (PDT)
-Received: from amy-vm.localdomain ([10.12.183.232])
-        (user=yejunyan@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33M7iZgr022988-33M7iZgs022988
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Sat, 22 Apr 2023 15:44:49 +0800
-From:   Junyan Ye <yejunyan@hust.edu.cn>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Junyan Ye <yejunyan@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-pci@vger.kernel.org,
+        Sat, 22 Apr 2023 03:43:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACC419BD;
+        Sat, 22 Apr 2023 00:43:25 -0700 (PDT)
+Date:   Sat, 22 Apr 2023 07:43:22 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682149403;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X9vMKu/RlNQ7C/4jlltWW/zd/41Ilk8l/QMNavq8fmY=;
+        b=Q1CBR2tPwFJBi8heCUlh1cmDDTJlrKmd8OFeuZjrtT0/9VcH6xY+AjVuio7tzjnpSKQ+SZ
+        AmBKBGxKR6Iv7iU3jqYHisQn4lRgSqn3d0gycPM9HL0/zKTpSAP5WiDBWvnOdrbI3knvZv
+        FV7QGbqFgeY3MEkZ2p98Glq3iJG7UoJK5D6PbWhi0ebNOZAxWngg8TAH5g+RbBdc+hPBCr
+        5XEMe6pZRR/IM2dAmWeKcxPedFB6VJPI4yXaX3T+X8Scg5sAusj1tvkI2VmmkzSEJjuv8x
+        SsyGCh7yNaM7XipNzwQpqGRl1jcpA7nbjo5ADnEuO5TpwLTPp7rTkkp2dwoeDA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682149403;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X9vMKu/RlNQ7C/4jlltWW/zd/41Ilk8l/QMNavq8fmY=;
+        b=ie2R8dax70DE6fdOwVFQDA3IbvnN2z9p7TABtCHGrykFyBjm3k012CWOBbGrKCc7x8FU0d
+        JE9XbuhWRlYQksCg==
+From:   "tip-bot2 for Aaron Thompson" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/clock: Fix local_clock() before sched_clock_init()
+Cc:     Aaron Thompson <dev@aaront.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] pci: controller: pci-ftpci100: Release the clock resources
-Date:   Sat, 22 Apr 2023 15:42:52 +0800
-Message-Id: <20230422074254.14473-1-yejunyan@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230413175012.2201-1-dev@aaront.org>
+References: <20230413175012.2201-1-dev@aaront.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: yejunyan@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <168214940282.404.16454263292921385535.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reported:
-1. drivers/pci/controller/pci-ftpci100.c:526 faraday_pci_probe()
-warn: 'clk' from clk_prepare_enable() not released on lines:
-442,451,462,478,512,517.
-2. drivers/pci/controller/pci-ftpci100.c:526 faraday_pci_probe()
-warn: 'p->bus_clk' from clk_prepare_enable() not released on lines:
-451,462,478,512,517.
+The following commit has been merged into the sched/core branch of tip:
 
-The clock resource is obtained by the devm_clk_get function. The
-clk_prepare_enable function then makes the clock resource ready for use,
-notifying the system that the clock resource should be run. After that,
-the clock resource should be released when it is no longer needed. This
-includes notifying the system that the clock resource is no longer needed
-and revoking the prepared clock. The corresponding function is
-clk_disable_unprepare. However, while doing some error handling in the
-faraday_pci_probe function, the clk_disable_unprepare function is not
-called to release the clk and p->bus_clk resources.
+Commit-ID:     f31dcb152a3d0816e2f1deab4e64572336da197d
+Gitweb:        https://git.kernel.org/tip/f31dcb152a3d0816e2f1deab4e64572336da197d
+Author:        Aaron Thompson <dev@aaront.org>
+AuthorDate:    Thu, 13 Apr 2023 17:50:12 
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 21 Apr 2023 13:24:21 +02:00
 
-Fix the warning by adding the clk_disable_unprepare function before
-returning the error message.
+sched/clock: Fix local_clock() before sched_clock_init()
 
-Fixes: b3c433efb8a3 ("PCI: faraday: Fix wrong pointer passed to PTR_ERR()")
-Fixes: 2eeb02b28579 ("PCI: faraday: Add clock handling")
-Fixes: 783a862563f7 ("PCI: faraday: Use pci_parse_request_of_pci_ranges()")
-Fixes: d3c68e0a7e34 ("PCI: faraday: Add Faraday Technology FTPCI100 PCI Host Bridge driver")
-Fixes: f1e8bd21e39e ("PCI: faraday: Convert IRQ masking to raw PCI config accessors")
-Signed-off-by: Junyan Ye <yejunyan@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+Have local_clock() return sched_clock() if sched_clock_init() has not
+yet run. sched_clock_cpu() has this check but it was not included in the
+new noinstr implementation of local_clock().
+
+The effect can be seen on x86 with CONFIG_PRINTK_TIME enabled, for
+instance. scd->clock quickly reaches the value of TICK_NSEC and that
+value is returned until sched_clock_init() runs.
+
+dmesg without this patch:
+
+    [    0.000000] kvm-clock: ...
+    [    0.000002] kvm-clock: ...
+    [    0.000672] clocksource: ...
+    [    0.001000] tsc: ...
+    [    0.001000] e820: ...
+    [    0.001000] e820: ...
+     ...
+    [    0.001000] ..TIMER: ...
+    [    0.001000] clocksource: ...
+    [    0.378956] Calibrating delay loop ...
+    [    0.379955] pid_max: ...
+
+dmesg with this patch:
+
+    [    0.000000] kvm-clock: ...
+    [    0.000001] kvm-clock: ...
+    [    0.000675] clocksource: ...
+    [    0.002685] tsc: ...
+    [    0.003331] e820: ...
+    [    0.004190] e820: ...
+     ...
+    [    0.421939] ..TIMER: ...
+    [    0.422842] clocksource: ...
+    [    0.424582] Calibrating delay loop ...
+    [    0.425580] pid_max: ...
+
+Fixes: 776f22913b8e ("sched/clock: Make local_clock() noinstr")
+Signed-off-by: Aaron Thompson <dev@aaront.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230413175012.2201-1-dev@aaront.org
 ---
-This issue is found by static analyzer.
+ kernel/sched/clock.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- drivers/pci/controller/pci-ftpci100.c | 31 +++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/pci/controller/pci-ftpci100.c b/drivers/pci/controller/pci-ftpci100.c
-index ecd3009df586..ca3ba377b3dd 100644
---- a/drivers/pci/controller/pci-ftpci100.c
-+++ b/drivers/pci/controller/pci-ftpci100.c
-@@ -438,17 +438,21 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	p->bus_clk = devm_clk_get(dev, "PCICLK");
--	if (IS_ERR(p->bus_clk))
--		return PTR_ERR(p->bus_clk);
-+	if (IS_ERR(p->bus_clk)) {
-+		ret = PTR_ERR(p->bus_clk);
-+		goto err_release_clk;
-+	}
- 	ret = clk_prepare_enable(p->bus_clk);
- 	if (ret) {
- 		dev_err(dev, "could not prepare PCICLK\n");
--		return ret;
-+		goto err_release_clk;
- 	}
+diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
+index 5732fa7..b5cc2b5 100644
+--- a/kernel/sched/clock.c
++++ b/kernel/sched/clock.c
+@@ -300,6 +300,9 @@ noinstr u64 local_clock(void)
+ 	if (static_branch_likely(&__sched_clock_stable))
+ 		return sched_clock() + __sched_clock_offset;
  
- 	p->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(p->base))
--		return PTR_ERR(p->base);
-+	if (IS_ERR(p->base)) {
-+		ret = PTR_ERR(p->base);
-+		goto err_release_p_bus_clk;
-+	}
- 
- 	win = resource_list_first_type(&host->windows, IORESOURCE_IO);
- 	if (win) {
-@@ -459,7 +463,8 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 			writel(val, p->base + FTPCI_IOSIZE);
- 		} else {
- 			dev_err(dev, "illegal IO mem size\n");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err_release_p_bus_clk;
- 		}
- 	}
- 
-@@ -475,7 +480,7 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 		ret = faraday_pci_setup_cascaded_irq(p);
- 		if (ret) {
- 			dev_err(dev, "failed to setup cascaded IRQ\n");
--			return ret;
-+			goto err_release_p_bus_clk;
- 		}
- 	}
- 
-@@ -509,12 +514,12 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 
- 	ret = faraday_pci_parse_map_dma_ranges(p);
- 	if (ret)
--		return ret;
-+		goto err_release_p_bus_clk;
- 
- 	ret = pci_scan_root_bus_bridge(host);
- 	if (ret) {
- 		dev_err(dev, "failed to scan host: %d\n", ret);
--		return ret;
-+		goto err_release_p_bus_clk;
- 	}
- 	p->bus = host->bus;
- 	p->bus->max_bus_speed = max_bus_speed;
-@@ -524,6 +529,14 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 	pci_bus_add_devices(p->bus);
- 
- 	return 0;
++	if (!static_branch_likely(&sched_clock_running))
++		return sched_clock();
 +
-+err_release_p_bus_clk:
-+	clk_disable_unprepare(p->bus_clk);
-+
-+err_release_clk:
-+	clk_disable_unprepare(clk);
-+
-+	return ret;
- }
- 
- /*
--- 
-2.25.1
-
+ 	preempt_disable_notrace();
+ 	clock = sched_clock_local(this_scd());
+ 	preempt_enable_notrace();
