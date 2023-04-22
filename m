@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D0B6EBA97
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 19:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AB26EBAB5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 19:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjDVRNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 13:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S229825AbjDVRat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 13:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVRM7 (ORCPT
+        with ESMTP id S229508AbjDVRao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 13:12:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5331A2114;
-        Sat, 22 Apr 2023 10:12:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDD4560E9B;
-        Sat, 22 Apr 2023 17:12:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6153C433EF;
-        Sat, 22 Apr 2023 17:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682183577;
-        bh=dq2mWH2zsRT78Bh1KU9LpxGEzixDbvMmHZ0wzOfn++w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DA4/hLPyUXDRXZ3vSrh40L+CoA3JsasBezpy1VUg5TjyBPR5ViCWGQK3dPW8QaP99
-         r284UrX7cHhv3nwy9eB5Hf1Cb/zu0YvIKTo52O1KHh7TRLqg9DouCTbEgmTHC6LhWP
-         fMb8XMwwAhn1wBnRIK86ixAHR83/xmEA3NtETN7Ptj/IwyD6HRiIn9qLqk6IVJAyGm
-         +2VjXYAguZc4p7yitfckEVyqrGM6e4Scyf5n5T3s9Lmya3OlxofUesuJohW0InnQ7f
-         MCLMHnvgj7G1eT2QolYSfChljQm4qLlX/lttK2gUPddRHSPg5glZke30sIr4+Zwf/A
-         wzaG2oJg/Vt3w==
-Date:   Sat, 22 Apr 2023 18:28:33 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>
-Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] iio: accel: kionix-kx022a: Warn on failed
- matches and assume compatibility
-Message-ID: <20230422182833.7fbf6aae@jic23-huawei>
-In-Reply-To: <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
-References: <cover.1682019544.git.mehdi.djait.k@gmail.com>
-        <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 22 Apr 2023 13:30:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672B211E
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 10:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682184593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Whc1PiL8cvCrwQXfR2j4EkLjnYvdXwSxmXSEz6X/dk=;
+        b=NC8FX9cARPe5dub4NXsC9EKmIx23Q1uqDYtenSYDbbhRwQzeHY4ukLjoYYkIx3HlRgNNjc
+        pl6Yjy6EbZcMnGEg/28wybmJW/fMnp93ZeVrlYtYtUK4fwPiwvdJUI1vefgjyjjo+jm//8
+        xqv489U83zbe0u3OD6upFX7jQfIwOd4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-575-_lWhMZWGMraENTAqy75WIw-1; Sat, 22 Apr 2023 13:29:46 -0400
+X-MC-Unique: _lWhMZWGMraENTAqy75WIw-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-5067d65c251so2621444a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 10:29:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682184585; x=1684776585;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Whc1PiL8cvCrwQXfR2j4EkLjnYvdXwSxmXSEz6X/dk=;
+        b=Onuwo10f+pHAdWQCD/xPFD2/bs53mAgReT/Gwqg+gfmjZpGUBhnw025UE8FMwgyHUr
+         QZNOwVHue0h3c313HDdClQSP/EOC/JPjb44nZOd3K+112sYAlQlo2vtE9u6Ia4RCdHZe
+         9mniZHxPeNao2PjCo8PRBe4KXLX3++SGm9Bgb3AxO9ReNXr0xlaxnAXzuaJseppaYe9a
+         YA7wR+aHCTp7vBnidNXeILX+KjxQUbmiBC8ECVbubUj+qrvFcJEbF+MdUFyqNPBoI1Iz
+         jZpoFerizuG9fi2VQ4CbQIm5uy7/hKK+u16z3PPn1gu9y7Yu/IKED1CoBxUiZKUaGhrP
+         kjcg==
+X-Gm-Message-State: AAQBX9f4W+zWei2Oa6q5ahYV54w14u7ldt3J44aHYnTMoGnh+U/VpBNF
+        U8AzH7Tb21RsL1cuR3tFOydlJMdXBNpC2RmFlb3B0Kc5Gthz+86xs19aurjlzbzF49zszgI13Dw
+        4oXatHzZJl2P320tsQTPE7iwO
+X-Received: by 2002:a17:906:c784:b0:94e:23b:75e9 with SMTP id cw4-20020a170906c78400b0094e023b75e9mr5850087ejb.43.1682184585506;
+        Sat, 22 Apr 2023 10:29:45 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bfxC5TrRKzuNYFzFcfcAlfJa3Anku1Neu32ewCdS//eMbcwm/KNtEl+o7e4DvFbZXBE/SxQw==
+X-Received: by 2002:a17:906:c784:b0:94e:23b:75e9 with SMTP id cw4-20020a170906c78400b0094e023b75e9mr5850083ejb.43.1682184585208;
+        Sat, 22 Apr 2023 10:29:45 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id bj10-20020a170906b04a00b0094f5f6ba306sm3488679ejb.41.2023.04.22.10.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Apr 2023 10:29:44 -0700 (PDT)
+Message-ID: <5ff4416c-a195-7ac7-9eb1-16d667fd3ad6@redhat.com>
+Date:   Sat, 22 Apr 2023 19:29:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ACPI: x86: utils: Remove Lenovo Yoga Tablet 2's MAGN0001
+To:     Marius Hoch <mail@mariushoch.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230422164401.5986-1-mail@mariushoch.de>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230422164401.5986-1-mail@mariushoch.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 22:22:02 +0200
-Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
+Hi,
 
-> Avoid error returns on a failure to match and instead just warn with
-> assumption that we have a correct dt-binding telling us that
-> some new device with a different ID is backwards compatible.
+On 4/22/23 18:44, Marius Hoch wrote:
+> The LSM303D on the Lenovo Yoga Tablet 2 series is present
+> as both ACCL0001 and MAGN0001. As we can only ever register an
+> i2c client for one of them, ignore MAGN0001.
 > 
-> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> Currently this errors:
+> i2c i2c-4: Failed to register i2c client MAGN0001:00 at 0x1d (-16)
+> 
+> Tested on a Lenovo Yoga Tablet 2 1051-F.
+> 
+> Signed-off-by: Marius Hoch <mail@mariushoch.de>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
 > ---
-> v2:
-> - no changes, this patch is introduced in the v2
+>  drivers/acpi/x86/utils.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
->  drivers/iio/accel/kionix-kx022a.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
-> index f98393d74666..70530005cad3 100644
-> --- a/drivers/iio/accel/kionix-kx022a.c
-> +++ b/drivers/iio/accel/kionix-kx022a.c
-> @@ -1038,9 +1038,7 @@ int kx022a_probe_internal(struct device *dev)
->  		return dev_err_probe(dev, ret, "Failed to access sensor\n");
+> diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+> index ba420a28a4aa..9c2d6f35f88a 100644
+> --- a/drivers/acpi/x86/utils.c
+> +++ b/drivers/acpi/x86/utils.c
+> @@ -143,6 +143,16 @@ static const struct override_status_id override_status_ids[] = {
+>  		DMI_EXACT_MATCH(DMI_BOARD_SERIAL, "Default string"),
+>  		DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Default string"),
+>  	      }),
+> +
+> +	/*
+> +	 * The LSM303D on the Lenovo Yoga Tablet 2 series is present
+> +	 * as both ACCL0001 and MAGN0001. As we can only ever register an
+> +	 * i2c client for one of them, ignore MAGN0001.
+> +	 */
+> +	NOT_PRESENT_ENTRY_HID("MAGN0001", "1", ATOM_SILVERMONT, {
+> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +		DMI_MATCH(DMI_PRODUCT_FAMILY, "YOGATablet2"),
+> +	      }),
+>  };
 >  
->  	if (chip_id != KX022A_ID) {
-> -		dev_err(dev, "unsupported device 0x%x\n", chip_id);
-> -		return -EINVAL;
-> -	}
-> +		dev_warn(dev, "unsupported device 0x%x\n", chip_id);
-
-Try building this ;)  You have remove the closing bracket but kept the opening
-one.
-
-Jonathan
-
->  
->  	irq = fwnode_irq_get_byname(fwnode, "INT1");
->  	if (irq > 0) {
+>  bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *status)
 
