@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B0E6EBB0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD33C6EBB11
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjDVTz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 15:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S229811AbjDVT4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 15:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDVTzy (ORCPT
+        with ESMTP id S229797AbjDVT4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 15:55:54 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E00D1998
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682193353; x=1713729353;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XgaWl2nOkLRmJK/tO3Xi9cC/w7gi7ihoTePLG75RLKE=;
-  b=PqWJ8VmWVu15gGYHHEP1zidJU2go3CJiEN3bYIDzldjC3yUVaoaFswts
-   QmdFkpqIRi73ISkXwWSjvlgeOGXBN6RrKcW5/kYCVDW/ON4uUpgMvZoek
-   0ZnRcmCRNUi/+Vi3n4vqrwK6wzITZzgTXPwNks1p/cf0AOCtUCtRSCjDw
-   rl7AZ1n6o2y2u1HvWYf4vXPcf0FZ/Lh824VaAzr3UDd5Yo8LF6eS+fcvo
-   38BTd9W5De2Eq9rNavajD2dlVQxSI34GZTBtBw7SJ34YxGC4uSTuytjj4
-   0HHqovOfdln9u7b0gEULqf5l4u5j/namTzSJvw8ShegruYe88kNOBRqF1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="325793948"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="325793948"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 12:55:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="1022232109"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="1022232109"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Apr 2023 12:55:52 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqJKp-000hTB-1j;
-        Sat, 22 Apr 2023 19:55:51 +0000
-Date:   Sun, 23 Apr 2023 03:54:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:319:45: error: call to
- '__compiletime_assert_231' declared with attribute error: BUILD_BUG_ON
- failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-Message-ID: <202304230356.PiQfhkvF-lkp@intel.com>
+        Sat, 22 Apr 2023 15:56:46 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9462E19A6
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:56:44 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f196e8e2c6so11850915e9.1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682193403; x=1684785403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X9yZH5jobw+2NxtflHbFeViB++WpgYUG8lLecB6Yof4=;
+        b=CtthS9YsA6btqa4JO6vI8qG6Ei18swg2oPFg8KSHXvYFTzsNah2B3GZZ2DkXLIK3Bu
+         WM0pmmAqy8lmu8V5P5lBn6SpKmEQLfSQRnN9RvwhNc6BvTCdoCQ0A8lMUYzZCukwctyR
+         aHCIqkRnqpEv6uttQW+6QMeoM+SujZq10TVVXX8rdWR6DXNqDEHeemDTMcLHjoTM9FqD
+         doVI7jomezoHjx23hxLkDztftgUtxd1JXMvb2eIKQW5Ntoilq1SiNUJUzrOmd9GQkQoP
+         hzz2hmyx516OXcG72SALiwE7+ltPW0o7cRxRdqn5nMsGaCPULJuP4JTnjbysaF57fbUW
+         1L/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682193403; x=1684785403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X9yZH5jobw+2NxtflHbFeViB++WpgYUG8lLecB6Yof4=;
+        b=StesO1l4gAnEQEp3hFEMJtNHfqYkLTYkbdicA9vDU3Dn4gPa5oyxj0YigpWhIFKExq
+         ONHeDZsfSjlQDwxlccZjNIpNze2MJKIGybvoxCCw89hu1Qzvg8E+KHk9ueK/+L5HNv91
+         UFSojeUNKDfonhv5rRv8WJGHwwVfKaxRbF+Ww066Z8Np0/o1/jBxIxYalQJ8al5qapbJ
+         LsSYtmuEnsojC8mLTbr/QNOzASeF+5kG5y61srRlDMstnsvNcQNNeMlyl5p1wedCtzgk
+         kfp9haUYx97AOxwh7xMV2+TFT5Ofj+TjL4VX+IVR87vHnnWWbRiSTQdyeSeFmc2mArVY
+         ecSg==
+X-Gm-Message-State: AAQBX9d8155irkGUhRBeYGAkmw24egsgoufj30uWSZ1JFZNnXBWt28pS
+        6QrAmqToIm0tnPpSP4jI7VqXoA==
+X-Google-Smtp-Source: AKy350aU1g4P2e/Je3n5HyLAU9lTZT6CKyVdRbmopfPN/a5RVwo2XdTRo1sK9qdXYS1MlABzSAFFUA==
+X-Received: by 2002:adf:e2c8:0:b0:2ef:bc0b:e70 with SMTP id d8-20020adfe2c8000000b002efbc0b0e70mr7197653wrj.54.1682193403110;
+        Sat, 22 Apr 2023 12:56:43 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i3-20020adff303000000b002f4cf72fce6sm7206104wro.46.2023.04.22.12.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Apr 2023 12:56:42 -0700 (PDT)
+Date:   Sat, 22 Apr 2023 22:56:39 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, Vicki Pfau <vi@endrift.com>,
+        kernel-janitors@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Rojtberg <rojtberg@gmail.com>,
+        Nate Yocom <nate@yocom.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        John Butler <radon86dev@gmail.com>,
+        Matthias Benkmann <matthias.benkmann@gmail.com>,
+        Christopher Crockett <chaorace@gmail.com>,
+        Santosh De Massari <s.demassari@gmail.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com,
+        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: xpad - fix GPF in xpad_probe
+Message-ID: <c12873b2-d2e5-4fbc-987f-fa96cbe926da@kili.mountain>
+References: <20230414125603.686123-1-dzm91@hust.edu.cn>
+ <c3e0823b-2b03-4dab-b7cb-a8bc5151f0b1@kili.mountain>
+ <011c00e7-c351-4331-8be4-1c184d5773e1@kili.mountain>
+ <3ccc85bd-0541-4ffb-a207-dfc533a2c0aa@kili.mountain>
+ <d49bb5a2-ed78-4b16-b7ea-b9c7748ca0e4@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d49bb5a2-ed78-4b16-b7ea-b9c7748ca0e4@kili.mountain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Sat, Apr 22, 2023 at 10:48:32PM +0300, Dan Carpenter wrote:
+> The warnings from this are quite promising.
 
-FYI, the error/warning still remains.
+Well...  The results are over 90% false positives.  But there are still
+probably 15 bugs in there.  The printk warning trick would probably
+work.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2caeeb9d4a1bccd923b7918427f9e9ef7151ddd8
-commit: 39cac191ff37939544af80d5d2af6b870fd94c9b arc/mm/highmem: Use generic kmap atomic implementation
-date:   2 years, 5 months ago
-config: arc-buildonly-randconfig-r004-20230421 (https://download.01.org/0day-ci/archive/20230423/202304230356.PiQfhkvF-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=39cac191ff37939544af80d5d2af6b870fd94c9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 39cac191ff37939544af80d5d2af6b870fd94c9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/mm/
+regards,
+dan carpenter
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304230356.PiQfhkvF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   arch/arc/mm/highmem.c: In function 'kmap_init':
->> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_231' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
-     300 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
-      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
-         |         ^~~~~~~~~~~~
-
-
-vim +/__compiletime_assert_231 +319 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
-
-:::::: The code at line 319 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
