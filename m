@@ -2,146 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE706EB943
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 15:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3599B6EB947
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 15:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDVNMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 09:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S229873AbjDVNQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 09:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjDVNMv (ORCPT
+        with ESMTP id S229680AbjDVNQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 09:12:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F53CE65;
-        Sat, 22 Apr 2023 06:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682169170; x=1713705170;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=siolPaBbzy3Sc50U7pDpe27/YvjBEvisAHA0WNyP5iw=;
-  b=Wqoisyc/jSSHBrIZdyhw+76BfpbMX6B+df2vnCWI7tUFQJDwbHQ4nnZH
-   qkPkjU3Vqo+bLx2ywclqL0gCuoVPJxfL2JO4O2jeEK0kD9FNnRqQIiHgz
-   lW6T3nGhU4Rwr/gvjI4/nAChXvo5inxRir6RZGJjh+yQw6SY3HYswVqPY
-   vkyLCqNhXfpL5/+Y99cuO1ijQnvD6Gxx7fzAVDjmE+VRHFnJAKMMwXcAd
-   6RhxFKCeajENQsMRQWgciL54EFC85H2ux3dVlEPEVubjJ5/mBRWKlOKm4
-   TEBcDUqWw0ty0W9i5R2JvsRs7FQHnf8uzH+XYW+kf3WrT+gshFaRr7uRp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="330362804"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="330362804"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 06:12:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="836441170"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="836441170"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2023 06:12:45 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqD2i-000hJY-1T;
-        Sat, 22 Apr 2023 13:12:44 +0000
-Date:   Sat, 22 Apr 2023 21:12:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Subject: Re: [PATCH v9 04/11] LSM: syscalls for current process attributes
-Message-ID: <202304222142.YHgqLhGF-lkp@intel.com>
-References: <20230421174259.2458-5-casey@schaufler-ca.com>
+        Sat, 22 Apr 2023 09:16:57 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF9A1986
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 06:16:55 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4edc114c716so2823284e87.1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 06:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682169414; x=1684761414;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7jncnPx2grC6G7RQ2ee63CUWNqLMx/tnK4MbO+O2gC8=;
+        b=WznNI5log6OLCbjQlAgJDM6uaGoe5+ZWNN90yr1TwLrATj5HxPWoXA0nJvRAECdubD
+         eYt7BXA9lilWzB+oSXeCec55lmW/W57h4s3Fso8BB1x3oCCetwbfGNNKDMvW3j88LF8d
+         lGvdx44Oz4IsNBaNJrcu0adxD5m0vTQORqBq13Ng8B4YIJYGbVOYqQpBaw1KWOjNnqUp
+         2P3DBAw91/qdvfmsDL8U8OVUY4qSwG5ZTlzyjCjMBLZddXbUI7f+ipOjOqTA24AJD7OP
+         akcZNObRY7dzggSxnw06sJz1fjVr+occq0Q8apN6DZmKb0pIBbdMrw8lyARHGId0lCXW
+         ou6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682169414; x=1684761414;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7jncnPx2grC6G7RQ2ee63CUWNqLMx/tnK4MbO+O2gC8=;
+        b=F6ohGAi98aSri08VkcTFJRL61QIV4xUKu1lajT6U5OQlyx3ht3e/CnNk/VsRwC6UbU
+         4BsO5UD+jXg+bTJ/hm+4OBumXngvZlEb0KGKp5i87g28dAJikFKpcOuJ3v4FpE9vdqgw
+         IYnIww10LLb4LFGcB3TXGR/DkL4f+iGfUuCp4dawNmBygH68ZBZJn1FRP/37xEzWeB24
+         v/oPwsfoYsYRr5BVTJBbICJwZtw+fLMJWhKQe+aQ5HFdaQK7Ed3LFgzwpvMYDeM+PmmT
+         bMa/mpL6q0g8yorCQEr63R3OYPJIeUzY+/A9J6ubwA6odgHAEuBkyJ+lkMrUTXyWkItR
+         y2vA==
+X-Gm-Message-State: AAQBX9fmlMqvdPaXyhouFTyaXhh4fd3H9PFIo9JINZtflOoDRNnzPQIl
+        7zZS50EJKjplBFT+1fL6BfslwQ==
+X-Google-Smtp-Source: AKy350YnsIfKVhADdDt9MtMQHuIgPc/rStDXoyg0rQ3Pw7Ei3do+mb9dXvAAn9bNaoB5X+pr7sQSVQ==
+X-Received: by 2002:ac2:52af:0:b0:4b4:8f01:f8b1 with SMTP id r15-20020ac252af000000b004b48f01f8b1mr1982021lfm.31.1682169413906;
+        Sat, 22 Apr 2023 06:16:53 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id y3-20020ac24e63000000b004eca2b8b6bdsm898504lfs.4.2023.04.22.06.16.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Apr 2023 06:16:53 -0700 (PDT)
+Message-ID: <dac3b12e-8160-2566-5835-996d0b37a52a@linaro.org>
+Date:   Sat, 22 Apr 2023 15:16:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421174259.2458-5-casey@schaufler-ca.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v10 09/10] arm64: dts: qcom: sc7180: Add support for HDCP
+ in dp-controller
+Content-Language: en-US
+To:     Mark Yacoub <markyacoub@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     seanpaul@chromium.org, suraj.kandpal@intel.com,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230419154321.1993419-1-markyacoub@google.com>
+ <20230419154321.1993419-10-markyacoub@google.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230419154321.1993419-10-markyacoub@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
 
-kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on tip/perf/core]
-[also build test WARNING on acme/perf/core shuah-kselftest/next shuah-kselftest/fixes linus/master v6.3-rc7]
-[cannot apply to next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 19.04.2023 17:43, Mark Yacoub wrote:
+> From: Sean Paul <seanpaul@chromium.org>
+> 
+> Add the register ranges required for HDCP key injection and
+> HDCP TrustZone interaction as described in the dt-bindings for the
+> sc7180 dp controller.
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Sean Paul <seanpaul@chromium.org>
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> 
+> ---
+Looks like only patch 9 and 10 ever made it to linux-arm-msm and
+only patch 9 ever made it to me, even though I'm R: in MAINTAINERS?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230422-024331
-base:   tip/perf/core
-patch link:    https://lore.kernel.org/r/20230421174259.2458-5-casey%40schaufler-ca.com
-patch subject: [PATCH v9 04/11] LSM: syscalls for current process attributes
-config: mips-randconfig-s051-20230421 (https://download.01.org/0day-ci/archive/20230422/202304222142.YHgqLhGF-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/78ea54cc31d7bd9e5a5c7fe8cf34fba9516fde95
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230422-024331
-        git checkout 78ea54cc31d7bd9e5a5c7fe8cf34fba9516fde95
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
+Please fix your cc scripts.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304222142.YHgqLhGF-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> security/lsm_syscalls.c:34:48: sparse: sparse: dereference of noderef expression
---
-   security/security.c:406:25: sparse: sparse: cast removes address space '__rcu' of expression
->> security/security.c:2196:13: sparse: sparse: dereference of noderef expression
-   security/security.c:2203:14: sparse: sparse: dereference of noderef expression
-   security/security.c:2208:20: sparse: sparse: dereference of noderef expression
-   security/security.c:2218:43: sparse: sparse: dereference of noderef expression
-   security/security.c:2218:66: sparse: sparse: dereference of noderef expression
-   security/security.c:2263:13: sparse: sparse: dereference of noderef expression
-   security/security.c:2265:13: sparse: sparse: dereference of noderef expression
-   security/security.c:2269:13: sparse: sparse: dereference of noderef expression
-   security/security.c:2269:32: sparse: sparse: dereference of noderef expression
-   security/security.c:2275:53: sparse: sparse: dereference of noderef expression
-   security/security.c:2275:64: sparse: sparse: dereference of noderef expression
-   security/security.c:2275:70: sparse: sparse: dereference of noderef expression
-
-vim +34 security/lsm_syscalls.c
-
-    19	
-    20	/**
-    21	 * sys_lsm_set_self_attr - Set current task's security module attribute
-    22	 * @attr: which attribute to set
-    23	 * @ctx: the LSM contexts
-    24	 * @size: size of @ctx
-    25	 * @flags: reserved for future use
-    26	 *
-    27	 * Sets the calling task's LSM context. On success this function
-    28	 * returns 0. If the attribute specified cannot be set a negative
-    29	 * value indicating the reason for the error is returned.
-    30	 */
-    31	SYSCALL_DEFINE4(lsm_set_self_attr, unsigned int, attr, struct lsm_ctx __user *,
-    32			ctx, size_t __user, size, u32, flags)
-    33	{
-  > 34		return security_setselfattr(attr, ctx, size, flags);
-    35	}
-    36	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Konrad
+> Changes in v3:
+> -Split off into a new patch containing just the dts change (Stephen)
+> -Add hdcp compatible string (Stephen)
+> Changes in v4:
+> -Rebase on Bjorn's multi-dp patchset
+> Changes in v5:
+> -Put the tz register offsets in trogdor dtsi (Rob C)
+> Changes in v6:
+> -Rebased: Removed modifications in sc7180.dtsi as it's already upstream
+> Changes in v7:
+> -Change registers offset
+> 
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> index 423630c4d02c7..89d913fa6e3eb 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> @@ -822,6 +822,14 @@ &mdss_dp {
+>  	status = "okay";
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&dp_hot_plug_det>;
+> +
+> +	reg = <0 0x0ae90000 0 0x200>,
+> +	      <0 0x0ae90200 0 0x200>,
+> +	      <0 0x0ae90400 0 0xc00>,
+> +	      <0 0x0ae91000 0 0x400>,
+> +	      <0 0x0ae91400 0 0x400>,
+> +	      <0 0x0aed1000 0 0x174>,
+> +	      <0 0x0aee1000 0 0x2c>;
+>  };
+>  
+>  &mdss_dp_out {
