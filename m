@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E706EB9AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF51D6EB9C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDVOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 10:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        id S229864AbjDVOsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 10:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVOgB (ORCPT
+        with ESMTP id S229451AbjDVOsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 10:36:01 -0400
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8EC10E4;
-        Sat, 22 Apr 2023 07:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682174157;
-        bh=rV+obqBV2YKvr1MLCeqn9cEsCuGUCv/eN8ByCFyFd0o=;
-        h=From:To:Cc:Subject:Date;
-        b=cfipC+FMoS4I0CbQVjfyqkeELQI0ILoPQFJgH6Tui2WJ487VR7r4XZf7VJ25dAIgD
-         5aprOXElaQfofA19ELIoWq3jjPmVtrjicr/BNUNTlogjyq4bmJ89uPBXinuMz+lNSC
-         nSSEe5Btahqb/1SPcU/VWoD6TytPONgdmJWF3oXo=
-Received: from rtoax.. ([111.199.190.121])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id 8F7278F5; Sat, 22 Apr 2023 22:35:55 +0800
-X-QQ-mid: xmsmtpt1682174155tp1m27fmo
-Message-ID: <tencent_3E0341A1C9AC8FCB7915E7D791D117445707@qq.com>
-X-QQ-XMAILINFO: NhUkPfKlCtQw2r08/0nNmetDOkmWKFwsM6519DB8bTZ3b478RMp2L/YWkTkcA7
-         SdN9+kuyCMmR+hdxq99LYQIBh8G3SBJPVAkbG+Xo/BMV/mTpf5fKZ1RLkqjH3gBI4CHT4pI25j7N
-         pBpZnn+4TDkM2O+hPpukG2ZcunHYVRuit4bvMVkm3vplfNUX1TS6HJP5VBKghowY5JrlKpWoZnnO
-         cytYJrkn90M1Jh2ZAc6p33JhMS96Qc/p7PLgnD6fNY13RdX9rCRZzFDVKUwvRmJ+wjftrFrqbDbQ
-         Cdpj2ySLYb2xesJUtC2EySF2NTgobscnTwOdWr0jukv1xAXUXHcAQ38bZdeG7KlLDcJ2cCazUoT8
-         /poCy/7FCZcN7Ul2JHUPPA7G0w9IanT3jT5MX4+18pfyn06IY3ViuSHXE/0PnSTC1wHsV2dwjj5Z
-         XiUsRGedjVTqkJVCytKAIbkEjRr5XB2sw7gvG8m0Krn1lm5jfvTN6FP7CEg2/qdXn7ZX2HDDZ/wC
-         cHrdFxydsRo966SF7DS+ycWTyouJqCaxRGCnDBlFUUeQCHzWozlHp/+PMxBDsm8pcF+5PdxblHDG
-         oV6z3C/AywEeBIoXT9TFoLvUPDx6u4fAuej5an7YD1kDScF7WGzm4Dw29IUnBf/IFeqR5DaGT/BN
-         dOKHrDvlhntBi9KZkxFdSFxCYsHX0F/1gNohrksKR1YOQMCGYNKEBwIIaBJRl8URP6SCkcxllcwp
-         KPch8DM4UBpfhjYw2cKJkDO6HIXDdq+RHF12s4z+7XLNgzkWcLwwsWSvmlK05juOxSHHO2QoQ/g/
-         /cHYoBXkT9mKNRXNCm+xVSpd4LqwKki/dHgFmRF5ZXQf1u09jgt//YLA7HpWRabOoV+cr7rWWF5D
-         tM3Aahq5hLTWDZNWGPBBEfwFS1JhiUQjNaVimC4zNbqjsH0bznTZsR6hrTXiZwfA4JaLxxWxcY6P
-         csCSlYtWqtubXCkcjS0G3XKyfjzCrOUtntci0+ayChesTmlubRvgacsw2NUWOv191R3DP1TBMtu5
-         X6M9OKJA==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     william.gray@linaro.org
-Cc:     Rong Tao <rongtao@cestc.cn>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-iio@vger.kernel.org (open list:COUNTER SUBSYSTEM)
-Subject: [PATCH v2] tools/counter: Add .gitignore
-Date:   Sat, 22 Apr 2023 22:35:53 +0800
-X-OQ-MSGID: <20230422143554.61364-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.40.0
+        Sat, 22 Apr 2023 10:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F21723
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 07:48:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 264FF60670
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 14:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF3EC433EF;
+        Sat, 22 Apr 2023 14:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682174923;
+        bh=O4rgEkLJmewMNmbBssn0vGFbxV4mGZy57G3IusOA+d4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lqZcPBL8IbGvxblXaJir3U/7j7Th8Z0ZUNwtLiX+mu1NTyR92gnv+oVooKTlWFGXw
+         TE2Ie9ei/NV0ezt2Kz/BR/aTkhEvfK6+wGWqLWQwiZYnct+jfN7YfFnGiRLaA6ivcu
+         i7qsh1uVzVP20SPhtRLzO7N7GBfL1L27eDT73Lbq2fXTtzyYRdL6lgs/ICzOX+SXUL
+         1+HgW4aMfoHY2jeAxoxRm/OaYXgPml94ODZGqn5OvmPoVoNwyjSTHGG4zz7Gk3amGn
+         426tUePWmgRH2Xjm5s6nHovp2guapp+rn0N++15/0OwXHuMffKXwLTVfF/AWA6U5BJ
+         02kyvVnRtWs+A==
+Date:   Sat, 22 Apr 2023 16:48:40 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+Message-ID: <ZEPzyGZciQF5TPLU@localhost.localdomain>
+References: <ZEKDZEQmKExv0O7Q@lothringen>
+ <20230421142446.GA1185829@hirez.programming.kicks-ass.net>
+ <ZEK+IeTYsauHLozy@lothringen>
+ <20230422080814.GA1214746@hirez.programming.kicks-ass.net>
+ <20230422113811.GB1215777@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+In-Reply-To: <20230422113811.GB1215777@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,27 +63,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+eeLe Sat, Apr 22, 2023 at 01:38:11PM +0200, Peter Zijlstra a écrit :
+> On Sat, Apr 22, 2023 at 10:08:14AM +0200, Peter Zijlstra wrote:
+> > On Fri, Apr 21, 2023 at 06:47:29PM +0200, Frederic Weisbecker wrote:
+> > 
+> > > > *HOWEVER*
+> > > > 
+> > > > intel_idle_irq() is affected -- except that we only (normally) use that
+> > > > for very shallow idle states and it won't interact with NOHZ (because we
+> > > > only disable the tick for deep idle states).
+> > > 
+> > > Well I don't know, that doesn't look comfortable... :)
+> > > 
+> > > Also why does it need to enable IRQs if ecx=1 ?
+> > 
+> > Supposedly this is some interrupt latency hack. See commit:
+> > 
+> >   c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
+> 
+> Something like so perhaps...
+> 
+> diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
+> index 778df05f8539..07a4072c43de 100644
+> --- a/arch/x86/include/asm/mwait.h
+> +++ b/arch/x86/include/asm/mwait.h
+> @@ -115,8 +115,14 @@ static __always_inline void mwait_idle_with_hints(unsigned long eax, unsigned lo
+>  		}
+>  
+>  		__monitor((void *)&current_thread_info()->flags, 0, 0);
+> -		if (!need_resched())
+> -			__mwait(eax, ecx);
+> +		if (!need_resched()) {
+> +			if (ecx & 1) {
+> +				__mwait(eax, ecx);
+> +			} else {
+> +				__sti_mwait(eax, ecx);
+> +				raw_local_irq_disable();
+> +			}
+> +		}
 
-Ignore counter_example and include/linux/counter.h.
+Yep that looks good!
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v2: Ignore /include/linux/counter.h, instead of /include directory
-v1: https://lore.kernel.org/lkml/tencent_1625E21562D40C91CEE047E82E2BFC524305@qq.com/
----
- tools/counter/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 tools/counter/.gitignore
-
-diff --git a/tools/counter/.gitignore b/tools/counter/.gitignore
-new file mode 100644
-index 000000000000..9fd290d4bf43
---- /dev/null
-+++ b/tools/counter/.gitignore
-@@ -0,0 +1,2 @@
-+/counter_example
-+/include/linux/counter.h
--- 
-2.40.0
-
+Thanks!
