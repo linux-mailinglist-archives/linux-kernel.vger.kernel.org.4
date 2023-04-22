@@ -2,130 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183D56EBAF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C54F6EBAF7
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjDVTN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 15:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S229729AbjDVTT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 15:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjDVTNz (ORCPT
+        with ESMTP id S229500AbjDVTT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 15:13:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA01193;
-        Sat, 22 Apr 2023 12:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682190834; x=1713726834;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NMbAIgoL1EbZiIobpYsvn1zflbdPN5yfsrJDkxCjPlc=;
-  b=et5ljHVhsGc/HTJquCgwI5xHZrBXISXkdbS5OOqciA4fWVoZEfYvVJYT
-   CW7Ru0XnV81XqDMvmLeAy8RLgyR3JwGGKu84s60ZIDBumCl5voIHUy7R9
-   fZqQolJhgMX0nGUXwk15ebgjbTNXN9QFw81vFV7OCFjhiB93gjdvwd3F7
-   i16eoAS+m1EV83eUADOjq7q7msIiPP7ecmIGKFI4m4hsdXbaOq6L0p2PC
-   PIoCPkqJ0PMUTT2QUHAL2mnrrxG5qsk5lYDzX6R/bBzGkrILTFs3Zt2nM
-   sb0Z4JzrBYuHZAibEW59zOX2t5n0YdFxjCxjiNNzjNdTTCmkzddyl+TiY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="346209985"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="346209985"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 12:13:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="761926731"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="761926731"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2023 12:13:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqIgA-000hSC-37;
-        Sat, 22 Apr 2023 19:13:50 +0000
-Date:   Sun, 23 Apr 2023 03:13:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202304230332.itoWhpOB-lkp@intel.com>
+        Sat, 22 Apr 2023 15:19:57 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA46A172B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:19:55 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b9963a72fbfso440107276.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1682191195; x=1684783195;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OHJY4Fkh+i9IKg2K8qTc2zv9H9+ffmQTlvrABmh8bQ=;
+        b=tsV+XRz6vc6v28gtdYF8Gj99Qpo+XphroXPdLWtFBNnpBNNol6ARzQFBZAJLZYUc/9
+         mVicFywL0vgU7dZHJJ8b286loaHazmcmDh1GCUuCP+U/tei92lcLvifueeydbAcr5m0C
+         xE0xNy4X8A3TGTFVu+7F/jnmN9ZU+YHAPlh18=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682191195; x=1684783195;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3OHJY4Fkh+i9IKg2K8qTc2zv9H9+ffmQTlvrABmh8bQ=;
+        b=T6F0phPtaWOlVdCdyLQ8TqZy6yxNr6NWEy60JrisaJEhH4PjlgYV77DqqN5TrvuJoG
+         ZlHzgpmguhcVafEDu4ltVpj9HAteTyCJeXDc+L6CsnCkQpuYyc0Sk8czWTV91C/u6r/N
+         3O6MPVEzGUh0RNPx5lKFGyuSYQ3ikTcaE3hQ/AkYCcJkVrsschhqPJvqMlCdAuEBDaHs
+         9qel2UDkYn1gW0mqPtCTSjUecJkNQ9ayT1Q1Kxtv3Fl6qHVoi8YycXxPybrlPPv7mGLY
+         o89FYT1tCt/FmdndFQxZDDGHHr/5hQxff/tnZaSGAQGjoelTtVoXiPSKfJatSmQolkRo
+         gMSw==
+X-Gm-Message-State: AAQBX9f/fSFNt6p2f5qxB0/ybZviiJAHZ+E70AbC9oNxXS33iYL3bdTz
+        EQmF9f+kBBmcmyXCYpRv/tz84Ns+DF7Z43dbArN5rw==
+X-Google-Smtp-Source: AKy350abbGfzNu9Ezn4OMBp5YhNGQ7AC6quo9KEVhw/AIwmIzl2/hq5vRDRnt/Z4h6Ejw/51Vx77DKi3Wrd7Zr6TarY=
+X-Received: by 2002:a81:6604:0:b0:54f:5419:2fa4 with SMTP id
+ a4-20020a816604000000b0054f54192fa4mr4608890ywc.50.1682191194837; Sat, 22 Apr
+ 2023 12:19:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+In-Reply-To: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sat, 22 Apr 2023 21:19:41 +0200
+Message-ID: <CAEXW_YQCugPs1bquaA4ZLdsM4S3hWv9OMNTt80tSvjCO0LwiHg@mail.gmail.com>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Hi Zhouyi,
 
-FYI, the error/warning still remains.
+On Sat, Apr 22, 2023 at 2:47=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.com> =
+wrote:
+>
+> Dear PowerPC and RCU developers:
+> During the RCU torture test on mainline (on the VM of Opensource Lab
+> of Oregon State University), SRCU-P failed with __stack_chk_fail:
+> [  264.381952][   T99] [c000000006c7bab0] [c0000000010c67c0]
+> dump_stack_lvl+0x94/0xd8 (unreliable)
+> [  264.383786][   T99] [c000000006c7bae0] [c00000000014fc94] panic+0x19c/=
+0x468
+> [  264.385128][   T99] [c000000006c7bb80] [c0000000010fca24]
+> __stack_chk_fail+0x24/0x30
+> [  264.386610][   T99] [c000000006c7bbe0] [c0000000002293b4]
+> srcu_gp_start_if_needed+0x5c4/0x5d0
+> [  264.388188][   T99] [c000000006c7bc70] [c00000000022f7f4]
+> srcu_torture_call+0x34/0x50
+> [  264.389611][   T99] [c000000006c7bc90] [c00000000022b5e8]
+> rcu_torture_fwd_prog+0x8c8/0xa60
+> [  264.391439][   T99] [c000000006c7be00] [c00000000018e37c] kthread+0x15=
+c/0x170
+> [  264.392792][   T99] [c000000006c7be50] [c00000000000df94]
+> ret_from_kernel_thread+0x5c/0x64
+> The kernel config file can be found in [1].
+> And I write a bash script to accelerate the bug reproducing [2].
+> After a week's debugging, I found the cause of the bug is because the
+> register r10 used to judge for stack overflow is not constant between
+> context switches.
+> The assembly code for srcu_gp_start_if_needed is located at [3]:
+> c000000000226eb4:   78 6b aa 7d     mr      r10,r13
+> c000000000226eb8:   14 42 29 7d     add     r9,r9,r8
+> c000000000226ebc:   ac 04 00 7c     hwsync
+> c000000000226ec0:   10 00 7b 3b     addi    r27,r27,16
+> c000000000226ec4:   14 da 29 7d     add     r9,r9,r27
+> c000000000226ec8:   a8 48 00 7d     ldarx   r8,0,r9
+> c000000000226ecc:   01 00 08 31     addic   r8,r8,1
+> c000000000226ed0:   ad 49 00 7d     stdcx.  r8,0,r9
+> c000000000226ed4:   f4 ff c2 40     bne-    c000000000226ec8
+> <srcu_gp_start_if_needed+0x1c8>
+> c000000000226ed8:   28 00 21 e9     ld      r9,40(r1)
+> c000000000226edc:   78 0c 4a e9     ld      r10,3192(r10)
+> c000000000226ee0:   79 52 29 7d     xor.    r9,r9,r10
+> c000000000226ee4:   00 00 40 39     li      r10,0
+> c000000000226ee8:   b8 03 82 40     bne     c0000000002272a0
+> <srcu_gp_start_if_needed+0x5a0>
+> by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
+> but if there is a context-switch before c000000000226edc, a false
+> positive will be reported.
+>
+> [1] http://154.220.3.115/logs/0422/configformainline.txt
+> [2] 154.220.3.115/logs/0422/whilebash.sh
+> [3] http://154.220.3.115/logs/0422/srcu_gp_start_if_needed.txt
+>
+> My analysis and debugging may not be correct, but the bug is easily
+> reproducible.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2caeeb9d4a1bccd923b7918427f9e9ef7151ddd8
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   1 year, 1 month ago
-config: hexagon-randconfig-r016-20230423 (https://download.01.org/0day-ci/archive/20230423/202304230332.itoWhpOB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/media/platform/mediatek/mdp/
+Could you provide the full kernel log? It is not clear exactly from
+your attachments, but I think this is a stack overflow issue as
+implied by the mention of __stack_chk_fail. One trick might be to turn
+on any available stack debug kernel config options, or check the
+kernel logs for any messages related to shortage of remaining stack
+space.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304230332.itoWhpOB-lkp@intel.com/
+Additionally, you could also find out where the kernel crash happened
+in C code following the below notes [1] I wrote (see section "Figuring
+out where kernel crashes happen in C code"). The notes are
+x86-specific but should be generally applicable (In the off chance
+you'd like to improve the notes, feel free to share them ;-)).
 
-All warnings (new ones prefixed by >>):
+Lastly, is it a specific kernel release from which you start seeing
+this issue? You should try git bisect if it is easily reproducible in
+a newer release, but goes away in an older one.
 
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   1 warning generated.
+I will also join you in your debug efforts soon though I am currently
+in between conferences.
+
+[1] https://gist.github.com/joelagnel/ae15c404facee0eb3ebb8aff0e996a68
+
+thanks,
+
+ - Joel
 
 
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
 
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
 
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> Thanks
+> Zhouyi
