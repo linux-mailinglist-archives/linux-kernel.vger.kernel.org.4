@@ -2,76 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576336EBA74
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 18:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FBC6EBA78
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 18:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjDVQrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 12:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S229739AbjDVQsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 12:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjDVQrG (ORCPT
+        with ESMTP id S229669AbjDVQr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 12:47:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD4E1FEE;
-        Sat, 22 Apr 2023 09:47:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 22 Apr 2023 12:47:57 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111FE19B;
+        Sat, 22 Apr 2023 09:47:40 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD44560916;
-        Sat, 22 Apr 2023 16:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 214BEC433D2;
-        Sat, 22 Apr 2023 16:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682182024;
-        bh=XSpzGpQ3klSZx/WTwiv/0NELnBqkZLCQeaHFXF1pvcc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=iCsPWaDwWXlKC8yhiws9jwtFboVdiNjsmBnhF3JxGTk4v1B7f2h9rxETs5tHGG0/f
-         waoz0g6WshgQp5o+LqpefmOedtDf0HCMHtnj1pYC9Dg5t7/8o5u8mxrbM2EXMvdvoR
-         k1QK37S0RDsKkeK9bZeYXofxYd8eH2MZVK8odPV0KK7GPsI+QUxKEDSB3/dsp+KBU+
-         HZUhSa6RqhySAEpT1UIFmmCP2jD1ZQq/RqiS0FtZiz3n5kg57ZnDogyiW/n+a0P61n
-         1+Ykp9ujZQniI2QnvgOYwq118a1Qpmraxd6pN1nezflK6VNAFjaJBZYuDf2VWofpuz
-         bXwQHiE7XDlJg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 04F6EE270DA;
-        Sat, 22 Apr 2023 16:47:04 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mu1-3LwONaQGR5B9XSWTupdvK9SSSk3Pm-V5bGZdFeCqQ@mail.gmail.com>
-References: <CAH2r5mu1-3LwONaQGR5B9XSWTupdvK9SSSk3Pm-V5bGZdFeCqQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mu1-3LwONaQGR5B9XSWTupdvK9SSSk3Pm-V5bGZdFeCqQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc7-smb3-client-fixes
-X-PR-Tracked-Commit-Id: 023fc150a39ffe656da3e459ad801eb1c7fdfad9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 84ebdb8e0d9ca261d73677f345814505af172ae0
-Message-Id: <168218202401.21238.3378744505789997926.pr-tracker-bot@kernel.org>
-Date:   Sat, 22 Apr 2023 16:47:04 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q3ckw6J2yz9sJ5;
+        Sat, 22 Apr 2023 18:47:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
+        s=MBO0001; t=1682182056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UIrYwtDUNhK/5waVX3oGzXkU27Yiu2oa4nhKmolwfzA=;
+        b=nkYzQtYFyrl+LQ9rMpj32chuo7A1iONlR4jFzFD9XTHDyCMfuHHCniNLvMFsTOa/7u0Dio
+        F1p/7pJpQZlt0SQouksXiUMZ5qClYJNIt6AVY7rnNTXyVA914BnQMulrtB4dLNP0y4OSvP
+        QXmEb8a243SXNWu1KQfE8iAFoTW3kU9jmFmdHwKzZ2H/LJW8BYc+rtg/9ZQaPRLfSDn4Hq
+        ltyB2KPQkYFRdJM4en2WaQxkxp9D/llEQxWLuE534kSt8Hpxpc/AOOYqxV9mq5868qXi0m
+        ohjbn7A4VglZZPnZ6nwVWVr/aYmv0VziANtNo4QnhY3Du6yDM8Kqi8A+CKb6lA==
+Message-ID: <d0068345-6832-c9ae-ec40-bb692baa3f69@mariushoch.de>
+Date:   Sat, 22 Apr 2023 18:47:35 +0200
+MIME-Version: 1.0
+Subject: Re: [PATCH] ACPI: scan: Ignore MAGN0001
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230421162702.3558-1-mail@mariushoch.de>
+ <06e9623d-26ae-e0e3-8fd8-1f5c89497a5a@redhat.com>
+Content-Language: en-US
+From:   Marius Hoch <mail@mariushoch.de>
+In-Reply-To: <06e9623d-26ae-e0e3-8fd8-1f5c89497a5a@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 21 Apr 2023 21:43:50 -0500:
+Hi Hans,
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc7-smb3-client-fixes
+On 21/04/2023 20:07, Hans de Goede wrote:
+> Hi Marius,
+>
+> On 4/21/23 18:27, Marius Hoch wrote:
+>> The LSM303D on the Lenovo Yoga Tablet 2 series is present
+>> as both ACCL0001 and MAGN0001. As we can only ever register an
+>> i2c client for one of them, ignore MAGN0001.
+>>
+>> Currently this errors:
+>> i2c i2c-4: Failed to register i2c client MAGN0001:00 at 0x1d (-16)
+>>
+>> Tested on a Lenovo Yoga Tablet 2 1051-F.
+>>
+>> Signed-off-by: Marius Hoch <mail@mariushoch.de>
+> By adding the HID to the ignore_serial_bus_ids[] list, you are
+> causing the ACPI code to instead instantiate a platform_device
+> for it.
+>
+> This will successfully silence the error you are trying to silence,
+> but I don't think it really is what you intent / want to do ?
+It is not, no. Given we will only ever care for ACCL0001, we can 
+entirely skip MAGN0001.
+>
+> IMHO it would be better to add a NOT_PRESENT_ENTRY_HID() entry
+> to the override_status_ids[] table in drivers/acpi/x86/utils.c,
+> this will override the return of _STA, causing neither a
+> platform_device not an i2c_client to get instantiated for
+> the duplicate MAGN0001 device.
+That sounds much better, thanks for the pointer!
+I've send a new patch (20230422164401.5986-1-mail@mariushoch.de).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/84ebdb8e0d9ca261d73677f345814505af172ae0
+Cheers,
+Marius
+>
+> (please keep the comment above the entry why the entry is there)
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+>
+>
+>
+>> ---
+>>   drivers/acpi/scan.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+>> index 0c6f06abe3f4..d21c411e9719 100644
+>> --- a/drivers/acpi/scan.c
+>> +++ b/drivers/acpi/scan.c
+>> @@ -1730,6 +1730,12 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+>>   	 */
+>>   		{"BCM4752", },
+>>   		{"LNV4752", },
+>> +	/*
+>> +	 * The LSM303D on the Lenovo Yoga Tablet 2 series is present
+>> +	 * as both ACCL0001 and MAGN0001. As we can only ever register an
+>> +	 * i2c client for one of them, ignore MAGN0001.
+>> +	 */
+>> +		{"MAGN0001", },
+>>   		{}
+>>   	};
+>>   
+>>
+>> base-commit: cb0856346a60fe3eb837ba5e73588a41f81ac05f
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
