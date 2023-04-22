@@ -2,132 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECD96EB8CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886E46EB95A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 15:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjDVLTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 07:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S229920AbjDVNX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 09:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVLTr (ORCPT
+        with ESMTP id S229479AbjDVNXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 07:19:47 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71D11BDA
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 04:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682162386; x=1713698386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+EVsdeVWlcugnqDpDcwqF5ABdA1G/6ft2d3YeGRsGVk=;
-  b=mmyhVjZvA3oJtm7Y2PDTKc6n7787fyFV9dZPhOJg2XZZW+zn9uMeXwqF
-   V6iYE9ooBSwA2qEdHXkPWquLIvCFNS/M3oyY2aWh1tf6dtKu2zO1cHi/i
-   RcXyaOcyf6ssffTeSUeS3fg95Z+NjIECSS9tcnIno1UFE1hU7P/EW6kyw
-   GprZnlhmrI5HaAH4lcL046I4odtZsBW2Rn6HzT/tbqZU/VRYWzDVRSGI2
-   Q1oPsX6RFGxHrnvxlebdVyiQtFWq24XGwzjch4g6SRfzLqq0MN72aj3Kn
-   HhI/x2UwZ8yxoiXDfNzldcwFkZTviWPRXb4mXSxXZj+sT4pi4H7hxqsN5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="343633985"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="343633985"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 04:19:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="816704438"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="816704438"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Apr 2023 04:19:43 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqBHK-000hGO-1B;
-        Sat, 22 Apr 2023 11:19:42 +0000
-Date:   Sat, 22 Apr 2023 19:18:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH v4 2/3] mm, page_owner: Add page_owner_stacks file to
- print out only stacks and their counte
-Message-ID: <202304221906.CKlcyd2r-lkp@intel.com>
-References: <20230421101415.5734-3-osalvador@suse.de>
+        Sat, 22 Apr 2023 09:23:55 -0400
+X-Greylist: delayed 424 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Apr 2023 06:23:44 PDT
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 658BC1FED;
+        Sat, 22 Apr 2023 06:23:44 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 34C5140A03; Sat, 22 Apr 2023 13:22:30 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 34C5140A03
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1682162550;
+        bh=Ii2LxPiMXmjmzfkCcsyLVLNBXvLfF8tTgwZi1LaNQRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q8/8ylASz/AorxRyuNxlecsO+KRPJRHJ3EEE/4vOU8kDMAjP3eMg5CJxEF2XyM6o0
+         WtuRdx9yYgBOJiKYU1ATHcsynFret0nscZad/nxWh3VqTdlJwsDX3MbhuKeqS+a9ZU
+         LY0EpaHeMr+YbfXI4P1TYP5OSTVMwwZ2OJpfPFnY=
+Date:   Sat, 22 Apr 2023 13:22:29 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] watchdog: s3c2410_wdt: Use Use
+ devm_clk_get[_optional]_enabled() helpers
+Message-ID: <20230422112229.GA23896@www.linux-watchdog.org>
+References: <20230304165653.2179835-1-linux@roeck-us.net>
+ <20230306091048.mfrpexle24t6nwzy@pengutronix.de>
+ <20230418065603.rzpiazzw4upitynt@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230421101415.5734-3-osalvador@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230418065603.rzpiazzw4upitynt@pengutronix.de>
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oscar,
+Hi Uwe,
 
-kernel test robot noticed the following build warnings:
+> Hello,
+> 
+> On Mon, Mar 06, 2023 at 10:10:48AM +0100, Uwe Kleine-König wrote:
+> > On Sat, Mar 04, 2023 at 08:56:52AM -0800, Guenter Roeck wrote:
+> > > The devm_clk_get[_optional]_enabled() helpers:
+> > >     - call devm_clk_get[_optional]()
+> > >     - call clk_prepare_enable() and register what is needed in order to
+> > >       call clk_disable_unprepare() when needed, as a managed resource.
+> > > 
+> > > This simplifies the code and avoids the calls to clk_disable_unprepare().
+> > > 
+> > > While at it, use dev_err_probe consistently, and use its return value
+> > > to return the error code.
+> > > 
+> > > Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > 
+> > Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> This patch is in next now as b05a2e58c16c47f3d752b7db1714ef077e5b82d9.
+> My name occurs twice in the tag area, once it is mangled as
+> 
+> 	Uwe Kleine-K=F6nig
+> 
+> I would welcome fixing that (i.e. s/=F6/ö/). When this commit is
+> touched, you can also do s/Use Use/Use/ in the Subject.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc7]
-[cannot apply to akpm-mm/mm-everything next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/lib-stackdepot-Add-a-refcount-field-in-stack_record/20230421-181709
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230421101415.5734-3-osalvador%40suse.de
-patch subject: [PATCH v4 2/3] mm, page_owner: Add page_owner_stacks file to print out only stacks and their counte
-config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230422/202304221906.CKlcyd2r-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+Kind regards,
+wim.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304221906.CKlcyd2r-lkp@intel.com/
-
-smatch warnings:
-lib/stackdepot.c:558 stack_print() warn: unsigned 'stack->size' is never less than zero.
-
-vim +558 lib/stackdepot.c
-
-   551	
-   552	int stack_print(struct seq_file *m, void *v)
-   553	{
-   554		char *buf;
-   555		int ret = 0;
-   556		struct stack_record *stack =v;
-   557	
- > 558		if (!stack->size || stack->size < 0 ||
-   559		    stack->size > PAGE_SIZE || stack->handle.valid != 1 ||
-   560		    refcount_read(&stack->count) < 1)
-   561			return 0;
-   562	
-   563		buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
-   564		ret += stack_trace_snprint(buf, PAGE_SIZE, stack->entries, stack->size, 0);
-   565		scnprintf(buf + ret, PAGE_SIZE - ret, "stack count: %d\n\n",
-   566			  refcount_read(&stack->count));
-   567		seq_printf(m, buf);
-   568		seq_puts(m, "\n\n");
-   569		kfree(buf);
-   570	
-   571	        return 0;
-   572	}
-   573	#endif
-   574	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
