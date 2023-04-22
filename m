@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11166EB616
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 02:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4DA6EB623
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 02:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbjDVADi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 20:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S233778AbjDVAGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 20:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbjDVADV (ORCPT
+        with ESMTP id S232058AbjDVAGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 20:03:21 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6265726B5;
-        Fri, 21 Apr 2023 17:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=38uIKrEkm/KHYjQ9Ld2WXvwa9CxwZa7VCqEcFp/aR3U=; b=B9ID0WJg5NwnBuxfJ/ItrM5eb0
-        wDirm9AZhAj6AcqEcFoinxIjZX1dnypg6RBnfcNTOldLtDU+Tbb2Y6xUC3dOOmEEtSyta56OTCX4P
-        L/JK+aaSRsEwS2giC6+bUg3wVxrfv94OG3K/XwlIZpsgB+K2mpbuUghA1Hd/4RnCGWgefxoy8CGka
-        j+rQyfPUpUZho0VRFLR7qnKy/O1RCq19JaNu+3X1n6ny1BfMYuUyWCcGTzI7pDGKxIn7/rnJSHooU
-        5YLkUBRwP095/yvt8k0diIj2e6mUQMhzLfbeIoqllvXm1yWitz4Ox8UCxsPY0qNQZmizIyVOBnl1g
-        0g/SHlmQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pq0ii-00C7Mx-2a;
-        Sat, 22 Apr 2023 00:03:16 +0000
-Message-ID: <bc5a2d13-4829-0c5a-837d-8842e16cd997@infradead.org>
-Date:   Fri, 21 Apr 2023 17:03:15 -0700
+        Fri, 21 Apr 2023 20:06:07 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B146212D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:06:01 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b980e16b27bso1404943276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 17:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682121960; x=1684713960;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xO+YD26iSNYSmlzjnipo6n//XZnqdiZU5MbXowJFAto=;
+        b=Q9tFlYxp7N+1mxlzl25XZL2tPkhbxE7E+i6RzKw57sF0ZYGke+YtzMSsFk7NRtqVYA
+         tp7vnWOehv4rB6IgTMj2cApLYQ29VNz9DBcEvMVjjBMSqyMHBjDPRPDBgqiI4eNWTbeY
+         Ye8wqhl9VLEgKZexujdLyjyIWkALPRde0TRbtqQwUadnVe55IwF05aic1tn3XZviX9pN
+         1JjmzWe2zjnA9Nxv6CgZT2P9nJWhFNEBDOsm61Gezxxgi+VHvvoBQtl2W26GO+RXraY7
+         lMBP2AaDEFLMMOha30h+IKJkTcqT6nEPw56BC0aniVA8sYXFthEaeNhleJjYHpB66YLX
+         08OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682121960; x=1684713960;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xO+YD26iSNYSmlzjnipo6n//XZnqdiZU5MbXowJFAto=;
+        b=hGX3ZMI5miw1OLeiQhx47KcMwlBYbKs3aBoeoIPM8pek+pXEfGAbFzItpB6RPfBLiw
+         xs03sHyqKYV8cii3ve9iCh3CwxEFE7gv0q+OCoNxV7Kf/Pv5KuXP86zc12KDlNnw9JqE
+         B99kxOa3G1Z3Fe4YuWdBoFobQp8sf3wPTzIgCHXoe1VfRIwL303dKSfDhIJnLqE1Vf82
+         Zry2KU5LjgzTzhHt7DvK3abgIYPwHbW+Fh4B7mBNeU4IzWZbYUfrL76FEudU0NiWmEm2
+         vxfFzSvuOirq/PvkNSdZu6n8MUaRVVG25tL/774Cw0fm9E+fjrBY2jCGTJhZvJHH5K3/
+         IcTA==
+X-Gm-Message-State: AAQBX9c6XAAl26q6M3chA3V0iRfE8muMtriX2cgkDw9nfVhh/Nn2wtte
+        PNVK5L+LHG9MsS/PrC2aU0x2ataY8aPgJoHmTdQkCQ==
+X-Google-Smtp-Source: AKy350Z08K5FgJgpv45/NNHDApgfPP7MHftNwuO+NiJhlwya5xRnHc1+3JSKhFhy3kz4H8xwhcCBrTYHNhl80xudzEM=
+X-Received: by 2002:a0d:d541:0:b0:54f:cbaf:36d with SMTP id
+ x62-20020a0dd541000000b0054fcbaf036dmr2944127ywd.35.1682121960536; Fri, 21
+ Apr 2023 17:06:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 stable-5.10.y stable-5.15.y] docs: futex: Fix
- kernel-doc references after code split-up preparation
-Content-Language: en-US
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        stable <stable@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>
-References: <20230421221741.1827866-1-carnil@debian.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230421221741.1827866-1-carnil@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com> <20230421124938.21974-7-quic_devipriy@quicinc.com>
+In-Reply-To: <20230421124938.21974-7-quic_devipriy@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 22 Apr 2023 03:05:44 +0300
+Message-ID: <CAA8EJpoqq=3o1K=yDaim=e11nEN5n+phJUSd1d5BT_VJkdv6xg@mail.gmail.com>
+Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,67 +75,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please see https://lore.kernel.org/all/20211012135549.14451-1-andrealmeid@collabora.com/
-
-Don't know what has happened to it though.  :(
-
-
-On 4/21/23 15:17, Salvatore Bonaccorso wrote:
-> In upstream commit 77e52ae35463 ("futex: Move to kernel/futex/") the
-> futex code from kernel/futex.c was moved into kernel/futex/core.c in
-> preparation of the split-up of the implementation in various files.
-> 
-> Point kernel-doc references to the new files as otherwise the
-> documentation shows errors on build:
-> 
->     [...]
->     Error: Cannot open file ./kernel/futex.c
->     Error: Cannot open file ./kernel/futex.c
->     [...]
->     WARNING: kernel-doc './scripts/kernel-doc -rst -enable-lineno -sphinx-version 3.4.3 -internal ./kernel/futex.c' failed with return code 2
-> 
-> There is no direct upstream commit for this change. It is made in
-> analogy to commit bc67f1c454fb ("docs: futex: Fix kernel-doc
-> references") applied as consequence of the restructuring of the futex
-> code.
-> 
-> Fixes: 77e52ae35463 ("futex: Move to kernel/futex/")
-> Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+On Fri, 21 Apr 2023 at 15:51, Devi Priya <quic_devipriy@quicinc.com> wrote:
+>
+> The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
+> and two dual-lane based on SNPS core 5.70a
+> The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
+> Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
+> which reuses all the members of 'ops_2_9_0' except for the post_init
+> as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
+> and 1_27_0.
+> Also, modified get_resources of 'ops 2_9_0' to get the clocks
+> from the device tree and modelled the post init sequence as
+> a common function to avoid code redundancy.
+>
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 > ---
-> v1->v2:
->  - Fix typo in description about new target file for futex.c code
->  - Indent block with build log output
-> 
->  Documentation/kernel-hacking/locking.rst                    | 2 +-
->  Documentation/translations/it_IT/kernel-hacking/locking.rst | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-hacking/locking.rst
-> index 6ed806e6061b..a6d89efede79 100644
-> --- a/Documentation/kernel-hacking/locking.rst
-> +++ b/Documentation/kernel-hacking/locking.rst
-> @@ -1358,7 +1358,7 @@ Mutex API reference
->  Futex API reference
->  ===================
->  
-> -.. kernel-doc:: kernel/futex.c
-> +.. kernel-doc:: kernel/futex/core.c
->     :internal:
->  
->  Further reading
-> diff --git a/Documentation/translations/it_IT/kernel-hacking/locking.rst b/Documentation/translations/it_IT/kernel-hacking/locking.rst
-> index bf1acd6204ef..192ab8e28125 100644
-> --- a/Documentation/translations/it_IT/kernel-hacking/locking.rst
-> +++ b/Documentation/translations/it_IT/kernel-hacking/locking.rst
-> @@ -1400,7 +1400,7 @@ Riferimento per l'API dei Mutex
->  Riferimento per l'API dei Futex
->  ===============================
->  
-> -.. kernel-doc:: kernel/futex.c
-> +.. kernel-doc:: kernel/futex/core.c
->     :internal:
->  
->  Approfondimenti
+>  Changes in V3:
+>         - Rebased on top of linux-next/master
+>
+>  drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
+>  1 file changed, 43 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 4ab30892f6ef..3682ecdead1f 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -107,6 +107,7 @@
+>
+>  /* PARF_SLV_ADDR_SPACE_SIZE register value */
+>  #define SLV_ADDR_SPACE_SZ                      0x10000000
+> +#define SLV_ADDR_SPACE_SZ_1_27_0               0x08000000
+>
+>  /* PARF_MHI_CLOCK_RESET_CTRL register fields */
+>  #define AHB_CLK_EN                             BIT(0)
+> @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
+>         struct reset_control *rst;
+>  };
+>
+> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS             5
+>  struct qcom_pcie_resources_2_9_0 {
+> -       struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
+> +       struct clk_bulk_data *clks;
+>         struct reset_control *rst;
+> +       int num_clks;
+>  };
+>
+>  union qcom_pcie_resources {
+> @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
+>         struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>         struct dw_pcie *pci = pcie->pci;
+>         struct device *dev = pci->dev;
+> -       int ret;
+>
+> -       res->clks[0].id = "iface";
+> -       res->clks[1].id = "axi_m";
+> -       res->clks[2].id = "axi_s";
+> -       res->clks[3].id = "axi_bridge";
+> -       res->clks[4].id = "rchng";
+> -
+> -       ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> -       if (ret < 0)
+> -               return ret;
+> +       res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
+> +       if (res->clks < 0)
+> +               return res->num_clks;
+>
+>         res->rst = devm_reset_control_array_get_exclusive(dev);
+>         if (IS_ERR(res->rst))
+> @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
+>  {
+>         struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>
+> -       clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +       clk_bulk_disable_unprepare(res->num_clks, res->clks);
+>  }
+>
+>  static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+> @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+>
+>         usleep_range(2000, 2500);
+>
+> -       return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +       return clk_bulk_prepare_enable(res->num_clks, res->clks);
+>  }
+>
+> -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
+>  {
+>         struct dw_pcie *pci = pcie->pci;
+>         u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>         u32 val;
+>         int i;
+>
+> -       writel(SLV_ADDR_SPACE_SZ,
+> -               pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> -
+>         val = readl(pcie->parf + PARF_PHY_CTRL);
+>         val &= ~PHY_TEST_PWR_DOWN;
+>         writel(val, pcie->parf + PARF_PHY_CTRL);
+> @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>         return 0;
+>  }
+>
+> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
+> +{
+> +       writel(SLV_ADDR_SPACE_SZ_1_27_0,
+> +              pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> +
+> +       qcom_pcie_post_init(pcie);
+> +
+> +       return 0;
+> +}
+> +
+> +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> +{
+> +       writel(SLV_ADDR_SPACE_SZ,
+> +              pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> +
+> +       qcom_pcie_post_init(pcie);
+> +
+> +       return 0;
+> +}
+
+I'm not sure about moving the SLV_ADDR_SPACE_SIZE initialization from
+init() to post_init(). Probably a better solution might be to have two
+init() callbacks and to call the common function from both of them.
+
+> +
+>  static int qcom_pcie_link_up(struct dw_pcie *pci)
+>  {
+>         u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
+>         .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>  };
+>
+> +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
+> +static const struct qcom_pcie_ops ops_1_27_0 = {
+> +       .get_resources = qcom_pcie_get_resources_2_9_0,
+> +       .init = qcom_pcie_init_2_9_0,
+> +       .post_init = qcom_pcie_post_init_1_27_0,
+> +       .deinit = qcom_pcie_deinit_2_9_0,
+> +       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+> +};
+> +
+>  static const struct qcom_pcie_cfg cfg_1_0_0 = {
+>         .ops = &ops_1_0_0,
+>  };
+> @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
+>         .ops = &ops_2_9_0,
+>  };
+>
+> +static const struct qcom_pcie_cfg cfg_1_27_0 = {
+> +       .ops = &ops_1_27_0,
+> +};
+> +
+>  static const struct dw_pcie_ops dw_pcie_ops = {
+>         .link_up = qcom_pcie_link_up,
+>         .start_link = qcom_pcie_start_link,
+> @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>         { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
+>         { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
+>         { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
+> +       { .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
+>         { .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
+>         { .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
+>         { .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
+> --
+> 2.17.1
+>
+
 
 -- 
-~Randy
+With best wishes
+Dmitry
