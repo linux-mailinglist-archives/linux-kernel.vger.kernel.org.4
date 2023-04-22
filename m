@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33C46EB902
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 14:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FA36EB905
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 14:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjDVMDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 08:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S229704AbjDVMGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 08:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjDVMDj (ORCPT
+        with ESMTP id S229556AbjDVMGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 08:03:39 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B751FC8
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 05:03:37 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4edb9039a4cso2666538e87.3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 05:03:37 -0700 (PDT)
+        Sat, 22 Apr 2023 08:06:07 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5BF1FC8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 05:06:05 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4ec8da7aaf8so2734675e87.2
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 05:06:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682165016; x=1684757016;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1682165163; x=1684757163;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GTXIba6kgfgnk6XMMPm6IqSpaTy13D9nbXjftZoHK38=;
-        b=GPuC2HOTbLafP1qatCOmNgcyDBTReKAPNo5aHGQ4ZHZB2PpLAM7ftc1KrLDydpuJa7
-         8LP0KnbHQYk5IdlDEyiGzJS+B9rz6VOWi1CxSu4hb4jkJqKChcWRHMGsPJKNEhRSD2wF
-         m2hUQCCKsdDFPDvUMSrYnwcyYXV3wf+hBt8xwtb5aLvC9PbotDn01SViambNGlAW0uIj
-         UOK4xbMlwqQSjRycWGDZ6nU4UqgqbR0aSikN3/6eiBeuxo13ELHpXbVakoYTWmCondvm
-         AoVz6iJUsbiqiXWjgjhLJpSm+aqZmvhxYjjhgKa5/lSIDqMiJLByibyI1qpl9Gmw7ZSx
-         g7jQ==
+        bh=h8xysbB7X/7A4n/D8hoYzoSsechy/AMNA5gr6X9cM5A=;
+        b=s/2FOzpY8njzNnG01Ka5k8qMmzCnFrvFUqkUlGZyWPq2Orv+7mi7xeieovU8TGK37e
+         tEzZi2WbK1/My/xgqtLm5SRFUfo2vSJfnigJIIMmgCwxWuhi/Zla1o9OPHsZkDjbZGwP
+         fEQFkfXiiQoeETXGSGEQXoQE30KDtTnQ6yUVcTALy8LFZCSdgLtfhpcOMU6HxM/7y+zG
+         aabbxrsHjQocTxDgKRZLIrGCj23kqU7UvcGtjpOMr6dwJy6wPri8M30u5QVgdkVxcSIt
+         oJgLZsqBfK/bANJ2SelwPUgeNhx6arq39LuQThqb5DhN7cQ8IMc8362IsRE89sulPQJ/
+         /x7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682165016; x=1684757016;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1682165163; x=1684757163;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GTXIba6kgfgnk6XMMPm6IqSpaTy13D9nbXjftZoHK38=;
-        b=VvjR21bbP/0iFA5WtDKZJYldQKPjqSRHU5Mm4i0bAenbFC4wEEARoSjTU1ySRGmxyM
-         6IceSJeri60ENVSvEKXlFBHOqBppfC/9KMKraA7z4JyEgo5fkmSjahtD8z27ER56T273
-         jYTWbgn8oGS7jrgNDRTMMgEiHl2ncnROUknJrB+iyiKPshS0L8+BcXMjtf4SbWcuimJl
-         8UTiuCgorufEUrFGha2MMmmKILvcOsgmlOpGQ0ezsiXx8NTGr61u3kWenfYrzXbGobxf
-         a+ym0pquSCr522nG6+QRP486Ara8GUKKQD35GFw9vDDQAIoHdSuXKg0/wM2TcegnnDpp
-         tccA==
-X-Gm-Message-State: AAQBX9ciip9OFMQEWR4i5BH5uy7VCU8t9Gk87/QQd6z9xCk4rcUITbo2
-        8r6ZYftvIqrUmISBrFQgn1mHOA==
-X-Google-Smtp-Source: AKy350ZSfGZXg/lW+W7YdjTftfPkbAG/5Xs05BCEMR1S/VVCsIkWnzZK2Qg0eD7kyb+fknQVOxyH/Q==
-X-Received: by 2002:ac2:5a46:0:b0:4e8:47cd:b4ba with SMTP id r6-20020ac25a46000000b004e847cdb4bamr2350700lfn.13.1682165015987;
-        Sat, 22 Apr 2023 05:03:35 -0700 (PDT)
+        bh=h8xysbB7X/7A4n/D8hoYzoSsechy/AMNA5gr6X9cM5A=;
+        b=Q03owLVVHAvSBAvlD+0s4dB8YdiQN2CbrKwhcFsNH7djGiHeY/1wBNcUgRghDT8l8a
+         i39Kn3TOA3N7uGGdnobza0BL7lnCgLH7UlgmFewRCcEdrxsoc1/ILgs4RKL1WEsbCzT5
+         +7TcTxsmNe0yqtLZwPVbRJTX5me0VTrF/SsT3Hz2BsgwNEHu6F4FMxlGhJ4hrqGOfbTI
+         tZNUX9fgHA6lcHPLUGCfKpCE5T0myVrhlXUXmJNi1sNUqX5t9dZ91rqGX+9POTq47h7l
+         /yUpEwkLR3YgmSf+fuE0+0d/lnJGRRNyIY/ECBPgNZTzRL0zdZm1xus6GhQOXH2NtWRI
+         pzlw==
+X-Gm-Message-State: AAQBX9ejp7/i19rWFVApqvkD9GzMpybrEgRTZHd5lHkkCMJL1GRWEjBp
+        gA2RraiR/YWnjnTEo+xjOSKoyg==
+X-Google-Smtp-Source: AKy350bipweNDmu8aBHDiKdbJuJowLsE0ToVDrHVVUoJphkdNedyPHdcn0hyhQNWsgexdEQuix8voA==
+X-Received: by 2002:a2e:b0d3:0:b0:2a7:80f6:e503 with SMTP id g19-20020a2eb0d3000000b002a780f6e503mr1473364ljl.1.1682165163398;
+        Sat, 22 Apr 2023 05:06:03 -0700 (PDT)
 Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056512024a00b004edc3bd7fa1sm872153lfo.201.2023.04.22.05.03.34
+        by smtp.gmail.com with ESMTPSA id y10-20020ac2420a000000b004e811e3554dsm876346lfh.185.2023.04.22.05.06.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Apr 2023 05:03:35 -0700 (PDT)
-Message-ID: <0f2af683-07f9-7fc7-a043-ee55e41d65c3@linaro.org>
-Date:   Sat, 22 Apr 2023 14:03:33 +0200
+        Sat, 22 Apr 2023 05:06:02 -0700 (PDT)
+Message-ID: <62ae510f-428a-78e5-75db-e32d4039db0f@linaro.org>
+Date:   Sat, 22 Apr 2023 14:06:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH RFC 0/4] Add WCN3988 Bluetooth support for Fairphone 4
+Subject: Re: [RFT RFC PATCH] arm64: dts: qcom: sdm630-nile: correct duplicated
+ reserved memory node
 Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
-        Rocky Liao <rjliao@codeaurora.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230419211921.79871-1-krzysztof.kozlowski@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
+In-Reply-To: <20230419211921.79871-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,57 +82,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 21.04.2023 16:11, Luca Weiss wrote:
-> Just to start with the important part why this is an RFC:
+On 19.04.2023 23:19, Krzysztof Kozlowski wrote:
+> SoC DTSI already comes with 85800000 reserved memory node, so assume the
+> author wanted to update its length.  This fixes dtbs W=1 warning:
 > 
-> While Bluetooth chip init works totally fine and bluez seems to be
-> fairly happy with it, there's a (major) problem with scanning, as shown
-> with this bluetoothctl snippet and dmesg snippet:
+>   Warning (unique_unit_address_if_enabled): /reserved-memory/qhee-code@85800000: duplicate unit-address (also used in node /reserved-memory/reserved@85800000)
 > 
->   [bluetooth]# scan on
->   Failed to start discovery: org.bluez.Error.InProgress
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
->   [  202.371374] Bluetooth: hci0: Opcode 0x200b failed: -16
+> ---
 > 
-> This opcode should be the following:
-> 
->   include/net/bluetooth/hci.h:#define HCI_OP_LE_SET_SCAN_PARAM    0x200b
-Not a bluetooth expert or anything, but does that thing support
-bluetooth LE?
+> What was the original code intention?
+Hm, perhaps the original introduction had the common definition
+wrong.. I see a downstream sdm630.dtsi and sdm660.dtsi having
+the qhee_code sized at 0x37...
+
+I'm fine with either resolution, I think..
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
+>  arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> Unfortunately trying various existing code branches in the Bluetooth
-> driver doesn't show any sign of making this work and I don't really know
-> where to look to debug this further.
-> 
-> On the other hand "discoverable on" makes the device show up on other
-> devices during scanning , so the RF parts of the Bluetooth chip are
-> generally functional for sure.
-> 
-> Any ideas are welcome.
-> 
-> @Bjorn: Patch "arm64: dts: qcom: sm6350: add uart1 node" should be fine
-> to take regardless the RFC status, I don't think the problem is caused
-> there.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-> Luca Weiss (4):
->       dt-bindings: net: qualcomm: Add WCN3988
->       Bluetooth: btqca: Add WCN3988 support
->       arm64: dts: qcom: sm6350: add uart1 node
->       arm64: dts: qcom: sm7225-fairphone-fp4: Add Bluetooth
-> 
->  .../bindings/net/bluetooth/qualcomm-bluetooth.yaml |  2 +
->  arch/arm64/boot/dts/qcom/sm6350.dtsi               | 63 ++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts  | 17 ++++++
->  drivers/bluetooth/btqca.c                          | 13 ++++-
->  drivers/bluetooth/btqca.h                          | 12 ++++-
->  drivers/bluetooth/hci_qca.c                        | 12 +++++
->  6 files changed, 115 insertions(+), 4 deletions(-)
-> ---
-> base-commit: cf4c0112a0350cfe8a63b5eb3377e2366f57545b
-> change-id: 20230421-fp4-bluetooth-b36a0e87b9c8
-> 
-> Best regards,
+> diff --git a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
+> index 2ca713a3902a..3033723fc6ff 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
+> @@ -138,11 +138,6 @@ debug@ffb00000 {
+>  			no-map;
+>  		};
+>  
+> -		reserved@85800000 {
+> -			reg = <0x00 0x85800000 0x00 0x3700000>;
+> -			no-map;
+> -		};
+> -
+>  		cont_splash_mem: splash@9d400000 {
+>  			reg = <0 0x9d400000 0 (1920 * 1080 * 4)>;
+>  			no-map;
+> @@ -256,6 +251,10 @@ &pon_resin {
+>  	linux,code = <KEY_VOLUMEUP>;
+>  };
+>  
+> +&qhee_code {
+> +	reg = <0x00 0x85800000 0x00 0x3700000>;
+> +};
+> +
+>  &qusb2phy0 {
+>  	status = "okay";
+>  
