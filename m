@@ -2,105 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601836EBA34
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 18:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BC86EBA22
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 18:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjDVQJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 12:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S229670AbjDVQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 12:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjDVQJV (ORCPT
+        with ESMTP id S229533AbjDVQCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 12:09:21 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A17211E;
-        Sat, 22 Apr 2023 09:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682179758; x=1713715758;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UxZNNg2iR21QuxXZOviYjeKG5ki4ex9gVhzKOBg6N/A=;
-  b=RgXpeKe73eWRpqI/xu8WbUY5J5zvkrn+/cFX+14ijyD0SEw28TBi7CTU
-   m3aQVpQimiAWBQxR/s/R6/8EDQaIYQbkYL5ztJAS1kTvIpaeBcnZBQW3/
-   w5IP5MPz3jIA+Wh6GBpAyoiOkuHZrLgEFDF2dNM92TVVhoglSuUI+Wb9e
-   CB/oxAmwaHjXxj/MMhFEt4Dmvo35BKMKzZxRvI924O7t9cr8i0KfgGGGi
-   /8bgtAT2qCDFFLBTyRR9L74XrzseRbbJHFrEqzCwdyl5PRIdWxrcjxIWa
-   JNAAu98NCDzEufBgYYls6OCgm95GeJ79cNg0cY7cOogF964EeddTI2e7q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="325771755"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="325771755"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 09:09:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="692580814"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="692580814"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 22 Apr 2023 09:09:14 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pqFnU-003fcv-2G;
-        Sat, 22 Apr 2023 19:09:12 +0300
-Date:   Sat, 22 Apr 2023 19:09:12 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org,
-        mazziesaccount@gmail.com, oe-kbuild-all@lists.linux.dev,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] iio: accel: Add support for Kionix/ROHM
- KX132-1211 accelerometer
-Message-ID: <ZEQGqFLIyxm5XENQ@smile.fi.intel.com>
-References: <cef09595632a40eff8a0864fea2e0eb6653930a5.1682019544.git.mehdi.djait.k@gmail.com>
- <202304220729.FCofPRvH-lkp@intel.com>
+        Sat, 22 Apr 2023 12:02:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3151736;
+        Sat, 22 Apr 2023 09:02:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EFD1611C1;
+        Sat, 22 Apr 2023 16:02:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C543FC433EF;
+        Sat, 22 Apr 2023 16:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682179351;
+        bh=PoumuO8WQwaap5HmG8pUFcuCsPm1QbWRabiXoQhhiFw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GfcXZ350PyHfmCKruGAr1cbbVQm6ouJBElpPWHRMs/48iKCGdS/SsXAErj6MZnwuZ
+         aUG1WKCnkkqlbKOTikhQhwOjaQtN+OP/fn8Cz4YJapnZZnIU7EelWLfpPCuAHUP3su
+         uyky8tEmMK5k3uZuwb6Zt/motVVHEE7QQ8xLERT4BLZAU7Wn7VBZcViJCcD02OayvM
+         NNw7vIhy/eWJ78QL9TZ/F8RlQnMp5EqkofRMR1pHSKvKM/TkpFqkbSWI1N57glnnCX
+         iHH1pKjYX3fNm6YJYkphKYg7IRRN5gRRbKABK9ck+TKGJDkAV9PQZuP036T4OUSLdl
+         3U75eCPr7Riwg==
+Date:   Sat, 22 Apr 2023 17:18:07 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: iio: potentiometer: Add the Renesas
+ X9250 potentiometers
+Message-ID: <20230422171807.510d7fa3@jic23-huawei>
+In-Reply-To: <20230421085245.302169-2-herve.codina@bootlin.com>
+References: <20230421085245.302169-1-herve.codina@bootlin.com>
+        <20230421085245.302169-2-herve.codina@bootlin.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202304220729.FCofPRvH-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 07:19:44AM +0800, kernel test robot wrote:
-> Hi Mehdi,
+On Fri, 21 Apr 2023 10:52:43 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
+
+> The Renesas X9250 is a quad digitally controlled potentiometers.
 > 
-> kernel test robot noticed the following build warnings:
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-I believe it's not just a warning, it's a full functional error in the code.
+Hi Herve,
 
->    686	{
->    687		struct device *dev = regmap_get_device(data->regmap);
->    688		__le16 buf_status;
->    689		int ret, fifo_bytes;
->    690	
->    691		ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
->    692				       &buf_status, sizeof(buf_status));
->    693		if (ret) {
->    694			dev_err(dev, "Error reading buffer status\n");
->    695			return ret;
->    696		}
->    697	
->  > 698		buf_status &= data->chip_info->buf_smp_lvl_mask;
->    699		fifo_bytes = le16_to_cpu(buf_status);
+Historically we've been a bit lax in IIO bindings in always making
+sure the per supplies are included.  As a result we frequently get
+them added later and it just makes things messier than they should
+be.
 
-You need to mask in the same endianess space, i.o.w. either on CPU or device side.
+So please add vcc-supply from the start.  V+ and V- are a little trickier.
+I was expecting datasheet to say they should be symmetric about 0 but it
+doesn't. So they could be two independent supplies.
 
-I believe you wanted to have fifo_bytes to be masked, but I'm not sure.
+Also make it required as my current understanding is that we should
+do that for supplies that are definitely present even if we could
+rely on the fallback to regulator stubs if they aren't supplied.
+So add the 3 supplies to required as well.
 
->    701		return fifo_bytes;
->    702	}
+Less of a requirement, but you might want to also provide an optional 
+gpio for the not WP pin on basis someone might wire it up to the host processor.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Beyond the comment Krzystof made on iio.yaml this otherwise looks good to me.
 
+Thanks,
+
+Jonathan
+
+
+
+> ---
+>  .../iio/potentiometer/renesas,x9250.yaml      | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml b/Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
+> new file mode 100644
+> index 000000000000..dfa36b23eb0d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/potentiometer/renesas,x9250.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas X9250 quad potentiometers
+> +
+> +maintainers:
+> +  - Herve Codina <herve.codina@bootlin.com>
+> +
+> +description:
+> +  The Renesas X9250 integrates four digitally controlled potentiometers.
+> +  On each potentiometer, the X9250T has a 100 kOhms total resistance and the
+> +  X9250U has a 50 kOhms total resistance.
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml
+> +  - $ref: /schemas/iio/iio.yaml
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - renesas,x9250t
+> +      - renesas,x9250u
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#io-channel-cells':
+> +    const: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 2000000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#io-channel-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        potentiometer@0 {
+> +            compatible = "renesas,x9250t";
+> +            reg = <0>;
+> +            spi-max-frequency = <2000000>;
+> +            #io-channel-cells = <1>;
+> +        };
+> +    };
 
