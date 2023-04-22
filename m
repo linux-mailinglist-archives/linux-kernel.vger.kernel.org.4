@@ -2,133 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3426EB708
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 05:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0FD6EB713
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 05:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjDVDSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 23:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S229652AbjDVDa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 23:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDVDR5 (ORCPT
+        with ESMTP id S229548AbjDVDaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 23:17:57 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B86619B4;
-        Fri, 21 Apr 2023 20:17:55 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a5197f00e9so24153665ad.1;
-        Fri, 21 Apr 2023 20:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682133475; x=1684725475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ro9WxBg3nAsMPx4XvKLNPdXQpuH038dO7bV4dlzLzyM=;
-        b=ocKjaQmFsMBBPD53/mf+PXlwKLosIf2W1+0alr1mh8QE0TjaMhkCHb62g0JN17fRxg
-         CflH83+LrJhEF/mE8j18M7flZAv4q6/4WNzM5d/q1LBXMNnDwrvX/x2LTsegvfiC5LT6
-         o9M8DczIUyb5Zbb9NpWo+23r3ZndIBl7zHJcl8SI9w1hioNFRTATnh1ej8BozYekcFZY
-         qJYApoXY1xtVN+hJRtWUmZj6VtAKoihTn8B3R/blOE++CLI2qroUx/10tuhQ56aImoqF
-         8C881wG6PT+s22vcEfgEhA5uJU1bUVqpo+EEpqHFAlWPUeubPkPNBEhKcO0X9LxQCwxF
-         kQPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682133475; x=1684725475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ro9WxBg3nAsMPx4XvKLNPdXQpuH038dO7bV4dlzLzyM=;
-        b=Oth07RriRhrCJCtLaAmf15NivAXVAgi8SmtVTqJtu0jvKZWE2PylgvUxsye4AKPPhs
-         phgu+8EOkrBqi61Uwp8LT0pmOG7OomeTxUfBzw6rck41odD3beZIcOBXO0E0GROG9V8k
-         QyKzvia+fGX4n6hy8zeq2BmpZ1LdmYKxLi8egF9q7U46SoQ58WeZUwgGDAN9CTqEZejZ
-         a+K6ZcujhGQvHkMcegNB4A390kLltcVUYaDa6pyPu/hzFxPjUQZqRI0rI+LVj5KW398X
-         ucaZqMpeyVt9yx5TC631AhpkhAhT4hG9Tn9oUdl/wkhDOpZAv3J+yyTRp9PRw4jO4zoK
-         9XyA==
-X-Gm-Message-State: AAQBX9dj3NVD4VVJSgvrQkbD+rmud5uJGAXpvGqP4ug7LMXa+v8pwsn7
-        v+ia3VNJgEu1AAs6FtPzyBY=
-X-Google-Smtp-Source: AKy350ahrxtMfvGaOr/CB/BRc/hQA+C6Ggm3IkcnUj5nQb6eRkPlyvwmkRxMb9/q89kqCUBlY+qMfQ==
-X-Received: by 2002:a17:902:a989:b0:1a6:5575:9059 with SMTP id bh9-20020a170902a98900b001a655759059mr6736489plb.62.1682133474789;
-        Fri, 21 Apr 2023 20:17:54 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-89.three.co.id. [180.214.233.89])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1709027b8800b001a661000398sm3287567pll.103.2023.04.21.20.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 20:17:54 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 83E371068A8; Sat, 22 Apr 2023 10:17:50 +0700 (WIB)
-Date:   Sat, 22 Apr 2023 10:17:50 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ardb@kernel.org, kraxel@redhat.com,
-        dovmurik@linux.ibm.com, elena.reshetova@intel.com,
-        dave.hansen@linux.intel.com, Dhaval.Giani@amd.com,
-        michael.day@amd.com, pavankumar.paluri@amd.com,
-        David.Kaplan@amd.com, Reshma.Lal@amd.com, Jeremy.Powell@amd.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        alexander.shishkin@linux.intel.com, thomas.lendacky@amd.com,
-        tglx@linutronix.de, dgilbert@redhat.com, dinechin@redhat.com,
-        linux-coco@lists.linux.dev, berrange@redhat.com, mst@redhat.com,
-        tytso@mit.edu, jikos@kernel.org, joro@8bytes.org, leon@kernel.org,
-        richard.weinberger@gmail.com, lukas@wunner.de, jejb@linux.ibm.com,
-        cdupontd@redhat.com, jasowang@redhat.com, sameo@rivosinc.com,
-        bp@alien8.de, seanjc@google.com, security@kernel.org
-Subject: Re: [PATCH] docs: security: Confidential computing intro and threat
- model
-Message-ID: <ZENR3go7UFkd7/0a@debian.me>
-References: <20230327141816.2648615-1-carlos.bilbao@amd.com>
- <ZCQVmIKXWXX2xvo-@kroah.com>
+        Fri, 21 Apr 2023 23:30:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCC91BDA;
+        Fri, 21 Apr 2023 20:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7855563ED5;
+        Sat, 22 Apr 2023 03:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4CD9C4339B;
+        Sat, 22 Apr 2023 03:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682134218;
+        bh=mNB1LmqbGggsV1k/w/tZ1bOZ01KD1NhrCVUa295o8V4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=L3q/MW9u5tkh2SzksqQzkahHC8MedkWIAYZWBv4Srt0YhyH6O0IB1D2u8zMrtFUiU
+         HJevb4B1bsVStLQk3rdFZtKo3AgGONkyolSHVmpw6SxQ8c/Oz5sIVxYsaxbhhy1vh7
+         7F+/zxpwFjiEV92aMIzZip+JmK9xrkxjzpqwAcm0svBzD6pMQX1MeM2PpkMNj2skaO
+         g7DfEpTShylPl3E0jp6TlJ5Muqb7b7B0iRGx7e/5yYE2Bi0GDlcG+PbZ3eq0fC7k4T
+         0sK7zS7yDaAAIDAhDcYDAOmRaalR5WEftiOeEJSE7P3Ax+aMZ8znN9haUna2c8l4+e
+         e5l5stDuBfhow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADBE9E270E1;
+        Sat, 22 Apr 2023 03:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3g8wlG6vw73gCno8"
-Content-Disposition: inline
-In-Reply-To: <ZCQVmIKXWXX2xvo-@kroah.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: dsa: qca8k: fix LEDS_CLASS dependency
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168213421870.22496.6722225959216080417.git-patchwork-notify@kernel.org>
+Date:   Sat, 22 Apr 2023 03:30:18 +0000
+References: <20230420213639.2243388-1-arnd@kernel.org>
+In-Reply-To: <20230420213639.2243388-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ansuelsmth@gmail.com, arnd@arndb.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---3g8wlG6vw73gCno8
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed, Mar 29, 2023 at 12:40:24PM +0200, Greg KH wrote:
-> > +   * - Guest malicious configuration
-> > +     - A malicious host modifies one of the following guest's
-> > +       configuration:
-> > +
-> > +       1. Guest firmware or bootloader
-> > +
-> > +       2. Guest kernel or module binaries
-> > +
-> > +       3. Guest command line parameters
-> > +
-> > +       This allows the host to break the integrity of the code running
-> > +       inside a CoCo guest and violate the CoCo security objectives.
->=20
-> So hosts are not allowed to change this?  I don't understand the use of
-> "violate" here, sorry.
+On Thu, 20 Apr 2023 23:36:31 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> With LEDS_CLASS=m, a built-in qca8k driver fails to link:
+> 
+> arm-linux-gnueabi-ld: drivers/net/dsa/qca/qca8k-leds.o: in function `qca8k_setup_led_ctrl':
+> qca8k-leds.c:(.text+0x1ea): undefined reference to `devm_led_classdev_register_ext'
+> 
+> [...]
 
-I think the situation described above is when malicious actors gain
-control of a CoCo host.
+Here is the summary with links:
+  - net: dsa: qca8k: fix LEDS_CLASS dependency
+    https://git.kernel.org/netdev/net-next/c/33c1af8e2c75
 
-Thanks.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---3g8wlG6vw73gCno8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZENR2AAKCRD2uYlJVVFO
-ox5gAQDr0xDZcHVst4ZSWAsItsLfu4e/paGzNVDkaipTysmkPgEA5zp3+WfbAkW+
-XHdKvwKTa9cvmJFockTMXNcdcO9C4gI=
-=yGwU
------END PGP SIGNATURE-----
-
---3g8wlG6vw73gCno8--
