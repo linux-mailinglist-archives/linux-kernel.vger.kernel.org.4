@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970DF6EB879
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1AA6EB87D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDVKOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 06:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
+        id S229839AbjDVKPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 06:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjDVKOO (ORCPT
+        with ESMTP id S229838AbjDVKOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 06:14:14 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C497198A
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 03:13:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yWTtb8X1PWzMP0hPPxIA/opEVBGXs9woxLUOBTFzLto=; b=URet+H5Q9KNLN5qCHeLNLyT2Dj
-        VdmGkSAxj3Aw6ybOEfB6vzr+dUMOBqnWSFvi3Bd5pitTjfKJP2SNfR/vY7Oe9v1BLQBJYLfVGBVw8
-        grovCMQgKDmjOmWjR8n9goZ4mDCETMvmnsWxJ+YCQ0ia7UEN12MtZcPh7Zp1gptnlWKggwAIvQ8tx
-        hVQm9DMwf0g+yuHfcE1gj5CAtC81EgEW+OQJE27quMIAui6IV9YYoS6XDANIJEjCad9Apu0W6LmCi
-        kYTTbmDsMm8xKDu+lxAzToGhkxyV0u+gdVR2F/fxbsjvpKzBK0rnwB3P5OCzZ6YzJTFzQq/9BpXuB
-        toC7A3RQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pqAFD-006CPK-2w;
-        Sat, 22 Apr 2023 10:13:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 70B6E300338;
-        Sat, 22 Apr 2023 12:13:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2BB4623BD94B2; Sat, 22 Apr 2023 12:13:25 +0200 (CEST)
-Date:   Sat, 22 Apr 2023 12:13:25 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qyousef@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Zimuzo Ezeozue <zezeozue@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Connor O'Brien <connoro@google.com>
-Subject: Re: [PATCH v3 09/14] sched: Split scheduler execution context
-Message-ID: <20230422101325.GC1214746@hirez.programming.kicks-ass.net>
-References: <20230411042511.1606592-1-jstultz@google.com>
- <20230411042511.1606592-10-jstultz@google.com>
+        Sat, 22 Apr 2023 06:14:30 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C5B1FD8;
+        Sat, 22 Apr 2023 03:14:18 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 13B4C12C8D;
+        Sat, 22 Apr 2023 13:14:16 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id EDE3D12C8C;
+        Sat, 22 Apr 2023 13:14:15 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id BC1FE3C0435;
+        Sat, 22 Apr 2023 13:14:15 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 33MAEDsP005330;
+        Sat, 22 Apr 2023 13:14:13 +0300
+Date:   Sat, 22 Apr 2023 13:14:13 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+cc:     Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: [PATCH nf-next v3 0/4] ipvs: Cleanups for v6.4
+In-Reply-To: <ZEMYjOlXKd+6zsgw@calendula>
+Message-ID: <deeef4d5-208b-2d48-4714-5be1b9bc4393@ssi.bg>
+References: <20230409-ipvs-cleanup-v3-0-5149ea34b0b9@kernel.org> <a873ffc-bcdf-934f-127a-80188e8b33e6@ssi.bg> <ZEMYjOlXKd+6zsgw@calendula>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411042511.1606592-10-jstultz@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:25:06AM +0000, John Stultz wrote:
-> +	/*
-> +	 * XXX how does (proxy exec) mutexes and RT_mutexes work together?!
-> +	 */
 
-They don't, if PE works we can delete all of rt-mutex.
+	Hello,
+
+On Sat, 22 Apr 2023, Pablo Neira Ayuso wrote:
+
+> On Mon, Apr 17, 2023 at 07:59:35PM +0300, Julian Anastasov wrote:
+> > 
+> > On Mon, 17 Apr 2023, Simon Horman wrote:
+> > 
+> > > this series aims to clean up IPVS in several ways without
+> > > implementing any functional changes, aside from removing
+> > > some debugging output.
+> > > 
+> > > Patch 1/4: Update width of source for ip_vs_sync_conn_options
+> > >            The operation is safe, use an annotation to describe it properly.
+> > > 
+> > > Patch 2/4: Consistently use array_size() in ip_vs_conn_init()
+> > >            It seems better to use helpers consistently.
+> > > 
+> > > Patch 3/4: Remove {Enter,Leave}Function
+> > >            These seem to be well past their use-by date.
+> > > 
+> > > Patch 4/4: Correct spelling in comments
+> > > 	   I can't spell. But codespell helps me these days.
+> > > 
+> > > All changes: compile tested only!
+> > > 
+> > > ---
+> > > Changes in v3:
+> > > - Patch 2/4: Correct division by 1024.
+> > >              It was applied to the wrong variable in v2.
+> > > - Add Horatiu's Reviewed-by tag.
+> > > 
+> > > Changes in v2:
+> > > - Patch 1/4: Correct spelling of 'conn' in subject.
+> > > - Patch 2/4: Restore division by 1024. It was lost on v1.
+> > > 
+> > > ---
+> > > Simon Horman (4):
+> > >       ipvs: Update width of source for ip_vs_sync_conn_options
+> > >       ipvs: Consistently use array_size() in ip_vs_conn_init()
+> > >       ipvs: Remove {Enter,Leave}Function
+> > >       ipvs: Correct spelling in comments
+> > 
+> > 	The patchset looks good to me, thanks!
+> > 
+> > Acked-by: Julian Anastasov <ja@ssi.bg>
+> 
+> Applied, sorry Julian, I missed your Acked-by: tag.
+
+	No problem :)
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
