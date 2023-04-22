@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370EA6EB84F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF506EB853
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjDVJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 05:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S229656AbjDVJ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 05:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVJuf (ORCPT
+        with ESMTP id S229451AbjDVJ4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 05:50:35 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D3C1987;
-        Sat, 22 Apr 2023 02:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1682157023; i=deller@gmx.de;
-        bh=LinhArFfnf7KGQs8kxbfvg2R3rvrChV9Pz18t9V6fps=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=GtrZhGJCWkZj6IhoDJn5F0r5esIH6WhD1wBiethk8ztvVgbycemkEw+TvHxXDFqm1
-         zAfDBDRN9998n9P47ZJvp8QtZn9RHNRNtZhrCTMd/bfBRU+XE+xcTSx2slHoixqRM9
-         3i9FJ1o9/3i4GOcviWORwONKVSu17I98j4cYlPCxwKkK3j27+2lVGeKM4k32EWr7LQ
-         VQoWcZ5SuW8tWm7uC/jk7f8EXVfuMYP4n3UBGOG5vBcxhLCOeIlzLGOpIbjR1jVIpP
-         VIqHFvL84+80LPlJ/6TmuYEx1/L5ehJz8I4XQ0VJ/mfvfBeBzs3jxLgIxeB8bgMJob
-         bm/FU2aWPYRRw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.157.94]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MDysg-1q01Fr0jIK-009to4; Sat, 22
- Apr 2023 11:50:23 +0200
-Message-ID: <9f6547e5-ba5d-11bf-3646-2f65b4a6a2ea@gmx.de>
-Date:   Sat, 22 Apr 2023 11:50:22 +0200
+        Sat, 22 Apr 2023 05:56:39 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C550010F3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:56:37 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4ec81779f49so2641915e87.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682157396; x=1684749396;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RDQgb0udGi4TgE1jwB/Uj7tuQtIfaUvyOe998bYU7/g=;
+        b=PeyUjnRlP+n1PSyJQg8r/o4a3qsGPFuQeRlzl3dNs8XBPOq63Kp24A2TnJH+iSjJmA
+         0OdvWXXAu3dl6WqC+hWIvz2SworqCPnLLJ0aDIDoev0s4BiveJ+7Uj8AtATn81OoZziD
+         5Zr6Nuwo/XTa4hJNPgSS/PBuwT5FKswlkSKTQX/YYcJUADyjlnpr8pqylvaLUV8Ccja/
+         CvR9VGSAX2zDkMzmVJNKop3bEcHtFcKe8XDujzJVkZhbQmwHMGR4Yj+E4aVV5W0IkXuk
+         o7S3fS59b54kJiPxVkGsmDg8J6VwgLJmZoskjSBFWNt2VmBwYuTN5McfR5bsUz3o7+qZ
+         EgyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682157396; x=1684749396;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RDQgb0udGi4TgE1jwB/Uj7tuQtIfaUvyOe998bYU7/g=;
+        b=PZj+dC07ltYzq7BeZl3bnGymC/rTx8b3LVtJWwpjZ4T1kazGVZ1udInio6FIG7Ef9o
+         i2vUiNInfKH0IVb8XMbxU6ji7nX78QqsYexLJfHnl16K4k/WsVxxDjq+/dWfZRLZQ7ik
+         8T8X8JZMuzmQBJ4Scpw0eIckF0agTbyLylPoX1Ia92eJrygNbdILZMRbrreSZkOwlWr6
+         1EVRLJfNecqmTBJji4gMc0UQoDzcx/zYqmyagQax/swFHDPs2mGDEInQSY+OcPnTy7nc
+         xlZCZUxJFjKZTcJsgSS05vrtqO7FyjxG2j1FpUAcIKUEOzAeDeKmwRbg6pk2giKLFjeZ
+         ZwAQ==
+X-Gm-Message-State: AAQBX9fXBuLmHQaBY+NDIwvWLGAxTLCOpFMxHPqPexAOqMVuSwGqx9Hf
+        UUuZVvz/8m/AS+2O896zjyXQog==
+X-Google-Smtp-Source: AKy350ba+xIzdatXazTSlEA/wKsneXtw4QIKpv/3TBdA/Kc+aOgterKahyAD8iJ0SzPHXPwb3CXICQ==
+X-Received: by 2002:ac2:46cf:0:b0:4e8:d733:fde6 with SMTP id p15-20020ac246cf000000b004e8d733fde6mr2005270lfo.60.1682157396034;
+        Sat, 22 Apr 2023 02:56:36 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id b10-20020a056512024a00b004edc3bd7fa1sm837323lfo.201.2023.04.22.02.56.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Apr 2023 02:56:35 -0700 (PDT)
+Message-ID: <ff2dd271-71f7-47e0-b200-4edd2d692e71@linaro.org>
+Date:   Sat, 22 Apr 2023 11:56:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm8953: add GPIOs
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230421-pm8953-gpio-v1-0-3d33e2de47e3@z3ntu.xyz>
+ <20230421-pm8953-gpio-v1-3-3d33e2de47e3@z3ntu.xyz>
 Content-Language: en-US
-To:     Cyril Brulebois <cyril@debamax.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230412095509.2196162-1-cyril@debamax.com>
- <20230412095509.2196162-2-cyril@debamax.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230412095509.2196162-2-cyril@debamax.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:H6SNLZBC93QHTP8rBnvbbn8eavBf7kTQSVkEbnwzBzmtG2S5hM7
- kpH2H3Fye7vMU2MUkYkH5FL8r/WH3zBMaD5TZGgmZ/s2TARfPAwlyTL5rg0rqSOmO0A61Ll
- PowLcApDXINEb1WPol75OD5Q4HkGq5WxtMi3RVoBzjDBavFbyo26kXBgbMAHziiQpM4GSx9
- Oyhrm7IxF/6Em1xfXj7HA==
-UI-OutboundReport: notjunk:1;M01:P0:y38Rp/jC5iw=;OoilsxTUaVzuVBE/eSPC9mDIJuS
- 0SFsSqkyASTfSUVd2yKX8krnYZLx8qYNjsgehKRYHPTysreQF6cB7YSceiSuJwyQ5jJ3EXfJf
- DBWj7GQovPx6t8HlUH9Iq7IAcIniT1HCtq7tOdvNVkG2oSASirxyWm31t5BPbJEq2H9/bclFw
- grXBvB6y9l32jUMqLN4SV2X+k3r1A7GQxhsT9d/iNQmhHSOWD7Mni/JAU3dEJPnOEWJ6AORwz
- nAwoPR+tgToE7JeaqvGhhdupQYpcffqzJmMlzQ/JVd6SHiaqlzwFpcvPgfgoipcZxsN81A8oc
- wjLc1Tone5fh3oSMcKcSvSENKqsmgP8G077WxgxksE/rCVJZBDxWbRTihWdJDdhbIhBpkx4sv
- vkvTu59GH69InrSoF9drVOHsjo5nvTQMIh0SvmVwFgtienUZKS8TF2d1Ewv0+W34nlgzwCVhK
- nZdVUIForkcc4Zkgqe3TucgQiggUcJDQPzLxi6xI6HOe0Y81MweWvKLow4DjGUiVXLvZzzaFI
- ujmcvXpWNRtvYZXDv784t7En5ewNsiGSfNt4/8cTWIPQbfEyO0nEmJvmAMf7AJN0g0W2qdV3N
- cs768pEpQdrmAAjYdPa6VAmrB0Yh2+lKMCCysEZQTfqi7+xKECQWkJ6YiY93MA7U85gOgpUEx
- bQaqpSv5nhnWvxCpu5wyDuYTzyo/+qqIZP1dW5XljX1k1KvF2hlsPV+JH+Ted+3KVE5Ak99gy
- r9r048VS46HVx6uqJTWZzIqnJZzq8k6LSV+DoQ/LyaNgS3Hh1PPmX5T+T9ZXJrPjSjaAry83V
- 2f3sO88vufkYyWLb5sx91ZYq/9jls3yW0IioH65rzXv0f8rtSMxG1L90GopXv7XUEAde7JThR
- H0fjYoSmJW6lRYeWH/pQqc89wcQ4TzFNVCWsjhPQZ2ydnGTwzkY1QLvxgDUNMabmLC3KlItvY
- 5KNmPf9wziT85PODFJ6M6Nf3CGk=
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230421-pm8953-gpio-v1-3-3d33e2de47e3@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/23 11:55, Cyril Brulebois wrote:
-> Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique"=
-),
-> as spotted by Fr=C3=A9d=C3=A9ric Bonnard, the historical "of-display" de=
-vice is
-> gone: the updated logic creates "of-display.0" instead, then as many
-> "of-display.N" as required.
->
-> This means that offb no longer finds the expected device, which prevents
-> the Debian Installer from setting up its interface, at least on ppc64el.
->
-> It might be better to iterate on all possible nodes, but updating the
-> hardcoded device from "of-display" to "of-display.0" is confirmed to fix
-> the Debian Installer at the very least.
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217328
-> Link: https://bugs.debian.org/1033058
-> Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Cyril Brulebois <cyril@debamax.com>
 
-I've applied the series (2 patches, one of them in drm) to the fbdev git t=
-ree.
 
-Thanks!
-Helge
-
+On 21.04.2023 23:56, Luca Weiss wrote:
+> Add a node for the GPIOs found on the pm8953.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->   drivers/video/fbdev/offb.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/offb.c b/drivers/video/fbdev/offb.c
-> index b97d251d894b..6264c7184457 100644
-> --- a/drivers/video/fbdev/offb.c
-> +++ b/drivers/video/fbdev/offb.c
-> @@ -698,7 +698,7 @@ MODULE_DEVICE_TABLE(of, offb_of_match_display);
->
->   static struct platform_driver offb_driver_display =3D {
->   	.driver =3D {
-> -		.name =3D "of-display",
-> +		.name =3D "of-display.0",
->   		.of_match_table =3D offb_of_match_display,
->   	},
->   	.probe =3D offb_probe_display,
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  arch/arm64/boot/dts/qcom/pm8953.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/pm8953.dtsi b/arch/arm64/boot/dts/qcom/pm8953.dtsi
+> index a1d36f9ebbd2..2268daf27fa7 100644
+> --- a/arch/arm64/boot/dts/qcom/pm8953.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pm8953.dtsi
+> @@ -79,6 +79,16 @@ rtc@6000 {
+>  			reg-names = "rtc", "alarm";
+>  			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+>  		};
+> +
+> +		pm8953_gpios: gpio@c000 {
+> +			compatible = "qcom,pm8953-gpio", "qcom,spmi-gpio";
+> +			reg = <0xc000>;
+> +			gpio-controller;
+> +			gpio-ranges = <&pm8953_gpios 0 0 8>;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+>  	};
+>  
+>  	pmic@1 {
+> 
