@@ -2,153 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95206EB856
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B606EB85A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjDVJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 05:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S229687AbjDVKAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 06:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVJ5s (ORCPT
+        with ESMTP id S229672AbjDVJ76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 05:57:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D48B1BDC;
-        Sat, 22 Apr 2023 02:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682157466; x=1713693466;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cG7+KgDAr4AYUlsLPJRfqGCBuV8Fdm49l4MwT8XOd+c=;
-  b=k5DsePEZ5gWV/SIhDs9PCnmSz/8o8iZ3cCbfAVoMl9Wp6Xyk1n4rsj2X
-   TeklKk66jpF/KQOa7O6CUa86EagQ/5bD9givAoAEHQPBuyNi3NWUOT+a3
-   06OdB6/hxo8cEuMZH0KAqrFLh7q4G+s1jfxbIfhnx+UE6BpqjzWGyy/1i
-   rm986LzhrHQh2x5f4mKXY/hZDhW69veet5I6S0IMWca9ZicnSm8/4m3Or
-   0k8PdaUGutcSIl0rlfpnxWP30uZzXJGyOrD7CGzpPwTnx8PIjQJmoidh0
-   N+duFra4MJRWOdfU9Zt1ij5A/8GX6R+HkpC/TLILF8LMElIS7uf8HFp7e
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="326472827"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="326472827"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 02:57:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="642775237"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="642775237"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Apr 2023 02:57:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pq9zx-000hEW-0j;
-        Sat, 22 Apr 2023 09:57:41 +0000
-Date:   Sat, 22 Apr 2023 17:56:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH v12 2/3] cachestat: implement cachestat syscall
-Message-ID: <202304221702.Ye705xoC-lkp@intel.com>
-References: <20230421231421.2401346-3-nphamcs@gmail.com>
+        Sat, 22 Apr 2023 05:59:58 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AC01BCD
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:59:56 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4efea4569f5so169945e87.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:59:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682157594; x=1684749594;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fRbWMrtRPw5tKO1dZRharcTg4G5vu/RojnoHNMZk0Vs=;
+        b=zhsOEGdeI+Scd7u+CJBH2RPUANEiwJt6aqS9afI/7PwJfQ7sQ6z6p0ToTX38xHSNnZ
+         q5iieMqPQCPF3klGiU4nPkxpuSOF29e5ZMw7l3mYHV4oWry7WJ+r9CWuw8mNgbwXv6bf
+         Gn4kBNGmja6T+OxQX4WrKWfc0IwzWxke+kYAmvM5APEFIsZ0/oGMeJG6ssAOPcl3rHHZ
+         BrmUWyceF6of4Zu8JudVehVEGN8NqvolGd2/ilsCi8NcWoPWC/bgWeU/QMLNG5PssoB9
+         pLuB8ZdE9tY0Fk5ON+iuJkNuQOW2fYBJKS2N/pZnRZaRGTKJ27SHpUL9joX/qTB/16gJ
+         KrJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682157594; x=1684749594;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fRbWMrtRPw5tKO1dZRharcTg4G5vu/RojnoHNMZk0Vs=;
+        b=ZvUpe6CIC1PwWVeOjKBNUXyHORuzH1nm9jNsbIm1PnCz67J376zpgkTgeKXeU/gOMz
+         vGPRBnohhGh1pcndR7dZ74IeAM7ksDUXFsP04uRKN3ytpOH6qPIruxBAk81IVICZ1k1x
+         BB+6J5ArjDPMUrpjD/No/FiJiXbI48v5f2WOAFyBY7DB/p9MSdhwsjMgD6HIFcx32Bhm
+         6RC2aF7Z58GlmxLLw03fglGbBxblUgc/HVQI5lngtjN1sj4z0Koijmg2VsKj+DFSXvly
+         78+PiA1fjf5x1mhsxjcty0Wrr5jqpCy/c2YK06WyGofZTZFTJz4Aw/9cdeK7ca1AeKbd
+         dZjA==
+X-Gm-Message-State: AAQBX9fEwiDThXY2GNiUDuYfELvYO7768u+6RoQn5RbZnjyobE8UQeqB
+        wZI2iZ+mpVwx7DlXhnROFw+d7w==
+X-Google-Smtp-Source: AKy350Zgzg59kN7Ze0MMHfZgL8yLoD63YAcHDChKW1pjTA37p00j1SNnA6GCQ5FsFVgDkHG0VTk0Mw==
+X-Received: by 2002:ac2:4f86:0:b0:4ec:e32f:3d29 with SMTP id z6-20020ac24f86000000b004ece32f3d29mr2069717lfs.51.1682157594670;
+        Sat, 22 Apr 2023 02:59:54 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id o22-20020ac24356000000b004edd490cf77sm822804lfl.275.2023.04.22.02.59.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Apr 2023 02:59:54 -0700 (PDT)
+Message-ID: <b9cd7b67-4aa6-3e84-41fe-61f2c7f0edaf@linaro.org>
+Date:   Sat, 22 Apr 2023 11:59:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421231421.2401346-3-nphamcs@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] ARM: dts: qcom: msm8974: align WCNSS Bluetooth node name
+ with bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230421195437.31513-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230421195437.31513-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nhat,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[cannot apply to shuah-kselftest/next shuah-kselftest/fixes linus/master tip/x86/asm v6.3-rc7 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230422-071625
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230421231421.2401346-3-nphamcs%40gmail.com
-patch subject: [PATCH v12 2/3] cachestat: implement cachestat syscall
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230422/202304221702.Ye705xoC-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9691e4430fbb59890619289b45ee0ce9ec3e97ee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230422-071625
-        git checkout 9691e4430fbb59890619289b45ee0ce9ec3e97ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304221702.Ye705xoC-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> mm/filemap.c:4293:35: error: expected identifier
-   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
-                                     ^
->> mm/filemap.c:4293:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
-   ^
->> mm/filemap.c:4297:33: error: implicit declaration of function 'compat_arg_u64_glue' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-                                          ^
->> mm/filemap.c:4297:24: error: use of undeclared identifier 'fd'
-           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-                                 ^
->> mm/filemap.c:4297:28: error: use of undeclared identifier 'len'
-           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-                                     ^
->> mm/filemap.c:4297:53: error: use of undeclared identifier 'off'
-           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-                                                              ^
->> mm/filemap.c:4297:59: error: use of undeclared identifier 'cstat'
-           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-                                                                    ^
->> mm/filemap.c:4297:66: error: use of undeclared identifier 'flags'
-           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-                                                                           ^
->> mm/filemap.c:4293:1: warning: no previous prototype for function 'COMPAT_SYSCALL_DEFINE6' [-Wmissing-prototypes]
-   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
-   ^
-   mm/filemap.c:4293:23: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
-                         ^
-                         static 
->> mm/filemap.c:4293:23: error: this old-style function definition is not preceded by a prototype [-Werror,-Wstrict-prototypes]
-   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
-                         ^
-   1 warning and 9 errors generated.
 
 
-vim +4293 mm/filemap.c
+On 21.04.2023 21:54, Krzysztof Kozlowski wrote:
+> Bindings expect WCNSS Bluetooth child to be named "bluetooth":
+> 
+>   remoteproc@fb204000: smd-edge:wcnss: 'bt' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-  4291	
-  4292	#ifdef CONFIG_COMPAT
-> 4293	COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
-  4294			compat_arg_u64_dual(off), struct cachestat __user *, cstat,
-  4295			unsigned int, flags)
-  4296	{
-> 4297		return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Konrad
+>  arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> index 939449a0c695..58e144957c5d 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> @@ -746,7 +746,7 @@ wcnss {
+>  
+>  					qcom,mmio = <&pronto>;
+>  
+> -					bt {
+> +					bluetooth {
+>  						compatible = "qcom,wcnss-bt";
+>  					};
+>  
