@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD41F6EB8BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECD96EB8CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjDVLEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 07:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S229567AbjDVLTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 07:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVLEi (ORCPT
+        with ESMTP id S229451AbjDVLTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 07:04:38 -0400
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AC5198D;
-        Sat, 22 Apr 2023 04:04:37 -0700 (PDT)
-Received: from [46.183.248.101] (helo=deadeye)
-        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1pqB2f-0005XR-91; Sat, 22 Apr 2023 13:04:33 +0200
-Received: from ben by deadeye with local (Exim 4.96)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1pqB2e-001pFG-1N;
-        Sat, 22 Apr 2023 13:04:32 +0200
-Message-ID: <3a5c0f51d120bb11cb5fdf9b7e2925d8a5c1dbe2.camel@decadent.org.uk>
-Subject: Re: [PATCH 2/2] kbuild: deb-pkg: add KDEB_SOURCE_COMPRESS to
- specify compression type
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bastian Germann <bage@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Date:   Sat, 22 Apr 2023 13:04:32 +0200
-In-Reply-To: <CAK7LNAQjXTZhObuZ6R159kaOcsjTnTHftqnZe6GMfk0ibCkOkw@mail.gmail.com>
-References: <20230417142548.249610-1-masahiroy@kernel.org>
-         <20230417142548.249610-2-masahiroy@kernel.org>
-         <ZEBQPeihAuP4jVYG@bergen.fjasle.eu>
-         <CAK7LNAQjXTZhObuZ6R159kaOcsjTnTHftqnZe6GMfk0ibCkOkw@mail.gmail.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-gRCz5fKy5ML0UmVBw4B5"
-User-Agent: Evolution 3.46.4-1 
+        Sat, 22 Apr 2023 07:19:47 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71D11BDA
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 04:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682162386; x=1713698386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+EVsdeVWlcugnqDpDcwqF5ABdA1G/6ft2d3YeGRsGVk=;
+  b=mmyhVjZvA3oJtm7Y2PDTKc6n7787fyFV9dZPhOJg2XZZW+zn9uMeXwqF
+   V6iYE9ooBSwA2qEdHXkPWquLIvCFNS/M3oyY2aWh1tf6dtKu2zO1cHi/i
+   RcXyaOcyf6ssffTeSUeS3fg95Z+NjIECSS9tcnIno1UFE1hU7P/EW6kyw
+   GprZnlhmrI5HaAH4lcL046I4odtZsBW2Rn6HzT/tbqZU/VRYWzDVRSGI2
+   Q1oPsX6RFGxHrnvxlebdVyiQtFWq24XGwzjch4g6SRfzLqq0MN72aj3Kn
+   HhI/x2UwZ8yxoiXDfNzldcwFkZTviWPRXb4mXSxXZj+sT4pi4H7hxqsN5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="343633985"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="343633985"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 04:19:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="816704438"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="816704438"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Apr 2023 04:19:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqBHK-000hGO-1B;
+        Sat, 22 Apr 2023 11:19:42 +0000
+Date:   Sat, 22 Apr 2023 19:18:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH v4 2/3] mm, page_owner: Add page_owner_stacks file to
+ print out only stacks and their counte
+Message-ID: <202304221906.CKlcyd2r-lkp@intel.com>
+References: <20230421101415.5734-3-osalvador@suse.de>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 46.183.248.101
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421101415.5734-3-osalvador@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Oscar,
 
---=-gRCz5fKy5ML0UmVBw4B5
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Thu, 2023-04-20 at 16:17 +0900, Masahiro Yamada wrote:
-> On Thu, Apr 20, 2023 at 5:34=E2=80=AFAM Nicolas Schier <nicolas@fjasle.eu=
-> wrote:
-[...]
-> > > +KDEB_SOURCE_COMPRESS ?=3D gzip
-> >=20
-> > According to dpkg-source(1), xz is the default compression for deb
-> > source format >=3D 2.  Shouldn't we use xz here by default as well?
->=20
->=20
-> Yes.
-> xz is the default because we switched to format 3.0 (quilt).
->=20
-> But, we used gzip for a long time, so I did not change it
-> in this commit.
->=20
->=20
-> I do not have a strong opinion.
->=20
-> Ben (debian kernel maintainer) is in the CC list,
-> perhaps he has some preference.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc7]
+[cannot apply to akpm-mm/mm-everything next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I think it makes sense to keep source compression unchanged in this
-commit, but you could add another commit to change the default.
+url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/lib-stackdepot-Add-a-refcount-field-in-stack_record/20230421-181709
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230421101415.5734-3-osalvador%40suse.de
+patch subject: [PATCH v4 2/3] mm, page_owner: Add page_owner_stacks file to print out only stacks and their counte
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230422/202304221906.CKlcyd2r-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
-Ben.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304221906.CKlcyd2r-lkp@intel.com/
 
---=20
-Ben Hutchings
-Theory and practice are closer in theory than in practice - John Levine
+smatch warnings:
+lib/stackdepot.c:558 stack_print() warn: unsigned 'stack->size' is never less than zero.
 
---=-gRCz5fKy5ML0UmVBw4B5
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+vim +558 lib/stackdepot.c
 
------BEGIN PGP SIGNATURE-----
+   551	
+   552	int stack_print(struct seq_file *m, void *v)
+   553	{
+   554		char *buf;
+   555		int ret = 0;
+   556		struct stack_record *stack =v;
+   557	
+ > 558		if (!stack->size || stack->size < 0 ||
+   559		    stack->size > PAGE_SIZE || stack->handle.valid != 1 ||
+   560		    refcount_read(&stack->count) < 1)
+   561			return 0;
+   562	
+   563		buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
+   564		ret += stack_trace_snprint(buf, PAGE_SIZE, stack->entries, stack->size, 0);
+   565		scnprintf(buf + ret, PAGE_SIZE - ret, "stack count: %d\n\n",
+   566			  refcount_read(&stack->count));
+   567		seq_printf(m, buf);
+   568		seq_puts(m, "\n\n");
+   569		kfree(buf);
+   570	
+   571	        return 0;
+   572	}
+   573	#endif
+   574	
 
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmRDv0AACgkQ57/I7JWG
-EQkGCxAA1cIcv2n+iNlzdNkD3TXplfCPY2IJ+MyDgJd7ZyzPBgiLzEQhFerPx/AN
-2no1/wPPJVANsbOSj+CLkW7pQjJPxbGseKf6NLIEEvNd3W+PAjbHGYEIWrF+rKeJ
-qGntjbnbL7cvtIkSFDWuxMgT5tw6MlJQqdjt3kiUM8xhYjc7rZORHxIO/0QlfbDq
-74YATuYBUaM4/S6C1seRfC1jLwKyySh+aikb0i5fxtyh2vlmnfuQkS7OI2dFrLtT
-nDHLKhxyt1Rq52ULRrcc6wPHNsOeXEe5QEgiaDZzbbTnPeFXRJm1zpQ2Vxk/TDfO
-9fbd8ohN5pNklVDvGzST0sjI+y905IhbiS7KlDq3il79SYEKlcC5PTop+8w2K1gf
-gqoV7MvhPysELXj69a4x7B7qkOP7w8MwYlowS7vccozSBoceAySW9LvAOc2Ybz5C
-jx+VWo1K9M2L2pvwrJPc1EM6DFQhsBclkV3ldATDPCzpA1/OC6Awh/iorRKWyAET
-Rk04jkZsCQHNa7qsrVm2odBqAAgC97xQEll2Uj1pXCiDG6cd82SwIfCtnGvgRAab
-zDbdacrqJ8cSKWwR6li50MrZwo2lumWSHb2j5hGnC7/5nHmZBieuHqUTCQTTo0UF
-jd9is0HyMpOfzXYiHrBGDOSyv82zeN4/HbPDfcXO/XrbIrjo9js=
-=rQFw
------END PGP SIGNATURE-----
-
---=-gRCz5fKy5ML0UmVBw4B5--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
