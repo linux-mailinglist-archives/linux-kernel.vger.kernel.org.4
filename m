@@ -2,108 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1AA6EB87D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A80E6EB87E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDVKPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 06:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S229869AbjDVKPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 06:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDVKOa (ORCPT
+        with ESMTP id S229868AbjDVKOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 06:14:30 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C5B1FD8;
-        Sat, 22 Apr 2023 03:14:18 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 13B4C12C8D;
-        Sat, 22 Apr 2023 13:14:16 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id EDE3D12C8C;
-        Sat, 22 Apr 2023 13:14:15 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id BC1FE3C0435;
-        Sat, 22 Apr 2023 13:14:15 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 33MAEDsP005330;
-        Sat, 22 Apr 2023 13:14:13 +0300
-Date:   Sat, 22 Apr 2023 13:14:13 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-cc:     Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: Re: [PATCH nf-next v3 0/4] ipvs: Cleanups for v6.4
-In-Reply-To: <ZEMYjOlXKd+6zsgw@calendula>
-Message-ID: <deeef4d5-208b-2d48-4714-5be1b9bc4393@ssi.bg>
-References: <20230409-ipvs-cleanup-v3-0-5149ea34b0b9@kernel.org> <a873ffc-bcdf-934f-127a-80188e8b33e6@ssi.bg> <ZEMYjOlXKd+6zsgw@calendula>
+        Sat, 22 Apr 2023 06:14:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4286211D
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 03:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=az/+SNJkfuz6SKAsmyBKK6ylLWfMohDr3GAbdOAHiz4=; b=Yu7qjdgJxJvgIV65RKG2ktT+gr
+        WAqJIg0gZbcHhnhyJ3vWUkkF5HqqwMrpwwEIJpW+xHoBawFkupuXb+PpGEnwl9zc+GlHAmaKZ/faR
+        KB7EP9tLPZmN3lpFS5hhRLj+i3+vZjUAUXBn+kQqZ3m25/nPL7KFTIcNP3B6EMIunPV53vu1zizmh
+        HFhOEvjvWEFgzNy0KKBm3mYBYtANH2clkOKnw6jWAXeFPia9pdnB/VLP+3VbGbArw93yPFJbmkrii
+        oSqPkBkekCLHlCLmC1rj66inGc4x2cGs9ygS4arnYb1+lR0ADzW8NqZoZ1JGnrCJhKcTz1IuSdOIZ
+        taY1DzHQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pqAGD-00G916-3l; Sat, 22 Apr 2023 10:14:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B0F4C300338;
+        Sat, 22 Apr 2023 12:14:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9DEF623BD94B2; Sat, 22 Apr 2023 12:14:27 +0200 (CEST)
+Date:   Sat, 22 Apr 2023 12:14:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qyousef@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Zimuzo Ezeozue <zezeozue@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Connor O'Brien <connoro@google.com>
+Subject: Re: [PATCH v3 09/14] sched: Split scheduler execution context
+Message-ID: <20230422101427.GD1214746@hirez.programming.kicks-ass.net>
+References: <20230411042511.1606592-1-jstultz@google.com>
+ <20230411042511.1606592-10-jstultz@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411042511.1606592-10-jstultz@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-	Hello,
-
-On Sat, 22 Apr 2023, Pablo Neira Ayuso wrote:
-
-> On Mon, Apr 17, 2023 at 07:59:35PM +0300, Julian Anastasov wrote:
-> > 
-> > On Mon, 17 Apr 2023, Simon Horman wrote:
-> > 
-> > > this series aims to clean up IPVS in several ways without
-> > > implementing any functional changes, aside from removing
-> > > some debugging output.
-> > > 
-> > > Patch 1/4: Update width of source for ip_vs_sync_conn_options
-> > >            The operation is safe, use an annotation to describe it properly.
-> > > 
-> > > Patch 2/4: Consistently use array_size() in ip_vs_conn_init()
-> > >            It seems better to use helpers consistently.
-> > > 
-> > > Patch 3/4: Remove {Enter,Leave}Function
-> > >            These seem to be well past their use-by date.
-> > > 
-> > > Patch 4/4: Correct spelling in comments
-> > > 	   I can't spell. But codespell helps me these days.
-> > > 
-> > > All changes: compile tested only!
-> > > 
-> > > ---
-> > > Changes in v3:
-> > > - Patch 2/4: Correct division by 1024.
-> > >              It was applied to the wrong variable in v2.
-> > > - Add Horatiu's Reviewed-by tag.
-> > > 
-> > > Changes in v2:
-> > > - Patch 1/4: Correct spelling of 'conn' in subject.
-> > > - Patch 2/4: Restore division by 1024. It was lost on v1.
-> > > 
-> > > ---
-> > > Simon Horman (4):
-> > >       ipvs: Update width of source for ip_vs_sync_conn_options
-> > >       ipvs: Consistently use array_size() in ip_vs_conn_init()
-> > >       ipvs: Remove {Enter,Leave}Function
-> > >       ipvs: Correct spelling in comments
-> > 
-> > 	The patchset looks good to me, thanks!
-> > 
-> > Acked-by: Julian Anastasov <ja@ssi.bg>
+On Tue, Apr 11, 2023 at 04:25:06AM +0000, John Stultz wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
 > 
-> Applied, sorry Julian, I missed your Acked-by: tag.
+> Lets define the scheduling context as all the scheduler state in
+> task_struct and the execution context as all state required to run the
+> task.
+> 
+> Currently both are intertwined in task_struct. We want to logically
+> split these such that we can run the execution context of one task
+> with the scheduling context of another.
+> 
+> To this purpose introduce rq_selected() to point to the task_struct
+> used for scheduler state and preserve rq_curr() to denote the execution
+> context.
 
-	No problem :)
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+I can't say I like the rq_selected() naming :/
