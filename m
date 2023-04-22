@@ -2,57 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA646EBAC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 19:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5CA6EBADE
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 20:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjDVRxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 13:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S229590AbjDVScB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 14:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDVRxc (ORCPT
+        with ESMTP id S229509AbjDVSb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 13:53:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56021211D;
-        Sat, 22 Apr 2023 10:53:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E59116091F;
-        Sat, 22 Apr 2023 17:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A24C433EF;
-        Sat, 22 Apr 2023 17:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682186010;
-        bh=fPoF9s5UE6QAjkCKhn/BGCrF6ucRv3YJBUZBqq0vX8M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ASuCRNjGIFm5WeFlZWsXFjMnL6LS9Yj05fqvWwgfqqq1crGV6gEHWZXKuiriYVBZ/
-         0AVdTWEKFSaaZuogpw3EnWQ5LRbdjS/DsNqwqV1s7TpMV3+VsKvjT9XlgSFXQRY6YL
-         N4WXJJXrCe3Fw8luu/rjuDWv/uEUZ9Hb5PxQ49zXBoOIGXoM++Q4yRmMbZqt1hXwzY
-         Ly7IfsZgdiTanIawlXvrX4Kw49csTCBEtq+QglagdbrhXuWq+PoNs21GH2llY2hlPQ
-         byt0nDG0SrOtnlCQsIGI4TmP+98lCtVnFqpeeQe2xIZ9tw7dMQ4SPJzRdNMQuUnAPJ
-         4b2UGJnaNm2bA==
-Date:   Sat, 22 Apr 2023 19:09:06 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
-Subject: Re: [PATCH v2 2/2] iio: light: Add support for TI OPT4001 light
- sensor
-Message-ID: <20230422190906.36623838@jic23-huawei>
-In-Reply-To: <20230323-add-opt4001-driver-v2-2-0bae0398669d@axis.com>
-References: <20230323-add-opt4001-driver-v2-0-0bae0398669d@axis.com>
-        <20230323-add-opt4001-driver-v2-2-0bae0398669d@axis.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 22 Apr 2023 14:31:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361A11726;
+        Sat, 22 Apr 2023 11:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Trk4E1QX06OXD2M/GUSHWRLdm5Cqab+v5Rdy0NiLloQ=; b=y4Ot7/1yEy0Ma052H8oXXR+Kun
+        ofrX9SDpeoW45zo5VqRPfk6BUOxIi/gJDDfHo1nlH70MBUjbj+kL5RTSQIhPySx9G7QUTXP+m5liT
+        gWvYnbDoxSpp9M2tgo1BxzvK5+BmovbGvx3dmb4rfJj3roJqAGt0Way5+44BJFUjh5VzpqEQOc+J/
+        BLY3wrAIIWfhl9puHU+MHssVUeFH/NZ2Umnf5rCUvx7yn3pTUEg+e/ai7sD1Ut0uvrFv0IrewdOf6
+        ctPREpIqHze56JKkrYHJ9hH1qZ/gsKVZq6RpvLRPCyQch5/zkgbboPJ5496cjQQZ3/weGZZJeQ0P/
+        j9BEGFJg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pqI1b-00DEk5-01;
+        Sat, 22 Apr 2023 18:31:55 +0000
+Message-ID: <a1d39a73-9793-2e1f-550a-aa3495cd9414@infradead.org>
+Date:   Sat, 22 Apr 2023 11:31:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH linux-doc v2] docs/doc-guide: Clarify how to write tables
+Content-Language: en-US
+To:     Joe Stringer <joe@isovalent.com>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net
+References: <20230422175256.3396430-1-joe@isovalent.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230422175256.3396430-1-joe@isovalent.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,187 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 12:36:27 +0200
-Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com> wrote:
+Hi,
 
-> This driver uses the continuous mode of the chip and integration
-> time can be configured through sysfs.
-> The constants for calculating lux value differs between packaging
-> so it uses different compatible string for the two versions
-> "ti,opt4001-picostar" and "ti,opt4001-sot-5x3" since the device id
-> is the same.
+On 4/22/23 10:52, Joe Stringer wrote:
+> Prior to this commit, the kernel docs writing guide spent over a page
+> describing exactly how *not* to write tables into the kernel docs,
+> without providing a example about the desired format.
+> > This patch provides a positive example first in the guide so that it's
+> harder to miss, then leaves the existing less desirable approach below
+> for contributors to follow if they have some stronger justification for
+> why to use that approach.
 > 
-> Datasheet: https://www.ti.com/lit/gpn/opt4001
-> Signed-off-by: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
-
-A few minor comments inline.
-
-Thanks,
-
-Jonathan
-
-> +/* The different packaging of OPT4001 has different constants used when calculating
-/*
- * The different...
-
-For IIO multiline comments. This is not consistent across different kernel subsystems but
-tends to be consistent within one.
-
-> + * lux values.
-> + */
-> +struct opt4001_chip_info {
-> +	int mul;
-> +	int div;
-> +	const char *name;
-> +};
-
-
+> Signed-off-by: Joe Stringer <joe@isovalent.com>
+> ---
+> v2: Simplify recommendation for either simple or grid table syntax
+>     Remove example, link to rST user reference
+> ---
+>  Documentation/doc-guide/sphinx.rst | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+> index 23edb427e76f..77ac7dc27715 100644
+> --- a/Documentation/doc-guide/sphinx.rst
+> +++ b/Documentation/doc-guide/sphinx.rst
+> @@ -313,9 +313,18 @@ the documentation build system will automatically turn a reference to
+>  function name exists.  If you see ``c:func:`` use in a kernel document,
+>  please feel free to remove it.
+>  
+> +Tables
+> +------
 > +
-> +static int opt4001_read_raw(struct iio_dev *indio_dev,
-> +			    struct iio_chan_spec const *chan,
-> +			    int *val, int *val2, long mask)
-> +{
-> +	struct opt4001_chip *chip = iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_PROCESSED:
-> +		ret = opt4001_read_lux_value(indio_dev, val, val2);
+> +ReStructuredText provides several options for table syntax. Kernel style for
+> +tables is prefer *simple table* syntax or *grid table* syntax. See the
 
-As below. Early returns make for easier to review code as we don't need to go
-see if there is any cleanup when there isn't any to be done.
+   tables is to prefer
+or
+   tables prefers
 
-> +		break;
-> +	case IIO_CHAN_INFO_INT_TIME:
-> +		*val = 0;
-> +		*val2 = opt4001_int_time_reg[chip->light_settings.int_time][0];
-> +		ret = IIO_VAL_INT_PLUS_MICRO;
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int opt4001_write_raw(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     int val, int val2, long mask)
-> +{
-> +	struct opt4001_chip *chip = iio_priv(indio_dev);
-> +	int int_time;
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_INT_TIME:
-> +		int_time = opt4001_als_time_to_index(val2);
-> +		if (int_time < 0) {
-Early returns make this easier to review + shorten it a little.
+Otherwise LGTM. It's good to have positive examples, not just negative ones.
 
-> +			ret = int_time;
-			return int_time;
-> +		} else {
-		}
+Thanks.
 
-		and you can drop indent on next bit.
+> +`reStructuredText user reference for table syntax`_ for more details.
+> +
+> +.. _reStructuredText user reference for table syntax:
+> +   https://docutils.sourceforge.io/docs/user/rst/quickref.html#tables
+>  
+>  list tables
+> ------------
+> +~~~~~~~~~~~
+>  
+>  The list-table formats can be useful for tables that are not easily laid
+>  out in the usual Sphinx ASCII-art formats.  These formats are nearly
 
-> +			chip->light_settings.int_time = int_time;
-> +			ret = opt4001_set_conf(chip);
-			return opt...;
-> +		}
-> +
-
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-		return -EINVAL;
-
-> +	}
-> +
-> +	return ret;
-No need for this as can't reach here after above changes.
-
-> +}
-> +
-
-> +static int opt4001_probe(struct i2c_client *client)
-> +{
-> +	struct opt4001_chip *chip;
-> +	struct iio_dev *indio_dev;
-> +	int ret;
-> +	uint dev_id;
-> +
-> +	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*chip));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	chip = iio_priv(indio_dev);
-> +
-> +	ret = devm_regulator_get_enable(&client->dev, "vdd");
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret, "Failed to enable vdd supply\n");
-> +
-> +	chip->regmap = devm_regmap_init_i2c(client, &opt4001_regmap_config);
-> +	if (IS_ERR(chip->regmap))
-> +		return dev_err_probe(&client->dev, PTR_ERR(chip->regmap),
-> +				     "regmap initialization failed\n");
-> +	chip->client = client;
-> +
-> +	indio_dev->info = &opt4001_info_no_irq;
-> +
-> +	ret = regmap_reinit_cache(chip->regmap, &opt4001_regmap_config);
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "failed to reinit regmap cache\n");
-> +
-> +	ret = regmap_read(chip->regmap, OPT4001_DEVICE_ID, &dev_id);
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +			"Failed to read the device ID register\n");
-> +
-> +	dev_id = FIELD_GET(OPT4001_DEVICE_ID_MASK, dev_id);
-> +	if (dev_id != OPT4001_DEVICE_ID_VAL) {
-> +		dev_err(&client->dev, "Device ID: %#04x unknown\n", dev_id);
-> +		return -EINVAL;
-
-Warn only on a failure to match and don't error out.
-The reason for this is DT fallback compatibles. They only work to enable
-a newer part compatible with older driver support if the older driver doesn't
-error out on an ID miss match.   So the most we can do is warn that we don't
-know what the device is, but then assume the dt compatible or similar is
-correct.
-
-> +	}
-> +
-> +	chip->chip_info = device_get_match_data(&client->dev);
-> +
-> +	indio_dev->channels = opt4001_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(opt4001_channels);
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->name = chip->chip_info->name;
-> +
-> +	ret = opt4001_load_defaults(chip);
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to set sensor defaults\n");
-> +
-> +	ret = devm_add_action_or_reset(&client->dev,
-> +					opt4001_chip_off_action,
-> +					chip);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "Failed to setup power off action %d\n",
-> +			ret);
-Trivial, but in probe you can always use dev_err_probe() whether or not there
-is any chance of a defer.  That simplifies this to
-		return dev_err_probe(&client->dev, ret, "..");
-
-Which is slightly nicer.  Added bonus is reviewer doesn't need to think if
-something might defer or not.
-
-> +		return ret;
-> +	}
-> +
-> +	return devm_iio_device_register(&client->dev, indio_dev);
-> +}
-
+-- 
+~Randy
