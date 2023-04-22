@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946626EB884
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970DF6EB879
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 12:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjDVKRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 06:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
+        id S229548AbjDVKOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 06:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDVKRH (ORCPT
+        with ESMTP id S229846AbjDVKOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 06:17:07 -0400
-Received: from out203-205-251-85.mail.qq.com (out203-205-251-85.mail.qq.com [203.205.251.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69071E70;
-        Sat, 22 Apr 2023 03:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682158320;
-        bh=S1YnfUryk0L2ZsYdhjekcoTp3feYwxUkk3NnwN11E5U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=z0zMRTcVXte0BGrwzwElt40Jtg/TF0YfxVEB7KytNXRJlVTRWWh4mC8LPAWhD/eUv
-         RDxMcmfPI8cN8LNuknx3VSCn7FHOzPIMUe2Ee33Di6NN2l46/s+8ham6vuc39wxAW+
-         NJIjFEjoVwXbBcAkmg5Wziv1RlBJqifOHYnXZt2U=
-Received: from localhost.localdomain ([49.7.199.72])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id 1402C0F4; Sat, 22 Apr 2023 18:05:00 +0800
-X-QQ-mid: xmsmtpt1682157937to9uve8j0
-Message-ID: <tencent_60D59E6EE9816978182B3CA30E4B48DD000A@qq.com>
-X-QQ-XMAILINFO: NkHKfw09D6j8DzDFrl8OZ8DLAowJ2S27fJ6TyiQednlgwnWrGZ7po7Z1NK7DM2
-         1gB15xje0WgS3HC8cyXMDnzwd+xfnkdHWxX0XeAfCR5TXfV8ymB2ZSvBGuSImdd8tlzoM92UEPqY
-         P60PuepCEDQsKAcMzQl20IFWMEkdWHwqBrsult5Uga+qtfZtAFEyORgaCtnOpg6uEJH/6yfdNl+f
-         C9x/jIodWfAnRpljF5wfSPO8i1MCgHCtkfqGHWZMzW23/JxKxJm9GFRHm6Awdr2QdgOdTloi9VIJ
-         nY8eD0/NYBW3ETa3U8IZbmWYa+nO9Cw62j/cDhm3ECkB2WUrVnUoy9YYYi2n2FE6KLs5I4wLnndy
-         dUW9q1NCYSR1W7Qqx6AfNOliqCnkntQ5sVZzMVQs4TZt8Y3JuEPNWGqSlN14nCFWmibi0WUVBUjk
-         55AE2XuAtf2EYn9baNYf1SxPIUbTeMfwyaq25ywekxZqBmiNq56zqM5YI3qKpnrTydKTNr2TO+mo
-         LnOAm2EDNdJ9JbhhkikOnk0Fvb/AilsKjGOoMniBgnJNrMsUB3vkmzfP8MZXuIEZjoBSPwMjVFbK
-         Y0f4Ll+6HDzgRm0E5S3NWYgcR1kSeeXRCDN61KI0m5wv0BnFQNPPkZC5sLsbQHKofIkuq/0S+TYI
-         lZM7UJS5qNYf9I0vQZHtD8s0vfHzos9AcuDY/1RLOHt1fVTsD6lzYHjPnAGBIAnaTYR8BRkaSDs6
-         kKnaLuUN4qPDmLUug6lmliKJU26oqjnrK9YWEpZT9ixbQBsQpyaVoT7ImCab29j0LOoaM4ZfeiS+
-         dyAM1hMT9k2M0bjurm9CNfdUkqUMa7YFYvyg+59/bhdaBXed+yDqWFql5F/+c809BTCgOR0G9cO2
-         ZoEfyr3dj4c1NIGJc8ZE7e/PT3xBo02U1A6j7vhO6kTVfYErMjfBQh20Gc5XExqsc/Bny9iFCfdy
-         528BABRkuwWI4QSyQv1ueRYj7zFZItJwQ3XSuYkX9uJx13MsLIJXLi7rRikexO0vNd8nLTlXZCy2
-         ETbQWJEL5wwcTLiBWLMjv/NkfmN8aiVBc1OnGAoNqJ5erPzIOe
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     tony0620emma@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH 10/10] wifi: rtw88: fix incorrect error codes in rtw_debugfs_set_fw_crash
-Date:   Sat, 22 Apr 2023 18:04:54 +0800
-X-OQ-MSGID: <e5c786a4f5594388b4af17f545f072121316a410.1682156784.git.zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <cover.1682156784.git.zhang_shurong@foxmail.com>
-References: <cover.1682156784.git.zhang_shurong@foxmail.com>
+        Sat, 22 Apr 2023 06:14:14 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C497198A
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 03:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yWTtb8X1PWzMP0hPPxIA/opEVBGXs9woxLUOBTFzLto=; b=URet+H5Q9KNLN5qCHeLNLyT2Dj
+        VdmGkSAxj3Aw6ybOEfB6vzr+dUMOBqnWSFvi3Bd5pitTjfKJP2SNfR/vY7Oe9v1BLQBJYLfVGBVw8
+        grovCMQgKDmjOmWjR8n9goZ4mDCETMvmnsWxJ+YCQ0ia7UEN12MtZcPh7Zp1gptnlWKggwAIvQ8tx
+        hVQm9DMwf0g+yuHfcE1gj5CAtC81EgEW+OQJE27quMIAui6IV9YYoS6XDANIJEjCad9Apu0W6LmCi
+        kYTTbmDsMm8xKDu+lxAzToGhkxyV0u+gdVR2F/fxbsjvpKzBK0rnwB3P5OCzZ6YzJTFzQq/9BpXuB
+        toC7A3RQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pqAFD-006CPK-2w;
+        Sat, 22 Apr 2023 10:13:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 70B6E300338;
+        Sat, 22 Apr 2023 12:13:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2BB4623BD94B2; Sat, 22 Apr 2023 12:13:25 +0200 (CEST)
+Date:   Sat, 22 Apr 2023 12:13:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qyousef@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Zimuzo Ezeozue <zezeozue@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Connor O'Brien <connoro@google.com>
+Subject: Re: [PATCH v3 09/14] sched: Split scheduler execution context
+Message-ID: <20230422101325.GC1214746@hirez.programming.kicks-ass.net>
+References: <20230411042511.1606592-1-jstultz@google.com>
+ <20230411042511.1606592-10-jstultz@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SBL_CSS,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411042511.1606592-10-jstultz@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is a failure during copy_from_user, rtw_debugfs_set_fw_crash
-should return negative error code instead of a positive value count.
+On Tue, Apr 11, 2023 at 04:25:06AM +0000, John Stultz wrote:
+> +	/*
+> +	 * XXX how does (proxy exec) mutexes and RT_mutexes work together?!
+> +	 */
 
-Fix this bug by returning correct error code.
-
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/net/wireless/realtek/rtw88/debug.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/realtek/rtw88/debug.c b/drivers/net/wireless/realtek/rtw88/debug.c
-index f9bcb44b42ac..700d5183d62a 100644
---- a/drivers/net/wireless/realtek/rtw88/debug.c
-+++ b/drivers/net/wireless/realtek/rtw88/debug.c
-@@ -955,7 +955,9 @@ static ssize_t rtw_debugfs_set_fw_crash(struct file *filp,
- 	bool input;
- 	int ret;
- 
--	rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, count, 1);
-+	ret = rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, count, 1);
-+	if (ret < 0)
-+		return ret;
- 
- 	ret = kstrtobool(tmp, &input);
- 	if (ret)
--- 
-2.40.0
-
+They don't, if PE works we can delete all of rt-mutex.
