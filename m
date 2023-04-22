@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD33C6EBB11
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 21:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436F26EBB12
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 22:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjDVT4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 15:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S229811AbjDVUA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 16:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjDVT4q (ORCPT
+        with ESMTP id S229587AbjDVUAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 15:56:46 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9462E19A6
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:56:44 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f196e8e2c6so11850915e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 12:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682193403; x=1684785403;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X9yZH5jobw+2NxtflHbFeViB++WpgYUG8lLecB6Yof4=;
-        b=CtthS9YsA6btqa4JO6vI8qG6Ei18swg2oPFg8KSHXvYFTzsNah2B3GZZ2DkXLIK3Bu
-         WM0pmmAqy8lmu8V5P5lBn6SpKmEQLfSQRnN9RvwhNc6BvTCdoCQ0A8lMUYzZCukwctyR
-         aHCIqkRnqpEv6uttQW+6QMeoM+SujZq10TVVXX8rdWR6DXNqDEHeemDTMcLHjoTM9FqD
-         doVI7jomezoHjx23hxLkDztftgUtxd1JXMvb2eIKQW5Ntoilq1SiNUJUzrOmd9GQkQoP
-         hzz2hmyx516OXcG72SALiwE7+ltPW0o7cRxRdqn5nMsGaCPULJuP4JTnjbysaF57fbUW
-         1L/w==
+        Sat, 22 Apr 2023 16:00:23 -0400
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD5E199A
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 13:00:21 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2a8dc00ade2so27651441fa.0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 13:00:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682193403; x=1684785403;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X9yZH5jobw+2NxtflHbFeViB++WpgYUG8lLecB6Yof4=;
-        b=StesO1l4gAnEQEp3hFEMJtNHfqYkLTYkbdicA9vDU3Dn4gPa5oyxj0YigpWhIFKExq
-         ONHeDZsfSjlQDwxlccZjNIpNze2MJKIGybvoxCCw89hu1Qzvg8E+KHk9ueK/+L5HNv91
-         UFSojeUNKDfonhv5rRv8WJGHwwVfKaxRbF+Ww066Z8Np0/o1/jBxIxYalQJ8al5qapbJ
-         LsSYtmuEnsojC8mLTbr/QNOzASeF+5kG5y61srRlDMstnsvNcQNNeMlyl5p1wedCtzgk
-         kfp9haUYx97AOxwh7xMV2+TFT5Ofj+TjL4VX+IVR87vHnnWWbRiSTQdyeSeFmc2mArVY
-         ecSg==
-X-Gm-Message-State: AAQBX9d8155irkGUhRBeYGAkmw24egsgoufj30uWSZ1JFZNnXBWt28pS
-        6QrAmqToIm0tnPpSP4jI7VqXoA==
-X-Google-Smtp-Source: AKy350aU1g4P2e/Je3n5HyLAU9lTZT6CKyVdRbmopfPN/a5RVwo2XdTRo1sK9qdXYS1MlABzSAFFUA==
-X-Received: by 2002:adf:e2c8:0:b0:2ef:bc0b:e70 with SMTP id d8-20020adfe2c8000000b002efbc0b0e70mr7197653wrj.54.1682193403110;
-        Sat, 22 Apr 2023 12:56:43 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i3-20020adff303000000b002f4cf72fce6sm7206104wro.46.2023.04.22.12.56.41
+        d=1e100.net; s=20221208; t=1682193619; x=1684785619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L4de9YCcQ8wvq6ChwmsYT8Nh2orwqJ0P0/zKvV4GBJI=;
+        b=j9Jvy5GHBcTUBbiFxzFoqXYTzbIToXf1fSzNfB7UXA67b6F8yFaagqlAwZPkrt1ugo
+         BxhgXt71EHkIK/La7Yj8iWWLz61fsD03gv2G44YUOqgn3UxOT4zXCc3PDvTh34RRjR3J
+         /v9wtF9Qh9C873YJTXpYKHLtS5jt5Eqc6DQKEDzofpDbw9ktSYGreKW7UJ0wzTVwNIXN
+         3g4eWUDG4WmvNQjvdbfD/jEMczIGcJocwOJtlU2i/hAgJWBgtijEIiFgQPBgxIHpg5lH
+         D3eKQg5ixwk0ysTqFoXNo+DUavMa8xlD74iA/yvifmNODlQ2jNLG67XiXU1/YqkgEblc
+         ssFA==
+X-Gm-Message-State: AAQBX9fgWNHX7RPqhlqePzzJaMcz3D4d49dTOv5F9Nn4Zwqe9MZ1rlTq
+        CcjqjHBVNiHKv4V+GRmfROc=
+X-Google-Smtp-Source: AKy350Z+8cao3O2b8jKurJij0P1liANQkMuqt0M2KKptCo+zkp5rwi0xwjDqfTnVGVntIvVSyS2CFA==
+X-Received: by 2002:a2e:8e8f:0:b0:2a7:6b95:1d62 with SMTP id z15-20020a2e8e8f000000b002a76b951d62mr1663907ljk.52.1682193618893;
+        Sat, 22 Apr 2023 13:00:18 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:801:709:7e94:afb:ceb7:df2:e96c])
+        by smtp.googlemail.com with ESMTPSA id s14-20020a2e83ce000000b002a8c897efb9sm1104125ljh.131.2023.04.22.13.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Apr 2023 12:56:42 -0700 (PDT)
-Date:   Sat, 22 Apr 2023 22:56:39 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, Vicki Pfau <vi@endrift.com>,
-        kernel-janitors@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Rojtberg <rojtberg@gmail.com>,
-        Nate Yocom <nate@yocom.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        John Butler <radon86dev@gmail.com>,
-        Matthias Benkmann <matthias.benkmann@gmail.com>,
-        Christopher Crockett <chaorace@gmail.com>,
-        Santosh De Massari <s.demassari@gmail.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com,
-        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: xpad - fix GPF in xpad_probe
-Message-ID: <c12873b2-d2e5-4fbc-987f-fa96cbe926da@kili.mountain>
-References: <20230414125603.686123-1-dzm91@hust.edu.cn>
- <c3e0823b-2b03-4dab-b7cb-a8bc5151f0b1@kili.mountain>
- <011c00e7-c351-4331-8be4-1c184d5773e1@kili.mountain>
- <3ccc85bd-0541-4ffb-a207-dfc533a2c0aa@kili.mountain>
- <d49bb5a2-ed78-4b16-b7ea-b9c7748ca0e4@kili.mountain>
+        Sat, 22 Apr 2023 13:00:18 -0700 (PDT)
+From:   =?UTF-8?q?Bo=20Svang=C3=A5rd?= <bo.svangard@sylog.se>
+To:     derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Bo=20Svang=C3=A5rd?= <bo.svangard@sylog.se>
+Subject: [PATCH] misc/xilinx_sdfec: remove redundant _{open, release} function
+Date:   Sat, 22 Apr 2023 21:59:33 +0200
+Message-Id: <20230422195933.523874-1-bo.svangard@sylog.se>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d49bb5a2-ed78-4b16-b7ea-b9c7748ca0e4@kili.mountain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 10:48:32PM +0300, Dan Carpenter wrote:
-> The warnings from this are quite promising.
+The functions are redundant as they are empty and performed by the misc
+driver.
 
-Well...  The results are over 90% false positives.  But there are still
-probably 15 bugs in there.  The printk warning trick would probably
-work.
+Signed-off-by: Bo Svangård <bo.svangard@sylog.se>
+---
+ drivers/misc/xilinx_sdfec.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-regards,
-dan carpenter
+diff --git a/drivers/misc/xilinx_sdfec.c b/drivers/misc/xilinx_sdfec.c
+index cb9506f9cbd0..270ff4c5971a 100644
+--- a/drivers/misc/xilinx_sdfec.c
++++ b/drivers/misc/xilinx_sdfec.c
+@@ -855,16 +855,6 @@ static int xsdfec_cfg_axi_streams(struct xsdfec_dev *xsdfec)
+ 	return 0;
+ }
+ 
+-static int xsdfec_dev_open(struct inode *iptr, struct file *fptr)
+-{
+-	return 0;
+-}
+-
+-static int xsdfec_dev_release(struct inode *iptr, struct file *fptr)
+-{
+-	return 0;
+-}
+-
+ static int xsdfec_start(struct xsdfec_dev *xsdfec)
+ {
+ 	u32 regread;
+@@ -1030,8 +1020,6 @@ static __poll_t xsdfec_poll(struct file *file, poll_table *wait)
+ 
+ static const struct file_operations xsdfec_fops = {
+ 	.owner = THIS_MODULE,
+-	.open = xsdfec_dev_open,
+-	.release = xsdfec_dev_release,
+ 	.unlocked_ioctl = xsdfec_dev_ioctl,
+ 	.poll = xsdfec_poll,
+ 	.compat_ioctl = compat_ptr_ioctl,
+-- 
+2.40.0
 
