@@ -2,102 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436F26EBB12
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 22:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC716EBB16
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 22:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjDVUA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 16:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
+        id S229825AbjDVUBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 16:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDVUAX (ORCPT
+        with ESMTP id S229565AbjDVUBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 16:00:23 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD5E199A
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 13:00:21 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2a8dc00ade2so27651441fa.0
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 13:00:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682193619; x=1684785619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L4de9YCcQ8wvq6ChwmsYT8Nh2orwqJ0P0/zKvV4GBJI=;
-        b=j9Jvy5GHBcTUBbiFxzFoqXYTzbIToXf1fSzNfB7UXA67b6F8yFaagqlAwZPkrt1ugo
-         BxhgXt71EHkIK/La7Yj8iWWLz61fsD03gv2G44YUOqgn3UxOT4zXCc3PDvTh34RRjR3J
-         /v9wtF9Qh9C873YJTXpYKHLtS5jt5Eqc6DQKEDzofpDbw9ktSYGreKW7UJ0wzTVwNIXN
-         3g4eWUDG4WmvNQjvdbfD/jEMczIGcJocwOJtlU2i/hAgJWBgtijEIiFgQPBgxIHpg5lH
-         D3eKQg5ixwk0ysTqFoXNo+DUavMa8xlD74iA/yvifmNODlQ2jNLG67XiXU1/YqkgEblc
-         ssFA==
-X-Gm-Message-State: AAQBX9fgWNHX7RPqhlqePzzJaMcz3D4d49dTOv5F9Nn4Zwqe9MZ1rlTq
-        CcjqjHBVNiHKv4V+GRmfROc=
-X-Google-Smtp-Source: AKy350Z+8cao3O2b8jKurJij0P1liANQkMuqt0M2KKptCo+zkp5rwi0xwjDqfTnVGVntIvVSyS2CFA==
-X-Received: by 2002:a2e:8e8f:0:b0:2a7:6b95:1d62 with SMTP id z15-20020a2e8e8f000000b002a76b951d62mr1663907ljk.52.1682193618893;
-        Sat, 22 Apr 2023 13:00:18 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:801:709:7e94:afb:ceb7:df2:e96c])
-        by smtp.googlemail.com with ESMTPSA id s14-20020a2e83ce000000b002a8c897efb9sm1104125ljh.131.2023.04.22.13.00.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Apr 2023 13:00:18 -0700 (PDT)
-From:   =?UTF-8?q?Bo=20Svang=C3=A5rd?= <bo.svangard@sylog.se>
-To:     derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, michal.simek@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Bo=20Svang=C3=A5rd?= <bo.svangard@sylog.se>
-Subject: [PATCH] misc/xilinx_sdfec: remove redundant _{open, release} function
-Date:   Sat, 22 Apr 2023 21:59:33 +0200
-Message-Id: <20230422195933.523874-1-bo.svangard@sylog.se>
-X-Mailer: git-send-email 2.40.0
+        Sat, 22 Apr 2023 16:01:34 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A031FE3;
+        Sat, 22 Apr 2023 13:01:32 -0700 (PDT)
+Received: from [192.168.1.190] (ip5b42332c.dynamic.kabel-deutschland.de [91.66.51.44])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: buczek)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 83D7461E4052B;
+        Sat, 22 Apr 2023 22:01:29 +0200 (CEST)
+Message-ID: <3972fe6d-34f4-3a9b-b939-494fd19f1bfb@molgen.mpg.de>
+Date:   Sat, 22 Apr 2023 22:01:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+Content-Language: en-US
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
+        kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org,
+        ming.lei@redhat.com, gregkh@linuxfoundation.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+ <20230404140835.25166-4-sergei.shtepa@veeam.com>
+ <cb0cc2f1-48cb-8b15-35af-33a31ccc922c@molgen.mpg.de>
+ <86068780-bab3-2fc2-3f6f-1868be119b38@veeam.com>
+ <a1854604-cec1-abd5-1d49-6cf6a19ee7a1@veeam.com>
+ <1dc227d0-9528-9b77-63ff-b49b0579caa1@molgen.mpg.de>
+ <c05fd3e7-5610-4f63-9012-df1b808d9536@veeam.com>
+ <955ede49-bb69-2ab2-d256-a329fe1b728c@molgen.mpg.de>
+ <3b589d44-3fbd-1f4f-8efb-9b334c26a20f@molgen.mpg.de>
+ <b6516901-b7ba-cde9-644c-84dfdef012ad@veeam.com>
+ <a670606b-ad27-ff7c-f74c-e36269f2ddfc@veeam.com>
+From:   Donald Buczek <buczek@molgen.mpg.de>
+In-Reply-To: <a670606b-ad27-ff7c-f74c-e36269f2ddfc@veeam.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functions are redundant as they are empty and performed by the misc
-driver.
 
-Signed-off-by: Bo Svangård <bo.svangard@sylog.se>
----
- drivers/misc/xilinx_sdfec.c | 12 ------------
- 1 file changed, 12 deletions(-)
 
-diff --git a/drivers/misc/xilinx_sdfec.c b/drivers/misc/xilinx_sdfec.c
-index cb9506f9cbd0..270ff4c5971a 100644
---- a/drivers/misc/xilinx_sdfec.c
-+++ b/drivers/misc/xilinx_sdfec.c
-@@ -855,16 +855,6 @@ static int xsdfec_cfg_axi_streams(struct xsdfec_dev *xsdfec)
- 	return 0;
- }
- 
--static int xsdfec_dev_open(struct inode *iptr, struct file *fptr)
--{
--	return 0;
--}
--
--static int xsdfec_dev_release(struct inode *iptr, struct file *fptr)
--{
--	return 0;
--}
--
- static int xsdfec_start(struct xsdfec_dev *xsdfec)
- {
- 	u32 regread;
-@@ -1030,8 +1020,6 @@ static __poll_t xsdfec_poll(struct file *file, poll_table *wait)
- 
- static const struct file_operations xsdfec_fops = {
- 	.owner = THIS_MODULE,
--	.open = xsdfec_dev_open,
--	.release = xsdfec_dev_release,
- 	.unlocked_ioctl = xsdfec_dev_ioctl,
- 	.poll = xsdfec_poll,
- 	.compat_ioctl = compat_ptr_ioctl,
+On 4/21/23 19:32, Sergei Shtepa wrote:
+> 
+> 
+> On 4/20/23 21:17, Sergei Shtepa wrote:
+>> Subject:
+>> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+>> From:
+>> Sergei Shtepa <sergei.shtepa@veeam.com>
+>> Date:
+>> 4/20/23, 21:17
+>>
+>> To:
+>> Donald Buczek <buczek@molgen.mpg.de>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+>> CC:
+>> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+>>
+>>
+>>
+>> On 4/20/23 16:44, Donald Buczek wrote:
+>>> Subject:
+>>> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+>>> From:
+>>> Donald Buczek <buczek@molgen.mpg.de>
+>>> Date:
+>>> 4/20/23, 16:44
+>>>
+>>> To:
+>>> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+>>> CC:
+>>> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+>>>
+>>>
+>>> On 4/19/23 21:42, Donald Buczek wrote:
+>>>> Dear Sergei,
+>>>>
+>>>> On 4/19/23 15:05, Sergei Shtepa wrote:
+>>>>> [...]
+>>>>>
+>>>>> Patches in attach and https://github.com/SergeiShtepa/linux/tree/blksnap-master
+>>>> Thanks. I can confirm that this fixes the reported problem and I no longer can trigger the UAF. 😄
+>>>>
+>>>> Tested-Bny: Donald Buczek <buczek@molgen.mpg.de>
+>>>>
+>>>> Maybe you can add me to the cc list for v4 as I'm not subscribed to the lists.
+>>>
+>>> Sorry, found another one. Reproducer:
+>>>
+>>> =====
+>>> #! /bin/bash
+>>> set -xe
+>>> modprobe blksnap
+>>> test -e /scratch/local/test.dat || fallocate -l 1G /scratch/local/test.dat
+>>> s=$(blksnap snapshot_create -d /dev/vdb)
+>>> blksnap snapshot_appendstorage -i $s -f /scratch/local/test.dat
+>>> blksnap snapshot_take -i $s
+>>> s2=$(blksnap snapshot_create -d /dev/vdb)
+>>> blksnap snapshot_destroy -i $s2
+>>> blksnap snapshot_destroy -i $s
+>>> =====
+>>>
+>>>
+>>> [20382.402921] blksnap-snapshot: Snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa was created
+>>> [20382.535933] blksnap-image: Create snapshot image device for original device [253:16]
+>>> [20382.542405] blksnap-snapshot: Snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa was taken successfully
+>>> [20382.572564] blksnap-snapshot: Snapshot 4b2d571d-9a24-419d-96c2-8d64a07c4966 was created
+>>> [20382.600521] blksnap-snapshot: Destroy snapshot 4b2d571d-9a24-419d-96c2-8d64a07c4966
+>>> [20382.602373] blksnap-snapshot: Release snapshot 4b2d571d-9a24-419d-96c2-8d64a07c4966
+>>> [20382.722137] blksnap-snapshot: Destroy snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa
+>>> [20382.724033] blksnap-snapshot: Release snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa
+>>> [20382.725850] ==================================================================
+>>> [20382.727641] BUG: KASAN: wild-memory-access in snapshot_free+0x73/0x170 [blksnap]
+>>> [20382.729326] Write of size 8 at addr dead000000000108 by task blksnap/8297
+>>> ...
+>> Great! Thanks.
+>>
+>> There is no protection against re-adding a block device to the snapshot.
+>> I'll take care of it.
+>>
+> 
+> Hi!
+> 
+> I think the fix turned out to be quite beautiful.
+> Now you will get an error "Device or resource busy".
+> Fix in attach and on github.
+> Link: https://github.com/SergeiShtepa/linux/commit/43a5d3dd9858f092b734187b6a62ce75acaa47c7
+
+I can confirm, that this fixes the problem.
+
+     root@dose:~# blksnap snapshot_create -d /dev/vda -d /dev/vda
+     fdcd3ee3-a25f-4c2a-93d7-2d951520e938
+     Operation already in progress
+     root@dose:~# echo $?
+     1
+
+
+Tested-By: Donald Buczek <buczek@molgen.mpg.de>
+
+Best
+   Donald
+
 -- 
-2.40.0
-
+Donald Buczek
+buczek@molgen.mpg.de
+Tel: +49 30 8413 1433
