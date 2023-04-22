@@ -2,149 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A672B6EBC16
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 01:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A5C6EBC1D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 01:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjDVXaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 19:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S229751AbjDVXqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 19:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDVXaA (ORCPT
+        with ESMTP id S229500AbjDVXqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 19:30:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D30C213D;
-        Sat, 22 Apr 2023 16:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682206199; x=1713742199;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mk/rUj7xZQRo0wJpLXl0vUvyBjGAGS0GDp1KvZ8ywtY=;
-  b=UoL4LXvPoiGlOnYHwheXZtEUEvL1NSWHDO3PWJCWFFbcg5zQTJlVUwL0
-   W4PJQswd5xW0ZaDUEmIEUVXmFYZRpKRjApFOkYgROLQ/eoHmUITCsYmQ4
-   zSmmsJSqCbI6ZiqURc6qLcLT2ysRK+9OownHzdMkzgQpzkYkWc2Clq8RO
-   cz+WXqkwpK4fEmGRqqiX2b1jLJBLhxRtXo96Kab3skzLEfiMh/rMs999Q
-   /HP9vudGfVf6fi/ugfNyeowuWfCqP1z9sErcAl5jfd3FwsGNw/HySjoMM
-   W1KhNWL4YxKbmXlFca6CSBwjrStQJ5Yc1aImEM2EbSoqLxw2GAJYNSogE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="335096975"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="335096975"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 16:29:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="781954255"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="781954255"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Apr 2023 16:29:55 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqMfz-000hZ8-0g;
-        Sat, 22 Apr 2023 23:29:55 +0000
-Date:   Sun, 23 Apr 2023 07:29:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH V5 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
-Message-ID: <202304230707.TM8MomW0-lkp@intel.com>
-References: <142bfd034c12c245cda9f1dee20a05188b63494d.1681799201.git.quic_schowdhu@quicinc.com>
+        Sat, 22 Apr 2023 19:46:36 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110D02680
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 16:46:35 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-32b62107509so53979365ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 16:46:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682207194; x=1684799194;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kk97rR7/vXImouur5vtnRKbmRDnRpfwYKx1WX5/3Z8s=;
+        b=UqeOHQLlrmwTb+bAN4HY+fOKn++Tk+MH0hDHHEnhp6bb8Adx0xrLFnSajLFJ2B4edr
+         aAjcBF7VawzsWHD2uOgDEtmwt5sgBh9sG8ljIfKc1R3lg26vwkaZr0polof3w87opVdm
+         8kLNhKfK+4E6v/22KP3CQkzTkD8rINGiit0yCtm4yLyomFDsxiybu9snVRlWOQgteCw3
+         BxotxCloM7FtI+xMaCCP70Dhd8v0AMOc1bH8dE9aB9kMscgh2FXRNtGcNmxfbJTkCClk
+         /YNfl2rRobcnhzbNzk+wVkYcvBpR9WTpo+s/h13YTbjzF8chZ6lQM6jErVHxQL7vcocF
+         9kRg==
+X-Gm-Message-State: AAQBX9fv1ewH80MCvba40E7yyUO9Pp2FHEimRlzb/w7UjtcDHPmvQc6q
+        SmapaZr85jDZZh440x4GQRsqSCBCju/R+mwcVzMr0bmsVYTk
+X-Google-Smtp-Source: AKy350amD816Ko7C8FcW8O+eurgJ82Jp4CjRYp0bNV919Y91N0p9QW0WPZU4fRChKCARP4W37KLYX1J2OdZ3WrcObH4HpOVICmp3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <142bfd034c12c245cda9f1dee20a05188b63494d.1681799201.git.quic_schowdhu@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:dc4c:0:b0:328:4e63:795f with SMTP id
+ x12-20020a92dc4c000000b003284e63795fmr2235036ilq.0.1682207194336; Sat, 22 Apr
+ 2023 16:46:34 -0700 (PDT)
+Date:   Sat, 22 Apr 2023 16:46:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041d47405f9f56290@google.com>
+Subject: [syzbot] [btrfs?] kernel BUG in scrub_handle_errored_block
+From:   syzbot <syzbot+e19c41a2f26eccf41aab@syzkaller.appspotmail.com>
+To:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Souradeep,
+Hello,
 
-kernel test robot noticed the following build warnings:
+syzbot found the following issue on:
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk-dt/for-next linus/master v6.3-rc7 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    af67688dca57 Merge tag 'mmc-v6.3-rc3' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f8020bc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4afb87f3ec27b7fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=e19c41a2f26eccf41aab
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230418-144757
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/142bfd034c12c245cda9f1dee20a05188b63494d.1681799201.git.quic_schowdhu%40quicinc.com
-patch subject: [PATCH V5 2/3] soc: qcom: boot_stat: Add Driver Support for Boot Stats
-config: nios2-randconfig-s033-20230423 (https://download.01.org/0day-ci/archive/20230423/202304230707.TM8MomW0-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/1e2fc43bcc0869349f7e3698fceebbcc8333d1f3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230418-144757
-        git checkout 1e2fc43bcc0869349f7e3698fceebbcc8333d1f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/soc/qcom/
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304230707.TM8MomW0-lkp@intel.com/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/eaa3ac1127b4/disk-af67688d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/02dd376f6bb3/vmlinux-af67688d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0162b8821f2f/bzImage-af67688d.xz
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/soc/qcom/boot_stats.c:70:36: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void *data @@     got struct boot_stats [noderef] __iomem *b_stats @@
-   drivers/soc/qcom/boot_stats.c:70:36: sparse:     expected void *data
-   drivers/soc/qcom/boot_stats.c:70:36: sparse:     got struct boot_stats [noderef] __iomem *b_stats
-   drivers/soc/qcom/boot_stats.c:71:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void *data @@     got struct boot_stats [noderef] __iomem *b_stats @@
-   drivers/soc/qcom/boot_stats.c:71:72: sparse:     expected void *data
-   drivers/soc/qcom/boot_stats.c:71:72: sparse:     got struct boot_stats [noderef] __iomem *b_stats
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e19c41a2f26eccf41aab@syzkaller.appspotmail.com
 
-vim +70 drivers/soc/qcom/boot_stats.c
+BTRFS warning (device loop5): tree block 5423104 mirror 1 has bad bytenr, has 0 want 5423104
+assertion failed: 0, in fs/btrfs/scrub.c:614
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/messages.c:259!
+invalid opcode: 0000 [#2] PREEMPT SMP KASAN
+CPU: 0 PID: 17944 Comm: kworker/u4:18 Tainted: G      D            6.3.0-rc7-syzkaller-00043-gaf67688dca57 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: btrfs-scrub scrub_bio_end_io_worker
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 2c 4c 43 f7 e9 50 fb ff ff e8 42 80 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 ef 2b 8b e8 68 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 a3 8b ed f6 48
+RSP: 0018:ffffc900166a7638 EFLAGS: 00010246
+RAX: 000000000000002c RBX: 0000000004248060 RCX: 8c5f616438692d00
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc900166a7910 R08: ffffffff816df7fc R09: fffff52002cd4e41
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffffc900166a7860
+R13: ffff888030d3d000 R14: dffffc0000000000 R15: ffff88801cd20000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33342000 CR3: 0000000029ac2000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_full_stripe fs/btrfs/scrub.c:614 [inline]
+ scrub_handle_errored_block+0x1ee1/0x4730 fs/btrfs/scrub.c:1067
+ scrub_bio_end_io_worker+0x9bb/0x1370 fs/btrfs/scrub.c:2559
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
 
-    52	
-    53	static int boot_stats_probe(struct platform_device *pdev)
-    54	{
-    55		struct device *bootstat_dev = &pdev->dev;
-    56		struct bs_data *drvdata;
-    57	
-    58		drvdata = devm_kzalloc(bootstat_dev, sizeof(*drvdata), GFP_KERNEL);
-    59		platform_set_drvdata(pdev, drvdata);
-    60	
-    61		drvdata->dbg_dir = debugfs_create_dir(dev_name(bootstat_dev), NULL);
-    62		if (IS_ERR(drvdata->dbg_dir))
-    63			return dev_err_probe(bootstat_dev, -ENOENT, "failed to create debugfs directory");
-    64	
-    65		drvdata->b_stats = devm_of_iomap(bootstat_dev, bootstat_dev->of_node, 0, NULL);
-    66		if (!drvdata->b_stats)
-    67			return dev_err_probe(bootstat_dev, -ENOMEM, "failed to map imem region\n");
-    68	
-    69		debugfs_create_file("pre_abl_time", 0200, drvdata->dbg_dir,
-  > 70				    drvdata->b_stats, &pre_abl_time_fops);
-    71		debugfs_create_file("abl_time", 0200, drvdata->dbg_dir, drvdata->b_stats, &abl_time_fops);
-    72	
-    73		return 0;
-    74	}
-    75	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
