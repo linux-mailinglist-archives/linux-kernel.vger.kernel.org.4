@@ -2,141 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3E66EB9EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 17:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A672B6EBC16
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 01:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjDVPMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 11:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
+        id S229834AbjDVXaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 19:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjDVPL6 (ORCPT
+        with ESMTP id S229556AbjDVXaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 11:11:58 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0551BE3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 08:11:55 -0700 (PDT)
-X-ASG-Debug-ID: 1682176311-1eb14e638841370001-xx1T2L
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id ljftPdxn0Gr5sTUK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sat, 22 Apr 2023 23:11:51 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 22 Apr
- 2023 23:11:51 +0800
-Received: from [192.168.0.100] (115.171.114.112) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 22 Apr
- 2023 23:11:49 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Message-ID: <235c2ebc-ca9b-8765-0914-fcd839f1e45c@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 192.168.0.100
-Date:   Sun, 23 Apr 2023 07:11:49 +0800
+        Sat, 22 Apr 2023 19:30:00 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D30C213D;
+        Sat, 22 Apr 2023 16:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682206199; x=1713742199;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mk/rUj7xZQRo0wJpLXl0vUvyBjGAGS0GDp1KvZ8ywtY=;
+  b=UoL4LXvPoiGlOnYHwheXZtEUEvL1NSWHDO3PWJCWFFbcg5zQTJlVUwL0
+   W4PJQswd5xW0ZaDUEmIEUVXmFYZRpKRjApFOkYgROLQ/eoHmUITCsYmQ4
+   zSmmsJSqCbI6ZiqURc6qLcLT2ysRK+9OownHzdMkzgQpzkYkWc2Clq8RO
+   cz+WXqkwpK4fEmGRqqiX2b1jLJBLhxRtXo96Kab3skzLEfiMh/rMs999Q
+   /HP9vudGfVf6fi/ugfNyeowuWfCqP1z9sErcAl5jfd3FwsGNw/HySjoMM
+   W1KhNWL4YxKbmXlFca6CSBwjrStQJ5Yc1aImEM2EbSoqLxw2GAJYNSogE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="335096975"
+X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
+   d="scan'208";a="335096975"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 16:29:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="781954255"
+X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
+   d="scan'208";a="781954255"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Apr 2023 16:29:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqMfz-000hZ8-0g;
+        Sat, 22 Apr 2023 23:29:55 +0000
+Date:   Sun, 23 Apr 2023 07:29:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: Re: [PATCH V5 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
+ Stats
+Message-ID: <202304230707.TM8MomW0-lkp@intel.com>
+References: <142bfd034c12c245cda9f1dee20a05188b63494d.1681799201.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit
- value
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH v2] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit
- value
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>, <stable@vger.kernel.org>
-References: <20230421174142.382602-1-WeitaoWang-oc@zhaoxin.com>
- <a55aa38d-0fbf-4a95-a2b2-40821815275f@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <a55aa38d-0fbf-4a95-a2b2-40821815275f@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [115.171.114.112]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1682176311
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2276
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107774
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <142bfd034c12c245cda9f1dee20a05188b63494d.1681799201.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/21 22:59, Alan Stern wrote:
-> On Sat, Apr 22, 2023 at 01:41:42AM +0800, Weitao Wang wrote:
->> OverCurrent condition is not standardized in the UHCI spec.
->> Zhaoxin UHCI controllers report OverCurrent bit active off.
->> In order to handle OverCurrent condition correctly, the uhci-hcd
->> driver needs to be told to expect the active-off behavior.
->>
->> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->> ---
->> v1->v2
->>   - Modify the description of this patch.
->>   - Let Zhaoxin and VIA share a common oc_low flag
->>
->>   drivers/usb/host/uhci-pci.c | 9 +++++----
->>   1 file changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
->> index 3592f757fe05..034586911bb5 100644
->> --- a/drivers/usb/host/uhci-pci.c
->> +++ b/drivers/usb/host/uhci-pci.c
->> @@ -119,11 +119,12 @@ static int uhci_pci_init(struct usb_hcd *hcd)
->>   
->>   	uhci->rh_numports = uhci_count_ports(hcd);
->>   
->> -	/* Intel controllers report the OverCurrent bit active on.
->> -	 * VIA controllers report it active off, so we'll adjust the
->> -	 * bit value.  (It's not standardized in the UHCI spec.)
->> +	/* Intel controllers report the OverCurrent bit active on.  VIA
->> +	 * and ZHAOXIN controllers report it active off, so we'll adjust
->> +	 * the bit value.  (It's not standardized in the UHCI spec.)
->>   	 */
-> 
-> The style we use now for multi-line comments is:
-> 
-> 	/*
-> 	 * Blah blah blah
-> 	 * blah blah blah
-> 	 */
-> 
->> -	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
->> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
->> +		to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
-> 
-> The indentation level of the continuation line should be different from
-> the indentation of the statement below.  Otherwise it looks like the
-> continuation line is part of the conditional block.
-> 
-I see, Thanks for your careful examination. I'll change it later.
+Hi Souradeep,
 
-Best Regards,
-Weitao
+kernel test robot noticed the following build warnings:
 
-> Alan Stern
-> 
->>   		uhci->oc_low = 1;
->>   
->>   	/* HP's server management chip requires a longer port reset delay. */
->> -- 
->> 2.32.0
->>
-> .
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-dt/for-next linus/master v6.3-rc7 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230418-144757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/142bfd034c12c245cda9f1dee20a05188b63494d.1681799201.git.quic_schowdhu%40quicinc.com
+patch subject: [PATCH V5 2/3] soc: qcom: boot_stat: Add Driver Support for Boot Stats
+config: nios2-randconfig-s033-20230423 (https://download.01.org/0day-ci/archive/20230423/202304230707.TM8MomW0-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/1e2fc43bcc0869349f7e3698fceebbcc8333d1f3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230418-144757
+        git checkout 1e2fc43bcc0869349f7e3698fceebbcc8333d1f3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/soc/qcom/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304230707.TM8MomW0-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/soc/qcom/boot_stats.c:70:36: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void *data @@     got struct boot_stats [noderef] __iomem *b_stats @@
+   drivers/soc/qcom/boot_stats.c:70:36: sparse:     expected void *data
+   drivers/soc/qcom/boot_stats.c:70:36: sparse:     got struct boot_stats [noderef] __iomem *b_stats
+   drivers/soc/qcom/boot_stats.c:71:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void *data @@     got struct boot_stats [noderef] __iomem *b_stats @@
+   drivers/soc/qcom/boot_stats.c:71:72: sparse:     expected void *data
+   drivers/soc/qcom/boot_stats.c:71:72: sparse:     got struct boot_stats [noderef] __iomem *b_stats
+
+vim +70 drivers/soc/qcom/boot_stats.c
+
+    52	
+    53	static int boot_stats_probe(struct platform_device *pdev)
+    54	{
+    55		struct device *bootstat_dev = &pdev->dev;
+    56		struct bs_data *drvdata;
+    57	
+    58		drvdata = devm_kzalloc(bootstat_dev, sizeof(*drvdata), GFP_KERNEL);
+    59		platform_set_drvdata(pdev, drvdata);
+    60	
+    61		drvdata->dbg_dir = debugfs_create_dir(dev_name(bootstat_dev), NULL);
+    62		if (IS_ERR(drvdata->dbg_dir))
+    63			return dev_err_probe(bootstat_dev, -ENOENT, "failed to create debugfs directory");
+    64	
+    65		drvdata->b_stats = devm_of_iomap(bootstat_dev, bootstat_dev->of_node, 0, NULL);
+    66		if (!drvdata->b_stats)
+    67			return dev_err_probe(bootstat_dev, -ENOMEM, "failed to map imem region\n");
+    68	
+    69		debugfs_create_file("pre_abl_time", 0200, drvdata->dbg_dir,
+  > 70				    drvdata->b_stats, &pre_abl_time_fops);
+    71		debugfs_create_file("abl_time", 0200, drvdata->dbg_dir, drvdata->b_stats, &abl_time_fops);
+    72	
+    73		return 0;
+    74	}
+    75	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
