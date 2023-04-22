@@ -2,115 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90C66EB6E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 04:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357646EB6E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 04:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjDVCgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 22:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S229621AbjDVCnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 22:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVCgh (ORCPT
+        with ESMTP id S229451AbjDVCnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 22:36:37 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649522109;
-        Fri, 21 Apr 2023 19:36:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682130995; x=1713666995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/juVSSj7CyS7SRJ/nRbt/3sIAZrGeNxLQufHh/oQk1I=;
-  b=dfkNQapcBQGrn3+6HnpPnSxc3ADHbbGdG3iSDJ6Ep2DJb3okUme7pLt7
-   FApmcRS9S3bwnLhh32sfSwBvMlhx35Xwsa2valetL8X7ngap/GxjND4ga
-   b2g8kJeWvMWRXVfYFgzBjhZrmbSkLzLw2SedAZRs5aQUyEne7gA7HNBWU
-   2a39eNZMVHk1VAoGYL/tec2OXEPk3OViYjWGWOYnczpMmi+A2JwEIovSQ
-   D419XY7SkwJgsZ+is9loD7/KdHi76LklNc5m2u7cX+MalZYxwksT7uW8o
-   nVoV7/FvqGZTrpvfjJEo8gCa52UJvPi/pOwBa9GqAMNqMym8V1jE/858x
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="374056933"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="374056933"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 19:36:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="836364825"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="836364825"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2023 19:36:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pq371-000h0y-1b;
-        Sat, 22 Apr 2023 02:36:31 +0000
-Date:   Sat, 22 Apr 2023 10:35:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc:     oe-kbuild-all@lists.linux.dev, hannes@cmpxchg.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        bfoster@redhat.com, willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH v12 2/3] cachestat: implement cachestat syscall
-Message-ID: <202304221049.51AIFM7O-lkp@intel.com>
-References: <20230421231421.2401346-3-nphamcs@gmail.com>
+        Fri, 21 Apr 2023 22:43:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72A31BDD;
+        Fri, 21 Apr 2023 19:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=6s42dEkhm+h+7Bop8LtLFtXQGDgrgIugEwb6pwLtltI=; b=ME3SRQ7wA+waI0Ddl4KOd/ZFye
+        SCp9rPX+MMV3sfIVb1TXRcU6UAchfvFDuwB03VJMyi2a/Pnfs788e9pPtBxFHlx/JG/F7tSjBk2He
+        Dts47hcGQAb9c44hYLzhGlBVZGMHqJ32mesMHfWuldPvzkvBFusbG8YB0j0ED0qP+12pwWHv11opR
+        3q0JW0CiAdJlAD/+ehPeJDlRqO0Sf+u+bM3xmxmLHTNMi9+P8P4Xui9qqFxcPr6F64QS9iqWhyKhG
+        xoQfPuXzM2QGUt/g1Y61D5Kkz2xIaeBgcn5Udn0V4xwDW1FQilmED8QK1PTY1LSewTi2wF5ak5C0j
+        sld1j4sA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pq3DV-00CGf4-2h;
+        Sat, 22 Apr 2023 02:43:14 +0000
+Message-ID: <43df1f32-3506-fc2f-a033-b452852b5e25@infradead.org>
+Date:   Fri, 21 Apr 2023 19:43:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421231421.2401346-3-nphamcs@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/4] platform/x86: wmi: Add documentation
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230420233226.14561-1-W_Armin@gmx.de>
+ <20230420233226.14561-4-W_Armin@gmx.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230420233226.14561-4-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nhat,
+Hi--
 
-kernel test robot noticed the following build warnings:
+On 4/20/23 16:32, Armin Wolf wrote:
+> Add documentation for the WMI subsystem. The documentation describes
+> both the ACPI WMI interface and the driver API for interacting with
+> the WMI driver core. The information regarding the ACPI interface
+> where retrieved from the Ubuntu kernel references and the
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[cannot apply to shuah-kselftest/next shuah-kselftest/fixes linus/master tip/x86/asm v6.3-rc7 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  were?  I would say "was".
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230422-071625
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230421231421.2401346-3-nphamcs%40gmail.com
-patch subject: [PATCH v12 2/3] cachestat: implement cachestat syscall
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230422/202304221049.51AIFM7O-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9691e4430fbb59890619289b45ee0ce9ec3e97ee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230422-071625
-        git checkout 9691e4430fbb59890619289b45ee0ce9ec3e97ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k prepare
+> Windows driver samples available on GitHub. The documentation is
+> supposed to help driver developers writing WMI drivers, as many
+> modern machines designed to run Windows provide a ACPI WMI interface.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304221049.51AIFM7O-lkp@intel.com/
+                                                  an ACPI
 
-All warnings (new ones prefixed by >>):
+For the Documentation/ files, AFAIK, we still have an 80-column preferred
+limit.  coding-style.rst does not say anything about Documentation/ being
+exempt from that limit.
 
->> <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-Wcpp]
---
->> <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-Wcpp]
---
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-Wcpp]
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  Documentation/driver-api/index.rst   |  1 +
+>  Documentation/driver-api/wmi.rst     | 19 ++++++
+>  Documentation/subsystem-apis.rst     |  1 +
+>  Documentation/wmi/acpi-interface.rst | 86 ++++++++++++++++++++++++++++
+>  Documentation/wmi/index.rst          | 18 ++++++
+>  MAINTAINERS                          |  2 +
+>  include/linux/wmi.h                  |  2 +-
+>  7 files changed, 128 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/driver-api/wmi.rst
+>  create mode 100644 Documentation/wmi/acpi-interface.rst
+>  create mode 100644 Documentation/wmi/index.rst
+> 
+> diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+> index ff9aa1afdc62..1e16a40da3ba 100644
+> --- a/Documentation/driver-api/index.rst
+> +++ b/Documentation/driver-api/index.rst
+> @@ -113,6 +113,7 @@ available subsections can be seen below.
+>     xillybus
+>     zorro
+>     hte/index
+> +   wmi
+> 
+>  .. only::  subproject and html
+> 
+> diff --git a/Documentation/driver-api/wmi.rst b/Documentation/driver-api/wmi.rst
+> new file mode 100644
+> index 000000000000..06cecbe36afd
+> --- /dev/null
+> +++ b/Documentation/driver-api/wmi.rst
+> @@ -0,0 +1,19 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +==============
+> +WMI Driver API
+> +==============
+> +
+> +The WMI driver core supports a more modern bus-based interface for interacting with WMI devices,
+> +and an older GUID-based interface. The later interface is considered to be deprecated, so new
+
+ITYM                                      latter
+
+> +WMI drivers should generally avoid it since it has some issues with multiple WMI devices and
+> +events sharing the same GUIDs and/or notification IDs. The modern bus-based interface instead
+> +maps each WMI device to a :c:type:`struct wmi_device <wmi_device>`, so it supports WMI devices
+> +sharing GUIDs and/or notification IDs. Drivers can then register a :c:type:`struct wmi_driver <wmi_driver>`,
+> +which will get bound to compatible WMI devices by the driver core.
+
+s/get/be/ preferably.
+
+> +
+> +.. kernel-doc:: include/linux/wmi.h
+> +   :internal:
+> +
+> +.. kernel-doc:: drivers/platform/x86/wmi.c
+> +   :export:
+> diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
+> index b51f38527e14..69f5e4d53bad 100644
+> --- a/Documentation/subsystem-apis.rst
+> +++ b/Documentation/subsystem-apis.rst
+> @@ -57,3 +57,4 @@ needed).
+>     scheduler/index
+>     mhi/index
+>     peci/index
+> +   wmi/index
+> diff --git a/Documentation/wmi/acpi-interface.rst b/Documentation/wmi/acpi-interface.rst
+> new file mode 100644
+> index 000000000000..c0afdb6c5885
+> --- /dev/null
+> +++ b/Documentation/wmi/acpi-interface.rst
+> @@ -0,0 +1,86 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +==================
+> +ACPI WMI interface
+> +==================
+> +
+> +The ACPI WMI interface is a proprietary extension of the ACPI specification made by Microsoft
+> +to allow hardware vendors to embed WMI (Windows Management Instrumentation) objects inside
+> +their ACPI firmware. Typical functions implemented over ACPI WMI are hotkey events on modern
+> +notebooks and configuration of BIOS options.
+> +
+> +PNP0C14 ACPI device
+> +-------------------
+> +
+> +Discovery of WMI objects is handled by defining ACPI devices with a PNP ID of ``PNP0C14``.
+> +These devices will contain a set of ACPI buffers and methods used for mapping and execution
+> +of WMI methods and/or queries. If there exist multiple of such devices, then each device is
+> +required to have a unique ACPI UID.
+> +
+> +_WDG buffer
+> +-----------
+> +
+> +The ``_WDG`` buffer is used to discover WMI objects and is required to be static. Its internal
+> +structure consists of data blocks with a size of 20 bytes, containing the following data:
+> +
+> +======= =============== =====================================================
+> +Offset  Size (in bytes) Content
+> +======= =============== =====================================================
+> +0x00    16              128 bit Variant 2 object GUID.
+> +0x10    2               2 character method ID or single byte notification ID.
+> +0x12    1               Object instance count.
+> +0x13    1               Object flags.
+> +======= =============== =====================================================
+> +
+> +The WMI object flags control whether the method or notification ID is used:
+> +
+> +- 0x1: Data block usage is expensive and must be explicitly enabled/disabled.
+> +- 0x2: Data block contains WMI methods.
+> +- 0x4: Data block contains ASCIZ string.
+> +- 0x8: Data block describes a WMI event, use notification ID instead of method ID.
+> +
+> +Each WMI object GUID can appear multiple times inside a system. The method/notification ID
+> +is used to construct the ACPI method names used for interacting with the WMI object.
+> +
+> +WQxx ACPI methods
+> +-----------------
+> +
+> +If a data block does not contain WMI methods, then its content can be retrieved by this required
+> +ACPI methods. The last two characters of the ACPI method name are the method ID of the data block
+
+   ACPI method.
+
+> +to query. Their single parameter is a integer describing the instance which should be queried. This
+
+                                       an integer
+
+> +parameter can be omitted if the data block contains only a single instance.
+> +
+> +WSxx ACPI methods
+> +-----------------
+> +
+> +Similar to the ``WQxx`` ACPI methods, except that it is optional and takes an additional buffer
+> +as its second argument. The instance argument also cannot be omitted.
+> +
+> +WMxx ACPI methods
+> +-----------------
+> +
+> +Used for executing WMI methods associated with a data block. The last two characters of the ACPI method
+> +name are the method ID of the data block containing the WMI methods. Their first parameter is a integer
+
+                                                                                                 an integer
+
+> +describing the instance which methods should be executed. The second parameter is a integer describing
+> +the WMI method ID to execute, and the third parameter is a buffer containing the WMI method parameters.
+> +If the data block is marked as containing a ASCIZ string, then this buffer should contain a ASCIZ string.
+
+                                             an ASCIZ string,                                an ASCIZ string.
+
+> +The ACPI method will return the result of the executed WMI method.
+> +
+> +WExx ACPI methods
+> +-----------------
+> +
+> +Used for optionally enabling/disabling WMI events, the last two characters of the ACPI method are the
+> +notification ID of the data block describing the WMI event as hexadecimal value. Their first parameter
+> +is an integer with a value of 0 if the WMI event should be disabled, other values will enable the WMI event.
+> +
+> +WCxx ACPI methods
+> +-----------------
+> +Similar to the ``WExx`` ACPI methods, except that it controls data collection instead of events
+> +and thus the last two characters of the ACPI method name are the method ID of the data block
+> +to enable/disable.
+> +
+> +_WED ACPI method
+> +----------------
+> +
+> +Used to retrieve additional WMI event data, its single parameter is a integer holding the
+> +notification ID of the event.
+> diff --git a/Documentation/wmi/index.rst b/Documentation/wmi/index.rst
+> new file mode 100644
+> index 000000000000..b29933a86380
+> --- /dev/null
+> +++ b/Documentation/wmi/index.rst
+> @@ -0,0 +1,18 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +=============
+> +WMI Subsystem
+> +=============
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   acpi-interface
+> +
+> +.. only::  subproject and html
+> +
+> +
+> +   Indices
+> +   =======
+> +
+> +   * :ref:`genindex`
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0c9011f5fc17..979d37176429 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -449,6 +449,8 @@ F:	include/linux/acpi_viot.h
+>  ACPI WMI DRIVER
+>  L:	platform-driver-x86@vger.kernel.org
+>  S:	Orphan
+> +F:	Documentation/driver-api/wmi.rst
+> +F:	Documentation/wmi/
+>  F:	drivers/platform/x86/wmi.c
+>  F:	include/uapi/linux/wmi.h
+> 
+> diff --git a/include/linux/wmi.h b/include/linux/wmi.h
+> index 88f66b12eef9..87822effdf3c 100644
+> --- a/include/linux/wmi.h
+> +++ b/include/linux/wmi.h
+> @@ -49,7 +49,7 @@ extern int set_required_buffer_size(struct wmi_device *wdev, u64 length);
+>   *
+>   * This represents WMI drivers which handle WMI devices.
+>   * @filter_callback is only necessary for drivers which
+> - * want to set up a WMI IOCTL interface.
+> + * want to set up a WMI IOCTL interface
+
+Nothing wrong with the ending '.' there.
+
+>   */
+>  struct wmi_driver {
+>  	struct device_driver driver;
+> --
+> 2.30.2
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+~Randy
