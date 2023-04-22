@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC526EB9A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099536EB9A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjDVO3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 10:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
+        id S229853AbjDVObZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 10:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVO3B (ORCPT
+        with ESMTP id S229451AbjDVObX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 10:29:01 -0400
-Received: from out203-205-251-80.mail.qq.com (out203-205-251-80.mail.qq.com [203.205.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CC618E;
-        Sat, 22 Apr 2023 07:28:56 -0700 (PDT)
+        Sat, 22 Apr 2023 10:31:23 -0400
+Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1616F18E;
+        Sat, 22 Apr 2023 07:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682173734;
-        bh=lAhvK/6iAVJHwzi6nSMtZhd5mosxwxL4Es7IMJuPvs0=;
-        h=From:To:Cc:Subject:Date;
-        b=gJUYZeAuPoIwNf38RXa7VGZH1NIIK01lNJeAG2Hz1D8bsXXZldDrR4xDAOuP83a3z
-         6yiRcnX+nGhf/RxryLCCgQk8KIZXo8y30ANBx6IWBev/gHaNzjm9+YuIh3dfafBj9O
-         a7JIz+d47zcs/qrBsLuzEqbwl0ER53N0CkW4/l8Y=
+        s=s201512; t=1682173878;
+        bh=fcZ123v+5iWe00iPixPiJvoNEQTtOF1P0aFwqsZgykQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=a5Bm4/J4WXjEnWzxqpr999x1seqGHN2JkQmGCzRaYeK/zo5eIQmG8FVCokNxQ8l7E
+         Wjm+QHI4B8fq3o6gbgKCrwthumfrdcGC5azHJCXLmNpIWfTmJBATI9StQ5VU5mcoBs
+         xoURUXiIKld+gNk8WVY8bfDHdk6+RxNlkiecKnlw=
 Received: from rtoax.. ([111.199.190.121])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id 6E802069; Sat, 22 Apr 2023 22:27:40 +0800
-X-QQ-mid: xmsmtpt1682173660tar8ifj1g
-Message-ID: <tencent_F85E314661100B0CE2845EB27E2E2F558C09@qq.com>
-X-QQ-XMAILINFO: M/NR0wiIuy70dcPQJwtU+Jpl4XyXWAWk6hB7EqnCXZLF64re4832dic/sx4cTm
-         2Ac2uRIX30G5JuROgQ9gjEGy8+aN3znNUGDmpZGqjgNQE0rrVq9iPiq26e0KzgNGBHwp1hXfrzK4
-         KfTnTlBD7G1s0DEk049TJtHKCnXk5DdgNfFtjVlUmumhx32uEZCMD+Kay6eIKmTQ2NTI0C/pGCWO
-         CvB1PWAzTElgEBrc5PqbOfxGa+bT2075ZIQxR8PFQYIrtbI9WktiOKupNDYpa8J3FJzmnF14iX5d
-         lq281V1N5J5Q2RsbZLM9qew2xkAqEARP8oT042C7FZZsOUcReA7L0B+++CZlkWhE8Pdw5gt1xt9s
-         ATiEA78PMCgdAScahAJdKt6xjjlc05DCJDGsWprhfmm+MUv3bAgKyv5rMAGKow2MDzqVVWjhc2lY
-         RCBWMYbT/jHOK2tp+ZDwlrpd04ApKDQkqgN1A+v9+8GtwSjxHHiBRRE4R9VtwVQW5BTGbMZOg977
-         r8sjRRzM86ZAKm02eywtc6+DwYy3C6qe6YtC/W8fM566AgTfxIT0t0kY2GZocZeIujHJcQp2KJFR
-         If4+mUREgmHY5enFwQAwJjwA1fULvYdVB5tWhGbEr8ZQpxbIXHh+y9NOFUqIscZblJ6Y8hxByl2Z
-         riSxWDY9oXzzp3yy1VQdEA8/uJN2F7OvMifLVpDVkIysioJXWC5ur9FY6HjBO+yfHpj22/R4R6H0
-         fTl36Oav+yxCCDLYhyyrWP2wZxnmtss/RJeLT1CB6LUuYwISJeo2WgLmw5Y/KHTEWFXXIncmb+YU
-         plKSdQQKSiQLBF0FbANuIu5YduwWw74DdNuZKGJb9IpnsP9iSD3ixwaeYvE7sGwS/kLPnxQ/dl7W
-         JhCCfHKdBw9AUmLIVdqw53xfaBwJUZdGE5gFNWbKdLyRrkmGj/TNxksNW33Cnj9IyJPKIPwdOjGr
-         Ng+wwu8QHUtc/8xCjgJCUhXE1xwDaa/yKg7Uc8LViggOzyIAGZTQvifAk07VKm
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 7D017ACB; Sat, 22 Apr 2023 22:31:16 +0800
+X-QQ-mid: xmsmtpt1682173876tfm69o0a8
+Message-ID: <tencent_08445EF147F310070D7884E0B2402E6F5509@qq.com>
+X-QQ-XMAILINFO: NY3HYYTs4gYSazu/r0TvtxdBx7lab9HUfROFNsTSxW/fF7XpcIFrO253+8S4WN
+         rFEb5UdWBVJkyhtIZEYQNCmVPVPuqA/j8+Yo6KYda7D3KucCKR8aKf8PcxF3N827WCiWHL7NFiVq
+         B+qpglHBnBO9Ft3MtKDp+I9MLIWBJGpuV8E+5//RRNcSnSTjsfy06vX8zd22Zwqlo8Pqgtf6yunS
+         mPUM9bhK7dMFm+pzeIzxryrs6YyYTLgg/zUu2KT8iq32TOldPg4pjOaYjPvMJhWg3F8Gi7XJNlef
+         drq0hAlp3DI/7W2cMoj51bEjW9CTm3AE9ifJhw1bcxB3YvZv4ClYmD2fY78T+1j4CiauQGCgvMZ2
+         0glf7ytBloMrhwt3S4q8MKNxtTKz7XOO89LSHLirE3MY1ffckjFX2pgJLlcXOg9XFxiFYiZVxeSa
+         6MNWPocol1Hryqc68QEvgjU3FwIrj5puLFhBcDzzwlPZy7jdOCnb8vbYcYSA6i1eJEMQ38vZ/k+d
+         EjVEN0W5jBKTxMHgHRBf5pYNiQkYZUfpZtKfVowG6U8YcVlNbgr5xWalxXzLwdedcE2KapchQ8SF
+         2yxoLeAPtTqFJ3Fs6NCvQIlHRQ/4jJC3dw22z3blMocIAjT2D+R5a/xKwHfMWBTVytGX2cABL3FO
+         EN0dTXhPLo0hnxaAkOWt53PANXoUKyQDYEIXOK2Iv9PCuuyN0S8Q5LuYn7Gid9d/2fblRsj7GNoi
+         xKWCzJZmcIqLM9+RGD/dWMetfU8EPglE6K829Zip8u86CvE83qNONPepuGV7mFUkzb5JMqnn7UD+
+         yXeIkNSV5iVyuYEbmK91WI9SfHex0SgxDSnAx+dqCafpw2XC+0Il0BRsYuVMg8DTx6TL+Ox+DDtM
+         KTtAAKa8nVg0M+TNh5OAuK7uxhL7daQ+deQm71HWCJYnccTqwuGxPLzjzfm6cYaYaq81pwDoTin0
+         fqjdja4lK1l4+LgxIEEFn0lSNTu/rSl7Fx2rCQ5T6eL5wQV/ZJ0TbNvqMS0JWo
 From:   Rong Tao <rtoax@foxmail.com>
 To:     william.gray@linaro.org
-Cc:     Rong Tao <rongtao@cestc.cn>,
-        linux-iio@vger.kernel.org (open list:COUNTER SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] tools/counter: Makefile: Remove lingering 'include' when make clean
-Date:   Sat, 22 Apr 2023 22:27:38 +0800
-X-OQ-MSGID: <20230422142739.59948-1-rtoax@foxmail.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rongtao@cestc.cn, rtoax@foxmail.com
+Subject: Re: [PATCH] tools/counter: Makefile: Remove useless 'include' when make clean
+Date:   Sat, 22 Apr 2023 22:31:15 +0800
+X-OQ-MSGID: <20230422143115.60507-1-rtoax@foxmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <ZEPrLfRajOjhv52l@fedora>
+References: <ZEPrLfRajOjhv52l@fedora>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,30 +64,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
-
-'make' create 'include' directory, we should remove it when 'make clean'.
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v2: this commit, according to William Breathitt Gray's suggession in v1
-v1: https://lore.kernel.org/lkml/tencent_FA682F628E818DD04B96C3E5A94ACFABE206@qq.com/
----
- tools/counter/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/counter/Makefile b/tools/counter/Makefile
-index 8843f0fa6119..a0f4cab71fe5 100644
---- a/tools/counter/Makefile
-+++ b/tools/counter/Makefile
-@@ -40,6 +40,7 @@ $(OUTPUT)counter_example: $(COUNTER_EXAMPLE)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/linux/counter.h
-+	rmdir -p $(OUTPUT)include/linux
- 	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
--- 
-2.40.0
+Thanks, William. I submit v2, please review.
 
