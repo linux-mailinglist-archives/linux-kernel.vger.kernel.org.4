@@ -2,96 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE436EB7DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 09:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C456EB7E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 09:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjDVHi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 03:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S229559AbjDVHsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 03:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjDVHiO (ORCPT
+        with ESMTP id S229451AbjDVHsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 03:38:14 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7B219BD;
-        Sat, 22 Apr 2023 00:38:13 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33M7ZNDl027766;
-        Sat, 22 Apr 2023 07:38:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=Vsorn17+lHdspdySrV76ro0C+0yMpI5rorINwv56l2o=;
- b=Cqh2I/ZGB0lsWGyDlTwBA94i0LpeBlbgIYlfdbUNBYfDRfKoDEZCXmeAWc5RJiUmLJve
- tIyLyWxCGisYt3MIjXogFOl0adbj5LUwhylqKgqZHqcLjjCXayJ8IVufiQEi5yomaspV
- lKn8nCtSgZOJwwPgCZvvg6KE5bIGky8v7bVd5wO9loHHjtBmN9pBFQPMCr5k3YYdosEp
- KJdoFHI3MYZjmhJqSxeKD+G3Usp05VxxvlUkw09DT6ymEDnSU0DGb+oRvlOKKRhWHsYX
- nSlpKKKLUYfeSmWH7TUkM5FHQc7iSvu+Plde3QZC6iRMAVppGrl9p367sEUrr4SRb2Yf 9Q== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q48h385km-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Apr 2023 07:38:01 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33M7bxHq002516
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Apr 2023 07:37:59 GMT
-Received: from hazha-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sat, 22 Apr 2023 00:37:54 -0700
-From:   Hao Zhang <quic_hazha@quicinc.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Hao Zhang <quic_hazha@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-doc@vger.kernel.org>
-Subject: [PATCH v3 3/3] Documentation: trace: Add documentation for Coresight Dummy Trace
-Date:   Sat, 22 Apr 2023 15:37:14 +0800
-Message-ID: <20230422073714.38844-4-quic_hazha@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230422073714.38844-1-quic_hazha@quicinc.com>
-References: <20230422073714.38844-1-quic_hazha@quicinc.com>
+        Sat, 22 Apr 2023 03:48:38 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD211BDD;
+        Sat, 22 Apr 2023 00:48:36 -0700 (PDT)
+Received: from amy-vm.localdomain ([10.12.183.232])
+        (user=yejunyan@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33M7iZgr022988-33M7iZgs022988
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Sat, 22 Apr 2023 15:44:49 +0800
+From:   Junyan Ye <yejunyan@hust.edu.cn>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Junyan Ye <yejunyan@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pci: controller: pci-ftpci100: Release the clock resources
+Date:   Sat, 22 Apr 2023 15:42:52 +0800
+Message-Id: <20230422074254.14473-1-yejunyan@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3cnXiXHaXM4tSxblUdSU-IzjgEwVrY7R
-X-Proofpoint-GUID: 3cnXiXHaXM4tSxblUdSU-IzjgEwVrY7R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=952 mlxscore=0
- adultscore=0 priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304220064
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: yejunyan@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,54 +48,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for Coresight Dummy Trace under trace/coresight.
+Smatch reported:
+1. drivers/pci/controller/pci-ftpci100.c:526 faraday_pci_probe()
+warn: 'clk' from clk_prepare_enable() not released on lines:
+442,451,462,478,512,517.
+2. drivers/pci/controller/pci-ftpci100.c:526 faraday_pci_probe()
+warn: 'p->bus_clk' from clk_prepare_enable() not released on lines:
+451,462,478,512,517.
 
-Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+The clock resource is obtained by the devm_clk_get function. The
+clk_prepare_enable function then makes the clock resource ready for use,
+notifying the system that the clock resource should be run. After that,
+the clock resource should be released when it is no longer needed. This
+includes notifying the system that the clock resource is no longer needed
+and revoking the prepared clock. The corresponding function is
+clk_disable_unprepare. However, while doing some error handling in the
+faraday_pci_probe function, the clk_disable_unprepare function is not
+called to release the clk and p->bus_clk resources.
+
+Fix the warning by adding the clk_disable_unprepare function before
+returning the error message.
+
+Fixes: b3c433efb8a3 ("PCI: faraday: Fix wrong pointer passed to PTR_ERR()")
+Fixes: 2eeb02b28579 ("PCI: faraday: Add clock handling")
+Fixes: 783a862563f7 ("PCI: faraday: Use pci_parse_request_of_pci_ranges()")
+Fixes: d3c68e0a7e34 ("PCI: faraday: Add Faraday Technology FTPCI100 PCI Host Bridge driver")
+Fixes: f1e8bd21e39e ("PCI: faraday: Convert IRQ masking to raw PCI config accessors")
+Signed-off-by: Junyan Ye <yejunyan@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
- .../trace/coresight/coresight-dummy.rst       | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/trace/coresight/coresight-dummy.rst
+This issue is found by static analyzer.
 
-diff --git a/Documentation/trace/coresight/coresight-dummy.rst b/Documentation/trace/coresight/coresight-dummy.rst
-new file mode 100644
-index 000000000000..d0f73253f694
---- /dev/null
-+++ b/Documentation/trace/coresight/coresight-dummy.rst
-@@ -0,0 +1,34 @@
-+.. SPDX-License-Identifier: GPL-2.0
+ drivers/pci/controller/pci-ftpci100.c | 31 +++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/pci/controller/pci-ftpci100.c b/drivers/pci/controller/pci-ftpci100.c
+index ecd3009df586..ca3ba377b3dd 100644
+--- a/drivers/pci/controller/pci-ftpci100.c
++++ b/drivers/pci/controller/pci-ftpci100.c
+@@ -438,17 +438,21 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 	p->bus_clk = devm_clk_get(dev, "PCICLK");
+-	if (IS_ERR(p->bus_clk))
+-		return PTR_ERR(p->bus_clk);
++	if (IS_ERR(p->bus_clk)) {
++		ret = PTR_ERR(p->bus_clk);
++		goto err_release_clk;
++	}
+ 	ret = clk_prepare_enable(p->bus_clk);
+ 	if (ret) {
+ 		dev_err(dev, "could not prepare PCICLK\n");
+-		return ret;
++		goto err_release_clk;
+ 	}
+ 
+ 	p->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(p->base))
+-		return PTR_ERR(p->base);
++	if (IS_ERR(p->base)) {
++		ret = PTR_ERR(p->base);
++		goto err_release_p_bus_clk;
++	}
+ 
+ 	win = resource_list_first_type(&host->windows, IORESOURCE_IO);
+ 	if (win) {
+@@ -459,7 +463,8 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 			writel(val, p->base + FTPCI_IOSIZE);
+ 		} else {
+ 			dev_err(dev, "illegal IO mem size\n");
+-			return -EINVAL;
++			ret = -EINVAL;
++			goto err_release_p_bus_clk;
+ 		}
+ 	}
+ 
+@@ -475,7 +480,7 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 		ret = faraday_pci_setup_cascaded_irq(p);
+ 		if (ret) {
+ 			dev_err(dev, "failed to setup cascaded IRQ\n");
+-			return ret;
++			goto err_release_p_bus_clk;
+ 		}
+ 	}
+ 
+@@ -509,12 +514,12 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 
+ 	ret = faraday_pci_parse_map_dma_ranges(p);
+ 	if (ret)
+-		return ret;
++		goto err_release_p_bus_clk;
+ 
+ 	ret = pci_scan_root_bus_bridge(host);
+ 	if (ret) {
+ 		dev_err(dev, "failed to scan host: %d\n", ret);
+-		return ret;
++		goto err_release_p_bus_clk;
+ 	}
+ 	p->bus = host->bus;
+ 	p->bus->max_bus_speed = max_bus_speed;
+@@ -524,6 +529,14 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 	pci_bus_add_devices(p->bus);
+ 
+ 	return 0;
 +
-+=============================
-+Coresight Dummy Trace Module
-+=============================
++err_release_p_bus_clk:
++	clk_disable_unprepare(p->bus_clk);
 +
-+    :Author:   Hao Zhang <quic_hazha@quicinc.com>
-+    :Date:     April 2023
++err_release_clk:
++	clk_disable_unprepare(clk);
 +
-+Introduction
-+---------------------------
-+
-+Coresight Dummy Trace Module is for the specific devices that kernel
-+don't have permission to access or configure, e.g., CoreSight TPDMs
-+on Qualcomm platforms. So there need driver to register dummy devices
-+as Coresight devices. It may also be used to define components that
-+may not have any programming interfaces (e.g, static links), so that
-+paths can be established in the driver. Provide Coresight API for
-+dummy device operations, such as enabling and disabling dummy devices.
-+Build the Coresight path for dummy sink or dummy source for debugging.
-+
-+Config details
-+---------------------------
-+
-+There are two types of nodes, dummy sink and dummy source. The nodes
-+should be observed at the below coresight path::
-+
-+    ``/sys/bus/coresight/devices``.
-+
-+e.g.::
-+
-+    / $ ls -l /sys/bus/coresight/devices | grep dummy
-+    dummy0 -> ../../../devices/platform/soc@0/soc@0:dummy_source/dummy0
-+    dummy1 -> ../../../devices/platform/soc@0/soc@0:dummy_sink/dummy1
++	return ret;
+ }
+ 
+ /*
 -- 
-2.17.1
+2.25.1
 
