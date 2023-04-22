@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938186EB957
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 15:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85716EB954
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 15:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjDVNXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 09:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S229820AbjDVNWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 09:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDVNXa (ORCPT
+        with ESMTP id S229479AbjDVNWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 09:23:30 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8A510E2;
-        Sat, 22 Apr 2023 06:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1682169756; i=ps.report@gmx.net;
-        bh=cmUFT4OfIbNytno9emWfQm3hzQNoxBDM3Z5o7EEjaYU=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=QVXfltavTUdwOJ8zoLJGRSvD+g1HuJMOYmwwuaIbdNp1C1fo+dCNo8fkXuQQTT6tf
-         0onnoPIh17nQ1et5efnxJp/AjdMcW8fTItCpjYwEkIwkKfHASSY2ozMJU0JQWiZqDu
-         o8umVdhX81GkHqHKwBjhN+yZ1dS/ua8HlQKTnBHWW0fCNFnkCgR+cNyezhaFgXgidA
-         30h5hVoNHlTDYde2koC2c35wJM0Uwj1Sn1bUjxwU23ABsEWsG71jDfqGXDjryqdOwJ
-         HLZd2v29aQJisu/Goa0m89cG7V2MUxOJ8CqmEoobp+wJXx6nTjSsS4xBz8raMR0UG/
-         3eMZjXcF302lQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.208]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvbFs-1q89Dm31WQ-00shQn; Sat, 22
- Apr 2023 15:22:36 +0200
-Date:   Sat, 22 Apr 2023 15:22:34 +0200
-From:   Peter Seiderer <ps.report@gmx.net>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@toke.dk>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        linux-wireless@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sujith Manoharan <c_manoha@qca.qualcomm.com>,
-        "John W . Linville" <linville@tuxdriver.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gregg Wonderly <greggwonderly@seqtechllc.com>
-Subject: Re: [PATCH v1] wifi: ath9k: fix AR9003 mac hardware hang check
- register offset calculation
-Message-ID: <20230422152234.639fc98e@gmx.net>
-In-Reply-To: <87bkjgmd9g.fsf@toke.dk>
-References: <20230420204316.30475-1-ps.report@gmx.net>
-        <ZEOf7LXAkdLR0yFI@corigine.com>
-        <87bkjgmd9g.fsf@toke.dk>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+        Sat, 22 Apr 2023 09:22:52 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D4A10E2;
+        Sat, 22 Apr 2023 06:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682169770; x=1713705770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4hmqW8jviqLT2Gn4j6xIteHxG2TJ3+3ga9V3vfgYALA=;
+  b=fkvQOP/7PQ9QED+8hhgRWYg0Wp6sYbUaaJMKlW0kvOmX3iRGBCCCe469
+   ZXPJYth3Y+yEG1YI2aEYAJnmEohSQeMyFGMilZZolMmH56hFZRQRxJLjg
+   WIQJYV6FTN+rI+IUo3ROmWBHL28vGTeKlCbUqyS0t0zo7VUrrf1nnpf4G
+   4OY7RoYIROc8jOY3XpPPZbw4vXbA90NYqBxAwcHBJ1UHsH3b2XLhETDRf
+   e/ZPR1atcr55MCB5Ltw4qCn6XbDeD92NoWZO4Usjf9lCEe/WJdEnvS87c
+   ULsW81xWxzyTaUN9VlqrD3YtD8E8iRAHhLizsKOFPhNqaRpHzGN/C9qqh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="325753878"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="325753878"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 06:22:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="938787159"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="938787159"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2023 06:22:45 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqDCO-000hJw-2F;
+        Sat, 22 Apr 2023 13:22:44 +0000
+Date:   Sat, 22 Apr 2023 21:22:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nylon Chen <nylon.chen@sifive.com>, aou@eecs.berkeley.edu,
+        conor@kernel.org, emil.renner.berthing@canonical.com,
+        geert+renesas@glider.be, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, nylon.chen@sifive.com,
+        nylon7717@gmail.com, zong.li@sifive.com, greentime.hu@sifive.com,
+        vincent.chen@sifive.com, Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v3 2/2] pwm: sifive: change the PWM controlled LED
+ algorithm
+Message-ID: <202304222135.B9PoQ5w3-lkp@intel.com>
+References: <20230420093457.18936-3-nylon.chen@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/ZyPIhRP+ObOUX2XEzdAFS2huyTpaovE4UqGK62OivzVnICqXrH
- QEHeIqQZiSGwFHtrxnaS0wUxCDa/OazTe2/iF+nE5NP1XQjsnLU78eUYcf2OL3CdM+ilIM8
- CgkLTKWtPDqtvQwPd1kzVN6kXa05cxArkeaGzd9S0AmFgRQP5EjSD0+LD45xPBPyhVifomt
- 4JRD5JQ7jXc23H9W2c+MA==
-UI-OutboundReport: notjunk:1;M01:P0:40teIWQTOuk=;jcWNxkWtqXD+SAJ2lHoSMEIiOfe
- 0pxeOtQZLLEA9fzQT3m9bUrRFmGDSiyKYpfad5cbna7tv0ezi6gE2PMXuGmRZkl222gOEH9fk
- JIUgNSr0/rxYVZLjqFkNBLx6uW8cXJNpqkAoA32971CjQSw6rW/PPyLjPEntjzxJOK3TWkHyr
- vsOPEdcSYhE6430Xq6DEWYCnVNuG1BwnXKAgNh6joz6lbC8fWS9vxISg4Dz1GGjd2CrVi/8mp
- de3GLqHBGflz37QMQ1cGyKg9GleTmwIgR5udCG3wo2lOegFhzKy9F73KafMSET34lf326FUhl
- DEN8CZDoPeoRw11UnvuY41Ir33Kn/1bUow5qebjPpbJw9nP7pnbZs63//jPU4N3Ft8Ik3gW2l
- 6vZx+5eJUFi8wLG9s8msEhNBQfl2EBC64gZt70oi3nUO7SsZcpi0MuLRoSrMAjxrH7BDpWRE0
- rD38t39hA6pbTsCoEYiYAb/ZgIgPPDpqTSgrXIiPmaKyNcUdPisn05CJvXvtGztfX92A51tRq
- lr8Aj6dhdE30CuK7Xrfwumb/DEwLSIB3WNJ3/dHrxwhXQkbvebVMnLu71gXzGCAjIeGPQhGIv
- 5qVkz+whFtneGILJIsbVhTtvZhTeBbEO4L+k3Ol0y+bBhPuFD6FRJJWhi4Bcpnfn26wmBiF2o
- RJm06gCwUM8OrrRGn/LAzkXhkYDbN/LtYnmR/XYI9bh4xfMoxks9h7X4O29kOdyWc5ZUuforF
- AUCxNgowFa77Z5iqQwWDSehmJ7gbEcLBOIyZtxfBm7SNw9FEMbMm1K223p1jmUxo5P4NuBXlK
- J6t7Y0/d+m06ve7iSIZPwlSm0hURkW0EWICA4SCUaqu9nrvRch/w2hkDDqSr2AP2wijdByiYc
- 5IBLPbGDWWh1CSyk8+pSLsVeoyapRYj7gvxIdnmTXeeQinrIbnOjYxPTbwXrU4rRkCmylRPlg
- kQ629PdCNLKs8OcgZdtkj1hUmzE=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420093457.18936-3-nylon.chen@sifive.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,75 +74,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Apr 2023 12:18:03 +0200, Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
-toke.dk> wrote:
+Hi Nylon,
 
-> Simon Horman <simon.horman@corigine.com> writes:
->=20
-> > On Thu, Apr 20, 2023 at 10:43:16PM +0200, Peter Seiderer wrote: =20
-> >> Fix ath9k_hw_verify_hang()/ar9003_hw_detect_mac_hang() register offset
-> >> calculation (do not overflow the shift for the second register/queues
-> >> above five, use the register layout described in the comments above
-> >> ath9k_hw_verify_hang() instead).
-> >>=20
-> >> Fixes: 222e04830ff0 ("ath9k: Fix MAC HW hang check for AR9003")
-> >>=20
-> >> Reported-by: Gregg Wonderly <greggwonderly@seqtechllc.com>
-> >> Link: https://lore.kernel.org/linux-wireless/E3A9C354-0CB7-420C-ADEF-F=
-0177FB722F4@seqtechllc.com/
-> >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> >> ---
-> >> Notes:
-> >>   - tested with MikroTik R11e-5HnD/Atheros AR9300 Rev:4 (lspci: 168c:0=
-033
-> >>     Qualcomm Atheros AR958x 802.11abgn Wireless Network Adapter (rev 0=
-1))
-> >>     card
-> >> ---
-> >>  drivers/net/wireless/ath/ath9k/ar9003_hw.c | 27 ++++++++++++++--------
-> >>  1 file changed, 18 insertions(+), 9 deletions(-)
-> >>=20
-> >> diff --git a/drivers/net/wireless/ath/ath9k/ar9003_hw.c b/drivers/net/=
-wireless/ath/ath9k/ar9003_hw.c
-> >> index 4f27a9fb1482..0ccf13a35fb4 100644
-> >> --- a/drivers/net/wireless/ath/ath9k/ar9003_hw.c
-> >> +++ b/drivers/net/wireless/ath/ath9k/ar9003_hw.c
-> >> @@ -1099,17 +1099,22 @@ static bool ath9k_hw_verify_hang(struct ath_hw=
- *ah, unsigned int queue)
-> >>  {
-> >>  	u32 dma_dbg_chain, dma_dbg_complete;
-> >>  	u8 dcu_chain_state, dcu_complete_state;
-> >> +	unsigned int dbg_reg, reg_offset;
-> >>  	int i;
-> >> =20
-> >> -	for (i =3D 0; i < NUM_STATUS_READS; i++) {
-> >> -		if (queue < 6)
-> >> -			dma_dbg_chain =3D REG_READ(ah, AR_DMADBG_4);
-> >> -		else
-> >> -			dma_dbg_chain =3D REG_READ(ah, AR_DMADBG_5);
-> >> +	if (queue < 6) {
-> >> +		dbg_reg =3D AR_DMADBG_4;
-> >> +		reg_offset =3D i * 5; =20
-> >
-> > Hi Peter,
-> >
-> > unless my eyes are deceiving me, i is not initialised here. =20
->=20
-> Nice catch! Hmm, I wonder why my test compile didn't complain about
-> that? Or maybe it did and I overlooked it? Anyway, Kalle, I already
-> delegated this patch to you in patchwork, so please drop it and I'll try
-> to do better on reviewing the next one :)
+kernel test robot noticed the following build warnings:
 
-No warning reported because of Makefile:
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on thierry-reding-pwm/for-next rockchip/for-next linus/master v6.3-rc7 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  1038 # Enabled with W=3D2, disabled by default as noisy
-  1039 ifdef CONFIG_CC_IS_GCC
-  1040 KBUILD_CFLAGS +=3D -Wno-maybe-uninitialized
-  1041 endif
+url:    https://github.com/intel-lab-lkp/linux/commits/Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20230420-173619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230420093457.18936-3-nylon.chen%40sifive.com
+patch subject: [PATCH v3 2/2] pwm: sifive: change the PWM controlled LED algorithm
+config: sparc64-randconfig-s031-20230421 (https://download.01.org/0day-ci/archive/20230422/202304222135.B9PoQ5w3-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/f2d706bf61190a45a8f90f1f455bc943d4ac7b6e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20230420-173619
+        git checkout f2d706bf61190a45a8f90f1f455bc943d4ac7b6e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/pwm/
 
-Regards,
-Peter
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304222135.B9PoQ5w3-lkp@intel.com/
 
->=20
-> -Toke
+sparse warnings: (new ones prefixed by >>)
+>> drivers/pwm/pwm-sifive.c:157:18: sparse: sparse: incompatible types in comparison expression (different type sizes):
+>> drivers/pwm/pwm-sifive.c:157:18: sparse:    unsigned long long const *
+>> drivers/pwm/pwm-sifive.c:157:18: sparse:    unsigned int *
 
+vim +157 drivers/pwm/pwm-sifive.c
+
+   129	
+   130	static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+   131				    const struct pwm_state *state)
+   132	{
+   133		struct pwm_sifive_ddata *ddata = pwm_sifive_chip_to_ddata(chip);
+   134		struct pwm_state cur_state;
+   135		unsigned int duty_cycle, period;
+   136		unsigned long long num;
+   137		bool enabled;
+   138		int ret = 0;
+   139		u32 frac;
+   140	
+   141		if (state->polarity != PWM_POLARITY_NORMAL && state->polarity != PWM_POLARITY_INVERSED)
+   142			return -EINVAL;
+   143	
+   144		cur_state = pwm->state;
+   145		enabled = cur_state.enabled;
+   146	
+   147		duty_cycle = state->duty_cycle;
+   148		if (!state->enabled)
+   149			duty_cycle = 0;
+   150	
+   151		/*
+   152		 * The problem of output producing mixed setting as mentioned at top,
+   153		 * occurs here. To minimize the window for this problem, we are
+   154		 * calculating the register values first and then writing them
+   155		 * consecutively
+   156		 */
+ > 157		period = max(state->period, ddata->approx_period);
+   158		num = (u64)duty_cycle * (1U << PWM_SIFIVE_CMPWIDTH);
+   159		frac = DIV64_U64_ROUND_CLOSEST(num, state->period);
+   160		frac = min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
+   161		/* The hardware cannot generate a 100% duty cycle */
+   162		frac = (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
+   163	
+   164	
+   165		mutex_lock(&ddata->lock);
+   166		if (state->period != ddata->approx_period) {
+   167			/*
+   168			 * Don't let a 2nd user change the period underneath the 1st user.
+   169			 * However if ddate->approx_period == 0 this is the first time we set
+   170			 * any period, so let whoever gets here first set the period so other
+   171			 * users who agree on the period won't fail.
+   172			 */
+   173			if (ddata->user_count != 1 && ddata->approx_period) {
+   174				mutex_unlock(&ddata->lock);
+   175				return -EBUSY;
+   176			}
+   177			ddata->approx_period = state->period;
+   178			pwm_sifive_update_clock(ddata, clk_get_rate(ddata->clk));
+   179		}
+   180		mutex_unlock(&ddata->lock);
+   181	
+   182		/*
+   183		 * If the PWM is enabled the clk is already on. So only enable it
+   184		 * conditionally to have it on exactly once afterwards independent of
+   185		 * the PWM state.
+   186		 */
+   187		if (!enabled) {
+   188			ret = clk_enable(ddata->clk);
+   189			if (ret) {
+   190				dev_err(ddata->chip.dev, "Enable clk failed\n");
+   191				return ret;
+   192			}
+   193		}
+   194	
+   195		writel(frac, ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm));
+   196	
+   197		if (!state->enabled)
+   198			clk_disable(ddata->clk);
+   199	
+   200		return 0;
+   201	}
+   202	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
