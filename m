@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497806EB6B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 03:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3816EB6B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 03:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbjDVBoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 21:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S229530AbjDVB4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 21:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjDVBof (ORCPT
+        with ESMTP id S232989AbjDVB4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 21:44:35 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7CB35BB;
-        Fri, 21 Apr 2023 18:44:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682127874; x=1713663874;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vkWe51df/2dvVNBuhbu+qHD3Go/+n5R5vhvb2COquW8=;
-  b=COrpqp1j31pncDe/jx6HQQRKJROGUQvI9uIBJ5hf2TJI2Z+cJjr5tCGt
-   F3OUSTY1wWkDjZeEmAdDD7rgBpXF69MJOSGtlpuy/Irkd3g4ghoD2osYs
-   zy/D+BcvLk9huQUrTHty/cssLQkBZjW4HiEgjBdoWFrKC5gnxz8jsd6pB
-   x90IXhY6X5Riwk/GrJUoir7unakEz9Nm8uZLjek4mfoLWuN1oLp2Y7OzI
-   cLmWgi+KuOg+84B6Wjoy/2Uy/44dcgV/pKuWFo2nZ/VsdvFCcPDXPwFEf
-   3fPuJDfHeHjaU+UdTZJ1JqMJOK+GeeiEdzRX+ZKF/iY7a+W3fvdjGg485
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="343601258"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="343601258"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 18:44:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="692444597"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="692444597"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2023 18:44:30 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pq2If-000gzY-1u;
-        Sat, 22 Apr 2023 01:44:29 +0000
-Date:   Sat, 22 Apr 2023 09:44:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/7] arm64: dts: imx8mn-bsh-smm-s2/pro: add display setup
-Message-ID: <202304220932.cK8RhITJ-lkp@intel.com>
-References: <20230421154308.527128-4-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421154308.527128-4-dario.binacchi@amarulasolutions.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Fri, 21 Apr 2023 21:56:39 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EEC1719
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 18:56:38 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-51b41410216so1628533a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 18:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682128597; x=1684720597;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IQdNhpWZDysF1UahR095KnSwqZZsAIRpm1aTBOeoxU0=;
+        b=WvBNdsrmV3zKyzEzVd5WJbwXsxfW67XDwZajqzJsoe5/qS8aKiZC25DdwamG22qL6P
+         pOEeHuaZK2WXX6LGpiaQNIBtapa+enyHQ3U6So6xs1wWhEwuP6g5Y87o+vFl7Ncl0FqJ
+         aYPy5R3UpftMUJ2Et77SQTLDXmIxV+NGmjW43VWWPCwUWy6VQ0sym7Y44JghDOXDlOqh
+         r0btZ4Wmj5NknxwgPJ8hD/0A5NAUUs1K3/nu4gi0FhzTZfOz9uhzg5kr+7AprgOPq1Ig
+         Qak78Ut7eio8UZFGwrEoZe02RLOwNMhl/Q2sfzgRh2JM3lFX5eEtNS6gMx0wsVKF04EG
+         uhMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682128597; x=1684720597;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IQdNhpWZDysF1UahR095KnSwqZZsAIRpm1aTBOeoxU0=;
+        b=TIZ72+/xIlwZ0ElDoNjMqe4eVweZ3J7rGHzH/gP/2IchmaliCV3Z5g4s35gWGBD7rw
+         BE5qBaJMtinIGtOvbGDplYYjcKk/gSHGCdt5YfBtQqtY0zyOC8s0GCvsCsyVC6rSlIDi
+         Ai26MliMfxMaPjERv3CeVF7p8c6oEVb0JuVhHKv/tKBZF4ZITQHsXdd2vY2jxU9PkHsY
+         IX7bNofIgvbQSkUpd0teewkWvU3BBOSBhSWHTCjSnFGniQb0MkH1mxxQTOCEnGLHpTa4
+         HGm5NgX5UX6EDR36btUqcCopY+n+/G5jY9X8L0qx3uEAE5IxszpB2FJsr/0jXgeVeJzR
+         h15Q==
+X-Gm-Message-State: AAQBX9f5DieSCAwsGNvLQtAcQPJUw9OAOXQGwv4seNWlgSF/MhgVQYaN
+        ttpq7PgLiWjiMMRczb62IFIRWwS0M18=
+X-Google-Smtp-Source: AKy350bA8nYVy6RhXf+a8EbMVXDTb5UqBhqquCV4X8ayUrrycoEk7bjzkdzHz6OFwze4Uue09C5oGDmek/0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:40c1:0:b0:50b:189d:d1a with SMTP id
+ n184-20020a6340c1000000b0050b189d0d1amr1635019pga.10.1682128597618; Fri, 21
+ Apr 2023 18:56:37 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 18:56:35 -0700
+In-Reply-To: <CALzav=f=TFoqpR5tPDPOujoO6Gix-+zL-sZyyZK27qJvGPP9dg@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230421214946.2571580-1-seanjc@google.com> <CALzav=f=TFoqpR5tPDPOujoO6Gix-+zL-sZyyZK27qJvGPP9dg@mail.gmail.com>
+Message-ID: <ZEM+09p7QBJR7DoI@google.com>
+Subject: Re: [PATCH v2] KVM: x86: Preserve TDP MMU roots until they are
+ explicitly invalidated
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,44 +73,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario,
+On Fri, Apr 21, 2023, David Matlack wrote:
+> On Fri, Apr 21, 2023 at 2:49=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> >
+> >  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
+> >  {
+> >         struct kvm_mmu_page *root;
+> >
+> > -       lockdep_assert_held_write(&kvm->mmu_lock);
+> > -       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
+> > -               if (!root->role.invalid &&
+> > -                   !WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root))) {
+> > +       /*
+> > +        * Note!  mmu_lock isn't held when destroying the VM!  There ca=
+n't be
+> > +        * other references to @kvm, i.e. nothing else can invalidate r=
+oots,
+> > +        * but walking the list of roots does need to be guarded agains=
+t roots
+> > +        * being deleted by the asynchronous zap worker.
+> > +        */
+> > +       rcu_read_lock();
+> > +
+> > +       list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link) {
+>=20
+> I see that roots are removed from the list with list_del_rcu(), so I
+> agree this should be safe.
+>=20
+> KVM could, alternatively, acquire the mmu_lock in
+> kvm_mmu_uninit_tdp_mmu(), which would let us keep the lockdep
+> assertion and drop the rcu_read_lock() + comment. That might be worth
+> it in case someone accidentally adds a call to
+> kvm_tdp_mmu_invalidate_all_roots() without mmu_lock outside of VM
+> teardown. kvm_mmu_uninit_tdp_mmu() is not a particularly performance
+> sensitive path and adding the mmu_lock wouldn't add much overhead
+> anyway (it would block for at most a few milliseconds waiting for the
+> async work to reschedule).
 
-kernel test robot noticed the following build errors:
+Heh, I actually started to ping you off-list to specifically discuss this o=
+ption,
+but then decided that not waiting those few milliseconds might be worthwhil=
+e for
+some use cases.  I also couldn't quite convince myself that it would only b=
+e a few
+milliseconds, e.g. if the worker is zapping a fully populated 5-level root,=
+ there
+are no other tasks scheduled on _its_ CPU, and CONFIG_PREEMPTION=3Dn (which=
+ neuters
+rwlock_needbreak()).
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc7 next-20230421]
-[cannot apply to drm-misc/drm-misc-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The other reason I opted for not taking mmu_lock is that, with the persiste=
+nt roots
+approach, I don't think it's actually strictly necessary for kvm_mmu_zap_al=
+l_fast()
+to invaliate roots while holding mmu_lock for write.  Holding slots_lock en=
+sures
+that only a single task can be doing invalidations, versus the old model wh=
+ere
+putting the last reference to a root could happen just about anywhere.  And
+allocating a new root and zapping from mmu_noitifiers requires holding mmu_=
+lock for
+write, so I _think_ we could getaway with holding mmu_lock for read.  Maybe=
+.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dario-Binacchi/dt-bindings-display-panel-Add-synaptics-r63353-panel-controller/20230421-234627
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230421154308.527128-4-dario.binacchi%40amarulasolutions.com
-patch subject: [PATCH 3/7] arm64: dts: imx8mn-bsh-smm-s2/pro: add display setup
-config: arm64-buildonly-randconfig-r004-20230421 (https://download.01.org/0day-ci/archive/20230422/202304220932.cK8RhITJ-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/eb3fd6ddb6525c2084455d38de459aaaf0213471
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dario-Binacchi/dt-bindings-display-panel-Add-synaptics-r63353-panel-controller/20230421-234627
-        git checkout eb3fd6ddb6525c2084455d38de459aaaf0213471
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304220932.cK8RhITJ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-display.dtsi:47.1-5 Label or path dsi not found
->> FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+It's largely a moot point since kvm_mmu_zap_all_fast() needs to hold mmu_lo=
+ck for
+write anyways to play nice with the shadow MMU, i.e. I don't expect us to e=
+ver
+want to pursue a change in this area.  But at the same time I was strugglin=
+g to
+write a comment explaining why the VM destruction path "had" to take mmu_lo=
+ck.
