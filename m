@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0E76EB847
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E09B6EB84B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjDVJne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 05:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S229652AbjDVJpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 05:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVJnb (ORCPT
+        with ESMTP id S229451AbjDVJpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 05:43:31 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88A7E58;
-        Sat, 22 Apr 2023 02:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1682156558; i=ps.report@gmx.net;
-        bh=QsCBdx8nHvBDP3aG819b7lVVpo4Rb0udMPzn6QUwN44=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=jNOXqtZJ4V6/vpeSYe4AmMbs/qxr04bLrjZwRPKsfPl685fFZ0R0oAk2yJuTb3fhP
-         xJBgxoz4imVLjdvVkuuML/pKjrIOQvXjR+e/WoxfqB3UtSObp4xDFWlZkCqVdn/YU0
-         oChCInj5yVuhatHvzM++4UzmZXw7tWS3uc06wRezwu4MXc9EhuYZtFJTcS5cdkYe2o
-         gEjTXm3LUNlqPltt+lEy3ERRyvhqlmd4IZrPUStnuJBPURPCws2t8M8ivioj+4wq6m
-         DEVkxBAkGybF7k2lMPbQTVjR1TgheNOV0naVtCJx5j2I6OIS7V1zdN8N7iavTE+pnC
-         is0SjhDcDmeNg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.208]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MryT9-1qdDlz1ZkD-00nwDf; Sat, 22
- Apr 2023 11:42:38 +0200
-Date:   Sat, 22 Apr 2023 11:42:36 +0200
-From:   Peter Seiderer <ps.report@gmx.net>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
-        <toke@toke.dk>, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sujith Manoharan <c_manoha@qca.qualcomm.com>,
-        "John W . Linville" <linville@tuxdriver.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gregg Wonderly <greggwonderly@seqtechllc.com>
-Subject: Re: [PATCH v1] wifi: ath9k: fix AR9003 mac hardware hang check
- register offset calculation
-Message-ID: <20230422114236.133aa253@gmx.net>
-In-Reply-To: <ZEOf7LXAkdLR0yFI@corigine.com>
-References: <20230420204316.30475-1-ps.report@gmx.net>
-        <ZEOf7LXAkdLR0yFI@corigine.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+        Sat, 22 Apr 2023 05:45:19 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192CEE6F
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:45:18 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2fa0ce30ac2so2406418f8f.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682156716; x=1684748716;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vnyeSeDoQt5xayBqxmJ4+9xcveaUtfXwuDg05vHt+yk=;
+        b=bgUUoP+ifj+A6YakQarfnw6siDlPE7FcFykOQD7DBTpkTn6rp09MmzjJqkFV8VPlof
+         Ahs1oFPLZ6X91sEiGkoGC7d6BYUDmi+ziKdgx+Syys1+8lTqrCDEU2rWqkzxXDsGFO/8
+         C92VMZv/BRifS5872CMNasH4Z54j6iQN9H3Qr153+54F03fbN7AVhHxC/NEqV36BQPLJ
+         glvpwnarLQr67m8XNdWc4RCauLluE36yauLm5s52i0hCMzQGeB5T/2K3DPIukFqpp7yx
+         ceu2SK75wiAM8qRkkxvGtVcixjNPS7XJSd8sUHVJqJMst4znUBDbD3cIi8zsIEy21pqv
+         Ot1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682156716; x=1684748716;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vnyeSeDoQt5xayBqxmJ4+9xcveaUtfXwuDg05vHt+yk=;
+        b=gvoEpVaH0GcwqJZuA9Zwv3+wWq+O/gfXvcB33iFd4nIRhUztVUR9tO71Z5r6ibb1kD
+         Uvu1KpJPnUK+Pq+2gbSLMtNRn1OMLAl+syFcO7y5sh+i02lQ5ZSLyLM8zjGQTOBhG0cL
+         vzDSzuh4ZhGsIqiGtDa//mLqgQEB3c9Md4wI8lZfLZ+goxOoOe2HdeTUdgofCJ9aBnWV
+         BVSA1X/kHimaEWCyNYAKa9R1RWuiL7iXjuuGk2h87TmEGiY4J6zizfAPa/gEGWzCUmSX
+         JZz5rXaCz6AfTU3sgEjXrPetWxt2A2J5AtQVyTwFCSkkkPcN5ed5bmMESd1ebITBZHYe
+         h10g==
+X-Gm-Message-State: AAQBX9dF0W2VLI9HVknz+Hw5oQBksRmwD2rkqcj1HYUU+tw+pNGvtnyV
+        3rYFt+lpYQDgQQIZkjTZ/TaNKBkt3w==
+X-Google-Smtp-Source: AKy350b0zs8DNDUHsUETaNR2LgM6qXO4pRinoLUhGRaX/3lL994iUuWwaGqteuRhlhG1pjTXpVAxmw==
+X-Received: by 2002:adf:e8c4:0:b0:2f5:aadb:4642 with SMTP id k4-20020adfe8c4000000b002f5aadb4642mr5588115wrn.41.1682156716419;
+        Sat, 22 Apr 2023 02:45:16 -0700 (PDT)
+Received: from p183 ([46.53.251.93])
+        by smtp.gmail.com with ESMTPSA id 14-20020a05600c028e00b003f18b942338sm6616525wmk.3.2023.04.22.02.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Apr 2023 02:45:16 -0700 (PDT)
+Date:   Sat, 22 Apr 2023 12:45:14 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ELF: use __builtin_mul_overflow() more
+Message-ID: <a7f51d49-cb6a-4066-a58f-2505e29f25e8@p183>
+References: <dd85c092-379e-4d14-88f0-8f3910de9f7f@p183>
+ <20230421123911.3c4b1e3b56781ffdf043ef58@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jK/t3kz+S1y87/qahwOrSjkL1vTQWbgSzaX0+kJ2UFCXpZ9O4sB
- Lwa7jGafrb3t6yUVIrIgNZlbGzlyJjyHZhAUMEVhJDEdrZFlIs+iTpFlOglxJmzNKF3KsnL
- SXLeCwEfLRNC2Y9JuPnZSafDqXW966P1qrLfEdnK3vOves0zsS0TzGGvD17IeEDrggGUUKb
- UHzyXKRgF7vTP/Q+/HMFQ==
-UI-OutboundReport: notjunk:1;M01:P0:cZtHvyLybUQ=;8X0l6SRcHY4L6p8s/igb+WGTnKW
- jjX2GKNs1213uBUVbRFmFvyYttVb2nKLZVDoGewqDakpBUhlHPwF20o2/Rn6vKFaTXnty+HL3
- 0dZKLQNWSBMQviolKAKSqsJdauHMHVtd+37GlZbCLpUV7so283Rz0wR6ZPfoOKg4yJfmHuC1o
- bLQPqzgs0eDirvgLuyszP2aoGQZmrade3zwu65m1wEBV5heCQ2X2mqwBZCHde+XNk2Us+YY4w
- 9JTkjiQMEdSHw9QHZ4WxGtTmvN1G7oGd0WnUWsPStDTA4NuIEVCD9T6fomR/3XOAfcNF7/eKO
- EDe09RIVyp3QtdEIWk7gJ2Z7x83wDJ6d6uILyQSNJPf46DQp/5++nhLnRNs3aWqQs3PQJ/YC0
- oXS5g8W6S9OkSdOp4acpcEpzGgSTcmrFzEcK8fFn8x0XOglBkHzSdf+/Mm213pjfh7WudPwLS
- nvy4ZOyvYCeshZvsrQrzODdf+jMST27EkJBWkyW+PQoDmT9JYAaF+I+QQFqB5AP4+lQM8vN96
- HgyAAr3u4DIP1uZj8yry8O/ddNfhySsMS710HkRjRpES6M0wSe15GGsU9xyx/py0iK//nS7ly
- iwca67HKsboQUqg1saW9qAZ0dlK0sz+Gb7vnQNXy0+R3KsigZCryPqOtEkxEbGn2r74Xb4xue
- 0lDzkdxK4UCjftZLcI/xNNqjlP6Yh2fyJUyKSiLQoOUODyE+SB7AdTGZwFY8EyHjQGvyLitDQ
- FnOmusqGtodWrfBwe8SzA5QSjFPKo7jfzcXqVXUiZl0TLdELEA6ZIDLU2LJb0Q8BNNkXyUhiw
- x2z1qQW6e9996CJ4HVJkc4VuVAXHNFvwkNnfE7ZwLu3ifed3e6f1CUNIq/pdp8ZvVxAsmvHXV
- VwGa4VFce8ivPG8PGthdtXiPOPaGJFsLBDL0lOTtjt+gpqiCQl3fL+89N2Gblth94TEbDTWww
- sc46FHDFqa24qlGs3Qwsh2XzXKc=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230421123911.3c4b1e3b56781ffdf043ef58@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,85 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Simon,
+On Fri, Apr 21, 2023 at 12:39:11PM -0700, Andrew Morton wrote:
+> On Fri, 21 Apr 2023 21:54:36 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
+> 
+> > __builtin_mul_overflow() can do multiplication and overflow check
+> > in one line.
+> > 
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -1651,9 +1651,8 @@ static int fill_files_note(struct memelfnote *note, struct coredump_params *cprm
+> >  
+> >  	/* *Estimated* file count and total data size needed */
+> >  	count = cprm->vma_count;
+> > -	if (count > UINT_MAX / 64)
+> > +	if (__builtin_mul_overflow(count, 64, &size))
+> >  		return -EINVAL;
+> > -	size = count * 64;
+> 
+> Huh, what the heck is that ;)
+> 
+> 
+> include/linux/overflow.h has check_mul_overflow() for us to use here.
 
-On Sat, 22 Apr 2023 10:50:52 +0200, Simon Horman <simon.horman@corigine.co=
-m> wrote:
+Oh, no, wrappers.
 
-> On Thu, Apr 20, 2023 at 10:43:16PM +0200, Peter Seiderer wrote:
-> > Fix ath9k_hw_verify_hang()/ar9003_hw_detect_mac_hang() register offset
-> > calculation (do not overflow the shift for the second register/queues
-> > above five, use the register layout described in the comments above
-> > ath9k_hw_verify_hang() instead).
-> >
-> > Fixes: 222e04830ff0 ("ath9k: Fix MAC HW hang check for AR9003")
-> >
-> > Reported-by: Gregg Wonderly <greggwonderly@seqtechllc.com>
-> > Link: https://lore.kernel.org/linux-wireless/E3A9C354-0CB7-420C-ADEF-F=
-0177FB722F4@seqtechllc.com/
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Notes:
-> >   - tested with MikroTik R11e-5HnD/Atheros AR9300 Rev:4 (lspci: 168c:0=
-033
-> >     Qualcomm Atheros AR958x 802.11abgn Wireless Network Adapter (rev 0=
-1))
-> >     card
-> > ---
-> >  drivers/net/wireless/ath/ath9k/ar9003_hw.c | 27 ++++++++++++++-------=
--
-> >  1 file changed, 18 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/net/wireless/ath/ath9k/ar9003_hw.c b/drivers/net/=
-wireless/ath/ath9k/ar9003_hw.c
-> > index 4f27a9fb1482..0ccf13a35fb4 100644
-> > --- a/drivers/net/wireless/ath/ath9k/ar9003_hw.c
-> > +++ b/drivers/net/wireless/ath/ath9k/ar9003_hw.c
-> > @@ -1099,17 +1099,22 @@ static bool ath9k_hw_verify_hang(struct ath_hw=
- *ah, unsigned int queue)
-> >  {
-> >  	u32 dma_dbg_chain, dma_dbg_complete;
-> >  	u8 dcu_chain_state, dcu_complete_state;
-> > +	unsigned int dbg_reg, reg_offset;
-> >  	int i;
-> >
-> > -	for (i =3D 0; i < NUM_STATUS_READS; i++) {
-> > -		if (queue < 6)
-> > -			dma_dbg_chain =3D REG_READ(ah, AR_DMADBG_4);
-> > -		else
-> > -			dma_dbg_chain =3D REG_READ(ah, AR_DMADBG_5);
-> > +	if (queue < 6) {
-> > +		dbg_reg =3D AR_DMADBG_4;
-> > +		reg_offset =3D i * 5;
->
-> Hi Peter,
->
-> unless my eyes are deceiving me, i is not initialised here.
->
-> > +	} else {
-> > +		dbg_reg =3D AR_DMADBG_5;
-> > +		reg_offset =3D (i - 6) * 5;
->
-> Or here.
+> tools/lib/bpf/libbpf_internal.h uses
+> 
+> 	#if __has_builtin(__builtin_mul_overflow)
+> 
+> but check_mul_overflow() didn't bother testing for availability. 
 
-You are absolutely right, it should be queue instead if i here...,
-will provide (and test) an updated version of the patch...,
-many thanks for review!
+gcc 5.1 has __builtin_mul_overflow()
 
-Regards,
-Peter
+> Probably tools/lib/bpf/libbpf_internal.h should just use
+> check_mul_overflow().
 
-
->
-> > +	}
-> >
-> > +	for (i =3D 0; i < NUM_STATUS_READS; i++) {
-> > +		dma_dbg_chain =3D REG_READ(ah, dbg_reg);
-> >  		dma_dbg_complete =3D REG_READ(ah, AR_DMADBG_6);
-> >
-> > -		dcu_chain_state =3D (dma_dbg_chain >> (5 * queue)) & 0x1f;
-> > +		dcu_chain_state =3D (dma_dbg_chain >> reg_offset) & 0x1f;
-> >  		dcu_complete_state =3D dma_dbg_complete & 0x3;
-> >
-> >  		if ((dcu_chain_state !=3D 0x6) || (dcu_complete_state !=3D 0x1))
-
+I don't know, this is userspace stuff.
