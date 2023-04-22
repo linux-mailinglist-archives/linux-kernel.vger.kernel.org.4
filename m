@@ -2,80 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B966EB7F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 10:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F3C6EB7F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 10:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjDVIJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 04:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S229647AbjDVIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 04:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVIJP (ORCPT
+        with ESMTP id S229451AbjDVIRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 04:09:15 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16481981;
-        Sat, 22 Apr 2023 01:09:14 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pq8Iy-0005eX-Sj; Sat, 22 Apr 2023 10:09:12 +0200
-Message-ID: <834c05ee-287d-e5bf-be07-dec0d6f4b4b4@leemhuis.info>
-Date:   Sat, 22 Apr 2023 10:09:12 +0200
+        Sat, 22 Apr 2023 04:17:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA621BDC
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 01:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vZRgnSLydjrAlu+3QsbcpU0FsuYByXhE0S4O9admDPY=; b=k3TAX8R3TAsX6SUsbYXx4DaJsI
+        yLrIZAy/z2mttjCp68Gc7dTobphTfYvYn+OIkeaMsxo7xLuKhzznmSB6zQ1Ubr46DWkP1vrof3Tj4
+        GKtajNcbaedwspekfMDEiDpggVVE2JIJ79P7vyscmsu7IuU3J/cyjPxepImS351UcyMHnhSWIp8QQ
+        zjBYD7tMMKn3/smsXLuyw7cQOA9xEZWUi0PdEZeJe9MAqqvxditVc2Cq8pDiVGB/2vWU0Ab5x7+9K
+        Q4p0TgbU+K5pD0jKfopeTuUpHuC+r7kutL5hPVc9Pn8CyphAXj+/OQOmhJ75cOWAX2gTohx4Ewa4F
+        2MgbGbFA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pq8QW-00G4Mn-Ps; Sat, 22 Apr 2023 08:17:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55AC03000DC;
+        Sat, 22 Apr 2023 10:17:00 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3DEB123BD94AB; Sat, 22 Apr 2023 10:17:00 +0200 (CEST)
+Date:   Sat, 22 Apr 2023 10:17:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+Message-ID: <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
+References: <ZEKDZEQmKExv0O7Q@lothringen>
+ <87leil2r7v.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [REGRESSION] Bug 217353 - Logitech MX Anywhere 3 scroll wheel
- works incorrectly over USB dongle
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <5fa67291-98d0-c8d5-ca71-5a86b9adff41@leemhuis.info>
-In-Reply-To: <5fa67291-98d0-c8d5-ca71-5a86b9adff41@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1682150954;660c1b54;
-X-HE-SMSGID: 1pq8Iy-0005eX-Sj
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87leil2r7v.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lo!
-
-On 21.04.23 11:11, Linux regression tracking (Thorsten Leemhuis) wrote:
+On Fri, Apr 21, 2023 at 05:24:36PM +0200, Thomas Gleixner wrote:
+> On Fri, Apr 21 2023 at 14:36, Frederic Weisbecker wrote:
+> > I'm looking at the __arch_cpu_idle() implementation in Loongarch
+> > and I'm wondering about the rollback code. I don't understand well
+> > that code but with the help from PeterZ I might have seen something,
+> > so tell me if I'm wrong: when an interrupt happens within
+> > __arch_cpu_idle(), handle_vint() rolls back the return value to the
+> > beginning of __arch_cpu_idle(), so that TIF_NEED_RESCHED is checked
+> > again. Is that correct?
+> >
+> > Because if an interrupt fires while in __arch_cpu_idle(), that IRQ
+> > might enqueue a new timer and that new timer needs to be reprogrammed
+> > from the main idle loop and just checking TIF_NEED_RESCHED doesn't
+> > tell about that information.
 > 
-> Bastien, from the bug report it to me sounds like it might be another
-> case caused by 908d325e166 ("HID: logitech-hidpp: Detect hi-res
-> scrolling support"), but I might be totally wrong with that (and the
-> reporter didn't even explicitly state that it's a regression, but it
-> sounds like one). If I got something wrong I apologize in advance.
+> The check for TIF_NEED_RESCHED as loop termination condition is simply
+> wrong. The architecture is not to supposed to loop in arch_cpu_idle().
 > 
-> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217353 :
+> That loop is from Linux 0.9 days. Seems MIPS::__r4k_wait() and
+> loongarch, which copied that muck are still stuck in the 1990'ies.
+> 
+> It has to return when an interrupt brings it out of the "idle wait"
+> instruction.
 
-Ignore that mail, user in between noticed it's a userspace problem.
-Sorry for the noise.
+So I think the below is enough for these two...
 
-#regzbot resolved: userspace problem according to the reporter
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-
-
-
+diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+index 44ff1ff64260..5a102ff80de0 100644
+--- a/arch/loongarch/kernel/genex.S
++++ b/arch/loongarch/kernel/genex.S
+@@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
+ 	ori	t0, t0, 0x1f
+ 	xori	t0, t0, 0x1f
+ 	bne	t0, t1, 1f
++	addi.d	t0, t0, 0x20
+ 	LONG_S	t0, sp, PT_ERA
+ 1:	move	a0, sp
+ 	move	a1, sp
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index b6de8e88c1bd..cd6aae441ad9 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -140,6 +140,7 @@ LEAF(__r4k_wait)
+ 	ori	k0, 0x1f	/* 32 byte rollback region */
+ 	xori	k0, 0x1f
+ 	bne	k0, k1, \handler
++	addiu	k0, 0x20
+ 	MTC0	k0, CP0_EPC
+ 	.set pop
+ 	.endm
