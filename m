@@ -2,120 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDAF6EB928
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 14:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E9A6EB92E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 14:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjDVM3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 08:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S229793AbjDVMe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 08:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjDVM3W (ORCPT
+        with ESMTP id S229642AbjDVMeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 08:29:22 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C301BC3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 05:29:20 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2a8bbea12d7so25450031fa.3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 05:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682166559; x=1684758559;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c/sd8+90mWOvfj0mCOmTgWR1MxRpJMuPvMYRFU54ny4=;
-        b=JwvxIRx7wnqJYQpaovZKej+sEnuMtC3tpvW7MnDhW8U9zwGPdlr6r5gTEwspjpZ3b/
-         qoOvtO0swuoTixlSWKf17NdNUhzI33DpCcOASOkNr+ryREqQV3MDwbhIZPr2Gwln8Sx5
-         ByIo5tSRHhux8+eOvFvNbz0TVUKRpOh1EA8zeYwxZOle2Mp9vzHrB8BDte21Uy9c4xl+
-         sIjlvGAHzbfm8CKKaw4es4QqqTXwbAP4yJ56PZ3nWaERmRI8etDKQHyUeuAleyhUvPoB
-         DlOKz1nOLVn1JN2+v4IqYDQGA5JGzlmRKJO/CbeFz8DXBa0fu+DeiXxA0AiUTOpdrTfs
-         B2ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682166559; x=1684758559;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c/sd8+90mWOvfj0mCOmTgWR1MxRpJMuPvMYRFU54ny4=;
-        b=k0+LtzETuIohPt/dC1SwuRtT/+Nob+GWQppGBuMXa96lpzrPpM8rB2jagYXNbRNfle
-         0+v9x05O4XgqeuXZkeGva+3Usermvlc+Qut0iJj0wHCqtQbjqTXgvWClZJ4JKWFigb0G
-         DZBIudByXQGNjBs7kkzhUb2MHvNkskFb/ScrbF0hOj1E5Vdf4Q49ZqvL2RzstyeE05OF
-         n7MIKq+d3BxzUOtwOhT2geBRDTfgheYNiert3ZINRtzIH9CrV0nBvEQXyoCT4ZssiaUy
-         3ys2SzKEoyWeb6FJuuR/6R0zE5OkWDpDTxVGB81Fq3M7LgKxYjQKr9gbbpIsI9wDrEwx
-         Uu/g==
-X-Gm-Message-State: AAQBX9c7RqAHCm5XtwYnHCOie1AeurFIrsqpM6gn7woKY+6k+fLT9BJ5
-        XxvNcoycszOgiMFUlvPOoetOLQ==
-X-Google-Smtp-Source: AKy350ZnxLlEHGU0yVQpDZlzCuo1hlwMOdcu3otyXWFQM6LKiqgYXp8f1zOrb9MK9k1mA8vm/Smemw==
-X-Received: by 2002:a2e:3213:0:b0:2a8:e642:8cdb with SMTP id y19-20020a2e3213000000b002a8e6428cdbmr1205087ljy.49.1682166558915;
-        Sat, 22 Apr 2023 05:29:18 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id x23-20020a2e7c17000000b002a5f554d263sm970784ljc.46.2023.04.22.05.29.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Apr 2023 05:29:18 -0700 (PDT)
-Message-ID: <a3117f35-bf2d-09f9-439f-b656aa1278dc@linaro.org>
-Date:   Sat, 22 Apr 2023 14:29:17 +0200
+        Sat, 22 Apr 2023 08:34:25 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ABA1BE3;
+        Sat, 22 Apr 2023 05:34:23 -0700 (PDT)
+Received: from van1shing-pc.localdomain ([10.12.182.0])
+        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33MCWt03018163-33MCWt04018163
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 22 Apr 2023 20:33:03 +0800
+From:   Wang Zhang <silver_code@hust.edu.cn>
+To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Wang Zhang <silver_code@hust.edu.cn>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] i2c: ocores: use devm_ managed clks
+Date:   Sat, 22 Apr 2023 20:32:53 +0800
+Message-Id: <20230422123253.137368-1-silver_code@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
+References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFT PATCH 1/3] arm64: dts: qcom: msm8996: correct /soc/bus
- ranges
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230420180746.860934-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230420180746.860934-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: silver_code@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
+released. But the function returns directly in line 701 without freeing
+the clock. Even though we can fix it by freeing the clock manually if
+platform_get_irq_optional fails, it may not be following the best practice.
+The original code for this driver contains if (IS_ERR()) checks
+throughout, explicitly allowing the driver to continue loading even if
+devm_clk_get() fails.
 
+While it is not entirely clear why the original author implemented this
+behavior, there may have been certain circumstances or issues that were not
+apparent to us. It's possible that they were trying to work around a bug by
+employing an unconventional solution.Using `devm_clk_get_enabled()` rather
+than devm_clk_get() can automatically track the usage of clocks and free
+them when they are no longer needed or an error occurs.
 
-On 20.04.2023 20:07, Krzysztof Kozlowski wrote:
-> The bus@0 node should have reg or ranges to fix dtbs W=1 warnings:
-> 
->   Warning (unit_address_vs_reg): /soc@0/bus@0: node has a unit name, but no reg or ranges property
->   Warning (simple_bus_reg): /soc@0/bus@0: missing or empty reg/ranges property
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Please kindly test on hardware.
-> ---
-PCIe Wi-Fi still comes up and connects to the network
-(it doesn't really work reliably but it never quite did -
-brcmfmac is brcmfmac :/)
+fixing it by changing `ocores_i2c_of_probe` to use
+`devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
+`goto err_clk' to direct return and removing `err_clk`.
 
-Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org> # MSM8996 Kagura
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
+---
+v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
+v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
+---
+ drivers/i2c/busses/i2c-ocores.c | 56 +++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 34 deletions(-)
 
-Konrad
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index 2e575856c5cd..0b225177fdd1 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -552,16 +552,15 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 							&clock_frequency);
+ 	i2c->bus_clock_khz = 100;
+ 
+-	i2c->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		int ret = clk_prepare_enable(i2c->clk);
++	if (IS_ERR(i2c->clk)) {
++		dev_err(&pdev->dev,
++			"devm_clk_get_optional_enabled failed\n");
++		return PTR_ERR(i2c->clk);
++	}
+ 
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
++	if (i2c->clk) {
+ 		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
+ 		if (clock_frequency_present)
+ 			i2c->bus_clock_khz = clock_frequency / 1000;
+@@ -573,7 +572,6 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 			if (!clock_frequency_present) {
+ 				dev_err(&pdev->dev,
+ 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
+-				clk_disable_unprepare(i2c->clk);
+ 				return -ENODEV;
+ 			}
+ 			i2c->ip_clock_khz = clock_frequency / 1000;
+@@ -678,8 +676,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 		default:
+ 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
+ 				i2c->reg_io_width);
+-			ret = -EINVAL;
+-			goto err_clk;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -710,13 +707,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 						   pdev->name, i2c);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
+-			goto err_clk;
++			return ret;
+ 		}
+ 	}
+ 
+ 	ret = ocores_init(&pdev->dev, i2c);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* hook up driver to tree */
+ 	platform_set_drvdata(pdev, i2c);
+@@ -728,7 +725,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	/* add i2c adapter to i2c tree */
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* add in known devices to the bus */
+ 	if (pdata) {
+@@ -737,10 +734,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
+-
+-err_clk:
+-	clk_disable_unprepare(i2c->clk);
+-	return ret;
+ }
+ 
+ static int ocores_i2c_remove(struct platform_device *pdev)
+@@ -755,9 +748,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
+ 	/* remove adapter & data */
+ 	i2c_del_adapter(&i2c->adap);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
+-
+ 	return 0;
+ }
+ 
+@@ -771,8 +761,7 @@ static int ocores_i2c_suspend(struct device *dev)
+ 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
+ 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
++	clk_disable_unprepare(i2c->clk);
+ 	return 0;
+ }
+ 
+@@ -780,19 +769,18 @@ static int ocores_i2c_resume(struct device *dev)
+ {
+ 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		unsigned long rate;
+-		int ret = clk_prepare_enable(i2c->clk);
++	unsigned long rate;
++	int ret = clk_prepare_enable(i2c->clk);
+ 
+-		if (ret) {
+-			dev_err(dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
+-		rate = clk_get_rate(i2c->clk) / 1000;
+-		if (rate)
+-			i2c->ip_clock_khz = rate;
++	if (ret) {
++		dev_err(dev,
++			"clk_prepare_enable failed: %d\n", ret);
++		return ret;
+ 	}
++	rate = clk_get_rate(i2c->clk) / 1000;
++	if (rate)
++		i2c->ip_clock_khz = rate;
++
+ 	return ocores_init(dev, i2c);
+ }
+ 
+-- 
+2.34.1
 
->  arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> index e160d5e6863f..a88d0a9bb7e5 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> @@ -1832,7 +1832,7 @@ bus@0 {
->  			compatible = "simple-pm-bus";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			ranges;
-> +			ranges = <0x0 0x0 0xffffffff>;
->  
->  			pcie0: pcie@600000 {
->  				compatible = "qcom,pcie-msm8996";
