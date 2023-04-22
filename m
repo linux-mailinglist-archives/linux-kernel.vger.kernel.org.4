@@ -2,139 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B376EB8D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87CF6EB8D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjDVLh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 07:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S229642AbjDVLih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 07:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVLh4 (ORCPT
+        with ESMTP id S229451AbjDVLif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 07:37:56 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F191BF2
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 04:37:54 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-763646b324aso484945439f.0
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 04:37:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682163474; x=1684755474;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uH30ZUeK2Ah27FB5OM46e7dnNRwvE0TOAvtBMEB9588=;
-        b=ZlL1Ou6PJD5emfko+IQUOIg7BAmtFVL0cHaaQgREI+plYdAyYCx1YuAEu2y8ts3YOe
-         ZzrxH6lOKDZRPnYyjnmzjRe5vlSHRdphgrLJn2Qsvw2mUIkkfVDt2Chmzt4NeobFVWur
-         Im1ZCmkWEyoeOCITyzzozM9hT/Lwc3E1BKuVkXCrxs8rABTryF+sS4uKTf1f4tbe3bEp
-         KC4eoyNpAy6vxS+YyIaAuJhZqpM3wHb+rTprf5GPLo7OXH1D5TRkiX9Iz6R3JfzfRk9Z
-         4M+EX2fda+ZXs1EfTDFmjqhwkQkYEg5fwri5xAXGUY9+0yHV1b5HOcGTX3uIevUK384O
-         eAJA==
-X-Gm-Message-State: AAQBX9eo1D4/a2Oi3rqbX1uo1CegCDo7uOII9bPDoNOeCu+IztthEs0K
-        xvodghkQGBzoMi17eODIRhS0+mM6BSRfqv/OhuB9KcgUYSj3
-X-Google-Smtp-Source: AKy350ZzTnGild/+xCP5LBSEXqgjNrjO0MzeVrH+1jo+BlFwCKPx+O39uUyhgToQBQ5Criq3DDdtfcUmP6+Dw9QLubXCjpgpDDKR
+        Sat, 22 Apr 2023 07:38:35 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2411FCB
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 04:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qoA4LTGgkdfELsJdUxFAcbAY5ZKqxUA7mUBTTATjgqE=; b=AgjaKp4qXfGD0SQZvRj9dUQNd6
+        SqhDWKuIbF9evSKzi6+NaWLqsh+HdtSKH92wnyxIP9H9ZLQWiWR6voh/hWgVO69wwQfjDo7h6K4dI
+        9MurVPWrZGxdCJ9PjlmzAUwGD0XNIczRZZlKLmG81XKMR2FMdPPlAhWdGuUdFwXdkRQUgGuL4Jete
+        /1P863hIIZgrKVzxu82pjyoRfHaEVkxbZBNS/qVaQKGAwUGa7VH8xcE26QF1Dbq01NbLgm1+FpbyF
+        JK5Q9k6XmWiEXE/qYC17Lnkq5FQM5YH3iitZiRkUXO+5MMsYu3kvjS9rXySuQmDff+rS625j23dKi
+        okexRrLQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pqBZG-006EEZ-1z;
+        Sat, 22 Apr 2023 11:38:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 31C5E30035C;
+        Sat, 22 Apr 2023 13:38:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0DD8923BDA376; Sat, 22 Apr 2023 13:38:12 +0200 (CEST)
+Date:   Sat, 22 Apr 2023 13:38:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+Message-ID: <20230422113811.GB1215777@hirez.programming.kicks-ass.net>
+References: <ZEKDZEQmKExv0O7Q@lothringen>
+ <20230421142446.GA1185829@hirez.programming.kicks-ass.net>
+ <ZEK+IeTYsauHLozy@lothringen>
+ <20230422080814.GA1214746@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-Received: by 2002:a02:95c2:0:b0:411:a1e8:2916 with SMTP id
- b60-20020a0295c2000000b00411a1e82916mr1182999jai.4.1682163474058; Sat, 22 Apr
- 2023 04:37:54 -0700 (PDT)
-Date:   Sat, 22 Apr 2023 04:37:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000053541905f9eb3439@google.com>
-Subject: [syzbot] [btrfs?] kernel BUG in add_new_free_space
-From:   syzbot <syzbot+3ba856e07b7127889d8c@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230422080814.GA1214746@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Apr 22, 2023 at 10:08:14AM +0200, Peter Zijlstra wrote:
+> On Fri, Apr 21, 2023 at 06:47:29PM +0200, Frederic Weisbecker wrote:
+> 
+> > > *HOWEVER*
+> > > 
+> > > intel_idle_irq() is affected -- except that we only (normally) use that
+> > > for very shallow idle states and it won't interact with NOHZ (because we
+> > > only disable the tick for deep idle states).
+> > 
+> > Well I don't know, that doesn't look comfortable... :)
+> > 
+> > Also why does it need to enable IRQs if ecx=1 ?
+> 
+> Supposedly this is some interrupt latency hack. See commit:
+> 
+>   c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
 
-syzbot found the following issue on:
+Something like so perhaps...
 
-HEAD commit:    327bf9bb94cf Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1543949fc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=64943844c9bf6c7e
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ba856e07b7127889d8c
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/66410afe54f5/disk-327bf9bb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2757ce5e2a55/vmlinux-327bf9bb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7d54ee97c182/Image-327bf9bb.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3ba856e07b7127889d8c@syzkaller.appspotmail.com
-
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/block-group.c:537!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 12290 Comm: syz-executor.4 Not tainted 6.3.0-rc7-syzkaller-g327bf9bb94cf #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : add_new_free_space+0x290/0x294 fs/btrfs/block-group.c:537
-lr : add_new_free_space+0x290/0x294 fs/btrfs/block-group.c:537
-sp : ffff80001e816d00
-x29: ffff80001e816da0 x28: 1ffff00003d02dac x27: dfff800000000000
-x26: 0000000000000001 x25: ffff0000d9f7c190 x24: ffff80001e816d60
-x23: 0000000003d00000 x22: ffff80001e816d40 x21: 0000000000000000
-x20: 0000000001000000 x19: 00000000fffffff4 x18: 1fffe000368519b6
-x17: 0000000000000000 x16: ffff8000123165a4 x15: 0000000000000001
-x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
-x11: 0000000000040000 x10: 0000000000013b46 x9 : ffff80002505a000
-x8 : 0000000000013b47 x7 : 0000000000000001 x6 : 0000000000000001
-x5 : ffff80001e816258 x4 : ffff800015d5c8c0 x3 : ffff80000acba3f8
-x2 : 0000000000000001 x1 : 00000000fffffff4 x0 : 0000000000000000
-Call trace:
- add_new_free_space+0x290/0x294 fs/btrfs/block-group.c:537
- btrfs_make_block_group+0x34c/0x87c fs/btrfs/block-group.c:2712
- create_chunk fs/btrfs/volumes.c:5441 [inline]
- btrfs_create_chunk+0x142c/0x1ea4 fs/btrfs/volumes.c:5527
- do_chunk_alloc fs/btrfs/block-group.c:3710 [inline]
- btrfs_chunk_alloc+0x69c/0xf00 fs/btrfs/block-group.c:4004
- find_free_extent_update_loop fs/btrfs/extent-tree.c:4024 [inline]
- find_free_extent+0x43bc/0x5334 fs/btrfs/extent-tree.c:4407
- btrfs_reserve_extent+0x35c/0x674 fs/btrfs/extent-tree.c:4500
- __btrfs_prealloc_file_range+0x2a8/0x1000 fs/btrfs/inode.c:9594
- btrfs_prealloc_file_range+0x60/0x7c fs/btrfs/inode.c:9688
- btrfs_fallocate+0x1644/0x19e4 fs/btrfs/file.c:3177
- vfs_fallocate+0x478/0x5b4 fs/open.c:324
- ksys_fallocate fs/open.c:347 [inline]
- __do_sys_fallocate fs/open.c:355 [inline]
- __se_sys_fallocate fs/open.c:353 [inline]
- __arm64_sys_fallocate+0xc0/0x110 fs/open.c:353
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 9570392d 9787d9fb d4210000 9787d9f9 (d4210000) 
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
+index 778df05f8539..07a4072c43de 100644
+--- a/arch/x86/include/asm/mwait.h
++++ b/arch/x86/include/asm/mwait.h
+@@ -115,8 +115,14 @@ static __always_inline void mwait_idle_with_hints(unsigned long eax, unsigned lo
+ 		}
+ 
+ 		__monitor((void *)&current_thread_info()->flags, 0, 0);
+-		if (!need_resched())
+-			__mwait(eax, ecx);
++		if (!need_resched()) {
++			if (ecx & 1) {
++				__mwait(eax, ecx);
++			} else {
++				__sti_mwait(eax, ecx);
++				raw_local_irq_disable();
++			}
++		}
+ 	}
+ 	current_clr_polling();
+ }
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 938c17f25d94..4a823bd0f5e0 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -130,11 +130,12 @@ static unsigned int mwait_substates __initdata;
+ #define MWAIT2flg(eax) ((eax & 0xFF) << 24)
+ 
+ static __always_inline int __intel_idle(struct cpuidle_device *dev,
+-					struct cpuidle_driver *drv, int index)
++					struct cpuidle_driver *drv,
++					int index, bool irqoff)
+ {
+ 	struct cpuidle_state *state = &drv->states[index];
+ 	unsigned long eax = flg2MWAIT(state->flags);
+-	unsigned long ecx = 1; /* break on interrupt flag */
++	unsigned long ecx = 1*irqoff; /* break on interrupt flag */
+ 
+ 	mwait_idle_with_hints(eax, ecx);
+ 
+@@ -158,19 +159,13 @@ static __always_inline int __intel_idle(struct cpuidle_device *dev,
+ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+ 				struct cpuidle_driver *drv, int index)
+ {
+-	return __intel_idle(dev, drv, index);
++	return __intel_idle(dev, drv, index, true);
+ }
+ 
+ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+ 				    struct cpuidle_driver *drv, int index)
+ {
+-	int ret;
+-
+-	raw_local_irq_enable();
+-	ret = __intel_idle(dev, drv, index);
+-	raw_local_irq_disable();
+-
+-	return ret;
++	return __intel_idle(dev, drv, index, false);
+ }
+ 
+ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+@@ -183,7 +178,7 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ 	if (smt_active)
+ 		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+ 
+-	ret = __intel_idle(dev, drv, index);
++	ret = __intel_idle(dev, drv, index, true);
+ 
+ 	if (smt_active)
+ 		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
+@@ -195,7 +190,7 @@ static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
+ 				       struct cpuidle_driver *drv, int index)
+ {
+ 	fpu_idle_fpregs();
+-	return __intel_idle(dev, drv, index);
++	return __intel_idle(dev, drv, index, true);
+ }
+ 
+ /**
