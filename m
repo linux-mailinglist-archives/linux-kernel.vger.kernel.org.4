@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18B06EB8B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD41F6EB8BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjDVLC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 07:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S229640AbjDVLEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 07:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVLCz (ORCPT
+        with ESMTP id S229451AbjDVLEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 07:02:55 -0400
+        Sat, 22 Apr 2023 07:04:38 -0400
 Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB3C198D;
-        Sat, 22 Apr 2023 04:02:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AC5198D;
+        Sat, 22 Apr 2023 04:04:37 -0700 (PDT)
 Received: from [46.183.248.101] (helo=deadeye)
         by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ben@decadent.org.uk>)
-        id 1pqB0z-0005WH-IA; Sat, 22 Apr 2023 13:02:49 +0200
+        id 1pqB2f-0005XR-91; Sat, 22 Apr 2023 13:04:33 +0200
 Received: from ben by deadeye with local (Exim 4.96)
         (envelope-from <ben@decadent.org.uk>)
-        id 1pqB0y-001pC9-2K;
-        Sat, 22 Apr 2023 13:02:48 +0200
-Message-ID: <cfa5b431bc00405dba363dac46c52c30ffe4ebeb.camel@decadent.org.uk>
-Subject: Re: [PATCH 1/2] kbuild: add srcdeb-pkg target
+        id 1pqB2e-001pFG-1N;
+        Sat, 22 Apr 2023 13:04:32 +0200
+Message-ID: <3a5c0f51d120bb11cb5fdf9b7e2925d8a5c1dbe2.camel@decadent.org.uk>
+Subject: Re: [PATCH 2/2] kbuild: deb-pkg: add KDEB_SOURCE_COMPRESS to
+ specify compression type
 From:   Ben Hutchings <ben@decadent.org.uk>
-To:     Masahiro Yamada <masahiroy@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bastian Germann <bage@linutronix.de>,
-        Nicolas Schier <nicolas@fjasle.eu>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
-Date:   Sat, 22 Apr 2023 13:02:44 +0200
-In-Reply-To: <CAK7LNARnd=Jryg80NeRddYvHqHGTrzES0T5YNSAKShz3D_JGdw@mail.gmail.com>
+Date:   Sat, 22 Apr 2023 13:04:32 +0200
+In-Reply-To: <CAK7LNAQjXTZhObuZ6R159kaOcsjTnTHftqnZe6GMfk0ibCkOkw@mail.gmail.com>
 References: <20230417142548.249610-1-masahiroy@kernel.org>
-         <3a857172b78f1bbd6427600bdd5afa81dd21c73f.camel@decadent.org.uk>
-         <CAK7LNARnd=Jryg80NeRddYvHqHGTrzES0T5YNSAKShz3D_JGdw@mail.gmail.com>
+         <20230417142548.249610-2-masahiroy@kernel.org>
+         <ZEBQPeihAuP4jVYG@bergen.fjasle.eu>
+         <CAK7LNAQjXTZhObuZ6R159kaOcsjTnTHftqnZe6GMfk0ibCkOkw@mail.gmail.com>
 Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-hn64AqEG9HbDOBrnAoTV"
+        protocol="application/pgp-signature"; boundary="=-gRCz5fKy5ML0UmVBw4B5"
 User-Agent: Evolution 3.46.4-1 
 MIME-Version: 1.0
 X-SA-Exim-Connect-IP: 46.183.248.101
@@ -55,24 +57,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---=-hn64AqEG9HbDOBrnAoTV
+--=-gRCz5fKy5ML0UmVBw4B5
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2023-04-18 at 10:17 +0900, Masahiro Yamada wrote:
-> On Mon, Apr 17, 2023 at 11:52=E2=80=AFPM Ben Hutchings <ben@decadent.org.=
-uk> wrote:
+On Thu, 2023-04-20 at 16:17 +0900, Masahiro Yamada wrote:
+> On Thu, Apr 20, 2023 at 5:34=E2=80=AFAM Nicolas Schier <nicolas@fjasle.eu=
+> wrote:
 [...]
-> > This is also adding --no-check-builddeps (-d), which is not explained
-> > in the commit message.  It might be valid to add this for srcdeb-pkg,
-> > but the build dependency check is valuable for bindeb-pkg and deb-pkg.
+> > > +KDEB_SOURCE_COMPRESS ?=3D gzip
+> >=20
+> > According to dpkg-source(1), xz is the default compression for deb
+> > source format >=3D 2.  Shouldn't we use xz here by default as well?
 >=20
 >=20
 > Yes.
-> So, I added --no-check-builddeps to the else arm.
-[...]
+> xz is the default because we switched to format 3.0 (quilt).
+>=20
+> But, we used gzip for a long time, so I did not change it
+> in this commit.
+>=20
+>=20
+> I do not have a strong opinion.
+>=20
+> Ben (debian kernel maintainer) is in the CC list,
+> perhaps he has some preference.
 
-Sorry, I read that wrongly.
+I think it makes sense to keep source compression unchanged in this
+commit, but you could add another commit to change the default.
 
 Ben.
 
@@ -80,25 +92,25 @@ Ben.
 Ben Hutchings
 Theory and practice are closer in theory than in practice - John Levine
 
---=-hn64AqEG9HbDOBrnAoTV
+--=-gRCz5fKy5ML0UmVBw4B5
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmRDvtQACgkQ57/I7JWG
-EQnlqRAAptvwcLtQeeG4/TsblP6uGCMc+wyYPYJhUP7a+ppGrb9dw7tdFtBv/KY1
-aCENZFs2hpjT2R51yeuf4z0Gqhv4JeBP2yZNouYSLLN6TXSxIQECB8t1YrAjsR1f
-U2rYMwUuV2XRJjen002HuCIZM/AMl3OeQ8HygF3l3IX5P+d/0R65nkLkpsJBIo8Q
-jgr7L0oVVt/XsX6hVlVH2qV2ADbHXNimh/Ikf4v9vLPRaaAApPS5yNGeew42XEuV
-b1XVxiomxJ4HEpZlIwS/Cje06rdb7heRNJyUM6Tj+I0rw7JUUy+D5r4fSa7h0kg8
-83djzo2jfWAXAuJoHAK+okkDzQZQCkYPB4oWQjgwkmF1sk2jWIWDMyD3x6rtcMN/
-eFk5M2ObzJHjJfWgHHLFAX72/iI7anoS6IFBCTdIP3CP1ftO2FULOl3brl7KuROk
-E4GUBPXofox16kZ+ndzyA+k7kSwtwI4eZxY87wEUPJ/v78PkSTIQ1ofygeOq/BU/
-hgYgvhd8I7lhcCONlUAiBAwcz6YhpNilQwll2sl6wbqh5O5iqrRyNAQpiQX+M1vX
-Gip2uinlB7K1nlvDWeNGy9TDEcOkiwpDWgyajxasL0VhFRBPc+BURNXXtJTV3Kys
-4C2h/51gTN9CZxzqVPBoPZaF4dUwGgiii9UiMcy1GVMZ7WYeSko=
-=25ge
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmRDv0AACgkQ57/I7JWG
+EQkGCxAA1cIcv2n+iNlzdNkD3TXplfCPY2IJ+MyDgJd7ZyzPBgiLzEQhFerPx/AN
+2no1/wPPJVANsbOSj+CLkW7pQjJPxbGseKf6NLIEEvNd3W+PAjbHGYEIWrF+rKeJ
+qGntjbnbL7cvtIkSFDWuxMgT5tw6MlJQqdjt3kiUM8xhYjc7rZORHxIO/0QlfbDq
+74YATuYBUaM4/S6C1seRfC1jLwKyySh+aikb0i5fxtyh2vlmnfuQkS7OI2dFrLtT
+nDHLKhxyt1Rq52ULRrcc6wPHNsOeXEe5QEgiaDZzbbTnPeFXRJm1zpQ2Vxk/TDfO
+9fbd8ohN5pNklVDvGzST0sjI+y905IhbiS7KlDq3il79SYEKlcC5PTop+8w2K1gf
+gqoV7MvhPysELXj69a4x7B7qkOP7w8MwYlowS7vccozSBoceAySW9LvAOc2Ybz5C
+jx+VWo1K9M2L2pvwrJPc1EM6DFQhsBclkV3ldATDPCzpA1/OC6Awh/iorRKWyAET
+Rk04jkZsCQHNa7qsrVm2odBqAAgC97xQEll2Uj1pXCiDG6cd82SwIfCtnGvgRAab
+zDbdacrqJ8cSKWwR6li50MrZwo2lumWSHb2j5hGnC7/5nHmZBieuHqUTCQTTo0UF
+jd9is0HyMpOfzXYiHrBGDOSyv82zeN4/HbPDfcXO/XrbIrjo9js=
+=rQFw
 -----END PGP SIGNATURE-----
 
---=-hn64AqEG9HbDOBrnAoTV--
+--=-gRCz5fKy5ML0UmVBw4B5--
