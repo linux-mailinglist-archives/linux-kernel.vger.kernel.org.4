@@ -2,263 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118AA6EB9A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC526EB9A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 16:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjDVO1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 10:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S229838AbjDVO3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 10:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVO1U (ORCPT
+        with ESMTP id S229451AbjDVO3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 10:27:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9018A18E;
-        Sat, 22 Apr 2023 07:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682173638; x=1713709638;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZJUYAOJtumkx0anAvSi4mEUPinyG4AUgH/nrR7sE5DU=;
-  b=bQyocb5wLOcxdh3Ll7vqig+Zf7XF4NUiE6HZXUJkwZokehN6h+d5O19g
-   COg3+RuqK+y62O9Bsjk89fdkcKpW+l+gJ3DCQJZK2iXvTmLQRpGAo2AaC
-   EkufigbDa5H9C9XpKQ8mhvSzHiidfKB8zhBUMhGynXJnHD7dydOSkGpjR
-   0nIj6ovI1LameQA8L7NI/SWsrPjRdtSctwgfygcoyVsisE6CUnKO3CCjF
-   H75+xqOoFeZ0EktblozSU4GyVxwlu4oacyauhste3yV0ptb3Ka9h+MYJ3
-   2TVL/zXOr71qxQInuc2e1yAIQjgY8h65aka6GUIkx23fEe7Wrhe4Tgti9
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,218,1677567600"; 
-   d="scan'208";a="207795273"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Apr 2023 07:27:17 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 22 Apr 2023 07:27:17 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Sat, 22 Apr 2023 07:27:14 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <aleksander.lobakin@intel.com>, <maciej.fijalkowski@intel.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v3] lan966x: Don't use xdp_frame when action is XDP_TX
-Date:   Sat, 22 Apr 2023 16:23:44 +0200
-Message-ID: <20230422142344.3630602-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Sat, 22 Apr 2023 10:29:01 -0400
+Received: from out203-205-251-80.mail.qq.com (out203-205-251-80.mail.qq.com [203.205.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CC618E;
+        Sat, 22 Apr 2023 07:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1682173734;
+        bh=lAhvK/6iAVJHwzi6nSMtZhd5mosxwxL4Es7IMJuPvs0=;
+        h=From:To:Cc:Subject:Date;
+        b=gJUYZeAuPoIwNf38RXa7VGZH1NIIK01lNJeAG2Hz1D8bsXXZldDrR4xDAOuP83a3z
+         6yiRcnX+nGhf/RxryLCCgQk8KIZXo8y30ANBx6IWBev/gHaNzjm9+YuIh3dfafBj9O
+         a7JIz+d47zcs/qrBsLuzEqbwl0ER53N0CkW4/l8Y=
+Received: from rtoax.. ([111.199.190.121])
+        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+        id 6E802069; Sat, 22 Apr 2023 22:27:40 +0800
+X-QQ-mid: xmsmtpt1682173660tar8ifj1g
+Message-ID: <tencent_F85E314661100B0CE2845EB27E2E2F558C09@qq.com>
+X-QQ-XMAILINFO: M/NR0wiIuy70dcPQJwtU+Jpl4XyXWAWk6hB7EqnCXZLF64re4832dic/sx4cTm
+         2Ac2uRIX30G5JuROgQ9gjEGy8+aN3znNUGDmpZGqjgNQE0rrVq9iPiq26e0KzgNGBHwp1hXfrzK4
+         KfTnTlBD7G1s0DEk049TJtHKCnXk5DdgNfFtjVlUmumhx32uEZCMD+Kay6eIKmTQ2NTI0C/pGCWO
+         CvB1PWAzTElgEBrc5PqbOfxGa+bT2075ZIQxR8PFQYIrtbI9WktiOKupNDYpa8J3FJzmnF14iX5d
+         lq281V1N5J5Q2RsbZLM9qew2xkAqEARP8oT042C7FZZsOUcReA7L0B+++CZlkWhE8Pdw5gt1xt9s
+         ATiEA78PMCgdAScahAJdKt6xjjlc05DCJDGsWprhfmm+MUv3bAgKyv5rMAGKow2MDzqVVWjhc2lY
+         RCBWMYbT/jHOK2tp+ZDwlrpd04ApKDQkqgN1A+v9+8GtwSjxHHiBRRE4R9VtwVQW5BTGbMZOg977
+         r8sjRRzM86ZAKm02eywtc6+DwYy3C6qe6YtC/W8fM566AgTfxIT0t0kY2GZocZeIujHJcQp2KJFR
+         If4+mUREgmHY5enFwQAwJjwA1fULvYdVB5tWhGbEr8ZQpxbIXHh+y9NOFUqIscZblJ6Y8hxByl2Z
+         riSxWDY9oXzzp3yy1VQdEA8/uJN2F7OvMifLVpDVkIysioJXWC5ur9FY6HjBO+yfHpj22/R4R6H0
+         fTl36Oav+yxCCDLYhyyrWP2wZxnmtss/RJeLT1CB6LUuYwISJeo2WgLmw5Y/KHTEWFXXIncmb+YU
+         plKSdQQKSiQLBF0FbANuIu5YduwWw74DdNuZKGJb9IpnsP9iSD3ixwaeYvE7sGwS/kLPnxQ/dl7W
+         JhCCfHKdBw9AUmLIVdqw53xfaBwJUZdGE5gFNWbKdLyRrkmGj/TNxksNW33Cnj9IyJPKIPwdOjGr
+         Ng+wwu8QHUtc/8xCjgJCUhXE1xwDaa/yKg7Uc8LViggOzyIAGZTQvifAk07VKm
+From:   Rong Tao <rtoax@foxmail.com>
+To:     william.gray@linaro.org
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        linux-iio@vger.kernel.org (open list:COUNTER SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] tools/counter: Makefile: Remove lingering 'include' when make clean
+Date:   Sat, 22 Apr 2023 22:27:38 +0800
+X-OQ-MSGID: <20230422142739.59948-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the action of an xdp program was XDP_TX, lan966x was creating
-a xdp_frame and use this one to send the frame back. But it is also
-possible to send back the frame without needing a xdp_frame, because
-it is possible to send it back using the page.
-And then once the frame is transmitted is possible to use directly
-page_pool_recycle_direct as lan966x is using page pools.
-This would save some CPU usage on this path, which results in higher
-number of transmitted frames. Bellow are the statistics:
-Frame size:    Improvement:
-64                ~8%
-256              ~11%
-512               ~8%
-1000              ~0%
-1500              ~0%
+From: Rong Tao <rongtao@cestc.cn>
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+'make' create 'include' directory, we should remove it when 'make clean'.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-v2->v3:
-- fix length issue when the XDP action is XDP_REDIRECT, this issue was
-  introduced in v2 of this patch series.
-- reduce the number of changes by moving back all the assignments to
-  next_dcb_buf
-
-v1->v2:
-- reduce number of arguments for the function lan966x_fdma_xmit_xdpf,
-  as some of them are mutual exclusive, and other can be replaced with
-  deduced from the other ones
-- update commit message and add statistics for the improvement
+v2: this commit, according to William Breathitt Gray's suggession in v1
+v1: https://lore.kernel.org/lkml/tencent_FA682F628E818DD04B96C3E5A94ACFABE206@qq.com/
 ---
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 35 ++++++++++++-------
- .../ethernet/microchip/lan966x/lan966x_main.h |  6 ++--
- .../ethernet/microchip/lan966x/lan966x_xdp.c  | 10 ++----
- 3 files changed, 28 insertions(+), 23 deletions(-)
+ tools/counter/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 2ed76bb61a731..bd72fbc2220f3 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -390,6 +390,7 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
- static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
- {
- 	struct lan966x_tx *tx = &lan966x->tx;
-+	struct lan966x_rx *rx = &lan966x->rx;
- 	struct lan966x_tx_dcb_buf *dcb_buf;
- 	struct xdp_frame_bulk bq;
- 	struct lan966x_db *db;
-@@ -432,7 +433,8 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
- 			if (dcb_buf->xdp_ndo)
- 				xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
- 			else
--				xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
-+				page_pool_recycle_direct(rx->page_pool,
-+							 dcb_buf->data.page);
- 		}
+diff --git a/tools/counter/Makefile b/tools/counter/Makefile
+index 8843f0fa6119..a0f4cab71fe5 100644
+--- a/tools/counter/Makefile
++++ b/tools/counter/Makefile
+@@ -40,6 +40,7 @@ $(OUTPUT)counter_example: $(COUNTER_EXAMPLE)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/linux/counter.h
++	rmdir -p $(OUTPUT)include/linux
+ 	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
  
- 		clear = true;
-@@ -699,15 +701,14 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
- 	tx->last_in_use = next_to_use;
- }
- 
--int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
--			   struct xdp_frame *xdpf,
--			   struct page *page,
--			   bool dma_map)
-+int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
- {
- 	struct lan966x *lan966x = port->lan966x;
- 	struct lan966x_tx_dcb_buf *next_dcb_buf;
- 	struct lan966x_tx *tx = &lan966x->tx;
-+	struct xdp_frame *xdpf;
- 	dma_addr_t dma_addr;
-+	struct page *page;
- 	int next_to_use;
- 	__be32 *ifh;
- 	int ret = 0;
-@@ -722,8 +723,13 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
- 		goto out;
- 	}
- 
-+	/* Get the next buffer */
-+	next_dcb_buf = &tx->dcbs_buf[next_to_use];
-+
- 	/* Generate new IFH */
--	if (dma_map) {
-+	if (!len) {
-+		xdpf = ptr;
-+
- 		if (xdpf->headroom < IFH_LEN_BYTES) {
- 			ret = NETDEV_TX_OK;
- 			goto out;
-@@ -743,11 +749,16 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
- 			goto out;
- 		}
- 
-+		next_dcb_buf->data.xdpf = xdpf;
-+		next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
-+
- 		/* Setup next dcb */
- 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
- 					  xdpf->len + IFH_LEN_BYTES,
- 					  dma_addr);
- 	} else {
-+		page = ptr;
-+
- 		ifh = page_address(page) + XDP_PACKET_HEADROOM;
- 		memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
- 		lan966x_ifh_set_bypass(ifh, 1);
-@@ -756,21 +767,21 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
- 		dma_addr = page_pool_get_dma_addr(page);
- 		dma_sync_single_for_device(lan966x->dev,
- 					   dma_addr + XDP_PACKET_HEADROOM,
--					   xdpf->len + IFH_LEN_BYTES,
-+					   len + IFH_LEN_BYTES,
- 					   DMA_TO_DEVICE);
- 
-+		next_dcb_buf->data.page = page;
-+		next_dcb_buf->len = len + IFH_LEN_BYTES;
-+
- 		/* Setup next dcb */
- 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
--					  xdpf->len + IFH_LEN_BYTES,
-+					  len + IFH_LEN_BYTES,
- 					  dma_addr + XDP_PACKET_HEADROOM);
- 	}
- 
- 	/* Fill up the buffer */
--	next_dcb_buf = &tx->dcbs_buf[next_to_use];
- 	next_dcb_buf->use_skb = false;
--	next_dcb_buf->data.xdpf = xdpf;
--	next_dcb_buf->xdp_ndo = dma_map;
--	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
-+	next_dcb_buf->xdp_ndo = !len;
- 	next_dcb_buf->dma_addr = dma_addr;
- 	next_dcb_buf->used = true;
- 	next_dcb_buf->ptp = false;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 757378516f1fd..27f272831ea5c 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -262,6 +262,7 @@ struct lan966x_tx_dcb_buf {
- 	union {
- 		struct sk_buff *skb;
- 		struct xdp_frame *xdpf;
-+		struct page *page;
- 	} data;
- 	u32 len;
- 	u32 used : 1;
-@@ -593,10 +594,7 @@ int lan966x_ptp_setup_traps(struct lan966x_port *port, struct ifreq *ifr);
- int lan966x_ptp_del_traps(struct lan966x_port *port);
- 
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
--int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
--			   struct xdp_frame *frame,
--			   struct page *page,
--			   bool dma_map);
-+int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len);
- int lan966x_fdma_change_mtu(struct lan966x *lan966x);
- void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
- void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-index 2e6f486ec67d7..9ee61db8690b4 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-@@ -62,7 +62,7 @@ int lan966x_xdp_xmit(struct net_device *dev,
- 		struct xdp_frame *xdpf = frames[i];
- 		int err;
- 
--		err = lan966x_fdma_xmit_xdpf(port, xdpf, NULL, true);
-+		err = lan966x_fdma_xmit_xdpf(port, xdpf, 0);
- 		if (err)
- 			break;
- 
-@@ -76,7 +76,6 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
- {
- 	struct bpf_prog *xdp_prog = port->xdp_prog;
- 	struct lan966x *lan966x = port->lan966x;
--	struct xdp_frame *xdpf;
- 	struct xdp_buff xdp;
- 	u32 act;
- 
-@@ -90,11 +89,8 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
- 	case XDP_PASS:
- 		return FDMA_PASS;
- 	case XDP_TX:
--		xdpf = xdp_convert_buff_to_frame(&xdp);
--		if (!xdpf)
--			return FDMA_DROP;
--
--		return lan966x_fdma_xmit_xdpf(port, xdpf, page, false) ?
-+		return lan966x_fdma_xmit_xdpf(port, page,
-+					      data_len - IFH_LEN_BYTES) ?
- 		       FDMA_DROP : FDMA_TX;
- 	case XDP_REDIRECT:
- 		if (xdp_do_redirect(port->dev, &xdp, xdp_prog))
+ install: $(ALL_PROGRAMS)
 -- 
-2.38.0
+2.40.0
 
