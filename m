@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FBC6EBA78
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 18:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27C06EBA5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 18:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjDVQsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 12:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S229670AbjDVQdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 12:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjDVQr5 (ORCPT
+        with ESMTP id S229575AbjDVQdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 12:47:57 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111FE19B;
-        Sat, 22 Apr 2023 09:47:40 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 22 Apr 2023 12:33:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7930E1729;
+        Sat, 22 Apr 2023 09:33:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q3ckw6J2yz9sJ5;
-        Sat, 22 Apr 2023 18:47:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
-        s=MBO0001; t=1682182056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UIrYwtDUNhK/5waVX3oGzXkU27Yiu2oa4nhKmolwfzA=;
-        b=nkYzQtYFyrl+LQ9rMpj32chuo7A1iONlR4jFzFD9XTHDyCMfuHHCniNLvMFsTOa/7u0Dio
-        F1p/7pJpQZlt0SQouksXiUMZ5qClYJNIt6AVY7rnNTXyVA914BnQMulrtB4dLNP0y4OSvP
-        QXmEb8a243SXNWu1KQfE8iAFoTW3kU9jmFmdHwKzZ2H/LJW8BYc+rtg/9ZQaPRLfSDn4Hq
-        ltyB2KPQkYFRdJM4en2WaQxkxp9D/llEQxWLuE534kSt8Hpxpc/AOOYqxV9mq5868qXi0m
-        ohjbn7A4VglZZPnZ6nwVWVr/aYmv0VziANtNo4QnhY3Du6yDM8Kqi8A+CKb6lA==
-Message-ID: <d0068345-6832-c9ae-ec40-bb692baa3f69@mariushoch.de>
-Date:   Sat, 22 Apr 2023 18:47:35 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1450C619C9;
+        Sat, 22 Apr 2023 16:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19CAC433EF;
+        Sat, 22 Apr 2023 16:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682181221;
+        bh=wKfdeMGrhxc157gH7YIVMHP6ex5KAzQsJv+egMR2oxU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=npEcdtbhzzWYIK9wEklVlgxZMps2zlwq0VFXUskQkDLbfsUqkryKnc/PvpcpMKOqC
+         /c7046iSNe7BW/gkEidj41OUI6RIkwawzjgiwQ9NIh/D/g6guhhnRF7EC2kKBiuyLi
+         5CtuCPsqBgTJyBGILka9q7BgNKITkZ6HoQPGrSMBxR4QVw8LjYSjvNwn07xl2R90Qq
+         v9fsCF9uU2AnqLIYJL+eV/MgpnLpNX++43Lafg+zxWCXSoU6Ja00ay2vJ8VgUFEjL0
+         bUlFl+c9yPxEtv20mZeM8ZeAj7Rw3ydbJm6vM/4WqP0FR6mNGXZX4X2hwpn1lV9Fj2
+         J66N+OCbLWJ4g==
+Date:   Sat, 22 Apr 2023 17:49:16 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/4] iio: inkern: Add a helper to query an available
+ minimum raw value
+Message-ID: <20230422174916.74ccfe00@jic23-huawei>
+In-Reply-To: <20230421124122.324820-3-herve.codina@bootlin.com>
+References: <20230421124122.324820-1-herve.codina@bootlin.com>
+        <20230421124122.324820-3-herve.codina@bootlin.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [PATCH] ACPI: scan: Ignore MAGN0001
-To:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230421162702.3558-1-mail@mariushoch.de>
- <06e9623d-26ae-e0e3-8fd8-1f5c89497a5a@redhat.com>
-Content-Language: en-US
-From:   Marius Hoch <mail@mariushoch.de>
-In-Reply-To: <06e9623d-26ae-e0e3-8fd8-1f5c89497a5a@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,75 +66,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On Fri, 21 Apr 2023 14:41:20 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-On 21/04/2023 20:07, Hans de Goede wrote:
-> Hi Marius,
->
-> On 4/21/23 18:27, Marius Hoch wrote:
->> The LSM303D on the Lenovo Yoga Tablet 2 series is present
->> as both ACCL0001 and MAGN0001. As we can only ever register an
->> i2c client for one of them, ignore MAGN0001.
->>
->> Currently this errors:
->> i2c i2c-4: Failed to register i2c client MAGN0001:00 at 0x1d (-16)
->>
->> Tested on a Lenovo Yoga Tablet 2 1051-F.
->>
->> Signed-off-by: Marius Hoch <mail@mariushoch.de>
-> By adding the HID to the ignore_serial_bus_ids[] list, you are
-> causing the ACPI code to instead instantiate a platform_device
-> for it.
->
-> This will successfully silence the error you are trying to silence,
-> but I don't think it really is what you intent / want to do ?
-It is not, no. Given we will only ever care for ACCL0001, we can 
-entirely skip MAGN0001.
->
-> IMHO it would be better to add a NOT_PRESENT_ENTRY_HID() entry
-> to the override_status_ids[] table in drivers/acpi/x86/utils.c,
-> this will override the return of _STA, causing neither a
-> platform_device not an i2c_client to get instantiated for
-> the duplicate MAGN0001 device.
-That sounds much better, thanks for the pointer!
-I've send a new patch (20230422164401.5986-1-mail@mariushoch.de).
+> A helper, iio_read_max_channel_raw() exists to read the available
+> maximum raw value of a channel but nothing similar exists to read the
+> available minimum raw value.
+> 
+> This new helper, iio_read_min_channel_raw(), fills the hole and can be
+> used for reading the available minimum raw value of a channel.
+> It is fully based on the existing iio_read_max_channel_raw().
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-Cheers,
-Marius
->
-> (please keep the comment above the entry why the entry is there)
->
-> Regards,
->
-> Hans
->
->
->
->
->
->
->
->> ---
->>   drivers/acpi/scan.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
->> index 0c6f06abe3f4..d21c411e9719 100644
->> --- a/drivers/acpi/scan.c
->> +++ b/drivers/acpi/scan.c
->> @@ -1730,6 +1730,12 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
->>   	 */
->>   		{"BCM4752", },
->>   		{"LNV4752", },
->> +	/*
->> +	 * The LSM303D on the Lenovo Yoga Tablet 2 series is present
->> +	 * as both ACCL0001 and MAGN0001. As we can only ever register an
->> +	 * i2c client for one of them, ignore MAGN0001.
->> +	 */
->> +		{"MAGN0001", },
->>   		{}
->>   	};
->>   
->>
->> base-commit: cb0856346a60fe3eb837ba5e73588a41f81ac05f
+Hi Herve,
+
+All the comments on this are really comments on the existing code.
+If you don't mind fixing the first one about checking the error code whilst
+you are here that would be great.  Don't worry about the docs comment.
+There are lots of instances of that and the point is rather subtle and probably
+post dates this code being written.  In a few cases raw doesn't mean ADC counts
+but rather something slightly modified... Long story for why!
+
+Jonathan
+
+> ---
+>  drivers/iio/inkern.c         | 67 ++++++++++++++++++++++++++++++++++++
+>  include/linux/iio/consumer.h | 11 ++++++
+>  2 files changed, 78 insertions(+)
+> 
+> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> index 872fd5c24147..914fc69c718a 100644
+> --- a/drivers/iio/inkern.c
+> +++ b/drivers/iio/inkern.c
+> @@ -912,6 +912,73 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val)
+>  }
+>  EXPORT_SYMBOL_GPL(iio_read_max_channel_raw);
+>  
+> +static int iio_channel_read_min(struct iio_channel *chan,
+> +				int *val, int *val2, int *type,
+> +				enum iio_chan_info_enum info)
+> +{
+> +	int unused;
+> +	const int *vals;
+> +	int length;
+> +	int ret;
+> +
+> +	if (!val2)
+> +		val2 = &unused;
+> +
+> +	ret = iio_channel_read_avail(chan, &vals, type, &length, info);
+Obviously this is copied from *_read_max() but look at it here...
+
+We should check for an error first with
+if (ret < 0)
+	return ret;
+then the switch.
+
+Currently a different positive ret would result in that value
+being returned which would be odd. Not a problem today, but if we add other
+iio_avail_type enum entries in future and don't keep up with all the
+utility functions then a mess may result.
+
+If you agree with change and wouldn't mind adding another patch to this series
+tidying that up for the _max case that would be great! Otherwise I'll get to
+fixing that at some point but not anytime soon.
+
+> +	switch (ret) {
+> +	case IIO_AVAIL_RANGE:
+> +		switch (*type) {
+> +		case IIO_VAL_INT:
+> +			*val = vals[0];
+> +			break;
+> +		default:
+> +			*val = vals[0];
+> +			*val2 = vals[1];
+> +		}
+> +		return 0;
+> +
+> +	case IIO_AVAIL_LIST:
+> +		if (length <= 0)
+> +			return -EINVAL;
+> +		switch (*type) {
+> +		case IIO_VAL_INT:
+> +			*val = vals[--length];
+> +			while (length) {
+> +				if (vals[--length] < *val)
+> +					*val = vals[length];
+> +			}
+> +			break;
+> +		default:
+> +			/* FIXME: learn about min for other iio values */
+> +			return -EINVAL;
+> +		}
+> +		return 0;
+> +
+> +	default:
+> +		return ret;
+> +	}
+> +}
+> +
+> +int iio_read_min_channel_raw(struct iio_channel *chan, int *val)
+> +{
+> +	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(chan->indio_dev);
+> +	int ret;
+> +	int type;
+> +
+> +	mutex_lock(&iio_dev_opaque->info_exist_lock);
+> +	if (!chan->indio_dev->info) {
+> +		ret = -ENODEV;
+> +		goto err_unlock;
+> +	}
+> +
+> +	ret = iio_channel_read_min(chan, val, NULL, &type, IIO_CHAN_INFO_RAW);
+> +err_unlock:
+> +	mutex_unlock(&iio_dev_opaque->info_exist_lock);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(iio_read_min_channel_raw);
+> +
+>  int iio_get_channel_type(struct iio_channel *chan, enum iio_chan_type *type)
+>  {
+>  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(chan->indio_dev);
+> diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
+> index 6802596b017c..956120d8b5a3 100644
+> --- a/include/linux/iio/consumer.h
+> +++ b/include/linux/iio/consumer.h
+> @@ -297,6 +297,17 @@ int iio_write_channel_raw(struct iio_channel *chan, int val);
+>   */
+>  int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
+>  
+> +/**
+> + * iio_read_min_channel_raw() - read minimum available raw value from a given
+> + *				channel, i.e. the minimum possible value.
+> + * @chan:		The channel being queried.
+> + * @val:		Value read back.
+> + *
+> + * Note raw reads from iio channels are in adc counts and hence
+> + * scale will need to be applied if standard units are required.
+
+Hmm. That comment is almost always true, but not quite.  Not related to
+your patch but some cleanup of this documentation and pushing it down next
+to implementations should be done at some point.  If anyone is really
+bored and wants to take this on that's fine. If not, another one for the
+todo list ;)
+
+> + */
+> +int iio_read_min_channel_raw(struct iio_channel *chan, int *val);
+> +
+>  /**
+>   * iio_read_avail_channel_raw() - read available raw values from a given channel
+>   * @chan:		The channel being queried.
 
