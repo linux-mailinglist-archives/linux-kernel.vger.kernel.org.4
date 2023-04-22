@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF506EB853
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95206EB856
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 11:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjDVJ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 05:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        id S229554AbjDVJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 05:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVJ4j (ORCPT
+        with ESMTP id S229451AbjDVJ5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 05:56:39 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C550010F3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:56:37 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4ec81779f49so2641915e87.3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 02:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682157396; x=1684749396;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RDQgb0udGi4TgE1jwB/Uj7tuQtIfaUvyOe998bYU7/g=;
-        b=PeyUjnRlP+n1PSyJQg8r/o4a3qsGPFuQeRlzl3dNs8XBPOq63Kp24A2TnJH+iSjJmA
-         0OdvWXXAu3dl6WqC+hWIvz2SworqCPnLLJ0aDIDoev0s4BiveJ+7Uj8AtATn81OoZziD
-         5Zr6Nuwo/XTa4hJNPgSS/PBuwT5FKswlkSKTQX/YYcJUADyjlnpr8pqylvaLUV8Ccja/
-         CvR9VGSAX2zDkMzmVJNKop3bEcHtFcKe8XDujzJVkZhbQmwHMGR4Yj+E4aVV5W0IkXuk
-         o7S3fS59b54kJiPxVkGsmDg8J6VwgLJmZoskjSBFWNt2VmBwYuTN5McfR5bsUz3o7+qZ
-         EgyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682157396; x=1684749396;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RDQgb0udGi4TgE1jwB/Uj7tuQtIfaUvyOe998bYU7/g=;
-        b=PZj+dC07ltYzq7BeZl3bnGymC/rTx8b3LVtJWwpjZ4T1kazGVZ1udInio6FIG7Ef9o
-         i2vUiNInfKH0IVb8XMbxU6ji7nX78QqsYexLJfHnl16K4k/WsVxxDjq+/dWfZRLZQ7ik
-         8T8X8JZMuzmQBJ4Scpw0eIckF0agTbyLylPoX1Ia92eJrygNbdILZMRbrreSZkOwlWr6
-         1EVRLJfNecqmTBJji4gMc0UQoDzcx/zYqmyagQax/swFHDPs2mGDEInQSY+OcPnTy7nc
-         xlZCZUxJFjKZTcJsgSS05vrtqO7FyjxG2j1FpUAcIKUEOzAeDeKmwRbg6pk2giKLFjeZ
-         ZwAQ==
-X-Gm-Message-State: AAQBX9fXBuLmHQaBY+NDIwvWLGAxTLCOpFMxHPqPexAOqMVuSwGqx9Hf
-        UUuZVvz/8m/AS+2O896zjyXQog==
-X-Google-Smtp-Source: AKy350ba+xIzdatXazTSlEA/wKsneXtw4QIKpv/3TBdA/Kc+aOgterKahyAD8iJ0SzPHXPwb3CXICQ==
-X-Received: by 2002:ac2:46cf:0:b0:4e8:d733:fde6 with SMTP id p15-20020ac246cf000000b004e8d733fde6mr2005270lfo.60.1682157396034;
-        Sat, 22 Apr 2023 02:56:36 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056512024a00b004edc3bd7fa1sm837323lfo.201.2023.04.22.02.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Apr 2023 02:56:35 -0700 (PDT)
-Message-ID: <ff2dd271-71f7-47e0-b200-4edd2d692e71@linaro.org>
-Date:   Sat, 22 Apr 2023 11:56:33 +0200
+        Sat, 22 Apr 2023 05:57:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D48B1BDC;
+        Sat, 22 Apr 2023 02:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682157466; x=1713693466;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cG7+KgDAr4AYUlsLPJRfqGCBuV8Fdm49l4MwT8XOd+c=;
+  b=k5DsePEZ5gWV/SIhDs9PCnmSz/8o8iZ3cCbfAVoMl9Wp6Xyk1n4rsj2X
+   TeklKk66jpF/KQOa7O6CUa86EagQ/5bD9givAoAEHQPBuyNi3NWUOT+a3
+   06OdB6/hxo8cEuMZH0KAqrFLh7q4G+s1jfxbIfhnx+UE6BpqjzWGyy/1i
+   rm986LzhrHQh2x5f4mKXY/hZDhW69veet5I6S0IMWca9ZicnSm8/4m3Or
+   0k8PdaUGutcSIl0rlfpnxWP30uZzXJGyOrD7CGzpPwTnx8PIjQJmoidh0
+   N+duFra4MJRWOdfU9Zt1ij5A/8GX6R+HkpC/TLILF8LMElIS7uf8HFp7e
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="326472827"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="326472827"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 02:57:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="642775237"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="642775237"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Apr 2023 02:57:42 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pq9zx-000hEW-0j;
+        Sat, 22 Apr 2023 09:57:41 +0000
+Date:   Sat, 22 Apr 2023 17:56:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH v12 2/3] cachestat: implement cachestat syscall
+Message-ID: <202304221702.Ye705xoC-lkp@intel.com>
+References: <20230421231421.2401346-3-nphamcs@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm8953: add GPIOs
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230421-pm8953-gpio-v1-0-3d33e2de47e3@z3ntu.xyz>
- <20230421-pm8953-gpio-v1-3-3d33e2de47e3@z3ntu.xyz>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230421-pm8953-gpio-v1-3-3d33e2de47e3@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421231421.2401346-3-nphamcs@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,38 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nhat,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[cannot apply to shuah-kselftest/next shuah-kselftest/fixes linus/master tip/x86/asm v6.3-rc7 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230422-071625
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230421231421.2401346-3-nphamcs%40gmail.com
+patch subject: [PATCH v12 2/3] cachestat: implement cachestat syscall
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230422/202304221702.Ye705xoC-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9691e4430fbb59890619289b45ee0ce9ec3e97ee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230422-071625
+        git checkout 9691e4430fbb59890619289b45ee0ce9ec3e97ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304221702.Ye705xoC-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> mm/filemap.c:4293:35: error: expected identifier
+   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
+                                     ^
+>> mm/filemap.c:4293:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
+   ^
+>> mm/filemap.c:4297:33: error: implicit declaration of function 'compat_arg_u64_glue' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+                                          ^
+>> mm/filemap.c:4297:24: error: use of undeclared identifier 'fd'
+           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+                                 ^
+>> mm/filemap.c:4297:28: error: use of undeclared identifier 'len'
+           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+                                     ^
+>> mm/filemap.c:4297:53: error: use of undeclared identifier 'off'
+           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+                                                              ^
+>> mm/filemap.c:4297:59: error: use of undeclared identifier 'cstat'
+           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+                                                                    ^
+>> mm/filemap.c:4297:66: error: use of undeclared identifier 'flags'
+           return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+                                                                           ^
+>> mm/filemap.c:4293:1: warning: no previous prototype for function 'COMPAT_SYSCALL_DEFINE6' [-Wmissing-prototypes]
+   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
+   ^
+   mm/filemap.c:4293:23: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
+                         ^
+                         static 
+>> mm/filemap.c:4293:23: error: this old-style function definition is not preceded by a prototype [-Werror,-Wstrict-prototypes]
+   COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
+                         ^
+   1 warning and 9 errors generated.
 
 
-On 21.04.2023 23:56, Luca Weiss wrote:
-> Add a node for the GPIOs found on the pm8953.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+vim +4293 mm/filemap.c
 
-Konrad
->  arch/arm64/boot/dts/qcom/pm8953.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pm8953.dtsi b/arch/arm64/boot/dts/qcom/pm8953.dtsi
-> index a1d36f9ebbd2..2268daf27fa7 100644
-> --- a/arch/arm64/boot/dts/qcom/pm8953.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm8953.dtsi
-> @@ -79,6 +79,16 @@ rtc@6000 {
->  			reg-names = "rtc", "alarm";
->  			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
->  		};
-> +
-> +		pm8953_gpios: gpio@c000 {
-> +			compatible = "qcom,pm8953-gpio", "qcom,spmi-gpio";
-> +			reg = <0xc000>;
-> +			gpio-controller;
-> +			gpio-ranges = <&pm8953_gpios 0 0 8>;
-> +			#gpio-cells = <2>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +		};
->  	};
->  
->  	pmic@1 {
-> 
+  4291	
+  4292	#ifdef CONFIG_COMPAT
+> 4293	COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, size_t, len,
+  4294			compat_arg_u64_dual(off), struct cachestat __user *, cstat,
+  4295			unsigned int, flags)
+  4296	{
+> 4297		return ksys_cachestat(fd, len, compat_arg_u64_glue(off), cstat, flags);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
