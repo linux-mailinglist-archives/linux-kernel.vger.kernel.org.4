@@ -2,90 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E534E6EBC81
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 04:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783A16EBC89
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 05:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjDWC4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 22:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S230086AbjDWDFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 23:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDWC4l (ORCPT
+        with ESMTP id S229580AbjDWDFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 22:56:41 -0400
-Received: from out-23.mta1.migadu.com (out-23.mta1.migadu.com [IPv6:2001:41d0:203:375::17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A9B2136
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 19:56:40 -0700 (PDT)
-Message-ID: <58a984d3-a89d-89d4-2491-a559bc8b1076@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682218598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0dgL3xDEkr6o6FRjE7kxu44l06Ma5AgulZJtHgzYbLM=;
-        b=Q7m1T9YsWl4Y5ORRjicXCwxB8qgnMV8rW0ao/MMqnGtjS/1xpC04DP0cpOg/8PZWz6HR9e
-        aqaE9qWi/pMPNbDmkT56zCKn0NGohsQj1+mLYtklDWTJT0dhfomnfGm2xzsAwpNIpr2g3U
-        od8Oirq5s7ybLp19iol11dEW46qadf0=
-Date:   Sun, 23 Apr 2023 10:56:30 +0800
-MIME-Version: 1.0
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-Subject: Re: [PATCH for-next v2 2/3] RDMA/rtrs: Fix the last iu->buf leak in
- err path
-To:     Li Zhijian <lizhijian@fujitsu.com>, haris.iqbal@ionos.com,
-        jinpu.wang@ionos.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1682213212-2-1-git-send-email-lizhijian@fujitsu.com>
- <1682213212-2-3-git-send-email-lizhijian@fujitsu.com>
-Content-Language: en-US
-In-Reply-To: <1682213212-2-3-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+        Sat, 22 Apr 2023 23:05:50 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA591737
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 20:05:49 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a50cb65c92so28705985ad.0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 20:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682219149; x=1684811149;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=crhg2BtmzV8z4fyeXuT3xLp41da6Pfmqjc/PTEndqFM=;
+        b=G9xbbtwY9Pdx+xP4Mhg57gpO5BbHxpcuAkWKxKCn7dEPJHPJhscll/9jG19ZmVdxR3
+         Udga/B9CAWMVvUgWbIQhwVs0f6jJnlavvoIeolP6dPxPcP9a7gRPpfrDYru56hO5mL7M
+         dyw4dDYxZm1hOJSPXhjCj7A6jOw3VZcZ/nEfdvyilyjnKfedvagcfVb3RMx/Q/t9K5JX
+         f7y0dY6uZz3x0Dqs3Cyw6Fd2SF8N88mhujMpaxq2+0Jb9QB/7uD2b3HJDLm7BYUuutrQ
+         59e1Np4YhXK+lghsWsMmnEbcGgNiSU12Zr2RD1ZjhmYLaPeFcCbUmlnHdsf+dKJPEyrB
+         C2uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682219149; x=1684811149;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=crhg2BtmzV8z4fyeXuT3xLp41da6Pfmqjc/PTEndqFM=;
+        b=dDUXwMTQaKPNC1uhh2g7Hw446JDfHpCet6UdFWEHvp/m0rH7WMF7bIlNW/XTd1njMD
+         xBwT08DqG7PYlR9UDCkTIz9rrODQxrdu8dcJ7dNGx36vsDA9U/ILbOm915dusabFuA3G
+         zbDs2RQdHlo9HGhqg318crQiR0NEhfJjKgsjVS0kr5ik9nkH31b0XosjZ0WFYacOmz0F
+         Apz8XJuij9wLieWLkZGazbyJDO44FdIzu1GXjPcCbqrIgT0BEVB1UTfV5gXm3boEda5T
+         EliQyxmsYD1hZ+I72lSI6uHjwSY4/sjgEakKbF8tHW+Tn0rznsRdFNi9touhCJHGcuV/
+         McNw==
+X-Gm-Message-State: AAQBX9eK8yyJEpAc66QcCalTwmaqxP7WZ/r6tv7ob/kBft6kN9ygqMlX
+        CWR3GgBK8aKrat4IUnyc3SGewA==
+X-Google-Smtp-Source: AKy350bTF3GschNC3Wp1o4THB7iil7PMwvgBN1IquHPj20l5TL4uIusprnmXUKNRHWp6mQ6pSorJEA==
+X-Received: by 2002:a17:902:d4ca:b0:1a6:523c:8583 with SMTP id o10-20020a170902d4ca00b001a6523c8583mr11670530plg.68.1682219148771;
+        Sat, 22 Apr 2023 20:05:48 -0700 (PDT)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id jb14-20020a170903258e00b001a6370bb33csm4584954plb.41.2023.04.22.20.05.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Apr 2023 20:05:47 -0700 (PDT)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH v2] arm64: PCI: Add quirk for Qualcomm WoA devices
+Date:   Sun, 23 Apr 2023 11:05:20 +0800
+Message-Id: <20230423030520.9570-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from
+host bridge windows") introduced a check to remove host bridge register
+resources for all arm64 platforms, with the assumption that the PNP0A03
+_CRS resources would always be host bridge registers and never as windows
+on arm64 platforms.
 
+The assumption stands true until Qualcomm WoA (Windows on ARM) devices
+emerge.  These devices describe host bridge windows in PNP0A03 _CRS
+resources instead.  For example, the Microsoft Surface Pro X has host
+bridges defined as
 
-On 4/23/23 09:26, Li Zhijian wrote:
-> The last iu->buf will leak if ib_dma_mapping_error() fails.
+    Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
+    Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
 
-Fixes: c0894b3ea69d("RDMA/rtrs: core: lib functions shared between 
-client and server modules")
+    Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+    {
+        Name (RBUF, ResourceTemplate ()
+        {
+            Memory32Fixed (ReadWrite,
+                0x60200000,         // Address Base
+                0x01DF0000,         // Address Length
+                )
+            WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
+                0x0000,             // Granularity
+                0x0000,             // Range Minimum
+                0x0001,             // Range Maximum
+                0x0000,             // Translation Offset
+                0x0002,             // Length
+                ,, )
+        })
+        Return (RBUF) /* \_SB_.PCI0._CRS.RBUF */
+    }
 
-> Signed-off-by: Li Zhijian<lizhijian@fujitsu.com>
-> ---
-> V2: new patch to address memory leaking
-> ---
->   drivers/infiniband/ulp/rtrs/rtrs.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs.c b/drivers/infiniband/ulp/rtrs/rtrs.c
-> index 4bf9d868cc52..3696f367ff51 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs.c
-> @@ -37,8 +37,10 @@ struct rtrs_iu *rtrs_iu_alloc(u32 iu_num, size_t size, gfp_t gfp_mask,
->   			goto err;
->   
->   		iu->dma_addr = ib_dma_map_single(dma_dev, iu->buf, size, dir);
-> -		if (ib_dma_mapping_error(dma_dev, iu->dma_addr))
-> +		if (ib_dma_mapping_error(dma_dev, iu->dma_addr)) {
-> +			kfree(iu->buf);
->   			goto err;
-> +		}
->   
->   		iu->cqe.done  = done;
->   		iu->size      = size;
+The Memory32Fixed holds a host bridge window, but it's not properly
+defined as a "producer" resource.  Consequently the resource gets
+removed by kernel, and the BAR allocation fails later on:
 
-Good catch, Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+    [ 0.150731] pci 0002:00:00.0: BAR 14: no space for [mem size 0x00100000]
+    [ 0.150744] pci 0002:00:00.0: BAR 14: failed to assign [mem size 0x00100000]
+    [ 0.150758] pci 0002:01:00.0: BAR 0: no space for [mem size 0x00004000 64bit]
+    [ 0.150769] pci 0002:01:00.0: BAR 0: failed to assign [mem size 0x00004000 64bit]
 
-Thanks,
-Guoqing
+This eventually prevents the PCIe NVME drive from being accessible.
+
+Add a quirk for these devices to avoid the resource being removed.
+
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+---
+Changes for v2:
+- Match devices using PPTT instead of DSDT to avoid maintenance burden.
+  Hope this is an acceptable compromise.
+- Add const delaration to qcom_platlist[].
+
+v1 link:
+https://lore.kernel.org/lkml/20230227021221.17980-1-shawn.guo@linaro.org/
+
+ arch/arm64/kernel/pci.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
+index 2276689b5411..2ff2f3befa76 100644
+--- a/arch/arm64/kernel/pci.c
++++ b/arch/arm64/kernel/pci.c
+@@ -109,16 +109,44 @@ int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+ 	return 0;
+ }
+ 
++#define QCOM_PCI_QUIRK "Host bridge windows in PNP0A03 _CRS"
++
++/*
++ * Ideally DSDT (Differentiated System Description Table) should be used to
++ * match the platforms, as the quirk is in there. But devices from different
++ * manufacturers usually have different oem_id and oem_table_id in DSDT,
++ * so matching DSDT makes the list a maintenance burden.  As a compromise,
++ * PPTT (Processor Properties Topology Table) is used instead to work
++ * around this quirk for the most Qualcomm WoA (Windows on ARM) devices.
++ */
++static const struct acpi_platform_list qcom_platlist[] = {
++	{ "QCOM  ", "QCOMEDK2", 0, ACPI_SIG_PPTT, all_versions, QCOM_PCI_QUIRK },
++	{ }
++};
++
+ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+ {
+ 	struct resource_entry *entry, *tmp;
+ 	int status;
++	int idx;
+ 
+ 	status = acpi_pci_probe_root_resources(ci);
++
++	/*
++	 * Instead of describing host bridge registers in PNP0A03 _CRS
++	 * resources, Qualcomm WoA devices describe host bridge windows in
++	 * there.  We do not want to destroy the resources on these platforms.
++	 */
++	idx = acpi_match_platform_list(qcom_platlist);
++	if (idx >= 0)
++		goto done;
++
+ 	resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
+ 		if (!(entry->res->flags & IORESOURCE_WINDOW))
+ 			resource_list_destroy_entry(entry);
+ 	}
++
++done:
+ 	return status;
+ }
+ 
+-- 
+2.17.1
+
