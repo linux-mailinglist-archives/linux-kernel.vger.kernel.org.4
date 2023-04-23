@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9466EC25B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 22:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE606EC25F
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 23:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjDWU7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 16:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
+        id S230134AbjDWVCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 17:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWU7q (ORCPT
+        with ESMTP id S229476AbjDWVCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 16:59:46 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69113F7;
-        Sun, 23 Apr 2023 13:59:45 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5052caa1e32so6488907a12.2;
-        Sun, 23 Apr 2023 13:59:45 -0700 (PDT)
+        Sun, 23 Apr 2023 17:02:04 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D97811C;
+        Sun, 23 Apr 2023 14:02:03 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94eee951c70so549525466b.3;
+        Sun, 23 Apr 2023 14:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682283584; x=1684875584;
+        d=gmail.com; s=20221208; t=1682283722; x=1684875722;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vTeaFUMPzt83wxw5ZIyQFWx3FUsV665nSPOBgniATUI=;
-        b=kIP31mG0ih0F62/A0CEv78gRcICVKmeP1LaexXbntP364uK/kzVy1+lmAST/JPZh4D
-         uWhZJ+Ls2q7kVaJqQPZ6SFs3a6+pHuSzBE7vfaZPapQ1V3tn7JbVpEgHPnykjLhmUllH
-         jmojYInhQ3NLIxFJK2FXnNtbpIl3wG6KO0Ft2BCya1OZpF17yqfxLUb4hPWh45u8qIU7
-         lrVCSkyi3Fr33XGcNFd2ndRVtWgOH4sae63kEsMgIHiHCL6u/qFahs5jL1/peikwZSSB
-         Lber1L+eo6TMk2uITrt3AzrwLnc6SWa8sLaX/A2hOQXk6SDDSHAtOuZp8BvJYJf4Fe/k
-         o6jQ==
+        bh=eQGZByzNwTNHNZDulx2ynpAjg2TN652dzcztwDEhLDY=;
+        b=N6vcVe5JMgZk+mcR9rGRaoW8sBPGvj/go9Gq+j6xvO/lb8KPQQA0DOmRCBmdLtTOzM
+         cb0y4b9cnJ3p6+Sa7JgMTJpu+tUrKzIv7kbqDiE93kxi9FwGGgR/kwKKoFAfYrIHL986
+         1K4YmYJs2WWw8HEftklX8+PfCm6NqUe26NTbPZRmPiG9PWkTxN7yVWJ+TE8sDYsobOMP
+         DF4AeUKaOnNY2gkPVPTbE6lY0hDqeHuFFz6dJiPGQ9lSgeeZLyCVMu+qGAiH0WKQC5E8
+         P5rWQgJNiFAlhK0FYkLYWoElaDA2v/mslOZ+KY+zjNQMsX44PQbEttK/LjOhOFQDN0WI
+         Q3yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682283584; x=1684875584;
+        d=1e100.net; s=20221208; t=1682283722; x=1684875722;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vTeaFUMPzt83wxw5ZIyQFWx3FUsV665nSPOBgniATUI=;
-        b=U8s/AsHpyFYG+znMdL6HCFBTzp0MYfoDkPQWFvEhd2LRhfqRr2H1q1kvQojncIAYfG
-         9z4gdDol4RNE147Y74cX3RmkFc8FkMH0FpDnUAnE/ea31A5WAOE8MMAr8oZsM3Rb68TR
-         75btWQVC3iZAhUKWkedHARH+gTyQDZSVZH0icmqi2nmDaYvRlA+JhT82An37bOMkZRjj
-         AhCr/PlCFKUaNzeKn1bPJzUzO+jiF60NQ19TzbrCMXZLFDbM9GdbUMiGzZLthhCJ0Oij
-         x38ylURng8fuxY7NziehprRYLRdO7lrjeaIhN4+Tw6u9wJy6YfLXn+c7XMLSsXqPPlVy
-         ubqw==
-X-Gm-Message-State: AAQBX9c5BxfFCzYG/malKtAGoYk9zHScSGDKF4yriePJ5DqirlTx/mms
-        K4lTZK+niX36D2Sic5ZQ464=
-X-Google-Smtp-Source: AKy350ZLva5XbFvzjazIS59Msv3QLlHrXXGQt9Xm0N5bHyyyHkxs4fxmCMrekbD0SJPmqgy/q4Iy4Q==
-X-Received: by 2002:aa7:c902:0:b0:506:a561:b0a9 with SMTP id b2-20020aa7c902000000b00506a561b0a9mr10505241edt.14.1682283583630;
-        Sun, 23 Apr 2023 13:59:43 -0700 (PDT)
+        bh=eQGZByzNwTNHNZDulx2ynpAjg2TN652dzcztwDEhLDY=;
+        b=h71m+jnpvYlGvtbO4F+bYhXW1LIFAK+CuYBqX+6J8XlPsw1dNkk94nHBR6Zmy6ohDk
+         KiaU6/50QxecypW6pkUvTRUc2th5zkhwNGprMz/Hu6SUCAfRTJsRXP2pwh2yDshfBFqn
+         YDQhXSHarjCISyKOquKpGqxxy/BUCjtoZvhDaLHaeQmx8xZOm6EvqISNhzShRkxTA3CO
+         tOW4TwJFls1XG7Eg/96IP6nsoBTfUOaGdKlUV8aURixqNz4GuxYYpOH0h1CTi930llNa
+         RPa+DDONX+d3WFv4fUWSsyndsDOChnzYHoSeXUnsSNt8I4AW4dS+oyh1PxilW0cG8Q7u
+         llIA==
+X-Gm-Message-State: AAQBX9dZXhOCtOpGeD1NQmQOCqHneUSsDaddj8ixm/Fa3Ncv/lwMSueb
+        PCn4IwmR7DCXoLkRSdaiSY4=
+X-Google-Smtp-Source: AKy350ZyyvX18X7jpfRoCdltMyhN9uSRt6N8acooo90hc7tw+DE/QBtp6aBAKadmqw8MVDMdriET2A==
+X-Received: by 2002:a17:906:111:b0:947:ebd5:c798 with SMTP id 17-20020a170906011100b00947ebd5c798mr10169688eje.54.1682283721554;
+        Sun, 23 Apr 2023 14:02:01 -0700 (PDT)
 Received: from carbian ([2a02:8109:aa3f:ead8::d7e8])
-        by smtp.gmail.com with ESMTPSA id d12-20020a50fb0c000000b004bf999f8e57sm3938834edq.19.2023.04.23.13.59.42
+        by smtp.gmail.com with ESMTPSA id ec17-20020a170906b6d100b0094f6bf5ac9asm4754583ejb.22.2023.04.23.14.02.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 13:59:42 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 22:59:40 +0200
+        Sun, 23 Apr 2023 14:02:00 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 23:01:59 +0200
 From:   Mehdi Djait <mehdi.djait.k@gmail.com>
 To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        krzysztof.kozlowski+dt@linaro.org,
         andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] iio: accel: kionix-kx022a: Warn on failed matches
- and assume compatibility
-Message-ID: <ZEWcPJYfOK7LNq1S@carbian>
+Subject: Re: [PATCH v2 3/5] iio: accel: kionix-kx022a: Refactor driver and
+ add chip_info structure
+Message-ID: <ZEWcx9lQXFY/CkNp@carbian>
 References: <cover.1682019544.git.mehdi.djait.k@gmail.com>
- <b6cb3d48ab9e4177b924b18e27487f8ef763dfd6.1682019544.git.mehdi.djait.k@gmail.com>
- <20230422182833.7fbf6aae@jic23-huawei>
+ <e0b599e3f1d1fe0c68e4e0083c8d51fbf0834059.1682019544.git.mehdi.djait.k@gmail.com>
+ <ffae181f-f235-2767-b8fe-e8c4f2e69ccd@gmail.com>
+ <20230422183246.3b18be8f@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230422182833.7fbf6aae@jic23-huawei>
+In-Reply-To: <20230422183246.3b18be8f@jic23-huawei>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,42 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan,
+Hello Matti and Jonathan,
 
-On Sat, Apr 22, 2023 at 06:28:33PM +0100, Jonathan Cameron wrote:
-> On Thu, 20 Apr 2023 22:22:02 +0200
-> Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
+On Sat, Apr 22, 2023 at 06:32:46PM +0100, Jonathan Cameron wrote:
+> On Fri, 21 Apr 2023 09:19:32 +0300
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 > 
-> > Avoid error returns on a failure to match and instead just warn with
-> > assumption that we have a correct dt-binding telling us that
-> > some new device with a different ID is backwards compatible.
+> > Hi Mehdi,
 > > 
-> > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
-> > ---
-> > v2:
-> > - no changes, this patch is introduced in the v2
+> > Thanks for working on this driver :) Much appreciated!
 > > 
-> >  drivers/iio/accel/kionix-kx022a.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > On 4/20/23 23:22, Mehdi Djait wrote:
+> > > Refactor the kx022a driver implementation to make it more generic and
+> > > extensible.
+> > > Introduce an i2c_device_id table.
+> > > Add the chip_info structure to the driver's private data to hold all
+> > > the device specific infos.
+> > > 
+> > > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> > > ---
+> > > v2:
+> > > - mentioned the introduction of the i2c_device_id table in the commit  
 > > 
-> > diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
-> > index f98393d74666..70530005cad3 100644
-> > --- a/drivers/iio/accel/kionix-kx022a.c
-> > +++ b/drivers/iio/accel/kionix-kx022a.c
-> > @@ -1038,9 +1038,7 @@ int kx022a_probe_internal(struct device *dev)
-> >  		return dev_err_probe(dev, ret, "Failed to access sensor\n");
-> >  
-> >  	if (chip_id != KX022A_ID) {
-> > -		dev_err(dev, "unsupported device 0x%x\n", chip_id);
-> > -		return -EINVAL;
-> > -	}
-> > +		dev_warn(dev, "unsupported device 0x%x\n", chip_id);
+> > Maybe adding the i2c_device_id table could be done in a separate patch 
+> > with a Fixes tag? That would help backporting (and I think changes like 
+> > this are worth it).
 > 
-> Try building this ;)  You have remove the closing bracket but kept the opening
-> one.
+> Is it technically a fix?  I thought it was but turned out my reasoning only
+> applied to spi.   Agreed it would be nice as a separate patch though.
+> It's not directly related to the rest of what is happening here.
 
-Oops! I will fix this :)
+I will make it a separate patch in the v3
 
 --
-Kind Regards
+Kind Regard
 Mehdi Djait
