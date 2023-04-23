@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3776EC064
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4456EC067
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjDWO05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S229969AbjDWOac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjDWO0t (ORCPT
+        with ESMTP id S229476AbjDWOa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:26:49 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CBC211D;
-        Sun, 23 Apr 2023 07:26:37 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a5197f00e9so29945375ad.1;
-        Sun, 23 Apr 2023 07:26:37 -0700 (PDT)
+        Sun, 23 Apr 2023 10:30:29 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BFEE3;
+        Sun, 23 Apr 2023 07:30:28 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f182d745deso34729575e9.0;
+        Sun, 23 Apr 2023 07:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682259997; x=1684851997;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hDbIntu1UOpJwHdFve9fpGJWyayD8KIlufUr0WwNJSo=;
-        b=Ijgdn5SI4/jYVJ/JoB3fYabmjKi8mK5UBs9FGq6kbTAEqR/557qSm824tCrQW2a/5d
-         GNWGzps4K/u7aLe8YAZuHRtNuuHoBJzce+87l5GU+pHBUeRZGq7knP5S5+myY1qU38Pf
-         Gyi7oy0ICXuC66GlsvpxaEiuOITcVzHWIumVrFt3lRQE+fUbVj85EEGejxG+KjBnFlvb
-         e5W+hRsxu438NJoBGwCkGw2vYS/vWp8yd0W3sPxUyuHAryVqinV3AiIRrdOKmlVzzBRV
-         zHTUgd+g4LYWcHswJnDcWExkQ/XCZoJNQGBOTGbR372/WgxXCILdDdLrBbPtzlNbZ2on
-         yMsQ==
+        d=gmail.com; s=20221208; t=1682260227; x=1684852227;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hmz02kgYSIPTVGE2YzP1t9u5jmmiCjYgtKyhAhJJpAU=;
+        b=KQ/354GpPjBr/GF7Ev1Y2jkdF14nbEgnAMPYLzm9bKofG5mQa5wPu0OqnZpy2RISao
+         jddj2N/u1Pgifdz/7vD+2GGfWX2vyZb4b/dU5bqFzOEJ14qsT/nj4GUBPYVoLMEaHh5P
+         KGYEjpRYP641hmbk94/umFPA9aWC4DLHs1yUCjSTzNtDYGuYVBqQnOfyAGuhH9Ym+XBM
+         4uPy7yRRL3Xplm1kP3esQU5ean/nImylay62lRzRHMT1PYrqwDCRX3QMfMXmegkAY08f
+         cBnjbrcA4mGqFa0fLDNpa7+wvU/wkBRYAoUucZK65utrhWF76aJXqn2K8qGpctVApO0Q
+         B3bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682259997; x=1684851997;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hDbIntu1UOpJwHdFve9fpGJWyayD8KIlufUr0WwNJSo=;
-        b=QLxjkBYxuJyGDHc7AMWhprrhMr8uMgQl6w6QbDicWjMt2saSAiVw1B1QLEQ+wJ+s9v
-         ygyGmBWnTvC/j2rSWZFjCqix4AJM4fUyDpEVJT+mhUOAfE9+OORRCESXnGF9pXDy8LoB
-         nNPz5Yc/sdNxEnO/mc2oML919zcV5+uaJL137wkaZ77OuoATZ0YKLFVeOzZkRzmPeS06
-         xcfxojXoJnj9gpF+cK/aA0Gws3xA81IJPQGSzO57Vg3j46ngrfNbz0hitPbUIKd3Q6J6
-         KwZII/P2hx1iy0qj8gafg3oVdi0NzXFEcfEdB/Saft/OPO6klNqeWkfcGPs1xGMIOj1r
-         aCsQ==
-X-Gm-Message-State: AAQBX9cOjkIOzGR9sPFhIdY8hyOznfyTQPGVjmAx1n7dwH4HSHJURlaw
-        czak0VG96qn76xQjveXJ5Tk=
-X-Google-Smtp-Source: AKy350aoN241w7nbxKmiEzOtYF0nSPMYkpeFuUU9y0F40NjrExcFXuUWa/u9dTd8fj7PzRYupvy6kQ==
-X-Received: by 2002:a17:902:e5cd:b0:1a6:5487:3f97 with SMTP id u13-20020a170902e5cd00b001a654873f97mr13878348plf.64.1682259996750;
-        Sun, 23 Apr 2023 07:26:36 -0700 (PDT)
-Received: from localhost ([2605:59c8:148:ba10:5905:623a:c41:59e1])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170902c11100b001a6801fd9easm5136730pli.176.2023.04.23.07.26.35
+        d=1e100.net; s=20221208; t=1682260227; x=1684852227;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hmz02kgYSIPTVGE2YzP1t9u5jmmiCjYgtKyhAhJJpAU=;
+        b=IP0w2NXNEHVwzASK3Pm73iSQ6RS9UXLDUT7kldn31uDsls0+G/uDytnaAwWANu0RRu
+         yB5XzWyL132ZGhNMEfglwsu5KW5EaggYT8ZvihYS31kwBwdG48yLD4iuppKtVZ9A0Y38
+         j0+OrDNVcJrmKVNaqu2PeJ1xh3kdXkfHgzEPMH6pIRKu+dZmOolaWYgTbXNZSSOTR2RS
+         CHa9/bKnn9pVV2ocf/KPAJA0Vvn1qZR79VoseOELLlu6wSYUSUncdqaRJC7lIFwn4PQJ
+         5PcaSPbIVhiPYdgfM2vRx/wMEDRvJA7YOxTF7QccIeWg+M3x5NnDrkH3NKP6h1cSjNhd
+         g4RQ==
+X-Gm-Message-State: AAQBX9fJtqlD0ATmbTaqgrUXOVAPiQHRqPpCmMElDQ5HpEG8t3MEGk3K
+        NMQFd4nlwmpUipm2nCFDpNAbDYqkc924Lw==
+X-Google-Smtp-Source: AKy350YFG1XWLlzDerdjqq1cTqz6QsInPmJyhb5q+UOAbjM1BuxXV+707QxfrCa3w8mGQbVrwAluNA==
+X-Received: by 2002:a7b:c5c7:0:b0:3f1:75d0:6151 with SMTP id n7-20020a7bc5c7000000b003f175d06151mr5878554wmk.1.1682260226832;
+        Sun, 23 Apr 2023 07:30:26 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c000900b003f0aa490336sm13068176wmc.26.2023.04.23.07.30.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 07:26:36 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 07:26:35 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Joe Stringer <joe@isovalent.com>, bpf@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, corbet@lwn.net, martin.lau@linux.dev,
-        bagasdotme@gmail.com, maxtram95@gmail.com, john.fastabend@gmail.com
-Message-ID: <6445401b297a1_19af02083@john.notmuch>
-In-Reply-To: <20230422172054.3355436-2-joe@isovalent.com>
-References: <20230422172054.3355436-1-joe@isovalent.com>
- <20230422172054.3355436-2-joe@isovalent.com>
-Subject: RE: [PATCH bpf-next v5 2/2] docs/bpf: Add LRU internals description
- and graph
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Sun, 23 Apr 2023 07:30:26 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 16:30:24 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: brcm,kona-wdt: convert to YAML
+Message-ID: <20230423143024.GA10503@standask-GA-A55M-S2HP>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,22 +73,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joe Stringer wrote:
-> Extend the bpf hashmap docs to include a brief description of the
-> internals of the LRU map type (setting appropriate API expectations),
-> including the original commit message from Martin and a variant on the
-> graph that I had presented during my Linux Plumbers Conference 2022 talk
-> on "Pressure feedback for LRU map types"[0].
-> 
-> The node names in the dot file correspond roughly to the functions where
-> the logic for those decisions or steps is defined, to help curious
-> developers to cross-reference and update this logic if the details of
-> the LRU implementation ever differ from this description.
-> 
-> [0]: https://lpc.events/event/16/contributions/1368/
-> 
-> Signed-off-by: Joe Stringer <joe@isovalent.com>
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
+Convert Broadcom Kona family watchdog timer bindings to DT schema.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ .../bindings/watchdog/brcm,kona-wdt.txt       | 15 --------
+ .../bindings/watchdog/brcm,kona-wdt.yaml      | 37 +++++++++++++++++++
+ 2 files changed, 37 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+deleted file mode 100644
+index 2b86a00e351d..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Broadcom Kona Family Watchdog Timer
+------------------------------------
+-
+-This watchdog timer is used in the following Broadcom SoCs:
+-  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
+-
+-Required properties:
+-  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+-  - reg: memory address & range
+-
+-Example:
+-	watchdog@35002f40 {
+-		compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+-		reg = <0x35002f40 0x6c>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+new file mode 100644
+index 000000000000..5de1b022847b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom Kona family watchdog timer
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - brcm,bcm11351-wdt
++      - const: brcm,kona-wdt
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@35002f40 {
++        compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
++        reg = <0x35002f40 0x6c>;
++    };
++...
+-- 
+2.25.1
+
