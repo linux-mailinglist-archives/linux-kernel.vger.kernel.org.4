@@ -2,274 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CE76EBDE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8912C6EBDF0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjDWIQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 04:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S229623AbjDWIWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 04:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjDWIQL (ORCPT
+        with ESMTP id S229453AbjDWIWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:16:11 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56651986;
-        Sun, 23 Apr 2023 01:16:05 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Q41L817nHz4f3khR;
-        Sun, 23 Apr 2023 16:16:00 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7NA6URkr9jnHw--.47528S3;
-        Sun, 23 Apr 2023 16:16:01 +0800 (CST)
-Subject: Re: [PATCH for-6.4/block] block/rq_qos: protect rq_qos apis with a
- new lock
-To:     Yu Kuai <yukuai1@huaweicloud.com>, tj@kernel.org, hch@lst.de,
-        josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230414084008.2085155-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <dde18143-b3bf-e493-c10a-5ffd2d8b772a@huaweicloud.com>
-Date:   Sun, 23 Apr 2023 16:15:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 23 Apr 2023 04:22:43 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF7410D2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 01:22:15 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-52091c58109so3291734a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 01:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1682238135; x=1684830135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AsVqFxCnqnJj6X0Ne966CP4b3PoHHtGOf7X6eWIUjQM=;
+        b=Tb/B346e9/yJe3ib/AD+cCfT8dBiYza4ku/jwFqGwo74dVP1bpMIoBGZynuvEOKG4S
+         pQcCoPGJTostQastCdpOR3UmE251+CdP0QlPb885nFLmdHjZ+OpA20MIvTI8Yo9LZTlh
+         DgZU2E4PAlupns0wf7CTY9QGnwA5G3ehQ2Is4AVq9aiK7BrvTVaARL7m6oqGrS0Cs//k
+         OS070RKMfh6MqXo1w7Xo3Jo+b21Q71z97y3ijLzmdX7mH1PWWzufUnMcBpe6apy+Mrgy
+         iBRpzgQ+JdZO95o4IA9hHsuH5QgyJ0qWiTxyp412sXis3Npzvp+n2epKUwutOQkLC5XH
+         wUNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682238135; x=1684830135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AsVqFxCnqnJj6X0Ne966CP4b3PoHHtGOf7X6eWIUjQM=;
+        b=e3ZAO5q7VzmhfBeoI+ur6srJRk+Szr5rF5vrwx1xQxh3loIRtpd43TvyDIpmVZGMKZ
+         oHPFoYhHCkDoOU/Z3wgGaLkfciyY14wsXamYewlbUPnNAj4jTYPAz2bsi+zdJ0uee5bZ
+         XNyuZ8iTZ+lMazHrAWPDJNX+C5XBKZYlBrGzd/lwlI/hIClTZJfzsz6FJgH1v6YqX7s3
+         OtdOh/QHbLvgO8I1XY7mNolf62XYvPp2a/HyL0VYro0gbKZRZjOpZSzeVci2Woz6AMYU
+         immyKuf5yYe8iJkoDDiu5qyaXq+xiXjW4EJVHmfm8yM3wkBm2ygUf7iehhdRU4Hl3alr
+         CMPQ==
+X-Gm-Message-State: AAQBX9dqBdQKcRkG3X18vps1r+XFg3Wg84kyArLL4E468zK7I+8S+2pw
+        VlFggjSw4iPlXNdj5Z7P/zuCwODUXvfiQnMGBR7D
+X-Google-Smtp-Source: AKy350Y0cppnvzh+iIVajhTfZc/f8jqQq53obY80h8SaBPrHRovT6pzLOUPuQ563V4RBQW0br3Wx1AER7E1Wd3DLNL4=
+X-Received: by 2002:a17:902:fa0b:b0:1a6:d8a3:3346 with SMTP id
+ la11-20020a170902fa0b00b001a6d8a33346mr9686473plb.31.1682238135103; Sun, 23
+ Apr 2023 01:22:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230414084008.2085155-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7NA6URkr9jnHw--.47528S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wry7JF1DtFyfJFyDKFy8Xwb_yoWxCr17pa
-        y8KF43A392gr4Dua1DGw4xXwsIgws5KrW8CrWfW34ayrZF9r10vF1kAFyUWFWrArsxZF4k
-        XrW8WrsYkr1UCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419134329.346825-1-maxime.coquelin@redhat.com>
+ <CACGkMEuiHqPkqYk1ZG3RZXLjm+EM3bmR0v1T1yH-ADEazOwTMA@mail.gmail.com>
+ <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com> <CACGkMEuWpHokhwvJ5cF41_C=ezqFhoOyUOposdZ5+==A642OmQ@mail.gmail.com>
+ <88a24206-b576-efc6-1bce-7f5075024c63@redhat.com> <CACGkMEuZpk8QcrUQSOxqt6j3F9Ge-HdSs5-18FayMMQmH3Tcmg@mail.gmail.com>
+In-Reply-To: <CACGkMEuZpk8QcrUQSOxqt6j3F9Ge-HdSs5-18FayMMQmH3Tcmg@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Sun, 23 Apr 2023 16:22:00 +0800
+Message-ID: <CACycT3sbn=DSf0qW5RchV=FauDdn2eoMLEkRGAU3wXZZJwDsrw@mail.gmail.com>
+Subject: Re: [RFC 0/2] vduse: add support for networking devices
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Maxime Coquelin <maxime.coquelin@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Marchand <david.marchand@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Netdev <netdev@vger.kernel.org>, xuanzhuo@linux.alibaba.com,
+        Eugenio Perez Martin <eperezma@redhat.com>,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Apr 23, 2023 at 2:31=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
+ote:
+>
+> On Fri, Apr 21, 2023 at 10:28=E2=80=AFPM Maxime Coquelin
+> <maxime.coquelin@redhat.com> wrote:
+> >
+> >
+> >
+> > On 4/21/23 07:51, Jason Wang wrote:
+> > > On Thu, Apr 20, 2023 at 10:16=E2=80=AFPM Maxime Coquelin
+> > > <maxime.coquelin@redhat.com> wrote:
+> > >>
+> > >>
+> > >>
+> > >> On 4/20/23 06:34, Jason Wang wrote:
+> > >>> On Wed, Apr 19, 2023 at 9:43=E2=80=AFPM Maxime Coquelin
+> > >>> <maxime.coquelin@redhat.com> wrote:
+> > >>>>
+> > >>>> This small series enables virtio-net device type in VDUSE.
+> > >>>> With it, basic operation have been tested, both with
+> > >>>> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+> > >>>> adding VDUSE support [0] using split rings layout.
+> > >>>>
+> > >>>> Control queue support (and so multiqueue) has also been
+> > >>>> tested, but require a Kernel series from Jason Wang
+> > >>>> relaxing control queue polling [1] to function reliably.
+> > >>>>
+> > >>>> Other than that, we have identified a few gaps:
+> > >>>>
+> > >>>> 1. Reconnection:
+> > >>>>    a. VDUSE_VQ_GET_INFO ioctl() returns always 0 for avail
+> > >>>>       index, even after the virtqueue has already been
+> > >>>>       processed. Is that expected? I have tried instead to
+> > >>>>       get the driver's avail index directly from the avail
+> > >>>>       ring, but it does not seem reliable as I sometimes get
+> > >>>>       "id %u is not a head!\n" warnings. Also such solution
+> > >>>>       would not be possible with packed ring, as we need to
+> > >>>>       know the wrap counters values.
+> > >>>
+> > >>> Looking at the codes, it only returns the value that is set via
+> > >>> set_vq_state(). I think it is expected to be called before the
+> > >>> datapath runs.
+> > >>>
+> > >>> So when bound to virtio-vdpa, it is expected to return 0. But we ne=
+ed
+> > >>> to fix the packed virtqueue case, I wonder if we need to call
+> > >>> set_vq_state() explicitly in virtio-vdpa before starting the device=
+.
+> > >>>
+> > >>> When bound to vhost-vdpa, Qemu will call VHOST_SET_VRING_BASE which
+> > >>> will end up a call to set_vq_state(). Unfortunately, it doesn't
+> > >>> support packed ring which needs some extension.
+> > >>>
+> > >>>>
+> > >>>>    b. Missing IOCTLs: it would be handy to have new IOCTLs to
+> > >>>>       query Virtio device status,
+> > >>>
+> > >>> What's the use case of this ioctl? It looks to me userspace is
+> > >>> notified on each status change now:
+> > >>>
+> > >>> static int vduse_dev_set_status(struct vduse_dev *dev, u8 status)
+> > >>> {
+> > >>>           struct vduse_dev_msg msg =3D { 0 };
+> > >>>
+> > >>>           msg.req.type =3D VDUSE_SET_STATUS;
+> > >>>           msg.req.s.status =3D status;
+> > >>>
+> > >>>           return vduse_dev_msg_sync(dev, &msg);
+> > >>> }
+> > >>
+> > >> The idea was to be able to query the status at reconnect time, and
+> > >> neither having to assume its value nor having to store its value in =
+a
+> > >> file (the status could change while the VDUSE application is stopped=
+,
+> > >> but maybe it would receive the notification at reconnect).
+> > >
+> > > I see.
+> > >
+> > >>
+> > >> I will prototype using a tmpfs file to save needed information, and =
+see
+> > >> if it works.
+> > >
+> > > It might work but then the API is not self contained. Maybe it's
+> > > better to have a dedicated ioctl.
+> > >
+> > >>
+> > >>>> and retrieve the config
+> > >>>>       space set at VDUSE_CREATE_DEV time.
+> > >>>
+> > >>> In order to be safe, VDUSE avoids writable config space. Otherwise
+> > >>> drivers could block on config writing forever. That's why we don't =
+do
+> > >>> it now.
+> > >>
+> > >> The idea was not to make the config space writable, but just to be a=
+ble
+> > >> to fetch what was filled at VDUSE_CREATE_DEV time.
+> > >>
+> > >> With the tmpfs file, we can avoid doing that and just save the confi=
+g
+> > >> space there.
+> > >
+> > > Same as the case for status.
+> >
+> > I have cooked a DPDK patch to support reconnect with a tmpfs file as
+> > suggested by Yongji:
+> >
+> > https://gitlab.com/mcoquelin/dpdk-next-virtio/-/commit/53913f2b1155b02c=
+44d5d3d298aafd357e7a8c48
+>
+> This seems tricky, for example for status:
+>
+> dev->log->status =3D dev->status;
+>
+> What if we crash here?
+>
 
-ÔÚ 2023/04/14 16:40, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> commit 50e34d78815e ("block: disable the elevator int del_gendisk")
-> move rq_qos_exit() from disk_release() to del_gendisk(), this will
-> introduce some problems:
-> 
-> 1) If rq_qos_add() is triggered by enabling iocost/iolatency through
->     cgroupfs, then it can concurrent with del_gendisk(), it's not safe to
->     write 'q->rq_qos' concurrently.
-> 
-> 2) Activate cgroup policy that is relied on rq_qos will call
->     rq_qos_add() and blkcg_activate_policy(), and if rq_qos_exit() is
->     called in the middle, null-ptr-dereference will be triggered in
->     blkcg_activate_policy().
-> 
-> 3) blkg_conf_open_bdev() can call blkdev_get_no_open() first to find the
->     disk, then if rq_qos_exit() from del_gendisk() is done before
->     rq_qos_add(), then memory will be leaked.
-> 
-> This patch add a new disk level mutex 'rq_qos_mutex':
-> 
-> 1) The lock will protect rq_qos_exit() directly.
-> 
-> 2) For wbt that doesn't relied on blk-cgroup, rq_qos_add() can only be
->     called from disk initialization for now because wbt can't be
->     destructed until rq_qos_exit(), so it's safe not to protect wbt for
->     now. Hoever, in case that rq_qos dynamically destruction is supported
->     in the furture, this patch also protect rq_qos_add() from wbt_init()
->     directly, this is enough because blk-sysfs already synchronize
->     writers with disk removal.
-> 
-> 3) For iocost and iolatency, in order to synchronize disk removal and
->     cgroup configuration, the lock is held after blkdev_get_no_open()
->     from blkg_conf_open_bdev(), and is released in blkg_conf_exit().
->     In order to fix the above memory leak, disk_live() is checked after
->     holding the new lock.
-> 
-
-Friendly ping ...
+The message will be re-sent by the kernel if it's not replied. But I
+think it would be better if we can restore it via some ioctl.
 
 Thanks,
-Kuai
-> Fixes: 50e34d78815e ("block: disable the elevator int del_gendisk")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->   block/blk-cgroup.c     |  9 +++++++++
->   block/blk-core.c       |  1 +
->   block/blk-rq-qos.c     | 20 ++++++--------------
->   block/blk-wbt.c        |  2 ++
->   include/linux/blkdev.h |  1 +
->   5 files changed, 19 insertions(+), 14 deletions(-)
-> 
-> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> index 1c1ebeb51003..0d79d864ecb1 100644
-> --- a/block/blk-cgroup.c
-> +++ b/block/blk-cgroup.c
-> @@ -705,6 +705,13 @@ int blkg_conf_open_bdev(struct blkg_conf_ctx *ctx)
->   		return -ENODEV;
->   	}
->   
-> +	mutex_lock(&bdev->bd_queue->rq_qos_mutex);
-> +	if (!disk_live(bdev->bd_disk)) {
-> +		blkdev_put_no_open(bdev);
-> +		mutex_unlock(&bdev->bd_queue->rq_qos_mutex);
-> +		return -ENODEV;
-> +	}
-> +
->   	ctx->body = input;
->   	ctx->bdev = bdev;
->   	return 0;
-> @@ -849,6 +856,7 @@ EXPORT_SYMBOL_GPL(blkg_conf_prep);
->    */
->   void blkg_conf_exit(struct blkg_conf_ctx *ctx)
->   	__releases(&ctx->bdev->bd_queue->queue_lock)
-> +	__releases(&ctx->bdev->bd_queue->rq_qos_mutex)
->   {
->   	if (ctx->blkg) {
->   		spin_unlock_irq(&bdev_get_queue(ctx->bdev)->queue_lock);
-> @@ -856,6 +864,7 @@ void blkg_conf_exit(struct blkg_conf_ctx *ctx)
->   	}
->   
->   	if (ctx->bdev) {
-> +		mutex_unlock(&ctx->bdev->bd_queue->rq_qos_mutex);
->   		blkdev_put_no_open(ctx->bdev);
->   		ctx->body = NULL;
->   		ctx->bdev = NULL;
-> diff --git a/block/blk-core.c b/block/blk-core.c
-> index 269765d16cfd..fc7f902bdf5b 100644
-> --- a/block/blk-core.c
-> +++ b/block/blk-core.c
-> @@ -420,6 +420,7 @@ struct request_queue *blk_alloc_queue(int node_id)
->   	mutex_init(&q->debugfs_mutex);
->   	mutex_init(&q->sysfs_lock);
->   	mutex_init(&q->sysfs_dir_lock);
-> +	mutex_init(&q->rq_qos_mutex);
->   	spin_lock_init(&q->queue_lock);
->   
->   	init_waitqueue_head(&q->mq_freeze_wq);
-> diff --git a/block/blk-rq-qos.c b/block/blk-rq-qos.c
-> index d8cc820a365e..167be74df4ee 100644
-> --- a/block/blk-rq-qos.c
-> +++ b/block/blk-rq-qos.c
-> @@ -288,11 +288,13 @@ void rq_qos_wait(struct rq_wait *rqw, void *private_data,
->   
->   void rq_qos_exit(struct request_queue *q)
->   {
-> +	mutex_lock(&q->rq_qos_mutex);
->   	while (q->rq_qos) {
->   		struct rq_qos *rqos = q->rq_qos;
->   		q->rq_qos = rqos->next;
->   		rqos->ops->exit(rqos);
->   	}
-> +	mutex_unlock(&q->rq_qos_mutex);
->   }
->   
->   int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
-> @@ -300,6 +302,8 @@ int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
->   {
->   	struct request_queue *q = disk->queue;
->   
-> +	lockdep_assert_held(&q->rq_qos_mutex);
-> +
->   	rqos->disk = disk;
->   	rqos->id = id;
->   	rqos->ops = ops;
-> @@ -307,18 +311,13 @@ int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
->   	/*
->   	 * No IO can be in-flight when adding rqos, so freeze queue, which
->   	 * is fine since we only support rq_qos for blk-mq queue.
-> -	 *
-> -	 * Reuse ->queue_lock for protecting against other concurrent
-> -	 * rq_qos adding/deleting
->   	 */
->   	blk_mq_freeze_queue(q);
->   
-> -	spin_lock_irq(&q->queue_lock);
->   	if (rq_qos_id(q, rqos->id))
->   		goto ebusy;
->   	rqos->next = q->rq_qos;
->   	q->rq_qos = rqos;
-> -	spin_unlock_irq(&q->queue_lock);
->   
->   	blk_mq_unfreeze_queue(q);
->   
-> @@ -330,7 +329,6 @@ int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
->   
->   	return 0;
->   ebusy:
-> -	spin_unlock_irq(&q->queue_lock);
->   	blk_mq_unfreeze_queue(q);
->   	return -EBUSY;
->   }
-> @@ -340,21 +338,15 @@ void rq_qos_del(struct rq_qos *rqos)
->   	struct request_queue *q = rqos->disk->queue;
->   	struct rq_qos **cur;
->   
-> -	/*
-> -	 * See comment in rq_qos_add() about freezing queue & using
-> -	 * ->queue_lock.
-> -	 */
-> -	blk_mq_freeze_queue(q);
-> +	lockdep_assert_held(&q->rq_qos_mutex);
->   
-> -	spin_lock_irq(&q->queue_lock);
-> +	blk_mq_freeze_queue(q);
->   	for (cur = &q->rq_qos; *cur; cur = &(*cur)->next) {
->   		if (*cur == rqos) {
->   			*cur = rqos->next;
->   			break;
->   		}
->   	}
-> -	spin_unlock_irq(&q->queue_lock);
-> -
->   	blk_mq_unfreeze_queue(q);
->   
->   	mutex_lock(&q->debugfs_mutex);
-> diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-> index e49a48684532..53bf5aa6f9ad 100644
-> --- a/block/blk-wbt.c
-> +++ b/block/blk-wbt.c
-> @@ -942,7 +942,9 @@ int wbt_init(struct gendisk *disk)
->   	/*
->   	 * Assign rwb and add the stats callback.
->   	 */
-> +	mutex_lock(&q->rq_qos_mutex);
->   	ret = rq_qos_add(&rwb->rqos, disk, RQ_QOS_WBT, &wbt_rqos_ops);
-> +	mutex_unlock(&q->rq_qos_mutex);
->   	if (ret)
->   		goto err_free;
->   
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 6ede578dfbc6..17774f55743e 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -395,6 +395,7 @@ struct request_queue {
->   
->   	struct blk_queue_stats	*stats;
->   	struct rq_qos		*rq_qos;
-> +	struct mutex		rq_qos_mutex;
->   
->   	const struct blk_mq_ops	*mq_ops;
->   
-> 
-
+Yongji
