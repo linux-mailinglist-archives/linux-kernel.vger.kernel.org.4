@@ -2,138 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106D86EC052
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FCE6EC056
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjDWOT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S230373AbjDWOWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDWOTY (ORCPT
+        with ESMTP id S230319AbjDWOWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:19:24 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B4330DA
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:19:03 -0700 (PDT)
-Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33NEI1bK057487;
-        Sun, 23 Apr 2023 23:18:01 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
- Sun, 23 Apr 2023 23:18:01 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33NEI1va057479
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 23 Apr 2023 23:18:01 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <8904e414-6b3e-8fa3-67e1-709d51965372@I-love.SAKURA.ne.jp>
-Date:   Sun, 23 Apr 2023 23:17:57 +0900
+        Sun, 23 Apr 2023 10:22:09 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73D012B
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:22:07 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-247122e9845so2500109a91.0
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682259727; x=1684851727;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mVt7yDbi/0+T9A3kskBIqFMz5JWCsfF4sEoLpMEoXSs=;
+        b=gZeRNCEboFtFuzswRDftVtw5ef6noYVrDAGPpESkhflCUZOvCQ67A/ZnG00pPh9w/h
+         hHPyJyKBnzwFTSmK4Rcbsj5tKGudkYoq3cg4RXZ/a5ApjmhuM6vaoV2jbO9mNPkEcmX/
+         KKGX1x+ol2BZRH+nAMsFrocqHw7ArIZMJDjQboPTkMvfaX128ThcQWa+3kA+4GBFRnlW
+         jz95jh73NVmasYVkE1nEm8ubnPV3LKe9E0lg210IWfMeG9w5bFtDzOuZcCZX1n6dVyhD
+         rQAPw/eDYMPBvbLe4L/FXcJ53XLs4zmreonjyXe7N7e7qTiRiDobq+ZR1ZmNqVO84tkF
+         n/CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682259727; x=1684851727;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mVt7yDbi/0+T9A3kskBIqFMz5JWCsfF4sEoLpMEoXSs=;
+        b=ZK+Jt2uaPyVPYJ+q2Qph2EhH8biDFzy36rr6SkfI67mleynVhjynDU41ggSxTPoPDG
+         AIbuZ3b5gNoy/TUYfsry3GtFqqsCYusY56A5ifkb/9wSI098w4S3xUdW11Cqa7cLX7IU
+         YJ8CxhrPOBXHyg5qCdTV0LoCSdhoXyQTxVgokkrXqEQ2x2avGa5p1SRHJHiV3LVSPNtI
+         MwEpqBVYGUi2WEsWri5aTRk3auj8ExzrDY3gN9Xjpyh1ITzRZ5PoYaoPPUHpw+n27ww8
+         aMASX0HBnV/htvP198PTh3alwE8+TiqISTueQVhCZNqqy2rvPKyhHfwC2ih10dvvIjxK
+         lZxw==
+X-Gm-Message-State: AAQBX9fzeMudkVoeRRcRoLzG5+MWg/GqhUF15ZBo1N4qV3kjDqlpg7H3
+        gy8vRaGTD5Qx02bU1+8i7aNx4Q8y1X8=
+X-Google-Smtp-Source: AKy350ZL6PsANWh7JqFcxX+XhAOLY9xBXDIz+XG6HwbghAwtgd0H1ZXYmW8NIIz2+O5syNTA2Vny9g==
+X-Received: by 2002:a17:90b:4acc:b0:24b:8b39:cd7f with SMTP id mh12-20020a17090b4acc00b0024b8b39cd7fmr5213575pjb.41.1682259727343;
+        Sun, 23 Apr 2023 07:22:07 -0700 (PDT)
+Received: from pop-os.localdomain ([103.251.210.208])
+        by smtp.gmail.com with ESMTPSA id f3-20020a17090a9b0300b0024b960de793sm1716290pjp.40.2023.04.23.07.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 07:22:07 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 19:52:02 +0530
+From:   Yogesh Hegde <yogi.kernel@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/4] Remove unused rf_set_sens variable
+Message-ID: <cover.1682257566.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000013aaac05f9d44e7a@google.com>
- <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
- <6bec279c-07b3-d6f1-0860-4d6b136a2025@I-love.SAKURA.ne.jp>
- <2023042347-vaguely-monsieur-63ed@gregkh>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <2023042347-vaguely-monsieur-63ed@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/04/23 23:03, Greg Kroah-Hartman wrote:
->> Next step is to convert from
->>
->>   if (!f_op->$callbackname) {
->>     return error;
->>   }
->>   return f_op->$callbackname($args);
->>
->> to
->>
->>   fn = READ_ONCE(f_op->$callbackname);
->>   if (!fn) {
->>     return error;
->>   }
->>   return fn($args);
->>
->> pattern.
-> 
-> Why?  What does this solve differently than the first one?  What can
-> change the fops pointer between the check and call path?  If something
-> can change it, then do NOT make that type of check in the first place
-> (or put a proper lock in place.)
+The rf_set_sens variable is declared but never set, so it is always NULL.
+Cleanup the unused rf_set_sens variable. Remove functions
+_rtl92e_wx_get_sens and _rtl92e_wx_set_sens which always returned 
+error code after removal of rf_set_sens variable. 
+Cleanup unused max_sens and sens variable.
+The patches are required to be applied in sequence.
 
-__tty_hangup() is changing filp->f_op like
+Changes in v4:
+    1. Split changes into patch series per feedback from
+       gregkh@linuxfoundation.org
 
-	spin_lock(&tty->files_lock);
-	/* This breaks for file handles being sent over AF_UNIX sockets ? */
-	list_for_each_entry(priv, &tty->tty_files, list) {
-		filp = priv->file;
-		if (filp->f_op->write_iter == redirected_tty_write)
-			cons_filp = filp;
-		if (filp->f_op->write_iter != tty_write)
-			continue;
-		closecount++;
-		__tty_fasync(-1, filp, 0);	/* can't block */
-		filp->f_op = &hung_up_tty_fops;
-	}
-	spin_unlock(&tty->files_lock);
+Changes in v3:
+    1. Fixed description to fit within 75 chars
+    2. Added suggested tags
+    per feedback from philipp.g.hortmann@gmail.com
 
-but filp->f_op readers are (of course) not protected by tty->files_lock.
-Like Dmitry mentioned
+Changes in v2:
+    1. Removed function definition rf_set_sens
+    2. Removed usage of variable priv->rf_set_sens
+    3. Removed functions _rtl92e_wx_get_sens and _rtl92e_wx_set_sens
+    4. Cleaned up the variables sens and max_sens used in these functions
 
-  hung_up_tty_fops does not have splice_read, while other fops have.
+Changes in v1:
+    1. Fix comparison to NULL of variable rf_set_sens
 
-, patterns like
+Yogesh Hegde (4):
+  staging: rtl8192e: Remove unused rf_set_sens variable
+  staging: rtl8192e: Remove unused _rtl92e_wx_get_sens function
+  staging: rtl8192e: Remove unused _rtl92e_wx_set_sens function
+  staging: rtl8192e: Remove unused sens and max_sens from r8192_priv
+    struct
 
-	if (unlikely(!in->f_op->splice_read))
-	    return warn_unsupported(in, "read");
-	return in->f_op->splice_read(in, ppos, pipe, len, flags);
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  3 --
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c   | 45 --------------------
+ 2 files changed, 48 deletions(-)
 
-is not safe (if compiler generates a code that re-reads the pointer).
-
-Using READ_ONCE() is for preventing the compiler to re-read, and using data_race()
-is for teaching KCSAN that race while happens during READ_ONCE()/WRITE_ONCE()
-is acceptable.
-
->> First step (which Dmitry mentioned) is to avoid potential NULL pointer dereferences
->> caused by
->>
->>   if (!f_op->$callbackname) {
->>     return error;
->>   }
->>   return f_op->$callbackname($args);
->>
->> pattern, for the next step will touch too many locations to change all at once whereas
->> the first step could be handled by implementing dummy function for all missing $callbackname.
-> 
-> I do not understand, what "callbackname" is the problem here?  Just
-> splice_read?  Something else?
-
-I haven't checked.
-
->                                And where would it need to be modified
-> and why can't we do it in one place only (i.e. install a default handler
-> instead.)
-
-Yes, adding a dummy splice_read callback handler to hung_up_tty_fops is
-what I call the first step.
+-- 
+2.34.1
 
