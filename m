@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5696EBE35
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 11:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DD26EBE41
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 11:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjDWJN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 05:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S230020AbjDWJXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 05:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjDWJNY (ORCPT
+        with ESMTP id S229470AbjDWJXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 05:13:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABB31FCC
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 02:13:22 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q42Wt2yv7zndg5;
-        Sun, 23 Apr 2023 17:09:30 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 23 Apr 2023 17:13:18 +0800
-Subject: Re: BUG: divide error in ubi_attach_mtd_dev
-To:     Richard Weinberger <richard@nod.at>
-CC:     Yu Hao <yhao016@ucr.edu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <CA+UBctD_w=75wChmePZHp7KsBSNPWYGDBtzHPRPPtaFoqhGvXA@mail.gmail.com>
- <687864524.118195.1681799447034.JavaMail.zimbra@nod.at>
- <ff419c45-7d76-0219-a598-f6f4d081e29c@huawei.com>
- <CA+UBctBVHouL-3rM3zKYLpk01fXFvCpBnU7EpSRVdGW7cEjcJQ@mail.gmail.com>
- <977347543.226888.1682011999468.JavaMail.zimbra@nod.at>
- <CA+UBctA4fSbSdooQ9q9fwNuaHb_PnkfFuqJ7Q5vii-3-uCiUjw@mail.gmail.com>
- <412779912.228444.1682023015809.JavaMail.zimbra@nod.at>
- <ed510d18-47f1-7f46-03dd-84e043cab6d9@huawei.com>
- <1366603418.245114.1682236940160.JavaMail.zimbra@nod.at>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <951e4cf7-a0ea-b3ec-931d-e6a394ddc2ab@huawei.com>
-Date:   Sun, 23 Apr 2023 17:13:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Sun, 23 Apr 2023 05:23:07 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EE51736;
+        Sun, 23 Apr 2023 02:23:06 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id 3f1490d57ef6-b8ed0d0a33dso4832409276.1;
+        Sun, 23 Apr 2023 02:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682241786; x=1684833786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U4p45Ei1h+d04FWK39Ceoy+p6mxdk7RgkQcNsvmtw7k=;
+        b=mHWOGx7br5znrdiC3j0EV4ywsfZCd1sUgDdvus8FJ0KPyOfxBhKIK8pdSjknbAhsuN
+         cb/CI2cm1jt7cjVD14r05GyD3jtGy1wN7dmHwN50K+wAIyAFC/pu8jnCcEZnESs6rtE5
+         UvtwfsQ+HWRTyO9qBz8+lmKpCvGJqIPZoMExyyHe81oFiyH3dM8MZybUZYEQh2K/gkrC
+         esH8Aeq8am6KuX+qtODkgirSj1jtLxxAad42/ig7LAVgGzMgHTbremkGWhxRYt938bmg
+         OVmWkSlQxDzC2sLSGTATL2/PJUWDL0Ut6VscYQkg1/k9vMMxwFGZJKDzJY32c7bV2PBY
+         wmBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682241786; x=1684833786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U4p45Ei1h+d04FWK39Ceoy+p6mxdk7RgkQcNsvmtw7k=;
+        b=Bc0WIS60P3yltu1zww4wYmbXB4Nj0ps/JpD1WGIWZ/SeNtdJv6MC9IJW2w8JSxGYij
+         xvjt9PEIBI0k4hqvfrWbh+psTeLydVwIjshIZWy1TMDurGEUFU0lTUns9hsIJuljFk22
+         2zwnttJreHEWJUuyVqwwu658xt6lN7C543MeyXW72Wb9nlaQsYe8o/SK07Nx5zNVLRPP
+         XAVn7n94sVPOJ0oc39IPFXHTWM4MFuaNGDEZGmT1q+I7CeBmgWbtjkeAItjTdpgLWB8D
+         de+2O8p0qJZbx+CNeCUFoJpE6o/Fyb9+ycdFrnrPI9p1XzGfXtp/FMOQP9hBZJ/A5Vwh
+         hXCQ==
+X-Gm-Message-State: AAQBX9fm82I0Nk1nqZppmUxn4w35f1fJdXfhYeEnU3sW+c0abreYTlcm
+        47zKNcgZz/WgrkaGNf00z6Dd+BML9TqRKfJWH+c=
+X-Google-Smtp-Source: AKy350aGid2DLoaauz/3Wi+NjfOXdn7cI4Q3XMeZJq7cq/dTu7adV8qrQjl3j3q5XUlvEZCDBoH8psBwL1rk4szq4TI=
+X-Received: by 2002:a25:ce47:0:b0:b99:75f:8f1d with SMTP id
+ x68-20020a25ce47000000b00b99075f8f1dmr7226471ybe.37.1682241785557; Sun, 23
+ Apr 2023 02:23:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1366603418.245114.1682236940160.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230324020838.67149-1-zhanggenjian@kylinos.cn> <20230406191204.GZ19619@twin.jikos.cz>
+In-Reply-To: <20230406191204.GZ19619@twin.jikos.cz>
+From:   genjian zhang <zhanggenjian123@gmail.com>
+Date:   Sun, 23 Apr 2023 17:21:53 +0800
+Message-ID: <CAOd03yRsQATvvnV=U-RZvuKXrio-Wb-+nFZiYN45CgeEYOgWgw@mail.gmail.com>
+Subject: Re: [PATCH] btrfs: fix uninitialized variable warning
+To:     dsterba@suse.cz
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/4/23 16:02, Richard Weinberger 写道:
-> ----- Ursprüngliche Mail -----
->> Von: "chengzhihao1" <chengzhihao1@huawei.com>
->>>> root@syzkaller:~# cat /proc/mtd
->>>> dev:    size   erasesize  name
->>>> mtd0: 00020000 00001000 “mtdram test device”
->>>
->>> Hmm, mtdram should be fine, erasesize is not zero.
->>>
->>
->> I guess the zero-erasesize mtd device is dynamically generated in
->> runtime, after looking through the code, I find erasesize is
->> initiallized in specific flash driver and it won't be updated later(eg.
->> ioctl\sysctl). And some mtd devices may have zero erasesize, eg.
->> drivers/mtd/devices/mchp23k256.c[1]. Unfortunately, I don't know how to
->> load/simulate this mtd, maybe it requires a real device? If we load this
->> mtd device as ubi, it will trigger the problem?
-> 
-> Indeed. I guess qemu can emulate such chips.
-> So better fix UBI to reject attaching of mtd's with erasesize being 0.
-> (Please note, we cannot test for MTD_NO_ERASE, this one means there is no
-> erase method).
+On Fri, Apr 7, 2023 at 3:12=E2=80=AFAM David Sterba <dsterba@suse.cz> wrote=
+:
+>
+> On Fri, Mar 24, 2023 at 10:08:38AM +0800, Genjian wrote:
+> > From: Genjian Zhang <zhanggenjian@kylinos.cn>
+> >
+> > compiler warning:
+> >
+> > ../fs/btrfs/volumes.c: In function =E2=80=98btrfs_init_new_device=E2=80=
+=99:
+> > ../fs/btrfs/volumes.c:2703:3: error: =E2=80=98seed_devices=E2=80=99 may=
+ be used uninitialized in this function [-Werror=3Dmaybe-uninitialized]
+> >  2703 |   btrfs_setup_sprout(fs_info, seed_devices);
+> >       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > ../fs/btrfs/send.c: In function =E2=80=98get_cur_inode_state=E2=80=99:
+> > ../include/linux/compiler.h:70:32: error: =E2=80=98right_gen=E2=80=99 m=
+ay be used uninitialized in this function [-Werror=3Dmaybe-uninitialized]
+> >    70 |   (__if_trace.miss_hit[1]++,1) :  \
+> >       |                                ^
+> > ../fs/btrfs/send.c:1878:6: note: =E2=80=98right_gen=E2=80=99 was declar=
+ed here
+> >  1878 |  u64 right_gen;
+> >       |      ^~~~~~~~~
+> >
+> > Initialize the uninitialized variables.
+> >
+> > Reported-by: k2ci <kernel-bot@kylinos.cn>
+> > Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+>
+> The warnings are still reported by other build reports so I'll apply
+> this patch. If you have found more please send a patch or I can update
+> this one once applied. Thanks.
 
-Phram is an exception, it has erase function but is set flag 
-'MTD_CAP_RAM'. May I interpret 'MTD_NO_ERASE' as erase function is not 
-necessary?
+Sorry for the late reply.
+At present, only this one has been found.
+Thanks.
