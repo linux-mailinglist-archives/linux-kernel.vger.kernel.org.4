@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CECE6EBC40
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 03:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47946EBC46
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 03:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjDWB1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 21:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
+        id S229699AbjDWB3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 21:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjDWB1f (ORCPT
+        with ESMTP id S229556AbjDWB3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 21:27:35 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62FA10EC
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 18:27:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VghjePw_1682213247;
-Received: from 30.97.48.67(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VghjePw_1682213247)
-          by smtp.aliyun-inc.com;
-          Sun, 23 Apr 2023 09:27:28 +0800
-Message-ID: <1e4ca204-6813-a809-4361-4197103814b0@linux.alibaba.com>
-Date:   Sun, 23 Apr 2023 09:27:28 +0800
+        Sat, 22 Apr 2023 21:29:43 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FA52735
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 18:29:17 -0700 (PDT)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q3rHm0DnXzKtZm;
+        Sun, 23 Apr 2023 09:28:20 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 23 Apr 2023 09:29:15 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <chenzhongjin@huawei.com>, <ak@linux.intel.com>,
+        <David.Laight@ACULAB.COM>, <jpoimboe@kernel.org>
+Subject: [PATCH v3] x86: profiling: remove lock functions profiling in profile_pc
+Date:   Sun, 23 Apr 2023 09:27:44 +0800
+Message-ID: <20230423012744.24320-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
-        vbabka@suse.cz, mhocko@suse.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <c2eee65ecd15779721af85c9ff109a35345b52d4.1682158312.git.baolin.wang@linux.alibaba.com>
- <02defcbe9d7a797a2257e5f6a28ff7ea78e394e5.1682158312.git.baolin.wang@linux.alibaba.com>
- <87cz3vs8nn.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87cz3vs8nn.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Syzbot has been reporting the problem of stack-out-of-bounds in
+profile_pc for a long time:
+https://syzkaller.appspot.com/bug?extid=84fe685c02cd112a2ac3
 
+profile_pc will get return address for caller if current function
+is lock function. For !CONFIG_FRAME_POINTER it uses a hack way to get
+the caller by directly reading sp[0] or sp [1].
+It not works when KASAN is enabled because KASAN pushes data on stack
+which makes sp[0/1] become KASAN red zone. Then profile_pc reads wrong
+memory and triggers KASAN warning frequently.
 
-On 4/23/2023 9:13 AM, Huang, Ying wrote:
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> 
->> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
->> checks whether the given zone contains holes, and uses pfn_to_online_page()
->> to validate if the start pfn is online and valid, as well as using pfn_valid()
->> to validate the end pfn.
->>
->> However, though the start pfn of a pageblock is valid, it can not always
->> guarantee the end pfn of the pageblock is also valid (may be holes) in some
->> cases. For example, if the pageblock order is MAX_ORDER - 1, which will fall
->> into 2 sub-sections, and the end pfn of the pageblock may be hole even though
->> the start pfn is online and valid.
->>
->> This did not break anything until now, but the zone continuous is fragile
->> in this possible scenario. So as previous discussion[1], it is better to
->> add some comments to explain this possible issue in case there are some
->> future pfn walkers that rely on this.
->>
->> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   mm/page_alloc.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index 6457b64fe562..dc4005b32ae0 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -1502,6 +1502,14 @@ void __free_pages_core(struct page *page, unsigned int order)
->>    * interleaving within a single pageblock. It is therefore sufficient to check
->>    * the first and last page of a pageblock and avoid checking each individual
->>    * page in a pageblock.
->> + *
->> + * Note: if the start pfn of a pageblock is valid, but it can not always guarantee
->> + * the end pfn of the pageblock is also valid (may be holes) in some cases. For
-> 
-> "valid" sounds confusing here.  pfn_valid() is true, but the pfn is
-> considered invalid at some degree.  How about the following?
-> 
-> Note: the function may return non-NULL even if the end pfn of a
-> pageblock is in a memory hole in some situations.  For
-> 
->> + * example, if the pageblock order is MAX_ORDER - 1, which will fall into 2
->> + * sub-sections, and the end pfn of the pageblock may be hole even though the
->> + * start pfn is online and valid. This did not break anything until now, but be
->> + * careful this possible issue when checking if the whole pfns are valid of a
->                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> whether all pfns of a pageblock are valid. ?
-> 
->> + * pageblock.
->>    */
->>   struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
->>   				     unsigned long end_pfn, struct zone *zone)
-> 
-> My English is poor.  So, feel free to ignore the comments.
+This hack might be ok when first added at 2006 but now it's different:
 
-Better than me:) . Will do in next version. Thanks.
+1. There are some lock functions which have frame longer than two stack
+slots. For these functions sp[0/1] is not a legal return address even
+KASAN is not enabled.
+2. !CONFIG_FRAME_POINTER is more used today because UNWINDER_ORC.
+3. Lock function caller information can be prfiled by perf better.
+
+Since profile as a low level facility it's not proper to depend on
+complex generic unwinder to get the next frame. As lock profiling is
+no longer useful, it's fine to remove it.
+
+Fixes: 0cb91a229364 ("[PATCH] i386: Account spinlocks to the caller during profiling for !FP kernels")
+Suggested-by: Andi Kleen <ak@linux.intel.com>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+v1->v2:
+Make a more detailed commit log.
+
+v2->v3:
+Also remove if for FRAME_POINTER case; slightly fix the commit log.
+---
+arch/x86/kernel/time.c | 20 +-------------------
+ 1 file changed, 1 insertion(+), 19 deletions(-)
+
+diff --git a/arch/x86/kernel/time.c b/arch/x86/kernel/time.c
+index e42faa792c07..52e1f3f0b361 100644
+--- a/arch/x86/kernel/time.c
++++ b/arch/x86/kernel/time.c
+@@ -27,25 +27,7 @@
+ 
+ unsigned long profile_pc(struct pt_regs *regs)
+ {
+-	unsigned long pc = instruction_pointer(regs);
+-
+-	if (!user_mode(regs) && in_lock_functions(pc)) {
+-#ifdef CONFIG_FRAME_POINTER
+-		return *(unsigned long *)(regs->bp + sizeof(long));
+-#else
+-		unsigned long *sp = (unsigned long *)regs->sp;
+-		/*
+-		 * Return address is either directly at stack pointer
+-		 * or above a saved flags. Eflags has bits 22-31 zero,
+-		 * kernel addresses don't.
+-		 */
+-		if (sp[0] >> 22)
+-			return sp[0];
+-		if (sp[1] >> 22)
+-			return sp[1];
+-#endif
+-	}
+-	return pc;
++	return instruction_pointer(regs);
+ }
+ EXPORT_SYMBOL(profile_pc);
+ 
+-- 
+2.17.1
+
