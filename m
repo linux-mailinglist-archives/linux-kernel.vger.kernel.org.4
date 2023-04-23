@@ -2,183 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DD76EBDD3
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8926EBDD5
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjDWIAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 04:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S230155AbjDWIBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 04:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDWIAX (ORCPT
+        with ESMTP id S229516AbjDWIBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:00:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55440171F;
-        Sun, 23 Apr 2023 01:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682236822; x=1713772822;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=O6HQx+7ATNfLn29XVUobeBHwkKkA2qEXspWQTyfx/uw=;
-  b=BFEjRs646VRlWzjnX/s9TjQ2t1hH46ntY9vgq2RWA7SWz5QZm1k2qoSa
-   gbQEap+0RTcCP711q4M0rER6QdvSJDNfBQ5Hh/U/RMhunux9n5GzGXVl8
-   gPNBYJFpwcoRJKoJSb5MyAR5VYYevu1p+mbftSgzqnOK+qh2XrC0/9A27
-   exr1YT4R5yxL8XqAh/q6IYdJFGdtzCFQEei+tpdacXe5hpAmBaqgt5amu
-   MVvFW1afRQrJlpyJnpBXU9y97gKm3Wflb3PFlGgzVj15LyIgG3gwrTu8O
-   +snc50zsXceLdHLpMeBF+Dn+ptyVCZpPZMbd55NHaPgACIzVahGaj/xwb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="343744154"
-X-IronPort-AV: E=Sophos;i="5.99,220,1677571200"; 
-   d="scan'208";a="343744154"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 01:00:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="695382675"
-X-IronPort-AV: E=Sophos;i="5.99,220,1677571200"; 
-   d="scan'208";a="695382675"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 01:00:19 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>, linux-fsdevel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v2 3/4] migrate_pages: Don't wait forever locking pages
- in MIGRATE_SYNC_LIGHT
-References: <20230421221249.1616168-1-dianders@chromium.org>
-        <20230421151135.v2.3.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
-Date:   Sun, 23 Apr 2023 15:59:14 +0800
-In-Reply-To: <20230421151135.v2.3.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
-        (Douglas Anderson's message of "Fri, 21 Apr 2023 15:12:47 -0700")
-Message-ID: <87h6t7kp0t.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 23 Apr 2023 04:01:40 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2050.outbound.protection.outlook.com [40.107.22.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A84171F;
+        Sun, 23 Apr 2023 01:01:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OZw8Xh7KLSLT1R0eLYdd8raxPiElwHRK2UDXaaM/KpPkgvzbPxmZL2zT50Idih9eWnTaIkm2qkNgv4fN+GDM700Of871FzI+KBaLik93wM/J0JwV22wqn73LRys+ngRoevTQND6IPMbJHLRaOCBOMw9VsQ82gVaUxNX9pZukAJWHN8D3vP8OzGKPG07oGRAEZOXmZokb4WsP7itz8MiZTToosShaJKG3/BdKbDJw91E7VL9l/Z4gttNArwmj/rVguQGB1XBtaG//invO7hbpzTNsYsTpeMq16IVNMjn5p7xed9OzcNaHyFNCabazN2uYxvLzIbs/TmRjqpbKzQR+Qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mqn31Kmo61K8Mo/1UteorTqBhy65e2zXjJ+A5oKxzsI=;
+ b=M6XB8q6PoOhaWCNu7TCfTG7QHv7SNje6X6ST9HZOkSFlTto2gIaPFU/T2bgWzurqaH9l0a2VNyIN+tZQe3h+QbJtvdHv8lIwf1EseO7h9YOwyJlWbTWrys7J8pDllcLrURttDaVTV9SG8Xe2CkhqjgqDsKEzQPhGECEHIDg79X6ygb/1snN1Xp9FtpAvI3WSMYfbUqI4HvMjSxtKHklMwU/759ZeggUhslwao+VLeU3GEme7QmlMsKz79pSI2SLCRJU8TtiUziGcjs9B40j8vhQIFLEU+RXY2szNUi0h2WmcFqX/O9EMNdrLn/KEr4b5kOEgR5OSX7e1SBE173vpmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=solid-run.com; dmarc=pass action=none
+ header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mqn31Kmo61K8Mo/1UteorTqBhy65e2zXjJ+A5oKxzsI=;
+ b=TUTCrcL/D8gV9fbltJcPbZiUxznSt3gxTdykbQ5qKTJMeGJ+u0WIxk9j30fbGttvwMNPLuU/2WPJ+s7OfD/dckomCj+YB+3soMTbEnhJp8+HI/u7Wj1MWuNMjYVNt6ni3kdwP7Uz7rnXKy0jzNCBcEN92pznII7JFdiA0LERkE8=
+Received: from AM0PR04MB4723.eurprd04.prod.outlook.com (2603:10a6:208:c0::20)
+ by DUZPR04MB9782.eurprd04.prod.outlook.com (2603:10a6:10:4b1::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.32; Sun, 23 Apr
+ 2023 08:01:35 +0000
+Received: from AM0PR04MB4723.eurprd04.prod.outlook.com
+ ([fe80::d2fd:ad65:a6e0:a30a]) by AM0PR04MB4723.eurprd04.prod.outlook.com
+ ([fe80::d2fd:ad65:a6e0:a30a%5]) with mapi id 15.20.6319.032; Sun, 23 Apr 2023
+ 08:01:35 +0000
+From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Thread-Topic: [PATCH net] virtio-net: reject small vring sizes
+Thread-Index: AQHZcDeGnH5xR2OGlkuo4s6jvhNMC68uIjT9gABGFgCAAG90AIAAMSwAgAABjzCAAARBAIAABATIgAAENICAAAM4M4AAIQOAgAALfyGAABuqgIAAAQKHgAADxACACRVQMYAACvaAgAAKrv4=
+Date:   Sun, 23 Apr 2023 08:01:35 +0000
+Message-ID: <AM0PR04MB472392318BC9A36CBA7AF19AD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+References: <20230417023911-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47237BFB8BB3A3606CE6A408D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417030713-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723F3E6AE381AEC36D1AEFED49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417051816-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47237705695AFD873DEE4530D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417073830-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417075645-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA90465186B5A8A5C001D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230423031308-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230423031308-mutt-send-email-mst@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=solid-run.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB4723:EE_|DUZPR04MB9782:EE_
+x-ms-office365-filtering-correlation-id: 1e095f86-e0fd-4a59-0745-08db43d0f587
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: D0jwktXPyLujNwL/r3x3n4ODuH+2RhnLEoRIS+dJB6KuQmRtXzjUm0nmgi6w1HvmNz+mi2SC8c5/0ZMWlfO8LpKd7IIMCWGoNXIVXx9JdT8BAf9qGVagwP4qTgKJunW3UdN1ItAqbBhRZW9HP9rP/MJ3PKV1ivyHiP2MsYydfU65YbcIBAKFfJgSHlREMjKFbUKzSoAVqBWyG4jwBlFQF+8M2TjJUjRTaAK9hT1X9hHC8jkqKOdi3oAARPwCi4/Kg/hdkb8J1xiUp/UYhhw0W/p4f5ZLNSPeQbfEPgoXFmuMaukp94FZL8klInebYeKTebVFCITl7bMNXejcvxGeVLOGNpIzJ3jISKY73cGvFrjf/KeR8ZZWyUdzPMJ5VBtzt1UcW5Xa3QbTsCZ8VabV6/wQ4/5NYEeT7hNRrIs/u/p0ZjantRLEDdkRaMnC4uxmVuDb/IOwi0x2/Wj6xg3S0vhZLIZWdVusvcEoaXX/hkxsNJME6PekP5J2ObC+k/LidmJj97w6SsdgkMmFConeU0LX8iuvtqXCvvZxkQMcJSn+SoBZnaUVha7sGDmGDDAwjUKSkb2lVr2MnQM4b/AImkCzzjrO2NU3yuQ3rHgv9noz20ToU9muEtp5Ylj6a0dM
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4723.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(39830400003)(136003)(396003)(451199021)(478600001)(54906003)(86362001)(186003)(7696005)(26005)(9686003)(6506007)(558084003)(55016003)(33656002)(71200400001)(4326008)(6916009)(64756008)(66446008)(66476007)(66556008)(316002)(44832011)(83380400001)(91956017)(66946007)(76116006)(2906002)(38100700002)(122000001)(41300700001)(8676002)(8936002)(38070700005)(5660300002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?LDSG5v9epEfLg2cUG5iMOPoRirIC+Z9rsuaukRe6+GZuqeVAZgLz3soYfR?=
+ =?iso-8859-1?Q?mMUkiKSS0Rq7tSPYIB8UYmcgmnj7QWYvceykv4ZZ4AtNHSqFIbSHzQlrHV?=
+ =?iso-8859-1?Q?LwZpz5awnFIrvona9qD9XcWvH6nLPvzABz819FDVaCOgUIS3MU0w/6XSJ3?=
+ =?iso-8859-1?Q?zQLp+wB0cK0UPIIwf0j1LpK7RdYXgE/JfvNF6mZutiy7eMGgSD7sArHco6?=
+ =?iso-8859-1?Q?2ubZCL/IvQy3JFAkf37gpm6NGNjDYX9n2V+c5oY7pq1hyzEbrm+Q6cdFNO?=
+ =?iso-8859-1?Q?7M2PedHaLPKxYMHwjLJTBc/Kp/RYLFNveSuZHOHFmhNe3fa9OSHkWbz0kG?=
+ =?iso-8859-1?Q?/SipfbdCn2FMEiwJ24Pu1o6Ec+Z3S0jqUYoz5GNVtSLdM1rTb1Yv+scNY4?=
+ =?iso-8859-1?Q?TZkkeXlfQsN8fVcpuxZL5lsTfcIxH5P21WxC1joabCS6dc5eZdv4aiwGp+?=
+ =?iso-8859-1?Q?3Ez21zcNJ1N69fEta9I6YSP5KTpTzr00JLm4PpujhZeKqyHfLMbS3A76jd?=
+ =?iso-8859-1?Q?RbnqHKMvG/j4o2P1lQ3VH/9OYjCuOZDriYm6k40cJnu7EFt08QryUSuqfk?=
+ =?iso-8859-1?Q?qnBVwfa9LNOoEzByYwOVOArK58AxIypdEyW1NQgO41SxtidHzwtp8fnS81?=
+ =?iso-8859-1?Q?3nensVI0QRQCtcc0xpNRu8O8fVHY4fISykQNs904MivStL4CfGjN8MRZkN?=
+ =?iso-8859-1?Q?6bid9GmEh4QMzs+OaMDtpnlNHwDWkPj/D39/+mRWlhpS4XlqCa/HrF8NOI?=
+ =?iso-8859-1?Q?+wrR6ha7P6ac7VMe945/tucawl5YccnM2y2hkp4wT1W4qIotzQWpSwDmNP?=
+ =?iso-8859-1?Q?4HU3RrWnU1RnblCzDy1yFpFeRdUXKszvvGB/X3CRWorIQUeLbFQvenX5cF?=
+ =?iso-8859-1?Q?MyDoMKVypwxoMJbqN9JnvC8I+PLGlWfyKeYCDv/hy07cSiQfWUTq/b3M3b?=
+ =?iso-8859-1?Q?6RfHysomRk2dbn7SeK83kb1LE+eMpGJQ+BTq/I2qckvPCc+PIqkuu9TjVZ?=
+ =?iso-8859-1?Q?yvOaaiiB4rI7vrNN0wTc1Rbviv4N44ZRdqT9EPeyQSDUwV3Ez+FqAhxrSI?=
+ =?iso-8859-1?Q?7eoe/2kIrAcnQVKRaUzZNOcbatbOGaOTJAQJ1BEUny0q/jWvPVwVDF4IZI?=
+ =?iso-8859-1?Q?dRX46Wsz01C62h82AYAegzjz9cRyLimdEphhXMcgE0xHDazYpZzpGwIxM5?=
+ =?iso-8859-1?Q?v/PbDaBLIUGJXTngnD/nfXKbCJ6qWUGQjFzmz28yCqeOmUqEdQhk+AThDY?=
+ =?iso-8859-1?Q?caqbC0OnWJVjvw0FwwWJYHMkHOgdu2RQkLXZuK9WRsaZyGsz6S85lCkYm8?=
+ =?iso-8859-1?Q?vppXA1nDq1mzrn0XOC8Nqrk44EntLlZTRM1CRDWJGYhoYSsJ41K7ck1EG7?=
+ =?iso-8859-1?Q?NHKCx3Ck1E8Le/GK8GCc4Pbf+kMp8ljA5LaJXF0jcGW3GLEe92THD8K6Y2?=
+ =?iso-8859-1?Q?1eq+g9J5TEDsqqt+VGswj0FCe3DRNr36/+QZ4K8l0F9rZ52adspw1MVz94?=
+ =?iso-8859-1?Q?dHhsr3qy1RuBJ01vp/yFZXbcoB+xwoa5CGMmrwc45zgQ3TGzQewgHP9KUI?=
+ =?iso-8859-1?Q?rx0FcjbFSyAUGRGJnWPgvA7jgZpmEfajHBG5Rznjo8KSAAdau947Krf+2C?=
+ =?iso-8859-1?Q?7HSQMVBcm+jlqjtTzq82I2OdOUCakVuUQT?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: solid-run.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4723.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e095f86-e0fd-4a59-0745-08db43d0f587
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2023 08:01:35.4227
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eBTGo7dsKI8OnvGyx3cyzTOXjscoTmj902pILYpqJrTSv1DkSI72R1vtVEfvq60UTTVINPzH8inQmGu3HAqgdYHZFmqp9KJh04LF5OuwbRQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB9782
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Douglas Anderson <dianders@chromium.org> writes:
-
-> The MIGRATE_SYNC_LIGHT mode is intended to block for things that will
-> finish quickly but not for things that will take a long time. Exactly
-> how long is too long is not well defined, but waits of tens of
-> milliseconds is likely non-ideal.
->
-> Waiting on the folio lock in isolate_movable_page() is something that
-> usually is pretty quick, but is not officially bounded. Nothing stops
-> another process from holding a folio lock while doing an expensive
-> operation. Having an unbounded wait like this is not within the design
-> goals of MIGRATE_SYNC_LIGHT.
->
-> When putting a Chromebook under memory pressure (opening over 90 tabs
-> on a 4GB machine) it was fairly easy to see delays waiting for the
-> lock of > 100 ms. While the laptop wasn't amazingly usable in this
-> state, it was still limping along and this state isn't something
-> artificial. Sometimes we simply end up with a lot of memory pressure.
->
-> Putting the same Chromebook under memory pressure while it was running
-> Android apps (though not stressing them) showed a much worse result
-> (NOTE: this was on a older kernel but the codepaths here are
-> similar). Android apps on ChromeOS currently run from a 128K-block,
-> zlib-compressed, loopback-mounted squashfs disk. If we get a page
-> fault from something backed by the squashfs filesystem we could end up
-> holding a folio lock while reading enough from disk to decompress 128K
-> (and then decompressing it using the somewhat slow zlib algorithms).
-> That reading goes through the ext4 subsystem (because it's a loopback
-> mount) before eventually ending up in the block subsystem. This extra
-> jaunt adds extra overhead. Without much work I could see cases where
-> we ended up blocked on a folio lock for over a second. With more
-> more extreme memory pressure I could see up to 25 seconds.
->
-> Let's bound the amount of time we can wait for the folio lock. The
-> SYNC_LIGHT migration mode can already handle failure for things that
-> are slow, so adding this timeout in is fairly straightforward.
->
-> With this timeout, it can be seen that kcompactd can move on to more
-> productive tasks if it's taking a long time to acquire a lock.
-
-How long is the max wait time of folio_lock_timeout()?
-
-> NOTE: The reason I stated digging into this isn't because some
-> benchmark had gone awry, but because we've received in-the-field crash
-> reports where we have a hung task waiting on the page lock (which is
-> the equivalent code path on old kernels). While the root cause of
-> those crashes is likely unrelated and won't be fixed by this patch,
-> analyzing those crash reports did point out this unbounded wait and it
-> seemed like something good to fix.
->
-> ALSO NOTE: the timeout mechanism used here uses "jiffies" and we also
-> will retry up to 7 times. That doesn't give us much accuracy in
-> specifying the timeout. On 1000 Hz machines we'll end up timing out in
-> 7-14 ms. On 100 Hz machines we'll end up in 70-140 ms. Given that we
-> don't have a strong definition of how long "too long" is, this is
-> probably OK.
-
-You can use HZ to work with different configuration.  It doesn't help
-much if your target is 1ms.  But I think that it's possible to set it to
-longer than that in the future.  So, some general definition looks
-better.
-
-Best Regards,
-Huang, Ying
-
-> Suggested-by: Mel Gorman <mgorman@techsingularity.net>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
-> Changes in v2:
-> - Keep unbounded delay in "SYNC", delay with a timeout in "SYNC_LIGHT"
->
->  mm/migrate.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index db3f154446af..60982df71a93 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -58,6 +58,23 @@
->  
->  #include "internal.h"
->  
-> +/* Returns the schedule timeout for a non-async mode */
-> +static long timeout_for_mode(enum migrate_mode mode)
-> +{
-> +	/*
-> +	 * We'll always return 1 jiffy as the timeout. Since all places using
-> +	 * this timeout are in a retry loop this means that the maximum time
-> +	 * we might block is actually NR_MAX_MIGRATE_SYNC_RETRY jiffies.
-> +	 * If a jiffy is 1 ms that's 7 ms, though with the accuracy of the
-> +	 * timeouts it often ends up more like 14 ms; if a jiffy is 10 ms
-> +	 * that's 70-140 ms.
-> +	 */
-> +	if (mode == MIGRATE_SYNC_LIGHT)
-> +		return 1;
-> +
-> +	return MAX_SCHEDULE_TIMEOUT;
-> +}
-> +
->  bool isolate_movable_page(struct page *page, isolate_mode_t mode)
->  {
->  	struct folio *folio = folio_get_nontail_page(page);
-> @@ -1162,7 +1179,8 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
->  		if (current->flags & PF_MEMALLOC)
->  			goto out;
->  
-> -		folio_lock(src);
-> +		if (folio_lock_timeout(src, timeout_for_mode(mode)))
-> +			goto out;
->  	}
->  	locked = true;
+We could add a new virtio_config_ops: peek_vqs.=0A=
+We can call it during virtnet_validate, and then fixup the features in case=
+ of small vrings.=0A=
+=0A=
+If peek_vqs is not implemented by the transport, we can just fail probe lat=
+er in case of small vrings.=0A=
+=0A=
