@@ -2,50 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580556EBF07
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 13:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA916EBF0D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 13:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjDWLFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 07:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S229693AbjDWLGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 07:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjDWLF3 (ORCPT
+        with ESMTP id S229830AbjDWLFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 07:05:29 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF7510C6;
-        Sun, 23 Apr 2023 04:05:27 -0700 (PDT)
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q451D3R9pzndDL;
-        Sun, 23 Apr 2023 19:01:36 +0800 (CST)
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 23 Apr 2023 19:05:25 +0800
-From:   Huisong Li <lihuisong@huawei.com>
-To:     <robbiek@xsightlabs.com>, <sudeep.holla@arm.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
-        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
-        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
-        <guohanjun@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <huangdaode@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH v3 2/2] mailbox: pcc: Support shared interrupt for multiple subspaces
-Date:   Sun, 23 Apr 2023 19:03:35 +0800
-Message-ID: <20230423110335.2679-3-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20230423110335.2679-1-lihuisong@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20230423110335.2679-1-lihuisong@huawei.com>
+        Sun, 23 Apr 2023 07:05:54 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8730F6
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 04:05:39 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-504e232fe47so5980692a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 04:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682247937; x=1684839937;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4oBnCQEBGXtSAEIanLhSekClnyHSr24Ok+VnVMLZrEI=;
+        b=hv77IVehUa9xkU3c4CDNCnhlAG5dlsNmPUNm6jZ3PWzcrnMy5fI+z0sIajzCfXGJy7
+         Ycxfr9xH+wFiFAM/gYRit8kTE+aej+eqdoAVOMta58gih1+KUjG/FPFpJsJhbmp6e9FE
+         kg6b2q11cN9HORCLf6H84PgsgHftBzT1fWdDICqGh9M+kxYaR60O9UqL6rLJFdeJlT8v
+         8IbeMnq/aQ/B5+LPSVj7Ir3JRDEmJL2P8bZmAZMqRlcr0st7TKc77hrDkWdHrCibhVP+
+         k+qOhdY6+wSV/SWIMGJ8WoKe0i/Nw3ugTRsE+q3M6Q9hlAk/9p29WaimxTKk56SeG7rb
+         q+pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682247937; x=1684839937;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4oBnCQEBGXtSAEIanLhSekClnyHSr24Ok+VnVMLZrEI=;
+        b=QqPukNeg7tK+z29eJpee9pERaJmPe97lw4kFVdv1bRtf9dj78QzO9EOX6AqTZvsuH5
+         tH2Bp2+SRZEuWK0dle6igZ2tzK+6stDTCihmqP800ZKjMK/y1ub1igdSmrZbuvu6wTyc
+         6bDExhNT0yytN3oXt14AfnBp8nk5j/Uhip7MsGfwqDwnnQbnc350wzdQn8SLAqqH4xyy
+         +huvkoZlGmT70Nh4tY2TxOaCoyUqBJI3lrG9FQWy2cr8wlRVXmdi34a4AhOzZ15gNI8M
+         5HOl3frR5o80WosEoWQi8kXlQoyvn4H7Zjg+tkKBO1+BmaIRyGlZDYLAloqesdbqFz+d
+         Tlqw==
+X-Gm-Message-State: AAQBX9eUDzI3BjjTdyQKilGfI08FcsSW/pbJJFnVfbUBF56CZcLzlgWU
+        Dl0WjYrk7bCyJ53+70S8VC983Q==
+X-Google-Smtp-Source: AKy350b1gZdRRS99FXwzdyRQvuYGxvtRfTqL3wNCEdC9oTnowvf0c3qWXdTnD0zdTodXYGJA5CPqbA==
+X-Received: by 2002:a05:6402:14e:b0:505:7d54:db93 with SMTP id s14-20020a056402014e00b005057d54db93mr9808233edu.21.1682247937604;
+        Sun, 23 Apr 2023 04:05:37 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5d52:d466:d57f:118c? ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
+        by smtp.gmail.com with ESMTPSA id o10-20020aa7c50a000000b0050504648fc4sm3603764edq.80.2023.04.23.04.05.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Apr 2023 04:05:37 -0700 (PDT)
+Message-ID: <b58bdaf6-f0a4-41aa-e271-53cd223e9bb3@linaro.org>
+Date:   Sun, 23 Apr 2023 13:05:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.79.22]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ASoC: dt-bindings: More dropping unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, patches@opensource.cirrus.com
+References: <20230421214810.1811962-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230421214810.1811962-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,167 +85,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the platform acknowledge interrupt is level triggered, then it can
-be shared by multiple subspaces provided each one has a unique platform
-interrupt ack preserve and ack set masks.
+On 21/04/2023 23:48, Rob Herring wrote:
+> Another batch of dropping unneeded quotes on $id and $schema which were
+> missed in the last round. Once all these are fixed, checking for this can
+> be enabled in yamllint.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-If it can be shared, then we can request the irq with IRQF_SHARED and
-IRQF_ONESHOT flags. The first one indicating it can be shared and the
-latter one to keep the interrupt disabled until the hardirq handler
-finished.
 
-Further, since there is no way to detect if the interrupt is for a given
-channel as the interrupt ack preserve and ack set masks are for clearing
-the interrupt and not for reading the status(in case Irq Ack register
-may be write-only on some platforms), we need a way to identify if the
-given channel is in use and expecting the interrupt.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-PCC type0, type1 and type5 do not support shared level triggered interrupt.
-The methods of determining whether a given channel for remaining types
-should respond to an interrupt are as follows:
- - type2: Whether the interrupt belongs to a given channel is only
-          determined by the status field in Generic Communications Channel
-          Shared Memory Region, which is done in rx_callback of PCC client.
- - type3: This channel checks chan_in_use flag first and then checks the
-          command complete bit(value '1' indicates that the command has
-          been completed).
- - type4: Platform ensure that the default value of the command complete
-          bit corresponding to the type4 channel is '1'. This command
-          complete bit is '0' when receive a platform notification.
-
-The new field, 'chan_in_use' is used by the type only support the
-communication from OSPM to Platform (like type3) and should be completely
-ignored by other types so as to avoid too many type unnecessary checks in
-IRQ handler.
-
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/mailbox/pcc.c | 43 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 40 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index 80310b48bfb6..94885e411085 100644
---- a/drivers/mailbox/pcc.c
-+++ b/drivers/mailbox/pcc.c
-@@ -92,6 +92,13 @@ struct pcc_chan_reg {
-  * @error: PCC register bundle for the error status register
-  * @plat_irq: platform interrupt
-  * @type: PCC subspace type
-+ * @plat_irq_flags: platform interrupt flags
-+ * @chan_in_use: this flag is used just to check if the interrupt needs
-+ *		handling when it is shared. Since only one transfer can occur
-+ *		at a time and mailbox takes care of locking, this flag can be
-+ *		accessed without a lock. Note: the type only support the
-+ *		communication from OSPM to Platform, like type3, use it, and
-+ *		other types completely ignore it.
-  */
- struct pcc_chan_info {
- 	struct pcc_mbox_chan chan;
-@@ -102,6 +109,8 @@ struct pcc_chan_info {
- 	struct pcc_chan_reg error;
- 	int plat_irq;
- 	u8 type;
-+	unsigned int plat_irq_flags;
-+	bool chan_in_use;
- };
- 
- #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
-@@ -225,6 +234,12 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
- 	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
- }
- 
-+static bool pcc_chan_plat_irq_can_be_shared(struct pcc_chan_info *pchan)
-+{
-+	return (pchan->plat_irq_flags & ACPI_PCCT_INTERRUPT_MODE) ==
-+		ACPI_LEVEL_SENSITIVE;
-+}
-+
- static bool pcc_mbox_cmd_complete_check(struct pcc_chan_info *pchan)
- {
- 	u64 val;
-@@ -242,6 +257,7 @@ static bool pcc_mbox_cmd_complete_check(struct pcc_chan_info *pchan)
- 	 * command complete.
- 	 */
- 	val &= pchan->cmd_complete.status_mask;
-+
- 	/*
- 	 * If this is PCC slave subspace channel, and the command complete
- 	 * bit 0 indicates that Platform is sending a notification and OSPM
-@@ -268,6 +284,10 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
- 	int ret;
- 
- 	pchan = chan->con_priv;
-+	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE &&
-+	    !pchan->chan_in_use)
-+		return IRQ_NONE;
-+
- 	if (!pcc_mbox_cmd_complete_check(pchan))
- 		return IRQ_NONE;
- 
-@@ -289,9 +309,12 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
- 	/*
- 	 * The PCC slave subspace channel needs to set the command complete bit
- 	 * and ring doorbell after processing message.
-+	 *
-+	 * The PCC master subspace channel clears chan_in_use to free channel.
- 	 */
- 	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE)
- 		pcc_send_data(chan, NULL);
-+	pchan->chan_in_use = false;
- 
- 	return IRQ_HANDLED;
- }
-@@ -371,7 +394,11 @@ static int pcc_send_data(struct mbox_chan *chan, void *data)
- 	if (ret)
- 		return ret;
- 
--	return pcc_chan_reg_read_modify_write(&pchan->db);
-+	ret = pcc_chan_reg_read_modify_write(&pchan->db);
-+	if (!ret && pchan->plat_irq > 0)
-+		pchan->chan_in_use = true;
-+
-+	return ret;
- }
- 
- /**
-@@ -384,11 +411,14 @@ static int pcc_send_data(struct mbox_chan *chan, void *data)
- static int pcc_startup(struct mbox_chan *chan)
- {
- 	struct pcc_chan_info *pchan = chan->con_priv;
-+	unsigned long irqflags;
- 	int rc;
- 
- 	if (pchan->plat_irq > 0) {
--		rc = devm_request_irq(chan->mbox->dev, pchan->plat_irq, pcc_mbox_irq, 0,
--				      MBOX_IRQ_NAME, chan);
-+		irqflags = pcc_chan_plat_irq_can_be_shared(pchan) ?
-+						IRQF_SHARED | IRQF_ONESHOT : 0;
-+		rc = devm_request_irq(chan->mbox->dev, pchan->plat_irq, pcc_mbox_irq,
-+				      irqflags, MBOX_IRQ_NAME, chan);
- 		if (unlikely(rc)) {
- 			dev_err(chan->mbox->dev, "failed to register PCC interrupt %d\n",
- 				pchan->plat_irq);
-@@ -494,6 +524,7 @@ static int pcc_parse_subspace_irq(struct pcc_chan_info *pchan,
- 		       pcct_ss->platform_interrupt);
- 		return -EINVAL;
- 	}
-+	pchan->plat_irq_flags = pcct_ss->flags;
- 
- 	if (pcct_ss->header.type == ACPI_PCCT_TYPE_HW_REDUCED_SUBSPACE_TYPE2) {
- 		struct acpi_pcct_hw_reduced_type2 *pcct2_ss = (void *)pcct_ss;
-@@ -515,6 +546,12 @@ static int pcc_parse_subspace_irq(struct pcc_chan_info *pchan,
- 					"PLAT IRQ ACK");
- 	}
- 
-+	if (pcc_chan_plat_irq_can_be_shared(pchan) &&
-+	    !pchan->plat_irq_ack.gas) {
-+		pr_err("PCC subspace has level IRQ with no ACK register\n");
-+		return -EINVAL;
-+	}
-+
- 	return ret;
- }
- 
--- 
-2.22.0
+Best regards,
+Krzysztof
 
