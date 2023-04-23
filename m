@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B386EC160
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 19:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29C86EC16D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 19:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjDWR21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 13:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S229625AbjDWRml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 13:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDWR20 (ORCPT
+        with ESMTP id S229458AbjDWRmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 13:28:26 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82E3E55;
-        Sun, 23 Apr 2023 10:28:24 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f18335a870so22292055e9.0;
-        Sun, 23 Apr 2023 10:28:24 -0700 (PDT)
+        Sun, 23 Apr 2023 13:42:39 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937CD10C9;
+        Sun, 23 Apr 2023 10:42:38 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-95369921f8eso531641466b.0;
+        Sun, 23 Apr 2023 10:42:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682270903; x=1684862903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rmFnPlf15TJG9qiredh4hyrIMNo2fBNHqd9NUoV+idk=;
-        b=Eu6XOWyJ3ZHyolw01znSdBZJ2WU1+fPNFWxkpMCEtdOXHBFPfmBWY7tqEbwJX/xDf0
-         7imy0hQcMl7s/Q7c6ZJeiDuZYoyCBG57hXpyb7LWHGYnOKTK3lFGsIqdHPc/yb3FmvIO
-         8d8CqD6fNwFIoV39AZ2usOxrZKFgahKKTHs9DRuknu07P2eXA6cky2jjZ3gQjy1fRnPG
-         6EC+V8wJUguVsLGA/m3Afauza6rQF/F8RaDEpkTaaRivorFJmyKV0IskvNJO1z3Hwm+o
-         kiO92A/Dh8dVOoO2Ki4kxj7Y8ssZaOlxZXWBJIM6qR+7R3C2rJ6zene9f88zykZ4Elcj
-         lUpA==
+        d=googlemail.com; s=20221208; t=1682271757; x=1684863757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iA+bFNXU5lnOq/dCAFC+X0Kqr+6jDOeqz+/GHp8kMoU=;
+        b=K+runzIHR2GUuCZS0hxnRvuqLe8cxdW9DAJtsL8nSZ+fz5eVKaACjVavRLa9BMC3n2
+         ExcQjW0oMjxhnol1oqfaaWQ+Z4hipBQVfTFFz0tVWsIASlVM3iWS96KXyF+uje6KBadb
+         9606h/DVUIAj57AWet15IzumE0EP6CFKSYLFaA2ltMifY6yioqjJC3kpO4M14UxLGuEt
+         Tyqq/0PQZlFNkXFHlQv64iYiVxyLH76HmQ/YZXbkNTWjOalELGWczEPZu45z6xyLcDYu
+         u3j+kB7ziImEVj7GUkNAH/CZmaV7+otGMhXLV48+0wj0x5WYwvIPJyYKBzOYs2B/32U7
+         dsfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682270903; x=1684862903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rmFnPlf15TJG9qiredh4hyrIMNo2fBNHqd9NUoV+idk=;
-        b=b1G/4q3XHo3xsPqxtO206ELVCWn6+utAaapYmU8UKdXHmTq2VGMg5oloXbw06jDzm/
-         y3Rdqs/Q1puYCoOjQegxRNnZwWadlbFl88/lUJYYNpEL9sHqkkqKHXC4Sdo+W3Wj2MVL
-         j7No50ysILULb1EMBbv0LLA24oTNm1HhoVXlNHhG5zYNI65cUZMafnzvFo9g5nPdPdcO
-         CZG/uGtCkgKzQSzgSoM8qJRhkj6k5CGi9X1htM3W+24CCtDpQ4k1DkRt+9YUiDdiPsYI
-         t9ZJh5EYoKkvADiXv7imcaL7Abh7DLahaEdYNn2GCGB/1fjQYXjlmpVmZyDpnS+VQREc
-         S0lg==
-X-Gm-Message-State: AAQBX9fl22AKag7iTfZnc59d+jnSSJ1Foxb7Utr7Nguk+NPTPRyNIS1p
-        gJ1FEKZMkd9gKrmVWOL2uDs=
-X-Google-Smtp-Source: AKy350ZtT9vViOegiwHejx/+hxpNEokE6V0LFdTiMW1+9K2qjHVu2wPjXw4+mTK6lP2uN95ykgWd1A==
-X-Received: by 2002:a7b:c4cd:0:b0:3f1:8e33:8c68 with SMTP id g13-20020a7bc4cd000000b003f18e338c68mr6187193wmk.26.1682270902822;
-        Sun, 23 Apr 2023 10:28:22 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id n10-20020a1c720a000000b003edef091b17sm10024886wmc.37.2023.04.23.10.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 10:28:22 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: [net-next PATCH] net: phy: marvell: Fix inconsistent indenting in led_blink_set
-Date:   Sun, 23 Apr 2023 19:28:00 +0200
-Message-Id: <20230423172800.3470-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1682271757; x=1684863757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iA+bFNXU5lnOq/dCAFC+X0Kqr+6jDOeqz+/GHp8kMoU=;
+        b=jyudMacdrpgfXd/G8bPNpgoe1HlnctopXsz60SLX2rHCWTvDIWl+O3XjgqOEoLUE25
+         1Ilt244DF22TIRa+Q4LdY6jfmYzGPdXiFjBPDf5lxPcQPWJtp6avN0fAfa8W8C7Arfxn
+         NVVmgqlXbZChIv6t5hJbyDLUToGmoo9UhGHlTaA0JvLeP7mpDf7/4kKPn/a18QusELyC
+         Xq5M4OqpnM1Ez89Tj44i0s9UiykIU7HNZsVki/R1R2gvCOyaW7ipQ8ZqaWXLu0u1nLng
+         RyD471WkrYF4syEfvmrOvQOYbLp0ux0aORvuBXSzNsTgKHYUQ9nTVcM/BxoxWvEc472l
+         rMEg==
+X-Gm-Message-State: AAQBX9dRbrfihWohhyLXI0j+/gX9jfsqg3OwslReqJ6j0YNlbcWKwBYR
+        j+nbvgxdR78okuuf1EylERO5LZ4d11QxOHcQSSg=
+X-Google-Smtp-Source: AKy350bOdYkKefr9OG/iFTwW9Y8zJi7WP0q8ncdz0K81CjLsSSyV47R6xfpW3r2gOJHzwOS5zcVVfmeI2K2pEIvtR4k=
+X-Received: by 2002:a17:906:a10a:b0:94f:695e:b0c9 with SMTP id
+ t10-20020a170906a10a00b0094f695eb0c9mr8386847ejy.5.1682271756815; Sun, 23 Apr
+ 2023 10:42:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru> <20230418111612.19479-2-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230418111612.19479-2-ddrokosov@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 23 Apr 2023 19:42:25 +0200
+Message-ID: <CAFBinCDyhBQ5Nob38EmXor1PtcO09dRdReDTW+tc5CN4i20HhA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] phy: amlogic: enable/disable clkin during Amlogic
+ USB PHY init/exit
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        mturquette@baylibre.com, vkoul@kernel.org, kishon@kernel.org,
+        hminas@synopsys.com, Thinh.Nguyen@synopsys.com,
+        yue.wang@amlogic.com, hanjie.lin@amlogic.com,
+        kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-phy@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,38 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix inconsistent indeinting in m88e1318_led_blink_set reported by kernel
-test robot, probably done by the presence of an if condition dropped in
-later revision of the same code.
+Hi Dmitry,
 
-Cc: Andrew Lunn <andrew@lunn.ch>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304240007.0VEX8QYG-lkp@intel.com/
-Fixes: 46969f66e928 ("net: phy: marvell: Implement led_blink_set()")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/net/phy/marvell.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Tue, Apr 18, 2023 at 1:16=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
+>
+> Previously, all Amlogic boards used the XTAL clock as the default board
+> clock for the USB PHY input, so there was no need to enable it.
+> However, with the introduction of new Amlogic SoCs like the A1 family,
+> the USB PHY now uses a gated clock. Hence, it is necessary to enable
+> this gated clock during the PHY initialization sequence, or disable it
+> during the PHY exit, as appropriate.
+>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlo=
+gic/phy-meson-g12a-usb2.c
+> index 9d1efa0d9394..80938751da4f 100644
+> --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> @@ -172,10 +172,16 @@ static int phy_meson_g12a_usb2_init(struct phy *phy=
+)
+>         int ret;
+>         unsigned int value;
+>
+> -       ret =3D reset_control_reset(priv->reset);
+> +       ret =3D clk_prepare_enable(priv->clk);
+>         if (ret)
+>                 return ret;
+>
+> +       ret =3D reset_control_reset(priv->reset);
+> +       if (ret) {
+> +               clk_disable_unprepare(priv->clk);
+> +               return ret;
+> +       }
+> +
+This part looks good. You asked why I suggested this approach instead
+of enabling the clock at probe time and only now I have time to reply
+to it.
+Consider the following scenario:
+- modprobe phy-meson-g12a-usb2
+- modprobe dwc3-meson-g12a (this will call phy_init)
+- rmmod dwc3-meson-g12a (this will call phy_exit)
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index cd5d0ed9c5e5..43b6cb725551 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -2880,10 +2880,10 @@ static int m88e1318_led_blink_set(struct phy_device *phydev, u8 index,
- 	case 1:
- 	case 2:
- 		reg &= ~(0xf << (4 * index));
--			reg |= MII_88E1318S_PHY_LED_FUNC_BLINK << (4 * index);
--			/* Reset default is 84ms */
--			*delay_on = 84 / 2;
--			*delay_off = 84 / 2;
-+		reg |= MII_88E1318S_PHY_LED_FUNC_BLINK << (4 * index);
-+		/* Reset default is 84ms */
-+		*delay_on = 84 / 2;
-+		*delay_off = 84 / 2;
- 		break;
- 	default:
- 		return -EINVAL;
--- 
-2.39.2
+If the clock was enabled at probe time then it would only be disabled
+when using rmmod phy-meson-g12a-usb2.
+By manually calling clk_prepare_enable/clk_disable_unprepare we ensure
+that the clock gets disabled when we don't need the PHY anymore.
+Whether this makes any difference in terms of power draw: I can't say.
 
+>         udelay(RESET_COMPLETE_TIME);
+>
+>         /* usb2_otg_aca_en =3D=3D 0 */
+> @@ -277,8 +283,11 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+>  static int phy_meson_g12a_usb2_exit(struct phy *phy)
+>  {
+>         struct phy_meson_g12a_usb2_priv *priv =3D phy_get_drvdata(phy);
+> +       int ret =3D reset_control_reset(priv->reset);
+> +
+> +       clk_disable_unprepare(priv->clk);
+>
+> -       return reset_control_reset(priv->reset);
+> +       return ret;
+I think this can cause issues in case when reset_control_reset returns
+an error: If I understand the code in phy-core.c correctly it will
+only decrease the init ref-count if exit returns 0.
+Whenever phy_exit is called for the second time
+clk_disable_unprepare() will be called with a clock ref-count of 0, so
+it'll likely print some warning.
+
+My suggestion is to return early if reset_control_reset() fails and
+not call clk_disable_unprepare() in that case.
+What do you think?
+
+
+Best regards,
+Martin
