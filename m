@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B58B6EBFA4
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5136A6EBF8A
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjDWM62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S230153AbjDWMrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDWM60 (ORCPT
+        with ESMTP id S229749AbjDWMrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:58:26 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6001E10E2;
-        Sun, 23 Apr 2023 05:58:25 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 14:58:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1682254703; bh=HJZukvWGA79XO5tkgTXFO4AGdPlZ1YR+UNXDjQ8EzL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eRRcjBXBJd4zdlXEeyRIsyVffcxauEnlbc8jYu9ZVpvqdLY0dMMG/XZ8SWbxdFcnP
-         N7r0WScvcRYEkD1lwaWKv9zpwDGtCcrVBGaRebHduWBTLckXVb/9MSF9uDl0NYCcta
-         51tyacmvRVPaQDX/XRDwyyKASn8tCmL31rxi9waw=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 10/14] HP BIOSCFG driver  - passwdattr-interface
-Message-ID: <740fec33-7dd5-401f-b5fb-aaf2201f1d1f@t-8ch.de>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-11-jorge.lopez2@hp.com>
+        Sun, 23 Apr 2023 08:47:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439AAE57;
+        Sun, 23 Apr 2023 05:47:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAED360E33;
+        Sun, 23 Apr 2023 12:47:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B9FC433EF;
+        Sun, 23 Apr 2023 12:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682254038;
+        bh=eGIoQHOJZfoILARB2pz6hMBq1nDSmvzLHJKWEe0ma+w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T7mQuPTQFPWuWy1mJDy7UEmWdGrDE2z68wNTYlADK1cY+MHtDCBpyPlSLQa4/no5p
+         q8b/8MVcD1U927TGdXuiNm8cIT4wPGJPms35oCY35Xik4tzPFlwETQdDQJjaXxS6J4
+         jzmDMqOgTXKg1wgq4c+Hp2xN7cVeumCgFJ2v8U0ZNVRI7SsBO8rF1swtCaynXAMHEO
+         jY9kYSBOM7JXLD64g0tBOUI+IPsLyGXzUJWKMkiiVSixWSbRTqoP/+Iv/sp878U2J9
+         wldxbB2P6SEIuPqoxh+FHoC04X1o4iJ1Uu2rs/rqdTzU7wQRVgVxWuH/zob+INIpfu
+         b/1MQtu4ds3Bw==
+Date:   Sun, 23 Apr 2023 14:02:52 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Hui.Liu" <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Lala Lin <lala.lin@mediatek.com>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [PATCH v1 2/7] dt-bindings: iio: adc: Add support for MT7986
+Message-ID: <20230423140252.7b018c46@jic23-huawei>
+In-Reply-To: <20230421132047.42166-3-linux@fw-web.de>
+References: <20230421132047.42166-1-linux@fw-web.de>
+        <20230421132047.42166-3-linux@fw-web.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420165454.9517-11-jorge.lopez2@hp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 11:54:50-0500, Jorge Lopez wrote:
+On Fri, 21 Apr 2023 15:20:42 +0200
+Frank Wunderlich <linux@fw-web.de> wrote:
+
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add compatible string and specific clock property for mt7986.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+
+Given how trivial this is, I'll apply it without waiting for the DT maintainers
+to get to it.
+
+Applied to the togreg branch of iio.git and pushed out as testing for 0-day
+to take a look at it.
+
+Thanks,
+
+Jonathan
+
 > ---
->  .../x86/hp/hp-bioscfg/passwdattr-interface.c  | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.c
+>  .../devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml      | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.c b/drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.c
-> new file mode 100644
-> index 000000000000..02fc766eb3cf
-> --- /dev/null
-> +++ b/drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Functions corresponding to SET password methods under
-> + * HP_WMI_SET_BIOS_SETTING_GUID for use with hp-bioscfg driver.
-> + *
-> + * Copyright (c) 2022 Hewlett-Packard Inc.
-> + */
-> +
-> +#include <linux/wmi.h>
-> +#include "bioscfg.h"
-> +
-> +static int bios_attr_pass_interface_probe(struct wmi_device *wdev,
-> +					  const void *context)
-> +{
-> +	mutex_lock(&bioscfg_drv.mutex);
-> +	bioscfg_drv.password_attr_wdev = wdev;
+> diff --git a/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml b/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
+> index 7f79a06e76f5..6168b44ea72c 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
+> @@ -26,6 +26,7 @@ properties:
+>            - mediatek,mt2712-auxadc
+>            - mediatek,mt6765-auxadc
+>            - mediatek,mt7622-auxadc
+> +          - mediatek,mt7986-auxadc
+>            - mediatek,mt8173-auxadc
+>        - items:
+>            - enum:
 
-This wdev is never used. It seems this full subdriver can be dropped.
-Or the one UUID-based callsite using the same UUID can use the driver.
-
-> +	mutex_unlock(&bioscfg_drv.mutex);
-> +	return 0;
-> +}
-> +
-> +static void bios_attr_pass_interface_remove(struct wmi_device *wdev)
-> +{
-> +	mutex_lock(&bioscfg_drv.mutex);
-> +	bioscfg_drv.password_attr_wdev = NULL;
-> +	mutex_unlock(&bioscfg_drv.mutex);
-> +}
-> +
-> +static const struct wmi_device_id bios_attr_pass_interface_id_table[] = {
-> +	{ .guid_string = HP_WMI_SET_BIOS_SETTING_GUID },
-> +	{ },
-
-No comma after end-of-array marker.
-
-> +};
-> +static struct wmi_driver bios_attr_pass_interface_driver = {
-> +	.driver = {
-> +		.name = DRIVER_NAME"-password"
-> +	},
-> +	.probe = bios_attr_pass_interface_probe,
-> +	.remove = bios_attr_pass_interface_remove,
-> +	.id_table = bios_attr_pass_interface_id_table,
-> +};
-> +
-> +int init_bios_attr_pass_interface(void)
-> +{
-> +	return wmi_driver_register(&bios_attr_pass_interface_driver);
-> +}
-> +
-> +void exit_bios_attr_pass_interface(void)
-> +{
-> +	wmi_driver_unregister(&bios_attr_pass_interface_driver);
-> +}
-> +
-> +MODULE_DEVICE_TABLE(wmi, bios_attr_pass_interface_id_table);
-> -- 
-> 2.34.1
-> 
