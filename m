@@ -2,133 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715196EBFAB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 15:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CD86EBFAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 15:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjDWNKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 09:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S229797AbjDWNKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 09:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjDWNKN (ORCPT
+        with ESMTP id S229493AbjDWNKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 09:10:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7D110FD
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 06:10:12 -0700 (PDT)
+        Sun, 23 Apr 2023 09:10:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF1C1700;
+        Sun, 23 Apr 2023 06:10:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1682255412; x=1713791412;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TEeT4Lr/EMRAS6taXQOv+UrQfw44pWXmHsQOrTuHV7E=;
-  b=U2HzdqJoB3iJiqVS63Fg0C3j9d4Ysd6lTqlTvtdr3skuqAuxnyOMyWTx
-   80C1dDxHUDii5gOYW++rMvu2gay2NwhI2no+JDieu4WY4pYxhqncO9lHd
-   iVI6svd/7WRk8pWIyriKHvvBtE9ijZ0640KCNVVQCzO4pvXCOPGCGYF52
-   q23rwMz7tV7MbLaYi4xaHWpcoYIyhtPGu26QARh/mRx5qHrgm3X35itdl
-   wZ7rCyp+AQvbmTkchKFqQ+eucBTEGjgTtuGZIKBmD47uP5oRZ36tcqqep
-   S6dD1jazFcHE1XI/oDbsLIQXnK8Jlbjd7ZmLHOWMiD57wmGHua3CDUyJm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="348191350"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sXUx6uFNxdGi8vfusyCCbuO045rc926lOTZrVYTc/Yg=;
+  b=KnwhqBIlmnEdAzhRAJxuYF1w3opdCl+sUr/Tfqjt9AixQvsMjN+ExVOm
+   GQfZxfgIUfJMG1h83Zqa79FXGOn8aFyar3kmLgYbGC3fGN/LfuJtRC1SI
+   2jl3wgegaaBH0OrifvDKXOe0w7wwuyYZ7F09AF1kxqkBg7bHQn8onYRZ8
+   6+aZKmvcdXrBHM+MiMrOk2pY0qX07nI+kewX8vbrHenvK7T8qOIA40Xab
+   sv9emdnJ1jkpFVj38pOrI1UyjLeSCg+I0CdEKxiUwOLjT250H2RxacZ4n
+   x/72jGIPd1Hq33XW7vrSCw+uBBduyT/Iy+5yUc3rMuNhZGUnNsc47SrfL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="432557149"
 X-IronPort-AV: E=Sophos;i="5.99,220,1677571200"; 
-   d="scan'208";a="348191350"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 06:10:11 -0700
+   d="scan'208";a="432557149"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 06:10:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="816946904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="692774510"
 X-IronPort-AV: E=Sophos;i="5.99,220,1677571200"; 
-   d="scan'208";a="816946904"
+   d="scan'208";a="692774510"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 23 Apr 2023 06:10:10 -0700
+  by orsmga002.jf.intel.com with ESMTP; 23 Apr 2023 06:10:09 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pqZTl-000huK-0t;
+        id 1pqZTl-000huM-0x;
         Sun, 23 Apr 2023 13:10:09 +0000
-Date:   Sun, 23 Apr 2023 21:09:33 +0800
+Date:   Sun, 23 Apr 2023 21:09:34 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Subject: lib/fortify_kunit.c:28:9: sparse: sparse: incompatible types for
- operation (==):
-Message-ID: <202304232034.zAYM3qkH-lkp@intel.com>
+To:     Yan Wang <rk.code@outlook.com>, linus.walleij@linaro.org,
+        brgl@bgdev.pl
+Cc:     oe-kbuild-all@lists.linux.dev, Yan Wang <rk.code@outlook.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] gpio: gpiolib: clear the array_info's memory space
+Message-ID: <202304232025.QmaYH1Ov-lkp@intel.com>
+References: <KL1PR01MB54489B7A3D9D02D242B4BDA1E6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <KL1PR01MB54489B7A3D9D02D242B4BDA1E6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   622322f53c6d9ddd3c2a4aad852b3e1adbd56da7
-commit: 875bfd5276f31d09e811d31fca638b9f4d1205e8 fortify: Add KUnit test for FORTIFY_SOURCE internals
-date:   8 months ago
-config: s390-randconfig-s051-20230423 (https://download.01.org/0day-ci/archive/20230423/202304232034.zAYM3qkH-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce:
+Hi Yan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on brgl/gpio/for-next]
+[also build test WARNING on next-20230421]
+[cannot apply to linus/master v6.3-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yan-Wang/gpio-gpiolib-clear-the-array_info-s-memory-space/20230423-190500
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/KL1PR01MB54489B7A3D9D02D242B4BDA1E6669%40KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+patch subject: [PATCH v1] gpio: gpiolib: clear the array_info's memory space
+config: arm-randconfig-r046-20230423 (https://download.01.org/0day-ci/archive/20230423/202304232025.QmaYH1Ov-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=875bfd5276f31d09e811d31fca638b9f4d1205e8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 875bfd5276f31d09e811d31fca638b9f4d1205e8
+        # https://github.com/intel-lab-lkp/linux/commit/061c9f6937fab64a9c1d051252fcd3236a35381f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yan-Wang/gpio-gpiolib-clear-the-array_info-s-memory-space/20230423-190500
+        git checkout 061c9f6937fab64a9c1d051252fcd3236a35381f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpio/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304232034.zAYM3qkH-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304232025.QmaYH1Ov-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
-   lib/fortify_kunit.c:28:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:28:9: sparse: sparse: undefined identifier '__compiletime_strlen'
->> lib/fortify_kunit.c:28:9: sparse: sparse: incompatible types for operation (==):
->> lib/fortify_kunit.c:28:9: sparse:    bad type const __left
->> lib/fortify_kunit.c:28:9: sparse:    int const __right
-   lib/fortify_kunit.c:29:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:29:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:29:9: sparse: sparse: incompatible types for operation (==):
-   lib/fortify_kunit.c:29:9: sparse:    bad type const __left
-   lib/fortify_kunit.c:29:9: sparse:    int const __right
-   lib/fortify_kunit.c:30:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:30:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:30:9: sparse: sparse: incompatible types for operation (==):
-   lib/fortify_kunit.c:30:9: sparse:    bad type const __left
-   lib/fortify_kunit.c:30:9: sparse:    int const __right
-   lib/fortify_kunit.c:32:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:32:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:32:9: sparse: sparse: incompatible types for operation (==):
-   lib/fortify_kunit.c:32:9: sparse:    bad type const __left
->> lib/fortify_kunit.c:32:9: sparse:    unsigned long const __right
-   lib/fortify_kunit.c:34:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:34:9: sparse: sparse: undefined identifier '__compiletime_strlen'
-   lib/fortify_kunit.c:34:9: sparse: sparse: incompatible types for operation (==):
-   lib/fortify_kunit.c:34:9: sparse:    bad type const __left
-   lib/fortify_kunit.c:34:9: sparse:    unsigned long const __right
-   lib/fortify_kunit.c:56:16: sparse: sparse: undefined identifier '__compiletime_strlen'
+All warnings (new ones prefixed by >>):
 
-vim +28 lib/fortify_kunit.c
+   In file included from include/linux/string.h:254,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/kernfs.h:11,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/irqdomain.h:36,
+                    from include/linux/acpi.h:13,
+                    from drivers/gpio/gpiolib.c:3:
+   drivers/gpio/gpiolib.c: In function 'gpiod_get_array':
+>> include/linux/fortify-string.h:59:33: warning: argument 1 null where non-null expected [-Wnonnull]
+      59 | #define __underlying_memset     __builtin_memset
+         |                                 ^
+   include/linux/fortify-string.h:453:9: note: in expansion of macro '__underlying_memset'
+     453 |         __underlying_memset(p, c, __fortify_size);                      \
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/fortify-string.h:461:25: note: in expansion of macro '__fortify_memset_chk'
+     461 | #define memset(p, c, s) __fortify_memset_chk(p, c, s,                   \
+         |                         ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpiolib.c:4345:25: note: in expansion of macro 'memset'
+    4345 |                         memset(array_info, 0, sizeof(struct gpio_array));
+         |                         ^~~~~~
+   include/linux/fortify-string.h:59:33: note: in a call to built-in function '__builtin_memset'
+      59 | #define __underlying_memset     __builtin_memset
+         |                                 ^
+   include/linux/fortify-string.h:453:9: note: in expansion of macro '__underlying_memset'
+     453 |         __underlying_memset(p, c, __fortify_size);                      \
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/fortify-string.h:461:25: note: in expansion of macro '__fortify_memset_chk'
+     461 | #define memset(p, c, s) __fortify_memset_chk(p, c, s,                   \
+         |                         ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpiolib.c:4345:25: note: in expansion of macro 'memset'
+    4345 |                         memset(array_info, 0, sizeof(struct gpio_array));
+         |                         ^~~~~~
 
-    25	
-    26	static void known_sizes_test(struct kunit *test)
-    27	{
-  > 28		KUNIT_EXPECT_EQ(test, __compiletime_strlen("88888888"), 8);
-    29		KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_of_10), 10);
-    30		KUNIT_EXPECT_EQ(test, __compiletime_strlen(ptr_of_11), 11);
-    31	
-  > 32		KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
-    33		/* Externally defined and dynamically sized string pointer: */
-    34		KUNIT_EXPECT_EQ(test, __compiletime_strlen(saved_command_line), SIZE_MAX);
-    35	}
-    36	
+
+vim +59 include/linux/fortify-string.h
+
+78a498c3a227f2 Alexander Potapenko 2022-10-24  46  
+78a498c3a227f2 Alexander Potapenko 2022-10-24  47  #if defined(__SANITIZE_MEMORY__)
+78a498c3a227f2 Alexander Potapenko 2022-10-24  48  /*
+78a498c3a227f2 Alexander Potapenko 2022-10-24  49   * For KMSAN builds all memcpy/memset/memmove calls should be replaced by the
+78a498c3a227f2 Alexander Potapenko 2022-10-24  50   * corresponding __msan_XXX functions.
+78a498c3a227f2 Alexander Potapenko 2022-10-24  51   */
+78a498c3a227f2 Alexander Potapenko 2022-10-24  52  #include <linux/kmsan_string.h>
+78a498c3a227f2 Alexander Potapenko 2022-10-24  53  #define __underlying_memcpy	__msan_memcpy
+78a498c3a227f2 Alexander Potapenko 2022-10-24  54  #define __underlying_memmove	__msan_memmove
+78a498c3a227f2 Alexander Potapenko 2022-10-24  55  #define __underlying_memset	__msan_memset
+78a498c3a227f2 Alexander Potapenko 2022-10-24  56  #else
+a28a6e860c6cf2 Francis Laniel      2021-02-25  57  #define __underlying_memcpy	__builtin_memcpy
+a28a6e860c6cf2 Francis Laniel      2021-02-25  58  #define __underlying_memmove	__builtin_memmove
+a28a6e860c6cf2 Francis Laniel      2021-02-25 @59  #define __underlying_memset	__builtin_memset
+78a498c3a227f2 Alexander Potapenko 2022-10-24  60  #endif
+78a498c3a227f2 Alexander Potapenko 2022-10-24  61  
 
 -- 
 0-DAY CI Kernel Test Service
