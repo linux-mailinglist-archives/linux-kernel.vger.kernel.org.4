@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772586EBEFB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 13:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68976EBC85
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 05:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjDWLAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 07:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S230155AbjDWC77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 22:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjDWLAH (ORCPT
+        with ESMTP id S230060AbjDWC74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 07:00:07 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F771728
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:59:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VgjjRNn_1682247580;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgjjRNn_1682247580)
-          by smtp.aliyun-inc.com;
-          Sun, 23 Apr 2023 18:59:41 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     rppt@kernel.org, ying.huang@intel.com, mgorman@techsingularity.net,
-        vbabka@suse.cz, mhocko@suse.com, david@redhat.com,
-        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the possible hole in __pageblock_pfn_to_page()
-Date:   Sun, 23 Apr 2023 18:59:11 +0800
-Message-Id: <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
-References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
+        Sat, 22 Apr 2023 22:59:56 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C41737
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 19:59:54 -0700 (PDT)
+X-ASG-Debug-ID: 1682218791-1eb14e638744c60001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id wAEo9SqO79MjJgxb (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sun, 23 Apr 2023 10:59:51 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sun, 23 Apr
+ 2023 10:59:50 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sun, 23 Apr
+ 2023 10:59:50 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v3] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
+Date:   Sun, 23 Apr 2023 18:59:52 +0800
+X-ASG-Orig-Subj: [PATCH v3] UHCI:adjust zhaoxin UHCI controllers OverCurrent bit value
+Message-ID: <20230423105952.4526-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1682218791
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1541
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0002 1.0000 -2.0196
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107798
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
-checks whether the given zone contains holes, and uses pfn_to_online_page()
-to validate if the start pfn is online and valid, as well as using pfn_valid()
-to validate the end pfn.
+OverCurrent condition is not standardized in the UHCI spec.
+Zhaoxin UHCI controllers report OverCurrent bit active off.
+In order to handle OverCurrent condition correctly, the uhci-hcd
+driver needs to be told to expect the active-off behavior.
 
-However, the __pageblock_pfn_to_page() function may return non-NULL even
-if the end pfn of a pageblock is in a memory hole in some situations. For
-example, if the pageblock order is MAX_ORDER, which will fall into 2
-sub-sections, and the end pfn of the pageblock may be hole even though
-the start pfn is online and valid.
-
-This did not break anything until now, but the zone continuous is fragile
-in this possible scenario. So as previous discussion[1], it is better to
-add some comments to explain this possible issue in case there are some
-future pfn walkers that rely on this.
-
-[1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: stable@vger.kernel.org
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
-Changes from v1:
- - Update the comments per Ying and Mike, thanks.
----
- mm/page_alloc.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+v2->v3
+ - Change patch code style.
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 6457b64fe562..9756d66f471c 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
-  * interleaving within a single pageblock. It is therefore sufficient to check
-  * the first and last page of a pageblock and avoid checking each individual
-  * page in a pageblock.
-+ *
-+ * Note: the function may return non-NULL even if the end pfn of a pageblock
-+ * is in a memory hole in some situations. For example, if the pageblock
-+ * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
-+ * of the pageblock may be hole even though the start pfn is online and valid.
-+ * This did not break anything until now, but be careful about this possible
-+ * issue when checking whether all pfns of a pageblock are valid.
-  */
- struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
- 				     unsigned long end_pfn, struct zone *zone)
+ drivers/usb/host/uhci-pci.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+index 3592f757fe05..7bd2fddde770 100644
+--- a/drivers/usb/host/uhci-pci.c
++++ b/drivers/usb/host/uhci-pci.c
+@@ -119,11 +119,13 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+ 
+ 	uhci->rh_numports = uhci_count_ports(hcd);
+ 
+-	/* Intel controllers report the OverCurrent bit active on.
+-	 * VIA controllers report it active off, so we'll adjust the
+-	 * bit value.  (It's not standardized in the UHCI spec.)
++	/*
++	 * Intel controllers report the OverCurrent bit active on.  VIA
++	 * and ZHAOXIN controllers report it active off, so we'll adjust
++	 * the bit value.  (It's not standardized in the UHCI spec.)
+ 	 */
+-	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
++	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA ||
++			to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
+ 		uhci->oc_low = 1;
+ 
+ 	/* HP's server management chip requires a longer port reset delay. */
 -- 
-2.27.0
+2.32.0
 
