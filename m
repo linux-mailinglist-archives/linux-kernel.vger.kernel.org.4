@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6674F6EBF83
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A896EBF8C
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjDWMmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S230178AbjDWMsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjDWMmA (ORCPT
+        with ESMTP id S229453AbjDWMse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:42:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2051A1FDF;
-        Sun, 23 Apr 2023 05:41:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADD3F611D1;
-        Sun, 23 Apr 2023 12:41:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20ACDC4339B;
-        Sun, 23 Apr 2023 12:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682253712;
-        bh=YnBrIbmb5UAV+e+e3Hlm9AwckTbkzxsLFA2JOnShUwE=;
-        h=From:Date:Subject:To:Cc:From;
-        b=oEojJ7fmHncgZL27QlTgIfa3JTeslpH08azlxzWgdkAifGIbGZxN0BM+B6H+PHA20
-         lnmqpdad+jT31fyKG7HQYTamjKdQY+/HvbyU28wgNHgOlOmAZHi9T8sMyljf0p4u55
-         2nZ6mIQi+EpMETNnTUhDxsU0V4CfJSX2YtHxdx34KL04xBPeETVOGFhF+u77qXLOhy
-         y1n0VKzl407w65sEKtoVs0rDkTXIJSbQAatObQAO1X12/qGhM9/i0bSsJYSYFHHU4R
-         sBC62UnsNYUFQkrYX5uyNo3FXNFYWl90yn5ZjDDE3rV2sSDi6ccS7+bpEmS4gKCS3C
-         wZgW+gthqfWNA==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-187c78c6657so2416277fac.2;
-        Sun, 23 Apr 2023 05:41:52 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cCo1ZBrFKZdMuhLp4DvWIrWO4N+IhtRk3WayPgZmAydW244dD7
-        nTxtewK3HwijZQxbzXTIWfobSrGYZ0+8FvfXyJ8=
-X-Google-Smtp-Source: AKy350ZOPr+vhVnt1HJRudMJBNy3fHh4/WsxEA9IPdL4IYrpX43bebFCE8g2R/R+ZgTS/qN74UMFulGei05hCxoRvHM=
-X-Received: by 2002:aca:1319:0:b0:38e:8d7f:c07e with SMTP id
- e25-20020aca1319000000b0038e8d7fc07emr3346503oii.52.1682253711392; Sun, 23
- Apr 2023 05:41:51 -0700 (PDT)
+        Sun, 23 Apr 2023 08:48:34 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AA510C8;
+        Sun, 23 Apr 2023 05:48:32 -0700 (PDT)
+Received: from pride-PowerEdge-R740.. ([172.16.0.254])
+        (user=U201812168@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33NCl40M013852-33NCl40N013852
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 23 Apr 2023 20:47:08 +0800
+From:   Ziwei Yan <u201812168@hust.edu.cn>
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bai Ping <ping.bai@nxp.com>, Anson Huang <anson.huang@nxp.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Ziwei Yan <u201812168@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: imx: clk-imx8mq: fix memory leak and missing unwind goto in imx8mq_clocks_probe
+Date:   Sun, 23 Apr 2023 08:47:02 -0400
+Message-Id: <20230423124702.168027-1-u201812168@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 23 Apr 2023 21:41:15 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASokmOqPSzuaAf-vTdNM7jKRW=9Y8S6pZzkEWf_6HLQeA@mail.gmail.com>
-Message-ID: <CAK7LNASokmOqPSzuaAf-vTdNM7jKRW=9Y8S6pZzkEWf_6HLQeA@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v6.3(-rc8)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: U201812168@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+Smatch reports:
+drivers/clk/imx/clk-imx8mq.c:611 imx8mq_clocks_probe() warn: 'base'
+from of_iomap() not released on lines: 399,611.
 
+This is because probe() returns without releasing base.
+I fix this by replacing of_iomap() with devm_of_iomap()
+to automatically handle the unused ioremap region.
 
-Please pull Kbuild fixes.
-Thank you.
+Similarly, I use devm_kzalloc() instead of kzalloc()
+to automatically free the memory
+using devm_kfree() when error occurs.
 
+Besides, in this function, some other issues are found.
+On line 311 and 398,
+probe() returns directly without unregistering hws.
+So I add `goto unregister_hws;` here.
 
+Fixes: b9ef22e1592f ("clk: imx: imx8mq: Switch to clk_hw based API")
+Fixes: b80522040cd3 ("clk: imx: Add clock driver for i.MX8MQ CCM")
+Fixes: 1aa6af5f1813 ("clk: imx8mq: Use devm_platform_ioremap_resource() instead of of_iomap()")
+Signed-off-by: Ziwei Yan <u201812168@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+The issue is found by static analysis and remains untested.
+---
+ drivers/clk/imx/clk-imx8mq.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-The following changes since commit 6a8f57ae2eb07ab39a6f0ccad60c760743051026:
-
-  Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v6.3-4
-
-for you to fetch changes up to 9cedc5e89a59da72bfecdb76bfaa5a28a273029d:
-
-  kbuild: use proper prefix for tarballs to fix rpm-pkg build error
-(2023-04-23 21:23:10 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v6.3 (4th)
-
- - Fix the prefix in the kernel source tarball
-
- - Fix a typo in the copyright file in Debian package
-
-----------------------------------------------------------------
-Masahiro Yamada (1):
-      kbuild: use proper prefix for tarballs to fix rpm-pkg build error
-
-Woody Suwalski (1):
-      kbuild: deb-pkg: Fix a spell typo in mkdebian script
-
- scripts/Makefile.package | 6 +++---
- scripts/package/mkdebian | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-
-
+diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+index 4bd65879fcd3..4aa58a7e7880 100644
+--- a/drivers/clk/imx/clk-imx8mq.c
++++ b/drivers/clk/imx/clk-imx8mq.c
+@@ -288,7 +288,7 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+ 	void __iomem *base;
+ 	int err;
+ 
+-	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
++	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws,
+ 					  IMX8MQ_CLK_END), GFP_KERNEL);
+ 	if (WARN_ON(!clk_hw_data))
+ 		return -ENOMEM;
+@@ -306,10 +306,12 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+ 	hws[IMX8MQ_CLK_EXT4] = imx_get_clk_hw_by_name(np, "clk_ext4");
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mq-anatop");
+-	base = of_iomap(np, 0);
++	base = devm_of_iomap(dev, np, 0, NULL);
+ 	of_node_put(np);
+-	if (WARN_ON(!base))
+-		return -ENOMEM;
++	if (WARN_ON(IS_ERR(base))) {
++		err = PTR_ERR(base);
++		goto unregister_hws;
++	}
+ 
+ 	hws[IMX8MQ_ARM_PLL_REF_SEL] = imx_clk_hw_mux("arm_pll_ref_sel", base + 0x28, 16, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+ 	hws[IMX8MQ_GPU_PLL_REF_SEL] = imx_clk_hw_mux("gpu_pll_ref_sel", base + 0x18, 16, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+@@ -395,8 +397,10 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+ 
+ 	np = dev->of_node;
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+-	if (WARN_ON(IS_ERR(base)))
+-		return PTR_ERR(base);
++	if (WARN_ON(IS_ERR(base))) {
++		err = PTR_ERR(base);
++		goto unregister_hws;
++	}
+ 
+ 	/* CORE */
+ 	hws[IMX8MQ_CLK_A53_DIV] = imx8m_clk_hw_composite_core("arm_a53_div", imx8mq_a53_sels, base + 0x8000);
 -- 
-Best Regards
-Masahiro Yamada
+2.34.1
+
