@@ -2,142 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8926EBDD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ABB6EBDD8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjDWIBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 04:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S230176AbjDWIC1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 23 Apr 2023 04:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDWIBk (ORCPT
+        with ESMTP id S230123AbjDWICZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:01:40 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2050.outbound.protection.outlook.com [40.107.22.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A84171F;
-        Sun, 23 Apr 2023 01:01:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OZw8Xh7KLSLT1R0eLYdd8raxPiElwHRK2UDXaaM/KpPkgvzbPxmZL2zT50Idih9eWnTaIkm2qkNgv4fN+GDM700Of871FzI+KBaLik93wM/J0JwV22wqn73LRys+ngRoevTQND6IPMbJHLRaOCBOMw9VsQ82gVaUxNX9pZukAJWHN8D3vP8OzGKPG07oGRAEZOXmZokb4WsP7itz8MiZTToosShaJKG3/BdKbDJw91E7VL9l/Z4gttNArwmj/rVguQGB1XBtaG//invO7hbpzTNsYsTpeMq16IVNMjn5p7xed9OzcNaHyFNCabazN2uYxvLzIbs/TmRjqpbKzQR+Qw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mqn31Kmo61K8Mo/1UteorTqBhy65e2zXjJ+A5oKxzsI=;
- b=M6XB8q6PoOhaWCNu7TCfTG7QHv7SNje6X6ST9HZOkSFlTto2gIaPFU/T2bgWzurqaH9l0a2VNyIN+tZQe3h+QbJtvdHv8lIwf1EseO7h9YOwyJlWbTWrys7J8pDllcLrURttDaVTV9SG8Xe2CkhqjgqDsKEzQPhGECEHIDg79X6ygb/1snN1Xp9FtpAvI3WSMYfbUqI4HvMjSxtKHklMwU/759ZeggUhslwao+VLeU3GEme7QmlMsKz79pSI2SLCRJU8TtiUziGcjs9B40j8vhQIFLEU+RXY2szNUi0h2WmcFqX/O9EMNdrLn/KEr4b5kOEgR5OSX7e1SBE173vpmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=solid-run.com; dmarc=pass action=none
- header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mqn31Kmo61K8Mo/1UteorTqBhy65e2zXjJ+A5oKxzsI=;
- b=TUTCrcL/D8gV9fbltJcPbZiUxznSt3gxTdykbQ5qKTJMeGJ+u0WIxk9j30fbGttvwMNPLuU/2WPJ+s7OfD/dckomCj+YB+3soMTbEnhJp8+HI/u7Wj1MWuNMjYVNt6ni3kdwP7Uz7rnXKy0jzNCBcEN92pznII7JFdiA0LERkE8=
-Received: from AM0PR04MB4723.eurprd04.prod.outlook.com (2603:10a6:208:c0::20)
- by DUZPR04MB9782.eurprd04.prod.outlook.com (2603:10a6:10:4b1::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.32; Sun, 23 Apr
- 2023 08:01:35 +0000
-Received: from AM0PR04MB4723.eurprd04.prod.outlook.com
- ([fe80::d2fd:ad65:a6e0:a30a]) by AM0PR04MB4723.eurprd04.prod.outlook.com
- ([fe80::d2fd:ad65:a6e0:a30a%5]) with mapi id 15.20.6319.032; Sun, 23 Apr 2023
- 08:01:35 +0000
-From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-CC:     Jason Wang <jasowang@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] virtio-net: reject small vring sizes
-Thread-Topic: [PATCH net] virtio-net: reject small vring sizes
-Thread-Index: AQHZcDeGnH5xR2OGlkuo4s6jvhNMC68uIjT9gABGFgCAAG90AIAAMSwAgAABjzCAAARBAIAABATIgAAENICAAAM4M4AAIQOAgAALfyGAABuqgIAAAQKHgAADxACACRVQMYAACvaAgAAKrv4=
-Date:   Sun, 23 Apr 2023 08:01:35 +0000
-Message-ID: <AM0PR04MB472392318BC9A36CBA7AF19AD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
-References: <20230417023911-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47237BFB8BB3A3606CE6A408D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417030713-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723F3E6AE381AEC36D1AEFED49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417051816-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47237705695AFD873DEE4530D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417073830-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417075645-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723FA90465186B5A8A5C001D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230423031308-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230423031308-mutt-send-email-mst@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=solid-run.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR04MB4723:EE_|DUZPR04MB9782:EE_
-x-ms-office365-filtering-correlation-id: 1e095f86-e0fd-4a59-0745-08db43d0f587
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: D0jwktXPyLujNwL/r3x3n4ODuH+2RhnLEoRIS+dJB6KuQmRtXzjUm0nmgi6w1HvmNz+mi2SC8c5/0ZMWlfO8LpKd7IIMCWGoNXIVXx9JdT8BAf9qGVagwP4qTgKJunW3UdN1ItAqbBhRZW9HP9rP/MJ3PKV1ivyHiP2MsYydfU65YbcIBAKFfJgSHlREMjKFbUKzSoAVqBWyG4jwBlFQF+8M2TjJUjRTaAK9hT1X9hHC8jkqKOdi3oAARPwCi4/Kg/hdkb8J1xiUp/UYhhw0W/p4f5ZLNSPeQbfEPgoXFmuMaukp94FZL8klInebYeKTebVFCITl7bMNXejcvxGeVLOGNpIzJ3jISKY73cGvFrjf/KeR8ZZWyUdzPMJ5VBtzt1UcW5Xa3QbTsCZ8VabV6/wQ4/5NYEeT7hNRrIs/u/p0ZjantRLEDdkRaMnC4uxmVuDb/IOwi0x2/Wj6xg3S0vhZLIZWdVusvcEoaXX/hkxsNJME6PekP5J2ObC+k/LidmJj97w6SsdgkMmFConeU0LX8iuvtqXCvvZxkQMcJSn+SoBZnaUVha7sGDmGDDAwjUKSkb2lVr2MnQM4b/AImkCzzjrO2NU3yuQ3rHgv9noz20ToU9muEtp5Ylj6a0dM
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4723.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(39830400003)(136003)(396003)(451199021)(478600001)(54906003)(86362001)(186003)(7696005)(26005)(9686003)(6506007)(558084003)(55016003)(33656002)(71200400001)(4326008)(6916009)(64756008)(66446008)(66476007)(66556008)(316002)(44832011)(83380400001)(91956017)(66946007)(76116006)(2906002)(38100700002)(122000001)(41300700001)(8676002)(8936002)(38070700005)(5660300002)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?LDSG5v9epEfLg2cUG5iMOPoRirIC+Z9rsuaukRe6+GZuqeVAZgLz3soYfR?=
- =?iso-8859-1?Q?mMUkiKSS0Rq7tSPYIB8UYmcgmnj7QWYvceykv4ZZ4AtNHSqFIbSHzQlrHV?=
- =?iso-8859-1?Q?LwZpz5awnFIrvona9qD9XcWvH6nLPvzABz819FDVaCOgUIS3MU0w/6XSJ3?=
- =?iso-8859-1?Q?zQLp+wB0cK0UPIIwf0j1LpK7RdYXgE/JfvNF6mZutiy7eMGgSD7sArHco6?=
- =?iso-8859-1?Q?2ubZCL/IvQy3JFAkf37gpm6NGNjDYX9n2V+c5oY7pq1hyzEbrm+Q6cdFNO?=
- =?iso-8859-1?Q?7M2PedHaLPKxYMHwjLJTBc/Kp/RYLFNveSuZHOHFmhNe3fa9OSHkWbz0kG?=
- =?iso-8859-1?Q?/SipfbdCn2FMEiwJ24Pu1o6Ec+Z3S0jqUYoz5GNVtSLdM1rTb1Yv+scNY4?=
- =?iso-8859-1?Q?TZkkeXlfQsN8fVcpuxZL5lsTfcIxH5P21WxC1joabCS6dc5eZdv4aiwGp+?=
- =?iso-8859-1?Q?3Ez21zcNJ1N69fEta9I6YSP5KTpTzr00JLm4PpujhZeKqyHfLMbS3A76jd?=
- =?iso-8859-1?Q?RbnqHKMvG/j4o2P1lQ3VH/9OYjCuOZDriYm6k40cJnu7EFt08QryUSuqfk?=
- =?iso-8859-1?Q?qnBVwfa9LNOoEzByYwOVOArK58AxIypdEyW1NQgO41SxtidHzwtp8fnS81?=
- =?iso-8859-1?Q?3nensVI0QRQCtcc0xpNRu8O8fVHY4fISykQNs904MivStL4CfGjN8MRZkN?=
- =?iso-8859-1?Q?6bid9GmEh4QMzs+OaMDtpnlNHwDWkPj/D39/+mRWlhpS4XlqCa/HrF8NOI?=
- =?iso-8859-1?Q?+wrR6ha7P6ac7VMe945/tucawl5YccnM2y2hkp4wT1W4qIotzQWpSwDmNP?=
- =?iso-8859-1?Q?4HU3RrWnU1RnblCzDy1yFpFeRdUXKszvvGB/X3CRWorIQUeLbFQvenX5cF?=
- =?iso-8859-1?Q?MyDoMKVypwxoMJbqN9JnvC8I+PLGlWfyKeYCDv/hy07cSiQfWUTq/b3M3b?=
- =?iso-8859-1?Q?6RfHysomRk2dbn7SeK83kb1LE+eMpGJQ+BTq/I2qckvPCc+PIqkuu9TjVZ?=
- =?iso-8859-1?Q?yvOaaiiB4rI7vrNN0wTc1Rbviv4N44ZRdqT9EPeyQSDUwV3Ez+FqAhxrSI?=
- =?iso-8859-1?Q?7eoe/2kIrAcnQVKRaUzZNOcbatbOGaOTJAQJ1BEUny0q/jWvPVwVDF4IZI?=
- =?iso-8859-1?Q?dRX46Wsz01C62h82AYAegzjz9cRyLimdEphhXMcgE0xHDazYpZzpGwIxM5?=
- =?iso-8859-1?Q?v/PbDaBLIUGJXTngnD/nfXKbCJ6qWUGQjFzmz28yCqeOmUqEdQhk+AThDY?=
- =?iso-8859-1?Q?caqbC0OnWJVjvw0FwwWJYHMkHOgdu2RQkLXZuK9WRsaZyGsz6S85lCkYm8?=
- =?iso-8859-1?Q?vppXA1nDq1mzrn0XOC8Nqrk44EntLlZTRM1CRDWJGYhoYSsJ41K7ck1EG7?=
- =?iso-8859-1?Q?NHKCx3Ck1E8Le/GK8GCc4Pbf+kMp8ljA5LaJXF0jcGW3GLEe92THD8K6Y2?=
- =?iso-8859-1?Q?1eq+g9J5TEDsqqt+VGswj0FCe3DRNr36/+QZ4K8l0F9rZ52adspw1MVz94?=
- =?iso-8859-1?Q?dHhsr3qy1RuBJ01vp/yFZXbcoB+xwoa5CGMmrwc45zgQ3TGzQewgHP9KUI?=
- =?iso-8859-1?Q?rx0FcjbFSyAUGRGJnWPgvA7jgZpmEfajHBG5Rznjo8KSAAdau947Krf+2C?=
- =?iso-8859-1?Q?7HSQMVBcm+jlqjtTzq82I2OdOUCakVuUQT?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 23 Apr 2023 04:02:25 -0400
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563E5CC
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 01:02:23 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id CEB0463CC166;
+        Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id SGYmLo3VK3p2; Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 5CBEA63CC174;
+        Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id zUKjAkq3QXJ7; Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 42A9563CC166;
+        Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+Date:   Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     chengzhihao1 <chengzhihao1@huawei.com>
+Cc:     Yu Hao <yhao016@ucr.edu>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1366603418.245114.1682236940160.JavaMail.zimbra@nod.at>
+In-Reply-To: <ed510d18-47f1-7f46-03dd-84e043cab6d9@huawei.com>
+References: <CA+UBctD_w=75wChmePZHp7KsBSNPWYGDBtzHPRPPtaFoqhGvXA@mail.gmail.com> <687864524.118195.1681799447034.JavaMail.zimbra@nod.at> <ff419c45-7d76-0219-a598-f6f4d081e29c@huawei.com> <CA+UBctBVHouL-3rM3zKYLpk01fXFvCpBnU7EpSRVdGW7cEjcJQ@mail.gmail.com> <977347543.226888.1682011999468.JavaMail.zimbra@nod.at> <CA+UBctA4fSbSdooQ9q9fwNuaHb_PnkfFuqJ7Q5vii-3-uCiUjw@mail.gmail.com> <412779912.228444.1682023015809.JavaMail.zimbra@nod.at> <ed510d18-47f1-7f46-03dd-84e043cab6d9@huawei.com>
+Subject: Re: BUG: divide error in ubi_attach_mtd_dev
 MIME-Version: 1.0
-X-OriginatorOrg: solid-run.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4723.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e095f86-e0fd-4a59-0745-08db43d0f587
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2023 08:01:35.4227
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eBTGo7dsKI8OnvGyx3cyzTOXjscoTmj902pILYpqJrTSv1DkSI72R1vtVEfvq60UTTVINPzH8inQmGu3HAqgdYHZFmqp9KJh04LF5OuwbRQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB9782
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: divide error in ubi_attach_mtd_dev
+Thread-Index: P5jqm95hRKoxVO9TZkSQrtm6hLkHZQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We could add a new virtio_config_ops: peek_vqs.=0A=
-We can call it during virtnet_validate, and then fixup the features in case=
- of small vrings.=0A=
-=0A=
-If peek_vqs is not implemented by the transport, we can just fail probe lat=
-er in case of small vrings.=0A=
-=0A=
+----- Ursprüngliche Mail -----
+> Von: "chengzhihao1" <chengzhihao1@huawei.com>
+>>> root@syzkaller:~# cat /proc/mtd
+>>> dev:    size   erasesize  name
+>>> mtd0: 00020000 00001000 “mtdram test device”
+>> 
+>> Hmm, mtdram should be fine, erasesize is not zero.
+>> 
+> 
+> I guess the zero-erasesize mtd device is dynamically generated in
+> runtime, after looking through the code, I find erasesize is
+> initiallized in specific flash driver and it won't be updated later(eg.
+> ioctl\sysctl). And some mtd devices may have zero erasesize, eg.
+> drivers/mtd/devices/mchp23k256.c[1]. Unfortunately, I don't know how to
+> load/simulate this mtd, maybe it requires a real device? If we load this
+> mtd device as ubi, it will trigger the problem?
+
+Indeed. I guess qemu can emulate such chips.
+So better fix UBI to reject attaching of mtd's with erasesize being 0.
+(Please note, we cannot test for MTD_NO_ERASE, this one means there is no
+erase method).
+
+Thanks,
+//richard
