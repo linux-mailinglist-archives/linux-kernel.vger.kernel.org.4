@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA916EBF0D
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 13:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B8F6EBF11
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 13:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjDWLGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 07:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S229606AbjDWLHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 07:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjDWLFy (ORCPT
+        with ESMTP id S229477AbjDWLHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 07:05:54 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8730F6
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 04:05:39 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-504e232fe47so5980692a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 04:05:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682247937; x=1684839937;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4oBnCQEBGXtSAEIanLhSekClnyHSr24Ok+VnVMLZrEI=;
-        b=hv77IVehUa9xkU3c4CDNCnhlAG5dlsNmPUNm6jZ3PWzcrnMy5fI+z0sIajzCfXGJy7
-         Ycxfr9xH+wFiFAM/gYRit8kTE+aej+eqdoAVOMta58gih1+KUjG/FPFpJsJhbmp6e9FE
-         kg6b2q11cN9HORCLf6H84PgsgHftBzT1fWdDICqGh9M+kxYaR60O9UqL6rLJFdeJlT8v
-         8IbeMnq/aQ/B5+LPSVj7Ir3JRDEmJL2P8bZmAZMqRlcr0st7TKc77hrDkWdHrCibhVP+
-         k+qOhdY6+wSV/SWIMGJ8WoKe0i/Nw3ugTRsE+q3M6Q9hlAk/9p29WaimxTKk56SeG7rb
-         q+pQ==
+        Sun, 23 Apr 2023 07:07:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B7910E2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 04:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682248018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g1lbsLzGIKBrnxXJSYGJKVy6ieEQPX6tVrFGk22ivD8=;
+        b=KBvT5WuTymayJdKYiah2r7hTcaj0qqu4I1nbZJgA90MR70nN7D/MLUAgYHsA8kpPKDubTA
+        xLS8ERtqYojImic7RSf/6ECb1Vd9lkP+4Gvm2LR2j2Y3FQjc7JQ1X0oJAcTa0UF8Wvt2i+
+        SuBV30Lg/sLQt17hguJZS8ZeyI/FWAY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-248-LjDxl5AKMuyDztZ748rxgA-1; Sun, 23 Apr 2023 07:06:57 -0400
+X-MC-Unique: LjDxl5AKMuyDztZ748rxgA-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f21e35dc08so1006535e9.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 04:06:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682247937; x=1684839937;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682248016; x=1684840016;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oBnCQEBGXtSAEIanLhSekClnyHSr24Ok+VnVMLZrEI=;
-        b=QqPukNeg7tK+z29eJpee9pERaJmPe97lw4kFVdv1bRtf9dj78QzO9EOX6AqTZvsuH5
-         tH2Bp2+SRZEuWK0dle6igZ2tzK+6stDTCihmqP800ZKjMK/y1ub1igdSmrZbuvu6wTyc
-         6bDExhNT0yytN3oXt14AfnBp8nk5j/Uhip7MsGfwqDwnnQbnc350wzdQn8SLAqqH4xyy
-         +huvkoZlGmT70Nh4tY2TxOaCoyUqBJI3lrG9FQWy2cr8wlRVXmdi34a4AhOzZ15gNI8M
-         5HOl3frR5o80WosEoWQi8kXlQoyvn4H7Zjg+tkKBO1+BmaIRyGlZDYLAloqesdbqFz+d
-         Tlqw==
-X-Gm-Message-State: AAQBX9eUDzI3BjjTdyQKilGfI08FcsSW/pbJJFnVfbUBF56CZcLzlgWU
-        Dl0WjYrk7bCyJ53+70S8VC983Q==
-X-Google-Smtp-Source: AKy350b1gZdRRS99FXwzdyRQvuYGxvtRfTqL3wNCEdC9oTnowvf0c3qWXdTnD0zdTodXYGJA5CPqbA==
-X-Received: by 2002:a05:6402:14e:b0:505:7d54:db93 with SMTP id s14-20020a056402014e00b005057d54db93mr9808233edu.21.1682247937604;
-        Sun, 23 Apr 2023 04:05:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5d52:d466:d57f:118c? ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
-        by smtp.gmail.com with ESMTPSA id o10-20020aa7c50a000000b0050504648fc4sm3603764edq.80.2023.04.23.04.05.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Apr 2023 04:05:37 -0700 (PDT)
-Message-ID: <b58bdaf6-f0a4-41aa-e271-53cd223e9bb3@linaro.org>
-Date:   Sun, 23 Apr 2023 13:05:36 +0200
+        bh=g1lbsLzGIKBrnxXJSYGJKVy6ieEQPX6tVrFGk22ivD8=;
+        b=Xz6llqLFyzkFdtYfDMQNYOM0lsMYGpsly8m0NpVg4L1xYWtVCAuLPgN9rF60ZXBYu7
+         vrKL56l82CFK4ckJyFvXDB+NS6ZB+8P9xbpOk5AR0/dQC8y7OyFio8sS68yZjriFNHcf
+         Ys+OTZs0k0dsM2D979ZpeGVBivsAUcUoX2TPhCOtZA+vAbpqpM+mmeaAKTMMhl0v+P8r
+         R6MCQXFm/19vpSIU/mL6WeesB/rbhZMrzaB9dDDmPWwgNEZ6mn0mNxXjs5gUCq9LcH0A
+         1C4OP2cHv0aNs0DZIo+/yv/3V4bDxrk+mOVlHJY3Wr13Ys4zzlV2tYDVK+DgM6rdP4kE
+         Ztig==
+X-Gm-Message-State: AAQBX9e4WwsxjgDVoC/6BTPXeUwHk51vae2H43VvXpzT4nnesmv5KPQ4
+        lTfssQQ8HFEwkAB5uSooTyBQUg8L11k0fhi7VBvHSIH2CTF6oDjXLb+ie2rKpAgxITPrELWGArI
+        oYWfqo6xEXMyrQE8GeF1nplOt
+X-Received: by 2002:adf:e391:0:b0:2ff:f37:9d18 with SMTP id e17-20020adfe391000000b002ff0f379d18mr8443651wrm.58.1682248016037;
+        Sun, 23 Apr 2023 04:06:56 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YH8SS0VuiRXjohEkEQZc8MmQshWjBCHCvdHkztK8dbkfkMtdUR3z5eGaMnzjCodqZBlxcrXw==
+X-Received: by 2002:adf:e391:0:b0:2ff:f37:9d18 with SMTP id e17-20020adfe391000000b002ff0f379d18mr8443639wrm.58.1682248015697;
+        Sun, 23 Apr 2023 04:06:55 -0700 (PDT)
+Received: from redhat.com ([2.55.61.39])
+        by smtp.gmail.com with ESMTPSA id j32-20020a05600c1c2000b003f173987ec2sm12802917wms.22.2023.04.23.04.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 04:06:55 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 07:06:51 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Message-ID: <20230423065132-mutt-send-email-mst@kernel.org>
+References: <20230417030713-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723F3E6AE381AEC36D1AEFED49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417051816-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47237705695AFD873DEE4530D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417073830-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417075645-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA90465186B5A8A5C001D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230423031308-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47233B680283E892C45430BCD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] ASoC: dt-bindings: More dropping unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, patches@opensource.cirrus.com
-References: <20230421214810.1811962-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230421214810.1811962-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AM0PR04MB47233B680283E892C45430BCD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 23:48, Rob Herring wrote:
-> Another batch of dropping unneeded quotes on $id and $schema which were
-> missed in the last round. Once all these are fixed, checking for this can
-> be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Sun, Apr 23, 2023 at 07:52:10AM +0000, Alvaro Karsz wrote:
+> > Hmm. I was wrong. There is no way to disable CVQ feature bit.
+> > 
+> > 1. Reset the device.
+> > 2. Set the ACKNOWLEDGE status bit: the guest OS has notice the device.
+> > 3. Set the DRIVER status bit: the guest OS knows how to drive the device.
+> > 4. Read device feature bits, and write the subset of feature bits understood by the OS and driver to the
+> > device. During this step the driver MAY read (but MUST NOT write) the device-specific configuration
+> > fields to check that it can support the device before accepting it.
+> > 5. Set the FEATURES_OK status bit. The driver MUST NOT accept new feature bits after this step.
+> > 6. Re-read device status to ensure the FEATURES_OK bit is still set: otherwise, the device does not
+> > support our subset of features and the device is unusable.
+> > 7. Perform device-specific setup, including discovery of virtqueues for the device, optional per-> bus setup,
+> > reading and possibly writing the device’s virtio configuration space, and population of virtqueues.
+> > 8. Set the DRIVER_OK status bit. At this point the device is “live”.
+> > 
+> > 
+> > So features are confirmed before find vqs.
+> > 
+> > The rest of stuff can probably just be moved to after find_vqs without
+> > much pain.
+> > 
+> Actually, I think that with a little bit of pain :)
+> If we use small vrings and a GRO feature bit is set, Linux will need to allocate 64KB of continuous memory for every receive descriptor..
+
+Oh right. Hmm. Well this is same as big packets though, isn't it?
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Instead of failing probe if GRO/CVQ are set, can we just reset the device if we discover small vrings and start over?
+> Can we remember that this device uses small vrings, and then just avoid negotiating the features that we cannot support?
 
-Best regards,
-Krzysztof
+
+We technically can of course. I am just not sure supporting CVQ with just 1 s/g entry will
+ever be viable.
+
+-- 
+MST
 
