@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE606EC25F
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 23:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84146EC266
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 23:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjDWVCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 17:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S230157AbjDWVMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 17:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWVCE (ORCPT
+        with ESMTP id S229476AbjDWVMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 17:02:04 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D97811C;
-        Sun, 23 Apr 2023 14:02:03 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94eee951c70so549525466b.3;
-        Sun, 23 Apr 2023 14:02:03 -0700 (PDT)
+        Sun, 23 Apr 2023 17:12:42 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2791B3;
+        Sun, 23 Apr 2023 14:12:40 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f7a0818aeso522605266b.2;
+        Sun, 23 Apr 2023 14:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682283722; x=1684875722;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQGZByzNwTNHNZDulx2ynpAjg2TN652dzcztwDEhLDY=;
-        b=N6vcVe5JMgZk+mcR9rGRaoW8sBPGvj/go9Gq+j6xvO/lb8KPQQA0DOmRCBmdLtTOzM
-         cb0y4b9cnJ3p6+Sa7JgMTJpu+tUrKzIv7kbqDiE93kxi9FwGGgR/kwKKoFAfYrIHL986
-         1K4YmYJs2WWw8HEftklX8+PfCm6NqUe26NTbPZRmPiG9PWkTxN7yVWJ+TE8sDYsobOMP
-         DF4AeUKaOnNY2gkPVPTbE6lY0hDqeHuFFz6dJiPGQ9lSgeeZLyCVMu+qGAiH0WKQC5E8
-         P5rWQgJNiFAlhK0FYkLYWoElaDA2v/mslOZ+KY+zjNQMsX44PQbEttK/LjOhOFQDN0WI
-         Q3yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682283722; x=1684875722;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=googlemail.com; s=20221208; t=1682284359; x=1684876359;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eQGZByzNwTNHNZDulx2ynpAjg2TN652dzcztwDEhLDY=;
-        b=h71m+jnpvYlGvtbO4F+bYhXW1LIFAK+CuYBqX+6J8XlPsw1dNkk94nHBR6Zmy6ohDk
-         KiaU6/50QxecypW6pkUvTRUc2th5zkhwNGprMz/Hu6SUCAfRTJsRXP2pwh2yDshfBFqn
-         YDQhXSHarjCISyKOquKpGqxxy/BUCjtoZvhDaLHaeQmx8xZOm6EvqISNhzShRkxTA3CO
-         tOW4TwJFls1XG7Eg/96IP6nsoBTfUOaGdKlUV8aURixqNz4GuxYYpOH0h1CTi930llNa
-         RPa+DDONX+d3WFv4fUWSsyndsDOChnzYHoSeXUnsSNt8I4AW4dS+oyh1PxilW0cG8Q7u
-         llIA==
-X-Gm-Message-State: AAQBX9dZXhOCtOpGeD1NQmQOCqHneUSsDaddj8ixm/Fa3Ncv/lwMSueb
-        PCn4IwmR7DCXoLkRSdaiSY4=
-X-Google-Smtp-Source: AKy350ZyyvX18X7jpfRoCdltMyhN9uSRt6N8acooo90hc7tw+DE/QBtp6aBAKadmqw8MVDMdriET2A==
-X-Received: by 2002:a17:906:111:b0:947:ebd5:c798 with SMTP id 17-20020a170906011100b00947ebd5c798mr10169688eje.54.1682283721554;
-        Sun, 23 Apr 2023 14:02:01 -0700 (PDT)
-Received: from carbian ([2a02:8109:aa3f:ead8::d7e8])
-        by smtp.gmail.com with ESMTPSA id ec17-20020a170906b6d100b0094f6bf5ac9asm4754583ejb.22.2023.04.23.14.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 14:02:00 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 23:01:59 +0200
-From:   Mehdi Djait <mehdi.djait.k@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] iio: accel: kionix-kx022a: Refactor driver and
- add chip_info structure
-Message-ID: <ZEWcx9lQXFY/CkNp@carbian>
-References: <cover.1682019544.git.mehdi.djait.k@gmail.com>
- <e0b599e3f1d1fe0c68e4e0083c8d51fbf0834059.1682019544.git.mehdi.djait.k@gmail.com>
- <ffae181f-f235-2767-b8fe-e8c4f2e69ccd@gmail.com>
- <20230422183246.3b18be8f@jic23-huawei>
+        bh=rRKnMw4QG50vnSFwd6Sq3W6Jkn3ZJ2yur8UiF0FgUbM=;
+        b=bQs61RS+BXawVW4hK2pXsIzqZif6LIir0t7z6rldZ2pSXl/J7TnR5PH81Xnrjs9rbS
+         /l/LyNd7WQrQJrp0egB9ucSZ2q9xJj7TuYqO2XLs1UWnVN6Z1Pl/QRUvcYvYs6tCwKUI
+         BtUL+eizagvmjUSMhrnTQXL+mVcYJRSJXaBW5XOlmqrs5Jbsnufir/3QgA5Ym9LjQaMp
+         upZwDwTP5dXgWGq5CBi41Rit8LZx5+v1I+eanfKvTGhCdMOcmdRvmYnR4UYz0AMhD+ia
+         y43NYxdUmugr+9kM0/w0W9YcrO3IgUYc4gaOjUXbNtgaQJM/nprXEPrC6xjvdBMrmyqC
+         0GTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682284359; x=1684876359;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rRKnMw4QG50vnSFwd6Sq3W6Jkn3ZJ2yur8UiF0FgUbM=;
+        b=Ybr8NdBybXwP7FgMhRj+BR6ZMI8WBxeF/tMThoHhVQmcCE2cEb3CAS2O+TP+pdJom4
+         coYt4336Hq3vDoUbpXJyOIeB/NAc2dVYdrs22JUknCDkSPIlOQzkv3xW+TFhXIqrPNo2
+         YrVJmB90f71nz2JtEshnjFXxIxY0JVxqeJE4gmG/KhvSNuhgAQcVDuTlXI9RUV4MZrUe
+         T3Zo2Qdp3ewTs4uBcpzg+jp0+1cq83GvMjXM/rLeTzuzEc5dRW/ZGYzAyx5tDsDpI3Vw
+         YanBj+/HFeEM9PJp1vOUdMNbhIwLehqPjMzAotEBDmKa/yRBCKkbrmmOL3u003p7JEm3
+         eWHg==
+X-Gm-Message-State: AAQBX9c/jC2a/RFG6mXY9GTOIrEjlG1SIZea057nWoIPkmgP4QvM2qXd
+        VVTebCf/h9SYMCvCydknvLr9vr3l34oLk5h3yz8=
+X-Google-Smtp-Source: AKy350a5xYCoNTfH85jnfhrovh3KaFGyGvbTHqG+qrISXQKZrEMxqacX9V1s3QID4AJY4Rh6Ep1iATOzSQZQjOo9zEU=
+X-Received: by 2002:a17:906:abd9:b0:94a:5d5c:fe6f with SMTP id
+ kq25-20020a170906abd900b0094a5d5cfe6fmr8162781ejb.47.1682284358711; Sun, 23
+ Apr 2023 14:12:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230422183246.3b18be8f@jic23-huawei>
+References: <20230405195927.13487-1-ddrokosov@sberdevices.ru> <20230405195927.13487-5-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230405195927.13487-5-ddrokosov@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 23 Apr 2023 23:12:27 +0200
+Message-ID: <CAFBinCA3uZXzr3RgnWnKV5Qr-CPaZQX5joDg319i_cgzhLJy2g@mail.gmail.com>
+Subject: Re: [PATCH v13 4/6] clk: meson: a1: add Amlogic A1 PLL clock
+ controller driver
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,38 +75,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Matti and Jonathan,
+Hello Dmitry,
 
-On Sat, Apr 22, 2023 at 06:32:46PM +0100, Jonathan Cameron wrote:
-> On Fri, 21 Apr 2023 09:19:32 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
-> > Hi Mehdi,
-> > 
-> > Thanks for working on this driver :) Much appreciated!
-> > 
-> > On 4/20/23 23:22, Mehdi Djait wrote:
-> > > Refactor the kx022a driver implementation to make it more generic and
-> > > extensible.
-> > > Introduce an i2c_device_id table.
-> > > Add the chip_info structure to the driver's private data to hold all
-> > > the device specific infos.
-> > > 
-> > > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
-> > > ---
-> > > v2:
-> > > - mentioned the introduction of the i2c_device_id table in the commit  
-> > 
-> > Maybe adding the i2c_device_id table could be done in a separate patch 
-> > with a Fixes tag? That would help backporting (and I think changes like 
-> > this are worth it).
-> 
-> Is it technically a fix?  I thought it was but turned out my reasoning only
-> applied to spi.   Agreed it would be nice as a separate patch though.
-> It's not directly related to the rest of what is happening here.
+currently Jerome is busy so I am trying to continue where he left off.
+I have followed the previous iterations a bit but may have missed some
+details. So apologies if I'm repeating some questions that Jerome
+previously asked.
 
-I will make it a separate patch in the v3
+On Wed, Apr 5, 2023 at 9:59=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevice=
+s.ru> wrote:
+[...]
+> +config COMMON_CLK_A1_PLL
+> +       tristate "Meson A1 SoC PLL controller support"
+Should this be "Amlogic A1 SoC PLL controller support"?
+My understanding is that the "meson" name was dropped for this
+generation of SoCs.
 
---
-Kind Regard
-Mehdi Djait
+[...]
+> +static const struct of_device_id a1_pll_clkc_match_table[] =3D {
+> +       { .compatible =3D "amlogic,a1-pll-clkc", },
+> +       {},
+nit-pick: please drop the comma after {}
+This empty entry is a sentinel, no other entries are supposed to come
+after this - so a trailing comma is not necessary.
+
+[...]
+> +/* PLL register offset */
+> +#define ANACTRL_FIXPLL_CTRL0   0x0
+> +#define ANACTRL_FIXPLL_CTRL1   0x4
+> +#define ANACTRL_FIXPLL_STS     0x14
+> +#define ANACTRL_HIFIPLL_CTRL0  0xc0
+> +#define ANACTRL_HIFIPLL_CTRL1  0xc4
+> +#define ANACTRL_HIFIPLL_CTRL2  0xc8
+> +#define ANACTRL_HIFIPLL_CTRL3  0xcc
+> +#define ANACTRL_HIFIPLL_CTRL4  0xd0
+> +#define ANACTRL_HIFIPLL_STS    0xd4
+Here I have a question that will potentially affect patch 3/6
+("dt-bindings: clock: meson: add A1 PLL clock controller bindings").
+In the cover-letter you mentioned that quite a few clocks have been omitted=
+.
+Any dt-bindings that we create need to be stable going forward. That
+means: the dt-bindings will always need to describe what the hardware
+is capable of, not what the driver implements.
+So my question is: do we have all needed inputs described in the
+dt-bindings (even though we're omitting quite a few registers here
+that will only be added/used in the future)?
+Older SoCs require (temporarily) using the XTAL clock for CPU clock
+tree changes. To make a long story short: I'm wondering if - at least
+- the XTAL clock input is missing.
+
+PS: I don't have an A1 datasheet nor a vendor kernel source (and even
+less a board for testing). So I can't verify any of this myself and
+I'm asking questions instead.
+
+
+Best regards,
+Martin
