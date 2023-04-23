@@ -2,142 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BCB6EC250
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 22:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9F16EC257
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 22:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjDWUvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 16:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S230046AbjDWU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 16:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWUvG (ORCPT
+        with ESMTP id S229476AbjDWU5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 16:51:06 -0400
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182D010D9;
-        Sun, 23 Apr 2023 13:51:04 -0700 (PDT)
-Received: by soltyk.jannau.net (Postfix, from userid 1000)
-        id 4361826FC9D; Sun, 23 Apr 2023 22:51:02 +0200 (CEST)
-Date:   Sun, 23 Apr 2023 22:51:02 +0200
-From:   Janne Grunau <j@jannau.net>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Zongmin Zhou <zhouzongmin@kylinos.cn>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        neil.armstrong@linaro.org, tony.luck@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
- drm_kms_helper_poll_disable during suspend
-Message-ID: <20230423205102.GE3280@jannau.net>
-References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
- <20230420200148.GD3280@jannau.net>
- <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
+        Sun, 23 Apr 2023 16:57:03 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3063B1AB;
+        Sun, 23 Apr 2023 13:57:02 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9505214c47fso674038766b.1;
+        Sun, 23 Apr 2023 13:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682283420; x=1684875420;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eU1Tk/gnXrnHdm84vw9TLyvNW9CFqnp1t/CWjp9JRhA=;
+        b=S0am4xMmSjK8nfNHQPjGBaesjmnvMyXntZB/bvW3dK82NNjT9tYgsNWiDVA1sdYdzv
+         js5tmbQz3O6QZyxcgwyuDb1QzZ8fjBcFHxDMhkGtKJv0CYeMmZvqzHFfa83qWDrQmgX7
+         ZdYyoTSRk/FE04DJ3yuZzXIQYYAhwmpMpD2WAkyc2hv9/pJaxVk+Wk7FnmnImwiYTEp5
+         rllaOUCBk2nsT0lcfagBN//TxWfudqKDpOoOJCSuhxoM+xH+JQA1710fwYttY/+vwU61
+         1QVXdPkI3ofYzrJHD93JkT8V0A6GIdwghe4ghT79rtNExmo8NIbI3y6atw/WQyNnKT6S
+         iiTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682283420; x=1684875420;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eU1Tk/gnXrnHdm84vw9TLyvNW9CFqnp1t/CWjp9JRhA=;
+        b=heeZXL9KD8t5sjHUQ9wiLigN1Hz/Yi0ZeJZt5NqtHrUK24D9asnzJp56J0l8ci3RZH
+         7wPXLjT4Wrfg37L1aei1U6xn6LzxLPFzFIyXejCFqKLC12lr1OX3U0wDO/1O8eE+rWQo
+         XZfKVGYORs+Jrklrd7Q1bik8bBn9I31vFI4PT8XMWUD/bd+GiGda8TmcC+/3pIL0Uvgj
+         gCqpKLSFJY3CJS9M4eQ+sj/c0bjIk0Ai3gkAWHZSAj0G5Oic+XNN3r8lGMlw+meHnTqx
+         HHkAp4R/GFuPjkRJlB7ChApKuS7qJJBAYvZTBrGoMKxO4xVHtNMn4tUMkM0iXIBaN2ZM
+         xB0A==
+X-Gm-Message-State: AAQBX9ccIGW+/bV1T5GgaYfLhMv31+3sEfrY0ZheeTlr4fBkwIxv4zwv
+        OwV9lMd2xmsr5O0+LenVfkw=
+X-Google-Smtp-Source: AKy350bItPTLFl3p6XwDCCEpUteu9ipM6f51Y+fgIxwoiIQ4L4WHxEbZEUOd4IH/lzG7VvEgfV/5Qw==
+X-Received: by 2002:a17:906:4a8b:b0:94f:7d45:4312 with SMTP id x11-20020a1709064a8b00b0094f7d454312mr7253697eju.29.1682283420445;
+        Sun, 23 Apr 2023 13:57:00 -0700 (PDT)
+Received: from carbian ([2a02:8109:aa3f:ead8::d7e8])
+        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b009572db67bf2sm3208007ejc.89.2023.04.23.13.56.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 13:56:59 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 22:56:57 +0200
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     kernel test robot <lkp@intel.com>, jic23@kernel.org,
+        mazziesaccount@gmail.com, oe-kbuild-all@lists.linux.dev,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] iio: accel: Add support for Kionix/ROHM
+ KX132-1211 accelerometer
+Message-ID: <ZEWbmSuJqWJWf0aD@carbian>
+References: <cef09595632a40eff8a0864fea2e0eb6653930a5.1682019544.git.mehdi.djait.k@gmail.com>
+ <202304220729.FCofPRvH-lkp@intel.com>
+ <ZEQGqFLIyxm5XENQ@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZEQGqFLIyxm5XENQ@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 23:07:01 +0300, Dmitry Baryshkov wrote:
-> On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net> wrote:
-> >
-> > On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
-> > > When drivers call drm_kms_helper_poll_disable from
-> > > their device suspend implementation without enabled output polling before,
-> > > following warning will be reported,due to work->func not be initialized:
-> >
-> > we see the same warning with the wpork in progress kms driver for apple
-> > silicon SoCs. The connectors do not need to polled so the driver never
-> > calls drm_kms_helper_poll_init().
-> >
-> > > [   55.141361] WARNING: CPU: 3 PID: 372 at kernel/workqueue.c:3066 __flush_work+0x22f/0x240
-> > > [   55.141382] Modules linked in: nls_iso8859_1 snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3 aesni_intel drm_kms_helper joydev input_leds syscopyarea crypto_simd snd cryptd sysfillrect sysimgblt mac_hid serio_raw soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp parport drm ramoops reed_solomon pstore_blk pstore_zone efi_pstore virtio_rng ip_tables x_tables autofs4 hid_generic usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover virtio_blk xhci_pci_renesas failover
-> > > [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted 6.2.0-rc6+ #16
-> > > [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-> > > [   55.141435] Workqueue: events_unbound async_run_entry_fn
-> > > [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
-> > > [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54 d8 00 66 90 90 90 90 90 90
-> > > [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
-> > > [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff9b72bcbe
-> > > [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI: ff3ea01e4265e330
-> > > [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09: 8080808080808080
-> > > [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12: ff3ea01e4265e330
-> > > [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15: 0000000000000001
-> > > [   55.141455] FS:  0000000000000000(0000) GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
-> > > [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4: 0000000000771ee0
-> > > [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > [   55.141466] PKRU: 55555554
-> > > [   55.141467] Call Trace:
-> > > [   55.141469]  <TASK>
-> > > [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
-> > > [   55.141478]  ? mptcp_seq_show+0xe0/0x180
-> > > [   55.141484]  __cancel_work_timer+0x124/0x1b0
-> > > [   55.141487]  cancel_delayed_work_sync+0x17/0x20
-> > > [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40 [drm_kms_helper]
-> > > [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90 [drm_kms_helper]
-> > > [   55.141531]  ? __pm_runtime_resume+0x64/0x90
-> > > [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
-> > > [   55.141540]  pci_pm_suspend+0x8b/0x1b0
-> > > [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
-> > > [   55.141547]  dpm_run_callback+0x4c/0x160
-> > > [   55.141550]  __device_suspend+0x14c/0x4c0
-> > > [   55.141553]  async_suspend+0x24/0xa0
-> > > [   55.141555]  async_run_entry_fn+0x34/0x120
-> > > [   55.141557]  process_one_work+0x21a/0x3f0
-> > > [   55.141560]  worker_thread+0x4e/0x3c0
-> > > [   55.141563]  ? __pfx_worker_thread+0x10/0x10
-> > > [   55.141565]  kthread+0xf2/0x120
-> > > [   55.141568]  ? __pfx_kthread+0x10/0x10
-> > > [   55.141570]  ret_from_fork+0x29/0x50
-> > > [   55.141575]  </TASK>
-> > > [   55.141575] ---[ end trace 0000000000000000 ]---
-> > >
-> > > Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running vs poll_enabled")
-> > > Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
-> > > ---
-> > >  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-> > > index 8127be134c39..ac72b18e2257 100644
-> > > --- a/drivers/gpu/drm/drm_probe_helper.c
-> > > +++ b/drivers/gpu/drm/drm_probe_helper.c
-> > > @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct drm_device *dev)
-> > >       if (dev->mode_config.poll_running)
-> > >               drm_kms_helper_disable_hpd(dev);
-> > >
-> > > -     cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
-> > > +     if (dev->mode_config.poll_enabled)
-> > > +             cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
-> >
-> > Checking for dev->mode_config.poll_enabled at the start of the function
-> > and return early if it is not true looks more in style with the rest of
-> > drm_probe_helper.c.
+Hello Andy,
+
+thank you for the review.
+
+On Sat, Apr 22, 2023 at 07:09:12PM +0300, Andy Shevchenko wrote:
+> On Sat, Apr 22, 2023 at 07:19:44AM +0800, kernel test robot wrote:
+> > Hi Mehdi,
+> > 
+> > kernel test robot noticed the following build warnings:
 > 
-> I think it is an error to call drm_kms_helper_poll_disable() if
-> polling was not initialized. So, in my opinion the fix should go to
-> the drm_mode_config_helper_suspend() / _resume() instead. Please add a
-> guard there using dev->mode_config.poll_enabled.
+> I believe it's not just a warning, it's a full functional error in the code.
+> 
+> >    686	{
+> >    687		struct device *dev = regmap_get_device(data->regmap);
+> >    688		__le16 buf_status;
+> >    689		int ret, fifo_bytes;
+> >    690	
+> >    691		ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
+> >    692				       &buf_status, sizeof(buf_status));
+> >    693		if (ret) {
+> >    694			dev_err(dev, "Error reading buffer status\n");
+> >    695			return ret;
+> >    696		}
+> >    697	
+> >  > 698		buf_status &= data->chip_info->buf_smp_lvl_mask;
+> >    699		fifo_bytes = le16_to_cpu(buf_status);
+> 
+> You need to mask in the same endianess space, i.o.w. either on CPU or device side.
+> 
+> I believe you wanted to have fifo_bytes to be masked, but I'm not sure.
 
-While I tend to agree to the sentiment I do not think this is the 
-correct fix in this situation. drm_kms_helper_poll_disable had the
-check since at least 2014. a4e771729a51 is a regression. If we want to  
-change the behavior it should be done explicitly and after verifying all 
-drm_kms_helper_poll_disable() calls.
+I wanted to read the registers buf_status_1 and buf_status_2 --> 16 bits
+and mask the result of the read to get the bits 0..9 which is the
+buf_status: the number of bytes in the buffer
 
-#regzbot ^introduced a4e771729a51
+This is due to my lack of experience, but I have a question:
+If I don't get any warnings when testing, how should I go about this ? I
+will obviously fix this, but this is for the future.
 
-ciao
-Janne
+--
+Kind Regards
+Mehdi Djait
