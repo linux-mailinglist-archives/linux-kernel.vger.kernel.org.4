@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6E96EC0EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4E56EC0F3
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 18:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjDWPzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 11:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S229509AbjDWQDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 12:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDWPzX (ORCPT
+        with ESMTP id S229453AbjDWQD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 11:55:23 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01952E70;
-        Sun, 23 Apr 2023 08:55:21 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Sun, 23 Apr 2023 12:03:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927B110EC
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 09:03:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 7D6AD35E;
-        Sun, 23 Apr 2023 15:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7D6AD35E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1682265321; bh=Eq7I91rvkJgR1lXQO6Y7qo5YQsJ2G/Qu3dWfTJsNRl8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=H0hjvH0nrBX2pTgA8en1Cputc4qzLmxHL1pGrPTRcwR+k9ZyNRXJSNzvONjOImAgm
-         UvR5yzXUf5xqd0z0Fkks7EYFs9uowQ/2CIQFZbokmc6pjxetnwedSv6+onxvTl96ki
-         SET+R1cMjgrAa3mmoAPbW/QSVkgGkXLLDMLd+vBHqex4bhNaiicF1QCjS4Qzu0FUoh
-         4NuzYZjJgPKNgMTOCIK5f7eSlipqqHHTYigA955hriHFhNbmlu96G2Ze2uzwgtIXgX
-         f5soMGecqgLIGZ+ByycmFc86in7oH6QO6QPgHDDGsFb0ZPLkluMPZiH6W0v7JmC+qM
-         SdsDM49oaDUAw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
- Sphinx output
-In-Reply-To: <7e3b424d-2aba-3326-29c8-2ccdbfb12f70@gmail.com>
-References: <87o7nitvd4.fsf@meer.lwn.net>
- <7e3b424d-2aba-3326-29c8-2ccdbfb12f70@gmail.com>
-Date:   Sun, 23 Apr 2023 09:55:20 -0600
-Message-ID: <87leiioaon.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D65860F5D
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 16:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E3FC433EF;
+        Sun, 23 Apr 2023 16:03:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682265806;
+        bh=/hdz+i+nYRUKEXgv7GQajTKcP8oCUU7AN+8fnhfL/Lw=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=SdFpj43ZoMG9P2j5lQj3TR7F78PzqFBIA1ayhOux4OkMZ032BpxQpbvZaOwsVBuZW
+         J38BShYDkcZiIOXN1+BvNXvXVtFlNgZu/aovvoSnvfP+Ay3Jg4Ifs0Y8xF3tnEnhwI
+         KShPRLY+CAAmshhFeFRWBrI6XEzcSJoQoy8iaQyUVGmV4s+pilbdmJMwmA0UU18GQf
+         hjVuq8kH7sOMZwa5knJINvFuwCoRQnpKCCteKCAn+QfhuQ9VIjECwUIfQZZHN4FhDQ
+         8c9fdIF8e47SSzCURY5HnJ3zh9JxGK6SPsWQe7bBXpmC4AFn24+WXxXIT8pDvVqd2/
+         GsEmfCZbyV+Fw==
+Message-ID: <99c955da-6551-dd63-6587-7f515dd5be32@kernel.org>
+Date:   Mon, 24 Apr 2023 00:03:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230406193716.70796-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH] f2fs: add sanity check for proc_mkdir
+In-Reply-To: <20230406193716.70796-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
+On 2023/4/7 3:37, Yangtao Li wrote:
+> Return -ENOMEM when proc_mkdir failed.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   fs/f2fs/sysfs.c | 17 ++++++++++++-----
+>   1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> index 3aad3500a701..dcd497e0920a 100644
+> --- a/fs/f2fs/sysfs.c
+> +++ b/fs/f2fs/sysfs.c
+> @@ -1385,12 +1385,19 @@ int __init f2fs_init_sysfs(void)
+>   
+>   	ret = kobject_init_and_add(&f2fs_feat, &f2fs_feat_ktype,
+>   				   NULL, "features");
+> -	if (ret) {
+> -		kobject_put(&f2fs_feat);
+> -		kset_unregister(&f2fs_kset);
+> -	} else {
+> -		f2fs_proc_root = proc_mkdir("fs/f2fs", NULL);
+> +	if (ret)
+> +		goto put_kobject;
+> +
+> +	f2fs_proc_root = proc_mkdir("fs/f2fs", NULL);
+> +	if (!f2fs_proc_root) {
 
-> Whereas the summary reads "docs: turn off "smart quotes" in the HTML build",
-> the change is also effective in the LaTeX/PDF build.
+How about removing below check for f2fs_proc_root in f2fs_register_sysfs()?
 
-True...so the title is a bit off, but it is a fix for that build too,
-right? 
-
-> BTW, Jon, don't you test build pdfdocs these days?
-
-I will confess that I don't do it as often as I should.  As you may have
-noticed, it takes a little while to run, and the interest in PDF output
-is pretty low these days.
-
-> The fix to the pdfdocs build error from Tomi [1] is not yet picked up
-> either by Mauro or you ... :-/
->
-> [1] https://lore.kernel.org/linux-doc/29380b3e-1daa-3aef-1749-dbd9960ba620@gmail.com/
-
-Media docs patches normally go through the media tree, just like the
-original bug did; I had assumed that would happen here as well.
-Seemingly not, so I've just picked those patches up into docs-next.
-
-> I waited to see if there is anybody else who hits this build error.
-> It looks like I am alone!
->
-> If there is so few interest in pdfdocs, it might not be worth keeping
-> kernel documentation compatible with PDF build. 
-
-Interest is low, but not zero, and I'd prefer to keep it working.  It
-really helps when somebody tells me that it breaks (it is rather
-fragile, alas)!
-
-One of these days I would really like to make a serious attempt to see
-if rst2pdf has any hope of ever working for us.  Taking latex out of the
-picture would simplify so many things.
+	if (f2fs_proc_root)
+		sbi->s_proc = proc_mkdir(sb->s_id, f2fs_proc_root);
 
 Thanks,
 
-jon
+> +		ret = -ENOMEM;
+> +		goto put_kobject;
+>   	}
+> +
+> +	return 0;
+> +put_kobject:
+> +	kobject_put(&f2fs_feat);
+> +	kset_unregister(&f2fs_kset);
+>   	return ret;
+>   }
+>   
