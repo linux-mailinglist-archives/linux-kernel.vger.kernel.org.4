@@ -2,78 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12436EBEAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 12:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179246EBEB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 12:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjDWKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 06:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S229690AbjDWKuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 06:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWKrV (ORCPT
+        with ESMTP id S229549AbjDWKuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 06:47:21 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94C51A4
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:47:19 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-508418b6d59so5962144a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:47:19 -0700 (PDT)
+        Sun, 23 Apr 2023 06:50:06 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7BA1A5
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:50:04 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94f4b911570so472748466b.0
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682246838; x=1684838838;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1682247003; x=1684839003;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+XRTRCwuJXviemws1Zz/yvRVYmSzKUNLKSeSX1GMTyI=;
-        b=qmelLx0P4oQVBJ5d4axAcmfpgIV1DqogwtUO6C4a0NovNa+b6qlx/wEyx5yCG3VB0h
-         HOeWFwJK1un1bcNzP8GWTTvMhl6Sy9SOw3PKLwtEKA+QYe8pzRr1cxEcphxx4YotDj5c
-         s1cf3Lojm0KRLgVmECxzJXstybEf9Gtp4XFu9mf7G/GzC4pSbdNLhVCc5QL3u6y9HSN2
-         78+wM4zB/a8NKpBOLWgfNC6fEhCFkVjTuFlNBdLInrN0odM4LGVqjp/TbtCP/OuQOU+a
-         WosRgXeRLIJwzRLYmTnp7A9xzOtHKJuQkk6B3+sVLV+L4/UYLIwP5lTIU/WF8EB90Z8L
-         Swvg==
+        bh=2fzBmJ5IaxGOE/MKESUjcu15ne21K7ZWZXs93DssTIU=;
+        b=DVW+gq1t/Ga8g/padr1BQXIy9LolE6eOkEEqaXjDBMGvX6qCh08vb2eG4hWXN2TPQZ
+         sq0ECt7m9ObNHuM9X7OTK8FFlXVE2shzNZixNcHBIPWELAYCrL38QiF6zjQ7w+Tc9C8X
+         kWG6iMKlRRKNhu4j/AAcb27miqHERQWPzRiQUcSnSTNkoCYcn6N7O40EeDmwxY9MnF1V
+         NvtFn38PDRZ9frpXRHospVkRm+g8uwS7qZ8/zSZpNg7UbyE5MdbtN+LW5Pw/MAR1iWVQ
+         bsNN3bSrSuYTg2QB1+VDrKYo1qZ7N6GnlWnR7DmzLNVy/S6pzm1GHFUaY/BkYJiy4n0t
+         metA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682246838; x=1684838838;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682247003; x=1684839003;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XRTRCwuJXviemws1Zz/yvRVYmSzKUNLKSeSX1GMTyI=;
-        b=hy+DgLKtH1coysLbA5/sEV2Ko75+4PUhDjsUsN2DfyD75c17d+7W4BbfZZfLaN4oUg
-         Qm4b3Tx2x/Xqw/5t6AzP2wXJtxa66S+Npx7Ck43mVR9ao7BOwGF8HyGPdepK48cG+Qtb
-         9v4cdnpkeZPJsTgVstCnzjcMt6QsnjWAUE0Vq0xROcpfCpYnNRx8r0sFA5lWTttM8+g1
-         1K/u2v/truGNc0+QRsPhxsjgN/naNi/TP++W0gEeb57uyNEy5mIhsYmOpxaSFUysHybH
-         mn1c9ytEROoiKtOHOHFEMrpv/CA+QcBIg5rmVj0R389wYzwZB5paKCsYx7X7G4xdwl4J
-         Y0KA==
-X-Gm-Message-State: AAQBX9frN4NhODP0isUPpTcysARlxcMZfKppd6SmTToam7N1poF8hx4f
-        h/XiFS8DpyTjBNwKaCNJwFJcnuWv/F0gQUGz5bUYdpAw
-X-Google-Smtp-Source: AKy350acdjCks+1nK3zvE1zXtdwdVaobEzN4nlhn5hPLCUH3KRn7tQpsRhdWHELK4JOi3iWRUAUALA==
-X-Received: by 2002:aa7:da93:0:b0:508:3ff5:a306 with SMTP id q19-20020aa7da93000000b005083ff5a306mr7882917eds.37.1682246838232;
-        Sun, 23 Apr 2023 03:47:18 -0700 (PDT)
+        bh=2fzBmJ5IaxGOE/MKESUjcu15ne21K7ZWZXs93DssTIU=;
+        b=fzYVuiDd4ie/PRSzLH/f4hW7yNESEWypXloRTRbMOpeyzfHKRJhSz2NcnQkUc1a32m
+         e/htTzfuPIvlz1Eys96orXtGxjeUQFdGPMnhHqVo6ENcnCoZOZdW3qsCrg+xm65FWa0d
+         AClSUQZZTZ6xQZNCbIdAUv0VgC5ZkYzPvkW+lfrhO1Mhv+AEn+6zgsIvEg4oAxYcdV8q
+         qWgBcBDipGTdEUpuhoFlSs5hjl0vPI8xLw+yveM+7DZ8SEupyZGZkgk6na173NxTih4K
+         gLrrg0QsWliesC1nAXg+U1Zm1fEmUeGsKZJDoHpqkDT9/bCRnmOr6AHt/Y4VBlDOJ7w6
+         wGfA==
+X-Gm-Message-State: AAQBX9csQNbV7KaOiD7/QiHFLCb/i6PJVk/ICrrNH8K3FKiWK2pj6sc3
+        kjA+Fir+XYeyM84Ef0Nk84MzlA==
+X-Google-Smtp-Source: AKy350b60kIZRrMx1GXtSvsinNr30+8WRngC0UTGZPlTUxTXeSBxDO9eTw6EyUvjVqflIa4JLohPqw==
+X-Received: by 2002:a17:907:9285:b0:959:8cbe:63a5 with SMTP id bw5-20020a170907928500b009598cbe63a5mr970045ejc.44.1682247002788;
+        Sun, 23 Apr 2023 03:50:02 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:5d52:d466:d57f:118c? ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
-        by smtp.gmail.com with ESMTPSA id k26-20020aa7c39a000000b005068053b53dsm3632568edq.73.2023.04.23.03.47.16
+        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b009572db67bf2sm2703485ejc.89.2023.04.23.03.50.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Apr 2023 03:47:17 -0700 (PDT)
-Message-ID: <47c3f816-413a-02c9-7e2a-d0b61873fc5c@linaro.org>
-Date:   Sun, 23 Apr 2023 12:47:16 +0200
+        Sun, 23 Apr 2023 03:50:02 -0700 (PDT)
+Message-ID: <47f4cf35-50a7-51a0-5df6-3fadc5fee4cb@linaro.org>
+Date:   Sun, 23 Apr 2023 12:49:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
+Subject: Re: [PATCH RFC 1/4] dt-bindings: net: qualcomm: Add WCN3988
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682185969.git.stano.jakubek@gmail.com>
- <9f4a9a8e20084ba895a309e7d2b78d2047a84ac6.1682185969.git.stano.jakubek@gmail.com>
-Content-Language: en-US
+        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
+        Rocky Liao <rjliao@codeaurora.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
+ <20230421-fp4-bluetooth-v1-1-0430e3a7e0a2@fairphone.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9f4a9a8e20084ba895a309e7d2b78d2047a84ac6.1682185969.git.stano.jakubek@gmail.com>
+In-Reply-To: <20230421-fp4-bluetooth-v1-1-0430e3a7e0a2@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,97 +92,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2023 20:07, Stanislav Jakubek wrote:
-> Convert Broadcom Kona family I2C bindings to DT schema.
+On 21/04/2023 16:11, Luca Weiss wrote:
+> Add the compatible for the Bluetooth part of the Qualcomm WCN3988
+> chipset.
 > 
-> Changes during conversion:
->   - add used, but previously undocumented SoC-specific compatibles
->   - drop references to SoCs that are not upstream
->   - add supported clock frequencies according to the Linux driver [1]
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/i2c/busses/i2c-bcm-kona.c#n731
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
->  .../devicetree/bindings/i2c/brcm,kona-i2c.txt | 35 -----------
->  .../bindings/i2c/brcm,kona-i2c.yaml           | 58 +++++++++++++++++++
->  2 files changed, 58 insertions(+), 35 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt
->  create mode 100644 Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt b/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt
-> deleted file mode 100644
-> index 1b87b741fa8e..000000000000
-> --- a/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -Broadcom Kona Family I2C
-> -=========================
-> -
-> -This I2C controller is used in the following Broadcom SoCs:
-> -
-> -  BCM11130
-> -  BCM11140
-> -  BCM11351
-> -  BCM28145
-> -  BCM28155
-> -
-> -Required Properties
-> --------------------
-> -- compatible: "brcm,bcm11351-i2c", "brcm,kona-i2c"
-> -- reg: Physical base address and length of controller registers
-> -- interrupts: The interrupt number used by the controller
-> -- clocks: clock specifier for the kona i2c external clock
-> -- clock-frequency: The I2C bus frequency in Hz
-> -- #address-cells: Should be <1>
-> -- #size-cells: Should be <0>
-> -
-> -Refer to clocks/clock-bindings.txt for generic clock consumer
-> -properties.
-> -
-> -Example:
-> -
-> -i2c@3e016000 {
-> -	compatible = "brcm,bcm11351-i2c","brcm,kona-i2c";
-> -	reg = <0x3e016000 0x80>;
-> -	interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-> -	clocks = <&bsc1_clk>;
-> -	clock-frequency = <400000>;
-> -	#address-cells = <1>;
-> -	#size-cells = <0>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml b/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml
-> new file mode 100644
-> index 000000000000..636912d8518d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/brcm,kona-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom Kona family I2C controller
-> +
-> +maintainers:
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - brcm,bcm11351-i2c
-> +        - brcm,bcm21664-i2c
-> +        - brcm,bcm23550-i2c
-> +      - const: brcm,kona-i2c
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
