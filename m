@@ -2,135 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF3F6EBE11
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8909A6EBDFB
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjDWIkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 04:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S229659AbjDWIZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 04:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDWIka (ORCPT
+        with ESMTP id S229693AbjDWIZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:40:30 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A6D1BC2;
-        Sun, 23 Apr 2023 01:40:28 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id CD7696015E;
-        Sun, 23 Apr 2023 10:40:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682239225; bh=NrrlTJuO2WOxeh84ut/e47TmcJC+8c5WzWqQwG1PyZM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=wGp+Td+o+UT/S6x13KMiwr0evq+FpgQ35SnO8axIUu1KndCG36ab4g5H1X4Epe3X5
-         6iOrEGvFXGj9f7rf24cu1DQAZILmvknxsGVUI0Zxlc14EjNvaGVEWorFC9toty2Ptq
-         EwE8KW2hnmkpIYqu1n+HTfz5YeyvhvOCE1UCzuPxH3/SvbKzCao5yTWqJbJ3OqoVOE
-         ta1429MrqTlEilYvh5OCUJWYispnfe8OKkB/ZALFSRhdXiPWTBGzma4uoS+VheP5/j
-         pu0wqE0xul5MA3/5vJ14wr3Hc//4rURDTsgGsiwM6bl24cooj3dRi/yQ1ZhflHlH2v
-         DMUTbw9U2/6cA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2RCTnkPxMSfa; Sun, 23 Apr 2023 10:40:22 +0200 (CEST)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id 3B93C6015F; Sun, 23 Apr 2023 10:40:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682239222; bh=NrrlTJuO2WOxeh84ut/e47TmcJC+8c5WzWqQwG1PyZM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h6uu9H21cv/CQb7i/w6iaZiCtnHDd6k/JZ+kg3zkyo1LktTCzrRay48eAqqhjYPQ6
-         RAQf+ap1wI8HeWv8va3hg/gja8U0bd+SpzUc1mwbr36D1q4DO51T7VG9qNA74jzASw
-         k7FpCRsZYQEMzpAwLz8Asf/vIGPtUvKOxOUPLZJUtqdxQ7KjzNbOlgf7eREPpR6ntb
-         Flg8d1UDCPNnoh2bVgZzp4cwO0KLOUaNFb30Cp6iwKZffA0XPcvYAsOvBkDlNUDgCR
-         DgEGflKgN0lXN0aY4Mt5Koh/SIFr6/FMc1SzHnfwBS/fJLDaW6X5PvgsITHiV7zJRB
-         vvby6RT8r9xkQ==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Alexander Wetzel <alexander@wetzel-home.de>
-Subject: [PATCH RFC v1 1/1] net: mac80211: fortify the spinlock against deadlock in interrupt
-Date:   Sun, 23 Apr 2023 10:24:05 +0200
-Message-Id: <20230423082403.49143-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.30.2
+        Sun, 23 Apr 2023 04:25:49 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6539C1BD5
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 01:25:46 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-506b20efd4cso5541792a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 01:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682238345; x=1684830345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qETio9rQ+I+ApbmjseQZz+b4a2GrMopfzyspvxvfmDI=;
+        b=CNlnud9ixhpA7rN5EkdFypqZA/9EHtbHo0dnoloz/zm9AmQu9Q7dFAPSj4qpSWmA20
+         LojHlppqQf6E2hQUooLbrCEqRzfDtZLvo/byw7QN4ujUSkjLnpmj3Ejl9UP4EoVVkVJJ
+         5js84TxfRY5fzJBR9v7M6CZkkJz11L7tpmtrEsbML+0/W5NrrY2NHnQV0Y86EoVyi4tG
+         dFteiFaIqHvaV4yAmni+nFeReHPTtKmlzPNBhQyj4eEC6dYOPxKpOgh7Fesd9EpWlnIp
+         bB7P6hgsKucCZU2KN3vOd2+7LnBC+WlY/jANPYX1BQ0wf8f8O0Bm1xBwgY0eYj70aW5E
+         hD9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682238345; x=1684830345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qETio9rQ+I+ApbmjseQZz+b4a2GrMopfzyspvxvfmDI=;
+        b=Id5mkFsTRh1XEAJOO+BamnrSg0f149/vOXIuRhI6HqYCfJaDVf/kTuLYhBJgi//QQi
+         UZTUciNtwILiWoFfJsHgprF6dCbO5iaZkbdwCiFKmb7LUC9gHaY65qmWJzo5VI479iBX
+         9jrBBytWPhrP6azesLkcEJTOdR/OubuAYjus8GAjMverNQy/r6QkC8knaLxN1crwt2eC
+         Tr6QUywKK5rXcSJy6MVRLK/LXSZ/pLUyg+PYtU18xd1g4hcwYLKOe2T8h6b8VveyQQBn
+         Pr4gwQyZWBtzMeSh87Cw09DUH7K/8QrTcUaXMl9kcQQApI1mhb3FXvXA1XID1QNH18/Q
+         o6WQ==
+X-Gm-Message-State: AAQBX9fM0nCME0Ryr3ZCSBW3s5m+KQv3UM2qZk8kCcseIGwsq6kPjVzQ
+        Dgi/Ot6H1flQbSwt2tshGGqZ0w==
+X-Google-Smtp-Source: AKy350a52plHENuAAwWUdq2bp/DaP8sNnY6cqie/09b6KCgt6I5FlFz697CL/6UK2AIp1gEeHdBZUg==
+X-Received: by 2002:a05:6402:74c:b0:506:976e:5242 with SMTP id p12-20020a056402074c00b00506976e5242mr8618775edy.25.1682238344819;
+        Sun, 23 Apr 2023 01:25:44 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5d52:d466:d57f:118c? ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
+        by smtp.gmail.com with ESMTPSA id p21-20020a056402075500b0050684020babsm3464665edy.27.2023.04.23.01.25.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Apr 2023 01:25:44 -0700 (PDT)
+Message-ID: <80c6cfbd-5661-ba39-2193-c6ae8eba3648@linaro.org>
+Date:   Sun, 23 Apr 2023 10:25:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 12/12] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0
+ boards
+Content-Language: en-US
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230416133422.1949-1-aweber.kernel@gmail.com>
+ <20230416133422.1949-13-aweber.kernel@gmail.com>
+ <9aba4c1d-93f3-7613-6fb5-0591a281ec0a@linaro.org>
+ <5818b5be-f9cc-8009-e2a4-1049d84a944d@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5818b5be-f9cc-8009-e2a4-1049d84a944d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the function ieee80211_tx_dequeue() there is a locking sequence:
+On 22/04/2023 15:50, Artur Weber wrote:
+> Hi,
+> 
+> thank you for the review.
+> 
+> On 16/04/2023 20:26, Krzysztof Kozlowski wrote:
+>> On 16/04/2023 15:34, Artur Weber wrote:
+>> [...]
+>>> +
+>>> +		backlight: backlight@2c {
+>>> +			compatible = "ti,lp8556";
+>>
+>> You need to convert bindings to DT schema first. I don't accept any new
+>> usages of TXT bindings anymore, sorry.
+>>
+> 
+> I'll be taking a look at the conversion (will likely submit it as a
+> separate patchset, since I've been looking into some minor driver-side
+> changes there as well...), although I have one question - who should I
+> list as the bindings maintainer ("maintainers" field in YAML format)? Is
 
-begin:
-	spin_lock(&local->queue_stop_reason_lock);
-	q_stopped = local->queue_stop_reasons[q];
-	spin_unlock(&local->queue_stop_reason_lock);
+Anyone who has interest in the device/driver, like driver maintainer,
+device developers, you erc.
 
-However small the chance (increased by ftracetest), an asynchronous
-interrupt can occur in between of spin_lock() and spin_unlock(),
-and the interrupt routine will attempt to lock the same
-&local->queue_stop_reason_lock again.
+> this someone specific for that subsystem, or the author of the driver,
+> or someone else? (It's worth noting that there isn't a maintainer listed
+> for the lp855x driver in the MAINTAINERS file.)
+> Documentation/devicetree/bindings/writing-schema.rst doesn't really
+> mention anything about this.
+> 
+>>> +&bus_acp {
+>>
+>> Order label/phandle overrides by name, so acp before dmc.
+>>
+> 
+> Out of curiosity - should I order the children of the / node 
 
-This is the only remaining spin_lock() on local->queue_stop_reason_lock
-that did not disable interrupts and could have possibly caused the deadlock
-on the same CPU (core).
+Yes.
 
-This will cause a costly reset of the CPU and wifi device or an
-altogether hang in the single CPU and single core scenario.
+> or the
+> pinctrl nodes by name as well?
 
-This is the probable reproduce of the deadlock:
+These are usually by pin name.
 
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  Possible unsafe locking scenario:
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        CPU0
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        ----
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   lock(&local->queue_stop_reason_lock);
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   <Interrupt>
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:     lock(&local->queue_stop_reason_lock);
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:
-                                                 *** DEADLOCK ***
 
-Fixes: 4444bc2116ae
-Link: https://lore.kernel.org/all/1f58a0d1-d2b9-d851-73c3-93fcc607501c@alu.unizg.hr/
-Cc: Alexander Wetzel <alexander@wetzel-home.de>
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- net/mac80211/tx.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-index 7699fb410670..45cb8e7bcc61 100644
---- a/net/mac80211/tx.c
-+++ b/net/mac80211/tx.c
-@@ -3781,6 +3781,7 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- 	ieee80211_tx_result r;
- 	struct ieee80211_vif *vif = txq->vif;
- 	int q = vif->hw_queue[txq->ac];
-+	unsigned long flags;
- 	bool q_stopped;
- 
- 	WARN_ON_ONCE(softirq_count() == 0);
-@@ -3789,9 +3790,9 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- 		return NULL;
- 
- begin:
--	spin_lock(&local->queue_stop_reason_lock);
-+	spin_lock_irqsave(&local->queue_stop_reason_lock, flags);
- 	q_stopped = local->queue_stop_reasons[q];
--	spin_unlock(&local->queue_stop_reason_lock);
-+	spin_unlock_irqrestore(&local->queue_stop_reason_lock, flags);
- 
- 	if (unlikely(q_stopped)) {
- 		/* mark for waking later */
--- 
-2.30.2
+Best regards,
+Krzysztof
 
