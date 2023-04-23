@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D476EC32E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 01:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044FF6EC32F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 01:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjDWXna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 19:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S229907AbjDWXzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 19:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDWXn1 (ORCPT
+        with ESMTP id S229476AbjDWXzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 19:43:27 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF7810DC;
-        Sun, 23 Apr 2023 16:43:24 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 686F9C01F; Mon, 24 Apr 2023 01:43:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682293402; bh=TQDHD4jI59yg5j92q8CZUXHlZNsl1jsaeFCptRogf/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nayINonr/sB4v3HW01quRhd+xr1575UgoZGlXNPxkHRu0meWc+xGEpBqEY90gPHP8
-         76XrWUKGCCJJHAc5BgkDSUrD8bJIk8M5Fql/xU50B5DBdZBo/JVG3oQFa5cy/gVoj4
-         jZkJ68P1PTuWSJnRJ5S4LszBxCoL+/UmJz+DYKjwxXMy5kpiFU6QIzcZPl+iA4MLXE
-         XHKJ5xZZtOXPWer934KcW5il7y7zMyTxO4sFPr2o9UuC8Bfy6Wk2nui3/3IDr6SsvY
-         olITCQkJ2zg12b4dQTSIcgxH3PfFzgeucr7OWzxMscw9F7hhmn6Heo+kPBnrLjQxMS
-         4yyfyFIdMnf+g==
+        Sun, 23 Apr 2023 19:55:44 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE32710E7;
+        Sun, 23 Apr 2023 16:55:42 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a814fe0ddeso43789715ad.2;
+        Sun, 23 Apr 2023 16:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682294142; x=1684886142;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K4dhQ+Vl6Yr6TY/lKeJ/u29Yt2u4QfMPU7QYP0YhBF4=;
+        b=kBnTUBlb7sGxwyjR1OH8Jx27X+Q1mvH/36hGFIFPXF1hmT3KNsN+sfKZ7Ru77xZlmr
+         3jqvLqrOUNCPBW9+kjYZ7JFPmXzna4OL+UkJ2kQy+iHQhdB8fY/D3x94kTDVPVNJUgKz
+         WNXtdkISWY0QQ0/zOogHhBj8XoM6qPMEYYMi8TVk0YOWRtRYILotJY+WRpXeXICs7Alw
+         Hbft9YX5umH16E+TM5O4Dm04fjdJMBVRhtivof7Yy0Si1ID0Qz5MGRrsMUtYqRkceM+q
+         6LPl0KT6t0Jr2D11oQP2Rgy95Kw44UX8Cdp91K0YTEYHNzjrTocEqRenoDnZDwiRvz7Q
+         iSHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682294142; x=1684886142;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K4dhQ+Vl6Yr6TY/lKeJ/u29Yt2u4QfMPU7QYP0YhBF4=;
+        b=gEyUFdJ6ENg3ZNcYqDz6qw+qvOFksKRjKOz2+zAr+f+XLjQ9loNinQs4lJBwLdrQJq
+         zOgYoqr0nN4SQ7ph4fkmeFRI0iP0dJdbUMPJIXFWw3uqh8arKoUJOPi6b0sd4PsIu3VN
+         C9G2VSCVA+24gwJB1xOqNCSBnMQ15jwR+ZcU+Jg0Ppg/aVu6yKJvcHSy2vl81qObnm6c
+         Q/8YRV17/dOKvnv9f55N/Ie1n2vHr4GdiLaq7PBAzHIyTm7u+iGEy6j4SgFi2X+xfk+4
+         izjtlNJOZd6pV5PyzgSuG4VVLoZZNzECi/nNelRsBDZ6gChyVCDGwPkdV3elXewDVuah
+         IFtw==
+X-Gm-Message-State: AAQBX9eq2h6ENBGPVjK2bowoZrxZxqUeJl/5olgFgSyDDtYzbYrKZCJ5
+        iT3jWDlySwAFmDBqlQ1/QeOKx82Cv4cNpHRk
+X-Google-Smtp-Source: AKy350Zo1nTCfznS7N7Qhb8HC8hGXv/LcFgMoxOYO5hc4WT2P0Ru1biDigHBppS3dZDCNV7aHq5dgg==
+X-Received: by 2002:a17:902:b097:b0:1a6:6b30:2b3b with SMTP id p23-20020a170902b09700b001a66b302b3bmr11509075plr.64.1682294141783;
+        Sun, 23 Apr 2023 16:55:41 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.245.199])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170902bf4800b0019c13d032d8sm5458314pls.253.2023.04.23.16.55.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 16:55:41 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: engine - Fix typo in struct crypto_engine_op doc
+Date:   Mon, 24 Apr 2023 07:55:31 +0800
+Message-Id: <20230423235532.2729539-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id F0968C009;
-        Mon, 24 Apr 2023 01:43:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682293401; bh=TQDHD4jI59yg5j92q8CZUXHlZNsl1jsaeFCptRogf/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZgF5QrmaAmHNgSkif+qUnkKMyLqSqljUL0cTguaelnnOqeGcCBVylo0uZENCEK2OK
-         px1O6P0Sawbks/lLuOaBtLIguspd//gxo3jSUg9HRNbbNpSr+EIVZFg4whJ7AOb6FD
-         36ybP1jS7cloLsRTNhG1JVhJavATBrkwqQ51jJSW5yDIYbhT3ska57S68zUVlvY0JG
-         Nh2pW/BY/4LYoHscdkLgto9pdpa8gAE6xy8qHHW2aJL4yB2VF2u4okCDSEAlVYxRHk
-         05tmLz0V0PySqMuHVDY9Snl2ArWz9ofBzLBNN9StZ1r72I4lMVvT0NzfEfZFNs9oon
-         GHJwQGWA9WMxQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id a40d7486;
-        Sun, 23 Apr 2023 23:43:15 +0000 (UTC)
-Date:   Mon, 24 Apr 2023 08:43:00 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
-Message-ID: <ZEXChAJfCRPv9vbs@codewreck.org>
-References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
- <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
- <20230423224045.GS447837@dread.disaster.area>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230423224045.GS447837@dread.disaster.area>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dave Chinner wrote on Mon, Apr 24, 2023 at 08:40:45AM +1000:
-> This doesn't actually introduce non-blocking getdents operations, so
-> what's the point? If it just shuffles the getdents call off to a
-> background thread, why bother with io_uring in the first place?
+There is a redundant underscore in prepare_request. Remove it.
 
-As said in the cover letter my main motivation really is simplifying the
-userspace application:
- - style-wise, mixing in plain old getdents(2) or readdir(3) in the
-middle of an io_uring handling loop just feels wrong; but this may just
-be my OCD talking.
- - in my understanding io_uring has its own thread pool, so even if the
-actual getdents is blocking other IOs can progress (assuming there is
-less blocked getdents than threads), without having to build one's own
-extra thread pool next to the uring handling.
-Looking at io_uring/fs.c the other "metadata related" calls there also
-use the synchronous APIs (renameat, unlinkat, mkdirat, symlinkat and
-linkat all do), so I didn't think of that as a problem in itself.
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+ include/crypto/engine.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> Filesystems like XFS can easily do non-blocking getdents calls - we
-> just need the NOWAIT plumbing (like we added to the IO path with
-> IOCB_NOWAIT) to tell the filesystem not to block on locks or IO.
-> Indeed, filesystems often have async readahead built into their
-> getdents paths (XFS does), so it seems to me that we really want
-> non-blocking getdents to allow filesystems to take full advantage of
-> doing work without blocking and then shuffling the remainder off to
-> a background thread when it actually needs to wait for IO....
-
-I believe that can be done without any change of this API, so that'll be
-a very welcome addition when it is ready; I don't think the adding the
-uring op should wait on this if we can agree a simple wrapper API is
-good enough (or come up with a better one if someone has a Good Idea)
-
-(looking at io_uring/rw.c for comparison, io_getdents() will "just" need
-to be adjusted to issue an async req if IO_URING_F_NONBLOCK is set, and
-the poll/retry logic sorted out)
-
-Thanks,
+diff --git a/include/crypto/engine.h b/include/crypto/engine.h
+index ae133e98d813..b9e76ed4085b 100644
+--- a/include/crypto/engine.h
++++ b/include/crypto/engine.h
+@@ -78,7 +78,7 @@ struct crypto_engine {
+ 
+ /*
+  * struct crypto_engine_op - crypto hardware engine operations
+- * @prepare__request: do some prepare if need before handle the current request
++ * @prepare_request: do some prepare if need before handle the current request
+  * @unprepare_request: undo any work done by prepare_request()
+  * @do_one_request: do encryption for current request
+  */
 -- 
-Dominique Martinet | Asmadeus
+2.39.2
+
