@@ -2,116 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CE06EC0A8
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8AE6EC0AE
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjDWPBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 11:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S229641AbjDWPIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 11:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjDWPBQ (ORCPT
+        with ESMTP id S229464AbjDWPIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 11:01:16 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4744E5E;
-        Sun, 23 Apr 2023 08:01:15 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 3AABF32000D7;
-        Sun, 23 Apr 2023 11:01:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 23 Apr 2023 11:01:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1682262074; x=1682348474; bh=6QjtEPyQ/6/lnFAEkWOaMj0D1aHTRIisrSh
-        1HQErj8U=; b=FmmWYcIebGf7Tszh9/2kSUL7Z6AxIQQmbkO1sI80xbCViriA7HI
-        Ri7HhjkAxtvIbPCyOkh0G/nqqLxI2ZQbskMEtFXUSDhEY6XDTuEH3elvxXEcI+cY
-        lpQZHJEb68Qh8E6I6+x2Nh4iOGwLAVH0KcYDTrZdQmk9Q+ZY/+i7CBzSqqpsUX9k
-        C3IMO/Ojq6vMw1V1OwM06IUe3CU8myZvmZtTBnVpk8sQ0oloLwW7OwOApyZqzrSx
-        TAoOjkLhLbBenb50hi96tbl/qKhI/U/uAWuHUUS8ukJtZsyWuT3LFboYaZY7lBL4
-        4sDpU/4elNQ5X38aeN7XXgoRKV/je95IUVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682262074; x=1682348474; bh=6QjtEPyQ/6/lnFAEkWOaMj0D1aHTRIisrSh
-        1HQErj8U=; b=j0F0rDu+Zox67+adfUiWhAUSvwbp6RjN4Qmuw0dQfyyW1aIApx4
-        w5j06zUsBt2zvfwC/ob0J2fSgJ2dMjjpDairyBJryPZDlMh6pwc0MZUqwbsXmuhv
-        NLjQQU4dxAPErsAbierwVDjo3NIVwB8X5k+TWGtqBuJLFslz96jRtICRg4gsZ8d5
-        JK36//6oYIukYuQ84gnlVm+c55ZsIR3G1OiAT7W1n0c2hjzXQkPQcL6vtQ3n4tLY
-        85on3zIJD5IqfjlsSh0AYcvpAUwv/oWTscwfkzDqjXJuKdO9HR96+ZhzI4siH1ac
-        lQ5uDqCabvSqcGxeYEZWNtJTCAS6MhrrRyQ==
-X-ME-Sender: <xms:OkhFZF0NIF0BkormfpxCNW3pfPTPvuWXfzEWvMMXwuzebPNPHRFBvA>
-    <xme:OkhFZMFaWbLljJddjYarhCyHb14A-fPu60YvCy2NJAN5_19WqykKLxAWy8Mt2KZqK
-    13EKqHMD5307i8Rw1I>
-X-ME-Received: <xmr:OkhFZF5i4TZrEPTaon7Scs4eKxWHiYM7iJEs9T_Xe134AKfENG9ZyTdz463F2xFimOLn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtkedgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:OkhFZC3C4lM8aE7RUPClI9XTSy9fEqnSgDg7KqtaLjIOnzctt4d3lA>
-    <xmx:OkhFZIHfwLUqA-An7U5XnaBkRUNVJNMzdBTBa44WxogpWIWk6CvG2g>
-    <xmx:OkhFZD-svxXoC2qBmsDKVUT3Nw_bvppddpQPfl4T1k4KqrSqIGH49w>
-    <xmx:OkhFZCMGrcVKyh0EuQ4Ct7IHUTkuGM-SoiX3QnDPEk8rrUcaWZhDFQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Apr 2023 11:01:14 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: Remove unused variable in arch_local_irq_restore
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <BD0619A1-0F31-4226-B2C6-F2FA9FBBB38D@flygoat.com>
-Date:   Sun, 23 Apr 2023 16:01:03 +0100
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        Sun, 23 Apr 2023 11:08:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45272E73;
+        Sun, 23 Apr 2023 08:08:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D49A161A18;
+        Sun, 23 Apr 2023 15:08:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62058C433EF;
+        Sun, 23 Apr 2023 15:08:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682262501;
+        bh=Bx08/1DfqELmigMEJHsOejEGnnoVg2rW5edq8aepiMY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=INdR8/X3lJVtD4B20CDbxGQjqqiWV8AcaGSfeoVppiLGDmv7vdgy0fC1aPiI4wXKb
+         E33YNCFOu2n2nA47tfllh27dBlZqxVqOvLbRzcCCYihSTEKarZYOCL6IYgjuZjBu9N
+         iv969l3igGxijcs62IlpWZMXIYnUwoll3SI4g5P5W91XpVNR3RnuWtslVYVD1QXAmY
+         9eqtF06gESC7jxsmOPaTrmSCLBgs4R7wAnu0LyaF7ZK6SxD1u3pVeJwxjrit1adB7w
+         pTVFdLG3jwsYqVhv4mPG6WdJR2vAAlzMnuUf6ZmW6IKeTQrsNlBDT71AJp6U/fjyJr
+         oSpnn2JgC7nKw==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <213E2B79-C35A-456E-817D-E55BA9E2D45C@flygoat.com>
-References: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
- <BD0619A1-0F31-4226-B2C6-F2FA9FBBB38D@flygoat.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 23 Apr 2023 18:08:16 +0300
+Message-Id: <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Krishna Yarlagadda" <kyarlagadda@nvidia.com>,
+        <jsnitsel@redhat.com>, <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Cc:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+X-Mailer: aerc 0.14.0
+References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+ <20230421091309.2672-3-kyarlagadda@nvidia.com>
+In-Reply-To: <20230421091309.2672-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri Apr 21, 2023 at 12:13 PM EEST, Krishna Yarlagadda wrote:
+> TPM devices may insert wait state on last clock cycle of ADDR phase.
+> For SPI controllers that support full-duplex transfers, this can be
+> detected using software by reading the MISO line. For SPI controllers
+> that only support half-duplex transfers, such as the Tegra QSPI, it is
+> not possible to detect the wait signal from software. The QSPI
+> controller in Tegra234 and Tegra241 implement hardware detection of the
+> wait signal which can be enabled in the controller for TPM devices.
+>
+> The current TPM TIS driver only supports software detection of the wait
+> signal. To support SPI controllers that use hardware to detect the wait
+> signal, add the function tpm_tis_spi_hw_flow_transfer() and move the
+> existing code for software based detection into a function called
+> tpm_tis_spi_sw_flow_transfer(). SPI controllers that only support
+> half-duplex transfers will always call tpm_tis_spi_hw_flow_transfer()
+> because they cannot support software based detection. The bit
+> SPI_TPM_HW_FLOW is set to indicate to the SPI controller that hardware
+> detection is required and it is the responsibility of the SPI controller
+> driver to determine if this is supported or not.
+>
+> For hardware flow control, CMD-ADDR-DATA messages are combined into a
+> single message where as for software flow control exiting method of
+> CMD-ADDR in a message and DATA in another is followed.
+>
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
+>  1 file changed, 89 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_t=
+is_spi_main.c
+> index a0963a3e92bd..8967f179f808 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi=
+_phy *phy,
+>  	return 0;
+>  }
+> =20
+> -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+> -			 u8 *in, const u8 *out)
+> +/*
+> + * Half duplex controller with support for TPM wait state detection like
+> + * Tegra QSPI need CMD, ADDR & DATA sent in single message to manage HW =
+flow
+> + * control. Each phase sent in different transfer for controller to iden=
+ity
+> + * phase.
+> + */
+> +static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr=
+,
+> +				     u16 len, u8 *in, const u8 *out)
+> +{
+> +	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
+> +	struct spi_transfer spi_xfer[3];
+> +	struct spi_message m;
+> +	u8 transfer_len;
+> +	int ret;
+> +
+> +	while (len) {
+> +		transfer_len =3D min_t(u16, len, MAX_SPI_FRAMESIZE);
+> +
+> +		spi_message_init(&m);
+> +		phy->iobuf[0] =3D (in ? 0x80 : 0) | (transfer_len - 1);
+> +		phy->iobuf[1] =3D 0xd4;
+> +		phy->iobuf[2] =3D addr >> 8;
+> +		phy->iobuf[3] =3D addr;
+> +
+> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
+> +
+> +		spi_xfer[0].tx_buf =3D phy->iobuf;
+> +		spi_xfer[0].len =3D 1;
+> +		spi_message_add_tail(&spi_xfer[0], &m);
+> +
+> +		spi_xfer[1].tx_buf =3D phy->iobuf + 1;
+> +		spi_xfer[1].len =3D 3;
+> +		spi_message_add_tail(&spi_xfer[1], &m);
+> +
+> +		if (out) {
+> +			spi_xfer[2].tx_buf =3D &phy->iobuf[4];
+> +			spi_xfer[2].rx_buf =3D NULL;
+> +			memcpy(&phy->iobuf[4], out, transfer_len);
+> +			out +=3D transfer_len;
+> +		}
+> +
+> +		if (in) {
+> +			spi_xfer[2].tx_buf =3D NULL;
+> +			spi_xfer[2].rx_buf =3D &phy->iobuf[4];
+> +		}
+> +
+> +		spi_xfer[2].len =3D transfer_len;
+> +		spi_message_add_tail(&spi_xfer[2], &m);
+> +
+> +		reinit_completion(&phy->ready);
+> +
+> +		ret =3D spi_sync(phy->spi_device, &m);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (in) {
+> +			memcpy(in, &phy->iobuf[4], transfer_len);
+> +			in +=3D transfer_len;
+> +		}
+> +
+> +		len -=3D transfer_len;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr=
+,
+> +				     u16 len, u8 *in, const u8 *out)
+>  {
+>  	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
+>  	int ret =3D 0;
+> @@ -140,6 +206,24 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, =
+u32 addr, u16 len,
+>  	return ret;
+>  }
+> =20
+> +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+> +			 u8 *in, const u8 *out)
+> +{
+> +	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
+> +	struct spi_controller *ctlr =3D phy->spi_device->controller;
+> +
+> +	/*
+> +	 * TPM flow control over SPI requires full duplex support.
+> +	 * Send entire message to a half duplex controller to handle
+> +	 * wait polling in controller.
+> +	 * Set TPM HW flow control flag..
+> +	 */
+> +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
+> +		return tpm_tis_spi_transfer_half(data, addr, len, in, out);
+> +	else
+> +		return tpm_tis_spi_transfer_full(data, addr, len, in, out);
+> +}
+> +
+>  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
+>  				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
+>  {
+> @@ -181,6 +265,9 @@ static int tpm_tis_spi_probe(struct spi_device *dev)
+> =20
+>  	phy->flow_control =3D tpm_tis_spi_flow_control;
+> =20
+> +	if (dev->controller->flags & SPI_CONTROLLER_HALF_DUPLEX)
+> +		dev->mode |=3D SPI_TPM_HW_FLOW;
+> +
+>  	/* If the SPI device has an IRQ then use that */
+>  	if (dev->irq > 0)
+>  		irq =3D dev->irq;
+> --=20
+> 2.17.1
 
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> 2023=E5=B9=B44=E6=9C=8823=E6=97=A5 15:42=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
->=20
->=20
->> 2023=E5=B9=B44=E6=9C=8823=E6=97=A5 15:35=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->>=20
->> It was left over in 9efe1ad6f24a ("MIPS: Don't play with fire in
->> DIEI irq_restore").
->>=20
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->=20
-> Oh sorry please ignore the noise.
->=20
-> mips-fixes tree on codeaurora mirror is lapsed. Really shouldn=E2=80=99t=
- use that mirror.
+Should I pick these patches?
 
-Reported to korg helpdesk, hopefully they can get it fixed :-)
-
-That=E2=80=99s the only option for my remote development machine located =
-in China.
-
-Thanks
-Jiaxun=
+BR, Jarkko
