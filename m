@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897036EC0A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CE06EC0A8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjDWOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        id S229563AbjDWPBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 11:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjDWOyc (ORCPT
+        with ESMTP id S229464AbjDWPBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:54:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2F135A9
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682261586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=brUP6Y4+fxRUO3RjcIxh9okEQNw9LLitzlIw6oM9sjU=;
-        b=QHuQc6mxxdTRG0MzA/1IeW4fZjj2kX9BAzJrW4KVsl3N+CJ/iHuWA2v8PUj4DWGdM8vluv
-        kjxYjm2oYycjQfasDb+Gs5hFbGROT5/DTEDfH3c4IT7Z0k/Iowo6F44gL6ho82tPXuPgWJ
-        SXpZzkB/5SkZpGLIS/4RkXLUoLuzqpA=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-F9swDheOOLSRIT0Yb5kEew-1; Sun, 23 Apr 2023 10:53:05 -0400
-X-MC-Unique: F9swDheOOLSRIT0Yb5kEew-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3ef34e947edso42710961cf.3
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:53:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682261585; x=1684853585;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=brUP6Y4+fxRUO3RjcIxh9okEQNw9LLitzlIw6oM9sjU=;
-        b=T4KxFKjJt3qTubNAv6AZgTsD4Txx7cHwH8ZQlaSIAaaET54jjtXa75GTegzlgmEFoP
-         czjFdKYncBHEda0WATCA4vpYO0gfOPK6YG9VtUDprNTqXa2q+BbjJLpBttsAsxlKePj+
-         FnC7cNrvPXfN/9dmdToGo8JCDhEtu9xPyDcBRAHoz5Ia99kgcR262mWADNgib4TMTlNA
-         ytaBDAgvQ/KsKHiLMqsJm5eyDvZbaY1ZOjjwdGe9YURnKn7vObrj5Edp6/GP+thZJwgh
-         ZqY2xaoHJ6QgJ10HR3XsY8GqEagfwR3KvGrT4brCYcEwK0WUr0+CkGLeB2arXFDykNe1
-         zhjw==
-X-Gm-Message-State: AAQBX9e5jdifLuiYD87SKFsHV9q0uH1KZNrYFSGejVz9n5XYJXHGpUeT
-        r0feQrBZnHT1GYsIEuUANT0FxrYeQYvfYICFEnMl1+/lmWyXVi+cuMOPLzAAdL9ZQs2650JSeEm
-        7FepD6AvLR9vNhZFAKyEv3ImP
-X-Received: by 2002:ac8:5892:0:b0:3e3:9117:66e8 with SMTP id t18-20020ac85892000000b003e3911766e8mr19520239qta.35.1682261584965;
-        Sun, 23 Apr 2023 07:53:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bmzZ2YfZA9i7Lvmo/Y61N2NeOxSpRotijBmk2JHeQ07QlcP3dqMW3ponYcBCaTHnGgvtlrcg==
-X-Received: by 2002:ac8:5892:0:b0:3e3:9117:66e8 with SMTP id t18-20020ac85892000000b003e3911766e8mr19520221qta.35.1682261584717;
-        Sun, 23 Apr 2023 07:53:04 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id w24-20020a05622a191800b003ef59e2b9a6sm2358221qtc.78.2023.04.23.07.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 07:53:04 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     neil.armstrong@linaro.org, airlied@gmail.com, daniel@ffwll.ch,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/meson: set variables meson_hdmi_* storage-class-specifier to static
-Date:   Sun, 23 Apr 2023 10:53:00 -0400
-Message-Id: <20230423145300.3937831-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Sun, 23 Apr 2023 11:01:16 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4744E5E;
+        Sun, 23 Apr 2023 08:01:15 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 3AABF32000D7;
+        Sun, 23 Apr 2023 11:01:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sun, 23 Apr 2023 11:01:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1682262074; x=1682348474; bh=6QjtEPyQ/6/lnFAEkWOaMj0D1aHTRIisrSh
+        1HQErj8U=; b=FmmWYcIebGf7Tszh9/2kSUL7Z6AxIQQmbkO1sI80xbCViriA7HI
+        Ri7HhjkAxtvIbPCyOkh0G/nqqLxI2ZQbskMEtFXUSDhEY6XDTuEH3elvxXEcI+cY
+        lpQZHJEb68Qh8E6I6+x2Nh4iOGwLAVH0KcYDTrZdQmk9Q+ZY/+i7CBzSqqpsUX9k
+        C3IMO/Ojq6vMw1V1OwM06IUe3CU8myZvmZtTBnVpk8sQ0oloLwW7OwOApyZqzrSx
+        TAoOjkLhLbBenb50hi96tbl/qKhI/U/uAWuHUUS8ukJtZsyWuT3LFboYaZY7lBL4
+        4sDpU/4elNQ5X38aeN7XXgoRKV/je95IUVA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682262074; x=1682348474; bh=6QjtEPyQ/6/lnFAEkWOaMj0D1aHTRIisrSh
+        1HQErj8U=; b=j0F0rDu+Zox67+adfUiWhAUSvwbp6RjN4Qmuw0dQfyyW1aIApx4
+        w5j06zUsBt2zvfwC/ob0J2fSgJ2dMjjpDairyBJryPZDlMh6pwc0MZUqwbsXmuhv
+        NLjQQU4dxAPErsAbierwVDjo3NIVwB8X5k+TWGtqBuJLFslz96jRtICRg4gsZ8d5
+        JK36//6oYIukYuQ84gnlVm+c55ZsIR3G1OiAT7W1n0c2hjzXQkPQcL6vtQ3n4tLY
+        85on3zIJD5IqfjlsSh0AYcvpAUwv/oWTscwfkzDqjXJuKdO9HR96+ZhzI4siH1ac
+        lQ5uDqCabvSqcGxeYEZWNtJTCAS6MhrrRyQ==
+X-ME-Sender: <xms:OkhFZF0NIF0BkormfpxCNW3pfPTPvuWXfzEWvMMXwuzebPNPHRFBvA>
+    <xme:OkhFZMFaWbLljJddjYarhCyHb14A-fPu60YvCy2NJAN5_19WqykKLxAWy8Mt2KZqK
+    13EKqHMD5307i8Rw1I>
+X-ME-Received: <xmr:OkhFZF5i4TZrEPTaon7Scs4eKxWHiYM7iJEs9T_Xe134AKfENG9ZyTdz463F2xFimOLn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtkedgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:OkhFZC3C4lM8aE7RUPClI9XTSy9fEqnSgDg7KqtaLjIOnzctt4d3lA>
+    <xmx:OkhFZIHfwLUqA-An7U5XnaBkRUNVJNMzdBTBa44WxogpWIWk6CvG2g>
+    <xmx:OkhFZD-svxXoC2qBmsDKVUT3Nw_bvppddpQPfl4T1k4KqrSqIGH49w>
+    <xmx:OkhFZCMGrcVKyh0EuQ4Ct7IHUTkuGM-SoiX3QnDPEk8rrUcaWZhDFQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 23 Apr 2023 11:01:14 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH] MIPS: Remove unused variable in arch_local_irq_restore
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <BD0619A1-0F31-4226-B2C6-F2FA9FBBB38D@flygoat.com>
+Date:   Sun, 23 Apr 2023 16:01:03 +0100
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <213E2B79-C35A-456E-817D-E55BA9E2D45C@flygoat.com>
+References: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
+ <BD0619A1-0F31-4226-B2C6-F2FA9FBBB38D@flygoat.com>
+To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,165 +88,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch has several simailar warnings to
-drivers/gpu/drm/meson/meson_venc.c:189:28: warning: symbol
-  'meson_hdmi_enci_mode_480i' was not declared. Should it be static?
 
-These variables are only used in their defining file so should be static
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/meson/meson_venc.c | 32 +++++++++++++++---------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+> 2023=E5=B9=B44=E6=9C=8823=E6=97=A5 15:42=EF=BC=8CJiaxun Yang =
+<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+>=20
+>=20
+>> 2023=E5=B9=B44=E6=9C=8823=E6=97=A5 15:35=EF=BC=8CJiaxun Yang =
+<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
+>>=20
+>> It was left over in 9efe1ad6f24a ("MIPS: Don't play with fire in
+>> DIEI irq_restore").
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>=20
+> Oh sorry please ignore the noise.
+>=20
+> mips-fixes tree on codeaurora mirror is lapsed. Really shouldn=E2=80=99t=
+ use that mirror.
 
-diff --git a/drivers/gpu/drm/meson/meson_venc.c b/drivers/gpu/drm/meson/meson_venc.c
-index fcd532db19c1..27ef9f88e4ff 100644
---- a/drivers/gpu/drm/meson/meson_venc.c
-+++ b/drivers/gpu/drm/meson/meson_venc.c
-@@ -186,7 +186,7 @@ union meson_hdmi_venc_mode {
- 	} encp;
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_enci_mode_480i = {
-+static union meson_hdmi_venc_mode meson_hdmi_enci_mode_480i = {
- 	.enci = {
- 		.hso_begin = 5,
- 		.hso_end = 129,
-@@ -206,7 +206,7 @@ union meson_hdmi_venc_mode meson_hdmi_enci_mode_480i = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_enci_mode_576i = {
-+static union meson_hdmi_venc_mode meson_hdmi_enci_mode_576i = {
- 	.enci = {
- 		.hso_begin = 3,
- 		.hso_end = 129,
-@@ -226,7 +226,7 @@ union meson_hdmi_venc_mode meson_hdmi_enci_mode_576i = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_480p = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_480p = {
- 	.encp = {
- 		.dvi_settings = 0x21,
- 		.video_mode = 0x4000,
-@@ -272,7 +272,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_480p = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_576p = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_576p = {
- 	.encp = {
- 		.dvi_settings = 0x21,
- 		.video_mode = 0x4000,
-@@ -318,7 +318,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_576p = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_720p60 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_720p60 = {
- 	.encp = {
- 		.dvi_settings = 0x2029,
- 		.video_mode = 0x4040,
-@@ -360,7 +360,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_720p60 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_720p50 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_720p50 = {
- 	.encp = {
- 		.dvi_settings = 0x202d,
- 		.video_mode = 0x4040,
-@@ -405,7 +405,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_720p50 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080i60 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080i60 = {
- 	.encp = {
- 		.dvi_settings = 0x2029,
- 		.video_mode = 0x5ffc,
-@@ -454,7 +454,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080i60 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080i50 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080i50 = {
- 	.encp = {
- 		.dvi_settings = 0x202d,
- 		.video_mode = 0x5ffc,
-@@ -503,7 +503,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080i50 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p24 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p24 = {
- 	.encp = {
- 		.dvi_settings = 0xd,
- 		.video_mode = 0x4040,
-@@ -552,7 +552,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p24 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p30 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p30 = {
- 	.encp = {
- 		.dvi_settings = 0x1,
- 		.video_mode = 0x4040,
-@@ -596,7 +596,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p30 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p50 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p50 = {
- 	.encp = {
- 		.dvi_settings = 0xd,
- 		.video_mode = 0x4040,
-@@ -644,7 +644,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p50 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p60 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p60 = {
- 	.encp = {
- 		.dvi_settings = 0x1,
- 		.video_mode = 0x4040,
-@@ -688,7 +688,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_1080p60 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p24 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p24 = {
- 	.encp = {
- 		.dvi_settings = 0x1,
- 		.video_mode = 0x4040,
-@@ -730,7 +730,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p24 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p25 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p25 = {
- 	.encp = {
- 		.dvi_settings = 0x1,
- 		.video_mode = 0x4040,
-@@ -772,7 +772,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p25 = {
- 	},
- };
- 
--union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p30 = {
-+static union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p30 = {
- 	.encp = {
- 		.dvi_settings = 0x1,
- 		.video_mode = 0x4040,
-@@ -814,7 +814,7 @@ union meson_hdmi_venc_mode meson_hdmi_encp_mode_2160p30 = {
- 	},
- };
- 
--struct meson_hdmi_venc_vic_mode {
-+static struct meson_hdmi_venc_vic_mode {
- 	unsigned int vic;
- 	union meson_hdmi_venc_mode *mode;
- } meson_hdmi_venc_vic_modes[] = {
--- 
-2.27.0
+Reported to korg helpdesk, hopefully they can get it fixed :-)
 
+That=E2=80=99s the only option for my remote development machine located =
+in China.
+
+Thanks
+Jiaxun=
