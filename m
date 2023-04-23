@@ -2,203 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A836EBD37
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 07:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DE66EBD3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 07:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjDWFhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 01:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S229863AbjDWFpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 01:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDWFhj (ORCPT
+        with ESMTP id S229516AbjDWFpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 01:37:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468341987;
-        Sat, 22 Apr 2023 22:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682228258; x=1713764258;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=96LhbRImznppKpRmUuTODm7V8mS1ssCno8gRqM2GOu8=;
-  b=JxPD2ie3WyF+ogbx/85Xm13v60EjbMdGTQ5dPDsGyHCHXztB+bQjo6Do
-   WK19UcwO2bXSfNYHvPSSPVsVrCjEnpjYCZr+Dz4tIU9Dav3jnAfidpolW
-   M9S66lPaEnQKFJlPSal2pfsI87s0mjSKHC4fXOQhmeTbqubly84YW9gnu
-   s/5Jou2LBoYjmaD4TaKeSiYLraFLa5VJs7Se0tGaTMG3aERjkr9ApZLtK
-   +nIB4VgHTlrYXGOiQovYyz3NYRiScmcW+iQ6PvfxQTbM4/DTGyqJi1iMW
-   P0wnPGAp/9pMSvQOXFyEVrmkvw6pPUUL3yWz3OU8Td712cRAHP3V0BB1F
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="330453386"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="330453386"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 22:37:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="762008569"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="762008569"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2023 22:37:37 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 22 Apr 2023 22:37:37 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sat, 22 Apr 2023 22:37:37 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sat, 22 Apr 2023 22:37:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gtKkNVlAxBB0LpwTDzaC7YOlXub0Dm0JB8mCmbnQRYYdDO6W3/Dgxp8aKLIi2556pEQQ9Bft7hugqg+9nehaHK7hXwgkTwi+uBCJ9YTaF4OozWfgW4pcyY9ticOTTnmpwmhs9LHeaUi0xxAXyyCM5FMRxQuLw+8TXcBEui48BLV3NC4xf3smxIl1mL+0OYfSBI/5m5vz4yexn4JtPTC3ZgXb9eMDLDf4C/51b7OJ6Tm+J5M4irQKBq3LIlkHIREKe4TWGGw1Y6Z8V6uezmo59uyBuOBJZPIkYksdoiSnK0/T6ySkHq8+TNvDyYMReou8W+xXl7kkwCao6a4Q3ZnKaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k58eepagYqQG0ssaesAZNXBY9Lac8o5wtviVSqvsXHg=;
- b=Eb3/sNb/7BH/S+aBWUXLnNqPeY9lBB7g40Q1S/vxlyXLRV5uI9zUimDPAk/QeTXm9zBuUGfPXbot1USr0doW72wLfN2YxlMpomn8uc9EYTHypd03lsAKBQ9JJGqz7UZq6lPia8733TnlEo0kNa9k4EEM7xmrzVSPu3pEfGdpfvYJ77saE6KK5yq8G7B8jMuuVKxfBhNSy7Gwrxx/UibEWSdnAhkpU6a75BOYve4h5gaQYZGySS2wo1Yq61qkn8F4LPaOSF1YVbuhS7N92QIh3XvIXSWEsKq3wBAG3r+rku973KKcVeuw/xv10DNk8k7LjbxgKvKYx6+m3S0jHO63RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by MN6PR11MB8243.namprd11.prod.outlook.com (2603:10b6:208:46e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Sun, 23 Apr
- 2023 05:37:34 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ea74:f9ea:fdca:4890]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ea74:f9ea:fdca:4890%5]) with mapi id 15.20.6319.031; Sun, 23 Apr 2023
- 05:37:34 +0000
-Message-ID: <b9d8632d-7b42-58bf-5849-0291909f3819@intel.com>
-Date:   Sun, 23 Apr 2023 13:37:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 00/21] Enable CET Virtualization
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     <seanjc@google.com>, <pbonzini@redhat.com>, <peterz@infradead.org>,
-        <john.allen@amd.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rick.p.edgecombe@intel.com>
-References: <20230421134615.62539-1-weijiang.yang@intel.com>
- <ZEMGA2uUfpJL4rMH@kernel.org>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <ZEMGA2uUfpJL4rMH@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR01CA0171.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::27) To PH0PR11MB4965.namprd11.prod.outlook.com
- (2603:10b6:510:34::7)
+        Sun, 23 Apr 2023 01:45:34 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C639819BD;
+        Sat, 22 Apr 2023 22:45:32 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-517bb01bac9so2462668a12.0;
+        Sat, 22 Apr 2023 22:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682228731; x=1684820731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XfJCkDUStFvQlmTy2TXfR/ynfAHG7u0kjCgYu5zu+S0=;
+        b=h3K1g2SlnA1hNafZsDzL73GqQ1fMN3ZSIkf+EqngNBU7zAM6wqFmSPnKPTKawt2WKW
+         iaIRN0/XnDAJVZFtJoF1QHNP+JWbVd+i5p4Q02wtaCKp9b+hV7eaOGEAyK2NV9SDG7D+
+         ZhqUEZJg5gbLoNJUhcxisMxtOpaB54OBwhNnIV3un4c4nnZ3Ms9zAkJAHuhN28+YmCjg
+         jjxQMc2LXjzWUXmVZNso5aAvjBpQ9wVuiWwGwka1oBs2hS9nyA76a1+Y28gYgaukGDJ9
+         BpdoqsQ4KqQYA/AFzykeg41Z/9YTlgbUYEofSp2w57GWCOxCdypVmL9NLDLXBFyMmz9+
+         +6Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682228732; x=1684820732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XfJCkDUStFvQlmTy2TXfR/ynfAHG7u0kjCgYu5zu+S0=;
+        b=VV3K1WcIk+vH0d12TQ5DUeBr0QXg+d6fdC3HO4gUbX/FEGcRqQN003aOpkP7vdxTjY
+         4BIHQMfI/YOTdzEWdAwuG0b04MCSHOYY8IIrdO5Lm5t8ydY3oA1JuJaytHqjKJaaeY/p
+         73s3y+bwbjXEk+wP0g2Pz3NKUKhKjPOPit710MYEFEVU8jo0eNc8tEDR90mLBo55pdvy
+         U0KNeM6i5K3Lq7q8c+sudOcauPCusck+UYhF8NNU9fqBzMcjjtPkJLA8+4rVUTy7XemR
+         Qo2xZgbl/yiN6VZyYC92g1/xfpBf8e+N/QhLuZDwZ2S9eg0BbNV5nwrQKPgY7W8x7YNI
+         LSYA==
+X-Gm-Message-State: AAQBX9d7aVYpnyROQzpkOuPHz52Oy+LUICX3mMVlkUCcPf32N2SNAPsX
+        6WI5bcOeDFeRyp65sXD3a8G1u5SJuCXpi3p2RgjU+yW0Y2A=
+X-Google-Smtp-Source: AKy350aDyCUNDsIcYQXQcqK0mni7J28pUoI0YrKxDiK2jn8R3+yZ0a/3XNftKZEdRgkkqzNpR2iLz3CPFuu1ytYHUEM=
+X-Received: by 2002:a17:90b:3507:b0:247:eae:1783 with SMTP id
+ ls7-20020a17090b350700b002470eae1783mr10044277pjb.45.1682228731562; Sat, 22
+ Apr 2023 22:45:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|MN6PR11MB8243:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58fa7b70-0f6f-41a9-02f2-08db43bcd640
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +zZinsPPv/VobxE3ZGrI5n+Tc0fXcK8h8o2K5wIbBmKFNen7k6rf+ZKj8TXu2quA8YlNFL8/Krp72qFrrtNaZ25KEY9ZCOaovFidzzwPKfCMEDmYpyLNJpp1ObwFntHsdSXIRHY8XIBBi6IIyl+OQZiTjX3xU6mVoyriEa2OQl+Zn/OyU0BYwvjnhySip8OUlzAOXSdWqUw5IM2j+EJjFjJgRU7ZdL3HwD4+tKRETMq1yW8f9U9Hy0V6K8cPP1/RCxg31DGJB5eicTY2HN2X3M5fl+ah6GhA563f4KPklY1gfvP0lyvOSo0qjliOPLhc7WC16QZJB9YWsJxPuOYt1+K4LhvfZ2+4doULECIEfqb7KCCv7lMMNUJAf0xi5TJEboFfk334MVnlNGDBy6uzIV3GYTJCclGcsXjilfs61b3+PAe5Xrs/q8fnuXYGqmoIvk875EggOsPyRFUyU/iGu4a4N45tyagFwJAe+oEWI4l82kkpYop4HpgSGW1VDCPVMdWpAV+60IRrDO0vavysRzkpj3yWrFz4LC8RuOxtB0gpwJGK3XlgabAeHsnoplBoQ/39Ftjca7NyDR1zW7yvWUA96+HmeG6o39LLc3dugJvT8YT0Kzct+uV/hD/oiC0Q0vZNrxU673WhtI68k+4dCoDtlQLWncQqwrT3PWTaS7Pql6pMCgobX+noY35Pjyw2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(376002)(366004)(39860400002)(451199021)(2906002)(82960400001)(38100700002)(31696002)(86362001)(478600001)(6916009)(316002)(2616005)(41300700001)(66946007)(66476007)(66556008)(4326008)(107886003)(26005)(53546011)(6512007)(6506007)(6666004)(966005)(36756003)(186003)(8676002)(31686004)(6486002)(8936002)(83380400001)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dVVDMGVma1VPajJFQ1dyRGdMdzRSRE1FR1RXTS9nVHozeng1NDIySGJLVi9t?=
- =?utf-8?B?OU5rY1g5VVlaNmoxNU5Ta3RCaFNLWE81UWlseHY5ang5dlRocDlIUG1vMTlH?=
- =?utf-8?B?aUhSd05iaDRidTZnQ0pmNzRuaVUzVW1hN2pSdFhUSjFHMnhWSFRQYW1mTVcv?=
- =?utf-8?B?cjZJYUE0K09rblNTV0VhNS9aVGFlZm0zSWwzcm5BYnd3V20wb0ZPZFRXbkhv?=
- =?utf-8?B?a1J3QWNWWDgrNm0vc2NlbmpzMHR4REwrazBHZTVaQndIckZwNmpWSHJkeUp2?=
- =?utf-8?B?RGI2R1FXZVhNTXBuTlBUUVp1SnFQU2UwZmlpUDI4NUdNVHNPZVdaUnhadExh?=
- =?utf-8?B?cUwrc3grcks5a2VVZXVldlBLcjZkWDZzS3VISUJaZEI3RTQzeFZjUDZsMWtq?=
- =?utf-8?B?L2I0WHNBbEZzNHg5ZGFqbEl0Tkh4UUVpRmVUNGN0T2d6cko4SGJBc3VLRFpI?=
- =?utf-8?B?SE92N0JMWWsyZEwrR0U1bE1TUHQ4d1gxR0U5MTlucFUvTHdDN0VaMnpoczNM?=
- =?utf-8?B?bXREMzZFWlNXMGhqNTJuV1N4cWxpb1VPcjl3RkQxWXRqUE9EWXZCNGhuQWN6?=
- =?utf-8?B?QXNEQnhBbEpzQUhhWlArV0x2TUdtU2FMcUxlREhkbnBuKzAyQWRZNGZTNThM?=
- =?utf-8?B?d0RNb1Qva3ZmWjNMak5CK2JSMTNNTEpoOUxSSEdLUzhVR3hnUkhXdlZxV0lV?=
- =?utf-8?B?MWRmZUgwT2xjOTk2NGlabVZESnFoVHp4ZHk1WmlOL2t4V3N6UUZsNEExVmxh?=
- =?utf-8?B?eHlYTEprcWRwNFJBSHliL3R3aWpEdE95L2MyT1N3b1VHSzRmb3lVcWlwaTE3?=
- =?utf-8?B?V2wveEhwNnBjeW9aeGZUUDRVTzZLcTEwaHAxa2VoRVJTOWVyK2xzaXV1N2dh?=
- =?utf-8?B?ckpqQmJWL0FFRFY5UXplcG8zd3FIdVpmNkZidzg4aTM3S3V4MEt6c2x6NVly?=
- =?utf-8?B?dnZXcndQY0NVOWxHWFJRcFdTcWRSc1hKb0tQNUlBdEN2MktxYkd6RjZWUGtw?=
- =?utf-8?B?KzBETUZ6Wk9CRm50dFdhakt5bWljbkFYNVBhSjdrSFNVNXlseDh0dE1McTdv?=
- =?utf-8?B?NFp3Q2M4bldNemg0cUFEOThNZjIrS1FCeU5MOGhKK3ExbGRNV2ZCV284TmtP?=
- =?utf-8?B?VWxjMmlZZ0hDUUZLSE5wRkFXNDF6aGZsZmU2emJONnlETUp2cElHUlAwNVdn?=
- =?utf-8?B?S1JXT2hPZTNmZW10UEU2Q1ZhL3U3NHU4MTdJYVQvZEEvSlpGbFdPYkp1UFZq?=
- =?utf-8?B?QzFtUCtPNGJncnNGK1BWd29MMzRtNjgwcCtKelAva3pkL0p6azNhQmxMVkM4?=
- =?utf-8?B?TllqdHUvSVZYY3dUZ2NFcEFBMHljSXplSWROYVN4Y0tmTlJmajc5N3c5UUw2?=
- =?utf-8?B?UU5lY285elFPZkJENUFXYVltZlRSaUV6WCtycVEvOU9OZVhvMXc5NTBSdC9K?=
- =?utf-8?B?REJ5TzkwUWJYczZsemtHc056bHJraC8wL1dwenVXVjFuWXBQUU1HUTcwOGNw?=
- =?utf-8?B?NG5ibmt3V3lialpuRVB6WFJESmRLTm1oVXVhdVVHa1lQUndpYVdsK3RpL3Ur?=
- =?utf-8?B?RCszWEEzaVhDSGZuZE9CbytnZk12WDVUL2N6QlNaV0RsR1hDZW1sc0J1cGE0?=
- =?utf-8?B?aFd5aXhmWk5WejhzSTVpWEdlSWpOOS94TmxuVFZCUDFtOXdMc21CTVY3Z21P?=
- =?utf-8?B?dENRc056R0Noc2h6TzhhQ0VnWVhRSXZmYStwaGRiM1F4U3h2bG9xb1ZYMjNj?=
- =?utf-8?B?SUtNaHEwWXEzSko1c1duZzgvQy9wMVBhbkZaQzZsdXpqZXQ1dDRNVTFTeW8x?=
- =?utf-8?B?Z3hUYlYvbW52d0NSYzUxa1N1OGRnVUo0V0h6L2ZTNnhDNjluc0sxMkxRR3JQ?=
- =?utf-8?B?czFjTG5xSC8zbGs1bXh2bnFRRmdadlg5U080elZ3RHR6ekphTitLd2lnbmRo?=
- =?utf-8?B?b1lrMzFZeVJoaXVyOE9lZ0RIdlZLRnAvbXZtNkh5YmgyWHNUbS84TlNwNGs2?=
- =?utf-8?B?OWRsS1p0SGFGeWc5MHE2c0R2Zk1Db3RwUGZwUUtXdWtldXNKUE1vSGVkUjBX?=
- =?utf-8?B?UWVNYnppd1JOQjM0WmFlRlNwMEpvaXMraWU4NlgwcytLVkxsM2RKNWRrUmxD?=
- =?utf-8?B?ZEgyWm5OM2JiV2N2eXZZU2dHai9JUWl3dVRIRzZuSi9UODVsMnlPWEEwSzdj?=
- =?utf-8?B?SUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58fa7b70-0f6f-41a9-02f2-08db43bcd640
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2023 05:37:33.4820
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4DnJlUDPqGbZ7wIcGgyTPfZF3Q40tqwR5JPw6kH+yt9GvOGtJ/YOPwawPPWlZjQciXUOrMW0SZCJBlRTKOSKGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8243
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+ <CAEXW_YQCugPs1bquaA4ZLdsM4S3hWv9OMNTt80tSvjCO0LwiHg@mail.gmail.com> <CAABZP2wE8Gz9wV_YAjNsFo7V=rpymuLOqVJ0=aAmwixqPiHTiQ@mail.gmail.com>
+In-Reply-To: <CAABZP2wE8Gz9wV_YAjNsFo7V=rpymuLOqVJ0=aAmwixqPiHTiQ@mail.gmail.com>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Sun, 23 Apr 2023 13:45:20 +0800
+Message-ID: <CAABZP2w3gGEvU1xx_8abE78RzmPX88wvcALF033U8mjC9AvwaQ@mail.gmail.com>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 4/22/2023 5:54 AM, Mike Rapoport wrote:
-> Hi,
+On Sun, Apr 23, 2023 at 9:37=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.com> =
+wrote:
 >
-> On Fri, Apr 21, 2023 at 09:45:54AM -0400, Yang Weijiang wrote:
->> [...]
->>
->> [1]: linux-next: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/?h=next-20230420
->> [2]: QEMU patch: https://lore.kernel.org/all/20230421041227.90915-1-weijiang.yang@intel.com/
->> [3]: v1 patchset: https://lore.kernel.org/all/20220616084643.19564-1-weijiang.yang@intel.com/
->> [4]: Rebase branch: https://github.com/kvm-x86/linux.git, commit: 7b632f72528d (tag: kvm-x86-next-2023.04.14)
->   
-> I played a bit with KVM support for shadow stacks on AMD machines and I
-> rebased v1 patches along with John's SVM series
+> On Sun, Apr 23, 2023 at 3:19=E2=80=AFAM Joel Fernandes <joel@joelfernande=
+s.org> wrote:
+> >
+> > Hi Zhouyi,
+> Thank Joel for your quick response ;-)
+> I will gradually provide all the necessary information to facilitate
+> our chasing. Please do not hesitate email me
+> if I have ignored any ;-)
+> >
+> > On Sat, Apr 22, 2023 at 2:47=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.c=
+om> wrote:
+> > >
+> > > Dear PowerPC and RCU developers:
+> > > During the RCU torture test on mainline (on the VM of Opensource Lab
+> > > of Oregon State University), SRCU-P failed with __stack_chk_fail:
+> > > [  264.381952][   T99] [c000000006c7bab0] [c0000000010c67c0]
+> > > dump_stack_lvl+0x94/0xd8 (unreliable)
+> > > [  264.383786][   T99] [c000000006c7bae0] [c00000000014fc94] panic+0x=
+19c/0x468
+> > > [  264.385128][   T99] [c000000006c7bb80] [c0000000010fca24]
+> > > __stack_chk_fail+0x24/0x30
+> > > [  264.386610][   T99] [c000000006c7bbe0] [c0000000002293b4]
+> > > srcu_gp_start_if_needed+0x5c4/0x5d0
+> > > [  264.388188][   T99] [c000000006c7bc70] [c00000000022f7f4]
+> > > srcu_torture_call+0x34/0x50
+> > > [  264.389611][   T99] [c000000006c7bc90] [c00000000022b5e8]
+> > > rcu_torture_fwd_prog+0x8c8/0xa60
+> > > [  264.391439][   T99] [c000000006c7be00] [c00000000018e37c] kthread+=
+0x15c/0x170
+> > > [  264.392792][   T99] [c000000006c7be50] [c00000000000df94]
+> > > ret_from_kernel_thread+0x5c/0x64
+> > > The kernel config file can be found in [1].
+> > > And I write a bash script to accelerate the bug reproducing [2].
+> > > After a week's debugging, I found the cause of the bug is because the
+> > > register r10 used to judge for stack overflow is not constant between
+> > > context switches.
+> > > The assembly code for srcu_gp_start_if_needed is located at [3]:
+> > > c000000000226eb4:   78 6b aa 7d     mr      r10,r13
+> > > c000000000226eb8:   14 42 29 7d     add     r9,r9,r8
+> > > c000000000226ebc:   ac 04 00 7c     hwsync
+> > > c000000000226ec0:   10 00 7b 3b     addi    r27,r27,16
+> > > c000000000226ec4:   14 da 29 7d     add     r9,r9,r27
+> > > c000000000226ec8:   a8 48 00 7d     ldarx   r8,0,r9
+> > > c000000000226ecc:   01 00 08 31     addic   r8,r8,1
+> > > c000000000226ed0:   ad 49 00 7d     stdcx.  r8,0,r9
+> > > c000000000226ed4:   f4 ff c2 40     bne-    c000000000226ec8
+> > > <srcu_gp_start_if_needed+0x1c8>
+> > > c000000000226ed8:   28 00 21 e9     ld      r9,40(r1)
+> > > c000000000226edc:   78 0c 4a e9     ld      r10,3192(r10)
+> > > c000000000226ee0:   79 52 29 7d     xor.    r9,r9,r10
+> > > c000000000226ee4:   00 00 40 39     li      r10,0
+> > > c000000000226ee8:   b8 03 82 40     bne     c0000000002272a0
+> > > <srcu_gp_start_if_needed+0x5a0>
+> > > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
+> > > but if there is a context-switch before c000000000226edc, a false
+> > > positive will be reported.
+> > >
+> > > [1] http://154.220.3.115/logs/0422/configformainline.txt
+> > > [2] 154.220.3.115/logs/0422/whilebash.sh
+> > > [3] http://154.220.3.115/logs/0422/srcu_gp_start_if_needed.txt
+> > >
+> > > My analysis and debugging may not be correct, but the bug is easily
+> > > reproducible.
+> >
+> > Could you provide the full kernel log? It is not clear exactly from
+> > your attachments, but I think this is a stack overflow issue as
+> > implied by the mention of __stack_chk_fail. One trick might be to turn
+> > on any available stack debug kernel config options, or check the
+> > kernel logs for any messages related to shortage of remaining stack
+> > space.
+> The full kernel log is [1]
+> [1] http://154.220.3.115/logs/0422/console.log
+> >
+> > Additionally, you could also find out where the kernel crash happened
+> > in C code following the below notes [1] I wrote (see section "Figuring
+> > out where kernel crashes happen in C code"). The notes are
+> > x86-specific but should be generally applicable (In the off chance
+> > you'd like to improve the notes, feel free to share them ;-)).
+> Fantastic article!!!, I benefit a lot from reading it. Because we can
+> reproduce it so easily on powerpc VM,
+> I can even use gdb to debug it, following is my debug process on
+> 2e83b879fb91dafe995967b46a1d38a5b0889242(srcu: Create an
+> srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()).
 >
-> https://lore.kernel.org/kvm/20221012203910.204793-1-john.allen@amd.com/
+> [2] http://154.220.3.115/logs/0422/gdb.txt
+> >
+> > Lastly, is it a specific kernel release from which you start seeing
+> > this issue? You should try git bisect if it is easily reproducible in
+> > a newer release, but goes away in an older one.
+> I did bisect on powerpc VM, the problem begin to appear on
+> 2e83b879fb91dafe995967b46a1d38a5b0889242(srcu: Create an
+> srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()).
 >
-> on top of v6.3-rc4 and Rick's series for host shadow stack support. I've
-> put this at
+> The kernel is good at 5d0f5953b60f5f7a278085b55ddc73e2932f4c33(srcu:
+> Convert ->srcu_lock_count and ->srcu_unlock_count to atomic)
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=shstk/kvm
+> But if I apply the following patch [3] to
+> 5d0f5953b60f5f7a278085b55ddc73e2932f4c33, the bug appears again.
+> [3] http://154.220.3.115/logs/0422/bug.patch
 >
-> if anybody is interested. With this I could successfully run shadow stack
-> self test in a guest on an AMD Zen3 machine.
+> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
+> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
+update: stress tested on x86 platform for 6 hours, no bug reported
+(while we can reproduce it on X86 based cross platform powerpc gcc and
+X86 based cross platform powerpc qemu in less than 3 minute).
+> >
+> > I will also join you in your debug efforts soon though I am currently
+> > in between conferences.
+> Exciting!! Thank you very much!
+> I can give you ssh access (based on rsa pub key) to PPC vm on Oregon
+> State University if you like.
 >
-> One thing I've noticed while rebasing is that John's patches move
-> cet_is_msr_accessible() from vmx/ to x86.c and I also had to make such move
-> for cet_is_ssp_msr_accessible().
->
-> Would make sense to have them available for both VMX and SVM from the
-> start.
-
-Hi, Mike,
-
-Yes, it makes sense to do so. I'll include the change in next version so 
-that John's patchset can
-
-omit the work, thanks!
-
-[...]
-
-
+> Thanks again
+> Zhouyi
+> >
+> > [1] https://gist.github.com/joelagnel/ae15c404facee0eb3ebb8aff0e996a68
+> >
+> > thanks,
+> >
+> >  - Joel
+> >
+> >
+> >
+> >
+> > >
+> > > Thanks
+> > > Zhouyi
