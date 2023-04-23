@@ -2,94 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC386EBC31
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 03:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F6F6EBBE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 00:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjDWA4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 20:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S229774AbjDVWCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 18:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjDWA4x (ORCPT
+        with ESMTP id S229500AbjDVWCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 20:56:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DABE10F4
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 17:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682211412; x=1713747412;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=0X/4Q5twC3FRie9aoJ3rmcwKIX0qxnUdDpWJ83Ct1ss=;
-  b=NuvF76eJMtjNjaG5rlx9Wz2XsJh1I6KOb46jeWvzJE3sjc5CpR9RaK+U
-   5tWsG/2IlpA3COWMoETkTaCLND/MHUvWhK/aVnk33BbjGVSukXKf0IuN5
-   IqPswa38HCdsU7n0J0olccv84yphuZ1jBsWbpZQNyy5149/ZJh7hsYllT
-   PkjRBcV3bI4Zqs6WI2tzpafUd8Jq5QfTKKQnwpQ2C1ULb2nNogoQvB7AQ
-   nyYfqIPamKo+MVWkj2x9fBGW4Bxv10/MgoMthD/RokZ5Amk2QEvhIMtPA
-   3rVLmRlB08Gsv0i2Ng3EeqD+MjMhQjSJaIj1TlzdpMj4ak0kr1R5lFZ8K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="346239316"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="346239316"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 17:56:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="686231335"
-X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="686231335"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 17:56:49 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     <akpm@linux-foundation.org>, <mgorman@techsingularity.net>,
-        <vbabka@suse.cz>, <mhocko@suse.com>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mm/page_alloc: drop the unnecessary pfn_valid() for
- start pfn
-In-Reply-To: <c2eee65ecd15779721af85c9ff109a35345b52d4.1682158312.git.baolin.wang@linux.alibaba.com>
-        (Baolin Wang's message of "Sat, 22 Apr 2023 18:15:17 +0800")
-References: <c2eee65ecd15779721af85c9ff109a35345b52d4.1682158312.git.baolin.wang@linux.alibaba.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Sun, 23 Apr 2023 08:55:45 +0800
-Message-ID: <87h6t7s9gu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Sat, 22 Apr 2023 18:02:23 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB52A268B;
+        Sat, 22 Apr 2023 15:02:22 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so13075226e87.0;
+        Sat, 22 Apr 2023 15:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682200941; x=1684792941;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2dGkZFDJrBb5dcOlpUDOnjcit/4DMIiT8lgxh76O1Fc=;
+        b=kTHd1OPTWLjdiO0sjUTsgDsPQL1IkmIscMklw6ifSCdcLo6jz6HVZaCkehqdfFJxFG
+         AMPUWA+Epr+9/Ql6jnMBEwtlZG4pSii5meYGrWbjBv3tIST/7gX3zedg71xp+iISH/sI
+         rIoBSs5bgzPGM5ZbfKj+DQrJbNyUlRAWwke104suSNtsyLWOJ0OnNVr3RawaLQWusvHZ
+         MWrUDGHh+tSEqTwgGxF5i4ws48OkYKGldUM1TCUjCCSMbvc2OYbTybjHZgCpq6mzmGyY
+         z+EZ3ZvNB3RGi+bCARx83XrUneR4kSh2a4wwdBsl7+tAr16G72fzh9DlVQIG5k7pwxig
+         eHHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682200941; x=1684792941;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2dGkZFDJrBb5dcOlpUDOnjcit/4DMIiT8lgxh76O1Fc=;
+        b=H6j/g4rlNJ1nfqhm/D9DfV4Kk26xx5dflIaDS4hOuiOSkaTHswvhJTPy1Jl6WiQX9R
+         MImXu5n9Lm+t2Bbj6Zf+fcN+I4G7+m25sWO0hxPvAl3aSKEFMPemCbrecIv1C+II0GoR
+         BjZiJ9KdS4m7BHyPyHiNvc92oAb98gFct6q6mbuSZCtcdZX57beOR7q1noLQ0gESqyRh
+         orajGTIAluVHA1JLDqRnWZTJ5JouKihaT47E6WDGZ5uvWn+A/H5M5nKEG4HwYJx2xwrc
+         UiWdSuEELi+4++u4CIRB74xwI7TrQyE9ezKPLYxGaYZZNVhlgM+9qyPnQuRwZbxIEIVZ
+         vk1w==
+X-Gm-Message-State: AAQBX9fxxMw++JvBmEKJll56ZpvBtUwP3GhzT6xDxnA+wYdHEa7FYLmL
+        sswkXwgVtFnNz9lKPHiPvq5bjimTUibybWGq
+X-Google-Smtp-Source: AKy350YyP9Mx6PKHYDySzsYS4Kng3481t/YYrpHXjc3ubrI6JKgUZryv6iZz/w3Cd/K9xjSzXPQgvA==
+X-Received: by 2002:ac2:4c54:0:b0:4d8:86c1:4782 with SMTP id o20-20020ac24c54000000b004d886c14782mr4428578lfk.23.1682200940808;
+        Sat, 22 Apr 2023 15:02:20 -0700 (PDT)
+Received: from [100.119.4.164] (93-80-67-109.broadband.corbina.ru. [93.80.67.109])
+        by smtp.gmail.com with ESMTPSA id w4-20020ac25d44000000b004eb0c51780bsm1043563lfd.29.2023.04.22.15.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Apr 2023 15:02:20 -0700 (PDT)
+Message-ID: <38eff1f50343a576edd115be9283f6bd28bd2008.camel@gmail.com>
+Subject: Re: [PATCH 3/4] net/ftgmac100: add mac-address-increment option for
+ GMA command from NC-SI
+From:   Ivan Mikhaylov <fr0st61te@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Fertser <fercerpav@gmail.com>,
+        openbmc@lists.ozlabs.org
+Date:   Sun, 23 Apr 2023 01:02:17 +0000
+In-Reply-To: <20230418185445.GA2111443-robh@kernel.org>
+References: <20230413002905.5513-1-fr0st61te@gmail.com>
+         <20230413002905.5513-4-fr0st61te@gmail.com>
+         <20230418185445.GA2111443-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+On Tue, 2023-04-18 at 13:54 -0500, Rob Herring wrote:
+> On Thu, Apr 13, 2023 at 12:29:04AM +0000, Ivan Mikhaylov wrote:
+> > Add s32 mac-address-increment option for Get MAC Address command
+> > from
+> > NC-SI.
+> >=20
+> > Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+> > Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
+> > ---
+> > =C2=A0Documentation/devicetree/bindings/net/ftgmac100.txt | 4 ++++
+> > =C2=A01 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/net/ftgmac100.txt
+> > b/Documentation/devicetree/bindings/net/ftgmac100.txt
+> > index 29234021f601..7ef5329d888d 100644
+> > --- a/Documentation/devicetree/bindings/net/ftgmac100.txt
+> > +++ b/Documentation/devicetree/bindings/net/ftgmac100.txt
+> > @@ -22,6 +22,10 @@ Optional properties:
+> > =C2=A0- use-ncsi: Use the NC-SI stack instead of an MDIO PHY. Currently
+> > assumes
+> > =C2=A0=C2=A0 rmii (100bT) but kept as a separate property in case NC-SI=
+ grows
+> > support
+> > =C2=A0=C2=A0 for a gigabit link.
+> > +- mac-address-increment: Increment the MAC address taken by GMA
+> > command via
+> > +=C2=A0 NC-SI. Specifies a signed number to be added to the host MAC
+> > address as
+> > +=C2=A0 obtained by the OEM GMA command. If not specified, 1 is used by
+> > default
+> > +=C2=A0 for Broadcom and Intel network cards, 0 otherwise.
+>=20
+> This would need to be common. There's been some attempts around how
+> to=20
+> support a base MAC address with a transform per instance. So far it's
+> not clear that something in DT works for everyone. Until there's=20
+> something common (if ever), you need platform specific code somewhere
+> to=20
+> handle this. The nvmem binding has had some extensions to support
+> that.
+>=20
+> Rob
 
-> We've already used pfn_to_online_page() for start pfn to make sure
-> it is online and valid, so the pfn_valid() for the start pfn is
-> unnecessary, drop it.
->
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Rob, I agree but unfortunately there isn't a generic option for such
+case, maybe something should be added into net/ethernet-
+controller.yaml? As example, `mac-address-increment` option using
+widely in openwrt project. About nvmem, are we talking `nvmem-cell-
+names` option or reverse_mac_address in drivers/nvmem/imx-ocotp.c?
 
-Thanks!
+I'll do the transfer into DT schema, that's not a problem but after
+naming resolve.
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+Adding openbmc community, maybe they have some ideas about this one.
 
-> ---
->  mm/page_alloc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 9de2a18519a1..6457b64fe562 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1512,7 +1512,7 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
->  	/* end_pfn is one past the range we are checking */
->  	end_pfn--;
->  
-> -	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
-> +	if (!pfn_valid(end_pfn))
->  		return NULL;
->  
->  	start_page = pfn_to_online_page(start_pfn);
+Thanks.
