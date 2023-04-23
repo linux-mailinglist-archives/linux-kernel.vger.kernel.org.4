@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC7B6EBDE5
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CE76EBDE8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 10:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjDWIKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 04:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S229549AbjDWIQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 04:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjDWIKP (ORCPT
+        with ESMTP id S229511AbjDWIQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:10:15 -0400
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD79172C
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 01:10:13 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id qUnQpJWEt3pfeqUnQpzkaa; Sun, 23 Apr 2023 10:10:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682237412;
-        bh=eUw6lwCqRPFGvEY7KIEtjH9lv7Qyusv4qg87RM8p+Os=;
-        h=From:To:Cc:Subject:Date;
-        b=ba51sbsnfIixWqGK5DHuJtf4xIHn7siFvpLbbsut35d2LZflItCMtJxXNagucBove
-         /zVsrmifLGr0fmdPLXwp4uR7xFLHtb4Mlg3gQubufLRNCUGj3ZtecOUCWGdlgi2K59
-         Wt5uMSCYPBMpkWY1fZaeTeS87dqKC0Ocx8/lHCUXOTSfx6CJnOtAo08+Q7y4nhhn0S
-         Xd5CgZo6E8dKic7bYuLgA6K8w5EwZUrtb3PgwXARyFRIhSNDneaoEOdyG7puE4wiSJ
-         TNkPCzsBKDfGLdO2ztWV3/OQeTw9n6Gj5d0xACkL/1OxvBlpFKz/Zh8L+7wauB0/zK
-         4c5FZ2++bSFQw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 23 Apr 2023 10:10:12 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        patches@opensource.cirrus.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: lochnagar: Remove the unneeded include <linux/i2c.h>
-Date:   Sun, 23 Apr 2023 10:10:07 +0200
-Message-Id: <df555e724d1b52bd9958c0bd729a774dfe0cf150.1682237387.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 23 Apr 2023 04:16:11 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56651986;
+        Sun, 23 Apr 2023 01:16:05 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Q41L817nHz4f3khR;
+        Sun, 23 Apr 2023 16:16:00 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7NA6URkr9jnHw--.47528S3;
+        Sun, 23 Apr 2023 16:16:01 +0800 (CST)
+Subject: Re: [PATCH for-6.4/block] block/rq_qos: protect rq_qos apis with a
+ new lock
+To:     Yu Kuai <yukuai1@huaweicloud.com>, tj@kernel.org, hch@lst.de,
+        josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230414084008.2085155-1-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <dde18143-b3bf-e493-c10a-5ffd2d8b772a@huaweicloud.com>
+Date:   Sun, 23 Apr 2023 16:15:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20230414084008.2085155-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-CM-TRANSID: gCh0CgD3X7NA6URkr9jnHw--.47528S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wry7JF1DtFyfJFyDKFy8Xwb_yoWxCr17pa
+        y8KF43A392gr4Dua1DGw4xXwsIgws5KrW8CrWfW34ayrZF9r10vF1kAFyUWFWrArsxZF4k
+        XrW8WrsYkr1UCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,28 +66,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver does not use i2c, so there is no point in including
-<linux/i2c.h>
+Hi,
 
-Remove it.
+ÔÚ 2023/04/14 16:40, Yu Kuai Ð´µÀ:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> commit 50e34d78815e ("block: disable the elevator int del_gendisk")
+> move rq_qos_exit() from disk_release() to del_gendisk(), this will
+> introduce some problems:
+> 
+> 1) If rq_qos_add() is triggered by enabling iocost/iolatency through
+>     cgroupfs, then it can concurrent with del_gendisk(), it's not safe to
+>     write 'q->rq_qos' concurrently.
+> 
+> 2) Activate cgroup policy that is relied on rq_qos will call
+>     rq_qos_add() and blkcg_activate_policy(), and if rq_qos_exit() is
+>     called in the middle, null-ptr-dereference will be triggered in
+>     blkcg_activate_policy().
+> 
+> 3) blkg_conf_open_bdev() can call blkdev_get_no_open() first to find the
+>     disk, then if rq_qos_exit() from del_gendisk() is done before
+>     rq_qos_add(), then memory will be leaked.
+> 
+> This patch add a new disk level mutex 'rq_qos_mutex':
+> 
+> 1) The lock will protect rq_qos_exit() directly.
+> 
+> 2) For wbt that doesn't relied on blk-cgroup, rq_qos_add() can only be
+>     called from disk initialization for now because wbt can't be
+>     destructed until rq_qos_exit(), so it's safe not to protect wbt for
+>     now. Hoever, in case that rq_qos dynamically destruction is supported
+>     in the furture, this patch also protect rq_qos_add() from wbt_init()
+>     directly, this is enough because blk-sysfs already synchronize
+>     writers with disk removal.
+> 
+> 3) For iocost and iolatency, in order to synchronize disk removal and
+>     cgroup configuration, the lock is held after blkdev_get_no_open()
+>     from blkg_conf_open_bdev(), and is released in blkg_conf_exit().
+>     In order to fix the above memory leak, disk_live() is checked after
+>     holding the new lock.
+> 
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/hwmon/lochnagar-hwmon.c | 1 -
- 1 file changed, 1 deletion(-)
+Friendly ping ...
 
-diff --git a/drivers/hwmon/lochnagar-hwmon.c b/drivers/hwmon/lochnagar-hwmon.c
-index 9948e2f7208d..6350904a8a8b 100644
---- a/drivers/hwmon/lochnagar-hwmon.c
-+++ b/drivers/hwmon/lochnagar-hwmon.c
-@@ -11,7 +11,6 @@
- #include <linux/delay.h>
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
--#include <linux/i2c.h>
- #include <linux/math64.h>
- #include <linux/mfd/lochnagar.h>
- #include <linux/mfd/lochnagar2_regs.h>
--- 
-2.34.1
+Thanks,
+Kuai
+> Fixes: 50e34d78815e ("block: disable the elevator int del_gendisk")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/blk-cgroup.c     |  9 +++++++++
+>   block/blk-core.c       |  1 +
+>   block/blk-rq-qos.c     | 20 ++++++--------------
+>   block/blk-wbt.c        |  2 ++
+>   include/linux/blkdev.h |  1 +
+>   5 files changed, 19 insertions(+), 14 deletions(-)
+> 
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index 1c1ebeb51003..0d79d864ecb1 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -705,6 +705,13 @@ int blkg_conf_open_bdev(struct blkg_conf_ctx *ctx)
+>   		return -ENODEV;
+>   	}
+>   
+> +	mutex_lock(&bdev->bd_queue->rq_qos_mutex);
+> +	if (!disk_live(bdev->bd_disk)) {
+> +		blkdev_put_no_open(bdev);
+> +		mutex_unlock(&bdev->bd_queue->rq_qos_mutex);
+> +		return -ENODEV;
+> +	}
+> +
+>   	ctx->body = input;
+>   	ctx->bdev = bdev;
+>   	return 0;
+> @@ -849,6 +856,7 @@ EXPORT_SYMBOL_GPL(blkg_conf_prep);
+>    */
+>   void blkg_conf_exit(struct blkg_conf_ctx *ctx)
+>   	__releases(&ctx->bdev->bd_queue->queue_lock)
+> +	__releases(&ctx->bdev->bd_queue->rq_qos_mutex)
+>   {
+>   	if (ctx->blkg) {
+>   		spin_unlock_irq(&bdev_get_queue(ctx->bdev)->queue_lock);
+> @@ -856,6 +864,7 @@ void blkg_conf_exit(struct blkg_conf_ctx *ctx)
+>   	}
+>   
+>   	if (ctx->bdev) {
+> +		mutex_unlock(&ctx->bdev->bd_queue->rq_qos_mutex);
+>   		blkdev_put_no_open(ctx->bdev);
+>   		ctx->body = NULL;
+>   		ctx->bdev = NULL;
+> diff --git a/block/blk-core.c b/block/blk-core.c
+> index 269765d16cfd..fc7f902bdf5b 100644
+> --- a/block/blk-core.c
+> +++ b/block/blk-core.c
+> @@ -420,6 +420,7 @@ struct request_queue *blk_alloc_queue(int node_id)
+>   	mutex_init(&q->debugfs_mutex);
+>   	mutex_init(&q->sysfs_lock);
+>   	mutex_init(&q->sysfs_dir_lock);
+> +	mutex_init(&q->rq_qos_mutex);
+>   	spin_lock_init(&q->queue_lock);
+>   
+>   	init_waitqueue_head(&q->mq_freeze_wq);
+> diff --git a/block/blk-rq-qos.c b/block/blk-rq-qos.c
+> index d8cc820a365e..167be74df4ee 100644
+> --- a/block/blk-rq-qos.c
+> +++ b/block/blk-rq-qos.c
+> @@ -288,11 +288,13 @@ void rq_qos_wait(struct rq_wait *rqw, void *private_data,
+>   
+>   void rq_qos_exit(struct request_queue *q)
+>   {
+> +	mutex_lock(&q->rq_qos_mutex);
+>   	while (q->rq_qos) {
+>   		struct rq_qos *rqos = q->rq_qos;
+>   		q->rq_qos = rqos->next;
+>   		rqos->ops->exit(rqos);
+>   	}
+> +	mutex_unlock(&q->rq_qos_mutex);
+>   }
+>   
+>   int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
+> @@ -300,6 +302,8 @@ int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
+>   {
+>   	struct request_queue *q = disk->queue;
+>   
+> +	lockdep_assert_held(&q->rq_qos_mutex);
+> +
+>   	rqos->disk = disk;
+>   	rqos->id = id;
+>   	rqos->ops = ops;
+> @@ -307,18 +311,13 @@ int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
+>   	/*
+>   	 * No IO can be in-flight when adding rqos, so freeze queue, which
+>   	 * is fine since we only support rq_qos for blk-mq queue.
+> -	 *
+> -	 * Reuse ->queue_lock for protecting against other concurrent
+> -	 * rq_qos adding/deleting
+>   	 */
+>   	blk_mq_freeze_queue(q);
+>   
+> -	spin_lock_irq(&q->queue_lock);
+>   	if (rq_qos_id(q, rqos->id))
+>   		goto ebusy;
+>   	rqos->next = q->rq_qos;
+>   	q->rq_qos = rqos;
+> -	spin_unlock_irq(&q->queue_lock);
+>   
+>   	blk_mq_unfreeze_queue(q);
+>   
+> @@ -330,7 +329,6 @@ int rq_qos_add(struct rq_qos *rqos, struct gendisk *disk, enum rq_qos_id id,
+>   
+>   	return 0;
+>   ebusy:
+> -	spin_unlock_irq(&q->queue_lock);
+>   	blk_mq_unfreeze_queue(q);
+>   	return -EBUSY;
+>   }
+> @@ -340,21 +338,15 @@ void rq_qos_del(struct rq_qos *rqos)
+>   	struct request_queue *q = rqos->disk->queue;
+>   	struct rq_qos **cur;
+>   
+> -	/*
+> -	 * See comment in rq_qos_add() about freezing queue & using
+> -	 * ->queue_lock.
+> -	 */
+> -	blk_mq_freeze_queue(q);
+> +	lockdep_assert_held(&q->rq_qos_mutex);
+>   
+> -	spin_lock_irq(&q->queue_lock);
+> +	blk_mq_freeze_queue(q);
+>   	for (cur = &q->rq_qos; *cur; cur = &(*cur)->next) {
+>   		if (*cur == rqos) {
+>   			*cur = rqos->next;
+>   			break;
+>   		}
+>   	}
+> -	spin_unlock_irq(&q->queue_lock);
+> -
+>   	blk_mq_unfreeze_queue(q);
+>   
+>   	mutex_lock(&q->debugfs_mutex);
+> diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+> index e49a48684532..53bf5aa6f9ad 100644
+> --- a/block/blk-wbt.c
+> +++ b/block/blk-wbt.c
+> @@ -942,7 +942,9 @@ int wbt_init(struct gendisk *disk)
+>   	/*
+>   	 * Assign rwb and add the stats callback.
+>   	 */
+> +	mutex_lock(&q->rq_qos_mutex);
+>   	ret = rq_qos_add(&rwb->rqos, disk, RQ_QOS_WBT, &wbt_rqos_ops);
+> +	mutex_unlock(&q->rq_qos_mutex);
+>   	if (ret)
+>   		goto err_free;
+>   
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 6ede578dfbc6..17774f55743e 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -395,6 +395,7 @@ struct request_queue {
+>   
+>   	struct blk_queue_stats	*stats;
+>   	struct rq_qos		*rq_qos;
+> +	struct mutex		rq_qos_mutex;
+>   
+>   	const struct blk_mq_ops	*mq_ops;
+>   
+> 
 
