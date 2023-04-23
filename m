@@ -2,71 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E0B6EBC29
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 02:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A569D6EBC2E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 02:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjDWAWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 20:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S229949AbjDWAfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 20:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDWAWg (ORCPT
+        with ESMTP id S229580AbjDWAe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 20:22:36 -0400
-Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796BA1FEB;
-        Sat, 22 Apr 2023 17:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682209352;
-        bh=9luFgRX+xUYAZu6/4d+y7gQdpEOya0tnPMQQsYH7ey4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=iDyWCNgehW/GHTnCJoqN9DbYjXwDbeOJffbzMGe9CMUu61oHd5CsEL/+jv8qj6FYS
-         gCdw7JcjjjgF4uRppEpfo91yJPvaHhN+ehmnlwKXEDEXGSj0MynPxKLKPxqEmLcg82
-         5YiA9x2yVtntwVNfH4MUCgGS6JpktTgPyuwslTVA=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 59D9563A; Sun, 23 Apr 2023 08:22:29 +0800
-X-QQ-mid: xmsmtpt1682209349tomu2ejww
-Message-ID: <tencent_0359C097ED2A7EAF23A35788000632428008@qq.com>
-X-QQ-XMAILINFO: MaZu5Xhaz90xyZLi7eG6DfwuyskB/919VD7/5rJhfG574EAEyZI9/lBRBNAr90
-         JBkkVnZRkVBsYZlw+ixhKQMf82M9RaX5FCvDNKGZUX1oBCma+hYg6+FI+YEmBu7QBD/PUkedUa6B
-         l+X11MtvqjI47HX/Jbm4njpirYPwz3LtMiRctl5SMz0xwIbXbjkt/DZOFJIYXWEBqenWm51kkhye
-         ZV4eDXMFBI/7QabxnY8ahruhHsJKauKG+u8oMX/6NKVmDj39uFNFOkXbDnYWZ4/f6XMDeXNMHTSb
-         NFg1SfwANizmf40V3kP7EFphMz3Wcl0qqq3dgQyjtYNFJ1/L4ff4IDegefhE1ouknJpAtdcOTPdw
-         s6MDWR1khztB8LJnZr4kpGaXGt3V2OeSRUi8rGh2TSoIcXESldcEAvTAA0ZHr1Ag/t24ZJWQYw89
-         CqTLYikWlpasG7FvBa3SLAQehh/yKAGPAE4Yotvq+iNMWtfd4wRo1rFbNq9r6r2O5Edx03Qt82j4
-         8M0wK5Vfhzu3MKQK8HiJIlf7mtGMIiJK8TCKrN6WV13TxSBDEUN/4hjPbfLp8B9mTKcLw2VZroB3
-         gyYX17XHpC/P1xdRT5r0NTr/qrOGpM0IfYrhyLyGXgGmnk0XPrbchX58ol3EZWOBvQtLklkIRU0w
-         Wjy1zCB/re/5xewn0XDSFwZTG+HDJH7fwECxD7wQ2rMTCYu2Q8Aa9dV1kUfnKaN7iaNKG3CDJ4Qj
-         DjiZpuibcKZxYwS6NSM8HSEKEiKU9RbjMVHXIT+Zm5oXgUjPBGeqXJaQMZVMrIxG5GUww7v+gXZy
-         9TXuDTJKb0HbaKm1gvDNMNFBFrBg9U9T996RCz32oFMeUp1ET0o4YAwgExLNTAwuVslpQqiSHYJL
-         p8HB1pNre+5NJcWCD8/90X5uNKlXIhGe52mEmvaxc6qXVPOkV8ndROzIm4wDAkLH4xh51qIgzgzL
-         KJFEojv4P2WjUQQsdpDs7Oojf9PICOOSKJ/Vhom6uHwtH+n5v3Hg==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     william.gray@linaro.org
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rongtao@cestc.cn, rtoax@foxmail.com
-Subject: Re: [PATCH v2] tools/counter: Makefile: Remove lingering 'include' when make clean
-Date:   Sun, 23 Apr 2023 08:22:29 +0800
-X-OQ-MSGID: <20230423002229.4478-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <ZEQGbGor+5i4Gzk/@fedora>
-References: <ZEQGbGor+5i4Gzk/@fedora>
+        Sat, 22 Apr 2023 20:34:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48702211E
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 17:34:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D397261461
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 00:34:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611E7C433D2;
+        Sun, 23 Apr 2023 00:34:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682210097;
+        bh=JNSlUkMUb/vTZyPvFPK9GDKgh29Sk76KROilX21N1bY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=N8LfNmHhurMgegU++0cdfW0n9sl4pIgFJCEbK5J8QG5KYJDfHRup03GgvqtCqsVYt
+         uM4+5Nd67bNhprWPpCHs6RBLEFIJ9murSI53svGg+je+LzOHvwj7yJmn8smFOgcIvv
+         NY+bQad5oRgKwomjbeEr7dMqtdx9qaiTg+DJY1lTRhvifNoiu42unWvTEDMMMLqSfV
+         v1ZL1Z0Q3b5yRfaNXLg793YVQWZjCrRDbezSsxtDpm7gYe8LNua91bhyHudu0XtXds
+         MCKS5GwNA+iP+fIXZ0uqoHTqcQ5krbahT5k2jrM4bfGfqlIiZENnva9Hlqhep4KDx+
+         UdB/dtpcTvMUA==
+Message-ID: <04cc52e7458cbd22c0ef9d092aabca3ea5403074.camel@kernel.org>
+Subject: Re: [PATCH v2] drm: use mgr->dev in drm_dbg_kms in
+ drm_dp_add_payload_part2
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Wayne.Lin@amd.com, lyude@redhat.com, alexdeucher@gmail.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Sat, 22 Apr 2023 20:34:55 -0400
+In-Reply-To: <87o7nkypmo.fsf@intel.com>
+References: <20230419112447.18471-1-jlayton@kernel.org>
+         <87o7nkypmo.fsf@intel.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 (3.48.0-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, William,
+On Wed, 2023-04-19 at 16:21 +0300, Jani Nikula wrote:
+> On Wed, 19 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
+> > I've been experiencing some intermittent crashes down in the display
+> > driver code. The symptoms are ususally a line like this in dmesg:
+> >=20
+> >     amdgpu 0000:30:00.0: [drm] Failed to create MST payload for port 00=
+0000006d3a3885: -5
+> >=20
+> > ...followed by an Oops due to a NULL pointer dereference.
+> >=20
+> > Switch to using mgr->dev instead of state->dev since "state" can be
+> > NULL in some cases.
+> >=20
+> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2184855
+> > Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+>=20
+> Thanks,
+>=20
+> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+>=20
+>
+> > ---
+> >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > I've been running this patch for a couple of days, but the problem
+> > hasn't occurred again as of yet. It seems sane though as long as we can
+> > assume that mgr->dev will be valid even when "state" is a NULL pointer.
+> >=20
+> > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gp=
+u/drm/display/drm_dp_mst_topology.c
+> > index 38dab76ae69e..e2e21ce79510 100644
+> > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > @@ -3404,7 +3404,7 @@ int drm_dp_add_payload_part2(struct drm_dp_mst_to=
+pology_mgr *mgr,
+> > =20
+> >  	/* Skip failed payloads */
+> >  	if (payload->vc_start_slot =3D=3D -1) {
+> > -		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s failed, s=
+kipping part 2\n",
+> > +		drm_dbg_kms(mgr->dev, "Part 1 of payload creation for %s failed, ski=
+pping part 2\n",
+> >  			    payload->port->connector->name);
+> >  		return -EIO;
+> >  	}
+>=20
 
-Of course it's okay, thanks.
+Thanks for the reviews!
 
-Rong Tao
-
+I finally had this happen again today, and I can confirm that this does
+prevent the oops. GNOME rearranged my screen layout after the error, but
+the box stayed up and running.=20
+--=20
+Jeff Layton <jlayton@kernel.org>
