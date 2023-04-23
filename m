@@ -2,279 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B56C6EBD66
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 08:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072A86EBD83
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 08:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjDWGbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 02:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S230170AbjDWGvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 02:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDWGbV (ORCPT
+        with ESMTP id S229604AbjDWGvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 02:31:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA51199E
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 23:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682231435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ojJ8J6SwJ2t3heHFBn0Bsabr0jgX7CmT47hae2NlsQQ=;
-        b=PawHmV5cHIpyEkkNGAuirCygIPXlpS9AuwC0ZeZ44UHP8uc058Wycla2aXz39sqZ82ve7m
-        raPwayh13F8YOmkTqEBH7A98F/GaGx88823vZsykfN/miqPiqJO0EDHa8ozCBj+C8vDKuh
-        v8PPKv5ogjg3PCi6FLmYkh+8hG1JvKE=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-413-FZxLhxQePqiuhf3VUVGwqg-1; Sun, 23 Apr 2023 02:30:30 -0400
-X-MC-Unique: FZxLhxQePqiuhf3VUVGwqg-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1877e4dff8aso2145518fac.2
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 23:30:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682231429; x=1684823429;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ojJ8J6SwJ2t3heHFBn0Bsabr0jgX7CmT47hae2NlsQQ=;
-        b=fg4tOOWotiD76+ZcAFA25PSWkaI45C1FjQyLZaudMMihvvKCvqUmefTxsPjQACNqKs
-         hQ/8lTReC4FdqbGViIADYWpSdY8wAlJSNHsGxCfJpIr9mc7/PjNpneirQ+CjZE7AeF7K
-         OqvuuOH0MSw4bFA8C42/4hagutLLk0+uQAT/Kog98G0HU9NB4lp0zwJsdbuTyHQvWMuh
-         smRQWfnIgNP6v+PeFo4ztDhv74umhm4WZ4nO4E7/Z+Ppsngxgwb4Sd36E8FzMMhNKvyG
-         Wnt74t6cKCQNQUbmE8KSvPw4LUR8hhe+z8dZPGLdIfS7LBpI0e4FDrBiIJhfhZHS3J8H
-         qk8Q==
-X-Gm-Message-State: AAQBX9fKVJPTdePX4t9IIaFSDXDAp1tGndq+b/xHUnhk7hp5xzpvMsyM
-        j4J6ZGbdOinx4pKD+Q8I00Vw2obqIjk8WU+eGGAiii2kDohGa+2TzhPd2PkUCJwpsd/OJTtyWBR
-        37nAsa4RmrkycilyOZXjKqNDICMLZtlvE/iRkqc//
-X-Received: by 2002:a05:6870:d389:b0:184:8300:bfac with SMTP id k9-20020a056870d38900b001848300bfacmr7672320oag.35.1682231429423;
-        Sat, 22 Apr 2023 23:30:29 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YzsgF0Z9L5BvVC8ev7/eC3gT2mJGdBB3NlrQjX6tzHkIyY6LeBMqfYTzC99ghGTCiMe89Snmwc8jP9Ue530OI=
-X-Received: by 2002:a05:6870:d389:b0:184:8300:bfac with SMTP id
- k9-20020a056870d38900b001848300bfacmr7672318oag.35.1682231429136; Sat, 22 Apr
- 2023 23:30:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419134329.346825-1-maxime.coquelin@redhat.com>
- <CACGkMEuiHqPkqYk1ZG3RZXLjm+EM3bmR0v1T1yH-ADEazOwTMA@mail.gmail.com>
- <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com> <CACGkMEuWpHokhwvJ5cF41_C=ezqFhoOyUOposdZ5+==A642OmQ@mail.gmail.com>
- <88a24206-b576-efc6-1bce-7f5075024c63@redhat.com>
-In-Reply-To: <88a24206-b576-efc6-1bce-7f5075024c63@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Sun, 23 Apr 2023 14:30:18 +0800
-Message-ID: <CACGkMEuZpk8QcrUQSOxqt6j3F9Ge-HdSs5-18FayMMQmH3Tcmg@mail.gmail.com>
-Subject: Re: [RFC 0/2] vduse: add support for networking devices
-To:     Maxime Coquelin <maxime.coquelin@redhat.com>
-Cc:     xieyongji@bytedance.com, mst@redhat.com, david.marchand@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 23 Apr 2023 02:51:46 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1AF173F
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 23:51:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vgimp-a_1682232700;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vgimp-a_1682232700)
+          by smtp.aliyun-inc.com;
+          Sun, 23 Apr 2023 14:51:41 +0800
+Message-ID: <1682232694.2048266-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH] tools/virtio: ringtest: Add .gitignore
+Date:   Sun, 23 Apr 2023 14:51:34 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     Rong Tao <rongtao@cestc.cn>, Jason Wang <jasowang@redhat.com>,
+        linux-kernel@vger.kernel.org (open list),
+        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND 
+        NET DRIVERS), mst@redhat.com
+References: <tencent_B2592997622AA2AF59A31E88DB069C424408@qq.com>
+In-Reply-To: <tencent_B2592997622AA2AF59A31E88DB069C424408@qq.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:28=E2=80=AFPM Maxime Coquelin
-<maxime.coquelin@redhat.com> wrote:
+On Fri, 21 Apr 2023 20:04:33 +0800, Rong Tao <rtoax@foxmail.com> wrote:
+> From: Rong Tao <rongtao@cestc.cn>
 >
+> Ignore ringtest binaries.
 >
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+
+> ---
+>  tools/virtio/ringtest/.gitignore | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>  create mode 100644 tools/virtio/ringtest/.gitignore
 >
-> On 4/21/23 07:51, Jason Wang wrote:
-> > On Thu, Apr 20, 2023 at 10:16=E2=80=AFPM Maxime Coquelin
-> > <maxime.coquelin@redhat.com> wrote:
-> >>
-> >>
-> >>
-> >> On 4/20/23 06:34, Jason Wang wrote:
-> >>> On Wed, Apr 19, 2023 at 9:43=E2=80=AFPM Maxime Coquelin
-> >>> <maxime.coquelin@redhat.com> wrote:
-> >>>>
-> >>>> This small series enables virtio-net device type in VDUSE.
-> >>>> With it, basic operation have been tested, both with
-> >>>> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
-> >>>> adding VDUSE support [0] using split rings layout.
-> >>>>
-> >>>> Control queue support (and so multiqueue) has also been
-> >>>> tested, but require a Kernel series from Jason Wang
-> >>>> relaxing control queue polling [1] to function reliably.
-> >>>>
-> >>>> Other than that, we have identified a few gaps:
-> >>>>
-> >>>> 1. Reconnection:
-> >>>>    a. VDUSE_VQ_GET_INFO ioctl() returns always 0 for avail
-> >>>>       index, even after the virtqueue has already been
-> >>>>       processed. Is that expected? I have tried instead to
-> >>>>       get the driver's avail index directly from the avail
-> >>>>       ring, but it does not seem reliable as I sometimes get
-> >>>>       "id %u is not a head!\n" warnings. Also such solution
-> >>>>       would not be possible with packed ring, as we need to
-> >>>>       know the wrap counters values.
-> >>>
-> >>> Looking at the codes, it only returns the value that is set via
-> >>> set_vq_state(). I think it is expected to be called before the
-> >>> datapath runs.
-> >>>
-> >>> So when bound to virtio-vdpa, it is expected to return 0. But we need
-> >>> to fix the packed virtqueue case, I wonder if we need to call
-> >>> set_vq_state() explicitly in virtio-vdpa before starting the device.
-> >>>
-> >>> When bound to vhost-vdpa, Qemu will call VHOST_SET_VRING_BASE which
-> >>> will end up a call to set_vq_state(). Unfortunately, it doesn't
-> >>> support packed ring which needs some extension.
-> >>>
-> >>>>
-> >>>>    b. Missing IOCTLs: it would be handy to have new IOCTLs to
-> >>>>       query Virtio device status,
-> >>>
-> >>> What's the use case of this ioctl? It looks to me userspace is
-> >>> notified on each status change now:
-> >>>
-> >>> static int vduse_dev_set_status(struct vduse_dev *dev, u8 status)
-> >>> {
-> >>>           struct vduse_dev_msg msg =3D { 0 };
-> >>>
-> >>>           msg.req.type =3D VDUSE_SET_STATUS;
-> >>>           msg.req.s.status =3D status;
-> >>>
-> >>>           return vduse_dev_msg_sync(dev, &msg);
-> >>> }
-> >>
-> >> The idea was to be able to query the status at reconnect time, and
-> >> neither having to assume its value nor having to store its value in a
-> >> file (the status could change while the VDUSE application is stopped,
-> >> but maybe it would receive the notification at reconnect).
-> >
-> > I see.
-> >
-> >>
-> >> I will prototype using a tmpfs file to save needed information, and se=
-e
-> >> if it works.
-> >
-> > It might work but then the API is not self contained. Maybe it's
-> > better to have a dedicated ioctl.
-> >
-> >>
-> >>>> and retrieve the config
-> >>>>       space set at VDUSE_CREATE_DEV time.
-> >>>
-> >>> In order to be safe, VDUSE avoids writable config space. Otherwise
-> >>> drivers could block on config writing forever. That's why we don't do
-> >>> it now.
-> >>
-> >> The idea was not to make the config space writable, but just to be abl=
-e
-> >> to fetch what was filled at VDUSE_CREATE_DEV time.
-> >>
-> >> With the tmpfs file, we can avoid doing that and just save the config
-> >> space there.
-> >
-> > Same as the case for status.
+> diff --git a/tools/virtio/ringtest/.gitignore b/tools/virtio/ringtest/.gitignore
+> new file mode 100644
+> index 000000000000..4c6f4bad6b5d
+> --- /dev/null
+> +++ b/tools/virtio/ringtest/.gitignore
+> @@ -0,0 +1,6 @@
+> +/noring
+> +/ptr_ring
+> +/ring
+> +/virtio_ring_0_9
+> +/virtio_ring_inorder
+> +/virtio_ring_poll
+> --
+> 2.39.1
 >
-> I have cooked a DPDK patch to support reconnect with a tmpfs file as
-> suggested by Yongji:
->
-> https://gitlab.com/mcoquelin/dpdk-next-virtio/-/commit/53913f2b1155b02c44=
-d5d3d298aafd357e7a8c48
-
-This seems tricky, for example for status:
-
-dev->log->status =3D dev->status;
-
-What if we crash here?
-
-
->
-> That's still rough around the edges, but it seems to work reliably
-> for the testing I have done so far. We'll certainly want to use the
-> tmpfs memory to directly store available indexes and wrap counters to
-> avoid introducing overhead in the datapath.
-
-That's fine, we probably need a chapter in the kernel doc to describe
-the reliable reconnection but it is not limited to tmpfs.
-
-> The tricky part will be to
-> manage NUMA affinity.
-
-This part is not clear to me, what affinity should we care about?
-There's a sysfs that was invented by YongJi for virtqueue affinity
-management recently.
-
-Thanks
-
->
-> Regards,
-> Maxime
->
-> >
-> > Thanks
-> >
-> >>
-> >>> We need to harden the config write before we can proceed to this I th=
-ink.
-> >>>
-> >>>>
-> >>>> 2. VDUSE application as non-root:
-> >>>>     We need to run the VDUSE application as non-root. There
-> >>>>     is some race between the time the UDEV rule is applied
-> >>>>     and the time the device starts being used. Discussing
-> >>>>     with Jason, he suggested we may have a VDUSE daemon run
-> >>>>     as root that would create the VDUSE device, manages its
-> >>>>     rights and then pass its file descriptor to the VDUSE
-> >>>>     app. However, with current IOCTLs, it means the VDUSE
-> >>>>     daemon would need to know several information that
-> >>>>     belongs to the VDUSE app implementing the device such
-> >>>>     as supported Virtio features, config space, etc...
-> >>>>     If we go that route, maybe we should have a control
-> >>>>     IOCTL to create the device which would just pass the
-> >>>>     device type. Then another device IOCTL to perform the
-> >>>>     initialization. Would that make sense?
-> >>>
-> >>> I think so. We can hear from others.
-> >>>
-> >>>>
-> >>>> 3. Coredump:
-> >>>>     In order to be able to perform post-mortem analysis, DPDK
-> >>>>     Vhost library marks pages used for vrings and descriptors
-> >>>>     buffers as MADV_DODUMP using madvise(). However with
-> >>>>     VDUSE it fails with -EINVAL. My understanding is that we
-> >>>>     set VM_DONTEXPAND flag to the VMAs and madvise's
-> >>>>     MADV_DODUMP fails if it is present. I'm not sure to
-> >>>>     understand why madvise would prevent MADV_DODUMP if
-> >>>>     VM_DONTEXPAND is set. Any thoughts?
-> >>>
-> >>> Adding Peter who may know the answer.
-> >>
-> >> Thanks!
-> >> Maxime
-> >>
-> >>> Thanks
-> >>>
-> >>>>
-> >>>> [0]: https://patchwork.dpdk.org/project/dpdk/list/?series=3D27594&st=
-ate=3D%2A&archive=3Dboth
-> >>>> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ=
-0WvjGRr3whU+QasUg@mail.gmail.com/T/
-> >>>>
-> >>>> Maxime Coquelin (2):
-> >>>>     vduse: validate block features only with block devices
-> >>>>     vduse: enable Virtio-net device type
-> >>>>
-> >>>>    drivers/vdpa/vdpa_user/vduse_dev.c | 11 +++++++----
-> >>>>    1 file changed, 7 insertions(+), 4 deletions(-)
-> >>>>
-> >>>> --
-> >>>> 2.39.2
-> >>>>
-> >>>
-> >>
-> >
->
-
