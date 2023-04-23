@@ -2,166 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66DB6EBFD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 15:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B716EBFDA
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjDWNwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 09:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S229917AbjDWOAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjDWNwx (ORCPT
+        with ESMTP id S229456AbjDWOAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 09:52:53 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D8941737
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 06:52:50 -0700 (PDT)
-Received: from loongson.cn (unknown [223.72.41.205])
-        by gateway (Coremail) with SMTP id _____8DxAf8xOEVkMBkhAA--.52021S3;
-        Sun, 23 Apr 2023 21:52:49 +0800 (CST)
-Received: from [192.168.1.14] (unknown [223.72.41.205])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx37MwOEVkX_A2AA--.8749S3;
-        Sun, 23 Apr 2023 21:52:49 +0800 (CST)
-Message-ID: <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
-Date:   Sun, 23 Apr 2023 21:52:49 +0800
+        Sun, 23 Apr 2023 10:00:12 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2066.outbound.protection.outlook.com [40.92.53.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF5C10C8;
+        Sun, 23 Apr 2023 07:00:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aOwY/DwiuNhrAO3ZmGgx3J69eO+TrTBBfrx5SqIxd3HogX29w7dDHY0lM+IZV3ayHJBPJm7kucr46+6FVnrcW7i/IYpvnpU/mrn2KO3CzaiSnS+rSlmAJ+WEKn9WvdsZ4lDQygA9tn4f8BmPkG6CXO3AEmAzcYoDTWZknHHafzysyAJfWhgAf60nCzY9FZtKjNlgaBNpKeLm9rCvETXItf4Az6C3yaHgjIJt2rPsGSvV7/hl0ZDEcZn+UPfjI3auZkSpJ3H7+J5AIH56fAZ74tTyRljphnAvI7EHH44Ism6v7w5EQPwoQx5x4zAKV956tJii9M2mNX6g0clGguLAqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RZtAJ42XVnr7fKAiI8iqrmXTJnda4s1twzyRvpRMR90=;
+ b=nu7Sul5/EQ7F0jhR2i22eAIR+khCwtq83QlJwsuZ329jXZDfXk6uwcgme2i+EmHR65JUd9p2+PDvRYe0ZaW+LWMfbtjM7WJZTI6PjPob8YqHohSZL7flQnbL+NaFzQFrtDdeD8SJ9Xmqu49t3EOCNTjjyg2149pgi4mbaE5fiBh5HoLzgKRFs/7EPqgA1ppRdc0jaVx/eHOsOfZ7LUDgMkCFjJKse4dIICN4GKSU/rQ1gV96/wAmkmC1LRvCQvPhVZwuObzzR6sEWqv2hC2/U4gtVgk1Yzg0OZ53UqSq+e0J+HRJuOpU71hlQa3a/OCJlrQyHbum8v5f0MPd89E0LA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RZtAJ42XVnr7fKAiI8iqrmXTJnda4s1twzyRvpRMR90=;
+ b=H5dpMGnXKJd5DBQ3pNoyDqY0TUoFgILrqjFQ9v20afcd0iyouXAwkaodF8RGCo4C54s+S5WU/fPxdEnkVBQXmUzbLtL76qjTpTzHZ+bwg2GW0kDwxkeo+fjllrXgBaITcbDFL1hqoScvqY71a7QLegh29Yhh7J4MVXMcDFSahEY65LDbXDi9YG98hYV0k6y5T2XnB3wAiokySOK2m2xA6ZhtwLXwIRFEpCr+5DZAi9SQ+UXAynRBSsM8j6MkuW6fGYwaRRNptZXVtdxjJav7hxAc8jqF6RMTteSL1cheX35ciF9eI9MXSu9zndCw2BTNU2NyP+R6tHfY+Iz0EWMGlg==
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12) by SEZPR01MB4183.apcprd01.prod.exchangelabs.com
+ (2603:1096:101:38::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.11; Sun, 23 Apr
+ 2023 14:00:05 +0000
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::5bff:fd7e:ec7c:e9d3]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::5bff:fd7e:ec7c:e9d3%5]) with mapi id 15.20.6340.018; Sun, 23 Apr 2023
+ 14:00:05 +0000
+From:   Yan Wang <rk.code@outlook.com>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     Yan Wang <rk.code@outlook.com>,
+        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] gpio: gpiolib: clear the array_info's memory space
+Date:   Sun, 23 Apr 2023 21:59:43 +0800
+Message-ID: <KL1PR01MB5448327326B6EDA8001AF714E6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <202304232146.7M89pwCz-lkp@intel.com>
+References: <202304232146.7M89pwCz-lkp@intel.com>
+Content-Type: text/plain
+X-TMN:  [KaQ/JvKzjW08PnlwxR9ubaa9qnNChpCFeVAix8Mhsmc=]
+X-ClientProxiedBy: SI1PR02CA0022.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::16) To KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12)
+X-Microsoft-Original-Message-ID: <20230423135943.1433-1-rk.code@outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
- <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
- <ZEPteS82TbIhMQxe@lothringen>
- <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx37MwOEVkX_A2AA--.8749S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGFy5Xw48Xry3uw18Wr1kAFb_yoW5XFWrpr
-        y8ua1vkFWvgr95W3sxtw1vqrn8JasrKrya9an5AFWrAF47ur1UXw18Z3s09FyFgw4fJr40
-        gFnYqayS9a13JaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1YL9UUUUU=
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|SEZPR01MB4183:EE_
+X-MS-Office365-Filtering-Correlation-Id: dbbc8e68-ec6f-464c-0790-08db44030a4a
+X-MS-Exchange-SLBlob-MailProps: ZILSnhm0P3kpnoAp0BLte3KMHHlGHUDRtiUdCriPD/E7WQXBlqOx2DZFKs//gOMbnop3XUDrchpV/nX4MxJAq3w1+DN82HrEMPU98jtWeM54hVPbsLtpYe/eN1MQJZFlX86CdR0/aDxOnN2iqVqo+9cF5NRndGly4CuRZH59jWI+bIvyQDw1ECDGY5z5gJ++fe4itk6fRTjQ5Wlv2FAQMg8kosTer2XeUorse4M3IhWp5T7THAgGzEQpU+UuVoGqlA8j+c73wR0TDqlIeeTEofpYy51iKdACUic8YP2bIRvJ8P3JMuQ7L4sVt8zMQA96yn4KjjzLsxp4Tmj9h2tZwpRjq5xeECtu0aUNHDtSFbQeHInuvuWNpcs6YqjniyigivTZ+wwDyeGi57Ehpgq1I9uled28MXLBfagbDc/fty3nwhmFjgrx5DfJYlPxLUTHN0q7NzD2NvBCGhhyfTimpSAAvYSRZtVZXYvF2ESjTdAqsx5AzEqDJNXdrVX+LBkC4RzUffiSY0ntL0fVfVidf+VitKKugquTTFS/7ce541OWy1HubNGDQ0EUVgurj4Z2bDPPYe+6LPAx6Y+fx6fOzbAmJeDSi0hzA0iq/SXuXmjc4bymRUdwt0oROLDslYOuIb3pqliYk+lMAizYr6K9ekriEQEXCplPL2OQjr8s8Yf962AAxC1NhyDYbr9+02jNtfIFhGg1BsBlSUhuIS4KklMZYZsa26K0k1htHmr1qckopQiJPoZWnw3Ma/qHyRzcWyhWNx6tiz1G+kN8op+aF7G2HZCXm0tb
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BkqI2dvJiuBox5gGCtm6QszHPkpVITHoHxuLEMhq6gv53ssc/pF0Ijti8jJsCbYzTtQNQjhPiw6ub4K1C0a1bDKgi3bsv7FoyFAN7dae2jYgb+mgn/6ewbJKtplyTYq7p6Hb/vnJQK7G41ME3MwaQmAvFZ3yuFW8rQL0AwyAuCkkM7oETxwkWk2PvJ3UFfqtUhePDKR5ETBCbUhIMOUYsXA/2aZGkgIRYWW/88kfKZztZgR1qbT/FYtSHqWYubQdB8etdqbfHnWVVAc9sX8dm3j04DLHkJwAy6xObeRuGlBPkyhrfr38RfN9TuhE+8TpkTCFrk2qjbbU2i2oyIo6EIDR7GyJJeixNhIIgPqbTYsabSns307i2fgy91btUdNsFDkuIaODVa+3ea30neoytIT9yd3X0EymEtXJnBFnZJsnQSS6pga4swCtVTqP4R80w0H8hmDnSmgwsIaRNPTXfHI2t7/fZHaJhn5gdzVWY5K1ruTO2d42yMKjJVs8l8owYxszrKXPvV64QW/cIuDs+v5ig3Z1f6tG34rVXQ1Tf60ny4sALgvMNN0X3rqdtgiqXdzhhYJMoZFqSOfKb4rzBTUSFFQLoWxzmNoqD5VSVvE=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SQ2NvsHnvZW4wxR5N+nyE9z2g1WVFIhnxmB2Uvvz1OPXsPZdwFC6e9kuYtFD?=
+ =?us-ascii?Q?iCmR/bXrhue7IUilfhiUXvv6p83ApfF2eAYo2d9Yvl3Kanh4O6LZy+w6rhnF?=
+ =?us-ascii?Q?7pMEv+Qnhjx6ezYzHLTQSv9LXjc1HkEVRV5zOE/3ma0yyckwYea0i+J47l9O?=
+ =?us-ascii?Q?fCgMd5zd474OYdq3C8sq5nn1BrRx3IpQNEqoM8oZWL3gUh2cApN8cpUejFju?=
+ =?us-ascii?Q?tYvHu1ZPiZrgegG2YM0zOGyJZTtXei7vmTgsPTKgZJ4si4r82/PzJ+WXlEw/?=
+ =?us-ascii?Q?pCkoWozVnFZHaHhooDgMgVO1VWpfXAPG+DcvULuI7kencaf0zF2DDJCQurY+?=
+ =?us-ascii?Q?rEJFivArYpXoi47f9SsM5tvHWMNmBbAxN5HzSRsPaGCHUzb8Z2XB/MVL1pwY?=
+ =?us-ascii?Q?ZF0/9mykqJdtY+RylSpWRBv8gy62D3axXvCLVmUOEthv3Gn2yU4RtSCD+Re1?=
+ =?us-ascii?Q?7PN9mcj7ePdKBgA5N6/SITJ15iFvM2INGBe3Hd+2kVZwLT5onvo4JN9j+FFz?=
+ =?us-ascii?Q?L/wTbJ+tY1TeUFeFHhct5wPmgeSXFfif5GEAFbj1dWMvLxWj6cp1C1BZ8e2D?=
+ =?us-ascii?Q?8FugPqREV7e5Zx7u483lhQ6nnwOo8akRNAQp1am8yFtkD35Zf6GJSmcBytv9?=
+ =?us-ascii?Q?CPIF1OomjyEi89bURjC0oFQIcrqt+xW6eHEeqowY/jb6Fb5wtw/M/I+WCSfW?=
+ =?us-ascii?Q?JQa5it7biBEdH2USbFNwtgaY+Ie8LqpHErtMbxfI5hB2pVf+N3IhJQp1w3h+?=
+ =?us-ascii?Q?hVvtdWRHTCUffxnh9CNe28oTelBg7Tf1LLu13RQoIfqljb3sS0Jx3htpHuXi?=
+ =?us-ascii?Q?aeqKYZSMtwctdKuVBSG9IyKNVgewLql3+afj/9DtakOBRaSm5y6GcDmZ5dMi?=
+ =?us-ascii?Q?rnv4kE8ydSZGGwOhgYlYdwE+zn1Tx2UNcYwjFVRPzaP9r8rSRB2+2SxDUPDz?=
+ =?us-ascii?Q?7h0Oapq76bW+WMBuF7nDptDM5ixFfuCdxIb8KyYFrAHZvwYxErc8k9vdXYSC?=
+ =?us-ascii?Q?VCBuNZvdF1KFh+i+BJ4gk2DLiJQx4O0UwFtxcx6qUmLogkzrsBDzGGohop0J?=
+ =?us-ascii?Q?D/pi3AmbeUTuFwqaFW3Ba7JjJzTnOPrCJR/AbSiOBuLpuzsUWlDMjOwrUx3S?=
+ =?us-ascii?Q?TV39u/JsXhy1dbNimd+THsuVf/qDUyQerI4jwx4JmIpqZFdmXeX3KeGL5Qho?=
+ =?us-ascii?Q?cD5FzJUwiB6h15Z0IrvHo+F+rT6NI+uadLEaZg=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbbc8e68-ec6f-464c-0790-08db44030a4a
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2023 14:00:05.3305
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR01MB4183
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+if hardware number different to array index,it needs to clear to points
+memory space if the array_info have been assigned a value.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304232146.7M89pwCz-lkp@intel.com/
+Signed-off-by: Yan Wang <rk.code@outlook.com>
+---
+v1->v2: fixed building warning
+---
+ drivers/gpio/gpiolib.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-在 2023/4/22 23:04, Peter Zijlstra 写道:
-> On Sat, Apr 22, 2023 at 04:21:45PM +0200, Frederic Weisbecker wrote:
->> On Sat, Apr 22, 2023 at 10:17:00AM +0200, Peter Zijlstra wrote:
->>> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
->>> index 44ff1ff64260..5a102ff80de0 100644
->>> --- a/arch/loongarch/kernel/genex.S
->>> +++ b/arch/loongarch/kernel/genex.S
->>> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
->>>   	ori	t0, t0, 0x1f
->>>   	xori	t0, t0, 0x1f
->>>   	bne	t0, t1, 1f
->>> +	addi.d	t0, t0, 0x20
->>>   	LONG_S	t0, sp, PT_ERA
->>>   1:	move	a0, sp
->>>   	move	a1, sp
->>
->> But the interrupts are enabled in C from arch_cpu_idle(), which
->> only then calls the ASM __arch_cpu_idle(). So if the interrupt happens
->> somewhere in between the call, the rollback (or fast-forward now)
->> doesn't apply.
-I do not know much details about scheduler and timer, if the interrupt 
-happens between the call, will flag _TIF_NEED_RESCHED be set? If it is 
-set, the rollback will still apply.
-
-
->>
->> I guess interrupts need to be re-enabled from ASM in the beginning
->> of __arch_cpu_idle() so that it's part of the fast-forward region.
-> 
-> Right; something like so I suppose, but at this point I'm really just
-> guessing... Loongarch person will have to do.
-> 
-> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-> index 44ff1ff64260..4814ac5334ef 100644
-> --- a/arch/loongarch/kernel/genex.S
-> +++ b/arch/loongarch/kernel/genex.S
-> @@ -19,13 +19,13 @@
->   	.align	5
->   SYM_FUNC_START(__arch_cpu_idle)
->   	/* start of rollback region */
-> +	move	t0, CSR_CRMD_IE
-> +	csrxchg	t0, t0, LOONGARCH_CSR_CRMD
->   	LONG_L	t0, tp, TI_FLAGS
->   	nop
->   	andi	t0, t0, _TIF_NEED_RESCHED
->   	bnez	t0, 1f
->   	nop
-> -	nop
-> -	nop
->   	idle	0
->   	/* end of rollback region */
->   1:	jr	ra
-> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
->   	ori	t0, t0, 0x1f
->   	xori	t0, t0, 0x1f
->   	bne	t0, t1, 1f
-> +	addi.d	t0, t0, 0x20
-It is more reasonable with this patch, this will jump out of idle 
-function directly after interrupt returns. If so, can we remove checking 
-_TIF_NEED_RESCHED in idle ASM function?
-
- > +	move	t0, CSR_CRMD_IE
- > +	csrxchg	t0, t0, LOONGARCH_CSR_CRMD
--   	LONG_L	t0, tp, TI_FLAGS
-+	nop
- >   	nop
--	andi	t0, t0, _TIF_NEED_RESCHED
--	bnez	t0, 1f
-+	nop
-+	nop
- >   	nop
- > -	nop
- > -	nop
- >   	idle	0
-
-Regards
-Bibo, Mao
->   	LONG_S	t0, sp, PT_ERA
->   1:	move	a0, sp
->   	move	a1, sp
-> diff --git a/arch/loongarch/kernel/idle.c b/arch/loongarch/kernel/idle.c
-> index 0b5dd2faeb90..5ba72d229920 100644
-> --- a/arch/loongarch/kernel/idle.c
-> +++ b/arch/loongarch/kernel/idle.c
-> @@ -11,7 +11,6 @@
->   
->   void __cpuidle arch_cpu_idle(void)
->   {
-> -	raw_local_irq_enable();
->   	__arch_cpu_idle(); /* idle instruction needs irq enabled */
->   	raw_local_irq_disable();
->   }
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 04fb05df805b..8b2a8db44b54 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -4359,6 +4359,8 @@ struct gpio_descs *__must_check gpiod_get_array(struct device *dev,
+ 			 * hardware number is different from its array index.
+ 			 */
+ 			if (bitmap_full(array_info->get_mask, descs->ndescs)) {
++				/*clear descs->info*/
++				memset(array_info, 0, sizeof(struct gpio_array));
+ 				array_info = NULL;
+ 			} else {
+ 				__clear_bit(descs->ndescs,
+-- 
+2.17.1
 
