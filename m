@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4456EC067
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBE46EC06B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjDWOac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S229881AbjDWOf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWOa3 (ORCPT
+        with ESMTP id S229453AbjDWOf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:30:29 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BFEE3;
-        Sun, 23 Apr 2023 07:30:28 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f182d745deso34729575e9.0;
-        Sun, 23 Apr 2023 07:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682260227; x=1684852227;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hmz02kgYSIPTVGE2YzP1t9u5jmmiCjYgtKyhAhJJpAU=;
-        b=KQ/354GpPjBr/GF7Ev1Y2jkdF14nbEgnAMPYLzm9bKofG5mQa5wPu0OqnZpy2RISao
-         jddj2N/u1Pgifdz/7vD+2GGfWX2vyZb4b/dU5bqFzOEJ14qsT/nj4GUBPYVoLMEaHh5P
-         KGYEjpRYP641hmbk94/umFPA9aWC4DLHs1yUCjSTzNtDYGuYVBqQnOfyAGuhH9Ym+XBM
-         4uPy7yRRL3Xplm1kP3esQU5ean/nImylay62lRzRHMT1PYrqwDCRX3QMfMXmegkAY08f
-         cBnjbrcA4mGqFa0fLDNpa7+wvU/wkBRYAoUucZK65utrhWF76aJXqn2K8qGpctVApO0Q
-         B3bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682260227; x=1684852227;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hmz02kgYSIPTVGE2YzP1t9u5jmmiCjYgtKyhAhJJpAU=;
-        b=IP0w2NXNEHVwzASK3Pm73iSQ6RS9UXLDUT7kldn31uDsls0+G/uDytnaAwWANu0RRu
-         yB5XzWyL132ZGhNMEfglwsu5KW5EaggYT8ZvihYS31kwBwdG48yLD4iuppKtVZ9A0Y38
-         j0+OrDNVcJrmKVNaqu2PeJ1xh3kdXkfHgzEPMH6pIRKu+dZmOolaWYgTbXNZSSOTR2RS
-         CHa9/bKnn9pVV2ocf/KPAJA0Vvn1qZR79VoseOELLlu6wSYUSUncdqaRJC7lIFwn4PQJ
-         5PcaSPbIVhiPYdgfM2vRx/wMEDRvJA7YOxTF7QccIeWg+M3x5NnDrkH3NKP6h1cSjNhd
-         g4RQ==
-X-Gm-Message-State: AAQBX9fJtqlD0ATmbTaqgrUXOVAPiQHRqPpCmMElDQ5HpEG8t3MEGk3K
-        NMQFd4nlwmpUipm2nCFDpNAbDYqkc924Lw==
-X-Google-Smtp-Source: AKy350YFG1XWLlzDerdjqq1cTqz6QsInPmJyhb5q+UOAbjM1BuxXV+707QxfrCa3w8mGQbVrwAluNA==
-X-Received: by 2002:a7b:c5c7:0:b0:3f1:75d0:6151 with SMTP id n7-20020a7bc5c7000000b003f175d06151mr5878554wmk.1.1682260226832;
-        Sun, 23 Apr 2023 07:30:26 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c000900b003f0aa490336sm13068176wmc.26.2023.04.23.07.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 07:30:26 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 16:30:24 +0200
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: brcm,kona-wdt: convert to YAML
-Message-ID: <20230423143024.GA10503@standask-GA-A55M-S2HP>
+        Sun, 23 Apr 2023 10:35:56 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17D9FF;
+        Sun, 23 Apr 2023 07:35:54 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 869DF32008C0;
+        Sun, 23 Apr 2023 10:35:52 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sun, 23 Apr 2023 10:35:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1682260552; x=1682346952; bh=PAr4ZIboJa
+        MJHdcJfTxs+nnLe/T7fzo0XDxOaHgRyXc=; b=jELwyHghNtdBQkMRWXrbT7Pi85
+        SekQsOSnG0U4zaTXXArDVkRWgSgqG71E/yRCZufo9K6Htzj9QUA7KDCC+qYwI6p6
+        /HJAKNzXzZLA6NWdLkmDfj8ZqimxCWS9D2iWVSlUCJ5r9XA3WjQ1/h2xIxXi0itc
+        zO0rhDub8Y8WlwgYZIN/f9F792PSz+MgzqDoIp9T0yWkvnkDngY1E3piiKy/Xz9V
+        o/rtjWuWjyB23palsPzR3QWTdXOfCuEO4eNkpRwOKoVS9wTCzsHr/f2kPq9DQTL4
+        ONkhrtgYO7RhAQame0E5XzmNWyOPKQxqfP+xpOGiPjKJtMH5cYTh37CMo3Ug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682260552; x=1682346952; bh=PAr4ZIboJaMJH
+        dcJfTxs+nnLe/T7fzo0XDxOaHgRyXc=; b=GVR0AE//fuvQZurX4qScKH9S8wlFd
+        3Bk1pjj0b3d29JhfD3xMrTg5bY12VmqSmk62zxyljkgk6LB70r3jkWmTi/o1fYWo
+        8BHTyT1png2MgBgcrgP0wvJcLr8jZwhXjP4nlc/TbSHXox2gOzLtOo6SEAnCzOE7
+        QUrpMWZayAEMbShoeNAZWtRuJkqwTrr13UhJA119GJPSlFQAHhau3ba6eAJFGWDa
+        JlZT77/wK877WOLnqv7ybSLG/gSwSiNS/k0ZVKEoRu6EgkPa4UINbyk3P/Mou6mw
+        ldUPYD+YTCEE5NMNha7TY2ZVbriezfMuIeCdBzfiVHJKlolt3bOHe0QZg==
+X-ME-Sender: <xms:R0JFZP5McjHkG02elBuK4R3cdnp10UAc2fTEXC3TO8MFdB1HJZbjiQ>
+    <xme:R0JFZE4Y9URdImaDNkIis_DnZzizHQhnKD9eIfP-EP02sHnauAdeDytjkacPLIhey
+    9eflFD8N5SRoI80hMM>
+X-ME-Received: <xmr:R0JFZGfFeZOs8RJIopBuNsC7Ub5p74Eov2WbP8kBaBSk7I5DnU5F8r8VcZlK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtkedgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:R0JFZAIDC8SGw8EhhWmMfhPFrAmY055IwQUFA9jd6r85lXHWLXaJfw>
+    <xmx:R0JFZDLYfxsPJel5rzSaVJaV-ZjDrcn5zbhmbKgbS7gDkKDq4Hr3pg>
+    <xmx:R0JFZJyVqryL6S9ldbDJI4bTApa731sJ7Yq9vnh-xJTjWy1UjRClOw>
+    <xmx:SEJFZKX5xvwKBK0CrjXCO7V5YpIkKQhZYo9QEXdiD8bqBzOFieXoug>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 23 Apr 2023 10:35:50 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH] MIPS: Remove unused variable in arch_local_irq_restore
+Date:   Sun, 23 Apr 2023 15:35:45 +0100
+Message-Id: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,80 +81,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Broadcom Kona family watchdog timer bindings to DT schema.
+It was left over in 9efe1ad6f24a ("MIPS: Don't play with fire in
+DIEI irq_restore").
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- .../bindings/watchdog/brcm,kona-wdt.txt       | 15 --------
- .../bindings/watchdog/brcm,kona-wdt.yaml      | 37 +++++++++++++++++++
- 2 files changed, 37 insertions(+), 15 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+ arch/mips/include/asm/irqflags.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-deleted file mode 100644
-index 2b86a00e351d..000000000000
---- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Broadcom Kona Family Watchdog Timer
-------------------------------------
+diff --git a/arch/mips/include/asm/irqflags.h b/arch/mips/include/asm/irqflags.h
+index 3357bce75c69..b79269789c71 100644
+--- a/arch/mips/include/asm/irqflags.h
++++ b/arch/mips/include/asm/irqflags.h
+@@ -59,8 +59,6 @@ static inline unsigned long arch_local_irq_save(void)
+ 
+ static inline void arch_local_irq_restore(unsigned long flags)
+ {
+-	unsigned long __tmp1;
 -
--This watchdog timer is used in the following Broadcom SoCs:
--  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
--
--Required properties:
--  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
--  - reg: memory address & range
--
--Example:
--	watchdog@35002f40 {
--		compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
--		reg = <0x35002f40 0x6c>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-new file mode 100644
-index 000000000000..5de1b022847b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-@@ -0,0 +1,37 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom Kona family watchdog timer
-+
-+maintainers:
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - brcm,bcm11351-wdt
-+      - const: brcm,kona-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@35002f40 {
-+        compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-+        reg = <0x35002f40 0x6c>;
-+    };
-+...
+ 	if (likely(flags)) {
+ 		__asm__ __volatile__(
+ 		"	.set	push						\n"
 -- 
-2.25.1
+2.39.2 (Apple Git-143)
 
