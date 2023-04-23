@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15ADE6EBC4A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 03:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7356EBC3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 03:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjDWBek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 21:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S230055AbjDWB1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 21:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDWBei (ORCPT
+        with ESMTP id S230044AbjDWB1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 21:34:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3862F1FE3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 18:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682213634;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=09Pqr7rDFYYz3FncrOkQc8pLBhiqcgYn36BtmrtOB5A=;
-        b=RhLuodqJxNfaTAe+b8kflTIseP/rftgKnoDIcwis7LXCnBQ6Q0IL7hy6lzGz10ocnqbesl
-        Q48FEUdijBaHkbOTKkqmmoqTscmaPbNUgma2ktEVYgTRY0oBDN7/+Tna+wivFuSumS8wUR
-        Hh/21aNrCwhvDH6h3jiQPtFAzrJArtw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-2Xeptx0oPzu-RVqHESuNgw-1; Sat, 22 Apr 2023 21:33:50 -0400
-X-MC-Unique: 2Xeptx0oPzu-RVqHESuNgw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sat, 22 Apr 2023 21:27:30 -0400
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E0310E2;
+        Sat, 22 Apr 2023 18:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1682213247; i=@fujitsu.com;
+        bh=q8VRNeqr3EzQLYWmemAVzstBD0W+cAm/QdJIUQrLxOs=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=aSBjJlGrF+mkkCk+0LdlH8rMxJNKRRdqZ65YCqyN4OCDI+PvyDkSUyTMDeIS2i1H0
+         Jpjarf4+ywBAWyhTl3qHN/J4ubuXXfeNf83wyLzV1GCVUlC9wRTxL9Z0HGR2pxBFEg
+         SfROSGP4Jzu2TLjAhtKAJP0geTzhSU1voG8Uw78zftkMoXiij6Gcww1BU95QpEcdB1
+         pFW8w4JNVbSpYpGzpvgvmridzipOtCLoVpu/WgkpCvZOQ2Wpne8/NYnUMLKHW4seY4
+         nL4I5R6NW/ptwgXQ5+qoIKwoEtZR5Klqi9O4lQlR8qXr/X+QvIsCdgl7AGTOlueIei
+         P88A6R/cpQeEg==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHIsWRWlGSWpSXmKPExsViZ8ORqFvb6ZJ
+  i0HiV2+LGNDmLbac3sFvMnHGC0eLtpiksFlN+LWW2uLxrDpvFs0O9LA7sHqff3GHy2LSqk81j
+  YcNUZo/Pm+Q8tn6+zRLAGsWamZeUX5HAmnH/dhtLQTNnxYolM1kaGNewdzFycQgJbGGUmHRyP
+  pSzgknixLZLbBDOAUaJ5TufsHQxcnKwCWhI3Gu5yQhiiwiUShxu28cOYjMLJEnMu/2WGcQWFr
+  CXuLFsHiuIzSKgKnH59nMwm1fAUeLKuR6wGgkBBYkpD98zQ8QFJU7OhJjPLCAhcfDFC6gaRYk
+  jnX9ZIOxKidYPv6BsNYmr5zYxT2Dkn4WkfRaS9gWMTKsYTYtTi8pSi3RN9JKKMtMzSnITM3P0
+  Eqt0E/VSS3XLU4tLdI30EsuL9VKLi/WKK3OTc1L08lJLNjECgz2lWKljB+P1nX/1DjFKcjApi
+  fK+2O2QIsSXlJ9SmZFYnBFfVJqTWnyIUYaDQ0mC92ObS4qQYFFqempFWmYOMPJg0hIcPEoivF
+  vLgNK8xQWJucWZ6RCpU4yKUuK8UzqAEgIgiYzSPLg2WLRfYpSVEuZlZGBgEOIpSC3KzSxBlX/
+  FKM7BqCTMqwcyhSczrwRu+iugxUxAi3dxgy0uSURISTUwuevwLF8z659/0LfmyafVDnO+vZrd
+  eZFDgM3ZUeZk45PZG9NTz0qG3lx33Krcz2ZK2YKtluv2XotW2GxdyPx/iV/A5Nkrn+2sfaV2a
+  vLmvC+Kt8s+RKas8E50mnmRnY1hTt/Txu1if85m2i/UXHrj102dsOtBZ+u5nly6KnZgO3vbRR
+  m+WD+2Jb8/Hlm29YWS2fSGObEafze/zX97rEnL4XbHoa1dm+d9MeiMYv7P9kru0Jsn8XJiwbw
+  NH2q4jgtk+XV9EE7rkBI93r1+78eDceZd8oGHLsheZ/EJ/vb0vdns+ToN1tpHayxO7JT2TQ36
+  clhtQc8ECfdeZa9J2x4fVTlWvWbf5Cf3ajdGan8IvqvEUpyRaKjFXFScCAB9YHZ+cQMAAA==
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-20.tower-565.messagelabs.com!1682213245!159966!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.105.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 1217 invoked from network); 23 Apr 2023 01:27:25 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-20.tower-565.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 23 Apr 2023 01:27:25 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id D7C4C100226;
+        Sun, 23 Apr 2023 02:27:24 +0100 (BST)
+Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDCFF85A5B1;
-        Sun, 23 Apr 2023 01:33:49 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7FB9F4400C;
-        Sun, 23 Apr 2023 01:33:49 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id CCFF2400DC5BC; Sat, 22 Apr 2023 22:25:01 -0300 (-03)
-Date:   Sat, 22 Apr 2023 22:25:01 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Theurer <atheurer@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZESI7U13pOTJ1Y3W@tpad>
-References: <20230320180332.102837832@redhat.com>
- <20230418150200.027528c155853fea8e4f58b2@linux-foundation.org>
- <ZD/NAaa5TVcL7Mxm@tpad>
- <ZD/NbAU8gHILW/6w@tpad>
- <98E08059-6607-43FF-84E3-BFF3FF193D09@redhat.com>
- <ZEDv/O30XLZfw/GX@dhcp22.suse.cz>
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id CAF6B1001BF;
+        Sun, 23 Apr 2023 02:27:24 +0100 (BST)
+Received: from d3e152dc4f88.localdomain (10.167.226.45) by
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Sun, 23 Apr 2023 02:27:21 +0100
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <haris.iqbal@ionos.com>, <jinpu.wang@ionos.com>, <jgg@ziepe.ca>,
+        <leon@kernel.org>, <linux-rdma@vger.kernel.org>
+CC:     <guoqing.jiang@linux.dev>, <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH for-next v2 0/3] RDMA/rtrs: bugfix and cleanups
+Date:   Sun, 23 Apr 2023 01:26:49 +0000
+Message-ID: <1682213212-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEDv/O30XLZfw/GX@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.167.226.45]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,34 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 09:55:40AM +0200, Michal Hocko wrote:
-> On Wed 19-04-23 08:44:23, Andrew Theurer wrote:
-> > > On Apr 19, 2023, at 6:15 AM, Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > >> Andrew Theurer, can you please explain what problem is the vmstat_work
-> > >> interruption causing in your testing?
-> > > 
-> > > +CC Andrew.
-> > 
-> > Nearly every telco we work with for 5G RAN is demanding <20 usec CPU
-> > latency as measured by cyclictest & oslat.  We cannot achieve under 20
-> > usec with the vmstats interruption.
-> 
-> Are you able to get those latency requirements with PREEMPT_RT?
+V2:
+- Add new patch2 to fix a memory leak
+- rewrite original patch2 to patch3 by refactoring the cleanup path instead of
+  introducing a new flag
+- Drop original patch3: RDMA/rtrs: Fix use-after-free in rtrs_clt_rdma_cm_handler
+  The problem it tried to addressing doesn't appear after the new patch3
+  where it adjust the cleanup order
 
-What do you mean, exactly?
+It's trying to fix 1 issue triggered by the following script which
+connect/disconnect rnbd frequently.
 
-PREEMPT_RT allows for the preemption of tasks in kernel context
-(so that higher priority tasks can interrupt lower priority tasks).
-It also enables IRQ handling to happen in thread context 
-(so that a given thread might be given higher priority than executing
-a particular IRQ handler).
+# cat rnbd-self.sh 
+#!/bin/bash
 
-If the question is: "Are you able to achieve <20 usec latency while
-allowing switching between different tasks ?" The answer with current
-processor and memory speeds is probably: no.
-But with more performant processors, you might.
+/root/rpma/tools/config_softroce.sh eth0
+modprobe rnbd_server
+modprobe rnbd_client
 
-However, with a fully isolated processor which does not require
-switching between tasks, yes you can achieve < 20 usec latency.
+while true;
+do
+        echo "sessname=xyz path=ip:<server-ip> device_path=/dev/nvme0n1" > /sys/devices/virtual/rnbd-client/ctl/map_device
+        for i in /sys/block/rnbd*/rnbd/unmap_device
+        do
+                echo "normal" > $i
+        done
+done
 
+Li Zhijian (3):
+  RDMA/rtrs: remove duplicate cq_num assignment
+  RDMA/rtrs: Fix the last iu->buf leak in err path
+  RDMA/rtrs: Fix rxe_dealloc_pd warning
+
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 56 +++++++++++---------------
+ drivers/infiniband/ulp/rtrs/rtrs.c     |  4 +-
+ 2 files changed, 26 insertions(+), 34 deletions(-)
+
+-- 
+2.29.2
 
