@@ -2,139 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9AC6EBFDC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3996EBFE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjDWODf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S230186AbjDWOMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDWODe (ORCPT
+        with ESMTP id S229649AbjDWOML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:03:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6310EC
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:03:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C9DF6116E
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 14:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DE8C433D2;
-        Sun, 23 Apr 2023 14:03:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682258611;
-        bh=AfrkTWaqi1tasRCU5KrVEhnQApgyFkOmZl7igHgmCZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IHhZ05dY/n5CmW69ZWqKrlSQR7dTmVMlU1GsHTGEwGBITD9s2E6BJ1H3XdPe3eELb
-         VBfzbPquPzdac/9MfbDD3x81vN3cPiIlpPeBFWLBPweygqIlCreQCYMeS5zPx2nIP/
-         By60vxGkMrpRPVg/hzUH8si/5iuiwIXFHGIgFSiQ=
-Date:   Sun, 23 Apr 2023 16:03:28 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
-Message-ID: <2023042347-vaguely-monsieur-63ed@gregkh>
-References: <00000000000013aaac05f9d44e7a@google.com>
- <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
- <6bec279c-07b3-d6f1-0860-4d6b136a2025@I-love.SAKURA.ne.jp>
+        Sun, 23 Apr 2023 10:12:11 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E24610CC
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=wW8cHrcAdLnS/PDlwOJdcqPUxh8bdVCQ3SzRIGLCfxs=; b=XAz/jF73XU1SqBH9nVYLpcd1w6
+        sDoQnFPuY/ozTMClZRmakVgFYAHyMDT3lcBD9OJjkY5lhKRxfPWjuAjJ+esMgX39XDayHmcDIFUzZ
+        UvaFr2nXy6IAKmfPR4XP5nWzuYwmOp7YQJB3mg967JQPIq6PEu6KRXs+ngn8bxkiD0KV8RBb8yrX7
+        rzygo1fUVSoSE5zUaABbCe+MpFyVm9yNBev9YZEZ7H2lWeph70jmNuAXlkEn4r3YkBET62LC8OLQP
+        gXHRA9ZEWhCroTF9vN3pPOB2dgs+k6bIA375afBZRAci9VzKrn8yNX/2XLcqUyTiIf/CxN/Wkf2dm
+        1F9AwkDg==;
+Received: from nat-wifi.fi.muni.cz ([147.251.43.9] helo=killbill.fi.muni.cz)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1pqaRO-00ANVs-Gp; Sun, 23 Apr 2023 16:11:46 +0200
+From:   Melissa Wen <mwen@igalia.com>
+To:     amd-gfx@lists.freedesktop.org,
+        Harry Wentland <harry.wentland@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        sunpeng.li@amd.com, Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org, airlied@gmail.com,
+        christian.koenig@amd.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, Xinhui.Pan@amd.com
+Cc:     Joshua Ashton <joshua@froggi.es>,
+        Sebastian Wick <sebastian.wick@redhat.com>,
+        Xaver Hugl <xaver.hugl@gmail.com>,
+        Shashank Sharma <Shashank.Sharma@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        sungjoon.kim@amd.com, Alex Hung <alex.hung@amd.com>,
+        Melissa Wen <mwen@igalia.com>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 00/40] drm/amd/display: add AMD driver-specific properties for color mgmt
+Date:   Sun, 23 Apr 2023 13:10:12 -0100
+Message-Id: <20230423141051.702990-1-mwen@igalia.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6bec279c-07b3-d6f1-0860-4d6b136a2025@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 10:28:58PM +0900, Tetsuo Handa wrote:
-> On 2023/04/21 17:21, Dmitry Vyukov wrote:
-> > On Fri, 21 Apr 2023 at 10:18, syzbot
-> > <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> syzbot found the following issue on:
-> >>
-> >> HEAD commit:    fcd476ea6a88 Merge tag 'urgent-rcu.2023.03.28a' of git://g..
-> >> git tree:       upstream
-> >> console output: https://syzkaller.appspot.com/x/log.txt?x=146618b9c80000
-> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=f7350c77b8056a38
-> >> dashboard link: https://syzkaller.appspot.com/bug?extid=b7c3ba8cdc2f6cf83c21
-> >> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> >>
-> >> Unfortunately, I don't have any reproducer for this issue yet.
-> >>
-> >> Downloadable assets:
-> >> disk image: https://storage.googleapis.com/syzbot-assets/f3d8ce4faab0/disk-fcd476ea.raw.xz
-> >> vmlinux: https://storage.googleapis.com/syzbot-assets/fc53d9dee279/vmlinux-fcd476ea.xz
-> >> kernel image: https://storage.googleapis.com/syzbot-assets/22ad755d39b2/bzImage-fcd476ea.xz
-> >>
-> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> >> Reported-by: syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com
-> > 
-> > If I am reading this correctly, this race can lead to NULL derefs
-> > among other things.
-> > hung_up_tty_fops does not have splice_read, while other fops have.
-> > 
-> > So the following code in splice can execute NULL callback:
-> > 
-> > if (unlikely(!in->f_op->splice_read))
-> >     return warn_unsupported(in, "read");
-> > return in->f_op->splice_read(in, ppos, pipe, len, flags);
-> 
-> Hmm, it seems to me that we need multiple patches (which would become too big to
-> backport) for fixing this bug.
-> 
-> First step (which Dmitry mentioned) is to avoid potential NULL pointer dereferences
-> caused by
-> 
->   if (!f_op->$callbackname) {
->     return error;
->   }
->   return f_op->$callbackname($args);
-> 
-> pattern, for the next step will touch too many locations to change all at once whereas
-> the first step could be handled by implementing dummy function for all missing $callbackname.
+Hi all,
 
-I do not understand, what "callbackname" is the problem here?  Just
-splice_read?  Something else?  And where would it need to be modified
-and why can't we do it in one place only (i.e. install a default handler
-instead.)
+Joshua Ashton and I (with the great collaboration of Harry Wentland -
+thanks) have been working on KMS color pipeline enhancement for Steam
+Deck/SteamOS by exposing the large set of color caps available in AMD
+display HW.
 
-Also, pointer function operations like this are dirt slow, be wary of
-adding additional ones if possible, on fast paths.
+This patchset results from this full-stack work, including pre-blending
+and post-blending new color properties. The first two patches fix
+quantization issues on shaper LUT programming. Just after, we have one
+patch that adds a config option to restrict AMD colo feature usage. The
+following 13 patches implement AMD driver-private color properties
+(pending detachment of property counter and plane color_mgmt_changed
+from DRM). Finally, the last 24 patches rework the AMD display manager
+and color management to support the properties exposed.
 
-> Next step is to convert from
-> 
->   if (!f_op->$callbackname) {
->     return error;
->   }
->   return f_op->$callbackname($args);
-> 
-> to
-> 
->   fn = READ_ONCE(f_op->$callbackname);
->   if (!fn) {
->     return error;
->   }
->   return fn($args);
-> 
-> pattern.
+In short, for pre-blending, we added the following:
+- plane degamma LUT and predefined transfer function;
+- plane HDR multiplier
+- plane shaper LUT/transfer function;
+- plane 3D LUT; and finally,
+- plane blend LUT/transfer function, just before blending.
 
-Why?  What does this solve differently than the first one?  What can
-change the fops pointer between the check and call path?  If something
-can change it, then do NOT make that type of check in the first place
-(or put a proper lock in place.)
+After blending, we already have DRM CRTC degamma/gamma LUTs and CTM,
+therefore, we extend CRTC color pipeline with the following:
+- CRTC shaper LUT/transfer function;
+- CRTC 3D LUT; and
+- CRTC gamma transfer function.
 
-thanks,
+You can already find the AMD color capabilities and color management
+pipeline documented here:
+https://dri.freedesktop.org/docs/drm/gpu/amdgpu/display/display-manager.html#color-management-properties
 
-greg k-h
+In previous iterations, we tried to provide a generic solution for
+post-blending shaper and 3D LUT [1][2][3], and also Alex Hung worked on
+a pre-blending 3D LUT solution[4] extending plane color mgmt proposal
+from Uma Shankar [5]. However, we identified during our work [6] that
+AMD provides many other valuable capabilities that we don't find in
+other vendors, so we started to work on AMD driver-private color
+properties that better describe its color pipeline, enabling us to
+expose full AMD color capabilities on Deck HW.
+
+Our primary purpose is to avoid usage limitations of color calibration
+features provided by HW just because we don't have an interface for
+that. At the same time, a generic solution doesn't fit well since some
+of these capabilities seem AMD HW specific, such as hardcoded
+curve/predefined transfer function and shaper 1D LUTs sandwiching 3D
+LUT.
+
+So far, we keep these properties' usage under an AMD display config
+option (STEAM_DECK). However, we are fine with having them fully
+available to other DCN HW generations. In the current proposal, we are
+already checking ASICs before exposing a color feature. We can work on
+3D LUT resource acquisition details to fit them to DCN 3+ families that
+support them. Indeed, before moving to these config boundaries, we
+started working on an open solution for any AMD HW [7].
+
+The userspace case here is Gamescope which is the compositor for
+SteamOS. It's already using all of this functionality (although with a
+VALVE1_ prefix instead of AMD) to implement its color management
+pipeline right now:
+https://github.com/ValveSoftware/gamescope
+
+We are planning on shipping our color management support with gamut
+mapping, HDR, SDR on HDR, HDR on SDR, and much more in Steam OS 3.5. A
+brief overview of our color pipeline can be found here:
+https://github.com/ValveSoftware/gamescope/blob/master/src/docs/Steam%20Deck%20Display%20Pipeline.png
+
+We have also had some other userspace interests from Xaver Hugl (KDE) in
+experimenting with these properties for their HDR/color bring-up before
+a generic interface is settled on also.
+
+It still needs AMD-specific IGT tests; we are working on documentation
+and adding plane CTM support too. 
+
+We decided first to share our work to collect thoughts and open for
+discussion, even with missing refinements, since driver-private
+properties are not the usual DMR/KMS color management approach.
+
+Please, let us know your thoughts.
+
+Best Regards,
+
+Signed-off-by: Joshua Ashton <joshua@froggi.es>
+Signed-off-by: Melissa Wen<mwen@igalia.com>
+
+[1] https://lore.kernel.org/dri-devel/20220619223104.667413-1-mwen@igalia.com/
+[2] https://lore.kernel.org/amd-gfx/20220906164628.2361811-1-mwen@igalia.com/
+[3] https://lore.kernel.org/dri-devel/20230109143846.1966301-1-mwen@igalia.com/
+[4] https://lore.kernel.org/dri-devel/20221004211451.1475215-1-alex.hung@amd.com/
+[5] https://lore.kernel.org/dri-devel/20210906213904.27918-1-uma.shankar@intel.com/
+[6] https://gitlab.freedesktop.org/mwen/linux-amd/-/commits/amd-color-mgmt
+[7] https://gitlab.freedesktop.org/mwen/linux-amd/-/commits/amd-private-color-mgmt
+
+Harry Wentland (2):
+  drm/amd/display: fix segment distribution for linear LUTs
+  drm/amd/display: fix the delta clamping for shaper LUT
+
+Joshua Ashton (15):
+  drm/amd/display: add CRTC gamma TF to driver-private props
+  drm/amd/display: add plane degamma LUT driver-private props
+  drm/amd/display: add plane degamma TF driver-private property
+  drm/amd/display: add plane HDR multiplier driver-private property
+  drm/amd/display: add plane blend LUT and TF driver-private properties
+  drm/amd/display: copy 3D LUT settings from crtc state to stream_update
+  drm/amd/display: dynamically acquire 3DLUT resources for color changes
+  drm/amd/display: add CRTC regamma TF support
+  drm/amd/display: set sdr_ref_white_level to 80 for out_transfer_func
+  drm/amd/display: add support for plane degamma TF and LUT properties
+  drm/amd/display: add dc_fixpt_from_s3132 helper
+  drm/adm/display: add HDR multiplier support
+  drm/amd/display: handle empty LUTs in __set_input_tf
+  drm/amd/display: add DRM plane blend LUT and TF support
+  drm/amd/display: allow newer DC hardware to use degamma ROM for PQ/HLG
+
+Melissa Wen (23):
+  drm/amd/display: introduce Steam Deck color features to AMD display
+    driver
+  drm/drm_mode_object: increase max objects to accommodate new color
+    props
+  drm/amd/display: add shaper LUT driver-private props
+  drm/amd/display: add 3D LUT driver-private props
+  drm/drm_plane: track color mgmt changes per plane
+  drm/amd/display: move replace blob func to dm plane
+  drm/amd/display: add plane 3D LUT driver-private properties
+  drm/amd/display: add plane shaper LUT driver-private properties
+  drm/amd/display: add plane shaper TF driver-private property
+  drm/amd/display: add comments to describe DM crtc color mgmt behavior
+  drm/amd/display: encapsulate atomic regamma operation
+  drm/amd/display: update lut3d and shaper lut to stream
+  drm/amd/display: allow BYPASS 3D LUT but keep shaper LUT settings
+  drm/amd/display: handle MPC 3D LUT resources for a given context
+  drm/amd/display: add CRTC 3D LUT support to amd color pipeline
+  drm/amd/display: decouple steps to reuse in CRTC shaper LUT support
+  drm/amd/display: add CRTC shaper LUT support to amd color pipeline
+  drm/amd/display: add CRTC shaper TF support
+  drm/amd/display: mark plane as needing reset if plane color mgmt
+    changes
+  drm/amd/display: decouple steps for mapping CRTC degamma to DC plane
+  drm/amd/display: reject atomic commit if setting both plane and CRTC
+    degamma
+  drm/amd/display: add plane shaper/3D LUT and shaper TF support
+  drm/amd/display: copy dc_plane color settings to surface_updates
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c   | 153 +++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |  92 +++
+ drivers/gpu/drm/amd/display/Kconfig           |   6 +
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  31 +-
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h | 120 +++-
+ .../amd/display/amdgpu_dm/amdgpu_dm_color.c   | 613 ++++++++++++++++--
+ .../amd/display/amdgpu_dm/amdgpu_dm_crtc.c    | 124 +++-
+ .../amd/display/amdgpu_dm/amdgpu_dm_plane.c   | 238 +++++++
+ .../amd/display/amdgpu_dm/amdgpu_dm_plane.h   |   7 +
+ drivers/gpu/drm/amd/display/dc/core/dc.c      |  49 +-
+ drivers/gpu/drm/amd/display/dc/dc.h           |   8 +
+ .../amd/display/dc/dcn10/dcn10_cm_common.c    | 109 +++-
+ .../drm/amd/display/dc/dcn20/dcn20_hwseq.c    |   5 +-
+ .../drm/amd/display/dc/dcn30/dcn30_hwseq.c    |   9 +-
+ .../amd/display/dc/dcn301/dcn301_resource.c   |  26 +-
+ .../gpu/drm/amd/display/include/fixed31_32.h  |  12 +
+ drivers/gpu/drm/drm_atomic.c                  |   1 +
+ drivers/gpu/drm/drm_atomic_state_helper.c     |   1 +
+ include/drm/drm_mode_object.h                 |   2 +-
+ include/drm/drm_plane.h                       |   7 +
+ 20 files changed, 1509 insertions(+), 104 deletions(-)
+
+-- 
+2.39.2
+
