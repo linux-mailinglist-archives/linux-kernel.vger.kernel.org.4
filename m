@@ -2,147 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92D16EBEA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 12:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12436EBEAC
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 12:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjDWKpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 06:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S229621AbjDWKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 06:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWKpg (ORCPT
+        with ESMTP id S229476AbjDWKrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 06:45:36 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39669171F;
-        Sun, 23 Apr 2023 03:45:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vgjcqv._1682246726;
-Received: from 30.97.49.3(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vgjcqv._1682246726)
-          by smtp.aliyun-inc.com;
-          Sun, 23 Apr 2023 18:45:28 +0800
-Message-ID: <02f7dcf5-1aad-0f8b-24e7-a22c0685fc42@linux.alibaba.com>
-Date:   Sun, 23 Apr 2023 18:45:25 +0800
+        Sun, 23 Apr 2023 06:47:21 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94C51A4
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:47:19 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-508418b6d59so5962144a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 03:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682246838; x=1684838838;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+XRTRCwuJXviemws1Zz/yvRVYmSzKUNLKSeSX1GMTyI=;
+        b=qmelLx0P4oQVBJ5d4axAcmfpgIV1DqogwtUO6C4a0NovNa+b6qlx/wEyx5yCG3VB0h
+         HOeWFwJK1un1bcNzP8GWTTvMhl6Sy9SOw3PKLwtEKA+QYe8pzRr1cxEcphxx4YotDj5c
+         s1cf3Lojm0KRLgVmECxzJXstybEf9Gtp4XFu9mf7G/GzC4pSbdNLhVCc5QL3u6y9HSN2
+         78+wM4zB/a8NKpBOLWgfNC6fEhCFkVjTuFlNBdLInrN0odM4LGVqjp/TbtCP/OuQOU+a
+         WosRgXeRLIJwzRLYmTnp7A9xzOtHKJuQkk6B3+sVLV+L4/UYLIwP5lTIU/WF8EB90Z8L
+         Swvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682246838; x=1684838838;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+XRTRCwuJXviemws1Zz/yvRVYmSzKUNLKSeSX1GMTyI=;
+        b=hy+DgLKtH1coysLbA5/sEV2Ko75+4PUhDjsUsN2DfyD75c17d+7W4BbfZZfLaN4oUg
+         Qm4b3Tx2x/Xqw/5t6AzP2wXJtxa66S+Npx7Ck43mVR9ao7BOwGF8HyGPdepK48cG+Qtb
+         9v4cdnpkeZPJsTgVstCnzjcMt6QsnjWAUE0Vq0xROcpfCpYnNRx8r0sFA5lWTttM8+g1
+         1K/u2v/truGNc0+QRsPhxsjgN/naNi/TP++W0gEeb57uyNEy5mIhsYmOpxaSFUysHybH
+         mn1c9ytEROoiKtOHOHFEMrpv/CA+QcBIg5rmVj0R389wYzwZB5paKCsYx7X7G4xdwl4J
+         Y0KA==
+X-Gm-Message-State: AAQBX9frN4NhODP0isUPpTcysARlxcMZfKppd6SmTToam7N1poF8hx4f
+        h/XiFS8DpyTjBNwKaCNJwFJcnuWv/F0gQUGz5bUYdpAw
+X-Google-Smtp-Source: AKy350acdjCks+1nK3zvE1zXtdwdVaobEzN4nlhn5hPLCUH3KRn7tQpsRhdWHELK4JOi3iWRUAUALA==
+X-Received: by 2002:aa7:da93:0:b0:508:3ff5:a306 with SMTP id q19-20020aa7da93000000b005083ff5a306mr7882917eds.37.1682246838232;
+        Sun, 23 Apr 2023 03:47:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5d52:d466:d57f:118c? ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
+        by smtp.gmail.com with ESMTPSA id k26-20020aa7c39a000000b005068053b53dsm3632568edq.73.2023.04.23.03.47.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Apr 2023 03:47:17 -0700 (PDT)
+Message-ID: <47c3f816-413a-02c9-7e2a-d0b61873fc5c@linaro.org>
+Date:   Sun, 23 Apr 2023 12:47:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, ying.huang@intel.com
-References: <20230421221249.1616168-1-dianders@chromium.org>
- <20230422051858.1696-1-hdanton@sina.com>
- <20230423081203.1812-1-hdanton@sina.com>
- <20230423094901.1867-1-hdanton@sina.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230423094901.1867-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682185969.git.stano.jakubek@gmail.com>
+ <9f4a9a8e20084ba895a309e7d2b78d2047a84ac6.1682185969.git.stano.jakubek@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9f4a9a8e20084ba895a309e7d2b78d2047a84ac6.1682185969.git.stano.jakubek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/4/23 17:49, Hillf Danton wrote:
-> On 23 Apr 2023 16:35:26 +0800 Gao Xiang <hsiangkao@linux.alibaba.com>
->> On 2023/4/23 16:12, Hillf Danton wrote:
->>> On 23 Apr 2023 14:08:49 +0800 Gao Xiang <hsiangkao@linux.alibaba.com>
->>>> On 2023/4/22 13:18, Hillf Danton wrote:
->>>>> On 21 Apr 2023 15:12:45 -0700 Douglas Anderson <dianders@chromium.org>
->>>>>> Add a variant of folio_lock() that can timeout. This is useful to
->>>>>> avoid unbounded waits for the page lock in kcompactd.
->>>>>
->>>>> Given no mutex_lock_timeout() (perhaps because timeout makes no sense for
->>>>> spinlock), I suspect your fix lies in the right layer. If waiting for
->>>>> page under IO causes trouble for you, another simpler option is make
->>>>> IO faster (perhaps all you can do) for instance. If kcompactd is waken
->>>>> up by kswapd, waiting for slow IO is the right thing to do.
->>>>
->>>> A bit out of topic.  That is almost our original inital use scenarios for
->>>
->>> Thanks for taking a look.
->>>
->>>> EROFS [1] although we didn't actually test Chrome OS, there lies four
->>>> points:
->>>>
->>>>     1) 128kb compressed size unit is not suitable for memory constraint
->>>>        workload, especially memory pressure scenarios, that amplify both I/Os
->>>>        and memory footprints (EROFS was initially optimized with 4KiB
->>>>        pclusters);
->>>
->>> Feel free to take another one at 2M THP [1].
->>>
->>> [1] https://lore.kernel.org/lkml/20230418191313.268131-1-hannes@cmpxchg.org/
->>
->> Honestly I don't catch your point here, does THP has some relationship with
+On 22/04/2023 20:07, Stanislav Jakubek wrote:
+> Convert Broadcom Kona family I2C bindings to DT schema.
 > 
-> THP tests ended without the help of timeout helpers.
+> Changes during conversion:
+>   - add used, but previously undocumented SoC-specific compatibles
+>   - drop references to SoCs that are not upstream
+>   - add supported clock frequencies according to the Linux driver [1]
 > 
->> this?  Almost all smartphones (but I don't know Chromebook honestly) didn't
->> use THP at that time.
->>>>
->>>>     2) If you turn into a small compressed size (e.g. 4 KiB), some fs behaves
->>>>        ineffective since its on-disk compressed index isn't designed to be
->>>>        random accessed (another in-memory cache for random access) so you have
->>>>        to count one by one to calculate physical data offset if cache miss;
->>>>
->>>>     3) compressed data needs to take extra memory during I/O (especially
->>>>        low-ended devices) that makes the cases worse and our camera app
->>>>        workloads once cannot be properly launched under heavy memory pressure,
->>>>        but in order to keep user best experience we have to keep as many as
->>>>        apps active so that it's hard to kill apps directly.  So inplace I/O +
->>>>        decompression is needed in addition to small compressed sizes for
->>>>        overall performance.
->>>
->>> Frankly nowadays I have no interest in running linux with <16M RAM for example.
->>
->> Our cases are tested on 2016-2018 devices under 3 to 6 GB memory if you
->> take a glance at the original ATC paper, the page 9 (section 5.1) wrote:
->> "However, it costed too much CPU and memory resources, and when trying to
->>   run a camera application, the phone froze for tens of seconds before it
->>   finally failed."
->>
->> I have no idea how 16M RAM here comes from but smartphones doesn't have
->> such limited memory.  In brief, if you runs few app, you have few problem.
->> but as long as you keeps more apps in background (and running), then the
->> memory will eventually suffer pressure.
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/i2c/busses/i2c-bcm-kona.c#n731
 > 
-> Given no complaints in case of running 16 apps with 1G RAM for instance,
-> what is the point of running 256 apps with the same RAM? And adding changes
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+>  .../devicetree/bindings/i2c/brcm,kona-i2c.txt | 35 -----------
+>  .../bindings/i2c/brcm,kona-i2c.yaml           | 58 +++++++++++++++++++
+>  2 files changed, 58 insertions(+), 35 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt b/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt
+> deleted file mode 100644
+> index 1b87b741fa8e..000000000000
+> --- a/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.txt
+> +++ /dev/null
+> @@ -1,35 +0,0 @@
+> -Broadcom Kona Family I2C
+> -=========================
+> -
+> -This I2C controller is used in the following Broadcom SoCs:
+> -
+> -  BCM11130
+> -  BCM11140
+> -  BCM11351
+> -  BCM28145
+> -  BCM28155
+> -
+> -Required Properties
+> --------------------
+> -- compatible: "brcm,bcm11351-i2c", "brcm,kona-i2c"
+> -- reg: Physical base address and length of controller registers
+> -- interrupts: The interrupt number used by the controller
+> -- clocks: clock specifier for the kona i2c external clock
+> -- clock-frequency: The I2C bus frequency in Hz
+> -- #address-cells: Should be <1>
+> -- #size-cells: Should be <0>
+> -
+> -Refer to clocks/clock-bindings.txt for generic clock consumer
+> -properties.
+> -
+> -Example:
+> -
+> -i2c@3e016000 {
+> -	compatible = "brcm,bcm11351-i2c","brcm,kona-i2c";
+> -	reg = <0x3e016000 0x80>;
+> -	interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+> -	clocks = <&bsc1_clk>;
+> -	clock-frequency = <400000>;
+> -	#address-cells = <1>;
+> -	#size-cells = <0>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml b/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml
+> new file mode 100644
+> index 000000000000..636912d8518d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/brcm,kona-i2c.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/brcm,kona-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom Kona family I2C controller
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +        - brcm,bcm11351-i2c
+> +        - brcm,bcm21664-i2c
+> +        - brcm,bcm23550-i2c
+> +      - const: brcm,kona-i2c
 
-I don't think the `ill-designed` word is helpful to the overall topic.
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-I'm not sure if my description is confusing:
+Best regards,
+Krzysztof
 
-  1) First, I never said running 256 apps with the same RAM.  In fact, in 2018
-     there are indeed some phones still with 1G RAM, if my memory is correct,
-     such 1G phones couldn't run 16 latest mainstream super apps at the same time
-     smoothly, and, previously compression will lead this worse.  Even such
-     phones cannot use a full Android but a minimized Android Go [1] instead.
-     The worst case I've heard on phones with 1G RAM would be "after you checked
-     a new message from friends on a superapp by switch out, another previous
-     one with some incomplete registeration form could be killed and you have
-     to restart and refill the form."
-
-  2) apps and baseos can be upgraded over time, especially apps, since Android
-     ecosystem is open.  It's hard to get over it.
-
-Thanks,
-Gao Xiang
-
-> because of ill designed phone products?
-
-[1] https://developer.android.com/guide/topics/androidgo
