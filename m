@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943106EBFC9
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 15:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934816EBFCA
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 15:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjDWNht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 09:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S229548AbjDWNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 09:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDWNhr (ORCPT
+        with ESMTP id S229441AbjDWNiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 09:37:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC75CE4C;
-        Sun, 23 Apr 2023 06:37:46 -0700 (PDT)
+        Sun, 23 Apr 2023 09:38:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF3DE4C
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 06:38:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FAD3615A7;
-        Sun, 23 Apr 2023 13:37:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D47FC433D2;
-        Sun, 23 Apr 2023 13:37:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A198360F55
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 13:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53868C433EF;
+        Sun, 23 Apr 2023 13:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682257065;
-        bh=lNfqEnclLuJur3CxKKHX89bLr+bFUK+pfiFE5PZ+yb0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y2ag7jrrZt3K9gQQ4Wy7akb6i6qKkojkn0dTiIOWP8kDb7nU0urvtnH79TTvkhHSl
-         aOMAORKv6qRLehUXSHH6SOTb6P+hSwdDTa7hgMdbgsyZWcJS+n9CRWpaTVYQ8HYbzF
-         HmtkzLLOgWZX7Vsg/JjeTpze9YjgR9mt+QCDGf4pJAM8wpMj7AJE2UmckYxxsiCYDl
-         WEmD67f6qC8EYFBnIFB5WbLBy6oBRcSJWTZ0idj/+eKpUi1vLMq7T9L+2oDHSBCnt1
-         u6Ufbx0hf/7CLt2udpsj0bvBuN8WDGTFVB1GA5FmOv+Cn6/o0fDBvfC1MJCvh38LBJ
-         mQ1is2Edt63wQ==
-Date:   Sun, 23 Apr 2023 22:37:40 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] tracing/probes: Add tracepoint support on
- fprobe_event
-Message-Id: <20230423223740.9f1186a08b3b316b5a0156e7@kernel.org>
-In-Reply-To: <ZEThQgkJV7esVGdR@krava>
-References: <168198993129.1795549.8306571027057356176.stgit@mhiramat.roam.corp.google.com>
-        <168198997089.1795549.1009510263722958117.stgit@mhiramat.roam.corp.google.com>
-        <ZEThQgkJV7esVGdR@krava>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        s=k20201202; t=1682257103;
+        bh=X0CzlQ7DeLiLo5XSC8aAcVNlZSUiv+H5SzNN8Js8smc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XowOucbwxVtK15zuGoC6BwgJPZJ4ROtbL0ChORdG+Cv+KZt2uIwtdXThDbrq53AKV
+         adrS14eybn2knt0esblTzAI+01L+rMLNFj82jW0av04/NFx9sP4FQi5yss/9luj+V5
+         EeycepyToyzm/DcvaqBvy6wEvc7+kuq1riMJV4338PIhxjIVd4UaINhc8G5DqvPR7r
+         c3r17nJ0lGHRKmzudHDRn9Giclp7FcLSViEHuWqe2qXDEwvH1ySqnve2NV3pb0htjZ
+         G+eMcwuM5gvcsRuw4WTpsSxNR1QG0a1JXIdwdwfDE0kTSGWZvtxHGNXMN7Sdjv1lfS
+         CYa3fifYd3rnQ==
+Message-ID: <6be75dac-0904-390d-023b-a533f79073ce@kernel.org>
+Date:   Sun, 23 Apr 2023 15:38:19 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drivers: w1: slaves: Drop unnecessary explicit casting
+To:     Anup Sharma <anupnewsmail@gmail.com>, zbr@ioremap.net
+Cc:     linux-kernel@vger.kernel.org
+References: <ZECFjQMLwnoYPMeL@yoga>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <ZECFjQMLwnoYPMeL@yoga>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,71 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Apr 2023 09:41:54 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
-
-> On Thu, Apr 20, 2023 at 08:26:10PM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Allow fprobe_event to trace raw tracepoints so that user can trace
-> > tracepoints which don't have traceevent wrappers. This new event is
-> > always available if fprobe event is enabled since the tracepoint is
-> > disabled, trace-event and dynamic event is also not available.
+On 20/04/2023 02:21, Anup Sharma wrote:
+> Provide correct specifiers while printing error logs to discard the use
+> of unnecessary explicit casting.
 > 
-> I thought of ftrace tracepoints wrappers as standard in distros,
-> could you specify which config options that involves?
-
-Ah, sorry, I'm completely confused you.
-
-----
-This new event is always available if fprobe event is enabled. If the
-tracepoint is disabled, trace-event and dynamic event including
-fprobe is also not available.
-----
-
+> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> ---
+>  drivers/w1/slaves/w1_ds2433.c  | 6 +++---
+>  drivers/w1/slaves/w1_ds28e04.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> > +	if (trace_fprobe_is_tracepoint(tf)) {
-> > +		struct tracepoint *tpoint = tf->tpoint;
-> > +		unsigned long ip = (unsigned long)tpoint->probestub;
-> > +		/*
-> > +		 * Here, we do 2 steps to enable fprobe on a tracepoint.
-> > +		 * At first, put __probestub_##TP function on the tracepoint
-> > +		 * and put a fprobe on the stub function.
-> > +		 */
-> > +		ret = tracepoint_probe_register_prio_may_exist(tpoint,
-> > +					tpoint->probestub, NULL, 0);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +		return register_fprobe_ips(&tf->fp, &ip, 1);
-> 
-> nice idea
+> diff --git a/drivers/w1/slaves/w1_ds2433.c b/drivers/w1/slaves/w1_ds2433.c
+> index 0f72df15a024..ba441d42b0b0 100644
+> --- a/drivers/w1/slaves/w1_ds2433.c
+> +++ b/drivers/w1/slaves/w1_ds2433.c
+> @@ -213,15 +213,15 @@ static ssize_t eeprom_write(struct file *filp, struct kobject *kobj,
+>  #ifdef CONFIG_W1_SLAVE_DS2433_CRC
+>  	/* can only write full blocks in cached mode */
+>  	if ((off & W1_PAGE_MASK) || (count & W1_PAGE_MASK)) {
+> -		dev_err(&sl->dev, "invalid offset/count off=%d cnt=%zd\n",
+> -			(int)off, count);
+> +		dev_err(&sl->dev, "invalid offset/count off=%pe cnt=%zd\n",
+> +			off, count);
 
-Thanks!
+I don't think you tested this patch. Why do you think off is a pointer?
 
+Best regards,
+Krzysztof
 
-> 
-> jirka
-> 
-> > +	}
-> > +
-> >  	/* TODO: handle filter, nofilter or symbol list */
-> >  	return register_fprobe(&tf->fp, tf->symbol, NULL);
-> >  }
-> > @@ -699,6 +723,12 @@ static void __unregister_trace_fprobe(struct trace_fprobe *tf)
-> >  	if (trace_fprobe_is_registered(tf)) {
-> >  		unregister_fprobe(&tf->fp);
-> >  		memset(&tf->fp, 0, sizeof(tf->fp));
-> > +		if (trace_fprobe_is_tracepoint(tf)) {
-> > +			tracepoint_probe_unregister(tf->tpoint,
-> > +					tf->tpoint->probestub, NULL);
-> > +			tf->tpoint = NULL;
-> > +			tf->mod = NULL;
-> > +		}
-> >  	}
-> >  }
-> 
-> SNIP
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
