@@ -2,89 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859176EBF93
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0F66EBF9A
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjDWMu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S229655AbjDWMxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjDWMuV (ORCPT
+        with ESMTP id S230336AbjDWMxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:50:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14EA10EC;
-        Sun, 23 Apr 2023 05:50:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EF7560F12;
-        Sun, 23 Apr 2023 12:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AAC5C433A1;
-        Sun, 23 Apr 2023 12:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682254219;
-        bh=QpV1kIThma30wk4nihLJg1ef6jHbubidHACUqkX3n1o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Q077Xzq3rt/q/xNk6RvlrDXWf5q528PK/E4Dkkr12Ny89BspQfxNqpTm09JVQ+rgj
-         olhMnMwHxU3p+QcqXnhni70tFJNdu4pXgWEbWHY8gc/X4Er7ljh06HPambZPG/G+ca
-         UX6sy0dXX/xd4lxX75aM8ZO4+VFNMG58kd/oOiY1NF+8+cBmvzPllL2/0sm/HUyv63
-         hKXAIbCkDMmqtFHPJhqvsTbDhTNE4h0hM/BPkgl+5SqCk7KLWm+UNX/ogVxFNmfvV7
-         PFCw/Mv7FXvpUOcl0QO+SCf4ibDbQbZBIq/wpjQnO/EZMk8s3pt7bNTsHYaiCHDrxO
-         dZYzj2UOD7rjA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D6FCE4F0DA;
-        Sun, 23 Apr 2023 12:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 23 Apr 2023 08:53:03 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5962B10D0;
+        Sun, 23 Apr 2023 05:53:02 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso5970371a12.1;
+        Sun, 23 Apr 2023 05:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682254381; x=1684846381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iytNL3ionK0y40hikstW/BCZlPf3T/1Wm7ZwrV0sJlw=;
+        b=mxFY2HrILM2cerTaYDSv71GR+WQ2TxeE3y9At9pEM0MB96S0zeycHmvj5b2o2Nyfah
+         8Hl6doywdvO32gzAWuXTOUT7U2gYPyaTtw08w4VvSPX7Ciu6zck0aaLKatWWicqz0szb
+         IRmEldsEp1zTkz495xH/zXysU/vFiKUiGzyvNn7aSQE7K0RkI0v9udqJrqic2TQ2bNwn
+         cZcriicgvgEM8HKLukppbCVWxS5Wztoc8HBi9T6Hpy8HogBf7Dg3UEEfv1/j8RSxD1GD
+         S2VJGecIOyRBelHB9ALxDbN5CJd5KkrmJEWVjCMVNimtYnhkWEcLruPlcm57ib1JZTC1
+         Cjng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682254381; x=1684846381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iytNL3ionK0y40hikstW/BCZlPf3T/1Wm7ZwrV0sJlw=;
+        b=HwVlsVKpHYSVNm7yqFgG+1kXXHQzQCQsYHt3X13aKd+lvpjVAIE1FGo00XVvLVKKcF
+         Cf4GtwMpNteY3p0El13f6u1JdK3nm5P5uBJc9wuxFfkj359cB+5FqHNvzkQvDijIbxrk
+         PCHEYFNnxq9uYG3vK5bm+HIBOb/yMfmY8gavF7hizcN4jOez/suFDslH+yMBiWhhBCGz
+         pojp5xJMhurlbcTA2iAtLnaqtbUgLGdnaRQ076U6rFcWgzk3B64OXTKLLExKWi1ASWka
+         jHgwNQ6YVmaXDmWkUdlOWlAhNm56cMjZXxkUQwtJRMRX+fE/OKLOPkgh5iX85aRAYHfb
+         zqUg==
+X-Gm-Message-State: AAQBX9frco1oStuokQmgCdyJreA1J/fWUoFKK6W4Yg9jvzSQKgX+Lp9k
+        uZFBKGkgkoKynOkuN8sDwSo=
+X-Google-Smtp-Source: AKy350bSWYI/SvP558yd57KKjIp5PRfYPqiEM6lRUyYP8OmlVk45UlwzWUqDELXx4SoaZLUxhRnKcA==
+X-Received: by 2002:a05:6402:641:b0:504:921b:825 with SMTP id u1-20020a056402064100b00504921b0825mr9276422edx.36.1682254380636;
+        Sun, 23 Apr 2023 05:53:00 -0700 (PDT)
+Received: from [192.168.50.244] (83.11.224.11.ipv4.supernova.orange.pl. [83.11.224.11])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b00501d73cfc86sm3847476edu.9.2023.04.23.05.52.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Apr 2023 05:53:00 -0700 (PDT)
+Message-ID: <c717e975-092a-5090-89de-ec08237388a3@gmail.com>
+Date:   Sun, 23 Apr 2023 14:52:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] rxrpc: Replace fake flex-array with flexible-array
- member
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168225421951.16046.3046343203794923640.git-patchwork-notify@kernel.org>
-Date:   Sun, 23 Apr 2023 12:50:19 +0000
-References: <84871.1682082533@warthog.procyon.org.uk>
-In-Reply-To: <84871.1682082533@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, gustavoars@kernel.org,
-        simon.horman@corigine.com, keescook@chromium.org,
-        jaltman@auristor.com, marc.dionne@auristor.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-afs@lists.infradead.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 12/12] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0
+ boards
+Content-Language: en-US
+To:     Henrik Grimler <henrik@grimler.se>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230416133422.1949-1-aweber.kernel@gmail.com>
+ <20230416133422.1949-13-aweber.kernel@gmail.com> <ZEBN2AciChG03FpM@L14.lan>
+From:   Artur Weber <aweber.kernel@gmail.com>
+In-Reply-To: <ZEBN2AciChG03FpM@L14.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 21 Apr 2023 14:08:53 +0100 you wrote:
-> From: Gustavo A. R. Silva <gustavoars@kernel.org>
+On 19/04/2023 22:23, Henrik Grimler wrote:
+>> +	memory@40000000 {
+>> +		device_type = "memory";
+>> +
+>> +		/* Technically 2GB, but last 1GB is flaky, so we ignore it for now */
+>> +		reg = <0x40000000 0x3FC00000>;
 > 
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
-> 
-> Transform zero-length array into flexible-array member in struct
-> rxrpc_ackpacket.
-> 
-> [...]
+> Comment says 1GB but you are skipping 1GB+4MB.  Is the entire region
+> flaky or perhaps just the 4MB region in the middle?
 
-Here is the summary with links:
-  - [net-next] rxrpc: Replace fake flex-array with flexible-array member
-    https://git.kernel.org/netdev/net-next/c/788352191c85
+I copied the memory bank configuration from downstream: according to
+boot logs and ATAG data from the stock bootloader, there are two memory
+regions: one starting at 0x40000000 (size: 1020M) and one starting at
+0x80000000 (size: 1024M). Here, only the first bank is added, since the
+second one doesn't work.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I tried changing the size of this first bank to the full 1024M, and it
+seems to be booting fine; still, I'd rather leave this at the same size
+as claimed by downstream and ATAG.
 
+The second memory bank (anything past 0x80000000) doesn't work, as
+downstream has some weird special behavior regarding it: that region
+contains "page holes", and there's a check that discards every second
+page frame in that region[1][2]. That also means my comment is incorrect
+- indeed, 2GB of memory are passed to the kernel, but the second 1GB is
+effectively halved, leaving us with 1.5GB. (That's an oversight on my
+part - I wasn't aware of this when writing the DTS initially, and only
+checked this more in-depth now.)
 
+I'm not sure if there's a way to re-create this behavior in mainline;
+the closest thing I can think of is making a separate entry in reg for
+each of the working pages, but that would leave us with hundreds of
+lines, which is not ideal... so it's much easier to just leave it unused
+for now.
+
+Best regards
+Artur Weber
+
+[1]
+https://github.com/gr8nole/android_kernel_samsung_smdk4x12/blob/786b1473b93aabf40c18a2dca035503cce5ecac7/arch/arm/mm/init.c#L413-L414
+[2]
+https://github.com/gr8nole/android_kernel_samsung_smdk4x12/blob/786b1473b93aabf40c18a2dca035503cce5ecac7/arch/arm/mach-exynos/include/mach/memory.h#L30-L38
