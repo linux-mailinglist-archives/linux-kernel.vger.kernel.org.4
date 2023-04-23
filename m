@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A896EBF8C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DBC6EBF91
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjDWMsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S230217AbjDWMuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDWMse (ORCPT
+        with ESMTP id S229456AbjDWMuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:48:34 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AA510C8;
-        Sun, 23 Apr 2023 05:48:32 -0700 (PDT)
-Received: from pride-PowerEdge-R740.. ([172.16.0.254])
-        (user=U201812168@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33NCl40M013852-33NCl40N013852
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 23 Apr 2023 20:47:08 +0800
-From:   Ziwei Yan <u201812168@hust.edu.cn>
-To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Bai Ping <ping.bai@nxp.com>, Anson Huang <anson.huang@nxp.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Ziwei Yan <u201812168@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: imx: clk-imx8mq: fix memory leak and missing unwind goto in imx8mq_clocks_probe
-Date:   Sun, 23 Apr 2023 08:47:02 -0400
-Message-Id: <20230423124702.168027-1-u201812168@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Sun, 23 Apr 2023 08:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D02110CC;
+        Sun, 23 Apr 2023 05:50:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3850F60EF6;
+        Sun, 23 Apr 2023 12:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B2A4C433D2;
+        Sun, 23 Apr 2023 12:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682254217;
+        bh=0XtrEUR1rKRDtOBaE4iikDH8y7lfxm9ELVPwc7pzzWw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Nv25gNiN1wBjMxGYgUFvfAbNrvZBRAZwHoDHlCAIDjTb2WjzUqa+TficF7srYiUPe
+         hfSWeG1xbBWFm/pXe6wEB5BajErzMq3A9pgLulZIMr6plG/NheHWgXWYDzuIho54/c
+         GgwagxGXeDB96wFXF/gJIQdvFxqtRwvDJKpvZbvO9iu2OK7Wp4Gh5r+5jPRtOrFHrD
+         Qp+/uXM1kkIcjVo/QXj2x53GJMzxsMiivdmLNepjYX6PNigcSEE+NPKp3e/XV36ChX
+         h3Po8zhL81iieORMEXc5uRnM365n2Ho7EtMND3tJyZrGYi4KombEH+VTaQI8+nkI1q
+         dn92sGky5Worg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DD07E270E1;
+        Sun, 23 Apr 2023 12:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: U201812168@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] net: ethernet: mediatek: remove return value check of
+ `mtk_wed_hw_add_debugfs`
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168225421744.16046.7230758740526095778.git-patchwork-notify@kernel.org>
+Date:   Sun, 23 Apr 2023 12:50:17 +0000
+References: <20230421151010.130695-1-silver_code@hust.edu.cn>
+In-Reply-To: <20230421151010.130695-1-silver_code@hust.edu.cn>
+To:     Wang Zhang <silver_code@hust.edu.cn>
+Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, lorenzo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        hust-os-kernel-patches@googlegroups.com, dzm91@hust.edu.cn,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-drivers/clk/imx/clk-imx8mq.c:611 imx8mq_clocks_probe() warn: 'base'
-from of_iomap() not released on lines: 399,611.
+Hello:
 
-This is because probe() returns without releasing base.
-I fix this by replacing of_iomap() with devm_of_iomap()
-to automatically handle the unused ioremap region.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Similarly, I use devm_kzalloc() instead of kzalloc()
-to automatically free the memory
-using devm_kfree() when error occurs.
+On Fri, 21 Apr 2023 23:10:09 +0800 you wrote:
+> Smatch complains that:
+> mtk_wed_hw_add_debugfs() warn: 'dir' is an error pointer or valid
+> 
+> Debugfs checks are generally not supposed to be checked
+> for errors and it is not necessary here.
+> 
+> fix it by just deleting the dead code.
+> 
+> [...]
 
-Besides, in this function, some other issues are found.
-On line 311 and 398,
-probe() returns directly without unregistering hws.
-So I add `goto unregister_hws;` here.
+Here is the summary with links:
+  - net: ethernet: mediatek: remove return value check of `mtk_wed_hw_add_debugfs`
+    https://git.kernel.org/netdev/net/c/b148b9abc844
 
-Fixes: b9ef22e1592f ("clk: imx: imx8mq: Switch to clk_hw based API")
-Fixes: b80522040cd3 ("clk: imx: Add clock driver for i.MX8MQ CCM")
-Fixes: 1aa6af5f1813 ("clk: imx8mq: Use devm_platform_ioremap_resource() instead of of_iomap()")
-Signed-off-by: Ziwei Yan <u201812168@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-The issue is found by static analysis and remains untested.
----
- drivers/clk/imx/clk-imx8mq.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
-index 4bd65879fcd3..4aa58a7e7880 100644
---- a/drivers/clk/imx/clk-imx8mq.c
-+++ b/drivers/clk/imx/clk-imx8mq.c
-@@ -288,7 +288,7 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
- 	void __iomem *base;
- 	int err;
- 
--	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-+	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws,
- 					  IMX8MQ_CLK_END), GFP_KERNEL);
- 	if (WARN_ON(!clk_hw_data))
- 		return -ENOMEM;
-@@ -306,10 +306,12 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MQ_CLK_EXT4] = imx_get_clk_hw_by_name(np, "clk_ext4");
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mq-anatop");
--	base = of_iomap(np, 0);
-+	base = devm_of_iomap(dev, np, 0, NULL);
- 	of_node_put(np);
--	if (WARN_ON(!base))
--		return -ENOMEM;
-+	if (WARN_ON(IS_ERR(base))) {
-+		err = PTR_ERR(base);
-+		goto unregister_hws;
-+	}
- 
- 	hws[IMX8MQ_ARM_PLL_REF_SEL] = imx_clk_hw_mux("arm_pll_ref_sel", base + 0x28, 16, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
- 	hws[IMX8MQ_GPU_PLL_REF_SEL] = imx_clk_hw_mux("gpu_pll_ref_sel", base + 0x18, 16, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-@@ -395,8 +397,10 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
- 
- 	np = dev->of_node;
- 	base = devm_platform_ioremap_resource(pdev, 0);
--	if (WARN_ON(IS_ERR(base)))
--		return PTR_ERR(base);
-+	if (WARN_ON(IS_ERR(base))) {
-+		err = PTR_ERR(base);
-+		goto unregister_hws;
-+	}
- 
- 	/* CORE */
- 	hws[IMX8MQ_CLK_A53_DIV] = imx8m_clk_hw_composite_core("arm_a53_div", imx8mq_a53_sels, base + 0x8000);
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
