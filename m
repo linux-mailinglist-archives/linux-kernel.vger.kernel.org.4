@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390006EBF74
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5216EBF72
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjDWMbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S229726AbjDWMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDWMbf (ORCPT
+        with ESMTP id S229477AbjDWMaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:31:35 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA54D107;
-        Sun, 23 Apr 2023 05:31:33 -0700 (PDT)
-Received: from dd-virtual-machine.localdomain ([60.247.94.10])
-        (user=u202112092@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33NCTlSE024381-33NCTlSF024381
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Sun, 23 Apr 2023 20:30:05 +0800
-From:   Ruliang Lin <u202112092@hust.edu.cn>
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Ruliang Lin <u202112092@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, Borislav Petkov <bp@suse.de>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: ras: cec: return value check of `d`
-Date:   Sun, 23 Apr 2023 20:29:32 +0800
-Message-Id: <20230423122932.31274-1-u202112092@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 23 Apr 2023 08:30:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8325E10F0;
+        Sun, 23 Apr 2023 05:30:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EAF860F5A;
+        Sun, 23 Apr 2023 12:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 673D6C4339B;
+        Sun, 23 Apr 2023 12:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682253018;
+        bh=x3u0o4CRVGoUpTOcZqcBpH3LsucNfjILoz6/opJTae8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=a39wzx2PLQSP+XYGNFoLqNiK0NnciJyggIxNn8dKzcfAO23vSLJ+RY6n3YkL1p2Ns
+         LMm8g82DD6NErlwTkWeC71sLLkSvcV96SzxrCDwHPI87hwX/zli0wj6JYtLmDycQg7
+         qYnuOwL6XgfJP+fWCrr5gcte/KF8gwBMPdqsnBvBFF77BlwS4IEI04BIPrYrbhb6uo
+         m8C6KhFsSsmTX7DHlWYAGO57/12aCw73xhhdTq8pM2L49ppWWLBO6xJ1WcruuGCI+C
+         fhCS1qo21R39aGQ2NGWDa9fRmnZRtjcO3vgmxMyQxfO+JCxs0On+FrVjYQM9ynzNoq
+         sO+1BAItIcsvA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 406ACC395EA;
+        Sun, 23 Apr 2023 12:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: u202112092@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next] net: mtk_eth_soc: mediatek: fix ppe flow accounting
+ for v1 hardware
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168225301826.6341.12919802141863070642.git-patchwork-notify@kernel.org>
+Date:   Sun, 23 Apr 2023 12:30:18 +0000
+References: <d8474a95a528a4bec5121252205d179f357c7124.1682024624.git.daniel@makrotopia.org>
+In-Reply-To: <d8474a95a528a4bec5121252205d179f357c7124.1682024624.git.daniel@makrotopia.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, lorenzo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch complains that:
-create_debugfs_nodes() warn: 'd' is an error pointer or valid
+Hello:
 
-According to the documentation of the debugfs_create_dir() function, 
-there is no need to check the return value of this function.
-Just delete the dead code.
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Fixes: 011d82611172 ("RAS: Add a Corrected Errors Collector")
-Signed-off-by: Ruliang Lin <u202112092@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/ras/cec.c | 4 ----
- 1 file changed, 4 deletions(-)
+On Thu, 20 Apr 2023 22:06:42 +0100 you wrote:
+> From: Felix Fietkau <nbd@nbd.name>
+> 
+> Older chips (like MT7622) use a different bit in ib2 to enable hardware
+> counter support. Add macros for both and select the appropriate bit.
+> 
+> Fixes: 3fbe4d8c0e53 ("net: ethernet: mtk_eth_soc: ppe: add support for flow accounting")
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> 
+> [...]
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 321af498ee11..d2a03f94cbfe 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -483,10 +483,6 @@ static int __init create_debugfs_nodes(void)
- 	struct dentry *d, *pfn, *decay, *count, *array;
- 
- 	d = debugfs_create_dir("cec", ras_debugfs_dir);
--	if (!d) {
--		pr_warn("Error creating cec debugfs node!\n");
--		return -1;
--	}
- 
- 	decay = debugfs_create_file("decay_interval", S_IRUSR | S_IWUSR, d,
- 				    &decay_interval, &decay_interval_ops);
+Here is the summary with links:
+  - [net-next] net: mtk_eth_soc: mediatek: fix ppe flow accounting for v1 hardware
+    https://git.kernel.org/netdev/net-next/c/4eaeca1fc43a
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
