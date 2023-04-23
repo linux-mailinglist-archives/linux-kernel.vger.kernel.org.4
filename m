@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620046EC15B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 19:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11EA6EC15E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 19:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjDWRZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 13:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S229696AbjDWR0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 13:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjDWRZr (ORCPT
+        with ESMTP id S230139AbjDWRZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 13:25:47 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8304F10D4
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 10:25:45 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-2f833bda191so2104189f8f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 10:25:45 -0700 (PDT)
+        Sun, 23 Apr 2023 13:25:48 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261AB10DF
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 10:25:47 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so53999705e9.1
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 10:25:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1682270743; x=1684862743;
+        d=amarulasolutions.com; s=google; t=1682270745; x=1684862745;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0FeM+sCDaiJjgHIKAN9KA5DToVUgObUF0WlB1aYKrng=;
-        b=Cg0qM4kMSyG1istSRanl7VDS6Dy0TnJALGPLvbHhJLyTfvVepvGSxZjN9dLA7p5/RJ
-         vdQx888knq7AwWjjmJHfeEkbf+ofHW3zEN45ssZuQcvuc0zqEMh536s84pjHvTq3M4M+
-         qrY7eM6BO3IogIqIogbZq8/56fjkmnNmNh58E=
+        bh=MbxDPqhzMCS7xX3Keeglii9B+3fU/m4LAIoQKCOvlGw=;
+        b=kFx5aT3ZHShtKXQkjX5bjO1mltO6ghMp7YmjXd5ZNvN76bvrP2gL4pOSBoqLeReB8G
+         zeWLvoIy3pGRjaBg8ippvtE2ncmlfWQ4TADwU81Z+/hoRM/Bogq1AjHFchGRzH+I/e4P
+         WZ8/UXVNRta+9EMAFm/75ZgVx4u7w4Zq4Gm40=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682270743; x=1684862743;
+        d=1e100.net; s=20221208; t=1682270745; x=1684862745;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0FeM+sCDaiJjgHIKAN9KA5DToVUgObUF0WlB1aYKrng=;
-        b=VwKncxpa/eEQKo2cnhjH46o53wzezR6Pv850bXfPWwObRa1yFGR00mMciSHbr1u8Fq
-         zevIpNBk8tEAXq5tgl2utNdZzsacWMyachklt7nQz4vw9oTV5K7xSIwJOTis8onZ1WKm
-         eLqXonTu+YLWS3ilczBUWd0hT2NCI/yGXRs28ZLTrbgPyJZuDP9EqyRCm5FkjlZ/etPf
-         Al1oOJwh53nzwvw62sebHMwbmARt2SpkQyZP+oSFwJ2Wj0pYX1PdrdBBWmIXsaOMT4G7
-         eGQ099mxKhFaQPBqrZAJY/7FDtRYpyczgHWdeOViPiNUXlpWzJGQOsS+ZF5iu2NX93Eq
-         8Kdw==
-X-Gm-Message-State: AAQBX9cYHnGi1+Kxl9y2EvVDePyw3iUxahuVcomGmW5IDBya7FjCOhiq
-        os+qSDR0XvYoJq1lBKl4ZBU8d4i+1ge6vhdax+DiUg==
-X-Google-Smtp-Source: AKy350ZG9b++T7dK9uT8+qInWMRARXrouuqU40WgBNWL+FhWJRbAFNK8K7tKbrQmqgyES7dKmxf+Rw==
-X-Received: by 2002:a5d:5272:0:b0:2f4:de63:a0b5 with SMTP id l18-20020a5d5272000000b002f4de63a0b5mr8057660wrc.69.1682270743681;
-        Sun, 23 Apr 2023 10:25:43 -0700 (PDT)
+        bh=MbxDPqhzMCS7xX3Keeglii9B+3fU/m4LAIoQKCOvlGw=;
+        b=NlffK9E0bFFMSG01zHH9JEysSO2Osyz7lBqzICQa6UdfazqcPoTXOQ03z8K+/W+bo7
+         eMvo5IgTu0Lbj8x0Kdx+t7X2+Mwd1kQ5jiP+IEOjFUbmWnTCoeBeojubesLIqkmcpxR1
+         KHjC6M4+SM+5VxBHIxu/NzEErNjG81lhFVq/FMfPx1Jh4lNIJX7slo7Y+jn9QPK8V7ET
+         vlDXFDt5fyrm/ZGFzuhstlY9u6luFqY3SiTaMCTz9PI0SRYXx6uUt3xfS+Xjbtp1K72B
+         OjH/lyFOq+5CEEOV34zLHxi9AehxcsvyIyy7gvEWTjgQgGIomwyZrquod5ZthGrHza7q
+         fZag==
+X-Gm-Message-State: AAQBX9ebu4ozBn7w4sIEQjhWXEfiADm5lRvNe++hXUSDsDOLYC/ajlj8
+        kjn9sMxj2WqsFDbLxRY++qFiAemo9In7zq0EI+LecQ==
+X-Google-Smtp-Source: AKy350ZHuZgYLS/Hh8NQ9a899+cfyiN9BaStXdrvXMXXQ5mfLaLgd3HI+XE8ZsuF4x4OP0KwGf8x8A==
+X-Received: by 2002:a1c:e904:0:b0:3ed:3268:5f35 with SMTP id q4-20020a1ce904000000b003ed32685f35mr6156037wmc.18.1682270745255;
+        Sun, 23 Apr 2023 10:25:45 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.. ([37.159.119.249])
-        by smtp.gmail.com with ESMTPSA id j32-20020a05600c1c2000b003f173987ec2sm13511653wms.22.2023.04.23.10.25.42
+        by smtp.gmail.com with ESMTPSA id j32-20020a05600c1c2000b003f173987ec2sm13511653wms.22.2023.04.23.10.25.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 10:25:43 -0700 (PDT)
+        Sun, 23 Apr 2023 10:25:44 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
         michael@amarulasolutions.com,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 3/4] ARM: dts: stm32: add pin map for CAN controller on stm32f7
-Date:   Sun, 23 Apr 2023 19:25:27 +0200
-Message-Id: <20230423172528.1398158-4-dario.binacchi@amarulasolutions.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 4/4] can: bxcan: add support for single peripheral configuration
+Date:   Sun, 23 Apr 2023 19:25:28 +0200
+Message-Id: <20230423172528.1398158-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
 References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
@@ -76,107 +77,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pin configurations for using CAN controller on stm32f7.
+Add support for bxCAN controller in single peripheral configuration:
+- primary bxCAN
+- dedicated Memory Access Controller unit
+- 512-byte SRAM memory
+- 14 fiter banks
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
 ---
 
- arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 82 ++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ drivers/net/can/bxcan.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-index c8e6c52fb248..9f65403295ca 100644
---- a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-@@ -283,6 +283,88 @@ pins2 {
- 					slew-rate = <2>;
- 				};
- 			};
-+
-+			can1_pins_a: can1-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('A', 12, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('A', 11, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can1_pins_b: can1-1 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 9, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 8, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can1_pins_c: can1-2 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('D', 1, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('D', 0, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+
-+				};
-+			};
-+
-+			can1_pins_d: can1-3 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('H', 13, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('H', 14, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+
-+				};
-+			};
-+
-+			can2_pins_a: can2-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 6, AF9)>; /* CAN2_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 5, AF9)>; /* CAN2_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can2_pins_b: can2-1 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 12, AF9)>; /* CAN2_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can3_pins_a: can3-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('A', 15, AF11)>; /* CAN3_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('A', 8, AF11)>; /* CAN3_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can3_pins_b: can3-1 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 4, AF11)>;  /* CAN3_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 3, AF11)>; /* CAN3_RX */
-+					bias-pull-up;
-+				};
-+			};
- 		};
- 	};
+diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
+index e26ccd41e3cb..9bcbbb85da6e 100644
+--- a/drivers/net/can/bxcan.c
++++ b/drivers/net/can/bxcan.c
+@@ -155,6 +155,7 @@ struct bxcan_regs {
+ 	u32 reserved0[88];		/* 0x20 */
+ 	struct bxcan_mb tx_mb[BXCAN_TX_MB_NUM];	/* 0x180 - tx mailbox */
+ 	struct bxcan_mb rx_mb[BXCAN_RX_MB_NUM];	/* 0x1b0 - rx mailbox */
++	u32 reserved1[12];		/* 0x1d0 */
  };
+ 
+ struct bxcan_priv {
+@@ -922,6 +923,12 @@ static int bxcan_get_berr_counter(const struct net_device *ndev,
+ 	return 0;
+ }
+ 
++static const struct regmap_config bxcan_gcan_regmap_config = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++};
++
+ static int bxcan_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+@@ -942,11 +949,18 @@ static int bxcan_probe(struct platform_device *pdev)
+ 
+ 	gcan = syscon_regmap_lookup_by_phandle(np, "st,gcan");
+ 	if (IS_ERR(gcan)) {
+-		dev_err(dev, "failed to get shared memory base address\n");
+-		return PTR_ERR(gcan);
++		primary = true;
++		gcan = devm_regmap_init_mmio(dev,
++					     regs + sizeof(struct bxcan_regs),
++					     &bxcan_gcan_regmap_config);
++		if (IS_ERR(gcan)) {
++			dev_err(dev, "failed to get filter base address\n");
++			return PTR_ERR(gcan);
++		}
++	} else {
++		primary = of_property_read_bool(np, "st,can-primary");
+ 	}
+ 
+-	primary = of_property_read_bool(np, "st,can-primary");
+ 	clk = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(dev, "failed to get clock\n");
 -- 
 2.32.0
 
