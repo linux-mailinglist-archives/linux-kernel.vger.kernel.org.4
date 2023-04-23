@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0066EBF3A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10ABD6EBF3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjDWMM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S229976AbjDWMND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDWMMy (ORCPT
+        with ESMTP id S229522AbjDWMM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:12:54 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153F3E7C
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 05:12:53 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-329627dabfbso35778575ab.0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 05:12:53 -0700 (PDT)
+        Sun, 23 Apr 2023 08:12:57 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0BC10C9
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 05:12:54 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-763c3429aa6so28890939f.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 05:12:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682251972; x=1684843972;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kmlliGRkQt3zFcGLj9Go0Ae946lja32lat9O7DSGJ1s=;
-        b=PiHgoOLlsJuL21nPDzQBkQ6wNUxHJHMrJke/SD3DX89cNmUnGulmMBm7Ck3QZEe1jJ
-         M8vbckkkIgLAkDQWn0/WejBhDijURz64QDfTogbJuyXiD/9l529uws1blBSsUlGGNbJ4
-         LBYVITbRU0ftIRRzDc+rt1GfQf4JOOMkNNZ/XutRjbEUnV9IQKRCcYDZBpMPIx18A2ac
-         xjQlyaQCuSWDNRAkzMtFgKQ2iOx3TapVe7G+NySApBAPnrkpnaNfB3xBRDjIwcQoowmC
-         F1YZmjVqbvvLjkHiiUbpISunwI2tkvVHKhhnK9g8iixJWGLTBAqpk3fjqd4H++ATMwPx
-         twLw==
+        d=gmail.com; s=20221208; t=1682251974; x=1684843974;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JTAw7F03HuAr0OI8IRjYA7Odta6kZ/yszj+u/BSAuPo=;
+        b=REgwWBSRFUiIEK9qwudRmoDNqt33mzgWRpmSeTuO2i/B46etyi8vK2RjYE9C13aKph
+         ZyKhanQ0+t1Z8fBqUULDvdIolx+0Fxu8moCOZsKPN5GgUj5g1viY7TQiMiwUA5v1Shwr
+         5tfFcNnPlsA+19dAYi5OAxfGbC53Oedw2SC09NpWcmDpQ4Vste76HhxFcxE9QVh4xNcp
+         xl26AtEqF+gEmpzevyNYf2RE5yEx3g9g1RdErKJbwGG4tw86WWFFHyZfzm0wpdw0HhTS
+         Otc5B5oJZ0pHrEVL7mOkHAVWvPhV4zL+UvE96ikTJo92Wnjw1sR3QGnl63CHt1w0M0DF
+         TlXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682251972; x=1684843972;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kmlliGRkQt3zFcGLj9Go0Ae946lja32lat9O7DSGJ1s=;
-        b=UfQk+bhpsbCz5aoqtiq3b7ZhKMAs6SSsONxU5vIBUMSoXkCT8Dnu65oQhCXe8KRLEf
-         lcU/VW+LB+1xlWbeltgmLQ0S57t2fizcfAMFWdH37JLEcRUFgDSouyb6N2nHTT91tpLI
-         geWOaNkvmLEcfd19d+tG72jCxs3uOHRJrYFgvk2QlQ2arGhO1Mj3f+Mac+/5+WiXtkLL
-         ULZ8hiGcBKluEH3uOpLBjtH5Xz9L7A4r0qTA0yHTtYhOXgQc2d90H03PVYniP2cby8s2
-         DEPUJQg/zVwufX/0zASsagBUG7TJ9QjJPA9mPcQPMPGafXeUK6HQxVHDW/b1E8Sk3QTe
-         27ww==
-X-Gm-Message-State: AAQBX9c6WkcPu7BmE/Nr40cT0/p5cxus9V48YxzeuWaHesgIvk/SSM3G
-        O4AIsGZd2TpwH8H/c1MUxK0IoVvR3vQ=
-X-Google-Smtp-Source: AKy350Z+/FqvbghweTImeWKxFlGIN4GJb1ciPYdiWsEAx/ozS9tZ1ED/le+s9cSTvXEmhFZc8xmy9g==
-X-Received: by 2002:a05:6602:368a:b0:763:5548:c53a with SMTP id bf10-20020a056602368a00b007635548c53amr3498141iob.8.1682251972271;
-        Sun, 23 Apr 2023 05:12:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682251974; x=1684843974;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JTAw7F03HuAr0OI8IRjYA7Odta6kZ/yszj+u/BSAuPo=;
+        b=C+cFyASwnxmAFk2wpWZXB+dXPCHTFaW6OObSRRuvDu8ey9cxYcz7zsLOGTbiWdyTvu
+         XYN0rbGi4vCtrJeihF8g8BWiws9X9SRGXtdQDA8xKGPEm9oFE1ajN2UJLV6MHyo3plKE
+         MJ8e2YxgbyaVHPkZ2jgPO/8BlA+IC3ubeXtqYKns6zMgLx3gCe+bf5tt1pniqEIsTHGs
+         D9b7MJOUoGke4IdetMdIFqgWZDhqQZ/Yf9saDhtMTvvMCO4LgZi0ri9fOubY1+8GPdSn
+         HePdD+ug0rNwIukNnIvXBr6CCXvQB4s1zk+HxyVlZARL5GW0WcDqOn+ozHGoG/lqOujG
+         WU1w==
+X-Gm-Message-State: AAQBX9cTds6DYtBAqITtcfEZBogsPqzie+ZswTzc1kG6Oj4h6XQnFvBb
+        pYzwFm44eBhFGBGTsK5+izo=
+X-Google-Smtp-Source: AKy350b4IsmOmc2kdOlEa4VZcUd9HynWDxOz89lLecHxdvuNlqnpR4ecObEj/S+7bd3uBqX33WJ1vw==
+X-Received: by 2002:a6b:7617:0:b0:74d:771:6ed5 with SMTP id g23-20020a6b7617000000b0074d07716ed5mr3107823iom.21.1682251974106;
+        Sun, 23 Apr 2023 05:12:54 -0700 (PDT)
 Received: from aford-B741.lan ([2601:447:d001:897f:b473:5d7c:4c2:75d7])
-        by smtp.gmail.com with ESMTPSA id u11-20020a02230b000000b00411a1373aa5sm1612155jau.155.2023.04.23.05.12.51
+        by smtp.gmail.com with ESMTPSA id u11-20020a02230b000000b00411a1373aa5sm1612155jau.155.2023.04.23.05.12.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 05:12:51 -0700 (PDT)
+        Sun, 23 Apr 2023 05:12:53 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     m.szyprowski@samsung.com, aford@beaconembedded.com,
@@ -65,11 +66,13 @@ Cc:     m.szyprowski@samsung.com, aford@beaconembedded.com,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 0/6] drm: bridge: samsung-dsim: Support variable clocking
-Date:   Sun, 23 Apr 2023 07:12:26 -0500
-Message-Id: <20230423121232.1345909-1-aford173@gmail.com>
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 1/6] drm: bridge: samsung-dsim: fix blanking packet size calculation
+Date:   Sun, 23 Apr 2023 07:12:27 -0500
+Message-Id: <20230423121232.1345909-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230423121232.1345909-1-aford173@gmail.com>
+References: <20230423121232.1345909-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,52 +85,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes the blanking pack size and the PMS calculation.  It then
-adds support to allows the DSIM to dynamically DPHY clocks, and support
-non-burst mode while allowing the removal of the hard-coded clock values
-for the PLL for imx8m mini/nano/plus, and it allows the removal of the
-burst-clock device tree entry when burst-mode isn't supported by connected
-devices like an HDMI brige.  In that event, the HS clock is set to the value
-requested by the bridge chip.
+From: Lucas Stach <l.stach@pengutronix.de>
 
-This has been tested on both an i.MX8M Nano and i.MX8M Plus, and should work
-on i.MX8M Mini as well.
+Scale the blanking packet sizes to match the ratio between HS clock
+and DPI interface clock. The controller seems to do internal scaling
+to the number of active lanes, so we don't take those into account.
 
-
-Adam Ford (5):
-  drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
-  drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
-  drm: bridge: samsung-dsim: Dynamically configure DPHY timing
-  drm: bridge: samsung-dsim: Support non-burst mode
-  drm: bridge: samsung-dsim: Let blanking calcuation work in non-burst
-    mode
-
-Lucas Stach (1):
-  drm: bridge: samsung-dsim: fix blanking packet size calculation
-
- drivers/gpu/drm/bridge/samsung-dsim.c | 150 ++++++++++++++++++++++----
- include/drm/bridge/samsung-dsim.h     |   5 +
- 2 files changed, 135 insertions(+), 20 deletions(-)
-
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
-V2:  Instead of using my packet blanking calculation, this integrates
-     on from Lucas Stach which gets modified later in the series to
-     cache the value of the HS-clock instead of having to do the
-     calucations again.
-     
-     Instead of completely eliminating the PLL clock frequency from
-     the device tree, this makes it optional to avoid breaking some
-     Samsung devices.  When the samsung,pll-clock-frequency is not 
-     found, it reads the value of the clock named "sclk_mipi"
-     This also maintains backwords compatibility with older device
-     trees.
-     
-     This also changes the DPHY calcuation from a Look-up table, 
-     a reverse engineered algorithm which uses
-     phy_mipi_dphy_get_default_config to determine the standard
-     nominal values and calculates the cycles necessary to update
-     the DPHY timings accordingly.
-     
+ drivers/gpu/drm/bridge/samsung-dsim.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index e0a402a85787..2be3b58624c3 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -874,17 +874,29 @@ static void samsung_dsim_set_display_mode(struct samsung_dsim *dsi)
+ 	u32 reg;
+ 
+ 	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
++		int byte_clk_khz = dsi->burst_clk_rate / 1000 / 8;
++		int hfp = (m->hsync_start - m->hdisplay) * byte_clk_khz / m->clock;
++		int hbp = (m->htotal - m->hsync_end) * byte_clk_khz / m->clock;
++		int hsa = (m->hsync_end - m->hsync_start) * byte_clk_khz / m->clock;
++
++		/* remove packet overhead when possible */
++		hfp = max(hfp - 6, 0);
++		hbp = max(hbp - 6, 0);
++		hsa = max(hsa - 6, 0);
++
++		dev_dbg(dsi->dev, "calculated hfp: %u, hbp: %u, hsa: %u",
++			hfp, hbp, hsa);
++
+ 		reg = DSIM_CMD_ALLOW(0xf)
+ 			| DSIM_STABLE_VFP(m->vsync_start - m->vdisplay)
+ 			| DSIM_MAIN_VBP(m->vtotal - m->vsync_end);
+ 		samsung_dsim_write(dsi, DSIM_MVPORCH_REG, reg);
+ 
+-		reg = DSIM_MAIN_HFP(m->hsync_start - m->hdisplay)
+-			| DSIM_MAIN_HBP(m->htotal - m->hsync_end);
++		reg = DSIM_MAIN_HFP(hfp) | DSIM_MAIN_HBP(hbp);
+ 		samsung_dsim_write(dsi, DSIM_MHPORCH_REG, reg);
+ 
+ 		reg = DSIM_MAIN_VSA(m->vsync_end - m->vsync_start)
+-			| DSIM_MAIN_HSA(m->hsync_end - m->hsync_start);
++			| DSIM_MAIN_HSA(hsa);
+ 		samsung_dsim_write(dsi, DSIM_MSYNC_REG, reg);
+ 	}
+ 	reg =  DSIM_MAIN_HRESOL(m->hdisplay, num_bits_resol) |
 -- 
 2.39.2
 
