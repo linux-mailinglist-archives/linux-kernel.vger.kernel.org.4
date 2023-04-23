@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716E56EBF8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859176EBF93
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 14:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjDWMuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 08:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
+        id S230180AbjDWMu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 08:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDWMuT (ORCPT
+        with ESMTP id S230185AbjDWMuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 08:50:19 -0400
+        Sun, 23 Apr 2023 08:50:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F7110D1;
-        Sun, 23 Apr 2023 05:50:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14EA10EC;
+        Sun, 23 Apr 2023 05:50:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F70D60EE0;
-        Sun, 23 Apr 2023 12:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 965A1C4339C;
-        Sun, 23 Apr 2023 12:50:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EF7560F12;
+        Sun, 23 Apr 2023 12:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AAC5C433A1;
+        Sun, 23 Apr 2023 12:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682254217;
-        bh=jTIdfQM1eWcNuDZK6fIyQc6YVyBhTD2oiuwh3kzg05A=;
+        s=k20201202; t=1682254219;
+        bh=QpV1kIThma30wk4nihLJg1ef6jHbubidHACUqkX3n1o=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DJMYMJ9fBXZKCuJLHC1v2vFdQJ2JZFDDsGfMQoqwBLunU9w79A4437bxts6OIiFYf
-         HPZBwGPuNGEjXcOV81X2/u2yyuGZoDKXJD6KcPM7/hPvLBvRm0lo3QmH99QTimVEX/
-         2LEc2VOk11+fnhPpiMNgvr7D3ikSwag3XCU3sVWhwGi/fOmDqfJC1BpjucRDwTskbo
-         DSQ+D8/PUxX4CYscF4EdsIZdzpEheT+ettPm/pgASEPYw4JfmL2MbpsrKmK1wosckN
-         I+sHFWGb7CwZ8Z2Im1i7kYRpvtvLULO0GZ6UNjDP4l2nec19CD7ps7SBXJNp8DjcwQ
-         ihdyVJjab2Ipw==
+        b=Q077Xzq3rt/q/xNk6RvlrDXWf5q528PK/E4Dkkr12Ny89BspQfxNqpTm09JVQ+rgj
+         olhMnMwHxU3p+QcqXnhni70tFJNdu4pXgWEbWHY8gc/X4Er7ljh06HPambZPG/G+ca
+         UX6sy0dXX/xd4lxX75aM8ZO4+VFNMG58kd/oOiY1NF+8+cBmvzPllL2/0sm/HUyv63
+         hKXAIbCkDMmqtFHPJhqvsTbDhTNE4h0hM/BPkgl+5SqCk7KLWm+UNX/ogVxFNmfvV7
+         PFCw/Mv7FXvpUOcl0QO+SCf4ibDbQbZBIq/wpjQnO/EZMk8s3pt7bNTsHYaiCHDrxO
+         dZYzj2UOD7rjA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 79CECC395EA;
-        Sun, 23 Apr 2023 12:50:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D6FCE4F0DA;
+        Sun, 23 Apr 2023 12:50:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] rxrpc: Fix error when reading rxrpc tokens
+Subject: Re: [PATCH net-next] rxrpc: Replace fake flex-array with flexible-array
+ member
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168225421749.16046.8327729709141933771.git-patchwork-notify@kernel.org>
-Date:   Sun, 23 Apr 2023 12:50:17 +0000
-References: <212125.1682093777@warthog.procyon.org.uk>
-In-Reply-To: <212125.1682093777@warthog.procyon.org.uk>
+Message-Id: <168225421951.16046.3046343203794923640.git-patchwork-notify@kernel.org>
+Date:   Sun, 23 Apr 2023 12:50:19 +0000
+References: <84871.1682082533@warthog.procyon.org.uk>
+In-Reply-To: <84871.1682082533@warthog.procyon.org.uk>
 To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, marc.dionne@auristor.com,
+Cc:     netdev@vger.kernel.org, gustavoars@kernel.org,
+        simon.horman@corigine.com, keescook@chromium.org,
+        jaltman@auristor.com, marc.dionne@auristor.com,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,23 +64,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
+This patch was applied to netdev/net-next.git (main)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 21 Apr 2023 17:16:17 +0100 you wrote:
-> From: Marc Dionne <marc.dionne@auristor.com>
+On Fri, 21 Apr 2023 14:08:53 +0100 you wrote:
+> From: Gustavo A. R. Silva <gustavoars@kernel.org>
 > 
-> When converting from ASSERTCMP to WARN_ON, the tested condition must
-> be inverted, which was missed for this case.
+> Zero-length arrays as fake flexible arrays are deprecated and we are
+> moving towards adopting C99 flexible-array members instead.
 > 
-> This would cause an EIO error when trying to read an rxrpc token, for
-> instance when trying to display tokens with AuriStor's "tokens" command.
+> Transform zero-length array into flexible-array member in struct
+> rxrpc_ackpacket.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] rxrpc: Fix error when reading rxrpc tokens
-    https://git.kernel.org/netdev/net/c/fadfc57cc804
+  - [net-next] rxrpc: Replace fake flex-array with flexible-array member
+    https://git.kernel.org/netdev/net-next/c/788352191c85
 
 You are awesome, thank you!
 -- 
