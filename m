@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDC76EC0E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6E96EC0EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjDWPuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 11:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S229521AbjDWPzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 11:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjDWPuI (ORCPT
+        with ESMTP id S229453AbjDWPzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 11:50:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265971702
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 08:50:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 23 Apr 2023 11:55:23 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01952E70;
+        Sun, 23 Apr 2023 08:55:21 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD90F61232
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 15:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DB4BC4339B;
-        Sun, 23 Apr 2023 15:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682265007;
-        bh=8gcxG8cNuInSOjAwh06L+2WeBD3n4AI/2Ng2AXzSvZY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=StW9h/83jVt/dmK1Yak2yRBZGKl8yTscKDXxlYz5jhLUTw2riV60PUCQNIQ6y7fh9
-         EYF7vBEGzroptNdqbMgn99d4GkqIPvQTLtAx5WOHO0oXejGdiG21F25Oua6AwT5KF0
-         l4E5SKlIKntmaJZ0eS5xPHzzzbk0Qh2jO7mySGCwGnKyJYTxCUrC2TC8mBegBvoTo4
-         KojGQMkDkHeVa7jiv3Kj7GiroRoEQ9y8/D6sLakqItxp/HzmT5GLXpsqIB6i9uD7yO
-         P9l3VDA2x9EATiuAr/yzCMH96CbUosBg/w5f+qGB4DcLTUf9QXa/0FAJ+X6V85SAaE
-         z4A1InJ1bAu5w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01BD4E4D000;
-        Sun, 23 Apr 2023 15:50:07 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/urgent for v6.3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230423100113.GAZEUB6UvR5TjCMkfz@fat_crate.local>
-References: <20230423100113.GAZEUB6UvR5TjCMkfz@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230423100113.GAZEUB6UvR5TjCMkfz@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.3
-X-PR-Tracked-Commit-Id: c22ef5684b64a3a1ac08db06a6f327f2695fd377
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 97249f05b27385b7f870d8e2e6062e26e5f132e8
-Message-Id: <168226500700.30883.5181370695889387073.pr-tracker-bot@kernel.org>
-Date:   Sun, 23 Apr 2023 15:50:07 +0000
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by ms.lwn.net (Postfix) with ESMTPSA id 7D6AD35E;
+        Sun, 23 Apr 2023 15:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7D6AD35E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1682265321; bh=Eq7I91rvkJgR1lXQO6Y7qo5YQsJ2G/Qu3dWfTJsNRl8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=H0hjvH0nrBX2pTgA8en1Cputc4qzLmxHL1pGrPTRcwR+k9ZyNRXJSNzvONjOImAgm
+         UvR5yzXUf5xqd0z0Fkks7EYFs9uowQ/2CIQFZbokmc6pjxetnwedSv6+onxvTl96ki
+         SET+R1cMjgrAa3mmoAPbW/QSVkgGkXLLDMLd+vBHqex4bhNaiicF1QCjS4Qzu0FUoh
+         4NuzYZjJgPKNgMTOCIK5f7eSlipqqHHTYigA955hriHFhNbmlu96G2Ze2uzwgtIXgX
+         f5soMGecqgLIGZ+ByycmFc86in7oH6QO6QPgHDDGsFb0ZPLkluMPZiH6W0v7JmC+qM
+         SdsDM49oaDUAw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
+ Sphinx output
+In-Reply-To: <7e3b424d-2aba-3326-29c8-2ccdbfb12f70@gmail.com>
+References: <87o7nitvd4.fsf@meer.lwn.net>
+ <7e3b424d-2aba-3326-29c8-2ccdbfb12f70@gmail.com>
+Date:   Sun, 23 Apr 2023 09:55:20 -0600
+Message-ID: <87leiioaon.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,15 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 23 Apr 2023 12:01:13 +0200:
+Akira Yokosawa <akiyks@gmail.com> writes:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.3
+> Whereas the summary reads "docs: turn off "smart quotes" in the HTML build",
+> the change is also effective in the LaTeX/PDF build.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/97249f05b27385b7f870d8e2e6062e26e5f132e8
+True...so the title is a bit off, but it is a fix for that build too,
+right? 
 
-Thank you!
+> BTW, Jon, don't you test build pdfdocs these days?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+I will confess that I don't do it as often as I should.  As you may have
+noticed, it takes a little while to run, and the interest in PDF output
+is pretty low these days.
+
+> The fix to the pdfdocs build error from Tomi [1] is not yet picked up
+> either by Mauro or you ... :-/
+>
+> [1] https://lore.kernel.org/linux-doc/29380b3e-1daa-3aef-1749-dbd9960ba620@gmail.com/
+
+Media docs patches normally go through the media tree, just like the
+original bug did; I had assumed that would happen here as well.
+Seemingly not, so I've just picked those patches up into docs-next.
+
+> I waited to see if there is anybody else who hits this build error.
+> It looks like I am alone!
+>
+> If there is so few interest in pdfdocs, it might not be worth keeping
+> kernel documentation compatible with PDF build. 
+
+Interest is low, but not zero, and I'd prefer to keep it working.  It
+really helps when somebody tells me that it breaks (it is rather
+fragile, alas)!
+
+One of these days I would really like to make a serious attempt to see
+if rst2pdf has any hope of ever working for us.  Taking latex out of the
+picture would simplify so many things.
+
+Thanks,
+
+jon
