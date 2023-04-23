@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A742A6EBFDB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9AC6EBFDC
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjDWOAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S230082AbjDWODf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDWOAV (ORCPT
+        with ESMTP id S229458AbjDWODe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:00:21 -0400
+        Sun, 23 Apr 2023 10:03:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C41FE3
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:00:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6310EC
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 07:03:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 282EB61A27
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 14:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE32C433D2;
-        Sun, 23 Apr 2023 14:00:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C9DF6116E
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 14:03:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DE8C433D2;
+        Sun, 23 Apr 2023 14:03:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682258418;
-        bh=rXa7qPtIZGglVvOdvfEFs+lsgsASMTAj/fjqzEcamoo=;
+        s=korg; t=1682258611;
+        bh=AfrkTWaqi1tasRCU5KrVEhnQApgyFkOmZl7igHgmCZg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0HBxJ96/rK7xfxinCXBvRC2dnxYjJbPapAoW/d0H5TAn22BFZCOUx2qcQhspeJ3BX
-         HvW1yXodryz/7ob9AmU91FrPsC9aY3al0N3kQAL+hLgCC1mO8yNSUYBC75TmUUE2kG
-         8Of4sljZePqney0NhN7AmkToZqb11f4oAMhtlrqw=
-Date:   Sun, 23 Apr 2023 16:00:15 +0200
+        b=IHhZ05dY/n5CmW69ZWqKrlSQR7dTmVMlU1GsHTGEwGBITD9s2E6BJ1H3XdPe3eELb
+         VBfzbPquPzdac/9MfbDD3x81vN3cPiIlpPeBFWLBPweygqIlCreQCYMeS5zPx2nIP/
+         By60vxGkMrpRPVg/hzUH8si/5iuiwIXFHGIgFSiQ=
+Date:   Sun, 23 Apr 2023 16:03:28 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 Cc:     Dmitry Vyukov <dvyukov@google.com>,
@@ -37,7 +37,7 @@ Cc:     Dmitry Vyukov <dvyukov@google.com>,
         Jiri Slaby <jirislaby@kernel.org>,
         linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Subject: Re: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
-Message-ID: <2023042342-nebula-hydrogen-baf4@gregkh>
+Message-ID: <2023042347-vaguely-monsieur-63ed@gregkh>
 References: <00000000000013aaac05f9d44e7a@google.com>
  <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
  <6bec279c-07b3-d6f1-0860-4d6b136a2025@I-love.SAKURA.ne.jp>
@@ -93,10 +93,47 @@ On Sun, Apr 23, 2023 at 10:28:58PM +0900, Tetsuo Handa wrote:
 > 
 > Hmm, it seems to me that we need multiple patches (which would become too big to
 > backport) for fixing this bug.
+> 
+> First step (which Dmitry mentioned) is to avoid potential NULL pointer dereferences
+> caused by
+> 
+>   if (!f_op->$callbackname) {
+>     return error;
+>   }
+>   return f_op->$callbackname($args);
+> 
+> pattern, for the next step will touch too many locations to change all at once whereas
+> the first step could be handled by implementing dummy function for all missing $callbackname.
 
-Fix the bug properly first.  And then only start to worry about stable
-kernels, don't let the existance of them affect your development efforts
-at all please.
+I do not understand, what "callbackname" is the problem here?  Just
+splice_read?  Something else?  And where would it need to be modified
+and why can't we do it in one place only (i.e. install a default handler
+instead.)
+
+Also, pointer function operations like this are dirt slow, be wary of
+adding additional ones if possible, on fast paths.
+
+> Next step is to convert from
+> 
+>   if (!f_op->$callbackname) {
+>     return error;
+>   }
+>   return f_op->$callbackname($args);
+> 
+> to
+> 
+>   fn = READ_ONCE(f_op->$callbackname);
+>   if (!fn) {
+>     return error;
+>   }
+>   return fn($args);
+> 
+> pattern.
+
+Why?  What does this solve differently than the first one?  What can
+change the fops pointer between the check and call path?  If something
+can change it, then do NOT make that type of check in the first place
+(or put a proper lock in place.)
 
 thanks,
 
