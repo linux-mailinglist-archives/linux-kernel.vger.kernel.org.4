@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9476EC0D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896FD6EC0D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjDWPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 11:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S229848AbjDWPfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 11:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDWPeX (ORCPT
+        with ESMTP id S229458AbjDWPfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 11:34:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56CB10EC;
-        Sun, 23 Apr 2023 08:34:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0882C60F89;
-        Sun, 23 Apr 2023 15:34:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA166C433EF;
-        Sun, 23 Apr 2023 15:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682264061;
-        bh=DuWcZ8Ufpqix6AGju65ri+2BRYftUvhxEIwzm6NEAso=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=slZTVFbLQyx6CNX8Li67ohcNIbdE533otTVdexrwqUOsdpTxpVagp2SofdXZxRdI2
-         nJV4+Wsyl0Sqrq+ltn5X8F2Tda/fGEerUPQs9s3NmLsxQj+mP2xjx2tGZiw+QjQk3a
-         ScLwJWffrrBMkvAtA8Bt02F71ksoCF/jdI3Q1dds5WSNqF8GEWuBhzmUUXxZ8dqH5v
-         G9UMPERRRfbwFyu1mxvdxJrQo2XHdsm7TWXJPe9CXFNv/sTZrk+zD2qghphOXTRy5L
-         FlDow6mGoU0EptwYca2lF1UEgVglYS6wq+UBFjN2Ixtdmc6uygaFht8T9UVjlZCY38
-         KmNVBSNT/cDEg==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 23 Apr 2023 18:34:16 +0300
-Message-Id: <CS48U6SYIBVB.V05DUEX5I01F@suppilovahvero>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "Thorsten Leemhuis" <regressions@leemhuis.info>,
-        "James Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>, "Jan Dabros" <jsd@semihalf.com>,
-        <regressions@lists.linux.dev>,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Johannes Altmanninger" <aclopte@gmail.com>
-X-Mailer: aerc 0.14.0
-References: <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com>
- <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
- <ZBBmVhwsTf/URoqs@kernel.org>
- <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
- <ZBBxMl5rVjY9FGS9@kernel.org> <ZBBxxftnXHVOjm92@kernel.org>
- <ZBB8R9H3CyQnNfCt@zx2c4.com> <ZBCDeleGG/fFlkt+@kernel.org>
- <ZEKlzaQhjd8sbE7I@kernel.org>
- <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
-In-Reply-To: <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 23 Apr 2023 11:35:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D275110EC
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 08:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682264072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6SqLgVIvmYoBeVscKlefF4YVXTcxu2vwftyHT1Y86s4=;
+        b=Byc64FphTMTCQFbsyc+fIhCpdXeEtKBj2GrMXcVXwIb6ardbcHYfabp6ifnS/t6BAr9Vx2
+        IeEdtxT+//YUK5yssKoXKdR0o8gSruDfLDLWhAYYoWl2u1vCRMmA34mhp4T+Lt0zGJvD/O
+        +RPO58Hv9nJCtLKrDwPLiJCmmCDy4mQ=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-86-Do7uGsaMNFuZP97CVHqkFw-1; Sun, 23 Apr 2023 11:34:31 -0400
+X-MC-Unique: Do7uGsaMNFuZP97CVHqkFw-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3ef6c0a9212so5467151cf.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 08:34:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682264071; x=1684856071;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6SqLgVIvmYoBeVscKlefF4YVXTcxu2vwftyHT1Y86s4=;
+        b=NntB4LAPKDA/XK2pn3skFbZvlJn2TherUkDxc+p7RHm1dstCflauhOVaxttC66qSMh
+         m4IVgWbag1Ogs8L8b34sJhvnDD2VJz04Gmicux8Ml7MpbKjwqdloNDpj1EMVnicLK4BY
+         OH29hwbbkSvxExgPf7PY5qg9QKJ3dnq8GE1sg265N4QcWeJmU/ZZDLHmgNe6uqMull5a
+         Cr7R4m4bwKZFK6metoyfraWDI2EYlhmVuq+KrCU5xe/RVp/6ANmypy13M2I8PUywtdjz
+         GznMoQPuxR+Ud2qJXqauWTU4ibjPOlLzFtaVVBgxHwekrcBrfxpdDISHaB+s08d3v9fC
+         7cZA==
+X-Gm-Message-State: AAQBX9d+2uOUOwRHClf2bSVg4Sy6FicXWemXEoPApllckfKL8mWezVxE
+        qeIAW4G+ReXj3boQcCPkOAX3DSRePIC1PQsg+h2dZ53QZ7KWJSONf8PqRdx1t8Ll34rS2ghTsnD
+        7OVICFITfS7ATs7FORmw+R+nP
+X-Received: by 2002:a05:622a:353:b0:3ef:3cdf:c29d with SMTP id r19-20020a05622a035300b003ef3cdfc29dmr19870207qtw.52.1682264070985;
+        Sun, 23 Apr 2023 08:34:30 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a3Nh0lPR6tJZeIU/ILJ6y6gRnF/+mxuC2FZU4C6ru1VswVmKRM5wNg2IwQGrBj2ocevTHgSw==
+X-Received: by 2002:a05:622a:353:b0:3ef:3cdf:c29d with SMTP id r19-20020a05622a035300b003ef3cdfc29dmr19870187qtw.52.1682264070767;
+        Sun, 23 Apr 2023 08:34:30 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id ey19-20020a05622a4c1300b003ef324c6fa3sm2334416qtb.52.2023.04.23.08.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 08:34:30 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mark.rutland@arm.com, lpieralisi@kernel.org, sudeep.holla@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] firmware: smccc: set variables smccc_soc_id_version,revision storage-class-specifier to static
+Date:   Sun, 23 Apr 2023 11:34:28 -0400
+Message-Id: <20230423153428.3938525-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Apr 21, 2023 at 9:27 PM EEST, Jason A. Donenfeld wrote:
-> Did you use the patch I sent you and suspend and resume according to
-> the instructions I gave you? If not, I don't have much to add.
+smatch reports
+drivers/firmware/smccc/smccc.c:20:21: warning: symbol
+  'smccc_soc_id_version' was not declared. Should it be static?
+drivers/firmware/smccc/smccc.c:21:21: warning: symbol
+  'smccc_soc_id_revision' was not declared. Should it be static?
 
-Finally, I got it reproduced at my side with TPM 1.2:
+These variables are only used in their defining file so should be static
 
-[    0.379677] tpm_tis 00:00: 1.2 TPM (device-id 0x1, rev-id 1)
-[   32.453447] tpm tpm0: tpm_transmit: tpm_recv: error -5
-[   33.450601] tpm tpm0: Unable to read header
-[   33.450607] tpm tpm0: tpm_transmit: tpm_recv: error -62
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/firmware/smccc/smccc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'll look at this further after I've sent v6.3 PR.
+diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
+index db818f9dcb8e..0cf4c45de417 100644
+--- a/drivers/firmware/smccc/smccc.c
++++ b/drivers/firmware/smccc/smccc.c
+@@ -17,8 +17,8 @@ static enum arm_smccc_conduit smccc_conduit = SMCCC_CONDUIT_NONE;
+ 
+ bool __ro_after_init smccc_trng_available = false;
+ u64 __ro_after_init smccc_has_sve_hint = false;
+-s32 __ro_after_init smccc_soc_id_version = SMCCC_RET_NOT_SUPPORTED;
+-s32 __ro_after_init smccc_soc_id_revision = SMCCC_RET_NOT_SUPPORTED;
++static s32 __ro_after_init smccc_soc_id_version = SMCCC_RET_NOT_SUPPORTED;
++static s32 __ro_after_init smccc_soc_id_revision = SMCCC_RET_NOT_SUPPORTED;
+ 
+ void __init arm_smccc_version_init(u32 version, enum arm_smccc_conduit conduit)
+ {
+-- 
+2.27.0
 
-BR, Jarkko
