@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4516EBD42
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 07:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D836EBD47
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 08:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjDWFsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 01:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S229930AbjDWGAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 02:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDWFsx (ORCPT
+        with ESMTP id S229516AbjDWGAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 01:48:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376FE19B1
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 22:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=vWpzRzo8cm9efAzaoFwYkqDS+jJeQhHNqJ+MkOQpCN4=; b=Z0rNnvswabJzlpm94qEF+uOGN+
-        opX9a8X/xSZZyiF4ewvOhUVjIUhgVuU3ZukEaaBk00W1DWkGbO+EJwDcTF3tmUsW2EB2Kli4jbAoh
-        kFwCU90vsDjyuxzIcOwc4WlZjnboLjmrN3Gx9TKczkqiql0Ea7Vfmtn6K48P8Ufaf5s997wBobHBh
-        A//3rqE3S63FmLMafJ/yQbmqSWnvvZ+Fd+EUEYUlxuSvE9woly3sP+EYyH+QCc1SuMNkSXP6yUDxB
-        zCD30TxbGP8+2C0Go6v8T+KrdrQeH2c1udGiaswq8Cm7L8bA36qMtUz1Jt+znb7DMp/YdLZDVM4gT
-        Kyzq1WnQ==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pqSae-00DneG-2R;
-        Sun, 23 Apr 2023 05:48:48 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kristoffer Ericson <Kristoffer.ericson@gmail.com>,
-        Russell King <linux@arm.linux.org.uk>, patches@armlinux.org.uk
-Subject: [PATCH] arm: HP Jornada 7XX: fix kernel-doc warnings
-Date:   Sat, 22 Apr 2023 22:48:45 -0700
-Message-Id: <20230423054845.27204-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.0
+        Sun, 23 Apr 2023 02:00:14 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4B61FEF
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 23:00:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VgiUM0a_1682229605;
+Received: from 30.97.48.67(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgiUM0a_1682229605)
+          by smtp.aliyun-inc.com;
+          Sun, 23 Apr 2023 14:00:06 +0800
+Message-ID: <9b9f6247-8428-e3ee-18e5-0dda59bbd5e5@linux.alibaba.com>
+Date:   Sun, 23 Apr 2023 14:00:05 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] mm/page_alloc: add some comments to explain the
+ possible hole in __pageblock_pfn_to_page()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, vbabka@suse.cz, mhocko@suse.com,
+        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <c2eee65ecd15779721af85c9ff109a35345b52d4.1682158312.git.baolin.wang@linux.alibaba.com>
+ <02defcbe9d7a797a2257e5f6a28ff7ea78e394e5.1682158312.git.baolin.wang@linux.alibaba.com>
+ <ZES/7+zfs0h+lg7y@kernel.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <ZES/7+zfs0h+lg7y@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,59 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix kernel-doc warnings from the kernel test robot:
 
-jornada720_ssp.c:24: warning: Function parameter or member 'jornada_ssp_lock' not described in 'DEFINE_SPINLOCK'
-jornada720_ssp.c:24: warning: expecting prototype for arch/arm/mac(). Prototype was for DEFINE_SPINLOCK() instead
-jornada720_ssp.c:34: warning: Function parameter or member 'byte' not described in 'jornada_ssp_reverse'
-jornada720_ssp.c:57: warning: Function parameter or member 'byte' not described in 'jornada_ssp_byte'
-jornada720_ssp.c:85: warning: Function parameter or member 'byte' not described in 'jornada_ssp_inout'
 
-Fixes: 69ebb22277a5 ("[ARM] 4506/1: HP Jornada 7XX: Addition of SSP Platform Driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: lore.kernel.org/r/202304210535.tWby3jWF-lkp@intel.com
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Kristoffer Ericson <Kristoffer.ericson@gmail.com>
-Cc: Russell King <linux@arm.linux.org.uk>
-Cc: patches@armlinux.org.uk
----
-KernelVersion: 6.3-rc7
+On 4/23/2023 1:19 PM, Mike Rapoport wrote:
+> Hi,
+> 
+> On Sat, Apr 22, 2023 at 06:15:18PM +0800, Baolin Wang wrote:
+>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
+>> checks whether the given zone contains holes, and uses pfn_to_online_page()
+>> to validate if the start pfn is online and valid, as well as using pfn_valid()
+>> to validate the end pfn.
+>>
+>> However, though the start pfn of a pageblock is valid, it can not always
+>> guarantee the end pfn of the pageblock is also valid (may be holes) in some
+>> cases. For example, if the pageblock order is MAX_ORDER - 1, which will fall
+> 
+> Nit: in the current mm tree the default pageblock order is MAX_ORDER.
 
- arch/arm/mach-sa1100/jornada720_ssp.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Ah, yes, will change in next version.
 
-diff -- a/arch/arm/mach-sa1100/jornada720_ssp.c b/arch/arm/mach-sa1100/jornada720_ssp.c
---- a/arch/arm/mach-sa1100/jornada720_ssp.c
-+++ b/arch/arm/mach-sa1100/jornada720_ssp.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/**
-+/*
-  *  arch/arm/mac-sa1100/jornada720_ssp.c
-  *
-  *  Copyright (C) 2006/2007 Kristoffer Ericson <Kristoffer.Ericson@gmail.com>
-@@ -26,6 +26,7 @@ static unsigned long jornada_ssp_flags;
- 
- /**
-  * jornada_ssp_reverse - reverses input byte
-+ * @byte: input byte to reverse
-  *
-  * we need to reverse all data we receive from the mcu due to its physical location
-  * returns : 01110111 -> 11101110
-@@ -46,6 +47,7 @@ EXPORT_SYMBOL(jornada_ssp_reverse);
- 
- /**
-  * jornada_ssp_byte - waits for ready ssp bus and sends byte
-+ * @byte: input byte to transmit
-  *
-  * waits for fifo buffer to clear and then transmits, if it doesn't then we will
-  * timeout after <timeout> rounds. Needs mcu running before its called.
-@@ -77,6 +79,7 @@ EXPORT_SYMBOL(jornada_ssp_byte);
- 
- /**
-  * jornada_ssp_inout - decide if input is command or trading byte
-+ * @byte: input byte to send (may be %TXDUMMY)
-  *
-  * returns : (jornada_ssp_byte(byte)) on success
-  *         : %-ETIMEDOUT on timeout failure
+> 
+>> into 2 sub-sections, and the end pfn of the pageblock may be hole even though
+>> the start pfn is online and valid.
+>>
+>> This did not break anything until now, but the zone continuous is fragile
+>> in this possible scenario. So as previous discussion[1], it is better to
+>> add some comments to explain this possible issue in case there are some
+>> future pfn walkers that rely on this.
+>>
+>> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   mm/page_alloc.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 6457b64fe562..dc4005b32ae0 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -1502,6 +1502,14 @@ void __free_pages_core(struct page *page, unsigned int order)
+>>    * interleaving within a single pageblock. It is therefore sufficient to check
+>>    * the first and last page of a pageblock and avoid checking each individual
+>>    * page in a pageblock.
+>> + *
+>> + * Note: if the start pfn of a pageblock is valid, but it can not always guarantee
+>> + * the end pfn of the pageblock is also valid (may be holes) in some cases. For
+>> + * example, if the pageblock order is MAX_ORDER - 1, which will fall into 2
+>> + * sub-sections, and the end pfn of the pageblock may be hole even though the
+>> + * start pfn is online and valid. This did not break anything until now, but be
+>> + * careful this possible issue when checking if the whole pfns are valid of a
+> 
+> careful about ...
+
+OK. Thanks for reviewing.
