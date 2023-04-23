@@ -2,204 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DE66EBD3E
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 07:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4516EBD42
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 07:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjDWFpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 01:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S230001AbjDWFsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 01:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDWFpe (ORCPT
+        with ESMTP id S229516AbjDWFsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 01:45:34 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C639819BD;
-        Sat, 22 Apr 2023 22:45:32 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-517bb01bac9so2462668a12.0;
-        Sat, 22 Apr 2023 22:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682228731; x=1684820731;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XfJCkDUStFvQlmTy2TXfR/ynfAHG7u0kjCgYu5zu+S0=;
-        b=h3K1g2SlnA1hNafZsDzL73GqQ1fMN3ZSIkf+EqngNBU7zAM6wqFmSPnKPTKawt2WKW
-         iaIRN0/XnDAJVZFtJoF1QHNP+JWbVd+i5p4Q02wtaCKp9b+hV7eaOGEAyK2NV9SDG7D+
-         ZhqUEZJg5gbLoNJUhcxisMxtOpaB54OBwhNnIV3un4c4nnZ3Ms9zAkJAHuhN28+YmCjg
-         jjxQMc2LXjzWUXmVZNso5aAvjBpQ9wVuiWwGwka1oBs2hS9nyA76a1+Y28gYgaukGDJ9
-         BpdoqsQ4KqQYA/AFzykeg41Z/9YTlgbUYEofSp2w57GWCOxCdypVmL9NLDLXBFyMmz9+
-         +6Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682228732; x=1684820732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XfJCkDUStFvQlmTy2TXfR/ynfAHG7u0kjCgYu5zu+S0=;
-        b=VV3K1WcIk+vH0d12TQ5DUeBr0QXg+d6fdC3HO4gUbX/FEGcRqQN003aOpkP7vdxTjY
-         4BIHQMfI/YOTdzEWdAwuG0b04MCSHOYY8IIrdO5Lm5t8ydY3oA1JuJaytHqjKJaaeY/p
-         73s3y+bwbjXEk+wP0g2Pz3NKUKhKjPOPit710MYEFEVU8jo0eNc8tEDR90mLBo55pdvy
-         U0KNeM6i5K3Lq7q8c+sudOcauPCusck+UYhF8NNU9fqBzMcjjtPkJLA8+4rVUTy7XemR
-         Qo2xZgbl/yiN6VZyYC92g1/xfpBf8e+N/QhLuZDwZ2S9eg0BbNV5nwrQKPgY7W8x7YNI
-         LSYA==
-X-Gm-Message-State: AAQBX9d7aVYpnyROQzpkOuPHz52Oy+LUICX3mMVlkUCcPf32N2SNAPsX
-        6WI5bcOeDFeRyp65sXD3a8G1u5SJuCXpi3p2RgjU+yW0Y2A=
-X-Google-Smtp-Source: AKy350aDyCUNDsIcYQXQcqK0mni7J28pUoI0YrKxDiK2jn8R3+yZ0a/3XNftKZEdRgkkqzNpR2iLz3CPFuu1ytYHUEM=
-X-Received: by 2002:a17:90b:3507:b0:247:eae:1783 with SMTP id
- ls7-20020a17090b350700b002470eae1783mr10044277pjb.45.1682228731562; Sat, 22
- Apr 2023 22:45:31 -0700 (PDT)
+        Sun, 23 Apr 2023 01:48:53 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376FE19B1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Apr 2023 22:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=vWpzRzo8cm9efAzaoFwYkqDS+jJeQhHNqJ+MkOQpCN4=; b=Z0rNnvswabJzlpm94qEF+uOGN+
+        opX9a8X/xSZZyiF4ewvOhUVjIUhgVuU3ZukEaaBk00W1DWkGbO+EJwDcTF3tmUsW2EB2Kli4jbAoh
+        kFwCU90vsDjyuxzIcOwc4WlZjnboLjmrN3Gx9TKczkqiql0Ea7Vfmtn6K48P8Ufaf5s997wBobHBh
+        A//3rqE3S63FmLMafJ/yQbmqSWnvvZ+Fd+EUEYUlxuSvE9woly3sP+EYyH+QCc1SuMNkSXP6yUDxB
+        zCD30TxbGP8+2C0Go6v8T+KrdrQeH2c1udGiaswq8Cm7L8bA36qMtUz1Jt+znb7DMp/YdLZDVM4gT
+        Kyzq1WnQ==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pqSae-00DneG-2R;
+        Sun, 23 Apr 2023 05:48:48 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kristoffer Ericson <Kristoffer.ericson@gmail.com>,
+        Russell King <linux@arm.linux.org.uk>, patches@armlinux.org.uk
+Subject: [PATCH] arm: HP Jornada 7XX: fix kernel-doc warnings
+Date:   Sat, 22 Apr 2023 22:48:45 -0700
+Message-Id: <20230423054845.27204-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YQCugPs1bquaA4ZLdsM4S3hWv9OMNTt80tSvjCO0LwiHg@mail.gmail.com> <CAABZP2wE8Gz9wV_YAjNsFo7V=rpymuLOqVJ0=aAmwixqPiHTiQ@mail.gmail.com>
-In-Reply-To: <CAABZP2wE8Gz9wV_YAjNsFo7V=rpymuLOqVJ0=aAmwixqPiHTiQ@mail.gmail.com>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Sun, 23 Apr 2023 13:45:20 +0800
-Message-ID: <CAABZP2w3gGEvU1xx_8abE78RzmPX88wvcALF033U8mjC9AvwaQ@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 9:37=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.com> =
-wrote:
->
-> On Sun, Apr 23, 2023 at 3:19=E2=80=AFAM Joel Fernandes <joel@joelfernande=
-s.org> wrote:
-> >
-> > Hi Zhouyi,
-> Thank Joel for your quick response ;-)
-> I will gradually provide all the necessary information to facilitate
-> our chasing. Please do not hesitate email me
-> if I have ignored any ;-)
-> >
-> > On Sat, Apr 22, 2023 at 2:47=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.c=
-om> wrote:
-> > >
-> > > Dear PowerPC and RCU developers:
-> > > During the RCU torture test on mainline (on the VM of Opensource Lab
-> > > of Oregon State University), SRCU-P failed with __stack_chk_fail:
-> > > [  264.381952][   T99] [c000000006c7bab0] [c0000000010c67c0]
-> > > dump_stack_lvl+0x94/0xd8 (unreliable)
-> > > [  264.383786][   T99] [c000000006c7bae0] [c00000000014fc94] panic+0x=
-19c/0x468
-> > > [  264.385128][   T99] [c000000006c7bb80] [c0000000010fca24]
-> > > __stack_chk_fail+0x24/0x30
-> > > [  264.386610][   T99] [c000000006c7bbe0] [c0000000002293b4]
-> > > srcu_gp_start_if_needed+0x5c4/0x5d0
-> > > [  264.388188][   T99] [c000000006c7bc70] [c00000000022f7f4]
-> > > srcu_torture_call+0x34/0x50
-> > > [  264.389611][   T99] [c000000006c7bc90] [c00000000022b5e8]
-> > > rcu_torture_fwd_prog+0x8c8/0xa60
-> > > [  264.391439][   T99] [c000000006c7be00] [c00000000018e37c] kthread+=
-0x15c/0x170
-> > > [  264.392792][   T99] [c000000006c7be50] [c00000000000df94]
-> > > ret_from_kernel_thread+0x5c/0x64
-> > > The kernel config file can be found in [1].
-> > > And I write a bash script to accelerate the bug reproducing [2].
-> > > After a week's debugging, I found the cause of the bug is because the
-> > > register r10 used to judge for stack overflow is not constant between
-> > > context switches.
-> > > The assembly code for srcu_gp_start_if_needed is located at [3]:
-> > > c000000000226eb4:   78 6b aa 7d     mr      r10,r13
-> > > c000000000226eb8:   14 42 29 7d     add     r9,r9,r8
-> > > c000000000226ebc:   ac 04 00 7c     hwsync
-> > > c000000000226ec0:   10 00 7b 3b     addi    r27,r27,16
-> > > c000000000226ec4:   14 da 29 7d     add     r9,r9,r27
-> > > c000000000226ec8:   a8 48 00 7d     ldarx   r8,0,r9
-> > > c000000000226ecc:   01 00 08 31     addic   r8,r8,1
-> > > c000000000226ed0:   ad 49 00 7d     stdcx.  r8,0,r9
-> > > c000000000226ed4:   f4 ff c2 40     bne-    c000000000226ec8
-> > > <srcu_gp_start_if_needed+0x1c8>
-> > > c000000000226ed8:   28 00 21 e9     ld      r9,40(r1)
-> > > c000000000226edc:   78 0c 4a e9     ld      r10,3192(r10)
-> > > c000000000226ee0:   79 52 29 7d     xor.    r9,r9,r10
-> > > c000000000226ee4:   00 00 40 39     li      r10,0
-> > > c000000000226ee8:   b8 03 82 40     bne     c0000000002272a0
-> > > <srcu_gp_start_if_needed+0x5a0>
-> > > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
-> > > but if there is a context-switch before c000000000226edc, a false
-> > > positive will be reported.
-> > >
-> > > [1] http://154.220.3.115/logs/0422/configformainline.txt
-> > > [2] 154.220.3.115/logs/0422/whilebash.sh
-> > > [3] http://154.220.3.115/logs/0422/srcu_gp_start_if_needed.txt
-> > >
-> > > My analysis and debugging may not be correct, but the bug is easily
-> > > reproducible.
-> >
-> > Could you provide the full kernel log? It is not clear exactly from
-> > your attachments, but I think this is a stack overflow issue as
-> > implied by the mention of __stack_chk_fail. One trick might be to turn
-> > on any available stack debug kernel config options, or check the
-> > kernel logs for any messages related to shortage of remaining stack
-> > space.
-> The full kernel log is [1]
-> [1] http://154.220.3.115/logs/0422/console.log
-> >
-> > Additionally, you could also find out where the kernel crash happened
-> > in C code following the below notes [1] I wrote (see section "Figuring
-> > out where kernel crashes happen in C code"). The notes are
-> > x86-specific but should be generally applicable (In the off chance
-> > you'd like to improve the notes, feel free to share them ;-)).
-> Fantastic article!!!, I benefit a lot from reading it. Because we can
-> reproduce it so easily on powerpc VM,
-> I can even use gdb to debug it, following is my debug process on
-> 2e83b879fb91dafe995967b46a1d38a5b0889242(srcu: Create an
-> srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()).
->
-> [2] http://154.220.3.115/logs/0422/gdb.txt
-> >
-> > Lastly, is it a specific kernel release from which you start seeing
-> > this issue? You should try git bisect if it is easily reproducible in
-> > a newer release, but goes away in an older one.
-> I did bisect on powerpc VM, the problem begin to appear on
-> 2e83b879fb91dafe995967b46a1d38a5b0889242(srcu: Create an
-> srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()).
->
-> The kernel is good at 5d0f5953b60f5f7a278085b55ddc73e2932f4c33(srcu:
-> Convert ->srcu_lock_count and ->srcu_unlock_count to atomic)
->
-> But if I apply the following patch [3] to
-> 5d0f5953b60f5f7a278085b55ddc73e2932f4c33, the bug appears again.
-> [3] http://154.220.3.115/logs/0422/bug.patch
->
-> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
-> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
-update: stress tested on x86 platform for 6 hours, no bug reported
-(while we can reproduce it on X86 based cross platform powerpc gcc and
-X86 based cross platform powerpc qemu in less than 3 minute).
-> >
-> > I will also join you in your debug efforts soon though I am currently
-> > in between conferences.
-> Exciting!! Thank you very much!
-> I can give you ssh access (based on rsa pub key) to PPC vm on Oregon
-> State University if you like.
->
-> Thanks again
-> Zhouyi
-> >
-> > [1] https://gist.github.com/joelagnel/ae15c404facee0eb3ebb8aff0e996a68
-> >
-> > thanks,
-> >
-> >  - Joel
-> >
-> >
-> >
-> >
-> > >
-> > > Thanks
-> > > Zhouyi
+Fix kernel-doc warnings from the kernel test robot:
+
+jornada720_ssp.c:24: warning: Function parameter or member 'jornada_ssp_lock' not described in 'DEFINE_SPINLOCK'
+jornada720_ssp.c:24: warning: expecting prototype for arch/arm/mac(). Prototype was for DEFINE_SPINLOCK() instead
+jornada720_ssp.c:34: warning: Function parameter or member 'byte' not described in 'jornada_ssp_reverse'
+jornada720_ssp.c:57: warning: Function parameter or member 'byte' not described in 'jornada_ssp_byte'
+jornada720_ssp.c:85: warning: Function parameter or member 'byte' not described in 'jornada_ssp_inout'
+
+Fixes: 69ebb22277a5 ("[ARM] 4506/1: HP Jornada 7XX: Addition of SSP Platform Driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202304210535.tWby3jWF-lkp@intel.com
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kristoffer Ericson <Kristoffer.ericson@gmail.com>
+Cc: Russell King <linux@arm.linux.org.uk>
+Cc: patches@armlinux.org.uk
+---
+KernelVersion: 6.3-rc7
+
+ arch/arm/mach-sa1100/jornada720_ssp.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff -- a/arch/arm/mach-sa1100/jornada720_ssp.c b/arch/arm/mach-sa1100/jornada720_ssp.c
+--- a/arch/arm/mach-sa1100/jornada720_ssp.c
++++ b/arch/arm/mach-sa1100/jornada720_ssp.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-/**
++/*
+  *  arch/arm/mac-sa1100/jornada720_ssp.c
+  *
+  *  Copyright (C) 2006/2007 Kristoffer Ericson <Kristoffer.Ericson@gmail.com>
+@@ -26,6 +26,7 @@ static unsigned long jornada_ssp_flags;
+ 
+ /**
+  * jornada_ssp_reverse - reverses input byte
++ * @byte: input byte to reverse
+  *
+  * we need to reverse all data we receive from the mcu due to its physical location
+  * returns : 01110111 -> 11101110
+@@ -46,6 +47,7 @@ EXPORT_SYMBOL(jornada_ssp_reverse);
+ 
+ /**
+  * jornada_ssp_byte - waits for ready ssp bus and sends byte
++ * @byte: input byte to transmit
+  *
+  * waits for fifo buffer to clear and then transmits, if it doesn't then we will
+  * timeout after <timeout> rounds. Needs mcu running before its called.
+@@ -77,6 +79,7 @@ EXPORT_SYMBOL(jornada_ssp_byte);
+ 
+ /**
+  * jornada_ssp_inout - decide if input is command or trading byte
++ * @byte: input byte to send (may be %TXDUMMY)
+  *
+  * returns : (jornada_ssp_byte(byte)) on success
+  *         : %-ETIMEDOUT on timeout failure
