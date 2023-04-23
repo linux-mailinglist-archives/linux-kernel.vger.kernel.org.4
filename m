@@ -2,74 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC4F6EC0FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 18:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68EA6EC10F
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 18:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDWQPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 12:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S229709AbjDWQWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 12:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDWQO7 (ORCPT
+        with ESMTP id S229493AbjDWQWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 12:14:59 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CD2E71;
-        Sun, 23 Apr 2023 09:14:57 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f195b164c4so12224735e9.1;
-        Sun, 23 Apr 2023 09:14:57 -0700 (PDT)
+        Sun, 23 Apr 2023 12:22:15 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92234CE;
+        Sun, 23 Apr 2023 09:22:13 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94f910ea993so497315166b.3;
+        Sun, 23 Apr 2023 09:22:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682266496; x=1684858496;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N2WWfegOvU9upeAYp5N/FtKW0M+GO0T69Pg9FL709S0=;
-        b=TD9d+0KQJAarLZpQwxytUyPLHXa2EsOUK3r/D6NbT/DxXnjd2FOkaxu8Mk8vdRAnFn
-         DsrPnLq6gn/k+PKrO1L5N49Qm6geWjzDMA348U4qPWplSIcm3qRC8WnAuXeQO8evDyFL
-         v1MAtrchYLwO1SnAsRqsiKq0I5WpQpR+cL5CEX+uJY+05khydhAOD8VfvDT0dIY9JAdH
-         VZ7GjpxE4qiLtOjOw5h+clJXEMV/eCeLUeMGc5cZnQqQYxEfOQTdZJNpnZuCgW4MAQZj
-         cww9HA/gEzFgxDq14nNQSQ8kDmVyYKIHTt5MSV9a2I+SXU9ndu0zm+amomyB9KBvjK0H
-         g24A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682266496; x=1684858496;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682266932; x=1684858932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N2WWfegOvU9upeAYp5N/FtKW0M+GO0T69Pg9FL709S0=;
-        b=mIJtANuTJ3Fdt/ncOPEVJJKR0pb7LjD8/hQ52Bf/N8naT1+sGH1NCtzOs3rGE4bR9e
-         CS/5zkD+KcRlL32vmtOP4KiHdnhe/y0zyRfjApONeynON6ge4VKhgC8NhBfoGAjLEd9K
-         do+WEfy4m0DkWJySAOh/Iy1CN8UlptIKwnFVob6SA6FLVy2WWfSPzO+4Raj+/sh3CEMe
-         yggXOOx0aGfY6pWqBa9fPqFqF9bsGe3fEeDu1X8Nli5iXAw8AxEZJbceEGBqkoeDMQgz
-         pu+Zch8KeXWoZ6syMVGF3qDY7Crkf34bV1VKuTHRJh5SwRN5MwhLHW/UaQ2E2aG9oFkt
-         yRZQ==
-X-Gm-Message-State: AAQBX9dFEv08Ef5fabGGc6tCS1S+S8gva/1B3MP3Rc754XoQdKsJGo/2
-        NLaO93lMIDmzMJ91ONh1ZkjR9/9Kyvpa5Q==
-X-Google-Smtp-Source: AKy350aHIVkamCMPlOPpFZw2ZbUuMbgbHBDImVPNzIaacdaeezzqVOSR2Wz9LAlWItGA0V/4te5p/w==
-X-Received: by 2002:a1c:7404:0:b0:3f1:7123:5f82 with SMTP id p4-20020a1c7404000000b003f171235f82mr6314095wmc.12.1682266496075;
-        Sun, 23 Apr 2023 09:14:56 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id l14-20020a7bc44e000000b003f195d2f1a9sm5562665wmi.15.2023.04.23.09.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 09:14:55 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 18:14:53 +0200
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH,RESEND] dt-bindings: watchdog: brcm,kona-wdt: convert to
- YAML
-Message-ID: <20230423161453.GA13078@standask-GA-A55M-S2HP>
-References: <20230423143951.GA10743@standask-GA-A55M-S2HP>
- <4641afaf-9797-3a29-7eb1-8dadbf3b713d@roeck-us.net>
+        bh=yidjVPwBHqcdYdJ/nDtM+sw6Z71xxnPo4Jwo9jCDNjU=;
+        b=G6kLdcKGxeCz6DcGFzpTWux076wIQgnE2Z9Vo5K9/gNBEVyI3+WJTexdvRiFHmlzm3
+         iDpwsdvId/rxbuiRy5lOKRlEn0lcT1N7YqUocmO+jEt9btjrxNsKfynIiRvjuPMjOxjp
+         tCLQZ8k8mIOi5zK7D8ocIuB0i6bj4eg2gSxCSjPAoGF9BZe16pLi6SvEFfF4VGyYTQ62
+         PAepNIRHawMbhTpwHooXJdhRzFIQ+fi6yb6keiQFazY5/QIzWN2DRwEbJvRZpF00P5jy
+         qtZgXJgtlA6nNFSArM4PxIBPbfn5rKzgoX/F2NZbFSi7SEMwO5+g4MNwpHWbHjcfdcbZ
+         dwQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682266932; x=1684858932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yidjVPwBHqcdYdJ/nDtM+sw6Z71xxnPo4Jwo9jCDNjU=;
+        b=k1gizqIBBcP0t2VDQz2vWmjcX6JO0Xdn8+DWnEYt7npPYDj2n0TUo3DYSXKLOS3zxb
+         1Dn0SC97W3xi1GWdeTA6DQ/sck5vgcQXJbHIEMHvqPIieVQiQNTgHtBJJeQdi7kpQbRD
+         CBE6m0zbxbRQ0hWfA8VI7IAiTFy3nNTVdNHuThKWGVQ6g5WoW8YoCZW+PfkK+R5r6QT/
+         uRbxnpKOfovujZZ+p3iy+JiCoo9DBKAwUDXCEWESo4KxrxeWRDA+3kbATx789vGHDzN9
+         5NFD9YGcxXE3KhKLNf6UiDKHhXjObJwfjZusbN1HC3E22cjckoXH3zoB4SaorKYnet8s
+         EAVQ==
+X-Gm-Message-State: AAQBX9cyM6QCYdNrP9wbNni+HhC/6TpMNR8oa4SqwTuaoYfs+g2jeU0y
+        zdbMlFb7U4jw1fNxp4g8T6/oE4mNK81eAERxLWGc0VyG
+X-Google-Smtp-Source: AKy350a4rUgBSyIHTYULi35CKzsB9o1sg5MJbqUP+kpNDhOsbDgEjPRUj3iylNQxQ1L65jAX0sjIz3oBnLo6zZgJ/ZI=
+X-Received: by 2002:a17:907:b01d:b0:94f:6c6c:e17c with SMTP id
+ fu29-20020a170907b01d00b0094f6c6ce17cmr6835618ejc.60.1682266931867; Sun, 23
+ Apr 2023 09:22:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4641afaf-9797-3a29-7eb1-8dadbf3b713d@roeck-us.net>
+References: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
+ <20230421090403.15515-3-zhoufeng.zf@bytedance.com> <20230421182418.5nvj4mp2vfumtmab@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <f860cf89-74b2-9102-d28b-abec7d51f349@bytedance.com>
+In-Reply-To: <f860cf89-74b2-9102-d28b-abec7d51f349@bytedance.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 23 Apr 2023 09:22:00 -0700
+Message-ID: <CAADnVQKks_tWKRMTr6k3pBzYYXrnzWTAP6h6F_AN4m0uLCJfkw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add
+ testcase for bpf_task_under_cgroup
+To:     Feng Zhou <zhoufeng.zf@bytedance.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, yangzhenze@bytedance.com,
+        Dongdong Wang <wangdongdong.6@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,111 +89,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 08:28:23AM -0700, Guenter Roeck wrote:
-> On 4/23/23 07:39, Stanislav Jakubek wrote:
-> > Convert Broadcom Kona family watchdog timer bindings to DT schema.
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > RESEND because I originally sent this to the wrong maintainers and
-> > mailing lists by accident. Sorry for the noise.
-> > 
-> 
-> Is this patch supposed to replace / compete with the other patch
-> doing the same ?
-> https://patchwork.kernel.org/project/linux-watchdog/patch/20230418170341.28805-1-n2h9z4@gmail.com/
+On Sat, Apr 22, 2023 at 8:51=E2=80=AFPM Feng Zhou <zhoufeng.zf@bytedance.co=
+m> wrote:
+>
+> =E5=9C=A8 2023/4/22 02:24, Alexei Starovoitov =E5=86=99=E9=81=93:
+>
+> On Fri, Apr 21, 2023 at 05:04:03PM +0800, Feng zhou wrote:
+>
+> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>
+> test_progs:
+> Tests new kfunc bpf_task_under_cgroup().
+>
+> The bpf program saves the pid which call the getuid syscall within a
+> given cgroup to the remote_pid, which is convenient for the user-mode
+> program to verify the test correctness.
+>
+> The user-mode program creates its own mount namespace, and mounts the
+> cgroupsv2 hierarchy in there, call the getuid syscall, then check if
+> remote_pid and local_pid are equal.
+>
+> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> ---
+>  .../bpf/prog_tests/task_under_cgroup.c        | 46 +++++++++++++++++++
+>  .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
+>  .../bpf/progs/test_task_under_cgroup.c        | 40 ++++++++++++++++
+>  3 files changed, 87 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgr=
+oup.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgr=
+oup.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b=
+/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+> new file mode 100644
+> index 000000000000..bd3deb469938
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2023 Bytedance */
+> +
+> +#include <test_progs.h>
+> +#include <cgroup_helpers.h>
+> +#include "test_task_under_cgroup.skel.h"
+> +
+> +#define FOO "/foo"
+> +
+> +void test_task_under_cgroup(void)
+> +{
+> + struct test_task_under_cgroup *skel;
+> + int ret, foo =3D -1;
+> +
+> + foo =3D test__join_cgroup(FOO);
+> + if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
+> + return;
+> +
+> + skel =3D test_task_under_cgroup__open();
+> + if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
+> + goto cleanup;
+> +
+> + skel->rodata->local_pid =3D getpid();
+> + skel->rodata->cgid =3D get_cgroup_id(FOO);
+> +
+> + ret =3D test_task_under_cgroup__load(skel);
+> + if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
+> + goto cleanup;
+> +
+> + ret =3D test_task_under_cgroup__attach(skel);
+> + if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
+> + goto cleanup;
+> +
+> + syscall(__NR_getuid);
+> +
+> + test_task_under_cgroup__detach(skel);
+> +
+> + ASSERT_EQ(skel->bss->remote_pid, skel->rodata->local_pid,
+> +  "test task_under_cgroup");
+> +
+> +cleanup:
+> + if (foo)
+> + close(foo);
+>
+> Looks wrong. should be if (foo >=3D 0) ?
+>
+> Yes.
+>
+> +
+> + test_task_under_cgroup__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tool=
+s/testing/selftests/bpf/progs/cgrp_kfunc_common.h
+> index 22914a70db54..41b3ea231698 100644
+> --- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
+> +++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
+> @@ -26,6 +26,7 @@ struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp,=
+ int level) __ksym;
+>  struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
+>  void bpf_rcu_read_lock(void) __ksym;
+>  void bpf_rcu_read_unlock(void) __ksym;
+> +int bpf_task_under_cgroup(struct cgroup *cgrp, struct task_struct *task)=
+ __ksym;
+>
+>  static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_look=
+up(struct cgroup *cgrp)
+>  {
+> diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b=
+/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+> new file mode 100644
+> index 000000000000..e2740f9b029d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+> @@ -0,0 +1,40 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2023 Bytedance */
+> +
+> +#include <vmlinux.h>
+> +#include <asm/unistd.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#include "cgrp_kfunc_common.h"
+> +
+> +const volatile int local_pid;
+> +const volatile long cgid;
+> +int remote_pid;
+> +
+> +SEC("tp_btf/sys_enter")
+>
+> pls narrow down to specific syscall. Like you use in user space part: get=
+uid
+>
+> Also add this test to denylist.s390. See BPF CI failure.
+>
+> bpf_task_under_cgroup is placed in generic_btf_ids, belongs to BPF_PROG_T=
+YPE_TRACING,
+>
+> if narrow down to specific syscall and uses SEC ("tp/syscalls/sys_enter_g=
+etuid"),
+>
+> bpf prog type is TRACEPOINT, kfunc cannot be used, and reports
+>
+> "calls kernel function bpf_cgroup_from_id is not allowed".
 
-I simply did not see that patch, thank you for pointing it out.
-
-> 
-> What is the difference, and what is the purpose ?
-
-I believe both patches serve the same purpose - get DT validation for the
-Broadcom Kona watchdog.
-
-Looking at the two patches, there's very little difference:
- - capitalization of title (*F*amily *W*atchdog *T*imer)
- - maintainers
- - the brcm,bcm11351-wdt compatible listed as const vs. as enum with
-   a single entry (I think the enum is better for future additions,
-   but no strong opinion on that)
- - the other patch has a description (which IMO is unnecessary)
-
-Since that patch came before mine, you can drop this one if you want.
-
-Stanislav
-
-> 
-> Guenter
-> 
-> >   .../bindings/watchdog/brcm,kona-wdt.txt       | 15 --------
-> >   .../bindings/watchdog/brcm,kona-wdt.yaml      | 37 +++++++++++++++++++
-> >   2 files changed, 37 insertions(+), 15 deletions(-)
-> >   delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-> >   create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-> > deleted file mode 100644
-> > index 2b86a00e351d..000000000000
-> > --- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-> > +++ /dev/null
-> > @@ -1,15 +0,0 @@
-> > -Broadcom Kona Family Watchdog Timer
-> > ------------------------------------
-> > -
-> > -This watchdog timer is used in the following Broadcom SoCs:
-> > -  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
-> > -
-> > -Required properties:
-> > -  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-> > -  - reg: memory address & range
-> > -
-> > -Example:
-> > -	watchdog@35002f40 {
-> > -		compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-> > -		reg = <0x35002f40 0x6c>;
-> > -	};
-> > diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> > new file mode 100644
-> > index 000000000000..5de1b022847b
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> > @@ -0,0 +1,37 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Broadcom Kona family watchdog timer
-> > +
-> > +maintainers:
-> > +  - Florian Fainelli <f.fainelli@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: watchdog.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - brcm,bcm11351-wdt
-> > +      - const: brcm,kona-wdt
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    watchdog@35002f40 {
-> > +        compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-> > +        reg = <0x35002f40 0x6c>;
-> > +    };
-> > +...
-> 
+sure, pls narrow it down. sys_enter is too broad.
+In parallel test_progs the bpf prog will be way too many times.
