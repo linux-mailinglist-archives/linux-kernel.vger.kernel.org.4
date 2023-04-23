@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598D36EBEA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 12:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91B26EBE94
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 12:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjDWKjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 06:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
+        id S229865AbjDWKZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 06:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWKjq (ORCPT
+        with ESMTP id S229453AbjDWKZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 06:39:46 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BE10E67;
-        Sun, 23 Apr 2023 03:39:43 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxJ_DuCkVkkAohAA--.51665S3;
-        Sun, 23 Apr 2023 18:39:42 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmrLqCkVkAcE2AA--.8595S3;
-        Sun, 23 Apr 2023 18:39:38 +0800 (CST)
-Subject: Re: [PATCH] MIPS: uprobes: Restore thread.trap_nr
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1682213883-3654-1-git-send-email-yangtiezhu@loongson.cn>
- <ZEShNUil0gsVlrDo@debian.me>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, Oleg Nesterov <oleg@redhat.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <f99fe71d-cd97-e641-d637-5e7efbcad5f5@loongson.cn>
-Date:   Sun, 23 Apr 2023 18:39:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 23 Apr 2023 06:25:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183EA10D9;
+        Sun, 23 Apr 2023 03:25:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D6C260BFB;
+        Sun, 23 Apr 2023 10:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749C2C433D2;
+        Sun, 23 Apr 2023 10:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682245508;
+        bh=gG3wOI4KVNr5mKVsWvDDGnE0DJ0ZKHEcpo3Oos6yAIs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GbVfjDWzDbeehwM7nmxuQgsi7su8hdftFhBXHiznT8AuBcvqAddZliHhd22rK2Vt3
+         iZ5Fe+p06byZ5ccyAA269Jdl7QYlW/W3c6PO5LoK0GEu6tGHYUyQCjDVbzIR6IYTCD
+         FrG1Tu6Iuq+ym5p5LFK7Lzgowu6pVP3G7tL4S912WJ1gyGQ6bgxaGX/V7ZRCbqg4jF
+         3U2aU1s7hskxJlyiWlj6lU0i6HJz5s5G8Hlp4Yg+TMQFnx+Tih4ACmXOAXey2Qpmjy
+         xrHgSU2ppwxz/U+Zytaof8PxkE061EQq2A60Y+bUrVC2c3mOiA21Kj+qemkSuWclnX
+         ZMJ/H8f8Ui5rw==
+Date:   Sun, 23 Apr 2023 11:40:43 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jiakai Luo <jkluo@hust.edu.cn>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>, Marek Vasut <marex@denx.de>,
+        Ksenija Stanojevic <ksenija.stanojevic@gmail.com>,
+        hust-os-kernel-patches@googlegroups.com, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iio: adc: mxs-lradc: fix the order of two cleanup
+ operations
+Message-ID: <20230423114043.72fe2891@jic23-huawei>
+In-Reply-To: <20230422133407.72908-1-jkluo@hust.edu.cn>
+References: <20230416132906.4ec56e47@jic23-huawei>
+        <20230422133407.72908-1-jkluo@hust.edu.cn>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <ZEShNUil0gsVlrDo@debian.me>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxmrLqCkVkAcE2AA--.8595S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Aw1Utr1fCryxtFW7urWkXrb_yoW8GFyrpa
-        1DAws8KaykAa4UJayUJa18ZayYvrs5JrsxC3W7Ja4xZ3yqgFyqqFs29r42g3ZxWr1xtr1S
-        q3W7ZFy2yayDA37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jFa0PUUUUU=
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,37 +65,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc:
-Oleg Nesterov <oleg@redhat.com>
-Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+On Sat, 22 Apr 2023 06:34:06 -0700
+Jiakai Luo <jkluo@hust.edu.cn> wrote:
 
-On 04/23/2023 11:08 AM, Bagas Sanjaya wrote:
-> On Sun, Apr 23, 2023 at 09:38:03AM +0800, Tiezhu Yang wrote:
->> thread.trap_nr is saved in arch_uprobe_pre_xol(), it should be restored
->> in arch_uprobe_{post,abort}_xol() accordingly, actually it was only done
->> in the post function, just do it in the abort function too, this change
->> is similar with x86 and powerpc.
->
-> I'm confused (please fix up grammar, spelling, and punctuation). Can you
-> explain why thread.trap_nr should be restored somewhere else? Also, what
-> x86/powerpc changes as reference?
->
+> Smatch reports:
+> drivers/iio/adc/mxs-lradc-adc.c:766 mxs_lradc_adc_probe() warn:
+> missing unwind goto?
+> 
+> the order of three init operation:
+> 1.mxs_lradc_adc_trigger_init
+> 2.iio_triggered_buffer_setup
+> 3.mxs_lradc_adc_hw_init
+> 
+> thus, the order of three cleanup operation should be:
+> 1.mxs_lradc_adc_hw_stop
+> 2.iio_triggered_buffer_cleanup
+> 3.mxs_lradc_adc_trigger_remove
+> 
+> we exchange the order of two cleanup operations,
+> introducing the following differences:
+> 1.if mxs_lradc_adc_trigger_init fails, returns directly;
+> 2.if trigger_init succeeds but iio_triggered_buffer_setup fails,
+> goto err_trig and remove the trigger.
+> 
+> In addition, we also reorder the unwind that goes on in the
+> remove() callback to match the new ordering.
+> 
+> Fixes: 6dd112b9f85e ("iio: adc: mxs-lradc: Add support for ADC driver")
+> Signed-off-by: Jiakai Luo <jkluo@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-Here is the related first commit for x86 in 2012:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0326f5a94dde
-
-When xol insn itself triggers the signal, restart the original insn,
-in this case, UTASK_SSTEP_TRAPPED is set [1], it does *abort_xol()
-instead of *post_xol() [2], then should do the restore operations.
-
-Maybe Oleg and Srikar could give more detailed backgrounds, thank you.
-https://lore.kernel.org/lkml/1682213883-3654-1-git-send-email-yangtiezhu@loongson.cn/
-
-[1] 
-https://elixir.bootlin.com/linux/latest/source/kernel/events/uprobes.c#L1980
-[2] 
-https://elixir.bootlin.com/linux/latest/source/kernel/events/uprobes.c#L2268
+Applied to the fixes-togreg branch of iio.git and marked for backporting to
+stable. At this stage I'll probably wait until around rc1 to send out a pull
+request with this in.  
 
 Thanks,
-Tiezhu
+
+Jonathan
+
+> ---
+> The issue is found by static analysis and remains untested.
+> ---
+>  drivers/iio/adc/mxs-lradc-adc.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/mxs-lradc-adc.c b/drivers/iio/adc/mxs-lradc-adc.c
+> index bca79a93cbe4..85882509b7d9 100644
+> --- a/drivers/iio/adc/mxs-lradc-adc.c
+> +++ b/drivers/iio/adc/mxs-lradc-adc.c
+> @@ -757,13 +757,13 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+>  
+>  	ret = mxs_lradc_adc_trigger_init(iio);
+>  	if (ret)
+> -		goto err_trig;
+> +		return ret;
+>  
+>  	ret = iio_triggered_buffer_setup(iio, &iio_pollfunc_store_time,
+>  					 &mxs_lradc_adc_trigger_handler,
+>  					 &mxs_lradc_adc_buffer_ops);
+>  	if (ret)
+> -		return ret;
+> +		goto err_trig;
+>  
+>  	adc->vref_mv = mxs_lradc_adc_vref_mv[lradc->soc];
+>  
+> @@ -801,9 +801,9 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+>  
+>  err_dev:
+>  	mxs_lradc_adc_hw_stop(adc);
+> -	mxs_lradc_adc_trigger_remove(iio);
+> -err_trig:
+>  	iio_triggered_buffer_cleanup(iio);
+> +err_trig:
+> +	mxs_lradc_adc_trigger_remove(iio);
+>  	return ret;
+>  }
+>  
+> @@ -814,8 +814,8 @@ static int mxs_lradc_adc_remove(struct platform_device *pdev)
+>  
+>  	iio_device_unregister(iio);
+>  	mxs_lradc_adc_hw_stop(adc);
+> -	mxs_lradc_adc_trigger_remove(iio);
+>  	iio_triggered_buffer_cleanup(iio);
+> +	mxs_lradc_adc_trigger_remove(iio);
+> 
+>  	return 0;
+>  }
 
