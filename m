@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6616EC0B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCCF6EC0BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 17:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjDWPJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 11:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S229771AbjDWPNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 11:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDWPJw (ORCPT
+        with ESMTP id S229456AbjDWPND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 11:09:52 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A0BE73
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 08:09:50 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94a39f6e8caso619922266b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 08:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682262589; x=1684854589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9uaEulRobE0OCNfNMXefVDjWL4Gofpr35/oMUFxTi2M=;
-        b=tBOjUEXE7a/z4qdXVVlepEWEfiaBFS15wT4QriqPSwAfx/p67u7M5auXe+iAum/UNH
-         XKt0ZAb4HD0gy01JOObv95yU9MvEO2a187IIjBS/mARaI+aY985DZ2mYrBiF0htuWbSP
-         90AHy0N+zT7iu9XZzX+l2gpXfDXDNP8pyyPlOZxD3hRD9HfsLUkd7GiNm1AKMe7jQrRz
-         jAz1Dw1zxgTEKl5Udsn4yv2c5pN4y9b8oCQLl4g3Wpq1sIMLhvWsu3U5M+9cn9NA4JXX
-         0bVUo9+mfa2QFT8MLa5fMR0wmhABJShijjOFljKZy0DVG4uR71mjjvsmiq+oUAEW1nhi
-         oJSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682262589; x=1684854589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9uaEulRobE0OCNfNMXefVDjWL4Gofpr35/oMUFxTi2M=;
-        b=VtqvWz7yU5FPev4AQvdVMNB6LE6wPOG1j8j9epy5v3sLT7cPXz2dylpCvGKJtkuxu1
-         HxIBFQhlPKlKX8kN/XcsQcQ5dUmtSRN6JKnYmD/LHzfZwndEMMAjGEWxx2qJjM7E2TAm
-         +Fk2TTfACm+Ff1Cr5lW4Wtp5NpQTm4LZ4CvoDJB/IKZUYWfgSXWNd9eTVqnHFiNDtrSm
-         7HG/PfvaV1FGFYQ6t5nZ4gFw0hJWBUPXhN6JGbEkrxQlvoj7OJ+/Iy6SPBPD0Kg/sEj+
-         A8pZafHTWy3LNz8wADtZ8PjyR/rXNJ2wGiG2alWjGqI4r0FS99OjdSNs4gl8nP0k8nvv
-         7LOQ==
-X-Gm-Message-State: AAQBX9csKmDha+pn8GjCCG86fdIyY9n/hNRdq2X/Q5BygsK3uc0nwuaK
-        6T+M3oviyuvjsfvw+6EzQ0PbJA==
-X-Google-Smtp-Source: AKy350bOWwQmma+aSBSnWVbFJgHURaUFsRjSOzzceCWFsCgemUK6U8xV32q4cxAikUeFlFO4EgSkrg==
-X-Received: by 2002:a17:906:f8d9:b0:94f:720b:1b14 with SMTP id lh25-20020a170906f8d900b0094f720b1b14mr7001243ejb.29.1682262588877;
-        Sun, 23 Apr 2023 08:09:48 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170906114d00b0094a44867e0asm4489141eja.52.2023.04.23.08.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 08:09:48 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        William Zhang <william.zhang@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: broadcom: add missing cache properties
-Date:   Sun, 23 Apr 2023 17:09:43 +0200
-Message-Id: <20230423150943.118576-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Sun, 23 Apr 2023 11:13:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB85E7D;
+        Sun, 23 Apr 2023 08:13:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09EE4611AC;
+        Sun, 23 Apr 2023 15:13:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B041C433D2;
+        Sun, 23 Apr 2023 15:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682262780;
+        bh=AG9DJZKb5AXH2c0az9/0UlHgvcR2b85u+6yXwdK30HQ=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=BSRWhPBhfSM03HuvQb+y4p1ndshuPczQ3mHWCR+WA4fQ5nDNHEaWh8JqgK5D3rkgS
+         2DJE+sYAWgM0a7xj8Zx4jYjguuU6825y+HjVRV1Qc9UkEnOBFaEfBcNUrWXU+y3Qgq
+         kgW7miXSbTIzjbjwUNrjqRDlfyc1qkiU8+MMAfcYBCYgiBwj9Yf/yEONL00FXIYo92
+         4lcZ6kvGY+DRGol+2jEuvIsw9daS/r8WkkToPoPvxxoLRFeoES9rlKs6l81BxYBjoe
+         ypYWeO+bidGIy58+24pHa7wGcTJLrMzULDe8M2YyuGga4evpEa62pFaO4I76LM18e+
+         By/mijx/sgvtw==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 23 Apr 2023 18:12:54 +0300
+Message-Id: <CS48DTLH7UEG.1PX2N6DVS1UDR@suppilovahvero>
+Cc:     "Matthew Wilcox" <willy@infradead.org>,
+        "David Hildenbrand" <david@redhat.com>, <x86@kernel.org>,
+        <linux-sgx@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Xinhui Pan" <Xinhui.Pan@amd.com>,
+        "David Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Dimitri Sivanich" <dimitri.sivanich@hpe.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Jason Gunthorpe" <jgg@nvidia.com>
+Subject: Re: [PATCH v4 1/6] mm/gup: remove unused vmas parameter from
+ get_user_pages()
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Lorenzo Stoakes" <lstoakes@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+X-Mailer: aerc 0.14.0
+References: <cover.1681831798.git.lstoakes@gmail.com>
+ <cd05b41d6d15ee9ff94273bc116ed3db3f5125bf.1681831798.git.lstoakes@gmail.com>
+In-Reply-To: <cd05b41d6d15ee9ff94273bc116ed3db3f5125bf.1681831798.git.lstoakes@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,106 +72,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As all level 2 and level 3 caches are unified, add required
-cache-unified properties to fix warnings like:
+On Tue Apr 18, 2023 at 6:49 PM EEST, Lorenzo Stoakes wrote:
+> No invocation of get_user_pages() uses the vmas parameter, so remove
+> it.
+>
+> The GUP API is confusing and caveated. Recent changes have done much to
+> improve that, however there is more we can do. Exporting vmas is a prime
+> target as the caller has to be extremely careful to preclude their use
+> after the mmap_lock has expired or otherwise be left with dangling
+> pointers.
+>
+> Removing the vmas parameter focuses the GUP functions upon their primary
+> purpose - pinning (and outputting) pages as well as performing the action=
+s
+> implied by the input flags.
+>
+> This is part of a patch series aiming to remove the vmas parameter
+> altogether.
+>
+> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/ioctl.c     | 2 +-
+>  drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
+>  drivers/misc/sgi-gru/grufault.c     | 2 +-
+>  include/linux/mm.h                  | 3 +--
+>  mm/gup.c                            | 9 +++------
+>  mm/gup_test.c                       | 5 ++---
+>  virt/kvm/kvm_main.c                 | 2 +-
+>  7 files changed, 10 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/io=
+ctl.c
+> index 21ca0a831b70..5d390df21440 100644
+> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> @@ -214,7 +214,7 @@ static int __sgx_encl_add_page(struct sgx_encl *encl,
+>  	if (!(vma->vm_flags & VM_MAYEXEC))
+>  		return -EACCES;
+> =20
+> -	ret =3D get_user_pages(src, 1, 0, &src_page, NULL);
+> +	ret =3D get_user_pages(src, 1, 0, &src_page);
+>  	if (ret < 1)
+>  		return -EFAULT;
+> =20
+> diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon=
+/radeon_ttm.c
+> index 1e8e287e113c..0597540f0dde 100644
+> --- a/drivers/gpu/drm/radeon/radeon_ttm.c
+> +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+> @@ -362,7 +362,7 @@ static int radeon_ttm_tt_pin_userptr(struct ttm_devic=
+e *bdev, struct ttm_tt *ttm
+>  		struct page **pages =3D ttm->pages + pinned;
+> =20
+>  		r =3D get_user_pages(userptr, num_pages, write ? FOLL_WRITE : 0,
+> -				   pages, NULL);
+> +				   pages);
+>  		if (r < 0)
+>  			goto release_pages;
+> =20
+> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufa=
+ult.c
+> index b836936e9747..378cf02a2aa1 100644
+> --- a/drivers/misc/sgi-gru/grufault.c
+> +++ b/drivers/misc/sgi-gru/grufault.c
+> @@ -185,7 +185,7 @@ static int non_atomic_pte_lookup(struct vm_area_struc=
+t *vma,
+>  #else
+>  	*pageshift =3D PAGE_SHIFT;
+>  #endif
+> -	if (get_user_pages(vaddr, 1, write ? FOLL_WRITE : 0, &page, NULL) <=3D =
+0)
+> +	if (get_user_pages(vaddr, 1, write ? FOLL_WRITE : 0, &page) <=3D 0)
+>  		return -EFAULT;
+>  	*paddr =3D page_to_phys(page);
+>  	put_page(page);
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 37554b08bb28..b14cc4972d0b 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2380,8 +2380,7 @@ long pin_user_pages_remote(struct mm_struct *mm,
+>  			   unsigned int gup_flags, struct page **pages,
+>  			   struct vm_area_struct **vmas, int *locked);
+>  long get_user_pages(unsigned long start, unsigned long nr_pages,
+> -			    unsigned int gup_flags, struct page **pages,
+> -			    struct vm_area_struct **vmas);
+> +		    unsigned int gup_flags, struct page **pages);
+>  long pin_user_pages(unsigned long start, unsigned long nr_pages,
+>  		    unsigned int gup_flags, struct page **pages,
+>  		    struct vm_area_struct **vmas);
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 1f72a717232b..7e454d6b157e 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2251,8 +2251,6 @@ long get_user_pages_remote(struct mm_struct *mm,
+>   * @pages:      array that receives pointers to the pages pinned.
+>   *              Should be at least nr_pages long. Or NULL, if caller
+>   *              only intends to ensure the pages are faulted in.
+> - * @vmas:       array of pointers to vmas corresponding to each page.
+> - *              Or NULL if the caller does not require them.
+>   *
+>   * This is the same as get_user_pages_remote(), just with a less-flexibl=
+e
+>   * calling convention where we assume that the mm being operated on belo=
+ngs to
+> @@ -2260,16 +2258,15 @@ long get_user_pages_remote(struct mm_struct *mm,
+>   * obviously don't pass FOLL_REMOTE in here.
+>   */
+>  long get_user_pages(unsigned long start, unsigned long nr_pages,
+> -		unsigned int gup_flags, struct page **pages,
+> -		struct vm_area_struct **vmas)
+> +		    unsigned int gup_flags, struct page **pages)
+>  {
+>  	int locked =3D 1;
+> =20
+> -	if (!is_valid_gup_args(pages, vmas, NULL, &gup_flags, FOLL_TOUCH))
+> +	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_TOUCH))
+>  		return -EINVAL;
+> =20
+>  	return __get_user_pages_locked(current->mm, start, nr_pages, pages,
+> -				       vmas, &locked, gup_flags);
+> +				       NULL, &locked, gup_flags);
+>  }
+>  EXPORT_SYMBOL(get_user_pages);
+> =20
+> diff --git a/mm/gup_test.c b/mm/gup_test.c
+> index 8ae7307a1bb6..9ba8ea23f84e 100644
+> --- a/mm/gup_test.c
+> +++ b/mm/gup_test.c
+> @@ -139,8 +139,7 @@ static int __gup_test_ioctl(unsigned int cmd,
+>  						 pages + i);
+>  			break;
+>  		case GUP_BASIC_TEST:
+> -			nr =3D get_user_pages(addr, nr, gup->gup_flags, pages + i,
+> -					    NULL);
+> +			nr =3D get_user_pages(addr, nr, gup->gup_flags, pages + i);
+>  			break;
+>  		case PIN_FAST_BENCHMARK:
+>  			nr =3D pin_user_pages_fast(addr, nr, gup->gup_flags,
+> @@ -161,7 +160,7 @@ static int __gup_test_ioctl(unsigned int cmd,
+>  						    pages + i, NULL);
+>  			else
+>  				nr =3D get_user_pages(addr, nr, gup->gup_flags,
+> -						    pages + i, NULL);
+> +						    pages + i);
+>  			break;
+>  		default:
+>  			ret =3D -EINVAL;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index d255964ec331..7f31e0a4adb5 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2474,7 +2474,7 @@ static inline int check_user_page_hwpoison(unsigned=
+ long addr)
+>  {
+>  	int rc, flags =3D FOLL_HWPOISON | FOLL_WRITE;
+> =20
+> -	rc =3D get_user_pages(addr, 1, flags, NULL, NULL);
+> +	rc =3D get_user_pages(addr, 1, flags, NULL);
+>  	return rc =3D=3D -EHWPOISON;
+>  }
+> =20
+> --=20
+> 2.40.0
 
-  bcm963148.dtb: l2-cache0: 'cache-unified' is a required property
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/bcm47622.dtsi | 1 +
- arch/arm/boot/dts/bcm63148.dtsi | 1 +
- arch/arm/boot/dts/bcm63178.dtsi | 1 +
- arch/arm/boot/dts/bcm6756.dtsi  | 1 +
- arch/arm/boot/dts/bcm6846.dtsi  | 1 +
- arch/arm/boot/dts/bcm6855.dtsi  | 1 +
- arch/arm/boot/dts/bcm6878.dtsi  | 1 +
- 7 files changed, 7 insertions(+)
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-diff --git a/arch/arm/boot/dts/bcm47622.dtsi b/arch/arm/boot/dts/bcm47622.dtsi
-index cd25ed2757b7..7cd38de118c3 100644
---- a/arch/arm/boot/dts/bcm47622.dtsi
-+++ b/arch/arm/boot/dts/bcm47622.dtsi
-@@ -52,6 +52,7 @@ CA7_3: cpu@3 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/bcm63148.dtsi b/arch/arm/boot/dts/bcm63148.dtsi
-index ba7f265db121..24431de1810e 100644
---- a/arch/arm/boot/dts/bcm63148.dtsi
-+++ b/arch/arm/boot/dts/bcm63148.dtsi
-@@ -36,6 +36,7 @@ B15_1: cpu@1 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/bcm63178.dtsi b/arch/arm/boot/dts/bcm63178.dtsi
-index d8268a1e889b..3f9aed96babf 100644
---- a/arch/arm/boot/dts/bcm63178.dtsi
-+++ b/arch/arm/boot/dts/bcm63178.dtsi
-@@ -44,6 +44,7 @@ CA7_2: cpu@2 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/bcm6756.dtsi b/arch/arm/boot/dts/bcm6756.dtsi
-index 49ecc1f0c18c..1d8d957d65dd 100644
---- a/arch/arm/boot/dts/bcm6756.dtsi
-+++ b/arch/arm/boot/dts/bcm6756.dtsi
-@@ -52,6 +52,7 @@ CA7_3: cpu@3 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/bcm6846.dtsi b/arch/arm/boot/dts/bcm6846.dtsi
-index fbc7d3a5dc5f..cf92cf8c4693 100644
---- a/arch/arm/boot/dts/bcm6846.dtsi
-+++ b/arch/arm/boot/dts/bcm6846.dtsi
-@@ -36,6 +36,7 @@ CA7_1: cpu@1 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/bcm6855.dtsi b/arch/arm/boot/dts/bcm6855.dtsi
-index 5e0fe26530f1..52d6bc89f9f8 100644
---- a/arch/arm/boot/dts/bcm6855.dtsi
-+++ b/arch/arm/boot/dts/bcm6855.dtsi
-@@ -44,6 +44,7 @@ CA7_2: cpu@2 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/bcm6878.dtsi b/arch/arm/boot/dts/bcm6878.dtsi
-index 96529d3d4dc2..2c5d706bac7e 100644
---- a/arch/arm/boot/dts/bcm6878.dtsi
-+++ b/arch/arm/boot/dts/bcm6878.dtsi
-@@ -36,6 +36,7 @@ CA7_1: cpu@1 {
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
--- 
-2.34.1
-
+BR, Jarkko
