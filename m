@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95A56EBC71
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 04:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DFF6EBC75
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 04:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjDWCdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Apr 2023 22:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S230081AbjDWCfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Apr 2023 22:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjDWCdT (ORCPT
+        with ESMTP id S229771AbjDWCfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Apr 2023 22:33:19 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524B81717;
-        Sat, 22 Apr 2023 19:33:18 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id B65063200495;
-        Sat, 22 Apr 2023 22:33:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 22 Apr 2023 22:33:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:content-type:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1682217195; x=
-        1682303595; bh=bzjFJF8i4h0k780+vILhhBwCTdIlS1yLGzDitiHYXY4=; b=n
-        kd15zKmtYPGCOgPPJBrlr+u6Dfwb2bFjPemJPXaYf/2e23sy/CbClrtD1q2T5E84
-        NKQmpACPRl5apF2bCdLIL930DNZgbrP08IbUTV3sUKs2gUu6RxzU/U63MOg5y5qp
-        5msX0Q9XBl+Q+6wfIqNNQoq/akxua8mueB6I24SThtevrYEKaT4Fob7kCt8/9ufm
-        01+OpF+RaNCjjjNI35WCa/doKK+9iDf5aiQIt5ZwaYTAPpD6jm939EsYm6+X1OSG
-        U82qCbnw6OWOY2P3EdzLhbXnVEVgWzqNwQaa19Tk2bkHi+FA3KErKiOvOKkiTgr4
-        5a4pmoljof/UBLLdqvupA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682217195; x=1682303595; bh=bzjFJF8i4h0k7
-        80+vILhhBwCTdIlS1yLGzDitiHYXY4=; b=BCdVtL5ZnM+KVQMnOty6a5n63PHR8
-        MquQr1mmCzIMCOkUNTRnoo31NZbUy1xOGr0UloU0wao5b2RMPwvPKbkhO8Xu5b+n
-        4bNxvESBQiv2+fNZYslTgKGZ4EM+dwB08aZuOZRqN+/Xx7bvNdbDTagk731kuTkX
-        +sBt0wlOqGXAOEVYx+VzgS0TsUDWpakEw9TCAZY7uwGStCmIBKNB4/adn2zObmGU
-        oYLW0VAtOLjbrMev6/d5jhiWeOxBZEFo2cpDYvniYEajZRveyEtGRCu+uDtI2XSb
-        nZof1ML6GsM2PlyE1ly4UygbzbzopyL9nlMM0NytRLPNL18UppGA1rbPQ==
-X-ME-Sender: <xms:65hEZFcz089UFGntcLnW3HweD8WYqhPR1R7hSHFEqRXdV-HtNCuDZA>
-    <xme:65hEZDMiN0sRTeZCPazFKPNu3PZ6rKtiOj0ysysjIliTLSpw4k67VT3o3UBcJTkzC
-    4V9IJN3atC87jMAM2c>
-X-ME-Received: <xmr:65hEZOi5l0foAikeBDYGrx-KvCyu0VrN-zgx4YIoHkH3cv6ktemgYgMG1kV936R2F0mqYg-MZ6FtKu14TEh03Fy1RA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtjedgiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomheplfhoshhhucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhh
-    thhrihhplhgvthhtrdhorhhgqeenucggtffrrghtthgvrhhnpeegtdfgfeeghfevgeelgf
-    efieegudeuheekkedtueeutefgheffveegueeiteehteenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjohhshhesjhhoshhhthhrihhplhgvth
-    htrdhorhhg
-X-ME-Proxy: <xmx:65hEZO8DZKOsKAD6Xt5n_LtzmX0XnaNjVg4EqEl0QSvqhN7xYlGmMQ>
-    <xmx:65hEZBsrtovArJey3oEqtAbJ2mVw2WAVbghlXZBFNTfBMnWG4_dJ6Q>
-    <xmx:65hEZNE4Fc8A0Ku4sztLJxyB-a9hDuuCcDxuHZxra6kKjU88uQL_yw>
-    <xmx:65hEZK5g8-PvX-sXc24H8iBtKkPLrCP6ha0nb6fr3dhYETh4YJgBkg>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 22 Apr 2023 22:33:12 -0400 (EDT)
-Date:   Sun, 23 Apr 2023 11:33:08 +0900
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-Subject: Re: [PATCH v3] ext4: Add a uapi header for ext4 userspace APIs
-Message-ID: <ZESY5NAN8+7ubDLk@localhost>
-References: <680175260970d977d16b5cc7e7606483ec99eb63.1680402881.git.josh@joshtriplett.org>
+        Sat, 22 Apr 2023 22:35:00 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1A1BF0;
+        Sat, 22 Apr 2023 19:34:58 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5113:78e9:d35:fdff:4057] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33N2XTsv018716-33N2XTsw018716
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Sun, 23 Apr 2023 10:33:29 +0800
+Message-ID: <f71f3012-916c-5271-b908-feeee5a85a46@hust.edu.cn>
+Date:   Sun, 23 Apr 2023 10:33:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <680175260970d977d16b5cc7e7606483ec99eb63.1680402881.git.josh@joshtriplett.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] Input: xpad - fix GPF in xpad_probe
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     Vicki Pfau <vi@endrift.com>, kernel-janitors@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Rojtberg <rojtberg@gmail.com>,
+        Nate Yocom <nate@yocom.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        John Butler <radon86dev@gmail.com>,
+        Matthias Benkmann <matthias.benkmann@gmail.com>,
+        Christopher Crockett <chaorace@gmail.com>,
+        Santosh De Massari <s.demassari@gmail.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com,
+        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230414125603.686123-1-dzm91@hust.edu.cn>
+ <c3e0823b-2b03-4dab-b7cb-a8bc5151f0b1@kili.mountain>
+ <011c00e7-c351-4331-8be4-1c184d5773e1@kili.mountain>
+ <3ccc85bd-0541-4ffb-a207-dfc533a2c0aa@kili.mountain>
+ <d49bb5a2-ed78-4b16-b7ea-b9c7748ca0e4@kili.mountain>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <d49bb5a2-ed78-4b16-b7ea-b9c7748ca0e4@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 11:37:52AM +0900, Josh Triplett wrote:
-> Create a uapi header include/uapi/linux/ext4.h, move the ioctls and
-> associated data structures to the uapi header, and include it from
-> fs/ext4/ext4.h.
-> 
-> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
-> ---
 
-Following up on this: would it be possible to get this in the 6.4 ext4
-pull request? It'd be really helpful to have this UAPI header available,
-for the benefit of tools that generate bindings to ioctls.
+On 2023/4/23 03:48, Dan Carpenter wrote:
+> The warnings from this are quite promising.
+>
+> When you're writing a check, you start with a simple idea and then try
+> it and then filter out the common false positives.
+>
+> The first 10 warnings are from loops like:
+>
+> 	p = NULL;
+>
+> 	for (i = 0; i < limit; i++) {
+> 		if (i == 0)
+> 			p = non_null();
+> 		else
+> 			*p = something();
+> 	}
+>
+> Smatch doesn't handle loops correctly.  (I know how to fix this but I've
+> never gotten around to it because it would make Smatch slow)...
+>
+> So instead of that maybe I would do a hack to silence this type of
+> warning.  Not sure what...
+>
+> drivers/usb/gadget/udc/amd5536udc_pci.c:61 udc_pci_remove() warn: pointer dereferenced without being set '&udc->gadget'
+> This one is interesting.  Seems like a real bug.
+>
+> drivers/mtd/ubi/block.c:391 ubiblock_create() warn: pointer dereferenced without being set 'dev->gd'
+>
+> This one too.  So maybe we could make this a separate warning where
+> NULL dereferences happen on error paths.  Or maybe when they happen in
+> printks.
+>
+> So there are ways to take this first draft and massage it and get
+> fewer false positives, by filtering false positives or taking things
+> which work and creating new checks instead.
+
+Hi Dan,
+
+thanks for your efforts. After finishing the current task list, we can 
+first ask senior students to check this result quickly and then assign 
+highly-to-be True Positive to students.
+
+BTW, do you have any plans to improve the code readability, directory 
+orgranization, documentation etc. of Smatch? It's hard even for senior 
+students to start with.
+
+> Anyway, results attached.
+>
+> regards,
+> dan carpenter
+>
