@@ -2,60 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7316E6EBD0B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 06:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936C36EBD04
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 06:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDWEmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 00:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S229993AbjDWEdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 00:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDWEmU (ORCPT
+        with ESMTP id S229580AbjDWEdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 00:42:20 -0400
-X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Apr 2023 21:42:19 PDT
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D85A1FCC;
-        Sat, 22 Apr 2023 21:42:16 -0700 (PDT)
-From:   "Xu,Rongbo" <xurongbo@baidu.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] [PATCH] fuse: no interrupt for lookup request
-Thread-Topic: [PATCH] [PATCH] fuse: no interrupt for lookup request
-Thread-Index: AQHZdGBbSPcvGdSwlU+gwdW0scg84a84TvGA
-Date:   Sun, 23 Apr 2023 04:27:04 +0000
-Message-ID: <425B0C38-15A7-45A3-B3C6-55F7844E90B4@baidu.com>
-References: <20230417075545.58817-1-xurongbo@baidu.com>
- <CAJfpegswN_CJJ6C3RZiaK6rpFmNyWmXfaEpnQUJ42KCwNF5tWw@mail.gmail.com>
-In-Reply-To: <CAJfpegswN_CJJ6C3RZiaK6rpFmNyWmXfaEpnQUJ42KCwNF5tWw@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.24.202.19]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BDEE3D7FE289EE438AF1595B36C4C47A@internal.baidu.com>
-Content-Transfer-Encoding: base64
+        Sun, 23 Apr 2023 00:33:04 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A153A1737;
+        Sat, 22 Apr 2023 21:33:00 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q3wJN6nBQz17TsB;
+        Sun, 23 Apr 2023 12:29:08 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sun, 23 Apr
+ 2023 12:32:55 +0800
+Date:   Sun, 23 Apr 2023 12:32:42 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+CC:     Changbin Du <changbin.du@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hui Wang <hw.huiwang@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v5 2/3] perf: add helper map__fprintf_dsoname_dsoff
+Message-ID: <20230423043242.bjoqrkdztl3snaj4@M910t>
+References: <20230418031825.1262579-1-changbin.du@huawei.com>
+ <20230418031825.1262579-3-changbin.du@huawei.com>
+ <3001bde2-b010-3c00-17de-1c78ef4b589b@intel.com>
+ <20230420025511.fkd7upvuoxfz2xih@M910t>
+ <ff8bc134-853d-a9d9-901b-2c20beed8d05@intel.com>
+ <20230421050456.qnwzj2kl47i6ahto@M910t>
+ <03753b17-f380-94fc-d6eb-c5dfb1edb5d5@intel.com>
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.51.57
-X-FE-Last-Public-Client-IP: 100.100.100.60
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <03753b17-f380-94fc-d6eb-c5dfb1edb5d5@intel.com>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SSB2ZXJpZmllZCwgaXQncyBPS+OAgg0KDQrvu7/lnKggMjAyMy80LzIxIDIyOjQ477yM4oCcTWlr
-bG9zIFN6ZXJlZGnigJ08bWlrbG9zQHN6ZXJlZGkuaHUgPG1haWx0bzptaWtsb3NAc3plcmVkaS5o
-dT4+IOWGmeWFpToNCg0KDQpPbiBNb24sIDE3IEFwciAyMDIzIGF0IDA5OjU5LCBYdSBSb25nYm8g
-PHh1cm9uZ2JvQGJhaWR1LmNvbSA8bWFpbHRvOnh1cm9uZ2JvQGJhaWR1LmNvbT4+IHdyb3RlOg0K
-Pg0KPiBGcm9tOiB4dXJvbmdibyA8eHVyb25nYm9AYmFpZHUuY29tIDxtYWlsdG86eHVyb25nYm9A
-YmFpZHUuY29tPj4NCj4NCj4gaWYgbG9va3VwIHJlcXVlc3QgaW50ZXJydXB0ZWQsIHRoZW4gZGVu
-dHJ5IHJldmFsaWRhdGUgcmV0dXJuIC1FSU5UUg0KPiB3aWxsIHVtb3VudCBiaW5kLW1vdW50ZWQg
-ZGlyZWN0b3J5Lg0KPg0KDQoNClRoYW5rcyBmb3IgdGhlIHJlcG9ydC4NCg0KDQpDb3VsZCB5b3Ug
-cGxlYXNlIHZlcmlmeSB0aGF0IHRoZSBhdHRhY2hlZCBmaXggYWxzbyB3b3Jrcz8NCg0KDQpUaGFu
-a3MsDQpNaWtsb3MNCg0KDQoNCg==
+On Fri, Apr 21, 2023 at 10:30:45AM +0300, Adrian Hunter wrote:
+> On 21/04/23 08:04, Changbin Du wrote:
+> >> What do you get if you try below diff on top of
+> >> your patches:
+> >>
+> >> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> >> index c7bf1ac14e90..df0d21141185 100644
+> >> --- a/tools/perf/builtin-script.c
+> >> +++ b/tools/perf/builtin-script.c
+> >> @@ -576,8 +576,11 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
+> >>  	if (PRINT_FIELD(DSO))
+> >>  		output[type].print_ip_opts |= EVSEL__PRINT_DSO;
+> >>  
+> >> -	if (PRINT_FIELD(DSOFF))
+> >> +	if (PRINT_FIELD(DSOFF)) {
+> >>  		output[type].print_ip_opts |= EVSEL__PRINT_DSOFF;
+> >> +		/* DSO offset is relative to dso->longname */
+> >> +		symbol_conf.show_kernel_path = true;
+> >> +	}
+> >>  
+> >>  	if (PRINT_FIELD(SYMOFFSET))
+> >>  		output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
+> >> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> >> index a86614599269..19ebfd3468cc 100644
+> >> --- a/tools/perf/util/dso.c
+> >> +++ b/tools/perf/util/dso.c
+> >> @@ -67,6 +67,42 @@ char dso__symtab_origin(const struct dso *dso)
+> >>  	return origin[dso->symtab_type];
+> >>  }
+> >>  
+> >> +bool dso__is_file(const struct dso *dso)
+> >> +{
+> >> +	switch (dso->binary_type) {
+> >> +	case DSO_BINARY_TYPE__KALLSYMS:
+> >> +	case DSO_BINARY_TYPE__GUEST_KALLSYMS:
+> >> +		return false;
+> >> +	case DSO_BINARY_TYPE__VMLINUX:
+> >> +	case DSO_BINARY_TYPE__GUEST_VMLINUX:
+> >> +		return true;
+> >> +	case DSO_BINARY_TYPE__JAVA_JIT:
+> >> +		return false;
+> >> +	case DSO_BINARY_TYPE__DEBUGLINK:
+> >> +	case DSO_BINARY_TYPE__BUILD_ID_CACHE:
+> >> +	case DSO_BINARY_TYPE__BUILD_ID_CACHE_DEBUGINFO:
+> >> +	case DSO_BINARY_TYPE__FEDORA_DEBUGINFO:
+> >> +	case DSO_BINARY_TYPE__UBUNTU_DEBUGINFO:
+> >> +	case DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO:
+> >> +	case DSO_BINARY_TYPE__BUILDID_DEBUGINFO:
+> >> +	case DSO_BINARY_TYPE__SYSTEM_PATH_DSO:
+> >> +	case DSO_BINARY_TYPE__GUEST_KMODULE:
+> >> +	case DSO_BINARY_TYPE__GUEST_KMODULE_COMP:
+> >> +	case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE:
+> >> +	case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP:
+> >> +	case DSO_BINARY_TYPE__KCORE:
+> >> +	case DSO_BINARY_TYPE__GUEST_KCORE:
+> >> +	case DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO:
+> >> +		return true;
+> >> +	case DSO_BINARY_TYPE__BPF_PROG_INFO:
+> >> +	case DSO_BINARY_TYPE__BPF_IMAGE:
+> >> +	case DSO_BINARY_TYPE__OOL:
+> >> +	case DSO_BINARY_TYPE__NOT_FOUND:
+> >> +	default:
+> >> +		return false;
+> >> +	}
+> >> +}
+> >> +
+> >>  int dso__read_binary_type_filename(const struct dso *dso,
+> >>  				   enum dso_binary_type type,
+> >>  				   char *root_dir, char *filename, size_t size)
+> >> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> >> index 0b7c7633b9f6..fb33f5224fb6 100644
+> >> --- a/tools/perf/util/dso.h
+> >> +++ b/tools/perf/util/dso.h
+> >> @@ -396,6 +396,8 @@ static inline bool dso__is_kallsyms(struct dso *dso)
+> >>  	return dso->kernel && dso->long_name[0] != '/';
+> >>  }
+> >>  
+> >> +bool dso__is_file(const struct dso *dso);
+> >> +
+> >>  void dso__free_a2l(struct dso *dso);
+> >>  
+> >>  enum dso_type dso__type(struct dso *dso, struct machine *machine);
+> >> diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+> >> index 7da96b41100f..9b79f88d371c 100644
+> >> --- a/tools/perf/util/map.c
+> >> +++ b/tools/perf/util/map.c
+> >> @@ -447,11 +447,12 @@ size_t map__fprintf_dsoname(struct map *map, FILE *fp)
+> >>  
+> >>  size_t map__fprintf_dsoname_dsoff(struct map *map, bool print_off, u64 addr, FILE *fp)
+> >>  {
+> >> +	const struct dso *dso = map ? map__dso(map) : NULL;
+> >>  	int printed = 0;
+> >>  
+> >>  	printed += fprintf(fp, " (");
+> >>  	printed += map__fprintf_dsoname(map, fp);
+> >> -	if (print_off && map && map__dso(map) && !map__dso(map)->kernel)
+> >> +	if (print_off && dso && dso__is_file(dso))
+> >>  		printed += fprintf(fp, "+0x%" PRIx64, addr);
+> >>  	printed += fprintf(fp, ")");
+> >>  
+> >>
+> > 
+> > Here are the outputs with above change.
+> > 
+> > For elf in build-id cache, it works as expected.
+> > $ sudo perf script -F +dsoff
+> >        perf-exec 12768   135.648023:          1 cycles:  ffffffff96c8ee44 native_write_msr+0x4 (/home/changbin/.debug/.build-id/5e/2fa721660d663f38b6e1aa98d6fa3776974b54/elf+0x28ee44)
+> >        perf-exec 12768   135.648028:          1 cycles:  ffffffff96c8ee44 native_write_msr+0x4 (/home/changbin/.debug/.build-id/5e/2fa721660d663f38b6e1aa98d6fa3776974b54/elf+0x28ee44)
+> >        perf-exec 12768   135.648030:         11 cycles:  ffffffff96c8ee44 native_write_msr+0x4 (/home/changbin/.debug/.build-id/5e/2fa721660d663f38b6e1aa98d6fa3776974b54/elf+0x28ee44)
+> >        perf-exec 12768   135.648031:        295 cycles:  ffffffff96c8ee46 native_write_msr+0x6 (/home/changbin/.debug/.build-id/5e/2fa721660d663f38b6e1aa98d6fa3776974b54/elf+0x28ee46)
+> >        perf-exec 12768   135.648032:       8850 cycles:  ffffffff96c4c686 native_sched_clock+0x66 (/home/changbin/.debug/.build-id/5e/2fa721660d663f38b6e1aa98d6fa3776974b54/elf+0x24c686)
+> 
+> A bit messy though.  User can use option --show-kernel-path
+> so let's not force that after all.
+> 
+> >               ls 27521   501.120978:    4309123 cycles:      7f31cb51c591 _dl_sort_maps+0x301 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+> > 
+> > But when I specify my vmlinux: (the binary_type is DSO_BINARY_TYPE__SYSTEM_PATH_DSO)
+> > $ sudo perf script -k linux/vmlinux -F +dsoff
+> >        perf-exec 12768   135.648023:          1 cycles:  ffffffff96c8ee44 [unknown] (/lib/modules/6.2.12/build/vmlinux)
+> >        perf-exec 12768   135.648028:          1 cycles:  ffffffff96c8ee44 [unknown] (/lib/modules/6.2.12/build/vmlinux+0xffffffff96c8ee44)
+> >        perf-exec 12768   135.648030:         11 cycles:  ffffffff96c8ee44 [unknown] (/lib/modules/6.2.12/build/vmlinux+0xffffffff96c8ee44)
+> >        perf-exec 12768   135.648031:        295 cycles:  ffffffff96c8ee46 [unknown] (/lib/modules/6.2.12/build/vmlinux+0xffffffff96c8ee46)
+> > 
+> > This is for kcore file:
+> > $ sudo perf script --kallsyms /proc/kallsyms -F +dsoff
+> >        perf-exec 18922   267.284368:          1 cycles:  ffffffff96c8ee44 native_write_msr+0x4 (/proc/kcore+0x7fff96c91e44)
+> >        perf-exec 18922   267.284372:          1 cycles:  ffffffff96c8ee44 native_write_msr+0x4 (/proc/kcore+0x7fff96c91e44)
+> >        perf-exec 18922   267.284374:         11 cycles:  ffffffff96c8ee44 native_write_msr+0x4 (/proc/kcore+0x7fff96c91e44)
+> > 
+> > For ko, it's wierd that the binary_type of first one is DSO_BINARY_TYPE__NOT_FOUND.
+> > $ sudo perf script -F +dsoff | grep '.ko'
+> >            gedit 37410   769.927194:     199304 cycles:  ffffffffc0a3d050 ipt_do_table+0x0 (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko)
+> >            gedit 37410   770.459667:     271035 cycles:  ffffffffc0a3d050 ipt_do_table+0x0 (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0xf0)
+> >            gedit 37410   770.649838:     271878 cycles:  ffffffffc0a3d050 ipt_do_table+0x0 (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0xf0)
+> >            gedit 37410   771.239221:     216084 cycles:  ffffffffc0a3d13b ipt_do_table+0xeb (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0x1db)
+> >            gedit 37410   771.257816:     219469 cycles:  ffffffffc0a3d165 ipt_do_table+0x115 (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0x205)
+> >            gedit 37410   771.531158:     288970 cycles:  ffffffffc0a3d151 ipt_do_table+0x101 (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0x1f1)
+> >            gedit 37410   771.816916:     321215 cycles:  ffffffffc0a3d151 ipt_do_table+0x101 (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0x1f1)
+> >            gedit 37410   773.624786:     332528 cycles:  ffffffffc0a3d2ea ipt_do_table+0x29a (/lib/modules/6.2.12/kernel/net/ipv4/netfilter/ip_tables.ko+0x38a)
+> > 
+> > Maybe we can just filter by name? e.g. '[kernel.kallsyms]', '[guest.kernel.kallsyms]'.
+> 
+> Using the dso->binary_type deals with other cases also.
+> We can just change case DSO_BINARY_TYPE__NOT_FOUND to return
+> true.
+> 
+> How about this:
+> 
+> commit abaf1cbf5be5d50b1b3682511b92794394b72178
+> Author: Adrian Hunter <adrian.hunter@intel.com>
+> Date:   Fri Apr 21 10:15:14 2023 +0300
+> 
+>     perf script: Refine printing of dso offset
+>     
+>     Print dso offset only for object files, and in those cases force using the
+>     dso->long_name if the dso->name starts with '[' or the dso is kcore, in
+>     order to avoid special names such as [vdso], or mixing up kcore with
+>     vmlinux.
+>     
+>     Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> 
+> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> index a86614599269..046fbfcfdaab 100644
+> --- a/tools/perf/util/dso.c
+> +++ b/tools/perf/util/dso.c
+> @@ -67,6 +67,39 @@ char dso__symtab_origin(const struct dso *dso)
+>  	return origin[dso->symtab_type];
+>  }
+>  
+> +bool dso__is_object_file(const struct dso *dso)
+> +{
+> +	switch (dso->binary_type) {
+> +	case DSO_BINARY_TYPE__KALLSYMS:
+> +	case DSO_BINARY_TYPE__GUEST_KALLSYMS:
+> +	case DSO_BINARY_TYPE__JAVA_JIT:
+> +	case DSO_BINARY_TYPE__BPF_PROG_INFO:
+> +	case DSO_BINARY_TYPE__BPF_IMAGE:
+> +	case DSO_BINARY_TYPE__OOL:
+> +		return false;
+> +	case DSO_BINARY_TYPE__VMLINUX:
+> +	case DSO_BINARY_TYPE__GUEST_VMLINUX:
+> +	case DSO_BINARY_TYPE__DEBUGLINK:
+> +	case DSO_BINARY_TYPE__BUILD_ID_CACHE:
+> +	case DSO_BINARY_TYPE__BUILD_ID_CACHE_DEBUGINFO:
+> +	case DSO_BINARY_TYPE__FEDORA_DEBUGINFO:
+> +	case DSO_BINARY_TYPE__UBUNTU_DEBUGINFO:
+> +	case DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO:
+> +	case DSO_BINARY_TYPE__BUILDID_DEBUGINFO:
+> +	case DSO_BINARY_TYPE__SYSTEM_PATH_DSO:
+> +	case DSO_BINARY_TYPE__GUEST_KMODULE:
+> +	case DSO_BINARY_TYPE__GUEST_KMODULE_COMP:
+> +	case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE:
+> +	case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP:
+> +	case DSO_BINARY_TYPE__KCORE:
+> +	case DSO_BINARY_TYPE__GUEST_KCORE:
+> +	case DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO:
+> +	case DSO_BINARY_TYPE__NOT_FOUND:
+> +	default:
+> +		return true;
+> +	}
+> +}
+> +
+>  int dso__read_binary_type_filename(const struct dso *dso,
+>  				   enum dso_binary_type type,
+>  				   char *root_dir, char *filename, size_t size)
+> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> index 0b7c7633b9f6..b23a157c914d 100644
+> --- a/tools/perf/util/dso.h
+> +++ b/tools/perf/util/dso.h
+> @@ -379,23 +379,25 @@ void dso__reset_find_symbol_cache(struct dso *dso);
+>  size_t dso__fprintf_symbols_by_name(struct dso *dso, FILE *fp);
+>  size_t dso__fprintf(struct dso *dso, FILE *fp);
+>  
+> -static inline bool dso__is_vmlinux(struct dso *dso)
+> +static inline bool dso__is_vmlinux(const struct dso *dso)
+>  {
+>  	return dso->binary_type == DSO_BINARY_TYPE__VMLINUX ||
+>  	       dso->binary_type == DSO_BINARY_TYPE__GUEST_VMLINUX;
+>  }
+>  
+> -static inline bool dso__is_kcore(struct dso *dso)
+> +static inline bool dso__is_kcore(const struct dso *dso)
+>  {
+>  	return dso->binary_type == DSO_BINARY_TYPE__KCORE ||
+>  	       dso->binary_type == DSO_BINARY_TYPE__GUEST_KCORE;
+>  }
+>  
+> -static inline bool dso__is_kallsyms(struct dso *dso)
+> +static inline bool dso__is_kallsyms(const struct dso *dso)
+>  {
+>  	return dso->kernel && dso->long_name[0] != '/';
+>  }
+>  
+> +bool dso__is_object_file(const struct dso *dso);
+> +
+>  void dso__free_a2l(struct dso *dso);
+>  
+>  enum dso_type dso__type(struct dso *dso, struct machine *machine);
+> diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+> index 7da96b41100f..5e7808b0bc87 100644
+> --- a/tools/perf/util/map.c
+> +++ b/tools/perf/util/map.c
+> @@ -424,14 +424,21 @@ size_t map__fprintf(struct map *map, FILE *fp)
+>  		       map__start(map), map__end(map), map__pgoff(map), dso->name);
+>  }
+>  
+> -size_t map__fprintf_dsoname(struct map *map, FILE *fp)
+> +static bool prefer_dso_long_name(const struct dso *dso, bool print_off)
+> +{
+> +	return dso->long_name &&
+> +	       (symbol_conf.show_kernel_path ||
+> +		(print_off && (dso->name[0] == '[' || dso__is_kcore(dso))));
+> +}
+> +
+> +static size_t __map__fprintf_dsoname(struct map *map, bool print_off, FILE *fp)
+>  {
+>  	char buf[symbol_conf.pad_output_len_dso + 1];
+>  	const char *dsoname = "[unknown]";
+>  	const struct dso *dso = map ? map__dso(map) : NULL;
+>  
+>  	if (dso) {
+> -		if (symbol_conf.show_kernel_path && dso->long_name)
+> +		if (prefer_dso_long_name(dso, print_off))
+>  			dsoname = dso->long_name;
+>  		else
+>  			dsoname = dso->name;
+> @@ -445,13 +452,21 @@ size_t map__fprintf_dsoname(struct map *map, FILE *fp)
+>  	return fprintf(fp, "%s", dsoname);
+>  }
+>  
+> +size_t map__fprintf_dsoname(struct map *map, FILE *fp)
+> +{
+> +	return __map__fprintf_dsoname(map, false, fp);
+> +}
+> +
+>  size_t map__fprintf_dsoname_dsoff(struct map *map, bool print_off, u64 addr, FILE *fp)
+>  {
+> +	const struct dso *dso = map ? map__dso(map) : NULL;
+>  	int printed = 0;
+>  
+> +	if (print_off && (!dso || !dso__is_object_file(dso)))
+> +		print_off = false;
+>  	printed += fprintf(fp, " (");
+> -	printed += map__fprintf_dsoname(map, fp);
+> -	if (print_off && map && map__dso(map) && !map__dso(map)->kernel)
+> +	printed += __map__fprintf_dsoname(map, print_off, fp);
+> +	if (print_off)
+>  		printed += fprintf(fp, "+0x%" PRIx64, addr);
+>  	printed += fprintf(fp, ")");
+>  
+> 
+> 
+I am fine with this polish patch. So will send this standalone or append to this
+thread?
+
+-- 
+Cheers,
+Changbin Du
