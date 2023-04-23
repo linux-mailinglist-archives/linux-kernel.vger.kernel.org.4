@@ -2,152 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA286EBDC1
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 09:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BC76EBDC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 09:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjDWHpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 03:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        id S230052AbjDWHvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 03:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjDWHpG (ORCPT
+        with ESMTP id S229524AbjDWHvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 03:45:06 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB2218C;
-        Sun, 23 Apr 2023 00:45:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SDUxx7mklww2bUIjPq/CZNtBjg1y/K6yG432Y0S7PvmhnIUQFddXcINMTNbVwzhKQXa0c/U8TfpYE1jJCsCBb7GPuMe3Iz4ZMNH+J0Livczb38h3xS1+fwFk0k5eIsLYHz91RPxvHtlFsKs7OiolY2ux7t8ttg5GFIh/SpjZ68DQscZtlWrA+nOaEL0pa1BaL+jHuQa7EdpjTK4o4eQlKml+gNlxLKm2IihLYM50CswlkwfdmSkUXbHoma6KMVADOY6edzOpEwhfvVk56kKkVTOcyY4lWXLhP8Wt/l/uZEgeQPBzYIdgKJ0SY8UGQ6mrQoIx7c4sA6M7cxeauKCLDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FddsASLZPBMRSM1t8BsY5TZ6QFD/rZaJuFrUsqJ2DeA=;
- b=DWxmRD3dROg7A9beHU0DwSkI5HVDiOjVC8+OpFUhqwz24eCB/9mQyScDE+1v+yaqtBN2K4zG10FcQiX9PlTrRnjoE6n/A2Bw2ZtBnRL5ZapkwM4fuie5SLuxuvdwyB8iSwUB+c5hCDheYQ2ANFJQUiNAGrZWJ93ziE/Uwl+cs7BurdPRmD0d3doY4bwSYWEjrSbF+i+BeFOExoMwmQuxSqmnr5ZFXnKXZnulfz9SfCOlZk4fyzK9w6JQ0K3q7wxj5GLLRpFgQruUcoNJ5CcmyZljzqTxHd6XAo7LHcR1O8FZb9NOcarrHLlLM5RaGmZAJC7d1VxviZU32/P1kvtFPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FddsASLZPBMRSM1t8BsY5TZ6QFD/rZaJuFrUsqJ2DeA=;
- b=VGNyQbyNr/t+hciCTeGqROnXgD0dKpC4Sx9xxa57vG4IGtMrZcWTAGb0CRYPxTbrtfJDwWZKqlp6WJuzgl15bO7q1yRnuMREVIM94Q3OrvUr43v+O6cdSOQh9aca5xXeSFC6vEi+rO30RS3G7d02hVeUiubmhWn5VYaNjcMCyayUybeGtPs7w8rtHRj9Ab8Esbz37Y3QS4BYQH0ldRX3DPOx1C/XWKynLaDqjH7WOd6xa4/2EHVYjpHOeaFwAcpNiYQQa6w78nsBTVE+JHD2v5i918gg2/TQELLiIJIWFrnSkXbpp5EWgQB5bKzNXIiYEdIMA2ndowMa7jaYjyUoZA==
-Received: from BN7PR06CA0053.namprd06.prod.outlook.com (2603:10b6:408:34::30)
- by SJ0PR12MB5421.namprd12.prod.outlook.com (2603:10b6:a03:3bb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.32; Sun, 23 Apr
- 2023 07:45:02 +0000
-Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:34:cafe::e1) by BN7PR06CA0053.outlook.office365.com
- (2603:10b6:408:34::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.32 via Frontend
- Transport; Sun, 23 Apr 2023 07:45:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.18 via Frontend Transport; Sun, 23 Apr 2023 07:45:01 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sun, 23 Apr 2023
- 00:44:51 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Sun, 23 Apr
- 2023 00:44:51 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Sun, 23 Apr 2023 00:44:50 -0700
-Date:   Sun, 23 Apr 2023 00:44:49 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 0/3] Add set_dev_data and unset_dev_data support
-Message-ID: <ZETh8ZBMtjUp7C9/@Asurada-Nvidia>
-References: <BN9PR11MB52764ED59905104D3A5A68C08C609@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZEI+LBkEeNZdJyTB@Asurada-Nvidia>
- <BN9PR11MB5276C39E256CD4B922435E1C8C609@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZEJBldGXBNGEy9tV@Asurada-Nvidia>
- <BN9PR11MB527693075725A13DB9EE18678C609@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZEJHPb1E1/eI8V6A@Asurada-Nvidia>
- <ZEKLDzU8C2niNyOw@nvidia.com>
- <ZELJ0uv4gGCPrDfX@Asurada-Nvidia>
- <ZELPCTOEgU8XlhFh@nvidia.com>
- <ZELTqCK4lcAkf/ti@Asurada-Nvidia>
+        Sun, 23 Apr 2023 03:51:15 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F205D1712;
+        Sun, 23 Apr 2023 00:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682236273; x=1713772273;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=hLqzuB/dsyGdPuw8pDlg/eKJWZevKf5YyeT9JmqhmFM=;
+  b=g4YkJ+WFyT2Sj6Hhrj+KVRf8j4An1E+SbbBnDk/foFA0Mpr8s/rLtbTz
+   UuFvZnC50A1YesDE57eajCm9HHqK4/Mgs5CNdEzQsFiTNpmIUEI8ck/+V
+   2PquNEScYFd/ujJM4EDQj+tgBIOBD+gnQiDY8duxcf5NH673oOWGIKeLH
+   sGymAV2VAszoHUMOt7yP2Y9ZRh3iMyRyKW57BzgMdUbjfFbV/WLL2ltUx
+   ZMCTd6ypUA4Wc7nA+5naOhlxLBX7a8YKuXpUAFhP8wPnk5S1btjHJKY3j
+   /XIwdBSsF1OPXSjVlAfeY8N99FP6MOSJP38yDB7LR6w4Xo5/wqxyVXCMY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="325857887"
+X-IronPort-AV: E=Sophos;i="5.99,220,1677571200"; 
+   d="scan'208";a="325857887"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 00:51:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="867132673"
+X-IronPort-AV: E=Sophos;i="5.99,220,1677571200"; 
+   d="scan'208";a="867132673"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 00:51:10 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yu Zhao <yuzhao@google.com>, linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
+References: <20230421221249.1616168-1-dianders@chromium.org>
+        <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
+Date:   Sun, 23 Apr 2023 15:50:01 +0800
+In-Reply-To: <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
+        (Douglas Anderson's message of "Fri, 21 Apr 2023 15:12:45 -0700")
+Message-ID: <87leijkpg6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZELTqCK4lcAkf/ti@Asurada-Nvidia>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT004:EE_|SJ0PR12MB5421:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43f628b6-eeb3-4537-db60-08db43cea53e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 40d8H1k8zb2VRkIIz1kPe2fLgNGsmV4YFrDtKRRG7xxxRs99wHVGFkpzMSft8PA+LWpzOQdxJcG4wGoT2MgVJMCvB/EPjcYFOdGSzflNk/x306V177JkNiYgLZTcqFE0u7UmlNvSoysw3s7moC9HXTXxyq5J6bkqBPhULBwNxVgYFsr6QsE1ipHw7TM3X1se9dm7BTKdDIcV3ze7QgwX5zuijiuFnEUYnXITCcKzCXA4QMGkYB9SdD+VBkRChP6cM7DLbtmNCH5EmVe9dPW0xNlaUsxpy6pR3gZozQNboAnSeCHxtpx5II+oVnw8uLXRpRdpQtMBRyJ5WTo2kZndD2VSiXGv7QD1D03e6SiIA5z75rfweSOWBXHeQAp1ybMw7KQOqjgk8/7FrAs3Z0TrmtQuvBY7gZWNnse8k/me9sOBV9h9C0RiZDmG/5kE9oSS1FOWNZNtppjCNACkWQIjdXf85509tS9DQMtXpdqS2xCVZSFllvxCxyupgyT+pGXByOsHfrFSJx165xfV/1xc30TLM+9SCMhyfwK/Bm7gs47PhKB8lTGeOv0riIzxi6eaTtY1SyydcFv3P8fbX5TsUIInNgtqY8XOnc/Sb0dP4j5NqoZuBUeKHLGixj223Pc2flRUbqv308BLgPiJJFdtALXwMvhFNgHQqPrrY5tioto+PxuV78g4vqkvSqNFcXoewJaOp2o2d7nNkZVR1ZNzfaOufiqDI6YRNuxWbiaie+WyJr3Itv+mTWJ34maRB7QYPHFXy5IIyAqstV20B9zeBA==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199021)(36840700001)(46966006)(40470700004)(478600001)(40460700003)(54906003)(6636002)(86362001)(966005)(34020700004)(186003)(26005)(82310400005)(9686003)(33716001)(55016003)(40480700001)(4326008)(316002)(82740400003)(70206006)(70586007)(36860700001)(2906002)(4744005)(7636003)(336012)(356005)(426003)(41300700001)(8676002)(6862004)(8936002)(5660300002)(47076005)(7416002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2023 07:45:01.5553
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43f628b6-eeb3-4537-db60-08db43cea53e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5421
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 11:19:23AM -0700, Nicolin Chen wrote:
-> On Fri, Apr 21, 2023 at 02:59:37PM -0300, Jason Gunthorpe wrote:
-> > On Fri, Apr 21, 2023 at 10:37:22AM -0700, Nicolin Chen wrote:
-> > 
-> > > How about the following piece? Needs a test with QEMU though..
-> > > 
-> > > static const size_t iommufd_device_data_size[] = {
-> > > 	[IOMMU_HW_INFO_TYPE_NONE] = 0,
-> > > 	[IOMMU_HW_INFO_TYPE_INTEL_VTD] = 0,
-> > > 	[IOMMU_HW_INFO_TYPE_ARM_SMMUV3] =
-> > > 		sizeof(struct iommu_device_data_arm_smmuv3),
-> > > };
-> > 
-> > If we need more than one of these things we'll need a better
-> > solution..
-> 
-> How about adding ops->device_data_size to store the value?
+Douglas Anderson <dianders@chromium.org> writes:
 
-https://lore.kernel.org/linux-iommu/cover.1682234302.git.nicolinc@nvidia.com/
+> Add a variant of folio_lock() that can timeout. This is useful to
+> avoid unbounded waits for the page lock in kcompactd.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+> Changes in v2:
+> - "Add folio_lock_timeout()" new for v2.
+>
+>  include/linux/pagemap.h | 16 ++++++++++++++
+>  mm/filemap.c            | 47 +++++++++++++++++++++++++++++------------
+>  2 files changed, 50 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> index 0acb8e1fb7af..0f3ef9f79300 100644
+> --- a/include/linux/pagemap.h
+> +++ b/include/linux/pagemap.h
+> @@ -892,6 +892,7 @@ static inline bool wake_page_match(struct wait_page_queue *wait_page,
+>  }
+>  
+>  void __folio_lock(struct folio *folio);
+> +int __folio_lock_timeout(struct folio *folio, long timeout);
+>  int __folio_lock_killable(struct folio *folio);
+>  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+>  				unsigned int flags);
+> @@ -952,6 +953,21 @@ static inline void folio_lock(struct folio *folio)
+>  		__folio_lock(folio);
+>  }
+>  
+> +/**
+> + * folio_lock_timeout() - Lock this folio, with a timeout.
+> + * @folio: The folio to lock.
+> + * @timeout: The timeout in jiffies; %MAX_SCHEDULE_TIMEOUT means wait forever.
+> + *
+> + * Return: 0 upon success; -ETIMEDOUT upon failure.
 
-I sent a v3 that includes this replacing the data_size array.
-If it looks good, we can drop the other two data_size arrays
-for hwpt in the nesting series too.
+IIUC, the funtion may return -EINTR too.
 
-Thanks
-Nic
+Otherwise looks good to me.  Thanks!
+
+Best Regards,
+Huang, Ying
+
+> + */
+> +static inline int folio_lock_timeout(struct folio *folio, long timeout)
+> +{
+> +	might_sleep();
+> +	if (!folio_trylock(folio))
+> +		return __folio_lock_timeout(folio, timeout);
+> +	return 0;
+> +}
+> +
+>  /**
+>   * lock_page() - Lock the folio containing this page.
+>   * @page: The page to lock.
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 2723104cc06a..c6056ec41284 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -1220,7 +1220,7 @@ static inline bool folio_trylock_flag(struct folio *folio, int bit_nr,
+>  int sysctl_page_lock_unfairness = 5;
+>  
+>  static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+> -		int state, enum behavior behavior)
+> +		int state, enum behavior behavior, long timeout)
+>  {
+>  	wait_queue_head_t *q = folio_waitqueue(folio);
+>  	int unfairness = sysctl_page_lock_unfairness;
+> @@ -1229,6 +1229,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>  	bool thrashing = false;
+>  	unsigned long pflags;
+>  	bool in_thrashing;
+> +	int err;
+>  
+>  	if (bit_nr == PG_locked &&
+>  	    !folio_test_uptodate(folio) && folio_test_workingset(folio)) {
+> @@ -1295,10 +1296,13 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>  		/* Loop until we've been woken or interrupted */
+>  		flags = smp_load_acquire(&wait->flags);
+>  		if (!(flags & WQ_FLAG_WOKEN)) {
+> +			if (!timeout)
+> +				break;
+> +
+>  			if (signal_pending_state(state, current))
+>  				break;
+>  
+> -			io_schedule();
+> +			timeout = io_schedule_timeout(timeout);
+>  			continue;
+>  		}
+>  
+> @@ -1324,10 +1328,10 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>  	}
+>  
+>  	/*
+> -	 * If a signal happened, this 'finish_wait()' may remove the last
+> -	 * waiter from the wait-queues, but the folio waiters bit will remain
+> -	 * set. That's ok. The next wakeup will take care of it, and trying
+> -	 * to do it here would be difficult and prone to races.
+> +	 * If a signal/timeout happened, this 'finish_wait()' may remove the
+> +	 * last waiter from the wait-queues, but the folio waiters bit will
+> +	 * remain set. That's ok. The next wakeup will take care of it, and
+> +	 * trying to do it here would be difficult and prone to races.
+>  	 */
+>  	finish_wait(q, wait);
+>  
+> @@ -1336,6 +1340,13 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>  		psi_memstall_leave(&pflags);
+>  	}
+>  
+> +	/*
+> +	 * If we don't meet the success criteria below then we've got an error
+> +	 * of some sort. Differentiate between the two error cases. If there's
+> +	 * no time left it must have been a timeout.
+> +	 */
+> +	err = !timeout ? -ETIMEDOUT : -EINTR;
+> +
+>  	/*
+>  	 * NOTE! The wait->flags weren't stable until we've done the
+>  	 * 'finish_wait()', and we could have exited the loop above due
+> @@ -1350,9 +1361,9 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>  	 * waiter, but an exclusive one requires WQ_FLAG_DONE.
+>  	 */
+>  	if (behavior == EXCLUSIVE)
+> -		return wait->flags & WQ_FLAG_DONE ? 0 : -EINTR;
+> +		return wait->flags & WQ_FLAG_DONE ? 0 : err;
+>  
+> -	return wait->flags & WQ_FLAG_WOKEN ? 0 : -EINTR;
+> +	return wait->flags & WQ_FLAG_WOKEN ? 0 : err;
+>  }
+>  
+>  #ifdef CONFIG_MIGRATION
+> @@ -1442,13 +1453,15 @@ void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>  
+>  void folio_wait_bit(struct folio *folio, int bit_nr)
+>  {
+> -	folio_wait_bit_common(folio, bit_nr, TASK_UNINTERRUPTIBLE, SHARED);
+> +	folio_wait_bit_common(folio, bit_nr, TASK_UNINTERRUPTIBLE, SHARED,
+> +			      MAX_SCHEDULE_TIMEOUT);
+>  }
+>  EXPORT_SYMBOL(folio_wait_bit);
+>  
+>  int folio_wait_bit_killable(struct folio *folio, int bit_nr)
+>  {
+> -	return folio_wait_bit_common(folio, bit_nr, TASK_KILLABLE, SHARED);
+> +	return folio_wait_bit_common(folio, bit_nr, TASK_KILLABLE, SHARED,
+> +				     MAX_SCHEDULE_TIMEOUT);
+>  }
+>  EXPORT_SYMBOL(folio_wait_bit_killable);
+>  
+> @@ -1467,7 +1480,8 @@ EXPORT_SYMBOL(folio_wait_bit_killable);
+>   */
+>  static int folio_put_wait_locked(struct folio *folio, int state)
+>  {
+> -	return folio_wait_bit_common(folio, PG_locked, state, DROP);
+> +	return folio_wait_bit_common(folio, PG_locked, state, DROP,
+> +				     MAX_SCHEDULE_TIMEOUT);
+>  }
+>  
+>  /**
+> @@ -1662,17 +1676,24 @@ EXPORT_SYMBOL_GPL(page_endio);
+>  void __folio_lock(struct folio *folio)
+>  {
+>  	folio_wait_bit_common(folio, PG_locked, TASK_UNINTERRUPTIBLE,
+> -				EXCLUSIVE);
+> +				EXCLUSIVE, MAX_SCHEDULE_TIMEOUT);
+>  }
+>  EXPORT_SYMBOL(__folio_lock);
+>  
+>  int __folio_lock_killable(struct folio *folio)
+>  {
+>  	return folio_wait_bit_common(folio, PG_locked, TASK_KILLABLE,
+> -					EXCLUSIVE);
+> +					EXCLUSIVE, MAX_SCHEDULE_TIMEOUT);
+>  }
+>  EXPORT_SYMBOL_GPL(__folio_lock_killable);
+>  
+> +int __folio_lock_timeout(struct folio *folio, long timeout)
+> +{
+> +	return folio_wait_bit_common(folio, PG_locked, TASK_KILLABLE,
+> +					EXCLUSIVE, timeout);
+> +}
+> +EXPORT_SYMBOL_GPL(__folio_lock_timeout);
+> +
+>  static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+>  {
+>  	struct wait_queue_head *q = folio_waitqueue(folio);
