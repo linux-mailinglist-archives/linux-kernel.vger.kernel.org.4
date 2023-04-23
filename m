@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0992D6EC071
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBA96EC091
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Apr 2023 16:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjDWOm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 10:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S230500AbjDWOv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 10:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDWOmy (ORCPT
+        with ESMTP id S230507AbjDWOvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:42:54 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A3E77;
-        Sun, 23 Apr 2023 07:42:53 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id EA712320089C;
-        Sun, 23 Apr 2023 10:42:52 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 23 Apr 2023 10:42:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1682260972; x=1682347372; bh=WPq+Zi7vywciatF5G9rBX6Bg3LuU18ZaNh/
-        wk2gqel8=; b=laGDiIMmpcnsJBY/YrcHFcpjxkkRjGs+LWsJMypzC1/slkxvsu9
-        2EAEgZxqg8Khl0up9m4z6MHXo01NmVJouNvzRZ/OldqJtQRsoNx3ixHMScgWf5YX
-        LNag+jYgGM0AoHn+M1Rb6EZNhM1+RMgIese82FDsfYC2387qtFpST+IKcMidvDjH
-        n1hKTxfWMCsAbplVpOrxWk9vbrViOuViZpZh+Vy2Nq4hUa/ytsta5Y+y5PziiIBy
-        8VGLJCysi/vtBpNtmInBfeZarfa+qm8I5Jd3QbtvscEM/jcPqRw28dIm+W1c0LUg
-        6sFq42oDAjInVSFG13+TP9HR+IraGUereJw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682260972; x=1682347372; bh=WPq+Zi7vywciatF5G9rBX6Bg3LuU18ZaNh/
-        wk2gqel8=; b=FWGaDxUREopJdToOwAHn1rQbzKzLa8TCJnONMklpxPazJtszniV
-        X6M4D2VhRCA/HqRiPII/f1ULqjI+6QxAB9cxIyX/Oc+AJf1PVplf8czRFbGhoupc
-        AoEkdU1Zc065OFu/pgTvsY/r4Czbpd2opD+oZ4uM0QQ9iGx3JwdMkGVfi7O/5eom
-        rzvVlvBT/cud7i6Wq42nCZszOkaz2IXfFXFiSHxSaUe7DjKWKHKHq7cEf6DDRjin
-        dEwDMc3lwbU41klPF95mY4zKQiGU3eNq1+U87WxHhl8JgjeFWL3cktqlr/G6ZlC6
-        zwQUGLvfepf23+Mecs3J+YRVkxQElUYgS7g==
-X-ME-Sender: <xms:7ENFZHFWKemQEWALxlayMdnGJvspliziPLZ2WPJFMnXQ5J0JkmudWA>
-    <xme:7ENFZEVwZWCdmmOwMngZ5QQABR6VXlxOZy7KPa3s6e48bh6_LEBvmdDyTJE08Xhx4
-    Iihf7GQI-eCMCW5oxc>
-X-ME-Received: <xmr:7ENFZJIjC3s2q_sz2kpDOKGd_WoFXs9giMnFWYfW6sKii7dMl6IDgkS7nRyKVWVFx9We>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtkedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:7ENFZFG9LhHIbkOXSVoZal785sefLRC-ahBGzzg4wCEW__e2zjyJ2g>
-    <xmx:7ENFZNUl7U-dvf88-n0ZNT8xXaNvxc0RJFlUP4hxMbtIwKiaXvygpQ>
-    <xmx:7ENFZAMWOS8k62Z63m7F4uOPbpxq8KLlw58bL4yzEHWqj_8xfJEKeg>
-    <xmx:7ENFZMfBpwXacG1ETti0rCGdnjGYrOTdE7HaTqoWJeo47Q_-yWhIuw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Apr 2023 10:42:51 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: Remove unused variable in arch_local_irq_restore
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
-Date:   Sun, 23 Apr 2023 15:42:40 +0100
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        Sun, 23 Apr 2023 10:51:12 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C63271C;
+        Sun, 23 Apr 2023 07:51:07 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-42ff08ab61dso765420137.1;
+        Sun, 23 Apr 2023 07:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682261466; x=1684853466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Byy5aNIeSbfDla4aJVVFrIzVSy2E3RHqITcEmVo7JRE=;
+        b=RKBXXCzMbPO0c3dNHN4kOwMb50a1vI21F46uM2qNrVGZnxlLgn6ryNiwH1XqALlyv7
+         mZQRQuTDmWR38qNqUA2rrHKP5Uhei0U8KHgtxj0lsz6a2FfEzm3+tYKroNLLgYxBiwKk
+         MLD2rYfWu3b0phFlVaYGkcvgnIFD3jbaMYAPdk5rPRrdzAvXYf7mJJMJ4KGa34iDcPt4
+         5ox0VFI/dPyeyTAhwd0MFh3YbdadxiwI14v1BK4DXfxDmc0mcGoQDdBZXnXi4+2CrscN
+         FyRRXhJW9V/P8Nb0SBdcjBCgwi04HqJfwI20sjH4UMKLdKUutDpCdU1VvKebky04iNnp
+         P9hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682261466; x=1684853466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Byy5aNIeSbfDla4aJVVFrIzVSy2E3RHqITcEmVo7JRE=;
+        b=GzX2wnZG97WGdB1le7spxvoebd1vJqz9duV/KV+vBz6YU0+OYg+eTUSBpGYixvBwAQ
+         A2ukyAt/8/yvW06Rm1+vRIlYFwtxC+/xSl+/gfSJHcdCYEYRwp6ko4laz+cnKuyibza4
+         cCeJF8NwTckjEhzIDHI1HgnNvnbT8NSvQ+6ew95L124ch4WLugOwFSZRwiKSm156JJAa
+         CPZ1ADB3vEAPWcCkWo0FPQZlEVShSg/XbOXeiFU72bzlLbOnYoExAAG2wHyJaCVjSEiK
+         ir9zJYhB7FQ/HuQfpGw/xsq/NSNFmhGeL9GPeyeug/kH25pTeJbl3v7xdEOxP2BIlwpw
+         /m6w==
+X-Gm-Message-State: AAQBX9ds2/4kjJ7PTkuRS51NclIssKzjw6znnCCVBEMafEsxNJsSPKma
+        v7l+6Mg+6KZBhPVKXSAdx9I1bJq8QCkmKKVo950=
+X-Google-Smtp-Source: AKy350Z5gzn4UWfEtW4Wn7+TaHy7dwqZraT/JdO1pegO5CuBK/GTa8ixWUrBAabB5nkoPrMqhSd1EaFai8Vxlw5iCMg=
+X-Received: by 2002:a67:fe97:0:b0:430:23c2:1c05 with SMTP id
+ b23-20020a67fe97000000b0043023c21c05mr4275621vsr.4.1682261466002; Sun, 23 Apr
+ 2023 07:51:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230418014037.2412394-1-drosen@google.com> <CAOQ4uxhpFrRVcviQ6bK1ZMtZDSMXRFuqY-d_+uQ1C0YMDtQpLA@mail.gmail.com>
+ <CA+PiJmT1wCoGnqtVSfcM-0qKm=Vu-jPf=7Op90vcGo3A7kYr0g@mail.gmail.com>
+In-Reply-To: <CA+PiJmT1wCoGnqtVSfcM-0qKm=Vu-jPf=7Op90vcGo3A7kYr0g@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Sun, 23 Apr 2023 17:50:53 +0300
+Message-ID: <CAOQ4uxgwmsAA8b1ApmHh9fKuSyy0-NKgpkDSLk-gUWnaGKXtFQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
+ Extension for FUSE
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <BD0619A1-0F31-4226-B2C6-F2FA9FBBB38D@flygoat.com>
-References: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,44 +85,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 4:41=E2=80=AFAM Daniel Rosenberg <drosen@google.com=
+> wrote:
+>
+> On Mon, Apr 17, 2023 at 10:33=E2=80=AFPM Amir Goldstein <amir73il@gmail.c=
+om> wrote:
+> >
+> >
+> > Which brings me to my biggest concern.
+> > I still do not see how these patches replace Allesio's
+> > FUSE_DEV_IOC_PASSTHROUGH_OPEN patches.
+> >
+> > Is the idea here that ioctl needs to be done at FUSE_LOOKUP
+> > instead or in addition to the ioctl on FUSE_OPEN to setup the
+> > read/write passthrough on the backing file?
+> >
+>
+> In these patches, the fuse daemon responds to the lookup request via
+> an ioctl, essentially in the same way it would have to the /dev/fuse
+> node. It just flags the write as coming from an ioctl and calls
+> fuse_dev_do_write. An additional block in the lookup response gives
+> the backing file and what bpf_ops to use. The main difference is that
+> fuse-bpf uses backing inodes, while passthrough uses a file.
 
+Ah right. I wonder if there is benefit in both APIs or if backing inode
+is sufficient to impelelent everything the could be interesting to implemen=
+t
+with a backing file.
 
-> 2023=E5=B9=B44=E6=9C=8823=E6=97=A5 15:35=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> It was left over in 9efe1ad6f24a ("MIPS: Don't play with fire in
-> DIEI irq_restore").
->=20
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Fuse-bpf's read/write support currently isn't complete, but it does
+> allow for direct passthrough. You could set ops to default to
+> userspace in every case that Allesio's passthrough code does and it
+> should have about the same effect.
 
-Oh sorry please ignore the noise.
+What are the subtle differences then?
 
-mips-fixes tree on codeaurora mirror is lapsed. Really shouldn=E2=80=99t =
-use that mirror.
+> With the struct_op change, I did
+> notice that doing something like that is more annoying, and am
+> planning to add a default op which only takes the meta info and runs
+> if the opcode specific op is not present.
+>
 
-Thanks
-Jiaxun=20
+Sounds interesting. I'll wait to see what you propose.
 
-> ---
-> arch/mips/include/asm/irqflags.h | 2 --
-> 1 file changed, 2 deletions(-)
->=20
-> diff --git a/arch/mips/include/asm/irqflags.h =
-b/arch/mips/include/asm/irqflags.h
-> index 3357bce75c69..b79269789c71 100644
-> --- a/arch/mips/include/asm/irqflags.h
-> +++ b/arch/mips/include/asm/irqflags.h
-> @@ -59,8 +59,6 @@ static inline unsigned long =
-arch_local_irq_save(void)
->=20
-> static inline void arch_local_irq_restore(unsigned long flags)
-> {
-> - unsigned long __tmp1;
-> -
-> if (likely(flags)) {
-> __asm__ __volatile__(
-> " .set push \n"
-> --=20
-> 2.39.2 (Apple Git-143)
->=20
+>
+> > I am missing things like the FILESYSTEM_MAX_STACK_DEPTH check that
+> > was added as a result of review on Allesio's patches.
+> >
+>
+> I'd definitely want to fix any issues that were fixed there. There's a
+> lot of common code between fuse-bpf and fuse passthrough, so many of
+> the suggestions there will apply here.
+>
 
+That's why I suggested trying to implement the passthough file ioctl
+functionality first to make sure that none of the review comments
+in the first round were missed.
+
+But if we need functionality of both ioctls, we can collaborate the
+work on merging them separately.
+
+> > The reason I am concerned about this is that we are using the
+> > FUSE_DEV_IOC_PASSTHROUGH_OPEN patches and I would like
+> > to upstream their functionality sooner rather than later.
+> > These patches have already been running in production for a while
+> > I believe that they are running in Android as well and there is value
+> > in upsteaming well tested patches.
+> >
+> > The API does not need to stay FUSE_DEV_IOC_PASSTHROUGH_OPEN
+> > it should be an API that is extendable to FUSE-BPF, but it would be
+> > useful if the read/write passthrough could be the goal for first merge.
+> >
+> > Does any of this make sense to you?
+> > Can you draw a roadmap for merging FUSE-BPF that starts with
+> > a first (hopefully short term) phase that adds the read/write passthrou=
+gh
+> > functionality?
+> >
+> > I can help with review and testing of that part if needed.
+> > I was planning to discuss this with you on LSFMM anyway,
+> > but better start the discussion beforehand.
+> >
+> > Thanks,
+> > Amir.
+>
+> We've been using an earlier version of fuse-bpf on Android, closer to
+> the V1 patches. They fit our current needs but don't cover everything
+> we intend to. The V3 patches switch to a new style of bpf program,
+> which I'm hoping to get some feedback on before I spend too much time
+> fixing up the details. The backing calls themselves can be reviewed
+> separately from that though.
+>
+> Without bpf, we're essentially enabling complete passthrough at a
+> directory or file. By default, once you set a backing file fuse-bpf
+> calls by the backing filesystem by default, with no additional
+> userspace interaction apart from if an installed bpf program says
+> otherwise. If we had some commands without others, we'd have behavior
+> changes as we introduce support for additional calls. We'd need a way
+> to set default behavior. Perhaps something like a u64 flag field
+> extension in FUSE_INIT for indicating which opcodes support backing,
+> and a response for what those should default to doing. If there's a
+> bpf_op present for a given opcode, it would be able to override that
+> default. If we had something like that, we'd be able to add support
+> for a subset of opcodes in a sensible way.
+
+So maybe this is something to consider.
+
+Thanks,
+Amir.
