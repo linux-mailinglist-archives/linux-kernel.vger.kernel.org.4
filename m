@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C1C6ED760
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4E76ED762
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjDXWDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S229514AbjDXWD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjDXWDO (ORCPT
+        with ESMTP id S233110AbjDXWDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:03:14 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D941BD8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:03:11 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C77C83F364;
-        Tue, 25 Apr 2023 00:03:02 +0200 (CEST)
-Date:   Tue, 25 Apr 2023 00:03:01 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
- RM instead of IDs
-Message-ID: <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
-References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
- <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com>
+        Mon, 24 Apr 2023 18:03:24 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8895BA7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:03:23 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63d32d21f95so1167689b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682373802; x=1684965802;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BOc9YH+oGqwIpPSq5V/5aVKlMiMHqBjxPBRqWKmHOfA=;
+        b=rmT/wQJtGXdI2xWEpUP5et6/IDtgx8ko4m/4kTM/DaHFG4IJ0felb43tvKYMorRR0H
+         T83uSU+fp/ninhWqyK6ZEWuZg/VsCfFmsHwSHpEfQnyVWbtbS2db/YFxsl8390fdDrOZ
+         SUor7GQu0n2bY0i8rCrJtLGVqQYKNsrzeePKZMP4Ohf+w/v5R0aijnP9K5wHAHPDL7gT
+         3J7CRh/5YhfZSZdRxoB1pDBl1UaaMTmtThd3GXx+OxHlMZSbKrjOh8WLS8EHrXIkwHq4
+         LNvi5qpJH8r4aHaSSUuY+emoY8d5WyXZdgKg9pH0XvPvSNq3bNdDOjPorAil+6ghTf8L
+         aaLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682373802; x=1684965802;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BOc9YH+oGqwIpPSq5V/5aVKlMiMHqBjxPBRqWKmHOfA=;
+        b=WspbgVhUh6e5LnyZLRLT35laIQOd55GO2f+J1+AvE6Bfq8fGq8s7qc2j+PuFXpGtIe
+         WU7IvONJV1fL+RlmwV8C0LE+BpixqXdm9P81OfSyL/sESGLvxPXXIf5QrPC0xtx1W49Y
+         mQk9faNNsVS/tFkrXo81sr6GyvQyzVdGyfz72aRtL2ayHyuKMglWjdYVEgcELA2QUc4T
+         s4rUneXLNQ4k/MwhBllU/2hctE3pU2VBi6InsSJKEO1QY1YKcNphDFh3Zm1LbIcN+rad
+         7RVMNDyQ77IHl+WaWJSv5tx+KXz1oEwmOGrlXLeMlrZnMOXTg73JqqDa2HOcYg6UytPU
+         y6kQ==
+X-Gm-Message-State: AAQBX9fMROZKy2pdvihXCa0uuSk9dvG2pr8y8yJfoDZqJoEn4DigOJYh
+        qGo+D0qWLPtJtWiwj1mLsb+9mw==
+X-Google-Smtp-Source: AKy350ZlEdxLB0ycl7j8TzRt1zNUbUabFy4ZhtSwJjyDusHh4TNPAvFoiBMZx6rDkm+z9gCe2uv9gA==
+X-Received: by 2002:a05:6a00:f0e:b0:63f:21e:cad8 with SMTP id cr14-20020a056a000f0e00b0063f021ecad8mr17447730pfb.3.1682373802596;
+        Mon, 24 Apr 2023 15:03:22 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056a00235200b0063d46ec5777sm7888385pfj.158.2023.04.24.15.03.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 15:03:22 -0700 (PDT)
+Message-ID: <83712767-82b2-42f6-c86f-9e3d4edd44d5@kernel.dk>
+Date:   Mon, 24 Apr 2023 16:03:21 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+ <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
+ <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
+ <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
+ <ae8ee8f3-9960-1fd9-5471-433acacb6521@kernel.dk>
+In-Reply-To: <ae8ee8f3-9960-1fd9-5471-433acacb6521@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,112 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-21 16:25:15, Abhinav Kumar wrote:
+On 4/24/23 3:55?PM, Jens Axboe wrote:
+> On 4/24/23 3:37?PM, Linus Torvalds wrote:
+>> On Mon, Apr 24, 2023 at 2:22?PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>
+>>> If we don't ever wait for IO with the pipe lock held, then we can skip
+>>> the conditional locking. But with splice, that's not at all the case! We
+>>> most certainly wait for IO there with the pipe lock held.
+>>
+>> I think that then needs to just be fixed.
 > 
+> I took another look at this, and the main issue is in fact splice
+> confirming buffers. So I do think that we can make this work by simply
+> having the non-block nature of it being passed down the ->confirm()
+> callback as that's the one that'll be waiting for IO. If we have that,
+> then we can disregard the pipe locking as we won't be holding it over
+> IO.
 > 
-> On 4/21/2023 1:53 PM, Marijn Suijten wrote:
-> > The Resource Manager already iterates over all available blocks from the
-> > catalog, only to pass their ID to a dpu_hw_xxx_init() function which
-> > uses an _xxx_offset() helper to search for and find the exact same
-> > catalog pointer again to initialize the block with, fallible error
-> > handling and all.
-> > 
-> > Instead, pass const pointers to the catalog entries directly to these
-> > _init functions and drop the for loops entirely, saving on both
-> > readability complexity and unnecessary cycles at boot.
-> > 
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Which is what part of this series does, notably patch 1.
 > 
-> Overall, a nice cleanup!
+> Only other oddity is pipe_to_sendpage(), which we can probably sanely
+> ignore.
 > 
-> One comment below.
-> 
-> > ---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
-> >   23 files changed, 139 insertions(+), 375 deletions(-)
-> > 
-> 
-> <snipped>
-> 
-> > -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
-> > -		void __iomem *addr,
-> > -		const struct dpu_mdss_cfg *m)
-> > +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
-> > +		void __iomem *addr)
-> >   {
-> >   	struct dpu_hw_intf *c;
-> > -	const struct dpu_intf_cfg *cfg;
-> > +
-> > +	if (cfg->type == INTF_NONE) {
-> > +		pr_err("Cannot create interface hw object for INTF_NONE type\n");
-> > +		return ERR_PTR(-EINVAL);
-> > +	}
-> 
-> The caller of dpu_hw_intf_init which is the RM already has protection 
-> for INTF_NONE, see below
-> 
->          for (i = 0; i < cat->intf_count; i++) {
->                  struct dpu_hw_intf *hw;
->                  const struct dpu_intf_cfg *intf = &cat->intf[i];
-> 
->                  if (intf->type == INTF_NONE) {
->                          DPU_DEBUG("skip intf %d with type none\n", i);
->                          continue;
->                  }
->                  if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
->                          DPU_ERROR("skip intf %d with invalid id\n", 
-> intf->id);
->                          continue;
->                  }
->                  hw = dpu_hw_intf_init(intf->id, mmio, cat);
-> 
-> So this part can be dropped.
+> IOW, would you be fine with a v2 of this pull request where patch 2
+> drops the conditional locking and just passes it to ->confirm()? That's
+> certainly sane, and just makes the ultimate page locking conditional to
+> avoid waiting on IO. I'd really hate to still be missing out on pipe
+> performance with io_uring.
 
-I mainly intended to keep original validation where _intf_offset would
-skip INTF_NONE, and error out.  RM init is hence expected to filter out
-INTF_NONE instead of running into that `-EINVAL`, which I maintained
-here.
+I guess that would still have blocking if you have someone doing splice
+in a blocking fashion, and someone else trying to do RWF_NOWAIT reads or
+writes to the pipe... The very thing the conditional pipe locking would
+sort out.
 
-If you think there won't be another caller of dpu_hw_intf_init, and that
-such validation is hence excessive, I can remove it in a followup v3.
+Only fool proof alternative would seem to be having splice use a
+specific pipe lock rather then pipe->mutex. And honestly pipes and
+splice are so tied together than I'm not sure that doing separate
+locking would be feasible.
 
-- Marijn
+-- 
+Jens Axboe
 
-> >   	c = kzalloc(sizeof(*c), GFP_KERNEL);
-> >   	if (!c)
-> >   		return ERR_PTR(-ENOMEM);
-> >   
-> > -	cfg = _intf_offset(idx, m, addr, &c->hw);
-> > -	if (IS_ERR_OR_NULL(cfg)) {
-> > -		kfree(c);
-> > -		pr_err("failed to create dpu_hw_intf %d\n", idx);
-> > -		return ERR_PTR(-EINVAL);
-> > -	}
-> > +	c->hw.blk_addr = addr + cfg->base;
-> > +	c->hw.log_mask = DPU_DBG_MASK_INTF;
-> >   
-> 
-> <snipped>
