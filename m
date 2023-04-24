@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01256ED1A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02736ED152
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjDXPpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S231854AbjDXP3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbjDXPpl (ORCPT
+        with ESMTP id S231785AbjDXP3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:45:41 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE28B6EAB;
-        Mon, 24 Apr 2023 08:45:37 -0700 (PDT)
-Received: from liber-MS-7D42.. ([10.12.190.56])
-        (user=gangecen@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33OFSRmo021659-33OFSRmp021659
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 24 Apr 2023 23:28:32 +0800
-From:   Gencen Gan <gangecen@hust.edu.cn>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Gan Gecen <gangecen@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5] net: amd: Fix link leak when verifying config failed
-Date:   Mon, 24 Apr 2023 23:28:01 +0800
-Message-Id: <20230424152805.188004-1-gangecen@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Apr 2023 11:29:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179EA19D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682350111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uIDKs7C3LWJvB7Ayc1EEStt5gge8jFMIwXcZbhssBfA=;
+        b=RYvvcU/7r022T2Xd84eP7DSCfTLWLUdV/m7u8BpqPMONjEGERX23YkNEsnZmvYDsWiT86w
+        961CTPRPL+/U/Y7iAcC9IU55hD5KkoGH8EGJ80jMquxuiN9TaOmhYUMSdqc4LgI/UPZMFi
+        YTLoRJ0Kqmtr4NeXrB8Deq17Lfnvy4A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-U95PYXJNN2yT1yIIZ1hCnA-1; Mon, 24 Apr 2023 11:28:29 -0400
+X-MC-Unique: U95PYXJNN2yT1yIIZ1hCnA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 220DE29AA3BF;
+        Mon, 24 Apr 2023 15:28:29 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.225])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F3658492B03;
+        Mon, 24 Apr 2023 15:28:26 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 24 Apr 2023 17:28:18 +0200 (CEST)
+Date:   Mon, 24 Apr 2023 17:28:15 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
+Message-ID: <20230424152815.GA32615@redhat.com>
+References: <1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn>
+ <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: gangecen@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After failing to verify configuration, it returns directly without
-releasing link, which may cause memory leak.
+On 04/24, Tiezhu Yang wrote:
+>
+> >--- a/arch/csky/kernel/probes/uprobes.c
+> >+++ b/arch/csky/kernel/probes/uprobes.c
+> >@@ -64,6 +64,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+> > 	struct uprobe_task *utask = current->utask;
+> >
+> > 	WARN_ON_ONCE(current->thread.trap_no != UPROBE_TRAP_NR);
+> >+	current->thread.trap_no = utask->autask.saved_trap_no;
+> >
+> > 	instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
+> >
+> >@@ -101,6 +102,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+> > {
+> > 	struct uprobe_task *utask = current->utask;
+> >
+> >+	current->thread.trap_no = utask->autask.saved_trap_no;
+> > 	/*
+> > 	 * Task has received a fatal signal, so reset back to probed
+> > 	 * address.
 
-Paolo Abeni thinks that the whole code of this driver is quite 
-"suboptimal" and looks unmainatained since at least ~15y, so he 
-suggests that we could simply remove the whole driver, please 
-take it into consideration.
-
-Simon Horman suggests that the fix label should be set to 
-"Linux-2.6.12-rc2" considering that the problem has existed
-since the driver was introduced and the commit above doesn't
-seem to exist in net/net-next.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Gan Gecen <gangecen@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v4->v5: I have made some mistakes on patch rules, sorry for that.
-v3->v4: Modify the 'Fixes:' tag to make it more accurate.
-v2->v3: Add Fixes tag and add a suggestion about this driver.
-v1->v2: Fix the whitespace-damaged bug.
- drivers/net/ethernet/amd/nmclan_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/amd/nmclan_cs.c b/drivers/net/ethernet/amd/nmclan_cs.c
-index 823a329a921f..0dd391c84c13 100644
---- a/drivers/net/ethernet/amd/nmclan_cs.c
-+++ b/drivers/net/ethernet/amd/nmclan_cs.c
-@@ -651,7 +651,7 @@ static int nmclan_config(struct pcmcia_device *link)
-     } else {
-       pr_notice("mace id not found: %x %x should be 0x40 0x?9\n",
- 		sig[0], sig[1]);
--      return -ENODEV;
-+      goto failed;
-     }
-   }
- 
--- 
-2.34.1
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 
