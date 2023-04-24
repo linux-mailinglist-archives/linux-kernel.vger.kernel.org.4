@@ -2,114 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0040A6ED415
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0A26ED416
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjDXSFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S231804AbjDXSJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbjDXSFb (ORCPT
+        with ESMTP id S229688AbjDXSJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:05:31 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6FE7D8C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:05:30 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b5fca48bcso4108825b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682359530; x=1684951530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tfmGIk+2aJtglmQ4U+xotZJmfTGbg/l0yn8LVq2SGfo=;
-        b=OarNsWC+fF4u+9Ooj0JuFEUiySfJdyWWMfDsKABx+8IhNqooMu67lLrn21b907pxSV
-         HF75Bf7Sn4C9W9C1k3x7TXDy2bi9I8G7irqy81QbvEE4g3+COSbEZ9B1sWDFcgyY4/i7
-         dfwu2ZtKN/9iv63Q8MJJlyXURJ9BWZQQac4AhCBtyCOBH2msn1kgPqtMjASeQVMHZmqd
-         24yBO0+fzkcmstrvItioH7HPnbkajWjknDCCL/X/M188exE7W4VkOXotr9XqVPTJVq2y
-         zvyRr3ag+sSVP9CrnTck5sWVuon1wX0N94pP9YEuPkk38AbfJEdqBjhcF/0bxcLaAFWJ
-         wLWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682359530; x=1684951530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tfmGIk+2aJtglmQ4U+xotZJmfTGbg/l0yn8LVq2SGfo=;
-        b=RSYpXYbK/4gN6XAWgt/x43RAW9XtjP4XG6yS/rlVXkT399cACpUu3exZoMASOMPADt
-         FplQiHrjJqxx+Pbl4rqWYcRMNrO16lzCsTtSZB3a7MrBn0B4XDEWY+GHseKA6X5t6XtA
-         Lt8E72ypl0FX2M98ufBd+n3C0FkFnJb2J4Ye6F3NarzoLyNq2REAnVbifRmsMMllCaWm
-         K8mcRLX4FkhIMNmj7Np+l9jh16TA+Mx2AiIxA9tsdOMeEdFrQ/IyBHBzI5Sz1H0LuF+2
-         2jj0RhHdUmmeU5RJvDKIwutS0+16h+RhYT3Xqw+vWXIK0FBrE+1Xa8z5NUkUwV1Gb5Zc
-         s8Xg==
-X-Gm-Message-State: AAQBX9ejuxMMlTKtaWIjR2eHVZfJeNeZStogJNoT9OUiHZ9g3S37OWSf
-        V7NrEqmVnCyHYkyhiBRbwRUE97Vta+E=
-X-Google-Smtp-Source: AKy350b16pqAJrWOT+Sm5OQWm92N7XgAfn7JZrPjyvJrRp8bFYWR1qAMfjPUGAnZ3NPHUNtGl4kMog==
-X-Received: by 2002:a05:6a00:a93:b0:63f:1717:b7fa with SMTP id b19-20020a056a000a9300b0063f1717b7famr17891664pfl.24.1682359529639;
-        Mon, 24 Apr 2023 11:05:29 -0700 (PDT)
-Received: from pop-os.localdomain ([103.251.210.208])
-        by smtp.gmail.com with ESMTPSA id h69-20020a628348000000b0063db25e140bsm7666697pfe.32.2023.04.24.11.05.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 11:05:29 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 23:35:25 +0530
-From:   Yogesh Hegde <yogi.kernel@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] staging: rtl8192e: Remove unused sens and max_sens
- from r8192_priv struct
-Message-ID: <e117e958ada5695975deecfcd442703fd11bba3f.1682358035.git.yogi.kernel@gmail.com>
-References: <cover.1682358035.git.yogi.kernel@gmail.com>
+        Mon, 24 Apr 2023 14:09:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D86E91;
+        Mon, 24 Apr 2023 11:09:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73B2C622EC;
+        Mon, 24 Apr 2023 18:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8417C433D2;
+        Mon, 24 Apr 2023 18:09:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682359759;
+        bh=DCPhmzjXeq8Lo44Zu22jyvJqFljz6eHBBKLb+VcR4h8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=bz3XKFtgJK/4SHg5scRNDEawqSH+rwy+/+N0pE2HH+hvD7acuajV2zGUCNYwwENxx
+         bXHiZJV3KsaoFcF7pcjaqkzN9QBFB4vTIoIXDap3eAFrYavW1CinS77iPtR8Ga0knG
+         gVfg4HyYq6rD0Bil+T2ZdEbOwbvlaEP4HY2O9APbrngyfZmK4Q+XGYkFMN/2DEAMnH
+         8kwmcyoXqA0Q+WB4rIwAOPCXI4WypsacITSB+qAmJFAa+KvV6cVuEAYfISvcuomA+W
+         DJWNSwYu4Iwtkb66oO7/ZOw+ZhhwZGC7HNpuxoiSIPXiqQA71nsD0wp44s113eici6
+         8LkmgE8FzyFcw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 5C48315404E7; Mon, 24 Apr 2023 11:09:19 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 11:09:19 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v6 2/3] sched/task: Add the put_task_struct_atomic_safe()
+ function
+Message-ID: <9ff7ea3a-b48b-4cff-851e-179713393531@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230414125532.14958-1-wander@redhat.com>
+ <20230414125532.14958-3-wander@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1682358035.git.yogi.kernel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230414125532.14958-3-wander@redhat.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'sens' and 'max_sens' fields in the 'r8192_priv' structure are no
-longer used by the driver. This commit removes these fields.
+On Fri, Apr 14, 2023 at 09:55:28AM -0300, Wander Lairson Costa wrote:
+> Due to the possibility of indirectly acquiring sleeping locks, it is
+> unsafe to call put_task_struct() in atomic contexts when the kernel is
+> compiled with PREEMPT_RT.
+> 
+> To mitigate this issue, this commit introduces
+> put_task_struct_atomic_safe(), which schedules __put_task_struct()
+> through call_rcu() when PREEMPT_RT is enabled. While a workqueue would
+> be a more natural approach, we cannot allocate dynamic memory from
+> atomic context in PREEMPT_RT, making the code more complex.
+> 
+> This implementation ensures safe execution in atomic contexts and
+> avoids any potential issues that may arise from using the non-atomic
+> version.
+> 
+> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> Reported-by: Hu Chunyu <chuhu@redhat.com>
+> Cc: Paul McKenney <paulmck@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  include/linux/sched/task.h | 31 +++++++++++++++++++++++++++++++
+>  kernel/fork.c              |  8 ++++++++
+>  2 files changed, 39 insertions(+)
+> 
+> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+> index b597b97b1f8f..5c13b83d7008 100644
+> --- a/include/linux/sched/task.h
+> +++ b/include/linux/sched/task.h
+> @@ -141,6 +141,37 @@ static inline void put_task_struct_many(struct task_struct *t, int nr)
+>  
+>  void put_task_struct_rcu_user(struct task_struct *task);
+>  
+> +extern void __delayed_put_task_struct(struct rcu_head *rhp);
+> +
+> +static inline void put_task_struct_atomic_safe(struct task_struct *task)
+> +{
+> +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> +		/*
+> +		 * Decrement the refcount explicitly to avoid unnecessarily
+> +		 * calling call_rcu.
+> +		 */
+> +		if (refcount_dec_and_test(&task->usage))
+> +			/*
+> +			 * under PREEMPT_RT, we can't call put_task_struct
+> +			 * in atomic context because it will indirectly
+> +			 * acquire sleeping locks.
+> +			 * call_rcu() will schedule delayed_put_task_struct_rcu()
+> +			 * to be called in process context.
+> +			 *
+> +			 * __put_task_struct() is called called when
+> +			 * refcount_dec_and_test(&t->usage) succeeds.
+> +			 *
+> +			 * This means that it can't "conflict" with
+> +			 * put_task_struct_rcu_user() which abuses ->rcu the same
+> +			 * way; rcu_users has a reference so task->usage can't be
+> +			 * zero after rcu_users 1 -> 0 transition.
+> +			 */
+> +			call_rcu(&task->rcu, __delayed_put_task_struct);
 
-Suggested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
----
+This will invoke __delayed_put_task_struct() with softirqs disabled.
+Or do softirq-disabled contexts count as non-atomic in PREEMPT_RT?
 
-Changes in v5:
-    1. Rebased onto latest staging-testing branch
+							Thanx, Paul
 
-Changes in v4:
-    1. Split changes into patch series per feedback from
-       gregkh@linuxfoundation.org
-
-Changes in v3:
-    -- None
-
-Changes in v2:
-    -- None
-
-Changes in v1:
-    -- None
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 08145e1f814c..ec9e454299a8 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -270,8 +270,6 @@ struct r8192_priv {
- 	short	promisc;
- 
- 	short	chan;
--	short	sens;
--	short	max_sens;
- 	bool ps_force;
- 
- 	u32 irq_mask[2];
--- 
-2.34.1
-
+> +	} else {
+> +		put_task_struct(task);
+> +	}
+> +}
+> +
+>  /* Free all architecture-specific resources held by a thread. */
+>  void release_thread(struct task_struct *dead_task);
+>  
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 0c92f224c68c..9884794fe4b8 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -854,6 +854,14 @@ void __put_task_struct(struct task_struct *tsk)
+>  }
+>  EXPORT_SYMBOL_GPL(__put_task_struct);
+>  
+> +void __delayed_put_task_struct(struct rcu_head *rhp)
+> +{
+> +	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
+> +
+> +	__put_task_struct(task);
+> +}
+> +EXPORT_SYMBOL_GPL(__delayed_put_task_struct);
+> +
+>  void __init __weak arch_task_cache_init(void) { }
+>  
+>  /*
+> -- 
+> 2.39.2
+> 
