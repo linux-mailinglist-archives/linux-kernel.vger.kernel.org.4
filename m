@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3317E6ECBE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B277B6ECBEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjDXMQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
+        id S231329AbjDXMSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDXMQ3 (ORCPT
+        with ESMTP id S229522AbjDXMR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:16:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63F710F7;
-        Mon, 24 Apr 2023 05:16:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7711F6212A;
-        Mon, 24 Apr 2023 12:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB278C433D2;
-        Mon, 24 Apr 2023 12:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682338587;
-        bh=bbpREEP7jCWuZ/XOSK68CL0Pc9DKr0jWgLXLoTlyIK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FBpmDjNw9NZIUoR5aOtkyWJKK/EZrcPvECCwOnV3Kw0bjzyzUTIJpTOJl0TuLf1oj
-         oR9cvvPvbOgH27g4WknwryhqfW1WbPMzgAQA6Eav1GKAzlWoHH91Vj/HIicURrGIDO
-         L4h4obiSEbqsI1D1ZxHbIWrdZbAPvKPv+bB70F4V9u3TTU763GpvwgfF7cuUZN7/aD
-         14fSoqTid9tdl2SKjMfBJFSYLFH8tPpXytPiyYNx65S4SWBqb4lipEjAAGnVVuPJca
-         6bpLYyuG+AXaRfUWdyxpGDI7cJX97RP7eBOsrQjP/51QR244zpBTWYsGR2LjSoZUnl
-         ICzpqgacPO/mA==
-Date:   Mon, 24 Apr 2023 13:16:22 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Shengyu Qu <wiagn233@outlook.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wens@csie.org, lgirdwood@gmail.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] mfd: axp20x: Add support for AXP15060 PMIC
-Message-ID: <20230424121622.GB50521@google.com>
-References: <20230417090537.6052-1-wiagn233@outlook.com>
- <TY3P286MB261126058D704A3CDE91CE6D989C9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+        Mon, 24 Apr 2023 08:17:59 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7303426B7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 05:17:58 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5113:4140:2ad:3e:4b54] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33OCH9Aq011419-33OCH9Ar011419
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Mon, 24 Apr 2023 20:17:09 +0800
+Message-ID: <4b1dcfd3-a82c-5165-7c0a-1767f97273e6@hust.edu.cn>
+Date:   Mon, 24 Apr 2023 20:17:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TY3P286MB261126058D704A3CDE91CE6D989C9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] drivers: regulator: core: remove return value check of
+ `rdev->debugfs`
+To:     Mark Brown <broonie@kernel.org>,
+        Yuchen Yang <u202114568@hust.edu.cn>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        hust-os-kernel-patches@googlegroups.com,
+        Liam Girdwood <lrg@slimlogic.co.uk>,
+        linux-kernel@vger.kernel.org
+References: <20230424025738.34950-1-u202114568@hust.edu.cn>
+ <1ea2bb36-af47-4651-8f37-b72736ca0367@sirena.org.uk>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <1ea2bb36-af47-4651-8f37-b72736ca0367@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,34 +50,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023, Shengyu Qu wrote:
 
-> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
-> via an I2C bus.
-> 
-> Describe the regmap and the MFD bits, along with the registers exposed
-> via I2C. Eventually advertise the device using a new compatible string
-> and add support for power off the system.
-> 
-> The driver would disable PEK function if IRQ is not configured in device
-> tree, since some boards (For example, Starfive Visionfive 2) didn't
-> connect IRQ line of PMIC to SOC.
-> 
-> GPIO function isn't enabled in this commit, since its configuration
-> operation is different from any existing AXP PMICs and needs
-> logic modification on existing driver. GPIO support might come in later
-> patches.
-> 
-> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
-> ---
->  drivers/mfd/axp20x-i2c.c   |  2 +
->  drivers/mfd/axp20x.c       | 90 ++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/axp20x.h | 85 +++++++++++++++++++++++++++++++++++
->  3 files changed, 177 insertions(+)
+On 2023/4/24 19:56, Mark Brown wrote:
+> On Mon, Apr 24, 2023 at 10:57:37AM +0800, Yuchen Yang wrote:
+>> Smatch complains that:
+>> rdev_init_debugfs() warn: 'rdev->debugfs' is an error pointer or valid
+>>
+>> According to the documentation of the debugfs_create_dir() function,
+>> there is no need to check the return value of this function.
+>> Just delete the dead code.
+> Please stop sending these patches.
 
-Doesn't apply.  Please rebase and resend with this applied:
+No problem. We will disable this Smatch checker in our daily use.
 
-Reviewed-by: Lee Jones <lee@kernel.org>
+Thanks for your feedback.
 
--- 
-Lee Jones [李琼斯]
