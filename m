@@ -2,193 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869D96EC9A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CD96EC9B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjDXKAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        id S230426AbjDXKEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 06:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjDXKAW (ORCPT
+        with ESMTP id S230095AbjDXKEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:00:22 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CA196
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:00:21 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51b6d0b9430so3272687a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:00:21 -0700 (PDT)
+        Mon, 24 Apr 2023 06:04:38 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2562A1712
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:04:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b60366047so3446401b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682330420; x=1684922420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pUMRNHc1IOPvtn61NaRliWajnbOQ2JnYVpMoyrR6jps=;
-        b=ksjcdvRamKkSMZEKA/vEAJ0XlgtzkXUIkC/Du4VtUU9X7CTiVzPMYUvDjSa3c5+4li
-         x1zzd+9epZfHWAAwIcEa2E/n6sf5GZnQS4iYJM++OotNWPsHxewi3uPc686+XmMJik9G
-         I/9DjXUg04FNDgiZg5B0QHdVjT4f5SlszJEUtAc1tVWLaemQmdo20Qo7bgpjARJVqXKx
-         bMFlNL9lpNmTRCmBHrVDjDMiB56wJnhJAZnXTbeGw9zf9EYvQphDYAhm4Y7ytviRrH9o
-         ezkINx3DgZirGId7U4BLS4yEg7J0cE+Aq3uGNCWl2yesZsmq2y9wO4Pg8T+DCIEioLIU
-         3J2A==
+        d=chromium.org; s=google; t=1682330676; x=1684922676;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2WsBy9D+hRfwOWkrxwmd3lLjMwOzTRUf9EB9Q/QdtQ=;
+        b=QAT8s9jI9J/mNPQLSP2R9Gv0/pCLs36KQ58Jrhu8C6+SrP/N1F/G4CaLqL7IRuYz9m
+         o92u1G+OMIkgsdt4DEhrbqxoL4BiGD/GHiQou79/lSFaMsx8t0AIU0c5ARh/U93oJRRO
+         hVJ/4lbG3A+A/vWLmsD/lBxcGAuDpvi+5OrPo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682330420; x=1684922420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pUMRNHc1IOPvtn61NaRliWajnbOQ2JnYVpMoyrR6jps=;
-        b=HIqUEhUsA8mXjVSadWDJ0A6pdCSnGh9F+maLwWBBblxd8LE6WSDkDn2mrBQJzwexep
-         kelg1dj40kfvr+u8Ew6V++/XSgtJkQMdLvU2VlIpJISeMzLCtHkL0V/ClMNiPMVbKIV1
-         JFEtIlwLfBwvw5zv0gNKc8LCpxdUFfjnSfQrxkQTQOIks1NdsXylfZqC7Pf/ipru1NWL
-         Iux1StgzIeEzhHxaQMaY/y5+cV5PVEiQ1Q/5VJSCur58s8h4vypY66jBSrXhg3dhBxl5
-         SpQAoRHdek4kMIn0T9x8Iw481T8KBV3EWzxtupyST1jTwAkKeWLS27bw2h2cfIjv6DA8
-         TFDQ==
-X-Gm-Message-State: AAQBX9c12gAXMkSboLs5fHrMkpFwhLRBIDki632YzPVmyXqiQjxvkSGX
-        yjMZoh9S9ljkCT8zKzUTTA3Biwsrxa/pMLl7yPM=
-X-Google-Smtp-Source: AKy350YUY1ReqHJOT7z0DA806c3GV+dlkDAcLbZdmJUpeKLYce3dM6MZm7Bi7vtEySOMlCMSPrH6x1xFWGYiPL+w734=
-X-Received: by 2002:a17:90a:4b42:b0:247:944d:b75e with SMTP id
- o2-20020a17090a4b4200b00247944db75emr13573601pjl.12.1682330420421; Mon, 24
- Apr 2023 03:00:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682330676; x=1684922676;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V2WsBy9D+hRfwOWkrxwmd3lLjMwOzTRUf9EB9Q/QdtQ=;
+        b=Eoy2odpzI/KQu80JPEOsCn2+24kWTGlAtHbP09JYs6L5qIrIwdQCG2iKefUZ/+yF0p
+         6yIyjQr2dq4HvJyZdeo4ZlvEjucFbRE2qw03aYdBZnNEPxpbHT/tS7l4xF5QF+5jFmB7
+         XEjPk5UmL9sMv1xjZE/79W2RompplRLD9+lw/mG9IKEYdwGjm+DOOE5pUFA/SXzeEc84
+         q3NMRx7CW5VEfIr+zIVVcaHfCxgsVdvuofneH5GNIn/D1ZS5Jhdff3aGOVqkFI/QEOfX
+         g8FyuMLuFLJ4yzpL+PsSjnYwO+loJ2RrhqyrkI4AFLbzm2YR5chlPmg7jUPUGsE86/Af
+         ihQg==
+X-Gm-Message-State: AAQBX9dzAy6sadsQFeBhLABcLW/W4ekFv55ELHLHLcS29Qr8LymcMaBY
+        G60AxEAf3SxBUOejD2+lCzrcvw==
+X-Google-Smtp-Source: AKy350bj/iADyzfE4iDotwQ7l2Rxbf6TbBeW1F3yNWU/4SiigkNJRyIeCg1s+Cm+cSH3JmiMZNXFWQ==
+X-Received: by 2002:a05:6a00:cd2:b0:627:6328:79f1 with SMTP id b18-20020a056a000cd200b00627632879f1mr18330546pfv.34.1682330676591;
+        Mon, 24 Apr 2023 03:04:36 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:1d00:1ac0:e499:fc5b])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056a00235200b0063d46ec5777sm7084425pfj.158.2023.04.24.03.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 03:04:36 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH v2] arm64: dts: mediatek: mt8192-asurada-hayato: Enable Bluetooth
+Date:   Mon, 24 Apr 2023 18:04:09 +0800
+Message-ID: <20230424100409.2992418-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-References: <20230423121232.1345909-1-aford173@gmail.com> <CGME20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2@eucas1p2.samsung.com>
- <20230423121232.1345909-6-aford173@gmail.com> <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
-In-Reply-To: <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 24 Apr 2023 05:00:09 -0500
-Message-ID: <CAHCN7x+vd-bP8NgS-cRrnm8ojq0kwUg6aXokJv6xSU7BrT04Vw@mail.gmail.com>
-Subject: Re: [PATCH V2 5/6] drm: bridge: samsung-dsim: Support non-burst mode
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
-        dario.binacchi@amarulasolutions.com, l.stach@pengutronix.de,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 3:25=E2=80=AFAM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> On 23.04.2023 14:12, Adam Ford wrote:
-> > The high-speed clock is hard-coded to the burst-clock
-> > frequency specified in the device tree.  However, when
-> > using devices like certain bridge chips without burst mode
-> > and varying resolutions and refresh rates, it may be
-> > necessary to set the high-speed clock dynamically based
-> > on the desired pixel clock for the connected device.
-> >
-> > This also removes the need to set a clock speed from
-> > the device tree for non-burst mode operation, since the
-> > pixel clock rate is the rate requested from the attached
-> > device like an HDMI bridge chip.  This should have no
-> > impact for people using burst-mode and setting the burst
-> > clock rate is still required for those users.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
->
-> This one breaks Exynos-5433 based TM2e board with a DSI panel.
+Hayato's Realtek WiFi/BT module has it's Bluetooth function wired to
+UART1.
 
-Marek S,
+Add and enable the relevant device nodes for it.
 
-Thank you for testing!  I knoiw there are several of us who appreciate
-your testing this since it's hard to know if something broke without
-hardware.  Is there any way you can tell me if the flag is set to
-enable MIPI_DSI_MODE_VIDEO_BURST?
-I was trying to be diligent about not breaking your boards, but
-without your boards, it's difficult.  The theory was that if
-MIPI_DSI_MODE_VIDEO_BURST is set and there is a burst clock set in the
-device tree, it would use the burst clock.
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Changes since v1:
+- Dropped unreferenced labels
+- Dropped GPIO line name comments
+- Fixed pinctrl node names
+- Dropped "output-enable" property
+- Added spacing between device nodes for consistency
 
-As a fall-back I could just simply check for the presence of the
-burst_clock_rate instead of both MIPI_DSI_MODE_VIDEO_BURST and
-burst_clock_rate.
+ .../dts/mediatek/mt8192-asurada-hayato-r1.dts | 81 +++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+index 43a823990a92..6e23428a3ed2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+@@ -40,9 +40,90 @@ CROS_STD_MAIN_KEYMAP
+ 	>;
+ };
+ 
++&pio {
++	bt_pins: bt-pins {
++		pins-bt-kill {
++			pinmux = <PINMUX_GPIO144__FUNC_GPIO144>;
++			output-low;
++		};
++
++		pins-bt-wake {
++			pinmux = <PINMUX_GPIO22__FUNC_GPIO22>;
++			bias-pull-up;
++		};
++
++		pins-ap-wake-bt {
++			pinmux = <PINMUX_GPIO168__FUNC_GPIO168>;
++			output-low;
++		};
++	};
++
++	uart1_pins: uart1-pins {
++		pins-rx {
++			pinmux = <PINMUX_GPIO94__FUNC_URXD1>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		pins-tx {
++			pinmux = <PINMUX_GPIO95__FUNC_UTXD1>;
++		};
++
++		pins-cts {
++			pinmux = <PINMUX_GPIO166__FUNC_UCTS1>;
++			input-enable;
++		};
++
++		pins-rts {
++			pinmux = <PINMUX_GPIO167__FUNC_URTS1>;
++		};
++	};
++
++	uart1_pins_sleep: uart1-sleep-pins {
++		pins-rx {
++			pinmux = <PINMUX_GPIO94__FUNC_GPIO94>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		pins-tx {
++			pinmux = <PINMUX_GPIO95__FUNC_UTXD1>;
++		};
++
++		pins-cts {
++			pinmux = <PINMUX_GPIO166__FUNC_UCTS1>;
++			input-enable;
++		};
++
++		pins-rts {
++			pinmux = <PINMUX_GPIO167__FUNC_URTS1>;
++		};
++	};
++};
++
+ &touchscreen {
+ 	compatible = "hid-over-i2c";
+ 	post-power-on-delay-ms = <10>;
+ 	hid-descr-addr = <0x0001>;
+ 	vdd-supply = <&pp3300_u>;
+ };
++
++&uart1 {
++	status = "okay";
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&uart1_pins>;
++	pinctrl-1 = <&uart1_pins_sleep>;
++	/delete-property/ interrupts;
++	interrupts-extended = <&gic GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH 0>,
++			      <&pio 94 IRQ_TYPE_EDGE_FALLING>;
++
++	bluetooth {
++		compatible = "realtek,rtl8822cs-bt";
++		pinctrl-names = "default";
++		pinctrl-0 = <&bt_pins>;
++
++		enable-gpios = <&pio 144 GPIO_ACTIVE_HIGH>;
++		device-wake-gpios = <&pio 168 GPIO_ACTIVE_HIGH>;
++		host-wake-gpios = <&pio 22 GPIO_ACTIVE_LOW>;
++	};
++};
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
->
-> > ---
-> >   drivers/gpu/drm/bridge/samsung-dsim.c | 17 ++++++++++++++---
-> >   1 file changed, 14 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/br=
-idge/samsung-dsim.c
-> > index f165483d5044..cea847b8e23c 100644
-> > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> > @@ -657,11 +657,21 @@ static unsigned long samsung_dsim_set_pll(struct =
-samsung_dsim *dsi,
-> >
-> >   static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
-> >   {
-> > -     unsigned long hs_clk, byte_clk, esc_clk;
-> > +     unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
-> >       unsigned long esc_div;
-> >       u32 reg;
-> > +     struct drm_display_mode *m =3D &dsi->mode;
-> > +     int bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
-> > +
-> > +     /* m->clock is in KHz */
-> > +     pix_clk =3D m->clock * 1000;
-> > +
-> > +     /* Use burst_clk_rate for burst mode, otherwise use the pix_clk *=
-/
-> > +     if ((dsi->mode_flags & MIPI_DSI_MODE_VIDEO_BURST) && dsi->burst_c=
-lk_rate)
-
-Would you be willing to test this if this line just read:
-
-              if (dsi->burst_clk_rate)
-
-That would tell me if my fallback idea works.
-
-Thank you,
-
-adam
-
-> > +             hs_clk =3D samsung_dsim_set_pll(dsi, dsi->burst_clk_rate)=
-;
-> > +     else
-> > +             hs_clk =3D samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_clk=
- * bpp, dsi->lanes));
-> >
-> > -     hs_clk =3D samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
-> >       if (!hs_clk) {
-> >               dev_err(dsi->dev, "failed to configure DSI PLL\n");
-> >               return -EFAULT;
-> > @@ -1800,10 +1810,11 @@ static int samsung_dsim_parse_dt(struct samsung=
-_dsim *dsi)
-> >                       return PTR_ERR(pll_clk);
-> >       }
-> >
-> > +     /* If it doesn't exist, use pixel clock instead of failing */
-> >       ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequ=
-ency",
-> >                                      &dsi->burst_clk_rate);
-> >       if (ret < 0)
-> > -             return ret;
-> > +             dsi->burst_clk_rate =3D 0;
-> >
-> >       ret =3D samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequen=
-cy",
-> >                                      &dsi->esc_clk_rate);
->
-> Best regards
-> --
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->
