@@ -2,121 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C605B6ED8E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AE56ED8F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjDXXih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S232829AbjDXXrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjDXXie (ORCPT
+        with ESMTP id S232060AbjDXXrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:38:34 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E2F49E5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:38:32 -0700 (PDT)
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id BBAE88029C62
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 23:38:31 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 01FDB10040639
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 23:38:30 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id r5lOpASgYIYZar5lOpvFZH; Mon, 24 Apr 2023 23:38:30 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Q68XX66a c=1 sm=1 tr=0 ts=644712f6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fbc7EaZ9IEMMzL7cNU7E/iujHMBL13J7AXCMPZ7HnkM=; b=sTK4XmyWO+F2JzVuRC+av0Ey0Y
-        Qsqv/iGrhjsWJ/Ok8iXtL7H5aA0CgpE6VPmSJP4FYPg1AjQtRDOCmErqZQ9c4ErVpFLjUMB7EWfl5
-        E7nqKLusIOlSAcb2jHt24NE8Y7qvBPDN2ek3H71FZShTBL3gXMDf1VbwF5WDFCMze54KZWRM3T7E5
-        RlR7WJf78ehN2n3/B+PQbaJA8VuL8JWeKenAIkDx6T/SPznbGA9AQkFvHz7rfnlkAcbwE0JfUhj3H
-        MqSpBKASaWdZUrDqv3I1zyCm5AeqoV+oqdC1TKyYJOS9UEE3+Q1dQmfz0yszavztfeiOJMHkQD1cZ
-        AhSOFvhw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35994 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pr5lO-003y1I-1q;
-        Mon, 24 Apr 2023 17:38:30 -0600
-Subject: Re: [PATCH 6.2 000/110] 6.2.13-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230424131136.142490414@linuxfoundation.org>
-In-Reply-To: <20230424131136.142490414@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <d7374363-e46f-4fed-ae05-6535b6f37bbc@w6rz.net>
-Date:   Mon, 24 Apr 2023 16:38:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 24 Apr 2023 19:47:20 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCB111A;
+        Mon, 24 Apr 2023 16:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682380038; x=1713916038;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aK/On8LhJ5PZbxxIOlfLlJ0Lc3VgGWOJ7H6mrKcUX3I=;
+  b=GA/JyIl4Q4VwDeUhfroMYs1R3KnLPcgqwr/gphnKS8dXhNYw0i2656vg
+   zZcfk251isd6XFFdKz8af7xFLA5TjbLn10HHPtxHfTqDaZ1Vo6qMsQlcE
+   9IvzgASnpHfg4rJOaYq1vaWPh79fTIVJarLOPltPar3lKXCPmQo2UyzMk
+   XGaDfODVKWMUqvGf/YhNS8KlJltydV8Hk8TVCalN8jxSOuzc9UHbl5m9i
+   AMjosnGUlopTxBMYEOMLsSsSTXHXMit8fgiX94ywm1mQytOceqnTGOyuf
+   yazSDApG6pCPt7y6qxAOkAKYWqBhvtOnwLZxD3dHJLG1FNITBkrUVEbED
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="335499666"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="335499666"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 16:47:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="782611127"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="782611127"
+Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.251.8.47]) ([10.251.8.47])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 16:47:13 -0700
+Message-ID: <97260e8b-1892-49a5-3792-0e3c28378fc0@linux.intel.com>
+Date:   Mon, 24 Apr 2023 16:47:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v4 2/3] PCI/AER: Disable AER interrupt on suspend
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
+Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230424055249.460381-1-kai.heng.feng@canonical.com>
+ <20230424055249.460381-2-kai.heng.feng@canonical.com>
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pr5lO-003y1I-1q
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35994
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230424055249.460381-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 6:16 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.13 release.
-> There are 110 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Tested-by: Ron Economos <re@w6rz.net>
+On 4/23/23 10:52 PM, Kai-Heng Feng wrote:
+> PCIe service that shares IRQ with PME may cause spurious wakeup on
+> system suspend.
+> 
+> PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
+> that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
+> (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
+> much here to disable AER during system suspend.
+> 
+> This is very similar to previous attempts to suspend AER and DPC [1],
+> but with a different reason.
+> 
+> [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216295
+> 
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
 
+IIUC, you encounter AER errors during the suspend/resume process, which
+results in AER IRQ. Because AER and PME share an IRQ, it is regarded as a
+spurious wake-up IRQ. So to fix it, you want to disable AER reporting,
+right?
+
+It looks like it is harmless to disable the AER during the suspend/resume
+path. But, I am wondering why we get these errors? Did you check what errors
+you get during the suspend/resume path? Are these errors valid?
+
+
+>  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 1420e1f27105..9c07fdbeb52d 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
+>  	return 0;
+>  }
+>  
+> +static int aer_suspend(struct pcie_device *dev)
+> +{
+> +	struct aer_rpc *rpc = get_service_data(dev);
+> +	struct pci_dev *pdev = rpc->rpd;
+> +
+> +	aer_disable_irq(pdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aer_resume(struct pcie_device *dev)
+> +{
+> +	struct aer_rpc *rpc = get_service_data(dev);
+> +	struct pci_dev *pdev = rpc->rpd;
+> +
+> +	aer_enable_irq(pdev);
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+>   * @dev: pointer to Root Port, RCEC, or RCiEP
+> @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver = {
+>  	.service	= PCIE_PORT_SERVICE_AER,
+>  
+>  	.probe		= aer_probe,
+> +	.suspend	= aer_suspend,
+> +	.resume		= aer_resume,
+>  	.remove		= aer_remove,
+>  };
+>  
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
