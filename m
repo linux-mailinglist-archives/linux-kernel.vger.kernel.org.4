@@ -2,88 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CF76EC5C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3CC6EC5C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjDXF5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 01:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S230342AbjDXF5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 01:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjDXF5L (ORCPT
+        with ESMTP id S231344AbjDXF5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 01:57:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535D3A99;
-        Sun, 23 Apr 2023 22:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=edf2YE6tOjy5o639pmoNCDDnqNTZQ8NPmup4HBvbC60=; b=qBKmlBP0RbumDgdRWERGFEVbSD
-        kDf8Kr5lk5aB2+nWak9xt17TfHD2PupAuPb1mUJmwaPm/dURvhYPVWSPaaOFCU9vr679O7rjTbCXX
-        FY14jwJ6foFME5jmhn6hiaV5cvLy3w+4wiA9HOCqY9FKPUwzVOJnoZoumJfKXe+j3dCSf+I4DhyyN
-        meS9IcfszZYuw8bakpryb8WeNnXvLqGFAShnlXlum+ZdAx1uWAgWfJ88JFAJBehhF7KCT0OC/pGsx
-        saWH2fGCCZFbpsAwVDoLKGMeyxz9Qo8euhIsqOiC8WZE42QMSALorud5SvHI394LQ9T2HdWzjtMUM
-        uj/muRvg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pqpAv-00FPys-1e;
-        Mon, 24 Apr 2023 05:55:45 +0000
-Date:   Sun, 23 Apr 2023 22:55:45 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, axboe@kernel.dk,
-        agk@redhat.com, snitzer@kernel.org, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
-        hch@infradead.org, djwong@kernel.org, minchan@kernel.org,
-        senozhatsky@chromium.org, patches@lists.linux.dev,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org, hare@suse.de, p.raghav@samsung.com,
-        da.gomez@samsung.com, kbusch@kernel.org
-Subject: Re: [PATCH 3/5] iomap: simplify iomap_init() with PAGE_SECTORS
-Message-ID: <ZEYZ4ScVDXviFJ/J@infradead.org>
-References: <20230421195807.2804512-1-mcgrof@kernel.org>
- <20230421195807.2804512-4-mcgrof@kernel.org>
- <ZELuiBNNHTk4EdxH@casper.infradead.org>
- <ZEMH9h/cd9Cp1t+X@bombadil.infradead.org>
- <20230421223420.GH3223426@dread.disaster.area>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421223420.GH3223426@dread.disaster.area>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 24 Apr 2023 01:57:10 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC49B3599;
+        Sun, 23 Apr 2023 22:56:35 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Q4ZB038G5z4y3PL;
+        Mon, 24 Apr 2023 13:55:52 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 33O5tib1097567;
+        Mon, 24 Apr 2023 13:55:44 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 24 Apr 2023 13:55:46 +0800 (CST)
+Date:   Mon, 24 Apr 2023 13:55:46 +0800 (CST)
+X-Zmail-TransId: 2b03644619e25da-ae8a1
+X-Mailer: Zmail v1.0
+Message-ID: <202304241355464262541@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <davem@davemloft.net>, <willemdebruijn.kernel@gmail.com>
+Cc:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhang.yunkai@zte.com.cn>, <yang.yang29@zte.com.cn>,
+        <xu.xin16@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjNdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfcng6IEZpeCB2ZXJpZnR5IGV4Y2VwdGlvbnM=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 33O5tib1097567
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 644619E8.002/4Q4ZB038G5z4y3PL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 08:34:20AM +1000, Dave Chinner wrote:
-> > 
-> > -	return bioset_init(&iomap_ioend_bioset, 4 * (PAGE_SIZE / SECTOR_SIZE),
-> > +	return bioset_init(&iomap_ioend_bioset, 4 * PAGE_SECTORS,
-> 
-> Yes, please.
-> 
-> > The shift just seemed optimal if we're just going to change it.
-> 
-> Nope, it's just premature optimisation at the expense of
-> maintainability. The compiler will optimise the multiplication into
-> shifts if that is the fastest way to do it for the given
-> architecture the code is being compiled to.
+From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
 
-We still had cases of the compiler not doing obvious
-multiplication/division to shift conversion lately.  That being said:
+The verification function of this test case is likely to encounter the
+following error, which may confuse users. The problem is easily
+reproducible in the latest kernel.
 
- 1) this is an initialization path, no one actually cares
- 2) we're dealing with constants here, and compilers are really good
-    at constant folding
+Environment A, the sender:
+bash# udpgso_bench_tx -l 4 -4 -D "$IP_B"
+udpgso_bench_tx: write: Connection refused
 
-so yes, this should be using the much more readable version.
+Environment B, the receiver:
+bash# udpgso_bench_rx -4 -G -S 1472 -v
+udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
 
+If the packet is captured, you will see:
+Environment A, the sender:
+bash# tcpdump -i eth0 host "$IP_B" &
+IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
+IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
+IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+
+Environment B, the receiver:
+bash# tcpdump -i eth0 host "$IP_B" &
+IP $IP_A.41025 > $IP_B.8000: UDP, length 7360
+IP $IP_A.41025 > $IP_B.8000: UDP, length 14720
+IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+
+In one test, the verification data is printed as follows:
+abcd...xyz           | 1...
+..                  |
+abcd...xyz           |
+abcd...opabcd...xyz  | ...1472... Not xyzabcd, messages are merged
+..                  |
+
+The issue is that the test on receive for expected payload pattern 
+{AB..Z}+ fail for GRO packets if segment payload does not end on a Z.
+
+The issue still exists when using the GRO with -G, but not using the -S
+to obtain gsosize. Therefore, a print has been added to remind users.
+
+Changes in v3:
+- Simplify description and adjust judgment order.
+
+Changes in v2:
+- Fix confusing descriptions.
+
+Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+Reviewed-by: Xu Xin (CGEL ZTE) <xu.xin16@zte.com.cn>
+Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
+Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
+---
+ tools/testing/selftests/net/udpgso_bench_rx.c | 34 +++++++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
+index f35a924d4a30..3ad18cbc570d 100644
+--- a/tools/testing/selftests/net/udpgso_bench_rx.c
++++ b/tools/testing/selftests/net/udpgso_bench_rx.c
+@@ -189,26 +189,45 @@ static char sanitized_char(char val)
+ 	return (val >= 'a' && val <= 'z') ? val : '.';
+ }
+
+-static void do_verify_udp(const char *data, int len)
++static void do_verify_udp(const char *data, int start, int len)
+ {
+-	char cur = data[0];
++	char cur = data[start];
+ 	int i;
+
+ 	/* verify contents */
+ 	if (cur < 'a' || cur > 'z')
+ 		error(1, 0, "data initial byte out of range");
+
+-	for (i = 1; i < len; i++) {
++	for (i = start + 1; i < start + len; i++) {
+ 		if (cur == 'z')
+ 			cur = 'a';
+ 		else
+ 			cur++;
+
+-		if (data[i] != cur)
++		if (data[i] != cur) {
++			if (cfg_gro_segment && !cfg_expected_gso_size)
++				error(0, 0, "Use -S to obtain gsosize to guide "
++					"splitting and verification.");
++
+ 			error(1, 0, "data[%d]: len %d, %c(%hhu) != %c(%hhu)\n",
+ 			      i, len,
+ 			      sanitized_char(data[i]), data[i],
+ 			      sanitized_char(cur), cur);
++		}
++	}
++}
++
++static void do_verify_udp_gro(const char *data, int len, int segment_size)
++{
++	int start = 0;
++
++	while (len - start > 0) {
++		if (len - start > segment_size)
++			do_verify_udp(data, start, segment_size);
++		else
++			do_verify_udp(data, start, len - start);
++
++		start += segment_size;
+ 	}
+ }
+
+@@ -268,7 +287,12 @@ static void do_flush_udp(int fd)
+ 			if (ret == 0)
+ 				error(1, errno, "recv: 0 byte datagram\n");
+
+-			do_verify_udp(rbuf, ret);
++			if (!cfg_gro_segment)
++				do_verify_udp(rbuf, 0, ret);
++			else if (gso_size > 0)
++				do_verify_udp_gro(rbuf, ret, gso_size);
++			else
++				do_verify_udp_gro(rbuf, ret, ret);
+ 		}
+ 		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
+ 			error(1, 0, "recv: bad gso size, got %d, expected %d "
+-- 
+2.15.2
