@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1995D6EC7BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4136EC7C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjDXIRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S231387AbjDXIUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjDXIRl (ORCPT
+        with ESMTP id S230245AbjDXIUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:17:41 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D91110
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:17:40 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763c3442563so62058639f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:17:40 -0700 (PDT)
+        Mon, 24 Apr 2023 04:20:32 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DD610C;
+        Mon, 24 Apr 2023 01:20:31 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-246f856d751so2967758a91.0;
+        Mon, 24 Apr 2023 01:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682324431; x=1684916431;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UPel+0qwmJUcqYks5xvHkpCgxM5ZV0cSQB2llgEFPmk=;
+        b=a+uON3acHnhWWUbX2uWHWCBnxkDxdzZ4OY1uSXkvu/x6k46fp3RQ1NwkXM7RPTu6BE
+         PzZX2haJrXVhMzHhGQpNpS65UOnKvmFcoyaamy0bRocsffnWkCU0etB1P2h0Cz6oDH0S
+         TaIIzOYJb4GG7DRSF8OOXtdh+4ax7PzPdUf2r0SjouOu8aSQ7C72FksFjpDZBgjjqKTf
+         sRqNwNIUC2CYf5ON6RKfb9AokWMaCdAOojLS0cN5rOl/G6HUUMH+HI7eGE+XR7lsavjn
+         JwcO43uTX1qM/WVmBPVVmjqf5adq4eesEeHk3eyOC2YRHxwQ8RNctN2JP4EThgZ390ra
+         uoHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682324260; x=1684916260;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tJ6Cu4igdI/nmIrxohYpGuE1NNYUq7Nw0Hy6ZHEHguc=;
-        b=P/2EtaX1tKy++WGan7XiUCz+n/pZmra3Uo6y4kKJus4sOLZJLs3M//x73DkbkqfHK0
-         mIF2p+cW97iAv0qgYDRKurO7G8PRoCm93k739nmpc19WJv8ooU+rYRpTKy1D9TzdABTV
-         PXnI/4+9XlvkORHo54tXqJYbqEve9+dA2Nyu3unhdf3wfLFYXdGu4gQs02o+9DNsHXac
-         JPDtKg/p89QD8c8X+Ghao/QMXu2ZLtDQiko/HhqFjRBMpT2UroZn2gXpfDdWa3GGRNtK
-         sm90IVtJ2ufx7KcSPAnm2gojDUMeTO/oiO+TwG25UyZZhYfPxsETWsjCI3SX5cZvoNWe
-         Ajkw==
-X-Gm-Message-State: AAQBX9dIB9/9bb9kS3xCciylTU6L3I8pT10R4CZIidktgp8ohgKWXsoJ
-        h5R0gCya4uJFpsBhs+Y11ip6HzT6GjnPD2XuVo9dx7b3Tngf
-X-Google-Smtp-Source: AKy350aFzHMV6VFIzD2FSXRqIbFUZLma0gVQ8G9LxOuITHlZvqMWGarEKa80XNdr3DLueyye9FgXQpw6ZKRr1gQItXCIHgxAcEYm
+        d=1e100.net; s=20221208; t=1682324431; x=1684916431;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UPel+0qwmJUcqYks5xvHkpCgxM5ZV0cSQB2llgEFPmk=;
+        b=A3wGvJ4xUiYXOe7TDOzfArKPQ7XwxFiv1ginMhPRKCtuw7kyA1IuHxiPD0v/xK1SfS
+         wSCqno4pb3rIrY0CSv7m9OyM73Oqp6noMaUQM/eQFGDt8Lzq5bjdqEKRJRtIXL4Pu6wZ
+         7uIA55aDbwKlUCJATqVrctHJ4KOocFZmXwImGqqwb9E1u0d7smfJLY5+g+nchNJo72a8
+         wect5mhtCbI5ZX7VAcgBKG/IPo/opQLrWr3CgO5robivySrlit5H0IJjq2aw2jdKapPs
+         ifGmcs1IW1EalfDM3nVHkonWn21aSxKnJjcKxZ1mitmLx+njvzrrLPuAXGnseaPd24lu
+         18Kw==
+X-Gm-Message-State: AAQBX9d+S9U9uPrGfxUTzGHovJVgyN0chBKxbStu+naohpHe3vUxlaIz
+        LKtW9tXC1x4DTfjydNSBGfGWLNKStXrnETDKw9A=
+X-Google-Smtp-Source: AKy350YfpxYkSpoKB+T3acIYkkeF7g6IpyVT5u2rKBjSrnk4treer5PatKrSnsW1dIYvmTPLG5uOaGueVwKszLtZuso=
+X-Received: by 2002:a17:90a:ca90:b0:23f:b177:9082 with SMTP id
+ y16-20020a17090aca9000b0023fb1779082mr11601147pjt.49.1682324431102; Mon, 24
+ Apr 2023 01:20:31 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2210:b0:760:e9b6:e6de with SMTP id
- n16-20020a056602221000b00760e9b6e6demr3854730ion.0.1682324259846; Mon, 24 Apr
- 2023 01:17:39 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 01:17:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e7c6d205fa10a3cd@google.com>
-Subject: [syzbot] [afs?] [net?] KCSAN: data-race in rxrpc_send_data / rxrpc_set_call_completion
-From:   syzbot <syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marc.dionne@auristor.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20230420121615.967487-1-d-gole@ti.com> <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
+In-Reply-To: <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Mon, 24 Apr 2023 10:20:20 +0200
+Message-ID: <CAOiHx==7TV3879ADbiWGbHT0NysNck4FUQXkXEocjkD2BzEoRA@mail.gmail.com>
+Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional compilation
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Dhruva Gole <d-gole@ti.com>, Mark Brown <broonie@kernel.org>,
+        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 21 Apr 2023 at 19:17, Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 4/20/23 05:16, Dhruva Gole wrote:
+> > Get rid of conditional compilation based on CONFIG_PM_SLEEP because
+> > it may introduce build issues with certain configs where it maybe disabled
+> > This is because if above config is not enabled the suspend-resume
+> > functions are never part of the code but the bcm63xx_spi_pm_ops struct
+> > still inits them to non-existent suspend-resume functions.
+> >
+> > Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
+> >
+> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> > ---
+> >   drivers/spi/spi-bcm63xx.c | 2 --
+> >   1 file changed, 2 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+> > index 96633a0051b1..99395932074c 100644
+> > --- a/drivers/spi/spi-bcm63xx.c
+> > +++ b/drivers/spi/spi-bcm63xx.c
+> > @@ -617,7 +617,6 @@ static void bcm63xx_spi_remove(struct platform_device *pdev)
+> >       clk_disable_unprepare(bs->clk);
+> >   }
+> >
+> > -#ifdef CONFIG_PM_SLEEP
+> >   static int bcm63xx_spi_suspend(struct device *dev)
+>
+> Don't we need a __maybe_unused here?
 
-syzbot found the following issue on:
+Actually the premise of this patch is wrong, and should rather be reverted.
 
-HEAD commit:    148341f0a2f5 Merge tag 'vfs.misc.fixes.v6.3-rc6' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14a62269c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=54d63ee086ae78d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=ebc945fdb4acd72cba78
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+The bcm63xx_spi_pm_ops struct is initialized with
+SET_SYSTEM_SLEEP_PM_OPS(), which is defined as
 
-Unfortunately, I don't have any reproducer for this issue yet.
+#ifdef CONFIG_PM_SLEEP
+#define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+#else
+#define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+#endif
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1c557f92a6e1/disk-148341f0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f2c85210e1ce/vmlinux-148341f0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b019d0447709/bzImage-148341f0.xz
+so for !CONFIG_PM_SLEEP it won't initialize the struct at all (or
+reference non-existing functions), and therefore there will be no
+build issues.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KCSAN: data-race in rxrpc_send_data / rxrpc_set_call_completion
-
-write to 0xffff888159cf3c50 of 4 bytes by task 25673 on cpu 1:
- rxrpc_set_call_completion+0x71/0x1c0 net/rxrpc/call_state.c:22
- rxrpc_send_data_packet+0xba9/0x1650 net/rxrpc/output.c:479
- rxrpc_transmit_one+0x1e/0x130 net/rxrpc/output.c:714
- rxrpc_decant_prepared_tx net/rxrpc/call_event.c:326 [inline]
- rxrpc_transmit_some_data+0x496/0x600 net/rxrpc/call_event.c:350
- rxrpc_input_call_event+0x564/0x1220 net/rxrpc/call_event.c:464
- rxrpc_io_thread+0x307/0x1d80 net/rxrpc/io_thread.c:461
- kthread+0x1ac/0x1e0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-read to 0xffff888159cf3c50 of 4 bytes by task 25672 on cpu 0:
- rxrpc_send_data+0x29e/0x1950 net/rxrpc/sendmsg.c:296
- rxrpc_do_sendmsg+0xb7a/0xc20 net/rxrpc/sendmsg.c:726
- rxrpc_sendmsg+0x413/0x520 net/rxrpc/af_rxrpc.c:565
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg net/socket.c:747 [inline]
- ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
- ___sys_sendmsg net/socket.c:2555 [inline]
- __sys_sendmmsg+0x263/0x500 net/socket.c:2641
- __do_sys_sendmmsg net/socket.c:2670 [inline]
- __se_sys_sendmmsg net/socket.c:2667 [inline]
- __x64_sys_sendmmsg+0x57/0x60 net/socket.c:2667
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0x00000000 -> 0xffffffea
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 25672 Comm: syz-executor.5 Not tainted 6.3.0-rc5-syzkaller-00005-g148341f0a2f5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Regards,
+Jonas
