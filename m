@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418986ECFED
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC636ECFF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjDXOH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
+        id S231667AbjDXOHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjDXOH1 (ORCPT
+        with ESMTP id S231792AbjDXOHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:07:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43C1B6181;
-        Mon, 24 Apr 2023 07:07:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF52AD75;
-        Mon, 24 Apr 2023 07:08:09 -0700 (PDT)
-Received: from [10.57.21.60] (unknown [10.57.21.60])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5DC93F64C;
-        Mon, 24 Apr 2023 07:07:24 -0700 (PDT)
-Message-ID: <07ee0cf7-a5c2-f87a-d627-8dd8fb082345@arm.com>
-Date:   Mon, 24 Apr 2023 15:07:20 +0100
+        Mon, 24 Apr 2023 10:07:48 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CE3E83DC;
+        Mon, 24 Apr 2023 07:07:40 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:56046.1777299264
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 5900410026E;
+        Mon, 24 Apr 2023 22:07:36 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id b96101ecef424972bd508052d9d47069 for emil.l.velikov@gmail.com;
+        Mon, 24 Apr 2023 22:07:38 CST
+X-Transaction-ID: b96101ecef424972bd508052d9d47069
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <aaad7121-538b-e2ad-8334-2682a120ed9b@189.cn>
+Date:   Mon, 24 Apr 2023 22:07:35 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [regression] Bug 217218 - Trying to boot Linux version 6-2.2
- kernel with Marvell SATA controller 88SE9235
-Content-Language: en-GB
-To:     Jason Adriaanse <jason_a69@yahoo.co.uk>, hch@lst.de
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <20230416065503.GB6410@lst.de>
- <fc9f4cef-9426-c9d2-3c2c-3ce12fe5f6c3@yahoo.co.uk>
- <5f37b0b0-6cb5-b210-a894-d1e91976126e@arm.com>
- <2a699a99-545c-1324-e052-7d2f41fed1ae@yahoo.co.uk>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <2a699a99-545c-1324-e052-7d2f41fed1ae@yahoo.co.uk>
+Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
+ controller
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nathan@kernel.org, linux-media@vger.kernel.org
+References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
+ <20230403171304.2157326-3-suijingfeng@loongson.cn>
+ <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-24 14:44, Jason Adriaanse wrote:
-> I took out "iommu=soft" and the server failed to boot, so yes it does 
-> break.
-> 
-> The first error was
-> ata7.00: Failed to IDENTIFY (INIT_DEV_PARAMS failed , err_mask=0x80)
+Hi,
 
-OK, great, that confirms the underlying issue existed all along, so the 
-regression is only a change in who wins a fight between certain 
-conflicting command-line arguments, which is arguably not so critical.
+On 2023/4/4 22:10, Emil Velikov wrote:
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/loongson/lsdc_debugfs.c
+>> +void lsdc_debugfs_init(struct drm_minor *minor)
+>> +{
+>> +#ifdef CONFIG_DEBUG_FS
+>> +       drm_debugfs_create_files(lsdc_debugfs_list,
+>> +                                ARRAY_SIZE(lsdc_debugfs_list),
+>> +                                minor->debugfs_root,
+>> +                                minor);
+>> +#endif
+>> +}
+> Should probably build the file when debugfs is enabled and provide
+> no-op stub in the header. See nouveau for an example.
+>
+>
+It seem that the drm core already done this for us, are we really need 
+those #ifdef guard anymore?
 
-The rest of the evidence points to 88SE9235 wanting the same phantom 
-function quirk as most other Marvell controllers, since although it's 
-apparently been half-fixed such that DMA for two of the ports is being 
-correctly emitted from function 0 - given that you say two of the disks 
-*are* detected OK - the other two are still claiming to be function 1 
-after all.
+I remove all of the  #ifdef CONFIG_DEBUG_FS in my program and disable 
+the debugfs option in menuconfig
 
-Thanks,
-Robin.
+my driver compile without any error.
 
-> On 24/04/2023 21:20, Robin Murphy wrote:
->> On 2023-04-22 07:25, Jason Adriaanse wrote:
->>> Hi Christoph,
->>>
->>> Sorry for my late reply, I have been on the road.
->>>
->>> So, if I boot with
->>> intel_iommu=off
->>> Then the server boots fine..although that is not a solution because I 
->>> need Intel iommu for virtualisation.
->>>
->>> Also, I build all my kernels with CONFIG_INTEL_IOMMU=y
->>>
->>
->> If you boot 5.15 *without* the "iommu=soft" argument, just 
->> "intel_iommu=on", does that also break?
->>
->> Robin.
