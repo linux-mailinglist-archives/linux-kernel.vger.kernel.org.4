@@ -2,211 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DECF6EC38F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297C86EC390
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjDXCXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 22:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S230211AbjDXCZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 22:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXCXN (ORCPT
+        with ESMTP id S229548AbjDXCZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 22:23:13 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A5AE60;
-        Sun, 23 Apr 2023 19:23:11 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a50cb65c92so32842395ad.0;
-        Sun, 23 Apr 2023 19:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682302991; x=1684894991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3S0sFVoFyu2eJh9f1TXlvcKTjZ/nv79PKMNTv2RFnZY=;
-        b=dOXATqLaT7rQ1M4ciT7u3JXsPfBIfBRRdEiYC15lo5pMdt+5qmBCy0TZyy7UdCQetF
-         5MMtg5nKw/QuJlfVb52QI+t4IpQPOyyrQcV7Zv5JT+0bdCKxcSEuCeSGOuE+cEKZFovq
-         Aku8IA4l8EAvgTt4NoLvhL1tXwuA8/tGRw93AyN8UqPzXeqdNbSMfiQ3s0KnTuG5OakJ
-         OjBasQmhsfqtPh8uwfPXkdPfnzEcPxg4wCg7Cc3Qz/jXcdpSBSzNmnxmDQ6nDD9l49ul
-         fbrPbUsESw3FhrHpBlgHoae/kZTCHs01K6qxQ0ExhH1DtE3OG8r24dk80EnTa7SZmeIS
-         vmMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682302991; x=1684894991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3S0sFVoFyu2eJh9f1TXlvcKTjZ/nv79PKMNTv2RFnZY=;
-        b=RA2lY4iBUH0WKvOr8kxUap7kz69jPSEvRmanJuPf+E1IZaagYLj6p3zc3a0My/G+ON
-         GzDI2v4lY9e6MUAo4bJDU7XbAgccHyi4E0uML6zz1GWrbjGoxEwI+IBurgR7mptfhSaW
-         Ep0/YP06p6bEg97FB1MQfSZLxmzSrssoWr4qkE5jQVuOpaaJYfdQu0CIphJEymgdIugK
-         2kuMQ5f2BF4nO9+r3yy3WwiLBpE4u6ZXB4ShvOdjsWgQWdel8dZG4HncPyCLsZL+FAWJ
-         uMhcVEWak7V5BaseyHsHecFmuEmyf7QRildo8JaxxVUnTn0XkfoWmK6qrf3u0294zF0X
-         nqgQ==
-X-Gm-Message-State: AAQBX9ffXhHyZNEC+qHPgHcCJITsjsBKCm0Vm8WMZuOvQnu3v7R3DGP2
-        Mn6J2iXokbzbgV5bBTWmblo6gO4nsPYnA2CSWKE=
-X-Google-Smtp-Source: AKy350ZEgpH9cb1IfDjHHfT7SEB07X/oaT+/CXJHGA6AUie2M0cMMp+VyS3ptYN+5vgwiuejw4NApCesJZ2MYx69omI=
-X-Received: by 2002:a17:903:2987:b0:1a6:bb7b:7a40 with SMTP id
- lm7-20020a170903298700b001a6bb7b7a40mr12123123plb.64.1682302990569; Sun, 23
- Apr 2023 19:23:10 -0700 (PDT)
+        Sun, 23 Apr 2023 22:25:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8930B1FCF
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682303130; x=1713839130;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=mFgWMHVptgTptbXo4KBicjciW2/3ffbL7luHMBnQ60k=;
+  b=aYlCFLtxZIPzxsiEPml4V/THyrX9WluRcB34+7yNXt/uAFgF9dOGn1Dq
+   MfulzR5BLD7svvEdom+htWVw1b8ohH+rAgC437apDQGGS1YMzNfVpygdR
+   n96JY/g+TJcdqsbi9EkL4H3ia2VwV2I330v1BPdkDPg1vjZFJEasQwBBm
+   IIUPRmkISq0c9L68/2qDLPSsyEeUUtq0Lz2B+RkCq/WSfM0c4aOL5axr5
+   KXkuiuaaV6zhh8icqaBurWOdS38UBHoPtOpZyWYxU7C9yTOfs3eS/v7LV
+   btxR7tSWqmeKwFiQsTj2hz1T0RNdOgxwxnb5SiLVViIeJw/j1mWvfV41N
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="325944835"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="325944835"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 19:25:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="670343291"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="670343291"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 19:25:27 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     <akpm@linux-foundation.org>, <rppt@kernel.org>,
+        <mgorman@techsingularity.net>, <vbabka@suse.cz>, <mhocko@suse.com>,
+        <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
+ possible hole in __pageblock_pfn_to_page()
+References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
+        <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
+Date:   Mon, 24 Apr 2023 10:24:17 +0800
+In-Reply-To: <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
+        (Baolin Wang's message of "Sun, 23 Apr 2023 18:59:11 +0800")
+Message-ID: <874jp6kofi.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230423212656.1381002-1-aford173@gmail.com> <20230424004706.GL21943@pendragon.ideasonboard.com>
-In-Reply-To: <20230424004706.GL21943@pendragon.ideasonboard.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 23 Apr 2023 21:22:59 -0500
-Message-ID: <CAHCN7xKM38RgFW9DAc9co_xcC7NjfymcVEwzu3LMwgYxytCpLA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mn: Enable CSI and ISI Nodes
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 7:46=E2=80=AFPM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Adam,
->
-> Thank you for the patch.
->
-> On Sun, Apr 23, 2023 at 04:26:55PM -0500, Adam Ford wrote:
-> > The CSI in the imx8mn is the same as what is used in the imx8mm,
-> > but it's routed to the ISI on the Nano. Add both the ISI and CSI
-> > nodes, and pointing them to each other. Since the CSI capture is
-> > dependent on an attached camera, mark both ISI and CSI as
-> > disabled by default.
->
-> I'd then write the subject line as "Add CSI and ISI nodes".
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-That makes sense, especially since I disabled them by default.
+> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
+> checks whether the given zone contains holes, and uses pfn_to_online_page()
+> to validate if the start pfn is online and valid, as well as using pfn_valid()
+> to validate the end pfn.
 >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boo=
-t/dts/freescale/imx8mn.dtsi
-> > index 8be8f090e8b8..102550b41f22 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > @@ -1104,6 +1104,24 @@ dsim_from_lcdif: endpoint {
-> >                               };
-> >                       };
-> >
-> > +                     isi: isi@32e20000 {
-> > +                             compatible =3D "fsl,imx8mn-isi";
-> > +                             reg =3D <0x32e20000 0x100>;
+> However, the __pageblock_pfn_to_page() function may return non-NULL even
+> if the end pfn of a pageblock is in a memory hole in some situations. For
+> example, if the pageblock order is MAX_ORDER, which will fall into 2
+> sub-sections, and the end pfn of the pageblock may be hole even though
+> the start pfn is online and valid.
 >
-> The i.MX8MN reference manual documents the ISI registers block size to
-> be 64kB. Should we use the same here, even if all the registers we need
-> are within the first 256 bytes ?
+> This did not break anything until now, but the zone continuous is fragile
+> in this possible scenario. So as previous discussion[1], it is better to
+> add some comments to explain this possible issue in case there are some
+> future pfn walkers that rely on this.
+>
+> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
+>
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-I can do that.
->
-> > +                             interrupts =3D <GIC_SPI 16 IRQ_TYPE_LEVEL=
-_HIGH>;
-> > +                             clocks =3D <&clk IMX8MN_CLK_DISP_AXI_ROOT=
->,
-> > +                                      <&clk IMX8MN_CLK_DISP_APB_ROOT>;
-> > +                             clock-names =3D "axi", "apb";
-> > +                             fsl,blk-ctrl =3D <&disp_blk_ctrl>;
-> > +                             power-domains =3D <&disp_blk_ctrl IMX8MN_=
-DISPBLK_PD_ISI>;
-> > +                             status =3D "disabled";
-> > +
-> > +                             port {
-> > +                                     isi_in: endpoint {
-> > +                                             remote-endpoint =3D <&mip=
-i_csi_out>;
-> > +                                     };
-> > +                             };
->
-> This will fail to validate against the ISI DT binding, as they require a
-> "ports" node. When a single port is present using a "port" node directly
-> is fine from an OF graph point of view, but to avoid too much complexity
-> in the ISI binding the consensus was to always require a "ports" node
-> for the ISI.
+Looks good to me!  Thanks!
 
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-Argh!  I pulled from the wrong test repo.  I remember the discussion
-from a few months back.  I'll fix it and the others when I submit V2.
-
+> ---
+> Changes from v1:
+>  - Update the comments per Ying and Mike, thanks.
+> ---
+>  mm/page_alloc.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> > +                     };
-> > +
-> >                       disp_blk_ctrl: blk-ctrl@32e28000 {
-> >                               compatible =3D "fsl,imx8mn-disp-blk-ctrl"=
-, "syscon";
-> >                               reg =3D <0x32e28000 0x100>;
-> > @@ -1147,6 +1165,42 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
-> >                               #power-domain-cells =3D <1>;
-> >                       };
-> >
-> > +                     mipi_csi: mipi-csi@32e30000 {
-> > +                             compatible =3D "fsl,imx8mm-mipi-csi2";
-> > +                             reg =3D <0x32e30000 0x1000>;
-> > +                             interrupts =3D <GIC_SPI 17 IRQ_TYPE_LEVEL=
-_HIGH>;
-> > +                             assigned-clocks =3D <&clk IMX8MN_CLK_CAME=
-RA_PIXEL>,
-> > +                                               <&clk IMX8MN_CLK_CSI1_P=
-HY_REF>;
-> > +                             assigned-clock-parents =3D <&clk IMX8MN_S=
-YS_PLL2_1000M>,
-> > +                                                       <&clk IMX8MN_SY=
-S_PLL2_1000M>;
-> > +                             assigned-clock-rates =3D <333000000>;
-> > +                             clock-frequency =3D <333000000>;
-> > +                             clocks =3D <&clk IMX8MN_CLK_DISP_APB_ROOT=
->,
-> > +                                      <&clk IMX8MN_CLK_CAMERA_PIXEL>,
-> > +                                      <&clk IMX8MN_CLK_CSI1_PHY_REF>,
-> > +                                      <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
-> > +                             clock-names =3D "pclk", "wrap", "phy", "a=
-xi";
-> > +                             power-domains =3D <&disp_blk_ctrl IMX8MN_=
-DISPBLK_PD_MIPI_CSI>;
-> > +                             status =3D "disabled";
-> > +
-> > +                             ports {
-> > +                                     #address-cells =3D <1>;
-> > +                                     #size-cells =3D <0>;
-> > +
-> > +                                     port@0 {
-> > +                                             reg =3D <0>;
-> > +                                     };
-> > +
-> > +                                     port@1 {
-> > +                                             reg =3D <1>;
-> > +
-> > +                                             mipi_csi_out: endpoint {
-> > +                                                     remote-endpoint =
-=3D <&isi_in>;
-> > +                                             };
-> > +                                     };
-> > +                             };
-> > +                     };
-> > +
-> >                       usbotg1: usb@32e40000 {
-> >                               compatible =3D "fsl,imx8mn-usb", "fsl,imx=
-7d-usb", "fsl,imx27-usb";
-> >                               reg =3D <0x32e40000 0x200>;
->
-> --
-> Regards,
->
-> Laurent Pinchart
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 6457b64fe562..9756d66f471c 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
+>   * interleaving within a single pageblock. It is therefore sufficient to check
+>   * the first and last page of a pageblock and avoid checking each individual
+>   * page in a pageblock.
+> + *
+> + * Note: the function may return non-NULL even if the end pfn of a pageblock
+> + * is in a memory hole in some situations. For example, if the pageblock
+> + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
+> + * of the pageblock may be hole even though the start pfn is online and valid.
+> + * This did not break anything until now, but be careful about this possible
+> + * issue when checking whether all pfns of a pageblock are valid.
+>   */
+>  struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>  				     unsigned long end_pfn, struct zone *zone)
