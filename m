@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39716ED81B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2AE6ED827
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232852AbjDXWpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S232442AbjDXWxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbjDXWpG (ORCPT
+        with ESMTP id S231438AbjDXWxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:45:06 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD9161A5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:45:03 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b8b927f62so1176305b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:45:03 -0700 (PDT)
+        Mon, 24 Apr 2023 18:53:08 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDE37694
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:53:06 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-505035e3368so8739003a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682376303; x=1684968303;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XyAyZvkBYkEc712cEMV3mpROJFIG+zAeVUV4dUXDvuI=;
-        b=Lhx5LzsaBaoqEWqnxNW38qntF9QqpPCXaBk64MUOpxQbjWzyKsvYTPDddk5jyU5jdS
-         C/unHMsPnxQqtOTk3Cl1OGQ6bEdKkQlmy+M2bwW/kGU495ZPC8MR0uEFwrLMmL9Rl0/W
-         738a+UTY898TmTjE7uyG0cbllvHey6ampnGHQ0gGd60vM8+stt+PTc4R/bsvfdrOYLy1
-         Wf1DtYcIM4zZJcCGfPBeacKH20QAiU7lccNAXvvJmMpZs8hESAeKOMw52KSxl1wjha8y
-         GIYmAdIehEOAIuHZech7ZbiHVXrPuoDvjeZ1gY2jH19xY3uPxEtei+pJG6CS7qAVZsvQ
-         x9yQ==
+        d=dectris.com; s=google; t=1682376785; x=1684968785;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lb9V5qEz8uwYJMRGS2n+7cwxt++F8Vl5cfnWbWpg2NA=;
+        b=oqBZV0kBPqtAYvC/4m7in4/HJVjt2Cq2tq+xjPyWe6vOXlUcae6M/NmBFzDz/FPGrX
+         AG2o8U04UdF21KwSmuhBGZ1q2DHETDwPFLMrgZrFyDGnBs4S312y0jexltI499BS+Nbf
+         U4J9A0MQ8UK8x7eGinOq2eMOG1HC++DT1KCug=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682376303; x=1684968303;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XyAyZvkBYkEc712cEMV3mpROJFIG+zAeVUV4dUXDvuI=;
-        b=jXLdWF2ZIr5yXWFaCwTg1wy///5TqOk/byKYxYLcfJqYlTcIVOCJkpVtPSrwym3V81
-         8tJaXN+u+nc06dLm4nQIFJNMPNy1/8+6vNVp3cF9gM719KFUDlyga1I1R/exYlUPW6bZ
-         FiTnzZSYA82o7xxjNVwgn3oGlt+aIFfKrSQWj0h6nKtKUUCMZSNo3OLyMQHxMDywTM3J
-         x3IR2+ihZjgQmTfXMSbbJeftmQjVOQlaO/Bta9Fc+VR43XAg1yCgwbf3eUtucHD6eLbU
-         HyQXQepY9Azs8bLlADEr/M/uHI1XfxWZAlGygHoRgnAzOAFtkSqWKHYnqdDKZBsLX9rx
-         CF0Q==
-X-Gm-Message-State: AAQBX9ceUJT5Hs/hlZ8SpoN3UnjdN3mANKINSbviNYoZi7iiVmopVtWr
-        wII7F/0CkubgewtRN8fPqq0btju+TGtdGHwQzr4=
-X-Google-Smtp-Source: AKy350Zpt2t30t66DD9GxrwuipngBmDrdC/PFh7ol9LvVK9zpSzmcnQQeCkc0Nbggd9FVMC4bP4v3g==
-X-Received: by 2002:a17:902:f690:b0:1a6:e00b:c3e5 with SMTP id l16-20020a170902f69000b001a6e00bc3e5mr18310958plg.4.1682376303317;
-        Mon, 24 Apr 2023 15:45:03 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jw4-20020a170903278400b001a975b64c38sm2329910plb.68.2023.04.24.15.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 15:45:02 -0700 (PDT)
-Message-ID: <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
-Date:   Mon, 24 Apr 2023 16:44:56 -0600
+        d=1e100.net; s=20221208; t=1682376785; x=1684968785;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lb9V5qEz8uwYJMRGS2n+7cwxt++F8Vl5cfnWbWpg2NA=;
+        b=dshFlG0bebw2A2+V3lc9ccG73k1Hy5HHtOoaRZOsJaw/7YS6GmWE3ooIiMFs3m60yJ
+         po3nI/gZe/mY784gY/gnSQ7z4tHSbRpnQRDVc31rW9cU4N54uFNIz52a7JVRuD3Xs3qF
+         c5FtHVoNA9Sc6QdTexaLDTrpZ4NCoo+sqzaybIY/xCpYi4d8BopyRzl5sALqUPyRjHfM
+         /XYlecxlgipRskuvOiwk81ARs6zQ+mhlh91Vm3VZsZn8yUpkEBvE6GH884wbQjpZZ0Ef
+         OKHteFtEQFkwP++++iCYq9uGYdOGafjj3sl3x/83umBf3sioE7uwVwPJFqwBXJO/Uk30
+         V6PQ==
+X-Gm-Message-State: AAQBX9dXRiFaZs1ANNWdtbd9/mswaILpjFluyIwD3PD/TUf84AjujMl/
+        ABL3fRdDxJFIakR4LDyKGAMjDwBEamrYrcUVP8K/cA==
+X-Google-Smtp-Source: AKy350bV1SaUES6IvRlxAiUCsXAqw751wdGR/d9hfAt2fNVjRZuydHYBPeewsR9bUeFBdElZDsrQXIucfmuElG1ioTY=
+X-Received: by 2002:aa7:d490:0:b0:508:422b:a61 with SMTP id
+ b16-20020aa7d490000000b00508422b0a61mr14430531edr.4.1682376785287; Mon, 24
+ Apr 2023 15:53:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
- <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
- <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
- <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
- <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
-In-Reply-To: <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230423075335.92597-1-kal.conley@dectris.com> <6446d34f9568_338f220872@john.notmuch>
+In-Reply-To: <6446d34f9568_338f220872@john.notmuch>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Tue, 25 Apr 2023 00:52:53 +0200
+Message-ID: <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
+Subject: Re: [PATCH] xsk: Use pool->dma_pages to check for DMA
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,153 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 4:07?PM, Jens Axboe wrote:
-> On 4/24/23 3:58?PM, Linus Torvalds wrote:
->> On Mon, Apr 24, 2023 at 2:37?PM Linus Torvalds
->> <torvalds@linux-foundation.org> wrote:
->>>
->>> And I completely refuse to add that trylock hack to paper that over.
->>> The pipe lock is *not* meant for IO.
->>
->> If you want to paper it over, do it other ways.
->>
->> I'd love to just magically fix splice, but hey, that might not be possible.
-> 
-> Don't think it is... At least not trivially.
-> 
->> But possible fixes papering this over might be to make splice "poison
->> a pipe, and make io_uring falls back on io workers only on pipes that
->> do splice. Make any normal pipe read/write load sane.
->>
->> And no, don't worry about races. If you have the same pipe used for
->> io_uring IO *and* somebody else then doing splice on it and racing,
->> just take the loss and tell people that they might hit a slow case if
->> they do stupid things.
->>
->> Basically, the patch might look like something like
->>
->>  - do_pipe() sets FMODE_NOWAIT by default when creating a pipe
->>
->>  - splice then clears FMODE_NOWAIT on pipes as they are used
->>
->> and now io_uring sees whether the pipe is playing nice or not.
->>
->> As far as I can tell, something like that would make the
->> 'pipe_buf_confirm()' part unnecessary too, since that's only relevant
->> for splice.
->>
->> A fancier version might be to only do that "splice then clears
->> FMODE_NOWAIT" thing if the other side of the splice has not set
->> FMODE_NOWAIT.
->>
->> Honestly, if the problem is "pipe IO is slow", then splice should not
->> be the thing you optimize for.
-> 
-> I think that'd be an acceptable approach, and would at least fix the
-> pure pipe case which I suspect is 99.9% of them, if not more. And yes,
-> it'd mean that we don't need to do the ->confirm() change either, as the
-> pipe is already tainted at that point.
-> 
-> I'll respin a v2, post, and send in later this merge window.
+> > Compare pool->dma_pages instead of pool->dma_pages_cnt to check for an
+> > active DMA mapping. pool->dma_pages needs to be read anyway to access
+> > the map so this compiles to more efficient code.
+>
+> Was it noticable in some sort of performance test?
 
-Something like this. Not tested yet, but wanted to get your feedback
-early to avoid issues down the line. Really just the first hunk, as
-we're not really expecting f_mode to change and hence could just use
-an xchg(). Seems saner to use a cmpxchg though, but maybe that's
-too much of both belt and suspenders?
+This patch is part of the patchset found at
+https://lore.kernel.org/all/20230412162114.19389-3-kal.conley@dectris.com/
+which is being actively discussed and needs to be resubmitted anyway
+because of a conflict. While the discussion continues, I am submitting
+this patch by itself because I think it's an improvement on its own
+(regardless of what happens with the rest of the linked patchset). On
+one system, I measured a performance regression of 2-3% with xdpsock
+and the linked changes without the current patch. With the current
+patch, the performance regression was no longer observed.
 
-commit f10cbebf4dd7f77b0e87c77bb0191a5a07d5e7ac
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Mon Apr 24 16:32:55 2023 -0600
+> > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> > index d318c769b445..a8d7b8a3688a 100644
+> > --- a/include/net/xsk_buff_pool.h
+> > +++ b/include/net/xsk_buff_pool.h
+> > @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+> >       if (likely(!cross_pg))
+> >               return false;
+> >
+> > -     return pool->dma_pages_cnt &&
+> > +     return pool->dma_pages &&
+> >              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+> >  }
 
-    splice: clear FMODE_NOWAIT on file if splice/vmsplice is used
-    
-    In preparation for pipes setting FMODE_NOWAIT on pipes to indicate that
-    RWF_NOWAIT/IOCB_NOWAIT is fully supported, have splice and vmsplice
-    clear that file flag. Splice holds the pipe lock around IO and cannot
-    easily be refactored to avoid that, as splice and pipes are inherently
-    tied together.
-    
-    By clearing FMODE_NOWAIT if splice is being used on a pipe, other users
-    of the pipe will know that the pipe is no longer safe for RWF_NOWAIT
-    and friends.
-    
-    Signed-off-by: Jens Axboe <axboe@kernel.dk>
+I would consider the above code part of the "fast path". It may be
+executed approximately once per frame in unaligned mode.
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 2c3dec2b6dfa..3ce7c07621e2 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -37,6 +37,29 @@
- 
- #include "internal.h"
- 
-+/*
-+ * Splice doesn't support FMODE_NOWAIT. Since pipes may set this flag to
-+ * indicate they support non-blocking reads or writes, we must clear it
-+ * here if set to avoid blocking other users of this pipe if splice is
-+ * being done on it.
-+ */
-+static void pipe_clear_nowait(struct file *file)
-+{
-+	fmode_t new_fmode, old_fmode;
-+
-+	/*
-+	 * We could get by with just doing an xchg() here as f_mode should
-+	 * not change in the file's lifetime, but let's be safe and use
-+	 * a cmpxchg() instead.
-+	 */
-+	do {
-+		old_fmode = READ_ONCE(file->f_mode);
-+		if (!(old_fmode & FMODE_NOWAIT))
-+			break;
-+		new_fmode = old_fmode & ~FMODE_NOWAIT;
-+	} while (!try_cmpxchg(&file->f_mode, &old_fmode, new_fmode));
-+}
-+
- /*
-  * Attempt to steal a page from a pipe buffer. This should perhaps go into
-  * a vm helper function, it's already simplified quite a bit by the
-@@ -1211,10 +1234,16 @@ static long __do_splice(struct file *in, loff_t __user *off_in,
- 	ipipe = get_pipe_info(in, true);
- 	opipe = get_pipe_info(out, true);
- 
--	if (ipipe && off_in)
--		return -ESPIPE;
--	if (opipe && off_out)
--		return -ESPIPE;
-+	if (ipipe) {
-+		if (off_in)
-+			return -ESPIPE;
-+		pipe_clear_nowait(in);
-+	}
-+	if (opipe) {
-+		if (off_out)
-+			return -ESPIPE;
-+		pipe_clear_nowait(out);
-+	}
- 
- 	if (off_out) {
- 		if (copy_from_user(&offset, off_out, sizeof(loff_t)))
-@@ -1311,6 +1340,8 @@ static long vmsplice_to_user(struct file *file, struct iov_iter *iter,
- 	if (!pipe)
- 		return -EBADF;
- 
-+	pipe_clear_nowait(file);
-+
- 	if (sd.total_len) {
- 		pipe_lock(pipe);
- 		ret = __splice_from_pipe(pipe, &sd, pipe_to_user);
-@@ -1339,6 +1370,8 @@ static long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
- 	if (!pipe)
- 		return -EBADF;
- 
-+	pipe_clear_nowait(file);
-+
- 	pipe_lock(pipe);
- 	ret = wait_for_space(pipe, flags);
- 	if (!ret)
+> This seems to be used in the setup/tear-down paths so your optimizing
+> a control side. Is there a fast path with this code? I walked the
+> ice driver. If its just setup code we should do whatever is more
+> readable.
 
--- 
-Jens Axboe
+It is not only used in setup/tear-down paths (see above).
+Additionally, I believe the code is also _more_ readable with this
+patch applied. In particular, this patch reduces cognitive complexity
+since people (and compilers) reading the code don't need to
+additionally think about pool->dma_pages_cnt.
 
+> Both the _alloc_ cases read neighboring free_heads_cnt so your saving a load I guess?
+> This is so deep into micro-optimizing I'm curious if you could measure it?
+
+It is saving a load which also reduces code size. This will affect
+other decisions such as what to inline. Also in the linked patchset,
+dma_pages and dma_pages_cnt do not share a cache line (on x86_64).
+
+>
+> >               } else {
+> >                       xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
+>
+> I'm not actually against optimizing but maybe another idea. Why do we have to
+> check at all? Seems if the DMA has been disabled/unmapped the driver shouldn't
+> be trying to call xsk_buff_alloc_batch? Then you can just drop the 'if' check.
+>
+> It feels to me the drivers shouldn't even be calling this after unmapping
+> the dma. WDYT?
+
+Many of these code paths are used both for ZC and copy modes. You
+might be right that this particular case is only used with DMA.
