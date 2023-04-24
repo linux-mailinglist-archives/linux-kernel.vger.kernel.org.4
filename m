@@ -2,197 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1456ED537
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3C26ED543
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjDXTSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 15:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S232289AbjDXTWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 15:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjDXTSi (ORCPT
+        with ESMTP id S231967AbjDXTV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:18:38 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE12E6D;
-        Mon, 24 Apr 2023 12:18:37 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f1738d0d4cso31247715e9.1;
-        Mon, 24 Apr 2023 12:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682363916; x=1684955916;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1q/4i2elk3BA3Rj+QoCYnRS4MnuAVuxCMWMhVXymMw=;
-        b=Vxlkf6eXc8hNlYZKosRpWF10A+8sPT/LRwFFpD5gCIgEgQHJBPpwl9XiMM+9uYDKuC
-         YSn4qSHxRINZbV3uwOtC94D3OJm+l367BKSLmUgej0ndLIhkKZCtmFmrkUxlSmVoNLJe
-         GRvJGjJKlxVnK4G0OrmF46tlTXyKPBtRd5H8joCvOh7P0ty5Hfzc4EEEMj+Q9zl/9W3a
-         2u7zMqMYAbF8qwiF8KdyV6Lrl3fV/JR5w2wyzmlnUmeeCGpse4JDmBWv8KwSdBiOfCzT
-         R6s4Y8XFOF0n78/m5pa0JPN8s76eyEnWzqN3PPZdKTQlQArnoA98jmakIPBtAhbCfvpQ
-         Bs/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682363916; x=1684955916;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P1q/4i2elk3BA3Rj+QoCYnRS4MnuAVuxCMWMhVXymMw=;
-        b=df0z6N76T4awY3Xt3ePqv5lJp9pL4it6/fpJu5Bn5Dr5EuaTpIVRk74CL1ae/z+4sf
-         RUkwMjzEpieb8hU4lhDKSoGmzNeSzeYHT7gPRZKaVKt/Fkyevo7J0vc7AopTR9Wl/v1Q
-         9CeUZ6u8QGWZEWgWqoUTCChb6sEfIqu6ZU3w72Rinzvu/DJK5yP+b/wWxOpdBX67NDfE
-         LLzLzbrI5j2GPZRnTF7/Ar1I7JdwbkqW9WUEpsfKFJ6i2Ay5AmU81cZIzxpFAdfDD4Sn
-         Z5O2cLbZS5y1TlEtei1Ad1B4nFB32RiC8zuwo5DNrdF2nmIA4b0epGPnsB2a8NobwZuF
-         3w7w==
-X-Gm-Message-State: AAQBX9dITIGKVrLIi/JLFjvhW1gph42p+HyCqqagJt7knxp3JHsVrQ09
-        RCHN/Jw7avFYnIL5JYKNo2A=
-X-Google-Smtp-Source: AKy350ZDhAPYuLEpF8HIpNccA9jbhB9WMePiz/zH6jKMYHFwbOFzbI0LXgErhPvQ+QtiuM8faomL1A==
-X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr10085377wri.19.1682363915655;
-        Mon, 24 Apr 2023 12:18:35 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id j14-20020adfea4e000000b002fc3d8c134bsm11397032wrn.74.2023.04.24.12.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 12:18:34 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 20:18:33 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <f00058b8-0397-465f-9db5-ddd30a5efe8e@lucifer.local>
-References: <c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com>
- <ZEZPXHN4OXIYhP+V@infradead.org>
- <90a54439-5d30-4711-8a86-eba816782a66@lucifer.local>
- <ZEZ117OMCi0dFXqY@nvidia.com>
- <c8fff8b3-ead6-4f52-bf17-f2ef2e752b57@lucifer.local>
- <ZEaGjad50lqRNTWD@nvidia.com>
- <cd488979-d257-42b9-937f-470cc3c57f5e@lucifer.local>
- <ZEa+L5ivNDhCmgj4@nvidia.com>
- <cfb5afaa-8636-4c7d-a1a2-2e0a85f9f3d3@lucifer.local>
- <ZEbQeImOiaXrydBE@nvidia.com>
+        Mon, 24 Apr 2023 15:21:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9390F19A2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:21:56 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1pr1kq-0002nz-SE; Mon, 24 Apr 2023 21:21:40 +0200
+Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1pr1kn-000254-GY; Mon, 24 Apr 2023 21:21:37 +0200
+Date:   Mon, 24 Apr 2023 21:21:37 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Jacky Huang <ychuang570808@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v7 10/12] reset: Add Nuvoton ma35d1 reset driver support
+Message-ID: <20230424192137.GB30248@pengutronix.de>
+References: <20230412053824.106-1-ychuang570808@gmail.com>
+ <20230412053824.106-11-ychuang570808@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEbQeImOiaXrydBE@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230412053824.106-11-ychuang570808@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: pza@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:54:48PM -0300, Jason Gunthorpe wrote:
-> On Mon, Apr 24, 2023 at 07:22:03PM +0100, Lorenzo Stoakes wrote:
->
-> > OK I guess you mean the folio lock :) Well there is
-> > unpin_user_pages_dirty_lock() and unpin_user_page_range_dirty_lock() and
-> > also set_page_dirty_lock() (used by __access_remote_vm()) which should
-> > avoid this.
->
-> It has been a while, but IIRC, these are all basically racy, the
-> comment in front of set_page_dirty_lock() even says it is racy..
->
-> The race is that a FS cleans a page and thinks it cannot become dirty,
-> and then it becomes dirty - and all variations of that..
->
-> Looking around a bit, I suppose what I'd expect to see is a sequence
-> sort of like what do_page_mkwrite() does:
->
->         /* Synchronize with the FS and get the page locked */
->      	ret = vmf->vma->vm_ops->page_mkwrite(vmf);
-> 	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE)))
-> 		return ret;
-> 	if (unlikely(!(ret & VM_FAULT_LOCKED))) {
-> 		lock_page(page);
-> 		if (!page->mapping) {
-> 			unlock_page(page);
-> 			return 0; /* retry */
-> 		}
-> 		ret |= VM_FAULT_LOCKED;
-> 	} else
-> 		VM_BUG_ON_PAGE(!PageLocked(page), page);
->
-> 	/* Write to the page with the CPU */
-> 	va = kmap_local_atomic(page);
-> 	memcpy(va, ....);
-> 	kunmap_local_atomic(page);
->
-> 	/* Tell the FS and unlock it. */
-> 	set_page_dirty(page);
-> 	unlock_page(page);
->
-> I don't know if this is is exactly right, but it seems closerish
->
-> So maybe some kind of GUP interfaces that returns single locked pages
-> is the right direction? IDK
->
-> Or maybe we just need to make a memcpy primitive that works while
-> holding the PTLs?
->
+Hi Jacky,
 
-I think this patch suggestion has scope crept from 'incremental
-improvement' to 'major rework of GUP' at this point. Also surely you'd want
-to obtain the PTL of all mappings to a file? This seems really unworkable
-and I don't think holding a folio lock over a long period is sensible
-either.
+On Wed, Apr 12, 2023 at 05:38:22AM +0000, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> This driver supports individual IP reset for ma35d1. The reset
+> control registers is a subset of system control registers.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  drivers/reset/Kconfig        |   6 +
+>  drivers/reset/Makefile       |   1 +
+>  drivers/reset/reset-ma35d1.c | 255 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 262 insertions(+)
+>  create mode 100644 drivers/reset/reset-ma35d1.c
+> 
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index 2a52c990d4fe..58477c6ca9b8 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -143,6 +143,12 @@ config RESET_NPCM
+>  	  This enables the reset controller driver for Nuvoton NPCM
+>  	  BMC SoCs.
+>  
+> +config RESET_NUVOTON_MA35D1
+> +	bool "Nuvton MA35D1 Reset Driver"
+> +	default ARCH_NUVOTON || COMPILE_TEST
+> +	help
+> +	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
+> +
+>  config RESET_OXNAS
+>  	bool
+>  
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 3e7e5fd633a8..fd52dcf66a99 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -20,6 +20,7 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+>  obj-$(CONFIG_RESET_MESON) += reset-meson.o
+>  obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+>  obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
+> +obj-$(CONFIG_RESET_NUVOTON_MA35D1) += reset-ma35d1.o
+>  obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
+>  obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
+>  obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
+> new file mode 100644
+> index 000000000000..57ed710c10f4
+> --- /dev/null
+> +++ b/drivers/reset/reset-ma35d1.c
+> @@ -0,0 +1,255 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Nuvoton Technology Corp.
+> + * Author: Chi-Fang Li <cfli0@nuvoton.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/reset-controller.h>
+> +#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
+> +
+> +struct ma35d1_reset_data {
+> +	struct reset_controller_dev rcdev;
+> +	void __iomem *base;
+> +};
+> +
+> +struct ma35d1_reboot_data {
+> +	struct notifier_block restart_handler;
+> +	void __iomem *base;
+> +};
 
-> > We definitely need to keep ptrace and /proc/$pid/mem functioning correctly,
-> > and I given the privilege levels required I don't think there's a security
-> > issue there?
->
-> Even root is not allowed to trigger data corruption or oops inside the
-> kernel.
->
-> Jason
+These two structs can be combined into one, no need to duplicate the
+iomem base.
 
-Of course, but isn't this supposed to be an incremental fix? It feels a
-little contradictory to want to introduce a flag intentionally to try to
-highlight brokenness then to not accept any solution that doesn't solve
-that brokenness.
+> +
+> +static const struct {
+> +	unsigned long id;
 
-In any case, I feel that this patch isn't going to go anywhere as-is, it's
-insufficiently large to solve the problem as a whole (I think that's a
-bigger problem we can return to later), and there appears to be no taste
-for an incremental improvement, even from the suggester :)
+Why store the id? ids should be contiguous and should start at 0,
+so the id could just be an index into the array.
 
-As a result, I suggest we take the cautious route in order to unstick the
-vmas patch series - introduce an OPT-IN flag which allows the check to be
-made, and update io_uring to use this.
+> +	u32 reg_ofs;
+> +	u32 bit;
+> +} ma35d1_reset_map[] = {
+> +	{ MA35D1_RESET_CHIP,    0x20, 0  },
+> +	{ MA35D1_RESET_CA35CR0,	0x20, 1  },
+> +	{ MA35D1_RESET_CA35CR1, 0x20, 2  },
+> +	{ MA35D1_RESET_CM4,     0x20, 3  },
+> +	{ MA35D1_RESET_PDMA0,   0x20, 4  },
+> +	{ MA35D1_RESET_PDMA1,   0x20, 5  },
+> +	{ MA35D1_RESET_PDMA2,   0x20, 6  },
+> +	{ MA35D1_RESET_PDMA3,   0x20, 7  },
+> +	{ MA35D1_RESET_DISP,    0x20, 9  },
+> +	{ MA35D1_RESET_VCAP0,   0x20, 10 },
+> +	{ MA35D1_RESET_VCAP1,   0x20, 11 },
+> +	{ MA35D1_RESET_GFX,     0x20, 12 },
+> +	{ MA35D1_RESET_VDEC,    0x20, 13 },
+> +	{ MA35D1_RESET_WHC0,    0x20, 14 },
+> +	{ MA35D1_RESET_WHC1,    0x20, 15 },
+> +	{ MA35D1_RESET_GMAC0,   0x20, 16 },
+> +	{ MA35D1_RESET_GMAC1,   0x20, 17 },
+> +	{ MA35D1_RESET_HWSEM,   0x20, 18 },
+> +	{ MA35D1_RESET_EBI,     0x20, 19 },
+> +	{ MA35D1_RESET_HSUSBH0, 0x20, 20 },
+> +	{ MA35D1_RESET_HSUSBH1, 0x20, 21 },
+> +	{ MA35D1_RESET_HSUSBD,  0x20, 22 },
+> +	{ MA35D1_RESET_USBHL,   0x20, 23 },
+> +	{ MA35D1_RESET_SDH0,    0x20, 24 },
+> +	{ MA35D1_RESET_SDH1,    0x20, 25 },
+> +	{ MA35D1_RESET_NAND,    0x20, 26 },
+> +	{ MA35D1_RESET_GPIO,    0x20, 27 },
+> +	{ MA35D1_RESET_MCTLP,   0x20, 28 },
+> +	{ MA35D1_RESET_MCTLC,   0x20, 29 },
+> +	{ MA35D1_RESET_DDRPUB,  0x20, 30 },
+> +	{ MA35D1_RESET_TMR0,    0x24, 2  },
+> +	{ MA35D1_RESET_TMR1,    0x24, 3  },
+> +	{ MA35D1_RESET_TMR2,    0x24, 4  },
+> +	{ MA35D1_RESET_TMR3,    0x24, 5  },
+> +	{ MA35D1_RESET_I2C0,    0x24, 8  },
+> +	{ MA35D1_RESET_I2C1,    0x24, 9  },
+> +	{ MA35D1_RESET_I2C2,    0x24, 10 },
+> +	{ MA35D1_RESET_I2C3,    0x24, 11 },
+> +	{ MA35D1_RESET_QSPI0,   0x24, 12 },
+> +	{ MA35D1_RESET_SPI0,    0x24, 13 },
+> +	{ MA35D1_RESET_SPI1,    0x24, 14 },
+> +	{ MA35D1_RESET_SPI2,    0x24, 15 },
+> +	{ MA35D1_RESET_UART0,   0x24, 16 },
+> +	{ MA35D1_RESET_UART1,   0x24, 17 },
+> +	{ MA35D1_RESET_UART2,   0x24, 18 },
+> +	{ MA35D1_RESET_UAER3,   0x24, 19 },
+> +	{ MA35D1_RESET_UART4,   0x24, 20 },
+> +	{ MA35D1_RESET_UART5,   0x24, 21 },
+> +	{ MA35D1_RESET_UART6,   0x24, 22 },
+> +	{ MA35D1_RESET_UART7,   0x24, 23 },
+> +	{ MA35D1_RESET_CANFD0,  0x24, 24 },
+> +	{ MA35D1_RESET_CANFD1,  0x24, 25 },
+> +	{ MA35D1_RESET_EADC0,   0x24, 28 },
+> +	{ MA35D1_RESET_I2S0,    0x24, 29 },
+> +	{ MA35D1_RESET_SC0,     0x28, 0  },
+> +	{ MA35D1_RESET_SC1,     0x28, 1  },
+> +	{ MA35D1_RESET_QSPI1,   0x28, 4  },
+> +	{ MA35D1_RESET_SPI3,    0x28, 6  },
+> +	{ MA35D1_RESET_EPWM0,   0x28, 16 },
+> +	{ MA35D1_RESET_EPWM1,   0x28, 17 },
+> +	{ MA35D1_RESET_QEI0,    0x28, 22 },
+> +	{ MA35D1_RESET_QEI1,    0x28, 23 },
+> +	{ MA35D1_RESET_ECAP0,   0x28, 26 },
+> +	{ MA35D1_RESET_ECAP1,   0x28, 27 },
+> +	{ MA35D1_RESET_CANFD2,  0x28, 28 },
+> +	{ MA35D1_RESET_ADC0,    0x28, 31 },
+> +	{ MA35D1_RESET_TMR4,    0x2C, 0  },
+> +	{ MA35D1_RESET_TMR5,    0x2C, 1  },
+> +	{ MA35D1_RESET_TMR6,    0x2C, 2  },
+> +	{ MA35D1_RESET_TMR7,    0x2C, 3  },
+> +	{ MA35D1_RESET_TMR8,    0x2C, 4  },
+> +	{ MA35D1_RESET_TMR9,    0x2C, 5  },
+> +	{ MA35D1_RESET_TMR10,   0x2C, 6  },
+> +	{ MA35D1_RESET_TMR11,   0x2C, 7  },
+> +	{ MA35D1_RESET_UART8,   0x2C, 8  },
+> +	{ MA35D1_RESET_UART9,   0x2C, 9  },
+> +	{ MA35D1_RESET_UART10,  0x2C, 10 },
+> +	{ MA35D1_RESET_UART11,  0x2C, 11 },
+> +	{ MA35D1_RESET_UART12,  0x2C, 12 },
+> +	{ MA35D1_RESET_UART13,  0x2C, 13 },
+> +	{ MA35D1_RESET_UART14,  0x2C, 14 },
+> +	{ MA35D1_RESET_UART15,  0x2C, 15 },
+> +	{ MA35D1_RESET_UART16,  0x2C, 16 },
+> +	{ MA35D1_RESET_I2S1,    0x2C, 17 },
+> +	{ MA35D1_RESET_I2C4,    0x2C, 18 },
+> +	{ MA35D1_RESET_I2C5,    0x2C, 19 },
+> +	{ MA35D1_RESET_EPWM2,   0x2C, 20 },
+> +	{ MA35D1_RESET_ECAP2,   0x2C, 21 },
+> +	{ MA35D1_RESET_QEI2,    0x2C, 22 },
+> +	{ MA35D1_RESET_CANFD3,  0x2C, 23 },
+> +	{ MA35D1_RESET_KPI,     0x2C, 24 },
+> +	{ MA35D1_RESET_GIC,     0x2C, 28 },
+> +	{ MA35D1_RESET_SSMCC,   0x2C, 30 },
+> +	{ MA35D1_RESET_SSPCC,   0x2C, 31 }
+> +};
+> +
+> +static u32 ma35d1_reset_map_lookup(unsigned long id)
+> +{
+> +	u32 i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ma35d1_reset_map); i++) {
+> +		if (ma35d1_reset_map[i].id == id)
+> +			break;
+> +	}
+> +	return i;
+> +}
 
-That way it defers the larger discussion around this improvement, avoids
-breaking anything, provides some basis in code for this check and is a net,
-incremental small and digestible improvement.
+If you use the id as a look up into the mapping array, this lookup
+function wouldn't be necessary.
+
+> +static int ma35d1_restart_handler(struct notifier_block *this,
+> +				  unsigned long mode, void *cmd)
+> +{
+> +	u32 i;
+> +	struct ma35d1_reboot_data *data = container_of(this,
+> +						       struct ma35d1_reboot_data,
+> +						       restart_handler);
+> +
+> +	i = ma35d1_reset_map_lookup(MA35D1_RESET_CHIP);
+> +	writel_relaxed(BIT(ma35d1_reset_map[i].bit),
+> +		       data->base + ma35d1_reset_map[i].reg_ofs);
+> +	return 0;
+> +}
+> +
+> +static int ma35d1_reset_update(struct reset_controller_dev *rcdev,
+> +			       unsigned long id, bool assert)
+> +{
+> +	u32 i, reg;
+> +	struct ma35d1_reset_data *data = container_of(rcdev,
+> +						      struct ma35d1_reset_data,
+> +						      rcdev);
+> +
+> +	i = ma35d1_reset_map_lookup(id);
+> +	reg = readl_relaxed(data->base + ma35d1_reset_map[i].reg_ofs);
+> +	if (assert)
+> +		reg |= BIT(ma35d1_reset_map[i].bit);
+> +	else
+> +		reg &= ~(BIT(ma35d1_reset_map[i].bit));
+> +	writel_relaxed(reg, data->base + ma35d1_reset_map[i].reg_ofs);
+
+This requires a spinlock to protect the register from simultaneous
+read-modify-writes.
+
+[...]
+> +static int ma35d1_reset_probe(struct platform_device *pdev)
+> +{
+> +	int err;
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	struct ma35d1_reset_data *reset_data;
+> +	struct ma35d1_reboot_data *reboot_data;
+> +
+> +	if (!pdev->dev.of_node) {
+> +		dev_err(&pdev->dev, "Device tree node not found\n");
+
+The driver is only probed via OF, so this isn't reachable and can be
+dropped.
+
+regards
+Philipp
