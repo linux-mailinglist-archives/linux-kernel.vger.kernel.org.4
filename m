@@ -2,77 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6D66ED2C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F886ED2C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjDXQoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S231814AbjDXQpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbjDXQo1 (ORCPT
+        with ESMTP id S229625AbjDXQpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:44:27 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D933769C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:44:26 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63d2ba63dddso3832145b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:44:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1682354665; x=1684946665;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=cuciqmUipXVuAISy5lipUJ/KFt3Ofk0Iif47Cxhcto4=;
-        b=ggipNS59r6OMXqMVHYbMq6vvzj7IveU2eeXK6aP9ZChyZzTggGnoH2z/KKj9rVdW73
-         2TtVCMjsYyAKN2XfdUwvXDbOdzFlddg4bZyzEuT47QC7HoKJcvFv7VVp0TtDaHSH/+dQ
-         U3GU8tzdUY6547xvbs+tP4bbuZ22LCqQrQDks=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682354665; x=1684946665;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cuciqmUipXVuAISy5lipUJ/KFt3Ofk0Iif47Cxhcto4=;
-        b=D/j6dBBN4TousOHyvxqANFuLZ0pcHwnDJF1vrC0V9gWsV4sj4jKETC/GikpU4MuFJ3
-         O64mhlfNlMkuDTwDPdWaERjY3zKJj7CRmMWWzn6HiVi6BHSBFrOzr1EJ6UTVhq3eyGb4
-         +YvsrNCpFS7ytRqlVfrcRCasgGDsMG2qwfHcg+arjRhVXe4bxpKzZHP9k/5n/KcUCZLb
-         mReyR52a9d4QoM7wPZL6V6O7PeyqHZ5XavPqY7PXYpZpzL5frRSYaQVQa+Y8r8ZLWYn5
-         SNOCW7YOKE+NUGBOyEKLar1SmuiM/6Jb3prwalHEBV5LSWvpC7GWY7HhjIMT/ei5RVWa
-         /DKg==
-X-Gm-Message-State: AAQBX9dC/IQR3QUcSFPoEcOgEo3Zq+G8ph0YN7uH9kcjtfP0opX77nt+
-        qXMVjMOkBLsU+576h1KviM7EEnIoq6iK13LerDqMQxSK6JbTMCtuSMHcf2Fl+/CllCoKyZwKli8
-        gcohEN14xW+iiqyBx5d2hFkEW2xnnK0OsCODCAPZbRnaA2yJBkIZfBY31rULLfUlWxp6UelVn5M
-        1OHPrlH7zHP5sf4w==
-X-Google-Smtp-Source: AKy350YJqeeHmdypcKQiEuzqAebuyapqcmrTSMOq+CBrAP2bXH+SmCGpeKIhGjzvybhARmNLAgHzgw==
-X-Received: by 2002:a05:6a00:1a0b:b0:62d:8376:3712 with SMTP id g11-20020a056a001a0b00b0062d83763712mr15560312pfv.28.1682354665286;
-        Mon, 24 Apr 2023 09:44:25 -0700 (PDT)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id g7-20020aa78747000000b0063f15cc9c38sm6357370pfo.99.2023.04.24.09.44.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Apr 2023 09:44:24 -0700 (PDT)
-Subject: Re: [PATCH] ARM: dts: broadcom: add missing cache properties
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230423150943.118576-1-krzysztof.kozlowski@linaro.org>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <c3991ca3-a703-4cfc-887f-249f799ef8dc@broadcom.com>
-Date:   Mon, 24 Apr 2023 09:44:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        Mon, 24 Apr 2023 12:45:09 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5284346B3;
+        Mon, 24 Apr 2023 09:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682354707; x=1713890707;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vMdYsHi2VCi1y7pYwQor8tKuYdOXgofFriswRr3UwIQ=;
+  b=WdaEbeXnwRHYkG8SObpOcObkL5vLbx6dlJSgkWFgBWkauEeMH7DxDO7m
+   NE57LR8+ReI7jmp0//2DZTpEc0ZVglZOot4u81figH8RXtHrDmruBxHWJ
+   zy/G+3Ja7CIbN7s7i6B2Vs8cHqcU8eyfSeeMX07HyBPrxfHYK/KhDBdhc
+   CT4UuoMrvEE0DTY/TMiNFBN1FEhGnwYoMvQCfozFcHCQd/4pL3CZObCda
+   ePMY2JjhItorQJY+a3U1ytu3bl6VizwCDLJ7xffBujliwRdm7x7kJuzYa
+   pImCPyqnc+cUt9b7xxWydIIAhR++8YqfJgXwoh/SEiNSRglwaH3liV4Hx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="409434065"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="409434065"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 09:45:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="725754854"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="725754854"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga001.jf.intel.com with ESMTP; 24 Apr 2023 09:45:06 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 24 Apr 2023 09:45:06 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 24 Apr 2023 09:45:05 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 24 Apr 2023 09:45:05 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 24 Apr 2023 09:45:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YiK/ZI8DIofulIxhnh/m4Q+tnRuM2SXyrsN0Pn6v669AGG6o/GRF1Uycjv40wiqqq9l9u9AQoj1T2OW70b+7G2mBZ9yy/I30+3lJ2uiB4UOuVP+DzxQ5yhtjUOZBxJhVO2Dgu6HDkidCiJEsd87PmmMR8T6czf/mokb8TuGEtbYlCLPzxzTJcoPyCuRiJKlfZs94+8EcC8HEhxUhsXMxHcGwqk6NvZz9kg9jsRctTKdD5+heuD+Ew7ZngcV+OWI3w2VKvJP3REQW7x9rkgqHlVX42GdyhEr5m1pN/iF6Xbm9+wJWI5Emp49G2WL/x25gHNWnKlR3xp6UkDcLsZG9mA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UZgdw0JPjqEYpi58PNngqLe2CRQblXnvfsqF3mIL7l4=;
+ b=Qm7EDlShlCK4pJ5LMcm5Kj6aFetoqBlh5y7Kl0Cz7ELyJ/fztG3Wr1MW9dK28+twva7qxCkKT87VTk8t7a6O4sQ08OdeqorvgG2ax5ujeI64X/Fd5h3K4Q5xnao72W1+/iCan0+pR8x0/zmyQ5J3ZtElrxyJpheo7T3wWWGOsgA/q2Rzjuk821gmPA2rY5yMsrGos8cuxoTaL5yP3VsUeaN6zlqJyATg05k75piI4sS/vLsDxjcKqp45YuSRVEfZDaZxF2ceHyhTohfHEk/Cu54fJME1P/S9a4F63+VOOkDslDlWxRfm4Jt4ScpsKj+7HHmfhmJMNkwOsnr3f2KYVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by MW5PR11MB5785.namprd11.prod.outlook.com (2603:10b6:303:197::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
+ 2023 16:45:04 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::2854:770d:2a43:dbc6]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::2854:770d:2a43:dbc6%4]) with mapi id 15.20.6319.033; Mon, 24 Apr 2023
+ 16:45:04 +0000
+Message-ID: <9a9b0de5-0e19-d68f-606f-c10817b873bc@intel.com>
+Date:   Mon, 24 Apr 2023 09:45:01 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2 16/24] selftests/resctrl: Create cache_alloc_size()
+ helper
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC:     <linux-kselftest@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Shaopeng Tan" <tan.shaopeng@jp.fujitsu.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
+ <20230418114506.46788-17-ilpo.jarvinen@linux.intel.com>
+ <287e5f1f-87d5-473a-2bff-271adca8d458@intel.com>
+ <5db5680-4123-17b8-e657-39ba20356259@linux.intel.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <5db5680-4123-17b8-e657-39ba20356259@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR13CA0031.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::6) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
 MIME-Version: 1.0
-In-Reply-To: <20230423150943.118576-1-krzysztof.kozlowski@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003d031305fa17b86d"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|MW5PR11MB5785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38b67823-6dc9-40a9-2afd-08db44e340ca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wRoPjlXTyMgyTVCDEnZc6c1sW7mq3fnUwawLGBQpm1kLZROWtV27wqLm4yYdC2j2TqLySxoliDHYuLL6jy46mdfkt4V7kNBmlt0nCx3wLHbWOT2V4i1UZFNB4Zm+fNpTtI4hI56X5jhzFRcmUssdegHQsVULtfPYqywC/iC0N4NtO4G1nJsxl0qwQhANBCC8A5H6q0/0Z+zoqQrqgrqNAjxE5fAAl6ggNsKOweG2mIaoOdKPVi+Vtc9r1UGtIROhD/sHM8eYSU3bl8+UpVjQGBjgXAEuUymhprP7V3CjkByH3QBGSTg8LDWmnTbV76dv9URE02fKmv9J4+6zvTa9gSg4RBSlv8jxYfbtqJ38LctkZly3UaAm8i5h/92ZB/UucJNy2BjGtGiRkImeEfBdfAjfNmbM7EVaiaqdn1nAx0WbsW2pN9TY8e5hQdhh67oIyMej790BfYdVZZBl2ZvG67ep1WRVgTIGdFqgsuwf9u8Zm2NyA+5j0knt+Gox7HX9/MTmGcSFi8jl37c/nc6l/iBY7O54PacGf3SpmudBbUE3BWCxBbjlbXUhw8Q7KwcE/hPWkN6Iibnet7e6FYmkhXgFoSrdsjebOI4pWtLCL3fIBncGffOqbmu8l008A/V9qfTQfI5vjd1CN7V07q2jBg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199021)(54906003)(36756003)(478600001)(82960400001)(316002)(4326008)(6916009)(66476007)(66556008)(66946007)(41300700001)(44832011)(2906002)(8936002)(8676002)(5660300002)(38100700002)(2616005)(31686004)(6512007)(6506007)(26005)(53546011)(86362001)(186003)(31696002)(6666004)(83380400001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RVc2NzNIS3JJaGtURTh3Q09NQ2oreXV2N2JpeFJ5d1dBZE5oSGJpcVVDUWN1?=
+ =?utf-8?B?a3BaM0JZNVlMV2t2ZGhNU0EwUUE0NEtoWWVIL2RQZFh6bFR0NzE0NVhvYk0w?=
+ =?utf-8?B?YVlNR2tNL3pldG8wWkhCS2JNa3NRRmNtcnlvZzZQeXgrNDJkRFNxZ1FmTmtV?=
+ =?utf-8?B?dklIelNPMHhLSDBoY0h2TDcxZEgwbGRIVVVSQStSSkg1U296b3EwYWtpS3Fq?=
+ =?utf-8?B?bEFWYTJxcGh5MXJaa2hsQ0NVaHJzclNvVUcyZEMrYm5uM0JDeWFHenJmbEdP?=
+ =?utf-8?B?TC9MdjJUVjh1OFpxdFBnTDIrMEtqU2lPUkFRQkRhYkM2QWR0a1dQanZkdEM0?=
+ =?utf-8?B?ampIcy9iNGlRTmhUL0pEenZDT25KT1RhQXp0UmlwSGFEeURTVmxrTTdLYVlR?=
+ =?utf-8?B?dDd2N2NNZVRPQ3YxVXBnOVVUclJGempJTDFEUVloUXhnUEc4eEVOSXMxR1Zj?=
+ =?utf-8?B?ZlR0WVBRVGs4WHRQS0RnUTkyVE1mbzVETWV1VXpmU0ZJN3ZFSkZNeXNQd09s?=
+ =?utf-8?B?SXBJcGo0VXl5OWlmM3VDTVlyMEtxYncxVzBNRytjSHZZQnJnSUVwNHVaVUhI?=
+ =?utf-8?B?bVR6cWpqK1I0RGFzdjY0U1RNOENCaFFlY21Ta0J2SEh1c2I5OHp1R01FbE9n?=
+ =?utf-8?B?N3BNbTFhMEE0cUIxSXJSTmlOM3JPZjZCYUFpNXpTQm5oWDhXYWZpYU5SSS9u?=
+ =?utf-8?B?V3p5MVJXTFhPUnVmQkp5Uy90d1JkL3k3RWFFVStsRWxMcW4zV2RnTWJYcFR3?=
+ =?utf-8?B?Yms1aGc3NHZlWUlOUFZYSmxLcFVWSjNncVdaVUVCeEtRbUozN1BXVFJGendw?=
+ =?utf-8?B?SExEQmxFS1pCQklTbUV5OWd3VFBOalI1dlNKcGxSWlJzUjZpczEwRGVVYXE1?=
+ =?utf-8?B?UU8ranFwRGxXVzVsamc5Ykkrb2hGeDFOOGNNR0libGxvVmliSTV3Y01DaHUz?=
+ =?utf-8?B?cm9CLy9TdUprQVBaeGoyL2U5aGR0UnNVU0pFTk1oZlplMkU4aEp4a2M0ajZH?=
+ =?utf-8?B?dnlnayt0by9UaTUrTnBVdGF4RUFsamJZclU1c1ZVY2RyRDR2dkdkejAvSkxX?=
+ =?utf-8?B?NStqKzkzUmwvcmwrWDl4aHRFWDNEd0NiamNmdU1aM3lScnpCMjZwZjJwUmxK?=
+ =?utf-8?B?RWpjSkRpWUxsS0hrV0Q4RDM0MHQ5cnNzT3llSVJOZ0duMU41ZXB0dG9kRGhi?=
+ =?utf-8?B?T1d6R0E0TlEyUS93SEx4MWU4eWlxdWxxUldwYzBuY0VUS0c2TFRpREpsWmtR?=
+ =?utf-8?B?cEhOenlqS0dZMWsxVW1qMXZjTGw4bkQwdEl2cmpRaTJndVdqaEZ0R3UzUXFB?=
+ =?utf-8?B?Vmk2YTY5Qyszd3lvb0hvNTcwcDdsMEpCOGI1WVJtdGtFWkplZUt6LzRrU1Zn?=
+ =?utf-8?B?ZDNucmtWRHJhN25NNll2MEt2bHRrUC9aWlpUcUd4MzFpWUc3VVhVak5NWlhs?=
+ =?utf-8?B?V3pNTHZzRm53YU1kZkZYU2M3Y3JZdVAzbzhhaHpOS0tad1E4Qzgzb1g1ejMr?=
+ =?utf-8?B?TSs0ZWo2YWFPaEs5RStsVkdydFl3Q1lWdXI1ak5rS2wvWWhGYkxyWWRBTy9s?=
+ =?utf-8?B?dUpaTzZ1QXAxUWhHcW5DRE5Qc1AwMXpTME0zanMxRlhRVXFNODljV2NtNFVX?=
+ =?utf-8?B?TGVYa29lQ1NkZlNRUWNSMkFSWU0vZ3QwOHJWeGt3Ums4MlFiMy9zRlFRNmhJ?=
+ =?utf-8?B?V3d6bmhmaWpTVEhKMXBkQ3dOdEJEb3ZwUjNnaUFIVXN6ckdaZ0NsamtsRmw4?=
+ =?utf-8?B?bklqQnZTQ0ZseVpEZDJnQ3ZOTldmYWY0aWRJRW15Vm9KOHpBMVdOeWNKSnhV?=
+ =?utf-8?B?MHlhczlTVFZzNEp0VXFDaFhEdGIvVDN1TlhSK25ndWhwVmNWTld6WndIRzQw?=
+ =?utf-8?B?eFhFTWVacDRjMm5va3FNTkIvVjVBRGM5UmxQS3AvV3FMUGdienFFdnZ0bWlw?=
+ =?utf-8?B?RFFGM0hGWWx5d3AzMW5RYW9GWWpXcXl2bjhmL2tMcTlTRmZSZGhpYlA4NzZm?=
+ =?utf-8?B?M2RjVGkxZk5tbUI0WmM5d2hzZXlIaHIzVjlhMDY4NTJkWWRZRzd5OGlwdUpi?=
+ =?utf-8?B?ZWNoN2NxYnpYWWFxYUlTTXZBSzczN1RpVnFOaDNZY1RGeE5CWkJXY1BFWmZs?=
+ =?utf-8?B?T2NhQjJRTnJLdmlvbmhEWXdwSVJ2emJKVzR1ak96UzBJaXFjNUp6NlI3dlha?=
+ =?utf-8?B?c3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38b67823-6dc9-40a9-2afd-08db44e340ca
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 16:45:04.0176
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pq4WtTQysKdkw7CHvv2PP91uqxEUaWHknZ5BiVkANCiWGfq8ju0idNXM7cB+y15dsUfDeYi6n7t8Roepq5DhpJxbjcSAsaruJ5oq8b+Ucps=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5785
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,112 +168,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003d031305fa17b86d
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Hi Ilpo,
 
-
-
-On 04/23/2023 08:09 AM, Krzysztof Kozlowski wrote:
-> As all level 2 and level 3 caches are unified, add required
-> cache-unified properties to fix warnings like:
+On 4/24/2023 9:28 AM, Ilpo Järvinen wrote:
+> On Fri, 21 Apr 2023, Reinette Chatre wrote:
 > 
->    bcm963148.dtb: l2-cache0: 'cache-unified' is a required property
+>> On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
+>>> CAT and CMT tests calculate the span size from the n-bits cache
+>>> allocation on their own.
+>>>
+>>> Add cache_alloc_size() helper which calculates size of the cache
+>>> allocation for the given number of bits to avoid duplicating code.
+>>
+>> This patch is very heavy on the usage of allocation when I think it
+>> only refers to the cache size ... how that size is used by the caller
+>> is independent from this. 
+>>
+>> Compare to how it sounds with some small changes to changelog:
+>>
+>> 	CAT and CMT tests calculate the span size from the capacity
+>> 	bitmask independently.
+>> 	
+>> 	Add cache_size() helper which calculates the size of the
+>> 	cache for the given number of bits to avoid duplicating code.
+>>
+>> I think removing "alloc" helps to convey what this code actually does.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm/boot/dts/bcm47622.dtsi | 1 +
->   arch/arm/boot/dts/bcm63148.dtsi | 1 +
->   arch/arm/boot/dts/bcm63178.dtsi | 1 +
->   arch/arm/boot/dts/bcm6756.dtsi  | 1 +
->   arch/arm/boot/dts/bcm6846.dtsi  | 1 +
->   arch/arm/boot/dts/bcm6855.dtsi  | 1 +
->   arch/arm/boot/dts/bcm6878.dtsi  | 1 +
->   7 files changed, 7 insertions(+)
+> Does it? Without something to indicate its not the full cache size, 
+> there's possiblity for confusion. While the tests are mostly interested 
+> in the allocated size, the full cache size is also collected (solely for 
+> printing it out, IIRC). Maybe I should rename those variable to 
+> total_cache_size or something like that to mitigate the confusion?
+
+This patch adds and use a utility that converts a bitmask into bytes.
+I do not think it should dictate what the meaning or usage of the bitmask
+is.
+
+>>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>>> ---
+>>>  tools/testing/selftests/resctrl/cache.c    | 27 ++++++++++++++++++++++
+>>>  tools/testing/selftests/resctrl/cat_test.c |  8 +++++--
+>>>  tools/testing/selftests/resctrl/cmt_test.c |  4 +++-
+>>>  tools/testing/selftests/resctrl/resctrl.h  |  2 ++
+>>>  4 files changed, 38 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+>>> index 6bc912de38be..b983af394e33 100644
+>>> --- a/tools/testing/selftests/resctrl/cache.c
+>>> +++ b/tools/testing/selftests/resctrl/cache.c
+>>> @@ -15,6 +15,33 @@ static struct read_format rf_cqm;
+>>>  static int fd_lm;
+>>>  char llc_occup_path[1024];
+>>>  
+>>> +/*
+>>> + * cache_alloc_size - Calculate alloc size for given cache alloc mask
+>>
+>> "cache_size - Calculate number of bytes represented by bitmask" ?
+>> Please feel free to improve.
+>>
+>>
+>>> + * @cpu_no:		CPU number
+>>> + * @cache_type:		Cache level L2/L3
+>>> + * @alloc_mask:		Cache alloc mask
+>>
+>> The description is mostly a rewrite of the variable name. Can it be
+>> more descriptive?
+>>
+>>> + * @alloc_size:		Alloc size returned on success
+>>
+>> I do not think the utility should assume anything about how
+>> the value it provides should be used. Instead it should just reflect
+>> what the value is.
 > 
+> I was just referring to that the value is filled only on success.
 
-Reviewed-by: William Zhang <william.zhang@broadcom.com>
+I understand. My comment was about the naming of the parameter, which can,
+for example, just be "size".
+
+>>> + * Returns: 0 on success with @alloc_size filled, non-zero on error.
+>>> + */
+>>> +int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
+>>> +		     unsigned long *alloc_size)
+>>> +{
+>>> +	unsigned long cache_size, full_mask;
+>>> +	int ret;
+>>> +
+>>> +	ret = get_cbm_mask(cache_type, &full_mask);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	ret = get_cache_size(cpu_no, cache_type, &cache_size);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	*alloc_size = cache_size * count_bits(alloc_mask) / count_bits(full_mask);
+>>> +	return 0;
+>>> +}
+>>> +
+>>>  static void initialize_perf_event_attr(void)
+>>>  {
+>>>  	pea_llc_miss.type = PERF_TYPE_HARDWARE;
+>>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+>>> index 9bf5d05d9e74..d3fbd4de9f8a 100644
+>>> --- a/tools/testing/selftests/resctrl/cat_test.c
+>>> +++ b/tools/testing/selftests/resctrl/cat_test.c
+>>> @@ -140,7 +140,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>>>  	/* Set param values for parent thread which will be allocated bitmask
+>>>  	 * with (max_bits - n) bits
+>>>  	 */
+>>> -	param.span = cache_size * (count_of_bits - n) / count_of_bits;
+>>> +	ret = cache_alloc_size(cpu_no, cache_type, l_mask, &param.span);
+>>> +	if (ret)
+>>> +		return ret;
+>>>  	strcpy(param.ctrlgrp, "c2");
+>>>  	strcpy(param.mongrp, "m2");
+>>>  	strcpy(param.filename, RESULT_FILE_NAME2);
+>>> @@ -162,7 +164,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>>>  		param.mask = l_mask_1;
+>>>  		strcpy(param.ctrlgrp, "c1");
+>>>  		strcpy(param.mongrp, "m1");
+>>> -		param.span = cache_size * n / count_of_bits;
+>>> +		ret = cache_alloc_size(cpu_no, cache_type, l_mask_1, &param.span);
+>>> +		if (ret)
+>>> +			exit(-1);
+>>>  		strcpy(param.filename, RESULT_FILE_NAME1);
+>>>  		param.num_of_runs = 0;
+>>>  		param.cpu_no = sibling_cpu_no;
+>>
+>> Did this change intend to remove the duplicate code mentioned
+>> in the changelog?
+> 
+> It removes n CBM bits -> cache size calculations by collecting the 
+> calculation into one place.
+> 
+> cache_alloc_size() takes mask instead of n (CBM bits) as input which makes 
+> things easier down the line when the new CAT test starts to tweak the 
+> alloc size. The new CAT test would otherwise need to track both the mask 
+> and n.
+> 
+> cache_alloc_size() is independent of what caller requires so the full mask 
+> is not passed from the caller.
+> 
+>> I was expecting the calls to get_cbm_mask() and get_cache_size() within 
+>> cat_perf_miss_val() to be removed.
+> 
+> I would have wanted to remove get_cache_size() but it would mean removing 
+> cache size print or moving it to elsewhere.
+> 
+> get_cbm_mask() cannot be removed as it's used by the test to calculate the 
+> mask the test wants (but it no longer has to determine the size itself but 
+> uses this new helper instead).
+> 
+> I can try to amend the changelog to explain things better.
+
+The current motivation for this patch is to avoid duplicating code but as I
+see it it introduces more duplicated code.
+
+Reinette
 
 
---0000000000003d031305fa17b86d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFg3im0igypD6Aa51hpnXjcRYstn
-lRE6Qtnn/ICZMXy0MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDQyNDE2NDQyNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCngZutTTpjKON9WCS351jJU6wULzZtpSnjyUgMpMPOSQEN
-6I2Z9kJJmC60e1WxDrBFizP8y8E1LxPoyaZaru2q4EMkQNPi1mm9+dmbRM5A4LE1HqTq2jYrpIYo
-PhZJs+6HH8sr3+CsHPokqfrTQ2mqvxMqUL2r0aVoRlUEhYOiM6bEn1uR2FwM18zd86svNF9uheWu
-Re3BvilZHWQodtldqMrxf8a0Q+7bkaGCXDwrDKlAwLIijp5AVDVYVxPr2po4N3bFQKA0CXaoasu2
-e+/B9bfrSfR3WdFsOb1SCmQx5b2G1lOg23CTz97lPE8so6VxybnIGR9EFO3DjZqpnMb7
---0000000000003d031305fa17b86d--
