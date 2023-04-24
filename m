@@ -2,501 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C306ECCF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5996ECCC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjDXNRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S231849AbjDXNOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbjDXNQ7 (ORCPT
+        with ESMTP id S230416AbjDXNON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:16:59 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6092E5259;
-        Mon, 24 Apr 2023 06:16:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kDWvpL1OHQZ//WeGJSzYo4cygC05IS+qTCexvJZfP2koQPi0ZDtloUjgtTJGprOs77GAxOcenUl/+zgs1x3a1BZ3oykgX6HsNV1M3HnyObNtxLb/3vJCMN9/IB+QtKJSEYXm2IvElyoqhSmxo3IYEqlMNLtk3iBpmtGoJLJ0oth2xuJ6pFexT0SJQHesdb88VEb3bU3JKLbAn2NwOHGfBJP9y7+B+Yt8zkyqqlO6JYGVlNCiH6Lc2OORS7Cb1+sp4ARheIOZuugpeYi3w6wEfdlztxZz7KbIntMQyCU3LdT3pKW0EVbiMh+obCHNzhb4fFVAHir3GQZCBeQkObzgFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3nsMtliVfQ4xVQKkWlDg78TRz0LuP+gntsRIi9bqP48=;
- b=CSXdf7uee0XJF2J/55SGrMEZTABgnhNrtp7qMwx0oQAM4ygssY5656a4qFAnvePEhWlDipCDmRrfaUdbCBk6AQmXun34luZJg9luJL/skBfmzRRvLH8U5kXRAgIDCfQRNPrDOdwXymvkqaxWaiYG3VIoA9c+SMDrLbFQLsFvBQE8bMRPBqBMv7230DyZuAgTWt/+u0Re19Cfw7nyXrgv2bXBLYETinUkFplDYrNGwN8riP5Dp5RCyVEv86NSjg/OgNvBjtqmwEqidp/reBJdsVSiXDTR1BHArpfBEzanFbAe79vogWNzYdjRSYmJqnysPmNzu+MBXp1HwtZBkTi3Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3nsMtliVfQ4xVQKkWlDg78TRz0LuP+gntsRIi9bqP48=;
- b=ZxGYfgZEbw/iX6f0Qkhs7H05dEQSo/jadjDk+yQ/Axq6C4oIWj8+zt3+woG0rM9fiZ3IlnU+0jbvapNwLUKVd/AdU6tpsJ0OTpr/8pH5gO7pIf82fGH5CK0Db8i2gorSUCHkVu3kWZaDnJgV263l4KpY0wR6z4WEvaRdLWJfzoxs/Jv1g1UKQjpZ80M9Ig21SdzQTU7wBsjgNH1HvKWJ5gbkAAuvUmAocBv1C0JndN9d6GT62S3XxkrHRX2i9j6oxQN0hw46+KHjdhjhqBMeqrfSSQZ0T2iiXfrgQbzEGC4708lvGXwNWaS5rfFZy3T8FZ/uRjv5D3XCfE5eAF9sBg==
-Received: from BL1PR13CA0400.namprd13.prod.outlook.com (2603:10b6:208:2c2::15)
- by DM6PR12MB5024.namprd12.prod.outlook.com (2603:10b6:5:20a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 13:16:01 +0000
-Received: from BL02EPF000145B9.namprd05.prod.outlook.com
- (2603:10b6:208:2c2:cafe::dc) by BL1PR13CA0400.outlook.office365.com
- (2603:10b6:208:2c2::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.19 via Frontend
- Transport; Mon, 24 Apr 2023 13:16:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF000145B9.mail.protection.outlook.com (10.167.241.209) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.16 via Frontend Transport; Mon, 24 Apr 2023 13:16:01 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 24 Apr 2023
- 06:15:46 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 24 Apr
- 2023 06:15:46 -0700
-Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Mon, 24 Apr 2023 06:15:40 -0700
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
-        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>, <helgaas@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <mmaddireddy@nvidia.com>,
-        <kw@linux.com>, <bhelgaas@google.com>, <vidyas@nvidia.com>,
-        <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, <sumitg@nvidia.com>
-Subject: [Patch v7 8/8] arm64: tegra: Add cpu OPP tables and interconnects property
-Date:   Mon, 24 Apr 2023 18:43:37 +0530
-Message-ID: <20230424131337.20151-9-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230424131337.20151-1-sumitg@nvidia.com>
-References: <20230424131337.20151-1-sumitg@nvidia.com>
-X-NVConfidentiality: public
+        Mon, 24 Apr 2023 09:14:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613EE3C35;
+        Mon, 24 Apr 2023 06:14:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Q4lvc1NK5z4xFk;
+        Mon, 24 Apr 2023 23:14:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1682342044;
+        bh=rAKfGIpfGUfQJGxo6deg2EVn0G/Z65TZXTVSjeW+nY4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UZJMUxEapjvdGCgfPjbLgLah58rNqMaCXZk/CLhW8lSR3KYbNzGV7Wy7rOCQh1rPm
+         FPufVJM3J2hRt0cz4/lpju9GndP/USzGsSkSsGznvvjwS2d7xVnOir+JXTy4Qq3xOo
+         v8XtlhieBrHHOKgC39Q9AxF6hegs3dTbjg7KQ8inL2GOB6XZm12Kn7hqVD/VtUjkho
+         Ndq20DVImSQpNp1zVCdAoJQNnHtTwIth6ZzUDPzyMctdjmgm7BsLxfr6Ka3YLbRC55
+         CdIYCDmLxtYM9dRuYeBZu89xBQYeJco2CbnlbLYVDmrGw44TH9Afxm0HClqwW961CX
+         AOhTQ8EcRmPxg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Boqun Feng <boqun.feng@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+In-Reply-To: <ZEXOMC2casTlobE1@boqun-archlinux>
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+ <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
+ <ZEXOMC2casTlobE1@boqun-archlinux>
+Date:   Mon, 24 Apr 2023 23:14:00 +1000
+Message-ID: <87fs8pzalj.fsf@mail.concordia>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000145B9:EE_|DM6PR12MB5024:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a6b79e4-7439-4894-8e27-08db44c60cd1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T4vvTfGDPDNPx8uky/m8zP5E3yNtQvaqxrqSnzYDD1ARMPHFMaImPw7rdAAZ15S2kOkBWkQeCUzBxQ1bsBlQQNR96abWYu6JkBCHun6YNFVc9OHK421Aau+PaeqUGGknuL9huDlkApZ3yWYkStyVI+tjDc7tDckBuDJo2UsOxgja1GiU+TX/nHmkIduhpSM4eR5KuhQZcI4PNDK6jjmwmEjnnvrkAnXSmsU03je1aRpqludPQCCctV6mbVFEQ6py8xwPGEfVrZxfMkagrAN93VS49RUHGMVBLJrE+ktrJelrMk5EvVqMbspCG960bb1NI9ow2n0PkNbOaOalRp3iwthSsPZCC3ZAjxKKjDTEiwsG0HXqCbYSPB0pLx+2B/bw9o4blbd8Z4ZeJwrcAZ0bOBUj5Qs5+9RLW83bepQDZw7/XrSSRON6Krc67yRoZ5VL+e1buDdjDcSyLuTS/a7EOo4U0mroPBIHfjoWNvNFuKh4LEuuIC2NWMmdS7C9+u8HK8VBzI3QzFdge+ZWJcvVMCseexJoXzZWeN2aHmMI1y8suE0rEOK/gCeSuoXh75TlkOX9qdbOH8aewGjUUbSXY4WXZhmvTRb7XvWNgELZU7ytSSalVSvN2iUoqbwdgyHCMVkAFHA1iiVBIyQN3ix0FICjZ/YByLhqL8RszyJ60SXWDk2wS4G5UDCIfOevH9i+dLTUBU/Af7rr1n/EmZT8BQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199021)(36840700001)(46966006)(40470700004)(478600001)(40460700003)(110136005)(54906003)(86362001)(36756003)(107886003)(186003)(7696005)(26005)(82310400005)(1076003)(40480700001)(6666004)(4326008)(316002)(82740400003)(83380400001)(70206006)(70586007)(36860700001)(2906002)(7636003)(336012)(356005)(426003)(41300700001)(8676002)(8936002)(5660300002)(47076005)(7416002)(2616005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 13:16:01.0455
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a6b79e4-7439-4894-8e27-08db44c60cd1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5024
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add OPP table and interconnects property to scale DDR frequency with
-CPU frequency for better performance. Each operating point entry of
-the OPP table has CPU freq to per MC channel bandwidth mapping.
-One table is added for each cluster even though the table data is
-same because the bandwidth request is per cluster. This is done
-because OPP framework creates a single icc path and hence single
-bandwidth request if the table is marked as 'opp-shared' and shared
-among all clusters. For us, the OPP table data is same but the MC
-Client ID argument to interconnects property is different for each
-cluster. So, having per cluster table makes different icc path for
-each cluster and helps to make per cluster BW requests.
+Hi Boqun,
 
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 276 +++++++++++++++++++++++
- 1 file changed, 276 insertions(+)
+Thanks for debugging this ...
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index 5d354f8923b4..8d0b89b5733e 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -3011,6 +3011,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl0_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER0 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3027,6 +3030,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl0_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER0 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3043,6 +3049,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl0_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER0 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3059,6 +3068,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl0_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER0 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3075,6 +3087,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl1_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER1 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3091,6 +3106,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl1_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER1 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3107,6 +3125,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl1_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER1 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3123,6 +3144,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl1_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER1 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3139,6 +3163,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl2_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER2 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3155,6 +3182,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl2_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER2 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3171,6 +3201,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl2_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER2 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3187,6 +3220,9 @@
- 
- 			enable-method = "psci";
- 
-+			operating-points-v2 = <&cl2_opp_tbl>;
-+			interconnects = <&mc TEGRA_ICC_MC_CPU_CLUSTER2 &emc>;
-+
- 			i-cache-size = <65536>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -3461,4 +3497,244 @@
- 		interrupt-parent = <&gic>;
- 		always-on;
- 	};
-+
-+	cl0_opp_tbl: opp-table-cluster0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cl0_ch1_opp1: opp-115200000 {
-+			  opp-hz = /bits/ 64 <115200000>;
-+			  opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp2: opp-268800000 {
-+			opp-hz = /bits/ 64 <268800000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp3: opp-422400000 {
-+			opp-hz = /bits/ 64 <422400000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp4: opp-576000000 {
-+			opp-hz = /bits/ 64 <576000000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp5: opp-729600000 {
-+			opp-hz = /bits/ 64 <729600000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp6: opp-883200000 {
-+			opp-hz = /bits/ 64 <883200000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp7: opp-1036800000 {
-+			opp-hz = /bits/ 64 <1036800000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp8: opp-1190400000 {
-+			opp-hz = /bits/ 64 <1190400000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl0_ch1_opp9: opp-1344000000 {
-+			opp-hz = /bits/ 64 <1344000000>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		cl0_ch1_opp10: opp-1497600000 {
-+			opp-hz = /bits/ 64 <1497600000>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		cl0_ch1_opp11: opp-1651200000 {
-+			opp-hz = /bits/ 64 <1651200000>;
-+			opp-peak-kBps = <2660000>;
-+		};
-+
-+		cl0_ch1_opp12: opp-1804800000 {
-+			opp-hz = /bits/ 64 <1804800000>;
-+			opp-peak-kBps = <2660000>;
-+		};
-+
-+		cl0_ch1_opp13: opp-1958400000 {
-+			opp-hz = /bits/ 64 <1958400000>;
-+			opp-peak-kBps = <3200000>;
-+		};
-+
-+		cl0_ch1_opp14: opp-2112000000 {
-+			opp-hz = /bits/ 64 <2112000000>;
-+			opp-peak-kBps = <6400000>;
-+		};
-+
-+		cl0_ch1_opp15: opp-2201600000 {
-+			opp-hz = /bits/ 64 <2201600000>;
-+			opp-peak-kBps = <6400000>;
-+		};
-+	};
-+
-+	cl1_opp_tbl: opp-table-cluster1 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cl1_ch1_opp1: opp-115200000 {
-+			  opp-hz = /bits/ 64 <115200000>;
-+			  opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp2: opp-268800000 {
-+			opp-hz = /bits/ 64 <268800000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp3: opp-422400000 {
-+			opp-hz = /bits/ 64 <422400000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp4: opp-576000000 {
-+			opp-hz = /bits/ 64 <576000000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp5: opp-729600000 {
-+			opp-hz = /bits/ 64 <729600000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp6: opp-883200000 {
-+			opp-hz = /bits/ 64 <883200000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp7: opp-1036800000 {
-+			opp-hz = /bits/ 64 <1036800000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp8: opp-1190400000 {
-+			opp-hz = /bits/ 64 <1190400000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl1_ch1_opp9: opp-1344000000 {
-+			opp-hz = /bits/ 64 <1344000000>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		cl1_ch1_opp10: opp-1497600000 {
-+			opp-hz = /bits/ 64 <1497600000>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		cl1_ch1_opp11: opp-1651200000 {
-+			opp-hz = /bits/ 64 <1651200000>;
-+			opp-peak-kBps = <2660000>;
-+		};
-+
-+		cl1_ch1_opp12: opp-1804800000 {
-+			opp-hz = /bits/ 64 <1804800000>;
-+			opp-peak-kBps = <2660000>;
-+		};
-+
-+		cl1_ch1_opp13: opp-1958400000 {
-+			opp-hz = /bits/ 64 <1958400000>;
-+			opp-peak-kBps = <3200000>;
-+		};
-+
-+		cl1_ch1_opp14: opp-2112000000 {
-+			opp-hz = /bits/ 64 <2112000000>;
-+			opp-peak-kBps = <6400000>;
-+		};
-+
-+		cl1_ch1_opp15: opp-2201600000 {
-+			opp-hz = /bits/ 64 <2201600000>;
-+			opp-peak-kBps = <6400000>;
-+		};
-+	};
-+
-+	cl2_opp_tbl: opp-table-cluster2 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cl2_ch1_opp1: opp-115200000 {
-+			  opp-hz = /bits/ 64 <115200000>;
-+			  opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp2: opp-268800000 {
-+			opp-hz = /bits/ 64 <268800000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp3: opp-422400000 {
-+			opp-hz = /bits/ 64 <422400000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp4: opp-576000000 {
-+			opp-hz = /bits/ 64 <576000000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp5: opp-729600000 {
-+			opp-hz = /bits/ 64 <729600000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp6: opp-883200000 {
-+			opp-hz = /bits/ 64 <883200000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp7: opp-1036800000 {
-+			opp-hz = /bits/ 64 <1036800000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp8: opp-1190400000 {
-+			opp-hz = /bits/ 64 <1190400000>;
-+			opp-peak-kBps = <816000>;
-+		};
-+
-+		cl2_ch1_opp9: opp-1344000000 {
-+			opp-hz = /bits/ 64 <1344000000>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		cl2_ch1_opp10: opp-1497600000 {
-+			opp-hz = /bits/ 64 <1497600000>;
-+			opp-peak-kBps = <1632000>;
-+		};
-+
-+		cl2_ch1_opp11: opp-1651200000 {
-+			opp-hz = /bits/ 64 <1651200000>;
-+			opp-peak-kBps = <2660000>;
-+		};
-+
-+		cl2_ch1_opp12: opp-1804800000 {
-+			opp-hz = /bits/ 64 <1804800000>;
-+			opp-peak-kBps = <2660000>;
-+		};
-+
-+		cl2_ch1_opp13: opp-1958400000 {
-+			opp-hz = /bits/ 64 <1958400000>;
-+			opp-peak-kBps = <3200000>;
-+		};
-+
-+		cl2_ch1_opp14: opp-2112000000 {
-+			opp-hz = /bits/ 64 <2112000000>;
-+			opp-peak-kBps = <6400000>;
-+		};
-+
-+		cl2_ch1_opp15: opp-2201600000 {
-+			opp-hz = /bits/ 64 <2201600000>;
-+			opp-peak-kBps = <6400000>;
-+		};
-+	};
- };
--- 
-2.17.1
+Boqun Feng <boqun.feng@gmail.com> writes:
+> On Sat, Apr 22, 2023 at 09:28:39PM +0200, Joel Fernandes wrote:
+>> On Sat, Apr 22, 2023 at 2:47=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.co=
+m> wrote:
+>> >
+>> > Dear PowerPC and RCU developers:
+>> > During the RCU torture test on mainline (on the VM of Opensource Lab
+>> > of Oregon State University), SRCU-P failed with __stack_chk_fail:
+>> > [  264.381952][   T99] [c000000006c7bab0] [c0000000010c67c0]
+>> > dump_stack_lvl+0x94/0xd8 (unreliable)
+>> > [  264.383786][   T99] [c000000006c7bae0] [c00000000014fc94] panic+0x1=
+9c/0x468
+>> > [  264.385128][   T99] [c000000006c7bb80] [c0000000010fca24]
+>> > __stack_chk_fail+0x24/0x30
+>> > [  264.386610][   T99] [c000000006c7bbe0] [c0000000002293b4]
+>> > srcu_gp_start_if_needed+0x5c4/0x5d0
+>> > [  264.388188][   T99] [c000000006c7bc70] [c00000000022f7f4]
+>> > srcu_torture_call+0x34/0x50
+>> > [  264.389611][   T99] [c000000006c7bc90] [c00000000022b5e8]
+>> > rcu_torture_fwd_prog+0x8c8/0xa60
+>> > [  264.391439][   T99] [c000000006c7be00] [c00000000018e37c] kthread+0=
+x15c/0x170
+>> > [  264.392792][   T99] [c000000006c7be50] [c00000000000df94]
+>> > ret_from_kernel_thread+0x5c/0x64
+>> > The kernel config file can be found in [1].
+>> > And I write a bash script to accelerate the bug reproducing [2].
+>> > After a week's debugging, I found the cause of the bug is because the
+>> > register r10 used to judge for stack overflow is not constant between
+>> > context switches.
+>> > The assembly code for srcu_gp_start_if_needed is located at [3]:
+>> > c000000000226eb4:   78 6b aa 7d     mr      r10,r13
+>> > c000000000226eb8:   14 42 29 7d     add     r9,r9,r8
+>> > c000000000226ebc:   ac 04 00 7c     hwsync
+>> > c000000000226ec0:   10 00 7b 3b     addi    r27,r27,16
+>> > c000000000226ec4:   14 da 29 7d     add     r9,r9,r27
+>> > c000000000226ec8:   a8 48 00 7d     ldarx   r8,0,r9
+>> > c000000000226ecc:   01 00 08 31     addic   r8,r8,1
+>> > c000000000226ed0:   ad 49 00 7d     stdcx.  r8,0,r9
+>> > c000000000226ed4:   f4 ff c2 40     bne-    c000000000226ec8
+>> > <srcu_gp_start_if_needed+0x1c8>
+>> > c000000000226ed8:   28 00 21 e9     ld      r9,40(r1)
+>> > c000000000226edc:   78 0c 4a e9     ld      r10,3192(r10)
+>> > c000000000226ee0:   79 52 29 7d     xor.    r9,r9,r10
+>> > c000000000226ee4:   00 00 40 39     li      r10,0
+>> > c000000000226ee8:   b8 03 82 40     bne     c0000000002272a0
+>> > <srcu_gp_start_if_needed+0x5a0>
+>> > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
+>> > but if there is a context-switch before c000000000226edc, a false
+>> > positive will be reported.
+>> >
+>> > [1] http://154.220.3.115/logs/0422/configformainline.txt
+>> > [2] 154.220.3.115/logs/0422/whilebash.sh
+>> > [3] http://154.220.3.115/logs/0422/srcu_gp_start_if_needed.txt
+>> >
+>> > My analysis and debugging may not be correct, but the bug is easily
+>> > reproducible.
+>>=20
+>> If this is a bug in the stack smashing protection as you seem to hint,
+>> I wonder if you see the issue with a specific gcc version and is a
+>> compiler-specific issue. It's hard to say, but considering this I
+>
+> Very likely, more asm code from Zhouyi's link:
+>
+> This is the __srcu_read_unlock_nmisafe(), since "hwsync" is
+> smp_mb__{after,before}_atomic(), and the following code is first
+> barrier then atomic, so it's the unlock.
+>
+> 	c000000000226eb4:	78 6b aa 7d 	mr      r10,r13
+>
+> ^ r13 is the pointer to percpu data on PPC64 kernel, and it's also
+> the pointer to TLS data for userspace code.
 
+I've never understood why the compiler wants to make a copy of a
+register variable into another register!? >:#
+
+> 	c000000000226eb8:	14 42 29 7d 	add     r9,r9,r8
+> 	c000000000226ebc:	ac 04 00 7c 	hwsync
+> 	c000000000226ec0:	10 00 7b 3b 	addi    r27,r27,16
+> 	c000000000226ec4:	14 da 29 7d 	add     r9,r9,r27
+> 	c000000000226ec8:	a8 48 00 7d 	ldarx   r8,0,r9
+> 	c000000000226ecc:	01 00 08 31 	addic   r8,r8,1
+> 	c000000000226ed0:	ad 49 00 7d 	stdcx.  r8,0,r9
+> 	c000000000226ed4:	f4 ff c2 40 	bne-    c000000000226ec8 <srcu_gp_start_i=
+f_needed+0x1c8>
+> 	c000000000226ed8:	28 00 21 e9 	ld      r9,40(r1)
+> 	c000000000226edc:	78 0c 4a e9 	ld      r10,3192(r10)
+>
+> here I think that the compiler is using r10 as an alias to r13, since
+> for userspace program, it's safe to assume the TLS pointer doesn't
+> change. However this is not true for kernel percpu pointer.
+>
+> The real intention here is to compare 40(r1) vs 3192(r13) for stack
+> guard checking, however since r13 is the percpu pointer in kernel, so
+> the value of r13 can be changed if the thread gets scheduled to a
+> different CPU after reading r13 for r10.
+
+Yeah that's not good.
+
+> If I'm correct, the following should be a workaround:
+>
+> 	diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> 	index ab4ee58af84b..f5ae3be3d04d 100644
+> 	--- a/kernel/rcu/srcutree.c
+> 	+++ b/kernel/rcu/srcutree.c
+> 	@@ -747,6 +747,7 @@ void __srcu_read_unlock_nmisafe(struct srcu_struct *=
+ssp, int idx)
+>
+> 		smp_mb__before_atomic(); /* C */  /* Avoid leaking the critical section=
+. */
+> 		atomic_long_inc(&sdp->srcu_unlock_count[idx]);
+> 	+       asm volatile("" : : : "r13", "memory");
+> 	 }
+> 	 EXPORT_SYMBOL_GPL(__srcu_read_unlock_nmisafe);
+>
+> Zhouyi, could you give a try? Note I think the "memory" clobber here is
+> unnecesarry, but I just add it in case I'm wrong.
+>
+> Needless to say, the correct fix is to make ppc stack protector aware of
+> r13 is volatile.
+
+I suspect the compiler developers will tell us to go jump :)
+
+The problem of the compiler caching r13 has come up in the past, but I
+only remember it being "a worry" rather than causing an actual bug.
+
+We've had the DEBUG_PREEMPT checks in get_paca(), which have given us at
+least some comfort that if the compiler is caching r13, it shouldn't be
+doing it in preemptable regions.
+
+But obviously that doesn't help at all with the stack protector check.
+
+I don't see an easy fix.
+
+Adding "volatile" to the definition of local_paca seems to reduce but
+not elimate the caching of r13, and the GCC docs explicitly say *not* to
+use volatile. It also triggers lots of warnings about volatile being
+discarded.
+
+Short term we can make stack protector depend on !PREEMPT.
+
+Longer term possibly we can move to having current in a register like
+32-bit does, and then use that as the stack protector reg.
+
+Or something simple I haven't thought of? :)
+
+cheers
