@@ -2,355 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A072D6ED01C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D936ED019
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjDXOOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        id S231481AbjDXOOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjDXONv (ORCPT
+        with ESMTP id S231156AbjDXOOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:13:51 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58733768D;
-        Mon, 24 Apr 2023 07:13:50 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b5c830d5eso3654725b3a.2;
-        Mon, 24 Apr 2023 07:13:50 -0700 (PDT)
+        Mon, 24 Apr 2023 10:14:03 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE53107
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:14:00 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-2f6401ce8f8so2706689f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682345630; x=1684937630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TSEUsfr4dvWjlfJEd5fQQs4Zw/stuQIOx0vS+NOEm3c=;
-        b=VcCZSgiac/KQ6Yz9t4vq8KO8Xg80es06TeZjm5LWSfeYgU0pnJspuLntkiJiu429mG
-         bGu6Yt9lzoZNZmfNF77lSLUyZ8aMDNk13DNcvhUs5PNVc9CmTLHHpyTC8tP0iNE8brYW
-         cPbSmHYUoufiIMAr07/wNQMjt1qESn1UuS/3oSqp6wThPPSTzWezNPeS7yv0u0azRTLC
-         qVfHxXG0uodrABGmNW0mWLSu6RxjsXSX5KPrfgBKD7WMrUBPItXZJL/gw6tBn5Q8IW2n
-         n/DdNUQfPhS1FsrdGReKp804/k9tQASZKom2F5h/jMiwq7Mo1hqnYE++1WyB19ywGEZ1
-         cCbg==
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1682345639; x=1684937639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cIrOvNnDK3YOPprEDWvUP7TH6l3ojujdYbZDLboXHeQ=;
+        b=C5/BaNrVHKzKCv8bmvgsFkCjXVOVAkiYvvB/XpF1MJJ7J2h2p9mqJ/pPOfrpuYcTou
+         EkZiMb9FW2tFZYnaNMN93UVNTra6XQkvA6XNdP2IucNvMEPiEPmPRgbad/cnjYVOzb69
+         9djjCAyKsAj6w181zL/TczEMMH0PSOhkpBe7KHt5Dst1cvEy9A6kC+IQcZZffrZVDdWV
+         6zGs6feDCoZ6mUrOKkdbOINehPk0PoCbKyu1O/3o4d2mRW6CGZDBpuBJc5xpw8Jss+er
+         RDC0XVG8YjNfxP+h+oF7mOj2ZhxqalxWXsbkMsDYM0oQwPQkw6ZU6kHyAbQ4wnCTIMTj
+         CdiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682345630; x=1684937630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TSEUsfr4dvWjlfJEd5fQQs4Zw/stuQIOx0vS+NOEm3c=;
-        b=knb5rb4P0K/sVDTWZu5N7D6jou8NdylPDR2GfgXL5gSRyOzPxcgFXD8GwfnVniBlOj
-         gwYWs/Cw1J1zKPARNiecElWX4xKZMu0NyBKVyQjf38vUG13tk6BUo6uHAzKgPUd+PmFO
-         GYTQglCK7Q4JaO+g0RXZ+I3vUXaNATPDZVkN0taUEaCpRnj5j+TzbGoad/7UQ0xujVjS
-         OqkhQOg6DqwjDjvuKzhocfolMZ34TRaVVSRJdgrRy3QDp7sCVwu+GS3zB43sLKJgjQxa
-         LWih1J8Y1GwwgcoyysTedB/UFSejlhnsowfLthPP2LATFmHHNYuienxKmZqeGHQKS0iz
-         XYdg==
-X-Gm-Message-State: AAQBX9fZXEydZrP4xvIrX77J6vs6x1Nwi1+XcCYhx9b2381ms9ULTuvz
-        p0eaJBqhuptiOV3SERhlHKA=
-X-Google-Smtp-Source: AKy350YSmo+bdGt+AZUpTh+Km1yLIwDuTtNFpPe6MjG2FyhxYEvlH3Hy1oWbBvnMPwkkCzwBMZfR6A==
-X-Received: by 2002:a17:90b:1b4a:b0:24b:5eb7:f404 with SMTP id nv10-20020a17090b1b4a00b0024b5eb7f404mr12144814pjb.41.1682345629772;
-        Mon, 24 Apr 2023 07:13:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4-20020a17090ae60400b0023faa95f75csm8404920pjy.36.2023.04.24.07.13.48
+        d=1e100.net; s=20221208; t=1682345639; x=1684937639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cIrOvNnDK3YOPprEDWvUP7TH6l3ojujdYbZDLboXHeQ=;
+        b=EqBo+lUORINDbDGGE+/9e/x4cpraApMvLWDw1mucqO5hZzt6iwXI0ZFQ0kN9l0XPrA
+         4NKoRDpDH6/v5p6cUh4QMMfriHRqOz3uIzNE9oFOEukOKZ6/isfvv6dkLlMI7GyCp7Bw
+         J9vbV4VeXteijhKChbLtccFbTSnbOjGiCeBkUzkSt56TCQXr8dwStCpD8Nb3prDK3B+9
+         0NN0bY39wFMuAA5xWiB5Xocp6ZcWa+ezb9w8may8AAKHANYenaJFgiAkTOSJofUjWQwr
+         gsZCd853EE44u0pmQGuQB+CHZHPZtH9jwfruGZec9xkAH/empHwslQUGoA6X9l39rvGV
+         8PsQ==
+X-Gm-Message-State: AAQBX9flBetSMZahe0f/+OTEMYDqcS47huP5IPSw6Q8yxV83kfxgp6ai
+        3S/ljKPDxbr0SwUCtkYalGlJjA==
+X-Google-Smtp-Source: AKy350Y4T4ghVMKPBUr+c2Hr6CiBXhCbSw31hyyVujD8ZchcuP1MHmLR+HvQCSsmpyowr4FjxHTvWg==
+X-Received: by 2002:a05:6000:14d:b0:2f9:46dd:d6fa with SMTP id r13-20020a056000014d00b002f946ddd6famr9425129wrx.37.1682345639176;
+        Mon, 24 Apr 2023 07:13:59 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:c9b3:7cb4:1e81:ba4])
+        by smtp.gmail.com with ESMTPSA id l11-20020a5d674b000000b0030276f42f08sm9586765wrw.88.2023.04.24.07.13.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 07:13:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Apr 2023 07:13:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
-Message-ID: <c83242ca-f966-48e7-86a3-88b1b53c606c@roeck-us.net>
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+        Mon, 24 Apr 2023 07:13:58 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [GIT PULL] gpio: updates for v6.4
+Date:   Mon, 24 Apr 2023 16:13:54 +0200
+Message-Id: <20230424141354.7168-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 06:13:50PM +0800, Delphine CC Chiu wrote:
-> Add support for ltc4286 driver
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-The patch does not add support for a driver, it adds support for a chip.
+Linus,
 
-> 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> ---
->  drivers/hwmon/pmbus/Kconfig   |   9 +++
->  drivers/hwmon/pmbus/Makefile  |   1 +
->  drivers/hwmon/pmbus/ltc4286.c | 142 ++++++++++++++++++++++++++++++++++
+This is the main pull-request for this merge window from the GPIO subsystem.
+We have some new drivers, significant refactoring of existing intel platforms,
+lots of improvements all around, mass conversion to using immutable irqchips by
+drivers that had not been converted individually yet and some changes in the
+core library code.
 
-Documentation is missing.
+Nothing is really controversial and everything has been in next for at least
+two weeks.
 
->  3 files changed, 152 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/ltc4286.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 59d9a7430499..1230d910d681 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -218,6 +218,15 @@ config SENSORS_LTC3815
->  	  This driver can also be built as a module. If so, the module will
->  	  be called ltc3815.
->  
-> +config SENSORS_LTC4286
-> +	bool "Linear Technologies LTC4286"
+There are usual merges from Andy for intel platforms and one merge from the
+regmap subsystem pulling in changes required by GPIO commits.
 
-Analog Devices ?
+Please pull,
+Bartosz
 
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Linear
-> +	  Technology LTC4286.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called ltc4286.
-> +
->  config SENSORS_MAX15301
->  	tristate "Maxim MAX15301"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 3ae019916267..540265539580 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
->  obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
->  obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
->  obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-> +obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
->  obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
->  obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
->  obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-> diff --git a/drivers/hwmon/pmbus/ltc4286.c b/drivers/hwmon/pmbus/ltc4286.c
-> new file mode 100644
-> index 000000000000..474f4ec9107c
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ltc4286.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for LTC4286 Hot-Swap Controller
-> + *
-> + * Copyright (c) 2023 Linear Technology
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-Really ?
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +// LTC4286 register
+are available in the Git repository at:
 
-Please no C++ comments in the code.
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-updates-for-v6.4
 
-> +#define LTC4286_MFR_CONFIG1 (0xF2)
+for you to fetch changes up to 8a4adcf67a39b3f308bb8cf686e41c0e26aa12e8:
 
-Unnecessary ( )
+  gpio: gpiolib: Simplify gpiochip_add_data_with_key() fwnode (2023-04-11 21:13:34 +0200)
 
-> +
-> +// LTC4286 configuration
-> +#define VRANGE_SELECT (1 << 1)
+----------------------------------------------------------------
+gpio updates for v6.4-rc1
 
-#define<space>DEFINE<tab>value, please. Also, please use BIT() macros
-where appropriate.
-> +
-> +#define LTC4286_MFR_ID_SIZE 3
-> +
-> +enum chips { ltc4286, ltc4287 };
+New drivers:
+- add a driver for the Loongson GPIO controller
+- add a driver for the fxl6408 I2C GPIO expander
+- add a GPIO module containing code common for Intel Elkhart Lake and
+  Merrifield platforms
+- add a driver for the Intel Elkhart Lake platform reusing the code from
+  the intel tangier library
 
-There is no LTC4287 according to information available in public.
-It has not even be announced.
+GPIOLIB core:
+- GPIO ACPI improvements
+- simplify gpiochip_add_data_with_keys() fwnode handling
+- cleanup header inclusions (remove unneeded ones, order the rest
+  alphabetically)
+- remove duplicate code (reuse krealloc() instead of open-coding it, drop
+  a duplicated check in gpiod_find_and_request())
+- reshuffle the code to remove unnecessary forward declarations
+- coding style cleanups and improvements
+- add a helper for accessing device fwnodes
+- small updates in docs
 
-Besides, the above enum is not really used anywhere and therefore
-has zero value. Maybe the LTC4287 is not yet released. Even then,
-there is no value listing it here because its parameters seem
-to be identical to LTC4286.
+Driver improvements:
+- convert all remaining GPIO irqchip drivers to using immutable irqchips
+- drop unnecessary of_match_ptr() macro expansions
+- shrink the code in gpio-merrifield significantly by reusing the code from
+  gpio-tangier + minor tweaks to the driver code
+- remove MODULE_LICENSE() from drivers that can only be built-in
+- add device-tree support to gpio-loongson1
+- use new regmap features in gpio-104-dio-48e and gpio-pcie-idio-24
+- minor tweaks and fixes to gpio-xra1403, gpio-sim, gpio-tegra194, gpio-omap,
+  gpio-aspeed, gpio-raspberrypi-exp
+- shrink code in gpio-ich and gpio-pxa
+- Kconfig tweak for gpio-pmic-eic-sprd
 
-> +
-> +static struct pmbus_driver_info ltc4286_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.m[PSC_VOLTAGE_IN] = 32,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 1,
-> +	.m[PSC_VOLTAGE_OUT] = 32,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 1,
-> +	.m[PSC_CURRENT_OUT] = 1024,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	.R[PSC_CURRENT_OUT] = 3 - 6,
+----------------------------------------------------------------
+Andrew Davis (1):
+      gpio: ich: Use devm_gpiochip_add_data() to simplify remove path
 
-This needs explanation.
+Andy Shevchenko (24):
+      gpio: aggregator: Add missing header(s)
+      gpio: reg: Add missing header(s)
+      gpio: regmap: Add missing header(s)
+      gpiolib: Drop unused forward declaration from driver.h
+      gpiolib: Deduplicate forward declarations in consumer.h
+      gpiolib: Group forward declarations in consumer.h
+      gpiolib: Clean up headers
+      gpio: merrifield: Use dev_err_probe()
+      gpio: merrifield: Utilise temporary variable for struct device
+      gpiolib: Access device's fwnode via dev_fwnode()
+      gpiolib: Get rid of gpio_bus_match() forward declaration
+      gpio: sim: Deactivate device in reversed order
+      gpiolib: Get rid of devprop prefix in one function
+      gpiolib: Move gpiodevice_*() to gpiodev namespace
+      gpiolib: Remove duplicative check in gpiod_find_and_request()
+      gpiolib: Use IRQ hardware number getter instead of direct access
+      Documentation: gpio: Input mode is not true Hi-Z
+      powerpc/40x: Add missing select OF_GPIO_MM_GPIOCHIP
+      gpio: mm-lantiq: Fix typo in the newly added header filename
+      gpiolib: acpi: Move ACPI device NULL check to acpi_get_driver_gpio_data()
+      gpiolib: Replace open coded krealloc()
+      gpiolib: Check array_info for NULL only once in gpiod_get_array()
+      gpiolib: Move gpiochip_get_data() higher in the code
+      gpiolib: Add gpiochip_set_data() helper
 
-> +	.m[PSC_POWER] = 1,
-> +	.b[PSC_POWER] = 0,
-> +	.R[PSC_POWER] = 4 - 6,
+Arnd Bergmann (8):
+      gpiolib: remove empty asm/gpio.h files
+      gpiolib: coldfire: remove custom asm/gpio.h
+      gpiolib: remove asm-generic/gpio.h
+      gpiolib: remove gpio_set_debounce()
+      gpiolib: remove legacy gpio_export()
+      gpiolib: split linux/gpio/driver.h out of linux/gpio.h
+      gpiolib: split of_mm_gpio_chip out of linux/of_gpio.h
+      mips: ar7: include linux/gpio/driver.h
 
-This needs explanation.
+Bartosz Golaszewski (3):
+      Merge tag 'intel-gpio-v6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-next
+      Merge tag 'regmap-no-status' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap into gpio/for-next
+      Merge tag 'intel-gpio-v6.4-2' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-next
 
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.b[PSC_TEMPERATURE] = 273.15,
+Benjamin Tissoires (1):
+      gpiolib: acpi: use the fwnode in acpi_gpiochip_find()
 
-Assigning a float to an int doesn't make much sense.
+Emanuele Ghidoli (2):
+      dt-bindings: gpio: add fcs,fxl6408
+      gpio: fxl6408: add I2C GPIO expander driver
 
-> +	.R[PSC_TEMPERATURE] = 0,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +		   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP,
+Geert Uytterhoeven (1):
+      sh: mach-x3proto: Add missing #include <linux/gpio/driver.h>
 
-The chip does have a number of status registers.
+Jiapeng Chong (1):
+      gpio: loongson: Remove unnecessary .owner
 
-> +};
-> +
-> +static int ltc4286_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	int ret;
-> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct device *dev = &client->dev;
-> +	struct pmbus_driver_info *info;
-> +	u32 rsense;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer id\n");
+Joel Stanley (1):
+      gpio: aspeed: Always register the irqchip
 
-Kind of pointless to declare a local 'dev' variable and not use it.
+Keguang Zhang (4):
+      gpio: loongson1: Convert to SPDX identifier
+      gpio: loongson1: Introduce ls1x_gpio_chip struct
+      dt-bindings: gpio: Add Loongson-1 GPIO
+      gpio: loongson1: Add DT support
 
-> +		return ret;
-> +	}
-> +
-> +	/* Refer to ltc4286 datasheet page 20
-> +	 * the default manufacturer id is LTC
+Krzysztof Kozlowski (9):
+      MAINTAINERS: gpio: xra1403: drop Semi Malinen
+      gpio: ftgpio010: drop of_match_ptr for ID table
+      gpio: altera: drop of_match_ptr for ID table
+      gpio: rcar: drop of_match_ptr for ID table
+      gpio: visconti: drop of_match_ptr for ID table
+      gpio: sifive: drop of_match_ptr for ID table
+      gpio: sama5d2-piobu: drop of_match_ptr for ID table
+      gpio: xra1403: mark OF related data as maybe unused
+      gpio: raspberrypi-exp: mark OF related data as maybe unused
 
-Why "default" ?
+Linus Walleij (31):
+      gpio: pmic-eic-sprd: Move Kconfig to MFD expanders
+      ARM: orion/gpio: Use the right include
+      ARM: s3c64xx: Use the right include
+      hte: tegra-194: Use proper includes
+      gpiolib: Make the legacy <linux/gpio.h> consumer-only
+      gpio: altera: Convert to immutable irq_chip
+      gpio: adnp: Convert to immutable irq_chip
+      gpio: aspeed: Convert to immutable irq_chip
+      gpio: aspeed-sgpio: Convert to immutable irq_chip
+      gpio: ath79: Convert to immutable irq_chip
+      gpio: cadence: Convert to immutable irq_chip
+      gpio: hisi: Convert to immutable irq_chip
+      gpio: hlwd: Convert to immutable irq_chip
+      gpio: idt3243x: Convert to immutable irq_chip
+      gpio: msc313: Convert to immutable irq_chip
+      gpio: mlxbf2: Convert to immutable irq_chip
+      gpio: max732x: Convert to immutable irq_chip
+      gpio: omap: Drop irq_base
+      gpio: omap: Convert to immutable irq_chip
+      gpio: pci-idio-16: Convert to immutable irq_chip
+      gpio: pcie-idio-24: Convert to immutable irq_chip
+      gpio: rda: Convert to immutable irq_chip
+      gpio: siox: Convert to immutable irq_chip
+      gpio: stmpe: Convert to immutable irq_chip
+      gpio: thunderx: Convert to immutable irq_chip
+      gpio: tqmx86: Convert to immutable irq_chip
+      gpio: visconti: Convert to immutable irq_chip
+      gpio: xgs-iproc: Convert to immutable irq_chip
+      gpio: xilinx: Convert to immutable irq_chip
+      gpio: xlp: Convert to immutable irq_chip
+      gpio: gpiolib: Simplify gpiochip_add_data_with_key() fwnode
 
-> +	 */
+Nick Alcock (3):
+      gpio: remove MODULE_LICENSE in non-modules
+      kbuild, gpio: remove MODULE_LICENSE in non-modules
+      kbuild, gpio: gpio-aspeed-sgpio: remove MODULE_LICENSE in non-modules
 
-Please use standard multi-line comments.
+Pandith N (3):
+      gpio: tangier: Introduce Intel Tangier GPIO driver
+      gpio: merrifield: Adapt to Intel Tangier GPIO driver
+      gpio: elkhartlake: Introduce Intel Elkhart Lake PSE GPIO
 
-> +	if (ret != LTC4286_MFR_ID_SIZE ||
-> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-> +		dev_err(&client->dev, "unsupported manufacturer id\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer model\n");
-> +		return ret;
-> +	}
+Rob Herring (1):
+      gpio: Use of_property_read_bool() for boolean properties
 
-Why read the model if you don't do anything with it ?
+Tom Rix (1):
+      gpio: pxa: remove unused gpio_is_pxa_type function
 
-> +
-> +	ret = of_property_read_u32(client->dev.of_node, "rsense-micro-ohms",
-> +				   &rsense);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (rsense == 0)
-> +		return -EINVAL;
-> +
+Trevor Woerner (1):
+      dt-bindings: gpio.txt: expand gpio-line-names recommendations
 
-There should be a default for systems not supporting devicetree.
+Werner Sembach (1):
+      gpiolib: acpi: Add a ignore wakeup quirk for Clevo NL5xNU
 
-> +	info = &ltc4286_info;
-> +
-> +	/* Default of VRANGE_SELECT = 1 */
-> +	if (device_property_read_bool(dev, "vrange_select_25p6")) {
-> +		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-> +		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-> +		if (ret < 0) {
-> +			dev_err(&client->dev,
-> +				"failed to read manufacturer configuration one\n");
-> +			return ret;
-> +		}
-> +
-> +		ret &= ~VRANGE_SELECT; /* VRANGE_SELECT = 0, 25.6V */
-> +		i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1, ret);
+William Breathitt Gray (4):
+      regmap-irq: Add no_status support
+      gpio: 104-dio-48e: Utilize mask_buf_def in handle_mask_sync() callback
+      gpio: pcie-idio-24: Prune superfluous license boilerplate
+      gpio: 104-dio-48e: Utilize no_status regmap-irq flag
 
-Error check missing.
+Yinbo Zhu (3):
+      dt-bindings: gpio: add loongson gpio
+      gpio: loongson: add gpio driver support
+      gpio: loongson: fixup the warning about OF_GPIO direct dependencies
 
-> +
-> +		info->m[PSC_VOLTAGE_IN] = 128;
-> +		info->m[PSC_VOLTAGE_OUT] = 128;
-> +		info->m[PSC_POWER] = 4 * rsense;
-> +	} else {
-> +		info->m[PSC_POWER] = rsense;
-
-This just takes the current configuration, and assumes it is the default.
-That may not be correct. The chip may have been configured by the BIOS,
-or manually.
-
-> +	}
-> +
-
-The code assumes that there is only a single chip in the system, or that
-the configuration of all chips is identical. This is not necessarily
-correct.
-
-> +	info->m[PSC_CURRENT_OUT] = 1024 * rsense;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", ltc4286 },
-> +						   { "ltc4287", ltc4287 },
-
-Even if LTC4287 existed, assigning the ID here ...
-
-> +						   {} };
-> +MODULE_DEVICE_TABLE(i2c, ltc4286_id);
-> +
-> +static const struct of_device_id ltc4286_of_match[] = {
-> +	{ .compatible = "lltc,ltc4286" },
-> +	{ .compatible = "lltc,ltc4287" },
-
-... but not here defeats having it in the first place.
-
-> +	{}
-> +};
-
-MODULE_DEVOCE_TABLE() missing.
-
-> +
-> +/* This is the driver that will be inserted */
-
-Useless comment
-
-> +static struct i2c_driver ltc4286_driver = {
-> +	.driver = {
-> +		.name = "ltc4286",
-> +		.of_match_table = ltc4286_of_match,
-> +	},
-> +	.probe = ltc4286_probe,
-> +	.id_table = ltc4286_id,
-> +};
-> +
-> +module_i2c_driver(ltc4286_driver);
-> +
-> +MODULE_AUTHOR("Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>");
-> +MODULE_DESCRIPTION("PMBUS driver for LTC4286 and compatibles");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.17.1
-> 
+ Documentation/admin-guide/gpio/sysfs.rst           |   2 +-
+ .../devicetree/bindings/gpio/fcs,fxl6408.yaml      |  58 +++
+ Documentation/devicetree/bindings/gpio/gpio.txt    |  41 +-
+ .../devicetree/bindings/gpio/loongson,ls-gpio.yaml | 126 +++++
+ .../bindings/gpio/loongson,ls1x-gpio.yaml          |  49 ++
+ Documentation/driver-api/gpio/driver.rst           |   8 +-
+ Documentation/driver-api/gpio/legacy.rst           |  23 -
+ .../translations/zh_CN/driver-api/gpio/legacy.rst  |  20 -
+ Documentation/translations/zh_TW/gpio.txt          |  19 -
+ MAINTAINERS                                        |  11 +-
+ arch/arm/Kconfig                                   |   1 -
+ arch/arm/include/asm/gpio.h                        |  21 -
+ arch/arm/mach-omap1/irq.c                          |   1 +
+ arch/arm/mach-omap2/pdata-quirks.c                 |   9 +-
+ arch/arm/mach-orion5x/board-rd88f5182.c            |   1 +
+ arch/arm/mach-s3c/s3c64xx.c                        |   2 +-
+ arch/arm/mach-sa1100/assabet.c                     |   1 +
+ arch/arm/plat-orion/gpio.c                         |   5 +-
+ arch/m68k/Kconfig.cpu                              |   1 -
+ arch/m68k/include/asm/gpio.h                       |  95 ----
+ arch/m68k/include/asm/mcfgpio.h                    |   2 +-
+ arch/mips/ar7/gpio.c                               |   2 +-
+ arch/powerpc/platforms/40x/Kconfig                 |   1 +
+ arch/powerpc/platforms/44x/Kconfig                 |   1 +
+ arch/powerpc/platforms/4xx/gpio.c                  |   2 +-
+ arch/powerpc/platforms/8xx/Kconfig                 |   1 +
+ arch/powerpc/platforms/8xx/cpm1.c                  |   2 +-
+ arch/powerpc/platforms/Kconfig                     |   2 +
+ arch/powerpc/sysdev/cpm_common.c                   |   2 +-
+ arch/sh/Kconfig                                    |   1 -
+ arch/sh/boards/board-magicpanelr2.c                |   1 +
+ arch/sh/boards/mach-ap325rxa/setup.c               |   7 +-
+ arch/sh/boards/mach-x3proto/setup.c                |   2 +-
+ arch/sh/include/asm/gpio.h                         |  45 --
+ drivers/base/regmap/regmap-irq.c                   |  22 +-
+ drivers/gpio/Kconfig                               |  81 +++-
+ drivers/gpio/Makefile                              |   4 +
+ drivers/gpio/TODO                                  |  15 +-
+ drivers/gpio/gpio-104-dio-48e.c                    |  11 +-
+ drivers/gpio/gpio-adnp.c                           |   9 +-
+ drivers/gpio/gpio-aggregator.c                     |   9 +-
+ drivers/gpio/gpio-altera.c                         |  29 +-
+ drivers/gpio/gpio-aspeed-sgpio.c                   |  45 +-
+ drivers/gpio/gpio-aspeed.c                         |  82 ++--
+ drivers/gpio/gpio-ath79.c                          |   8 +-
+ drivers/gpio/gpio-cadence.c                        |  10 +-
+ drivers/gpio/gpio-davinci.c                        |   2 -
+ drivers/gpio/gpio-elkhartlake.c                    |  90 ++++
+ drivers/gpio/gpio-ftgpio010.c                      |   2 +-
+ drivers/gpio/gpio-fxl6408.c                        | 158 ++++++
+ drivers/gpio/gpio-hisi.c                           |  25 +-
+ drivers/gpio/gpio-hlwd.c                           |  33 +-
+ drivers/gpio/gpio-ich.c                            |  10 +-
+ drivers/gpio/gpio-idt3243x.c                       |  11 +-
+ drivers/gpio/gpio-imx-scu.c                        |   1 -
+ drivers/gpio/gpio-loongson-64bit.c                 | 238 +++++++++
+ drivers/gpio/gpio-loongson1.c                      |  71 +--
+ drivers/gpio/gpio-max732x.c                        |   8 +-
+ drivers/gpio/gpio-merrifield.c                     | 453 ++---------------
+ drivers/gpio/gpio-mlxbf2.c                         |  32 +-
+ drivers/gpio/gpio-mm-lantiq.c                      |   2 +-
+ drivers/gpio/gpio-mpc5200.c                        |   2 +-
+ drivers/gpio/gpio-msc313.c                         |  26 +-
+ drivers/gpio/gpio-mxs.c                            |   1 -
+ drivers/gpio/gpio-omap.c                           |  83 ++--
+ drivers/gpio/gpio-pci-idio-16.c                    |  12 +-
+ drivers/gpio/gpio-pcie-idio-24.c                   |  21 +-
+ drivers/gpio/gpio-pxa.c                            |   5 -
+ drivers/gpio/gpio-raspberrypi-exp.c                |   2 +-
+ drivers/gpio/gpio-rcar.c                           |   2 +-
+ drivers/gpio/gpio-rda.c                            |  23 +-
+ drivers/gpio/gpio-reg.c                            |  12 +-
+ drivers/gpio/gpio-regmap.c                         |  12 +-
+ drivers/gpio/gpio-sama5d2-piobu.c                  |   2 +-
+ drivers/gpio/gpio-sifive.c                         |   2 +-
+ drivers/gpio/gpio-sim.c                            |   2 +-
+ drivers/gpio/gpio-siox.c                           |  75 +--
+ drivers/gpio/gpio-stmpe.c                          |   8 +-
+ drivers/gpio/gpio-stp-xway.c                       |   2 +-
+ drivers/gpio/gpio-tangier.c                        | 536 +++++++++++++++++++++
+ drivers/gpio/gpio-tangier.h                        | 117 +++++
+ drivers/gpio/gpio-tb10x.c                          |   2 +-
+ drivers/gpio/gpio-thunderx.c                       |  26 +-
+ drivers/gpio/gpio-tqmx86.c                         |  28 +-
+ drivers/gpio/gpio-visconti.c                       |  52 +-
+ drivers/gpio/gpio-xgs-iproc.c                      |  32 +-
+ drivers/gpio/gpio-xilinx.c                         |  23 +-
+ drivers/gpio/gpio-xlp.c                            |  14 +-
+ drivers/gpio/gpio-xra1403.c                        |   2 +-
+ drivers/gpio/gpiolib-acpi.c                        |  36 +-
+ drivers/gpio/gpiolib-acpi.h                        |   1 -
+ drivers/gpio/gpiolib-of.c                          |   9 +-
+ drivers/gpio/gpiolib-of.h                          |   1 -
+ drivers/gpio/gpiolib-swnode.c                      |   5 +-
+ drivers/gpio/gpiolib-sysfs.c                       |  25 +-
+ drivers/gpio/gpiolib.c                             | 173 ++++---
+ drivers/hte/hte-tegra194-test.c                    |  10 +-
+ drivers/input/touchscreen/ads7846.c                |   5 +-
+ drivers/media/pci/sta2x11/sta2x11_vip.c            |  10 +-
+ drivers/net/ieee802154/ca8210.c                    |   3 +-
+ .../net/wireless/broadcom/brcm80211/brcmsmac/led.c |   1 +
+ drivers/pinctrl/core.c                             |   1 -
+ drivers/soc/fsl/qe/gpio.c                          |   2 +-
+ include/asm-generic/gpio.h                         | 147 ------
+ include/linux/gpio.h                               | 104 ++--
+ include/linux/gpio/consumer.h                      |  24 +-
+ include/linux/gpio/driver.h                        |  31 +-
+ include/linux/gpio/legacy-of-mm-gpiochip.h         |  36 ++
+ include/linux/mfd/ucb1x00.h                        |   1 +
+ include/linux/of_gpio.h                            |  21 -
+ include/linux/regmap.h                             |   2 +
+ 111 files changed, 2428 insertions(+), 1370 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/fcs,fxl6408.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
+ delete mode 100644 arch/arm/include/asm/gpio.h
+ delete mode 100644 arch/m68k/include/asm/gpio.h
+ delete mode 100644 arch/sh/include/asm/gpio.h
+ create mode 100644 drivers/gpio/gpio-elkhartlake.c
+ create mode 100644 drivers/gpio/gpio-fxl6408.c
+ create mode 100644 drivers/gpio/gpio-loongson-64bit.c
+ create mode 100644 drivers/gpio/gpio-tangier.c
+ create mode 100644 drivers/gpio/gpio-tangier.h
+ delete mode 100644 include/asm-generic/gpio.h
+ create mode 100644 include/linux/gpio/legacy-of-mm-gpiochip.h
