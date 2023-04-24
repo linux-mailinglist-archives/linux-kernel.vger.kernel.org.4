@@ -2,46 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3AF6EC921
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7D46EC923
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjDXJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S230508AbjDXJiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDXJiY (ORCPT
+        with ESMTP id S230072AbjDXJis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:38:24 -0400
-Received: from outbound-smtp37.blacknight.com (outbound-smtp37.blacknight.com [46.22.139.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7740E66
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:38:21 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp37.blacknight.com (Postfix) with ESMTPS id 0AEFD1CF1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:38:20 +0100 (IST)
-Received: (qmail 14803 invoked from network); 24 Apr 2023 09:38:19 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 24 Apr 2023 09:38:19 -0000
-Date:   Mon, 24 Apr 2023 10:38:17 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Ying <ying.huang@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>, linux-fsdevel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v2 3/4] migrate_pages: Don't wait forever locking pages
- in MIGRATE_SYNC_LIGHT
-Message-ID: <20230424093817.am3qpsba35yrhmow@techsingularity.net>
-References: <20230421221249.1616168-1-dianders@chromium.org>
- <20230421151135.v2.3.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
+        Mon, 24 Apr 2023 05:38:48 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6661729;
+        Mon, 24 Apr 2023 02:38:41 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33O9cTsN058073;
+        Mon, 24 Apr 2023 04:38:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682329109;
+        bh=ITVPUVnnfgkGMB3knFuO7Z6qcBUOl6T8Xv3HE/MDZC8=;
+        h=From:To:CC:Subject:Date;
+        b=rm1SUf/Uc57XAQaYZkLO4dg9yyUMKGOj4OIMftizY0eQ3/Dfd/7d2G1m6/V5fOZEq
+         43jLkgA/wu9/9JLW6IwJHYhAYI9vw2wR7iJY82MnnwMSiToX8Nwb6Uu4pgWPyyoNar
+         w6jH/zCCatCFYkg/RlzpkEuHAXGgcSQRhrK09Was=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33O9cTYO023889
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 04:38:29 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 04:38:28 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 04:38:28 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33O9cROk023312;
+        Mon, 24 Apr 2023 04:38:28 -0500
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <b-kapoor@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j721e-main: Update delay select values for MMC subsystems
+Date:   Mon, 24 Apr 2023 15:08:27 +0530
+Message-ID: <20230424093827.1378602-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230421151135.v2.3.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,111 +63,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 03:12:47PM -0700, Douglas Anderson wrote:
-> The MIGRATE_SYNC_LIGHT mode is intended to block for things that will
-> finish quickly but not for things that will take a long time. Exactly
-> how long is too long is not well defined, but waits of tens of
-> milliseconds is likely non-ideal.
-> 
-> Waiting on the folio lock in isolate_movable_page() is something that
-> usually is pretty quick, but is not officially bounded. Nothing stops
-> another process from holding a folio lock while doing an expensive
-> operation. Having an unbounded wait like this is not within the design
-> goals of MIGRATE_SYNC_LIGHT.
-> 
-> When putting a Chromebook under memory pressure (opening over 90 tabs
-> on a 4GB machine) it was fairly easy to see delays waiting for the
-> lock of > 100 ms. While the laptop wasn't amazingly usable in this
-> state, it was still limping along and this state isn't something
-> artificial. Sometimes we simply end up with a lot of memory pressure.
-> 
-> Putting the same Chromebook under memory pressure while it was running
-> Android apps (though not stressing them) showed a much worse result
-> (NOTE: this was on a older kernel but the codepaths here are
-> similar). Android apps on ChromeOS currently run from a 128K-block,
-> zlib-compressed, loopback-mounted squashfs disk. If we get a page
-> fault from something backed by the squashfs filesystem we could end up
-> holding a folio lock while reading enough from disk to decompress 128K
-> (and then decompressing it using the somewhat slow zlib algorithms).
-> That reading goes through the ext4 subsystem (because it's a loopback
-> mount) before eventually ending up in the block subsystem. This extra
-> jaunt adds extra overhead. Without much work I could see cases where
-> we ended up blocked on a folio lock for over a second. With more
-> more extreme memory pressure I could see up to 25 seconds.
-> 
-> Let's bound the amount of time we can wait for the folio lock. The
-> SYNC_LIGHT migration mode can already handle failure for things that
-> are slow, so adding this timeout in is fairly straightforward.
-> 
-> With this timeout, it can be seen that kcompactd can move on to more
-> productive tasks if it's taking a long time to acquire a lock.
-> 
-> NOTE: The reason I stated digging into this isn't because some
-> benchmark had gone awry, but because we've received in-the-field crash
-> reports where we have a hung task waiting on the page lock (which is
-> the equivalent code path on old kernels). While the root cause of
-> those crashes is likely unrelated and won't be fixed by this patch,
-> analyzing those crash reports did point out this unbounded wait and it
-> seemed like something good to fix.
-> 
-> ALSO NOTE: the timeout mechanism used here uses "jiffies" and we also
-> will retry up to 7 times. That doesn't give us much accuracy in
-> specifying the timeout. On 1000 Hz machines we'll end up timing out in
-> 7-14 ms. On 100 Hz machines we'll end up in 70-140 ms. Given that we
-> don't have a strong definition of how long "too long" is, this is
-> probably OK.
-> 
-> Suggested-by: Mel Gorman <mgorman@techsingularity.net>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - Keep unbounded delay in "SYNC", delay with a timeout in "SYNC_LIGHT"
-> 
->  mm/migrate.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index db3f154446af..60982df71a93 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -58,6 +58,23 @@
->  
->  #include "internal.h"
->  
-> +/* Returns the schedule timeout for a non-async mode */
-> +static long timeout_for_mode(enum migrate_mode mode)
-> +{
-> +	/*
-> +	 * We'll always return 1 jiffy as the timeout. Since all places using
-> +	 * this timeout are in a retry loop this means that the maximum time
-> +	 * we might block is actually NR_MAX_MIGRATE_SYNC_RETRY jiffies.
-> +	 * If a jiffy is 1 ms that's 7 ms, though with the accuracy of the
-> +	 * timeouts it often ends up more like 14 ms; if a jiffy is 10 ms
-> +	 * that's 70-140 ms.
-> +	 */
-> +	if (mode == MIGRATE_SYNC_LIGHT)
-> +		return 1;
-> +
+Update the delay values for various speed modes supported, based on
+the revised august 2021 J721E Datasheet.
 
-Use switch and WARN_ON_ONCE if MIGRATE_ASYNC with a fallthrough to
-MIGRATE_SYNC_LIGHT?
+[1] - Table 7-77. MMC0 DLL Delay Mapping for All Timing Modes and
+Table 7-86. MMC1/2 DLL Delay Mapping for All Timing Modes, in
+https://www.ti.com/lit/ds/symlink/tda4vm.pdf,
+(SPRSP36J – FEBRUARY 2019 – REVISED AUGUST 2021)
 
-> +	return MAX_SCHEDULE_TIMEOUT;
-> +}
-> +
+Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Even though HZ is defined at compile time, it is underdesirable to use
-a constant timeout unrelated to HZ because it's normal case is variable
-depending on CONFIG_HZ.  Please use a value like DIV_ROUND_UP(HZ/250) or
-DIV_ROUND_UP(HZ/1000) for a 4ms or 1ms timeout respectively. Even though
-it's still potentially variable, it would make any hypothetical transition
-to [milli|micro|nano]seconds easier in the future as the intent would be
-known. While there are no plans for change as such, working in jiffies is
-occasionally problematic in kernel/sched/. At OSPM this year, the notion
-of dynamic HZ was brought up (it would be hard) and a preliminary step
-would be converting all uses of HZ to normal time.
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+index 10c8a5fb4ee2..c249cc3d1fba 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+@@ -1287,8 +1287,8 @@ main_sdhci0: mmc@4f80000 {
+ 		bus-width = <8>;
+ 		mmc-hs200-1_8v;
+ 		mmc-ddr-1_8v;
+-		ti,otap-del-sel-legacy = <0xf>;
+-		ti,otap-del-sel-mmc-hs = <0xf>;
++		ti,otap-del-sel-legacy = <0x0>;
++		ti,otap-del-sel-mmc-hs = <0x0>;
+ 		ti,otap-del-sel-ddr52 = <0x5>;
+ 		ti,otap-del-sel-hs200 = <0x6>;
+ 		ti,otap-del-sel-hs400 = <0x0>;
+@@ -1309,11 +1309,12 @@ main_sdhci1: mmc@4fb0000 {
+ 		assigned-clocks = <&k3_clks 92 0>;
+ 		assigned-clock-parents = <&k3_clks 92 1>;
+ 		ti,otap-del-sel-legacy = <0x0>;
+-		ti,otap-del-sel-sd-hs = <0xf>;
++		ti,otap-del-sel-sd-hs = <0x0>;
+ 		ti,otap-del-sel-sdr12 = <0xf>;
+ 		ti,otap-del-sel-sdr25 = <0xf>;
+ 		ti,otap-del-sel-sdr50 = <0xc>;
+ 		ti,otap-del-sel-ddr50 = <0xc>;
++		ti,otap-del-sel-sdr104 = <0x5>;
+ 		ti,itap-del-sel-legacy = <0x0>;
+ 		ti,itap-del-sel-sd-hs = <0x0>;
+ 		ti,itap-del-sel-sdr12 = <0x0>;
+@@ -1335,11 +1336,12 @@ main_sdhci2: mmc@4f98000 {
+ 		assigned-clocks = <&k3_clks 93 0>;
+ 		assigned-clock-parents = <&k3_clks 93 1>;
+ 		ti,otap-del-sel-legacy = <0x0>;
+-		ti,otap-del-sel-sd-hs = <0xf>;
++		ti,otap-del-sel-sd-hs = <0x0>;
+ 		ti,otap-del-sel-sdr12 = <0xf>;
+ 		ti,otap-del-sel-sdr25 = <0xf>;
+ 		ti,otap-del-sel-sdr50 = <0xc>;
+ 		ti,otap-del-sel-ddr50 = <0xc>;
++		ti,otap-del-sel-sdr104 = <0x5>;
+ 		ti,itap-del-sel-legacy = <0x0>;
+ 		ti,itap-del-sel-sd-hs = <0x0>;
+ 		ti,itap-del-sel-sdr12 = <0x0>;
 -- 
-Mel Gorman
-SUSE Labs
+2.34.1
+
