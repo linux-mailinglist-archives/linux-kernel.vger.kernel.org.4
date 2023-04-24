@@ -2,179 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0CC6EC4AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF766EC4B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjDXFJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 01:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S230463AbjDXFLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 01:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDXFJk (ORCPT
+        with ESMTP id S229476AbjDXFLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 01:09:40 -0400
-Received: from DEU01-BE0-obe.outbound.protection.outlook.com (mail-be0deu01on2131.outbound.protection.outlook.com [40.107.127.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B664E2D70;
-        Sun, 23 Apr 2023 22:09:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PP95oSZlITihFIwltyNaATtSbfX9+fn9X1dSITqaDipiKUp0LI3SntWsuvKgA5+zwuaYPzeCiIivJRtih5RqQPMiEf3R7tY3S6GcN/1cIPGHb/a+ngS0eRjwVZTWjo2Mt3YKVUcBefepb2z5pkjwBVJTGOoOVp1pCyVTGdPpCkPKNkkMlYOufK/QYxHo6bqU4cnUiR5JtPXgpWZB7bLvlnnXLZGZ+Ntm+Xs2ZD8hOmt8PHB/Pq4zd7PNJ3uHQpARBhZ6NLaWHjdrPEsO2jrdmm4uhzXCImAk/0eb+yWHCjStBMrX9qw/1M9wN2fFflsvfS1k0mKtTH4Jj6hJndNl/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rb5Yw6IFz8QvOXuJmwCrXMAvWu0qqA5OXf7887Pt0TU=;
- b=a9h0ztG7SUoUmnPsaG6zRYi31xtIF9n04nmN/DS/bFTfSOZzo2NXei0sK+O62pk/o2fXr46TMvt0b55HPnXKkLAZlvmcedSLhBXsqVchWAlvMXI7ITD3jslAkp8TCYZbpKaFqTrg4eBp0P8iVYCGpg78U7/1aIZ9ecgfE+PSEk1M6BredoOzlnsWCoCPYp4sEIaV3JMUrRJiF7NpbfBukrdHKWVn4NnWWLfBzWjwt3VHC5cjD+7HpUbm1/U+6LoEn+em+UA9Y/KKc65gt+cyaT70kLEXJCfSfMdsxzujhjbUE0zotD3oj63qyTMUJWoS5Vv1u94RxC7PJ2ruP0Sbdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductor.onmicrosoft.com;
- s=selector2-rohmsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rb5Yw6IFz8QvOXuJmwCrXMAvWu0qqA5OXf7887Pt0TU=;
- b=bbgWcF8M1p4GEezBLkObXTf/HBX6k0J5ABEa3mbE6sJgmlUcaJo4PtcvkL5V9MYIdnDo9dWuO6MTqtbJiOwpBPWH9aa1BF6O3EqStrvdcFelo2uwbw9oFaOXckfC8hXGMjqaBoO1IZjl2yxqXszAjorXNTSLxvoeMSCf4G7yAK0=
-Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
- by BEZP281MB3124.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:77::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 05:09:36 +0000
-Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
- ([fe80::4218:fb63:61ae:c42a]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
- ([fe80::4218:fb63:61ae:c42a%4]) with mapi id 15.20.6319.033; Mon, 24 Apr 2023
- 05:09:36 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-CC:     Lars-Peter Clausen <lars@metafoo.de>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] iio: gts-helpers: fix integration time units
-Thread-Topic: [PATCH 2/2] iio: gts-helpers: fix integration time units
-Thread-Index: AQHZcQ3cxEvcR4X7g0mCvGGZUqAfKK84yHyAgAErVIA=
-Date:   Mon, 24 Apr 2023 05:09:36 +0000
-Message-ID: <ec06f796-24f7-c3a4-c22e-f568bcc08522@fi.rohmeurope.com>
-References: <cover.1681722914.git.mazziesaccount@gmail.com>
- <eeacd192c259e885850b5a2dd8b776bccfc44fa8.1681722914.git.mazziesaccount@gmail.com>
- <20230423121815.6d7c8039@jic23-huawei>
-In-Reply-To: <20230423121815.6d7c8039@jic23-huawei>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BEZP281MB2454:EE_|BEZP281MB3124:EE_
-x-ms-office365-filtering-correlation-id: 4cd06cfe-673d-4a86-bc67-08db44821926
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4hksFLCN6WGBGfUWDWBgNOLOQNdIS9g7rr8ljTqnOEDKfYXjKu+XBO4W2Nf4rwNN7FkjA40RQcrm4Dir4bcyYFkxUOvThwMz2dzQwz7RNSYmhu7ZN9hFZsDU4iL7A33NFAeQsvnVIlFgT2d3UJB/L4oFvvWY5rmAa8hbPXIGz9UEzsdaTOgLMT36sr/lKxRljnk88LntNt1p5QDM87duAxVjmbdueLkH2oiiolgZihzzHr2FPZVJrx3HvECOmsNcp00zalpSMTK6VIjcj7TEY0CPXAsPnC21PtZuTVTGvWkPunpLE8MuCJpgK2kGwbSTlbwOcZjuZaD2LYIl23/FS0gdSgdFQo4AYUOd5trKmn2TncEeqZj+1vEDQlb6fZFCvzSo4Dgn9g3AFQ8v2NmiGc5ubXcNznnJSR2d/NIdx602YnO+ch6yQnaV0AVRQPMZsWaNoUs4i44n8uY55lblATAhiU7b2QPI2U6VBx0KgcknTFkF1XVl0OZ5KAp4kZhVv9uW7MB/dBXR46TeJJXbyPk+Bk3hmetCfAJUw7c+p6FnRA7CenORJiPtFusjx8aeoMiUNH+4hnwCEVr7ROzrLFZB0mcJR+7BwCK7u9SSw8ahv4oAmF+uttt3g05YSY+RyF0n7zPrvrwXpPVSmOxlG+/Ysb7gexvkcqEolutou50uN3XYQIh0Dbujh9+OnmIY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39830400003)(376002)(366004)(346002)(451199021)(53546011)(6506007)(26005)(6512007)(38070700005)(2616005)(83380400001)(186003)(38100700002)(122000001)(66946007)(31696002)(478600001)(76116006)(86362001)(64756008)(66556008)(66476007)(66446008)(31686004)(8936002)(8676002)(54906003)(91956017)(110136005)(5660300002)(71200400001)(6486002)(41300700001)(2906002)(4326008)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Sk9VNytycmRtYW1HdDdaam9tVDMzNS9Sb1VWbDluejk2RFQ3SnBvVlJuUDVl?=
- =?utf-8?B?YUd3cmp0OTQyT0tRa0pMbWkyaGZCZGw3SEJ2MFpBT1J2UzlxcUtoM2ZMZHh6?=
- =?utf-8?B?NENQbUdJRDdSVVExRVB2WjM1R2Z4OGZOZ0hvc014T0VXNmZrbUtzZFJ1VS8z?=
- =?utf-8?B?d0ZCaGpyQmpyZGZ2WXAwd0xSQWpscGNqQ2xUYzY5Z3A4VUlIVFdLWWFJRWVE?=
- =?utf-8?B?ZUlyWEs5Y0o3MVdRSXpVa2hKdHNmUlEyOGd5cWpiblJPVmYxSThOUDBLeE1V?=
- =?utf-8?B?YVJDUTdFL3pNSjQwZ2tScGRDa0dCVDVpRXk5eVVleXJ3Q2diWVhQS0cwY1gx?=
- =?utf-8?B?WXpsaGlwK3gvVmh2WkIwdFY3dTVBWkdLR3Jpam1mNXJWWUxpTkoyVnZwT1JL?=
- =?utf-8?B?V0hvR2lzdGZFalBUMVd3bmpHdWpXODFRVkJRM3Q1UEtHa0JFQ0xjWlBQZXNC?=
- =?utf-8?B?QzV1QWIyQjkxeE9jZWZpTkVKN1ZvUnRsZWxpcTVWano1UGk4NEdpaHBrTDZu?=
- =?utf-8?B?WDZCanpXbVp5TTlYajZMeGpCRU5OV205SUtaRHhtSXBtakp4Rk91c296TUdw?=
- =?utf-8?B?Nyt0ZTBjMFVLcE1Ec1JSWUlRcHhZK0hqcGVERzViTkp1U1ZDMCtodFovN2Fr?=
- =?utf-8?B?bmRidlJ0Z0luTXEwK2hUZkhvY0V4NVlnbHNFWGVpaVpicFhtU2VxUFp6eEwv?=
- =?utf-8?B?bGxTMmZSZkVhMTJBbEJ1bS9nSHZNb1FyRlVDMFFObFJTZkRPa3JyZmNpVDZF?=
- =?utf-8?B?eWFmS0ZZZWR0WHRZeU16WGpuaXBuK2xGb1Bpdk0zMWdRUkZjYVFSN1cvUUVi?=
- =?utf-8?B?VFkzbnUxdU1wd0I2RU5wSVpXOGRWdHlycEZ4cjdNa3JEKytDNjhnejcrV2hN?=
- =?utf-8?B?ZEZJellrQVNEZ0YzbGFUT0ZOaG5UMVJzZmlGWG02anRKV0EreG56UWE0L3Q2?=
- =?utf-8?B?QmkxM2lYb1Nld0o3NlRLWmpid3RrMWxUcWtMdEtiMHZIQnM2MHpMZ0Jta1N3?=
- =?utf-8?B?Zk10ZGhHY1JkY2RaSDlnbEJkTWh3TkpnT01mb0tKRElubDNpNStNSHVEQXZQ?=
- =?utf-8?B?N1ozdnJlL1FSRkZtL1RYbm1aS1NISkM5N1RLd3N4aWl5R2t1eGxrSm1ObG5x?=
- =?utf-8?B?UWtPZk9NelZQT29iMUVmYTJTMEsxY2VWMXovQW1GUnJRSHBmaW53SWlMTm01?=
- =?utf-8?B?NWhuN0lFQi9LdmF1S3EzeEYvQmsxR3g3aVdtQUNVWXJMcHdrNENnS0ZqcU9E?=
- =?utf-8?B?UVI2YkQzWmRQZ3RKWUQ5OWJsMHVQQnhadGlpNE4zMXhxR3JxL3JwaXhrVXJE?=
- =?utf-8?B?UW83VmlacVNvb1ljejNpZ3dsdllIbS9jeWN4cXhHWG9MNmhiSS94aGdvZDRL?=
- =?utf-8?B?ZXJrZVFOb0RHZ3BSQnBxTDNObWVYbWhpMGtaL3RJT2NUQUZUYXpBSDVXUlVk?=
- =?utf-8?B?SHJFMjVUMVpKSzgzZDF4VEs0QnZZalNkaUZndWt4VnBEb1JzZEk1NnNoejRL?=
- =?utf-8?B?LzZTTEtXS2ZiVHkyOFlOSWp5Q25Md2RMSnVSUkwxdWEwTGkvTkNDWDhqS2hC?=
- =?utf-8?B?MG5MbTlER2VhQkpmQmRmV0ZuckJkMWtMUCsrTTZWZG53UFV3akE2NzFTMnR6?=
- =?utf-8?B?dmhiaFNodk84K2tsc0Z1bTlCZDlobzNIcWQwdHJGeGVyeTFlUXFPcTZxa1Ey?=
- =?utf-8?B?Qys0ZG44cjhUM1JML2F4SlJEMkdzbWI4STZNMTJDTEM3NFZ1aEtRY3ZBMzY0?=
- =?utf-8?B?R0ZsOFVJa3N0ckZWSHlwTENmM1Y0Wnk2SEdNNjRQTVBXODZ4Q3hsM2dYcTJy?=
- =?utf-8?B?L0t5VXgrWkRGVVFYU0JOMWtWUHdxUVppZXZsT2l0eWxLWThpKzlGUUFFaEFJ?=
- =?utf-8?B?VVA0TnZmVU5MUUc0SGpaQjhYekwxTy9SL0kzaU12cGNvZFFjRDhOeVd3azZ3?=
- =?utf-8?B?KzVDb2FjM1A5OWZqVFM4UlB5MEE0azNmcVVSaHdKbldUdkk4S2lvQjBCZHM0?=
- =?utf-8?B?cktjQS9CMVNpS2RGRHVpb2FLVCtBUWxDSU9CZ0ovbStleUdJb2M2ZHhvUENO?=
- =?utf-8?B?WDJ0eC9FWGdzQ3FoaFYwODRQQmczSUdwVlA4M0o4SU5rekhJd1ZXaDhCcVFD?=
- =?utf-8?B?Mk1lQU00WkpMakozYkwvVDFYTW5YbHNuTlNEZlFsV056cnB0WDZ0cXJMNTdQ?=
- =?utf-8?B?bUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FBDF555DD7973C49ADE9BA3CD4811715@DEUP281.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 24 Apr 2023 01:11:45 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770EA2117
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 22:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682313103; x=1713849103;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=spjPszczlRJ6WXEUahSzbZ8YRRmzgy2bt1wJgMDK6ng=;
+  b=KpDrKQZdPXITCJ6Qvx7NAkvBgBVnETznq5jgHYTkWGg1Cy/Ws1B1ljbT
+   BWQs2QRKWCFB0P8kjDvDX6Z5Ui82x2/ltJKptodx5yiAYRX3+ZORyblxq
+   IbCa/pRCQUpcB33I4x/ZIrXoHW0MfGoEi7VVBBRj7Etov8y6CsarDDvLU
+   thbR0/xf1NY7+BS2CqvEcN8vLqT1gB5KP8yVoKU7ld71cNe5JBrKePonx
+   EESHbA5AmlUZFpzisfSUwGMVWklXviv2bEZBAU0+8ULsRFpxVefNunTzm
+   VyZNCahLO3KzCifcCmHO4n1uxn/sJtKkTYsgVLZfNlzP1oo5QeCyjMwT3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="374305760"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="374305760"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:11:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="939171660"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="939171660"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Apr 2023 22:11:40 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqoUF-000iHE-31;
+        Mon, 24 Apr 2023 05:11:39 +0000
+Date:   Mon, 24 Apr 2023 13:11:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        'Marek =?utf-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Subject: Re: [PATCH] drm/amdgpu: Mark contexts guilty for any reset type
+Message-ID: <202304241259.Qq0Dmlud-lkp@intel.com>
+References: <20230424014324.218531-1-andrealmeid@igalia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cd06cfe-673d-4a86-bc67-08db44821926
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2023 05:09:36.0947
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Rqx+5Cj1/FS7sk/JGs3o9DYX+ckWIN+DiBm1XPx0iL3vFzMXmOFJVxk1d0QuhaKyPN/W8ODxbVA8WIb+QkiMMFXYD5on2G20XKHQW0EvEfw2jgpAm3SB+3s0xie5Hd3Z
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB3124
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230424014324.218531-1-andrealmeid@igalia.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNC8yMy8yMyAxNDoxOCwgSm9uYXRoYW4gQ2FtZXJvbiB3cm90ZToNCj4gT24gTW9uLCAxNyBB
-cHIgMjAyMyAxMjoyMDoxOCArMDMwMA0KPiBNYXR0aSBWYWl0dGluZW4gPG1henppZXNhY2NvdW50
-QGdtYWlsLmNvbT4gd3JvdGU6DQo+IA0KPj4gVGhlIElJTyBBQkkgbWFuZGF0ZXMgZXhwcmVzc2lu
-ZyBpbnRlZ3JhdGlvbiB0aW1lcyBpbiBzZWNvbmRzLiBUaGUgR1RTDQo+PiBoZWxwZXIgZXJyb3Ju
-ZW91c2x5IHVzZXMgbWljcm8gc2Vjb25kcyBpbiBpbnRlZ3JhdGlvbl90aW1lc19hdmFpbGFibGUu
-DQo+PiBGaXggdGhpcyBieSBjb252ZXJ0aW5nIHRoZSBsaXN0cyB0byBJSU9fVkFMX0lOVF9QTFVT
-X01JQ1JPLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IE1hdHRpIFZhaXR0aW5lbiA8bWF6emllc2Fj
-Y291bnRAZ21haWwuY29tPg0KPj4gLS0tDQo+PiAgIGRyaXZlcnMvaWlvL2luZHVzdHJpYWxpby1n
-dHMtaGVscGVyLmMgfCA0MyArKysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCj4+ICAgMSBmaWxl
-IGNoYW5nZWQsIDMzIGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYg
-LS1naXQgYS9kcml2ZXJzL2lpby9pbmR1c3RyaWFsaW8tZ3RzLWhlbHBlci5jIGIvZHJpdmVycy9p
-aW8vaW5kdXN0cmlhbGlvLWd0cy1oZWxwZXIuYw0KPj4gaW5kZXggOGJiNjg5NzViMjU5Li4yYWI4
-ZDJkY2UwMTkgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2lpby9pbmR1c3RyaWFsaW8tZ3RzLWhl
-bHBlci5jDQo+PiArKysgYi9kcml2ZXJzL2lpby9pbmR1c3RyaWFsaW8tZ3RzLWhlbHBlci5jDQo+
-PiBAQCAtMzM3LDYgKzMzNywxNyBAQCBzdGF0aWMgaW50IGlpb19ndHNfYnVpbGRfYXZhaWxfc2Nh
-bGVfdGFibGUoc3RydWN0IGlpb19ndHMgKmd0cykNCj4+ICAgCXJldHVybiByZXQ7DQo+PiAgIH0N
-Cj4+ICAgDQo+PiArc3RhdGljIHZvaWQgaWlvX2d0c191c190b19pbnRfbWljcm8oaW50ICp0aW1l
-X3VzLCBpbnQgKmludF9taWNyb190aW1lcywNCj4+ICsJCQkJICAgIGludCBudW1fdGltZXMpDQo+
-PiArew0KPj4gKwlpbnQgaTsNCj4+ICsNCj4+ICsJZm9yIChpID0gMDsgaSA8IG51bV90aW1lczsg
-aSsrKSB7DQo+PiArCQlpbnRfbWljcm9fdGltZXNbaSAqIDJdID0gdGltZV91c1tpXSAvIDEwMDAw
-MDA7DQo+PiArCQlpbnRfbWljcm9fdGltZXNbaSAqIDIgKyAxXSA9IHRpbWVfdXNbaV0gJSAxMDAw
-MDAwOw0KPj4gKwl9DQo+PiArfQ0KPj4gKw0KPj4gICAvKioNCj4+ICAgICogaWlvX2d0c19idWls
-ZF9hdmFpbF90aW1lX3RhYmxlIC0gYnVpbGQgdGFibGUgb2YgYXZhaWxhYmxlIGludGVncmF0aW9u
-IHRpbWVzDQo+PiAgICAqIEBndHM6CUdhaW4gdGltZSBzY2FsZSBkZXNjcmlwdG9yDQo+PiBAQCAt
-MzUxLDcgKzM2Miw3IEBAIHN0YXRpYyBpbnQgaWlvX2d0c19idWlsZF9hdmFpbF9zY2FsZV90YWJs
-ZShzdHJ1Y3QgaWlvX2d0cyAqZ3RzKQ0KPj4gICAgKi8NCj4+ICAgc3RhdGljIGludCBpaW9fZ3Rz
-X2J1aWxkX2F2YWlsX3RpbWVfdGFibGUoc3RydWN0IGlpb19ndHMgKmd0cykNCj4+ICAgew0KPj4g
-LQlpbnQgKnRpbWVzLCBpLCBqLCBpZHggPSAwOw0KPj4gKwlpbnQgKnRpbWVzLCBpLCBqLCBpZHgg
-PSAwLCAqaW50X21pY3JvX3RpbWVzOw0KPj4gICANCj4+ICAgCWlmICghZ3RzLT5udW1faXRpbWUp
-DQo+PiAgIAkJcmV0dXJuIDA7DQo+PiBAQCAtMzYwLDYgKzM3MSw3IEBAIHN0YXRpYyBpbnQgaWlv
-X2d0c19idWlsZF9hdmFpbF90aW1lX3RhYmxlKHN0cnVjdCBpaW9fZ3RzICpndHMpDQo+PiAgIAlp
-ZiAoIXRpbWVzKQ0KPj4gICAJCXJldHVybiAtRU5PTUVNOw0KPj4gICANCj4+ICsNCj4gDQo+IEdy
-dW1ibGUuDQoNCk9oLiBJIHdvbmRlciBob3cgdGhpbmdzIGxpa2UgdGhpcyB0ZW5kIHRvIHNsaXAt
-aW4uIE1heWJlIEkgc2hvdWxkIGNoYW5nZSANCm15IHBhc3N3b3JkLCBpdCBtdXN0IGJlIHNvbWVv
-bmUgZWxzZSBoYXMgY3JhY2tlZCBteSBpdCBhbmQgaXMgdHlwaW5nIA0KdGhlc2UgaW4gYXQgbmln
-aHQgd2hpbGUgSSBhbSBzbGVlcGluZyBeX147DQoNCj4gSWYgbm90aGluZyBlbHNlIGNvbWVzIHVw
-IEknbGwgdGlkeSB0aGF0IHN0cmF5IGxpbmUgdXAgd2hlbiBhcHBseWluZy4NCg0KVGhhbmtzIQ0K
-DQo+IE5vdGUgdGhhdCB0aGVzZSB3aWxsIG5lZWQgdG8gd2FpdCBmb3IgYWZ0ZXIgcmMxIG5vdyBz
-byBteSBmaXhlcyBicmFuY2gNCj4gaGFzIG1vdmVkIG9uIHRvIGluY2x1ZGUgdGhlIGNvZGUgYmVp
-bmcgZml4ZWQuDQoNCldlbGwsIHRoYXQncyBPay4gUGxlYXNlLCBsZXQgbWUga25vdyBpZiB5b3Ug
-d2FudCBtZSB0byByZWJhc2UgdG8gcmMxIGFuZCANCnJlc3BpbiB0aGUgc2VyaWVzLg0KDQotLU1h
-dHRpDQoNCi0tIA0KTWF0dGkgVmFpdHRpbmVuDQpMaW51eCBrZXJuZWwgZGV2ZWxvcGVyIGF0IFJP
-SE0gU2VtaWNvbmR1Y3RvcnMNCk91bHUgRmlubGFuZA0KDQp+fiBXaGVuIHRoaW5ncyBnbyB1dHRl
-cmx5IHdyb25nIHZpbSB1c2VycyBjYW4gYWx3YXlzIHR5cGUgOmhlbHAhIH5+DQoNCg==
+Hi André,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/drm-amdgpu-Mark-contexts-guilty-for-any-reset-type/20230424-094534
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230424014324.218531-1-andrealmeid%40igalia.com
+patch subject: [PATCH] drm/amdgpu: Mark contexts guilty for any reset type
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230424/202304241259.Qq0Dmlud-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ea7b1d78b677fdcf5f4776e63de611a2681cd5fb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andr-Almeida/drm-amdgpu-Mark-contexts-guilty-for-any-reset-type/20230424-094534
+        git checkout ea7b1d78b677fdcf5f4776e63de611a2681cd5fb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304241259.Qq0Dmlud-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_device_pre_asic_reset':
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4738:28: warning: variable 'job' set but not used [-Wunused-but-set-variable]
+    4738 |         struct amdgpu_job *job = NULL;
+         |                            ^~~
+
+
+vim +/job +4738 drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+
+5740682e66cef5 Monk Liu          2017-10-25  4733  
+e3c1b0712fdb03 shaoyunl          2021-02-16  4734  int amdgpu_device_pre_asic_reset(struct amdgpu_device *adev,
+04442bf70debb1 Lijo Lazar        2021-03-16  4735  				 struct amdgpu_reset_context *reset_context)
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4736  {
+5c1e6fa49e8d8d Huang Rui         2021-12-16  4737  	int i, r = 0;
+04442bf70debb1 Lijo Lazar        2021-03-16 @4738  	struct amdgpu_job *job = NULL;
+04442bf70debb1 Lijo Lazar        2021-03-16  4739  	bool need_full_reset =
+04442bf70debb1 Lijo Lazar        2021-03-16  4740  		test_bit(AMDGPU_NEED_FULL_RESET, &reset_context->flags);
+04442bf70debb1 Lijo Lazar        2021-03-16  4741  
+04442bf70debb1 Lijo Lazar        2021-03-16  4742  	if (reset_context->reset_req_dev == adev)
+04442bf70debb1 Lijo Lazar        2021-03-16  4743  		job = reset_context->job;
+711826656bebb0 Monk Liu          2017-12-25  4744  
+b602ca5f31fe69 Tiecheng Zhou     2020-08-19  4745  	if (amdgpu_sriov_vf(adev)) {
+b602ca5f31fe69 Tiecheng Zhou     2020-08-19  4746  		/* stop the data exchange thread */
+b602ca5f31fe69 Tiecheng Zhou     2020-08-19  4747  		amdgpu_virt_fini_data_exchange(adev);
+b602ca5f31fe69 Tiecheng Zhou     2020-08-19  4748  	}
+b602ca5f31fe69 Tiecheng Zhou     2020-08-19  4749  
+9e225fb9e636b3 Andrey Grodzovsky 2022-06-18  4750  	amdgpu_fence_driver_isr_toggle(adev, true);
+9e225fb9e636b3 Andrey Grodzovsky 2022-06-18  4751  
+711826656bebb0 Monk Liu          2017-12-25  4752  	/* block all schedulers and reset given job's ring */
+0875dc9e80eb3b Chunming Zhou     2016-06-12  4753  	for (i = 0; i < AMDGPU_MAX_RINGS; ++i) {
+0875dc9e80eb3b Chunming Zhou     2016-06-12  4754  		struct amdgpu_ring *ring = adev->rings[i];
+0875dc9e80eb3b Chunming Zhou     2016-06-12  4755  
+51687759be93fb Chunming Zhou     2017-04-24  4756  		if (!ring || !ring->sched.thread)
+0875dc9e80eb3b Chunming Zhou     2016-06-12  4757  			continue;
+5740682e66cef5 Monk Liu          2017-10-25  4758  
+c530b02f39850a Jack Zhang        2021-05-12  4759  		/*clear job fence from fence drv to avoid force_completion
+c530b02f39850a Jack Zhang        2021-05-12  4760  		 *leave NULL and vm flush fence in fence drv */
+5c1e6fa49e8d8d Huang Rui         2021-12-16  4761  		amdgpu_fence_driver_clear_job_fences(ring);
+c530b02f39850a Jack Zhang        2021-05-12  4762  
+2200edac745a65 Chunming Zhou     2016-06-30  4763  		/* after all hw jobs are reset, hw fence is meaningless, so force_completion */
+2f9d4084cac96a Monk Liu          2017-10-16  4764  		amdgpu_fence_driver_force_completion(ring);
+2f9d4084cac96a Monk Liu          2017-10-16  4765  	}
+d38ceaf99ed015 Alex Deucher      2015-04-20  4766  
+9e225fb9e636b3 Andrey Grodzovsky 2022-06-18  4767  	amdgpu_fence_driver_isr_toggle(adev, false);
+9e225fb9e636b3 Andrey Grodzovsky 2022-06-18  4768  
+04442bf70debb1 Lijo Lazar        2021-03-16  4769  	r = amdgpu_reset_prepare_hwcontext(adev, reset_context);
+404b277bbe4945 Lijo Lazar        2021-03-26  4770  	/* If reset handler not implemented, continue; otherwise return */
+404b277bbe4945 Lijo Lazar        2021-03-26  4771  	if (r == -ENOSYS)
+404b277bbe4945 Lijo Lazar        2021-03-26  4772  		r = 0;
+404b277bbe4945 Lijo Lazar        2021-03-26  4773  	else
+04442bf70debb1 Lijo Lazar        2021-03-16  4774  		return r;
+04442bf70debb1 Lijo Lazar        2021-03-16  4775  
+1d721ed679db18 Andrey Grodzovsky 2019-04-18  4776  	/* Don't suspend on bare metal if we are not going to HW reset the ASIC */
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4777  	if (!amdgpu_sriov_vf(adev)) {
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4778  
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4779  		if (!need_full_reset)
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4780  			need_full_reset = amdgpu_device_ip_need_full_reset(adev);
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4781  
+360cd08196cabc Likun Gao         2022-12-21  4782  		if (!need_full_reset && amdgpu_gpu_recovery &&
+360cd08196cabc Likun Gao         2022-12-21  4783  		    amdgpu_device_ip_check_soft_reset(adev)) {
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4784  			amdgpu_device_ip_pre_soft_reset(adev);
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4785  			r = amdgpu_device_ip_soft_reset(adev);
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4786  			amdgpu_device_ip_post_soft_reset(adev);
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4787  			if (r || amdgpu_device_ip_check_soft_reset(adev)) {
+aac891685da661 Dennis Li         2020-08-20  4788  				dev_info(adev->dev, "soft reset failed, will fallback to full reset!\n");
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4789  				need_full_reset = true;
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4790  			}
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4791  		}
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4792  
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4793  		if (need_full_reset)
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4794  			r = amdgpu_device_ip_suspend(adev);
+04442bf70debb1 Lijo Lazar        2021-03-16  4795  		if (need_full_reset)
+04442bf70debb1 Lijo Lazar        2021-03-16  4796  			set_bit(AMDGPU_NEED_FULL_RESET, &reset_context->flags);
+04442bf70debb1 Lijo Lazar        2021-03-16  4797  		else
+04442bf70debb1 Lijo Lazar        2021-03-16  4798  			clear_bit(AMDGPU_NEED_FULL_RESET,
+04442bf70debb1 Lijo Lazar        2021-03-16  4799  				  &reset_context->flags);
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4800  	}
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4801  
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4802  	return r;
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4803  }
+26bc534094ed45 Andrey Grodzovsky 2018-11-22  4804  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
