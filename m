@@ -2,153 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A819A6EC38C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DECF6EC38F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjDXCR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 22:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S230228AbjDXCXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 22:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXCRY (ORCPT
+        with ESMTP id S229458AbjDXCXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 22:17:24 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845FF19B0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:17:22 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-b98415ba97aso4982270276.0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:17:22 -0700 (PDT)
+        Sun, 23 Apr 2023 22:23:13 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A5AE60;
+        Sun, 23 Apr 2023 19:23:11 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a50cb65c92so32842395ad.0;
+        Sun, 23 Apr 2023 19:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682302641; x=1684894641;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0VX+qVpX589en4ibYbxaJtlcS+1y2JMmkJuoXSEze8c=;
-        b=R+pGwl7zsqYJxq4psP2Yt3s6BCQ3CZJbTh81Pn2v7fummBwCHwM71kwo2PAyc0/APK
-         YHeoYkCJdEjEWvwvjRs8CdCtloPwwEu9AEPaILzyABUklFu1ePu63lA89MZaywQ8JR3n
-         /FA5ODedUWzc1tiMgcNY0i32HwWTC5uvkmrbu2uEGdTzPfPZeOdxGlS16fG6mYkydmOj
-         TWftwM8lOiSCPJqo5QTwuVEA1TrWAGwQfbkTYQtFynFkk9o+2+p4mAIgd0OXYOL9HRwo
-         BQdQ0bwZ7/CPIu9dw5/Qja6quF6Dz7VcuGnFNrfxDBbn85Xf34gSSq73Uu3J/WtRsN8v
-         kh+w==
+        d=gmail.com; s=20221208; t=1682302991; x=1684894991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3S0sFVoFyu2eJh9f1TXlvcKTjZ/nv79PKMNTv2RFnZY=;
+        b=dOXATqLaT7rQ1M4ciT7u3JXsPfBIfBRRdEiYC15lo5pMdt+5qmBCy0TZyy7UdCQetF
+         5MMtg5nKw/QuJlfVb52QI+t4IpQPOyyrQcV7Zv5JT+0bdCKxcSEuCeSGOuE+cEKZFovq
+         Aku8IA4l8EAvgTt4NoLvhL1tXwuA8/tGRw93AyN8UqPzXeqdNbSMfiQ3s0KnTuG5OakJ
+         OjBasQmhsfqtPh8uwfPXkdPfnzEcPxg4wCg7Cc3Qz/jXcdpSBSzNmnxmDQ6nDD9l49ul
+         fbrPbUsESw3FhrHpBlgHoae/kZTCHs01K6qxQ0ExhH1DtE3OG8r24dk80EnTa7SZmeIS
+         vmMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682302641; x=1684894641;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0VX+qVpX589en4ibYbxaJtlcS+1y2JMmkJuoXSEze8c=;
-        b=b9xbL95kF4YNY+1oSuju4z4gwC7dm9GJdXQdN/luH5V9c1Iw9SAuVFLJFn4UNe4SKE
-         /+ynHgOr90o0Zq6O3QoJOnNVDbUirr3NF/EVXvgfn1SbfkbHPq1UjDVPv2z6aS/fCANJ
-         YRRqRXsPiR9bUpdfQk/WSrWofRcSm54gYoE33AafmjFbuGtNwKDo4iljBNGXBjdK+B/n
-         NL4dCbChB+Vj7+BDt41LDbrJjp6vdUNQfcfDNy3VUpe76ccVW2HiLK+i6xllhL4o+yY8
-         3a6kRDVvBy7nYZGNVt0/LpvU78VlbOZpJdMvEkpWml8XvQv9Ll5UiQXM8stq2fb9Fn94
-         DJ9Q==
-X-Gm-Message-State: AAQBX9fh3pquiFDzfvWndGF23JVIVMnKtY9X/VobnXvL4f+PsTNY1O8q
-        dQOyoItYpEf4whlnGE7bxiyo4Q==
-X-Google-Smtp-Source: AKy350ZnFkJQzOHeJaKMeyQF5MBYpYAdpIbWqkfSn/0sv31npK+KqOuCFoaJUPKOnnhFNOhG2k10zQ==
-X-Received: by 2002:a25:fc5:0:b0:b92:3b1d:f21e with SMTP id 188-20020a250fc5000000b00b923b1df21emr8371307ybp.1.1682302641606;
-        Sun, 23 Apr 2023 19:17:21 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 190-20020a250ac7000000b00b7767ca749esm2605415ybk.59.2023.04.23.19.17.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 19:17:20 -0700 (PDT)
-Date:   Sun, 23 Apr 2023 19:17:12 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     David Stevens <stevensd@chromium.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH next] mm/khugepaged: fix conflicting mods to
- collapse_file()
-In-Reply-To: <CAD=HUj5NSXX8a5shf-GVYqkMFC-o26vuyo26hMPpPCnuSD683A@mail.gmail.com>
-Message-ID: <cf24ea0-92da-cd46-a7cd-87f5449016e8@google.com>
-References: <b6c881-c352-bb91-85a8-febeb09dfd71@google.com> <CAD=HUj5NSXX8a5shf-GVYqkMFC-o26vuyo26hMPpPCnuSD683A@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1682302991; x=1684894991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3S0sFVoFyu2eJh9f1TXlvcKTjZ/nv79PKMNTv2RFnZY=;
+        b=RA2lY4iBUH0WKvOr8kxUap7kz69jPSEvRmanJuPf+E1IZaagYLj6p3zc3a0My/G+ON
+         GzDI2v4lY9e6MUAo4bJDU7XbAgccHyi4E0uML6zz1GWrbjGoxEwI+IBurgR7mptfhSaW
+         Ep0/YP06p6bEg97FB1MQfSZLxmzSrssoWr4qkE5jQVuOpaaJYfdQu0CIphJEymgdIugK
+         2kuMQ5f2BF4nO9+r3yy3WwiLBpE4u6ZXB4ShvOdjsWgQWdel8dZG4HncPyCLsZL+FAWJ
+         uMhcVEWak7V5BaseyHsHecFmuEmyf7QRildo8JaxxVUnTn0XkfoWmK6qrf3u0294zF0X
+         nqgQ==
+X-Gm-Message-State: AAQBX9ffXhHyZNEC+qHPgHcCJITsjsBKCm0Vm8WMZuOvQnu3v7R3DGP2
+        Mn6J2iXokbzbgV5bBTWmblo6gO4nsPYnA2CSWKE=
+X-Google-Smtp-Source: AKy350ZEgpH9cb1IfDjHHfT7SEB07X/oaT+/CXJHGA6AUie2M0cMMp+VyS3ptYN+5vgwiuejw4NApCesJZ2MYx69omI=
+X-Received: by 2002:a17:903:2987:b0:1a6:bb7b:7a40 with SMTP id
+ lm7-20020a170903298700b001a6bb7b7a40mr12123123plb.64.1682302990569; Sun, 23
+ Apr 2023 19:23:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463760895-436720276-1682302640=:4090"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230423212656.1381002-1-aford173@gmail.com> <20230424004706.GL21943@pendragon.ideasonboard.com>
+In-Reply-To: <20230424004706.GL21943@pendragon.ideasonboard.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 23 Apr 2023 21:22:59 -0500
+Message-ID: <CAHCN7xKM38RgFW9DAc9co_xcC7NjfymcVEwzu3LMwgYxytCpLA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] arm64: dts: imx8mn: Enable CSI and ISI Nodes
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Sun, Apr 23, 2023 at 7:46=E2=80=AFPM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Adam,
+>
+> Thank you for the patch.
+>
+> On Sun, Apr 23, 2023 at 04:26:55PM -0500, Adam Ford wrote:
+> > The CSI in the imx8mn is the same as what is used in the imx8mm,
+> > but it's routed to the ISI on the Nano. Add both the ISI and CSI
+> > nodes, and pointing them to each other. Since the CSI capture is
+> > dependent on an attached camera, mark both ISI and CSI as
+> > disabled by default.
+>
+> I'd then write the subject line as "Add CSI and ISI nodes".
 
----1463760895-436720276-1682302640=:4090
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+That makes sense, especially since I disabled them by default.
+>
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boo=
+t/dts/freescale/imx8mn.dtsi
+> > index 8be8f090e8b8..102550b41f22 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+> > @@ -1104,6 +1104,24 @@ dsim_from_lcdif: endpoint {
+> >                               };
+> >                       };
+> >
+> > +                     isi: isi@32e20000 {
+> > +                             compatible =3D "fsl,imx8mn-isi";
+> > +                             reg =3D <0x32e20000 0x100>;
+>
+> The i.MX8MN reference manual documents the ISI registers block size to
+> be 64kB. Should we use the same here, even if all the registers we need
+> are within the first 256 bytes ?
 
-On Mon, 24 Apr 2023, David Stevens wrote:
-> On Sun, Apr 23, 2023 at 1:47=E2=80=AFPM Hugh Dickins <hughd@google.com> w=
-rote:
-> >
-> > Inserting Ivan Orlov's syzbot fix commit 2ce0bdfebc74
-> > ("mm: khugepaged: fix kernel BUG in hpage_collapse_scan_file()")
-> > ahead of Jiaqi Yan's and David Stevens's commits
-> > 12904d953364 ("mm/khugepaged: recover from poisoned file-backed memory"=
-)
-> > cae106dd67b9 ("mm/khugepaged: refactor collapse_file control flow")
-> > ac492b9c70ca ("mm/khugepaged: skip shmem with userfaultfd")
-> > (all of which restructure collapse_file()) did not work out well.
-> >
-> > xfstests generic/086 on huge tmpfs (with accelerated khugepaged) freeze=
-s
-> > (if not on the first attempt, then the 2nd or 3rd) in find_lock_entries=
-()
-> > while doing drop_caches: the file's xarray seems to have been corrupted=
-,
-> > with find_get_entry() returning nonsense which makes no progress.
-> >
-> > Bisection led to ac492b9c70ca; and diff against earlier working linux-n=
-ext
-> > suggested that it's probably down to an errant xas_store(), which does =
-not
-> > belong with the later changes (and nor does the positioning of warnings=
-).
-> > The later changes look as if they fix the syzbot issue independently.
-> >
-> > Remove most of what's left of 2ce0bdfebc74: just leave one WARN_ON_ONCE
-> > (xas_error) after the final xas_store() of the multi-index entry.
-> >
-> > Signed-off-by: Hugh Dickins <hughd@google.com>
-> > ---
-> >
-> >  mm/khugepaged.c | 23 +----------------------
-> >  1 file changed, 1 insertion(+), 22 deletions(-)
-> >
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -1941,16 +1941,6 @@ static int collapse_file(struct mm_struct *mm, u=
-nsigned long addr,
-> >                                         result =3D SCAN_FAIL;
-> >                                         goto xa_locked;
-> >                                 }
-> > -                               xas_store(&xas, hpage);
-> > -                               if (xas_error(&xas)) {
-> > -                                       /* revert shmem_charge performe=
-d
-> > -                                        * in the previous condition
-> > -                                        */
-> > -                                       mapping->nrpages--;
-> > -                                       shmem_uncharge(mapping->host, 1=
-);
-> > -                                       result =3D SCAN_STORE_FAILED;
->=20
-> With this being removed, SCAN_STORE_FAILED should also be removed from
-> the scan_result enum and trace event definitions.
+I can do that.
+>
+> > +                             interrupts =3D <GIC_SPI 16 IRQ_TYPE_LEVEL=
+_HIGH>;
+> > +                             clocks =3D <&clk IMX8MN_CLK_DISP_AXI_ROOT=
+>,
+> > +                                      <&clk IMX8MN_CLK_DISP_APB_ROOT>;
+> > +                             clock-names =3D "axi", "apb";
+> > +                             fsl,blk-ctrl =3D <&disp_blk_ctrl>;
+> > +                             power-domains =3D <&disp_blk_ctrl IMX8MN_=
+DISPBLK_PD_ISI>;
+> > +                             status =3D "disabled";
+> > +
+> > +                             port {
+> > +                                     isi_in: endpoint {
+> > +                                             remote-endpoint =3D <&mip=
+i_csi_out>;
+> > +                                     };
+> > +                             };
+>
+> This will fail to validate against the ISI DT binding, as they require a
+> "ports" node. When a single port is present using a "port" node directly
+> is fine from an OF graph point of view, but to avoid too much complexity
+> in the ISI binding the consensus was to always require a "ports" node
+> for the ISI.
 
-Only if we also remove your use of SCAN_STORE_FAILED in ac492b9c70ca:
-what would you want that to say instead?
 
-I don't care myself for any of those "SCAN" result codes, nor whether they
-are few or many: I'd rather have __LINE__ numbers for my own debugging.
+Argh!  I pulled from the wrong test repo.  I remember the discussion
+from a few months back.  I'll fix it and the others when I submit V2.
 
-But if people want to remove SCAN_STORE_FAILED now, sure, send a patch;
-my intent was to unbreak the breakage.
-
-Hugh
----1463760895-436720276-1682302640=:4090--
+>
+> > +                     };
+> > +
+> >                       disp_blk_ctrl: blk-ctrl@32e28000 {
+> >                               compatible =3D "fsl,imx8mn-disp-blk-ctrl"=
+, "syscon";
+> >                               reg =3D <0x32e28000 0x100>;
+> > @@ -1147,6 +1165,42 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
+> >                               #power-domain-cells =3D <1>;
+> >                       };
+> >
+> > +                     mipi_csi: mipi-csi@32e30000 {
+> > +                             compatible =3D "fsl,imx8mm-mipi-csi2";
+> > +                             reg =3D <0x32e30000 0x1000>;
+> > +                             interrupts =3D <GIC_SPI 17 IRQ_TYPE_LEVEL=
+_HIGH>;
+> > +                             assigned-clocks =3D <&clk IMX8MN_CLK_CAME=
+RA_PIXEL>,
+> > +                                               <&clk IMX8MN_CLK_CSI1_P=
+HY_REF>;
+> > +                             assigned-clock-parents =3D <&clk IMX8MN_S=
+YS_PLL2_1000M>,
+> > +                                                       <&clk IMX8MN_SY=
+S_PLL2_1000M>;
+> > +                             assigned-clock-rates =3D <333000000>;
+> > +                             clock-frequency =3D <333000000>;
+> > +                             clocks =3D <&clk IMX8MN_CLK_DISP_APB_ROOT=
+>,
+> > +                                      <&clk IMX8MN_CLK_CAMERA_PIXEL>,
+> > +                                      <&clk IMX8MN_CLK_CSI1_PHY_REF>,
+> > +                                      <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
+> > +                             clock-names =3D "pclk", "wrap", "phy", "a=
+xi";
+> > +                             power-domains =3D <&disp_blk_ctrl IMX8MN_=
+DISPBLK_PD_MIPI_CSI>;
+> > +                             status =3D "disabled";
+> > +
+> > +                             ports {
+> > +                                     #address-cells =3D <1>;
+> > +                                     #size-cells =3D <0>;
+> > +
+> > +                                     port@0 {
+> > +                                             reg =3D <0>;
+> > +                                     };
+> > +
+> > +                                     port@1 {
+> > +                                             reg =3D <1>;
+> > +
+> > +                                             mipi_csi_out: endpoint {
+> > +                                                     remote-endpoint =
+=3D <&isi_in>;
+> > +                                             };
+> > +                                     };
+> > +                             };
+> > +                     };
+> > +
+> >                       usbotg1: usb@32e40000 {
+> >                               compatible =3D "fsl,imx8mn-usb", "fsl,imx=
+7d-usb", "fsl,imx27-usb";
+> >                               reg =3D <0x32e40000 0x200>;
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
