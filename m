@@ -2,53 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F826ED6DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F936ED6DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjDXVkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 17:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S232617AbjDXVov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 17:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDXVky (ORCPT
+        with ESMTP id S232102AbjDXVoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 17:40:54 -0400
+        Mon, 24 Apr 2023 17:44:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8714C02;
-        Mon, 24 Apr 2023 14:40:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FA45267;
+        Mon, 24 Apr 2023 14:44:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9DD062744;
-        Mon, 24 Apr 2023 21:40:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDEBC433D2;
-        Mon, 24 Apr 2023 21:40:50 +0000 (UTC)
-Date:   Mon, 24 Apr 2023 17:40:49 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00972622F1;
+        Mon, 24 Apr 2023 21:44:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC2AFC433D2;
+        Mon, 24 Apr 2023 21:44:43 +0000 (UTC)
+Date:   Mon, 24 Apr 2023 17:44:41 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention
- mechanism
-Message-ID: <20230424174049.1c9e54dd@rorschach.local.home>
-In-Reply-To: <CAADnVQ+FO-+1OALTtgVkcpH3Adc6xS9qjzORyq2vwVtwY2UoxQ@mail.gmail.com>
-References: <20230417154737.12740-1-laoar.shao@gmail.com>
-        <20230417154737.12740-6-laoar.shao@gmail.com>
-        <20230417201457.c43xfcukjzm4u6vx@dhcp-172-26-102-232.dhcp.thefacebook.com>
-        <CALOAHbC4Bz_VX52zmv=sScBf0hzscMAC4+EwMCpnd1BcaSVJSw@mail.gmail.com>
-        <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
-        <CALOAHbCtPR26it_Wdk7T_TETMTh2se6rgEbL_KC5XKtzvObjiA@mail.gmail.com>
-        <CAADnVQ+FO-+1OALTtgVkcpH3Adc6xS9qjzORyq2vwVtwY2UoxQ@mail.gmail.com>
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] tracing/timer: Add missing hrtimer modes to
+ decode_hrtimer_mode().
+Message-ID: <20230424174441.3baebdef@rorschach.local.home>
+In-Reply-To: <20230418143854.8vHWQKLM@linutronix.de>
+References: <20230418143854.8vHWQKLM@linutronix.de>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -62,32 +46,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 15:46:34 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Tue, 18 Apr 2023 16:38:54 +0200
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
 
-> No. Just one prog at entry into any of the kernel functions
-> and another prog at entry of funcs that 1st bpf prog called indirectly.
-> Like one prog is tracing networking events while another
-> is focusing on mm. They should not conflict.
+> The trace output for the HRTIMER_MODE_.*_HARD modes is seen as a number
+> since these modes are not decoded. The author was not aware of the fancy
+> decoding function which makes the life easier.
+> 
+> Extend decode_hrtimer_mode() with the additional HRTIMER_MODE_.*_HARD
+> modes.
+> 
+> Fixes: ae6683d815895 ("hrtimer: Introduce HARD expiry mode")
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-You mean that you have:
-
-function start:
-  __bpf_prog_enter_recur()
-    bpf_program1()
-      __bpf_prog_enter_recur()
-        bpf_program2();
-      __bpf_prog_exit_recur()
-  __bpf_prog_exit_recur()
-
-  rest of function
-
-That is, a bpf program can be called within another bpf pogram between
-the prog_enter and prog_exit(), that is in the same context (normal,
-softirq, irq, etc)?
-
-The protection is on the trampoline where the bpf program is called.
-Not sure how ftrace can stop BPF or BPF stop ftrace, unless bpf is
-tracing a ftrace callback, or ftrace is tracing a bpf function.
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
 -- Steve
