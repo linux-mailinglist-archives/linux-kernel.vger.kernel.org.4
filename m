@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D5E6ED251
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3906ED2B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjDXQWM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 12:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S231865AbjDXQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjDXQWK (ORCPT
+        with ESMTP id S231580AbjDXQka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:22:10 -0400
-Received: from mail6.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C62F7682;
-        Mon, 24 Apr 2023 09:22:08 -0700 (PDT)
-Received: from mail6.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 87AF7222951;
-        Mon, 24 Apr 2023 18:22:06 +0200 (CEST)
-Received: from mail6.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 7355C2225AC;
-        Mon, 24 Apr 2023 18:22:06 +0200 (CEST)
-X-TM-AS-ERS: 10.181.10.102-127.5.254.253
-X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
-        Q==
-X-DDEI-TLS-USAGE: Used
-Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
-        by mail6.swissbit.com (Postfix) with ESMTPS;
-        Mon, 24 Apr 2023 18:22:06 +0200 (CEST)
-From:   Christian Loehle <CLoehle@hyperstone.com>
-To:     ulf hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Avri Altman <avri.altman@wdc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH] mmc: queue: ensure error propagation for non-blk
-Thread-Topic: [PATCH] mmc: queue: ensure error propagation for non-blk
-Thread-Index: Adl2xsdYtFja5ytvTvyF17/lcuh7dQ==
-Date:   Mon, 24 Apr 2023 16:22:05 +0000
-Message-ID: <1d8ce997934c4395bb5dd235525bf7a2@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 24 Apr 2023 12:40:30 -0400
+X-Greylist: delayed 953 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 09:40:21 PDT
+Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFD5876BB;
+        Mon, 24 Apr 2023 09:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:In-Reply-To:References:MIME-Version:
+        Content-Transfer-Encoding; bh=smNFfWYZDzCdeMK2Jp8UC6yG66GXW3bdYd
+        Cd5GyzDhc=; b=gbhP58M97zPzv/37DsaIKaQ0fORdRWpNhTVkU0XfWDJ4vWgjth
+        wHhGpwviy8whL4i3U/BennGlb9xW+dK5EjhTlxW4XiGpa2mOqraMk1Epx06R924j
+        ZETpdL6doCImayur9yXwJuL04C5GdspwiDvqeOdZQPytoaENLuNFRfZyc=
+Received: from localhost.localdomain (unknown [10.7.101.92])
+        by front01 (Coremail) with SMTP id 5oFpogD3fz59rEZkQRscAA--.27563S2;
+        Tue, 25 Apr 2023 00:21:22 +0800 (CST)
+From:   Ruihan Li <lrh2000@pku.edu.cn>
+To:     torvalds@linux-foundation.org, masahiroy@kernel.org
+Cc:     arnd@arndb.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        devel@acpica.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, mingo@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, ojeda@kernel.org, rafael@kernel.org,
+        robert.moore@intel.com, terrelln@fb.com, tglx@linutronix.de,
+        trix@redhat.com, x86@kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
+Subject: [PATCH] scripts: Remove ICC-related dead code
+Date:   Tue, 25 Apr 2023 00:21:10 +0800
+Message-Id: <20230424162110.11082-1-lrh2000@pku.edu.cn>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20221016182349.49308-1-masahiroy@kernel.org>
+References: <20221016182349.49308-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27586.000
-X-TMASE-Result: 10--1.863700-10.000000
-X-TMASE-MatchedRID: GegCmeQgyY5A+YmEQEhsujz6L+U/pejx1QQ6Jx/ffla4n9bqPhfH20mo
-        bOLhIyMmZX2hfwUP7YpvtPtMpliQxdAy2LXTI7g3EXjPIvKd74BMkOX0UoduuSxMw0FMkBlZnvu
-        lBJY7sZvi8zVgXoAltu339GNyKR8aC24oEZ6SpSkj80Za3RRg8KiVP4VLL8ChQv8bOiTBfk31he
-        RrqmEGW4uV9Sql14RLrP2oEAEBXfg=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 188d4078-3282-414d-923f-36a7f32a4dfa-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: 5oFpogD3fz59rEZkQRscAA--.27563S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrtFy7Kry8WF1rXF4kZrW5ZFb_yoW8JF1Upa
+        yjk34qgr1kZr4S9r1xAw10qF1rAan7t3yxCw1jgF1jkF13Gr40qrWxtFyakr98Za18trWF
+        9FW8A343Gr43CrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+        87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw2
+        0F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIE
+        c7CjxVA2Y2ka0xkIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
+        IEY20_Kr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEEBVPy77qNLwASsG
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,47 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Requests to the mmc layer usually come through a block device.
-The exceptions are the RPMB chardev and debugfs, which issue their
-own blk_mq requests through blk_execute_rq and do not query
-the BLK_STS error but the mmc-internal drv_op_result.
-This patch ensures that drv_op_result is set as error whenever
-a BLK_STS error is set.
+Intel compiler support has already been completely removed in commit
+95207db8166a ("Remove Intel compiler support"). However, it appears that
+there is still some ICC-related code in scripts/cc-version.sh. There is
+no harm in leaving the code as it is, but removing the dead code makes
+the codebase a bit cleaner.
 
-The behavior leads to a bug where the request never sees the error,
-e.g. by directly erroring out at mmc_blk_mq_issue_rq if
-mmc_blk_part_switch fails. The ioctl caller of the rpmb chardev then
-can never see the error and thus may assume that their call executed
-successfully when it did not.
+Hopefully all ICC-related stuff in the build scripts will be removed
+after this commit, given the grep output as below:
 
-While always checking the blk_execute_rq return value would be
-advised, let's eliminate the error completely by always setting
-drv_op_result in case of a BLK_STS error.
+	(linux/scripts) $ grep -i -w -R 'icc'
+	cc-version.sh:ICC)
+	cc-version.sh:	min_version=$($min_tool_version icc)
+	dtc/include-prefixes/arm64/qcom/sm6350.dtsi:#include <dt-bindings/interconnect/qcom,icc.h>
 
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+Fixes: 95207db8166a ("Remove Intel compiler support")
+Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
 ---
- drivers/mmc/core/queue.c | 3 +++
- 1 file changed, 3 insertions(+)
+ scripts/cc-version.sh | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
-index b396e3900717..8240962e28f3 100644
---- a/drivers/mmc/core/queue.c
-+++ b/drivers/mmc/core/queue.c
-@@ -334,6 +334,9 @@ static blk_status_t mmc_mq_queue_rq(struct blk_mq_hw_ctx *hctx,
- 		WRITE_ONCE(mq->busy, false);
- 	}
- 
-+	/* Ensure request error propagates to non-blk callers, too. */
-+	if (!req_to_mmc_queue_req(req)->drv_op_result && ret)
-+		req_to_mmc_queue_req(req)->drv_op_result = ret;
- 	return ret;
- }
- 
+diff --git a/scripts/cc-version.sh b/scripts/cc-version.sh
+index 0573c92e8..a7e28b6a5 100755
+--- a/scripts/cc-version.sh
++++ b/scripts/cc-version.sh
+@@ -45,10 +45,6 @@ Clang)
+ 	version=$2.$3.$4
+ 	min_version=$($min_tool_version llvm)
+ 	;;
+-ICC)
+-	version=$(($2 / 100)).$(($2 % 100)).$3
+-	min_version=$($min_tool_version icc)
+-	;;
+ *)
+ 	echo "$orig_args: unknown C compiler" >&2
+ 	exit 1
 -- 
-2.37.3
-
-
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+2.40.0
 
