@@ -2,234 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894746ED009
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E826ED00C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbjDXOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S231818AbjDXOLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjDXOLA (ORCPT
+        with ESMTP id S231583AbjDXOLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:11:00 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E52DE;
-        Mon, 24 Apr 2023 07:10:57 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-5ef55901f49so19037966d6.2;
-        Mon, 24 Apr 2023 07:10:57 -0700 (PDT)
+        Mon, 24 Apr 2023 10:11:47 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE219754
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:11:33 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-95369921f8eso686697066b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:11:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682345456; x=1684937456;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gd9Pl0It3TDltQeAVm2rUEyHHwpqgvGnQc5Nc20j11o=;
-        b=OqZYsS4SU4LHUhElPmxqFbN9r+Jg2q93L6UFEtrdRCLhzqiZQI+z0NHxn+lzeq8UEJ
-         03V2u6KywmZYYZ4TpdHFD8rTrnPj0Esw7R4c4BkoQqNT4XPjp2A5N6ntBR9wVSwLtbrP
-         LOdymBYrRWbxz6IDkGXJjrWcAlkuUYoHeiKSEJNKzTzJKx2Frj/i9OmRpPwNbsqhb+nI
-         2ARMKnCjjahLpNen8SWwwgCTFTDsR32YaELIXgHpmTmcGPve2mGeZFcE+LkCGRpuoK8Y
-         GxRfUQ7GFvaUQJhBvo5F1LfT/3SDsyXKkF+imnkt00Audiqdt8l8kY2eRm1vzKYg3b8s
-         H+Vg==
+        d=linaro.org; s=google; t=1682345492; x=1684937492;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cyOmFLO2JoBn3WUaKWXU8qyDvCA1T3Gwnz4RtedevIA=;
+        b=PG9T1fl49/momPqz7oKrvqcQovXddXgLi8MagEHArWynQva1DUuyjG6No0tW7MMAI2
+         /Lw8u9WhLibQy4jY8ZBNevD5UjjogZEjwFp9xa0m8DMAMcDojj0DmT9p5qS3ddu6YhVE
+         sagFfArUw5Rpww44UUQ67doQb3g/iq6mZDAfePFMQrpXH6cdk25Nv9e5MeNV3jjQWNgE
+         DiZkKWJyZYMDmMkhhhL7q1tjISXi9IvFiakQ4zOoVxl8IgpkhfqZ1IHZ/ECtK/bkgKkc
+         6Vtpr41OwTNkfZ6yElPpu7RDd0c0nwp7W7awTKnAtSRFqIFpAZa4WmKAFJvUOSTxutFT
+         2mJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682345456; x=1684937456;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Gd9Pl0It3TDltQeAVm2rUEyHHwpqgvGnQc5Nc20j11o=;
-        b=aUT2Gd0DY+79HL1d+cPLB+Tc4xey/Zbkvplkzf0+3k3Msoa9aqmasA1whB5i10NTsk
-         9cXhkNfMjnppg/IEIW3h/E89y0EO3K+SGpqygcQg4ml+gAjN00snR2FoRdQ0dihrnDpu
-         HpxV8aP43EIeFrboTSL0bPIbnQGIzVbqx8IwsOrIidYYMMAz3Flok09knAmzV+pKiuD3
-         +xAitVaXEvVVxc6HdfTBe/CQidq11GWpvE2zFsMikWMBgK3+Kq7Ro0kVJsnP2lURh4cg
-         0/skOlxrRCVq1gTAgZKUUYG2NUetY2RDDUXoZMFUwxd2mlxN074psngBERMZ0gfMlqtJ
-         d2oA==
-X-Gm-Message-State: AC+VfDwShhIBd36ny8XGdgqS2pnVPNisYShcC/SmAcELb/jO0TiAKpII
-        UY7N+s8jd/UDWd2cGwVGcBI=
-X-Google-Smtp-Source: ACHHUZ6fbXcD4TpjrtcJ/LY+6XZH/BKqQVQjdnCjhh/UAAtkD1IldLCbOqOnGtxKzN+y2LjUMG9OWA==
-X-Received: by 2002:a05:6214:19cf:b0:616:2ff9:4826 with SMTP id j15-20020a05621419cf00b006162ff94826mr4768223qvc.18.1682345455733;
-        Mon, 24 Apr 2023 07:10:55 -0700 (PDT)
-Received: from localhost (172.174.245.35.bc.googleusercontent.com. [35.245.174.172])
-        by smtp.gmail.com with ESMTPSA id y15-20020a0c8ecf000000b005e7648f9b78sm3301042qvb.109.2023.04.24.07.10.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 07:10:55 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 10:10:54 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     yang.yang29@zte.com.cn, davem@davemloft.net,
-        willemdebruijn.kernel@gmail.com
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhang.yunkai@zte.com.cn, yang.yang29@zte.com.cn,
-        xu.xin16@zte.com.cn
-Message-ID: <64468deedd90a_191c8029493@willemb.c.googlers.com.notmuch>
-In-Reply-To: <202304241355464262541@zte.com.cn>
-References: <202304241355464262541@zte.com.cn>
-Subject: RE: [PATCH linux-next v3] selftests: net: udpgso_bench_rx: Fix
- verifty exceptions
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        d=1e100.net; s=20221208; t=1682345492; x=1684937492;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cyOmFLO2JoBn3WUaKWXU8qyDvCA1T3Gwnz4RtedevIA=;
+        b=gfw52Z2IuyH8DfJwZT+KuY2qKTbkVwXfKEW1tnbKjoTrOHKmTzjTj9y1sd4xCViVrF
+         4ZoLsBMUWNJmY8/LIHGAEy7E+DJsfO+S5xl944yAQgTAtsxGSVJvESfxF5enzbcQHPkn
+         lZ4mJhsZYwFw4FzHbwAHEMVs7eLvpAr5xBi3tFU5sEZC0opuHWkRhFqh17ckKpWo43E2
+         LHR2Ys/QQzZYKxonsblwjNSrcNk25Dw81zNpdo9FlURd/Rj+F1UI+PbFjG5KrN/nlw6B
+         2kZjDyRocpOCm/9cwdHq7KYFQ8vhn0Qj5FZmIX5A26DAWhf01V5H1r9C+Kz7lYKGh1L4
+         IyXg==
+X-Gm-Message-State: AAQBX9fCuzcqN5G+TkRP408yMHzMiZHBUzOsJLLF37WIVQrXA5+LtYMk
+        YBCdruOJ2LLv0OYZ+PQ6ydbX2A==
+X-Google-Smtp-Source: AKy350aBgtFZYTL1Ju0RY3cxLmt1xiSQKImJxRO9xYY9udVWu8lfE3sHZ3IJpLZ8MJK1oMZdRdr+KA==
+X-Received: by 2002:a17:907:9554:b0:957:272d:7b2c with SMTP id ex20-20020a170907955400b00957272d7b2cmr8890674ejc.41.1682345491717;
+        Mon, 24 Apr 2023 07:11:31 -0700 (PDT)
+Received: from [10.105.146.163] ([88.128.92.195])
+        by smtp.gmail.com with ESMTPSA id o9-20020a1709064f8900b0094f3b18044bsm5532222eju.218.2023.04.24.07.11.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 07:11:31 -0700 (PDT)
+Message-ID: <786adb30-1b5e-96d7-358b-0b4d3e89964c@linaro.org>
+Date:   Mon, 24 Apr 2023 16:11:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/7] mfd: Add support for the Lantiq PEF2256 framer
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230417171601.74656-1-herve.codina@bootlin.com>
+ <20230417171601.74656-4-herve.codina@bootlin.com>
+ <20230420123946.GB996918@google.com> <20230420151551.78c1288b@bootlin.com>
+ <20230420134703.GC996918@google.com> <20230421092645.56127f11@bootlin.com>
+ <20230421074558.GQ996918@google.com>
+ <054a384b-b0ef-2697-4a70-09868694ec6d@linaro.org>
+ <20230424095200.GC8035@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424095200.GC8035@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yang.yang29@ wrote:
-> From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+On 24/04/2023 11:52, Lee Jones wrote:
+>>>>>>>>  include/linux/mfd/pef2256.h |  52 ++
+>>>>>>>>  5 files changed, 1269 insertions(+)
+>>>>>>>>  create mode 100644 drivers/mfd/pef2256-regs.h
+>>>>>>>>  create mode 100644 drivers/mfd/pef2256.c
+>>>>>>>>  create mode 100644 include/linux/mfd/pef2256.h    
+>>>>>>>
+>>>>>>> [...]
+>>>>>>>   
+>>>>>>>> +static int pef2256_add_audio_devices(struct pef2256 *pef2256)
+>>>>>>>> +{
+>>>>>>>> +	const char *compatible = "lantiq,pef2256-codec";
+>>>>>>>> +	struct mfd_cell *audio_devs;
+>>>>>>>> +	struct device_node *np;
+>>>>>>>> +	unsigned int count = 0;
+>>>>>>>> +	unsigned int i;
+>>>>>>>> +	int ret;
+>>>>>>>> +
+>>>>>>>> +	for_each_available_child_of_node(pef2256->dev->of_node, np) {
+>>>>>>>> +		if (of_device_is_compatible(np, compatible))
+>>>>>>>> +			count++;
+>>>>>>>> +	}    
+>>>>>>>
+>>>>>>> Converting Device Tree nodes into MFD cells to register with the
+>>>>>>> Platform Device API is not a reasonable use-case of MFD.
+>>>>>>>
+>>>>>>> Have the CODEC driver match on "lantiq,pef2256-codec" and let it
+>>>>>>> instantiate itself.  
+>>>>>>
+>>>>>> As the framer is going to used by several subsystem, I cannot instantiate
+>>>>>> it in the specific ASoC subsystem.
+>>>>>>   
+>>>>>>>
+>>>>>>> Your first version using of_platform_populate() was closer to the mark.  
+>>>>>>
+>>>>>> The issue was that I need MFD cells for the pinctrl part.  
+>>>>>
+>>>>> Why can't it be represented in DT?
+>>>>
+>>>> The pinctrl part has no specific compatible string.
+>>>> Not sure that a compatible string for pinctrl can be accepted
+>>>> as there is only one pinctrl subnode and no specific reg for this
+>>>> subnode.
+>>>>
+>>>> The DT looks like this:
+>>>>     framer@2000000 {
+>>>>       compatible = "lantiq,pef2256";
+>>>>       reg = <0x2000000 0x100>;
+>>>>       ...
+>>>>       pinctrl {
+>>>>         pef2256_rpa_sypr: rpa-pins {
+>>>>           pins = "RPA";
+>>>>           function = "SYPR";
+>>>>         };
+>>>>       };
+>>>>
+>>>>       pef2256_codec0: codec-0 {
+>>>>         compatible = "lantiq,pef2256-codec";
+>>>>         #sound-dai-cells = <0>;
+>>>>         sound-name-prefix = "PEF2256_0";
+>>>>       };
+>>>>     };
+>>>>
+>>>> Krzysztof, is it acceptable to have a compatible string in the pinctrl node ?
+>>>
+>>> Why wouldn't it be?
+>>>
+>>> $ git grep ".compatible" -- drivers/pinctrl/
+>>>
+>>>> In this case, it will looks like this:
+>>>>     framer@2000000 {
+>>>>       compatible = "lantiq,pef2256";
+>>>>       reg = <0x2000000 0x100>;
+>>>>       ...
+>>>>       pinctrl {
+>>>>         compatible = "lantiq,pef2256-pinctrl";
+>>
+>> If you do not have any resources, there is no point in having separate
+>> compatible for separate device node.
 > 
-> The verification function of this test case is likely to encounter the
-> following error, which may confuse users. The problem is easily
-> reproducible in the latest kernel.
-> 
-> Environment A, the sender:
-> bash# udpgso_bench_tx -l 4 -4 -D "$IP_B"
-> udpgso_bench_tx: write: Connection refused
+> That's a new rule.  Is that documented somewhere?  I'm sure we already
+> have device nodes for devices whom only operate on shared resources. 
 
-This error is not relevant to the bug that is being fixed
- 
-> Environment B, the receiver:
-> bash# udpgso_bench_rx -4 -G -S 1472 -v
-> udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
-> 
-> If the packet is captured, you will see:
-> Environment A, the sender:
-> bash# tcpdump -i eth0 host "$IP_B" &
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
-> IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+Let me clarify - no need for separate node for such case, when this is
+in general one device and it's sub-block does not look re-usable. For
+SoC blocks it is a bit different. For PMICs which pretty often re-use
+pieces between different devices, as well.
 
-Same here
+But here there is not much benefit of separate device node for pinctrl.
 
-> Environment B, the receiver:
-> bash# tcpdump -i eth0 host "$IP_B" &
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 7360
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 14720
-> IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+Whether rule is new? Dunno, depends, I saw it from reviews from Rob
+since long time, e.g.:
+https://lore.kernel.org/all/20220902172808.GB52527-robh@kernel.org/
 
-And here
- 
-> In one test, the verification data is printed as follows:
-> abcd...xyz           | 1...
-> ..                  |
-> abcd...xyz           |
-> abcd...opabcd...xyz  | ...1472... Not xyzabcd, messages are merged
-> ..                  |
-> 
-> The issue is that the test on receive for expected payload pattern 
-> {AB..Z}+ fail for GRO packets if segment payload does not end on a Z.
+Maybe this is a bit different because of children - pinconf settings?
+But I would still look at this as:
+1. For a re-usable sub-block: separate device node and compatible is useful,
+2. Non-reusable but having a child node only to group children like pin
+configuration nodes: no need for compatible.
 
-This is really the only pertinent explanation needed for the fix.
-
-> The issue still exists when using the GRO with -G, but not using the -S
-> to obtain gsosize. Therefore, a print has been added to remind users.
-
-So the issue is that -G/cfg_gro_segment enables UDP_GRO, but
--S/cfg_expected_gso_size enables recvmsg cmsg UDP_GRO. We need
-gso_size to know whether discontinuities will appear, so cannot
-verify payload for -G without -S. There really is no reason to
-ever run the test in that configuration, should perhaps fail.
-
-Btw title should start with PATCH net as this is a fix, instead of
-PATCH linux-next. And it is verify not verifty. Also needs a Fixes tag:
-
-Fixes: 0a9ac2e954091 ("selftests: add GRO support to udp bench rx program")
-
-> Changes in v3:
-> - Simplify description and adjust judgment order.
-> 
-> Changes in v2:
-> - Fix confusing descriptions.
-> 
-> Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-> Reviewed-by: Xu Xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-> Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
-> Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
-> ---
->  tools/testing/selftests/net/udpgso_bench_rx.c | 34 +++++++++++++++++++++++----
->  1 file changed, 29 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-> index f35a924d4a30..3ad18cbc570d 100644
-> --- a/tools/testing/selftests/net/udpgso_bench_rx.c
-> +++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-> @@ -189,26 +189,45 @@ static char sanitized_char(char val)
->  	return (val >= 'a' && val <= 'z') ? val : '.';
->  }
-> 
-> -static void do_verify_udp(const char *data, int len)
-> +static void do_verify_udp(const char *data, int start, int len)
->  {
-> -	char cur = data[0];
-> +	char cur = data[start];
->  	int i;
-> 
->  	/* verify contents */
->  	if (cur < 'a' || cur > 'z')
->  		error(1, 0, "data initial byte out of range");
-> 
-> -	for (i = 1; i < len; i++) {
-> +	for (i = start + 1; i < start + len; i++) {
->  		if (cur == 'z')
->  			cur = 'a';
->  		else
->  			cur++;
-> 
-> -		if (data[i] != cur)
-> +		if (data[i] != cur) {
-> +			if (cfg_gro_segment && !cfg_expected_gso_size)
-> +				error(0, 0, "Use -S to obtain gsosize to guide "
-> +					"splitting and verification.");
-> +
-
-This is not the place to add a gso_size test. Drop.
-
->  			error(1, 0, "data[%d]: len %d, %c(%hhu) != %c(%hhu)\n",
->  			      i, len,
->  			      sanitized_char(data[i]), data[i],
->  			      sanitized_char(cur), cur);
-> +		}
-> +	}
-> +}
-> +
-> +static void do_verify_udp_gro(const char *data, int len, int segment_size)
-> +{
-> +	int start = 0;
-> +
-> +	while (len - start > 0) {
-> +		if (len - start > segment_size)
-> +			do_verify_udp(data, start, segment_size);
-> +		else
-> +			do_verify_udp(data, start, len - start);
-
-Instead of adding start argument, just pass data + start as first argument.
-
-> +
-> +		start += segment_size;
->  	}
->  }
-> 
-> @@ -268,7 +287,12 @@ static void do_flush_udp(int fd)
->  			if (ret == 0)
->  				error(1, errno, "recv: 0 byte datagram\n");
-> 
-> -			do_verify_udp(rbuf, ret);
-> +			if (!cfg_gro_segment)
-> +				do_verify_udp(rbuf, 0, ret);
-> +			else if (gso_size > 0)
-> +				do_verify_udp_gro(rbuf, ret, gso_size);
-> +			else
-> +				do_verify_udp_gro(rbuf, ret, ret);
-
-This only test a fraction of the payload. The test should always test
-the entire payload. It should just be aware of discontinuity at gso_size.
->  		}
->  		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
->  			error(1, 0, "recv: bad gso size, got %d, expected %d "
-> -- 
-> 2.15.2
-
+Best regards,
+Krzysztof
 
