@@ -2,184 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919E46EC7D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A406EC7D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjDXIZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S231168AbjDXIZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjDXIZY (ORCPT
+        with ESMTP id S229458AbjDXIZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:25:24 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74261BFF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:25:15 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4efea87c578so2275e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682324713; x=1684916713;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j18LTPw/0ZiwBV/EQmierqo28H2NNyEAjpLUZMbxn80=;
-        b=CesUfe+p8d0dkEmrufChgURYmQzPVsRKB6Z1zq/0m7jQFerLN1vm3sKO5u2K/rl8sJ
-         753Xb1kwNpqsBLPPmYoA5D+gusVtmDUbYgFOfDLoue7QdZQWNHon9ozJTA5RjVwFMkRL
-         AnIoCuhdETOi2d3M+DoGmCRI0qslU+tTb1mfNS7drK8UaW9VeLrCnkq4Fqi2j5alos/A
-         IZikzBkRNKNvM0btTwz4vgI7z6JQ0rR5oqbZStxatygVFvg2zG7l8lGwK2GYsyt17272
-         RWCij0rqF2sPbmgGniN/jpu8ahpeTEhNwAAwPrUPETEnOkOGoHjSz5eh3iai5awtX9jQ
-         I5Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682324713; x=1684916713;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j18LTPw/0ZiwBV/EQmierqo28H2NNyEAjpLUZMbxn80=;
-        b=jkIUI7fooWMZ1pWhThtp39jJSHev9Md94CHnIYMOf5A0kVtlno37wWcvJJLlpcqR4g
-         76MJKDosDizgV8OBxd62gFBYfhwbV2BM1SroJfh/Tar5HYhx42TR4WW5fxR5PosMj4D8
-         T9WnLziK4BE3ai7R4i2yBoWeZ31OVyesi3adPCiyS0w2yCUpGnakxoJNGaT7KKJ7Fymi
-         RZLFEfvZNkAIGZAc2kEicPDltDCB/fDci9vJfwLzJGrWL3TuR4UEfxJ7ydKf58y90iOd
-         iWDchnCexM/RgsyrOP/R43VZz0c5SJK65wJF9ktuTzCjlZXOcz722V+u6FgS0Uo8G3RL
-         hArQ==
-X-Gm-Message-State: AAQBX9dyheI+uDAZ+tSPCk5ukE6JIlLhU81Q83bA2OoMs1V76ck2Co55
-        qD0oNTf8Q17evlliX1e45huO62ZZfzc2scxpZznSgA==
-X-Google-Smtp-Source: AKy350a4MUjUHwoBfxED2Pw4cqUKPKubA2JMVCH1vFSwww8z8PN8W5VV4psZGKlLDpTHBQR/gqh8epDpYPGCETmVnoc=
-X-Received: by 2002:a05:6512:239b:b0:4ea:e5e2:c893 with SMTP id
- c27-20020a056512239b00b004eae5e2c893mr151496lfv.1.1682324713337; Mon, 24 Apr
- 2023 01:25:13 -0700 (PDT)
+        Mon, 24 Apr 2023 04:25:20 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D035E6F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:25:13 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230424082511euoutp021fd53e8fb5148c12106ae042fda04e94~Y0WlMtSKT2678126781euoutp02L
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:25:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230424082511euoutp021fd53e8fb5148c12106ae042fda04e94~Y0WlMtSKT2678126781euoutp02L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682324711;
+        bh=a8mRBFCihAlbJxSTGq0qF9HfVNE/vS02KdPCxCIpeQY=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=iN8YTAvxo8evczlFYM7kEHf0UT2qXx4Vl3OyWaMePMc3xf0O7AZwTRMTj6muCL2g7
+         4TbLkpNxtp9ObKm27P4dueJg/dreUaDXV20ypguZg8+0IfS/o4M3Y+5MzO3HVSg+pr
+         Lz81tJfNRyWym66eChBxk3heYsTGVycm+FmtyEVw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230424082510eucas1p269bb33932383921e38366c0ed9fcbba7~Y0Wk2Mofb0729107291eucas1p2K;
+        Mon, 24 Apr 2023 08:25:10 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id AB.E8.09966.6EC36446; Mon, 24
+        Apr 2023 09:25:10 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230424082510eucas1p2baee575b3d6671741dbe35aea271e6ea~Y0WkVMeT00729107291eucas1p2I;
+        Mon, 24 Apr 2023 08:25:10 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230424082510eusmtrp1ddb02fcd7ba2696a61d74ca1ad1f38b0~Y0WkUU9n_2899528995eusmtrp1s;
+        Mon, 24 Apr 2023 08:25:10 +0000 (GMT)
+X-AuditID: cbfec7f4-d4fff700000026ee-f1-64463ce6962c
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 16.14.22108.5EC36446; Mon, 24
+        Apr 2023 09:25:09 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230424082509eusmtip2a8bd4c7374ac2d6146376c5daa9b223d~Y0WjWkFrh2112821128eusmtip2j;
+        Mon, 24 Apr 2023 08:25:08 +0000 (GMT)
+Message-ID: <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
+Date:   Mon, 24 Apr 2023 10:25:08 +0200
 MIME-Version: 1.0
-References: <000000000000b9915d05f9d98bdd@google.com> <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
- <ZEKko6U2MxfkXgs5@casper.infradead.org> <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
- <20230424-frucht-beneiden-83a8083a973b@brauner>
-In-Reply-To: <20230424-frucht-beneiden-83a8083a973b@brauner>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Apr 2023 10:25:00 +0200
-Message-ID: <CACT4Y+b+4pFtZQxXZLVF8e0OKcEEYgLo+5ExAg_iKZFVERcXrw@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, tytso@mit.edu,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
-        bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH V2 5/6] drm: bridge: samsung-dsim: Support non-burst
+ mode
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     aford@beaconembedded.com, dario.binacchi@amarulasolutions.com,
+        l.stach@pengutronix.de, Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230423121232.1345909-6-aford173@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnk+LIzCtJLcpLzFFi42LZduznOd1nNm4pBqt2ylrcuX2a2WL31W52
+        ixPXFzFZ3F/8mcXi/7aJzBYTd8xms7jy9T2bRe/Sc6wWk+5PYLH4smkCm8Xz+esYLU6+ucpi
+        8WDuTSaLzolL2C0u75rDZvGmrZHR4v3OW4wWk+bdZHUQ8lj78T6rx8vlDcwe82adYPHY+20B
+        i8fOWXfZPWZ3zGT1WLznJZPHplWdbB5Hri5m9Tgx4RKTx51re9g87ncfZ/Lo/2vg0bdlFaPH
+        501yAfxRXDYpqTmZZalF+nYJXBl7X3WxFJwUrZh39zVzA+M6wS5GDg4JAROJw3ssuxi5OIQE
+        VjBKfL85nQXC+cIoceH+bXYI5zOjxL9D+4EynGAdu8/sZ4VILGeUuHnyMxOE85FRYtH7J0wg
+        VbwCdhKTnx1kBLFZBFQlzjzpY4WIC0qcnPkEbJKoQKpE0+w37CC2sIC/xLVLq8BsZgFxiVtP
+        5oPNERFwljj59xvYAmaBGywSB94eBCtiEzCU6HrbxQZicwpYSVx/cgSqWV5i+9s5zCANEgLf
+        OCXaJzxmgrjbRWLZqUmMELawxKvjW9ghbBmJ05N7WCAa2hklFvy+zwThTGCUaHh+C6rDWuLO
+        uV9soDBjFtCUWL9LHyLsKHFm6WRmSFDySdx4KwhxBJ/EpG3TocK8Eh1tQhDVahKzjq+DW3vw
+        wiXmCYxKs5DCZRaS/2cheWcWwt4FjCyrGMVTS4tz01OLjfJSy/WKE3OLS/PS9ZLzczcxAtPq
+        6X/Hv+xgXP7qo94hRiYOxkOMEhzMSiK8HqVOKUK8KYmVValF+fFFpTmpxYcYpTlYlMR5tW1P
+        JgsJpCeWpGanphakFsFkmTg4pRqYVlZPnVQz9YaRwd+1AXXLqxlMmjXmPF8yn68twrpqupjg
+        uVeWfdUlJ7mZ3nnfOSya5G1gz3u98ZCHAH9H3tS4uesk/DeHmToG8ekbNnOFqc7Z5rKvPl2i
+        S2/zx7hX4du2RZ+4d6/TyHSbUfBjAU2ZaTkpBj5JmlPfuojkKTAqvF2epflC6tjnC2oVc6+u
+        eR2X3Fk2SzvAtYklhFPX+VK3iH2Ad8Bdk4UyPGdmtXes2FohLrwlrVjpwHPeGb6czYo6u7T6
+        Wtez3V0ifL4844i/2M4QN9FGVqdrM1ewd9YHrWn/qdE5pUV0+RbJyX/vhDJM2/Vf4Cp7qA9H
+        vAl3c0zmiSbhw6kChznv7on7p8RSnJFoqMVcVJwIAPy2En4aBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsVy+t/xe7pPbdxSDOYdtbG4c/s0s8Xuq93s
+        FieuL2KyuL/4M4vF/20TmS0m7pjNZnHl63s2i96l51gtJt2fwGLxZdMENovn89cxWpx8c5XF
+        4sHcm0wWnROXsFtc3jWHzeJNWyOjxfudtxgtJs27yeog5LH2431Wj5fLG5g95s06weKx99sC
+        Fo+ds+6ye8zumMnqsXjPSyaPTas62TyOXF3M6nFiwiUmjzvX9rB53O8+zuTR/9fAo2/LKkaP
+        z5vkAvij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S
+        9DL2vupiKTgpWjHv7mvmBsZ1gl2MnBwSAiYSu8/sZ+1i5OIQEljKKPFyfTMjREJG4uS0BlYI
+        W1jiz7UuNoii94wS+3/vZwFJ8ArYSUx+dhCsgUVAVeLMkz5WiLigxMmZT8BqRAVSJW7s+cMG
+        YgsL+Eqcm9MAVs8sIC5x68l8JhBbRMBZ4uTfb0wgC5gFbrFIPD5/nhli215GiUuvP4J1sAkY
+        SnS97QKbxClgJXH9yRF2iElmEl1bu6CmyktsfzuHeQKj0Cwkh8xCsnAWkpZZSFoWMLKsYhRJ
+        LS3OTc8tNtQrTswtLs1L10vOz93ECEwk24793LyDcd6rj3qHGJk4GA8xSnAwK4nwepQ6pQjx
+        piRWVqUW5ccXleakFh9iNAWGxkRmKdHkfGAqyyuJNzQzMDU0MbM0MLU0M1YS5/Us6EgUEkhP
+        LEnNTk0tSC2C6WPi4JRqYFI1sd9462Ky8FYVpZAl29mOnPt58miMYserHg3vawGSKnr3b2Ty
+        G/xLVGlIWvi9RSFhqo7lpL18e5NmOykk9NuffcDmkDfta7Gy0lxjxsnvOphf9y945aJg8ChW
+        rPRenJ/Glp+Pq1LDL6tNOmLMHmP2YeGXWXeqOJsvi7w69FRW1zlje5C+n5vZhjUvdAR3yF38
+        FN4Zl/y4Zd1emdlGcSlOKwwPsC4/pWZ46in/3wVc1cu3G9StrJXf+2Pbnml35DlFs+SfX26P
+        L+VZEGOR4JTzxNvibKPSL8X0uVuDW+46FCzKkHzI9sbn8tng9YmXHBzNdNgqGF1e3Ir4HM2k
+        vVL98y75G475Vme0F126oMRSnJFoqMVcVJwIAPGas+mtAwAA
+X-CMS-MailID: 20230424082510eucas1p2baee575b3d6671741dbe35aea271e6ea
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
+References: <20230423121232.1345909-1-aford173@gmail.com>
+        <CGME20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2@eucas1p2.samsung.com>
+        <20230423121232.1345909-6-aford173@gmail.com>
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 09:59, Christian Brauner <brauner@kernel.org> wrote:
+On 23.04.2023 14:12, Adam Ford wrote:
+> The high-speed clock is hard-coded to the burst-clock
+> frequency specified in the device tree.  However, when
+> using devices like certain bridge chips without burst mode
+> and varying resolutions and refresh rates, it may be
+> necessary to set the high-speed clock dynamically based
+> on the desired pixel clock for the connected device.
 >
-> On Fri, Apr 21, 2023 at 12:40:45PM -0500, Mike Christie wrote:
-> > cc'ing Christian, because I might have fixed this with a patch in
-> > his tree.
-> >
-> > On 4/21/23 9:58 AM, Matthew Wilcox wrote:
-> > > I'm not sure how it is that bpf is able to see the task before comm is
-> > > initialised; that seems to be the real race here, that comm is not set
-> > > before the kthread is a schedulable entity?  Adding the scheduler people.
-> > >
-> > >>> ==================================================================
-> > >>> BUG: KCSAN: data-race in strscpy / strscpy
-> > >>>
-> > >>> write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
-> > >>>  strscpy+0xa9/0x170 lib/string.c:165
-> > >>>  strscpy_pad+0x27/0x80 lib/string_helpers.c:835
-> > >>>  __set_task_comm+0x46/0x140 fs/exec.c:1232
-> > >>>  set_task_comm include/linux/sched.h:1984 [inline]
-> > >>>  __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
-> > >>>  kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
-> > >>>  ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
-> > >>>  ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
-> > >>>  __ext4_fill_super fs/ext4/super.c:5480 [inline]
-> > >>>  ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
-> > >>>  get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
-> > >>>  ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
-> > >>>  vfs_get_tree+0x51/0x190 fs/super.c:1510
-> > >>>  do_new_mount+0x200/0x650 fs/namespace.c:3042
-> > >>>  path_mount+0x498/0xb40 fs/namespace.c:3372
-> > >>>  do_mount fs/namespace.c:3385 [inline]
-> > >>>  __do_sys_mount fs/namespace.c:3594 [inline]
-> > >>>  __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
-> > >>>  __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
-> > >>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >>>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> > >>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > >>>
-> > >>> read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
-> > >>>  strscpy+0xde/0x170 lib/string.c:174
-> > >>>  ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
-> > >>>  bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
-> > >>>  ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
-> > >>>  __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
-> > >>>  bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
-> > >>>  __bpf_prog_run include/linux/filter.h:601 [inline]
-> > >>>  bpf_prog_run include/linux/filter.h:608 [inline]
-> > >>>  __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
-> > >>>  bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
-> > >>>  __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
-> > >>>  trace_sched_switch include/trace/events/sched.h:222 [inline]
-> > >>>  __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
-> > >>>  schedule+0x51/0x80 kernel/sched/core.c:6701
-> > >>>  schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
-> > >>>  kthread+0x11c/0x1e0 kernel/kthread.c:369
-> > >>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-> > >>>
-> >
-> >
-> > I didn't see the beginning of this thread and I think the part of the
-> > sysbot report that lists the patches/trees being used got cut off so
-> > I'm not 100% sure what's in the kernel.
-> >
-> > In Linus's current tree we do set_task_comm in __kthread_create_on_node
-> > after waiting on the kthread_create_info completion which is completed by
-> > threadd(). At this time, kthread() has already done the complete() on the
-> > kthread_create_info completion and started to run the threadfn function and
-> > that could be running. So we can hit the race that way.
-> >
-> >
-> > In linux next, from
-> > https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=kernel.user_worker
-> > we have:
-> >
-> > commit cf587db2ee0261c74d04f61f39783db88a0b65e4
-> > Author: Mike Christie <michael.christie@oracle.com>
-> > Date:   Fri Mar 10 16:03:23 2023 -0600
-> >
-> >     kernel: Allow a kernel thread's name to be set in copy_process
-> >
-> > and so now copy_process() sets the name before the taskfn is started, so we
-> > shouldn't hit any races like above.
+> This also removes the need to set a clock speed from
+> the device tree for non-burst mode operation, since the
+> pixel clock rate is the rate requested from the attached
+> device like an HDMI bridge chip.  This should have no
+> impact for people using burst-mode and setting the burst
+> clock rate is still required for those users.
 >
-> Yeah, that looks like it should fix it.
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+
+This one breaks Exynos-5433 based TM2e board with a DSI panel.
+
+> ---
+>   drivers/gpu/drm/bridge/samsung-dsim.c | 17 ++++++++++++++---
+>   1 file changed, 14 insertions(+), 3 deletions(-)
 >
-> Afaict, this has no reproducer so there's no point in letting syzbot
-> test on this. I've sent the pull request for the kernel user worker
-> series on Friday. So I guess we'll see whether it's reproducible on
-> v6.4-rc1.
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+> index f165483d5044..cea847b8e23c 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -657,11 +657,21 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
+>   
+>   static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
+>   {
+> -	unsigned long hs_clk, byte_clk, esc_clk;
+> +	unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
+>   	unsigned long esc_div;
+>   	u32 reg;
+> +	struct drm_display_mode *m = &dsi->mode;
+> +	int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+> +
+> +	/* m->clock is in KHz */
+> +	pix_clk = m->clock * 1000;
+> +
+> +	/* Use burst_clk_rate for burst mode, otherwise use the pix_clk */
+> +	if ((dsi->mode_flags & MIPI_DSI_MODE_VIDEO_BURST) && dsi->burst_clk_rate)
+> +		hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
+> +	else
+> +		hs_clk = samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_clk * bpp, dsi->lanes));
+>   
+> -	hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
+>   	if (!hs_clk) {
+>   		dev_err(dsi->dev, "failed to configure DSI PLL\n");
+>   		return -EFAULT;
+> @@ -1800,10 +1810,11 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
+>   			return PTR_ERR(pll_clk);
+>   	}
+>   
+> +	/* If it doesn't exist, use pixel clock instead of failing */
+>   	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
+>   				       &dsi->burst_clk_rate);
+>   	if (ret < 0)
+> -		return ret;
+> +		dsi->burst_clk_rate = 0;
+>   
+>   	ret = samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequency",
+>   				       &dsi->esc_clk_rate);
 
-To see if it still happens to tell syzbot about the fix, then it will
-remind if it still happens with the fix or not. Otherwise everybody
-will forget about this tomorrow ;)
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-#syz fix: kernel: Allow a kernel thread's name to be set in copy_process
-
-Btw, a similar race will still be possible b/c it's possible to change
-the name at any point by writing to /proc/self/task/[tid]/comm. But I
-am not sure how provably dangerous it will be and there is a different
-attitude towards fixing races proactively for different kernel
-subsystems, so we will probably not report it.
