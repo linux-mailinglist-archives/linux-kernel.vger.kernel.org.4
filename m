@@ -2,109 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381C16ED67E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE9C6ED681
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbjDXVEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 17:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S232549AbjDXVEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 17:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjDXVEH (ORCPT
+        with ESMTP id S232503AbjDXVEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 17:04:07 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519796184;
-        Mon, 24 Apr 2023 14:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682370246; x=1713906246;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w120y8U0Nl44mL6g4HwtTn60PEDVyOXswzL2W/2Luk0=;
-  b=LljMitiSSzDxkNC9TZzposGvInJl40F7NhKryKOPgZpUcLLPpjKihwXZ
-   /utwgJsigWA6Iqnc3jD8hC15E+sB9k4Y2xXKkz+Z6mHRkiMc/uWmidJ+N
-   RmlEH/xeZ+inUtBWCfsCjYLDLXxiv6km9Bgf+vZxk7VlZWu8vd2OK+3h3
-   Ulqct6MQQ6z6JTGN2KdmWH3qBH13cUQ3ViXBhakUN4MFkiD88YWGs2ig0
-   WBTDw9J/M9glxeDnmWdnzchWlv7F8eBqGABp7OohMqiIjVaAADHLSIRa7
-   OhzurocdQfza4PiVltt1sS/MlpP5/pU8uDj1RSjbvA9ICfe00oA6+0IGu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="326873558"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="326873558"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 14:04:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="782545860"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="782545860"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Apr 2023 14:04:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pr3Ls-000iee-0R;
-        Mon, 24 Apr 2023 21:04:00 +0000
-Date:   Tue, 25 Apr 2023 05:03:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Donghun Yoon <donghun.yoon@lge.com>, linux-usb@vger.kernel.org,
+        Mon, 24 Apr 2023 17:04:23 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5789E6185;
+        Mon, 24 Apr 2023 14:04:18 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 23:04:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1682370255; bh=PZbcpsup20QeRuaUGzcXEPgVVxiaSu5FYW4sV+lkMQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GOBRPp4wYWAM0cZtj0ag+vmiLp2ENK3L35Y/b5jamskGrcvrveF+RBAyWIMED3Cjc
+         uUdNYqphtnnX572/gARhlTHfJUWU7oncdjs/P2LbFV7tZJFllw+5oulKVEtnv1Wa35
+         TGCAvc8gHEGWvOITzIGQjhKPXvgpsS/fLOVifnIs=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci-pci: Only run d3cold avoidance quirk for s2idle
-Message-ID: <202304250440.oxpMvFPQ-lkp@intel.com>
-References: <20230424134926.1416-1-mario.limonciello@amd.com>
+Subject: Re: [PATCH v11 02/14] HP BIOSCFG driver - biosattr-interface
+Message-ID: <67108caf-2a03-4ef0-9f8d-819b0d6f0a2e@t-8ch.de>
+References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+ <20230420165454.9517-3-jorge.lopez2@hp.com>
+ <b7c49593-13f9-44f8-b3b8-66551b01e966@t-8ch.de>
+ <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230424134926.1416-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On 2023-04-24 15:33:26-0500, Jorge Lopez wrote:
+> Hi Thomas,
+> 
+> Please see my comments below.
+> 
+> On Sat, Apr 22, 2023 at 4:30 PM Thomas Weißschuh <thomas@t-8ch.de> wrote:
+> >
+> > Hi Jorge,
+> >
+> > checkpatch.pl finds some issues on your patches.
+> > Please make sure checkpath.pl --strict is happy.
+> >
+> I wasn't aware of the '--strict' parameter.  It is not part of the
+> help information for checkpath.pl tool.
+> Nonetheless, I will use it forward.
+> Thanks
 
-kernel test robot noticed the following build errors:
+It's an alias to --subjective. But indeed, it's hard to see in the help
+output.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > On 2023-04-20 11:54:42-0500, Jorge Lopez wrote:
+> > > ---
+> > > Based on the latest platform-drivers-x86.git/for-next
+> > No need to initialize auth_token_choice and start.
+> > Consider coalescing variable declaration to avoid wasting vertical
+> > space.
+> >
+> Done!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/xhci-pci-Only-run-d3cold-avoidance-quirk-for-s2idle/20230424-215356
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230424134926.1416-1-mario.limonciello%40amd.com
-patch subject: [PATCH] xhci-pci: Only run d3cold avoidance quirk for s2idle
-config: i386-randconfig-a005-20230424 (https://download.01.org/0day-ci/archive/20230425/202304250440.oxpMvFPQ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8e287659296330d0cb31e4730daacc92d0467e63
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/xhci-pci-Only-run-d3cold-avoidance-quirk-for-s2idle/20230424-215356
-        git checkout 8e287659296330d0cb31e4730daacc92d0467e63
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Please note that this affects many parts of the driver,
+try to fix it everywhere.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304250440.oxpMvFPQ-lkp@intel.com/
+> > > +{
+> > > +     struct acpi_buffer input, output = { ACPI_ALLOCATE_BUFFER, NULL };
+> > > +     struct bios_return *bios_return;
+> > > +     union acpi_object *obj = NULL;
+> > > +     struct bios_args *args = NULL;
+> > > +     int mid, actual_outsize;
+> > > +     size_t bios_args_size;
+> > > +     int ret;
+> > > +
+> > > +     mid = encode_outsize_for_pvsz(outsize);
+> > > +     if (WARN_ON(mid < 0))
+> > > +             return mid;
+> > > +
+> > > +     bios_args_size = struct_size(args, data, insize);
+> > > +     args = kmalloc(bios_args_size, GFP_KERNEL);
+> > > +     if (!args)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     input.length = bios_args_size;
+> > > +     input.pointer = args;
+> > > +
+> > > +     args->signature = 0x55434553;
+> >
+> > What does this number mean?
+> This is a HEX representation of the word  'SECU' expected by BIOS as a signa.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Sounds like a good thing to comment or put into a #define.
 
->> ERROR: modpost: "pm_suspend_target_state" [drivers/usb/host/xhci-pci.ko] undefined!
+> >
+> > > +     args->command = command;
+> > > +     args->commandtype = query;
+> > > +     args->datasize = insize;
+> > > +     memcpy(args->data, buffer, flex_array_size(args, data, insize));
+> > > +
+> > > +     ret = wmi_evaluate_method(HP_WMI_BIOS_GUID, 0, mid, &input, &output);
+> >
+> > The driver is mixing calls to the UUID based APIs and the wmi_device
+> > ones.
+> > wmi_devices is newer and preferred.
+> 
+> The driver  calls wmi_evaluate_method when initiating an WMI call.
+> Where is the driver mixing calls to the UUID based APIs and the
+> wmi_device one?
+> WMI calls are made by calling hp_wmi_perform_query() which invokes
+> wmi_evaluate_method().
+> Did I miss something?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+wmi_evaluate_method() is UUID-based.
+struct wmi_driver is wmi_device based.
+
+The wmi_driver/wmi_device code essentially does nothing and is only used
+to validate that a device is present.
+The same can be done more easily wmi_has_guid().
+
+> >
+> > > +     bioscfg_wmi_error_and_message(ret);
+> > > +
+> > > +     if (ret)
+> > > +             goto out_free;
+> > > +
+> > > +     obj = output.pointer;
+> > > +     if (!obj) {
+> > > +             ret = -EINVAL;
+> > > +             goto out_free;
+> > > +     }
+> > > +     if (query != HPWMI_SECUREPLATFORM_GET_STATE &&
+> > > +         command != HPWMI_SECUREPLATFORM)
+> > > +             if (obj->type != ACPI_TYPE_BUFFER ||
+> > > +                 obj->buffer.length < sizeof(*bios_return)) {
+> > > +                     pr_warn("query 0x%x returned wrong type or too small buffer\n", query);
+> > > +                     ret = -EINVAL;
+> > > +                     goto out_free;
+> > > +             }
+> > > +
+> > > +
+> > > +     bios_return = (struct bios_return *)obj->buffer.pointer;
+> >
+> > For query == HPWMI_SECUREPLATFORM_GET_STATE && command == HPWMI_SECUREPLATFORM
+> > this is not guaranteed to be a buffer.
+> 
+> BIOS ensures the output is of buffer type and  buffer of 1024 bytes in
+> size.  This check also help us validate that BIOS only returns a
+> buffer type for this query/command type.
+
+The kernel does not trust the BIOS :-)
+It trusts nothing and nobody.
+
+All cases should be validated.
+
+> >
+> > > + */
+> > > +void *ascii_to_utf16_unicode(u16 *p, const u8 *str)
+> > > +{
+> > > +     int len = strlen(str);
+> > > +     int ret;
+> > > +
+> > > +     /*
+> > > +      * Add null character when reading an empty string
+> > > +      * "02 00 00 00"
+> > > +      */
+> > > +     if (len == 0)
+> > > +             return utf16_empty_string(p);
+> > > +
+> > > +     /* Move pointer len * 2 number of bytes */
+> > > +     *p++ = len * 2;
+> > > +     ret = utf8s_to_utf16s(str, strlen(str), UTF16_HOST_ENDIAN, p, len);
+> > > +     if (ret < 0) {
+> > > +             dev_err(bioscfg_drv.class_dev, "UTF16 conversion failed\n");
+> > > +             goto ascii_to_utf16_unicode_out;
+> > > +     }
+> >
+> > What if ret != len ?
+> 
+> only in conditions where utf8s_to_utf16s an error, we can state  ret != len.
+> ret == len when utf8s_to_utf16s() is successful.
+> >
+> > > +
+> > > +     if ((ret * sizeof(u16)) > U16_MAX) {
+> > > +             dev_err(bioscfg_drv.class_dev, "Error string too long\n");
+> > > +             goto ascii_to_utf16_unicode_out;
+> > > +     }
+> > > +
+> > > +ascii_to_utf16_unicode_out:
+> > > +     p += len;
+> >
+> > In cases of errors this will still point to the end of the data that
+> > should have been written but was not actually written.
+> > The caller has no way to recognize the error case.
+> >
+> That is correct.  If an error occurs, we only provide an error message
+> for those conditions.
+
+But the caller has no idea that this error occurred and will try to use
+the garbage buffer.
+The error should be communicated to the caller, and the caller has to
+validate the result.
+Maybe return NULL?
+
+> 
+> > > +     return p;
+> > > +}
+> > > +
+> > > +/*
+> >
+> > kernel-doc comments start with "/**". Note the two asterisks.
+> Done
+
+This also needs to be done all over the driver.
