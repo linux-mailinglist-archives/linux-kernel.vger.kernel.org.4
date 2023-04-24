@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980D16ECB3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51066ECB3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjDXLXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S231628AbjDXLXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjDXLXP (ORCPT
+        with ESMTP id S231398AbjDXLXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:23:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C080211F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:23:13 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Cx_eqfZkZkcQUAAA--.50S3;
-        Mon, 24 Apr 2023 19:23:11 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeWeZkZktrE4AA--.40489S3;
-        Mon, 24 Apr 2023 19:23:11 +0800 (CST)
-Message-ID: <71678ebe-db31-bbcd-7b32-8b29b874d635@loongson.cn>
-Date:   Mon, 24 Apr 2023 19:23:10 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
- <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
- <ZEPteS82TbIhMQxe@lothringen>
- <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
- <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
- <ZEY9UvvuTXYx3QEA@lothringen>
-Content-Language: en-US
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <ZEY9UvvuTXYx3QEA@lothringen>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxAeWeZkZktrE4AA--.40489S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Cr13Cw15KF15Wr4fJF1DWrg_yoW8Cr47p3
-        48Aa1qkFWktr95K34ayw1v9Fn8Kr1DKry5uwn5Kry8AFs0vr15Jw1jqrZ0ga4Sqr4rX3WI
-        qF4rXa4a93W5AaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 07:23:20 -0400
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E243C2D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:23:19 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-94f5a1fa123so444049066b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682335397; x=1684927397;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=klWy9eDeY9DLyh7eLsNz2mZGZzQpgILthmxtoxhfJPs=;
+        b=mxilGFIr6qGQEG87YfDW5J2uPJURyiX6HOl+bYW2jIP+y/R1nS+GY4Tsz7SEqVu3q8
+         iNJGENUs/fkJ3IN1UwEagRLu2Wi5OlRC7rePMrAw9JGnYNxTomfP2wZYgrHfuGSVXj0Y
+         My7mMOBWyZgKnguCH465dASmx7AqHjBBQXnDDJ6xM8msgN/Bxd5IwFfe3kkS94UhaNDT
+         ovYKX+1R9as8Iuam+OMrwLCe8BgEP8G/RFnQhSpzLFDHuuiZ2oIpxdscyG/kGa/yyo//
+         aJ1odHmuhZRINrZ++FlEeC5GrfKHmpwy4EZmvKhYlXcIjy27ObQZLdGXel85oh9qehA+
+         izyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682335397; x=1684927397;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=klWy9eDeY9DLyh7eLsNz2mZGZzQpgILthmxtoxhfJPs=;
+        b=gj67UZzyHRv5hub0tlk8sXFjay3dSNxLgMNG8QP1qZfX/qeQHkUHy0CiQYwEfBY/Ai
+         wNyj1wh5Y7/RtN+MO6JC6Du3qglbcGAVSk9Dn9IpwBi+2X69wBzsXPN7P3tKlIHG0TdV
+         prQGBabU1B3vE5Xv+NJMTjSq8qYuZwxmDiD8xey8KKtMSAW1dHkHPsgcWV7CmHxdNAbH
+         wMJwRzebY97EisKt980k3vPqa3nt5jnXjzQ5U3ztnK0tiy0dVriqKARv0lCs18YR/aIJ
+         WuVZvHBHIjuZzifDrBIiEET+tYPo3NlbRewAq5wlbmhNnDfxcpFU9j7EnvokQbEx7E9M
+         BPZQ==
+X-Gm-Message-State: AAQBX9ento78FlEHobE32QQcZKPk58J9UVECPpoquv39BS2W2oDswXz1
+        OQfWYhyKBt78VmmEzA+rgVkTyQ1hPkQ=
+X-Google-Smtp-Source: AKy350ZoNzOeasIEj2Fw8MS4uKUsSHqBrI5tm7dytA+d4XYszcR9uTtOdoUCuGTHYrUT6uw+vIKdqIb0D7U=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:ae04:112a:7904:fef5])
+ (user=glider job=sendgmr) by 2002:a17:906:eb1a:b0:94f:c72:1de0 with SMTP id
+ mb26-20020a170906eb1a00b0094f0c721de0mr3297825ejb.14.1682335397499; Mon, 24
+ Apr 2023 04:23:17 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 13:23:13 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230424112313.3408363-1-glider@google.com>
+Subject: [PATCH] string: use __builtin_memcpy() in strlcpy/strlcat
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, elver@google.com, dvyukov@google.com,
+        kasan-dev@googlegroups.com, andy@kernel.org,
+        ndesaulniers@google.com, nathan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+lib/string.c is built with -ffreestanding, which prevents the compiler
+from replacing certain functions with calls to their library versions.
 
+On the other hand, this also prevents Clang and GCC from instrumenting
+calls to memcpy() when building with KASAN, KCSAN or KMSAN:
+ - KASAN normally replaces memcpy() with __asan_memcpy() with the
+   additional cc-param,asan-kernel-mem-intrinsic-prefix=1;
+ - KCSAN and KMSAN replace memcpy() with __tsan_memcpy() and
+   __msan_memcpy() by default.
 
-在 2023/4/24 16:26, Frederic Weisbecker 写道:
-> On Sun, Apr 23, 2023 at 09:52:49PM +0800, bibo, mao wrote:
->>
->>
->> 在 2023/4/22 23:04, Peter Zijlstra 写道:
->>> On Sat, Apr 22, 2023 at 04:21:45PM +0200, Frederic Weisbecker wrote:
->>>> On Sat, Apr 22, 2023 at 10:17:00AM +0200, Peter Zijlstra wrote:
->>>>> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
->>>>> index 44ff1ff64260..5a102ff80de0 100644
->>>>> --- a/arch/loongarch/kernel/genex.S
->>>>> +++ b/arch/loongarch/kernel/genex.S
->>>>> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
->>>>>   	ori	t0, t0, 0x1f
->>>>>   	xori	t0, t0, 0x1f
->>>>>   	bne	t0, t1, 1f
->>>>> +	addi.d	t0, t0, 0x20
->>>>>   	LONG_S	t0, sp, PT_ERA
->>>>>   1:	move	a0, sp
->>>>>   	move	a1, sp
->>>>
->>>> But the interrupts are enabled in C from arch_cpu_idle(), which
->>>> only then calls the ASM __arch_cpu_idle(). So if the interrupt happens
->>>> somewhere in between the call, the rollback (or fast-forward now)
->>>> doesn't apply.
->> I do not know much details about scheduler and timer, if the interrupt
->> happens between the call, will flag _TIF_NEED_RESCHED be set? If it is set,
->> the rollback will still apply.
-> 
-> Nop, TIF_NEED_RESCHED is set only if a task is ready to run after the interrupt,
-> not if the interrupt only modified/added a timer.
-Got it, thanks for your explanation, it is actually one issue in the LoongArch
-ASM code __arch_cpu_idle().
+To let the tools catch memory accesses from strlcpy/strlcat, replace
+the calls to memcpy() with __builtin_memcpy(), which KASAN, KCSAN and
+KMSAN are able to replace even in -ffreestanding mode.
 
-Regards
-Bibo, Mao
+This preserves the behavior in normal builds (__builtin_memcpy() ends up
+being replaced with memcpy()), and does not introduce new instrumentation
+in unwanted places, as strlcpy/strlcat are already instrumented.
 
-> 
->>> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
->>>   	ori	t0, t0, 0x1f
->>>   	xori	t0, t0, 0x1f
->>>   	bne	t0, t1, 1f
->>> +	addi.d	t0, t0, 0x20
->> It is more reasonable with this patch, this will jump out of idle function
->> directly after interrupt returns. If so, can we remove checking
->> _TIF_NEED_RESCHED in idle ASM function?
-> 
-> Indeed we can remove the check to TIF_RESCHED!
-> 
-> Thanks!
+Suggested-by: Marco Elver <elver@google.com>
+Signed-off-by: Alexander Potapenko <glider@google.com>
+Link: https://lore.kernel.org/all/20230224085942.1791837-1-elver@google.com/
+---
+ lib/string.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/string.c b/lib/string.c
+index 3d55ef8901068..be26623953d2e 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -110,7 +110,7 @@ size_t strlcpy(char *dest, const char *src, size_t size)
+ 
+ 	if (size) {
+ 		size_t len = (ret >= size) ? size - 1 : ret;
+-		memcpy(dest, src, len);
++		__builtin_memcpy(dest, src, len);
+ 		dest[len] = '\0';
+ 	}
+ 	return ret;
+@@ -260,7 +260,7 @@ size_t strlcat(char *dest, const char *src, size_t count)
+ 	count -= dsize;
+ 	if (len >= count)
+ 		len = count-1;
+-	memcpy(dest, src, len);
++	__builtin_memcpy(dest, src, len);
+ 	dest[len] = 0;
+ 	return res;
+ }
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
