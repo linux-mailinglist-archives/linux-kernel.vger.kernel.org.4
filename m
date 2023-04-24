@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFDC6ED113
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0614F6ED194
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjDXPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S229929AbjDXPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjDXPNz (ORCPT
+        with ESMTP id S231794AbjDXPkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:13:55 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830B119F;
-        Mon, 24 Apr 2023 08:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682349234; x=1713885234;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=frhCaQHz/0+SvLWssH9RMMeJzPVGe5R5XNjt8rhsOKc=;
-  b=Kquv+soqcrtifWZgGebbAFGGCwiTcJqzlNIE50d35HN1raMHAAtymkJh
-   NgVBNa5Mt8EaRbAK7jIz3MZ5BJia7SIFphJZlMz8EjzxY3zMxTfDOUfOI
-   YtE0goqbX4K8EmoVZPcwv9xNOqZqYdMqfwtcVXBQ+TAcFWF0THzTBwSOv
-   rpERsFinAspnxjtg5XqAy+/eqyb7JJ3eVW9FohCsuLz/7ctHQHXWtL/ta
-   VzAB16ATJxiAPEx/n/7GrJo9ISJoNM4JhLeCPGxHvqdfjdpQ5UA/wiHXF
-   LhqIk2kg49/M9hv2lJzPlPxFLd0tmOM7tZaGCTURFd/JCHip8eA3bzqJk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345234160"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="345234160"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:13:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="723617191"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="723617191"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Apr 2023 08:13:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqxt1-000iSG-05;
-        Mon, 24 Apr 2023 15:13:51 +0000
-Date:   Mon, 24 Apr 2023 23:13:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        Shyam-sundar.S-k@amd.com,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
-Message-ID: <202304242231.68KXGyif-lkp@intel.com>
-References: <20230420160923.14127-1-mario.limonciello@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Mon, 24 Apr 2023 11:40:45 -0400
+X-Greylist: delayed 1044 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 08:40:43 PDT
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 816CB114;
+        Mon, 24 Apr 2023 08:40:43 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 33OFDqb6006351;
+        Mon, 24 Apr 2023 10:13:52 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 33OFDpYA006350;
+        Mon, 24 Apr 2023 10:13:51 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Mon, 24 Apr 2023 10:13:51 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+Message-ID: <20230424151351.GP19790@gate.crashing.org>
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com> <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com> <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230420160923.14127-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87fs8pzalj.fsf@mail.concordia>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+Hi!
 
-kernel test robot noticed the following build warnings:
+On Mon, Apr 24, 2023 at 11:14:00PM +1000, Michael Ellerman wrote:
+> Boqun Feng <boqun.feng@gmail.com> writes:
+> > On Sat, Apr 22, 2023 at 09:28:39PM +0200, Joel Fernandes wrote:
+> >> On Sat, Apr 22, 2023 at 2:47 PM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+> >> > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
+> >> > but if there is a context-switch before c000000000226edc, a false
+> >> > positive will be reported.
 
-[auto build test WARNING on 7124d7671af0facf115d70f9d1fadde0d768d325]
+> I've never understood why the compiler wants to make a copy of a
+> register variable into another register!? >:#
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
-base:   7124d7671af0facf115d70f9d1fadde0d768d325
-patch link:    https://lore.kernel.org/r/20230420160923.14127-1-mario.limonciello%40amd.com
-patch subject: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
-config: i386-randconfig-s003 (https://download.01.org/0day-ci/archive/20230424/202304242231.68KXGyif-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
-        git checkout e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
+It is usually because a) you told it to (maybe via an earlyclobber), or
+b) it looked cheaper.  I don't see either here :-(
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304242231.68KXGyif-lkp@intel.com/
+> > here I think that the compiler is using r10 as an alias to r13, since
+> > for userspace program, it's safe to assume the TLS pointer doesn't
+> > change. However this is not true for kernel percpu pointer.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/acpi/x86/s2idle.c:479:13: sparse: sparse: restricted suspend_state_t degrades to integer
-   drivers/acpi/x86/s2idle.c:479:33: sparse: sparse: restricted suspend_state_t degrades to integer
->> drivers/acpi/x86/s2idle.c:552:6: sparse: sparse: symbol 'lps0_s2idle_wake' was not declared. Should it be static?
+r13 is a "fixed" register, but that means it has a fixed purpose (so not
+available for allocation), it does not mean "unchanging".
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> > The real intention here is to compare 40(r1) vs 3192(r13) for stack
+> > guard checking, however since r13 is the percpu pointer in kernel, so
+> > the value of r13 can be changed if the thread gets scheduled to a
+> > different CPU after reading r13 for r10.
+> 
+> Yeah that's not good.
+
+The GCC pattern here makes the four machine insns all stay together.
+That is to make sure to not leak any secret value, which is impossible
+to guarantee otherwise.
+
+What tells GCC r13 can randomly change behind its back?  And, what then
+makes GCC ignore that fact?
+
+> > 	+       asm volatile("" : : : "r13", "memory");
+
+Any asm without output is always volatile.
+
+> > Needless to say, the correct fix is to make ppc stack protector aware of
+> > r13 is volatile.
+> 
+> I suspect the compiler developers will tell us to go jump :)
+
+Why would r13 change over the course of *this* function / this macro,
+why can this not happen anywhere else?
+
+> The problem of the compiler caching r13 has come up in the past, but I
+> only remember it being "a worry" rather than causing an actual bug.
+
+In most cases the compiler is smart enough to use r13 directly, instead
+of copying it to another reg and then using that one.  But not here for
+some strange reason.  That of course is a very minor generated machine
+code quality bug and nothing more :-(
+
+> We've had the DEBUG_PREEMPT checks in get_paca(), which have given us at
+> least some comfort that if the compiler is caching r13, it shouldn't be
+> doing it in preemptable regions.
+> 
+> But obviously that doesn't help at all with the stack protector check.
+> 
+> I don't see an easy fix.
+> 
+> Adding "volatile" to the definition of local_paca seems to reduce but
+> not elimate the caching of r13, and the GCC docs explicitly say *not* to
+> use volatile. It also triggers lots of warnings about volatile being
+> discarded.
+
+The point here is to say some code clobbers r13, not the asm volatile?
+
+> Or something simple I haven't thought of? :)
+
+At what points can r13 change?  Only when some particular functions are
+called?
+
+
+Segher
