@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEEC6EC757
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8506EC75C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbjDXHo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S231431AbjDXHpm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 03:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjDXHoZ (ORCPT
+        with ESMTP id S230205AbjDXHpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:44:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11591727;
-        Mon, 24 Apr 2023 00:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682322240; x=1713858240;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ysxOCdd6c2ud/hjGkCp2WM6rGiWACJUsq97pSfnR7zo=;
-  b=lLH+Fmal4mW294mjbiI24iOkVLHXni6ZghI2Ssp4iUsjktGGwWe0qBmy
-   ILP+GNJ84VJYvp2xNhZ9lfIQZway4Nit5YWufo0wwb9CINJkzM+axiQp8
-   h4XYSp1ctRIF/DYzaun4X94Bm0L/hnsCW9ZEZ18zNeHhHjwxyg2EB3uCg
-   HsvqCponhRGFVS2OZjv0osa9qhrARKF+7nnqmKp9Fpak3xAzVQjFYoD5a
-   /Vc4tLWrQk0SHoVAOEkI7YibTVmXjx6AeVf6fs/aa/plMxzyW/cx/Xa4W
-   mv0u27GG60kR6S9/FKwvxBObbhIkTadtkDUQgUmLOmwIUG8sBK/ll/HoY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="374332149"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="374332149"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 00:44:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="695661527"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="695661527"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.3.89]) ([10.238.3.89])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 00:43:57 -0700
-Message-ID: <735e3259-26d4-33f1-0e59-8171d1e832e9@linux.intel.com>
-Date:   Mon, 24 Apr 2023 15:43:55 +0800
+        Mon, 24 Apr 2023 03:45:39 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6326EA7;
+        Mon, 24 Apr 2023 00:45:37 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pqqt8-0005nG-2g; Mon, 24 Apr 2023 09:45:30 +0200
+Received: from p5b13a35e.dip0.t-ipconnect.de ([91.19.163.94] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pqqt7-001uPL-Rj; Mon, 24 Apr 2023 09:45:30 +0200
+Message-ID: <3c52c57f8bf4bedc0e7757937464d97f3f825394.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3] sh: Use generic GCC library routines
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, linux-sh@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 24 Apr 2023 09:45:29 +0200
+In-Reply-To: <74dbe68dc8e2ffb6180092f73723fe21ab692c7a.1679566500.git.geert+renesas@glider.be>
+References: <74dbe68dc8e2ffb6180092f73723fe21ab692c7a.1679566500.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
- violation check
-To:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Gao Chao <chao.gao@intel.com>
-References: <20230420133724.11398-1-guang.zeng@intel.com>
- <20230420133724.11398-3-guang.zeng@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230420133724.11398-3-guang.zeng@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.163.94
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,177 +54,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/20/2023 9:37 PM, Zeng Guang wrote:
-> Intel introduce LASS (Linear Address Separation) feature providing
-/s/introduce/introduces
-
-> an independent mechanism to achieve the mode-based protection.
->
-> LASS partitions 64-bit linear address space into two halves, user-mode
-> address (LA[bit 63]=0) and supervisor-mode address (LA[bit 63]=1). It
-> stops any code execution or data access
->      1. from user mode to supervisor-mode address space
->      2. from supervisor mode to user-mode address space
-> and generates LASS violation fault accordingly.
-IMO, the description of the point 2 may be misleading that LASS stops
-any data access from supervisor mode to user mode address space,
-although the description following adds the conditions.
-
-
->
-> A supervisor mode data access causes a LASS violation only if supervisor
-> mode access protection is enabled (CR4.SMAP = 1) and either RFLAGS.AC = 0
-> or the access implicitly accesses a system data structure.
->
-> Following are the rule of LASS violation check on the linear address(LA).
-/s/rule/rules
-
-> User access to supervisor-mode address space:
->      LA[bit 63] && (CPL == 3)
-> Supervisor access to user-mode address space:
->      Instruction fetch: !LA[bit 63] && (CPL < 3)
->      Data access: !LA[bit 63] && (CR4.SMAP==1) && ((RFLAGS.AC == 0 &&
-> 		 CPL < 3) || Implicit supervisor access)
->
-> Add new ops in kvm_x86_ops to do LASS violation check.
->
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+On Thu, 2023-03-23 at 11:18 +0100, Geert Uytterhoeven wrote:
+> The C implementations of __ashldi3(), __ashrdi3__(), and __lshrdi3() in
+> arch/sh/lib/ are identical to the generic C implementations in lib/.
+> Reduce duplication by switching SH to the generic versions.
+> 
+> Update the include path in arch/sh/boot/compressed accordingly.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 > ---
->   arch/x86/include/asm/kvm-x86-ops.h |  1 +
->   arch/x86/include/asm/kvm_host.h    |  5 +++
->   arch/x86/kvm/vmx/vmx.c             | 55 ++++++++++++++++++++++++++++++
->   arch/x86/kvm/vmx/vmx.h             |  2 ++
->   4 files changed, 63 insertions(+)
->
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index abccd51dcfca..f76c07f2674b 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -131,6 +131,7 @@ KVM_X86_OP(msr_filter_changed)
->   KVM_X86_OP(complete_emulated_msr)
->   KVM_X86_OP(vcpu_deliver_sipi_vector)
->   KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
-> +KVM_X86_OP_OPTIONAL_RET0(check_lass);
->   
->   #undef KVM_X86_OP
->   #undef KVM_X86_OP_OPTIONAL
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 8ff89a52ef66..31fb8699a1ff 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -69,6 +69,9 @@
->   #define KVM_X86_NOTIFY_VMEXIT_VALID_BITS	(KVM_X86_NOTIFY_VMEXIT_ENABLED | \
->   						 KVM_X86_NOTIFY_VMEXIT_USER)
->   
-> +/* x86-specific emulation flags */
-> +#define KVM_X86_EMULFLAG_SKIP_LASS	_BITULL(1)
-Do you use the flag outside of emulator?
-For LAM patch, it's planned to move the flags inside emulator.
+> v3:
+>   - Add Acked-by,
+> 
+> v2:
+>   - Fix silly typo in subject.
+> 
+> Tested on landisk and qemu/rts7751r2d.
+> 
+> Note that it also works without the change to arch/sh/boot/compressed/,
+> as lib/ashldi3.c can be reached via both include/uapi/../../lib/ashldi3.c
+> and arch/sh/boot/compressed/../../../../lib/ashldi3.c.
+> 
+> Palmer tried a similar thing before:
+> https://lore.kernel.org/linux-arch/20170523220546.16758-1-palmer@dabbelt.com/
+> but initially it broke the SH build due to a missing change to
+> arch/sh/boot/compressed/, and the later update never got picked up.
+> In the mean time, arch/sh/boot/compressed/ was changed, so his patch no
+> longer applies.
+> 
+> Similar for the other architectures, I guess?
+> ---
+>  arch/sh/Kconfig                   |  3 +++
+>  arch/sh/boot/compressed/ashldi3.c |  4 ++--
+>  arch/sh/lib/Makefile              |  4 +---
+>  arch/sh/lib/ashldi3.c             | 30 -----------------------------
+>  arch/sh/lib/ashrdi3.c             | 32 -------------------------------
+>  arch/sh/lib/lshrdi3.c             | 30 -----------------------------
+>  6 files changed, 6 insertions(+), 97 deletions(-)
+>  delete mode 100644 arch/sh/lib/ashldi3.c
+>  delete mode 100644 arch/sh/lib/ashrdi3.c
+>  delete mode 100644 arch/sh/lib/lshrdi3.c
+> 
+> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+> index ccb866750a884643..892903dc74990c36 100644
+> --- a/arch/sh/Kconfig
+> +++ b/arch/sh/Kconfig
+> @@ -20,6 +20,9 @@ config SUPERH
+>  	select GENERIC_CMOS_UPDATE if SH_SH03 || SH_DREAMCAST
+>  	select GENERIC_IDLE_POLL_SETUP
+>  	select GENERIC_IRQ_SHOW
+> +	select GENERIC_LIB_ASHLDI3
+> +	select GENERIC_LIB_ASHRDI3
+> +	select GENERIC_LIB_LSHRDI3
+>  	select GENERIC_PCI_IOMAP if PCI
+>  	select GENERIC_SCHED_CLOCK
+>  	select GENERIC_SMP_IDLE_THREAD
+> diff --git a/arch/sh/boot/compressed/ashldi3.c b/arch/sh/boot/compressed/ashldi3.c
+> index 7cebd646df839b48..7c12121702309e8c 100644
+> --- a/arch/sh/boot/compressed/ashldi3.c
+> +++ b/arch/sh/boot/compressed/ashldi3.c
+> @@ -1,2 +1,2 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -#include "../../lib/ashldi3.c"
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include "../../../../lib/ashldi3.c"
+> diff --git a/arch/sh/lib/Makefile b/arch/sh/lib/Makefile
+> index eb473d373ca43a4b..d20a0768b31fa2b6 100644
+> --- a/arch/sh/lib/Makefile
+> +++ b/arch/sh/lib/Makefile
+> @@ -7,9 +7,7 @@ lib-y  = delay.o memmove.o memchr.o \
+>  	 checksum.o strlen.o div64.o div64-generic.o
+>  
+>  # Extracted from libgcc
+> -obj-y += movmem.o ashldi3.o ashrdi3.o lshrdi3.o \
+> -	 ashlsi3.o ashrsi3.o ashiftrt.o lshrsi3.o \
+> -	 udiv_qrnnd.o
+> +obj-y += movmem.o ashlsi3.o ashrsi3.o ashiftrt.o lshrsi3.o udiv_qrnnd.o
+>  
+>  udivsi3-y			:= udivsi3_i4i-Os.o
+>  
+> diff --git a/arch/sh/lib/ashldi3.c b/arch/sh/lib/ashldi3.c
+> deleted file mode 100644
+> index e5afe0935847427f..0000000000000000
+> --- a/arch/sh/lib/ashldi3.c
+> +++ /dev/null
+> @@ -1,30 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include <linux/module.h>
+> -
+> -#include "libgcc.h"
+> -
+> -long long __ashldi3(long long u, word_type b)
+> -{
+> -	DWunion uu, w;
+> -	word_type bm;
+> -
+> -	if (b == 0)
+> -		return u;
+> -
+> -	uu.ll = u;
+> -	bm = 32 - b;
+> -
+> -	if (bm <= 0) {
+> -		w.s.low = 0;
+> -		w.s.high = (unsigned int) uu.s.low << -bm;
+> -	} else {
+> -		const unsigned int carries = (unsigned int) uu.s.low >> bm;
+> -
+> -		w.s.low = (unsigned int) uu.s.low << b;
+> -		w.s.high = ((unsigned int) uu.s.high << b) | carries;
+> -	}
+> -
+> -	return w.ll;
+> -}
+> -
+> -EXPORT_SYMBOL(__ashldi3);
+> diff --git a/arch/sh/lib/ashrdi3.c b/arch/sh/lib/ashrdi3.c
+> deleted file mode 100644
+> index ae263fbf25383b70..0000000000000000
+> --- a/arch/sh/lib/ashrdi3.c
+> +++ /dev/null
+> @@ -1,32 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include <linux/module.h>
+> -
+> -#include "libgcc.h"
+> -
+> -long long __ashrdi3(long long u, word_type b)
+> -{
+> -	DWunion uu, w;
+> -	word_type bm;
+> -
+> -	if (b == 0)
+> -		return u;
+> -
+> -	uu.ll = u;
+> -	bm = 32 - b;
+> -
+> -	if (bm <= 0) {
+> -		/* w.s.high = 1..1 or 0..0 */
+> -		w.s.high =
+> -		    uu.s.high >> 31;
+> -		w.s.low = uu.s.high >> -bm;
+> -	} else {
+> -		const unsigned int carries = (unsigned int) uu.s.high << bm;
+> -
+> -		w.s.high = uu.s.high >> b;
+> -		w.s.low = ((unsigned int) uu.s.low >> b) | carries;
+> -	}
+> -
+> -	return w.ll;
+> -}
+> -
+> -EXPORT_SYMBOL(__ashrdi3);
+> diff --git a/arch/sh/lib/lshrdi3.c b/arch/sh/lib/lshrdi3.c
+> deleted file mode 100644
+> index 33eaa1edbc3c0656..0000000000000000
+> --- a/arch/sh/lib/lshrdi3.c
+> +++ /dev/null
+> @@ -1,30 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include <linux/module.h>
+> -
+> -#include "libgcc.h"
+> -
+> -long long __lshrdi3(long long u, word_type b)
+> -{
+> -	DWunion uu, w;
+> -	word_type bm;
+> -
+> -	if (b == 0)
+> -		return u;
+> -
+> -	uu.ll = u;
+> -	bm = 32 - b;
+> -
+> -	if (bm <= 0) {
+> -		w.s.high = 0;
+> -		w.s.low = (unsigned int) uu.s.high >> -bm;
+> -	} else {
+> -		const unsigned int carries = (unsigned int) uu.s.high << bm;
+> -
+> -		w.s.high = (unsigned int) uu.s.high >> b;
+> -		w.s.low = ((unsigned int) uu.s.low >> b) | carries;
+> -	}
+> -
+> -	return w.ll;
+> -}
+> -
+> -EXPORT_SYMBOL(__lshrdi3);
 
-> +
->   /* x86-specific vcpu->requests bit members */
->   #define KVM_REQ_MIGRATE_TIMER		KVM_ARCH_REQ(0)
->   #define KVM_REQ_REPORT_TPR_ACCESS	KVM_ARCH_REQ(1)
-> @@ -1706,6 +1709,8 @@ struct kvm_x86_ops {
->   	 * Returns vCPU specific APICv inhibit reasons
->   	 */
->   	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
-> +
-> +	bool (*check_lass)(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
-The flags may be dropped if the caller knows to skip it or not.
+Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
->   };
->   
->   struct kvm_x86_nested_ops {
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c923d7599d71..581327ede66a 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -8070,6 +8070,59 @@ static void vmx_vm_destroy(struct kvm *kvm)
->   	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
->   }
->   
-> +/*
-> + * Determine whether an access to the linear address causes a LASS violation.
-> + * LASS protection is only effective in long mode. As a prerequisite, caller
-> + * should make sure VM
-Should be vCPU？
-
-> running in long mode and invoke this api to do LASS
-> + * violation check.
-> + */
-> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
-> +{
-> +	bool user_mode, user_as, rflags_ac;
-> +
-> +	if (!!(flags & KVM_X86_EMULFLAG_SKIP_LASS) ||
-> +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
-> +		return false;
-> +
-> +	WARN_ON_ONCE(!is_long_mode(vcpu));
-> +
-> +	user_as = !(la >> 63);
-> +
-> +	/*
-> +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
-> +	 * accesses a system data structure. For implicit accesses to system
-> +	 * data structure, the processor acts as if RFLAGS.AC is clear.
-> +	 */
-> +	if (access & PFERR_IMPLICIT_ACCESS) {
-> +		user_mode = false;
-> +		rflags_ac = false;
-> +	} else {
-> +		user_mode = vmx_get_cpl(vcpu) == 3;
-> +		if (!user_mode)
-> +			rflags_ac = !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
-> +	}
-> +
-> +	if (user_mode != user_as) {
-> +		/*
-> +		 * Supervisor-mode _data_ accesses to user address space
-> +		 * cause LASS violations only if SMAP is enabled.
-> +		 */
-> +		if (!user_mode && !(access & PFERR_FETCH_MASK)) {
-> +			return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) &&
-> +			       !rflags_ac;
-> +		} else {
-> +			return true;
-> +		}
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
-> +{
-> +	return is_long_mode(vcpu) && __vmx_check_lass(vcpu, access, la, flags);
-> +}
-> +
->   static struct kvm_x86_ops vmx_x86_ops __initdata = {
->   	.name = "kvm_intel",
->   
-> @@ -8207,6 +8260,8 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->   	.complete_emulated_msr = kvm_complete_insn_gp,
->   
->   	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
-> +
-> +	.check_lass = vmx_check_lass,
->   };
->   
->   static unsigned int vmx_handle_intel_pt_intr(void)
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index a3da84f4ea45..6569385a5978 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -433,6 +433,8 @@ void vmx_enable_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr, int type);
->   u64 vmx_get_l2_tsc_offset(struct kvm_vcpu *vcpu);
->   u64 vmx_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
->   
-> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
-> +
->   static inline void vmx_set_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr,
->   					     int type, bool value)
->   {
-
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
