@@ -2,65 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DD86EC815
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5616EC81B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjDXIsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S231329AbjDXIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjDXIsB (ORCPT
+        with ESMTP id S229507AbjDXIuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:48:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003EF131;
-        Mon, 24 Apr 2023 01:47:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 894071FD7D;
-        Mon, 24 Apr 2023 08:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682326073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Ms5T3XZYu1VTvsowncWRC+NA0acUncB1fOJ3TJZ4Grs=;
-        b=0SZ3+YX8QlYHS0KNQPHDeKSfu8S6mCc0r66paFPRDggLXgUsYdSUxuokv3EW+pXh1I9mRz
-        yjcEy9AxTKcImaxu3BFClOXJbKjOnHoGjhqe0OnkFNhPWt/H7ubdutz2ikRrfwHNDTAzGZ
-        Z9NEW1IjVo9lk+JWGC0DybCNUVis1SU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682326073;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Ms5T3XZYu1VTvsowncWRC+NA0acUncB1fOJ3TJZ4Grs=;
-        b=pOQ5+SklUdE0ENCPlrMvulDfFnW2H8CmSyb3dKLdJdxZ1MAOdJ5y/xL+BZnTeVXaCWcx+D
-        rVReR/NhZosJS7Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A7C213780;
-        Mon, 24 Apr 2023 08:47:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RahFDTlCRmRDcwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 24 Apr 2023 08:47:53 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        deller@gmx.de, arnd@arndb.de, daniel.vetter@ffwll.ch,
-        javierm@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH] arch/x86: Include <asm/fb.h> in fbdev source file
-Date:   Mon, 24 Apr 2023 10:47:51 +0200
-Message-Id: <20230424084751.14641-1-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.40.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Mon, 24 Apr 2023 04:50:24 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778FA8;
+        Mon, 24 Apr 2023 01:50:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VgrC-uE_1682326217;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgrC-uE_1682326217)
+          by smtp.aliyun-inc.com;
+          Mon, 24 Apr 2023 16:50:18 +0800
+Message-ID: <1682326210.6946251-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH bpf-next] xsk: Use pool->dma_pages to check for DMA
+Date:   Mon, 24 Apr 2023 16:50:10 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Kal Conley <kal.conley@dectris.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+References: <20230423180157.93559-1-kal.conley@dectris.com>
+In-Reply-To: <20230423180157.93559-1-kal.conley@dectris.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,98 +50,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the implementation of fb_pgprotect() to fbdev.c and include
-<asm/fb.h>. Fixes the following warning:
+On Sun, 23 Apr 2023 20:01:56 +0200, Kal Conley <kal.conley@dectris.com> wrote:
+> Compare pool->dma_pages instead of pool->dma_pages_cnt to check for an
+> active DMA mapping. pool->dma_pages needs to be read anyway to access
+> the map so this compiles to more efficient code.
+>
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-  ../arch/x86/video/fbdev.c:14:5: warning: no previous prototype for 'fb_is_primary_device' [-Wmissing-prototypes]
-     14 | int fb_is_primary_device(struct fb_info *info)
-        |     ^~~~~~~~~~~~~~~~~~~~
 
-Just including <asm/fb.h> results in a number of built-in errors
-about undefined function. Moving fb_pgprotect() to the source file
-avoids the required include statements in the header. The function
-is only called occasionally from fb_mmap(), so having it as static
-inline had no benefit.
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
-While at it, fix the codying style in fbdev.c.
-
-Link: https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/video/fbdev/core/fbmem.c#L1404
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
----
- arch/x86/include/asm/fb.h | 14 ++------------
- arch/x86/video/fbdev.c    | 17 ++++++++++++++++-
- 2 files changed, 18 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/include/asm/fb.h b/arch/x86/include/asm/fb.h
-index a3fb801f12f1..23873da8fb77 100644
---- a/arch/x86/include/asm/fb.h
-+++ b/arch/x86/include/asm/fb.h
-@@ -2,21 +2,11 @@
- #ifndef _ASM_X86_FB_H
- #define _ASM_X86_FB_H
- 
--#include <asm/page.h>
--
- struct fb_info;
- struct file;
-+struct vm_area_struct;
- 
--static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
--				unsigned long off)
--{
--	unsigned long prot;
--
--	prot = pgprot_val(vma->vm_page_prot) & ~_PAGE_CACHE_MASK;
--	if (boot_cpu_data.x86 > 3)
--		pgprot_val(vma->vm_page_prot) =
--			prot | cachemode2protval(_PAGE_CACHE_MODE_UC_MINUS);
--}
-+void fb_pgprotect(struct file *file, struct vm_area_struct *vma, unsigned long off);
- #define fb_pgprotect fb_pgprotect
- 
- int fb_is_primary_device(struct fb_info *info);
-diff --git a/arch/x86/video/fbdev.c b/arch/x86/video/fbdev.c
-index 5ec4eafbb981..57ee3c158f97 100644
---- a/arch/x86/video/fbdev.c
-+++ b/arch/x86/video/fbdev.c
-@@ -6,11 +6,25 @@
-  * for more details.
-  *
-  */
-+
-+#include <asm/fb.h>
-+
- #include <linux/fb.h>
--#include <linux/pci.h>
- #include <linux/module.h>
-+#include <linux/pci.h>
- #include <linux/vgaarb.h>
- 
-+void fb_pgprotect(struct file *file, struct vm_area_struct *vma, unsigned long off)
-+{
-+	unsigned long prot;
-+
-+	prot = pgprot_val(vma->vm_page_prot) & ~_PAGE_CACHE_MASK;
-+	if (boot_cpu_data.x86 > 3)
-+		pgprot_val(vma->vm_page_prot) =
-+			prot | cachemode2protval(_PAGE_CACHE_MODE_UC_MINUS);
-+}
-+EXPORT_SYMBOL(fb_pgprotect);
-+
- int fb_is_primary_device(struct fb_info *info)
- {
- 	struct device *device = info->device;
-@@ -26,4 +40,5 @@ int fb_is_primary_device(struct fb_info *info)
- 	return 0;
- }
- EXPORT_SYMBOL(fb_is_primary_device);
-+
- MODULE_LICENSE("GPL");
-
-base-commit: d2639bb054c42db5ff15c56902d1113303f5b655
-prerequisite-patch-id: 0aa359f6144c4015c140c8a6750be19099c676fb
-prerequisite-patch-id: c67e5d886a47b7d0266d81100837557fda34cb24
-prerequisite-patch-id: cbc453ee02fae02af22fbfdce56ab732c7a88c36
--- 
-2.40.0
-
+> ---
+>  include/net/xsk_buff_pool.h | 2 +-
+>  net/xdp/xsk_buff_pool.c     | 7 ++++---
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> index d318c769b445..a8d7b8a3688a 100644
+> --- a/include/net/xsk_buff_pool.h
+> +++ b/include/net/xsk_buff_pool.h
+> @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+>  	if (likely(!cross_pg))
+>  		return false;
+>
+> -	return pool->dma_pages_cnt &&
+> +	return pool->dma_pages &&
+>  	       !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+>  }
+>
+> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> index b2df1e0f8153..26f6d304451e 100644
+> --- a/net/xdp/xsk_buff_pool.c
+> +++ b/net/xdp/xsk_buff_pool.c
+> @@ -350,7 +350,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+>  {
+>  	struct xsk_dma_map *dma_map;
+>
+> -	if (pool->dma_pages_cnt == 0)
+> +	if (!pool->dma_pages)
+>  		return;
+>
+>  	dma_map = xp_find_dma_map(pool);
+> @@ -364,6 +364,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+>
+>  	__xp_dma_unmap(dma_map, attrs);
+>  	kvfree(pool->dma_pages);
+> +	pool->dma_pages = NULL;
+>  	pool->dma_pages_cnt = 0;
+>  	pool->dev = NULL;
+>  }
+> @@ -503,7 +504,7 @@ static struct xdp_buff_xsk *__xp_alloc(struct xsk_buff_pool *pool)
+>  	if (pool->unaligned) {
+>  		xskb = pool->free_heads[--pool->free_heads_cnt];
+>  		xp_init_xskb_addr(xskb, pool, addr);
+> -		if (pool->dma_pages_cnt)
+> +		if (pool->dma_pages)
+>  			xp_init_xskb_dma(xskb, pool, pool->dma_pages, addr);
+>  	} else {
+>  		xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
+> @@ -569,7 +570,7 @@ static u32 xp_alloc_new_from_fq(struct xsk_buff_pool *pool, struct xdp_buff **xd
+>  		if (pool->unaligned) {
+>  			xskb = pool->free_heads[--pool->free_heads_cnt];
+>  			xp_init_xskb_addr(xskb, pool, addr);
+> -			if (pool->dma_pages_cnt)
+> +			if (pool->dma_pages)
+>  				xp_init_xskb_dma(xskb, pool, pool->dma_pages, addr);
+>  		} else {
+>  			xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
+> --
+> 2.39.2
+>
