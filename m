@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5CD6ED88F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8DE6ED880
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbjDXXRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S232995AbjDXXRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbjDXXRT (ORCPT
+        with ESMTP id S233239AbjDXXR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:17:19 -0400
+        Mon, 24 Apr 2023 19:17:28 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F56A253;
-        Mon, 24 Apr 2023 16:16:57 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OMF1Xr008934;
-        Mon, 24 Apr 2023 23:16:45 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313BDAF22;
+        Mon, 24 Apr 2023 16:17:00 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OMxNJC026377;
+        Mon, 24 Apr 2023 23:16:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=OiaoQlWJMxZipymNqSdud0B4nLvAFeMnWnqOtCF6KHA=;
- b=nqgGWpaE2vev2J/EteGq3Wdew1sZck1pkKOEqAJUQAQdUJLE178iFbOfUatJ+tctWhG/
- xC+jEwyNBEy2H7GG2YCL0OjcVM48eMHWf4u0WzsfbnmVYiWq3mSqScZKH+B5rD2NHQwY
- gc8nFquWN0zDcAjEXxG1+Edfim1uind1XJwQxmOjR5lzb2ROmplxEBwk8A5pnP/tGr5W
- mdGfZqOPQgSClcoDvuibkFK1zyCiL0nelYbd4sSIOpC/Yb7rvpNiBZXeIa4IAOzblyfN
- 5dRYRKU4+tTJBiHR0UX7strNOe1/p3/fTchoIBEVwyqeE3Rs7Yrhuwk3tOCYNJaL9N4K kg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5kbut3r9-1
+ bh=ROXK7GYcTDUVn5BFIaKm4expuEzXn1kwb4oQlQJd1Ig=;
+ b=BbIWDdKjA/+tZl0Z8lWMyWOxxvFjF+cx8hdW+ktIQfoadK+fGUt8itkwnqKPDw+WjBoT
+ z9HPXxvJkvSVyWupD/piZplKLpXucGAvWHCC9bgrKuDykm/zzEu/ObZR79BuALpnAsQW
+ fWLB1CfsYlarJE8PPChFrWoFjofM7IyEqz07EmQY0O3L2/omZ8dcrG7oxyfovEdvtl++
+ o3cWtzigg7gxcLT6oNXMBcA/2Ek9Jkir5hLAF9xIvYx0F6V/4BK+4WU9ASWFleJenc6i
+ eZilV7SsFBuR5BKmb7ntLdBj7WoPpkNrH6PAEH4tkdHkwpdggdTSNISBdkS47XeSKtAZ 3w== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q61jdr5ks-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 23:16:44 +0000
+        Mon, 24 Apr 2023 23:16:46 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ONGh9T029971
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ONGjXB000956
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 23:16:43 GMT
+        Mon, 24 Apr 2023 23:16:45 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 24 Apr 2023 16:16:43 -0700
+ 15.2.986.42; Mon, 24 Apr 2023 16:16:44 -0700
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Alex Elder <elder@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -63,9 +63,9 @@ CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v12 11/25] gunyah: vm_mgr: Add/remove user memory regions
-Date:   Mon, 24 Apr 2023 16:15:44 -0700
-Message-ID: <20230424231558.70911-12-quic_eberman@quicinc.com>
+Subject: [PATCH v12 12/25] gunyah: vm_mgr: Add ioctls to support basic non-proxy VM boot
+Date:   Mon, 24 Apr 2023 16:15:45 -0700
+Message-ID: <20230424231558.70911-13-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230424231558.70911-1-quic_eberman@quicinc.com>
 References: <20230424231558.70911-1-quic_eberman@quicinc.com>
@@ -77,14 +77,14 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SY7EEDmUaP_Ux0stgJbtiWGwqQAfp9nU
-X-Proofpoint-GUID: SY7EEDmUaP_Ux0stgJbtiWGwqQAfp9nU
+X-Proofpoint-ORIG-GUID: 1auFI2M7opOmUTDqu0TrcdG03Z70HS-E
+X-Proofpoint-GUID: 1auFI2M7opOmUTDqu0TrcdG03Z70HS-E
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0 phishscore=0
+ adultscore=0 mlxscore=0 suspectscore=0 impostorscore=0 bulkscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304240211
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -97,460 +97,373 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When launching a virtual machine, Gunyah userspace allocates memory for
-the guest and informs Gunyah about these memory regions through
-SET_USER_MEMORY_REGION ioctl.
+Add remaining ioctls to support non-proxy VM boot:
+
+ - Gunyah Resource Manager uses the VM's devicetree to configure the
+   virtual machine. The location of the devicetree in the guest's
+   virtual memory can be declared via the SET_DTB_CONFIG ioctl.
+ - Trigger start of the virtual machine with VM_START ioctl.
 
 Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/virt/gunyah/Makefile    |   2 +-
- drivers/virt/gunyah/vm_mgr.c    |  59 +++++++-
- drivers/virt/gunyah/vm_mgr.h    |  26 ++++
- drivers/virt/gunyah/vm_mgr_mm.c | 236 ++++++++++++++++++++++++++++++++
- include/uapi/linux/gunyah.h     |  37 +++++
- 5 files changed, 356 insertions(+), 4 deletions(-)
- create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
+ drivers/virt/gunyah/vm_mgr.c    | 215 ++++++++++++++++++++++++++++++++
+ drivers/virt/gunyah/vm_mgr.h    |  11 ++
+ drivers/virt/gunyah/vm_mgr_mm.c |  20 +++
+ include/uapi/linux/gunyah.h     |  15 +++
+ 4 files changed, 261 insertions(+)
 
-diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-index e47e25895299..bacf78b8fa33 100644
---- a/drivers/virt/gunyah/Makefile
-+++ b/drivers/virt/gunyah/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--gunyah-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
-+gunyah-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
- obj-$(CONFIG_GUNYAH) += gunyah.o
 diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
-index a43401cb34f7..297427952b8c 100644
+index 297427952b8c..b8c5f5fe0838 100644
 --- a/drivers/virt/gunyah/vm_mgr.c
 +++ b/drivers/virt/gunyah/vm_mgr.c
-@@ -15,6 +15,8 @@
+@@ -17,6 +17,68 @@
  
- #include "vm_mgr.h"
+ static void gh_vm_free(struct work_struct *work);
  
-+static void gh_vm_free(struct work_struct *work);
++static int gh_vm_rm_notification_status(struct gh_vm *ghvm, void *data)
++{
++	struct gh_rm_vm_status_payload *payload = data;
++
++	if (payload->vmid != ghvm->vmid)
++		return NOTIFY_OK;
++
++	/* All other state transitions are synchronous to a corresponding RM call */
++	if (payload->vm_status == GH_RM_VM_STATUS_RESET) {
++		down_write(&ghvm->status_lock);
++		ghvm->vm_status = payload->vm_status;
++		up_write(&ghvm->status_lock);
++		wake_up(&ghvm->vm_status_wait);
++	}
++
++	return NOTIFY_DONE;
++}
++
++static int gh_vm_rm_notification_exited(struct gh_vm *ghvm, void *data)
++{
++	struct gh_rm_vm_exited_payload *payload = data;
++
++	if (payload->vmid != ghvm->vmid)
++		return NOTIFY_OK;
++
++	down_write(&ghvm->status_lock);
++	ghvm->vm_status = GH_RM_VM_STATUS_EXITED;
++	up_write(&ghvm->status_lock);
++	wake_up(&ghvm->vm_status_wait);
++
++	return NOTIFY_DONE;
++}
++
++static int gh_vm_rm_notification(struct notifier_block *nb, unsigned long action, void *data)
++{
++	struct gh_vm *ghvm = container_of(nb, struct gh_vm, nb);
++
++	switch (action) {
++	case GH_RM_NOTIFICATION_VM_STATUS:
++		return gh_vm_rm_notification_status(ghvm, data);
++	case GH_RM_NOTIFICATION_VM_EXITED:
++		return gh_vm_rm_notification_exited(ghvm, data);
++	default:
++		return NOTIFY_OK;
++	}
++}
++
++static void gh_vm_stop(struct gh_vm *ghvm)
++{
++	int ret;
++
++	down_write(&ghvm->status_lock);
++	if (ghvm->vm_status == GH_RM_VM_STATUS_RUNNING) {
++		ret = gh_rm_vm_stop(ghvm->rm, ghvm->vmid);
++		if (ret)
++			dev_warn(ghvm->parent, "Failed to stop VM: %d\n", ret);
++	}
++	up_write(&ghvm->status_lock);
++
++	wait_event(ghvm->vm_status_wait, ghvm->vm_status == GH_RM_VM_STATUS_EXITED);
++}
 +
  static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
  {
  	struct gh_vm *ghvm;
-@@ -26,20 +28,72 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+@@ -26,17 +88,130 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+ 		return ERR_PTR(-ENOMEM);
+ 
  	ghvm->parent = gh_rm_get(rm);
++	ghvm->vmid = GH_VMID_INVAL;
  	ghvm->rm = rm;
  
-+	mmgrab(current->mm);
-+	ghvm->mm = current->mm;
-+	mutex_init(&ghvm->mm_lock);
-+	INIT_LIST_HEAD(&ghvm->memory_mappings);
-+	INIT_WORK(&ghvm->free_work, gh_vm_free);
-+
+ 	mmgrab(current->mm);
+ 	ghvm->mm = current->mm;
+ 	mutex_init(&ghvm->mm_lock);
+ 	INIT_LIST_HEAD(&ghvm->memory_mappings);
++	init_rwsem(&ghvm->status_lock);
++	init_waitqueue_head(&ghvm->vm_status_wait);
+ 	INIT_WORK(&ghvm->free_work, gh_vm_free);
++	ghvm->vm_status = GH_RM_VM_STATUS_NO_STATE;
+ 
  	return ghvm;
  }
  
--static int gh_vm_release(struct inode *inode, struct file *filp)
-+static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	struct gh_vm *ghvm = filp->private_data;
-+	void __user *argp = (void __user *)arg;
-+	long r;
-+
-+	switch (cmd) {
-+	case GH_VM_SET_USER_MEM_REGION: {
-+		struct gh_userspace_memory_region region;
-+
-+		/* only allow owner task to add memory */
-+		if (ghvm->mm != current->mm)
-+			return -EPERM;
-+
-+		if (copy_from_user(&region, argp, sizeof(region)))
-+			return -EFAULT;
-+
-+		/* All other flag bits are reserved for future use */
-+		if (region.flags & ~(GH_MEM_ALLOW_READ | GH_MEM_ALLOW_WRITE | GH_MEM_ALLOW_EXEC))
-+			return -EINVAL;
-+
-+		r = gh_vm_mem_alloc(ghvm, &region);
-+		break;
-+	}
-+	default:
-+		r = -ENOTTY;
-+		break;
-+	}
- 
-+	return r;
-+}
-+
-+static void gh_vm_free(struct work_struct *work)
-+{
-+	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
-+
-+	gh_vm_mem_reclaim(ghvm);
- 	gh_rm_put(ghvm->rm);
-+	mmdrop(ghvm->mm);
- 	kfree(ghvm);
-+}
-+
-+static int gh_vm_release(struct inode *inode, struct file *filp)
-+{
-+	struct gh_vm *ghvm = filp->private_data;
-+
-+	/* VM will be reset and make RM calls which can interruptible sleep.
-+	 * Defer to a work so this thread can receive signal.
-+	 */
-+	schedule_work(&ghvm->free_work);
- 	return 0;
- }
- 
- static const struct file_operations gh_vm_fops = {
- 	.owner = THIS_MODULE,
-+	.unlocked_ioctl = gh_vm_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.release = gh_vm_release,
- 	.llseek = noop_llseek,
- };
-@@ -77,8 +131,7 @@ static long gh_dev_ioctl_create_vm(struct gh_rm *rm, unsigned long arg)
- err_put_fd:
- 	put_unused_fd(fd);
- err_destroy_vm:
--	gh_rm_put(ghvm->rm);
--	kfree(ghvm);
-+	gh_vm_free(&ghvm->free_work);
- 	return err;
- }
- 
-diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
-index 1e94b58d7d34..434ef9f662a7 100644
---- a/drivers/virt/gunyah/vm_mgr.h
-+++ b/drivers/virt/gunyah/vm_mgr.h
-@@ -7,14 +7,40 @@
- #define _GH_VM_MGR_H
- 
- #include <linux/gunyah_rsc_mgr.h>
-+#include <linux/list.h>
-+#include <linux/miscdevice.h>
-+#include <linux/mutex.h>
- 
- #include <uapi/linux/gunyah.h>
- 
- long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned long arg);
- 
-+enum gh_vm_mem_share_type {
-+	VM_MEM_SHARE,
-+	VM_MEM_LEND,
-+};
-+
-+struct gh_vm_mem {
-+	struct list_head list;
-+	enum gh_vm_mem_share_type share_type;
-+	struct gh_rm_mem_parcel parcel;
-+
-+	__u64 guest_phys_addr;
-+	struct page **pages;
-+	unsigned long npages;
-+};
-+
- struct gh_vm {
- 	struct gh_rm *rm;
- 	struct device *parent;
-+
-+	struct work_struct free_work;
-+	struct mm_struct *mm; /* userspace tied to this vm */
-+	struct mutex mm_lock;
-+	struct list_head memory_mappings;
- };
- 
-+int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region);
-+void gh_vm_mem_reclaim(struct gh_vm *ghvm);
-+
- #endif
-diff --git a/drivers/virt/gunyah/vm_mgr_mm.c b/drivers/virt/gunyah/vm_mgr_mm.c
-new file mode 100644
-index 000000000000..91109bbf36b3
---- /dev/null
-+++ b/drivers/virt/gunyah/vm_mgr_mm.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#define pr_fmt(fmt) "gh_vm_mgr: " fmt
-+
-+#include <linux/gunyah_rsc_mgr.h>
-+#include <linux/mm.h>
-+
-+#include <uapi/linux/gunyah.h>
-+
-+#include "vm_mgr.h"
-+
-+static bool pages_are_mergeable(struct page *a, struct page *b)
-+{
-+	if (page_to_pfn(a) + 1 != page_to_pfn(b))
-+		return false;
-+	if (!zone_device_pages_have_same_pgmap(a, b))
-+		return false;
-+	return true;
-+}
-+
-+static bool gh_vm_mem_overlap(struct gh_vm_mem *a, u64 addr, u64 size)
-+{
-+	u64 a_end = a->guest_phys_addr + (a->npages << PAGE_SHIFT);
-+	u64 end = addr + size;
-+
-+	return a->guest_phys_addr < end && addr < a_end;
-+}
-+
-+static struct gh_vm_mem *__gh_vm_mem_find_by_label(struct gh_vm *ghvm, u32 label)
-+	__must_hold(&ghvm->mm_lock)
++static int gh_vm_start(struct gh_vm *ghvm)
 +{
 +	struct gh_vm_mem *mapping;
++	u64 dtb_offset;
++	u32 mem_handle;
++	int ret;
 +
-+	list_for_each_entry(mapping, &ghvm->memory_mappings, list)
-+		if (mapping->parcel.label == label)
-+			return mapping;
-+
-+	return NULL;
-+}
-+
-+static void gh_vm_mem_reclaim_mapping(struct gh_vm *ghvm, struct gh_vm_mem *mapping)
-+	__must_hold(&ghvm->mm_lock)
-+{
-+	int ret = 0;
-+
-+	if (mapping->parcel.mem_handle != GH_MEM_HANDLE_INVAL) {
-+		ret = gh_rm_mem_reclaim(ghvm->rm, &mapping->parcel);
-+		if (ret)
-+			pr_warn("Failed to reclaim memory parcel for label %d: %d\n",
-+				mapping->parcel.label, ret);
++	down_write(&ghvm->status_lock);
++	if (ghvm->vm_status != GH_RM_VM_STATUS_NO_STATE) {
++		up_write(&ghvm->status_lock);
++		return 0;
 +	}
 +
-+	if (!ret) {
-+		unpin_user_pages(mapping->pages, mapping->npages);
-+		account_locked_vm(ghvm->mm, mapping->npages, false);
++	ghvm->nb.notifier_call = gh_vm_rm_notification;
++	ret = gh_rm_notifier_register(ghvm->rm, &ghvm->nb);
++	if (ret)
++		goto err;
++
++	ret = gh_rm_alloc_vmid(ghvm->rm, 0);
++	if (ret < 0) {
++		gh_rm_notifier_unregister(ghvm->rm, &ghvm->nb);
++		goto err;
 +	}
-+
-+	kfree(mapping->pages);
-+	kfree(mapping->parcel.acl_entries);
-+	kfree(mapping->parcel.mem_entries);
-+
-+	list_del(&mapping->list);
-+}
-+
-+void gh_vm_mem_reclaim(struct gh_vm *ghvm)
-+{
-+	struct gh_vm_mem *mapping, *tmp;
++	ghvm->vmid = ret;
++	ghvm->vm_status = GH_RM_VM_STATUS_LOAD;
 +
 +	mutex_lock(&ghvm->mm_lock);
++	list_for_each_entry(mapping, &ghvm->memory_mappings, list) {
++		mapping->parcel.acl_entries[0].vmid = cpu_to_le16(ghvm->vmid);
++		ret = gh_rm_mem_share(ghvm->rm, &mapping->parcel);
++		if (ret) {
++			dev_warn(ghvm->parent, "Failed to share parcel %d: %d\n",
++				mapping->parcel.label, ret);
++			mutex_unlock(&ghvm->mm_lock);
++			goto err;
++		}
++	}
++	mutex_unlock(&ghvm->mm_lock);
 +
-+	list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
-+		gh_vm_mem_reclaim_mapping(ghvm, mapping);
-+		kfree(mapping);
++	mapping = gh_vm_mem_find_by_addr(ghvm, ghvm->dtb_config.guest_phys_addr,
++					ghvm->dtb_config.size);
++	if (!mapping) {
++		dev_warn(ghvm->parent, "Failed to find the memory_handle for DTB\n");
++		ret = -EINVAL;
++		goto err;
 +	}
 +
-+	mutex_unlock(&ghvm->mm_lock);
++	mem_handle = mapping->parcel.mem_handle;
++	dtb_offset = ghvm->dtb_config.guest_phys_addr - mapping->guest_phys_addr;
++
++	ret = gh_rm_vm_configure(ghvm->rm, ghvm->vmid, ghvm->auth, mem_handle,
++				0, 0, dtb_offset, ghvm->dtb_config.size);
++	if (ret) {
++		dev_warn(ghvm->parent, "Failed to configure VM: %d\n", ret);
++		goto err;
++	}
++
++	ret = gh_rm_vm_init(ghvm->rm, ghvm->vmid);
++	if (ret) {
++		ghvm->vm_status = GH_RM_VM_STATUS_INIT_FAILED;
++		dev_warn(ghvm->parent, "Failed to initialize VM: %d\n", ret);
++		goto err;
++	}
++	ghvm->vm_status = GH_RM_VM_STATUS_READY;
++
++	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
++	if (ret) {
++		dev_warn(ghvm->parent, "Failed to start VM: %d\n", ret);
++		goto err;
++	}
++
++	ghvm->vm_status = GH_RM_VM_STATUS_RUNNING;
++	up_write(&ghvm->status_lock);
++	return ret;
++err:
++	/* gh_vm_free will handle releasing resources and reclaiming memory */
++	up_write(&ghvm->status_lock);
++	return ret;
 +}
 +
-+int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
++static int gh_vm_ensure_started(struct gh_vm *ghvm)
 +{
-+	struct gh_vm_mem *mapping, *tmp_mapping;
-+	struct page *curr_page, *prev_page;
-+	struct gh_rm_mem_parcel *parcel;
-+	int i, j, pinned, ret = 0;
-+	unsigned int gup_flags;
-+	size_t entry_size;
-+	u16 vmid;
++	int ret;
 +
-+	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
-+		!PAGE_ALIGNED(region->userspace_addr) ||
-+		!PAGE_ALIGNED(region->guest_phys_addr))
-+		return -EINVAL;
-+
-+	if (overflows_type(region->guest_phys_addr + region->memory_size, u64))
-+		return -EOVERFLOW;
-+
-+	ret = mutex_lock_interruptible(&ghvm->mm_lock);
++	ret = down_read_interruptible(&ghvm->status_lock);
 +	if (ret)
 +		return ret;
 +
-+	mapping = __gh_vm_mem_find_by_label(ghvm, region->label);
-+	if (mapping) {
-+		ret = -EEXIST;
-+		goto unlock;
++	/* Unlikely because VM is typically started */
++	if (unlikely(ghvm->vm_status == GH_RM_VM_STATUS_NO_STATE)) {
++		up_read(&ghvm->status_lock);
++		ret = gh_vm_start(ghvm);
++		if (ret)
++			return ret;
++		/** gh_vm_start() is guaranteed to bring status out of
++		 * GH_RM_VM_STATUS_LOAD, thus inifitely recursive call is not
++		 * possible
++		 */
++		return gh_vm_ensure_started(ghvm);
 +	}
 +
-+	list_for_each_entry(tmp_mapping, &ghvm->memory_mappings, list) {
-+		if (gh_vm_mem_overlap(tmp_mapping, region->guest_phys_addr,
-+					region->memory_size)) {
-+			ret = -EEXIST;
-+			goto unlock;
-+		}
-+	}
++	/* Unlikely because VM is typically running */
++	if (unlikely(ghvm->vm_status != GH_RM_VM_STATUS_RUNNING))
++		ret = -ENODEV;
 +
-+	mapping = kzalloc(sizeof(*mapping), GFP_KERNEL_ACCOUNT);
-+	if (!mapping) {
-+		ret = -ENOMEM;
-+		goto unlock;
-+	}
-+
-+	mapping->guest_phys_addr = region->guest_phys_addr;
-+	mapping->npages = region->memory_size >> PAGE_SHIFT;
-+	parcel = &mapping->parcel;
-+	parcel->label = region->label;
-+	parcel->mem_handle = GH_MEM_HANDLE_INVAL; /* to be filled later by mem_share/mem_lend */
-+	parcel->mem_type = GH_RM_MEM_TYPE_NORMAL;
-+
-+	ret = account_locked_vm(ghvm->mm, mapping->npages, true);
-+	if (ret)
-+		goto free_mapping;
-+
-+	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL_ACCOUNT);
-+	if (!mapping->pages) {
-+		ret = -ENOMEM;
-+		mapping->npages = 0; /* update npages for reclaim */
-+		goto unlock_pages;
-+	}
-+
-+	gup_flags = FOLL_LONGTERM;
-+	if (region->flags & GH_MEM_ALLOW_WRITE)
-+		gup_flags |= FOLL_WRITE;
-+
-+	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
-+					gup_flags, mapping->pages);
-+	if (pinned < 0) {
-+		ret = pinned;
-+		goto free_pages;
-+	} else if (pinned != mapping->npages) {
-+		ret = -EFAULT;
-+		mapping->npages = pinned; /* update npages for reclaim */
-+		goto unpin_pages;
-+	}
-+
-+	parcel->n_acl_entries = 2;
-+	mapping->share_type = VM_MEM_SHARE;
-+	parcel->acl_entries = kcalloc(parcel->n_acl_entries, sizeof(*parcel->acl_entries),
-+					GFP_KERNEL);
-+	if (!parcel->acl_entries) {
-+		ret = -ENOMEM;
-+		goto unpin_pages;
-+	}
-+
-+	/* acl_entries[0].vmid will be this VM's vmid. We'll fill it when the
-+	 * VM is starting and we know the VM's vmid.
-+	 */
-+	if (region->flags & GH_MEM_ALLOW_READ)
-+		parcel->acl_entries[0].perms |= GH_RM_ACL_R;
-+	if (region->flags & GH_MEM_ALLOW_WRITE)
-+		parcel->acl_entries[0].perms |= GH_RM_ACL_W;
-+	if (region->flags & GH_MEM_ALLOW_EXEC)
-+		parcel->acl_entries[0].perms |= GH_RM_ACL_X;
-+
-+	ret = gh_rm_get_vmid(ghvm->rm, &vmid);
-+	if (ret)
-+		goto free_acl;
-+
-+	parcel->acl_entries[1].vmid = cpu_to_le16(vmid);
-+	/* Host assumed to have all these permissions. Gunyah will not
-+	 * grant new permissions if host actually had less than RWX
-+	 */
-+	parcel->acl_entries[1].perms = GH_RM_ACL_R | GH_RM_ACL_W | GH_RM_ACL_X;
-+
-+	parcel->n_mem_entries = 1;
-+	for (i = 1; i < mapping->npages; i++) {
-+		if (!pages_are_mergeable(mapping->pages[i - 1], mapping->pages[i]))
-+			parcel->n_mem_entries++;
-+	}
-+
-+	parcel->mem_entries = kcalloc(parcel->n_mem_entries,
-+					sizeof(parcel->mem_entries[0]),
-+					GFP_KERNEL_ACCOUNT);
-+	if (!parcel->mem_entries) {
-+		ret = -ENOMEM;
-+		goto free_acl;
-+	}
-+
-+	/* reduce number of entries by combining contiguous pages into single memory entry */
-+	prev_page = mapping->pages[0];
-+	parcel->mem_entries[0].phys_addr = cpu_to_le64(page_to_phys(prev_page));
-+	entry_size = PAGE_SIZE;
-+	for (i = 1, j = 0; i < mapping->npages; i++) {
-+		curr_page = mapping->pages[i];
-+		if (pages_are_mergeable(prev_page, curr_page)) {
-+			entry_size += PAGE_SIZE;
-+		} else {
-+			parcel->mem_entries[j].size = cpu_to_le64(entry_size);
-+			j++;
-+			parcel->mem_entries[j].phys_addr =
-+				cpu_to_le64(page_to_phys(curr_page));
-+			entry_size = PAGE_SIZE;
-+		}
-+
-+		prev_page = curr_page;
-+	}
-+	parcel->mem_entries[j].size = cpu_to_le64(entry_size);
-+
-+	list_add(&mapping->list, &ghvm->memory_mappings);
-+	mutex_unlock(&ghvm->mm_lock);
-+	return 0;
-+free_acl:
-+	kfree(parcel->acl_entries);
-+unpin_pages:
-+	unpin_user_pages(mapping->pages, pinned);
-+free_pages:
-+	kfree(mapping->pages);
-+unlock_pages:
-+	account_locked_vm(ghvm->mm, mapping->npages, false);
-+free_mapping:
-+	kfree(mapping);
-+unlock:
-+	mutex_unlock(&ghvm->mm_lock);
++	up_read(&ghvm->status_lock);
 +	return ret;
 +}
++
+ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ {
+ 	struct gh_vm *ghvm = filp->private_data;
+@@ -61,6 +236,24 @@ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 		r = gh_vm_mem_alloc(ghvm, &region);
+ 		break;
+ 	}
++	case GH_VM_SET_DTB_CONFIG: {
++		struct gh_vm_dtb_config dtb_config;
++
++		if (copy_from_user(&dtb_config, argp, sizeof(dtb_config)))
++			return -EFAULT;
++
++		if (overflows_type(dtb_config.guest_phys_addr + dtb_config.size, u64))
++			return -EOVERFLOW;
++
++		ghvm->dtb_config = dtb_config;
++
++		r = 0;
++		break;
++	}
++	case GH_VM_START: {
++		r = gh_vm_ensure_started(ghvm);
++		break;
++	}
+ 	default:
+ 		r = -ENOTTY;
+ 		break;
+@@ -72,8 +265,30 @@ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ static void gh_vm_free(struct work_struct *work)
+ {
+ 	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
++	int ret;
++
++	if (ghvm->vm_status == GH_RM_VM_STATUS_RUNNING)
++		gh_vm_stop(ghvm);
++
++	if (ghvm->vm_status != GH_RM_VM_STATUS_NO_STATE &&
++	    ghvm->vm_status != GH_RM_VM_STATUS_LOAD &&
++	    ghvm->vm_status != GH_RM_VM_STATUS_RESET) {
++		ret = gh_rm_vm_reset(ghvm->rm, ghvm->vmid);
++		if (ret)
++			dev_err(ghvm->parent, "Failed to reset the vm: %d\n", ret);
++		wait_event(ghvm->vm_status_wait, ghvm->vm_status == GH_RM_VM_STATUS_RESET);
++	}
+ 
+ 	gh_vm_mem_reclaim(ghvm);
++
++	if (ghvm->vm_status > GH_RM_VM_STATUS_NO_STATE) {
++		gh_rm_notifier_unregister(ghvm->rm, &ghvm->nb);
++
++		ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
++		if (ret)
++			dev_warn(ghvm->parent, "Failed to deallocate vmid: %d\n", ret);
++	}
++
+ 	gh_rm_put(ghvm->rm);
+ 	mmdrop(ghvm->mm);
+ 	kfree(ghvm);
+diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
+index 434ef9f662a7..4173bd51f83f 100644
+--- a/drivers/virt/gunyah/vm_mgr.h
++++ b/drivers/virt/gunyah/vm_mgr.h
+@@ -10,6 +10,8 @@
+ #include <linux/list.h>
+ #include <linux/miscdevice.h>
+ #include <linux/mutex.h>
++#include <linux/rwsem.h>
++#include <linux/wait.h>
+ 
+ #include <uapi/linux/gunyah.h>
+ 
+@@ -31,8 +33,16 @@ struct gh_vm_mem {
+ };
+ 
+ struct gh_vm {
++	u16 vmid;
+ 	struct gh_rm *rm;
+ 	struct device *parent;
++	enum gh_rm_vm_auth_mechanism auth;
++	struct gh_vm_dtb_config dtb_config;
++
++	struct notifier_block nb;
++	enum gh_rm_vm_status vm_status;
++	wait_queue_head_t vm_status_wait;
++	struct rw_semaphore status_lock;
+ 
+ 	struct work_struct free_work;
+ 	struct mm_struct *mm; /* userspace tied to this vm */
+@@ -42,5 +52,6 @@ struct gh_vm {
+ 
+ int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region);
+ void gh_vm_mem_reclaim(struct gh_vm *ghvm);
++struct gh_vm_mem *gh_vm_mem_find_by_addr(struct gh_vm *ghvm, u64 guest_phys_addr, u32 size);
+ 
+ #endif
+diff --git a/drivers/virt/gunyah/vm_mgr_mm.c b/drivers/virt/gunyah/vm_mgr_mm.c
+index 91109bbf36b3..44cb887268a0 100644
+--- a/drivers/virt/gunyah/vm_mgr_mm.c
++++ b/drivers/virt/gunyah/vm_mgr_mm.c
+@@ -79,6 +79,26 @@ void gh_vm_mem_reclaim(struct gh_vm *ghvm)
+ 	mutex_unlock(&ghvm->mm_lock);
+ }
+ 
++struct gh_vm_mem *gh_vm_mem_find_by_addr(struct gh_vm *ghvm, u64 guest_phys_addr, u32 size)
++{
++	struct gh_vm_mem *mapping;
++
++	if (overflows_type(guest_phys_addr + size, u64))
++		return NULL;
++
++	mutex_lock(&ghvm->mm_lock);
++
++	list_for_each_entry(mapping, &ghvm->memory_mappings, list) {
++		if (gh_vm_mem_overlap(mapping, guest_phys_addr, size))
++			goto unlock;
++	}
++
++	mapping = NULL;
++unlock:
++	mutex_unlock(&ghvm->mm_lock);
++	return mapping;
++}
++
+ int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
+ {
+ 	struct gh_vm_mem *mapping, *tmp_mapping;
 diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
-index 86b9cb60118d..91d6dd26fcc8 100644
+index 91d6dd26fcc8..4b63d0b9b8ba 100644
 --- a/include/uapi/linux/gunyah.h
 +++ b/include/uapi/linux/gunyah.h
-@@ -20,4 +20,41 @@
-  */
- #define GH_CREATE_VM			_IO(GH_IOCTL_TYPE, 0x0) /* Returns a Gunyah VM fd */
+@@ -57,4 +57,19 @@ struct gh_userspace_memory_region {
+ #define GH_VM_SET_USER_MEM_REGION	_IOW(GH_IOCTL_TYPE, 0x1, \
+ 						struct gh_userspace_memory_region)
  
-+/*
-+ * ioctls for VM fds
-+ */
-+
 +/**
-+ * enum gh_mem_flags - Possible flags on &struct gh_userspace_memory_region
-+ * @GH_MEM_ALLOW_READ: Allow guest to read the memory
-+ * @GH_MEM_ALLOW_WRITE: Allow guest to write to the memory
-+ * @GH_MEM_ALLOW_EXEC: Allow guest to execute instructions in the memory
++ * struct gh_vm_dtb_config - Set the location of the VM's devicetree blob
++ * @guest_phys_addr: Address of the VM's devicetree in guest memory.
++ * @size: Maximum size of the devicetree including space for overlays.
++ *        Resource manager applies an overlay to the DTB and dtb_size should
++ *        include room for the overlay. A page of memory is typicaly plenty.
 + */
-+enum gh_mem_flags {
-+	GH_MEM_ALLOW_READ	= 1UL << 0,
-+	GH_MEM_ALLOW_WRITE	= 1UL << 1,
-+	GH_MEM_ALLOW_EXEC	= 1UL << 2,
-+};
-+
-+/**
-+ * struct gh_userspace_memory_region - Userspace memory descripion for GH_VM_SET_USER_MEM_REGION
-+ * @label: Identifer to the region which is unique to the VM.
-+ * @flags: Flags for memory parcel behavior. See &enum gh_mem_flags.
-+ * @guest_phys_addr: Location of the memory region in guest's memory space (page-aligned)
-+ * @memory_size: Size of the region (page-aligned)
-+ * @userspace_addr: Location of the memory region in caller (userspace)'s memory
-+ *
-+ * See Documentation/virt/gunyah/vm-manager.rst for further details.
-+ */
-+struct gh_userspace_memory_region {
-+	__u32 label;
-+	__u32 flags;
++struct gh_vm_dtb_config {
 +	__u64 guest_phys_addr;
-+	__u64 memory_size;
-+	__u64 userspace_addr;
++	__u64 size;
 +};
++#define GH_VM_SET_DTB_CONFIG	_IOW(GH_IOCTL_TYPE, 0x2, struct gh_vm_dtb_config)
 +
-+#define GH_VM_SET_USER_MEM_REGION	_IOW(GH_IOCTL_TYPE, 0x1, \
-+						struct gh_userspace_memory_region)
++#define GH_VM_START		_IO(GH_IOCTL_TYPE, 0x3)
 +
  #endif
 -- 
