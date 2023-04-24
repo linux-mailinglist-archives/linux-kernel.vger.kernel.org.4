@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B544B6EC352
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA01A6EC357
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjDXAsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 20:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
+        id S230287AbjDXBJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 21:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDXAsx (ORCPT
+        with ESMTP id S229458AbjDXBJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 20:48:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13985ED;
-        Sun, 23 Apr 2023 17:48:52 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 00102A1A;
-        Mon, 24 Apr 2023 02:48:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1682297321;
-        bh=9mhAxbcpZ1v4L6uo2Y2JIDexdhgTf6lIdLPkHUK7Sww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pAdCRFvILVMyOj2WpF43kUD3KLdGiC1pbs41CaEwZ87iaPe6iYTpbkKeAMeyhAZ4X
-         wppPZ74ke0tpMgF/FN2PAnXgcIDwfg/By4tLgAUnPmugy1Q316IXoQti2DQQNAyDXF
-         2v3U61PqZG7CxAwVn3yRIOcmTeGpY9L9C6+KrGLg=
-Date:   Mon, 24 Apr 2023 03:49:02 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mn: Enable CSI and ISI Nodes
-Message-ID: <20230424004902.GN21943@pendragon.ideasonboard.com>
-References: <20230423212656.1381002-1-aford173@gmail.com>
- <20230424004706.GL21943@pendragon.ideasonboard.com>
+        Sun, 23 Apr 2023 21:09:33 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4293FE78
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 18:09:32 -0700 (PDT)
+Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33O19EIC081629;
+        Mon, 24 Apr 2023 10:09:14 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
+ Mon, 24 Apr 2023 10:09:14 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33O19DfL081626
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 24 Apr 2023 10:09:14 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <8e21256a-736e-4c2d-1ff4-723775bcac46@I-love.SAKURA.ne.jp>
+Date:   Mon, 24 Apr 2023 10:09:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230424004706.GL21943@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
+Content-Language: en-US
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000013aaac05f9d44e7a@google.com>
+ <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
+ <6ff6fdea-c955-f9dd-289e-b0d613a28280@I-love.SAKURA.ne.jp>
+ <20230423233433.GF3390869@ZenIV>
+ <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
+ <20230424004431.GG3390869@ZenIV>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20230424004431.GG3390869@ZenIV>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:47:13AM +0300, Laurent Pinchart wrote:
-> Hi Adam,
+On 2023/04/24 9:44, Al Viro wrote:
+> Do you mean doing that in method instances that are present in tty_fops
+> you mean doing that in method instances that are present in tty_fops
+> and different in hung_up_tty_fops?
 
-Another comment, do you plan to submit a patch with a camera DT overlay
-for an i.MX8MN board ?
+I meant, remove hung_up_tty_fops, and embed callbacks defined in hung_up_tty_fops into
+tty_fops. For example, tty_read() (from "struct file_operations tty_fops"->read_iter)
+will be changed like
 
-> Thank you for the patch.
-> 
-> On Sun, Apr 23, 2023 at 04:26:55PM -0500, Adam Ford wrote:
-> > The CSI in the imx8mn is the same as what is used in the imx8mm,
-> > but it's routed to the ISI on the Nano. Add both the ISI and CSI
-> > nodes, and pointing them to each other. Since the CSI capture is
-> > dependent on an attached camera, mark both ISI and CSI as
-> > disabled by default.
-> 
-> I'd then write the subject line as "Add CSI and ISI nodes".
-> 
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > index 8be8f090e8b8..102550b41f22 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > @@ -1104,6 +1104,24 @@ dsim_from_lcdif: endpoint {
-> >  				};
-> >  			};
-> >  
-> > +			isi: isi@32e20000 {
-> > +				compatible = "fsl,imx8mn-isi";
-> > +				reg = <0x32e20000 0x100>;
-> 
-> The i.MX8MN reference manual documents the ISI registers block size to
-> be 64kB. Should we use the same here, even if all the registers we need
-> are within the first 256 bytes ?
-> 
-> > +				interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
-> > +				clocks = <&clk IMX8MN_CLK_DISP_AXI_ROOT>,
-> > +					 <&clk IMX8MN_CLK_DISP_APB_ROOT>;
-> > +				clock-names = "axi", "apb";
-> > +				fsl,blk-ctrl = <&disp_blk_ctrl>;
-> > +				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_ISI>;
-> > +				status = "disabled";
-> > +
-> > +				port {
-> > +					isi_in: endpoint {
-> > +						remote-endpoint = <&mipi_csi_out>;
-> > +					};
-> > +				};
-> 
-> This will fail to validate against the ISI DT binding, as they require a
-> "ports" node. When a single port is present using a "port" node directly
-> is fine from an OF graph point of view, but to avoid too much complexity
-> in the ISI binding the consensus was to always require a "ports" node
-> for the ISI.
-> 
-> > +			};
-> > +
-> >  			disp_blk_ctrl: blk-ctrl@32e28000 {
-> >  				compatible = "fsl,imx8mn-disp-blk-ctrl", "syscon";
-> >  				reg = <0x32e28000 0x100>;
-> > @@ -1147,6 +1165,42 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
-> >  				#power-domain-cells = <1>;
-> >  			};
-> >  
-> > +			mipi_csi: mipi-csi@32e30000 {
-> > +				compatible = "fsl,imx8mm-mipi-csi2";
-> > +				reg = <0x32e30000 0x1000>;
-> > +				interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-> > +				assigned-clocks = <&clk IMX8MN_CLK_CAMERA_PIXEL>,
-> > +						  <&clk IMX8MN_CLK_CSI1_PHY_REF>;
-> > +				assigned-clock-parents = <&clk IMX8MN_SYS_PLL2_1000M>,
-> > +							  <&clk IMX8MN_SYS_PLL2_1000M>;
-> > +				assigned-clock-rates = <333000000>;
-> > +				clock-frequency = <333000000>;
-> > +				clocks = <&clk IMX8MN_CLK_DISP_APB_ROOT>,
-> > +					 <&clk IMX8MN_CLK_CAMERA_PIXEL>,
-> > +					 <&clk IMX8MN_CLK_CSI1_PHY_REF>,
-> > +					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
-> > +				clock-names = "pclk", "wrap", "phy", "axi";
-> > +				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_MIPI_CSI>;
-> > +				status = "disabled";
-> > +
-> > +				ports {
-> > +					#address-cells = <1>;
-> > +					#size-cells = <0>;
-> > +
-> > +					port@0 {
-> > +						reg = <0>;
-> > +					};
-> > +
-> > +					port@1 {
-> > +						reg = <1>;
-> > +
-> > +						mipi_csi_out: endpoint {
-> > +							remote-endpoint = <&isi_in>;
-> > +						};
-> > +					};
-> > +				};
-> > +			};
-> > +
-> >  			usbotg1: usb@32e40000 {
-> >  				compatible = "fsl,imx8mn-usb", "fsl,imx7d-usb", "fsl,imx27-usb";
-> >  				reg = <0x32e40000 0x200>;
+ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
+ {
+ 	int i;
+ 	struct file *file = iocb->ki_filp;
+ 	struct inode *inode = file_inode(file);
+ 	struct tty_struct *tty = file_tty(file);
+ 	struct tty_ldisc *ld;
+ 
++	if (data_race(file->tty_hangup)) {
++		return hung_up_tty_read(iocb, to);
++	}
++
+ 	if (tty_paranoia_check(tty, inode, "tty_read"))
+ 		return -EIO;
+ 	if (!tty || tty_io_error(tty))
+ 		return -EIO;
+ 
+ 	/* We want to wait for the line discipline to sort out in this
+ 	 * situation.
+ 	 */
+ 	ld = tty_ldisc_ref_wait(tty);
+ 	if (!ld)
+ 		return hung_up_tty_read(iocb, to);
+ 	i = -EIO;
+ 	if (ld->ops->read)
+ 		i = iterate_tty_read(ld, tty, file, to);
+ 	tty_ldisc_deref(ld);
+ 
+ 	if (i > 0)
+ 		tty_update_time(&inode->i_atime);
+ 
+ 	return i;
+ }
 
--- 
-Regards,
+in order to avoid wrapping filp->f_op->* dereferences using data_race().
 
-Laurent Pinchart
