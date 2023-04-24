@@ -2,204 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557C16ED0BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611806ED0BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjDXOxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S231228AbjDXOzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjDXOxe (ORCPT
+        with ESMTP id S229929AbjDXOzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:53:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7B26580;
-        Mon, 24 Apr 2023 07:53:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 24 Apr 2023 10:55:10 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0485235AC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:55:08 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF98C613E9;
-        Mon, 24 Apr 2023 14:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B466DC433EF;
-        Mon, 24 Apr 2023 14:53:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682348007;
-        bh=9CwJJUrhNP6wOsORyqwvzaE9qMKm02sq+6yuG+Ev91U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TBFPs1eWvgDreKyP2z4H6q2ZZgTj7aEde/gln69W0CfM1jNYwm2ZOwXv2yaa6XSZL
-         ztShbHl41Mc4mpHTmfQu2bddwtSgvi5v4WdqtnWbnTo0ps12xIf1Xcdpe4Yq6mxI2U
-         Yn+El8B1UF43LNtRukJgvLHEi9vqyaGHCHbS9mR2UbwCoT9TBC50+0et1CttRAW/3V
-         xeYYEAoBZd3upWJ/U4xW5tiDzxA18r2RFlLxw1yew0gVPMBJ/LwAGhU2ZQcRQWCG1k
-         hb2WvoqBSq/pfAfIRHr5Fb9NdhMvH/52K3owwrVA78IjFCjAnpzm3H02CBPH5duf2c
-         L+osQEwIwu17Q==
-Message-ID: <3f2baded-c5d6-7d94-00f3-6d8fb24262c4@kernel.org>
-Date:   Mon, 24 Apr 2023 17:53:19 +0300
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 759681EC01E0;
+        Mon, 24 Apr 2023 16:55:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1682348107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=RMVSpyKcePMAXubBNzaH8kvv2ei3Xony3FQ7Nm/nZVc=;
+        b=c8sfRkukLktGEBRzcuG+WlLsPMlMUkymfTqEXBqsisgYF9Uz1BcsTZMtxrT/WtV3eguqt7
+        9v/YHrTt5YOMQMxtmyet/UEeXGZXgXWJGXJvnIaQym9s+1OzxNHgVNri6CeyOkBKKej4cA
+        79Xr8AxCT3/lzckx2josmGK6nS16l7I=
+Date:   Mon, 24 Apr 2023 16:55:07 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/sev updates for v6.4-rc1
+Message-ID: <20230424145507.GGZEaYS0KOeYeXHYns@fat_crate.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 7/7] riscv: dts: starfive: Add USB dts configuration
- for JH7110
-Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-8-minda.chen@starfivetech.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230420110052.3182-8-minda.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+please pull a bunch of x86 SEV and x86-SEV-related updates for 6.4.
 
-On 20/04/2023 14:00, Minda Chen wrote:
-> Add USB wrapper layer and Cadence USB3 controller dts
-> configuration for StarFive JH7110 SoC and VisionFive2
-> Board.
-> USB controller connect to PHY, The PHY dts configuration
-> are also added.
-> 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 44 +++++++++++++++++++
->  2 files changed, 51 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index 1155b97b593d..fa97ebfd93ad 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -221,3 +221,10 @@
->  	pinctrl-0 = <&uart0_pins>;
->  	status = "okay";
->  };
-> +
-> +&usb0 {
-> +	phys = <&usbphy0>;
-> +	phy-names = "usb2";
-> +	dr_mode = "peripheral";
-> +	status = "okay";
-> +};
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index 29cd798b6732..eee395e19cdb 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -366,6 +366,50 @@
->  			status = "disabled";
->  		};
->  
-> +		usb0: usb@10100000 {
-> +			compatible = "starfive,jh7110-usb";
-> +			reg = <0x0 0x10100000 0x0 0x10000>,
-> +			      <0x0 0x10110000 0x0 0x10000>,
-> +			      <0x0 0x10120000 0x0 0x10000>;
-> +			reg-names = "otg", "xhci", "dev";
-> +			interrupts = <100>, <108>, <110>;
-> +			interrupt-names = "host", "peripheral", "otg";
-> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
-> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
-> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
-> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
-> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
-> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
-> +			reset-names = "pwrup", "apb", "axi", "utmi_apb";
+Thx.
 
-All this can really be "cdns,usb3" node. The cdns,usb3 driver should
-do reset and clocks init as it is generic.
+---
 
-> +			starfive,stg-syscon = <&stg_syscon 0x4>;
-> +			status = "disabled";
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
 
-Only the syscon handling looks starfive specific so only that handling
-should be done in starfive USB driver.
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
 
-This node should look like this
+are available in the Git repository at:
 
- 
-	starfive-usb@4 {
-		compatible = "starfive,jh7110-usb";
-		starfive,stg-syscon = <&stg_syscon 0x4>;
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sev_for_v6.4_rc1
 
-		usb0: usb@10100000 {
-			compatible = "cdns,usb3";
-			reg = <0x0 0x10100000 0x0 0x10000>,
-			      <0x0 0x10110000 0x0 0x10000>,
-			      <0x0 0x10120000 0x0 0x10000>;
-			reg-names = "otg", "xhci", "dev";
-			interrupts = <100>, <108>, <110>;
-			interrupt-names = "host", "peripheral", "otg";
-			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
-				 <&stgcrg JH7110_STGCLK_USB0_STB>,
-				 <&stgcrg JH7110_STGCLK_USB0_APB>,
-				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
-				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
-			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
-			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
-				 <&stgcrg JH7110_STGRST_USB0_APB>,
-				 <&stgcrg JH7110_STGRST_USB0_AXI>,
-				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
-			reset-names = "pwrup", "apb", "axi", "utmi_apb";
-			starfive,stg-syscon = <&stg_syscon 0x4>;
-			status = "disabled";
-		};
-	}
+for you to fetch changes up to 812b0597fb4043240724e4c7bed7ba1fe15c0e3f:
 
-In starfife-usb driver you can use of_platform_default_populate()
-to create the cdns,usb3 child for you.
+  x86/hyperv: Change vTOM handling to use standard coco mechanisms (2023-03-27 09:31:43 +0200)
 
-> +		};
-> +
-> +		usbphy0: phy@10200000 {
-> +			compatible = "starfive,jh7110-usb-phy";
-> +			reg = <0x0 0x10200000 0x0 0x10000>;
-> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
-> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
-> +			clock-names = "125m", "app_125m";
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		pciephy0: phy@10210000 {
-> +			compatible = "starfive,jh7110-pcie-phy";
-> +			reg = <0x0 0x10210000 0x0 0x10000>;
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		pciephy1: phy@10220000 {
-> +			compatible = "starfive,jh7110-pcie-phy";
-> +			reg = <0x0 0x10220000 0x0 0x10000>;
-> +			#phy-cells = <0>;
-> +		};
-> +
->  		stgcrg: clock-controller@10230000 {
->  			compatible = "starfive,jh7110-stgcrg";
->  			reg = <0x0 0x10230000 0x0 0x10000>;
+----------------------------------------------------------------
+- Add the necessary glue so that the kernel can run as a confidential
+  SEV-SNP vTOM guest on Hyper-V. A vTOM guest basically splits the
+  address space in two parts: encrypted and unencrypted. The use case
+  being running unmodified guests on the Hyper-V confidential computing
+  hypervisor
 
-cheers,
--roger
+- Double-buffer messages between the guest and the hardware PSP device
+  so that no partial buffers are copied back'n'forth and thus potential
+  message integrity and leak attacks are possible
+
+- Name the return value the sev-guest driver returns when the hw PSP
+  device hasn't been called, explicitly
+
+- Cleanups
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (1):
+      crypto: ccp: Get rid of __sev_platform_init_locked()'s local function pointer
+
+Dionna Glaze (2):
+      virt/coco/sev-guest: Double-buffer messages
+      x86/sev: Change snp_guest_issue_request()'s fw_err argument
+
+Michael Kelley (6):
+      x86/ioremap: Add hypervisor callback for private MMIO mapping in coco VM
+      x86/hyperv: Reorder code to facilitate future work
+      Drivers: hv: Explicitly request decrypted in vmap_pfn() calls
+      x86/mm: Handle decryption/re-encryption of bss_decrypted consistently
+      init: Call mem_encrypt_init() after Hyper-V hypercall init is done
+      x86/hyperv: Change vTOM handling to use standard coco mechanisms
+
+Peter Gonda (1):
+      crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
+
+ Documentation/virt/coco/sev-guest.rst   |  20 +++--
+ arch/x86/coco/core.c                    |  40 ++++++---
+ arch/x86/hyperv/hv_init.c               |  11 ---
+ arch/x86/hyperv/ivm.c                   | 142 +++++++++++++++++++++-----------
+ arch/x86/include/asm/coco.h             |   1 -
+ arch/x86/include/asm/mem_encrypt.h      |   1 +
+ arch/x86/include/asm/mshyperv.h         |  16 ++--
+ arch/x86/include/asm/sev-common.h       |   4 -
+ arch/x86/include/asm/sev.h              |  10 ++-
+ arch/x86/include/asm/x86_init.h         |   4 +
+ arch/x86/kernel/apic/io_apic.c          |  10 ++-
+ arch/x86/kernel/cpu/mshyperv.c          |  15 ++--
+ arch/x86/kernel/sev.c                   |  15 ++--
+ arch/x86/kernel/x86_init.c              |   2 +
+ arch/x86/mm/ioremap.c                   |   5 ++
+ arch/x86/mm/mem_encrypt_amd.c           |  10 ++-
+ arch/x86/mm/pat/set_memory.c            |   3 -
+ drivers/crypto/ccp/sev-dev.c            |  22 +++--
+ drivers/hv/ring_buffer.c                |   2 +-
+ drivers/hv/vmbus_drv.c                  |   1 -
+ drivers/virt/coco/sev-guest/sev-guest.c |  99 +++++++++++++---------
+ include/asm-generic/mshyperv.h          |   2 +
+ include/uapi/linux/psp-sev.h            |   7 ++
+ include/uapi/linux/sev-guest.h          |  18 +++-
+ init/main.c                             |  19 +++--
+ 25 files changed, 311 insertions(+), 168 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
