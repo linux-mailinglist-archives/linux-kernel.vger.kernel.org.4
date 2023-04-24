@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D796ECC49
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5056ECC4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjDXMtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S231199AbjDXMuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjDXMtk (ORCPT
+        with ESMTP id S231799AbjDXMuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:49:40 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78FF23C2D;
-        Mon, 24 Apr 2023 05:49:38 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.110.102])
-        by gateway (Coremail) with SMTP id _____8CxlfDhekZklQoAAA--.112S3;
-        Mon, 24 Apr 2023 20:49:37 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.110.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHLPdekZkMNA4AA--.11292S4;
-        Mon, 24 Apr 2023 20:49:36 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH V4 2/2] irqchip/loongson-eiointc: Add DT init support
-Date:   Mon, 24 Apr 2023 20:49:12 +0800
-Message-Id: <e299c299095a9e32e3a4596b4e1c2c0864e5a01a.1682328016.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1682328016.git.zhoubinbin@loongson.cn>
-References: <cover.1682328016.git.zhoubinbin@loongson.cn>
+        Mon, 24 Apr 2023 08:50:01 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E8B44A4;
+        Mon, 24 Apr 2023 05:49:53 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O9Nvji012062;
+        Mon, 24 Apr 2023 14:49:38 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=n+onXhQc/Z9zA1qo+XmGpT4jO0zjGOwnR5I8Oi1IVS8=;
+ b=AQcDXT5WlQetPs5EXyPbKvxWAtU686ZmV/UELOOTYvJLi3Y7wnXAJJd8ETAnk1pt++As
+ MuU6HfyS87Hb1dXbfh6SiZIbscr1j2qh4ptSkQ35DVmot4Pqg3x0YF4w/ORo+tDl+N2V
+ 39bl3Is/pQEl8uweWQC5hY7OUcPM2nJZLS4SCUn8xB0kjsV/GIu5U9NAK9/V9k0pegng
+ DQKxMaSEwzMo7Am8i5iRVYEGlytrhjD9/zRH0xkodX4vs977FQoz/QN0240YiRTAQJj1
+ eRfXgNqENGFuZ9SbOYFr6fLO3OTIxo1bYca9xL1p0fq2VOK4eHsP3sPyGD34M2XSxup7 EQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q48dwbf7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 14:49:38 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C067510002A;
+        Mon, 24 Apr 2023 14:49:32 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B4C6D22D17C;
+        Mon, 24 Apr 2023 14:49:32 +0200 (CEST)
+Received: from [10.252.21.25] (10.252.21.25) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 24 Apr
+ 2023 14:49:29 +0200
+Message-ID: <c44d8942-83e5-01ec-491b-bac1fb27de99@foss.st.com>
+Date:   Mon, 24 Apr 2023 14:49:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxHLPdekZkMNA4AA--.11292S4
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3JFyktr43Xr45CF4DArWUurg_yoWxCry7pF
-        WUCF98trWrXFy7WrW5ta1DX34ayws5urW7Xa4fWFWftanrCryUGF1FyF1qkryjk3yrXF4a
-        vF4UZr1Uu3W5Kw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V7 1/3] rpmsg: core: Add signal API support
+Content-Language: en-US
+To:     Sarannya S <quic_sarannya@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
+ <1682160127-18103-2-git-send-email-quic_sarannya@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <1682160127-18103-2-git-send-email-quic_sarannya@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.21.25]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-24_07,2023-04-21_01,2023-02-09_01
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,219 +78,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add EIOINTC irqchip DT support, which is needed for Loongson chips
-based on DT and supporting EIOINTC, such as the Loongson-2K0500 SOC.
+Hello,
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/irqchip/irq-loongson-eiointc.c | 129 ++++++++++++++++++-------
- 1 file changed, 95 insertions(+), 34 deletions(-)
+On 4/22/23 12:42, Sarannya S wrote:
+> From: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> 
+> Some transports like Glink support the state notifications between
+> clients using flow control signals similar to serial protocol signals.
+> Local glink client drivers can send and receive flow control status
+> to glink clients running on remote processors.
+> 
+> Add APIs to support sending and receiving of flow control status by
+> rpmsg clients.
+> 
+> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+> ---
+>  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h |  2 ++
+>  include/linux/rpmsg.h          | 15 +++++++++++++++
+>  3 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index a2207c0..e8bbe05 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+>  
+>  /**
+> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+> + * @ept:	the rpmsg endpoint
+> + * @enable:	pause/resume incoming data flow	
+> + * @dst:	destination address of the endpoint
+> + *
+> + * Return: 0 on success and an appropriate error value on failure.
+> + */
+> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
+> +{
+> +	if (WARN_ON(!ept))
+> +		return -EINVAL;
+> +	if (!ept->ops->set_flow_control)
+> +		return -ENXIO;
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index d15fd38c1756..cfeb40daf1d7 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -39,6 +39,7 @@ static int nr_pics;
- 
- struct eiointc_priv {
- 	u32			node;
-+	u32			vec_count;
- 	nodemask_t		node_map;
- 	cpumask_t		cpuspan_map;
- 	struct fwnode_handle	*domain_handle;
-@@ -156,18 +157,18 @@ static int eiointc_router_init(unsigned int cpu)
- 	if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
- 		eiointc_enable();
- 
--		for (i = 0; i < VEC_COUNT / 32; i++) {
-+		for (i = 0; i < eiointc_priv[0]->vec_count / 32; i++) {
- 			data = (((1 << (i * 2 + 1)) << 16) | (1 << (i * 2)));
- 			iocsr_write32(data, EIOINTC_REG_NODEMAP + i * 4);
- 		}
- 
--		for (i = 0; i < VEC_COUNT / 32 / 4; i++) {
-+		for (i = 0; i < eiointc_priv[0]->vec_count / 32 / 4; i++) {
- 			bit = BIT(1 + index); /* Route to IP[1 + index] */
- 			data = bit | (bit << 8) | (bit << 16) | (bit << 24);
- 			iocsr_write32(data, EIOINTC_REG_IPMAP + i * 4);
- 		}
- 
--		for (i = 0; i < VEC_COUNT / 4; i++) {
-+		for (i = 0; i < eiointc_priv[0]->vec_count / 4; i++) {
- 			/* Route to Node-0 Core-0 */
- 			if (index == 0)
- 				bit = BIT(cpu_logical_map(0));
-@@ -178,7 +179,7 @@ static int eiointc_router_init(unsigned int cpu)
- 			iocsr_write32(data, EIOINTC_REG_ROUTE + i * 4);
- 		}
- 
--		for (i = 0; i < VEC_COUNT / 32; i++) {
-+		for (i = 0; i < eiointc_priv[0]->vec_count / 32; i++) {
- 			data = 0xffffffff;
- 			iocsr_write32(data, EIOINTC_REG_ENABLE + i * 4);
- 			iocsr_write32(data, EIOINTC_REG_BOUNCE + i * 4);
-@@ -198,7 +199,7 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
- 
- 	chained_irq_enter(chip, desc);
- 
--	for (i = 0; i < VEC_REG_COUNT; i++) {
-+	for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
- 		pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
- 		iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
- 		while (pending) {
-@@ -316,7 +317,7 @@ static void eiointc_resume(void)
- 	eiointc_router_init(0);
- 
- 	for (i = 0; i < nr_pics; i++) {
--		for (j = 0; j < VEC_COUNT; j++) {
-+		for (j = 0; j < eiointc_priv[0]->vec_count; j++) {
- 			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
- 			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
- 				raw_spin_lock(&desc->lock);
-@@ -373,11 +374,44 @@ static int __init acpi_cascade_irqdomain_init(void)
- 	return 0;
- }
- 
-+static int __init eiointc_init(struct eiointc_priv *priv, int parent_irq,
-+			       u64 node_map)
-+{
-+	int i;
-+
-+	node_map = node_map ? node_map : -1ULL;
-+	for_each_possible_cpu(i) {
-+		if (node_map & (1ULL << (cpu_to_eio_node(i)))) {
-+			node_set(cpu_to_eio_node(i), priv->node_map);
-+			cpumask_or(&priv->cpuspan_map, &priv->cpuspan_map,
-+				   cpumask_of(i));
-+		}
-+	}
-+
-+	priv->eiointc_domain = irq_domain_create_linear(priv->domain_handle,
-+							priv->vec_count,
-+							&eiointc_domain_ops,
-+							priv);
-+	if (!priv->eiointc_domain) {
-+		pr_err("loongson-extioi: cannot add IRQ domain\n");
-+		return -ENOMEM;
-+	}
-+
-+	eiointc_priv[nr_pics++] = priv;
-+	eiointc_router_init(0);
-+	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
-+	register_syscore_ops(&eiointc_syscore_ops);
-+	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
-+				  "irqchip/loongarch/intc:starting",
-+				  eiointc_router_init, NULL);
-+
-+	return 0;
-+}
-+
- int __init eiointc_acpi_init(struct irq_domain *parent,
- 				     struct acpi_madt_eio_pic *acpi_eiointc)
- {
--	int i, ret, parent_irq;
--	unsigned long node_map;
-+	int parent_irq, ret;
- 	struct eiointc_priv *priv;
- 
- 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-@@ -391,39 +425,20 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
- 		goto out_free_priv;
- 	}
- 
-+	priv->vec_count = VEC_COUNT;
- 	priv->node = acpi_eiointc->node;
--	node_map = acpi_eiointc->node_map ? : -1ULL;
--
--	for_each_possible_cpu(i) {
--		if (node_map & (1ULL << cpu_to_eio_node(i))) {
--			node_set(cpu_to_eio_node(i), priv->node_map);
--			cpumask_or(&priv->cpuspan_map, &priv->cpuspan_map, cpumask_of(i));
--		}
--	}
--
--	/* Setup IRQ domain */
--	priv->eiointc_domain = irq_domain_create_linear(priv->domain_handle, VEC_COUNT,
--					&eiointc_domain_ops, priv);
--	if (!priv->eiointc_domain) {
--		pr_err("loongson-eiointc: cannot add IRQ domain\n");
--		goto out_free_handle;
--	}
--
--	eiointc_priv[nr_pics++] = priv;
--
--	eiointc_router_init(0);
--
- 	parent_irq = irq_create_mapping(parent, acpi_eiointc->cascade);
--	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
- 
--	register_syscore_ops(&eiointc_syscore_ops);
--	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
--				  "irqchip/loongarch/intc:starting",
--				  eiointc_router_init, NULL);
-+	ret = eiointc_init(priv, parent_irq, acpi_eiointc->node_map);
-+	if (ret < 0)
-+		goto out_free_handle;
- 
- 	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
- 	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
-+
- 	ret = acpi_cascade_irqdomain_init();
-+	if (ret < 0)
-+		goto out_free_handle;
- 
- 	return ret;
- 
-@@ -435,3 +450,49 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
- 
- 	return -ENOMEM;
- }
-+
-+static int __init eiointc_of_init(struct device_node *of_node,
-+				  struct device_node *parent)
-+{
-+	int parent_irq, ret;
-+	struct eiointc_priv *priv;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	parent_irq = irq_of_parse_and_map(of_node, 0);
-+	if (parent_irq <= 0) {
-+		ret = -ENODEV;
-+		goto out_free_priv;
-+	}
-+
-+	ret = irq_set_handler_data(parent_irq, priv);
-+	if (ret < 0)
-+		goto out_free_priv;
-+
-+	/*
-+	 * In particular, the number of devices supported by the LS2K0500
-+	 * extended I/O interrupt vector is 128.
-+	 */
-+	if (of_device_is_compatible(of_node, "loongson,ls2k0500-eiointc"))
-+		priv->vec_count = 128;
-+	else
-+		priv->vec_count = VEC_COUNT;
-+
-+	priv->node = 0;
-+	priv->domain_handle = of_node_to_fwnode(of_node);
-+
-+	ret = eiointc_init(priv, parent_irq, 0);
-+	if (ret < 0)
-+		goto out_free_priv;
-+
-+	return 0;
-+
-+out_free_priv:
-+	kfree(priv);
-+	return ret;
-+}
-+
-+IRQCHIP_DECLARE(loongson_ls2k0500_eiointc, "loongson,ls2k0500-eiointc", eiointc_of_init);
-+IRQCHIP_DECLARE(loongson_ls2k2000_eiointc, "loongson,ls2k2000-eiointc", eiointc_of_init);
--- 
-2.39.1
+Here we return an error if the backend does not implement the ops.
+But the set_flow_control ops is optional.
+Should we return 0 instead with a debug message?
 
+> +
+> +	return ept->ops->set_flow_control(ept, enable, dst);
+> +}
+> +EXPORT_SYMBOL_GPL(rpmsg_set_flow_control);
+> +
+> +/**
+>   * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
+>   * @ept: the rpmsg endpoint
+>   *
+> @@ -539,6 +558,8 @@ static int rpmsg_dev_probe(struct device *dev)
+>  
+>  		rpdev->ept = ept;
+>  		rpdev->src = ept->addr;
+> +
+> +		ept->flow_cb = rpdrv->flowcontrol;
+>  	}
+>  
+>  	err = rpdrv->probe(rpdev);
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index 39b646d..b6efd3e 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -55,6 +55,7 @@ struct rpmsg_device_ops {
+>   * @trysendto:		see @rpmsg_trysendto(), optional
+>   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
+>   * @poll:		see @rpmsg_poll(), optional
+> + * @set_flow_control:	see @rpmsg_set_flow_control(), optional
+>   * @get_mtu:		see @rpmsg_get_mtu(), optional
+>   *
+>   * Indirection table for the operations that a rpmsg backend should implement.
+> @@ -75,6 +76,7 @@ struct rpmsg_endpoint_ops {
+>  			     void *data, int len);
+>  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
+>  			     poll_table *wait);
+> +	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable, u32 dst);
+>  	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
+>  };
+>  
+> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+> index 523c98b..a0e9d38 100644
+> --- a/include/linux/rpmsg.h
+> +++ b/include/linux/rpmsg.h
+> @@ -64,12 +64,14 @@ struct rpmsg_device {
+>  };
+>  
+>  typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
+> +typedef int (*rpmsg_flowcontrol_cb_t)(struct rpmsg_device *, void *, bool);
+>  
+>  /**
+>   * struct rpmsg_endpoint - binds a local rpmsg address to its user
+>   * @rpdev: rpmsg channel device
+>   * @refcount: when this drops to zero, the ept is deallocated
+>   * @cb: rx callback handler
+> + * @flow_cb: remote flow control callback handler
+>   * @cb_lock: must be taken before accessing/changing @cb
+>   * @addr: local rpmsg address
+>   * @priv: private data for the driver's use
+> @@ -92,6 +94,7 @@ struct rpmsg_endpoint {
+>  	struct rpmsg_device *rpdev;
+>  	struct kref refcount;
+>  	rpmsg_rx_cb_t cb;
+> +	rpmsg_flowcontrol_cb_t flow_cb;
+>  	struct mutex cb_lock;
+>  	u32 addr;
+>  	void *priv;
+> @@ -106,6 +109,7 @@ struct rpmsg_endpoint {
+>   * @probe: invoked when a matching rpmsg channel (i.e. device) is found
+>   * @remove: invoked when the rpmsg channel is removed
+>   * @callback: invoked when an inbound message is received on the channel
+> + * @flowcontrol: invoked when remote side flow control status is received
+>   */
+>  struct rpmsg_driver {
+>  	struct device_driver drv;
+> @@ -113,6 +117,7 @@ struct rpmsg_driver {
+>  	int (*probe)(struct rpmsg_device *dev);
+>  	void (*remove)(struct rpmsg_device *dev);
+>  	int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
+> +	int (*flowcontrol)(struct rpmsg_device *, void *, bool);
+
+I wonder here if we should also add a parameter for the remote source address.
+This parameter is already exist for the
+int (*callback)(struct rpmsg_device *, void *, int, void *, u32)
+useful in case of point to multi point communication...
+
+Regards,
+Arnaud
+
+>  };
+>  
+>  static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, __rpmsg16 val)
+> @@ -192,6 +197,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
+>  
+>  ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
+>  
+> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst);
+> +
+>  #else
+>  
+>  static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
+> @@ -316,6 +323,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+>  	return -ENXIO;
+>  }
+>  
+> +static inline int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
+> +{
+> +	/* This shouldn't be possible */
+> +	WARN_ON(1);
+> +
+> +	return -ENXIO;
+> +}
+> +
+>  #endif /* IS_ENABLED(CONFIG_RPMSG) */
+>  
+>  /* use a macro to avoid include chaining to get THIS_MODULE */
