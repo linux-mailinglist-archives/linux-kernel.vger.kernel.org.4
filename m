@@ -2,44 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD746ED596
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D316ED5AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjDXTu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 15:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S233027AbjDXTy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 15:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbjDXTtm (ORCPT
+        with ESMTP id S232827AbjDXTyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:49:42 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261EE44A4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:49:40 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pr2Bj-0006Mz-Qx; Mon, 24 Apr 2023 21:49:27 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
-        paul.walmsley@sifive.com
-Cc:     heiko@sntech.de, kito.cheng@sifive.com, jrtc27@jrtc27.com,
-        conor.dooley@microchip.com, matthias.bgg@gmail.com,
-        heinrich.schuchardt@canonical.com, greentime.hu@sifive.com,
-        nick.knight@sifive.com, christoph.muellner@vrull.eu,
-        philipp.tomsich@vrull.eu, richard.henderson@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: [PATCH 4/4] RISC-V: add support for vendor-extensions via AT_BASE_PLATFORM and xthead
-Date:   Mon, 24 Apr 2023 21:49:11 +0200
-Message-Id: <20230424194911.264850-5-heiko.stuebner@vrull.eu>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
+        Mon, 24 Apr 2023 15:54:33 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7E061B8;
+        Mon, 24 Apr 2023 12:54:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OJs2tg070547;
+        Mon, 24 Apr 2023 14:54:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682366042;
+        bh=CRNaEU+3hTqrHp9DO8zng7/FDGdFX/kjnkPhKcwTJP4=;
+        h=From:To:CC:Subject:Date;
+        b=LbTSF6twPIOl3q4bpC7qQN+iHIk0JiOZAndsuWeOwOPNwOwGJgg75+1REznjVZ5Vo
+         f7huDq8vhjPfg/jNCufSxUEApnq1dsWRIz560LQCs+lTOlISicW2gUjwqIuxuR15Qy
+         JhNJKETUd3SvN+8XRZQ37ERz+TTOavTduC/NEAhE=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OJs2ku095033
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 14:54:02 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 14:54:02 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 14:54:02 -0500
+Received: from a0498204.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OJs23F009344;
+        Mon, 24 Apr 2023 14:54:02 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH v2 0/4] Enable multiple MCAN on AM62x
+Date:   Mon, 24 Apr 2023 14:53:58 -0500
+Message-ID: <20230424195402.516-1-jm@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,225 +74,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+The MCANs in MCU domain were not enabled since there is no
+hardware interrupt routed to A53 GIC interrupt controller.
+Therefore A53 Linux cannot be interrupted by MCU MCANs.
 
-T-Head cores support a number of own ISA extensions that also include
-optimized instructions which could benefit userspace to improve
-performance.
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt and there is
+poll-interval property in DTB MCAN node. The hrtimer generates a
+recurring software interrupt which allows to call the isr. The isr
+will check if there is pending transaction by reading a register
+and proceed normally if there is.
 
-Extensions supported by current T-Head cores are:
-* XTheadBa - bitmanipulation instructions for address calculation
-* XTheadBb - conditional basic bit-manipulation instructions
-* XTheadBs - instructions to access a single bit in a register
-* XTheadCmo - cache management operations
-* XTheadCondMov - conditional move instructions
-* XTheadFMemIdx - indexed memory operations for floating-point registers
-* XTheadFmv - double-precision floating-point high-bit data transmission
-              intructions for RV32
-* XTheadInt - instructions to reduce the code size of ISRs and/or the
-              interrupt latencies that are caused by ISR entry/exit code
-* XTheadMac - multiply-accumulate instructions
-* XTheadMemIdx - indexed memory operations for GP registers
-* XTheadMemPair - two-GPR memory operations
-* XTheadSync - multi-core synchronization instructions
+On AM62x, this series enables two MCU MCAN which will use the hrtimer
+implementation. MCANs with hardware interrupt routed to A53 Linux
+will continue to use the hardware interrupt as expected.
 
-In-depth descriptions of these extensions can be found on
-    https://github.com/T-head-Semi/thead-extension-spec
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
 
-Support for those extensions was merged into the relevant toolchains
-so userspace programs can select necessary optimizations when needed.
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
 
-So a mechanism to the isa-string generation to export vendor-extension
-lists via the errata mechanism and implement it for T-Head C9xx cores.
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
 
-This exposes these vendor extensions then both in AT_BASE_PLATFORM
-and /proc/cpuinfo.
+This patch series depends on 'Enable CAN PHY transceiver driver':
+https://lore.kernel.org/lkml/775ec9ce-7668-429c-a977-6c8995968d6e@app.fastmail.com/T/
 
-Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
----
- arch/riscv/errata/thead/errata.c     | 43 ++++++++++++++++++++++++++++
- arch/riscv/include/asm/alternative.h |  4 +++
- arch/riscv/kernel/alternative.c      | 21 ++++++++++++++
- arch/riscv/kernel/cpu.c              | 12 ++++++++
- 4 files changed, 80 insertions(+)
+Previously sent an RFC:
+https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
 
-diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-index 1036b8f933ec..eb635bf80737 100644
---- a/arch/riscv/errata/thead/errata.c
-+++ b/arch/riscv/errata/thead/errata.c
-@@ -15,6 +15,7 @@
- #include <asm/errata_list.h>
- #include <asm/hwprobe.h>
- #include <asm/patch.h>
-+#include <asm/switch_to.h>
- #include <asm/vendorid_list.h>
- 
- static bool errata_probe_pbmt(unsigned int stage,
-@@ -125,3 +126,45 @@ void __init_or_module thead_feature_probe_func(unsigned int cpu,
- 	if ((archid == 0) && (impid == 0))
- 		per_cpu(misaligned_access_speed, cpu) = RISCV_HWPROBE_MISALIGNED_FAST;
- }
-+
-+
-+char *thead_extension_list_func(unsigned long archid,
-+				unsigned long impid)
-+{
-+	if ((archid == 0) && (impid == 0)) {
-+		const char *xbase1 = "xtheadba_xtheadbb_xtheadbs_xtheadcmo_xtheadcondmov";
-+		const char *xbase2 = "_xtheadint_xtheadmac_xtheadmemidx_xtheadmempair_xtheadsync";
-+		const char *xfpu = "_xtheadfmemIdx";
-+#ifdef CONFIG_32BIT
-+		const char *xfpu32 = "_xtheadfmv";
-+#endif
-+		int len = strlen(xbase1) + strlen(xbase2);
-+		char *str;
-+
-+		if (has_fpu()) {
-+			len += strlen(xfpu);
-+#ifdef CONFIG_32BIT
-+			len+= strlen(xfpu32);
-+#endif
-+		}
-+
-+		str = kzalloc(len, GFP_KERNEL);
-+		if (!str)
-+			return str;
-+
-+		strcpy(str, xbase1);
-+
-+		if (has_fpu()) {
-+			strcat(str, xfpu);
-+#ifdef CONFIG_32BIT
-+			strcat(str, xfpu32);
-+#endif
-+		}
-+
-+		strcat(str, xbase2);
-+
-+		return str;
-+	}
-+
-+	return NULL;
-+}
-diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-index a8f5cf6694a1..8c9aec196649 100644
---- a/arch/riscv/include/asm/alternative.h
-+++ b/arch/riscv/include/asm/alternative.h
-@@ -31,6 +31,7 @@
- #define ALT_ALT_PTR(a)			__ALT_PTR(a, alt_offset)
- 
- void __init probe_vendor_features(unsigned int cpu);
-+char *list_vendor_extensions(void);
- void __init apply_boot_alternatives(void);
- void __init apply_early_boot_alternatives(void);
- void apply_module_alternatives(void *start, size_t length);
-@@ -55,6 +56,8 @@ void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
- 
- void thead_feature_probe_func(unsigned int cpu, unsigned long archid,
- 			      unsigned long impid);
-+char *thead_extension_list_func(unsigned long archid,
-+				unsigned long impid);
- 
- void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
- 				 unsigned int stage);
-@@ -62,6 +65,7 @@ void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
- #else /* CONFIG_RISCV_ALTERNATIVE */
- 
- static inline void probe_vendor_features(unsigned int cpu) { }
-+static inline char *list_vendor_extensions(void) { return NULL; }
- static inline void apply_boot_alternatives(void) { }
- static inline void apply_early_boot_alternatives(void) { }
- static inline void apply_module_alternatives(void *start, size_t length) { }
-diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-index fc65c9293ac5..18913fd1809f 100644
---- a/arch/riscv/kernel/alternative.c
-+++ b/arch/riscv/kernel/alternative.c
-@@ -29,6 +29,8 @@ struct cpu_manufacturer_info_t {
- 				  unsigned int stage);
- 	void (*feature_probe_func)(unsigned int cpu, unsigned long archid,
- 				   unsigned long impid);
-+	char *(*extension_list_func)(unsigned long archid,
-+				    unsigned long impid);
- };
- 
- static void __init_or_module riscv_fill_cpu_mfr_info(struct cpu_manufacturer_info_t *cpu_mfr_info)
-@@ -54,6 +56,7 @@ static void __init_or_module riscv_fill_cpu_mfr_info(struct cpu_manufacturer_inf
- 	case THEAD_VENDOR_ID:
- 		cpu_mfr_info->patch_func = thead_errata_patch_func;
- 		cpu_mfr_info->feature_probe_func = thead_feature_probe_func;
-+		cpu_mfr_info->extension_list_func = thead_extension_list_func;
- 		break;
- #endif
- 	default:
-@@ -157,6 +160,24 @@ void __init_or_module probe_vendor_features(unsigned int cpu)
- 					cpu_mfr_info.imp_id);
- }
- 
-+/*
-+ * Lists the vendor-specific extensions common to all cores.
-+ * Returns a new underscore "_" concatenated string that the
-+ * caller is supposed to free after use.
-+ */
-+char *list_vendor_extensions(void)
-+{
-+	struct cpu_manufacturer_info_t cpu_mfr_info;
-+
-+	riscv_fill_cpu_mfr_info(&cpu_mfr_info);
-+	if (!cpu_mfr_info.extension_list_func)
-+		return NULL;
-+
-+	return cpu_mfr_info.extension_list_func(cpu_mfr_info.arch_id,
-+						cpu_mfr_info.imp_id);
-+
-+}
-+
- /*
-  * This is called very early in the boot process (directly after we run
-  * a feature detect on the boot CPU). No need to worry about other CPUs
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 71770563199f..6a0a45b2eb20 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -7,6 +7,7 @@
- #include <linux/init.h>
- #include <linux/seq_file.h>
- #include <linux/of.h>
-+#include <asm/alternative.h>
- #include <asm/cpufeature.h>
- #include <asm/csr.h>
- #include <asm/hwcap.h>
-@@ -260,6 +261,7 @@ static char *riscv_create_isa_string(void)
- {
- 	int maxlen = 4;
- 	char *isa_str;
-+	char *vendor_isa;
- 	int i;
- 
- 	/* calculate the needed string length */
-@@ -268,6 +270,10 @@ static char *riscv_create_isa_string(void)
- 			maxlen++;
- 	maxlen += strlen_isa_ext();
- 
-+	vendor_isa = list_vendor_extensions();
-+	if (vendor_isa)
-+		maxlen += strlen(vendor_isa) + 1;
-+
- 	isa_str = kzalloc(maxlen, GFP_KERNEL);
- 	if (!isa_str)
- 		return ERR_PTR(-ENOMEM);
-@@ -287,6 +293,12 @@ static char *riscv_create_isa_string(void)
- 
- 	strcat_isa_ext(isa_str);
- 
-+	if(vendor_isa) {
-+		strcat(isa_str, "_");
-+		strcat(isa_str, vendor_isa);
-+		kfree(vendor_isa);
-+	}
-+
- 	return isa_str;
- }
- 
+Changes since v1:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for both timer polling and hardware interrupt case, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
+
+Judith Mendez (4):
+  can: m_can: Add hrtimer to generate software interrupt
+  dt-bindings: net: can: Add poll-interval for MCAN
+  arm64: dts: ti: Add AM62x MCAN MAIN domain transceiver overlay
+  arm64: dts: ti: Enable MCU MCANs for AM62x
+
+ .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++-
+ arch/arm64/boot/dts/ti/Makefile               |  2 +
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi       | 24 ++++++++
+ .../boot/dts/ti/k3-am625-sk-mcan-main.dtso    | 35 ++++++++++++
+ .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 57 +++++++++++++++++++
+ drivers/net/can/m_can/m_can.c                 | 30 ++++++++--
+ drivers/net/can/m_can/m_can.h                 |  5 ++
+ drivers/net/can/m_can/m_can_platform.c        | 31 +++++++++-
+ 8 files changed, 200 insertions(+), 10 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
+
 -- 
-2.39.0
+2.17.1
 
