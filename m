@@ -2,207 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558866EC7F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A8F6EC7F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjDXIcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S231208AbjDXIkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDXIcV (ORCPT
+        with ESMTP id S230416AbjDXIkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:32:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60FF21AD;
-        Mon, 24 Apr 2023 01:32:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84820D75;
-        Mon, 24 Apr 2023 01:33:02 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BF913F5A1;
-        Mon, 24 Apr 2023 01:32:18 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 09:32:16 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     viresh.kumar@linaro.org, rafael@kernel.org, mark.rutland@arm.com,
-        sudeep.holla@arm.com, lpieralisi@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com, sdonthineni@nvidia.com,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch 6/6] cpufreq: CPPC: use wq to read amu counters on target
- cpu
-Message-ID: <ZEY+kENTxCvHlhvK@arm.com>
-References: <20230418113459.12860-1-sumitg@nvidia.com>
- <20230418113459.12860-7-sumitg@nvidia.com>
+        Mon, 24 Apr 2023 04:40:04 -0400
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8ED8E4F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:40:01 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id qrjpp9pdVS2Yhqrjqpy8BT; Mon, 24 Apr 2023 10:39:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682325599;
+        bh=vgMfnD5w8L8osmiEQCPKAcBxZ5zFalY5WsdQV5PqFVU=;
+        h=From:To:Cc:Subject:Date;
+        b=X9QChUa0hH2ybgHWlFRyPLmC5Dd0l0eKvnf5G6fJo66FWer4zD/ICt0pjXKSaN76J
+         y/J8oE8QazQDRAZkQvMnNDELOuZq66MPu0VaRSnO45ebxzG1gTBVSf6vQqtMTiVdBq
+         9xoBjg6jyAfzx8JfM3fWaXhAeOcm6qfWGI7jkifXS6CSNXBFJnF7KIusxzgwfWO70n
+         HdvGnUzH2/g3MnX5YgfksRY636m0p6Tc/h4YufQzqyEsAhQ81hgMsLZCI6sYAyX0Zb
+         eIrWarETpt4fDopYH99zjv38VHPTW4mYE60syRYxi45Sii3+sZccwAy4t3U2WATTOD
+         uOREdSNVtKMWw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 24 Apr 2023 10:39:59 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: mux: Remove some unneeded includes
+Date:   Mon, 24 Apr 2023 10:39:56 +0200
+Message-Id: <1db1e8bd253cbb652835c0cef6a0a2bb9a4970eb.1682325582.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418113459.12860-7-sumitg@nvidia.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sumit,
+This driver includes many header files that are unneeded.
+Remove them and add <linux/device.h> where devm_kzalloc() is defined.
 
-Thank you for the patches!
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Based on one of my script, this reduces the number of included files
+during the build process of this file from 551 to 345.
+---
+ drivers/usb/typec/mux/gpio-sbu-mux.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-On Tuesday 18 Apr 2023 at 17:04:59 (+0530), Sumit Gupta wrote:
-> ARM cores which implement the Activity Monitor Unit (AMU)
-> use Functional Fixed Hardware (FFH) to map AMU counters to
-> Delivered_Counter and Reference_Counter registers. Each
-> sysreg is read separately with a smp_call_function_single
-> call. So, total four IPI's are used, one per register.
-> Due to this, the AMU's core counter and constant counter
-> sampling can happen at a non-consistent time interval if
-> an IPI is handled late. This results in unstable frequency
-> value from "cpuinfo_cur_req" node sometimes. To fix, queue
-> work on target CPU to read all counters synchronously in
-> sequence. This helps to remove the inter-IPI latency and
-> make sure that both the counters are sampled at a close
-> time interval.
-> Without this change we observed that the re-generated value
-> of CPU Frequency from AMU counters sometimes deviates by
-> ~25% as the counters are read at non-determenistic time.
-> Currently, kept the change specific to Tegra241. It can be
-> applied to other SoC's having AMU if same issue is observed.
-> 
+diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
+index f62516dafe8f..c07856069d43 100644
+--- a/drivers/usb/typec/mux/gpio-sbu-mux.c
++++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
+@@ -3,14 +3,11 @@
+  * Copyright (C) 2022 Linaro Ltd.
+  */
+ 
+-#include <linux/bits.h>
+-#include <linux/i2c.h>
+-#include <linux/kernel.h>
++#include <linux/device.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/platform_device.h>
+-#include <linux/regmap.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_mux.h>
+ 
+-- 
+2.34.1
 
-To be honest I never liked the need for IPIs but it was the most
-generic solution I could find for an FFH implementation that does not
-assume a dependency between different reads, which is usecase specific.
-
-Also, for any kind of caching of the counters I'd have to introduce some
-logic that would assume we'd always have two consecutive reads - one for
-the cycle counter and one for the constant counter, and there should be no
-update between them. And then there's the problem of potentially returning
-the same values if there's no update between two sets of reads.
-
-The only feasible idea based on caching would be to piggy back on the
-frequency invariance engine (FIE) which computes a performance scale
-factor on the tick which can be translated to frequency. But the
-frequency obtained would be an average frequency for the past 4ms, which
-can in turn be at up to 4ms old (or more, if the CPU was idle).
-
-Would something like this work for you?
-
-This could also help with a similar issue described at [1] - not an IPI
-related issue, but an issue with similar symptoms.
-
-[1] https://lore.kernel.org/lkml/20230328193846.8757-1-yang@os.amperecomputing.com/
-
-Thanks,
-Ionela.
-
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 53 +++++++++++++++++++++++++++-------
->  1 file changed, 43 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 5e6a132a525e..52b93ac6225e 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -46,6 +46,8 @@ static bool boost_supported;
->  /* default 2usec delay between sampling */
->  static unsigned int sampling_delay_us = 2;
->  
-> +static bool get_rate_use_wq;
-> +
->  static void cppc_check_hisi_workaround(void);
->  static void cppc_nvidia_workaround(void);
->  
-> @@ -99,6 +101,12 @@ struct cppc_freq_invariance {
->  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
->  static struct kthread_worker *kworker_fie;
->  
-> +struct feedback_ctrs {
-> +	u32 cpu;
-> +	struct cppc_perf_fb_ctrs fb_ctrs_t0;
-> +	struct cppc_perf_fb_ctrs fb_ctrs_t1;
-> +};
-> +
->  static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
->  static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->  				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-> @@ -851,28 +859,44 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->  	return (reference_perf * delta_delivered) / delta_reference;
->  }
->  
-> +static int cppc_get_perf_ctrs_sync(void *fb_ctrs)
-> +{
-> +	struct feedback_ctrs *ctrs = fb_ctrs;
-> +	int ret;
-> +
-> +	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t0));
-> +	if (ret)
-> +		return ret;
-> +
-> +	udelay(sampling_delay_us);
-> +
-> +	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t1));
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ret;
-> +}
-> +
->  static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->  {
-> -	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
->  	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->  	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	struct feedback_ctrs fb_ctrs = {0};
->  	u64 delivered_perf;
->  	int ret;
->  
->  	cpufreq_cpu_put(policy);
-> +	fb_ctrs.cpu = cpu;
->  
-> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-> -	if (ret)
-> -		return ret;
-> -
-> -	udelay(sampling_delay_us);
-> -
-> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-> +	if (get_rate_use_wq)
-> +		ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_sync, &fb_ctrs, false);
-> +	else
-> +		ret = cppc_get_perf_ctrs_sync(&fb_ctrs);
->  	if (ret)
->  		return ret;
->  
-> -	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-> -					       &fb_ctrs_t1);
-> +	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &(fb_ctrs.fb_ctrs_t0),
-> +					       &(fb_ctrs.fb_ctrs_t1));
->  
->  	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
->  }
-> @@ -953,7 +977,16 @@ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu)
->  
->  static void cppc_nvidia_workaround(void)
->  {
-> +	int cpu;
-> +
->  	sampling_delay_us = 25;
-> +
-> +#ifdef CONFIG_ARM64_AMU_EXTN
-> +	cpu = get_cpu_with_amu_feat();
-> +
-> +	if (cpu < nr_cpu_ids)
-> +		get_rate_use_wq = true;
-> +#endif
->  }
->  
->  static void cppc_check_hisi_workaround(void)
-> -- 
-> 2.17.1
-> 
