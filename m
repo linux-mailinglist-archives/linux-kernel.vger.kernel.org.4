@@ -2,140 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEFB6ED2D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4646ED2D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjDXQsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S231687AbjDXQtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjDXQs3 (ORCPT
+        with ESMTP id S231139AbjDXQtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:48:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1246580;
-        Mon, 24 Apr 2023 09:48:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3886A21979;
-        Mon, 24 Apr 2023 16:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682354907;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0EGwejdLAGL43XPRy5+57KZH/Iv8Vay1sAesVB+mM0=;
-        b=URgZQq3EAqsDrbivzuqTKSpvkS1NlycKh2txTI5/yrV/pVzNWM6TOhddcFfUFtGEHm/EP8
-        9J9gK6Nojzz261PRIApv7FjSnSuvCWknu6den0k2YRHM/ur+KxJPW94XktAr/TKyMqLGHT
-        4sHEliuMIoFw4/nLKJ3EONjBAqHsXDo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682354907;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0EGwejdLAGL43XPRy5+57KZH/Iv8Vay1sAesVB+mM0=;
-        b=rxtrMnL7QtigII4uWp4ABpOCyRY7/s1rLKQsnehqJp1LDlKVH92VYnQNfTcMpj2pXxRwYv
-        aJs7fV/bJn2MNmDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD3301390E;
-        Mon, 24 Apr 2023 16:48:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WSxSK9qyRmQsFgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 24 Apr 2023 16:48:26 +0000
-Date:   Mon, 24 Apr 2023 18:48:35 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Kevin Brodsky <kevin.brodsky@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] uapi/netfilter: Prefer ISO-friendly __typeof__
-Message-ID: <20230424164835.GA2814761@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20230416210705.2300706-1-pvorel@suse.cz>
- <f8bd4212-9cca-03ca-884a-c9dec63bb256@arm.com>
+        Mon, 24 Apr 2023 12:49:18 -0400
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58C06580;
+        Mon, 24 Apr 2023 09:49:17 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2470e93ea71so3488503a91.0;
+        Mon, 24 Apr 2023 09:49:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682354957; x=1684946957;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQPzlQXVK7yiO98rLUpsr4qSlOZNSd2wUC44NfOzC5o=;
+        b=mD2yZUgU4vFwM/2a2hOoJlMnZL2RXtayE//pPGgUFJwp31MTQCELpisKaabXt49X2m
+         JMJ+DrwkOPMTQOey2CO8+OYMl9zCJd1QWLOq6++Cb8dQ581ZZJ83YuSICUa5UnIpmNrE
+         lTdBzRIBX8Fgd2QgETunPh3YskW68tQm7NUav3Xhu0KChqm5/7FRzEoFNgrv9f+7/3aN
+         ITBDMjVITA5fps6CeOMio+AZzgEvl3Hvj3soR4twOspa55J+aAHqERthPfG4aaLat3Ry
+         mpRszr5Ex0XRq3JczpYl5xusKSWXfZn5w385SC2SVstfXEMMLMBGb8IhCiYk/cX370+j
+         o6og==
+X-Gm-Message-State: AAQBX9euutcyErEqt5vkTP+PwHMnFH3CUUMAfHuJVv2WCnXQdwDdVv3v
+        vPHrU1pERrG7Qj7jl1HIhsw=
+X-Google-Smtp-Source: AKy350buLU0OlbzX25JOXcAqUZe69CK7FS254G2Wob6KCJ3eWiKz4m8UCiG1J0FN5j8wYX04LKmdtg==
+X-Received: by 2002:a17:90a:ca81:b0:247:a272:71be with SMTP id y1-20020a17090aca8100b00247a27271bemr14748647pjt.46.1682354957075;
+        Mon, 24 Apr 2023 09:49:17 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:1f14:a83c:1e8:6ae2? ([2620:15c:211:201:1f14:a83c:1e8:6ae2])
+        by smtp.gmail.com with ESMTPSA id o5-20020a17090aac0500b0024677263e36sm6528524pjq.43.2023.04.24.09.49.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 09:49:16 -0700 (PDT)
+Message-ID: <8948f2b1-e11f-8f84-62e7-e5b13be587b4@acm.org>
+Date:   Mon, 24 Apr 2023 09:49:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8bd4212-9cca-03ca-884a-c9dec63bb256@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/1] scsi: ufs: core: Fix &hwq->cq_lock deadlock issue
+Content-Language: en-US
+To:     Alice Chao <alice.chao@mediatek.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Can Guo <quic_cang@quicinc.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, tun-yu.yu@mediatek.com,
+        eddie.huang@mediatek.com, wsd_upstream@mediatek.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230424080400.8955-1-alice.chao@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230424080400.8955-1-alice.chao@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 16/04/2023 23:07, Petr Vorel wrote:
-> > typeof() is a GNU extension, UAPI requires ISO C, therefore __typeof__()
-> > should be used.  Similarly to b4bd35a19df5 ("uapi/linux/const.h: Prefer
-> > ISO-friendly __typeof__") use __typeof__() also in x_tables.h.
+On 4/24/23 01:03, Alice Chao wrote:
+> [name:lockdep&]WARNING: inconsistent lock state
+> [name:lockdep&]--------------------------------
+> [name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+> [name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
+>    ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
+> ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+> [name:lockdep&]{IN-HARDIRQ-W} state was registered at:
+>    lock_acquire+0x17c/0x33c
+>    _raw_spin_lock+0x5c/0x7c
+>    ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+>    ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
+>    __handle_irq_event_percpu+0x140/0x3ec
+>    handle_irq_event+0x50/0xd8
+>    handle_fasteoi_irq+0x148/0x2b0
+>    generic_handle_domain_irq+0x4c/0x6c
+>    gic_handle_irq+0x58/0x134
+>    call_on_irq_stack+0x40/0x74
+>    do_interrupt_handler+0x84/0xe4
+>    el1_interrupt+0x3c/0x78
+> <snip>
+> 
+> Possible unsafe locking scenario:
+>         CPU0
+>         ----
+>    lock(&hwq->cq_lock);
+>    <Interrupt>
+>      lock(&hwq->cq_lock);
+>    *** DEADLOCK ***
+> 2 locks held by kworker/u16:4/260:
+> 
+> [name:lockdep&]
+>   stack backtrace:
+> CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
+> 6.1.17-mainline-android14-2-g277223301adb #1
+> Workqueue: ufs_eh_wq_0 ufshcd_err_handler
+> 
+>   Call trace:
+>    dump_backtrace+0x10c/0x160
+>    show_stack+0x20/0x30
+>    dump_stack_lvl+0x98/0xd8
+>    dump_stack+0x20/0x60
+>    print_usage_bug+0x584/0x76c
+>    mark_lock_irq+0x488/0x510
+>    mark_lock+0x1ec/0x25c
+>    __lock_acquire+0x4d8/0xffc
+>    lock_acquire+0x17c/0x33c
+>    _raw_spin_lock+0x5c/0x7c
+>    ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+>    ufshcd_poll+0x68/0x1b0
+>    ufshcd_transfer_req_compl+0x9c/0xc8
+>    ufshcd_err_handler+0x3bc/0xea0
+>    process_one_work+0x2f4/0x7e8
+>    worker_thread+0x234/0x450
+>    kthread+0x110/0x134
+>    ret_from_fork+0x10/0x20
+> 
+> ufs_mtk_mcq_intr() could refer to
+> https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
+> 
+> When ufshcd_err_handler() is executed, CQ event interrupt can enter
+> waiting for the same lock. It could happened in upstream code path
+> ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
+> warning message will be generated when &hwq->cq_lock is used in IRQ
+> context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
+> spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
 
-> Thanks for finishing up the work!
+For future patches, please make sure that the patch description occurs 
+before the call traces. Anyway:
 
-> Minor thing, the hash for my commit in -next seems to be 31088f6f7906 at
-> the moment. As to the Fixes: tag, it looks like it should be (assuming
-> that commit already exported the macro):
-
-> Fixes: 72b2b1dd77e8 ("netfilter: xtables: replace XT_ENTRY_ITERATE macro")
-
-> Aside from that, looks good to me, so:
-
-Thank you!
-
-Andrew, I'll just wait for others to comment and then I'll send v2
-(so that you don't need to update the work yourself).
-
-Kind regards,
-Petr
-
-> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-
-> Kevin
-
-> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> > ---
-> > Based on [1] merged into linux-next as b4bd35a19df5.
-> > There should be the same Fixes: which we agree in discussion in [1]
-> > (likely a79ff731a1b2, or d6fc9fcbaa65).
-
-> > Kind regards,
-> > Petr
-
-> > [1] https://lore.kernel.org/lkml/20230411092747.3759032-1-kevin.brodsky@arm.com/
-
-
-> >  include/uapi/linux/netfilter/x_tables.h | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-
-> > diff --git a/include/uapi/linux/netfilter/x_tables.h b/include/uapi/linux/netfilter/x_tables.h
-> > index 796af83a963a..d4eced07f2a2 100644
-> > --- a/include/uapi/linux/netfilter/x_tables.h
-> > +++ b/include/uapi/linux/netfilter/x_tables.h
-> > @@ -172,11 +172,11 @@ struct xt_counters_info {
-
-> >  /* pos is normally a struct ipt_entry/ip6t_entry/etc. */
-> >  #define xt_entry_foreach(pos, ehead, esize) \
-> > -	for ((pos) = (typeof(pos))(ehead); \
-> > -	     (pos) < (typeof(pos))((char *)(ehead) + (esize)); \
-> > -	     (pos) = (typeof(pos))((char *)(pos) + (pos)->next_offset))
-> > +	for ((pos) = (__typeof__(pos))(ehead); \
-> > +	     (pos) < (__typeof__(pos))((char *)(ehead) + (esize)); \
-> > +	     (pos) = (__typeof__(pos))((char *)(pos) + (pos)->next_offset))
-
-> > -/* can only be xt_entry_match, so no use of typeof here */
-> > +/* can only be xt_entry_match, so no use of __typeof__ here */
-> >  #define xt_ematch_foreach(pos, entry) \
-> >  	for ((pos) = (struct xt_entry_match *)entry->elems; \
-> >  	     (pos) < (struct xt_entry_match *)((char *)(entry) + \
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
