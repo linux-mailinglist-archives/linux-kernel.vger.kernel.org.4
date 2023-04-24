@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003B46EC767
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E356EC769
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjDXHt0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 03:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S231459AbjDXHt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjDXHtX (ORCPT
+        with ESMTP id S231461AbjDXHtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:49:23 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE0C10C8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:49:21 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-b951f5e1b3fso2693061276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:49:21 -0700 (PDT)
+        Mon, 24 Apr 2023 03:49:53 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1C010E0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:49:51 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a814fe0ddeso46592255ad.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1682322591; x=1684914591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GO24WXWfCTLwBE/ozcKbOtSXwD5bqdw++c+e1svOB+Q=;
+        b=BT4zn/i4A+GcPJbM3S+qH0ai+Bltc3OvAM7QIhkEWEgkrF6cwwjtUfDSYXjyexUTHg
+         +vc0cyIfMal61gfdzucPZp6X4oRToJ31pYIhUZMWfUHSJcdBw3rp3CspODBvbC2ekFXC
+         M+zc85CmWV5ltNo8UCO/LZHuX1MM4jMyVyxcIqOZceWnC0wYpI0Ou8SJDci33k4DKwtT
+         4tVBeSr1fbrzHpO0If5FRl9bwHwYIB73Ic5wUQK33umASC5mi09+45xKO+jgx/C8nZ4s
+         BF0rn24NlWYCYYKtB5q+UPFTcBw0GvR8VkUs4ihfw1VPu0FV4RSgzgJnjICJNtZFfFm/
+         lVfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682322560; x=1684914560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZhRZsU3OCwHhu2Y4xdvv6Apf1TI1FKu57DbzduNxVh8=;
-        b=I/bROQd8s/p9euBciNfIUhtG5lPovgSquJXD5nYaWp+Bq34FO9OX1NVMSgtQOvtqvv
-         ohXOGgzoKoM9/NGjIeqCBz1r9gI6kILqrgA/mHWd/ay767E/UTjY/7Du2f2s8431/hwI
-         uicSi9DUSFdNk1WIKc6m/IPhCuSMwobU366iQSRRsoRrAj8Cwvm2dzIyYjRFYHTflJ4/
-         knhO+ocligqmHlPy+G976yWGTHYsHQjAbANhVPOmpqFHXKHt7G7rfmjhJATzkg6l4E76
-         cHKyB7boLyYdlMykLVAOGkhZLzdCXl01irt4ccz0UROPdEbJR6v0bAbXL8GRBueBeE67
-         VuSg==
-X-Gm-Message-State: AAQBX9eIS+1orH/uZNdPT3w86oXJ4jIW0PL49L5xgW/jIfcKWVwQPiUZ
-        e3pxSVHScKYrYShgryCQ+75BRw2AVblpkQ==
-X-Google-Smtp-Source: AKy350ahWCc8PC+tBtaOI0/sinqEGRUv0QEwRPLGTbkxat4ORXOwKcKOxSZ+KeYEY37R+D/lWvCMNg==
-X-Received: by 2002:a25:508b:0:b0:b79:6c89:86c0 with SMTP id e133-20020a25508b000000b00b796c8986c0mr7572535ybb.42.1682322560540;
-        Mon, 24 Apr 2023 00:49:20 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id c18-20020a25a292000000b00b8f6d69a631sm2734629ybi.27.2023.04.24.00.49.19
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1682322591; x=1684914591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GO24WXWfCTLwBE/ozcKbOtSXwD5bqdw++c+e1svOB+Q=;
+        b=gdVGQ1bjQqi+46ahtyaKekIwauFCogx0bo5RIF2uuvLPSDGTyAxnYqE9cGWlqtqG/R
+         rb1vAm/gtviN3Lb5nsV+YD92Lqco70yOWHLx1VrwODyAkN5AF0Hiw1DNN1bblVivozMF
+         HgI3e50FJcSEJkkKLS076gAQBgLuLyz0D83794bNsCEr7UIaPcA7jcK7ni5GNK0itz7Q
+         x5MV7+lk6OjwoJFr7D6C1EdGraYgVULSHwBnEKNskHYhf5PVMpu+y0H6YgFwnMzF4oGM
+         4IkEr3JIs2wJ+bmSfQhaio0TtjFTwWVC4m4FJJtre+vbqMvR6rzTZBjesTiYVF6UgDQj
+         ev6A==
+X-Gm-Message-State: AAQBX9cX1+2YnTXyWnqGdkMYNmo3mHcuhcqcLRpjsgmrScC2wHTr5/mH
+        ktg3G6IRHzqWJidDqYC8r46QJWFNI6I6Edo3MWU=
+X-Google-Smtp-Source: AKy350ZOZKJs8gSDtDUu2uc+8imsRM/UgIJ8XFhbNcLTrGky+TNXqXY7/e8ZOCna0oN6CIwrz4tHRA==
+X-Received: by 2002:a17:902:e742:b0:1a9:1b4:9fd5 with SMTP id p2-20020a170902e74200b001a901b49fd5mr15136501plf.68.1682322590943;
+        Mon, 24 Apr 2023 00:49:50 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170902bf4800b00198d7b52eefsm6046954pls.257.2023.04.24.00.49.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 00:49:20 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-54fb89e1666so25667147b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:49:19 -0700 (PDT)
-X-Received: by 2002:a0d:d98f:0:b0:552:a306:5256 with SMTP id
- b137-20020a0dd98f000000b00552a3065256mr7246793ywe.18.1682322559690; Mon, 24
- Apr 2023 00:49:19 -0700 (PDT)
+        Mon, 24 Apr 2023 00:49:50 -0700 (PDT)
+Message-ID: <51b6feba-de3b-0d9f-222d-09bed5050cc3@9elements.com>
+Date:   Mon, 24 Apr 2023 13:19:46 +0530
 MIME-Version: 1.0
-References: <202304222120.WcBMaHXo-lkp@intel.com> <20230422135838.3rn67ky2p7jmdk3n@pali>
-In-Reply-To: <20230422135838.3rn67ky2p7jmdk3n@pali>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Apr 2023 09:49:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX8PP3gH_ctgZgXfV6Psu95eTuCh0MBsEQsRVG_6rEUVg@mail.gmail.com>
-Message-ID: <CAMuHMdX8PP3gH_ctgZgXfV6Psu95eTuCh0MBsEQsRVG_6rEUVg@mail.gmail.com>
-Subject: Re: {standard input}:924: Error: unrecognized opcode: `eieio'
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add dt property
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Zev Weiss <zev@bewilderbeest.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230418145051.4192963-1-Naresh.Solanki@9elements.com>
+ <0da2b301-8780-48c0-a5dc-326474011e8d@hatter.bewilderbeest.net>
+ <9f425205-c395-648a-3f42-a776c7580a8f@9elements.com>
+ <20230421181013.GA1561415-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20230421181013.GA1561415-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+Hi Rob,
 
-On Sat, Apr 22, 2023 at 4:03 PM Pali Rohár <pali@kernel.org> wrote:
-> On Saturday 22 April 2023 21:53:23 kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   8e41e0a575664d26bb87e012c39435c4c3914ed9
-> > commit: ff7c76f66d8bad4e694c264c789249e1d3a8205d powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage
-> > date:   3 months ago
-> > config: powerpc-buildonly-randconfig-r006-20230422 (https://download.01.org/0day-ci/archive/20230422/202304222120.WcBMaHXo-lkp@intel.com/config)
-> > compiler: powerpc-linux-gcc (GCC) 12.1.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ff7c76f66d8bad4e694c264c789249e1d3a8205d
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout ff7c76f66d8bad4e694c264c789249e1d3a8205d
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202304222120.WcBMaHXo-lkp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    {standard input}: Assembler messages:
-> > >> {standard input}:924: Error: unrecognized opcode: `eieio'
-> >    {standard input}:1094: Error: unrecognized opcode: `eieio'
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests
->
-> Hello! What is that? In this error report there is no compile log, nor
-> any file / line. And "Link:" line from above error report does not work.
->
-> Intel, can you look at your robot? This looks some bug in error reporting.
-
-Looks fine to me: this is not a compile problem, but an assembler problem.
-Presumably this is when building a kernel for a PPC platform that does
-not support the eieio instruction?
-
-The Link: works fine for me, sometimes you just have to be a little bit
-patient for the archiver to catch up...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 21-04-2023 11:40 pm, Rob Herring wrote:
+> On Thu, Apr 20, 2023 at 01:52:30PM +0530, Naresh Solanki wrote:
+>> Hi Zev,
+>>
+>> On 20-04-2023 05:31 am, Zev Weiss wrote:
+>>> On Tue, Apr 18, 2023 at 07:50:50AM PDT, Naresh Solanki wrote:
+>>>> Add DT property regulator-supplies.
+>>>> This enables us to couple one or more regulator output to gether. This
+>>>> is use in case of Single connector having 2 or more supplies.
+>>>>
+>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> ---
+>>>> .../bindings/regulator/regulator-output.yaml         | 12 +++++++++---
+>>>> 1 file changed, 9 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git
+>>>> a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>> b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>> index 078b37a1a71a..17f683d3c1f3 100644
+>>>> --- a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>> +++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>> @@ -21,13 +21,19 @@ properties:
+>>>>    compatible:
+>>>>      const: regulator-output
+>>>>
+>>>> -  vout-supply:
+>>>> +  regulator-supplies:
+>>>>      description:
+>>>> -      Phandle of the regulator supplying the output.
+>>>> +      Specifies the name of the output supply provided by the regulator.
+>>>> +      Defaults to "vout".
+>>>> +    default: "vout"
+>>>> +
+>>>
+>>> Was this meant to be specified as a string-array to allow providing
+>>> multiple names?
+>> Yes. This is string-array.
+>>>
+>>>> +patternProperties:
+>>>> +  ".*-supply":
+>>>> +    description:
+>>>> +      Specified the phandle for various supplies
+>>>>
+>>>> required:
+>>>>    - compatible
+>>>> -  - vout-supply
+>>>>
+>>>> additionalProperties: false
+>>>>
+>>>>
+>>>
+>>> I think it would be nice to also update the examples to show what a
+>>> multi-supply instance would look like.
+>> Ack. Will do that.
+>>>
+>>> A slightly more descriptive subject line would also be good -- "Add dt
+>>> property" is a bit vague.
+>> Suggestion ?
+>> How about like 'Allow multiple supplies' or 'Add support for multiple
+>> supplies'
+> 
+> And indicate this is for regulator-output, As-is looks like it's
+> something for all regulators.
+Thanks for bringing that to my notice. Will make:
+dt-bindings: regulator-output: Add dt property
+> 
+> Rob
+Regards,
+Naresh
