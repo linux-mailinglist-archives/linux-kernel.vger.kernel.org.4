@@ -2,92 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132886ED305
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0906ED309
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjDXRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S231831AbjDXRAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjDXQ76 (ORCPT
+        with ESMTP id S231542AbjDXRAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:59:58 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41610AD01;
-        Mon, 24 Apr 2023 09:59:23 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OFxjKt022240;
-        Mon, 24 Apr 2023 16:59:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=IAojL9P59lyqntf0zLwGFxcGGrjKtYiJJY4Sqr2kfHU=;
- b=dKXn0evT9ZOK2+I4EjG6V1RtFj5VynU/4zU3TytQNcAOAdpZDFTVvrCi0q20c281OhGL
- r8kkdji+XhAiKA1R78579X/0F6Gfz3YHSLERYc4vRWG6XWJw1HIIh4UQVKFYtXwfnBhb
- ESefFWacS4xcVeSeicOLjgjd3CH8iTFvDBcZqgX3FGhpHFu0VRd7V/x8OMIRxRB2gXSw
- 9O1KXQTGEYOfGMOdFBtNwBMX6YGZlymW7xACo+uQ6HOaLHbb20VEWk3sRxLKg+d4jp2x
- zl7cttSYjpG8IJ93TeDziUi65Ox6bzOUa9s7UdTMC5cTGH2sdN8k0MS5PejqcGQWN2EN JA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5r0urw4r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 16:59:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OGwwuq025561
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 16:58:58 GMT
-Received: from [10.110.115.131] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
- 2023 09:58:57 -0700
-Message-ID: <eebb2245-20b2-c6cf-481b-2fde677870a4@quicinc.com>
-Date:   Mon, 24 Apr 2023 09:58:49 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 5/5] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
- chipsets
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682033114-28483-1-git-send-email-quic_khsieh@quicinc.com>
- <1682033114-28483-6-git-send-email-quic_khsieh@quicinc.com>
- <b26dfb22-bf97-b65e-ef06-62098c4eafec@linaro.org>
- <3ee67248-c94c-5f3d-527e-914e8c8b4a31@quicinc.com>
- <7b493d85-0691-8797-367e-1d71ea87c826@linaro.org>
- <4bea9976-d353-6783-f55a-3e83e7501da2@quicinc.com>
- <40f5ac92-f658-25cf-352b-60db49a129f6@linaro.org>
- <89b2a4a0-ddbb-b176-aa3c-c06449a9758d@quicinc.com>
- <347f0ca0-2657-4cb5-c006-ef19b0f04e80@linaro.org>
+        Mon, 24 Apr 2023 13:00:53 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E11BFF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:00:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dkZf5dZKP/yJvoq9LsikQXkuDbI7NcVMtTpQn5CbuHsTwZOKs9AKY2KiBEJUPHdtKwEFTQQaFhJI4FIR4Wd9/zlWjs05VY4YpOdBTUSH/t79CeN2DT7EYRuxLgC7rHRH+d3u5ZKac4nobchDO70lmP/rmWK6Q+QsZ70xGTy9fc8R+nGD41cpp5QHz3scQKJ1tjIsDAfdWrXpBbiZqttfwzue+Cc8ijgvxJnIlHs6Jk2DwWO3DKkSE+XRZaeMKeKK8O/IVkepmkbdB/8tLCFOJcWiW4l12RIqxjYgSmvVCvOO/Ie9D70mnvCurt0f/csSeD4V8jfK4E4Nc/uzTA1X1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qvlNQvv2vBf2bFX+KJV4QDyQZvHqngAC4T3Uc/3oxrM=;
+ b=d6a1ceqVMD9cNZoaSizwwZ5cgPfib6GYDmK7g3yOwRwtx83bSL0bfkpVonDFurrnyHXyb5qS+Nn2AYIDSdtY3/h8HU56H1X54dSA1kjIvli5tDVlAUb2z/KI7KjVMNxTSq0I7OUyawjeJ/a99cg8MgUDBIciwZNpAsAZCSgLWBCbDAQqG2By3jo1pnpJaITKTWCknBHR8q+RA0gtP0kPwnkhdRnf938clNiyM/pA2ByijShRvnfvWFhDCCGODMpffmO42ouVwhL4zlk4FynqdhPzY2tVqcyGt9Fdb94c9iSs8F1nQb5Lx0Wg6lqQGU8/x4zl/00KmS3GhzVek51ETg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qvlNQvv2vBf2bFX+KJV4QDyQZvHqngAC4T3Uc/3oxrM=;
+ b=1ePLNzUFOJwm8tsXQpWVcZmwPSqrc7xvP5NNrjqZm2EPgqDWbP9TufEBf+ZcfNO7B+8nerJK/fInV1OrsxTdYtQYj7APBiTBuf9GcHexChtxnV7NT7q8ZWqvbSki9qA8xVSGDa+QBgqSbaSEZrX9JyBhARoQYvY4T7Gy2OyBE/A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DS0PR12MB9040.namprd12.prod.outlook.com (2603:10b6:8:f5::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.33; Mon, 24 Apr 2023 17:00:49 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6319.022; Mon, 24 Apr 2023
+ 17:00:49 +0000
+Message-ID: <9910a5e3-a161-edfa-19d4-2bbf3bbf405f@amd.com>
+Date:   Mon, 24 Apr 2023 13:02:14 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] drm/amd/display: return status of
+ dmub_srv_get_fw_boot_status
 Content-Language: en-US
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <347f0ca0-2657-4cb5-c006-ef19b0f04e80@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Alvin.Lee2@amd.com, Jun.Lei@amd.com, qingqing.zhuo@amd.com,
+        Max.Tseng@amd.com, Josip.Pavic@amd.com, Eric.Yang2@amd.com,
+        aurabindo.pillai@amd.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230420135901.3889747-1-trix@redhat.com>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230420135901.3889747-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YFbHwSLzh5BRY-aoUkp_nX4dPBBbgEnU
-X-Proofpoint-ORIG-GUID: YFbHwSLzh5BRY-aoUkp_nX4dPBBbgEnU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_10,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 spamscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240152
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: YT4PR01CA0244.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10f::17) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS0PR12MB9040:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8239dfa0-5b78-450a-e4c6-08db44e57438
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q0np4zcZZ/CGHOqapHg5632TJxz0EsZVdOgw902R2kxHYZx0Tit8vpoZnfRTt+YUHW8ke08k7z27gkYDU01Lzo8uEwVr1n+qb+gEsnrSsGEDNb0EzECqiphtoz5gw5JvFc65KX19nKcTn1k4dYLHnk9y23NAxk8KZG/i2ud3jTZ+hKLic/ocS2IL8JmrgavAyFI1mqcWdB2XYYb/y1pL5BbLaQG1BUyMn3LIr9UGsgcy7jpdM47IyVDLppItr+pXzF+RIN1mRvvllCPPzgCpkDhT563aW88KjRvnPaArjhxXLSZxMfo/wrnESUPqiWtJLydPkydNlW/7ttjK9alfVRZmbjAf/VFvzu3QfXvealvyMzxqu0/KCXyJ2FvFNqvXtg0mgkZX/U0EOVvkdcrKtQsyI3CBQujKokgVUTumYJ0D/X+hQ18Wb1EhFWa5qZowgA3freWySErq2NB0iJhfyg9URwhEAA79cJx4NAwGdonhBoBRNtKTzcyn4sAd3SjowWJvSrZuMheT7iQHxR8BTEFDzoZ7WkpVZa//xz2Zft6jPmAPMZMx1OwTVIkcWaM7odfFN8Wtv4sel/gMVNAFW6JnLTtqXhhdEsCUpomtZvC4wvmGeGJ2B2t3hgKggTUdTC+7YJogUPp98nbZ5l4KyIXddoJH1yKR9srYnegm12Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199021)(31686004)(66556008)(66476007)(6636002)(44832011)(8936002)(8676002)(478600001)(31696002)(66946007)(38100700002)(86362001)(2906002)(41300700001)(4326008)(316002)(6666004)(5660300002)(6486002)(53546011)(26005)(6506007)(6512007)(186003)(921005)(2616005)(83380400001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjE0cStJY0dKSm9WR2hCMUpiL1o1czkxNFJlVTluenJSRVl3Tk5KN0NxM2JX?=
+ =?utf-8?B?bXQxZ1M1YmRRS3VnbkhnY2FIOWlNNmltVXNzZDFXMm9QeDMyMDhvdFpWZXE5?=
+ =?utf-8?B?Z2traGdrMjJuZFhqcEN1YmdKUWhkcFpLU1Y1Q1M1WElwWXo1cHdVWWsrNm42?=
+ =?utf-8?B?L3V1ZllaRERSTWZhaUhYVEJzeFhxdlRSV05aenowVkhrcWtVOGJQMzRSdXBE?=
+ =?utf-8?B?OWN0eHIydUtEZkJQWFJxVTFzUUNhNHZKT0JEeGJ4YmEwMHV5L1c2OERzOHZy?=
+ =?utf-8?B?ckh5a1hjMHprcmptTTRtTWxrY2hXbUs4emNjVlljOHY0K2VwalMrazhNYTBm?=
+ =?utf-8?B?aXlrUDJoYmdUd0R6SnQ3WU5vZ3JEMjJtckErSlJ0cHJLNlBIdG1KZG9WOE5r?=
+ =?utf-8?B?K0pDR0g0STRiT2Z5RmZVZDl3aEtrbFhQMmJ5RFgwTDFjZmJ5RWtBMm1tMXE2?=
+ =?utf-8?B?SlVOakYzVUQyN25qbXR2U0tlYTU1c2xQTEczZXFPaFNEU0RRWnAzdzgyQUxH?=
+ =?utf-8?B?R3NIOEF0RWE1aVVIVkgrQTR4VThMamdqdVNFVFFFeklHWURpT1FIQ28rWHpD?=
+ =?utf-8?B?SnFNSkhkdk9CU0RyZTNTb08rWkxoNDU1YlcyLzI1aUVzOWtwZjRUZGlKaTh1?=
+ =?utf-8?B?L1pObC95ZWhkYXE1RXBkS0Q3c3lNWFRwU0x3Q2V2TVBrdjN6UmsxVmU0eHZL?=
+ =?utf-8?B?NlF3MWNKaWg3ZUlFSkZrcXNuLzBaUW53U0NMMmpoeGR6M0JNdGp3dnZkbnBu?=
+ =?utf-8?B?N0IvT2pJUzRlbUllK0FZenFYOTMyYWY5Zm5LMFZYaEpHMlFMQ1UxSGhXbWlF?=
+ =?utf-8?B?aFJTQmkwYkdVZ2MySkxpdHI3M1B0aE1aRm4yNzVibFVDc1J4aVc1UFhZVDRT?=
+ =?utf-8?B?dG1yWVJCcmVsUkwyT1ZpTTlob2NYQ3ZrQndFOUdIa1Nickw2MjI2cFB6elcw?=
+ =?utf-8?B?N0t1Y1Q3OHh2TVRpa2dkN05IWGozdTR1QUlTMllKd2QwWFhNSWV5RzlXWnVB?=
+ =?utf-8?B?TGwrYUZxK2lLVk9GNkwyQi8zVlRKOXdlSGZDTk9RcVBYL2NzVWJnTEN4OVpY?=
+ =?utf-8?B?Qkk1eXhWRkFCUmY5YWlHMUxCUEM5ZVBJTG1CbHRWRXlTM3pjOUtGVUFwZjBM?=
+ =?utf-8?B?K0d1c0x1ZzhNd080aEFnNjZUWXFwWlVRYmZuSml4U3lBTnFUU3ZPZmtTakg5?=
+ =?utf-8?B?eFc2SVhyT2RQdlI4bzNZMUVMYjFBNFdXanJoc0duU1N4VFBNUFlJMUxIUkd1?=
+ =?utf-8?B?c1ZKand1cXhPSUM0VXBrVURGZUxZR3lNaHBXSnppT1hyY3RlZW92MkQrRVJL?=
+ =?utf-8?B?YXMvQ0tpMmhKNVVLOVJzRE5TektYcUxTQVA1ZG5qa0hXbWRSTURrZFl3REE4?=
+ =?utf-8?B?Yzd2NlphbFhZNllGQk5odHZwYXdra1N5SjQrOWpsYkRqOGsxSCtMenlPTk10?=
+ =?utf-8?B?bmt0dDBqSE02RGlXUkNwUmJadHhQUGhsczJxdnlEdFBPWTRZS3l1ZXFISnpJ?=
+ =?utf-8?B?NVJOaEptanpZaUhoRWsrVUtUc1RiZUpmOThaUm9xcWpPeFhtRm0vbTNGSCt0?=
+ =?utf-8?B?NW1UY0NicTM3YWZTSms2RitNMUZZNXh5SnBVa2JLM1lKREJMb25PbWsvZmZO?=
+ =?utf-8?B?RVZLQ1dwQzNCUXBFY2h2SlZKTEhhQTA3OCs1U1pJUXFFd3VTMjc0R2x3UjZK?=
+ =?utf-8?B?cHpCMWQ1bDl4dGZkT09HYkt6S3dHL0dlNERJclJVK3cvV1pUZnptcDB0d0RK?=
+ =?utf-8?B?OENNb3ZxdWFCNnpYYUs4L25sN21SbDhQQ2JEeHd0THl1ZWsycWx6VnBVbnJW?=
+ =?utf-8?B?UTF5Uk5wVWd0QkpaZzh6MjhxNTU1cjNJU0VuSTRVWUZRK3ZhbHJqUWx6aEhI?=
+ =?utf-8?B?VjNob0dCTlpGVmptM1hQTjJGdVF0M2FyL0NBYnU0T3NMei90N21SUlEwOEpP?=
+ =?utf-8?B?SldUR0JrRzhwT1hwdmZwaVR2d0JwdFUvMFhTVkE2bUtLYTZkWEZvbDhnN3g2?=
+ =?utf-8?B?Ukpuc3BDSlYzYjdDbCs0d3BQSzc5bGlqaWRaYXpNbGdFN0tiL0VhbGl0U0Fh?=
+ =?utf-8?B?bDFsdmxvYjJGY3RPTEdTQUpFN0lha2xwNFFHWnhZVUJUUE9wVGtINzRIdVc0?=
+ =?utf-8?Q?VYuDEm45ZHEEI+8+pLYtrzIrB?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8239dfa0-5b78-450a-e4c6-08db44e57438
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 17:00:49.3306
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /A+x2jG7Q28oyuSNQ9CwCEfMVjopG/bvIZy03Tm3j3iKOCk9RdB3jR4f5jFFIGGZwZL6hI5e6NmPQT9qOrwYZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9040
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,187 +131,58 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 4/21/2023 4:22 PM, Dmitry Baryshkov wrote:
-> On 22/04/2023 02:16, Kuogee Hsieh wrote:
->>
->> On 4/21/2023 4:11 PM, Dmitry Baryshkov wrote:
->>> On 22/04/2023 02:08, Kuogee Hsieh wrote:
->>>>
->>>> On 4/21/2023 3:16 PM, Dmitry Baryshkov wrote:
->>>>> On 22/04/2023 01:05, Kuogee Hsieh wrote:
->>>>>>
->>>>>> On 4/20/2023 5:07 PM, Dmitry Baryshkov wrote:
->>>>>>> On 21/04/2023 02:25, Kuogee Hsieh wrote:
->>>>>>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>>>>
->>>>>>>> Add DSC 1.2 hardware blocks to the catalog with necessary
->>>>>>>> sub-block and feature flag information.
->>>>>>>> Each display compression engine (DCE) contains dual hard
->>>>>>>> slice DSC encoders so both share same base address but with
->>>>>>>> its own different sub block address.
->>>>>>>
->>>>>>> Please correct line wrapping. 72-75 is usually the preferred width
->>>>>>>
->>>>>>>>
->>>>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>>>>> ---
->>>>>>>> .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 19 
->>>>>>>> +++++++++++++++++++
->>>>>>>> .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h | 11 
->>>>>>>> +++++++++++
->>>>>>>> .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 21 
->>>>>>>> +++++++++++++++++++++
->>>>>>>> .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 19 
->>>>>>>> +++++++++++++++++++
->>>>>>>> .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 19 
->>>>>>>> +++++++++++++++++++
->>>>>>>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 12 ++++++++++--
->>>>>>>>   6 files changed, 99 insertions(+), 2 deletions(-)
->>>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> [I commented on sm8550, it applies to all the rest of platforms]
->>>>>>>
->>>>>>>> diff --git 
->>>>>>>> a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h 
->>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>>>>> index 9e40303..72a7bcf 100644
->>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->>>>>>>> @@ -165,6 +165,23 @@ static const struct dpu_merge_3d_cfg 
->>>>>>>> sm8550_merge_3d[] = {
->>>>>>>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
->>>>>>>>   };
->>>>>>>>   +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_0 = {
->>>>>>>> +    .enc = {.base = 0x100, .len = 0x100},
->>>>>>>> +    .ctl = {.base = 0xF00, .len = 0x10},
->>>>>>>> +};
->>>>>>>> +
->>>>>>>> +static const struct dpu_dsc_sub_blks sm8550_dsc_sblk_1 = {
->>>>>>>> +    .enc = {.base = 0x200, .len = 0x100},
->>>>>>>> +    .ctl = {.base = 0xF80, .len = 0x10},
->>>>>>>> +};
->>>>>>>
->>>>>>> Please keep sblk in dpu_hw_catalog for now.
->>>>>>>
->>>>>>>> +
->>>>>>>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
->>>>>>>> +    DSC_BLK_1_2("dsc_0", DSC_0, 0x80000, 0x100, 0, 
->>>>>>>> sm8550_dsc_sblk_0),
->>>>>>>> +    DSC_BLK_1_2("dsc_0", DSC_1, 0x80000, 0x100, 0, 
->>>>>>>> sm8550_dsc_sblk_1),
->>>>>>>
->>>>>>> Is there a reason why index in "dsc_N" doesn't match the DSC_n 
->>>>>>> which comes next to it?
->>>>>>
->>>>>> usually each DCE (display compression engine) contains two hard 
->>>>>> slice encoders.
->>>>>>
->>>>>> DSC_0 and DSC_1 (index) is belong to dsc_0.
->>>>>>
->>>>>> If there are two DCE, then DSC_2 and DSC_3 belong to dsc_1
->>>>>
->>>>> Ah, I see now. So, the block register space is the following:
->>>>> DCEi ->
->>>>>   common
->>>>>   dsc0_enc
->>>>>   dsc1_enc
->>>>>   dsc0_ctl
->>>>>   dsc1_ctl
->>>>>
->>>>> Instead of declaring a single DCE unit with two DSC blocks, we 
->>>>> declare two distinct DSC blocks. This raises a question, how 
->>>>> independent are these two parts of a single DCE block? For 
->>>>> example, can we use them to perform compression with different 
->>>>> parameters? Or use one of them for the DP DSC and another one for 
->>>>> DSI DSC? Can we have the following configuration:
->>>>>
->>>>> DSC_0 => DP DSC
->>>>> DSC_1, DSC_2 => DSI DSC in DSC_MERGE topology?
->>>>
->>>> no, For merge mode you have to use same DCE, such as DSC_2 and DSC3 
->>>> (pair)
->>>
->>> Ok, this is for the merge mode. So the dpu_rm should be extended to 
->>> allocate them in pairs if merge mode is requested.
->>>
->>> What about using DSC_0 for DP and DSC_1 for DSI? Is it possible?
->>
->> I never do that, but i think it should  works since they can work 
->> independently.
->
-> Good, thanks for the confirmation. For v2, could you please describe 
-> this arrangement of DCE -> 2xDSC in a comment close to DSC_BLK_1_2 and 
-> corresponding sblk definitions?
->
-> Also could you please fix dpu_rm to allocate DSC blocks in pairs for 
-> DSC_MERGE mode.
-yes, I will fix DSC_MERGE mode at next patch serial.
->
-> Last, but not least, would it make sense to name the blocks as "dceN" 
-> instead of "dscN"?
->
->>
->>
->>>
->>>>
->>>>>
->>>>>>
->>>>>>>
->>>>>>>> +    DSC_BLK_1_2("dsc_1", DSC_2, 0x81000, 0x100, 
->>>>>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_0),
->>>>>>>> +    DSC_BLK_1_2("dsc_1", DSC_3, 0x81000, 0x100, 
->>>>>>>> BIT(DPU_DSC_NATIVE_422_EN), sm8550_dsc_sblk_1),
->>>>>>>> +};
->>>>>>>> +
->>>>>>>>   static const struct dpu_intf_cfg sm8550_intf[] = {
->>>>>>>>       INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, 
->>>>>>>> MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 
->>>>>>>> 24, 25),
->>>>>>>>       /* TODO TE sub-blocks for intf1 & intf2 */
->>>>>>>> @@ -218,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
->>>>>>>>       .dspp = sm8550_dspp,
->>>>>>>>       .pingpong_count = ARRAY_SIZE(sm8550_pp),
->>>>>>>>       .pingpong = sm8550_pp,
->>>>>>>> +    .dsc = sm8550_dsc,
->>>>>>>> +    .dsc_count = ARRAY_SIZE(sm8550_dsc),
->>>>>>>>       .merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
->>>>>>>>       .merge_3d = sm8550_merge_3d,
->>>>>>>>       .intf_count = ARRAY_SIZE(sm8550_intf),
->>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>> index 03f162a..be08158 100644
->>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>> @@ -1,6 +1,6 @@
->>>>>>>>   // SPDX-License-Identifier: GPL-2.0-only
->>>>>>>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights 
->>>>>>>> reserved.
->>>>>>>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All 
->>>>>>>> rights reserved.
->>>>>>>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. 
->>>>>>>> All rights reserved.
->>>>>>>>    */
->>>>>>>>     #define pr_fmt(fmt)    "[drm:%s:%d] " fmt, __func__, __LINE__
->>>>>>>> @@ -540,7 +540,15 @@ static const struct dpu_pingpong_sub_blks 
->>>>>>>> sc7280_pp_sblk = {
->>>>>>>>       {\
->>>>>>>>       .name = _name, .id = _id, \
->>>>>>>>       .base = _base, .len = 0x140, \
->>>>>>>> -    .features = _features, \
->>>>>>>> +    .features = BIT(DPU_DSC_HW_REV_1_1) | _features, \
->>>>>>>> +    }
->>>>>>>> +
->>>>>>>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
->>>>>>>> +    {\
->>>>>>>> +    .name = _name, .id = _id, \
->>>>>>>> +    .base = _base, .len = _len, \
->>>>>>>> +    .features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
->>>>>>>> +    .sblk = &_sblk, \
->>>>>>>>       }
->>>>>>>> /*************************************************************
->>>>>>>
->>>>>
->>>
->
+On 4/20/23 09:59, Tom Rix wrote:
+> gcc with W=1 reports
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:
+>    In function ‘dc_dmub_srv_optimized_init_done’:
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:26:
+>    error: variable ‘dmub’ set but not used [-Werror=unused-but-set-variable]
+>    184 |         struct dmub_srv *dmub;
+>        |                          ^~~~
+> 
+> The return status is never set.
+> It looks like a call to dmub_srv_get_fw_boot_status is missing.
+> 
+> Fixes: 499e4b1c722e ("drm/amd/display: add mechanism to skip DCN init")
+
+What tree is this based on? I am unable to find that exact commit on
+amd-staging-drm-next.
+
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> index d15ec32243e2..36d936ab4300 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> @@ -182,14 +182,23 @@ bool dc_dmub_srv_cmd_run_list(struct dc_dmub_srv *dc_dmub_srv, unsigned int coun
+>   bool dc_dmub_srv_optimized_init_done(struct dc_dmub_srv *dc_dmub_srv)
+>   {
+>   	struct dmub_srv *dmub;
+> -	union dmub_fw_boot_status status;
+> +	struct dc_context *dc_ctx;
+> +	union dmub_fw_boot_status boot_status;
+> +	enum dmub_status status;
+>   
+>   	if (!dc_dmub_srv || !dc_dmub_srv->dmub)
+>   		return false;
+>   
+>   	dmub = dc_dmub_srv->dmub;
+> +	dc_ctx = dc_dmub_srv->ctx;
+> +
+> +	status = dmub_srv_get_fw_boot_status(dmub, &boot_status);
+> +	if (status != DMUB_STATUS_OK) {
+> +		DC_ERROR("Error querying DMUB boot status: error=%d\n", status);
+> +		return false;
+> +	}
+>   
+> -	return status.bits.optimized_init_done;
+> +	return boot_status.bits.optimized_init_done;
+>   }
+>   
+>   bool dc_dmub_srv_notify_stream_mask(struct dc_dmub_srv *dc_dmub_srv,
+-- 
+Hamza
+
