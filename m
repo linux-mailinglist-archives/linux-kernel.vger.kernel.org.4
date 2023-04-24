@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F4F6ED439
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216BE6ED432
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjDXSQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S232306AbjDXSPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjDXSQ1 (ORCPT
+        with ESMTP id S230500AbjDXSPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:16:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11687EED
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682360057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1t7mmBoREyN++55SKMolHK6qsrf6grZmQqxd4DYClio=;
-        b=h/lPDZrJBtfpkhuRN5sCe2gsCblGHl7U8V4CdeIbrTqsqD1TZjWyb2OxGBEQOA6lSeD7rr
-        I0lTc+EbiyE4JEOQCKc4qs6e44RFiuFfiU9x7y2X5yHA4qFvpjKVHypuZUiGvW0FdXPfNc
-        RFjQFIEjCxL16bB0/eokc/QXQbZAH8E=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-378-bIc3600xN8e5hI0BHUJDGw-1; Mon, 24 Apr 2023 14:14:15 -0400
-X-MC-Unique: bIc3600xN8e5hI0BHUJDGw-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5e7223aab07so28494726d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:14:15 -0700 (PDT)
+        Mon, 24 Apr 2023 14:15:48 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9064EE3;
+        Mon, 24 Apr 2023 11:14:59 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54f6f0dae19so32748507b3.0;
+        Mon, 24 Apr 2023 11:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682360098; x=1684952098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XzUuV71xlywRhSGB5NsLHjJvYQxnpMeaPTWJLwb1hAI=;
+        b=Zl71GsOyhmESY9jYgO6iLjOhVx8eC/OnUROmISnQJgtnd6t8SrEAoeKB1skTRAJZ7P
+         ePvZFuRfi6UFS1eNCGgh+Hz/lxanx2rGRxOtJL9j5NITb0843Fl1kquIpWw01tPtgXx8
+         FlfRYVrDzoZliMPkOPnwOwle4WqWhGhTIURsnbulH82eplNycxUYgbu3Mrf1lE0dNEy6
+         5gsGihJv8xkgNWQ3oJPxDRIyheeCqmlxFDMaAJlFoHMFD0/8Ib0feRBnSMVVTb6WPwdI
+         uLKhW2KCuIwXlCTO49s8wPxc+339MnEDbvbBQ2viPW4gt23Y7oCrqAvWMJ3YyESJeeh7
+         a1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682360055; x=1684952055;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1t7mmBoREyN++55SKMolHK6qsrf6grZmQqxd4DYClio=;
-        b=RDln4DhpsPLMiq3UHsXUJk657yENW8aq+3gCOOaUt4Vax8p1LsvMyRka854sLBtR51
-         c9rfeADtfNh3ygdZWDm5HR4CN90qUO6IP9+0k6ShfERaJ57GPK5NZBFpQKczA9Nagvjy
-         lljbGaExoy4dNunETel2y1VGroe+APyFz9PXyi0X3ml3Gzzx8y/2aCxlQLL37sqZr1Mp
-         8fT31i4q1XaJ4hAzdMynk3QSM4NhOywA3By5csZWzB2cCnLXWVq5nddbZ4IqrSSav03q
-         a0Ts+ULiBFA0Bvy1Hl9IfysGlopuaH75iMRFErbGRDvEAyzYcNiMBOVyTnoELXoo5Wbc
-         KWtA==
-X-Gm-Message-State: AAQBX9fgnzJuhEIMAzFU3F8jEZEZogx0gA6EEP8cFov9oPERjvaUZ2IP
-        UTSdH+RjT1G3wBJHkteY/3O7PXlL0gZKXLWqDyotk7eSsYg11iUmxf8g2BTykXuyk0F4xhy+Rb7
-        x3MJg05y78Kv0Ku5BvHhxTw6i
-X-Received: by 2002:ac8:5792:0:b0:3ef:5733:29e4 with SMTP id v18-20020ac85792000000b003ef573329e4mr23695496qta.64.1682360054981;
-        Mon, 24 Apr 2023 11:14:14 -0700 (PDT)
-X-Google-Smtp-Source: AKy350atGQDLcokpP+b8qwiVWcVt+lW3aoMSwbKlIc/IoMCQwMl5grguEKprAip97oqd3hMBQL6FWw==
-X-Received: by 2002:ac8:5792:0:b0:3ef:5733:29e4 with SMTP id v18-20020ac85792000000b003ef573329e4mr23695447qta.64.1682360054621;
-        Mon, 24 Apr 2023 11:14:14 -0700 (PDT)
-Received: from [192.168.1.31] (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id p141-20020a374293000000b0074de75f783fsm3757258qka.26.2023.04.24.11.14.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 11:14:14 -0700 (PDT)
-Message-ID: <4ca4e590-a996-81ad-e088-d172f5a5a8ba@redhat.com>
-Date:   Mon, 24 Apr 2023 11:14:10 -0700
+        d=1e100.net; s=20221208; t=1682360098; x=1684952098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XzUuV71xlywRhSGB5NsLHjJvYQxnpMeaPTWJLwb1hAI=;
+        b=dDdG/GtfjXMvnSH6mivAQiV1oy9eaNokubv7HWj8IQSLYpTuWXgJISDAddcTl0c18/
+         +ullU3WKhgA0XUGzq2uif5MZlv7QVdyXNbJlntPwYq83UiPzRMyta4TCJKN+4yEgDxGf
+         DXujj98LwPSsxlJi0aQ1qP8nkYIoOsT9O9kDm+8fvQf0cqiZqi/m4q7TxJQFo6MebfR8
+         gcgx8Gz16bdnSisswYc/EJhXEv0/Hise2RUXBGWB7ACwjjsO2CdUE+psvX7mYkLyCJFr
+         z/mej/xPNYrtD38TcZiQnu7MbYjTgqhs31661281rq0UFcsLZzgur+SlOI1wPIYregMd
+         emmw==
+X-Gm-Message-State: AAQBX9fEiMwOmmS8Lgc+bw3ivRHZp2AXIKfXr6aMTWmqyezWA7dsP6i4
+        JyQyFnzyVzssktZGACe5iC0e6d6aazqtVeYhHyY=
+X-Google-Smtp-Source: AKy350apcZVtlQedv1SFzob/DDZM7LIKQflG72XIzIVjRiOTTQzsTPOrG6AamPjIXZAD9v+Aoargnxls9GL6gjVxnp4=
+X-Received: by 2002:a81:5a05:0:b0:556:2699:f3cf with SMTP id
+ o5-20020a815a05000000b005562699f3cfmr6537955ywb.40.1682360098243; Mon, 24 Apr
+ 2023 11:14:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/amd/display: return status of
- dmub_srv_get_fw_boot_status
-Content-Language: en-US
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Alvin.Lee2@amd.com, Jun.Lei@amd.com, qingqing.zhuo@amd.com,
-        Max.Tseng@amd.com, Josip.Pavic@amd.com, Eric.Yang2@amd.com,
-        aurabindo.pillai@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230420135901.3889747-1-trix@redhat.com>
- <9910a5e3-a161-edfa-19d4-2bbf3bbf405f@amd.com>
-From:   Tom Rix <trix@redhat.com>
-In-Reply-To: <9910a5e3-a161-edfa-19d4-2bbf3bbf405f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+References: <1681863018-28006-1-git-send-email-justinpopo6@gmail.com>
+ <1681863018-28006-2-git-send-email-justinpopo6@gmail.com> <e2069707-3f09-f1e7-6973-a2e115af7536@linaro.org>
+In-Reply-To: <e2069707-3f09-f1e7-6973-a2e115af7536@linaro.org>
+From:   Justin Chen <justinpopo6@gmail.com>
+Date:   Mon, 24 Apr 2023 11:14:47 -0700
+Message-ID: <CAJx26kXnYy9oQiXZ+dbAbzf-jAO9M6ggWL164_67MDS_3cfNnA@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/6] dt-bindings: net: Brcm ASP 2.0 Ethernet controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        richardcochran@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,65 +78,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 4/24/23 10:02 AM, Hamza Mahfooz wrote:
+On Fri, Apr 21, 2023 at 12:29=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 4/20/23 09:59, Tom Rix wrote:
->> gcc with W=1 reports
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:
->>    In function ‘dc_dmub_srv_optimized_init_done’:
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:26:
->>    error: variable ‘dmub’ set but not used 
->> [-Werror=unused-but-set-variable]
->>    184 |         struct dmub_srv *dmub;
->>        |                          ^~~~
->>
->> The return status is never set.
->> It looks like a call to dmub_srv_get_fw_boot_status is missing.
->>
->> Fixes: 499e4b1c722e ("drm/amd/display: add mechanism to skip DCN init")
+> On 19/04/2023 02:10, Justin Chen wrote:
+> > From: Florian Fainelli <f.fainelli@gmail.com>
+> >
+> > Add a binding document for the Broadcom ASP 2.0 Ethernet
+> > controller.
+> >
+> > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+> > ---
+> >  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 146 +++++++++++++=
+++++++++
+> >  1 file changed, 146 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0=
+.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml b=
+/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+> > new file mode 100644
+> > index 000000000000..3817d722244f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+> > @@ -0,0 +1,146 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 >
-> What tree is this based on? I am unable to find that exact commit on
-> amd-staging-drm-next.
-
-linux-next
-
-Tom
-
+> Drop quotes.
+>
+> > +
+> > +title: Broadcom ASP 2.0 Ethernet controller
+> > +
+> > +maintainers:
+> > +  - Justin Chen <justinpopo6@gmail.com>
+> > +  - Florian Fainelli <f.fainelli@gmail.com>
+> > +
+> > +description: Broadcom Ethernet controller first introduced with 72165
+> > +
+> > +properties:
+> > +  '#address-cells':
+> > +    const: 1
+> > +  '#size-cells':
+> > +    const: 1
+> > +
+> > +  compatible:
+> > +    enum:
+> > +      - brcm,bcm72165-asp-v2.0
+> > +      - brcm,asp-v2.0
+> > +      - brcm,asp-v2.1
+>
+> Is this part of SoC? If so, then SoC compatibles are preferred, not IP
+> block versions.
+We have the same IP on different chips. So no, it isn't tied to a specific =
+SoC.
 
 >
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 13 +++++++++++--
->>   1 file changed, 11 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c 
->> b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
->> index d15ec32243e2..36d936ab4300 100644
->> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
->> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
->> @@ -182,14 +182,23 @@ bool dc_dmub_srv_cmd_run_list(struct 
->> dc_dmub_srv *dc_dmub_srv, unsigned int coun
->>   bool dc_dmub_srv_optimized_init_done(struct dc_dmub_srv *dc_dmub_srv)
->>   {
->>       struct dmub_srv *dmub;
->> -    union dmub_fw_boot_status status;
->> +    struct dc_context *dc_ctx;
->> +    union dmub_fw_boot_status boot_status;
->> +    enum dmub_status status;
->>         if (!dc_dmub_srv || !dc_dmub_srv->dmub)
->>           return false;
->>         dmub = dc_dmub_srv->dmub;
->> +    dc_ctx = dc_dmub_srv->ctx;
->> +
->> +    status = dmub_srv_get_fw_boot_status(dmub, &boot_status);
->> +    if (status != DMUB_STATUS_OK) {
->> +        DC_ERROR("Error querying DMUB boot status: error=%d\n", 
->> status);
->> +        return false;
->> +    }
->>   -    return status.bits.optimized_init_done;
->> +    return boot_status.bits.optimized_init_done;
->>   }
->>     bool dc_dmub_srv_notify_stream_mask(struct dc_dmub_srv *dc_dmub_srv,
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +    description: ASP registers
+>
+> Drop description.
+>
+> > +
+> > +  ranges: true
+> > +
+> > +  interrupts:
+> > +    minItems: 1
+> > +    items:
+> > +      - description: RX/TX interrupt
+> > +      - description: Port 0 Wake-on-LAN
+> > +      - description: Port 1 Wake-on-LAN
+> > +
+> > +  clocks:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>
+> Drop.
+>
+> > +    description: Phandle to clock controller
+>
+> Drop.
+>
+> Instead maxItems.
+>
+> > +
+> > +  clock-names:
+> > +    const: sw_asp
+>
+> Drop entire property.
+>
+> > +
+> > +  ethernet-ports:
+> > +    type: object
+> > +    properties:
+> > +      '#address-cells':
+> > +        const: 1
+> > +      '#size-cells':
+> > +        const: 0
+>
+> Missing additionalProperties:false. Look at existing bindings how it is
+> done.
+>
+> > +
+> > +    patternProperties:
+> > +      "^port@[0-9]+$":
+> > +        type: object
+> > +
+> > +        $ref: ethernet-controller.yaml#
+> > +
+> > +        properties:
+> > +          reg:
+> > +            maxItems: 1
+> > +            description: Port number
+> > +
+> > +          channel:
+> > +            maxItems: 1
+> > +            description: ASP channel number
+> > +
+> > +        required:
+> > +          - reg
+> > +          - channel
+> > +
+> > +patternProperties:
+> > +  "^mdio@[0-9a-f]+$":
+> > +    type: object
+> > +    $ref: "brcm,unimac-mdio.yaml"
+> > +
+> > +    description:
+> > +      ASP internal UniMAC MDIO bus
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - ranges
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    asp@9c00000 {
+>
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-device=
+tree-basics.html#generic-names-recommendation
+>
+> > +        compatible =3D "brcm,asp-v2.0";
+> > +        reg =3D <0x9c00000 0x1fff14>;
+> > +        interrupts =3D <0x0 0x33 0x4>;
+>
+> Use proper defines for flags.
+Not understanding this comment. Can you elaborate?
 
+Thanks,
+Justin
+>
+> > +        ranges;
+> > +        clocks =3D <&scmi 14>;
+> > +        clock-names =3D "sw_asp";
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <1>;
+>
+>
+> Best regards,
+> Krzysztof
+>
