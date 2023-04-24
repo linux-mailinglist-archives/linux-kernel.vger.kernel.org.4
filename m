@@ -2,82 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209516EC69D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1756EC6A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjDXG4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 02:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S230342AbjDXG5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 02:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjDXG4u (ORCPT
+        with ESMTP id S230245AbjDXG5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 02:56:50 -0400
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8101700
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:56:38 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id qq7npmbKSs9Agqq7oprqv5; Mon, 24 Apr 2023 08:56:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682319396;
-        bh=sv4+9V+79L7JIkIFQr4LHHxT2Rej6AyKPx3VrA1kgYY=;
-        h=From:To:Cc:Subject:Date;
-        b=KjzVa0KUsTUUxW75B+QaBRVX2IB/LaPlhbU9LpOf40XLRm4wddYLfaI61b4zq9yhc
-         hMOQgUXUhUq/7RNkDJ0kB18PD6PslFnCqaJ5taYbtMzH/NwqVxf69akBHu9EEpn7rj
-         mrNIwv1awCRkC0YU4WC00qsm+RZkqhVluqphOdyG3mSTgzi9D8peC2jyqqJcPLR7by
-         OZ+FYaBvxABwCOgX++jZHtPN44ukx0rsG6o5EBtdVI4AYWTag4YKoNvOOfkcZrhtxu
-         QJjjo0ImDfNu1ONfXPQ7kMqRuP9HdxJ1RCe2szaNM0fWvITZi96aBSZ2pIfUK8ntwE
-         kwzA8gKI/IhBw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 24 Apr 2023 08:56:36 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] mfd: rc5t583-irq: Remove the unneeded include <linux/i2c.h>
-Date:   Mon, 24 Apr 2023 08:56:34 +0200
-Message-Id: <128025bf5b81f5424db2202b0c8cfd9722c28aab.1682319383.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Apr 2023 02:57:12 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CAA2D70
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:57:05 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b992ed878ebso10973716276.0
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682319424; x=1684911424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A4rVcZshumczn0J8QZMiSz4nWQLMGsW4QsA9geh1PPA=;
+        b=buZlt30e78vPJkSEFmf8lmXCZ1uZX9dH3B5V9mONRspwdpPld+xXEwYDnWh4FRw+dh
+         eE7czF6607e7Zrk47RdSjzH0zBxmjP6kZk6KL7BlIaNkWE3roUolFQd5IuMPQcatsqyf
+         iS+NgU7irDe/Jjfk/721+Mv2JUFHLpfU+/WU7/vbhNhdtRllmyZn3S5wxA2fdnu4FhrQ
+         cLh63TFk8ded/NY9BP5JyVakpP6ywbilYcKGfbCZDvCs7p3IVdDxvW2xeJX+YCcL3thg
+         1SyEGzIF0JXMTOcXPff7TvAPOi6X+DMPMFLoVjr9+EA47UUPzTBduFwOk5UGY2It5snO
+         Kx5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682319424; x=1684911424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A4rVcZshumczn0J8QZMiSz4nWQLMGsW4QsA9geh1PPA=;
+        b=enUv7UcS6ZEGEFUsKSz+vqQ85NYAC8/rfYvVnXBM5AJ2FX8eQ2vzxhr7NRZrYuesW7
+         BEb+1YyXu8BX1wL8iRrnhc3IsgkHD6i+BkTRm3C97MxsLTagwPacrcqzTUhg09bCTsOY
+         WtLLxJBJUapEUy4CHTj7A4sDD5tI/8amKqC/jJTJoLEflxyhjr17VcFj8uBosn4C40j2
+         EqtNb/9rI4TkSfJ/Et/qENlDcF9D0KQ1eTxN450NljlJknQUVaIrzRlLIiAW6OGYdcbb
+         NqtKSbXVgo3PnlW83c2HYyqOriRuibSf0meoOqHAiCHodGQ5cjRCNi2EzDV37xnrCEUd
+         JWjg==
+X-Gm-Message-State: AAQBX9dYPb7GJoRSE7BGLTFIpDGVhPnJ4aUVHd5LI/mMYGnNz0A3igGd
+        +bjvpVcbXTQJr7pEYPwefyfAWPDjr4/cvaU1fqJ1wQ==
+X-Google-Smtp-Source: AKy350YffJqK0pT1GhwDQLtpmeVrNxrfczJZxesqoD2mDLwyV6kJjwD/cHNa+DE68cImGXsQZkh7jhIMdbgpyOugyqo=
+X-Received: by 2002:a0d:cac2:0:b0:544:9b15:e197 with SMTP id
+ m185-20020a0dcac2000000b005449b15e197mr7959752ywd.20.1682319424426; Sun, 23
+ Apr 2023 23:57:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <KL1PR01MB544800D7E51C9209A9BD998BE6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <KL1PR01MB544800D7E51C9209A9BD998BE6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 24 Apr 2023 08:56:52 +0200
+Message-ID: <CACRpkdZ8CVWb6=-sgK3BdW-ssivY1oz4cc_mYoXmyrBMLxsX=A@mail.gmail.com>
+Subject: Re: [PATCH v1] gpio: mmio: restroe get multiple gpio mask
+To:     Yan Wang <rk.code@outlook.com>
+Cc:     brgl@bgdev.pl, Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver does not use i2c, so there is no point in including
-<linux/i2c.h>
+Hi Yan,
 
-Remove it and add the needed <linux/device.h> instead, which is much more
-lightweight.
+thanks for your patch!
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/mfd/rc5t583-irq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Apr 23, 2023 at 11:07=E2=80=AFAM Yan Wang <rk.code@outlook.com> wro=
+te:
 
-diff --git a/drivers/mfd/rc5t583-irq.c b/drivers/mfd/rc5t583-irq.c
-index 621ea61fa7c6..97f52b671520 100644
---- a/drivers/mfd/rc5t583-irq.c
-+++ b/drivers/mfd/rc5t583-irq.c
-@@ -8,9 +8,9 @@
-  * based on code
-  *      Copyright (C) 2011 RICOH COMPANY,LTD
-  */
-+#include <linux/device.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
--#include <linux/i2c.h>
- #include <linux/mfd/rc5t583.h>
- 
- enum int_type {
--- 
-2.34.1
+> Simplify the code,should not modify its logic.
 
+I don't see how it simplifies the code, it seems to me that it is
+making it more complex?
+
+> Fixes: 761b5c30c206 ("gpio: mmio: replace open-coded for_each_set_bit()")
+> Signed-off-by: Yan Wang <rk.code@outlook.com>
+> ---
+>  drivers/gpio/gpio-mmio.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
+> index d9dff3dc92ae..c2347ef3a4df 100644
+> --- a/drivers/gpio/gpio-mmio.c
+> +++ b/drivers/gpio/gpio-mmio.c
+> @@ -271,10 +271,14 @@ static void bgpio_multiple_get_masks(struct gpio_ch=
+ip *gc,
+>         *clear_mask =3D 0;
+>
+>         for_each_set_bit(i, mask, gc->bgpio_bits) {
+> -               if (test_bit(i, bits))
+> -                       *set_mask |=3D bgpio_line2mask(gc, i);
+> -               else
+> -                       *clear_mask |=3D bgpio_line2mask(gc, i);
+> +               if (*mask =3D=3D 0)
+> +                       break;
+> +               if (__test_and_clear_bit(i, mask)) {
+> +                       if (test_bit(i, bits))
+> +                               *set_mask |=3D bgpio_line2mask(gc, i);
+> +                       else
+> +                               *clear_mask |=3D bgpio_line2mask(gc, i);
+> +               }
+
+The intention of the change seems to be to break out of the loop
+when all set bits are handled, by successively masking off one
+bit at a time from mask. So this is intended as an optimization,
+not a simplification.
+
+I think for_each_set_bit() is already skipping over every bit
+that is zero, see include/linux/find.h.
+
+So this optimization gains us nothing.
+
+Yours,
+Linus Walleij
