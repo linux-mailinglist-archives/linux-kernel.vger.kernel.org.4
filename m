@@ -2,182 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064006ED10A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B5D6ED10F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbjDXPL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S231667AbjDXPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjDXPLP (ORCPT
+        with ESMTP id S229967AbjDXPMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:11:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C35449E;
-        Mon, 24 Apr 2023 08:11:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F5CA625E1;
-        Mon, 24 Apr 2023 15:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C104DC433EF;
-        Mon, 24 Apr 2023 15:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682349073;
-        bh=CH5ETGl1VCk5J+tPCp/iNHJe4ToABvcdm5xjv9j3lBA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eGQWsqzImKJ+8lpWetGzUbqVKVCqOyNDACZBvfubmDwpHAUKkWDsXk6wIc8LfJqaK
-         nyLaJYE9kP1DiwLE8yaDX0eQraEuY6HWKq7r5Hl+BvOmqNN+F/w7jjvUIyotvhxmcc
-         AJVuX2xkwrs7BQ/+8D1nH7+PqP0vMBxxrlILiu1rnTe8WBdUM7PrlmX14WU6IGGZVc
-         r4s0mGlEBEyV3aQTHdCOSFpyCYTtCoG1k6sm2tQQfPTTcF+xOsdbflSU/ocxbICwO/
-         vXjykC6ZZq/0vC+9egeYOjg6yCY+jYo40zseLcQwn6hk0xmlQjWcJW5rNCfvHZp0fi
-         I8ql5Fgb0amOg==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org
-Subject: [PATCH v2 3/3] xfs: mark the inode for high-res timestamp update in getattr
-Date:   Mon, 24 Apr 2023 11:11:04 -0400
-Message-Id: <20230424151104.175456-4-jlayton@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230424151104.175456-1-jlayton@kernel.org>
-References: <20230424151104.175456-1-jlayton@kernel.org>
+        Mon, 24 Apr 2023 11:12:45 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5F11BC;
+        Mon, 24 Apr 2023 08:12:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682349163; x=1713885163;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=creu1FWEWXekS0GSi/hyE65nvjBle1W5o/SEndVTiPg=;
+  b=gR1zjWVzvg5pFOyPG1ur6NKh/BnhDGNtac5xwXX63kLgTHD0Ofv1LCdi
+   KcZrZU9iL/oI+kwZlnJZf7A4G5TWuhc+EHyP6/kszvaO0LkPtgQx7GDJ1
+   7cVu6G0G92dKjH1mjXD6NizBcN6n4VQvkoIea0ODowhfdpcYkhPyKyJ4+
+   zA1xelI4VlsNCXzpJIaJLyjRh3EeX3n9T1JR6ysTS1qflzbnogatwts+5
+   axs+MqzX5XhRoGwv6xdHr1/QvlGH3dgl2Fd1r6uW9UzGo8HU5MnksmJe3
+   YSCPCT5/rrvg6fo1ynwKx8p7wHmIi74Mtnacpvc+FLF2JaRldvTDAAv/4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="343965155"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="343965155"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:12:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="867511061"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="867511061"
+Received: from wlwpo-8.amr.corp.intel.com ([10.251.215.143])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:12:33 -0700
+Date:   Mon, 24 Apr 2023 18:12:29 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Moger, Babu" <Babu.Moger@amd.com>
+cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "Das1, Sandipan" <Sandipan.Das@amd.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "eranian@google.com" <eranian@google.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
+        "peternewman@google.com" <peternewman@google.com>
+Subject: RE: [PATCH v4 7/7] x86/resctrl: Add debug files when mounted with
+ debug option
+In-Reply-To: <MW3PR12MB4553359D41816826AA001A1095609@MW3PR12MB4553.namprd12.prod.outlook.com>
+Message-ID: <ff99af93-5121-5a27-e24f-6354b9dffa1f@linux.intel.com>
+References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu> <168177451010.1758847.568218491528297451.stgit@bmoger-ubuntu> <56497126-8f60-e590-bb13-b3739114375@linux.intel.com> <933d8ae2-d8b7-7436-5918-f639405c9ecb@amd.com>
+ <346622f4-3ea9-c19c-6175-3346ffc6016@linux.intel.com> <MW3PR12MB4553359D41816826AA001A1095609@MW3PR12MB4553.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-737270251-1682331682=:2038"
+Content-ID: <8c5736a4-4c1a-25f2-44b6-83d2cd225350@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the mtime or ctime is being queried via getattr, ensure that we
-mark the inode for a high-res timestamp update on the next pass. Also,
-switch to current_cmtime for other c/mtime updates.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/xfs/libxfs/xfs_trans_inode.c | 2 +-
- fs/xfs/xfs_acl.c                | 2 +-
- fs/xfs/xfs_inode.c              | 2 +-
- fs/xfs/xfs_inode_item.c         | 2 +-
- fs/xfs/xfs_iops.c               | 9 ++++++---
- fs/xfs/xfs_super.c              | 5 ++++-
- 6 files changed, 14 insertions(+), 8 deletions(-)
+--8323329-737270251-1682331682=:2038
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <1685ac52-bb85-bc24-b4c-4c7e8bcec817@linux.intel.com>
 
-diff --git a/fs/xfs/libxfs/xfs_trans_inode.c b/fs/xfs/libxfs/xfs_trans_inode.c
-index 8b5547073379..c08be3aa3339 100644
---- a/fs/xfs/libxfs/xfs_trans_inode.c
-+++ b/fs/xfs/libxfs/xfs_trans_inode.c
-@@ -63,7 +63,7 @@ xfs_trans_ichgtime(
- 	ASSERT(tp);
- 	ASSERT(xfs_isilocked(ip, XFS_ILOCK_EXCL));
- 
--	tv = current_time(inode);
-+	tv = current_ctime(inode);
- 
- 	if (flags & XFS_ICHGTIME_MOD)
- 		inode->i_mtime = tv;
-diff --git a/fs/xfs/xfs_acl.c b/fs/xfs/xfs_acl.c
-index 791db7d9c849..85353e6e9004 100644
---- a/fs/xfs/xfs_acl.c
-+++ b/fs/xfs/xfs_acl.c
-@@ -233,7 +233,7 @@ xfs_acl_set_mode(
- 	xfs_ilock(ip, XFS_ILOCK_EXCL);
- 	xfs_trans_ijoin(tp, ip, XFS_ILOCK_EXCL);
- 	inode->i_mode = mode;
--	inode->i_ctime = current_time(inode);
-+	inode->i_ctime = current_ctime(inode);
- 	xfs_trans_log_inode(tp, ip, XFS_ILOG_CORE);
- 
- 	if (xfs_has_wsync(mp))
-diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-index 5808abab786c..ac299c1a9838 100644
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -843,7 +843,7 @@ xfs_init_new_inode(
- 	ip->i_df.if_nextents = 0;
- 	ASSERT(ip->i_nblocks == 0);
- 
--	tv = current_time(inode);
-+	tv = current_ctime(inode);
- 	inode->i_mtime = tv;
- 	inode->i_atime = tv;
- 	inode->i_ctime = tv;
-diff --git a/fs/xfs/xfs_inode_item.c b/fs/xfs/xfs_inode_item.c
-index ca2941ab6cbc..dc33f495f4fa 100644
---- a/fs/xfs/xfs_inode_item.c
-+++ b/fs/xfs/xfs_inode_item.c
-@@ -381,7 +381,7 @@ xfs_inode_to_log_dinode(
- 	memset(to->di_pad3, 0, sizeof(to->di_pad3));
- 	to->di_atime = xfs_inode_to_log_dinode_ts(ip, inode->i_atime);
- 	to->di_mtime = xfs_inode_to_log_dinode_ts(ip, inode->i_mtime);
--	to->di_ctime = xfs_inode_to_log_dinode_ts(ip, inode->i_ctime);
-+	to->di_ctime = xfs_inode_to_log_dinode_ts(ip, timestamp_truncate(inode->i_ctime, inode));
- 	to->di_nlink = inode->i_nlink;
- 	to->di_gen = inode->i_generation;
- 	to->di_mode = inode->i_mode;
-diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-index 24718adb3c16..b0490e46e825 100644
---- a/fs/xfs/xfs_iops.c
-+++ b/fs/xfs/xfs_iops.c
-@@ -573,8 +573,11 @@ xfs_vn_getattr(
- 	stat->gid = vfsgid_into_kgid(vfsgid);
- 	stat->ino = ip->i_ino;
- 	stat->atime = inode->i_atime;
--	stat->mtime = inode->i_mtime;
--	stat->ctime = inode->i_ctime;
-+	if (request_mask & (STATX_MTIME|STATX_CTIME))
-+		generic_fill_multigrain_cmtime(inode, stat);
-+	else
-+		stat->result_mask &= ~(STATX_CTIME|STATX_MTIME);
-+
- 	stat->blocks = XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks);
- 
- 	if (xfs_has_v3inodes(mp)) {
-@@ -917,7 +920,7 @@ xfs_setattr_size(
- 	if (newsize != oldsize &&
- 	    !(iattr->ia_valid & (ATTR_CTIME | ATTR_MTIME))) {
- 		iattr->ia_ctime = iattr->ia_mtime =
--			current_time(inode);
-+			current_ctime(inode);
- 		iattr->ia_valid |= ATTR_CTIME | ATTR_MTIME;
- 	}
- 
-diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
-index 4f814f9e12ab..ee9d0b43bf15 100644
---- a/fs/xfs/xfs_super.c
-+++ b/fs/xfs/xfs_super.c
-@@ -1620,7 +1620,7 @@ xfs_fs_fill_super(
- 	sb->s_blocksize_bits = ffs(sb->s_blocksize) - 1;
- 	sb->s_maxbytes = MAX_LFS_FILESIZE;
- 	sb->s_max_links = XFS_MAXLINK;
--	sb->s_time_gran = 1;
-+	sb->s_time_gran = 2;
- 	if (xfs_has_bigtime(mp)) {
- 		sb->s_time_min = xfs_bigtime_to_unix(XFS_BIGTIME_TIME_MIN);
- 		sb->s_time_max = xfs_bigtime_to_unix(XFS_BIGTIME_TIME_MAX);
-@@ -1633,6 +1633,9 @@ xfs_fs_fill_super(
- 
- 	set_posix_acl_flag(sb);
- 
-+	/* Enable multigrain timestamps */
-+	sb->s_flags |= SB_MULTIGRAIN_TS;
-+
- 	/* version 5 superblocks support inode version counters. */
- 	if (xfs_has_crc(mp))
- 		sb->s_flags |= SB_I_VERSION;
+On Fri, 21 Apr 2023, Moger, Babu wrote:
+> > -----Original Message-----
+> > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > Sent: Thursday, April 20, 2023 3:59 AM
+> > To: Moger, Babu <Babu.Moger@amd.com>
+> > Cc: corbet@lwn.net; Reinette Chatre <reinette.chatre@intel.com>;
+> > tglx@linutronix.de; mingo@redhat.com; bp@alien8.de; fenghua.yu@intel.com;
+> > dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com;
+> > paulmck@kernel.org; akpm@linux-foundation.org; quic_neeraju@quicinc.com;
+> > rdunlap@infradead.org; damien.lemoal@opensource.wdc.com;
+> > songmuchun@bytedance.com; peterz@infradead.org; jpoimboe@kernel.org;
+> > pbonzini@redhat.com; chang.seok.bae@intel.com;
+> > pawan.kumar.gupta@linux.intel.com; jmattson@google.com;
+> > daniel.sneddon@linux.intel.com; Das1, Sandipan <Sandipan.Das@amd.com>;
+> > tony.luck@intel.com; james.morse@arm.com; linux-doc@vger.kernel.org;
+> > LKML <linux-kernel@vger.kernel.org>; bagasdotme@gmail.com;
+> > eranian@google.com; christophe.leroy@csgroup.eu; jarkko@kernel.org;
+> > adrian.hunter@intel.com; quic_jiles@quicinc.com; peternewman@google.com
+> > Subject: Re: [PATCH v4 7/7] x86/resctrl: Add debug files when mounted with
+> > debug option
+> > 
+> > On Wed, 19 Apr 2023, Moger, Babu wrote:
+> > 
+> > >
+> > >
+> > > On 4/19/23 08:20, Ilpo Järvinen wrote:
+> > > > On Mon, 17 Apr 2023, Babu Moger wrote:
+> > > >
+> > > >> Add the debug files to the resctrl hierarchy.
+> > > >>
+> > > >> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> > > >> ---
+> > > >>  arch/x86/kernel/cpu/resctrl/internal.h |    1 +
+> > > >>  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   54
+> > +++++++++++++++++++++++++++++++-
+> > > >>  2 files changed, 54 insertions(+), 1 deletion(-)
+> > > >>
+> > > >> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h
+> > > >> b/arch/x86/kernel/cpu/resctrl/internal.h
+> > > >> index 1eac07ebc31b..855109abb480 100644
+> > > >> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+> > > >> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+> > > >> @@ -288,6 +288,7 @@ struct rdtgroup {
+> > > >>  #define RFTYPE_TOP			BIT(4)
+> > > >>  #define RFTYPE_RES_CACHE		BIT(5)
+> > > >>  #define RFTYPE_RES_MB			BIT(6)
+> > > >> +#define RFTYPE_DEBUG			BIT(7)
+> > > >>  #define RFTYPE_CTRL_INFO		(RFTYPE_INFO |
+> > RFTYPE_CTRL)
+> > > >>  #define RFTYPE_MON_INFO			(RFTYPE_INFO |
+> > RFTYPE_MON)
+> > > >>  #define RFTYPE_TOP_INFO			(RFTYPE_INFO |
+> > RFTYPE_TOP)
+> > > >> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > >> b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > >> index 15ded0dd5b09..1ec4359348c2 100644
+> > > >> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > >> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > >> @@ -1880,6 +1880,7 @@ static struct rftype res_common_files[] = {
+> > > >>  		.mode		= 0444,
+> > > >>  		.kf_ops		= &rdtgroup_kf_single_ops,
+> > > >>  		.seq_show	= rdtgroup_rmid_show,
+> > > >> +		.fflags		= RFTYPE_BASE | RFTYPE_DEBUG,
+> > > >>  	},
+> > > >>  	{
+> > > >>  		.name		= "schemata",
+> > > >> @@ -1909,6 +1910,7 @@ static struct rftype res_common_files[] = {
+> > > >>  		.mode		= 0444,
+> > > >>  		.kf_ops		= &rdtgroup_kf_single_ops,
+> > > >>  		.seq_show	= rdtgroup_closid_show,
+> > > >> +		.fflags		= RFTYPE_CTRL_BASE | RFTYPE_DEBUG,
+> > > >>  	},
+> > > >>
+> > > >>  };
+> > > >> @@ -2420,6 +2422,49 @@ static int mkdir_mondata_all(struct
+> > kernfs_node *parent_kn,
+> > > >>  			     struct rdtgroup *prgrp,
+> > > >>  			     struct kernfs_node **mon_data_kn);
+> > > >>
+> > > >> +static void resctrl_add_debug_files(void) {
+> > > >> +	struct rftype *rfts, *rft;
+> > > >> +	int len;
+> > > >> +
+> > > >> +	rfts = res_common_files;
+> > > >> +	len = ARRAY_SIZE(res_common_files);
+> > > >> +
+> > > >> +	lockdep_assert_held(&rdtgroup_mutex);
+> > > >> +
+> > > >> +	for (rft = rfts; rft < rfts + len; rft++) {
+> > > >> +		if (rft->fflags & RFTYPE_DEBUG) {
+> > > >> +			rft->fflags &= ~RFTYPE_DEBUG;
+> > > >
+> > > > I don't fully follow why you need to play with ->fflags like this.
+> > > >
+> > > > Is it for the ->fflags test in rdtgroup_add_files()? Can't you just
+> > > > do some extra masking there for RFTYPE_DEBUG based on resctrl_debug
+> > > > which you already keep?
+> > >
+> > > Actually with this change, I can remove all these tricks here.
+> > > I don't have to change the check "if (rft->fflags && ((fflags &
+> > > rft->fflags) == rft->fflags)) {"
+> > >
+> > > diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > index 1ec4359348c2..b560c44817bb 100644
+> > > --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > > @@ -1925,6 +1925,9 @@ static int rdtgroup_add_files(struct kernfs_node
+> > > *kn, unsigned long fflags)
+> > >
+> > >         lockdep_assert_held(&rdtgroup_mutex);
+> > >
+> > > +       if (resctrl_debug)
+> > > +               fflags |= RFTYPE_DEBUG;
+> > 
+> > Yes, looks good.
+> > 
+> > It matches to the idea I had in my mind but doesn't require putting it 
+> > into the if condition itself.
+>
+> Without if condition?  How?  Let me know.
+
+I was referring to the if condition within the loop, not to doing it
+without some conditional (I had an (resctrl_debug ? RFTYPE_DEBUG : 0)
+construct in my mind).
+
+To remove if, it would, of course, be possible to use another static 
+file-level variable but it doesn't seem justified. I think what you 
+proposed is fine for this use and looks clean.
+
 -- 
-2.40.0
-
+ i.
+--8323329-737270251-1682331682=:2038--
