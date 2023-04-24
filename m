@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566226ED12A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D16C6ED11D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjDXPTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S231917AbjDXPPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjDXPTA (ORCPT
+        with ESMTP id S231723AbjDXPPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:19:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26B08A50;
-        Mon, 24 Apr 2023 08:18:53 -0700 (PDT)
+        Mon, 24 Apr 2023 11:15:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64AF65A7;
+        Mon, 24 Apr 2023 08:15:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A8E3625F5;
-        Mon, 24 Apr 2023 15:18:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788DCC433EF;
-        Mon, 24 Apr 2023 15:18:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF41625E8;
+        Mon, 24 Apr 2023 15:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1830C433EF;
+        Mon, 24 Apr 2023 15:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682349532;
-        bh=WNhrzb+two7LSArpEYTM4KxCfhgBU/6AXoKRPek2FD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O+0e9hekrRTYM0TjAunzdz9BezS0atWyS8DcUnKSaTQ5nSraFCAdjaltJtk6yN4nh
-         FbHL1hd6RTSuRbEIOulZtHxybTcYq6v3XYKpF6IFs+IUPFAuEG4VZgRp9nB7rTjkPG
-         Vyy7E52k158r121lPyvmfcrGZzrKrMi6GDyP21wjFxe6/sWy5k+662hJi6O4hhr8Lk
-         6Ped7sexk5PwgjuvyCjfvlcue4MTsCn/wLqWug5u6EbhTDE8XfluyYtuc3ZTH68kzy
-         sbK+Kn/vxP7sHoKmCZ4FBsTay4YhQARymw7i9ztT4Rb44YFYn6RQ/2PbXBhzDLQiPE
-         AqRn5OnfTjuzA==
-Date:   Mon, 24 Apr 2023 16:18:45 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        jsnitsel@redhat.com, robh+dt@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-3-kyarlagadda@nvidia.com>
- <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
- <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
- <ZEaWQD_QTs2usVl8@orome>
+        s=k20201202; t=1682349328;
+        bh=ehNtbOjPXKCjxTzYSbGk5qzu8/Du9Cfnuq4TM4fmjsM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e+tVp8aFRMBYnfQ1C8DZg1wjamIsoNJMnFId6uPCev1K1nrapaiPma2mk7plKMig/
+         Jz4jfwkiHTcU3XybJx8xlNLMIAMt9HHS6f7aMUzHgXnJsTrmTzpybCkION5g2AWXTt
+         qnHcwzhlCSXTrP5dz9l7rOCTZrTCrEzWhYCFBbzsIotWT18gnOva4tJfjWeX8MT5zT
+         vh8EjhdiUmSOT4l5VrxfCYDQoUU6Y+Ropcc3XP8/9trSR8TGXIcGjpyVEcT79/MEVz
+         tRgA50E2i2GVzkqzrE6zV4xkcHKwmKHW7RtTZO69EuO/06/Y4qygFLdMFt3tLZfGu3
+         jpdDu5NpJbwkA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        Rob Herring <robh@kernel.org>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        Simon Horman <horms@kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: [GIT PULL] remoteproc updates for v6.4
+Date:   Mon, 24 Apr 2023 08:19:12 -0700
+Message-Id: <20230424151912.278066-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7lPOdm6vGo8h/yZ6"
-Content-Disposition: inline
-In-Reply-To: <ZEaWQD_QTs2usVl8@orome>
-X-Cookie: A rolling disk gathers no MOS.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,36 +63,122 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---7lPOdm6vGo8h/yZ6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-> Would it make sense for you to pick up patch 2/3 as well? As far as I
-> can tell there's a build dependency on patch 1/3 because of the newly
-> added SPI_TPM_HW_FLOW symbol.
+are available in the Git repository at:
 
-I'll include it in my pull request for spi this time round so it should
-end up in -rc1, my thinking was that I was happy with the SPI bits and
-if it was in -rc1 then the TPM bits could be handled without cross tree
-issues when the review was sorted (which it is now but wasn't at the
-time).  If the SPI side doesn't make -rc1 for some reason I can pick up
-the TPM bit as well, and/or do a signed tag.
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-v6.4
 
---7lPOdm6vGo8h/yZ6
-Content-Type: application/pgp-signature; name="signature.asc"
+for you to fetch changes up to 1f6fa392a9942e4a2bd3122913baeb33e987ccd9:
 
------BEGIN PGP SIGNATURE-----
+  remoteproc: st: Use of_property_present() for testing DT property presence (2023-04-18 18:56:51 -0700)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGndQACgkQJNaLcl1U
-h9ADuAf+K3fSxfQBMYgj1jBglBFx5Ww6piOvrVw4uby6KKj9nDBve1456ikcc80Z
-hOQx1cJ3Cw191WSRTtUPX/I1xzuSEDfeks6kqK0JuaohVmQ3sGrSuo4vg3x8xiCs
-3UTACSsJ4WzHlup+63eWyToow5bigO+kXLz6k/tHUbqrtkiKbgRxjbPePVLzAcox
-dVJzpSFURHMzow92183nneyk+8FCEHeNTGTdYEnSRrtByFoqaCKwn8J1t6OhP46a
-S6whcV5g0AbnNM0eT4W44aLcQTyEnI9wxpq0uF8a4PF+0EWj/lVlayuRQItK/nqN
-D1QAtXhaCHRoCFt473q6C9cjcezxtA==
-=q1nE
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+remoteproc updates for v6.4
 
---7lPOdm6vGo8h/yZ6--
+Unnecessary type casts from the void * rproc->priv pointer is dropped
+throughout te subsystem.
+
+A kernel-doc error is corrected in the Mediatek SCPI IPI implementation.
+
+The firmware loading onto the IMX DSP remote processors is reworked to
+avoid non-32bit memory operations. A module parameter is introduced to
+assist development of firmware without communication abilities in place.
+Error paths in imx_dsp_rproc_mbox_alloc() is cleaned up.
+
+The cluster configuration handling in the TI K3 R5 driver is corrected
+and support for the single-R5 core found in the TI AM62x SoC family is
+introduced.
+
+The TI PRU driver device- to virtual-address translation is updated to
+avoid compiler warning about the unsigned device-address always being
+larger than 0.
+
+The ST remoteproc driver is transitioned to use of_property_present().
+
+Issues with kicks arriving after the STM32 remote processor has been
+shut down are mitigated by checking the processor's state before
+handling them.
+
+Support for mailbox channels for communication with the remote
+processors are added to the Xilinx R5 remoteproc driver. The naming of
+carveouts are corrected and their parsing is reworked.
+For this a couple of fixes targeting the mailbox subsystem are picked up
+here as well.
+
+Reference counting of of_nodes are corrected in the ST, STM32, RCAR and
+IMX remoteproc drivers.
+
+----------------------------------------------------------------
+Arnaud Pouliquen (2):
+      remoteproc: stm32_rproc: Add mutex protection for workqueue
+      dt-bindings: remoteproc: stm32-rproc: Typo fix
+
+Devarsh Thakkar (3):
+      remoteproc: k3-r5: Simplify cluster mode setting usage
+      dt-bindings: remoteproc: ti: Add new compatible for AM62 SoC family
+      remoteproc: k3-r5: Use separate compatible string for TI AM62x SoC family
+
+Iuliana Prodan (2):
+      remoteproc: imx_dsp_rproc: Add module parameter to ignore ready flag from remote processor
+      remoteproc: imx_dsp_rproc: Add custom memory copy implementation for i.MX DSP Cores
+
+Markus Elfring (1):
+      remoteproc: imx_dsp_rproc: Improve exception handling in imx_dsp_rproc_mbox_alloc()
+
+Mathieu Poirier (6):
+      remoteproc: stm32: Call of_node_put() on iteration error
+      remoteproc: st: Call of_node_put() on iteration error
+      remoteproc: rcar_rproc: Call of_node_put() on iteration error
+      remoteproc: imx_rproc: Call of_node_put() on iteration error
+      remoteproc: imx_dsp_rproc: Call of_node_put() on iteration error
+      remoteproc: imx_dsp_rproc: Fix kernel test robot sparse warning
+
+Rob Herring (2):
+      dt-bindings: remoteproc: Drop unneeded quotes
+      remoteproc: st: Use of_property_present() for testing DT property presence
+
+Simon Horman (1):
+      remoteproc: pru: Remove always true check positive unsigned value
+
+Tanmay Shah (5):
+      mailbox: zynqmp: Fix counts of child nodes
+      mailbox: zynqmp: Fix IPI isr handling
+      mailbox: zynqmp: Fix typo in IPI documentation
+      drivers: remoteproc: xilinx: Fix carveout names
+      remoteproc: xilinx: Add mailbox channels for rpmsg
+
+Yang Li (1):
+      remoteproc/mtk_scpi_ipi: Fix one kernel-doc comment
+
+Yu Zhe (1):
+      remoteproc: Remove unnecessary (void*) conversions
+
+ .../remoteproc/amlogic,meson-mx-ao-arc.yaml        |   4 +-
+ .../bindings/remoteproc/fsl,imx-rproc.yaml         |   4 +-
+ .../bindings/remoteproc/ingenic,vpu.yaml           |   4 +-
+ .../bindings/remoteproc/qcom,glink-edge.yaml       |   2 +-
+ .../bindings/remoteproc/qcom,smd-edge.yaml         |   2 +-
+ .../bindings/remoteproc/renesas,rcar-rproc.yaml    |   4 +-
+ .../bindings/remoteproc/st,stm32-rproc.yaml        |  18 +-
+ .../bindings/remoteproc/ti,k3-r5f-rproc.yaml       |  76 +++--
+ drivers/mailbox/zynqmp-ipi-mailbox.c               |  13 +-
+ drivers/remoteproc/da8xx_remoteproc.c              |  12 +-
+ drivers/remoteproc/imx_dsp_rproc.c                 | 249 ++++++++++++++--
+ drivers/remoteproc/imx_rproc.c                     |   7 +-
+ drivers/remoteproc/mtk_scp.c                       |  12 +-
+ drivers/remoteproc/mtk_scp_ipi.c                   |   2 +-
+ drivers/remoteproc/pru_rproc.c                     |   5 +-
+ drivers/remoteproc/qcom_q6v5_adsp.c                |  10 +-
+ drivers/remoteproc/qcom_q6v5_mss.c                 |   8 +-
+ drivers/remoteproc/qcom_q6v5_pas.c                 |  14 +-
+ drivers/remoteproc/qcom_wcnss.c                    |  10 +-
+ drivers/remoteproc/rcar_rproc.c                    |   9 +-
+ drivers/remoteproc/st_remoteproc.c                 |   7 +-
+ drivers/remoteproc/stm32_rproc.c                   |  14 +-
+ drivers/remoteproc/ti_k3_r5_remoteproc.c           | 127 +++++---
+ drivers/remoteproc/xlnx_r5_remoteproc.c            | 324 ++++++++++++++++-----
+ include/linux/mailbox/zynqmp-ipi-message.h         |   2 +-
+ 25 files changed, 710 insertions(+), 229 deletions(-)
