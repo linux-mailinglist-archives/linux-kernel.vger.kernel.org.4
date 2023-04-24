@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA996ECB77
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A596ECB7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjDXLkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S231695AbjDXLlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDXLkh (ORCPT
+        with ESMTP id S231405AbjDXLlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:40:37 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B13A8C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:40:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vgu6NWh_1682336430;
-Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vgu6NWh_1682336430)
-          by smtp.aliyun-inc.com;
-          Mon, 24 Apr 2023 19:40:31 +0800
-Message-ID: <8d4059e3-2e6d-3f0c-2881-13b9bd07aa6c@linux.alibaba.com>
-Date:   Mon, 24 Apr 2023 19:40:30 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
- <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
- <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
- <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
- <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Mon, 24 Apr 2023 07:41:01 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECB83A8C;
+        Mon, 24 Apr 2023 04:40:55 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-959a3e2dc72so197505366b.2;
+        Mon, 24 Apr 2023 04:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682336453; x=1684928453;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Atxqe0IIK6VDLPs1BwgFpTOFx3cvy6f167JM1AHQk1Y=;
+        b=rqR0Aznkpa/KhuYo7EPT5kkIe8+ouuxZJ9sHP4Qho9DYWp83KM6BlUpNAnn0xSGLIo
+         ZFVgRHM6edU8MKhCgxxayxrDx5z7ZXNEcV5POFrJmPqOxzDgrG682DZ/ooLUjTJgqcSl
+         SzIE183YMcanum737awhw51qB+Co0uWiRBMs2e8j/YldO2S7gwzBC8wKYptf02p0y5jg
+         kSO7SjXB6h+RAHwXHci9NHdgrdwZdOtEUZaP8AWEYGsXYxJd8Qml/TsX1vpUfSV5ejM1
+         4k/Pxlt1hskBtIrYsBYKUMXL5GIodI7MJCJuzU41DiBP/l1sVmqQgSRo/ysdB5P+YFaa
+         ynhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682336453; x=1684928453;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Atxqe0IIK6VDLPs1BwgFpTOFx3cvy6f167JM1AHQk1Y=;
+        b=HvVFyB4IVRnFukspLClR1EqpjRnmK7oR0EXF+k3fvnr1n+iiHFzEM3fgXSc7TFOU8b
+         kdHNai8YGtN7oE+gtrsQFP0YrsYKPOFhgbSX1K4OQQtyHSxb9ZLoCQj6PC6G4yjse5YO
+         wqhQTHmyNQVxfgxohZsSzVI5Iy7O+XfQeqHj2z2/hyi2AXOPp3c1qK2cK9nn5aNwMHq5
+         EJDtxFNMUQtJtPCyfIRSm5QHlM/0MxQeIy5+WKBprSdejQpJ0oUAlAVThCgZA8VGYbqJ
+         wuojjrc1Xyo7eWMqJJGZ+9jHavV8QRH1AV14a38/lyOhbySy0NqjusTnr7PvXMW3tF1f
+         PD7w==
+X-Gm-Message-State: AAQBX9fr7cHoct82UuAKVG3TER8Xus/nWuE3FIbaidNbTTcfuUOkN1GR
+        X0b0thfhWShrSadS5vx+Hf1IVQemhxc=
+X-Google-Smtp-Source: AKy350aX/xBxpt1PnTgQ8kFjllzm6KAbnrCFnpuubj37N4v9I3qsOO7RD9Jp4Yeguir8tzDIEGhL1w==
+X-Received: by 2002:a17:906:cb94:b0:94a:826c:df57 with SMTP id mf20-20020a170906cb9400b0094a826cdf57mr8242043ejb.39.1682336453548;
+        Mon, 24 Apr 2023 04:40:53 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:d8ac:5455:8f1f:51ef])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170906670800b0094f257e3e05sm5415705ejp.168.2023.04.24.04.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 04:40:53 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Sasha Finkelstein <7d578vix8hzw@opayq.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        asahi@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust file entry for ARM/APPLE MACHINE SUPPORT
+Date:   Mon, 24 Apr 2023 13:40:43 +0200
+Message-Id: <20230424114043.22475-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,99 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit de614ac31955 ("MAINTAINERS: Add entries for Apple PWM driver") adds
+an entry for Documentation/devicetree/bindings/pwm/pwm-apple.yaml, but
+commit 87a3a3929c71 ("dt-bindings: pwm: Add Apple PWM controller") from
+the same patch series actually adds the devicetree binding file with the
+name apple,s5l-fpwm.yaml.
 
+Adjust the file entry to the file actually added.
 
-On 4/24/2023 7:34 PM, Michal Hocko wrote:
-> On Mon 24-04-23 19:20:43, Baolin Wang wrote:
->>
->>
->> On 4/24/2023 5:54 PM, Michal Hocko wrote:
->>> On Sun 23-04-23 18:59:11, Baolin Wang wrote:
->>>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
->>>> checks whether the given zone contains holes, and uses pfn_to_online_page()
->>>> to validate if the start pfn is online and valid, as well as using pfn_valid()
->>>> to validate the end pfn.
->>>>
->>>> However, the __pageblock_pfn_to_page() function may return non-NULL even
->>>> if the end pfn of a pageblock is in a memory hole in some situations. For
->>>> example, if the pageblock order is MAX_ORDER, which will fall into 2
->>>> sub-sections, and the end pfn of the pageblock may be hole even though
->>>> the start pfn is online and valid.
->>>>
->>>> This did not break anything until now, but the zone continuous is fragile
->>>> in this possible scenario. So as previous discussion[1], it is better to
->>>> add some comments to explain this possible issue in case there are some
->>>> future pfn walkers that rely on this.
->>>>
->>>> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
->>>
->>> Do I remember correctly you've had a specific configuration that would
->>> trigger this case?
->>
->> Yes, I provided an example in previous thread [2] so show the
->> __pageblock_pfn_to_page() is fragile in some cases.
->>
->> [2] https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
-> 
-> Please make it a part of the changelog.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sure.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 82bea269e242..a430ea8018ff 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1961,7 +1961,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+ F:	Documentation/devicetree/bindings/power/apple*
+-F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
++F:	Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+ F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+ F:	arch/arm64/boot/dts/apple/
+ F:	drivers/bluetooth/hci_bcm4377.c
+-- 
+2.17.1
 
->   
->>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> ---
->>>> Changes from v1:
->>>>    - Update the comments per Ying and Mike, thanks.
->>>> ---
->>>>    mm/page_alloc.c | 7 +++++++
->>>>    1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>> index 6457b64fe562..9756d66f471c 100644
->>>> --- a/mm/page_alloc.c
->>>> +++ b/mm/page_alloc.c
->>>> @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
->>>>     * interleaving within a single pageblock. It is therefore sufficient to check
->>>>     * the first and last page of a pageblock and avoid checking each individual
->>>>     * page in a pageblock.
->>>> + *
->>>> + * Note: the function may return non-NULL even if the end pfn of a pageblock
->>>> + * is in a memory hole in some situations. For example, if the pageblock
->>>> + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
->>>> + * of the pageblock may be hole even though the start pfn is online and valid.
->>>> + * This did not break anything until now, but be careful about this possible
->>>> + * issue when checking whether all pfns of a pageblock are valid.
->>>
->>> It is not really clear what you should be doing (other than to be
->>> careful which is not helpful much TBH) when you encounter this
->>> situation. If the reality changes and this would break in the future
->>> what would breakage look like? What should be done about that?
->>
->> That depends on what the future pfn walkers do, which may access some hole
->> memory with zero-init page frame. For example, if checking the
->> __PageMovable() for a zero-init page frame, that will crash the system. But
->> I can not list all the possible cases.
->>
->> So how about below words?
->>
->>   * Note: the function may return non-NULL even if the end pfn of a pageblock
->>   * is in a memory hole in some situations. For example, if the pageblock
->>   * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
->>   * of the pageblock may be hole even though the start pfn is online and
->> valid.
->>   * This did not break anything until now, but be careful about this possible
->>   * issue when checking whether all pfns of a pageblock are valid, that may
->>   * lead to accessing empty page frame, and the worst case can crash the
->> system.
->>   * So you should use pfn_to_onlie_page() instead of pfn_valid() to valid the
->>   * pfns in a pageblock if such case happens.
-> 
-> Does that mean that struct page is not initialized and PagePoisoned will
-> trigger or it is just zero-prefilled?
-
-In the example I provided[2], these page frames of the hole memory are 
-zero-prefilled.
-
-[2] 
-https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
