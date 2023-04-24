@@ -2,172 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02516ED197
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357D76ED1B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjDXPl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S231868AbjDXPsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjDXPlY (ORCPT
+        with ESMTP id S231779AbjDXPsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:41:24 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ECE1FC8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:41:23 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OFc7BU006466;
-        Mon, 24 Apr 2023 15:40:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=U0CtoThiXz2wxMy2XF0vQyYLjU+i6XI3Wmus8K9U950=;
- b=D3LbjG/boL5qxTiGXgHaiGjIXItHIxTMmJmzDgs1RTwY8nP3cAxXgo+C9O+Ba+hRHery
- vMIh/uyDI4TyiyMzMdvA0CEn8zAPaa/to6NTnxWiudLn2Ktj+IKpekGefxuhPvuR1gvE
- XYDqJI1yOVjBMYbhnFyU+dQT/94qhP3dt+4/wgNGFrPhMTEdVPGdWb73FxBuh8vsoLbt
- JNw+WFQwvCKuGS9XFot42fMKadlMLHn0jhw3zUADj6PT8gY8rBZg3UTaZrFzNGTIMN6a
- oofFZARGBEZp/rkg4wcVWqFwYAuGhiWrYmcm0W+2TWk7yR975mo7k92Qof3Vg5O//phw 3Q== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q44shbt6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 15:40:57 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33ODwbvJ013941;
-        Mon, 24 Apr 2023 15:40:35 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3q477710j2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 15:40:35 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33OFeVUQ38076960
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Apr 2023 15:40:32 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0A392004E;
-        Mon, 24 Apr 2023 15:40:31 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8FD1920043;
-        Mon, 24 Apr 2023 15:40:27 +0000 (GMT)
-Received: from tarunpc (unknown [9.43.70.159])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 24 Apr 2023 15:40:27 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        muchun.song@linux.dev, aneesh.kumar@linux.ibm.com,
-        sidhartha.kumar@oracle.com, gerald.schaefer@linux.ibm.com,
-        linux-kernel@vger.kernel.org, jaypatel@linux.ibm.com
-Subject: Re: [PATCH] mm/folio: Avoid special handling for order value 0 in
- folio_set_order
-In-Reply-To: <20230418185608.GA4907@monkey>
-References: <20230414194832.973194-1-tsahu@linux.ibm.com>
- <ZDmzyag88pO1Kdk8@casper.infradead.org> <20230418185608.GA4907@monkey>
-Date:   Mon, 24 Apr 2023 21:10:23 +0530
-Message-ID: <87354p5lw8.fsf@linux.ibm.com>
+        Mon, 24 Apr 2023 11:48:37 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD7183E6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:48:35 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-760ed95b9e6so100295639f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682351314; x=1684943314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hxcjgeLi5mR/+Rnc6mrQlDv9TmBqIx7WXWMzAgilAKE=;
+        b=GrilttQIBtixqe5NQCftFI28cpKq89pHISF0NLxKcDgwY0XBw99bzQjkJW49DzkUrJ
+         5fShbW47Ce7KY5A9oJvbnITjc6ZfCiLOGCzC2rlrHkzxDqC2XyWzxEWGnYuISNkM2XES
+         RpfeY1AnW+ysoweFBeek5JD/O+twCi29z3H/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682351314; x=1684943314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hxcjgeLi5mR/+Rnc6mrQlDv9TmBqIx7WXWMzAgilAKE=;
+        b=a8MO5oNfHdJ4aM1HepIB6v/Ptqt9nvJqXwGGhicKJxlBVZiuuFowKV7y7iDuxcOlsE
+         Gl61ZE6VjvSLKbjwYpp1LZf3cKpMjYGNd/xohR6LsysroorXpRI50Yg5KWiCfe6/trig
+         Nhmqol19fZPV76ig/cindBPqnwGhqq6xgRZJSa0Y0rJvwOVrOdDGKNgkx5BMyGszzxhp
+         TBNTVG4EfLfabme1Lz71ljyr5fEY6babynevWEowioMBuEO2M2e+aAUHIrh0n+sKHTHo
+         +M6/H+n6jlJuq56/oJWeHS1b2cZee6Qtu8PC56/mhbsjyKCzQ8QYa//CrW1YBoqfQRBs
+         XD8g==
+X-Gm-Message-State: AAQBX9c4VHsKQLUXMLJHsP+7xCQXv7doxgkYYLoQi5l24rI//NO3dfJs
+        enhYNUA15DygVfRjSuLWQqqwtXWluWvdAo8NPSA=
+X-Google-Smtp-Source: AKy350Zm9osI5zeEpTrgLqTH2iVLm20qTOTxJnSuf3EjnKONj4TZcDnPm/GUSThvz+I57LmKLFnsJQ==
+X-Received: by 2002:a6b:db0a:0:b0:74c:b348:738 with SMTP id t10-20020a6bdb0a000000b0074cb3480738mr6201446ioc.11.1682351314543;
+        Mon, 24 Apr 2023 08:48:34 -0700 (PDT)
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com. [209.85.166.182])
+        by smtp.gmail.com with ESMTPSA id r23-20020a5d96d7000000b007079249a9d1sm3339789iol.34.2023.04.24.08.48.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 08:48:34 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-328cb023b1dso1064545ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:48:34 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1606:b0:315:8e3a:f546 with SMTP id
+ t6-20020a056e02160600b003158e3af546mr480218ilu.6.1682350901412; Mon, 24 Apr
+ 2023 08:41:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: RNBNXkbhs_OfGn5MUcNJ73E3u2q0944m
-X-Proofpoint-ORIG-GUID: RNBNXkbhs_OfGn5MUcNJ73E3u2q0944m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_09,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 adultscore=0
- mlxscore=0 malwarescore=0 impostorscore=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304240140
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230421155255.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
+ <20230424125355.GA4054@aspen.lan>
+In-Reply-To: <20230424125355.GA4054@aspen.lan>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 24 Apr 2023 08:41:28 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W2f37XUSWgSrr9AjGZ5WLBm-+6EkGx6YiOEPDsyYQn=w@mail.gmail.com>
+Message-ID: <CAD=FV=W2f37XUSWgSrr9AjGZ5WLBm-+6EkGx6YiOEPDsyYQn=w@mail.gmail.com>
+Subject: Re: [PATCH] hardlockup: detect hard lockups using secondary (buddy) cpus
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        Marc Zyngier <maz@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Will Deacon <will@kernel.org>, ito-yuichi@fujitsu.com,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Colin Cross <ccross@android.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexander Potapenko <glider@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ingo Molnar <mingo@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Marco Elver <elver@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-Hi Mike,
-
-
-Mike Kravetz <mike.kravetz@oracle.com> writes:
-
-> On 04/14/23 21:12, Matthew Wilcox wrote:
->> On Sat, Apr 15, 2023 at 01:18:32AM +0530, Tarun Sahu wrote:
->> > folio_set_order(folio, 0); which is an abuse of folio_set_order as 0-order
->> > folio does not have any tail page to set order.
->> 
->> I think you're missing the point of how folio_set_order() is used.
->> When splitting a large folio, we need to zero out the folio_nr_pages
->> in the tail, so it does have a tail page, and that tail page needs to
->> be zeroed.  We even assert that there is a tail page:
->> 
->>         if (WARN_ON_ONCE(!folio_test_large(folio)))
->>                 return;
->> 
->> Or maybe you need to explain yourself better.
->> 
->> > folio->_folio_nr_pages is
->> > set to 0 for order 0 in folio_set_order. It is required because
->> > _folio_nr_pages overlapped with page->mapping and leaving it non zero
->> > caused "bad page" error while freeing gigantic hugepages. This was fixed in
->> > Commit ba9c1201beaa ("mm/hugetlb: clear compound_nr before freeing gigantic
->> > pages"). Also commit a01f43901cfb ("hugetlb: be sure to free demoted CMA
->> > pages to CMA") now explicitly clear page->mapping and hence we won't see
->> > the bad page error even if _folio_nr_pages remains unset. Also the order 0
->> > folios are not supposed to call folio_set_order, So now we can get rid of
->> > folio_set_order(folio, 0) from hugetlb code path to clear the confusion.
->> 
->> ... this is all very confusing.
->> 
->> > The patch also moves _folio_set_head and folio_set_order calls in
->> > __prep_compound_gigantic_folio() such that we avoid clearing them in the
->> > error path.
->> 
->> But don't we need those bits set while we operate on the folio to set it
->> up?  It makes me nervous if we don't have those bits set because we can
->> end up with speculative references that point to a head page while that
->> page is not marked as a head page.  It may not be a problem, but I want
->> to see some air-tight analysis of that.
+On Mon, Apr 24, 2023 at 5:54=E2=80=AFAM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
 >
-> I am fairly certain we are 'safe'.  Here is code before setting up the
-> pointer to the head page.
+> On Fri, Apr 21, 2023 at 03:53:30PM -0700, Douglas Anderson wrote:
+> > From: Colin Cross <ccross@android.com>
+> >
+> > Implement a hardlockup detector that can be enabled on SMP systems
+> > that don't have an arch provided one or one implemented atop perf by
+> > using interrupts on other cpus. Each cpu will use its softlockup
+> > hrtimer to check that the next cpu is processing hrtimer interrupts by
+> > verifying that a counter is increasing.
+> >
+> > NOTE: unlike the other hard lockup detectors, the buddy one can't
+> > easily provide a backtrace on the CPU that locked up. It relies on
+> > some other mechanism in the system to get information about the locked
+> > up CPUs. This could be support for NMI backtraces like [1], it could
+> > be a mechanism for printing the PC of locked CPUs like [2], or it
+> > could be something else.
+> >
+> > This style of hardlockup detector originated in some downstream
+> > Android trees and has been rebased on / carried in ChromeOS trees for
+> > quite a long time for use on arm and arm64 boards. Historically on
+> > these boards we've leveraged mechanism [2] to get information about
+> > hung CPUs, but we could move to [1].
 >
-> 		 * In the case of demote, the ref count will be zero.
-> 		 */
-> 		if (!demote) {
-> 			if (!page_ref_freeze(p, 1)) {
-> 				pr_warn("HugeTLB page can not be used due to unexpected inflated ref count\n");
-> 				goto out_error;
-> 			}
-> 		} else {
-> 			VM_BUG_ON_PAGE(page_count(p), p);
-> 		}
-> 		if (i != 0)
-> 			set_compound_head(p, &folio->page);
->
-> So, before setting the pointer to head page ref count will be zero.
->
-> I 'think' it would actually be better to move the calls to _folio_set_head and
-> folio_set_order in __prep_compound_gigantic_folio() as suggested here.  Why?
-> In the current code, the ref count on the 'head page' is still 1 (or more)
-> while those calls are made.  So, someone could take a speculative ref on the
-> page BEFORE the tail pages are set up.
->
+> On the Arm platforms is this code able to leverage the existing
+> infrastructure to extract status from stuck CPUs:
+> https://docs.kernel.org/trace/coresight/coresight-cpu-debug.html
 
-Thanks, for confirming the correctness of moving these calls. Also I
-didn't look at it this way while moving them. Thanks for the comment.
-I will update the commit msg and send the v2.
+Yup! I wasn't explicit about this, but that's where you end up if you
+follow the whole bug tracker item that was linked as [2].
+Specifically, we used to have downstream patches in the ChromeOS that
+just reached into the coresight range from a SoC specific driver and
+printed out the CPU_DBGPCSR. When Brian was uprevving rk3399
+Chromebooks he found that the equivalent functionality had made it
+upstream in a generic way through the coresight framework. Brian
+confirmed it was working on rk3399 and made all of the device tree
+changes needed to get it all hooked up, so (at least for that SoC) it
+should work on that SoC.
 
-~Tarun
-
-> TBH, I do not have much of an opinion about potential confusion surrounding
-> folio_set_compound_order(folio, 0).  IIUC, hugetlb gigantic page setup is the
-> only place outside the page allocation code that sets up compound pages/large
-> folios.  So, it is going to be a bit 'special'.  As mentioned,  when this was
-> originally discussed I suggested folio_clear_order().  I would be happy with
-> either.
-
-
-> -- 
-> Mike Kravetz
+[2] https://issuetracker.google.com/172213129
