@@ -2,133 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0CF6ED517
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A031B6ED521
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjDXTIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 15:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S232561AbjDXTML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 15:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjDXTIl (ORCPT
+        with ESMTP id S232525AbjDXTMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:08:41 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58A8134;
-        Mon, 24 Apr 2023 12:08:39 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aebe8.dynamic.kabel-deutschland.de [95.90.235.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 31FC161E4052B;
-        Mon, 24 Apr 2023 21:08:38 +0200 (CEST)
-Message-ID: <4c498ee9-9b8f-425c-2749-d92fb081befc@molgen.mpg.de>
-Date:   Mon, 24 Apr 2023 21:08:37 +0200
+        Mon, 24 Apr 2023 15:12:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB216591;
+        Mon, 24 Apr 2023 12:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682363523; x=1713899523;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yXmB4O56FdS7HN2yEs1rka8M14EJ9vI2hHwXGarRAMA=;
+  b=dJPSfhgNKx0lUacFOh0OZeoUVk/iXWZfaPfofkmQwa2onn08GQaow2XY
+   qH20dzld0W0H40d4TnPb3qZ1xmsxv2potKIcIngPNFSaHeeTmUIMjpFsS
+   JSItJb3sCOwjnfikKLn4f6t6dTFQ/ikA1PEqwnKPuoyLcvcnZk0/5x413
+   Le3gBho5xGHGk2DgrarwQWt53pyfz/E050b5Uea9BlRzd39hSzRpV7WDb
+   yB2WgANvsZOSOcfFwCg2djSmGodILCX0yceSuB6AYpKmO5P9xYybKcTBg
+   GIrf2G+pSedgSp4Cw58EobAOBPwF/Hj2CJV63uPUY8idrYlFiNlezSVBW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345291579"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="345291579"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 12:12:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="939456108"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="939456108"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Apr 2023 12:11:59 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pr1bS-000ibk-0u;
+        Mon, 24 Apr 2023 19:11:58 +0000
+Date:   Tue, 25 Apr 2023 03:11:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org,
+        alex.williamson@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, dmy@semihalf.com, tn@semihalf.com,
+        dbehr@google.com, dbehr@chromium.org, upstream@semihalf.com,
+        dtor@google.com, jgg@ziepe.ca, kevin.tian@intel.com,
+        cohuck@redhat.com, abhsahu@nvidia.com, yishaih@nvidia.com,
+        yi.l.liu@intel.com, kvm@vger.kernel.org, libvir-list@redhat.com,
+        Grzegorz Jaszczyk <jaz@semihalf.com>
+Subject: Re: [PATCH v2] vfio/pci: Propagate ACPI notifications to user-space
+ via eventfd
+Message-ID: <202304250252.8MirvFb0-lkp@intel.com>
+References: <20230424162748.2711945-1-jaz@semihalf.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Intel-wired-lan] [PATCH v1 1/1] igc: enable multiple TXSTMP
- registers reporting TX timestamp.
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     xiaoyan.gong@intel.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        jesse.brandeburg@intel.com, edumazet@google.com,
-        anthony.l.nguyen@intel.com, intel-wired-lan@lists.osuosl.org,
-        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net
-References: <20230423075312.544244-1-xiaoyan.gong@intel.com>
- <b6a13b7f-b140-114b-781f-16299ec3379c@molgen.mpg.de>
-In-Reply-To: <b6a13b7f-b140-114b-781f-16299ec3379c@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424162748.2711945-1-jaz@semihalf.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resent with corrected address linux-kernel@ from original mail]
+Hi Grzegorz,
 
-Am 24.04.23 um 21:01 schrieb Paul Menzel:
-> Dear  Xiao Yan,
-> 
-> 
-> Am 23.04.23 um 09:53 schrieb gongxiao-intel:
-> 
-> Your name is incorrectly configured. Please do (please correct the 
-> spelling):
-> 
->      $ git config --global user.name "Xiao Yan Gong"
->      $ git commit --amend -s --author="Xiao Yan Gong <xiaoyan.gong@intel.com>"
-> 
-> Also, please remove the dot/period from the end of the commit message 
-> summary.
-> 
->> The HW TX timestamps created by the NIC via socket options can be
->> requested using the current network timestamps generation capability of
->> SOF_TIMESTAMPING_TX_HARDWARE. The most common users of this socket flag
->> is PTP, however other packet applications that require tx timestamps might
->> also ask for it.
->>
->> The problem is that, when there is a lot of traffic, there is a high chance
->> that the timestamps for a PTP packet will be lost if both PTP and Non-PTP
-> 
-> non-PTP
-> 
->> packets use the same SOF_TIMESTAMPING_TX_HARDWARE causing the tx timeout.
-> 
-> Is Linux logging this? If so, please paste such a message.
-> 
->> The root cause of this problem is that igc only use one TXSTMP 
->> register to
-> 
-> use*s*
-> 
->> report TX timestamp. Such implementation intensify the race of TX 
->> timestamp
-> 
-> intensif*ies*
-> 
->> query from multiple sockets.
->>
->> However, Intel i225/i226 controller has 4 TXSTMP registers. This patch fully
->> utilizes 4 TXSTMP registers to reduce the race of TX timestamp query.
->>
->> This patch dedicates TXSTMP register 0 to all PTP packets. In most case, only
->> one PTP sync process will run on a network port. So, one TXSTMP register is
->> enough for PTP stream.
->>
->> For TXSTMP register 1 - 3, they are allocated to sockets round robin. 
->> And each
-> 
-> register*s*
-> 
->> socket can only occupy one register at a time. So, at least 3 sockets 
->> can requiest
-> 
-> request
-> 
->> TX timestamp simultaneously.
-> 
-> Please add Signed-off-by line.
-> 
-> How did you test your patch?
-> 
->> ---
->>   drivers/net/ethernet/intel/igc/igc.h         | 24 +++--
->>   drivers/net/ethernet/intel/igc/igc_base.h    |  2 +-
->>   drivers/net/ethernet/intel/igc/igc_defines.h |  2 +-
->>   drivers/net/ethernet/intel/igc/igc_main.c    | 55 +++++++++--
->>   drivers/net/ethernet/intel/igc/igc_ptp.c     | 97 +++++++++++++-------
->>   drivers/net/ethernet/intel/igc/igc_regs.h    |  4 +-
->>   6 files changed, 129 insertions(+), 55 deletions(-)
-> 
-> […]
-> 
-> 
-> Kind regards,
-> 
-> Paul
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on awilliam-vfio/for-linus]
+[also build test WARNING on linus/master v6.3 next-20230421]
+[cannot apply to awilliam-vfio/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Grzegorz-Jaszczyk/vfio-pci-Propagate-ACPI-notifications-to-user-space-via-eventfd/20230425-002935
+base:   https://github.com/awilliam/linux-vfio.git for-linus
+patch link:    https://lore.kernel.org/r/20230424162748.2711945-1-jaz%40semihalf.com
+patch subject: [PATCH v2] vfio/pci: Propagate ACPI notifications to user-space via eventfd
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20230425/202304250252.8MirvFb0-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/62d759059cd5e6dab70052027e1b69c5d5cdc0f2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Grzegorz-Jaszczyk/vfio-pci-Propagate-ACPI-notifications-to-user-space-via-eventfd/20230425-002935
+        git checkout 62d759059cd5e6dab70052027e1b69c5d5cdc0f2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/vfio/pci/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304250252.8MirvFb0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/vfio/pci/vfio_pci_core.c:709:6: warning: no previous prototype for 'vfio_pci_acpi_notify_close_device' [-Wmissing-prototypes]
+     709 | void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vfio/pci/vfio_pci_core.c: In function 'vfio_pci_ioctl_acpi_notify_eventfd':
+>> drivers/vfio/pci/vfio_pci_core.c:1029:18: warning: variable 'events' set but not used [-Wunused-but-set-variable]
+    1029 |         __poll_t events;
+         |                  ^~~~~~
+
+
+vim +/vfio_pci_acpi_notify_close_device +709 drivers/vfio/pci/vfio_pci_core.c
+
+   708	
+ > 709	void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev)
+   710	{
+   711		struct vfio_acpi_notification *acpi_notify = vdev->acpi_notification;
+   712		struct pci_dev *pdev = vdev->pdev;
+   713		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
+   714		struct notification_queue *entry, *entry_tmp;
+   715		u64 cnt;
+   716	
+   717		if (!acpi_notify || !acpi_notify->acpi_notify_trigger)
+   718			return;
+   719	
+   720		acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
+   721					   vfio_pci_core_acpi_notify);
+   722	
+   723		eventfd_ctx_remove_wait_queue(acpi_notify->acpi_notify_trigger,
+   724					      &acpi_notify->wait, &cnt);
+   725	
+   726		flush_work(&acpi_notify->acpi_notification_work);
+   727	
+   728		mutex_lock(&acpi_notify->notification_list_lock);
+   729		list_for_each_entry_safe(entry, entry_tmp,
+   730					 &acpi_notify->notification_list,
+   731					 notify_val_next) {
+   732			list_del(&entry->notify_val_next);
+   733			kfree(entry);
+   734		}
+   735		mutex_unlock(&acpi_notify->notification_list_lock);
+   736	
+   737		eventfd_ctx_put(acpi_notify->acpi_notify_trigger);
+   738	
+   739		kfree(acpi_notify);
+   740	
+   741		vdev->acpi_notification = NULL;
+   742	}
+   743	#else
+   744	void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev) {}
+   745	#endif /* CONFIG_ACPI */
+   746	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
