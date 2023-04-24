@@ -2,198 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323486ED846
+	by mail.lfdr.de (Postfix) with ESMTP id 87FA66ED847
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbjDXXDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S232580AbjDXXDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjDXXDp (ORCPT
+        with ESMTP id S229755AbjDXXDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:03:45 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DDB93F6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:03:44 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-54fae5e9ec7so57186897b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:03:44 -0700 (PDT)
+        Mon, 24 Apr 2023 19:03:41 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B3093E6;
+        Mon, 24 Apr 2023 16:03:38 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f18335a870so32544805e9.0;
+        Mon, 24 Apr 2023 16:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682377423; x=1684969423;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRrth/2rPlHJRD57ZDquRzBPnCdvHhyHdVMWOLBhruc=;
-        b=pwTi6X4Nah2HOzAB1Ma+a9krICtX2pHckFVINb88v52GBWheZ7jNNAHDVo8Dnp5zsZ
-         wuJDfJTRWf9GdX6CanriP+Pu1yBthY4U12nueDOM1sq+a9AYrud+7bkuee8qPbzhqQNS
-         eSF8AfTN5oMY3xh7hUEhIiu5DCIlMS8bs+rduoF78daKpkxi+ykuz0ImcKQt4grSnFyx
-         O3tIl8t1S3YoAf+71PDzbzsIStpGrhiNCSpgRfO8l1LD20TmV+aOAm4DdrhMmbHJXXtM
-         9nWRUsfqJeEv+wO+5qHzsDsCN5nmk6Mg96rCymIFnFZk+Az51S7i5tUAwERWVkxY3c1p
-         dK2A==
+        d=gmail.com; s=20221208; t=1682377416; x=1684969416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0nMjLjJ2Ejf4Gum9iKdCO8GGAzyEOx1mv4U4DYV4qE=;
+        b=EuHX7Z/vAZocfhu4Vgyz49xCCl2q92HT9jd7KAaQxRyLHLUDRyT1hLjdT5+bk3UXb0
+         RFVUJ3ICo+HD9jfBMqoShj5ln64HLYckW5U9H24eAMXOLV1BEJbCwqLJuTDq6xty7NGx
+         cGvpM8DB3RDh7Anccmdge6TYaiqUOxvmmyhgkXDnFgOqaphLKnqe1pFzz2iZPuivObec
+         d6L6S3mBEuw6NA3pUpIwzfSFUsz6ErK0neRJMH6NkT5PpgVYsoczXw7CprHX7Pi5SDm4
+         QRRzJc/IHUy0nKhvW1yl2PtKcHCvXN4Y9BysJ8M0UHc3XfJiEv7dAKHcYsyju0hSDT73
+         Tekw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682377423; x=1684969423;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xRrth/2rPlHJRD57ZDquRzBPnCdvHhyHdVMWOLBhruc=;
-        b=GPAzRyye5G03LreKhzOI/3o/QOxFKXcY4W5w1YACIJWioitWzPv1fVhF29Fz6+KWon
-         /dovTJqOiKoeDMXHqNG/o/GkkM5U1DzHPZtcyx/hwslGg/Bl8B+ye96jpLeYocbjU1+P
-         Z87/NGbgdZTguccLYB+A0AKSVzBYY7VyH96pKg11A/T5SvHUWoD/YK+0vDifgGmsm50u
-         iPtrWxzs9mEuMr3LrxCmQ+9Iciy+gNH4Pea6uKveg4feX+nDRPcstERu5D5U72oiDiV/
-         7MfNLkhf6nBmnXS3LGSacK8erCed/3+Z76hQ0X4X2DeaCMu9CJfOcnnesAX/GJdvRQEO
-         7rNQ==
-X-Gm-Message-State: AAQBX9c0VNxGpLNPv55+ZVysiw5X0CAV60Ve7GTG7TJiGjR7bdGqaaI9
-        fzX6XBVl5gYEw07VeFshZ5ZOhrDBxLObptZjdXrlqg==
-X-Google-Smtp-Source: AKy350bUIDhOyA/75JWrk6ft3Se2t9sPXfgR909GdW/OWl6txSewv5q6VCQpcF8tzR9yOS7WWg8fvn4NqZyvM03Udk8=
-X-Received: by 2002:a0d:e68b:0:b0:54f:9e41:df5a with SMTP id
- p133-20020a0de68b000000b0054f9e41df5amr9223949ywe.15.1682377423165; Mon, 24
- Apr 2023 16:03:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682377416; x=1684969416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P0nMjLjJ2Ejf4Gum9iKdCO8GGAzyEOx1mv4U4DYV4qE=;
+        b=MccwXko8v9gSHAxdQKamrW1aF9wjwMrfnXdvypNTHncwwAOwDYFFkLgCjmH3K4qnV1
+         aj75trVEtdL5E+M2uzs7WeYTaiuXajU0z8u6+tRXqEiiw6wROwKBkfdO92BnO/+VW1Fx
+         jHBHySLsrt0WNzc5jHGfMtzYAYFR5oHPXbPi7/S/J5uE3a1gcANxcZxhwGqtW0C9G857
+         7Wy4LpAdhtSXsqV300T7jGpLEELmJj0YPMxHozglBNdkf/H1qKxLj57FbwMKLFu4/Rjx
+         G6WcuO5NJjjxlnIGbkouHSdzeAhskABaM/ETTjznUgRcVYh/4WCnG4w/J7RKXBt87Jy/
+         TN9g==
+X-Gm-Message-State: AAQBX9d09d9NIRWaj6ZgrwKckY6Yif+PIsuvHeER6chBSabOm2PKdKbl
+        7sJKSXb56SPRBRN79mMbQGk=
+X-Google-Smtp-Source: AKy350bEw1oYBxZ1aQpLH2RCWXylid0vlvZ0fQa3JAem1BWm3uFPUGdsWn5khS006UqQkx6YbrWY7A==
+X-Received: by 2002:adf:f185:0:b0:2f4:cfb4:57f7 with SMTP id h5-20020adff185000000b002f4cfb457f7mr9983848wro.61.1682377416362;
+        Mon, 24 Apr 2023 16:03:36 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm11648252wrw.92.2023.04.24.16.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 16:03:35 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 00:03:34 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <4f16b1fc-6bc5-4e41-8e94-151c336fcf69@lucifer.local>
+References: <90a54439-5d30-4711-8a86-eba816782a66@lucifer.local>
+ <ZEZ117OMCi0dFXqY@nvidia.com>
+ <c8fff8b3-ead6-4f52-bf17-f2ef2e752b57@lucifer.local>
+ <ZEaGjad50lqRNTWD@nvidia.com>
+ <cd488979-d257-42b9-937f-470cc3c57f5e@lucifer.local>
+ <ZEa+L5ivNDhCmgj4@nvidia.com>
+ <cfb5afaa-8636-4c7d-a1a2-2e0a85f9f3d3@lucifer.local>
+ <ZEbQeImOiaXrydBE@nvidia.com>
+ <f00058b8-0397-465f-9db5-ddd30a5efe8e@lucifer.local>
+ <ZEcIZspUwWUzH15L@nvidia.com>
 MIME-Version: 1.0
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com> <ZEcEGJiikEC2wIVE@fedora>
-In-Reply-To: <ZEcEGJiikEC2wIVE@fedora>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 25 Apr 2023 02:03:32 +0300
-Message-ID: <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEcIZspUwWUzH15L@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023 at 01:36, Adrien Thierry <athierry@redhat.com> wrote:
+On Mon, Apr 24, 2023 at 07:53:26PM -0300, Jason Gunthorpe wrote:
+> On Mon, Apr 24, 2023 at 08:18:33PM +0100, Lorenzo Stoakes wrote:
 >
-> Hi Shazad,
+> > I think this patch suggestion has scope crept from 'incremental
+> > improvement' to 'major rework of GUP' at this point.
 >
-> On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
-> > Update relavent DT bindings for USB, add new config to the phy driver,
-> > add USB and PHY nodes to the .dtsi and enable them in the board .dts
-> > for the sa8775p-ride platform.
-> >
-> > Shazad Hussain (6):
-> >   dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
-> >   dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
-> >   dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
-> >     binding
-> >   phy: qcom-qmp: Add SA8775P USB3 UNI phy
-> >   arm64: dts: qcom: sa8775p: add USB nodes
-> >   arm64: dts: qcom: sa8775p-ride: enable USB nodes
-> >
-> >  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
-> >  .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
-> >  .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
-> >  arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
-> >  arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
-> >  drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
-> >  6 files changed, 381 insertions(+), 2 deletions(-)
-> >
-> > --
-> > 2.17.1
-> >
->
-> Thanks for posting this. I tested the series on the sa8775p, and it seems
-> initialization for the controller at a400000 sometimes fails with a
-> timeout (-110) error:
->
->     dwc3 a400000.usb: Adding to iommu group 2
->     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->     xhci-hcd xhci-hcd.0.auto: can't setup: -110
->     xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
->     xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
-
-Semi-random suggestion, but could you please try using
-clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
-
-
->     dwc3 a600000.usb: Adding to iommu group 3
->     dwc3 a800000.usb: Adding to iommu group 4
->     xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
->     xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->     xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
->     xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
->     xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
->     hub 1-0:1.0: USB hub found
->     hub 1-0:1.0: 1 port detected
->     usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->     hub 2-0:1.0: USB hub found
->     hub 2-0:1.0: 1 port detected
->
-> In this case, only usb devices for a800000 are showing:
->
->     dracut:/# ls -alh /sys/bus/usb/devices
->     total 0
->     drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->     drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
->
-> This happens approximately 1 out of 2 reboots. Here's the kernel output
-> when initialization succeeds:
->
->     dwc3 a600000.usb: Adding to iommu group 2
->     dwc3 a800000.usb: Adding to iommu group 3
->     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->     xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->     xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
->     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
->     xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
->     hub 1-0:1.0: USB hub found
->     hub 1-0:1.0: 1 port detected
->     usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->     hub 2-0:1.0: USB hub found
->     hub 2-0:1.0: 1 port detected
->     dwc3 a400000.usb: Adding to iommu group 4
->     xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->     xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
->     xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
->     xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
->     xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
->     hub 3-0:1.0: USB hub found
->     hub 3-0:1.0: 1 port detected
->
-> And the list of usb devices:
->
->     dracut:/# ls -alh /sys/bus/usb/devices
->     total 0
->     drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->     drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
->     lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
->
-> Have you also encountered this?
->
-> Best,
->
-> Adrien
+> I don't really expect to you clean up all the callers - but we are
+> trying to understand what is actually wrong here to come up with the
+> right FOLL_ names and overall strategy. Leave behind a comment, for
+> instance.
 >
 
+Right, but you are suggesting introducing a whole new GUP interface holding
+the right locks etc. which is really scope-creeping from the original
+intent.
 
--- 
-With best wishes
-Dmitry
+I'm not disagreeing that we need an interface that can return things in a
+state where the dirtying can be done correctly, I just don't think _this_
+patch series is the place for it.
+
+> I don't think anyone has really thought about the ptrace users too
+> much till now, we were all thinking about DMA use cases, it shows we
+> still have some areas that need attention.
+
+I do like to feel that my recent glut of GUP activity, even if noisy and
+frustrating, has at least helped give some insights into usage and
+semantics :)
+
+>
+> > Also surely you'd want to obtain the PTL of all mappings to a file?
+>
+> No, just one is fine. If you do the memcpy under a single PTL that
+> points at a writable copy of the page then everything is trivially
+> fine because it is very similar to what the CPU itself would do, which
+> is fine by definition..
+>
+> Jason
+
+Except you dirty a page that is mapped elsewhere that thought everything
+was cleaned and... not sure the PTLs really help you much?
+
+Anyway I feel we're digressing into the broader discussion which needs to
+be had, but not when trying to unstick the vmas series :)
+
+I am going to put forward an opt-in variant of this change that explicitly
+checks whether any VMA in the range requires dirty page tracking, if not
+failing the GUP operation.
+
+This can then form the basis of the opt-OUT variant (it'll be the same
+check code right?) and help provide a basis for the additional work that
+clearly needs to be done.
+
+It will also replace the open-coded VMA check in io_uring so has utility
+and justification just from that.
+
+If we want to be more adventerous the opt-in variant could default to on
+for FOLL_LONGTERM too, but that discussion can be had over on that patch
+series.
