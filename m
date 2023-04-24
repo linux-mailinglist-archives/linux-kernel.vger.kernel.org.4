@@ -2,223 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39916EC3D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5444E6EC3DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjDXDIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        id S230185AbjDXDQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDXDIT (ORCPT
+        with ESMTP id S229476AbjDXDP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:08:19 -0400
-Received: from out-62.mta1.migadu.com (out-62.mta1.migadu.com [95.215.58.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1E31701
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:08:15 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682305691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rktJpHCoboWkL32TRaWgx22LE+khm36G3psZAXScPBI=;
-        b=QzwSL6mKb5iqX2DMZlKgThEskXLv7mneqOQYQDyOXOYwby5fL278UNJrV8qmr2TUQ4sYRg
-        sG8j1Dc272/YBaHsUzv8fdaMM2spVEBQRbhmJtP579oW5ll+RlZSmc8tCjnQpX7mDRy8ZD
-        rAPBNrbp5pqUFkj5RbAxpC0hhfzw+ls=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     david@redhat.com, osalvador@suse.de, gregkh@linuxfoundation.org,
-        rafael@kernel.org, akpm@linux-foundation.org, willy@infradead.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] mmzone: Introduce for_each_populated_zone_pgdat()
-Date:   Mon, 24 Apr 2023 11:07:56 +0800
-Message-Id: <20230424030756.1795926-1-yajun.deng@linux.dev>
+        Sun, 23 Apr 2023 23:15:59 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ECB1AB;
+        Sun, 23 Apr 2023 20:15:57 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q4VXY1krXzSvPZ;
+        Mon, 24 Apr 2023 11:11:41 +0800 (CST)
+Received: from [10.67.110.48] (10.67.110.48) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 24 Apr
+ 2023 11:15:54 +0800
+Message-ID: <8768d2ae-99ea-9890-83d9-7e1a35521aa3@huawei.com>
+Date:   Mon, 24 Apr 2023 11:15:54 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RFC] Randomized slab caches for kmalloc()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+CC:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>,
+        Kees Cook <keescook@chromium.org>,
+        <linux-hardening@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+References: <20230315095459.186113-1-gongruiqi1@huawei.com>
+ <b7a7c5d7-d3c8-503f-7447-602ec2a18fb0@gmail.com>
+From:   Gong Ruiqi <gongruiqi1@huawei.com>
+In-Reply-To: <b7a7c5d7-d3c8-503f-7447-602ec2a18fb0@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.48]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of define an index and determining if the zone has memory,
-introduce for_each_populated_zone_pgdat() helper that can be used
-to iterate over each populated zone in pgdat, and convert the most
-obvious users to it.
+Sorry for the late reply. I just came back from my paternity leave :)
 
-This patch has no functional change.
+On 2023/04/05 20:26, Hyeonggon Yoo wrote:
+> On 3/15/2023 6:54 PM, GONG, Ruiqi wrote:
+>> When exploiting memory vulnerabilities, "heap spraying" is a common
+>> technique targeting those related to dynamic memory allocation (i.e. the
+>> "heap"), and it plays an important role in a successful exploitation.
+>> Basically, it is to overwrite the memory area of vulnerable object by
+>> triggering allocation in other subsystems or modules and therefore
+>> getting a reference to the targeted memory location. It's usable on
+>> various types of vulnerablity including use after free (UAF), heap out-
+>> of-bound write and etc.
+>>
+>> There are (at least) two reasons why the heap can be sprayed: 1) generic
+>> slab caches are shared among different subsystems and modules, and
+>> 2) dedicated slab caches could be merged with the generic ones.
+>> Currently these two factors cannot be prevented at a low cost: the first
+>> one is a widely used memory allocation mechanism, and shutting down slab
+>> merging completely via `slub_nomerge` would be overkill.
+>>
+>> To efficiently prevent heap spraying, we propose the following approach:
+>> to create multiple copies of generic slab caches that will never be
+>> merged, and random one of them will be used at allocation. The random
+>> selection is based on the location of code that calls `kmalloc()`, which
+>> means it is static at runtime (rather than dynamically determined at
+>> each time of allocation, which could be bypassed by repeatedly spraying
+>> in brute force). In this way, the vulnerable object and memory allocated
+>> in other subsystems and modules will (most probably) be on different
+>> slab caches, which prevents the object from being sprayed.
+>>
+>> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+>> ---
+> 
+> I'm not yet sure if this feature is appropriate for mainline kernel.
+> 
+> I have few questions:
+> 
+> 1) What is cost of this configuration, in terms of memory overhead, or
+> execution time? 
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- drivers/base/memory.c  |  7 ++-----
- include/linux/mmzone.h |  8 ++++++++
- mm/compaction.c        | 36 +++++++-----------------------------
- mm/page-writeback.c    |  8 ++------
- 4 files changed, 19 insertions(+), 40 deletions(-)
+I haven't done a throughout test on the runtime overhead yet, but in
+theory it won't be large because in essence what it does is to create
+some additionally `struct kmem_cache` instances and separate the
+management of slab objects from the original one cache to all these caches.
 
-diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-index b456ac213610..ad898b1c85c7 100644
---- a/drivers/base/memory.c
-+++ b/drivers/base/memory.c
-@@ -656,7 +656,6 @@ static struct zone *early_node_zone_for_memory_block(struct memory_block *mem,
- 	const unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
- 	struct zone *zone, *matching_zone = NULL;
- 	pg_data_t *pgdat = NODE_DATA(nid);
--	int i;
- 
- 	/*
- 	 * This logic only works for early memory, when the applicable zones
-@@ -666,10 +665,8 @@ static struct zone *early_node_zone_for_memory_block(struct memory_block *mem,
- 	 * zones that intersect with the memory block are actually applicable.
- 	 * No need to look at the memmap.
- 	 */
--	for (i = 0; i < MAX_NR_ZONES; i++) {
--		zone = pgdat->node_zones + i;
--		if (!populated_zone(zone))
--			continue;
-+	for_each_populated_zone_pgdat(zone, pgdat, MAX_NR_ZONES) {
-+
- 		if (!zone_intersects(zone, start_pfn, nr_pages))
- 			continue;
- 		if (!matching_zone) {
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index a4889c9d4055..48e9f01c0b5d 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1580,6 +1580,14 @@ extern struct zone *next_zone(struct zone *zone);
- 			; /* do nothing */		\
- 		else
- 
-+#define for_each_populated_zone_pgdat(zone, pgdat, max) \
-+	for (zone = pgdat->node_zones;                  \
-+	     zone < pgdat->node_zones + max;            \
-+	     zone++)                                    \
-+		if (!populated_zone(zone))		\
-+			; /* do nothing */		\
-+		else
-+
- static inline struct zone *zonelist_zone(struct zoneref *zoneref)
- {
- 	return zoneref->zone;
-diff --git a/mm/compaction.c b/mm/compaction.c
-index c8bcdea15f5f..863f10c7e510 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -375,12 +375,9 @@ static void __reset_isolation_suitable(struct zone *zone)
- 
- void reset_isolation_suitable(pg_data_t *pgdat)
- {
--	int zoneid;
-+	struct zone *zone;
- 
--	for (zoneid = 0; zoneid < MAX_NR_ZONES; zoneid++) {
--		struct zone *zone = &pgdat->node_zones[zoneid];
--		if (!populated_zone(zone))
--			continue;
-+	for_each_populated_zone_pgdat(zone, pgdat, MAX_NR_ZONES) {
- 
- 		/* Only flush if a full compaction finished recently */
- 		if (zone->compact_blockskip_flush)
-@@ -2046,14 +2043,10 @@ static unsigned int fragmentation_score_zone_weighted(struct zone *zone)
- static unsigned int fragmentation_score_node(pg_data_t *pgdat)
- {
- 	unsigned int score = 0;
--	int zoneid;
-+	struct zone *zone;
- 
--	for (zoneid = 0; zoneid < MAX_NR_ZONES; zoneid++) {
--		struct zone *zone;
-+	for_each_populated_zone_pgdat(zone, pgdat, MAX_NR_ZONES) {
- 
--		zone = &pgdat->node_zones[zoneid];
--		if (!populated_zone(zone))
--			continue;
- 		score += fragmentation_score_zone_weighted(zone);
- 	}
- 
-@@ -2681,7 +2674,6 @@ enum compact_result try_to_compact_pages(gfp_t gfp_mask, unsigned int order,
-  */
- static void proactive_compact_node(pg_data_t *pgdat)
- {
--	int zoneid;
- 	struct zone *zone;
- 	struct compact_control cc = {
- 		.order = -1,
-@@ -2692,10 +2684,7 @@ static void proactive_compact_node(pg_data_t *pgdat)
- 		.proactive_compaction = true,
- 	};
- 
--	for (zoneid = 0; zoneid < MAX_NR_ZONES; zoneid++) {
--		zone = &pgdat->node_zones[zoneid];
--		if (!populated_zone(zone))
--			continue;
-+	for_each_populated_zone_pgdat(zone, pgdat, MAX_NR_ZONES) {
- 
- 		cc.zone = zone;
- 
-@@ -2712,7 +2701,6 @@ static void proactive_compact_node(pg_data_t *pgdat)
- static void compact_node(int nid)
- {
- 	pg_data_t *pgdat = NODE_DATA(nid);
--	int zoneid;
- 	struct zone *zone;
- 	struct compact_control cc = {
- 		.order = -1,
-@@ -2722,12 +2710,7 @@ static void compact_node(int nid)
- 		.gfp_mask = GFP_KERNEL,
- 	};
- 
--
--	for (zoneid = 0; zoneid < MAX_NR_ZONES; zoneid++) {
--
--		zone = &pgdat->node_zones[zoneid];
--		if (!populated_zone(zone))
--			continue;
-+	for_each_populated_zone_pgdat(zone, pgdat, MAX_NR_ZONES) {
- 
- 		cc.zone = zone;
- 
-@@ -2823,15 +2806,10 @@ static inline bool kcompactd_work_requested(pg_data_t *pgdat)
- 
- static bool kcompactd_node_suitable(pg_data_t *pgdat)
- {
--	int zoneid;
- 	struct zone *zone;
- 	enum zone_type highest_zoneidx = pgdat->kcompactd_highest_zoneidx;
- 
--	for (zoneid = 0; zoneid <= highest_zoneidx; zoneid++) {
--		zone = &pgdat->node_zones[zoneid];
--
--		if (!populated_zone(zone))
--			continue;
-+	for_each_populated_zone_pgdat(zone, pgdat, highest_zoneidx + 1) {
- 
- 		if (compaction_suitable(zone, pgdat->kcompactd_max_order, 0,
- 					highest_zoneidx) == COMPACT_CONTINUE)
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index db7943999007..9a7bcf8fdfd5 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -272,13 +272,9 @@ static void wb_min_max_ratio(struct bdi_writeback *wb,
- static unsigned long node_dirtyable_memory(struct pglist_data *pgdat)
- {
- 	unsigned long nr_pages = 0;
--	int z;
-+	struct zone *zone;
- 
--	for (z = 0; z < MAX_NR_ZONES; z++) {
--		struct zone *zone = pgdat->node_zones + z;
--
--		if (!populated_zone(zone))
--			continue;
-+	for_each_populated_zone_pgdat(zone, pgdat, MAX_NR_ZONES) {
- 
- 		nr_pages += zone_page_state(zone, NR_FREE_PAGES);
- 	}
--- 
-2.25.1
+But indeed the test is necessary. I will do it based on the v2 patch.
 
+> 
+> 2) The actual cache depends on caller which is static at build time, not
+> runtime.
+> 
+>     What about using (caller ^ (some subsystem-wide random sequence)),
+> 
+>     which is static at runtime?
+
+Yes it could be better. As I said in my reply to Alexander, I will add a
+the per-boot random seed in v2, and I think it's basically the `(some
+subsystem-wide random sequence)` you mentioned here.
