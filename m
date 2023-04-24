@@ -2,243 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1288E6EC7CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF42A6EC7D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjDXIXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S230455AbjDXIZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXIXC (ORCPT
+        with ESMTP id S229458AbjDXIZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:23:02 -0400
-Received: from outbound-smtp44.blacknight.com (outbound-smtp44.blacknight.com [46.22.136.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CC2E4F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:22:58 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp44.blacknight.com (Postfix) with ESMTPS id E58D2F842B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:22:56 +0100 (IST)
-Received: (qmail 6814 invoked from network); 24 Apr 2023 08:22:56 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 24 Apr 2023 08:22:56 -0000
-Date:   Mon, 24 Apr 2023 09:22:54 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Douglas Anderson <dianders@chromium.org>
+        Mon, 24 Apr 2023 04:25:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A855E68
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:25:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00AAA612BE
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C91DC433EF;
+        Mon, 24 Apr 2023 08:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682324700;
+        bh=wahJLGCz8Bnc65p1CGkD+QO9uiDS+OKs7I3XjdFSkCU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gvU0XbXG6BVYRHvo7RsTVk1wlXJ3HWyeE4iueTCKb8m6t7R/ImPOubXDT0YTqzR3I
+         ta2AahQW1ApoZdcHUrW2zQmVJsh90sbxOKMsF3GateURBZ4kbFecf7tf0sUjWlBzYb
+         gE0KHdK3H80cf+XEkg8+G2l3ZrYel6kvv7UvqYvr2+Ze43yurL/RgH5ir34Ctvjyt1
+         rOj0jyjREhWZfhxEJmb8j69ml/I13xy3i8fT7JA52GU6ryIElfLMdOXnZsBblAU5+Z
+         3IasPqBUfd5oRTBMy0CaqgW+v3rDEE2FX7hlnn7oGPM+8L0g6K6rXfz363ho7p6Yyd
+         kRCQUqgqBDoRA==
+Date:   Mon, 24 Apr 2023 10:24:55 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mark Fasheh <mark@fasheh.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Ying <ying.huang@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>, linux-fsdevel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
-Message-ID: <20230424082254.gopb4y2c7d65icpl@techsingularity.net>
-References: <20230421221249.1616168-1-dianders@chromium.org>
- <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        ocfs2-devel <ocfs2-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ocfs2: reduce ioctl stack usage
+Message-ID: <20230424-handtaschen-armut-91885793ecf1@brauner>
+References: <20230417205631.1956027-1-arnd@kernel.org>
+ <20230418-fortgehen-inkubationszeit-5d3db3f0c2b1@brauner>
+ <7555eaf9-b195-5189-3928-c7292e4a0ba5@linux.alibaba.com>
+ <20230418-vielmehr-nominieren-7f2adb0f6703@brauner>
+ <d1e719ea-95bf-bb96-62db-e550cefe0a80@linux.alibaba.com>
+ <20230419142159.fd5ca2e91658fe304e317a72@linux-foundation.org>
+ <20230420-wetten-aneignen-8324959e629d@brauner>
+ <CAGe7X7mLU0JOftGVA+NHabu-9a=fuaofy+KhpvCJFnkRz5ANtQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGe7X7mLU0JOftGVA+NHabu-9a=fuaofy+KhpvCJFnkRz5ANtQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 03:12:45PM -0700, Douglas Anderson wrote:
-> Add a variant of folio_lock() that can timeout. This is useful to
-> avoid unbounded waits for the page lock in kcompactd.
+On Thu, Apr 20, 2023 at 10:01:12AM -0700, Mark Fasheh wrote:
+> On Thu, Apr 20, 2023 at 2:34 AM Christian Brauner <brauner@kernel.org> wrote:
+> > I think I might not have communicated as clearly as I should have.
+> > Simply because I naively assumed that this is unproblematic.
+> >
+> > By "we" I mean people responsible for "fs/" which now happens to also
+> > include me. So the goal of this is for patches falling under fs/ to get
+> > picked up more quickly and broadly and share the maintenance burden.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+> Did you get buy-in from other folks in 'fs/'? What other projects are
+> you carrying? Granted I'm a bit out of the loop these days but this is
+> the first I'm hearing of this.
 > 
-> Changes in v2:
-> - "Add folio_lock_timeout()" new for v2.
-> 
->  include/linux/pagemap.h | 16 ++++++++++++++
->  mm/filemap.c            | 47 +++++++++++++++++++++++++++++------------
->  2 files changed, 50 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-> index 0acb8e1fb7af..0f3ef9f79300 100644
-> --- a/include/linux/pagemap.h
-> +++ b/include/linux/pagemap.h
-> @@ -892,6 +892,7 @@ static inline bool wake_page_match(struct wait_page_queue *wait_page,
->  }
->  
->  void __folio_lock(struct folio *folio);
-> +int __folio_lock_timeout(struct folio *folio, long timeout);
->  int __folio_lock_killable(struct folio *folio);
->  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
->  				unsigned int flags);
-> @@ -952,6 +953,21 @@ static inline void folio_lock(struct folio *folio)
->  		__folio_lock(folio);
->  }
->  
-> +/**
-> + * folio_lock_timeout() - Lock this folio, with a timeout.
-> + * @folio: The folio to lock.
-> + * @timeout: The timeout in jiffies; %MAX_SCHEDULE_TIMEOUT means wait forever.
-> + *
-> + * Return: 0 upon success; -ETIMEDOUT upon failure.
-> + */
+> Andrew has a well oiled machine going, so if he's still ok carrying
+> the patches then that's where I'd like them until such time that you
+> can provide a tangible benefit.
 
-May return -EINTR?
+A patch is sent for something that falls under the fs/ directory. In
+this case fs/ocfs2/. The maintainer's of fs/ocfs2/ provide their acks.
 
-> +static inline int folio_lock_timeout(struct folio *folio, long timeout)
-> +{
-> +	might_sleep();
-> +	if (!folio_trylock(folio))
-> +		return __folio_lock_timeout(folio, timeout);
-> +	return 0;
-> +}
-> +
->  /**
->   * lock_page() - Lock the folio containing this page.
->   * @page: The page to lock.
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 2723104cc06a..c6056ec41284 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -1220,7 +1220,7 @@ static inline bool folio_trylock_flag(struct folio *folio, int bit_nr,
->  int sysctl_page_lock_unfairness = 5;
->  
->  static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
-> -		int state, enum behavior behavior)
-> +		int state, enum behavior behavior, long timeout)
->  {
->  	wait_queue_head_t *q = folio_waitqueue(folio);
->  	int unfairness = sysctl_page_lock_unfairness;
-> @@ -1229,6 +1229,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->  	bool thrashing = false;
->  	unsigned long pflags;
->  	bool in_thrashing;
-> +	int err;
->  
->  	if (bit_nr == PG_locked &&
->  	    !folio_test_uptodate(folio) && folio_test_workingset(folio)) {
-> @@ -1295,10 +1296,13 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->  		/* Loop until we've been woken or interrupted */
->  		flags = smp_load_acquire(&wait->flags);
->  		if (!(flags & WQ_FLAG_WOKEN)) {
-> +			if (!timeout)
-> +				break;
-> +
+A maintainer - In this case my sorry ass - of fs/ looks into the
+maintainer's file to make sure that someone will pick up those patches
+by looking for a tree entry under the respective fs/ocfs2/ entry.
 
-An io_schedule_timeout of 0 is valid so why the special handling? It's
-negative timeouts that cause schedule_timeout() to complain.
+There is no tree entry.
 
->  			if (signal_pending_state(state, current))
->  				break;
->  
-> -			io_schedule();
-> +			timeout = io_schedule_timeout(timeout);
->  			continue;
->  		}
->  
-> @@ -1324,10 +1328,10 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->  	}
->  
->  	/*
-> -	 * If a signal happened, this 'finish_wait()' may remove the last
-> -	 * waiter from the wait-queues, but the folio waiters bit will remain
-> -	 * set. That's ok. The next wakeup will take care of it, and trying
-> -	 * to do it here would be difficult and prone to races.
-> +	 * If a signal/timeout happened, this 'finish_wait()' may remove the
-> +	 * last waiter from the wait-queues, but the folio waiters bit will
-> +	 * remain set. That's ok. The next wakeup will take care of it, and
-> +	 * trying to do it here would be difficult and prone to races.
->  	 */
->  	finish_wait(q, wait);
->  
-> @@ -1336,6 +1340,13 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->  		psi_memstall_leave(&pflags);
->  	}
->  
-> +	/*
-> +	 * If we don't meet the success criteria below then we've got an error
-> +	 * of some sort. Differentiate between the two error cases. If there's
-> +	 * no time left it must have been a timeout.
-> +	 */
-> +	err = !timeout ? -ETIMEDOUT : -EINTR;
-> +
->  	/*
->  	 * NOTE! The wait->flags weren't stable until we've done the
->  	 * 'finish_wait()', and we could have exited the loop above due
-> @@ -1350,9 +1361,9 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->  	 * waiter, but an exclusive one requires WQ_FLAG_DONE.
->  	 */
->  	if (behavior == EXCLUSIVE)
-> -		return wait->flags & WQ_FLAG_DONE ? 0 : -EINTR;
-> +		return wait->flags & WQ_FLAG_DONE ? 0 : err;
->  
-> -	return wait->flags & WQ_FLAG_WOKEN ? 0 : -EINTR;
-> +	return wait->flags & WQ_FLAG_WOKEN ? 0 : err;
->  }
->  
->  #ifdef CONFIG_MIGRATION
-> @@ -1442,13 +1453,15 @@ void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
->  
->  void folio_wait_bit(struct folio *folio, int bit_nr)
->  {
-> -	folio_wait_bit_common(folio, bit_nr, TASK_UNINTERRUPTIBLE, SHARED);
-> +	folio_wait_bit_common(folio, bit_nr, TASK_UNINTERRUPTIBLE, SHARED,
-> +			      MAX_SCHEDULE_TIMEOUT);
->  }
->  EXPORT_SYMBOL(folio_wait_bit);
->  
->  int folio_wait_bit_killable(struct folio *folio, int bit_nr)
->  {
-> -	return folio_wait_bit_common(folio, bit_nr, TASK_KILLABLE, SHARED);
-> +	return folio_wait_bit_common(folio, bit_nr, TASK_KILLABLE, SHARED,
-> +				     MAX_SCHEDULE_TIMEOUT);
->  }
->  EXPORT_SYMBOL(folio_wait_bit_killable);
->  
-> @@ -1467,7 +1480,8 @@ EXPORT_SYMBOL(folio_wait_bit_killable);
->   */
->  static int folio_put_wait_locked(struct folio *folio, int state)
->  {
-> -	return folio_wait_bit_common(folio, PG_locked, state, DROP);
-> +	return folio_wait_bit_common(folio, PG_locked, state, DROP,
-> +				     MAX_SCHEDULE_TIMEOUT);
->  }
->  
->  /**
-> @@ -1662,17 +1676,24 @@ EXPORT_SYMBOL_GPL(page_endio);
->  void __folio_lock(struct folio *folio)
->  {
->  	folio_wait_bit_common(folio, PG_locked, TASK_UNINTERRUPTIBLE,
-> -				EXCLUSIVE);
-> +				EXCLUSIVE, MAX_SCHEDULE_TIMEOUT);
->  }
->  EXPORT_SYMBOL(__folio_lock);
->  
->  int __folio_lock_killable(struct folio *folio)
->  {
->  	return folio_wait_bit_common(folio, PG_locked, TASK_KILLABLE,
-> -					EXCLUSIVE);
-> +					EXCLUSIVE, MAX_SCHEDULE_TIMEOUT);
->  }
->  EXPORT_SYMBOL_GPL(__folio_lock_killable);
->  
-> +int __folio_lock_timeout(struct folio *folio, long timeout)
-> +{
-> +	return folio_wait_bit_common(folio, PG_locked, TASK_KILLABLE,
-> +					EXCLUSIVE, timeout);
-> +}
-> +EXPORT_SYMBOL_GPL(__folio_lock_timeout);
-> +
->  static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
->  {
->  	struct wait_queue_head *q = folio_waitqueue(folio);
-> -- 
-> 2.40.0.634.g4ca3ef3211-goog
-> 
+So the patch is picked up by a respective maintainer of fs/ to ensure
+that fixes land in mainline.
 
--- 
-Mel Gorman
-SUSE Labs
+So, if you have a tree that you think fs/ocfs2/ belongs to then please
+send a patch to add the respective tree into the maintainer's file.
+
+This is especially true when fs/ stuff surprisingly goes via mm/. I
+don't want to have to guess what tree you're going through even if it's
+been going on for a long time.
+
+There are no bad intentions here but please clarify the ocfs2 entry in
+the maintainer's file.
