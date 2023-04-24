@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34106ED79F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6FA6ED7A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbjDXWNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S232926AbjDXWOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjDXWNP (ORCPT
+        with ESMTP id S232338AbjDXWOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:13:15 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAB25B90;
-        Mon, 24 Apr 2023 15:13:15 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so4811964a12.1;
-        Mon, 24 Apr 2023 15:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682374394; x=1684966394;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z9rvKKuJVj1CnXeKwNCCdeFPzJf6ElUXCptJ/Xncu1o=;
-        b=lgW/07YTzPgxutnXZ8yZ9NDI2sbzEYZRwHOtg5AvLIGZaO42Hme6ZIPkRlXSGKXu4L
-         tSsp1nw+IYnBdrFXuEqruxS15GqiOnl2olmJwMx1T2EIizWecMs43X5AvjAQFchtsZhX
-         Uc3vILp44cAhwxN3xMRwpQPkuMRAxD4/iyKkPDuOJoClMQ6jTM41zvFrpsRbu7CCpq7N
-         OhpBgr5rEwrEdi45ul8uj517SM+wEyjtp6Llk6aV5P3GoaSo7caowbk3fDg4JIpqkJig
-         J41g5iMu/sp3yTwV3tCJI3ftaUZvtmq2t8zNs+oOr4EIKq5XmlYWq6Vx6FKKAQtPeRYT
-         qTZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682374394; x=1684966394;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z9rvKKuJVj1CnXeKwNCCdeFPzJf6ElUXCptJ/Xncu1o=;
-        b=W7WbHcYG39gsoJBVd7Om2MNmDzUc7Z0pdf4I08jT9Ob0GQ71lj3DCH+7W3vDq7jnw7
-         Rl/t4IVFKyPmCVMxYpbTrgyiK753DLQzbe3imUh4TczDC6d2dRlgw0g/MN+urs4KVpfR
-         mIIy3Bs9hraQn2G6Aq2tER02VaxFaRXDUh7t5h2GYYUaJS8rXVyQQ3DSemUif6u1l4k+
-         B0LvXHbKwH0FPG2sKb4kF05saGxwnO2L/EXfwvD4jzo+GNOu+lMAVGtnPb5dhrTEcrI6
-         XxACMKD12WoKI+0Alw8scpQ4h1OzGmiXvaeX6rEYa7VqoHEREH+xONhXvmkfBEprZaLY
-         2UHQ==
-X-Gm-Message-State: AC+VfDywYiGRg7p4YX3pHFtn5TL6CpmquUL6XsqcRfle4rGFGJ4Sj9nB
-        UhabhgL3Dqmucm5T3z5IUz5Txpi0WqZ2fw+ddUU=
-X-Google-Smtp-Source: ACHHUZ7NDc8ftZgKp3D6+xjLBB5r4jOIbLW9ESTjJBqzh7b7RRVFRxjd4F4qyRKzKqNsTXfebgAdu1O2qNo8hfgzOKg=
-X-Received: by 2002:a17:90b:a49:b0:24b:d66c:523c with SMTP id
- gw9-20020a17090b0a4900b0024bd66c523cmr1346155pjb.9.1682374394571; Mon, 24 Apr
- 2023 15:13:14 -0700 (PDT)
+        Mon, 24 Apr 2023 18:14:18 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9715B90;
+        Mon, 24 Apr 2023 15:14:17 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OM8xeW007455;
+        Mon, 24 Apr 2023 22:14:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=zz76strXfWQb3PlBPdk/q+ueBLjUV07MIrSXwDmneYQ=;
+ b=rJ/FNmkgsSH2bVBp5hTqHqXtr7+7iXU4RT0U1lC0TbgoguADm0OpwZI6W1LrRs8eC/7Z
+ q5Tk63M8yxhPg7mGjz4qypwC0reIK+IahgjJol76fXD6hkVcwAJ2LevIRDUn7fxy01RF
+ y8G7gMVePBWLxm5OQOMZU9oSGIvgbkDt9Vh61BQFJq7Svj8VGdsYG3x500HAnylVgnBc
+ y3Jo9EzOLPp8nCSUfoTG8i6e0tsmm0oQvzeVFMVKap//puTBIfDyzuyFXGdgq1+jlalP
+ lzGmVgOZnQNuvBBEELkPnROwUfKsPdn8tlRj//xS4DvvMTyBQX9+4SzCyDLa6Keursva WA== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q60sgbats-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 22:14:15 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33OIFKFq001323;
+        Mon, 24 Apr 2023 22:14:15 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3q4778d8p6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 22:14:15 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33OMEE8C14746280
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Apr 2023 22:14:14 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 86D1558057;
+        Mon, 24 Apr 2023 22:14:14 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4029658061;
+        Mon, 24 Apr 2023 22:14:14 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.153.155])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Apr 2023 22:14:14 +0000 (GMT)
+Message-ID: <a52062d55fd57032f224fef1a296b75345f4da16.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: subsystem updates for v6.4
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 24 Apr 2023 18:14:13 -0400
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7Kc_wsmhwsDJDLQ0-UPkaLkNxRFnj_lP
+X-Proofpoint-GUID: 7Kc_wsmhwsDJDLQ0-UPkaLkNxRFnj_lP
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <87cz3tylwx.fsf@mail.concordia>
-In-Reply-To: <87cz3tylwx.fsf@mail.concordia>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Tue, 25 Apr 2023 06:13:03 +0800
-Message-ID: <CAABZP2zk2kpgocnGk_on3r3awyQcVyEtBQsby=brW=ciFSCYjA@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=818 spamscore=0 clxscore=1011 impostorscore=0 malwarescore=0
+ phishscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304240200
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +82,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 6:07=E2=80=AFAM Michael Ellerman <mpe@ellerman.id.a=
-u> wrote:
->
-> Zhouyi Zhou <zhouzhouyi@gmail.com> writes:
-> > Dear PowerPC and RCU developers:
-> > During the RCU torture test on mainline (on the VM of Opensource Lab
-> > of Oregon State University), SRCU-P failed with __stack_chk_fail:
-> ...
-> > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
-> > but if there is a context-switch before c000000000226edc, a false
-> > positive will be reported.
-> >
-> > [1] http://154.220.3.115/logs/0422/configformainline.txt
->
-> Says:
->
-> CONFIG_CC_VERSION_TEXT=3D"powerpc64le-linux-gnu-gcc-10 (Ubuntu 10.4.0-4ub=
-untu1~22.04) 10.4.0"
->
-> Do you see the same issue with a newer GCC?
-I would like to try that in the newest GCC ;-), please give me about a
-day's time because I am going to compile the gcc ;-)
->
-> There's 12.2.0 here:
->   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/12=
-.2.0/
->   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/ppc64le/1=
-2.2.0/
->
-> Or if you can build in a Fedora 38 system or container, it has GCC 13.
-OK, I will try it or similar
+Hi Linus,
 
-This is a very learningful process for me, thank you all ;-)
+Just one one bug fix.  Other integrity changes are being upstreamed via
+tpmdd and lsm.
 
-Cheers
->
-> cheers
+thanks,
+
+Mimi
+
+The following changes since commit
+eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
+integrity.git tags/integrity-v6.4
+
+for you to fetch changes up to
+644f17412f5acf01a19af9d04a921937a2bc86c6:
+
+  IMA: allow/fix UML builds (2023-03-15 18:24:40 -0400)
+
+----------------------------------------------------------------
+integrity-v6.4
+
+----------------------------------------------------------------
+Randy Dunlap (1):
+      IMA: allow/fix UML builds
+
+ security/integrity/ima/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+
