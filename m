@@ -2,218 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6B86EC798
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0966EC79A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjDXIG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S231480AbjDXIHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjDXIG4 (ORCPT
+        with ESMTP id S231394AbjDXIHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:06:56 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7010E7;
-        Mon, 24 Apr 2023 01:06:52 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Q4d53291Qz4f3jHn;
-        Mon, 24 Apr 2023 16:06:47 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP1 (Coremail) with SMTP id cCh0CgC3Iy6COEZkIzs8Hg--.48872S2;
-        Mon, 24 Apr 2023 16:06:47 +0800 (CST)
-Subject: Re: [PATCH v3 00/19] Fixes, cleanups and unit test for mballoc
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230417110617.2664129-1-shikemeng@huaweicloud.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <70123070-4901-1e00-298f-80ea2df18096@huaweicloud.com>
-Date:   Mon, 24 Apr 2023 16:06:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Mon, 24 Apr 2023 04:07:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68229E4F;
+        Mon, 24 Apr 2023 01:07:13 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF3F066031C8;
+        Mon, 24 Apr 2023 09:07:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682323631;
+        bh=fk2JF4cqUutVFMf5ReNQ5Z96Nq9fCMd68NIqprhYP4I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MnGUwRkrnSGoo5I2HpQ1KCjotEMOiHWLBKexRH7q759Dy2mH4gixRn5awN7Gi/NZu
+         dD6TwzsjthF4hzHgSj2Y3IjJ6qT7th+XS4dCDBJHzFjX26vEOdpi48GcGSGQzU7GOy
+         keTScAocTMzmC7GznLLAcu+31IA5HZ+FxSkS4XFUslc1ZE6CjaHV5hdWvRWzHRcXkH
+         o3KdMzNRNiKVkICdhKOX/zTVmQZcU7DR2j0gk8riSVQde61lz+TgJYY8ytdxSQ/fGf
+         BDfVSjES2saNVdhBQKoiienboJ8tM0eDhKUvd4PSPmeqFdCXbRKaACkzWr6+GW598X
+         JxqlYseu52+lA==
+Message-ID: <da2e268a-b209-f16e-7257-336fee2aad52@collabora.com>
+Date:   Mon, 24 Apr 2023 10:07:07 +0200
 MIME-Version: 1.0
-In-Reply-To: <20230417110617.2664129-1-shikemeng@huaweicloud.com>
-Content-Type: text/plain; charset=gbk
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/1] scsi: ufs: core: Fix &hwq->cq_lock deadlock issue
+Content-Language: en-US
+To:     Alice Chao <alice.chao@mediatek.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Can Guo <quic_cang@quicinc.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, tun-yu.yu@mediatek.com,
+        eddie.huang@mediatek.com, wsd_upstream@mediatek.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230424080400.8955-1-alice.chao@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230424080400.8955-1-alice.chao@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: cCh0CgC3Iy6COEZkIzs8Hg--.48872S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3JrykJFykXr1kCrWUKw4fuFg_yoWxtFW7pr
-        sFkrn8Kr1xJr1qya93C3y3W3WxCw48A3W7GrySg348uFy3Jr92yFn7KayY9asrGr4DZFya
-        vF1UCFWrCF4v9a7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping...
+Il 24/04/23 10:03, Alice Chao ha scritto:
+> [name:lockdep&]WARNING: inconsistent lock state
+> [name:lockdep&]--------------------------------
+> [name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+> [name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
+>    ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
+> ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+> [name:lockdep&]{IN-HARDIRQ-W} state was registered at:
+>    lock_acquire+0x17c/0x33c
+>    _raw_spin_lock+0x5c/0x7c
+>    ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+>    ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
+>    __handle_irq_event_percpu+0x140/0x3ec
+>    handle_irq_event+0x50/0xd8
+>    handle_fasteoi_irq+0x148/0x2b0
+>    generic_handle_domain_irq+0x4c/0x6c
+>    gic_handle_irq+0x58/0x134
+>    call_on_irq_stack+0x40/0x74
+>    do_interrupt_handler+0x84/0xe4
+>    el1_interrupt+0x3c/0x78
+> <snip>
+> 
+> Possible unsafe locking scenario:
+>         CPU0
+>         ----
+>    lock(&hwq->cq_lock);
+>    <Interrupt>
+>      lock(&hwq->cq_lock);
+>    *** DEADLOCK ***
+> 2 locks held by kworker/u16:4/260:
+> 
+> [name:lockdep&]
+>   stack backtrace:
+> CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
+> 6.1.17-mainline-android14-2-g277223301adb #1
+> Workqueue: ufs_eh_wq_0 ufshcd_err_handler
+> 
+>   Call trace:
+>    dump_backtrace+0x10c/0x160
+>    show_stack+0x20/0x30
+>    dump_stack_lvl+0x98/0xd8
+>    dump_stack+0x20/0x60
+>    print_usage_bug+0x584/0x76c
+>    mark_lock_irq+0x488/0x510
+>    mark_lock+0x1ec/0x25c
+>    __lock_acquire+0x4d8/0xffc
+>    lock_acquire+0x17c/0x33c
+>    _raw_spin_lock+0x5c/0x7c
+>    ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+>    ufshcd_poll+0x68/0x1b0
+>    ufshcd_transfer_req_compl+0x9c/0xc8
+>    ufshcd_err_handler+0x3bc/0xea0
+>    process_one_work+0x2f4/0x7e8
+>    worker_thread+0x234/0x450
+>    kthread+0x110/0x134
+>    ret_from_fork+0x10/0x20
+> 
+> ufs_mtk_mcq_intr() could refer to
+> https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
+> 
+> When ufshcd_err_handler() is executed, CQ event interrupt can enter
+> waiting for the same lock. It could happened in upstream code path
+> ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
+> warning message will be generated when &hwq->cq_lock is used in IRQ
+> context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
+> spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
+> 
+> Fixes: ed975065c31c ("scsi: ufs: core: mcq: Add completion support in poll")
+> Reviewed-by: Can Guo <quic_cang@quicinc.com>
+> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
 
-on 4/17/2023 7:05 PM, Kemeng Shi wrote:
-> v2->v3:
-> 1. Make patches on new branch head and fix conflic on "ext4: add
-> EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated"
-> 2. Fix build warnings on "ext4: add some kunit stub for mballoc kunit
-> test" and "ext4: add first unit test for ext4_mb_new_blocks_simple in
-> mballoc"
-> 
-> There are three parts in this patchset:
-> Part1: Patch 1-7 is v2 of sent series
-> v1->v2:
-> 1. collect reviewed-by from Ojaswin. Only "ext4: add
-> EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated" needs futher
-> review. See [1] for previous comments.
-> 2. drop "ext4: fix wrong unit use in ext4_mb_new_inode_pa" which is
-> already done in [2].
-> 
-> Part2: Patch 8-17 are more fixes and cleanups to mballoc
-> Some patches in this part will be conflict with patches in part1, so
-> append new patches in this series instead of creating a new one.
-> Patch 8-11 are some random fixes and cleanups, see respective log
-> message for detail.
-> Patch 12-17 factor out codes to mark bit in group is used or free
-> which will update on disk block bitmap and group descriptor. Several
-> reasons to do this:
-> 1. pair behavior of alloc/free bits. For example,
-> ext4_mb_new_blocks_simple will update free_clusters in struct flex_groups
-> in ext4_mb_mark_bb while ext4_free_blocks_simple forgets this.
-> 2. remove repeat code to read from disk, update and write back to disk.
-> 3. reduce future unit test mocks to avoid real IO to update structure
-> on disk.
-> 
-> Part3: Patch 18-19 add one unit test for mballoc
-> Patch 18 add mocks to functions which will issue IO to disk.
-> Patch 19 add unit test for ext4_mb_new_blocks_simple in mballoc.
-> Details can be found in respective log message.
-> 
-> Before add more unit tests, there are something should be discussed:
-> 1. How to test static function in mballoc.c
-> Currently, include mballoc-test.c in mballoc.c to test static function
-> in mballoc.c from mballoc-test.c which is one way suggested in [3].
-> Not sure if there is any more elegant way to test static function without
-> touch mballoc.c.
-> 2. How to add mocks to function in mballoc.c which may issue IO to disk
-> Currently, KUNIT_STATIC_STUB_REDIRECT is added to functions as suggested
-> in kunit document [4].
-> 3. How to simulate a block bitmap.
-> Currently, a fake buffer_head with bitmap data is returned, then no
-> futher change is needed.
-> If we simulate a block bitmap with an array of data structure like:
-> struct test_bitmap {
->        unsigned int	start;
->        unsigned int	len;
-> }
-> which is suggested by Theodore in [5], then we need to add mocks to
-> function which expected bitmap from bitmap_bh->b_data, like
-> mb_find_next_bit, mb_find_next_zero_bit and maybe more.
-> 
-> Would like to hear any suggestion! Thanks!
-> 
-> [1]
-> https://lore.kernel.org/linux-ext4/ZC3MoWn2UO6p+Swp@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com/
-> [2]
-> https://lore.kernel.org/linux-ext4/9b35f3955a1d7b66bbd713eca1e63026e01f78c1.1679731817.git.ojaswin@linux.ibm.com
-> [3]
-> https://docs.kernel.org/dev-tools/kunit/usage.html#testing-static-functions
-> [4]
-> https://docs.kernel.org/dev-tools/kunit/api/functionredirection.html#c.KUNIT_STATIC_STUB_REDIRECT
-> [5]
-> https://lore.kernel.org/linux-ext4/20230317155047.GB3270589@mit.edu/
-> 
-> By the way, the "xfstest somke" passes. Please let me know if any more
-> test is needed.
-> Unit test result is as followings:
-> # ./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig --raw_output
-> [18:44:39] Configuring KUnit Kernel ...
-> [18:44:39] Building KUnit Kernel ...
-> Populating config with:
-> $ make ARCH=um O=.kunit olddefconfig
-> Building with:
-> $ make ARCH=um O=.kunit --jobs=88
-> [18:44:47] Starting KUnit Kernel (1/1)...
-> KTAP version 1
-> 1..2
->     KTAP version 1
->     # Subtest: ext4_mballoc_test
->     1..1
->     ok 1 test_new_blocks_simple
-> ok 1 ext4_mballoc_test
->     KTAP version 1
->     # Subtest: ext4_inode_test
->     1..1
->         KTAP version 1
->         # Subtest: inode_test_xtimestamp_decoding
->         ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
->         ok 2 1969-12-31 Upper bound of 32bit < 0 timestamp, no extra bits
->         ok 3 1970-01-01 Lower bound of 32bit >=0 timestamp, no extra bits
->         ok 4 2038-01-19 Upper bound of 32bit >=0 timestamp, no extra bits
->         ok 5 2038-01-19 Lower bound of 32bit <0 timestamp, lo extra sec bit on
->         ok 6 2106-02-07 Upper bound of 32bit <0 timestamp, lo extra sec bit on
->         ok 7 2106-02-07 Lower bound of 32bit >=0 timestamp, lo extra sec bit on
->         ok 8 2174-02-25 Upper bound of 32bit >=0 timestamp, lo extra sec bit on
->         ok 9 2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on
->         ok 10 2242-03-16 Upper bound of 32bit <0 timestamp, hi extra sec bit on
->         ok 11 2242-03-16 Lower bound of 32bit >=0 timestamp, hi extra sec bit on
->         ok 12 2310-04-04 Upper bound of 32bit >=0 timestamp, hi extra sec bit on
->         ok 13 2310-04-04 Upper bound of 32bit>=0 timestamp, hi extra sec bit 1. 1 ns
->         ok 14 2378-04-22 Lower bound of 32bit>= timestamp. Extra sec bits 1. Max ns
->         ok 15 2378-04-22 Lower bound of 32bit >=0 timestamp. All extra sec bits on
->         ok 16 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra sec bits on
->     # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
->     ok 1 inode_test_xtimestamp_decoding
-> # Totals: pass:16 fail:0 skip:0 total:16
-> ok 2 ext4_inode_test
-> [18:44:48] Elapsed time: 8.602s total, 0.001s configuring, 8.483s building, 0.072s running
-> 
-> 
-> Kemeng Shi (19):
->   ext4: fix wrong unit use in ext4_mb_normalize_request
->   ext4: fix unit mismatch in ext4_mb_new_blocks_simple
->   ext4: fix wrong unit use in ext4_mb_find_by_goal
->   ext4: treat stripe in block unit
->   ext4: add EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated
->   ext4: remove ext4_block_group and ext4_block_group_offset declaration
->   ext4: try all groups in ext4_mb_new_blocks_simple
->   ext4: get block from bh before pass it to ext4_free_blocks_simple in
->     ext4_free_blocks
->   ext4: remove unsed parameter and unnecessary forward declaration of
->     ext4_mb_new_blocks_simple
->   ext4: fix wrong unit use in ext4_mb_clear_bb
->   ext4: fix wrong unit use in ext4_mb_new_blocks
->   ext4: factor out codes to update block bitmap and group descriptor on
->     disk from ext4_mb_mark_bb
->   ext4: call ext4_mb_mark_group_bb in ext4_free_blocks_simple
->   ext4: extent ext4_mb_mark_group_bb to support allocation under journal
->   ext4: call ext4_mb_mark_group_bb in ext4_mb_mark_diskspace_used
->   ext4: call ext4_mb_mark_group_bb in ext4_mb_clear_bb
->   ext4: call ext4_mb_mark_group_bb in ext4_group_add_blocks
->   ext4: add some kunit stub for mballoc kunit test
->   ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
-> 
->  fs/ext4/balloc.c       |  16 +
->  fs/ext4/ext4.h         |   4 -
->  fs/ext4/mballoc-test.c | 323 +++++++++++++++++++
->  fs/ext4/mballoc.c      | 704 +++++++++++++++++++----------------------
->  fs/ext4/super.c        |  13 +
->  5 files changed, 671 insertions(+), 389 deletions(-)
->  create mode 100644 fs/ext4/mballoc-test.c
-> 
 
--- 
-Best wishes
-Kemeng Shi
+For readability purposes only - next time please put the actual description at
+the beginning and the log at the end.
+
+Anyway,
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
