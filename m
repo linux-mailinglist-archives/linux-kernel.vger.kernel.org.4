@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EE86EC74F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5B36EC751
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbjDXHmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
+        id S231408AbjDXHnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjDXHmi (ORCPT
+        with ESMTP id S230489AbjDXHnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:42:38 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF46A7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:42:36 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4efd5e4d302so4016e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:42:36 -0700 (PDT)
+        Mon, 24 Apr 2023 03:43:19 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3921E4E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:43:17 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4efea87c578so2169e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682322155; x=1684914155;
+        d=google.com; s=20221208; t=1682322196; x=1684914196;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=23a1E0HIFpgHSlb82ihOoDCUEgYGChUX8rdYg8ouJPE=;
-        b=SDk0ywpSJg4VWH1VUThXYnGnxzOmvg4LtOZL4gGtJp7UcvOSs4k35qL7bzjz4Z4TWc
-         X+yDXh84KZtPtQpJjwNGO/WsHQ/YKbbypQZGVI+Csnl5jgBsjakrG7nmruqBskTXk40X
-         HYFqG4J53wgOi2s/3uBwpIZauFj3ouelxfiQ2RSKOtVI/X/Ihonv8zTi+sR1Dastqsra
-         i9lls/9F8V/cbh0M3cTiChbvE5wlEzGOyQiWueAikoCYI4mbP4o+5m1qhcE/YTe6MJuV
-         nbr2uTrhDkwknPOTsVxRfMytJHdKcte4w3+oWI7to9cEl/AfvwsQ42oPM7PbiSt3PIht
-         99Ww==
+        bh=XWKez64uXF0lxIyjlea8Na3PXa06xwVvpVBYUxO4AWo=;
+        b=ZsM+fLB2+s8hh50+Gu8PmJKVHinSjqXtwQ13WMKUvMoSPq0rZx2J8pxHTgXirbmEYy
+         hw+pvIfiK9bNiauGc6QNVexMbd7sBoKwBRYV1Eh34vWgLbuUPIiUgz+P69PtuoBYVFX/
+         JkBzX6lKTDR1AV3nNfzGXReHPn7S5Sr3HP5mQVeisK5ih4vgfRnVENiQEFaF6dYA1Uz9
+         nRCrKcM43Rh3JdgNhGiCcnyoxin6hrO7t5e1iiO8Brm6WgYKlRSqIc95rEVCZmjhQ7X3
+         KESDOM4v6ZNyZ3IcwiLAYozQkFN16iwvepiCHpRmI0+vAbWxQ3C+7D58sbSTetMrOIRr
+         C1Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682322155; x=1684914155;
+        d=1e100.net; s=20221208; t=1682322196; x=1684914196;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=23a1E0HIFpgHSlb82ihOoDCUEgYGChUX8rdYg8ouJPE=;
-        b=buMsx6fwLi40S9weoE6JJ+3oT6cCDcWbuZaBhJCUZX38roapJ1UWn27AjE6c9U2LyY
-         FvT75eC8ZPGY87RVL2aPYKeP5/ZnfwZ35zE85x3HeioOsQrIy1G1oDdELNYJYQfu8p/I
-         BJOo/3s3TQqEjLiA4p0xWCdzQ+bhl8Osp8A+Qhf2zYxfovYp3D95JIW7LYNd0exhe5Ph
-         M8RoKKfYWdFQp38bDHIsOMMDKwACCz0P3mPfwP3QRAggPL36oESAGgVgHbRmZJt79nGE
-         D4mP9Ml9h85mOHY5XZlC8kVKNZYWxX1SR1++kBVwFeVvCTop3ATd6zyeNxQO+Ldt1XJ9
-         uuQA==
-X-Gm-Message-State: AAQBX9cAJgp0VvZr6CWaiB3oPl2lsIu/bgH3bcoyupzb2lxXsZn3u03s
-        MUhyF4q7EJ4W9pwUudgDNmqMxqAKCUy/sTxudyr4kg==
-X-Google-Smtp-Source: AKy350Z167ghQt6zojoVa5Lzeq1YqkQgBD6oFOX3LLSAmZyTzOi3rQvaIMTRp8U2WAMJTZUpD+x8EEufVqLYVvvovYE=
+        bh=XWKez64uXF0lxIyjlea8Na3PXa06xwVvpVBYUxO4AWo=;
+        b=TGJAF0ZOOgGZz7Njgvu2sYHfaNPIrzZXX2j+gYOtH8Ty8/K8lRrVFI4VWTfagZrwFR
+         0Qg7R2UTgSAAAu6gEoAs8beEHOWB7sgQiEfnPpdoMm65ZNkKYd9vTAq6kfd9V4oxyyMu
+         ueNrduQqsT4qVFkIcfRGLP1yO0A0jNRmnnO/940Ve5hotYwQYNmJmJjLh/48ImYzm15Y
+         cFXXgPHVp6Ig6xp0/VoDotrFGjPZSeyRB2cT9m4yL83kQ5HkPk8bVDqQlsVyZwwq/5uS
+         unUe3Y3l13txAPt+W1DNSF21y8NPXMciFwpBxfICWN78J2Hll38a1S2gzED8VUfRngz+
+         5Xcw==
+X-Gm-Message-State: AAQBX9eST+UZzfz8TW66ohQQii91CfTFPLstafHf6pkyt/jzyRAAHfYF
+        l5zp4reL6M+F3IMxMBPK3NPdwuXJC1rNognQJKTUoA==
+X-Google-Smtp-Source: AKy350YuT/e5Z03klGMzn+0ke3erqJ0xhgwE7X2C1HUSnDE7vI9L13jM1eFvztiAq833VbI5xSoheAmM8xUKIGgOKxE=
 X-Received: by 2002:a05:6512:12ce:b0:4e8:3f1e:de43 with SMTP id
- p14-20020a05651212ce00b004e83f1ede43mr219269lfg.7.1682322154730; Mon, 24 Apr
- 2023 00:42:34 -0700 (PDT)
+ p14-20020a05651212ce00b004e83f1ede43mr219358lfg.7.1682322195956; Mon, 24 Apr
+ 2023 00:43:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <00000000000071af7a05fa0fd8dc@google.com>
-In-Reply-To: <00000000000071af7a05fa0fd8dc@google.com>
+References: <0000000000006efbbe05fa0fd886@google.com>
+In-Reply-To: <0000000000006efbbe05fa0fd886@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Apr 2023 09:42:22 +0200
-Message-ID: <CACT4Y+aBxmUzoOaG99Wucj7b3pJH1DUMSvKw7SHRiFJ9OuZq2g@mail.gmail.com>
-Subject: Re: [syzbot] [block?] KCSAN: data-race in __get_task_ioprio / set_task_ioprio
-To:     syzbot <syzbot+28ed267c18c614a9376f@syzkaller.appspotmail.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Date:   Mon, 24 Apr 2023 09:43:03 +0200
+Message-ID: <CACT4Y+Z1m2F368m1YLXQQP2TgM_1YSLYjU5z8LFGTjgnyXi8_g@mail.gmail.com>
+Subject: Re: [syzbot] [nfc?] KCSAN: data-race in __list_del_entry_valid / nfc_llcp_register_device
+To:     syzbot <syzbot+742c192afb1b2a0cbe86@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,7 +72,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, 24 Apr 2023 at 09:20, syzbot
-<syzbot+28ed267c18c614a9376f@syzkaller.appspotmail.com> wrote:
+<syzbot+742c192afb1b2a0cbe86@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
@@ -77,9 +80,9 @@ On Mon, 24 Apr 2023 at 09:20, syzbot
 >
 > HEAD commit:    44149752e998 Merge tag 'cgroup-for-6.3-rc6-fixes' of git:/..
 > git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=147afc8fc80000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1682221fc80000
 > kernel config:  https://syzkaller.appspot.com/x/.config?x=710057cbb8def08c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=28ed267c18c614a9376f
+> dashboard link: https://syzkaller.appspot.com/bug?extid=742c192afb1b2a0cbe86
 > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 >
 > Unfortunately, I don't have any reproducer for this issue yet.
@@ -90,47 +93,62 @@ On Mon, 24 Apr 2023 at 09:20, syzbot
 > kernel image: https://storage.googleapis.com/syzbot-assets/e584bce13ba7/bzImage-44149752.xz
 >
 > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+28ed267c18c614a9376f@syzkaller.appspotmail.com
+> Reported-by: syzbot+742c192afb1b2a0cbe86@syzkaller.appspotmail.com
 
-It looks like it can lead to reading wrong/uninit ioprio in __get_task_ioprio.
-I think set_task_ioprio() should init ioprio before publishing and
-publish with a release store, __get_task_ioprio needs to use load
-acquire to ensure proper ordering.
+Concurrent list modifications can lead to arbitrary memory corruptions.
 
 > ==================================================================
-> BUG: KCSAN: data-race in __get_task_ioprio / set_task_ioprio
+> BUG: KCSAN: data-race in __list_del_entry_valid / nfc_llcp_register_device
 >
-> write to 0xffff888108c83888 of 8 bytes by task 15748 on cpu 0:
->  set_task_ioprio+0x23b/0x260 block/blk-ioc.c:291
->  __do_sys_ioprio_set block/ioprio.c:124 [inline]
->  __se_sys_ioprio_set+0x272/0x5a0 block/ioprio.c:68
->  __x64_sys_ioprio_set+0x43/0x50 block/ioprio.c:68
+> read to 0xffff88810318c808 of 8 bytes by task 28453 on cpu 1:
+>  __list_del_entry_valid+0x15/0xe0 lib/list_debug.c:46
+>  __list_del_entry include/linux/list.h:134 [inline]
+>  list_del include/linux/list.h:148 [inline]
+>  local_release net/nfc/llcp_core.c:172 [inline]
+>  kref_put include/linux/kref.h:65 [inline]
+>  nfc_llcp_local_put net/nfc/llcp_core.c:182 [inline]
+>  nfc_llcp_unregister_device+0x7e/0x130 net/nfc/llcp_core.c:1620
+>  nfc_unregister_device+0xe6/0x130 net/nfc/core.c:1179
+>  nci_unregister_device+0x14c/0x160 net/nfc/nci/core.c:1303
+>  virtual_ncidev_close+0x30/0x50 drivers/nfc/virtual_ncidev.c:163
+>  __fput+0x245/0x570 fs/file_table.c:321
+>  ____fput+0x15/0x20 fs/file_table.c:349
+>  task_work_run+0x123/0x160 kernel/task_work.c:179
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop+0xd1/0xe0 kernel/entry/common.c:171
+>  exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+>  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+>  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> write to 0xffff88810318c808 of 8 bytes by task 28459 on cpu 0:
+>  __list_add include/linux/list.h:72 [inline]
+>  list_add include/linux/list.h:88 [inline]
+>  nfc_llcp_register_device+0x3e4/0x440 net/nfc/llcp_core.c:1604
+>  nfc_register_device+0x67/0x190 net/nfc/core.c:1124
+>  nci_register_device+0x4e6/0x570 net/nfc/nci/core.c:1257
+>  virtual_ncidev_open+0xdc/0x140 drivers/nfc/virtual_ncidev.c:148
+>  misc_open+0x1fd/0x230 drivers/char/misc.c:165
+>  chrdev_open+0x349/0x3c0 fs/char_dev.c:414
+>  do_dentry_open+0x5b3/0x930 fs/open.c:920
+>  vfs_open+0x47/0x50 fs/open.c:1051
+>  do_open fs/namei.c:3560 [inline]
+>  path_openat+0x17e6/0x1d00 fs/namei.c:3715
+>  do_filp_open+0xf6/0x200 fs/namei.c:3742
+>  do_sys_openat2+0xb5/0x2a0 fs/open.c:1348
+>  do_sys_open fs/open.c:1364 [inline]
+>  __do_sys_openat fs/open.c:1380 [inline]
+>  __se_sys_openat fs/open.c:1375 [inline]
+>  __x64_sys_openat+0xf3/0x120 fs/open.c:1375
 >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
 >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
 >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 >
-> read to 0xffff888108c83888 of 8 bytes by task 15749 on cpu 1:
->  __get_task_ioprio+0x1c/0x110 block/ioprio.c:150
->  get_current_ioprio include/linux/ioprio.h:60 [inline]
->  init_sync_kiocb include/linux/fs.h:2003 [inline]
->  __kernel_write_iter+0xe2/0x380 fs/read_write.c:515
->  dump_emit_page fs/coredump.c:885 [inline]
->  dump_user_range+0x258/0x480 fs/coredump.c:912
->  elf_core_dump+0x1a73/0x1b90 fs/binfmt_elf.c:2142
->  do_coredump+0xfeb/0x1840 fs/coredump.c:762
->  get_signal+0xd65/0xff0 kernel/signal.c:2845
->  arch_do_signal_or_restart+0x89/0x2a0 arch/x86/kernel/signal.c:306
->  exit_to_user_mode_loop+0x6f/0xe0 kernel/entry/common.c:168
->  exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
->  irqentry_exit_to_user_mode+0x9/0x20 kernel/entry/common.c:310
->  irqentry_exit+0x12/0x40 kernel/entry/common.c:413
->  exc_general_protection+0x339/0x4c0 arch/x86/kernel/traps.c:728
->  asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
->
-> value changed: 0x0000000000000000 -> 0xffff8881049b5c90
+> value changed: 0xffffffff85eac670 -> 0xdead000000000122
 >
 > Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 15749 Comm: syz-executor.5 Tainted: G        W          6.3.0-rc6-syzkaller-00138-g44149752e998 #0
+> CPU: 0 PID: 28459 Comm: syz-executor.0 Not tainted 6.3.0-rc6-syzkaller-00138-g44149752e998 #0
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
 > ==================================================================
 >
@@ -146,4 +164,4 @@ acquire to ensure proper ordering.
 > --
 > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000071af7a05fa0fd8dc%40google.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000006efbbe05fa0fd886%40google.com.
