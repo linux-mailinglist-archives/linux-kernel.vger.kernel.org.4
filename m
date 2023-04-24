@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6FA6ED7A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756E56ED7A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjDXWOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S232454AbjDXWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjDXWOS (ORCPT
+        with ESMTP id S232071AbjDXWPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:14:18 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9715B90;
-        Mon, 24 Apr 2023 15:14:17 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OM8xeW007455;
-        Mon, 24 Apr 2023 22:14:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=zz76strXfWQb3PlBPdk/q+ueBLjUV07MIrSXwDmneYQ=;
- b=rJ/FNmkgsSH2bVBp5hTqHqXtr7+7iXU4RT0U1lC0TbgoguADm0OpwZI6W1LrRs8eC/7Z
- q5Tk63M8yxhPg7mGjz4qypwC0reIK+IahgjJol76fXD6hkVcwAJ2LevIRDUn7fxy01RF
- y8G7gMVePBWLxm5OQOMZU9oSGIvgbkDt9Vh61BQFJq7Svj8VGdsYG3x500HAnylVgnBc
- y3Jo9EzOLPp8nCSUfoTG8i6e0tsmm0oQvzeVFMVKap//puTBIfDyzuyFXGdgq1+jlalP
- lzGmVgOZnQNuvBBEELkPnROwUfKsPdn8tlRj//xS4DvvMTyBQX9+4SzCyDLa6Keursva WA== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q60sgbats-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 22:14:15 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33OIFKFq001323;
-        Mon, 24 Apr 2023 22:14:15 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3q4778d8p6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 22:14:15 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33OMEE8C14746280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Apr 2023 22:14:14 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 86D1558057;
-        Mon, 24 Apr 2023 22:14:14 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4029658061;
-        Mon, 24 Apr 2023 22:14:14 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.153.155])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Apr 2023 22:14:14 +0000 (GMT)
-Message-ID: <a52062d55fd57032f224fef1a296b75345f4da16.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem updates for v6.4
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 24 Apr 2023 18:14:13 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7Kc_wsmhwsDJDLQ0-UPkaLkNxRFnj_lP
-X-Proofpoint-GUID: 7Kc_wsmhwsDJDLQ0-UPkaLkNxRFnj_lP
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 24 Apr 2023 18:15:25 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0576A59;
+        Mon, 24 Apr 2023 15:15:24 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso47788071fa.2;
+        Mon, 24 Apr 2023 15:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682374522; x=1684966522;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5UP7FGVhzXdLz5iNJ9W7/3mzISJ7lFKbYrpdcyd0K4c=;
+        b=rFZhJXyhnhQMxNtKliFDYrs9WJ56GWxeQkyKhAdFXSnV/qEpzJk6s7gKC8APzmAEGC
+         OXFj3OpN/XTjz1IYRu1Rx5dyDyC0xBS1TKiRTFtEjEGLX40zN0j65kwpKsqRYnjiUAmf
+         Y9+I583vBY0i9dprdGPDMzhzlnAD1O8S6f77RLCEbolwA+MC5BXYr5pTCLHrGEFxCivC
+         8Kfj25FVOhFmCl0iz99fO9jGb90mmbzdUNQpEMQad6n4H84FnDKWcvc2W5Sr3uv96lLj
+         a+XjNGZajQaYDCx5mBLFdghlVQ+S9fEeC67JtykVkRPiKoaerYl4cZKWp+3EKvBIrn+I
+         01cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682374522; x=1684966522;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5UP7FGVhzXdLz5iNJ9W7/3mzISJ7lFKbYrpdcyd0K4c=;
+        b=GEFbIhZ9AfGeZLHTjnmwWQxFHPHVIQ7RXGsqf1Tl8gdQ/FqSIeJRbC7i2z2nyLPqf3
+         oj4sSBWxATMnnm8dw9qNoxpfiQyn90Om3Pby+YsxuDoVIY9Y7XwFnZMB6O97OfskErAk
+         qCwIJZBCTIDrdaAyZJ5TuWG8OVfiJuobvNrYmSaMbh2nIINgttxLHyY3ZY6A5jR/I4aP
+         1T9PabDGByEJsCfcPHtAodNiNQp3wLteUYpk+tLns5LYNmIdZ/FH4hhS+V+4fAaOVLBl
+         egDiIDsHiPVPFRT61Y2uOm5eR6YoYGIOHNqm0i2ntJoKgrkQ1QXWgxTOz+sSUj+RoHod
+         87vw==
+X-Gm-Message-State: AAQBX9ehsaIgoka6yz0n+15a5jJCFJiwrlDVwin9Gc9ICeEFcVMplPIp
+        1evxyx/EWfy1a9BNIPIH1ogAM/RsSfFHggARCeA=
+X-Google-Smtp-Source: AKy350bK379v+0wKKHkuBxIPRu/TPM76BjJ5es5FmF246WAd6QmI7UB4BOl2YgvleGyE4WkHOZ159NdHbFybuph58TQ=
+X-Received: by 2002:a2e:80c5:0:b0:2a8:b79b:7e81 with SMTP id
+ r5-20020a2e80c5000000b002a8b79b7e81mr2992508ljg.30.1682374522001; Mon, 24 Apr
+ 2023 15:15:22 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=818 spamscore=0 clxscore=1011 impostorscore=0 malwarescore=0
- phishscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240200
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-3-jorge.lopez2@hp.com>
+ <b7c49593-13f9-44f8-b3b8-66551b01e966@t-8ch.de> <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
+ <67108caf-2a03-4ef0-9f8d-819b0d6f0a2e@t-8ch.de> <CAOOmCE8dru7YOmZeTiEoDMiy7d6nTEih6D2H-AMrOykt=z1bhQ@mail.gmail.com>
+In-Reply-To: <CAOOmCE8dru7YOmZeTiEoDMiy7d6nTEih6D2H-AMrOykt=z1bhQ@mail.gmail.com>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Mon, 24 Apr 2023 17:14:57 -0500
+Message-ID: <CAOOmCE8SGn9JsWVXUDnKgWyxSzuCuiXzjsv3V737uNXPu2jykA@mail.gmail.com>
+Subject: Re: [PATCH v11 02/14] HP BIOSCFG driver - biosattr-interface
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+HI Thomas,
 
-Just one one bug fix.  Other integrity changes are being upstreamed via
-tpmdd and lsm.
-
-thanks,
-
-Mimi
-
-The following changes since commit
-eeac8ede17557680855031c6f305ece2378af326:
-
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
-integrity.git tags/integrity-v6.4
-
-for you to fetch changes up to
-644f17412f5acf01a19af9d04a921937a2bc86c6:
-
-  IMA: allow/fix UML builds (2023-03-15 18:24:40 -0400)
-
-----------------------------------------------------------------
-integrity-v6.4
-
-----------------------------------------------------------------
-Randy Dunlap (1):
-      IMA: allow/fix UML builds
-
- security/integrity/ima/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sorry for asking again.  I just want to be understand exactly what I must do.
 
 
+> > > >
+> > > > > +     args->command = command;
+> > > > > +     args->commandtype = query;
+> > > > > +     args->datasize = insize;
+> > > > > +     memcpy(args->data, buffer, flex_array_size(args, data, insize));
+> > > > > +
+> > > > > +     ret = wmi_evaluate_method(HP_WMI_BIOS_GUID, 0, mid, &input, &output);
+> > > >
+> > > > The driver is mixing calls to the UUID based APIs and the wmi_device
+> > > > ones.
+> > > > wmi_devices is newer and preferred.
+> > >
+> > > The driver  calls wmi_evaluate_method when initiating an WMI call.
+> > > Where is the driver mixing calls to the UUID based APIs and the
+> > > wmi_device one?
+> > > WMI calls are made by calling hp_wmi_perform_query() which invokes
+> > > wmi_evaluate_method().
+> > > Did I miss something?
+> >
+> > wmi_evaluate_method() is UUID-based.
+> > struct wmi_driver is wmi_device based.
+> >
+> > The wmi_driver/wmi_device code essentially does nothing and is only used
+> > to validate that a device is present.
+> > The same can be done more easily wmi_has_guid().
+> >
+>
 
+Are you asking to replace all calls to wmi_evaluate_method() which is
+UUID based API with calls to  wmidev_evaluate_method() which is
+wmi_device based?  Correct?
