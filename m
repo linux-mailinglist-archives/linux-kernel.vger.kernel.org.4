@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAA56ED810
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1976ED819
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjDXWii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S233041AbjDXWkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbjDXWig (ORCPT
+        with ESMTP id S229634AbjDXWka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:38:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C877C658F;
-        Mon, 24 Apr 2023 15:38:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 24 Apr 2023 18:40:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95E665BD;
+        Mon, 24 Apr 2023 15:40:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63A6B61DD7;
-        Mon, 24 Apr 2023 22:38:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDFEC4339C;
-        Mon, 24 Apr 2023 22:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682375914;
-        bh=evOcVpwCy5DHD+rptVWH5BM9ayFOiHmM7ew5mfght2I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RD68tCpxiM5jq0EqkWQlRWyxsEyUYbFXiEwUGWvl21T+60MkWysjyHwFrV7mhOEU9
-         WgM9XKlwpegm1/Ryw1wy1RrbJXZQ5ZOHbQK3JNYG/908/HFoGBTE1BIfldQ4pK+VlM
-         15TmqDWefKTb7ps2GfG+/pcKT7pKGZh93VOSFmqU85u493wpKX8b2IsH+t2vsvuPNt
-         N/zCJR4EtdqYmc9YZ4edUwNF3oQnBLr6QhCL1KWOWYzOGu8HmtbLOkwtgSwQjzhnao
-         aswEHzBKzkcDIjeOQxer6n8+SV8gnM4pvjEHTVgQpL6bns04uowUg4BnrwRiQ81aZ+
-         zQ8eLjLsSxVkA==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4eff50911bfso1341697e87.2;
-        Mon, 24 Apr 2023 15:38:34 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eVKXazKDEpcUIFDmwjX4AGmSZ9SwuJI0XPQIqXM2K/a0jkGm9d
-        vuuW8iCjBU6q/K/Me87wEHv0RLOtf2KKvD9XkJM=
-X-Google-Smtp-Source: AKy350bd03oPgDoxJXhRz3alMs69f/8aOlpheo2UHJcn6VTzQX+1IFK8tt/wetIT9YCRjA/Wx2qU6mra+4RS/Ovq8AE=
-X-Received: by 2002:ac2:5d4f:0:b0:4db:3d51:6896 with SMTP id
- w15-20020ac25d4f000000b004db3d516896mr3326186lfd.11.1682375912802; Mon, 24
- Apr 2023 15:38:32 -0700 (PDT)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4189A21940;
+        Mon, 24 Apr 2023 22:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682376027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=feM04i0/6vRuC/hd4QJiH2jTDvSUCiEV+H+qsq5ng/c=;
+        b=jG+djohD8LGJypEysxreNq4J8bODv9nphYXo5fWEF17C4/Gp3msq4EBRjGFKymD74WWmPm
+        IOpO3GfwWAxh82FJ48B0HmTHg0BPLqY64nj52Ce3TDPCAKWFmAPUv1JXkEDyZkSUIlV5bB
+        1XMM9ghroU4WStNf9bzrRWgcT1esNc0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682376027;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=feM04i0/6vRuC/hd4QJiH2jTDvSUCiEV+H+qsq5ng/c=;
+        b=HVvj5Jq4rjhdr0M094REXU/pQH9kVDhjtHdES+sbOskKKlCDCStXvr1hjWGjcnxMTOEX//
+        RzBOPSkmJFiWP+AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E7FC13780;
+        Mon, 24 Apr 2023 22:40:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CBiBFVYFR2QwSwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 24 Apr 2023 22:40:22 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <961691d0-7224-caad-6c19-d9c8ca07a801@deltatee.com>
- <20230414013246.1969224-1-yukuai1@huaweicloud.com> <623c9eb9-b8e6-381f-894f-8d7b955e9651@huaweicloud.com>
-In-Reply-To: <623c9eb9-b8e6-381f-894f-8d7b955e9651@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 24 Apr 2023 15:38:20 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4XvTtJJ=4Xbu9-zd83OnoyJGaJronzVcn2+nKjs8G1aA@mail.gmail.com>
-Message-ID: <CAPhsuW4XvTtJJ=4Xbu9-zd83OnoyJGaJronzVcn2+nKjs8G1aA@mail.gmail.com>
-Subject: Re: [PATCH -next v7 5/5] md: protect md_thread with rcu
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     logang@deltatee.com, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        "Hugh Dickins" <hughd@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Dave Chinner" <david@fromorbit.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>, "Jan Kara" <jack@suse.cz>,
+        "Amir Goldstein" <amir73il@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] fs: add infrastructure for multigrain inode i_m/ctime
+In-reply-to: <404a9a8066b0735c9f355214d4eadf0d975b3188.camel@kernel.org>
+References: <20230424151104.175456-1-jlayton@kernel.org>,
+ <20230424151104.175456-2-jlayton@kernel.org>,
+ <168237287734.24821.11016713590413362200@noble.neil.brown.name>,
+ <404a9a8066b0735c9f355214d4eadf0d975b3188.camel@kernel.org>
+Date:   Tue, 25 Apr 2023 08:40:19 +1000
+Message-id: <168237601955.24821.11999779095797667429@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 7:42=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/04/14 9:32, Yu Kuai =E5=86=99=E9=81=93:
-> > From: Yu Kuai <yukuai3@huawei.com>
-> >
-> > Our test reports a uaf for 'mddev->sync_thread':
-> >
-> > T1                      T2
-> > md_start_sync
-> >   md_register_thread
-> >   // mddev->sync_thread is set
-> >                       raid1d
-> >                        md_check_recovery
-> >                         md_reap_sync_thread
-> >                          md_unregister_thread
-> >                           kfree
-> >
-> >   md_wakeup_thread
-> >    wake_up
-> >    ->sync_thread was freed
-> >
-> > Root cause is that there is a small windown between register thread and
-> > wake up thread, where the thread can be freed concurrently.
-> >
-> > Currently, a global spinlock 'pers_lock' is borrowed to protect
-> > 'mddev->thread', this problem can be fixed likewise, however, there are
-> > similar problems elsewhere, and use a global lock for all the cases is
-> > not good.
-> >
-> > This patch protect all md_thread with rcu.
->
-> Friendly ping... Or do I need to resend the whole patchset for v7?
+On Tue, 25 Apr 2023, Jeff Layton wrote:
+> On Tue, 2023-04-25 at 07:47 +1000, NeilBrown wrote:
+> > On Tue, 25 Apr 2023, Jeff Layton wrote:
+> > > +	/*
+> > > +	 * Warn if someone sets SB_MULTIGRAIN_TS, but doesn't turn down the ts
+> > > +	 * granularity.
+> > > +	 */
+> > > +	return (sb->s_flags & SB_MULTIGRAIN_TS) &&
+> > > +		!WARN_ON_ONCE(sb->s_time_gran == 1);
+> > 
+> >  Maybe 
+> > 		!WARN_ON_ONCE(sb->s_time_gran & SB_MULTIGRAIN_TS);
+> >  ??
+> > 
+> 
+> I'm not sure I understand what you mean here.
 
-Sorry for the delay. But yes, please resend the whole patchset.
+That's fair, as what I wrote didn't make any sense.
+I meant to write:
 
-Song
+ 		!WARN_ON_ONCE(sb->s_time_gran & I_CTIME_QUERIED);
+
+to make it explicit that s_time_gran must leave space for
+I_CTIME_QUERIED to be set (as you write below).  Specifically that
+s_time_gran mustn't be odd. 
+  
+>                                                We want to check whether
+> SB_MULTIGRAIN_TS is set in the flags, and that s_time_gran > 1. The
+> latter is required so that we have space for the I_CTIME_QUERIED flag.
+> 
+> If SB_MULTIGRAIN_TS is set, but the s_time_gran is too low, we want to
+> throw a warning (since something is clearly wrong).
+> 
+
+NeilBrown
