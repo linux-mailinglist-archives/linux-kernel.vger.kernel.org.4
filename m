@@ -2,255 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6AF6ED1CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61916ED1CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjDXPzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S232119AbjDXPyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbjDXPzD (ORCPT
+        with ESMTP id S229688AbjDXPyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:55:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB559E5;
-        Mon, 24 Apr 2023 08:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682351699; x=1713887699;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=twLeidi/BX59r6A18B0nMQG8GWRGkRGcWglppQmN5Lc=;
-  b=Ijrke6fODRsoQSwDv+0uXqfLP+6SNdOk9boAHrm6cDBvyXSFCw17yo7x
-   GBfcl1UsnvRDeJlA69NOLfibPxVpaHheRUsrHNJAYFDQOiO7XgjmbAJ/T
-   lYVOGqvDeHYNNjFxJXDSN+ZdXUg1NMdzJujDISFgenWHfsYc96ZD4J626
-   lD3yKCxQjm16ccm7sr1dgIOKljOBKd7Lg6axKuy63PGcQ/JVkBH++DcbF
-   579UwGWq9d5DZF6awVXyYNliCffbD0GdKHTkm629qrkvjGiyeAHJdHFfo
-   FmhU3Yox+LqpTI4OrB5RwkAiZ1IrLST1CuhOyv+PXFtfOJDN7ZXtt77Oz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345244381"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="345244381"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:54:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="804667850"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="804667850"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Apr 2023 08:54:53 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqyWi-000iUi-2i;
-        Mon, 24 Apr 2023 15:54:52 +0000
-Date:   Mon, 24 Apr 2023 23:54:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH v5 1/5] block: Don't invalidate pagecache for invalid
- falloc modes
-Message-ID: <202304242302.5zYRfUub-lkp@intel.com>
-References: <20230420004850.297045-2-sarthakkukreti@chromium.org>
+        Mon, 24 Apr 2023 11:54:47 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2074.outbound.protection.outlook.com [40.92.98.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11D422A;
+        Mon, 24 Apr 2023 08:54:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LeNUFHBx6T3LsQ2+af8X/pnLo3QI+vNop9Yvy7xVMsHdPFvzjWXrqJjp47MiN+ekA4Vkqe9xLGUDw6bapaFmUpVHYij3Eeds9NNuinhskZaXQMJp3cjjAPki52YGtcb4G5GfcQZhOmrVQaOA/+DhJI+w3dtnmnbYJucNsHr0hZ7pxaw9Dmt4ioelJIT5IcDFddgDLdrK4aZQflWcM01RlRixKGoyAxgSWsKjlrZXV2p/luIODNmNxedkPeNjP7pdv/wszrtE9fIUUUKjjoPylzipHgiudKGAAg3cdZPQmEEjYDbQwF5iRfOCZoDBPUtHuA/LOgIlPgMWn/2T2oz5Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S11wN6n4I8NRjTa38Exj4Z5in7evttcTsfi6XE5G7aQ=;
+ b=c9e00aApxrY6CiPnu8FSD/na8vh1UWcB+ROQ3hnJAaa+Kxrv92q6fovWCuC/F+/madjhvmITSP6ZenA72oo3Sig945+4wYBfKlKyNiHGskwW9Uqb432zM3o12Ca3t1Dpr71Ae/v1CCiNx9yi0it1oSTPWGc/O+1U24cojUDpBoRU1F97s/rWOlKTvjqKYE7dgy/15nwJ/y7CqZGx0+iaMG21QW9/hqM8ayEQO+tK2LKMEynYbZRH0hKW5ExT7LywEDMiNwMS2/UNwI2lveqDz5JbMfI8scziyIwtxkL5RhLNgobPSXK3M0FDMEm6HRRVG2q1a7t6KgpiW/bXBzDGVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S11wN6n4I8NRjTa38Exj4Z5in7evttcTsfi6XE5G7aQ=;
+ b=u8MzqFZG74H3b5Dai/9a8cGbE2iRkl44bbhaCwCDrH2n9KRzLx9U19te1nEC5FEiL4KeowMKxuyPYvqGg26I0hE1LnqUJihUYupxP6RC7Oosid693CEbDeCxemD5Nb+ZwMgG5XsCWXRXlc4AjNaVKCt6QFjuRgrt3T/EF+19a3wANDqIo1kfpHxIlLPc/LjGvm9bxoZ+ipVdvrJ2CjGla3duFxh+oiWkgfKKwPluwa82pAqomyoJaxVFC2MEL1rqqDZR0Ew6OFt0sVIlZUrwLFe4TB6CXGn6K/HqI6pbahJ88b2m/SNFbJaNa2KNyBQZAxjwGsZn1LhnbkqN1i6mXA==
+Received: from TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:252::12)
+ by OSZP286MB1677.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1b6::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
+ 2023 15:54:42 +0000
+Received: from TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::5805:16d6:6ab7:6639]) by TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::5805:16d6:6ab7:6639%2]) with mapi id 15.20.6319.022; Mon, 24 Apr 2023
+ 15:54:42 +0000
+Message-ID: <TY3P286MB2611CE0EA6C2E68DE64DA03798679@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Date:   Mon, 24 Apr 2023 23:54:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     wiagn233@outlook.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP15060 variant
+To:     Lee Jones <lee@kernel.org>
+References: <20230417090537.6052-1-wiagn233@outlook.com>
+ <TY3P286MB2611439E0FA49C224D639062989C9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <20230424120837.GA50521@google.com>
+From:   Shengyu Qu <wiagn233@outlook.com>
+In-Reply-To: <20230424120837.GA50521@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN:  [d6rO/Jvcu+lfYOiKqOx3lQj98dBfg8z4j+GUnzhg5R4=]
+X-ClientProxiedBy: SI2P153CA0009.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::18) To TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:252::12)
+X-Microsoft-Original-Message-ID: <8962427b-9e67-d794-81b2-e7daf5284011@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420004850.297045-2-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY3P286MB2611:EE_|OSZP286MB1677:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ec22811-0030-4a3e-3df2-08db44dc3792
+X-MS-Exchange-SLBlob-MailProps: obhAqMD0nT8wRrMOmTC7gIiazLgnsCtwc0nksGTj4nbD3mUX18ZxoLbxpOtclPmeAk8X1kqhb7llsOrXxPekmERKuwVHOrRs1KCxqeFjrT8SUm8b4pD+TZVUV4AXW38YKGapdspDqqZz04gAj3SDa88npHqtlg6n+657zrRN+ZRnh6DcA7xXaTboGdl+KePYDO8JnJjzAi6R07mcAm2qqCLIsyPob0kGFzH+Xcg9RsH176BW72c2nikonxUJihkUSllBpKjrWj9dnuXOUJreUfUfZwzg//xajgEvL+/bTMOx/PQGx0lwF9dcIIQjjy34R2XL5+1quE1sxJfuUS4/VPJIrs1G3zBQZ7oqLEfdKJP9c6dQLYLL2BmUdiaIiIYP2LTX5hjgqJKppJQhRmfMfm+jQghlMlUOXoWQWMDRDIX6YsVOb2Rg3954KOzBCydKM0IT/L7y2hU5EPy2649oWxj14eMoEw8Y1hPYymfwy3xnRGZ/zth30Lx7GrWSV8IDlYYszid7QFtk+Uq7JK2gDae3mt+5aYAL00WXeFXpjcMXdAKFipl6lmd06yE80j8nfZ+65zYSaIS4D1xfVfwg0MCdh3CNay6RT7co5Rv0LvWRAjtbamoTIpoaY+si7AVrxCOcFoGm1w1EcNfR0dFm0jYvOwwR9RDkxvI0jsmvrGovwD37LLhEIY9XYKubcv3sAp+71uzpIKuLDexqMVKbce+birjAy6vCT81H/08TJubNJla+P5mn1E50+iL78VVaUUX1pA/bU4GDLNfTvIVaIx7czgvqq+yfKygMVTYwWGxlpQ8kV7cF56dkAH/QtP2N
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /dvpaZbtdkGV2JZXiNxEXz7KhY3tteAw2rHWccF/GnLtMnlMmI3pI7GFt0mCn1vMz/bIeUWZAmNHvqd5c1QD9P9k2OP4tEbNQ6CAYppUol+LK9MRzkdTKc1onnFr2VAU7GtMPqm6ey5RBLDARUd1FjqH+pL24eSVOG1MaOg+nV/6AitvnlMruGxTw2sMYkWEhhz+b62i7iOq4f4s+hs7mFu1qoF78FavqNn5o2clY9xHv1yOKsHnGwpKuuFCA22Ui2oktSHpcIEIPfokdCBA/XYN9fmlRWgKclyseozY6hxZtjiS2Yd8IliBMXTc5eD8avL19Obtvr/2HkcudF2CPW9hT/PVBUdF10IYG/VqszbolfOJDB/aj9uqK++/nwolf5Uf4dAncrZYNQU9mZoh+3Xj1y1RiFaIsxKan/tC8iZeY++A0wMr9qrM0/Mz5vOEsZMpmBAfSmUpxiRNbzgvbh8xuk2rGuv7w8fhoMD40jT695kN5KmdeN2JkCvzhepyGmlBgWu17te2sVI9Pz8Xavz/nQqIaZKTVE5DHJs19v2GnRP7OwzuGUXdPyihZCl2YorVlPsl/tHW/izwQG3zvN2xoZ1wCdbdq5x00SmbcfX/6+7Y9hsq21OwzYAnPWxR
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0k3cW5yR2ZlWWxHTndLSHRaSnVhQTNFMDUvQlcrSFE2TXgyOFRycnA5VHFq?=
+ =?utf-8?B?dkJZRi93QzFlaEpGRFRGZVlVTWx1cUJ5ZUtja21ld1RuYjFGbnhLeGJYNHcr?=
+ =?utf-8?B?QzdTMk5vTGl0ZkFxRUhoMThtNXhPQW9EYVpGR2VYeU8rMUVaRFRNRUVHTS9k?=
+ =?utf-8?B?U0dCZTQwbXVLSG1uUXhRYWtLaUdLb0F1U3BoNWUwZU9rWERaeGdLcGMyRTBh?=
+ =?utf-8?B?dlpKYTNxU29LTjc4dUttMjFhSUVGbkxYQW5PWG9MVlVBYXU4Y2dhMG10ZStP?=
+ =?utf-8?B?RmE5N3EraXBxTVZPaHV6T0ZLYm9kbWd4YmF6NHE3OXdIR0pPdTM1QjNsc0JY?=
+ =?utf-8?B?dzlOZ1BsR1UyZDBrcEhWMmV2dVZUdTdvSC9aVEcrNzM4K3lYUnhwemNnM20x?=
+ =?utf-8?B?SU90bFcrK3k2ZklDams0ek05UEk2QkV6YUpVUk4xSEV6bFFXWERnV1hReHNj?=
+ =?utf-8?B?MjJnWVYveEhDYXRYWkJUcVFzR0MrYkNQMHhKcWFuTTZ2Sis2RkJmYTc0ZGxD?=
+ =?utf-8?B?WUk3V2hOS3F2RG4ybzBQMnRSbGIraG1Ub2hBV1NBS2dZeE9tQk1sOU9sdWtD?=
+ =?utf-8?B?TW5aZjhPT0dMaVphMkx5bW0xZVpwcUFDWGV4RkFVUzRHRFN6WnhiWElXcFlO?=
+ =?utf-8?B?MVZPYlFtWUlhVC92NDV5RFlRN0pMdTB4YzFHa2pFNWp5Mjc3R1NpYTk3U0xm?=
+ =?utf-8?B?azYrYTFyQmkzazE2VkZ5eDY2UnJaVU95OGJkUXlYUklMd1ZkOUpuSG1ydjVi?=
+ =?utf-8?B?OTI1dHdadTZmenB3Z21MY3JNcmdaWExJMlJuRGpGQlB0UlcwRGJWcStaaFJG?=
+ =?utf-8?B?aVd6bndITVhVM1VMMGFjWXNxZG9mYU9MajBkR3lvcEZBTzFEb0RveXBxOFVs?=
+ =?utf-8?B?RFhDSmNYMzdiUnplbXZVYWR4UlgvK0trSkhxWm5pSk1EMHVEU3VET29PZXVy?=
+ =?utf-8?B?WkN1SkIrUkwxWE9oRzdoTEl0T2R5cmlUZmplaUpVWFoyOTdjM3o4RlJwcmdS?=
+ =?utf-8?B?d2w4anNHVXBzdFRpcElRTFNPbWI4eGxTdE5BalpxYUxINUpmbWhWSHNtaThv?=
+ =?utf-8?B?cHVrNWtaOFFlWHNEcVdiWGZrSUhqOEFKd0pmRkpmNjBLY29XZVFlVHR1dVFl?=
+ =?utf-8?B?V1EyMkVMT2FmVi9Eaml2RFZyNy9ScWkyU29Ia3VxU2F1MnQ4bGhIU0l6aWFS?=
+ =?utf-8?B?K013ckVCQzZrVEliNU1lV1lTck1JL1hVVk55UjE4bnI2N0VydWJBSFdGdkZt?=
+ =?utf-8?B?TVA4RTZvYk9WcDFHcWJ0WGd0ZDZpbmcxS2hDNTN0Qkd3OGV0TXlkSkphQ1Bx?=
+ =?utf-8?B?Vnh1U0gveGM1T0gyZjVJZDhMSEYvdXlEem14QklZc1pWYkZsNHlOZWlOdmlG?=
+ =?utf-8?B?RzZOMnJiQ2RtU1JQRmpnK05mVlZJWkJUUXllMTUxOUZkZCtHK1pyWkdSckt0?=
+ =?utf-8?B?YzAwV25rZEJpd2NSckYremN1R2wwaWlZOWRBMW9LWmRuMVZPUjJoV2x4L1d2?=
+ =?utf-8?B?TWlWMkFDNDlOYlczaE9ENFhROFMxTXdCd2pyamcrSjR1a1pzOEZPK0V3V01D?=
+ =?utf-8?B?SmUwbUJydlNjVFBlSUkveWo5V3BDRXNwNWkyMnhVY1BhajQ2dTU2blMwUGE2?=
+ =?utf-8?Q?lEVO43N1tCCnBja5u5aADDdIgBxMdh8Kt3j3olr+hCTY=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ec22811-0030-4a3e-3df2-08db44dc3792
+X-MS-Exchange-CrossTenant-AuthSource: TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 15:54:42.0877
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB1677
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sarthak,
+Hi Lee,
 
-kernel test robot noticed the following build warnings:
+V3 already sent [1] few days ago, with patch 1 modified, please change 
+to v3.
 
-[auto build test WARNING on device-mapper-dm/for-next]
-[also build test WARNING on linus/master v6.3 next-20230421]
-[cannot apply to axboe-block/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Shengyu
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sarthak-Kukreti/block-Introduce-provisioning-primitives/20230420-095025
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-patch link:    https://lore.kernel.org/r/20230420004850.297045-2-sarthakkukreti%40chromium.org
-patch subject: [PATCH v5 1/5] block: Don't invalidate pagecache for invalid falloc modes
-config: hexagon-randconfig-r006-20230424 (https://download.01.org/0day-ci/archive/20230424/202304242302.5zYRfUub-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8bd0744b438be1722c5f8c1fe077e9dcef0e81b7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sarthak-Kukreti/block-Introduce-provisioning-primitives/20230420-095025
-        git checkout 8bd0744b438be1722c5f8c1fe077e9dcef0e81b7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+---
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304242302.5zYRfUub-lkp@intel.com/
+I didn't use reply all for the previous mail, so I sent it again.
 
-All warnings (new ones prefixed by >>):
+---
 
-   In file included from block/fops.c:9:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from block/fops.c:9:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from block/fops.c:9:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> block/fops.c:678:2: warning: unused label 'fail' [-Wunused-label]
-    fail:
-    ^~~~~
-   7 warnings generated.
+[1] 
+https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/T/#m0d1b78a5f561c4192cc2e9d409ba552ae60af986
 
 
-vim +/fail +678 block/fops.c
-
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  613  
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  614  #define	BLKDEV_FALLOC_FL_SUPPORTED					\
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  615  		(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |		\
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  616  		 FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  617  
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  618  static long blkdev_fallocate(struct file *file, int mode, loff_t start,
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  619  			     loff_t len)
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  620  {
-f278eb3d8178f9 Ming Lei          2021-09-23  621  	struct inode *inode = bdev_file_inode(file);
-f278eb3d8178f9 Ming Lei          2021-09-23  622  	struct block_device *bdev = I_BDEV(inode);
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  623  	loff_t end = start + len - 1;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  624  	loff_t isize;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  625  	int error;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  626  
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  627  	/* Fail if we don't recognize the flags. */
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  628  	if (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  629  		return -EOPNOTSUPP;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  630  
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  631  	/* Don't go off the end of the device. */
-2a93ad8fcb377b Christoph Hellwig 2021-10-18  632  	isize = bdev_nr_bytes(bdev);
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  633  	if (start >= isize)
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  634  		return -EINVAL;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  635  	if (end >= isize) {
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  636  		if (mode & FALLOC_FL_KEEP_SIZE) {
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  637  			len = isize - start;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  638  			end = start + len - 1;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  639  		} else
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  640  			return -EINVAL;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  641  	}
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  642  
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  643  	/*
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  644  	 * Don't allow IO that isn't aligned to logical block size.
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  645  	 */
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  646  	if ((start | len) & (bdev_logical_block_size(bdev) - 1))
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  647  		return -EINVAL;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  648  
-f278eb3d8178f9 Ming Lei          2021-09-23  649  	filemap_invalidate_lock(inode->i_mapping);
-f278eb3d8178f9 Ming Lei          2021-09-23  650  
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  651  	/*
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  652  	 * Invalidate the page cache, including dirty pages, for valid
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  653  	 * de-allocate mode calls to fallocate().
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  654  	 */
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  655  	switch (mode) {
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  656  	case FALLOC_FL_ZERO_RANGE:
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  657  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  658  		error = truncate_bdev_range(bdev, file->f_mode, start, end) ||
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  659  			blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
-6549a874fb65e7 Pavel Begunkov    2021-10-20  660  					     len >> SECTOR_SHIFT, GFP_KERNEL,
-6549a874fb65e7 Pavel Begunkov    2021-10-20  661  					     BLKDEV_ZERO_NOUNMAP);
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  662  		break;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  663  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  664  		error = truncate_bdev_range(bdev, file->f_mode, start, end) ||
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  665  			blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
-6549a874fb65e7 Pavel Begunkov    2021-10-20  666  					     len >> SECTOR_SHIFT, GFP_KERNEL,
-6549a874fb65e7 Pavel Begunkov    2021-10-20  667  					     BLKDEV_ZERO_NOFALLBACK);
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  668  		break;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  669  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HIDE_STALE:
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  670  		error = truncate_bdev_range(bdev, file->f_mode, start, end) ||
-8bd0744b438be1 Sarthak Kukreti   2023-04-19  671  			blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
-44abff2c0b970a Christoph Hellwig 2022-04-15  672  					     len >> SECTOR_SHIFT, GFP_KERNEL);
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  673  		break;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  674  	default:
-f278eb3d8178f9 Ming Lei          2021-09-23  675  		error = -EOPNOTSUPP;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  676  	}
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  677  
-f278eb3d8178f9 Ming Lei          2021-09-23 @678   fail:
-f278eb3d8178f9 Ming Lei          2021-09-23  679  	filemap_invalidate_unlock(inode->i_mapping);
-f278eb3d8178f9 Ming Lei          2021-09-23  680  	return error;
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  681  }
-cd82cca7ebfe9c Christoph Hellwig 2021-09-07  682  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> On Mon, 17 Apr 2023, Shengyu Qu wrote:
+>
+>> The X-Powers AXP15060 is a PMIC seen on Starfive Visionfive 2 board. Add
+>> relative compatible item and CPUSLDO support for it.
+>>
+>> Changes since v1:
+>> - Move cpusldo before drivevbus (Krzysztof Kozlowski)
+>>
+>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+>> ---
+>>   Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+> Applied, thanks
+>
