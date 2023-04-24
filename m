@@ -2,227 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE9C6ED681
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D656B6ED684
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbjDXVEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 17:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S232503AbjDXVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 17:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjDXVEX (ORCPT
+        with ESMTP id S229872AbjDXVFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 17:04:23 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5789E6185;
-        Mon, 24 Apr 2023 14:04:18 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 23:04:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1682370255; bh=PZbcpsup20QeRuaUGzcXEPgVVxiaSu5FYW4sV+lkMQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GOBRPp4wYWAM0cZtj0ag+vmiLp2ENK3L35Y/b5jamskGrcvrveF+RBAyWIMED3Cjc
-         uUdNYqphtnnX572/gARhlTHfJUWU7oncdjs/P2LbFV7tZJFllw+5oulKVEtnv1Wa35
-         TGCAvc8gHEGWvOITzIGQjhKPXvgpsS/fLOVifnIs=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 02/14] HP BIOSCFG driver - biosattr-interface
-Message-ID: <67108caf-2a03-4ef0-9f8d-819b0d6f0a2e@t-8ch.de>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-3-jorge.lopez2@hp.com>
- <b7c49593-13f9-44f8-b3b8-66551b01e966@t-8ch.de>
- <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
+        Mon, 24 Apr 2023 17:05:38 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DD66185
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:05:37 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-504fce3d7fbso7571801a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682370335; x=1684962335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N8tba+uDpkEW7dJT6XcMTrVp0OQq/mPaxrVBHBih1WQ=;
+        b=VX8v4h3N/14yvstAMpfQ/TxNsG6TZa2MTPUeVu66hXV8uwCYMq5vGq+feQ1yaUQgJO
+         Vq52tfGGw549jFbJJ/sDwZrM5Y1LjW9jzrrMKR4fDFc11IXc70/FRo8oqmYKIhP7mIgY
+         kkvbjGEWVf/FraDkCD+AXyi8chYjXjDI68PJY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682370335; x=1684962335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N8tba+uDpkEW7dJT6XcMTrVp0OQq/mPaxrVBHBih1WQ=;
+        b=OSAx9u+JAt9rjURmnHzslByidHrewvq3gq1y/TjsoYBJ9j77MoRRnjM611g0afK+w5
+         78orqHuwZ0y/FonLEIRvplYL5kd5Wk4BptBfooYBGIgvIihNoDG1Z/EsX65MGAzTMwNB
+         m+gz/YBo21DQ44RvskNzNseW1qjC+ymFrM6W1p6P3QOXaibW8BZBevHZmAbbHjLYwwCF
+         ++pj0LGoxhQSbPRAFWQ/mOPc3vae2KY4l6I9+e/ZoGzGXG3F/pSrYQy4+uaVj0mjGIy3
+         QIN/vb0Z1jaldaF9WfiF+vGPSjTW0LJI3GTMi2pl5nIBiknA9EQYs1wDto+UXWqihLvy
+         Xj3w==
+X-Gm-Message-State: AAQBX9eGeig9lVfz9sihdZM9DZzYtnjOg3ebVKMkMxZoG87aAk+jgzUv
+        aCPXKAsyIRcJhKAZLWXLsZPaesgsjCtLu0qHGju95hpM
+X-Google-Smtp-Source: AKy350aQ7YeC7SyvJmG2r/dJdKl0tGowZyj0rRyA8LhbO7auHSlJrXt/UA1XpjrzC599qY0lGJnhZg==
+X-Received: by 2002:a17:906:58:b0:921:da99:f39c with SMTP id 24-20020a170906005800b00921da99f39cmr12394634ejg.12.1682370335184;
+        Mon, 24 Apr 2023 14:05:35 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id l22-20020a170906795600b0094f25ae0821sm5913033ejo.31.2023.04.24.14.05.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 14:05:34 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5050497df77so7587753a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:05:34 -0700 (PDT)
+X-Received: by 2002:a05:6402:151:b0:508:41df:b276 with SMTP id
+ s17-20020a056402015100b0050841dfb276mr13756695edu.22.1682370334079; Mon, 24
+ Apr 2023 14:05:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+In-Reply-To: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 24 Apr 2023 14:05:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
+Message-ID: <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
+Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-24 15:33:26-0500, Jorge Lopez wrote:
-> Hi Thomas,
-> 
-> Please see my comments below.
-> 
-> On Sat, Apr 22, 2023 at 4:30 PM Thomas Weißschuh <thomas@t-8ch.de> wrote:
-> >
-> > Hi Jorge,
-> >
-> > checkpatch.pl finds some issues on your patches.
-> > Please make sure checkpath.pl --strict is happy.
-> >
-> I wasn't aware of the '--strict' parameter.  It is not part of the
-> help information for checkpath.pl tool.
-> Nonetheless, I will use it forward.
-> Thanks
+On Fri, Apr 21, 2023 at 7:02=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> This contains Jens' work to support FMODE_NOWAIT and thus IOCB_NOWAIT
+> for pipes ensuring that all places can deal with non-blocking requests.
+>
+> To this end, pass down the information that this is a nonblocking
+> request so that pipe locking, allocation, and buffer checking correctly
+> deal with those.
 
-It's an alias to --subjective. But indeed, it's hard to see in the help
-output.
+Ok, I pulled this, but then I unpulled it again.
 
-> > On 2023-04-20 11:54:42-0500, Jorge Lopez wrote:
-> > > ---
-> > > Based on the latest platform-drivers-x86.git/for-next
-> > No need to initialize auth_token_choice and start.
-> > Consider coalescing variable declaration to avoid wasting vertical
-> > space.
-> >
-> Done!
+Doing conditional locking for O_NONBLOCK and friends is not ok. Yes,
+it's been done, and I may even have let some slip through, but it's
+just WRONG.
 
-Please note that this affects many parts of the driver,
-try to fix it everywhere.
+There is absolutely no situation where a "ok, so the lock on this data
+structure was taken, we'll go to some async model" is worth it.
 
-> > > +{
-> > > +     struct acpi_buffer input, output = { ACPI_ALLOCATE_BUFFER, NULL };
-> > > +     struct bios_return *bios_return;
-> > > +     union acpi_object *obj = NULL;
-> > > +     struct bios_args *args = NULL;
-> > > +     int mid, actual_outsize;
-> > > +     size_t bios_args_size;
-> > > +     int ret;
-> > > +
-> > > +     mid = encode_outsize_for_pvsz(outsize);
-> > > +     if (WARN_ON(mid < 0))
-> > > +             return mid;
-> > > +
-> > > +     bios_args_size = struct_size(args, data, insize);
-> > > +     args = kmalloc(bios_args_size, GFP_KERNEL);
-> > > +     if (!args)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     input.length = bios_args_size;
-> > > +     input.pointer = args;
-> > > +
-> > > +     args->signature = 0x55434553;
-> >
-> > What does this number mean?
-> This is a HEX representation of the word  'SECU' expected by BIOS as a signa.
+Every single time I've seen this, it's been some developer who thinks
+that O_NONBLOCk is somehow some absolute "this cannot schedule" thing.
+And every single time it's been broken and horrid crap that just made
+everything more complicated and slowed things down.
 
-Sounds like a good thing to comment or put into a #define.
+If some lock wait is a real problem, then the lock needs to be just
+fixed. Not "ok, let's make a non-blocking version and fall back if
+it's held".
 
-> >
-> > > +     args->command = command;
-> > > +     args->commandtype = query;
-> > > +     args->datasize = insize;
-> > > +     memcpy(args->data, buffer, flex_array_size(args, data, insize));
-> > > +
-> > > +     ret = wmi_evaluate_method(HP_WMI_BIOS_GUID, 0, mid, &input, &output);
-> >
-> > The driver is mixing calls to the UUID based APIs and the wmi_device
-> > ones.
-> > wmi_devices is newer and preferred.
-> 
-> The driver  calls wmi_evaluate_method when initiating an WMI call.
-> Where is the driver mixing calls to the UUID based APIs and the
-> wmi_device one?
-> WMI calls are made by calling hp_wmi_perform_query() which invokes
-> wmi_evaluate_method().
-> Did I miss something?
+Note that FMODE_NOWAIT does not mean (and *CANNOT* mean) that you'd
+somehow be able to do the IO in some atomic context anyway. Many of
+our kernel locks don't even support that (eg mutexes).
 
-wmi_evaluate_method() is UUID-based.
-struct wmi_driver is wmi_device based.
+So thinking that FMODE_NOWAIT is that kind of absolute is the wrong
+kind of thinking entirely.
 
-The wmi_driver/wmi_device code essentially does nothing and is only used
-to validate that a device is present.
-The same can be done more easily wmi_has_guid().
+FMODE_NOWAIT should mean that no *IO* gets done. And yes, that might
+mean that allocations fail too. But not this kind of "let's turn
+locking into 'trylock' stuff".
 
-> >
-> > > +     bioscfg_wmi_error_and_message(ret);
-> > > +
-> > > +     if (ret)
-> > > +             goto out_free;
-> > > +
-> > > +     obj = output.pointer;
-> > > +     if (!obj) {
-> > > +             ret = -EINVAL;
-> > > +             goto out_free;
-> > > +     }
-> > > +     if (query != HPWMI_SECUREPLATFORM_GET_STATE &&
-> > > +         command != HPWMI_SECUREPLATFORM)
-> > > +             if (obj->type != ACPI_TYPE_BUFFER ||
-> > > +                 obj->buffer.length < sizeof(*bios_return)) {
-> > > +                     pr_warn("query 0x%x returned wrong type or too small buffer\n", query);
-> > > +                     ret = -EINVAL;
-> > > +                     goto out_free;
-> > > +             }
-> > > +
-> > > +
-> > > +     bios_return = (struct bios_return *)obj->buffer.pointer;
-> >
-> > For query == HPWMI_SECUREPLATFORM_GET_STATE && command == HPWMI_SECUREPLATFORM
-> > this is not guaranteed to be a buffer.
-> 
-> BIOS ensures the output is of buffer type and  buffer of 1024 bytes in
-> size.  This check also help us validate that BIOS only returns a
-> buffer type for this query/command type.
+The whoe flag is misnamed. It should have been FMODE_NOIO, the same
+way we have IOCB_NOIO.
 
-The kernel does not trust the BIOS :-)
-It trusts nothing and nobody.
+If you want FMODE_ATOMIC, then that is something entirely and
+completely different, and is probably crazy.
 
-All cases should be validated.
+We have done it in one area (RCU pathname lookup), and it was worth it
+there, and it was a *huge* undertaking. It was worth it, but it was
+worth it because it was a serious thing with some serious design and a
+critical area.
 
-> >
-> > > + */
-> > > +void *ascii_to_utf16_unicode(u16 *p, const u8 *str)
-> > > +{
-> > > +     int len = strlen(str);
-> > > +     int ret;
-> > > +
-> > > +     /*
-> > > +      * Add null character when reading an empty string
-> > > +      * "02 00 00 00"
-> > > +      */
-> > > +     if (len == 0)
-> > > +             return utf16_empty_string(p);
-> > > +
-> > > +     /* Move pointer len * 2 number of bytes */
-> > > +     *p++ = len * 2;
-> > > +     ret = utf8s_to_utf16s(str, strlen(str), UTF16_HOST_ENDIAN, p, len);
-> > > +     if (ret < 0) {
-> > > +             dev_err(bioscfg_drv.class_dev, "UTF16 conversion failed\n");
-> > > +             goto ascii_to_utf16_unicode_out;
-> > > +     }
-> >
-> > What if ret != len ?
-> 
-> only in conditions where utf8s_to_utf16s an error, we can state  ret != len.
-> ret == len when utf8s_to_utf16s() is successful.
-> >
-> > > +
-> > > +     if ((ret * sizeof(u16)) > U16_MAX) {
-> > > +             dev_err(bioscfg_drv.class_dev, "Error string too long\n");
-> > > +             goto ascii_to_utf16_unicode_out;
-> > > +     }
-> > > +
-> > > +ascii_to_utf16_unicode_out:
-> > > +     p += len;
-> >
-> > In cases of errors this will still point to the end of the data that
-> > should have been written but was not actually written.
-> > The caller has no way to recognize the error case.
-> >
-> That is correct.  If an error occurs, we only provide an error message
-> for those conditions.
+Not this kind of "conditional trylock" garbage which just means that
+people will require 'poll()' to now add the lock to the waitqueue, or
+make all callers go into some "let's use a different thread instead"
+logic.
 
-But the caller has no idea that this error occurred and will try to use
-the garbage buffer.
-The error should be communicated to the caller, and the caller has to
-validate the result.
-Maybe return NULL?
-
-> 
-> > > +     return p;
-> > > +}
-> > > +
-> > > +/*
-> >
-> > kernel-doc comments start with "/**". Note the two asterisks.
-> Done
-
-This also needs to be done all over the driver.
+                             Linus
