@@ -2,200 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401696ECC9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852BE6ECCA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjDXNIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S231818AbjDXNIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjDXNIH (ORCPT
+        with ESMTP id S231801AbjDXNIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:08:07 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367E13A94;
-        Mon, 24 Apr 2023 06:08:04 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4efd6e26585so2571593e87.1;
-        Mon, 24 Apr 2023 06:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682341682; x=1684933682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6femOnySKNTiqjlHMDrxwe74ekz6pLAJiaQJ5/km8I=;
-        b=DsBIs1MU4P+VNHqd6N6xMaAtkrzAcuPgpkeeVNuI3+jEmi8Gc0ZIAxqIQM4e3wgT8B
-         vD/tam9+dfkf3s0lGCcfKedqKaY7AdmDxG1zG+aGAEmzpomvaFRzWCYsiDkpuhuSVX5H
-         dk7ma2AjL7Zg47DtL4zuXkgyFDDSEscH2xNnerSZwRyTOTSwQcV0vgkNLrg1cgTqg+f7
-         K39R0WPxQjbgjTXpA5Jbp3LcwVfRTkJSz7/nQT9emJ48KL6VBTzbkz2Dk4yhV5oUIC8J
-         q71KwpOFArC4ku8QApFEO2xEmFECZqFNasSdCagqTR08iWTy8sPVYVscNg16uWxtDrip
-         a3Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682341682; x=1684933682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I6femOnySKNTiqjlHMDrxwe74ekz6pLAJiaQJ5/km8I=;
-        b=hTakThds0GI+f/7xPavWF4JkUDm5lmOJAQGWeS/EWktFCEv+1+TE7Uc61a8WWu4RPY
-         /e0vHJp86/2DdcsovtOU73/2gTIkMjh2Kd5mq1gsPDEbhF2Y+CCbD+p/0MB/n07m2xWa
-         ovulHAIbDbX26ECwAHmTN7Y4bOe0trFqambqutIWif44rft2W3kvba42Zi/Z+XBLJBdz
-         PrbZVIYI/eTsjllIVjdp0SXNXC9w992L0aaaDkfZZ+jXmDJf/JHminYe/22jwwRFekUq
-         TQhyffZcC/EuAO98vtyQ8KbHz6MpVVk4jEXUFPl6tB7+hIcg2gSTovjaUH05jEAjTA6+
-         AIkg==
-X-Gm-Message-State: AAQBX9czuoUWQKAt3IdrBZjvdb9Ef8v0KY7Oi1es5nLyhmQt0FqI7H+y
-        pvrUpodPOxq+3wQKziGrtzE=
-X-Google-Smtp-Source: AKy350YCIhYP0e1sJomsjp+MuMCtrER9Ozxgi5VyH7aJXE1FyQuYCDkvE+Wrv2mF5oi7q4Nth5Bs6g==
-X-Received: by 2002:a19:f611:0:b0:4ef:d3f3:c421 with SMTP id x17-20020a19f611000000b004efd3f3c421mr2617436lfe.4.1682341682550;
-        Mon, 24 Apr 2023 06:08:02 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id p15-20020ac246cf000000b004d8546456c6sm1651913lfo.195.2023.04.24.06.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 06:08:01 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 16:07:58 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/5] dt-bindings: iio: light: ROHM BU27008
-Message-ID: <c05272fdd607c45d352008f9d01fc44b9b8f50cc.1682340947.git.mazziesaccount@gmail.com>
-References: <cover.1682340947.git.mazziesaccount@gmail.com>
+        Mon, 24 Apr 2023 09:08:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0872149D0;
+        Mon, 24 Apr 2023 06:08:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C09612CA;
+        Mon, 24 Apr 2023 13:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBAAC4339B;
+        Mon, 24 Apr 2023 13:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682341685;
+        bh=MRtXNN7K2xxelZ/JoLLZMsrymk0qjan7oK/Hjqz/K7s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z7pBD1sH0r7g7xaRHXQ5z9Qq4Z1sZrN0xWvyH5RtHjsxRQ9dB/Axx8d016FPZVfL2
+         UFm1+ckTwKYK6mkivsDLi5QuIZ6tZ5rB7ebh+mtkkK4quMRX+Hfa/qrpUrU9Jd8RrR
+         DkUT5ttpIUMkl+s6UhRv68vxbx3VgMeqSKF6F8us=
+Date:   Mon, 24 Apr 2023 15:08:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Peter Enderborg <peter.enderborg@sony.com>,
+        Yingsha Xu <ysxu@hust.edu.cn>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: remove return value check of debugfs_create_dir()
+Message-ID: <2023042423-ice-rice-e3d3@gregkh>
+References: <20230423061155.2540-1-ysxu@hust.edu.cn>
+ <eb3c6aa6-6820-4e94-8eb0-5abd3b627fcc@sirena.org.uk>
+ <368e31ae-31b5-839f-72e3-20a27239cb0b@sony.com>
+ <a4706089-399b-4663-9ac8-216f12ebe7ca@sirena.org.uk>
+ <2023042421-landowner-magnitude-a38c@gregkh>
+ <55ab40bb-8b3e-496d-bf45-6c4ebd01e43f@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eQ1QSQkWWvAGy3fT"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1682340947.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <55ab40bb-8b3e-496d-bf45-6c4ebd01e43f@sirena.org.uk>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 24, 2023 at 02:00:14PM +0100, Mark Brown wrote:
+> On Mon, Apr 24, 2023 at 02:53:12PM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Apr 24, 2023 at 01:32:14PM +0100, Mark Brown wrote:
+> 
+> > > There's issues with partially created debugfs structures getting in the
+> > > way of people trying to debug things, just completely ignoring all
+> > > errors can create confusion as the diagnostic information people believe
+> > > is being shown to them ends up being partial or mistructured without any
+> > > indication that this has happened.
+> 
+> > How do you end up with partially created debugfs structures?
+> 
+> The ones I've seen have been name collisions caused by for example the
+> debugfs structure created being flatter than the device model structure,
+> though obviously something unanticipated could come up.
 
---eQ1QSQkWWvAGy3fT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure name collisions will happen, when people aren't precise about how
+they create their debugfs files (I just had to insist on this type of
+fixups for a USB patch last week.)  But, debugfs failures should never
+stop a driver from working properly, only the debugging functionalities.
+So there's no need to error out from debugfs errors as the only one
+affected is the kernel developer involved, not users.
 
-The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
-and IR) with four configurable channels. Red and green being always
-available and two out of the rest three (blue, clear, IR) can be
-selected to be simultaneously measured. Typical application is adjusting
-LCD backlight of TVs, mobile phones and tablet PCs.
+thanks,
 
-Add BU27008 dt-bindings.
+greg k-h
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
----
-Revision history:
-v1 =3D> v2:
-- fix binding file name
-- fix binding id
-- drop unnecessary '|' from description
----
- .../bindings/iio/light/rohm,bu27008.yaml      | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2700=
-8.yaml
-
-diff --git a/Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml =
-b/Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml
-new file mode 100644
-index 000000000000..4f66fd47b016
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/light/rohm,bu27008.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ROHM BU27008 color sensor
-+
-+maintainers:
-+  - Matti Vaittinen <mazziesaccount@gmail.com>
-+
-+description:
-+  The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
-+  and IR) with four configurable channels. Red and green being always
-+  available and two out of the rest three (blue, clear, IR) can be
-+  selected to be simultaneously measured. Typical application is adjusting
-+  LCD backlight of TVs, mobile phones and tablet PCs.
-+
-+properties:
-+  compatible:
-+    const: rohm,bu27008
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  vdd-supply: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells =3D <1>;
-+      #size-cells =3D <0>;
-+
-+      light-sensor@38 {
-+        compatible =3D "rohm,bu27008";
-+        reg =3D <0x38>;
-+      };
-+    };
-+
-+...
---=20
-2.40.0
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---eQ1QSQkWWvAGy3fT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRGfy4ACgkQeFA3/03a
-ocWtbAgAtdJKk1L7K5vQ+BbqtRExoYxcQMW9b/4txxP7elXDEcJNVrh9S+9MZxM9
-7SgDamCH+DBpErDIQavyDtSd+QCmvVrpBMiPGItc7ipIaqtVbRBgLl9kEcUY5Bri
-7wFBoMofWoaqOzHN48fnFZ3uwPQlsp3b6jBb5IeciCodLASKH4zwsxB3QQ9l1O1u
-eRXTBLwK6aje8ZNJ3aphMgOD3u9vAm3n8feM9Ta/BxDvRlI3WZOf17+jb1ECEo5S
-a8mJ7+lKg8xC9NUTlMCJU6KLmYXwBLIExZOba2TJXbxg+zUaiBsrA58uEsSSB+xj
-Z8xndlbcBrVlQQq4MF/ATpW0deHavg==
-=cBYC
------END PGP SIGNATURE-----
-
---eQ1QSQkWWvAGy3fT--
