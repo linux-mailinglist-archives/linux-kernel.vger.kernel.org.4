@@ -2,172 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54D06ED575
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8164E6ED57D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjDXTnD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 15:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        id S232140AbjDXTrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 15:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjDXTnB (ORCPT
+        with ESMTP id S231625AbjDXTrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:43:01 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541915B88
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:43:00 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-54fb8a8a597so57499447b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:43:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682365379; x=1684957379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hzv9DDy8KqR5toIcVytBQed/LqPBtxIbLra1+3vX+mg=;
-        b=K3+Su5o6DkNEAZua8ZvusiHzdE9JlBrahC8JEOWgp+QC6+r9Rz5J10UhXyp7JrBQhw
-         XY5OrGBm5JfmeCb8feP5qBoolPY1aihxtKFcbPp+R9Ynp6awL3FFbPQSkadb2U/JwRQR
-         D/n2ARxlBVR3TxsFwM7QUEMUHwgpLqQb+o7utuP2OYRCuu6/YDUqHeRUzyyE8QeweJD4
-         ekm04slxxtWskwgI/VFIy2O6ad6DmKVkO52F58X+xwoY1/LDBSVx9Nc6/zka8N8iotsI
-         z2m+gh/+clV69W//G8NrS5ocFoqlQHNaKrpFQF3jrHcXplK6CTGCQHu6EUViwnv+B0Yl
-         aM8g==
-X-Gm-Message-State: AAQBX9fPHQMt9+PnwT3PL02VhS5FA7bNAs0FWBSRujArYMTfsrG7NOtt
-        rmICj3qvjQ9cEdYKkVZQDXMmBYanhVDXpg==
-X-Google-Smtp-Source: AKy350a0A1Mln01KPxOziFZQAhS68YPeBOJgj8tehPpFinVBrswI9aF3CM6Ednx7ZhZ8yYFraIkgXw==
-X-Received: by 2002:a81:4849:0:b0:54f:b857:7fdc with SMTP id v70-20020a814849000000b0054fb8577fdcmr8989033ywa.17.1682365378260;
-        Mon, 24 Apr 2023 12:42:58 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id q189-20020a0dcec6000000b00555be5a354dsm3146677ywd.52.2023.04.24.12.42.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 12:42:57 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-b9582901279so7218779276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:42:57 -0700 (PDT)
-X-Received: by 2002:a81:5f83:0:b0:556:300c:d653 with SMTP id
- t125-20020a815f83000000b00556300cd653mr6938761ywb.40.1682365377354; Mon, 24
- Apr 2023 12:42:57 -0700 (PDT)
+        Mon, 24 Apr 2023 15:47:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA22527A;
+        Mon, 24 Apr 2023 12:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2Do1yeWHcPCiwl4CRls3I2dXsK6tP8pVag3VeASBUgM=; b=RyH62nvw+N9oAHQvClmlrR4pX/
+        SpU0VpnH5pHC3JlgThqshqVS9+S7lZpNq5wWmiM1Qsk6GvDKAG3RJXHwdPmJe6XLw4RaibFu7ZR5Y
+        7dK/tfunxoAHK6R94go/rtGwAXdDGYFRnnSvf1V0EskrwFBgpSzlsLHIOMCx2/OHksSsNJeCaCdUx
+        2KVMF1YuANBj0u+orQWi9ZmZXpmZLuiTO//JIZeNUbU2wHLP27mL1SuZoWK6oyR2e6nIL6XJlt/Ja
+        MxxUHQNFIkJiLIdTKEFMCp2zHisoe3ZjegT5FIsyuXypwi1UGca6kvC3s107nlbnBzpQvh1Mo33Dc
+        CYzHLEDQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pr29z-00H4WN-1E;
+        Mon, 24 Apr 2023 19:47:39 +0000
+Date:   Mon, 24 Apr 2023 12:47:39 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, live-patching@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <ZEbc20oRFR0f8Qj6@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <20230407232118.o2x5lakfgyzy56gz@treble>
 MIME-Version: 1.0
-References: <202304222120.WcBMaHXo-lkp@intel.com> <20230422135838.3rn67ky2p7jmdk3n@pali>
- <CAMuHMdX8PP3gH_ctgZgXfV6Psu95eTuCh0MBsEQsRVG_6rEUVg@mail.gmail.com> <20230424184941.44no7rkxjadnyojm@pali>
-In-Reply-To: <20230424184941.44no7rkxjadnyojm@pali>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Apr 2023 21:42:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWG5uzQCA6TA9n8sNn=WYOyO++AgThADVbLD5z9AiSL5w@mail.gmail.com>
-Message-ID: <CAMuHMdWG5uzQCA6TA9n8sNn=WYOyO++AgThADVbLD5z9AiSL5w@mail.gmail.com>
-Subject: Re: {standard input}:924: Error: unrecognized opcode: `eieio'
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407232118.o2x5lakfgyzy56gz@treble>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+On Fri, Apr 07, 2023 at 04:21:18PM -0700, Josh Poimboeuf wrote:
+> Anyway, I was nodding along with the above cover letter until I got to
+> the third paragraph.
+> 
+> A "built-in kernel module" is not actually a module, as it's built in to
+> vmlinux.  I suspect the point is that if you rebuild with a different
+> config, it might become a module.  But many other changes could also
+> occur with a changed config, including changed inlining decisions and
+> GCC IPA optimization function renaming, in which case the symbol might
+> no longer exist with the new config.
 
-On Mon, Apr 24, 2023 at 8:49 PM Pali Rohár <pali@kernel.org> wrote:
-> On Monday 24 April 2023 09:49:07 Geert Uytterhoeven wrote:
-> > On Sat, Apr 22, 2023 at 4:03 PM Pali Rohár <pali@kernel.org> wrote:
-> > > On Saturday 22 April 2023 21:53:23 kernel test robot wrote:
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > head:   8e41e0a575664d26bb87e012c39435c4c3914ed9
-> > > > commit: ff7c76f66d8bad4e694c264c789249e1d3a8205d powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage
-> > > > date:   3 months ago
-> > > > config: powerpc-buildonly-randconfig-r006-20230422 (https://download.01.org/0day-ci/archive/20230422/202304222120.WcBMaHXo-lkp@intel.com/config)
-> > > > compiler: powerpc-linux-gcc (GCC) 12.1.0
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ff7c76f66d8bad4e694c264c789249e1d3a8205d
-> > > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > > >         git fetch --no-tags linus master
-> > > >         git checkout ff7c76f66d8bad4e694c264c789249e1d3a8205d
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-> > > >
-> > > > If you fix the issue, kindly add following tag where applicable
-> > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > | Link: https://lore.kernel.org/oe-kbuild-all/202304222120.WcBMaHXo-lkp@intel.com/
-> > > >
-> > > > All errors (new ones prefixed by >>):
-> > > >
-> > > >    {standard input}: Assembler messages:
-> > > > >> {standard input}:924: Error: unrecognized opcode: `eieio'
-> > > >    {standard input}:1094: Error: unrecognized opcode: `eieio'
-> > > >
-> > > > --
-> > > > 0-DAY CI Kernel Test Service
-> > > > https://github.com/intel/lkp-tests
-> > >
-> > > Hello! What is that? In this error report there is no compile log, nor
-> > > any file / line. And "Link:" line from above error report does not work.
-> > >
-> > > Intel, can you look at your robot? This looks some bug in error reporting.
-> >
-> > Looks fine to me: this is not a compile problem, but an assembler problem.
-> > Presumably this is when building a kernel for a PPC platform that does
-> > not support the eieio instruction?
->
-> What is fine on this report? There is completely missing command which
-> generated this error; whole error message; input files which caused them
+Yes it does not matter, for his tooling effort it was just to be able
+to map a possible module to a symbol so tooling can display this to
+disambiguate.
 
-The file name is indeed missing.
+> Also I'm confused what it means for a symbol to be "used by multiple
+> modules".  If the same TU or inline symbol is linked into two modules,
+> it will be loaded twice at two different addresses, and the
+> implementations could even differ.
 
-> and also change or commit.
+He just wants to be able to map if a symbol with the same name but
+different addresses is due to a built-in or a module declaration of
+the same symbol so it can use it.
 
-That is mentioned, and looks like a valid possible introducer.
+> It sounds like there are two problems being conflated:
+> 
+>   1) how to uniquely identify symbols in the current kernel
+> 
+>      For this, all we really need is file+sym.
+> 
+>      Or, enable -zunique-symbols in the linker.
+> 
+>   2) how to uniquely identify symbols across multiple kernels/configs
+> 
+>      This seems much trickier, as much can change across kernels and
+>      configs, including compiler inlining and naming decisions, not to
+>      mention actual code changes.
+> 
+> The problems are related, but distinct.
+> 
+> #2 seems significantly harder to implement properly.
+> 
+> Would solving #1 give you most of what you need?
 
-> And what presumably happened? I'm really not going to spend more time on
-> guessing what reporter could probably might wanted to write into the
-> report and start looking into crystal ball what could be an issue.
->
-> I can say that this issue presumably happened when email operator of
-> this robot pushed incorrect button and instead of the real report, it
-> sent test report with content of some random error line from the random
-> log file.
->
-> Are we on the technical discussion about exactness? Or are going to
-> discuss what who think that what could happened?
+I'm not nick but my reading of his goals is that if you peg a
+"possible_module" prefix or postfix or whatever, then yes.
 
-It's randconfig, and the config is provided, incl. steps to reproduce.
+For 2) I think it would be good to see if one could just force Kconfig
+tristate to add -DPOSSIBLE_MODULE, that would be an easier approach
+than the possible-obj-m thing [0] I had suggested last
 
-> > The Link: works fine for me, sometimes you just have to be a little bit
-> > patient for the archiver to catch up...
->
-> Sorry, I do not have time to wait undefined amount of time to access
-> additional resources which are based on reported details required for
-> debugging.
+[0] https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
 
-The Link is just a reference to the email you received in your mailbox,
-and to all follow-ups.
-
-> Intel, could you please react on this issue? If not, I'm going to add
-> your robot to my black list. It is not first time when I received such
-> useless report from you and nobody reacted on it.
-
-Well, you are the one who authored the offending commit, and at
-first glance, it looks like a reasonable culprit that could introduce the
-failure mentioned ;-)
-
-Presumably you forgot to cater for a very specific combination of
-config option values?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+  Luis
