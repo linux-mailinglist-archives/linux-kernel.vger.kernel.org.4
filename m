@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA01A6EC357
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB626EC362
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjDXBJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 21:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S230315AbjDXBTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 21:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXBJd (ORCPT
+        with ESMTP id S229458AbjDXBTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 21:09:33 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4293FE78
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 18:09:32 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33O19EIC081629;
-        Mon, 24 Apr 2023 10:09:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Mon, 24 Apr 2023 10:09:14 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33O19DfL081626
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 24 Apr 2023 10:09:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <8e21256a-736e-4c2d-1ff4-723775bcac46@I-love.SAKURA.ne.jp>
-Date:   Mon, 24 Apr 2023 10:09:12 +0900
+        Sun, 23 Apr 2023 21:19:09 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7E3710DF
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 18:19:07 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxztoK2UVkHGMhAA--.40538S3;
+        Mon, 24 Apr 2023 09:19:06 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOQJ2UVkbeg3AA--.10000S3;
+        Mon, 24 Apr 2023 09:19:06 +0800 (CST)
+Subject: Re: [PATCH v3 4/6] LoongArch: Add uprobes support
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <1681898221-27828-1-git-send-email-yangtiezhu@loongson.cn>
+ <1681898221-27828-5-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H7Z_Y+XC-yMGRA1zq9FBU-tAVK+8+Jd4t5x4L4DFXAPJA@mail.gmail.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <993a2d7e-d7a2-3017-5a81-517ef6f85049@loongson.cn>
+Date:   Mon, 24 Apr 2023 09:19:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000013aaac05f9d44e7a@google.com>
- <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
- <6ff6fdea-c955-f9dd-289e-b0d613a28280@I-love.SAKURA.ne.jp>
- <20230423233433.GF3390869@ZenIV>
- <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
- <20230424004431.GG3390869@ZenIV>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230424004431.GG3390869@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAAhV-H7Z_Y+XC-yMGRA1zq9FBU-tAVK+8+Jd4t5x4L4DFXAPJA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxoOQJ2UVkbeg3AA--.10000S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ZF4rJFykAr1kWw4UZrW5KFg_yoW8Jw13pa
+        15Aay2qrsxJ3y8Cr18X390vryaq3yktr4DWr4DXrWrG3y7Xwn8GF92gryayFyjvrnYgay0
+        93Wj9FZ3ZFZxAFDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
+        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,48 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/04/24 9:44, Al Viro wrote:
-> Do you mean doing that in method instances that are present in tty_fops
-> you mean doing that in method instances that are present in tty_fops
-> and different in hung_up_tty_fops?
 
-I meant, remove hung_up_tty_fops, and embed callbacks defined in hung_up_tty_fops into
-tty_fops. For example, tty_read() (from "struct file_operations tty_fops"->read_iter)
-will be changed like
 
- static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
- {
- 	int i;
- 	struct file *file = iocb->ki_filp;
- 	struct inode *inode = file_inode(file);
- 	struct tty_struct *tty = file_tty(file);
- 	struct tty_ldisc *ld;
- 
-+	if (data_race(file->tty_hangup)) {
-+		return hung_up_tty_read(iocb, to);
-+	}
-+
- 	if (tty_paranoia_check(tty, inode, "tty_read"))
- 		return -EIO;
- 	if (!tty || tty_io_error(tty))
- 		return -EIO;
- 
- 	/* We want to wait for the line discipline to sort out in this
- 	 * situation.
- 	 */
- 	ld = tty_ldisc_ref_wait(tty);
- 	if (!ld)
- 		return hung_up_tty_read(iocb, to);
- 	i = -EIO;
- 	if (ld->ops->read)
- 		i = iterate_tty_read(ld, tty, file, to);
- 	tty_ldisc_deref(ld);
- 
- 	if (i > 0)
- 		tty_update_time(&inode->i_atime);
- 
- 	return i;
- }
+On 04/23/2023 09:12 PM, Huacai Chen wrote:
+> Hi, Tiezhu,
+>
+> On Wed, Apr 19, 2023 at 5:57 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> Uprobes is the user-space counterpart to kprobes, this commit
+>> adds uprobes support for LoongArch.
 
-in order to avoid wrapping filp->f_op->* dereferences using data_race().
+...
+
+>> +#define MAX_UINSN_BYTES                8
+>> +#define UPROBE_XOL_SLOT_BYTES  MAX_UINSN_BYTES
+> In old versions we define UPROBE_XOL_SLOT_BYTES to 128, why we use 8 now?
+
+I assume "the old version" maybe comes from mips, I am not quite sure 
+the backgrounds. For LoongArch, there are 2 xol slots to save 2 
+instructions, each of them is 32 bit, 2*32bit=8bytes, so 
+UPROBE_XOL_SLOT_BYTES can be 8.
+
+>> +
+>> +#define UPROBE_XOLBP_INSN      larch_insn_gen_break(BRK_UPROBE_XOLBP)
+>> +#define UPROBE_SWBP_INSN       larch_insn_gen_break(BRK_UPROBE_BP)
+>> +#define UPROBE_SWBP_INSN_SIZE  LOONGARCH_INSN_SIZE
+
+...
+
+>>         case BRK_UPROBE_XOLBP:
+>> -               if (notify_die(DIE_UPROBE_XOL, "Uprobe_XOL", regs, bcode,
+>> -                              current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
+>> +               if (uprobe_singlestep_handler(regs))
+> As I know, XOL means "execute out of line", is it an alias of "single step"?
+
+I think so, the instruction filled in xol slots is to single step, 
+arm64, riscv, csky also uses "single step" for the related code, 
+powerpc, s390 uses "DIE_SSTEP".
+
+Thanks,
+Tiezhu
 
