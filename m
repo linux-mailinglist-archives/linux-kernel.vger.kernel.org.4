@@ -2,151 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1146D6ED90C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20A56ED910
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjDXX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
+        id S232112AbjDXX4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDXXz6 (ORCPT
+        with ESMTP id S230355AbjDXX4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:55:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D345272;
-        Mon, 24 Apr 2023 16:55:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43D7762A56;
-        Mon, 24 Apr 2023 23:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DF9C433D2;
-        Mon, 24 Apr 2023 23:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682380542;
-        bh=/Xy1nbFBL6OoTaN9LfIVZd/HjfssH9pfdGmpPWgQX6o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AuVRgV5wNL6sfYK5/d6lYuMyDy2EFTKyFAmYNJhhXeYhtrHAnBRRK39z1xNFvZyky
-         L15oVP4EmWZ+NUJ+OK+P/qIPGTIkbdHmWll4FkymNxlYveyQcjW1m5b+5vJe3dhQzK
-         mLAdewCek0zuIIeaa8AI316CSqmKRxNyyCFKdCtHCszcNzY6w2MHgehDapMjk7TEWn
-         imGbH4Qm0q+iDNFRlM0lHvj+JoDE+ECDCgfPivE1bYfGLLK5sYlRRZa/EYMUsdzdOy
-         xPxQd5h2Sl65AzJpp5u6a/1VNuDoEQ7AMgnrP86zbHS1lSCWTlY6AVthEhv4m+zkA5
-         pzSEjv9apo2UQ==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2a8b1b51dbdso46948971fa.0;
-        Mon, 24 Apr 2023 16:55:42 -0700 (PDT)
-X-Gm-Message-State: AAQBX9fhIsZ8TiYmWdQXbe8ly9QYMBJ/PCR/zym6ZOe0EnU8q8l7vDOQ
-        Fx0LbO7DhK63fZBViyESdWpsMtVZvgz3x1KbkPg=
-X-Google-Smtp-Source: AKy350YMA6kITZDbZKx3Pm1hFsRyT7meVkV9yVlCuK0wy9PQp8RavGKaILlo7NpZrsZjKijdRKLwgjSp8ci1pS8nkQk=
-X-Received: by 2002:a2e:9989:0:b0:2a9:f114:f168 with SMTP id
- w9-20020a2e9989000000b002a9f114f168mr3023036lji.46.1682380540697; Mon, 24 Apr
- 2023 16:55:40 -0700 (PDT)
+        Mon, 24 Apr 2023 19:56:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C1D5255;
+        Mon, 24 Apr 2023 16:56:29 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ONdTjB028815;
+        Mon, 24 Apr 2023 23:55:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=f2+aPUSvLmUZTIuBdXcvPNjTt/QNqpPuQVW6OG5P7CM=;
+ b=IvsbL4k3vUnWOjpnj/rTok8k9YBc2p7DDfrP0HbOWp6H4NCQ5kFafSHUJMDCLXP1q8ak
+ 8yhQV5NpjGMKbpd0/05YphfhUuqpkE9+1hUdZ/rg+vhzCfSeO9iXTy1CZ6xaBBv4DZ9r
+ XvC6nurRBkW+AuDkALxXOdRGLpUBgBpyuxX9kjThtSHMKFwtmKUeIejvz72y1uVY5+ha
+ KBsLPZnmSB3DB6M49//gqKlhgT84ltF3YsVo+UY7113Z9GbX22PJrp2NPH4+MImDHZVH
+ vp2sWShOnMNqpz3doFkRiLxVmCUGzD9MSUOVBCcp6rAdVn06WUr75eVHfJxOpqpB2eTy JQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5wrb0rs9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 23:55:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ONtWZr018521
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 23:55:32 GMT
+Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
+ 2023 16:55:30 -0700
+Message-ID: <14a560e3-5451-153f-fb52-e528da745b15@quicinc.com>
+Date:   Mon, 24 Apr 2023 16:55:29 -0700
 MIME-Version: 1.0
-References: <20230420112946.2869956-1-yukuai1@huaweicloud.com> <20230420112946.2869956-2-yukuai1@huaweicloud.com>
-In-Reply-To: <20230420112946.2869956-2-yukuai1@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 24 Apr 2023 16:55:28 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7+autdRECogZiJa0uE-UYG3S7w6Hyz7=R8+19QNvu5RQ@mail.gmail.com>
-Message-ID: <CAPhsuW7+autdRECogZiJa0uE-UYG3S7w6Hyz7=R8+19QNvu5RQ@mail.gmail.com>
-Subject: Re: [PATCH -next 1/8] md/raid10: prevent soft lockup while flush writes
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     neilb@suse.de, akpm@osdl.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 06/17] drm/msm/dpu: Remove extraneous register define
+ indentation
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "Chandan Uddaraju" <chandanu@codeaurora.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-6-ef76c877eb97@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230411-dpu-intf-te-v2-6-ef76c877eb97@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VLdSmy7bfWjwxwS0uh48c9yLYlT1YFAf
+X-Proofpoint-ORIG-GUID: VLdSmy7bfWjwxwS0uh48c9yLYlT1YFAf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=576
+ bulkscore=0 clxscore=1015 malwarescore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304240217
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 4:31=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> Currently, there is no limit for raid1/raid10 plugged bio. While flushing
-> writes, raid1 has cond_resched() while raid10 doesn't, and too many
-> writes can cause soft lockup.
->
-> Follow up soft lockup can be triggered easily with writeback test for
-> raid10 with ramdisks:
->
-> watchdog: BUG: soft lockup - CPU#10 stuck for 27s! [md0_raid10:1293]
-> Call Trace:
->  <TASK>
->  call_rcu+0x16/0x20
->  put_object+0x41/0x80
->  __delete_object+0x50/0x90
->  delete_object_full+0x2b/0x40
->  kmemleak_free+0x46/0xa0
->  slab_free_freelist_hook.constprop.0+0xed/0x1a0
->  kmem_cache_free+0xfd/0x300
->  mempool_free_slab+0x1f/0x30
->  mempool_free+0x3a/0x100
->  bio_free+0x59/0x80
->  bio_put+0xcf/0x2c0
->  free_r10bio+0xbf/0xf0
->  raid_end_bio_io+0x78/0xb0
->  one_write_done+0x8a/0xa0
->  raid10_end_write_request+0x1b4/0x430
->  bio_endio+0x175/0x320
->  brd_submit_bio+0x3b9/0x9b7 [brd]
->  __submit_bio+0x69/0xe0
->  submit_bio_noacct_nocheck+0x1e6/0x5a0
->  submit_bio_noacct+0x38c/0x7e0
->  flush_pending_writes+0xf0/0x240
->  raid10d+0xac/0x1ed0
->
-> This patch fix the problem by adding cond_resched() to raid10 like what
-> raid1 did.
 
-nit: per submitting-patches.rst:
 
-Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-to do frotz", as if you are giving orders to the codebase to change
-its behaviour.
-
->
-> Note that unlimited plugged bio still need to be optimized because in
-> the case of writeback lots of dirty pages, this will take lots of memory
-> and io latecy is quite bad.
-
-typo: latency.
-
->
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On 4/17/2023 1:21 PM, Marijn Suijten wrote:
+> A bunch of registers are indented with two extra spaces, looking as if
+> these are values corresponding to the previous register which is not the
+> case, rather these are simply also register offsets and should only have
+> a single space separating them and the #define keyword.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  drivers/md/raid10.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 6590aa49598c..a116b7c9d9f3 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -921,6 +921,7 @@ static void flush_pending_writes(struct r10conf *conf=
-)
->                         else
->                                 submit_bio_noacct(bio);
->                         bio =3D next;
-> +                       cond_resched();
->                 }
->                 blk_finish_plug(&plug);
->         } else
-> @@ -1140,6 +1141,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, b=
-ool from_schedule)
->                 else
->                         submit_bio_noacct(bio);
->                 bio =3D next;
-> +               cond_resched();
->         }
->         kfree(plug);
->  }
-> --
-> 2.39.2
->
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
