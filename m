@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F8E6ED428
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9C16ED42A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjDXSNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S231499AbjDXSNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjDXSNf (ORCPT
+        with ESMTP id S232313AbjDXSNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Apr 2023 14:13:35 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA004C03
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:13:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2927459E7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:13:30 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682360007;
+        s=2020; t=1682360008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=5sjVCOTOKGYRbG6sN/eB48N/lr9EVJZJBYkiv7M5Xtk=;
-        b=crCBb33rNTQwC2r/kIJQ//fkPQbfblrSkp+F+69SMbhp39firjtqFIkJdlhE0KTfabwQd4
-        0N84vilNU1P3scJrmtccbHAlR5O3ik/GRZLcclX0Ol9O+ac1DTOjfqBCBD/yqdkk50dIly
-        +SisVGXk0MiHS2sLOc/K98Y6+dqs5ecc7P0jBY8bZhWG5sJMor9FX+4DglujcaDLb5Hkx6
-        ETRGBtHwGB3N1V14j7xU2OVNzDCSj+/oeHp9gQ+oifr1vq1MSXjtyVL8jT/85FK3JoRuS2
-        ExwIszlj08ni7auFv0SMU7sNEHaFq9/bS+ALBjKI3/DDDKUlaVZ0p+4IRYuf0A==
+        bh=0ooCSzoFBdO2JRjHsdDpenYgzuyvCYluYx0ojm1MFM8=;
+        b=2pjpldFpJXFMrO2r4VWkl6rV0rficHF6bcwY5io8i+h6BxoNcBZjFa5geFflRhvHWzBiXX
+        9BSFYVNeDhgKyFk/1iWkCws2yVxbB7pLB1u9wwnqkPCkmXWn1ymtMzb37oAoblCrh3plDA
+        Ao5cNI/p5LlRL1jo/VAQRT+S10jMb0hYdjE1E8SKGPGBaApukbzksAr0XL407udf84120b
+        NaoJJlwS9+7JwOYjHmW3FUTenl+/ARR7bIqBL0SiS3FDOih8gyEo98c4js/L/NaBHfS3qx
+        Zptq9+aaOKQf0DgagbsH1NcxPk6OD1WNPrCRgAaiOZrba5RcAK2eocf7mMDFhg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682360007;
+        s=2020e; t=1682360008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=5sjVCOTOKGYRbG6sN/eB48N/lr9EVJZJBYkiv7M5Xtk=;
-        b=6MQhgk3mRc2sr+JJRXGfLNksi2WYIs0nUwH9yDndM520W+O+CUWvkza3g2XkK/s5i2+elO
-        6tATPS+L+glmhKBQ==
+        bh=0ooCSzoFBdO2JRjHsdDpenYgzuyvCYluYx0ojm1MFM8=;
+        b=gmEFNWDP7CD1Wj715ssjDqDTx2yb1scgtOM83+SsUaaIRBzXJCxVAifNaav1GxJtoWlJXm
+        8ijC1G/Y0m1Ag+Dg==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] irq/core for 6.4-rc1
+Subject: [GIT pull] timers/core for 6.4-rc1
 References: <168235968801.840202.17752066425816055574.tglx@xen13>
-Message-ID: <168235969096.840202.4914424488387974308.tglx@xen13>
+Message-ID: <168235969244.840202.3708265453324842162.tglx@xen13>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Mon, 24 Apr 2023 20:13:26 +0200 (CEST)
+Date:   Mon, 24 Apr 2023 20:13:28 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -56,2440 +56,1290 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-please pull the latest irq/core branch from:
+please pull the latest timers/core branch from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-core-2023-04=
--24
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers-core-2023=
+-04-24
 
-up to:  f37202aa6e5d: Merge tag 'irqchip-6.4' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/maz/arm-platforms into irq/core
+up to:  f7abf14f0001: posix-cpu-timers: Implement the missing timer_wait_runn=
+ing callback
 
 
-Interrupt core and drivers updates:
+Timers and timekeeping updates:
 
- - Core:
+  - Improve the VDSO build time checks to cover all dynamic relocations
 
-   - Add tracepoints for tasklet callbacks which makes it possible to
-     analyze individual tasklet functions instead of guess working
-     from the overall duration of tasklet processing
+    VDSO does not allow dynamic relcations, but the build time check is
+    incomplete and fragile.
 
-   - Ensure that secondary interrupt threads have their affinity adjusted
-     correctly.
+    It's based on architectures specifying the relocation types to search
+    for and does not handle R_*_NONE relocation entries correctly.
+    R_*_NONE relocations are injected by some GNU ld variants if they fail
+    to determine the exact .rel[a]/dyn_size to cover trailing zeros.
+    R_*_NONE relocations must be ignored by dynamic loaders, so they
+    should be ignored in the build time check too.
 
- - Drivers:
+    Remove the architecture specific relocation types to check for and
+    validate strictly that no other relocations than R_*_NONE end up
+    in the VSDO .so file.
 
-   - A large rework of the RISC-V IPI management to prepare for a new
-     RISC-V interrupt architecture
+  - Prefer signal delivery to the current thread for
+    CLOCK_PROCESS_CPUTIME_ID based posix-timers
 
-   - Small fixes and enhancements all over the place
+    Such timers prefer to deliver the signal to the main thread of a
+    process even if the context in which the timer expires is the current
+    task. This has the downside that it might wake up an idle thread.
 
-   - Removal of support for various obsolete hardware platforms and the
-     related code
+    As there is no requirement or guarantee that the signal has to be
+    delivered to the main thread, avoid this by preferring the current
+    task if it is part of the thread group which shares sighand.
+
+    This not only avoids waking idle threads, it also distributes the
+    signal delivery in case of multiple timers firing in the context
+    of different threads close to each other better.
+
+  - Align the tick period properly (again)
+
+    For a long time the tick was starting at CLOCK_MONOTONIC zero, which
+    allowed users space applications to either align with the tick or to
+    place a periodic computation so that it does not interfere with the
+    tick. The alignement of the tick period was more by chance than by
+    intention as the tick is set up before a high resolution clocksource is
+    installed, i.e. timekeeping is still tick based and the tick period
+    advances from there.
+
+    The early enablement of sched_clock() broke this alignement as the time
+    accumulated by sched_clock() is taken into account when timekeeping is
+    initialized. So the base value now(CLOCK_MONOTONIC) is not longer a
+    multiple of tick periods, which breaks applications which relied on
+    that behaviour.
+
+    Cure this by aligning the tick starting point to the next multiple of
+    tick periods, i.e 1000ms/CONFIG_HZ.
+
+ - A set of NOHZ fixes and enhancements
+
+   - Cure the concurrent writer race for idle and IO sleeptime statistics
+
+     The statitic values which are exposed via /proc/stat are updated from
+     the CPU local idle exit and remotely by cpufreq, but that happens
+     without any form of serialization. As a consequence sleeptimes can be
+     accounted twice or worse.
+
+     Prevent this by restricting the accumulation writeback to the CPU
+     local idle exit and let the remote access compute the accumulated
+     value.
+
+   - Protect idle/iowait sleep time with a sequence count
+
+     Reading idle/iowait sleep time, e.g. from /proc/stat, can race with
+     idle exit updates. As a consequence the readout may result in random
+     and potentially going backwards values.
+
+     Protect this by a sequence count, which fixes the idle time
+     statistics issue, but cannot fix the iowait time problem because
+     iowait time accounting races with remote wake ups decrementing the
+     remote runqueues nr_iowait counter. The latter is impossible to fix,
+     so the only way to deal with that is to document it properly and to
+     remove the assertion in the selftest which triggers occasionally due
+     to that.
+
+   - Restructure struct tick_sched for better cache layout
+
+   - Some small cleanups and a better cache layout for struct tick_sched
+
+
+ - Implement the missing timer_wait_running() callback for POSIX CPU timers
+
+   For unknown reason the introduction of the timer_wait_running() callback
+   missed to fixup posix CPU timers, which went unnoticed for almost four
+   years.
+
+   While initially only targeted to prevent livelocks between a timer
+   deletion and the timer expiry function on PREEMPT_RT enabled kernels, it
+   turned out that fixing this for mainline is not as trivial as just
+   implementing a stub similar to the hrtimer/timer callbacks.
+
+   The reason is that for CONFIG_POSIX_CPU_TIMERS_TASK_WORK enabled systems
+   there is a livelock issue independent of RT.
+
+   CONFIG_POSIX_CPU_TIMERS_TASK_WORK=3Dy moves the expiry of POSIX CPU timers
+   out from hard interrupt context to task work, which is handled before
+   returning to user space or to a VM. The expiry mechanism moves the
+   expired timers to a stack local list head with sighand lock held. Once
+   sighand is dropped the task can be preempted and a task which wants to
+   delete a timer will spin-wait until the expiry task is scheduled back
+   in. In the worst case this will end up in a livelock when the preempting
+   task and the expiry task are pinned on the same CPU.
+
+   The timer wheel has a timer_wait_running() mechanism for RT, which uses
+   a per CPU timer-base expiry lock which is held by the expiry code and the
+   task waiting for the timer function to complete blocks on that lock.
+
+   This does not work in the same way for posix CPU timers as there is no
+   timer base and expiry for process wide timers can run on any task
+   belonging to that process, but the concept of waiting on an expiry lock
+   can be used too in a slightly different way.
+
+   Add a per task mutex to struct posix_cputimers_work, let the expiry task
+   hold it accross the expiry function and let the deleting task which
+   waits for the expiry to complete block on the mutex.
+
+   In the non-contended case this results in an extra mutex_lock()/unlock()
+   pair on both sides.
+
+   This avoids spin-waiting on a task which is scheduled out, prevents the
+   livelock and cures the problem for RT and !RT systems.
 
 Thanks,
 
 	tglx
 
 ------------------>
-Alain Volmat (1):
-      irqchip/st: Remove stih415/stih416 and stid127 platforms support
+Dmitry Vyukov (2):
+      posix-timers: Prefer delivery of signals to the current thread
+      selftests/timers/posix_timers: Test delivery of signals across threads
 
-Anup Patel (7):
-      RISC-V: Clear SIP bit only when using SBI IPI operations
-      irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
-      RISC-V: Treat IPIs as normal Linux IRQs
-      RISC-V: Allow marking IPIs as suitable for remote FENCEs
-      RISC-V: Use IPIs for remote TLB flush when possible
-      RISC-V: Use IPIs for remote icache flush when possible
-      irqchip/riscv-intc: Add empty irq_eoi() for chained irq handlers
+Fangrui Song (1):
+      vdso: Improve cmd_vdso_check to check all dynamic relocations
 
-Jianmin Lv (5):
-      irqchip/loongson-eiointc: Fix returned value on parsing MADT
-      irqchip/loongson-eiointc: Fix incorrect use of acpi_get_vec_parent
-      irqchip/loongson-eiointc: Fix registration of syscore_ops
-      irqchip/loongson-pch-pic: Fix registration of syscore_ops
-      irqchip/loongson-pch-pic: Fix pch_pic_acpi_init calling
+Frederic Weisbecker (8):
+      timers/nohz: Restructure and reshuffle struct tick_sched
+      timers/nohz: Only ever update sleeptime from idle exit
+      timers/nohz: Protect idle/iowait sleep time under seqcount
+      timers/nohz: Add a comment about broken iowait counter update race
+      timers/nohz: Remove middle-function __tick_nohz_idle_stop_tick()
+      MAINTAINERS: Remove stale email address
+      selftests/proc: Remove idle time monotonicity assertions
+      selftests/proc: Assert clock_gettime(CLOCK_BOOTTIME) VS /proc/uptime mo=
+notonicity
 
-John Keeping (1):
-      genirq: Update affinity of secondary threads
+Sebastian Andrzej Siewior (1):
+      tick/common: Align tick period with the HZ tick.
 
-Lingutla Chandrasekhar (1):
-      softirq: Add trace points for tasklet entry/exit
-
-Marc Zyngier (1):
-      irqchip/gic: Drop support for board files
-
-Mason Huo (1):
-      irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
-
-Rob Herring (1):
-      irqchip: Use of_property_read_bool() for boolean properties
-
-Sebastian Reichel (1):
-      irqchip/gic-v3: Add Rockchip 3588001 erratum workaround
-
-Shanker Donthineni (1):
-      irqchip/gicv3: Workaround for NVIDIA erratum T241-FABRIC-4
-
-=C3=81lvaro Fern=C3=A1ndez Rojas (1):
-      irqchip/bcm-6345-l1: Request memory region
+Thomas Gleixner (1):
+      posix-cpu-timers: Implement the missing timer_wait_running callback
 
 
- Documentation/arm64/silicon-errata.rst |   5 +
- arch/arm64/Kconfig                     |  10 ++
- arch/riscv/Kconfig                     |   2 +
- arch/riscv/include/asm/irq.h           |   4 +
- arch/riscv/include/asm/sbi.h           |   9 +-
- arch/riscv/include/asm/smp.h           |  49 +++++++---
- arch/riscv/kernel/Makefile             |   1 +
- arch/riscv/kernel/cpu-hotplug.c        |   3 +-
- arch/riscv/kernel/irq.c                |  21 +++-
- arch/riscv/kernel/sbi-ipi.c            |  77 +++++++++++++++
- arch/riscv/kernel/sbi.c                | 100 +++----------------
- arch/riscv/kernel/smp.c                | 171 +++++++++++++++++--------------=
+ MAINTAINERS                                    |   2 +-
+ arch/arm/vdso/Makefile                         |   4 +-
+ arch/arm64/kernel/vdso/Makefile                |   4 +-
+ arch/arm64/kernel/vdso32/Makefile              |   3 -
+ arch/csky/kernel/vdso/Makefile                 |   4 +-
+ arch/loongarch/vdso/Makefile                   |   4 +-
+ arch/mips/vdso/Makefile                        |   4 +-
+ arch/powerpc/kernel/vdso/Makefile              |   2 +-
+ arch/riscv/kernel/vdso/Makefile                |   4 +-
+ arch/s390/kernel/vdso32/Makefile               |   3 +-
+ arch/s390/kernel/vdso64/Makefile               |   3 +-
+ arch/x86/entry/vdso/Makefile                   |   5 +-
+ include/linux/posix-timers.h                   |  17 ++--
+ kernel/signal.c                                |  21 +++-
+ kernel/time/posix-cpu-timers.c                 |  81 ++++++++++++---
+ kernel/time/posix-timers.c                     |   4 +
+ kernel/time/tick-common.c                      |  12 ++-
+ kernel/time/tick-sched.c                       | 135 ++++++++++++-----------=
 --
- arch/riscv/kernel/smpboot.c            |   5 +-
- arch/riscv/mm/cacheflush.c             |   5 +-
- arch/riscv/mm/tlbflush.c               |  93 +++++++++++++++---
- drivers/clocksource/timer-clint.c      |  65 ++++++++++---
- drivers/firmware/smccc/smccc.c         |  26 +++++
- drivers/firmware/smccc/soc_id.c        |  28 +-----
- drivers/irqchip/Kconfig                |   3 +
- drivers/irqchip/irq-bcm6345-l1.c       |   6 +-
- drivers/irqchip/irq-csky-apb-intc.c    |   2 +-
- drivers/irqchip/irq-gic-v2m.c          |   2 +-
- drivers/irqchip/irq-gic-v3-its.c       |  35 +++++++
- drivers/irqchip/irq-gic-v3.c           | 115 +++++++++++++++++++---
- drivers/irqchip/irq-gic.c              |  60 +-----------
- drivers/irqchip/irq-loongson-eiointc.c |  32 ++++--
- drivers/irqchip/irq-loongson-pch-pic.c |   6 +-
- drivers/irqchip/irq-riscv-intc.c       |  71 ++++++++------
- drivers/irqchip/irq-sifive-plic.c      |  93 +++++++++++++++++-
- drivers/irqchip/irq-st.c               |  15 ---
- include/linux/arm-smccc.h              |  18 ++++
- include/linux/irqchip/arm-gic.h        |   6 --
- include/trace/events/irq.h             |  47 +++++++++
- kernel/irq/manage.c                    |   5 +-
- kernel/softirq.c                       |   9 +-
- 35 files changed, 819 insertions(+), 380 deletions(-)
- create mode 100644 arch/riscv/kernel/sbi-ipi.c
+ kernel/time/tick-sched.h                       |  67 +++++++-----
+ lib/vdso/Makefile                              |  13 +--
+ tools/testing/selftests/proc/proc-uptime-001.c |  25 +++--
+ tools/testing/selftests/proc/proc-uptime-002.c |  27 +++--
+ tools/testing/selftests/proc/proc-uptime.h     |  28 ++---
+ tools/testing/selftests/timers/posix_timers.c  |  77 ++++++++++++++
+ 24 files changed, 361 insertions(+), 188 deletions(-)
 
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/sil=
-icon-errata.rst
-index ec5f889d7681..9e311bc43e05 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -172,6 +172,8 @@ stable kernels.
- +----------------+-----------------+-----------------+----------------------=
--------+
- | NVIDIA         | Carmel Core     | N/A             | NVIDIA_CARMEL_CNP_ERR=
-ATUM   |
- +----------------+-----------------+-----------------+----------------------=
--------+
-+| NVIDIA         | T241 GICv3/4.x  | T241-FABRIC-4   | N/A                  =
-       |
-++----------------+-----------------+-----------------+----------------------=
--------+
- +----------------+-----------------+-----------------+----------------------=
--------+
- | Freescale/NXP  | LS2080A/LS1043A | A-008585        | FSL_ERRATUM_A008585  =
-       |
- +----------------+-----------------+-----------------+----------------------=
--------+
-@@ -205,6 +207,9 @@ stable kernels.
- +----------------+-----------------+-----------------+----------------------=
--------+
- | Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807=
-       |
- +----------------+-----------------+-----------------+----------------------=
--------+
-++----------------+-----------------+-----------------+----------------------=
--------+
-+| Rockchip       | RK3588          | #3588001        | ROCKCHIP_ERRATUM_3588=
-001    |
-++----------------+-----------------+-----------------+----------------------=
--------+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d8ebab595b2a..ee7e011f0b5e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14746,7 +14746,7 @@ F:	include/uapi/linux/nitro_enclaves.h
+ F:	samples/nitro_enclaves/
 =20
- +----------------+-----------------+-----------------+----------------------=
--------+
- | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_01000=
-1      |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1023e896d46b..02789215d251 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1150,6 +1150,16 @@ config NVIDIA_CARMEL_CNP_ERRATUM
+ NOHZ, DYNTICKS SUPPORT
+-M:	Frederic Weisbecker <fweisbec@gmail.com>
++M:	Frederic Weisbecker <frederic@kernel.org>
+ M:	Thomas Gleixner <tglx@linutronix.de>
+ M:	Ingo Molnar <mingo@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index a7ec06ce3785..515ca33b854c 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -1,8 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
 =20
- 	  If unsure, say Y.
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
 =20
-+config ROCKCHIP_ERRATUM_3588001
-+	bool "Rockchip 3588001: GIC600 can not support shareability attributes"
-+	default y
-+	help
-+	  The Rockchip RK3588 GIC600 SoC integration does not support ACE/ACE-lite.
-+	  This means, that its sharability feature may not be used, even though it
-+	  is supported by the IP itself.
-+
-+	  If unsure, say Y.
-+
- config SOCIONEXT_SYNQUACER_PREITS
- 	bool "Socionext Synquacer: Workaround for GICv3 pre-ITS"
- 	default y
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index eb7f29a412f8..139055bcfcae 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -63,6 +63,8 @@ config RISCV
- 	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
- 	select GENERIC_IDLE_POLL_SETUP
- 	select GENERIC_IOREMAP if MMU
-+	select GENERIC_IRQ_IPI if SMP
-+	select GENERIC_IRQ_IPI_MUX if SMP
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select GENERIC_IRQ_SHOW
- 	select GENERIC_IRQ_SHOW_LEVEL
-diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
-index e4c435509983..43b9ebfbd943 100644
---- a/arch/riscv/include/asm/irq.h
-+++ b/arch/riscv/include/asm/irq.h
-@@ -12,6 +12,10 @@
+ hostprogs :=3D vdsomunge
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index beaf9586338f..fe7a53c6781f 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -6,9 +6,7 @@
+ # Heavily based on the vDSO Makefiles for other archs.
+ #
 =20
- #include <asm-generic/irq.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
 =20
-+void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
-+
-+struct fwnode_handle *riscv_get_intc_hwnode(void);
-+
- extern void __init init_IRQ(void);
+ obj-vdso :=3D vgettimeofday.o note.o sigreturn.o
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Mak=
+efile
+index f59bd1a4ead6..d014162c5c71 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -3,9 +3,6 @@
+ # Makefile for vdso32
+ #
 =20
- #endif /* _ASM_RISCV_IRQ_H */
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 945b7be249c1..acab4410ef2a 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -271,8 +271,7 @@ long sbi_get_marchid(void);
- long sbi_get_mimpid(void);
- void sbi_set_timer(uint64_t stime_value);
- void sbi_shutdown(void);
--void sbi_clear_ipi(void);
--int sbi_send_ipi(const struct cpumask *cpu_mask);
-+void sbi_send_ipi(unsigned int cpu);
- int sbi_remote_fence_i(const struct cpumask *cpu_mask);
- int sbi_remote_sfence_vma(const struct cpumask *cpu_mask,
- 			   unsigned long start,
-@@ -335,4 +334,10 @@ unsigned long riscv_cached_mvendorid(unsigned int cpu_id=
-);
- unsigned long riscv_cached_marchid(unsigned int cpu_id);
- unsigned long riscv_cached_mimpid(unsigned int cpu_id);
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+ include $(srctree)/lib/vdso/Makefile
 =20
-+#if IS_ENABLED(CONFIG_SMP) && IS_ENABLED(CONFIG_RISCV_SBI)
-+void sbi_ipi_init(void);
-+#else
-+static inline void sbi_ipi_init(void) { }
-+#endif
-+
- #endif /* _ASM_RISCV_SBI_H */
-diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
-index 3831b638ecab..c4b77017ec58 100644
---- a/arch/riscv/include/asm/smp.h
-+++ b/arch/riscv/include/asm/smp.h
-@@ -15,12 +15,10 @@
- struct seq_file;
- extern unsigned long boot_cpu_hartid;
+ # Same as cc-*option, but using CC_COMPAT instead of CC
+diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+index 0b6909f10667..299e4e41ebc5 100644
+--- a/arch/csky/kernel/vdso/Makefile
++++ b/arch/csky/kernel/vdso/Makefile
+@@ -1,8 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
 =20
--struct riscv_ipi_ops {
--	void (*ipi_inject)(const struct cpumask *target);
--	void (*ipi_clear)(void);
--};
--
- #ifdef CONFIG_SMP
-+
-+#include <linux/jump_label.h>
-+
- /*
-  * Mapping between linux logical cpu index and hartid.
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+=20
+ # Symbols present in the vdso
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index d89e2ac75f7b..461240ab4436 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -1,9 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Objects to go into the VDSO.
+=20
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SL=
+OT
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+=20
+ obj-vdso-y :=3D elf.o vgetcpu.o vgettimeofday.o sigreturn.o
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index 18af9474ed0e..eb56581f6d73 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -4,9 +4,7 @@
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+  KCSAN_SANITIZE			:=3D n
+=20
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+=20
+ obj-vdso-y :=3D elf.o vgettimeofday.o sigreturn.o
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Mak=
+efile
+index 66f723f53be2..4c3f34485f08 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -2,7 +2,7 @@
+=20
+ # List of files in the vdso, has to be asm only for now
+=20
+-ARCH_REL_TYPE_ABS :=3D R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADD=
+R24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14=
+|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+=20
+ obj-vdso32 =3D sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32=
+.o note-32.o getcpu-32.o
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 06e6b27f3bcc..a04b3bc35ca2 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -1,9 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ # Copied from arch/tile/kernel/vdso/Makefile
+=20
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+ # Symbols present in the vdso
+ vdso-syms  =3D rt_sigreturn
+diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makef=
+ile
+index 245bddfe9bc0..bafd3147eb4e 100644
+--- a/arch/s390/kernel/vdso32/Makefile
++++ b/arch/s390/kernel/vdso32/Makefile
+@@ -2,9 +2,8 @@
+ # List of files in the vdso
+=20
+ KCOV_INSTRUMENT :=3D n
+-ARCH_REL_TYPE_ABS :=3D R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATI=
+VE
+-ARCH_REL_TYPE_ABS +=3D R_390_GOT|R_390_PLT
+=20
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+ obj-vdso32 =3D vdso_user_wrapper-32.o note-32.o
+=20
+diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makef=
+ile
+index 34f9542636e9..a766d286e15f 100644
+--- a/arch/s390/kernel/vdso64/Makefile
++++ b/arch/s390/kernel/vdso64/Makefile
+@@ -2,9 +2,8 @@
+ # List of files in the vdso
+=20
+ KCOV_INSTRUMENT :=3D n
+-ARCH_REL_TYPE_ABS :=3D R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATI=
+VE
+-ARCH_REL_TYPE_ABS +=3D R_390_GOT|R_390_PLT
+=20
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+ obj-vdso64 =3D vdso_user_wrapper.o note.o
+ obj-cvdso64 =3D vdso64_generic.o getcpu.o
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 1506a22a4fb6..6a1821bd7d5e 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -3,10 +3,7 @@
+ # Building vDSO images for x86.
+ #
+=20
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS :=3D R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIV=
+E|
+-ARCH_REL_TYPE_ABS +=3D R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
++# Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+=20
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+diff --git a/include/linux/posix-timers.h b/include/linux/posix-timers.h
+index 2c6e99ca48af..d607f51404fc 100644
+--- a/include/linux/posix-timers.h
++++ b/include/linux/posix-timers.h
+@@ -4,6 +4,7 @@
+=20
+ #include <linux/spinlock.h>
+ #include <linux/list.h>
++#include <linux/mutex.h>
+ #include <linux/alarmtimer.h>
+ #include <linux/timerqueue.h>
+=20
+@@ -62,16 +63,18 @@ static inline int clockid_to_fd(const clockid_t clk)
+  * cpu_timer - Posix CPU timer representation for k_itimer
+  * @node:	timerqueue node to queue in the task/sig
+  * @head:	timerqueue head on which this timer is queued
+- * @task:	Pointer to target task
++ * @pid:	Pointer to target task PID
+  * @elist:	List head for the expiry list
+  * @firing:	Timer is currently firing
++ * @handling:	Pointer to the task which handles expiry
   */
-@@ -33,9 +31,6 @@ void show_ipi_stats(struct seq_file *p, int prec);
- /* SMP initialization hook for setup_arch */
- void __init setup_smp(void);
+ struct cpu_timer {
+-	struct timerqueue_node	node;
+-	struct timerqueue_head	*head;
+-	struct pid		*pid;
+-	struct list_head	elist;
+-	int			firing;
++	struct timerqueue_node		node;
++	struct timerqueue_head		*head;
++	struct pid			*pid;
++	struct list_head		elist;
++	int				firing;
++	struct task_struct __rcu	*handling;
+ };
 =20
--/* Called from C code, this handles an IPI. */
--void handle_IPI(struct pt_regs *regs);
--
- /* Hook for the generic smp_call_function_many() routine. */
- void arch_send_call_function_ipi_mask(struct cpumask *mask);
+ static inline bool cpu_timer_enqueue(struct timerqueue_head *head,
+@@ -135,10 +138,12 @@ struct posix_cputimers {
+ /**
+  * posix_cputimers_work - Container for task work based posix CPU timer expi=
+ry
+  * @work:	The task work to be scheduled
++ * @mutex:	Mutex held around expiry in context of this task work
+  * @scheduled:  @work has been scheduled already, no further processing
+  */
+ struct posix_cputimers_work {
+ 	struct callback_head	work;
++	struct mutex		mutex;
+ 	unsigned int		scheduled;
+ };
 =20
-@@ -44,11 +39,22 @@ void arch_send_call_function_single_ipi(int cpu);
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 8cb28f1df294..8f6330f0e9ca 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1003,8 +1003,7 @@ static void complete_signal(int sig, struct task_struct=
+ *p, enum pid_type type)
+ 	/*
+ 	 * Now find a thread we can wake up to take the signal off the queue.
+ 	 *
+-	 * If the main thread wants the signal, it gets first crack.
+-	 * Probably the least surprising to the average bear.
++	 * Try the suggested task first (may or may not be the main thread).
+ 	 */
+ 	if (wants_signal(sig, p))
+ 		t =3D p;
+@@ -1970,8 +1969,24 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid,=
+ enum pid_type type)
 =20
- int riscv_hartid_to_cpuid(unsigned long hartid);
-=20
--/* Set custom IPI operations */
--void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops);
-+/* Enable IPI for CPU hotplug */
-+void riscv_ipi_enable(void);
+ 	ret =3D -1;
+ 	rcu_read_lock();
 +
-+/* Disable IPI for CPU hotplug */
-+void riscv_ipi_disable(void);
++	/*
++	 * This function is used by POSIX timers to deliver a timer signal.
++	 * Where type is PIDTYPE_PID (such as for timers with SIGEV_THREAD_ID
++	 * set), the signal must be delivered to the specific thread (queues
++	 * into t->pending).
++	 *
++	 * Where type is not PIDTYPE_PID, signals must be delivered to the
++	 * process. In this case, prefer to deliver to current if it is in
++	 * the same thread group as the target process, which avoids
++	 * unnecessarily waking up a potentially idle task.
++	 */
+ 	t =3D pid_task(pid, type);
+-	if (!t || !likely(lock_task_sighand(t, &flags)))
++	if (!t)
++		goto ret;
++	if (type !=3D PIDTYPE_PID && same_thread_group(t, current))
++		t =3D current;
++	if (!likely(lock_task_sighand(t, &flags)))
+ 		goto ret;
 =20
--/* Clear IPI for current CPU */
--void riscv_clear_ipi(void);
-+/* Check if IPI interrupt numbers are available */
-+bool riscv_ipi_have_virq_range(void);
-+
-+/* Set the IPI interrupt numbers for arch (called by irqchip drivers) */
-+void riscv_ipi_set_virq_range(int virq, int nr, bool use_for_rfence);
-+
-+/* Check if we can use IPIs for remote FENCEs */
-+DECLARE_STATIC_KEY_FALSE(riscv_ipi_for_rfence);
-+#define riscv_use_ipi_for_rfence() \
-+	static_branch_unlikely(&riscv_ipi_for_rfence)
+ 	ret =3D 1; /* the signal is ignored */
+diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
+index 2f5e9b34022c..e9c6f9d0e42c 100644
+--- a/kernel/time/posix-cpu-timers.c
++++ b/kernel/time/posix-cpu-timers.c
+@@ -846,6 +846,8 @@ static u64 collect_timerqueue(struct timerqueue_head *hea=
+d,
+ 			return expires;
 =20
- /* Check other CPUs stop or not */
- bool smp_crash_stop_failed(void);
-@@ -85,14 +91,29 @@ static inline unsigned long cpuid_to_hartid_map(int cpu)
- 	return boot_cpu_hartid;
- }
-=20
--static inline void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
-+static inline void riscv_ipi_enable(void)
-+{
-+}
-+
-+static inline void riscv_ipi_disable(void)
+ 		ctmr->firing =3D 1;
++		/* See posix_cpu_timer_wait_running() */
++		rcu_assign_pointer(ctmr->handling, current);
+ 		cpu_timer_dequeue(ctmr);
+ 		list_add_tail(&ctmr->elist, firing);
+ 	}
+@@ -1161,7 +1163,49 @@ static void handle_posix_cpu_timers(struct task_struct=
+ *tsk);
+ #ifdef CONFIG_POSIX_CPU_TIMERS_TASK_WORK
+ static void posix_cpu_timers_work(struct callback_head *work)
  {
- }
-=20
--static inline void riscv_clear_ipi(void)
-+static inline bool riscv_ipi_have_virq_range(void)
-+{
-+	return false;
++	struct posix_cputimers_work *cw =3D container_of(work, typeof(*cw), work);
++
++	mutex_lock(&cw->mutex);
+ 	handle_posix_cpu_timers(current);
++	mutex_unlock(&cw->mutex);
 +}
 +
-+static inline void riscv_ipi_set_virq_range(int virq, int nr,
-+					    bool use_for_rfence)
- {
- }
-=20
-+static inline bool riscv_use_ipi_for_rfence(void)
-+{
-+	return false;
-+}
-+
- #endif /* CONFIG_SMP */
-=20
- #if defined(CONFIG_HOTPLUG_CPU) && (CONFIG_SMP)
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 4cf303a779ab..67f542be1bea 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -74,6 +74,7 @@ obj-$(CONFIG_PERF_EVENTS)	+=3D perf_callchain.o
- obj-$(CONFIG_HAVE_PERF_REGS)	+=3D perf_regs.o
- obj-$(CONFIG_RISCV_SBI)		+=3D sbi.o
- ifeq ($(CONFIG_RISCV_SBI), y)
-+obj-$(CONFIG_SMP)		+=3D sbi-ipi.o
- obj-$(CONFIG_SMP) +=3D cpu_ops_sbi.o
- endif
- obj-$(CONFIG_HOTPLUG_CPU)	+=3D cpu-hotplug.o
-diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
-index f7a832e3a1d1..39235cf50652 100644
---- a/arch/riscv/kernel/cpu-hotplug.c
-+++ b/arch/riscv/kernel/cpu-hotplug.c
-@@ -13,7 +13,7 @@
- #include <asm/irq.h>
- #include <asm/cpu_ops.h>
- #include <asm/numa.h>
--#include <asm/sbi.h>
-+#include <asm/smp.h>
-=20
- bool cpu_has_hotplug(unsigned int cpu)
- {
-@@ -43,6 +43,7 @@ int __cpu_disable(void)
- 	remove_cpu_topology(cpu);
- 	numa_remove_cpu(cpu);
- 	set_cpu_online(cpu, false);
-+	riscv_ipi_disable();
- 	irq_migrate_all_off_this_cpu();
-=20
- 	return ret;
-diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 7207fa08d78f..eb9a68a539e6 100644
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@ -7,8 +7,26 @@
-=20
- #include <linux/interrupt.h>
- #include <linux/irqchip.h>
-+#include <linux/irqdomain.h>
-+#include <linux/module.h>
- #include <linux/seq_file.h>
--#include <asm/smp.h>
-+#include <asm/sbi.h>
-+
-+static struct fwnode_handle *(*__get_intc_node)(void);
-+
-+void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void))
-+{
-+	__get_intc_node =3D fn;
-+}
-+
-+struct fwnode_handle *riscv_get_intc_hwnode(void)
-+{
-+	if (__get_intc_node)
-+		return __get_intc_node();
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(riscv_get_intc_hwnode);
-=20
- int arch_show_interrupts(struct seq_file *p, int prec)
- {
-@@ -21,4 +39,5 @@ void __init init_IRQ(void)
- 	irqchip_init();
- 	if (!handle_arch_irq)
- 		panic("No interrupt controller found.");
-+	sbi_ipi_init();
- }
-diff --git a/arch/riscv/kernel/sbi-ipi.c b/arch/riscv/kernel/sbi-ipi.c
-new file mode 100644
-index 000000000000..a4559695ce62
---- /dev/null
-+++ b/arch/riscv/kernel/sbi-ipi.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Multiplex several IPIs over a single HW IPI.
-+ *
-+ * Copyright (c) 2022 Ventana Micro Systems Inc.
++ * Invoked from the posix-timer core when a cancel operation failed because
++ * the timer is marked firing. The caller holds rcu_read_lock(), which
++ * protects the timer and the task which is expiring it from being freed.
 + */
-+
-+#define pr_fmt(fmt) "riscv: " fmt
-+#include <linux/cpu.h>
-+#include <linux/init.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/irqdomain.h>
-+#include <asm/sbi.h>
-+
-+static int sbi_ipi_virq;
-+
-+static void sbi_ipi_handle(struct irq_desc *desc)
++static void posix_cpu_timer_wait_running(struct k_itimer *timr)
 +{
-+	struct irq_chip *chip =3D irq_desc_get_chip(desc);
++	struct task_struct *tsk =3D rcu_dereference(timr->it.cpu.handling);
 +
-+	chained_irq_enter(chip, desc);
-+
-+	csr_clear(CSR_IP, IE_SIE);
-+	ipi_mux_process();
-+
-+	chained_irq_exit(chip, desc);
-+}
-+
-+static int sbi_ipi_starting_cpu(unsigned int cpu)
-+{
-+	enable_percpu_irq(sbi_ipi_virq, irq_get_trigger_type(sbi_ipi_virq));
-+	return 0;
-+}
-+
-+void __init sbi_ipi_init(void)
-+{
-+	int virq;
-+	struct irq_domain *domain;
-+
-+	if (riscv_ipi_have_virq_range())
++	/* Has the handling task completed expiry already? */
++	if (!tsk)
 +		return;
 +
-+	domain =3D irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-+					  DOMAIN_BUS_ANY);
-+	if (!domain) {
-+		pr_err("unable to find INTC IRQ domain\n");
-+		return;
-+	}
-+
-+	sbi_ipi_virq =3D irq_create_mapping(domain, RV_IRQ_SOFT);
-+	if (!sbi_ipi_virq) {
-+		pr_err("unable to create INTC IRQ mapping\n");
-+		return;
-+	}
-+
-+	virq =3D ipi_mux_create(BITS_PER_BYTE, sbi_send_ipi);
-+	if (virq <=3D 0) {
-+		pr_err("unable to create muxed IPIs\n");
-+		irq_dispose_mapping(sbi_ipi_virq);
-+		return;
-+	}
-+
-+	irq_set_chained_handler(sbi_ipi_virq, sbi_ipi_handle);
-+
-+	/*
-+	 * Don't disable IPI when CPU goes offline because
-+	 * the masking/unmasking of virtual IPIs is done
-+	 * via generic IPI-Mux
-+	 */
-+	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-+			  "irqchip/sbi-ipi:starting",
-+			  sbi_ipi_starting_cpu, NULL);
-+
-+	riscv_ipi_set_virq_range(virq, BITS_PER_BYTE, false);
-+	pr_info("providing IPIs using SBI IPI extension\n");
++	/* Ensure that the task cannot go away */
++	get_task_struct(tsk);
++	/* Now drop the RCU protection so the mutex can be locked */
++	rcu_read_unlock();
++	/* Wait on the expiry mutex */
++	mutex_lock(&tsk->posix_cputimers_work.mutex);
++	/* Release it immediately again. */
++	mutex_unlock(&tsk->posix_cputimers_work.mutex);
++	/* Drop the task reference. */
++	put_task_struct(tsk);
++	/* Relock RCU so the callsite is balanced */
++	rcu_read_lock();
 +}
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 5c87db8fdff2..92b9b759ab3d 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -17,7 +17,7 @@ unsigned long sbi_spec_version __ro_after_init =3D SBI_SPEC=
-_VERSION_DEFAULT;
- EXPORT_SYMBOL(sbi_spec_version);
-=20
- static void (*__sbi_set_timer)(uint64_t stime) __ro_after_init;
--static int (*__sbi_send_ipi)(const struct cpumask *cpu_mask) __ro_after_init;
-+static void (*__sbi_send_ipi)(unsigned int cpu) __ro_after_init;
- static int (*__sbi_rfence)(int fid, const struct cpumask *cpu_mask,
- 			   unsigned long start, unsigned long size,
- 			   unsigned long arg4, unsigned long arg5) __ro_after_init;
-@@ -130,17 +130,6 @@ void sbi_shutdown(void)
- }
- EXPORT_SYMBOL(sbi_shutdown);
-=20
--/**
-- * sbi_clear_ipi() - Clear any pending IPIs for the calling hart.
-- *
-- * Return: None
-- */
--void sbi_clear_ipi(void)
--{
--	sbi_ecall(SBI_EXT_0_1_CLEAR_IPI, 0, 0, 0, 0, 0, 0, 0);
--}
--EXPORT_SYMBOL(sbi_clear_ipi);
--
- /**
-  * __sbi_set_timer_v01() - Program the timer for next timer event.
-  * @stime_value: The value after which next timer event should fire.
-@@ -157,17 +146,12 @@ static void __sbi_set_timer_v01(uint64_t stime_value)
- #endif
- }
-=20
--static int __sbi_send_ipi_v01(const struct cpumask *cpu_mask)
-+static void __sbi_send_ipi_v01(unsigned int cpu)
- {
--	unsigned long hart_mask;
--
--	if (!cpu_mask || cpumask_empty(cpu_mask))
--		cpu_mask =3D cpu_online_mask;
--	hart_mask =3D __sbi_v01_cpumask_to_hartmask(cpu_mask);
--
-+	unsigned long hart_mask =3D
-+		__sbi_v01_cpumask_to_hartmask(cpumask_of(cpu));
- 	sbi_ecall(SBI_EXT_0_1_SEND_IPI, 0, (unsigned long)(&hart_mask),
- 		  0, 0, 0, 0, 0);
--	return 0;
- }
-=20
- static int __sbi_rfence_v01(int fid, const struct cpumask *cpu_mask,
-@@ -216,12 +200,10 @@ static void __sbi_set_timer_v01(uint64_t stime_value)
- 		sbi_major_version(), sbi_minor_version());
- }
-=20
--static int __sbi_send_ipi_v01(const struct cpumask *cpu_mask)
-+static void __sbi_send_ipi_v01(unsigned int cpu)
- {
- 	pr_warn("IPI extension is not available in SBI v%lu.%lu\n",
- 		sbi_major_version(), sbi_minor_version());
--
--	return 0;
- }
-=20
- static int __sbi_rfence_v01(int fid, const struct cpumask *cpu_mask,
-@@ -248,55 +230,18 @@ static void __sbi_set_timer_v02(uint64_t stime_value)
- #endif
- }
-=20
--static int __sbi_send_ipi_v02(const struct cpumask *cpu_mask)
-+static void __sbi_send_ipi_v02(unsigned int cpu)
- {
--	unsigned long hartid, cpuid, hmask =3D 0, hbase =3D 0, htop =3D 0;
--	struct sbiret ret =3D {0};
- 	int result;
-+	struct sbiret ret =3D {0};
-=20
--	if (!cpu_mask || cpumask_empty(cpu_mask))
--		cpu_mask =3D cpu_online_mask;
--
--	for_each_cpu(cpuid, cpu_mask) {
--		hartid =3D cpuid_to_hartid_map(cpuid);
--		if (hmask) {
--			if (hartid + BITS_PER_LONG <=3D htop ||
--			    hbase + BITS_PER_LONG <=3D hartid) {
--				ret =3D sbi_ecall(SBI_EXT_IPI,
--						SBI_EXT_IPI_SEND_IPI, hmask,
--						hbase, 0, 0, 0, 0);
--				if (ret.error)
--					goto ecall_failed;
--				hmask =3D 0;
--			} else if (hartid < hbase) {
--				/* shift the mask to fit lower hartid */
--				hmask <<=3D hbase - hartid;
--				hbase =3D hartid;
--			}
--		}
--		if (!hmask) {
--			hbase =3D hartid;
--			htop =3D hartid;
--		} else if (hartid > htop) {
--			htop =3D hartid;
--		}
--		hmask |=3D BIT(hartid - hbase);
--	}
--
--	if (hmask) {
--		ret =3D sbi_ecall(SBI_EXT_IPI, SBI_EXT_IPI_SEND_IPI,
--				hmask, hbase, 0, 0, 0, 0);
--		if (ret.error)
--			goto ecall_failed;
-+	ret =3D sbi_ecall(SBI_EXT_IPI, SBI_EXT_IPI_SEND_IPI,
-+			1UL, cpuid_to_hartid_map(cpu), 0, 0, 0, 0);
-+	if (ret.error) {
-+		result =3D sbi_err_map_linux_errno(ret.error);
-+		pr_err("%s: hbase =3D [%lu] failed (error [%d])\n",
-+			__func__, cpuid_to_hartid_map(cpu), result);
- 	}
--
--	return 0;
--
--ecall_failed:
--	result =3D sbi_err_map_linux_errno(ret.error);
--	pr_err("%s: hbase =3D [%lu] hmask =3D [0x%lx] failed (error [%d])\n",
--	       __func__, hbase, hmask, result);
--	return result;
- }
-=20
- static int __sbi_rfence_v02_call(unsigned long fid, unsigned long hmask,
-@@ -410,13 +355,11 @@ void sbi_set_timer(uint64_t stime_value)
-=20
- /**
-  * sbi_send_ipi() - Send an IPI to any hart.
-- * @cpu_mask: A cpu mask containing all the target harts.
-- *
-- * Return: 0 on success, appropriate linux error code otherwise.
-+ * @cpu: Logical id of the target CPU.
-  */
--int sbi_send_ipi(const struct cpumask *cpu_mask)
-+void sbi_send_ipi(unsigned int cpu)
- {
--	return __sbi_send_ipi(cpu_mask);
-+	__sbi_send_ipi(cpu);
- }
- EXPORT_SYMBOL(sbi_send_ipi);
-=20
-@@ -641,15 +584,6 @@ long sbi_get_mimpid(void)
- }
- EXPORT_SYMBOL_GPL(sbi_get_mimpid);
-=20
--static void sbi_send_cpumask_ipi(const struct cpumask *target)
--{
--	sbi_send_ipi(target);
--}
--
--static const struct riscv_ipi_ops sbi_ipi_ops =3D {
--	.ipi_inject =3D sbi_send_cpumask_ipi
--};
--
- void __init sbi_init(void)
- {
- 	int ret;
-@@ -696,6 +630,4 @@ void __init sbi_init(void)
- 		__sbi_send_ipi	=3D __sbi_send_ipi_v01;
- 		__sbi_rfence	=3D __sbi_rfence_v01;
- 	}
--
--	riscv_set_ipi_ops(&sbi_ipi_ops);
- }
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index 8c3b59f1f9b8..5f985a197eff 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -13,14 +13,15 @@
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/kexec.h>
-+#include <linux/percpu.h>
- #include <linux/profile.h>
- #include <linux/smp.h>
- #include <linux/sched.h>
- #include <linux/seq_file.h>
- #include <linux/delay.h>
-+#include <linux/irq.h>
- #include <linux/irq_work.h>
-=20
--#include <asm/sbi.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
- #include <asm/cpu_ops.h>
-@@ -44,11 +45,10 @@ void __init smp_setup_processor_id(void)
- 	cpuid_to_hartid_map(0) =3D boot_cpu_hartid;
- }
-=20
--/* A collection of single bit ipi messages.  */
--static struct {
--	unsigned long stats[IPI_MAX] ____cacheline_aligned;
--	unsigned long bits ____cacheline_aligned;
--} ipi_data[NR_CPUS] __cacheline_aligned;
-+static DEFINE_PER_CPU_READ_MOSTLY(int, ipi_dummy_dev);
-+static int ipi_virq_base __ro_after_init;
-+static int nr_ipi __ro_after_init =3D IPI_MAX;
-+static struct irq_desc *ipi_desc[IPI_MAX] __read_mostly;
-=20
- int riscv_hartid_to_cpuid(unsigned long hartid)
- {
-@@ -100,48 +100,14 @@ static inline void ipi_cpu_crash_stop(unsigned int cpu,=
- struct pt_regs *regs)
- }
- #endif
-=20
--static const struct riscv_ipi_ops *ipi_ops __ro_after_init;
--
--void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
--{
--	ipi_ops =3D ops;
--}
--EXPORT_SYMBOL_GPL(riscv_set_ipi_ops);
--
--void riscv_clear_ipi(void)
--{
--	if (ipi_ops && ipi_ops->ipi_clear)
--		ipi_ops->ipi_clear();
--
--	csr_clear(CSR_IP, IE_SIE);
--}
--EXPORT_SYMBOL_GPL(riscv_clear_ipi);
--
- static void send_ipi_mask(const struct cpumask *mask, enum ipi_message_type =
-op)
- {
--	int cpu;
--
--	smp_mb__before_atomic();
--	for_each_cpu(cpu, mask)
--		set_bit(op, &ipi_data[cpu].bits);
--	smp_mb__after_atomic();
--
--	if (ipi_ops && ipi_ops->ipi_inject)
--		ipi_ops->ipi_inject(mask);
--	else
--		pr_warn("SMP: IPI inject method not available\n");
-+	__ipi_send_mask(ipi_desc[op], mask);
- }
-=20
- static void send_ipi_single(int cpu, enum ipi_message_type op)
- {
--	smp_mb__before_atomic();
--	set_bit(op, &ipi_data[cpu].bits);
--	smp_mb__after_atomic();
--
--	if (ipi_ops && ipi_ops->ipi_inject)
--		ipi_ops->ipi_inject(cpumask_of(cpu));
--	else
--		pr_warn("SMP: IPI inject method not available\n");
-+	__ipi_send_mask(ipi_desc[op], cpumask_of(cpu));
- }
-=20
- #ifdef CONFIG_IRQ_WORK
-@@ -151,59 +117,98 @@ void arch_irq_work_raise(void)
- }
- #endif
-=20
--void handle_IPI(struct pt_regs *regs)
-+static irqreturn_t handle_IPI(int irq, void *data)
- {
--	unsigned int cpu =3D smp_processor_id();
--	unsigned long *pending_ipis =3D &ipi_data[cpu].bits;
--	unsigned long *stats =3D ipi_data[cpu].stats;
-+	int ipi =3D irq - ipi_virq_base;
 +
-+	switch (ipi) {
-+	case IPI_RESCHEDULE:
-+		scheduler_ipi();
-+		break;
-+	case IPI_CALL_FUNC:
-+		generic_smp_call_function_interrupt();
-+		break;
-+	case IPI_CPU_STOP:
-+		ipi_stop();
-+		break;
-+	case IPI_CPU_CRASH_STOP:
-+		ipi_cpu_crash_stop(smp_processor_id(), get_irq_regs());
-+		break;
-+	case IPI_IRQ_WORK:
-+		irq_work_run();
-+		break;
-+#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-+	case IPI_TIMER:
-+		tick_receive_broadcast();
-+		break;
-+#endif
-+	default:
-+		pr_warn("CPU%d: unhandled IPI%d\n", smp_processor_id(), ipi);
-+		break;
-+	}
-=20
--	riscv_clear_ipi();
-+	return IRQ_HANDLED;
-+}
-=20
--	while (true) {
--		unsigned long ops;
-+void riscv_ipi_enable(void)
++static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
 +{
-+	int i;
-=20
--		/* Order bit clearing and data access. */
--		mb();
-+	if (WARN_ON_ONCE(!ipi_virq_base))
-+		return;
-=20
--		ops =3D xchg(pending_ipis, 0);
--		if (ops =3D=3D 0)
--			return;
-+	for (i =3D 0; i < nr_ipi; i++)
-+		enable_percpu_irq(ipi_virq_base + i, 0);
-+}
-=20
--		if (ops & (1 << IPI_RESCHEDULE)) {
--			stats[IPI_RESCHEDULE]++;
--			scheduler_ipi();
--		}
-+void riscv_ipi_disable(void)
-+{
-+	int i;
-=20
--		if (ops & (1 << IPI_CALL_FUNC)) {
--			stats[IPI_CALL_FUNC]++;
--			generic_smp_call_function_interrupt();
--		}
-+	if (WARN_ON_ONCE(!ipi_virq_base))
-+		return;
-=20
--		if (ops & (1 << IPI_CPU_STOP)) {
--			stats[IPI_CPU_STOP]++;
--			ipi_stop();
--		}
-+	for (i =3D 0; i < nr_ipi; i++)
-+		disable_percpu_irq(ipi_virq_base + i);
-+}
-=20
--		if (ops & (1 << IPI_CPU_CRASH_STOP)) {
--			ipi_cpu_crash_stop(cpu, get_irq_regs());
--		}
-+bool riscv_ipi_have_virq_range(void)
-+{
-+	return (ipi_virq_base) ? true : false;
-+}
-=20
--		if (ops & (1 << IPI_IRQ_WORK)) {
--			stats[IPI_IRQ_WORK]++;
--			irq_work_run();
--		}
-+DEFINE_STATIC_KEY_FALSE(riscv_ipi_for_rfence);
-+EXPORT_SYMBOL_GPL(riscv_ipi_for_rfence);
-=20
--#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
--		if (ops & (1 << IPI_TIMER)) {
--			stats[IPI_TIMER]++;
--			tick_receive_broadcast();
--		}
--#endif
--		BUG_ON((ops >> IPI_MAX) !=3D 0);
-+void riscv_ipi_set_virq_range(int virq, int nr, bool use_for_rfence)
-+{
-+	int i, err;
-+
-+	if (WARN_ON(ipi_virq_base))
-+		return;
-+
-+	WARN_ON(nr < IPI_MAX);
-+	nr_ipi =3D min(nr, IPI_MAX);
-+	ipi_virq_base =3D virq;
-=20
--		/* Order data access and bit testing. */
--		mb();
-+	/* Request IPIs */
-+	for (i =3D 0; i < nr_ipi; i++) {
-+		err =3D request_percpu_irq(ipi_virq_base + i, handle_IPI,
-+					 "IPI", &ipi_dummy_dev);
-+		WARN_ON(err);
-+
-+		ipi_desc[i] =3D irq_to_desc(ipi_virq_base + i);
-+		irq_set_status_flags(ipi_virq_base + i, IRQ_HIDDEN);
- 	}
-+
-+	/* Enabled IPIs for boot CPU immediately */
-+	riscv_ipi_enable();
-+
-+	/* Update RFENCE static key */
-+	if (use_for_rfence)
-+		static_branch_enable(&riscv_ipi_for_rfence);
-+	else
-+		static_branch_disable(&riscv_ipi_for_rfence);
++	/* Ensure that timr->it.cpu.handling task cannot go away */
++	rcu_read_lock();
++	spin_unlock_irq(&timr->it_lock);
++	posix_cpu_timer_wait_running(timr);
++	rcu_read_unlock();
++	/* @timr is on stack and is valid */
++	spin_lock_irq(&timr->it_lock);
  }
 =20
- static const char * const ipi_names[] =3D {
-@@ -223,7 +228,7 @@ void show_ipi_stats(struct seq_file *p, int prec)
- 		seq_printf(p, "%*s%u:%s", prec - 1, "IPI", i,
- 			   prec >=3D 4 ? " " : "");
- 		for_each_online_cpu(cpu)
--			seq_printf(p, "%10lu ", ipi_data[cpu].stats[i]);
-+			seq_printf(p, "%10u ", irq_desc_kstat_cpu(ipi_desc[i], cpu));
- 		seq_printf(p, " %s\n", ipi_names[i]);
- 	}
+ /*
+@@ -1177,6 +1221,7 @@ void clear_posix_cputimers_work(struct task_struct *p)
+ 	       sizeof(p->posix_cputimers_work.work));
+ 	init_task_work(&p->posix_cputimers_work.work,
+ 		       posix_cpu_timers_work);
++	mutex_init(&p->posix_cputimers_work.mutex);
+ 	p->posix_cputimers_work.scheduled =3D false;
  }
-diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index ddb2afba6d25..00b53913d4c6 100644
---- a/arch/riscv/kernel/smpboot.c
-+++ b/arch/riscv/kernel/smpboot.c
-@@ -30,7 +30,6 @@
- #include <asm/numa.h>
- #include <asm/tlbflush.h>
- #include <asm/sections.h>
--#include <asm/sbi.h>
- #include <asm/smp.h>
 =20
- #include "head.h"
-@@ -158,12 +157,12 @@ asmlinkage __visible void smp_callin(void)
- 	struct mm_struct *mm =3D &init_mm;
- 	unsigned int curr_cpuid =3D smp_processor_id();
+@@ -1255,6 +1300,18 @@ static inline void __run_posix_cpu_timers(struct task_=
+struct *tsk)
+ 	lockdep_posixtimer_exit();
+ }
 =20
--	riscv_clear_ipi();
--
- 	/* All kernel threads share the same mm context.  */
- 	mmgrab(mm);
- 	current->active_mm =3D mm;
-=20
-+	riscv_ipi_enable();
++static void posix_cpu_timer_wait_running(struct k_itimer *timr)
++{
++	cpu_relax();
++}
 +
- 	store_cpu_topology(curr_cpuid);
- 	notify_cpu_starting(curr_cpuid);
- 	numa_add_cpu(curr_cpuid);
-diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-index fcd6145fbead..20cec5e7cdbf 100644
---- a/arch/riscv/mm/cacheflush.c
-+++ b/arch/riscv/mm/cacheflush.c
-@@ -19,7 +19,7 @@ void flush_icache_all(void)
++static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
++{
++	spin_unlock_irq(&timr->it_lock);
++	cpu_relax();
++	spin_lock_irq(&timr->it_lock);
++}
++
+ static inline bool posix_cpu_timers_work_scheduled(struct task_struct *tsk)
  {
- 	local_flush_icache_all();
-=20
--	if (IS_ENABLED(CONFIG_RISCV_SBI))
-+	if (IS_ENABLED(CONFIG_RISCV_SBI) && !riscv_use_ipi_for_rfence())
- 		sbi_remote_fence_i(NULL);
- 	else
- 		on_each_cpu(ipi_remote_fence_i, NULL, 1);
-@@ -67,7 +67,8 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
- 		 * with flush_icache_deferred().
+ 	return false;
+@@ -1363,6 +1420,8 @@ static void handle_posix_cpu_timers(struct task_struct =
+*tsk)
  		 */
- 		smp_mb();
--	} else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-+	} else if (IS_ENABLED(CONFIG_RISCV_SBI) &&
-+		   !riscv_use_ipi_for_rfence()) {
- 		sbi_remote_fence_i(&others);
- 	} else {
- 		on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
-diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
-index ef701fa83f36..77be59aadc73 100644
---- a/arch/riscv/mm/tlbflush.c
-+++ b/arch/riscv/mm/tlbflush.c
-@@ -23,14 +23,62 @@ static inline void local_flush_tlb_page_asid(unsigned lon=
-g addr,
- 			: "memory");
+ 		if (likely(cpu_firing >=3D 0))
+ 			cpu_timer_fire(timer);
++		/* See posix_cpu_timer_wait_running() */
++		rcu_assign_pointer(timer->it.cpu.handling, NULL);
+ 		spin_unlock(&timer->it_lock);
+ 	}
  }
-=20
-+static inline void local_flush_tlb_range(unsigned long start,
-+		unsigned long size, unsigned long stride)
-+{
-+	if (size <=3D stride)
-+		local_flush_tlb_page(start);
-+	else
-+		local_flush_tlb_all();
-+}
-+
-+static inline void local_flush_tlb_range_asid(unsigned long start,
-+		unsigned long size, unsigned long stride, unsigned long asid)
-+{
-+	if (size <=3D stride)
-+		local_flush_tlb_page_asid(start, asid);
-+	else
-+		local_flush_tlb_all_asid(asid);
-+}
-+
-+static void __ipi_flush_tlb_all(void *info)
-+{
-+	local_flush_tlb_all();
-+}
-+
- void flush_tlb_all(void)
- {
--	sbi_remote_sfence_vma(NULL, 0, -1);
-+	if (riscv_use_ipi_for_rfence())
-+		on_each_cpu(__ipi_flush_tlb_all, NULL, 1);
-+	else
-+		sbi_remote_sfence_vma(NULL, 0, -1);
-+}
-+
-+struct flush_tlb_range_data {
-+	unsigned long asid;
-+	unsigned long start;
-+	unsigned long size;
-+	unsigned long stride;
-+};
-+
-+static void __ipi_flush_tlb_range_asid(void *info)
-+{
-+	struct flush_tlb_range_data *d =3D info;
-+
-+	local_flush_tlb_range_asid(d->start, d->size, d->stride, d->asid);
-+}
-+
-+static void __ipi_flush_tlb_range(void *info)
-+{
-+	struct flush_tlb_range_data *d =3D info;
-+
-+	local_flush_tlb_range(d->start, d->size, d->stride);
- }
-=20
--static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
--				  unsigned long size, unsigned long stride)
-+static void __flush_tlb_range(struct mm_struct *mm, unsigned long start,
-+			      unsigned long size, unsigned long stride)
- {
-+	struct flush_tlb_range_data ftd;
- 	struct cpumask *cmask =3D mm_cpumask(mm);
- 	unsigned int cpuid;
- 	bool broadcast;
-@@ -45,19 +93,34 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, u=
-nsigned long start,
- 		unsigned long asid =3D atomic_long_read(&mm->context.id) & asid_mask;
-=20
- 		if (broadcast) {
--			sbi_remote_sfence_vma_asid(cmask, start, size, asid);
--		} else if (size <=3D stride) {
--			local_flush_tlb_page_asid(start, asid);
-+			if (riscv_use_ipi_for_rfence()) {
-+				ftd.asid =3D asid;
-+				ftd.start =3D start;
-+				ftd.size =3D size;
-+				ftd.stride =3D stride;
-+				on_each_cpu_mask(cmask,
-+						 __ipi_flush_tlb_range_asid,
-+						 &ftd, 1);
-+			} else
-+				sbi_remote_sfence_vma_asid(cmask,
-+							   start, size, asid);
- 		} else {
--			local_flush_tlb_all_asid(asid);
-+			local_flush_tlb_range_asid(start, size, stride, asid);
+@@ -1497,23 +1556,16 @@ static int do_cpu_nanosleep(const clockid_t which_clo=
+ck, int flags,
+ 		expires =3D cpu_timer_getexpires(&timer.it.cpu);
+ 		error =3D posix_cpu_timer_set(&timer, 0, &zero_it, &it);
+ 		if (!error) {
+-			/*
+-			 * Timer is now unarmed, deletion can not fail.
+-			 */
++			/* Timer is now unarmed, deletion can not fail. */
+ 			posix_cpu_timer_del(&timer);
++		} else {
++			while (error =3D=3D TIMER_RETRY) {
++				posix_cpu_timer_wait_running_nsleep(&timer);
++				error =3D posix_cpu_timer_del(&timer);
++			}
  		}
- 	} else {
- 		if (broadcast) {
--			sbi_remote_sfence_vma(cmask, start, size);
--		} else if (size <=3D stride) {
--			local_flush_tlb_page(start);
-+			if (riscv_use_ipi_for_rfence()) {
-+				ftd.asid =3D 0;
-+				ftd.start =3D start;
-+				ftd.size =3D size;
-+				ftd.stride =3D stride;
-+				on_each_cpu_mask(cmask,
-+						 __ipi_flush_tlb_range,
-+						 &ftd, 1);
-+			} else
-+				sbi_remote_sfence_vma(cmask, start, size);
- 		} else {
--			local_flush_tlb_all();
-+			local_flush_tlb_range(start, size, stride);
- 		}
- 	}
+-		spin_unlock_irq(&timer.it_lock);
 =20
-@@ -66,23 +129,23 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, =
-unsigned long start,
+-		while (error =3D=3D TIMER_RETRY) {
+-			/*
+-			 * We need to handle case when timer was or is in the
+-			 * middle of firing. In other cases we already freed
+-			 * resources.
+-			 */
+-			spin_lock_irq(&timer.it_lock);
+-			error =3D posix_cpu_timer_del(&timer);
+-			spin_unlock_irq(&timer.it_lock);
+-		}
++		spin_unlock_irq(&timer.it_lock);
 =20
- void flush_tlb_mm(struct mm_struct *mm)
- {
--	__sbi_tlb_flush_range(mm, 0, -1, PAGE_SIZE);
-+	__flush_tlb_range(mm, 0, -1, PAGE_SIZE);
- }
-=20
- void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
- {
--	__sbi_tlb_flush_range(vma->vm_mm, addr, PAGE_SIZE, PAGE_SIZE);
-+	__flush_tlb_range(vma->vm_mm, addr, PAGE_SIZE, PAGE_SIZE);
- }
-=20
- void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
- 		     unsigned long end)
- {
--	__sbi_tlb_flush_range(vma->vm_mm, start, end - start, PAGE_SIZE);
-+	__flush_tlb_range(vma->vm_mm, start, end - start, PAGE_SIZE);
- }
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
- 			unsigned long end)
- {
--	__sbi_tlb_flush_range(vma->vm_mm, start, end - start, PMD_SIZE);
-+	__flush_tlb_range(vma->vm_mm, start, end - start, PMD_SIZE);
- }
- #endif
-diff --git a/drivers/clocksource/timer-clint.c b/drivers/clocksource/timer-cl=
-int.c
-index 6cfe2ab73eb0..9a55e733ae99 100644
---- a/drivers/clocksource/timer-clint.c
-+++ b/drivers/clocksource/timer-clint.c
-@@ -17,6 +17,9 @@
- #include <linux/sched_clock.h>
- #include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/irqdomain.h>
- #include <linux/of_irq.h>
- #include <linux/smp.h>
- #include <linux/timex.h>
-@@ -31,6 +34,7 @@
-=20
- /* CLINT manages IPI and Timer for RISC-V M-mode  */
- static u32 __iomem *clint_ipi_base;
-+static unsigned int clint_ipi_irq;
- static u64 __iomem *clint_timer_cmp;
- static u64 __iomem *clint_timer_val;
- static unsigned long clint_timer_freq;
-@@ -41,12 +45,10 @@ u64 __iomem *clint_time_val;
- EXPORT_SYMBOL(clint_time_val);
- #endif
-=20
--static void clint_send_ipi(const struct cpumask *target)
-+#ifdef CONFIG_SMP
-+static void clint_send_ipi(unsigned int cpu)
- {
--	unsigned int cpu;
--
--	for_each_cpu(cpu, target)
--		writel(1, clint_ipi_base + cpuid_to_hartid_map(cpu));
-+	writel(1, clint_ipi_base + cpuid_to_hartid_map(cpu));
- }
-=20
- static void clint_clear_ipi(void)
-@@ -54,10 +56,18 @@ static void clint_clear_ipi(void)
- 	writel(0, clint_ipi_base + cpuid_to_hartid_map(smp_processor_id()));
- }
-=20
--static struct riscv_ipi_ops clint_ipi_ops =3D {
--	.ipi_inject =3D clint_send_ipi,
--	.ipi_clear =3D clint_clear_ipi,
--};
-+static void clint_ipi_interrupt(struct irq_desc *desc)
-+{
-+	struct irq_chip *chip =3D irq_desc_get_chip(desc);
-+
-+	chained_irq_enter(chip, desc);
-+
-+	clint_clear_ipi();
-+	ipi_mux_process();
-+
-+	chained_irq_exit(chip, desc);
-+}
-+#endif
-=20
- #ifdef CONFIG_64BIT
- #define clint_get_cycles()	readq_relaxed(clint_timer_val)
-@@ -125,12 +135,19 @@ static int clint_timer_starting_cpu(unsigned int cpu)
-=20
- 	enable_percpu_irq(clint_timer_irq,
- 			  irq_get_trigger_type(clint_timer_irq));
-+	enable_percpu_irq(clint_ipi_irq,
-+			  irq_get_trigger_type(clint_ipi_irq));
- 	return 0;
- }
-=20
- static int clint_timer_dying_cpu(unsigned int cpu)
- {
- 	disable_percpu_irq(clint_timer_irq);
-+	/*
-+	 * Don't disable IPI when CPU goes offline because
-+	 * the masking/unmasking of virtual IPIs is done
-+	 * via generic IPI-Mux
-+	 */
- 	return 0;
- }
-=20
-@@ -170,6 +187,12 @@ static int __init clint_timer_init_dt(struct device_node=
- *np)
- 			return -ENODEV;
- 		}
-=20
-+		/* Find parent irq domain and map ipi irq */
-+		if (!clint_ipi_irq &&
-+		    oirq.args[0] =3D=3D RV_IRQ_SOFT &&
-+		    irq_find_host(oirq.np))
-+			clint_ipi_irq =3D irq_of_parse_and_map(np, i);
-+
- 		/* Find parent irq domain and map timer irq */
- 		if (!clint_timer_irq &&
- 		    oirq.args[0] =3D=3D RV_IRQ_TIMER &&
-@@ -177,9 +200,9 @@ static int __init clint_timer_init_dt(struct device_node =
-*np)
- 			clint_timer_irq =3D irq_of_parse_and_map(np, i);
- 	}
-=20
--	/* If CLINT timer irq not found then fail */
--	if (!clint_timer_irq) {
--		pr_err("%pOFP: timer irq not found\n", np);
-+	/* If CLINT ipi or timer irq not found then fail */
-+	if (!clint_ipi_irq || !clint_timer_irq) {
-+		pr_err("%pOFP: ipi/timer irq not found\n", np);
- 		return -ENODEV;
- 	}
-=20
-@@ -219,6 +242,19 @@ static int __init clint_timer_init_dt(struct device_node=
- *np)
- 		goto fail_iounmap;
- 	}
-=20
-+#ifdef CONFIG_SMP
-+	rc =3D ipi_mux_create(BITS_PER_BYTE, clint_send_ipi);
-+	if (rc <=3D 0) {
-+		pr_err("unable to create muxed IPIs\n");
-+		rc =3D (rc < 0) ? rc : -ENODEV;
-+		goto fail_free_irq;
-+	}
-+
-+	irq_set_chained_handler(clint_ipi_irq, clint_ipi_interrupt);
-+	riscv_ipi_set_virq_range(rc, BITS_PER_BYTE, true);
-+	clint_clear_ipi();
-+#endif
-+
- 	rc =3D cpuhp_setup_state(CPUHP_AP_CLINT_TIMER_STARTING,
- 				"clockevents/clint/timer:starting",
- 				clint_timer_starting_cpu,
-@@ -228,13 +264,10 @@ static int __init clint_timer_init_dt(struct device_nod=
-e *np)
- 		goto fail_free_irq;
- 	}
-=20
--	riscv_set_ipi_ops(&clint_ipi_ops);
--	clint_clear_ipi();
--
- 	return 0;
-=20
- fail_free_irq:
--	free_irq(clint_timer_irq, &clint_clock_event);
-+	free_percpu_irq(clint_timer_irq, &clint_clock_event);
- fail_iounmap:
- 	iounmap(base);
- 	return rc;
-diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
-index 60ccf3e90d7d..db818f9dcb8e 100644
---- a/drivers/firmware/smccc/smccc.c
-+++ b/drivers/firmware/smccc/smccc.c
-@@ -17,9 +17,13 @@ static enum arm_smccc_conduit smccc_conduit =3D SMCCC_COND=
-UIT_NONE;
-=20
- bool __ro_after_init smccc_trng_available =3D false;
- u64 __ro_after_init smccc_has_sve_hint =3D false;
-+s32 __ro_after_init smccc_soc_id_version =3D SMCCC_RET_NOT_SUPPORTED;
-+s32 __ro_after_init smccc_soc_id_revision =3D SMCCC_RET_NOT_SUPPORTED;
-=20
- void __init arm_smccc_version_init(u32 version, enum arm_smccc_conduit condu=
-it)
- {
-+	struct arm_smccc_res res;
-+
- 	smccc_version =3D version;
- 	smccc_conduit =3D conduit;
-=20
-@@ -27,6 +31,18 @@ void __init arm_smccc_version_init(u32 version, enum arm_s=
-mccc_conduit conduit)
- 	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
- 	    smccc_version >=3D ARM_SMCCC_VERSION_1_3)
- 		smccc_has_sve_hint =3D true;
-+
-+	if ((smccc_version >=3D ARM_SMCCC_VERSION_1_2) &&
-+	    (smccc_conduit !=3D SMCCC_CONDUIT_NONE)) {
-+		arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
-+				     ARM_SMCCC_ARCH_SOC_ID, &res);
-+		if ((s32)res.a0 >=3D 0) {
-+			arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_SOC_ID, 0, &res);
-+			smccc_soc_id_version =3D (s32)res.a0;
-+			arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_SOC_ID, 1, &res);
-+			smccc_soc_id_revision =3D (s32)res.a0;
-+		}
-+	}
- }
-=20
- enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void)
-@@ -44,6 +60,16 @@ u32 arm_smccc_get_version(void)
- }
- EXPORT_SYMBOL_GPL(arm_smccc_get_version);
-=20
-+s32 arm_smccc_get_soc_id_version(void)
-+{
-+	return smccc_soc_id_version;
-+}
-+
-+s32 arm_smccc_get_soc_id_revision(void)
-+{
-+	return smccc_soc_id_revision;
-+}
-+
- static int __init smccc_devices_init(void)
- {
- 	struct platform_device *pdev;
-diff --git a/drivers/firmware/smccc/soc_id.c b/drivers/firmware/smccc/soc_id.c
-index dd7c3d5e8b0b..890eb454599a 100644
---- a/drivers/firmware/smccc/soc_id.c
-+++ b/drivers/firmware/smccc/soc_id.c
-@@ -42,41 +42,23 @@ static int __init smccc_soc_init(void)
- 	if (arm_smccc_get_version() < ARM_SMCCC_VERSION_1_2)
- 		return 0;
-=20
--	if (arm_smccc_1_1_get_conduit() =3D=3D SMCCC_CONDUIT_NONE) {
--		pr_err("%s: invalid SMCCC conduit\n", __func__);
--		return -EOPNOTSUPP;
--	}
--
--	arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
--			     ARM_SMCCC_ARCH_SOC_ID, &res);
--
--	if ((int)res.a0 =3D=3D SMCCC_RET_NOT_SUPPORTED) {
-+	soc_id_version =3D arm_smccc_get_soc_id_version();
-+	if (soc_id_version =3D=3D SMCCC_RET_NOT_SUPPORTED) {
- 		pr_info("ARCH_SOC_ID not implemented, skipping ....\n");
- 		return 0;
- 	}
-=20
--	if ((int)res.a0 < 0) {
--		pr_info("ARCH_FEATURES(ARCH_SOC_ID) returned error: %lx\n",
--			res.a0);
--		return -EINVAL;
--	}
--
--	arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_SOC_ID, 0, &res);
--	if ((int)res.a0 < 0) {
-+	if (soc_id_version < 0) {
- 		pr_err("ARCH_SOC_ID(0) returned error: %lx\n", res.a0);
- 		return -EINVAL;
- 	}
-=20
--	soc_id_version =3D res.a0;
--
--	arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_SOC_ID, 1, &res);
--	if ((int)res.a0 < 0) {
-+	soc_id_rev =3D arm_smccc_get_soc_id_revision();
-+	if (soc_id_rev < 0) {
- 		pr_err("ARCH_SOC_ID(1) returned error: %lx\n", res.a0);
- 		return -EINVAL;
- 	}
-=20
--	soc_id_rev =3D res.a0;
--
- 	soc_dev_attr =3D kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
- 	if (!soc_dev_attr)
- 		return -ENOMEM;
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 7dc990eb2c9b..09e422da482f 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -7,6 +7,7 @@ config IRQCHIP
-=20
- config ARM_GIC
- 	bool
-+	depends on OF
- 	select IRQ_DOMAIN_HIERARCHY
- 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
-=20
-@@ -35,6 +36,7 @@ config ARM_GIC_V3
- 	select IRQ_DOMAIN_HIERARCHY
- 	select PARTITION_PERCPU
- 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
-+	select HAVE_ARM_SMCCC_DISCOVERY
-=20
- config ARM_GIC_V3_ITS
- 	bool
-@@ -535,6 +537,7 @@ config TI_PRUSS_INTC
- config RISCV_INTC
- 	bool
- 	depends on RISCV
-+	select IRQ_DOMAIN_HIERARCHY
-=20
- config SIFIVE_PLIC
- 	bool
-diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l=
-1.c
-index 6899e37810a8..fa113cb2529a 100644
---- a/drivers/irqchip/irq-bcm6345-l1.c
-+++ b/drivers/irqchip/irq-bcm6345-l1.c
-@@ -257,6 +257,9 @@ static int __init bcm6345_l1_init_one(struct device_node =
-*dn,
- 	if (!cpu->map_base)
- 		return -ENOMEM;
-=20
-+	if (!request_mem_region(res.start, sz, res.name))
-+		pr_err("failed to request intc memory");
-+
- 	for (i =3D 0; i < n_words; i++) {
- 		cpu->enable_cache[i] =3D 0;
- 		__raw_writel(0, cpu->map_base + reg_enable(intc, i));
-@@ -335,8 +338,7 @@ static int __init bcm6345_l1_of_init(struct device_node *=
-dn,
- 	for_each_cpu(idx, &intc->cpumask) {
- 		struct bcm6345_l1_cpu *cpu =3D intc->cpus[idx];
-=20
--		pr_info("  CPU%u at MMIO 0x%p (irq =3D %d)\n", idx,
--				cpu->map_base, cpu->parent_irq);
-+		pr_info("  CPU%u (irq =3D %d)\n", idx, cpu->parent_irq);
- 	}
-=20
- 	return 0;
-diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-csky-a=
-pb-intc.c
-index 42d8a2438ebc..6710691e4c25 100644
---- a/drivers/irqchip/irq-csky-apb-intc.c
-+++ b/drivers/irqchip/irq-csky-apb-intc.c
-@@ -68,7 +68,7 @@ static void __init ck_set_gc(struct device_node *node, void=
- __iomem *reg_base,
- 	gc->chip_types[0].chip.irq_mask =3D irq_gc_mask_clr_bit;
- 	gc->chip_types[0].chip.irq_unmask =3D irq_gc_mask_set_bit;
-=20
--	if (of_find_property(node, "csky,support-pulse-signal", NULL))
-+	if (of_property_read_bool(node, "csky,support-pulse-signal"))
- 		gc->chip_types[0].chip.irq_unmask =3D irq_ck_mask_set_bit;
- }
-=20
-diff --git a/drivers/irqchip/irq-gic-v2m.c b/drivers/irqchip/irq-gic-v2m.c
-index f1e75b35a52a..f2ff4387870d 100644
---- a/drivers/irqchip/irq-gic-v2m.c
-+++ b/drivers/irqchip/irq-gic-v2m.c
-@@ -421,7 +421,7 @@ static int __init gicv2m_of_init(struct fwnode_handle *pa=
-rent_handle,
- 		u32 spi_start =3D 0, nr_spis =3D 0;
- 		struct resource res;
-=20
--		if (!of_find_property(child, "msi-controller", NULL))
-+		if (!of_property_read_bool(child, "msi-controller"))
- 			continue;
-=20
- 		ret =3D of_address_to_resource(child, 0, &res);
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-it=
-s.c
-index 586271b8aa39..fa4641a5dfd8 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -42,9 +42,11 @@
- #define ITS_FLAGS_CMDQ_NEEDS_FLUSHING		(1ULL << 0)
- #define ITS_FLAGS_WORKAROUND_CAVIUM_22375	(1ULL << 1)
- #define ITS_FLAGS_WORKAROUND_CAVIUM_23144	(1ULL << 2)
-+#define ITS_FLAGS_FORCE_NON_SHAREABLE		(1ULL << 3)
-=20
- #define RDIST_FLAGS_PROPBASE_NEEDS_FLUSHING	(1 << 0)
- #define RDIST_FLAGS_RD_TABLES_PREALLOCATED	(1 << 1)
-+#define RDIST_FLAGS_FORCE_NON_SHAREABLE		(1 << 2)
-=20
- #define RD_LOCAL_LPI_ENABLED                    BIT(0)
- #define RD_LOCAL_PENDTABLE_PREALLOCATED         BIT(1)
-@@ -2359,6 +2361,9 @@ static int its_setup_baser(struct its_node *its, struct=
- its_baser *baser,
- 	its_write_baser(its, baser, val);
- 	tmp =3D baser->val;
-=20
-+	if (its->flags & ITS_FLAGS_FORCE_NON_SHAREABLE)
-+		tmp &=3D ~GITS_BASER_SHAREABILITY_MASK;
-+
- 	if ((val ^ tmp) & GITS_BASER_SHAREABILITY_MASK) {
- 		/*
- 		 * Shareability didn't stick. Just use
-@@ -3096,6 +3101,9 @@ static void its_cpu_init_lpis(void)
- 	gicr_write_propbaser(val, rbase + GICR_PROPBASER);
- 	tmp =3D gicr_read_propbaser(rbase + GICR_PROPBASER);
-=20
-+	if (gic_rdists->flags & RDIST_FLAGS_FORCE_NON_SHAREABLE)
-+		tmp &=3D ~GICR_PROPBASER_SHAREABILITY_MASK;
-+
- 	if ((tmp ^ val) & GICR_PROPBASER_SHAREABILITY_MASK) {
- 		if (!(tmp & GICR_PROPBASER_SHAREABILITY_MASK)) {
+ 		if ((it.it_value.tv_sec | it.it_value.tv_nsec) =3D=3D 0) {
  			/*
-@@ -3120,6 +3128,9 @@ static void its_cpu_init_lpis(void)
- 	gicr_write_pendbaser(val, rbase + GICR_PENDBASER);
- 	tmp =3D gicr_read_pendbaser(rbase + GICR_PENDBASER);
+@@ -1623,6 +1675,7 @@ const struct k_clock clock_posix_cpu =3D {
+ 	.timer_del		=3D posix_cpu_timer_del,
+ 	.timer_get		=3D posix_cpu_timer_get,
+ 	.timer_rearm		=3D posix_cpu_timer_rearm,
++	.timer_wait_running	=3D posix_cpu_timer_wait_running,
+ };
 =20
-+	if (gic_rdists->flags & RDIST_FLAGS_FORCE_NON_SHAREABLE)
-+		tmp &=3D ~GICR_PENDBASER_SHAREABILITY_MASK;
+ const struct k_clock clock_process =3D {
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 0c8a87a11b39..808a247205a9 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -846,6 +846,10 @@ static struct k_itimer *timer_wait_running(struct k_itim=
+er *timer,
+ 	rcu_read_lock();
+ 	unlock_timer(timer, *flags);
+=20
++	/*
++	 * kc->timer_wait_running() might drop RCU lock. So @timer
++	 * cannot be touched anymore after the function returns!
++	 */
+ 	if (!WARN_ON_ONCE(!kc->timer_wait_running))
+ 		kc->timer_wait_running(timer);
+=20
+diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+index 46789356f856..65b8658da829 100644
+--- a/kernel/time/tick-common.c
++++ b/kernel/time/tick-common.c
+@@ -218,9 +218,19 @@ static void tick_setup_device(struct tick_device *td,
+ 		 * this cpu:
+ 		 */
+ 		if (tick_do_timer_cpu =3D=3D TICK_DO_TIMER_BOOT) {
++			ktime_t next_p;
++			u32 rem;
 +
- 	if (!(tmp & GICR_PENDBASER_SHAREABILITY_MASK)) {
- 		/*
- 		 * The HW reports non-shareable, we must remove the
-@@ -4710,6 +4721,19 @@ static bool __maybe_unused its_enable_quirk_hip07_1616=
-00802(void *data)
+ 			tick_do_timer_cpu =3D cpu;
+=20
+-			tick_next_period =3D ktime_get();
++			next_p =3D ktime_get();
++			div_u64_rem(next_p, TICK_NSEC, &rem);
++			if (rem) {
++				next_p -=3D rem;
++				next_p +=3D TICK_NSEC;
++			}
++
++			tick_next_period =3D next_p;
+ #ifdef CONFIG_NO_HZ_FULL
+ 			/*
+ 			 * The boot CPU may be nohz_full, in which case set
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index b0e3c9205946..3b53b894ca98 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -637,43 +637,67 @@ static void tick_nohz_update_jiffies(ktime_t now)
+ 	touch_softlockup_watchdog_sched();
+ }
+=20
+-/*
+- * Updates the per-CPU time idle statistics counters
+- */
+-static void
+-update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_=
+update_time)
++static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
+ {
+ 	ktime_t delta;
+=20
+-	if (ts->idle_active) {
+-		delta =3D ktime_sub(now, ts->idle_entrytime);
+-		if (nr_iowait_cpu(cpu) > 0)
+-			ts->iowait_sleeptime =3D ktime_add(ts->iowait_sleeptime, delta);
+-		else
+-			ts->idle_sleeptime =3D ktime_add(ts->idle_sleeptime, delta);
+-		ts->idle_entrytime =3D now;
+-	}
++	if (WARN_ON_ONCE(!ts->idle_active))
++		return;
+=20
+-	if (last_update_time)
+-		*last_update_time =3D ktime_to_us(now);
++	delta =3D ktime_sub(now, ts->idle_entrytime);
+=20
+-}
++	write_seqcount_begin(&ts->idle_sleeptime_seq);
++	if (nr_iowait_cpu(smp_processor_id()) > 0)
++		ts->iowait_sleeptime =3D ktime_add(ts->iowait_sleeptime, delta);
++	else
++		ts->idle_sleeptime =3D ktime_add(ts->idle_sleeptime, delta);
+=20
+-static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
+-{
+-	update_ts_time_stats(smp_processor_id(), ts, now, NULL);
++	ts->idle_entrytime =3D now;
+ 	ts->idle_active =3D 0;
++	write_seqcount_end(&ts->idle_sleeptime_seq);
+=20
+ 	sched_clock_idle_wakeup_event();
+ }
+=20
+ static void tick_nohz_start_idle(struct tick_sched *ts)
+ {
++	write_seqcount_begin(&ts->idle_sleeptime_seq);
+ 	ts->idle_entrytime =3D ktime_get();
+ 	ts->idle_active =3D 1;
++	write_seqcount_end(&ts->idle_sleeptime_seq);
++
+ 	sched_clock_idle_sleep_event();
+ }
+=20
++static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
++				 bool compute_delta, u64 *last_update_time)
++{
++	ktime_t now, idle;
++	unsigned int seq;
++
++	if (!tick_nohz_active)
++		return -1;
++
++	now =3D ktime_get();
++	if (last_update_time)
++		*last_update_time =3D ktime_to_us(now);
++
++	do {
++		seq =3D read_seqcount_begin(&ts->idle_sleeptime_seq);
++
++		if (ts->idle_active && compute_delta) {
++			ktime_t delta =3D ktime_sub(now, ts->idle_entrytime);
++
++			idle =3D ktime_add(*sleeptime, delta);
++		} else {
++			idle =3D *sleeptime;
++		}
++	} while (read_seqcount_retry(&ts->idle_sleeptime_seq, seq));
++
++	return ktime_to_us(idle);
++
++}
++
+ /**
+  * get_cpu_idle_time_us - get the total idle time of a CPU
+  * @cpu: CPU number to query
+@@ -681,7 +705,10 @@ static void tick_nohz_start_idle(struct tick_sched *ts)
+  * counters if NULL.
+  *
+  * Return the cumulative idle time (since boot) for a given
+- * CPU, in microseconds.
++ * CPU, in microseconds. Note this is partially broken due to
++ * the counter of iowait tasks that can be remotely updated without
++ * any synchronization. Therefore it is possible to observe backward
++ * values within two consecutive reads.
+  *
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
+@@ -691,27 +718,9 @@ static void tick_nohz_start_idle(struct tick_sched *ts)
+ u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
+ {
+ 	struct tick_sched *ts =3D &per_cpu(tick_cpu_sched, cpu);
+-	ktime_t now, idle;
+-
+-	if (!tick_nohz_active)
+-		return -1;
+-
+-	now =3D ktime_get();
+-	if (last_update_time) {
+-		update_ts_time_stats(cpu, ts, now, last_update_time);
+-		idle =3D ts->idle_sleeptime;
+-	} else {
+-		if (ts->idle_active && !nr_iowait_cpu(cpu)) {
+-			ktime_t delta =3D ktime_sub(now, ts->idle_entrytime);
+-
+-			idle =3D ktime_add(ts->idle_sleeptime, delta);
+-		} else {
+-			idle =3D ts->idle_sleeptime;
+-		}
+-	}
+-
+-	return ktime_to_us(idle);
+=20
++	return get_cpu_sleep_time_us(ts, &ts->idle_sleeptime,
++				     !nr_iowait_cpu(cpu), last_update_time);
+ }
+ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+=20
+@@ -722,7 +731,10 @@ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+  * counters if NULL.
+  *
+  * Return the cumulative iowait time (since boot) for a given
+- * CPU, in microseconds.
++ * CPU, in microseconds. Note this is partially broken due to
++ * the counter of iowait tasks that can be remotely updated without
++ * any synchronization. Therefore it is possible to observe backward
++ * values within two consecutive reads.
+  *
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
+@@ -732,26 +744,9 @@ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+ u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time)
+ {
+ 	struct tick_sched *ts =3D &per_cpu(tick_cpu_sched, cpu);
+-	ktime_t now, iowait;
+=20
+-	if (!tick_nohz_active)
+-		return -1;
+-
+-	now =3D ktime_get();
+-	if (last_update_time) {
+-		update_ts_time_stats(cpu, ts, now, last_update_time);
+-		iowait =3D ts->iowait_sleeptime;
+-	} else {
+-		if (ts->idle_active && nr_iowait_cpu(cpu) > 0) {
+-			ktime_t delta =3D ktime_sub(now, ts->idle_entrytime);
+-
+-			iowait =3D ktime_add(ts->iowait_sleeptime, delta);
+-		} else {
+-			iowait =3D ts->iowait_sleeptime;
+-		}
+-	}
+-
+-	return ktime_to_us(iowait);
++	return get_cpu_sleep_time_us(ts, &ts->iowait_sleeptime,
++				     nr_iowait_cpu(cpu), last_update_time);
+ }
+ EXPORT_SYMBOL_GPL(get_cpu_iowait_time_us);
+=20
+@@ -1084,10 +1079,16 @@ static bool can_stop_idle_tick(int cpu, struct tick_s=
+ched *ts)
  	return true;
  }
 =20
-+static bool __maybe_unused its_enable_rk3588001(void *data)
-+{
-+	struct its_node *its =3D data;
-+
-+	if (!of_machine_is_compatible("rockchip,rk3588"))
-+		return false;
-+
-+	its->flags |=3D ITS_FLAGS_FORCE_NON_SHAREABLE;
-+	gic_rdists->flags |=3D RDIST_FLAGS_FORCE_NON_SHAREABLE;
-+
-+	return true;
-+}
-+
- static const struct gic_quirk its_quirks[] =3D {
- #ifdef CONFIG_CAVIUM_ERRATUM_22375
- 	{
-@@ -4755,6 +4779,14 @@ static const struct gic_quirk its_quirks[] =3D {
- 		.mask	=3D 0xffffffff,
- 		.init	=3D its_enable_quirk_hip07_161600802,
- 	},
-+#endif
-+#ifdef CONFIG_ROCKCHIP_ERRATUM_3588001
-+	{
-+		.desc   =3D "ITS: Rockchip erratum RK3588001",
-+		.iidr   =3D 0x0201743b,
-+		.mask   =3D 0xffffffff,
-+		.init   =3D its_enable_rk3588001,
-+	},
- #endif
- 	{
- 	}
-@@ -5096,6 +5128,9 @@ static int __init its_probe_one(struct resource *res,
- 	gits_write_cbaser(baser, its->base + GITS_CBASER);
- 	tmp =3D gits_read_cbaser(its->base + GITS_CBASER);
-=20
-+	if (its->flags & ITS_FLAGS_FORCE_NON_SHAREABLE)
-+		tmp &=3D ~GITS_CBASER_SHAREABILITY_MASK;
-+
- 	if ((tmp ^ baser) & GITS_CBASER_SHAREABILITY_MASK) {
- 		if (!(tmp & GITS_CBASER_SHAREABILITY_MASK)) {
- 			/*
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index fd134e1f481a..6fcee221f201 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -24,6 +24,9 @@
- #include <linux/irqchip/arm-gic-common.h>
- #include <linux/irqchip/arm-gic-v3.h>
- #include <linux/irqchip/irq-partition-percpu.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/arm-smccc.h>
-=20
- #include <asm/cputype.h>
- #include <asm/exception.h>
-@@ -47,6 +50,7 @@ struct redist_region {
-=20
- struct gic_chip_data {
- 	struct fwnode_handle	*fwnode;
-+	phys_addr_t		dist_phys_base;
- 	void __iomem		*dist_base;
- 	struct redist_region	*redist_regions;
- 	struct rdists		rdists;
-@@ -59,6 +63,10 @@ struct gic_chip_data {
- 	struct partition_desc	**ppi_descs;
- };
-=20
-+#define T241_CHIPS_MAX		4
-+static void __iomem *t241_dist_base_alias[T241_CHIPS_MAX] __read_mostly;
-+static DEFINE_STATIC_KEY_FALSE(gic_nvidia_t241_erratum);
-+
- static struct gic_chip_data gic_data __read_mostly;
- static DEFINE_STATIC_KEY_TRUE(supports_deactivate_key);
-=20
-@@ -179,6 +187,39 @@ static inline bool gic_irq_in_rdist(struct irq_data *d)
- 	}
- }
-=20
-+static inline void __iomem *gic_dist_base_alias(struct irq_data *d)
-+{
-+	if (static_branch_unlikely(&gic_nvidia_t241_erratum)) {
-+		irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
-+		u32 chip;
-+
-+		/*
-+		 * For the erratum T241-FABRIC-4, read accesses to GICD_In{E}
-+		 * registers are directed to the chip that owns the SPI. The
-+		 * the alias region can also be used for writes to the
-+		 * GICD_In{E} except GICD_ICENABLERn. Each chip has support
-+		 * for 320 {E}SPIs. Mappings for all 4 chips:
-+		 *    Chip0 =3D 32-351
-+		 *    Chip1 =3D 352-671
-+		 *    Chip2 =3D 672-991
-+		 *    Chip3 =3D 4096-4415
-+		 */
-+		switch (__get_intid_range(hwirq)) {
-+		case SPI_RANGE:
-+			chip =3D (hwirq - 32) / 320;
-+			break;
-+		case ESPI_RANGE:
-+			chip =3D 3;
-+			break;
-+		default:
-+			unreachable();
-+		}
-+		return t241_dist_base_alias[chip];
-+	}
-+
-+	return gic_data.dist_base;
-+}
-+
- static inline void __iomem *gic_dist_base(struct irq_data *d)
- {
- 	switch (get_intid_range(d)) {
-@@ -337,7 +378,7 @@ static int gic_peek_irq(struct irq_data *d, u32 offset)
- 	if (gic_irq_in_rdist(d))
- 		base =3D gic_data_rdist_sgi_base();
- 	else
--		base =3D gic_data.dist_base;
-+		base =3D gic_dist_base_alias(d);
-=20
- 	return !!(readl_relaxed(base + offset + (index / 32) * 4) & mask);
- }
-@@ -588,7 +629,7 @@ static int gic_set_type(struct irq_data *d, unsigned int =
-type)
- 	if (gic_irq_in_rdist(d))
- 		base =3D gic_data_rdist_sgi_base();
- 	else
--		base =3D gic_data.dist_base;
-+		base =3D gic_dist_base_alias(d);
-=20
- 	offset =3D convert_offset_index(d, GICD_ICFGR, &index);
-=20
-@@ -1708,6 +1749,43 @@ static bool gic_enable_quirk_hip06_07(void *data)
- 	return false;
- }
-=20
-+#define T241_CHIPN_MASK		GENMASK_ULL(45, 44)
-+#define T241_CHIP_GICDA_OFFSET	0x1580000
-+#define SMCCC_SOC_ID_T241	0x036b0241
-+
-+static bool gic_enable_quirk_nvidia_t241(void *data)
-+{
-+	s32 soc_id =3D arm_smccc_get_soc_id_version();
-+	unsigned long chip_bmask =3D 0;
-+	phys_addr_t phys;
-+	u32 i;
-+
-+	/* Check JEP106 code for NVIDIA T241 chip (036b:0241) */
-+	if ((soc_id < 0) || (soc_id !=3D SMCCC_SOC_ID_T241))
-+		return false;
-+
-+	/* Find the chips based on GICR regions PHYS addr */
-+	for (i =3D 0; i < gic_data.nr_redist_regions; i++) {
-+		chip_bmask |=3D BIT(FIELD_GET(T241_CHIPN_MASK,
-+				  (u64)gic_data.redist_regions[i].phys_base));
-+	}
-+
-+	if (hweight32(chip_bmask) < 3)
-+		return false;
-+
-+	/* Setup GICD alias regions */
-+	for (i =3D 0; i < ARRAY_SIZE(t241_dist_base_alias); i++) {
-+		if (chip_bmask & BIT(i)) {
-+			phys =3D gic_data.dist_phys_base + T241_CHIP_GICDA_OFFSET;
-+			phys |=3D FIELD_PREP(T241_CHIPN_MASK, i);
-+			t241_dist_base_alias[i] =3D ioremap(phys, SZ_64K);
-+			WARN_ON_ONCE(!t241_dist_base_alias[i]);
-+		}
-+	}
-+	static_branch_enable(&gic_nvidia_t241_erratum);
-+	return true;
-+}
-+
- static const struct gic_quirk gic_quirks[] =3D {
- 	{
- 		.desc	=3D "GICv3: Qualcomm MSM8996 broken firmware",
-@@ -1739,6 +1817,12 @@ static const struct gic_quirk gic_quirks[] =3D {
- 		.mask	=3D 0xe8f00fff,
- 		.init	=3D gic_enable_quirk_cavium_38539,
- 	},
-+	{
-+		.desc	=3D "GICv3: NVIDIA erratum T241-FABRIC-4",
-+		.iidr	=3D 0x0402043b,
-+		.mask	=3D 0xffffffff,
-+		.init	=3D gic_enable_quirk_nvidia_t241,
-+	},
- 	{
- 	}
- };
-@@ -1798,7 +1882,8 @@ static void gic_enable_nmi_support(void)
- 		gic_chip.flags |=3D IRQCHIP_SUPPORTS_NMI;
- }
-=20
--static int __init gic_init_bases(void __iomem *dist_base,
-+static int __init gic_init_bases(phys_addr_t dist_phys_base,
-+				 void __iomem *dist_base,
- 				 struct redist_region *rdist_regs,
- 				 u32 nr_redist_regions,
- 				 u64 redist_stride,
-@@ -1814,6 +1899,7 @@ static int __init gic_init_bases(void __iomem *dist_bas=
-e,
- 		pr_info("GIC: Using split EOI/Deactivate mode\n");
-=20
- 	gic_data.fwnode =3D handle;
-+	gic_data.dist_phys_base =3D dist_phys_base;
- 	gic_data.dist_base =3D dist_base;
- 	gic_data.redist_regions =3D rdist_regs;
- 	gic_data.nr_redist_regions =3D nr_redist_regions;
-@@ -1841,10 +1927,13 @@ static int __init gic_init_bases(void __iomem *dist_b=
-ase,
- 	gic_data.domain =3D irq_domain_create_tree(handle, &gic_irq_domain_ops,
- 						 &gic_data);
- 	gic_data.rdists.rdist =3D alloc_percpu(typeof(*gic_data.rdists.rdist));
--	gic_data.rdists.has_rvpeid =3D true;
--	gic_data.rdists.has_vlpis =3D true;
--	gic_data.rdists.has_direct_lpi =3D true;
--	gic_data.rdists.has_vpend_valid_dirty =3D true;
-+	if (!static_branch_unlikely(&gic_nvidia_t241_erratum)) {
-+		/* Disable GICv4.x features for the erratum T241-FABRIC-4 */
-+		gic_data.rdists.has_rvpeid =3D true;
-+		gic_data.rdists.has_vlpis =3D true;
-+		gic_data.rdists.has_direct_lpi =3D true;
-+		gic_data.rdists.has_vpend_valid_dirty =3D true;
-+	}
-=20
- 	if (WARN_ON(!gic_data.domain) || WARN_ON(!gic_data.rdists.rdist)) {
- 		err =3D -ENOMEM;
-@@ -2050,6 +2139,7 @@ static void __iomem *gic_of_iomap(struct device_node *n=
-ode, int idx,
-=20
- static int __init gic_of_init(struct device_node *node, struct device_node *=
-parent)
- {
-+	phys_addr_t dist_phys_base;
- 	void __iomem *dist_base;
- 	struct redist_region *rdist_regs;
- 	struct resource res;
-@@ -2063,6 +2153,8 @@ static int __init gic_of_init(struct device_node *node,=
- struct device_node *pare
- 		return PTR_ERR(dist_base);
- 	}
-=20
-+	dist_phys_base =3D res.start;
-+
- 	err =3D gic_validate_dist_version(dist_base);
- 	if (err) {
- 		pr_err("%pOF: no distributor detected, giving up\n", node);
-@@ -2094,8 +2186,8 @@ static int __init gic_of_init(struct device_node *node,=
- struct device_node *pare
-=20
- 	gic_enable_of_quirks(node, gic_quirks, &gic_data);
-=20
--	err =3D gic_init_bases(dist_base, rdist_regs, nr_redist_regions,
--			     redist_stride, &node->fwnode);
-+	err =3D gic_init_bases(dist_phys_base, dist_base, rdist_regs,
-+			     nr_redist_regions, redist_stride, &node->fwnode);
- 	if (err)
- 		goto out_unmap_rdist;
-=20
-@@ -2411,8 +2503,9 @@ gic_acpi_init(union acpi_subtable_headers *header, cons=
-t unsigned long end)
- 		goto out_redist_unmap;
- 	}
-=20
--	err =3D gic_init_bases(acpi_data.dist_base, acpi_data.redist_regs,
--			     acpi_data.nr_redist_regions, 0, gsi_domain_handle);
-+	err =3D gic_init_bases(dist->base_address, acpi_data.dist_base,
-+			     acpi_data.redist_regs, acpi_data.nr_redist_regions,
-+			     0, gsi_domain_handle);
- 	if (err)
- 		goto out_fwhandle_free;
-=20
-diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
-index 95e3d2a71db6..412196a7dad5 100644
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -1081,10 +1081,6 @@ static int gic_irq_domain_map(struct irq_domain *d, un=
-signed int irq,
- 	return 0;
- }
-=20
--static void gic_irq_domain_unmap(struct irq_domain *d, unsigned int irq)
--{
--}
--
- static int gic_irq_domain_translate(struct irq_domain *d,
- 				    struct irq_fwspec *fwspec,
- 				    unsigned long *hwirq,
-@@ -1167,11 +1163,6 @@ static const struct irq_domain_ops gic_irq_domain_hier=
-archy_ops =3D {
- 	.free =3D irq_domain_free_irqs_top,
- };
-=20
--static const struct irq_domain_ops gic_irq_domain_ops =3D {
--	.map =3D gic_irq_domain_map,
--	.unmap =3D gic_irq_domain_unmap,
--};
--
- static int gic_init_bases(struct gic_chip_data *gic,
- 			  struct fwnode_handle *handle)
- {
-@@ -1219,30 +1210,9 @@ static int gic_init_bases(struct gic_chip_data *gic,
- 		gic_irqs =3D 1020;
- 	gic->gic_irqs =3D gic_irqs;
-=20
--	if (handle) {		/* DT/ACPI */
--		gic->domain =3D irq_domain_create_linear(handle, gic_irqs,
--						       &gic_irq_domain_hierarchy_ops,
--						       gic);
--	} else {		/* Legacy support */
--		/*
--		 * For primary GICs, skip over SGIs.
--		 * No secondary GIC support whatsoever.
--		 */
--		int irq_base;
--
--		gic_irqs -=3D 16; /* calculate # of irqs to allocate */
--
--		irq_base =3D irq_alloc_descs(16, 16, gic_irqs,
--					   numa_node_id());
--		if (irq_base < 0) {
--			WARN(1, "Cannot allocate irq_descs @ IRQ16, assuming pre-allocated\n");
--			irq_base =3D 16;
--		}
--
--		gic->domain =3D irq_domain_add_legacy(NULL, gic_irqs, irq_base,
--						    16, &gic_irq_domain_ops, gic);
--	}
--
-+	gic->domain =3D irq_domain_create_linear(handle, gic_irqs,
-+					       &gic_irq_domain_hierarchy_ops,
-+					       gic);
- 	if (WARN_ON(!gic->domain)) {
- 		ret =3D -ENODEV;
- 		goto error;
-@@ -1297,23 +1267,6 @@ static int __init __gic_init_bases(struct gic_chip_dat=
-a *gic,
- 	return ret;
- }
-=20
--void __init gic_init(void __iomem *dist_base, void __iomem *cpu_base)
--{
--	struct gic_chip_data *gic;
--
--	/*
--	 * Non-DT/ACPI systems won't run a hypervisor, so let's not
--	 * bother with these...
--	 */
--	static_branch_disable(&supports_deactivate_key);
--
--	gic =3D &gic_data[0];
--	gic->raw_dist_base =3D dist_base;
--	gic->raw_cpu_base =3D cpu_base;
--
--	__gic_init_bases(gic, NULL);
--}
--
- static void gic_teardown(struct gic_chip_data *gic)
- {
- 	if (WARN_ON(!gic))
-@@ -1325,7 +1278,6 @@ static void gic_teardown(struct gic_chip_data *gic)
- 		iounmap(gic->raw_cpu_base);
- }
-=20
--#ifdef CONFIG_OF
- static int gic_cnt __initdata;
- static bool gicv2_force_probe;
-=20
-@@ -1570,12 +1522,6 @@ IRQCHIP_DECLARE(cortex_a7_gic, "arm,cortex-a7-gic", gi=
-c_of_init);
- IRQCHIP_DECLARE(msm_8660_qgic, "qcom,msm-8660-qgic", gic_of_init);
- IRQCHIP_DECLARE(msm_qgic2, "qcom,msm-qgic2", gic_of_init);
- IRQCHIP_DECLARE(pl390, "arm,pl390", gic_of_init);
--#else
--int gic_of_init_child(struct device *dev, struct gic_chip_data **gic, int ir=
-q)
--{
--	return -ENOTSUPP;
--}
--#endif
-=20
- #ifdef CONFIG_ACPI
- static struct
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loo=
-ngson-eiointc.c
-index d15fd38c1756..90181c42840b 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -280,9 +280,6 @@ static void acpi_set_vec_parent(int node, struct irq_doma=
-in *parent, struct acpi
- {
- 	int i;
-=20
--	if (cpu_has_flatmode)
--		node =3D cpu_to_node(node * CORES_PER_EIO_NODE);
--
- 	for (i =3D 0; i < MAX_IO_PICS; i++) {
- 		if (node =3D=3D vec_group[i].node) {
- 			vec_group[i].parent =3D parent;
-@@ -343,19 +340,27 @@ static int __init pch_pic_parse_madt(union acpi_subtabl=
-e_headers *header,
- 	if (parent)
- 		return pch_pic_acpi_init(parent, pchpic_entry);
-=20
--	return -EINVAL;
-+	return 0;
- }
-=20
- static int __init pch_msi_parse_madt(union acpi_subtable_headers *header,
- 					const unsigned long end)
- {
-+	struct irq_domain *parent;
- 	struct acpi_madt_msi_pic *pchmsi_entry =3D (struct acpi_madt_msi_pic *)head=
-er;
--	struct irq_domain *parent =3D acpi_get_vec_parent(eiointc_priv[nr_pics - 1]=
-->node, msi_group);
-+	int node;
-+
-+	if (cpu_has_flatmode)
-+		node =3D cpu_to_node(eiointc_priv[nr_pics - 1]->node * CORES_PER_EIO_NODE);
-+	else
-+		node =3D eiointc_priv[nr_pics - 1]->node;
-+
-+	parent =3D acpi_get_vec_parent(node, msi_group);
-=20
- 	if (parent)
- 		return pch_msi_acpi_init(parent, pchmsi_entry);
-=20
--	return -EINVAL;
-+	return 0;
- }
-=20
- static int __init acpi_cascade_irqdomain_init(void)
-@@ -379,6 +384,7 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
- 	int i, ret, parent_irq;
- 	unsigned long node_map;
- 	struct eiointc_priv *priv;
-+	int node;
-=20
- 	priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -416,13 +422,19 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
- 	parent_irq =3D irq_create_mapping(parent, acpi_eiointc->cascade);
- 	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
-=20
--	register_syscore_ops(&eiointc_syscore_ops);
--	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
-+	if (nr_pics =3D=3D 1) {
-+		register_syscore_ops(&eiointc_syscore_ops);
-+		cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
- 				  "irqchip/loongarch/intc:starting",
- 				  eiointc_router_init, NULL);
-+	}
-=20
--	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
--	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
-+	if (cpu_has_flatmode)
-+		node =3D cpu_to_node(acpi_eiointc->node * CORES_PER_EIO_NODE);
-+	else
-+		node =3D acpi_eiointc->node;
-+	acpi_set_vec_parent(node, priv->eiointc_domain, pch_group);
-+	acpi_set_vec_parent(node, priv->eiointc_domain, msi_group);
- 	ret =3D acpi_cascade_irqdomain_init();
-=20
- 	return ret;
-diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loo=
-ngson-pch-pic.c
-index 437f1af693d0..e5fe4d50be05 100644
---- a/drivers/irqchip/irq-loongson-pch-pic.c
-+++ b/drivers/irqchip/irq-loongson-pch-pic.c
-@@ -311,7 +311,8 @@ static int pch_pic_init(phys_addr_t addr, unsigned long s=
-ize, int vec_base,
- 	pch_pic_handle[nr_pics] =3D domain_handle;
- 	pch_pic_priv[nr_pics++] =3D priv;
-=20
--	register_syscore_ops(&pch_pic_syscore_ops);
-+	if (nr_pics =3D=3D 1)
-+		register_syscore_ops(&pch_pic_syscore_ops);
-=20
- 	return 0;
-=20
-@@ -403,6 +404,9 @@ int __init pch_pic_acpi_init(struct irq_domain *parent,
- 	int ret, vec_base;
- 	struct fwnode_handle *domain_handle;
-=20
-+	if (find_pch_pic(acpi_pchpic->gsi_base) >=3D 0)
-+		return 0;
-+
- 	vec_base =3D acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
-=20
- 	domain_handle =3D irq_domain_alloc_fwnode(&acpi_pchpic->address);
-diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-int=
-c.c
-index 499e5f81b3fe..f229e3e66387 100644
---- a/drivers/irqchip/irq-riscv-intc.c
-+++ b/drivers/irqchip/irq-riscv-intc.c
-@@ -26,20 +26,7 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
- 	if (unlikely(cause >=3D BITS_PER_LONG))
- 		panic("unexpected interrupt cause");
-=20
--	switch (cause) {
--#ifdef CONFIG_SMP
--	case RV_IRQ_SOFT:
--		/*
--		 * We only use software interrupts to pass IPIs, so if a
--		 * non-SMP system gets one, then we don't know what to do.
--		 */
--		handle_IPI(regs);
--		break;
--#endif
--	default:
--		generic_handle_domain_irq(intc_domain, cause);
--		break;
--	}
-+	generic_handle_domain_irq(intc_domain, cause);
- }
-=20
- /*
-@@ -59,22 +46,27 @@ static void riscv_intc_irq_unmask(struct irq_data *d)
- 	csr_set(CSR_IE, BIT(d->hwirq));
- }
-=20
--static int riscv_intc_cpu_starting(unsigned int cpu)
--{
--	csr_set(CSR_IE, BIT(RV_IRQ_SOFT));
--	return 0;
--}
--
--static int riscv_intc_cpu_dying(unsigned int cpu)
-+static void riscv_intc_irq_eoi(struct irq_data *d)
- {
--	csr_clear(CSR_IE, BIT(RV_IRQ_SOFT));
--	return 0;
-+	/*
-+	 * The RISC-V INTC driver uses handle_percpu_devid_irq() flow
-+	 * for the per-HART local interrupts and child irqchip drivers
-+	 * (such as PLIC, SBI IPI, CLINT, APLIC, IMSIC, etc) implement
-+	 * chained handlers for the per-HART local interrupts.
-+	 *
-+	 * In the absence of irq_eoi(), the chained_irq_enter() and
-+	 * chained_irq_exit() functions (used by child irqchip drivers)
-+	 * will do unnecessary mask/unmask of per-HART local interrupts
-+	 * at the time of handling interrupts. To avoid this, we provide
-+	 * an empty irq_eoi() callback for RISC-V INTC irqchip.
-+	 */
- }
-=20
- static struct irq_chip riscv_intc_chip =3D {
- 	.name =3D "RISC-V INTC",
- 	.irq_mask =3D riscv_intc_irq_mask,
- 	.irq_unmask =3D riscv_intc_irq_unmask,
-+	.irq_eoi =3D riscv_intc_irq_eoi,
- };
-=20
- static int riscv_intc_domain_map(struct irq_domain *d, unsigned int irq,
-@@ -87,11 +79,39 @@ static int riscv_intc_domain_map(struct irq_domain *d, un=
-signed int irq,
- 	return 0;
- }
-=20
-+static int riscv_intc_domain_alloc(struct irq_domain *domain,
-+				   unsigned int virq, unsigned int nr_irqs,
-+				   void *arg)
-+{
-+	int i, ret;
-+	irq_hw_number_t hwirq;
-+	unsigned int type =3D IRQ_TYPE_NONE;
-+	struct irq_fwspec *fwspec =3D arg;
-+
-+	ret =3D irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
-+	if (ret)
-+		return ret;
-+
-+	for (i =3D 0; i < nr_irqs; i++) {
-+		ret =3D riscv_intc_domain_map(domain, virq + i, hwirq + i);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct irq_domain_ops riscv_intc_domain_ops =3D {
- 	.map	=3D riscv_intc_domain_map,
- 	.xlate	=3D irq_domain_xlate_onecell,
-+	.alloc	=3D riscv_intc_domain_alloc
- };
-=20
-+static struct fwnode_handle *riscv_intc_hwnode(void)
-+{
-+	return intc_domain->fwnode;
-+}
-+
- static int __init riscv_intc_init(struct device_node *node,
- 				  struct device_node *parent)
- {
-@@ -126,10 +146,7 @@ static int __init riscv_intc_init(struct device_node *no=
-de,
- 		return rc;
- 	}
-=20
--	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
--			  "irqchip/riscv/intc:starting",
--			  riscv_intc_cpu_starting,
--			  riscv_intc_cpu_dying);
-+	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-=20
- 	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-=20
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-p=
-lic.c
-index ff47bd0dec45..e1484905b7bd 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -17,6 +17,7 @@
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/spinlock.h>
-+#include <linux/syscore_ops.h>
- #include <asm/smp.h>
-=20
- /*
-@@ -67,6 +68,8 @@ struct plic_priv {
- 	struct irq_domain *irqdomain;
- 	void __iomem *regs;
- 	unsigned long plic_quirks;
-+	unsigned int nr_irqs;
-+	unsigned long *prio_save;
- };
-=20
- struct plic_handler {
-@@ -78,6 +81,7 @@ struct plic_handler {
- 	 */
- 	raw_spinlock_t		enable_lock;
- 	void __iomem		*enable_base;
-+	u32			*enable_save;
- 	struct plic_priv	*priv;
- };
- static int plic_parent_irq __ro_after_init;
-@@ -229,6 +233,71 @@ static int plic_irq_set_type(struct irq_data *d, unsigne=
-d int type)
- 	return IRQ_SET_MASK_OK;
- }
-=20
-+static int plic_irq_suspend(void)
-+{
-+	unsigned int i, cpu;
-+	u32 __iomem *reg;
-+	struct plic_priv *priv;
-+
-+	priv =3D per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-+
-+	for (i =3D 0; i < priv->nr_irqs; i++)
-+		if (readl(priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID))
-+			__set_bit(i, priv->prio_save);
-+		else
-+			__clear_bit(i, priv->prio_save);
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler =3D per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		raw_spin_lock(&handler->enable_lock);
-+		for (i =3D 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-+			reg =3D handler->enable_base + i * sizeof(u32);
-+			handler->enable_save[i] =3D readl(reg);
-+		}
-+		raw_spin_unlock(&handler->enable_lock);
-+	}
-+
-+	return 0;
-+}
-+
-+static void plic_irq_resume(void)
-+{
-+	unsigned int i, index, cpu;
-+	u32 __iomem *reg;
-+	struct plic_priv *priv;
-+
-+	priv =3D per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-+
-+	for (i =3D 0; i < priv->nr_irqs; i++) {
-+		index =3D BIT_WORD(i);
-+		writel((priv->prio_save[index] & BIT_MASK(i)) ? 1 : 0,
-+		       priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-+	}
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler =3D per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		raw_spin_lock(&handler->enable_lock);
-+		for (i =3D 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-+			reg =3D handler->enable_base + i * sizeof(u32);
-+			writel(handler->enable_save[i], reg);
-+		}
-+		raw_spin_unlock(&handler->enable_lock);
-+	}
-+}
-+
-+static struct syscore_ops plic_irq_syscore_ops =3D {
-+	.suspend	=3D plic_irq_suspend,
-+	.resume		=3D plic_irq_resume,
-+};
-+
- static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
- 			      irq_hw_number_t hwirq)
- {
-@@ -345,6 +414,7 @@ static int __init __plic_init(struct device_node *node,
- 	u32 nr_irqs;
- 	struct plic_priv *priv;
- 	struct plic_handler *handler;
-+	unsigned int cpu;
-=20
- 	priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -363,15 +433,21 @@ static int __init __plic_init(struct device_node *node,
- 	if (WARN_ON(!nr_irqs))
- 		goto out_iounmap;
-=20
-+	priv->nr_irqs =3D nr_irqs;
-+
-+	priv->prio_save =3D bitmap_alloc(nr_irqs, GFP_KERNEL);
-+	if (!priv->prio_save)
-+		goto out_free_priority_reg;
-+
- 	nr_contexts =3D of_irq_count(node);
- 	if (WARN_ON(!nr_contexts))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
-=20
- 	error =3D -ENOMEM;
- 	priv->irqdomain =3D irq_domain_add_linear(node, nr_irqs + 1,
- 			&plic_irqdomain_ops, priv);
- 	if (WARN_ON(!priv->irqdomain))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
-=20
- 	for (i =3D 0; i < nr_contexts; i++) {
- 		struct of_phandle_args parent;
-@@ -441,6 +517,11 @@ static int __init __plic_init(struct device_node *node,
- 		handler->enable_base =3D priv->regs + CONTEXT_ENABLE_BASE +
- 			i * CONTEXT_ENABLE_SIZE;
- 		handler->priv =3D priv;
-+
-+		handler->enable_save =3D  kcalloc(DIV_ROUND_UP(nr_irqs, 32),
-+						sizeof(*handler->enable_save), GFP_KERNEL);
-+		if (!handler->enable_save)
-+			goto out_free_enable_reg;
- done:
- 		for (hwirq =3D 1; hwirq <=3D nr_irqs; hwirq++) {
- 			plic_toggle(handler, hwirq, 0);
-@@ -461,11 +542,19 @@ static int __init __plic_init(struct device_node *node,
- 				  plic_starting_cpu, plic_dying_cpu);
- 		plic_cpuhp_setup_done =3D true;
- 	}
-+	register_syscore_ops(&plic_irq_syscore_ops);
-=20
- 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
- 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
- 	return 0;
-=20
-+out_free_enable_reg:
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		handler =3D per_cpu_ptr(&plic_handlers, cpu);
-+		kfree(handler->enable_save);
-+	}
-+out_free_priority_reg:
-+	kfree(priv->prio_save);
- out_iounmap:
- 	iounmap(priv->regs);
- out_free_priv:
-diff --git a/drivers/irqchip/irq-st.c b/drivers/irqchip/irq-st.c
-index 1b83512b29c6..819a12297b58 100644
---- a/drivers/irqchip/irq-st.c
-+++ b/drivers/irqchip/irq-st.c
-@@ -15,10 +15,7 @@
- #include <linux/regmap.h>
- #include <linux/slab.h>
-=20
--#define STIH415_SYSCFG_642		0x0a8
--#define STIH416_SYSCFG_7543		0x87c
- #define STIH407_SYSCFG_5102		0x198
--#define STID127_SYSCFG_734		0x088
-=20
- #define ST_A9_IRQ_MASK			0x001FFFFF
- #define ST_A9_IRQ_MAX_CHANS		2
-@@ -44,22 +41,10 @@ struct st_irq_syscfg {
- };
-=20
- static const struct of_device_id st_irq_syscfg_match[] =3D {
--	{
--		.compatible =3D "st,stih415-irq-syscfg",
--		.data =3D (void *)STIH415_SYSCFG_642,
--	},
--	{
--		.compatible =3D "st,stih416-irq-syscfg",
--		.data =3D (void *)STIH416_SYSCFG_7543,
--	},
- 	{
- 		.compatible =3D "st,stih407-irq-syscfg",
- 		.data =3D (void *)STIH407_SYSCFG_5102,
- 	},
--	{
--		.compatible =3D "st,stid127-irq-syscfg",
--		.data =3D (void *)STID127_SYSCFG_734,
--	},
- 	{}
- };
-=20
-diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-index 220c8c60e021..f196c19f8e55 100644
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -226,6 +226,24 @@ void __init arm_smccc_version_init(u32 version, enum arm=
-_smccc_conduit conduit);
-=20
- extern u64 smccc_has_sve_hint;
-=20
+-static void __tick_nohz_idle_stop_tick(struct tick_sched *ts)
 +/**
-+ * arm_smccc_get_soc_id_version()
++ * tick_nohz_idle_stop_tick - stop the idle tick from the idle task
 + *
-+ * Returns the SOC ID version.
-+ *
-+ * When ARM_SMCCC_ARCH_SOC_ID is not present, returns SMCCC_RET_NOT_SUPPORTE=
-D.
++ * When the next event is more than a tick into the future, stop the idle ti=
+ck
 + */
-+s32 arm_smccc_get_soc_id_version(void);
-+
-+/**
-+ * arm_smccc_get_soc_id_revision()
-+ *
-+ * Returns the SOC ID revision.
-+ *
-+ * When ARM_SMCCC_ARCH_SOC_ID is not present, returns SMCCC_RET_NOT_SUPPORTE=
-D.
-+ */
-+s32 arm_smccc_get_soc_id_revision(void);
-+
- /**
-  * struct arm_smccc_res - Result from SMC/HVC call
-  * @a0-a3 result values from registers 0 to 3
-diff --git a/include/linux/irqchip/arm-gic.h b/include/linux/irqchip/arm-gic.h
-index 5686711b0f40..2223f95079ce 100644
---- a/include/linux/irqchip/arm-gic.h
-+++ b/include/linux/irqchip/arm-gic.h
-@@ -151,12 +151,6 @@ int gic_of_init(struct device_node *node, struct device_=
-node *parent);
-  */
- int gic_of_init_child(struct device *dev, struct gic_chip_data **gic, int ir=
-q);
++void tick_nohz_idle_stop_tick(void)
+ {
+-	ktime_t expires;
++	struct tick_sched *ts =3D this_cpu_ptr(&tick_cpu_sched);
+ 	int cpu =3D smp_processor_id();
++	ktime_t expires;
 =20
--/*
-- * Legacy platforms not converted to DT yet must use this to init
-- * their GIC
+ 	/*
+ 	 * If tick_nohz_get_sleep_length() ran tick_nohz_next_event(), the
+@@ -1119,16 +1120,6 @@ static void __tick_nohz_idle_stop_tick(struct tick_sch=
+ed *ts)
+ 	}
+ }
+=20
+-/**
+- * tick_nohz_idle_stop_tick - stop the idle tick from the idle task
+- *
+- * When the next event is more than a tick into the future, stop the idle ti=
+ck
 - */
--void gic_init(void __iomem *dist , void __iomem *cpu);
+-void tick_nohz_idle_stop_tick(void)
+-{
+-	__tick_nohz_idle_stop_tick(this_cpu_ptr(&tick_cpu_sched));
+-}
 -
- void gic_send_sgi(unsigned int cpu_id, unsigned int irq);
- int gic_get_cpu_id(unsigned int cpu);
- void gic_migrate_target(unsigned int new_cpu_id);
-diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-index eeceafaaea4c..a07b4607b663 100644
---- a/include/trace/events/irq.h
-+++ b/include/trace/events/irq.h
-@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
- 	TP_ARGS(vec_nr)
- );
-=20
-+DECLARE_EVENT_CLASS(tasklet,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	tasklet)
-+		__field(	void *,	func)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->tasklet =3D t;
-+		__entry->func =3D func;
-+	),
-+
-+	TP_printk("tasklet=3D%ps function=3D%ps", __entry->tasklet, __entry->func)
-+);
-+
-+/**
-+ * tasklet_entry - called immediately before the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_entry,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
-+/**
-+ * tasklet_exit - called immediately after the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_exit,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
- #endif /*  _TRACE_IRQ_H */
-=20
- /* This part must be outside protection */
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 8ce75495e04f..d2742af0f0fd 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -189,9 +189,12 @@ void irq_set_thread_affinity(struct irq_desc *desc)
+ void tick_nohz_idle_retain_tick(void)
  {
- 	struct irqaction *action;
+ 	tick_nohz_retain_tick(this_cpu_ptr(&tick_cpu_sched));
+diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
+index 504649513399..5ed5a9d41d5a 100644
+--- a/kernel/time/tick-sched.h
++++ b/kernel/time/tick-sched.h
+@@ -22,65 +22,82 @@ enum tick_nohz_mode {
 =20
--	for_each_action_of_desc(desc, action)
-+	for_each_action_of_desc(desc, action) {
- 		if (action->thread)
- 			set_bit(IRQTF_AFFINITY, &action->thread_flags);
-+		if (action->secondary && action->secondary->thread)
-+			set_bit(IRQTF_AFFINITY, &action->secondary->thread_flags);
-+	}
+ /**
+  * struct tick_sched - sched tick emulation and no idle tick control/stats
+- * @sched_timer:	hrtimer to schedule the periodic tick in high
+- *			resolution mode
+- * @check_clocks:	Notification mechanism about clocksource changes
+- * @nohz_mode:		Mode - one state of tick_nohz_mode
++ *
+  * @inidle:		Indicator that the CPU is in the tick idle mode
+  * @tick_stopped:	Indicator that the idle tick has been stopped
+  * @idle_active:	Indicator that the CPU is actively in the tick idle mode;
+  *			it is reset during irq handling phases.
+- * @do_timer_lst:	CPU was the last one doing do_timer before going idle
++ * @do_timer_last:	CPU was the last one doing do_timer before going idle
+  * @got_idle_tick:	Tick timer function has run with @inidle set
++ * @stalled_jiffies:	Number of stalled jiffies detected across ticks
++ * @last_tick_jiffies:	Value of jiffies seen on last tick
++ * @sched_timer:	hrtimer to schedule the periodic tick in high
++ *			resolution mode
+  * @last_tick:		Store the last tick expiry time when the tick
+  *			timer is modified for nohz sleeps. This is necessary
+  *			to resume the tick timer operation in the timeline
+  *			when the CPU returns from nohz sleep.
+  * @next_tick:		Next tick to be fired when in dynticks mode.
+  * @idle_jiffies:	jiffies at the entry to idle for idle time accounting
++ * @idle_waketime:	Time when the idle was interrupted
++ * @idle_entrytime:	Time when the idle call was entered
++ * @nohz_mode:		Mode - one state of tick_nohz_mode
++ * @last_jiffies:	Base jiffies snapshot when next event was last computed
++ * @timer_expires_base:	Base time clock monotonic for @timer_expires
++ * @timer_expires:	Anticipated timer expiration time (in case sched tick is =
+stopped)
++ * @next_timer:		Expiry time of next expiring timer for debugging purpose on=
+ly
++ * @idle_expires:	Next tick in idle, for debugging purpose only
+  * @idle_calls:		Total number of idle calls
+  * @idle_sleeps:	Number of idle calls, where the sched tick was stopped
+- * @idle_entrytime:	Time when the idle call was entered
+- * @idle_waketime:	Time when the idle was interrupted
+  * @idle_exittime:	Time when the idle state was left
+  * @idle_sleeptime:	Sum of the time slept in idle with sched tick stopped
+  * @iowait_sleeptime:	Sum of the time slept in idle with sched tick stopped,=
+ with IO outstanding
+- * @timer_expires:	Anticipated timer expiration time (in case sched tick is =
+stopped)
+- * @timer_expires_base:	Base time clock monotonic for @timer_expires
+- * @next_timer:		Expiry time of next expiring timer for debugging purpose on=
+ly
+  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
+- * @last_tick_jiffies:	Value of jiffies seen on last tick
+- * @stalled_jiffies:	Number of stalled jiffies detected across ticks
++ * @check_clocks:	Notification mechanism about clocksource changes
+  */
+ struct tick_sched {
+-	struct hrtimer			sched_timer;
+-	unsigned long			check_clocks;
+-	enum tick_nohz_mode		nohz_mode;
+-
++	/* Common flags */
+ 	unsigned int			inidle		: 1;
+ 	unsigned int			tick_stopped	: 1;
+ 	unsigned int			idle_active	: 1;
+ 	unsigned int			do_timer_last	: 1;
+ 	unsigned int			got_idle_tick	: 1;
+=20
++	/* Tick handling: jiffies stall check */
++	unsigned int			stalled_jiffies;
++	unsigned long			last_tick_jiffies;
++
++	/* Tick handling */
++	struct hrtimer			sched_timer;
+ 	ktime_t				last_tick;
+ 	ktime_t				next_tick;
+ 	unsigned long			idle_jiffies;
+-	unsigned long			idle_calls;
+-	unsigned long			idle_sleeps;
+-	ktime_t				idle_entrytime;
+ 	ktime_t				idle_waketime;
+-	ktime_t				idle_exittime;
+-	ktime_t				idle_sleeptime;
+-	ktime_t				iowait_sleeptime;
++
++	/* Idle entry */
++	seqcount_t			idle_sleeptime_seq;
++	ktime_t				idle_entrytime;
++
++	/* Tick stop */
++	enum tick_nohz_mode		nohz_mode;
+ 	unsigned long			last_jiffies;
+-	u64				timer_expires;
+ 	u64				timer_expires_base;
++	u64				timer_expires;
+ 	u64				next_timer;
+ 	ktime_t				idle_expires;
++	unsigned long			idle_calls;
++	unsigned long			idle_sleeps;
++
++	/* Idle exit */
++	ktime_t				idle_exittime;
++	ktime_t				idle_sleeptime;
++	ktime_t				iowait_sleeptime;
++
++	/* Full dynticks handling */
+ 	atomic_t			tick_dep_mask;
+-	unsigned long			last_tick_jiffies;
+-	unsigned int			stalled_jiffies;
++
++	/* Clocksource changes */
++	unsigned long			check_clocks;
+ };
+=20
+ extern struct tick_sched *tick_get_tick_sched(int cpu);
+diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
+index e814061d6aa0..9f031eafc465 100644
+--- a/lib/vdso/Makefile
++++ b/lib/vdso/Makefile
+@@ -5,18 +5,13 @@ GENERIC_VDSO_DIR :=3D $(dir $(GENERIC_VDSO_MK_PATH))
+=20
+ c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) :=3D $(addprefix $(GENERIC_VDS=
+O_DIR), gettimeofday.c)
+=20
+-# This cmd checks that the vdso library does not contain absolute relocation
++# This cmd checks that the vdso library does not contain dynamic relocations.
+ # It has to be called after the linking of the vdso library and requires it
+ # as a parameter.
+ #
+-# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and correspo=
+nds
+-# to the absolute relocation types printed by "objdump -R" and accepted by t=
+he
+-# dynamic linker.
+-ifndef ARCH_REL_TYPE_ABS
+-$(error ARCH_REL_TYPE_ABS is not set)
+-endif
+-
++# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
++# dynamic relocations, ignore R_*_NONE.
+ quiet_cmd_vdso_check =3D VDSOCHK $@
+-      cmd_vdso_check =3D if $(OBJDUMP) -R $@ | grep -E -h "$(ARCH_REL_TYPE_A=
+BS)"; \
++      cmd_vdso_check =3D if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_=
+\w*_"; \
+ 		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+ 			     rm -f $@; /bin/false); fi
+diff --git a/tools/testing/selftests/proc/proc-uptime-001.c b/tools/testing/s=
+elftests/proc/proc-uptime-001.c
+index 781f7a50fc3f..f335eec5067e 100644
+--- a/tools/testing/selftests/proc/proc-uptime-001.c
++++ b/tools/testing/selftests/proc/proc-uptime-001.c
+@@ -13,7 +13,9 @@
+  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+-// Test that values in /proc/uptime increment monotonically.
++// Test that boottime value in /proc/uptime and CLOCK_BOOTTIME increment
++// monotonically. We don't test idle time monotonicity due to broken iowait
++// task counting, cf: comment above get_cpu_idle_time_us()
+ #undef NDEBUG
+ #include <assert.h>
+ #include <stdint.h>
+@@ -25,20 +27,31 @@
+=20
+ int main(void)
+ {
+-	uint64_t start, u0, u1, i0, i1;
++	uint64_t start, u0, u1, c0, c1;
+ 	int fd;
+=20
+ 	fd =3D open("/proc/uptime", O_RDONLY);
+ 	assert(fd >=3D 0);
+=20
+-	proc_uptime(fd, &u0, &i0);
++	u0 =3D proc_uptime(fd);
+ 	start =3D u0;
++	c0 =3D clock_boottime();
++
+ 	do {
+-		proc_uptime(fd, &u1, &i1);
++		u1 =3D proc_uptime(fd);
++		c1 =3D clock_boottime();
++
++		/* Is /proc/uptime monotonic ? */
+ 		assert(u1 >=3D u0);
+-		assert(i1 >=3D i0);
++
++		/* Is CLOCK_BOOTTIME monotonic ? */
++		assert(c1 >=3D c0);
++
++		/* Is CLOCK_BOOTTIME VS /proc/uptime monotonic ? */
++		assert(c0 >=3D u0);
++
+ 		u0 =3D u1;
+-		i0 =3D i1;
++		c0 =3D c1;
+ 	} while (u1 - start < 100);
+=20
+ 	return 0;
+diff --git a/tools/testing/selftests/proc/proc-uptime-002.c b/tools/testing/s=
+elftests/proc/proc-uptime-002.c
+index 7d0aa22bdc12..ae453daa96c1 100644
+--- a/tools/testing/selftests/proc/proc-uptime-002.c
++++ b/tools/testing/selftests/proc/proc-uptime-002.c
+@@ -13,8 +13,10 @@
+  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+-// Test that values in /proc/uptime increment monotonically
+-// while shifting across CPUs.
++// Test that boottime value in /proc/uptime and CLOCK_BOOTTIME increment
++// monotonically while shifting across CPUs. We don't test idle time
++// monotonicity due to broken iowait task counting, cf: comment above
++// get_cpu_idle_time_us()
+ #undef NDEBUG
+ #include <assert.h>
+ #include <errno.h>
+@@ -42,10 +44,10 @@ static inline int sys_sched_setaffinity(pid_t pid, unsign=
+ed int len, unsigned lo
+=20
+ int main(void)
+ {
++	uint64_t u0, u1, c0, c1;
+ 	unsigned int len;
+ 	unsigned long *m;
+ 	unsigned int cpu;
+-	uint64_t u0, u1, i0, i1;
+ 	int fd;
+=20
+ 	/* find out "nr_cpu_ids" */
+@@ -60,7 +62,9 @@ int main(void)
+ 	fd =3D open("/proc/uptime", O_RDONLY);
+ 	assert(fd >=3D 0);
+=20
+-	proc_uptime(fd, &u0, &i0);
++	u0 =3D proc_uptime(fd);
++	c0 =3D clock_boottime();
++
+ 	for (cpu =3D 0; cpu < len * 8; cpu++) {
+ 		memset(m, 0, len);
+ 		m[cpu / (8 * sizeof(unsigned long))] |=3D 1UL << (cpu % (8 * sizeof(unsign=
+ed long)));
+@@ -68,11 +72,20 @@ int main(void)
+ 		/* CPU might not exist, ignore error */
+ 		sys_sched_setaffinity(0, len, m);
+=20
+-		proc_uptime(fd, &u1, &i1);
++		u1 =3D proc_uptime(fd);
++		c1 =3D clock_boottime();
++
++		/* Is /proc/uptime monotonic ? */
+ 		assert(u1 >=3D u0);
+-		assert(i1 >=3D i0);
++
++		/* Is CLOCK_BOOTTIME monotonic ? */
++		assert(c1 >=3D c0);
++
++		/* Is CLOCK_BOOTTIME VS /proc/uptime monotonic ? */
++		assert(c0 >=3D u0);
++
+ 		u0 =3D u1;
+-		i0 =3D i1;
++		c0 =3D c1;
+ 	}
+=20
+ 	return 0;
+diff --git a/tools/testing/selftests/proc/proc-uptime.h b/tools/testing/selft=
+ests/proc/proc-uptime.h
+index dc6a42b1d6b0..730cce4a3d73 100644
+--- a/tools/testing/selftests/proc/proc-uptime.h
++++ b/tools/testing/selftests/proc/proc-uptime.h
+@@ -19,10 +19,22 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <time.h>
+=20
+ #include "proc.h"
+=20
+-static void proc_uptime(int fd, uint64_t *uptime, uint64_t *idle)
++static uint64_t clock_boottime(void)
++{
++	struct timespec ts;
++	int err;
++
++	err =3D clock_gettime(CLOCK_BOOTTIME, &ts);
++	assert(err >=3D 0);
++
++	return (ts.tv_sec * 100) + (ts.tv_nsec / 10000000);
++}
++
++static uint64_t proc_uptime(int fd)
+ {
+ 	uint64_t val1, val2;
+ 	char buf[64], *p;
+@@ -43,18 +55,6 @@ static void proc_uptime(int fd, uint64_t *uptime, uint64_t=
+ *idle)
+ 	assert(p[3] =3D=3D ' ');
+=20
+ 	val2 =3D (p[1] - '0') * 10 + p[2] - '0';
+-	*uptime =3D val1 * 100 + val2;
+-
+-	p +=3D 4;
+-
+-	val1 =3D xstrtoull(p, &p);
+-	assert(p[0] =3D=3D '.');
+-	assert('0' <=3D p[1] && p[1] <=3D '9');
+-	assert('0' <=3D p[2] && p[2] <=3D '9');
+-	assert(p[3] =3D=3D '\n');
+-
+-	val2 =3D (p[1] - '0') * 10 + p[2] - '0';
+-	*idle =3D val1 * 100 + val2;
+=20
+-	assert(p + 4 =3D=3D buf + rv);
++	return val1 * 100 + val2;
+ }
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/se=
+lftests/timers/posix_timers.c
+index 0ba500056e63..8a17c0e8d82b 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -188,6 +188,80 @@ static int check_timer_create(int which)
+ 	return 0;
  }
 =20
- #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913c067d..1b725510dd0f 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action=
- *a,
- 		if (tasklet_trylock(t)) {
- 			if (!atomic_read(&t->count)) {
- 				if (tasklet_clear_sched(t)) {
--					if (t->use_callback)
-+					if (t->use_callback) {
-+						trace_tasklet_entry(t, t->callback);
- 						t->callback(t);
--					else
-+						trace_tasklet_exit(t, t->callback);
-+					} else {
-+						trace_tasklet_entry(t, t->func);
- 						t->func(t->data);
-+						trace_tasklet_exit(t, t->func);
-+					}
- 				}
- 				tasklet_unlock(t);
- 				continue;
++int remain;
++__thread int got_signal;
++
++static void *distribution_thread(void *arg)
++{
++	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++	return NULL;
++}
++
++static void distribution_handler(int nr)
++{
++	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
++		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
++}
++
++/*
++ * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_=
+ID
++ * timer signals. This primarily tests that the kernel does not favour any o=
+ne.
++ */
++static int check_timer_distribution(void)
++{
++	int err, i;
++	timer_t id;
++	const int nthreads =3D 10;
++	pthread_t threads[nthreads];
++	struct itimerspec val =3D {
++		.it_value.tv_sec =3D 0,
++		.it_value.tv_nsec =3D 1000 * 1000,
++		.it_interval.tv_sec =3D 0,
++		.it_interval.tv_nsec =3D 1000 * 1000,
++	};
++
++	printf("Check timer_create() per process signal distribution... ");
++	fflush(stdout);
++
++	remain =3D nthreads + 1;  /* worker threads + this thread */
++	signal(SIGALRM, distribution_handler);
++	err =3D timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
++	if (err < 0) {
++		perror("Can't create timer\n");
++		return -1;
++	}
++	err =3D timer_settime(id, 0, &val, NULL);
++	if (err < 0) {
++		perror("Can't set timer\n");
++		return -1;
++	}
++
++	for (i =3D 0; i < nthreads; i++) {
++		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
++			perror("Can't create thread\n");
++			return -1;
++		}
++	}
++
++	/* Wait for all threads to receive the signal. */
++	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++
++	for (i =3D 0; i < nthreads; i++) {
++		if (pthread_join(threads[i], NULL)) {
++			perror("Can't join thread\n");
++			return -1;
++		}
++	}
++
++	if (timer_delete(id)) {
++		perror("Can't delete timer\n");
++		return -1;
++	}
++
++	printf("[OK]\n");
++	return 0;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	printf("Testing posix timers. False negative may happen on CPU execution \n=
+");
+@@ -217,5 +291,8 @@ int main(int argc, char **argv)
+ 	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
+ 		return ksft_exit_fail();
+=20
++	if (check_timer_distribution() < 0)
++		return ksft_exit_fail();
++
+ 	return ksft_exit_pass();
+ }
 
