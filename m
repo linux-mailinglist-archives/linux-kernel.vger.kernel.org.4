@@ -2,114 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039F16ED365
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40446ED369
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjDXRTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S232085AbjDXRTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbjDXRTB (ORCPT
+        with ESMTP id S231794AbjDXRTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:19:01 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB92196
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:19:00 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b57c49c4cso4032485b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:19:00 -0700 (PDT)
+        Mon, 24 Apr 2023 13:19:15 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A17D84;
+        Mon, 24 Apr 2023 10:19:11 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f193ca059bso22638325e9.3;
+        Mon, 24 Apr 2023 10:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1682356739; x=1684948739;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a38sU0BVWLQ44397c5Qn/dNcocAQ8ZH17k9el5DRSzA=;
-        b=FAysqXWvfxHxpdw5VxbuKVZGy3vrZ+RvptRhxEhXV2MJl3v+wrRwW61C6LWwVOC60n
-         peb9q1u7ScStJMIgximwh9Ca3z+YBFEkVoBkDeN/8bUaLlqUH3U5/FEnNBZY6vinLDic
-         6Trs3rcEOIDBNejNOk6CFLb7o9NicmDD2aLbSTd/jFi67Mqkr/oZuscdBzVHWmDYq/b6
-         NbVw53gXjBoVQlkXQDeTrWOQhEfgNM3wNe9gtVFwy30DIyP8/lo8CefJTyoJX94HN5if
-         GdwMX/+dkZsy0OE1jqWckOgGkAwSmBIl89pYQqrBw5byU2wuDg9hNbgEjFoCg3nMKpKO
-         XXzA==
+        d=gmail.com; s=20221208; t=1682356749; x=1684948749;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q5ffUKulywUVWsUyD54zTOn22OGaFxg4joquRNd4FgQ=;
+        b=WUz8je7TAP9X0ZWTXN/DcIyVw3PSqQ6c+xZTy4D0RLal25VJ7IsPKmZdWbLw3jz7/K
+         KVlkJcMB3+qjXl8qVGPpaChDawz7eLxlQnFKgYMc3g08s+N0nY4+q6TNXc2rli8wuJHf
+         gcYnXs9U8/XouCegDQatfFV1D32O4Ui/ia3LrDFjUqR13p0pb0iEoTSkV9HrmAIC0DQo
+         1WEX2Vlu2Yho7dNkddLYnS4CcmcC/Ts+qaCzq0/pt00EcYBTQajLEBRbiURDAK9YXx90
+         439jUXDRabDTH9xDYyaHCEaAGhJJl2Fnclqag4G+/3vhHEyvO2IDXHin3qWrozA5ak49
+         nQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682356739; x=1684948739;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a38sU0BVWLQ44397c5Qn/dNcocAQ8ZH17k9el5DRSzA=;
-        b=TkamqfWzEylAd5xujAILGmL8wpTOUs4XqM0W8euuqsPqC3gwzCBgqFVfTTfOSmLLR4
-         6jdPL8lWn6UlR42tkf2V0AHLhzpfa+nlv0N3hI/mP/qZncFm/3rb4m1lUZFkqgDhheXK
-         ZUVB1J2H71Yl/nq2Hu8vLIKIphcLsSkIVN+0mtrl3BLaZcF7s3qVnnw2zK4yDaInp3Dn
-         u73TmQ4ienqFe/+JK0ElgqAseut+gCmlXdAZ1XNoLszx/c8GgZRbBWj3Gx/J1F4JfeUs
-         sYZz6+JCP/P6DWA1E4ZV1HpBSaguOlJWPLOdJ/Jb3smDL1W42lTi7tBbAdU8dbgEAw5k
-         c/AA==
-X-Gm-Message-State: AAQBX9dmIV3+6fgzCNwVVG7mYiU3EthI8rPLdATN96mVGAFS/bacU4z7
-        7Z704wRPuUNa/f2BvUs/RDbDRA==
-X-Google-Smtp-Source: AKy350ZSafi65mIsC48pRVJ2RG+WH9jsRqiNEMuLHqe4lXLIlF8X4WXv8fO55smHDKDAU3EupyJc0g==
-X-Received: by 2002:a05:6a00:1a01:b0:63b:89ba:fc9c with SMTP id g1-20020a056a001a0100b0063b89bafc9cmr18613973pfv.27.1682356739560;
-        Mon, 24 Apr 2023 10:18:59 -0700 (PDT)
-Received: from carnotaurus.. (c-73-252-184-87.hsd1.ca.comcast.net. [73.252.184.87])
-        by smtp.gmail.com with ESMTPSA id l18-20020a62be12000000b0063b7b811ce8sm7620177pff.205.2023.04.24.10.18.58
+        d=1e100.net; s=20221208; t=1682356749; x=1684948749;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q5ffUKulywUVWsUyD54zTOn22OGaFxg4joquRNd4FgQ=;
+        b=EWgHU/CryEjsX86WOx2Vvle9K3Zudf3wuaWRat8cz6/siSX0tQfmjU5hGwHWas84bs
+         /t57bgL/X4GlSvfZDKpITTOuqi57O9ZDbTVaPLFm1n6+kzpPu5BOYkX2cpPRxIULXgYm
+         Em/n1oxxIdYeROpYdsWUgv16HEcSu6VePHY3IZXeYgTDKzEYR3WKQFuWdxdwxLOVc8Eu
+         UYGxPxmmICYreGfyf/CPQiP7LarnsVT4QPGDcaXisltiEqoZi0p5OBikokK4GpFYKtc8
+         f8n8N59yylMoZpy2ovuYCp8VTzQXVc6iZoh6m7P/4VMsDsu4vwec5AEyS8G31r8r+avX
+         nSAg==
+X-Gm-Message-State: AAQBX9fph4omxg9WFHi6LtlfijD9mGFgy6F+oeTkWtGjHQ3mCyElCUfx
+        LLiivvATTp+rc6zUCSseOEM=
+X-Google-Smtp-Source: AKy350Ywom400cz3IyOOqt4vzhP+ONiCCOrenGpF0cgItGHbLrhWmKEBovxp3ORq5wPXvjxIpaC9iw==
+X-Received: by 2002:a05:600c:22d4:b0:3f1:82c6:2d80 with SMTP id 20-20020a05600c22d400b003f182c62d80mr8679594wmg.5.1682356749143;
+        Mon, 24 Apr 2023 10:19:09 -0700 (PDT)
+Received: from suse.localnet (host-79-36-111-57.retail.telecomitalia.it. [79.36.111.57])
+        by smtp.gmail.com with ESMTPSA id m18-20020a7bcb92000000b003f24f245f57sm3884154wmi.42.2023.04.24.10.19.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 10:18:59 -0700 (PDT)
-From:   Joe Stringer <joe@isovalent.com>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net
-Subject: [PATCH linux-doc v3] docs/doc-guide: Clarify how to write tables
-Date:   Mon, 24 Apr 2023 10:18:50 -0700
-Message-Id: <20230424171850.3612317-1-joe@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Apr 2023 10:19:08 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: Re: [PATCH v3 41/55] iscsi: Assume "sendpage" is okay in
+ iscsi_tcp_segment_map()
+Date:   Mon, 24 Apr 2023 19:19:04 +0200
+Message-ID: <1957131.PYKUYFuaPT@suse>
+In-Reply-To: <20230331160914.1608208-42-dhowells@redhat.com>
+References: <20230331160914.1608208-1-dhowells@redhat.com>
+ <20230331160914.1608208-42-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to this commit, the kernel docs writing guide spent over a page
-describing exactly how *not* to write tables into the kernel docs,
-without providing a example about the desired format.
+On venerd=EC 31 marzo 2023 18:09:00 CEST David Howells wrote:
+> As iscsi is now using sendmsg() with MSG_SPLICE_PAGES rather than sendpag=
+e,
+> assume that sendpage_ok() will return true in iscsi_tcp_segment_map() and
+> leave it to TCP to copy the data if not.
+>=20
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: linux-scsi@vger.kernel.org
+> cc: target-devel@vger.kernel.org
+> cc: netdev@vger.kernel.org
+> ---
+>  drivers/scsi/libiscsi_tcp.c | 13 +++----------
+>  1 file changed, 3 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/scsi/libiscsi_tcp.c b/drivers/scsi/libiscsi_tcp.c
+> index c182aa83f2c9..07ba0d864820 100644
+> --- a/drivers/scsi/libiscsi_tcp.c
+> +++ b/drivers/scsi/libiscsi_tcp.c
+> @@ -128,18 +128,11 @@ static void iscsi_tcp_segment_map(struct iscsi_segm=
+ent
+> *segment, int recv) * coalescing neighboring slab objects into a single f=
+rag
+> which
+>  	 * triggers one of hardened usercopy checks.
+>  	 */
+> -	if (!recv && sendpage_ok(sg_page(sg)))
+> +	if (!recv)
+>  		return;
+>=20
+> -	if (recv) {
+> -		segment->atomic_mapped =3D true;
+> -		segment->sg_mapped =3D kmap_atomic(sg_page(sg));
+> -	} else {
+> -		segment->atomic_mapped =3D false;
+> -		/* the xmit path can sleep with the page mapped so use=20
+kmap */
+> -		segment->sg_mapped =3D kmap(sg_page(sg));
+> -	}
+> -
+> +	segment->atomic_mapped =3D true;
+> +	segment->sg_mapped =3D kmap_atomic(sg_page(sg));
 
-This patch provides a positive example first in the guide so that it's
-harder to miss, then leaves the existing less desirable approach below
-for contributors to follow if they have some stronger justification for
-why to use that approach.
+As you probably know, kmap_atomic() is deprecated.
 
-Signed-off-by: Joe Stringer <joe@isovalent.com>
----
-v3: Fix grammar mistake
-v2: Simplify recommendation for either simple or grid table syntax
-    Remove example, link to rST user reference
----
- Documentation/doc-guide/sphinx.rst | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+I must admit that I'm not an expert of this code, however, it looks like th=
+e=20
+mapping has no need to rely on the side effects of kmap_atomic() (i.e.,=20
+pagefault_disable() and preempt_disable() - but I'm not entirely sure about=
+=20
+the possibility that preemption should be explicitly disabled along with th=
+e=20
+replacement with kmap_local_page()).=20
 
-diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-index 23edb427e76f..cd8ad7904491 100644
---- a/Documentation/doc-guide/sphinx.rst
-+++ b/Documentation/doc-guide/sphinx.rst
-@@ -313,9 +313,18 @@ the documentation build system will automatically turn a reference to
- function name exists.  If you see ``c:func:`` use in a kernel document,
- please feel free to remove it.
- 
-+Tables
-+------
-+
-+ReStructuredText provides several options for table syntax. Kernel style for
-+tables is to prefer *simple table* syntax or *grid table* syntax. See the
-+`reStructuredText user reference for table syntax`_ for more details.
-+
-+.. _reStructuredText user reference for table syntax:
-+   https://docutils.sourceforge.io/docs/user/rst/quickref.html#tables
- 
- list tables
-------------
-+~~~~~~~~~~~
- 
- The list-table formats can be useful for tables that are not easily laid
- out in the usual Sphinx ASCII-art formats.  These formats are nearly
--- 
-2.34.1
+Last year I've been working on several conversions from kmap{,_atomic}() to=
+=20
+kmap_local_page(), however I'm still not sure to understand what's happenin=
+g=20
+here...
+
+Am I missing any important details? Can you please explain why we still nee=
+d=20
+that kmap_atomic() instead of kmap_local_page()?=20
+
+Thanks in advance,
+
+=46abio
+
+>  	segment->data =3D segment->sg_mapped + sg->offset + segment-
+>sg_offset;
+>  }
+
+
+
 
