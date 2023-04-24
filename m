@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4734F6ECF86
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6226ECF87
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjDXNsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S232815AbjDXNs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbjDXNsN (ORCPT
+        with ESMTP id S232821AbjDXNsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:48:13 -0400
+        Mon, 24 Apr 2023 09:48:19 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 041318682;
-        Mon, 24 Apr 2023 06:48:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27BDD9747;
+        Mon, 24 Apr 2023 06:48:14 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7726ED75;
-        Mon, 24 Apr 2023 06:48:52 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99862D75;
+        Mon, 24 Apr 2023 06:48:57 -0700 (PDT)
 Received: from e127643.arm.com (unknown [10.57.58.229])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5D20D3F64C;
-        Mon, 24 Apr 2023 06:48:05 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C3E783F64C;
+        Mon, 24 Apr 2023 06:48:09 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
         shy828301@gmail.com
@@ -41,9 +41,9 @@ Cc:     denik@google.com, James Clark <james.clark@arm.com>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] perf tools: Add util function for overriding user set config values
-Date:   Mon, 24 Apr 2023 14:47:42 +0100
-Message-Id: <20230424134748.228137-3-james.clark@arm.com>
+Subject: [PATCH 3/7] perf: cs-etm: Don't test full_auxtrace because it's always set
+Date:   Mon, 24 Apr 2023 14:47:43 +0100
+Message-Id: <20230424134748.228137-4-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230424134748.228137-1-james.clark@arm.com>
 References: <20230424134748.228137-1-james.clark@arm.com>
@@ -58,150 +58,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is some duplicated code to only override config values if they
-haven't already been set by the user so make a util function for this.
+There is no path in cs-etm where this isn't true so it doesn't need to
+be tested. Also re-order the beginning of cs_etm_recording_options() so
+that nothing is done until the early exit is passed.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/perf/arch/arm64/util/arm-spe.c | 26 ++-----------------------
- tools/perf/arch/x86/util/intel-pt.c  | 22 ++-------------------
- tools/perf/util/evsel.c              | 29 ++++++++++++++++++++++++++++
- tools/perf/util/evsel.h              |  3 +++
- 4 files changed, 36 insertions(+), 44 deletions(-)
+ tools/perf/arch/arm/util/cs-etm.c | 56 ++++++++++++++-----------------
+ 1 file changed, 25 insertions(+), 31 deletions(-)
 
-diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
-index ef497a29e814..3b1676ff03f9 100644
---- a/tools/perf/arch/arm64/util/arm-spe.c
-+++ b/tools/perf/arch/arm64/util/arm-spe.c
-@@ -36,29 +36,6 @@ struct arm_spe_recording {
- 	bool			*wrapped;
- };
+diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+index e02a9bfc3d42..f9b9ebf7fffc 100644
+--- a/tools/perf/arch/arm/util/cs-etm.c
++++ b/tools/perf/arch/arm/util/cs-etm.c
+@@ -319,13 +319,6 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 	bool privileged = perf_event_paranoid_check(-1);
+ 	int err = 0;
  
--static void arm_spe_set_timestamp(struct auxtrace_record *itr,
--				  struct evsel *evsel)
--{
--	struct arm_spe_recording *ptr;
--	struct perf_pmu *arm_spe_pmu;
--	struct evsel_config_term *term = evsel__get_config_term(evsel, CFG_CHG);
--	u64 user_bits = 0, bit;
+-	ptr->evlist = evlist;
+-	ptr->snapshot_mode = opts->auxtrace_snapshot_mode;
 -
--	ptr = container_of(itr, struct arm_spe_recording, itr);
--	arm_spe_pmu = ptr->arm_spe_pmu;
+-	if (!record_opts__no_switch_events(opts) &&
+-	    perf_can_record_switch_events())
+-		opts->record_switch_events = true;
 -
--	if (term)
--		user_bits = term->val.cfg_chg;
--
--	bit = perf_pmu__format_bits(&arm_spe_pmu->format, "ts_enable");
--
--	/* Skip if user has set it */
--	if (bit & user_bits)
--		return;
--
--	evsel->core.attr.config |= bit;
--}
--
- static size_t
- arm_spe_info_priv_size(struct auxtrace_record *itr __maybe_unused,
- 		       struct evlist *evlist __maybe_unused)
-@@ -238,7 +215,8 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
- 	 */
- 	if (!perf_cpu_map__empty(cpus)) {
- 		evsel__set_sample_bit(arm_spe_evsel, CPU);
--		arm_spe_set_timestamp(itr, arm_spe_evsel);
-+		evsel__set_config_if_unset(arm_spe_pmu, arm_spe_evsel,
-+					   "ts_enable", 1);
+ 	evlist__for_each_entry(evlist, evsel) {
+ 		if (evsel->core.attr.type == cs_etm_pmu->type) {
+ 			if (cs_etm_evsel) {
+@@ -333,11 +326,7 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 				       CORESIGHT_ETM_PMU_NAME);
+ 				return -EINVAL;
+ 			}
+-			evsel->core.attr.freq = 0;
+-			evsel->core.attr.sample_period = 1;
+-			evsel->needs_auxtrace_mmap = true;
+ 			cs_etm_evsel = evsel;
+-			opts->full_auxtrace = true;
+ 		}
  	}
  
- 	/*
-diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
-index 2cff11de9d8a..17336da08b58 100644
---- a/tools/perf/arch/x86/util/intel-pt.c
-+++ b/tools/perf/arch/x86/util/intel-pt.c
-@@ -576,25 +576,6 @@ static int intel_pt_validate_config(struct perf_pmu *intel_pt_pmu,
- 	return err;
- }
- 
--static void intel_pt_config_sample_mode(struct perf_pmu *intel_pt_pmu,
--					struct evsel *evsel)
--{
--	u64 user_bits = 0, bits;
--	struct evsel_config_term *term = evsel__get_config_term(evsel, CFG_CHG);
--
--	if (term)
--		user_bits = term->val.cfg_chg;
--
--	bits = perf_pmu__format_bits(&intel_pt_pmu->format, "psb_period");
--
--	/* Did user change psb_period */
--	if (bits & user_bits)
--		return;
--
--	/* Set psb_period to 0 */
--	evsel->core.attr.config &= ~bits;
--}
--
- static void intel_pt_min_max_sample_sz(struct evlist *evlist,
- 				       size_t *min_sz, size_t *max_sz)
- {
-@@ -686,7 +667,8 @@ static int intel_pt_recording_options(struct auxtrace_record *itr,
+@@ -345,6 +334,18 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 	if (!cs_etm_evsel)
  		return 0;
  
- 	if (opts->auxtrace_sample_mode)
--		intel_pt_config_sample_mode(intel_pt_pmu, intel_pt_evsel);
-+		evsel__set_config_if_unset(intel_pt_pmu, intel_pt_evsel,
-+					   "psb_period", 0);
- 
- 	err = intel_pt_validate_config(intel_pt_pmu, intel_pt_evsel);
- 	if (err)
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index a85a987128aa..cdf1445136ad 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -3216,3 +3216,32 @@ void evsel__remove_from_group(struct evsel *evsel, struct evsel *leader)
- 		leader->core.nr_members--;
++	ptr->evlist = evlist;
++	ptr->snapshot_mode = opts->auxtrace_snapshot_mode;
++
++	if (!record_opts__no_switch_events(opts) &&
++	    perf_can_record_switch_events())
++		opts->record_switch_events = true;
++
++	cs_etm_evsel->core.attr.freq = 0;
++	cs_etm_evsel->core.attr.sample_period = 1;
++	cs_etm_evsel->needs_auxtrace_mmap = true;
++	opts->full_auxtrace = true;
++
+ 	ret = cs_etm_set_sink_attr(cs_etm_pmu, cs_etm_evsel);
+ 	if (ret)
+ 		return ret;
+@@ -414,8 +415,8 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 		}
  	}
- }
-+
-+/*
-+ * Set @config_name to @val as long as the user hasn't already set or cleared it
-+ * by passing a config term on the command line.
-+ *
-+ * @val is the value to put into the bits specified by @config_name rather than
-+ * the bit pattern. It is shifted into position by this function, so to set
-+ * something to true, pass 1 for val rather than a pre shifted value.
-+ */
-+#define field_prep(_mask, _val) (((_val) << (ffsll(_mask) - 1)) & (_mask))
-+void evsel__set_config_if_unset(struct perf_pmu *pmu, struct evsel *evsel,
-+				const char *config_name, u64 val)
-+{
-+	u64 user_bits = 0, bits;
-+	struct evsel_config_term *term = evsel__get_config_term(evsel, CFG_CHG);
-+
-+	if (term)
-+		user_bits = term->val.cfg_chg;
-+
-+	bits = perf_pmu__format_bits(&pmu->format, config_name);
-+
-+	/* Do nothing if the user changed the value */
-+	if (bits & user_bits)
-+		return;
-+
-+	/* Otherwise replace it */
-+	evsel->core.attr.config &= ~bits;
-+	evsel->core.attr.config |= field_prep(bits, val);
-+}
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 68072ec655ce..4120f5ff673d 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -529,4 +529,7 @@ bool arch_evsel__must_be_in_group(const struct evsel *evsel);
- 	((((src) >> (pos)) & ((1ull << (size)) - 1)) << (63 - ((pos) + (size) - 1)))
  
- u64 evsel__bitfield_swap_branch_flags(u64 value);
-+void evsel__set_config_if_unset(struct perf_pmu *pmu, struct evsel *evsel,
-+				const char *config_name, u64 val);
+-	/* We are in full trace mode but '-m,xyz' wasn't specified */
+-	if (opts->full_auxtrace && !opts->auxtrace_mmap_pages) {
++	/* Buffer sizes weren't specified with '-m,xyz' so give some defaults */
++	if (!opts->auxtrace_mmap_pages) {
+ 		if (privileged) {
+ 			opts->auxtrace_mmap_pages = MiB(4) / page_size;
+ 		} else {
+@@ -423,7 +424,6 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 			if (opts->mmap_pages == UINT_MAX)
+ 				opts->mmap_pages = KiB(256) / page_size;
+ 		}
+-
+ 	}
+ 
+ 	if (opts->auxtrace_snapshot_mode)
+@@ -454,23 +454,17 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+ 	}
+ 
+ 	/* Add dummy event to keep tracking */
+-	if (opts->full_auxtrace) {
+-		struct evsel *tracking_evsel;
+-
+-		err = parse_event(evlist, "dummy:u");
+-		if (err)
+-			goto out;
+-
+-		tracking_evsel = evlist__last(evlist);
+-		evlist__set_tracking_event(evlist, tracking_evsel);
+-
+-		tracking_evsel->core.attr.freq = 0;
+-		tracking_evsel->core.attr.sample_period = 1;
+-
+-		/* In per-cpu case, always need the time of mmap events etc */
+-		if (!perf_cpu_map__empty(cpus))
+-			evsel__set_sample_bit(tracking_evsel, TIME);
+-	}
++	err = parse_event(evlist, "dummy:u");
++	if (err)
++		goto out;
++	evsel = evlist__last(evlist);
++	evlist__set_tracking_event(evlist, evsel);
++	evsel->core.attr.freq = 0;
++	evsel->core.attr.sample_period = 1;
 +
- #endif /* __PERF_EVSEL_H */
++	/* In per-cpu case, always need the time of mmap events etc */
++	if (!perf_cpu_map__empty(cpus))
++		evsel__set_sample_bit(evsel, TIME);
+ 
+ out:
+ 	return err;
 -- 
 2.34.1
 
