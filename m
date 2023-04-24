@@ -2,184 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1776ECC3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC526ECC3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjDXMso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S231700AbjDXMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjDXMsl (ORCPT
+        with ESMTP id S231315AbjDXMtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:48:41 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4792C3A80
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 05:48:39 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VguwqY0_1682340512;
-Received: from 30.212.138.173(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VguwqY0_1682340512)
-          by smtp.aliyun-inc.com;
-          Mon, 24 Apr 2023 20:48:35 +0800
-Message-ID: <b07cbdf6-cbff-2bf4-9bba-b8c051ea090c@linux.alibaba.com>
-Date:   Mon, 24 Apr 2023 20:48:32 +0800
+        Mon, 24 Apr 2023 08:49:03 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D5A44AE
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 05:48:57 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a67bcde3a7so49041435ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 05:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682340537; x=1684932537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tRtJI0qVSZgwFwkseB3cLSDrpXy66ayacVGu/Wcx/aQ=;
+        b=BxtPBqv8KtKgkQDc0XgzWV2QxL2z6CZY6BmlfXQnG6rirWvnh14gxm+oh0CqZnq7EO
+         5vjFCREuPJTfhQAlIovG5XPGf5A7JYiire0wr+u3wiXn/9d7+rrOmmnDuC7cw9VFnkN3
+         zKqbc7PcRrxB4g/7Y//99ziAryrCseZrvDxXizfPRxXPZ6vUJ5Y82Dm2FwgK0jyydFEY
+         K87a6BV5/hEIrOy2D60dQlyHl2ZCV98OhiXjJu4iKXvgg/vsbqBVFlA8LA4iY6Gj7cp4
+         e83aOtpIWzAwYBV5w0th+Dsae2D4u4jntpPCNxvf2MSLIudzJg3NGj1Oz3nUAsb9SJw5
+         3Wdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682340537; x=1684932537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tRtJI0qVSZgwFwkseB3cLSDrpXy66ayacVGu/Wcx/aQ=;
+        b=imyJ0XOLMD+dcT77dabxw3TyLJaJWc4xMYUAb6rnqn0mTMkXv4fS1zwhuAFRNd9+cN
+         VvMRIBDsXdkNx6OqO97pqFyG1J2jAHFCF73E+ygzRkgIZBdMqn3SnKC1xICIgz3uh9Fa
+         jPnOnACwYl7PpExjEFetNRADAJO4ai9xZxr7p4oF80y+ZoxR71ub4Hzb0l3Py1ydWmEb
+         TSGwZoWqbuiduvcCefmaWYGFDBtRDcSC4p/ecZAe36S0g3oE8+ApciTnH+DSwDBmg6E7
+         Mz/ZRNoXRa2ZWuitxBPCYEx+ayJdBzgTlVsmADvHvBQpdQ4em+aioHfShm8ZWnIEMQi3
+         NgBg==
+X-Gm-Message-State: AC+VfDzdgmelvL+NynvPXsOlaQF/lld67HhkCvLogftfeWcaEUBy5WP6
+        t3KYfmDF2k3U7hgq15OILHDZgIzRxMmc6LlAq17/IzhBrSI=
+X-Google-Smtp-Source: ACHHUZ5ImOZ6a6KGIzUNbdDYZPMI4yRw7+MQOytkQQ/T/JP/sfPKX39tCOidkGf+Olr1FhHVF/s71XxSFfXP7v/6PWM=
+X-Received: by 2002:a17:902:d4cb:b0:1a9:7eea:2626 with SMTP id
+ o11-20020a170902d4cb00b001a97eea2626mr1872357plg.10.1682340536481; Mon, 24
+ Apr 2023 05:48:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
- <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
- <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
- <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
- <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
- <8d4059e3-2e6d-3f0c-2881-13b9bd07aa6c@linux.alibaba.com>
- <ZEZxKJA/5aOfbZdX@dhcp22.suse.cz>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <ZEZxKJA/5aOfbZdX@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230423121232.1345909-1-aford173@gmail.com> <20230423121232.1345909-5-aford173@gmail.com>
+ <CAGXv+5GHcigEahCp+UefxR+AboF7i-kYJjiNftz8fPDLAZVMow@mail.gmail.com>
+ <CAHCN7x+i41UkpdqLbK8s+OJmS=ExsctZwZL0YAQAic=N6kCbAw@mail.gmail.com>
+ <CGME20230424094440eucas1p1ca3d678493aef1d6a893abdfcaf01584@eucas1p1.samsung.com>
+ <CAGXv+5H34ojUAPWWpF+-=XpdF6Jj_Q7nqiPg3TEKVNXu4F6JAQ@mail.gmail.com>
+ <ceee0290-211b-a675-2ba5-9342ee27fc49@samsung.com> <CAHCN7x+koEFVoTOvY16DXYmSE_7+GrYkAk5mnZ02MX9gRmD=DQ@mail.gmail.com>
+In-Reply-To: <CAHCN7x+koEFVoTOvY16DXYmSE_7+GrYkAk5mnZ02MX9gRmD=DQ@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 24 Apr 2023 07:48:45 -0500
+Message-ID: <CAHCN7xL5Y7i=QtPcMg_CWnDATBxj_JRSa8dHNGGZC0meiS-jMA@mail.gmail.com>
+Subject: Re: [PATCH V2 4/6] drm: bridge: samsung-dsim: Dynamically configure
+ DPHY timing
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, dri-devel@lists.freedesktop.org,
+        Marek Vasut <marex@denx.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        aford@beaconembedded.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        dario.binacchi@amarulasolutions.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 24, 2023 at 4:50=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
+e:
+>
+> On Mon, Apr 24, 2023 at 4:47=E2=80=AFAM Marek Szyprowski
+> <m.szyprowski@samsung.com> wrote:
+> >
+> > On 24.04.2023 11:44, Chen-Yu Tsai wrote:
+> > > On Mon, Apr 24, 2023 at 5:31=E2=80=AFPM Adam Ford <aford173@gmail.com=
+> wrote:
+> > >> On Mon, Apr 24, 2023 at 1:12=E2=80=AFAM Chen-Yu Tsai <wenst@chromium=
+.org> wrote:
+> > >>> On Sun, Apr 23, 2023 at 8:13=E2=80=AFPM Adam Ford <aford173@gmail.c=
+om> wrote:
+> > >>>> The DPHY timings are currently hard coded. Since the input
+> > >>>> clock can be variable, the phy timings need to be variable
+> > >>>> too.  Add an additional variable to the driver data to enable
+> > >>>> this feature to prevent breaking boards that don't support it.
+> > >>>>
+> > >>>> The phy_mipi_dphy_get_default_config function configures the
+> > >>>> DPHY timings in pico-seconds, and a small macro converts those
+> > >>>> timings into clock cycles based on the pixel clock rate.
+> > >>>>
+> > >>>> Signed-off-by: Adam Ford <aford173@gmail.com>
+> > >>>> ---
+> > >>>>   drivers/gpu/drm/bridge/samsung-dsim.c | 79 +++++++++++++++++++++=
+++----
+> > >>>>   include/drm/bridge/samsung-dsim.h     |  1 +
+> > >>>>   2 files changed, 70 insertions(+), 10 deletions(-)
+> > >>>>
+> > >>>> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/d=
+rm/bridge/samsung-dsim.c
+> > >>>> index 5b6e7825b92f..f165483d5044 100644
+> > >>>> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> > >>>> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> > >>>> @@ -18,9 +18,7 @@
+> > >>>>   #include <linux/media-bus-format.h>
+> > >>>>   #include <linux/of_device.h>
+> > >>>>   #include <linux/phy/phy.h>
+> > >>>> -
+> > >>>>   #include <video/mipi_display.h>
+> > >>>> -
+> > >>>>   #include <drm/bridge/samsung-dsim.h>
+> > >>>>   #include <drm/drm_panel.h>
+> > >>>>   #include <drm/drm_print.h>
+> > >>>> @@ -218,6 +216,8 @@
+> > >>>>
+> > >>>>   #define OLD_SCLK_MIPI_CLK_NAME         "pll_clk"
+> > >>>>
+> > >>>> +#define PS_TO_CYCLE(PS, MHz) DIV64_U64_ROUND_CLOSEST(((PS) * (MHz=
+)), 1000000000000ULL)
+> > >>>> +
+> > >>>>   static const char *const clk_names[5] =3D {
+> > >>>>          "bus_clk",
+> > >>>>          "sclk_mipi",
+> > >>>> @@ -487,6 +487,7 @@ static const struct samsung_dsim_driver_data i=
+mx8mm_dsi_driver_data =3D {
+> > >>>>          .m_min =3D 64,
+> > >>>>          .m_max =3D 1023,
+> > >>>>          .vco_min =3D 1050,
+> > >>>> +       .dynamic_dphy =3D 1,
+> > >>>>   };
+> > >>>>
+> > >>>>   static const struct samsung_dsim_driver_data *
+> > >>>> @@ -698,13 +699,50 @@ static void samsung_dsim_set_phy_ctrl(struct=
+ samsung_dsim *dsi)
+> > >>>>          const struct samsung_dsim_driver_data *driver_data =3D ds=
+i->driver_data;
+> > >>>>          const unsigned int *reg_values =3D driver_data->reg_value=
+s;
+> > >>>>          u32 reg;
+> > >>>> +       struct drm_display_mode *m =3D &dsi->mode;
+> > >>>> +       int bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
+> > >>>> +       struct phy_configure_opts_mipi_dphy cfg;
+> > >>>> +       int clk_prepare, lpx, clk_zero, clk_post, clk_trail;
+> > >>>> +       int hs_exit, hs_prepare, hs_zero, hs_trail;
+> > >>>> +       unsigned long long clock_in_hz =3D m->clock * 1000;
+> > >>>>
+> > >>>>          if (driver_data->has_freqband)
+> > >>>>                  return;
+> > >>>>
+> > >>>> +       /* The dynamic_phy has the ability to adjust PHY Timing se=
+ttings */
+> > >>>> +       if (driver_data->dynamic_dphy) {
+> > >>>> +               phy_mipi_dphy_get_default_config(clock_in_hz, bpp,=
+ dsi->lanes, &cfg);
+> > >>> This requires adding "select GENERIC_PHY_MIPI_DPHY" to DRM_SAMSUNG_=
+DSIM,
+> > >>> otherwise with CONFIG_DRM_SAMSUNG_DSIM=3Dm:
+> > >>>
+> > >>> ERROR: modpost: "phy_mipi_dphy_get_default_config"
+> > >>> [drivers/gpu/drm/bridge/samsung-dsim.ko] undefined!
+> > >>> make[5]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+> > >>> make[4]: *** [Makefile:1978: modpost] Error 2
+> > >>> make[3]: *** [Makefile:357: __build_one_by_one] Error 2
+> > >>>
+> > >>> I'm sure there'll be a similar error if CONFIG_DRM_SAMSUNG_DSIM=3Dy=
+.
+> > >> That's interesting, I didn't come across that.
+> > >> What did you use for a starting point when you applied the patches?
+> > >> I want to see if I can replicate it.
+> > > next-20230421. My config is pretty much tailored to the Hummingbird P=
+ulse.
+> > > Device drivers for other hardware or things that I can't enable are a=
+ll
+> > > disabled. For example I don't have PHY_MIXEL_MIPI_DPHY enabled.
+> > >
+> > > Maybe you have some other bridge or phy that selects it enabled?
+> >
+> >
+> > I've observed similar issue while building exynos_defconfig for arm 32b=
+it.
+>
+> Thanks to both of you for the head's up.  I'll add a patch to update
+> Kconfig to explicitly select that when I do V3.  I was just using the
+> base arm64 'defconfig' option without any customization.
+
+Marek S & Chen-Yu,
+
+I added a patch into the series to make this select
+GENERIC_PHY_MIPI_DPHY, and I tested it with the 32-bit arm config,
+exynos_defconfig and it now builds successfully.
+
+I'm going to wait a few more hours to see if anyone else has any
+feedback before I send V3.
+
+adam
 
 
-On 4/24/2023 8:08 PM, Michal Hocko wrote:
-> On Mon 24-04-23 19:40:30, Baolin Wang wrote:
->>
->>
->> On 4/24/2023 7:34 PM, Michal Hocko wrote:
->>> On Mon 24-04-23 19:20:43, Baolin Wang wrote:
->>>>
->>>>
->>>> On 4/24/2023 5:54 PM, Michal Hocko wrote:
->>>>> On Sun 23-04-23 18:59:11, Baolin Wang wrote:
->>>>>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
->>>>>> checks whether the given zone contains holes, and uses pfn_to_online_page()
->>>>>> to validate if the start pfn is online and valid, as well as using pfn_valid()
->>>>>> to validate the end pfn.
->>>>>>
->>>>>> However, the __pageblock_pfn_to_page() function may return non-NULL even
->>>>>> if the end pfn of a pageblock is in a memory hole in some situations. For
->>>>>> example, if the pageblock order is MAX_ORDER, which will fall into 2
->>>>>> sub-sections, and the end pfn of the pageblock may be hole even though
->>>>>> the start pfn is online and valid.
->>>>>>
->>>>>> This did not break anything until now, but the zone continuous is fragile
->>>>>> in this possible scenario. So as previous discussion[1], it is better to
->>>>>> add some comments to explain this possible issue in case there are some
->>>>>> future pfn walkers that rely on this.
->>>>>>
->>>>>> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
->>>>>
->>>>> Do I remember correctly you've had a specific configuration that would
->>>>> trigger this case?
->>>>
->>>> Yes, I provided an example in previous thread [2] so show the
->>>> __pageblock_pfn_to_page() is fragile in some cases.
->>>>
->>>> [2] https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
->>>
->>> Please make it a part of the changelog.
->>
->> Sure.
->>
->>>>>
->>>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>>>> ---
->>>>>> Changes from v1:
->>>>>>     - Update the comments per Ying and Mike, thanks.
->>>>>> ---
->>>>>>     mm/page_alloc.c | 7 +++++++
->>>>>>     1 file changed, 7 insertions(+)
->>>>>>
->>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>>>> index 6457b64fe562..9756d66f471c 100644
->>>>>> --- a/mm/page_alloc.c
->>>>>> +++ b/mm/page_alloc.c
->>>>>> @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
->>>>>>      * interleaving within a single pageblock. It is therefore sufficient to check
->>>>>>      * the first and last page of a pageblock and avoid checking each individual
->>>>>>      * page in a pageblock.
->>>>>> + *
->>>>>> + * Note: the function may return non-NULL even if the end pfn of a pageblock
->>>>>> + * is in a memory hole in some situations. For example, if the pageblock
->>>>>> + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
->>>>>> + * of the pageblock may be hole even though the start pfn is online and valid.
->>>>>> + * This did not break anything until now, but be careful about this possible
->>>>>> + * issue when checking whether all pfns of a pageblock are valid.
->>>>>
->>>>> It is not really clear what you should be doing (other than to be
->>>>> careful which is not helpful much TBH) when you encounter this
->>>>> situation. If the reality changes and this would break in the future
->>>>> what would breakage look like? What should be done about that?
->>>>
->>>> That depends on what the future pfn walkers do, which may access some hole
->>>> memory with zero-init page frame. For example, if checking the
->>>> __PageMovable() for a zero-init page frame, that will crash the system. But
->>>> I can not list all the possible cases.
->>>>
->>>> So how about below words?
->>>>
->>>>    * Note: the function may return non-NULL even if the end pfn of a pageblock
->>>>    * is in a memory hole in some situations. For example, if the pageblock
->>>>    * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
->>>>    * of the pageblock may be hole even though the start pfn is online and
->>>> valid.
->>>>    * This did not break anything until now, but be careful about this possible
->>>>    * issue when checking whether all pfns of a pageblock are valid, that may
->>>>    * lead to accessing empty page frame, and the worst case can crash the
->>>> system.
->>>>    * So you should use pfn_to_onlie_page() instead of pfn_valid() to valid the
->>>>    * pfns in a pageblock if such case happens.
->>>
->>> Does that mean that struct page is not initialized and PagePoisoned will
->>> trigger or it is just zero-prefilled?
->>
->> In the example I provided[2], these page frames of the hole memory are
->> zero-prefilled.
-> 
-> OK, so make _that_ explicit in the comment. Essentially you want to say
-> that there are cases where we have zero-initialized struct pages for
-> memory holes. In general no pfn walker should touch a physical memory
-> range for pfn where the struct page doesn't contain any metadata it
-> recognizes. Zero fill struct pages do not contain any distinguishable
-> state so that makes it less of a problem.
-> 
-> All that being said I would reformulate the comment as follows:
-> 
-> 	* Note: the function may return non-NULL struct page even for a
-> 	* page block which contains a memory hole (i.e. there is no
-> 	* physical memory for a subset of the pfn range). This should be
-> 	* safe most of the time because struct pages are still zero
-> 	* pre-filled and pfn walkers shouldn't touch any physical memory
-> 	* range for which they do not recognize any specific metadata in
-> 	* struct pages.
 
-Thanks. That makes sense to me. A trivial thing is I still want to add 
-the example in the comments to make it clear. Are you okay with below 
-description?
-
-+ * Note: the function may return non-NULL struct page even for a page block
-+ * which contains a memory hole (i.e. there is no physical memory for a 
-subset
-+ * of the pfn range). For example, if the pageblock order is MAX_ORDER, 
-which
-+ * will fall into 2 sub-sections, and the end pfn of the pageblock may 
-be hole
-+ * even though the start pfn is online and valid. This should be safe 
-most of
-+ * the time because struct pages are still zero pre-filled and pfn walkers
-+ * shouldn't touch any physical memory range for which they do not 
-recognize
-+ * any specific metadata in struct pages.
+>
+> adam
+> >
+> >
+> > Best regards
+> > --
+> > Marek Szyprowski, PhD
+> > Samsung R&D Institute Poland
+> >
