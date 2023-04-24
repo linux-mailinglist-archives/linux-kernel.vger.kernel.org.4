@@ -2,100 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DE76EC714
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11516EC717
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjDXHaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230299AbjDXHa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjDXH36 (ORCPT
+        with ESMTP id S230179AbjDXHaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:29:58 -0400
-Received: from tiger.tulip.relay.mailchannels.net (tiger.tulip.relay.mailchannels.net [23.83.218.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BECE53;
-        Mon, 24 Apr 2023 00:29:53 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|cosmos@claycon.org
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 274B68C0DA8;
-        Mon, 24 Apr 2023 07:29:49 +0000 (UTC)
-Received: from pdx1-sub0-mail-a231.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 937BC8C0D91;
-        Mon, 24 Apr 2023 07:29:48 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1682321388; a=rsa-sha256;
-        cv=none;
-        b=i1VYIHVqcBq38YFvy6ObTOw3nGZBFrks8Jkp9bMNJlemw9MYMr3+qRcUeJrfrzkLzTeW/H
-        BH4rN4z5LLJTim1JIAb5A5RhG8gA2v+lsAD+9JGz1D+9qSv3TUSWWIdX1SN1yoesfUY2sr
-        ztPwJWIHyroyJnpCyIKKVsWwAUlecVeyul7oFsr3PqiPnBAy8kfgyn1x8m766YD8FEyhPc
-        gCJyr9guBK0lFQYhnRsleNRBa82UAI55NYS5YIx09NXJcOWmmzOvtf0CoQ1L63HwnxaRdD
-        lXdfRZBrsvRMMEJp6FexpPuOrK0WmoC4cRrMbAEBmMLwlznER10MHYN3//ZyFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1682321388;
+        Mon, 24 Apr 2023 03:30:24 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1729E6C;
+        Mon, 24 Apr 2023 00:30:14 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 46855FF807;
+        Mon, 24 Apr 2023 07:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682321413;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=xkn+0/xEzUELhMvEZfNFaqYe4uOX5uMuyqs9IjhPVzE=;
-        b=mRlXnkJioK+gqIbuLLlHXxv0sKj9alkKRTuDMutYDiarQWW+eACnG/8eojlwMuvGoOHrce
-        nn8TG6rg9MPuhA2J4HTG1vAVsZud5AlM4UK0vF6JtKpHQ4QtgO3yacDfPSZKUwLoflv9hm
-        YBj9ntHIGYZAxQCg3N6tNTo6tZ9BSpcnthOfUULGUJfaTvmi/jHSNj1usmyUMdrEp2aGlb
-        g9EFyv1PsmupifvPPPGdAvCYLwGRRkYl6JGWmFPwj2Edb4hT4H5Z+ux7X/OxR3ztQH8Lp5
-        3h62RwXpsWB3r+X1g4IGeKQ8g3pa93LR4Sk9QFRcMAE6+lXmLwG5kLLK2bh34w==
-ARC-Authentication-Results: i=1;
-        rspamd-548d6c8f77-vc5xk;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=bugs@claycon.org
-X-Sender-Id: dreamhost|x-authsender|cosmos@claycon.org
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|cosmos@claycon.org
-X-MailChannels-Auth-Id: dreamhost
-X-Supply-Ski: 5099a5e03bb63a7d_1682321388899_1523740686
-X-MC-Loop-Signature: 1682321388899:308728539
-X-MC-Ingress-Time: 1682321388899
-Received: from pdx1-sub0-mail-a231.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.97.48.69 (trex/6.7.2);
-        Mon, 24 Apr 2023 07:29:48 +0000
-Received: from ps29521.dreamhostps.com (ps29521.dreamhostps.com [69.163.186.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cosmos@claycon.org)
-        by pdx1-sub0-mail-a231.dreamhost.com (Postfix) with ESMTPSA id 4Q4cGN2G8Lz3K;
-        Mon, 24 Apr 2023 00:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=claycon.org;
-        s=dreamhost; t=1682321388;
-        bh=xkn+0/xEzUELhMvEZfNFaqYe4uOX5uMuyqs9IjhPVzE=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=SPoanSj/h/pitmFSCkVNu5JJ4uBLBxOEt1chC9h5m8V6oeqZAhJs2HvF4RrYIP/rQ
-         eEcl2XZQviKcBVZCHMLWEoV9uqJr+m43DXRPGBtsM1R9HCWhrBZTTc2CkmPamTKj6l
-         M/NTskKIoLGk+PhGfpuZueXKZy2i/aL+rm3jkT1L1aIf3Q97GdjweJu4/9XjASx0op
-         pcgoOlMnbU5ja36TK3s7WOi9u3D+Bd8sbrF7XMJZlFz2TjxPdoa+fkXmTJEXacRZ4C
-         hpGdrJgYNqgIbYq0GYvVIzmbwcvikmx6b680z7Hkem8w+rWeeBaz7GNeM8ohmNxWTL
-         2f7WnP1wc++xA==
-Date:   Mon, 24 Apr 2023 02:29:46 -0500
-From:   Clay Harris <bugs@claycon.org>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
-Message-ID: <20230424072946.uuzjvuqrch7m4zuk@ps29521.dreamhostps.com>
-References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
- <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
- <20230423224045.GS447837@dread.disaster.area>
- <ZEXChAJfCRPv9vbs@codewreck.org>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mQS0Q3oeQonBye5lBwhVR1nm1Yd7xoszRIo12e3txQ8=;
+        b=aOaoKZ0+j2I/OtHCfpOZT84Upgd0DsQTjrBCdX8aOVYyNljcedFSV+phcqthS23TI9lcTQ
+        ayC1B5DenY5DBFlTGlAGL6ff4xsavgLpGQW6lwts8jYc/pVSNk6mUXbCF4aLL4ZXhQINCV
+        Iu4lidqs6YevmEEQEZAL9y2KYnIFHMk5d00b/TjrDLJAB03EsOE3pouhoAPvnAQOrmrdxo
+        Vas2srO4dwIJRJuCTWihvBe3sLaXNfnNDY2XJdXpKvvmjEYjQqWN287eezkjCR94llgWn8
+        q5oAoUGfkGPXkEngVu1c+tjlRWSWi+T/JEjdzUE/9dlmTsEYXp/wGvW/idgVHQ==
+Date:   Mon, 24 Apr 2023 09:30:11 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 2/3] iio: potentiometer: Add support for the Renesas
+ X9250 potentiometers
+Message-ID: <20230424093011.1301c739@bootlin.com>
+In-Reply-To: <20230422173453.7d083cb4@jic23-huawei>
+References: <20230421085245.302169-1-herve.codina@bootlin.com>
+        <20230421085245.302169-3-herve.codina@bootlin.com>
+        <20230422173453.7d083cb4@jic23-huawei>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEXChAJfCRPv9vbs@codewreck.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -104,75 +62,386 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24 2023 at 08:43:00 +0900, Dominique Martinet quoth thus:
+Hi Jonathan,
 
-> Dave Chinner wrote on Mon, Apr 24, 2023 at 08:40:45AM +1000:
-> > This doesn't actually introduce non-blocking getdents operations, so
-> > what's the point? If it just shuffles the getdents call off to a
-> > background thread, why bother with io_uring in the first place?
+On Sat, 22 Apr 2023 17:34:53 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
+
+> On Fri, 21 Apr 2023 10:52:44 +0200
+> Herve Codina <herve.codina@bootlin.com> wrote:
 > 
-> As said in the cover letter my main motivation really is simplifying the
-> userspace application:
->  - style-wise, mixing in plain old getdents(2) or readdir(3) in the
-> middle of an io_uring handling loop just feels wrong; but this may just
-> be my OCD talking.
->  - in my understanding io_uring has its own thread pool, so even if the
-> actual getdents is blocking other IOs can progress (assuming there is
-> less blocked getdents than threads), without having to build one's own
-> extra thread pool next to the uring handling.
-> Looking at io_uring/fs.c the other "metadata related" calls there also
-> use the synchronous APIs (renameat, unlinkat, mkdirat, symlinkat and
-> linkat all do), so I didn't think of that as a problem in itself.
-
-Having written code to create additional worker threads in addition
-to using io_uring as a main loop, I'm glad to see this proposal back
-again.  I think the original work was shot down much too hastily based
-on the file positioning issues.  Really only two cases of directory
-position are useful*, which can be expressed either as an off_t
-(0 = rewind, -1 = curpos), or a single bit flag.  As I understand the
-code, the rewind case shouldn't be any problem.  From a practical
-viewpoint, I don't think non-blocking would see a lot of use, but it
-wouldn't hurt.
-
-This also seems like a good place to bring up a point I made with
-the last attempt at this code.  You're missing an optimization here.
-getdents knows whether it is returning a buffer because the next entry
-won't fit versus because there are no more entries.  As it doesn't
-return that information, callers must always keep calling it back
-until EOF.  This means a completely unnecessary call is made for
-every open directory.  In other words, for a directory scan where
-the buffers are large enough to not overflow, that literally twice
-as many calls are made to getdents as necessary.  As io_uring is
-in-kernel, it could use an internal interface to getdents which would
-return an EOF indicator along with the (probably non-empty) buffer.
-io_uring would then return that flag with the CQE.
-
-
-(* As an aside, the only place I've ever seen a non-zero lseek on a
-directory, is in a very resource limited environment, e.g. too small
-open files limit.  In the case of a depth-first directory scan, it
-must close directories before completely reading them, and reopen /
-lseek to their previous position in order to continue.  This scenario
-is certainly not worth bothering with for io_uring.)
-
-> > Filesystems like XFS can easily do non-blocking getdents calls - we
-> > just need the NOWAIT plumbing (like we added to the IO path with
-> > IOCB_NOWAIT) to tell the filesystem not to block on locks or IO.
-> > Indeed, filesystems often have async readahead built into their
-> > getdents paths (XFS does), so it seems to me that we really want
-> > non-blocking getdents to allow filesystems to take full advantage of
-> > doing work without blocking and then shuffling the remainder off to
-> > a background thread when it actually needs to wait for IO....
+> > The Renesas X9250 integrates four digitally controlled potentiometers.
+> > On each potentiometer, the X9250T has a 100 kOhms total resistance and
+> > the X9250U has a 50 kOhms total resistance.
+> > 
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
 > 
-> I believe that can be done without any change of this API, so that'll be
-> a very welcome addition when it is ready; I don't think the adding the
-> uring op should wait on this if we can agree a simple wrapper API is
-> good enough (or come up with a better one if someone has a Good Idea)
+> Hi Herve,
 > 
-> (looking at io_uring/rw.c for comparison, io_getdents() will "just" need
-> to be adjusted to issue an async req if IO_URING_F_NONBLOCK is set, and
-> the poll/retry logic sorted out)
+> Nice clean driver.  Comments are mostly about ways to avoid boilerplate
+> and simplify the code a bit.
 > 
-> Thanks,
-> -- 
-> Dominique Martinet | Asmadeus
+> Note that the binding comment on regulators should be matched by
+> appropriate devm_get_regulator_enabled() calls in here to ensure they 
+> are turned on.
+
+Yes, I will use devm_get_regulator_enabled().
+
+> 
+> Jonathan
+> 
+> > ---
+> >  drivers/iio/potentiometer/Kconfig  |  10 ++
+> >  drivers/iio/potentiometer/Makefile |   1 +
+> >  drivers/iio/potentiometer/x9250.c  | 234 +++++++++++++++++++++++++++++
+> >  3 files changed, 245 insertions(+)
+> >  create mode 100644 drivers/iio/potentiometer/x9250.c
+> > 
+> > diff --git a/drivers/iio/potentiometer/Kconfig b/drivers/iio/potentiometer/Kconfig
+> > index 01dd3f858d99..e6a9a3c67845 100644
+> > --- a/drivers/iio/potentiometer/Kconfig
+> > +++ b/drivers/iio/potentiometer/Kconfig
+> > @@ -136,4 +136,14 @@ config TPL0102
+> >  	  To compile this driver as a module, choose M here: the
+> >  	  module will be called tpl0102.
+> >  
+> > +config X9250
+> > +	tristate "Renesas X9250 quad controlled potentiometers"
+> > +	depends on SPI
+> > +	help
+> > +	  Enable support for the Renesas X9250 quad controlled
+> > +	  potentiometers.
+> > +
+> > +	  To compile this driver as a module, choose M here: the module
+> > +	  will be called x9250.
+> > +
+> >  endmenu
+> > diff --git a/drivers/iio/potentiometer/Makefile b/drivers/iio/potentiometer/Makefile
+> > index 5ebb8e3bbd76..d11fb739176c 100644
+> > --- a/drivers/iio/potentiometer/Makefile
+> > +++ b/drivers/iio/potentiometer/Makefile
+> > @@ -15,3 +15,4 @@ obj-$(CONFIG_MCP4131) += mcp4131.o
+> >  obj-$(CONFIG_MCP4531) += mcp4531.o
+> >  obj-$(CONFIG_MCP41010) += mcp41010.o
+> >  obj-$(CONFIG_TPL0102) += tpl0102.o
+> > +obj-$(CONFIG_X9250) += x9250.o
+> > diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiometer/x9250.c
+> > new file mode 100644
+> > index 000000000000..c6bc959205a3
+> > --- /dev/null
+> > +++ b/drivers/iio/potentiometer/x9250.c
+> > @@ -0,0 +1,234 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + *
+> > + * x9250.c  --  Renesas X9250 potentiometers IIO driver
+> > + *
+> > + * Copyright 2023 CS GROUP France
+> > + *
+> > + * Author: Herve Codina <herve.codina@bootlin.com>
+> > + */
+> > +
+> > +#include <linux/iio/iio.h>
+> > +#include <linux/limits.h>
+> > +#include <linux/module.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/spi/spi.h>
+> > +
+> > +struct x9250_cfg {
+> > +	int kohms;
+> > +};
+> > +
+> > +struct x9250 {
+> > +	struct spi_device *spi;
+> > +	const struct x9250_cfg *cfg;
+> > +	struct mutex lock; /* Protect tx and rx buffers */
+> > +	/* Cannot use stack area for SPI (dma-safe memory) */
+> > +	u8 spi_tx_buf[3] __aligned(IIO_DMA_MINALIGN);
+> > +	u8 spi_rx_buf[3] __aligned(IIO_DMA_MINALIGN);  
+> 
+> Technically you don't need to align the second one.  A particular peripheral
+> is always assumed to not step on it self.  So as long as only that
+> peripheral is accessing data in a cacheline then it's fine.
+> 
+> Note that below I suggest you just use spi_write_then_read() for all these
+> cases allowing  you to drop these and the lock.
+
+Indeed, I will give a try to spi_write_then_read()
+
+> 
+> > +};
+> > +
+> > +#define X9250_ID		0x50
+> > +#define X9250_CMD_RD_WCR(_p)    (0x90 | (_p))
+> > +#define X9250_CMD_WR_WCR(_p)    (0xa0 | (_p))
+> > +
+> > +static int x9250_write8(struct x9250 *x9250, u8 cmd, u8 val)
+> > +{
+> > +	struct spi_transfer xfer = {
+> > +		.tx_buf = &x9250->spi_tx_buf,
+> > +		.len = 3,
+> > +	};
+> > +	int ret;
+> > +
+> > +	BUILD_BUG_ON(sizeof(x9250->spi_tx_buf) < 3);  
+> 
+> I don't see an advantage in this check as the buffer
+> is allocated only a few lines above here and will have size
+> of 3.
+> 
+> If there were lots of different uses of that buffer
+> then it would be fair enough, but there aren't.
+> Anyhow, follow advice below and the buffers go away anyway
+> making this point irrelevant :)
+> 
+> > +
+> > +	mutex_lock(&x9250->lock);
+> > +
+> > +	x9250->spi_tx_buf[0] = X9250_ID;
+> > +	x9250->spi_tx_buf[1] = cmd;
+> > +	x9250->spi_tx_buf[2] = val;
+> > +
+> > +	ret = spi_sync_transfer(x9250->spi, &xfer, 1);  
+> 
+> Given buffer is small, I'd be tempted to use the 'cheat' approach
+> of spi_write_then_read() with a 0 sized read.  Avoids the need
+> for ensuring dma safe buffers etc and having to handle the buffer
+> locking in your driver.
+> 
+> > +
+> > +	mutex_unlock(&x9250->lock);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int x9250_read8(struct x9250 *x9250, u8 cmd, u8 *val)
+> > +{
+> > +	struct spi_transfer xfer = {
+> > +		.tx_buf = &x9250->spi_tx_buf,
+> > +		.rx_buf = &x9250->spi_rx_buf,
+> > +		.len = 3,
+> > +	};
+> > +	int ret;
+> > +
+> > +	BUILD_BUG_ON(sizeof(x9250->spi_tx_buf) < 3);
+> > +	BUILD_BUG_ON(sizeof(x9250->spi_rx_buf) < 3);
+> > +
+> > +	mutex_lock(&x9250->lock);
+> > +
+> > +	x9250->spi_tx_buf[0] = X9250_ID;
+> > +	x9250->spi_tx_buf[1] = cmd;
+> > +
+> > +	ret = spi_sync_transfer(x9250->spi, &xfer, 1);
+> > +	if (ret)
+> > +		goto end;
+> > +
+> > +	*val = x9250->spi_rx_buf[2];  
+> 
+> Cleaner as an spi_write_then_read() as transfer is not actually
+> duplex.  + then you don't need to bother with your own locks
+> for the buffer. The spi core can do that for you (and provide
+> DMA safe buffers as needed).
+> 
+> 
+> > +	ret = 0;
+> > +end:
+> > +	mutex_unlock(&x9250->lock);
+> > +	return ret;
+> > +}
+> > +
+> > +#define X9250_CHANNEL(ch) {						\
+> > +	.type = IIO_RESISTANCE,						\
+> > +	.indexed = 1,							\
+> > +	.output = 1,							\
+> > +	.channel = (ch),						\
+> > +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),			\
+> > +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
+> > +	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_RAW),	\
+> > +}
+> > +
+> > +static const struct iio_chan_spec x9250_channels[] = {
+> > +	X9250_CHANNEL(0),
+> > +	X9250_CHANNEL(1),
+> > +	X9250_CHANNEL(2),
+> > +	X9250_CHANNEL(3),
+> > +};
+> > +
+> > +static int x9250_read_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
+> > +			  int *val, int *val2, long mask)
+> > +{
+> > +	struct x9250 *x9250 = iio_priv(indio_dev);
+> > +	int ch = chan->channel;
+> > +	int ret;
+> > +	u8 v;
+> > +
+> > +	switch (mask) {
+> > +	case IIO_CHAN_INFO_RAW:
+> > +		ret = x9250_read8(x9250, X9250_CMD_RD_WCR(ch), &v);
+> > +		if (ret)
+> > +			return ret;
+> > +		*val = v;
+> > +		return IIO_VAL_INT;
+> > +
+> > +	case IIO_CHAN_INFO_SCALE:
+> > +		*val = 1000 * x9250->cfg->kohms;
+> > +		*val2 = U8_MAX;
+> > +		return IIO_VAL_FRACTIONAL;
+> > +	}
+> > +
+> > +	return -EINVAL;
+> > +}
+> > +
+> > +static int x9250_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
+> > +			    const int **vals, int *type, int *length, long mask)
+> > +{
+> > +	static const int range[] = {0, 1, 255}; /* min, step, max */
+> > +
+> > +	switch (mask) {
+> > +	case IIO_CHAN_INFO_RAW:
+> > +		*length = ARRAY_SIZE(range);
+> > +		*vals = range;
+> > +		*type = IIO_VAL_INT;
+> > +		return IIO_AVAIL_RANGE;
+> > +	}
+> > +
+> > +	return -EINVAL;
+> > +}
+> > +
+> > +static int x9250_write_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
+> > +			   int val, int val2, long mask)
+> > +{
+> > +	struct x9250 *x9250 = iio_priv(indio_dev);
+> > +	int ch = chan->channel;
+> > +
+> > +	if (mask != IIO_CHAN_INFO_RAW)
+> > +		return -EINVAL;
+> > +
+> > +	if (val > U8_MAX || val < 0)
+> > +		return -EINVAL;
+> > +
+> > +	return x9250_write8(x9250, X9250_CMD_WR_WCR(ch), val);
+> > +}
+> > +
+> > +static const struct iio_info x9250_info = {
+> > +	.read_raw = x9250_read_raw,
+> > +	.read_avail = x9250_read_avail,
+> > +	.write_raw = x9250_write_raw,
+> > +};
+> > +
+> > +enum x9250_type {
+> > +	X9250T,
+> > +	X9250U,
+> > +};
+> > +
+> > +static const struct x9250_cfg x9250_cfg[] = {
+> > +	[X9250T] = { .kohms =  100, },
+> > +	[X9250U] = { .kohms =  50, },
+> > +};
+> > +
+> > +static int x9250_probe(struct spi_device *spi)
+> > +{
+> > +	struct iio_dev *indio_dev;
+> > +	struct x9250 *x9250;
+> > +	int ret;
+> > +
+> > +	spi->bits_per_word = 8;  
+> 
+> This is configuring it to the default value.  You shouldn't need to
+> call spi_setup() explicitly. It will already have been called by
+> the spi subsystem as part of adding the device.  If you feel this
+> has important documentation value, then I don't mind it. However
+> we rarely do this unless we need to choose a non default value.
+
+Agree.
+I will remove in next iteration.
+
+> 
+> 
+> > +	ret = spi_setup(spi);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*x9250));
+> > +	if (!indio_dev)
+> > +		return -ENOMEM;
+> > +
+> > +	x9250 = iio_priv(indio_dev);
+> > +	x9250->spi = spi;
+> > +	x9250->cfg = device_get_match_data(&spi->dev);
+> > +	if (!x9250->cfg)
+> > +		x9250->cfg = &x9250_cfg[spi_get_device_id(spi)->driver_data];
+> > +
+> > +	mutex_init(&x9250->lock);
+> > +
+> > +	indio_dev->info = &x9250_info;
+> > +	indio_dev->channels = x9250_channels;
+> > +	indio_dev->num_channels = ARRAY_SIZE(x9250_channels);
+> > +	indio_dev->name = spi_get_device_id(spi)->name;  
+> 
+> Not relying on that preferred because the two tables may get out
+> of sync and spi_get_device_id() fail to match as a result.
+> 
+> Put a const char *name  in the x9250 structure and repeat
+> the names there.  Let the compiler do the magic of fusing the
+> identical strings if it can.
+
+Ok,
+I will add a name field in the x9250_cfg structure and use this new field
+here.
+
+> 
+> 
+> > +
+> > +	spi_set_drvdata(spi, indio_dev);  
+> 
+> Why?  Nothing seems to use it that I can see.
+
+Indeed, nothing use the drv data. I will remove in the next iteration.
+
+> 
+> > +
+> > +	return devm_iio_device_register(&spi->dev, indio_dev);
+> > +}
+> > +
+> > +static const struct of_device_id x9250_of_match[] = {
+> > +	{ .compatible = "renesas,x9250t", &x9250_cfg[X9250T]},
+> > +	{ .compatible = "renesas,x9250u", &x9250_cfg[X9250U]},
+> > +	{ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, x9250_of_match);
+> > +
+> > +static const struct spi_device_id x9250_id_table[] = {
+> > +	{ "x9250t", X9250T },
+> > +	{ "x9250u", X9250U },
+> > +	{ }
+> > +};
+> > +MODULE_DEVICE_TABLE(spi, x9250_id_table);
+> > +
+> > +static struct spi_driver x9250_spi_driver = {
+> > +	.driver  = {
+> > +		.name   = "x9250",  
+> 
+> I'd stick to a single space before the =
+> It just ends up messy if you attempt to align things with
+> extra spaces.
+
+Will be fixed.
+
+> 
+> > +		.of_match_table = x9250_of_match,
+> > +	},
+> > +	.id_table = x9250_id_table,
+> > +	.probe  = x9250_probe,
+> > +};
+> > +
+> > +module_spi_driver(x9250_spi_driver);
+> > +
+> > +MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
+> > +MODULE_DESCRIPTION("X9250 ALSA SoC driver");
+> > +MODULE_LICENSE("GPL");  
+> 
+
+Thanks for the review.
+
+Best regards,
+Hervé
