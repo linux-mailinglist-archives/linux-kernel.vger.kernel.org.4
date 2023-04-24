@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB626EC362
+	by mail.lfdr.de (Postfix) with ESMTP id 54DF66EC361
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjDXBTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 21:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S230321AbjDXBUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 21:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXBTJ (ORCPT
+        with ESMTP id S229458AbjDXBU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 21:19:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7E3710DF
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 18:19:07 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8CxztoK2UVkHGMhAA--.40538S3;
-        Mon, 24 Apr 2023 09:19:06 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOQJ2UVkbeg3AA--.10000S3;
-        Mon, 24 Apr 2023 09:19:06 +0800 (CST)
-Subject: Re: [PATCH v3 4/6] LoongArch: Add uprobes support
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1681898221-27828-1-git-send-email-yangtiezhu@loongson.cn>
- <1681898221-27828-5-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7Z_Y+XC-yMGRA1zq9FBU-tAVK+8+Jd4t5x4L4DFXAPJA@mail.gmail.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <993a2d7e-d7a2-3017-5a81-517ef6f85049@loongson.cn>
-Date:   Mon, 24 Apr 2023 09:19:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 23 Apr 2023 21:20:29 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1393F10DF;
+        Sun, 23 Apr 2023 18:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682299228; x=1713835228;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=as4THXpWVtwsuMyx+EcJb1cT+H8svUTldBTwSxNT588=;
+  b=TnHSDaTTjLV4AjZdKMYHHmJuLm9CCW+4o1+iJU1mB/DH/dH7IckGp/bm
+   3MQk7Pt/FuTR6ua9P0KwAmfG7JFdLGllIMGgBh8EXz98YKume4OQ5xZ3Q
+   prTi5PsR/n8Ws/QSx5x16kbTYKtfItnoade4Dno5DxfcDV9UXUfqOt2qA
+   U109KE0uYCjEn1DYFdB5VmC5UFugi7v9LhenXuW4cDkyFljZITi+l4DqL
+   Z1fb6qQGX0iD4SEEGBC4s79Zt8ESZIIBhwKnG4dqgvAyw1TNc2dQYi9uw
+   BftVsPh4B06nWyeIFwjLADPiLhmQzWpb4AzUdqDnTwKvA3Dk2pplDmgK4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="330538440"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="330538440"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 18:20:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="692885238"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="692885238"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.168.81]) ([10.249.168.81])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 18:20:24 -0700
+Message-ID: <99fd6359-bc5d-b633-9b16-711f16063da8@linux.intel.com>
+Date:   Mon, 24 Apr 2023 09:20:22 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H7Z_Y+XC-yMGRA1zq9FBU-tAVK+8+Jd4t5x4L4DFXAPJA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxoOQJ2UVkbeg3AA--.10000S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7ZF4rJFykAr1kWw4UZrW5KFg_yoW8Jw13pa
-        15Aay2qrsxJ3y8Cr18X390vryaq3yktr4DWr4DXrWrG3y7Xwn8GF92gryayFyjvrnYgay0
-        93Wj9FZ3ZFZxAFDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
-        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/6] LASS KVM virtualization support
+To:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Gao Chao <chao.gao@intel.com>
+References: <20230420133724.11398-1-guang.zeng@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230420133724.11398-1-guang.zeng@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,43 +70,88 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 04/23/2023 09:12 PM, Huacai Chen wrote:
-> Hi, Tiezhu,
+On 4/20/2023 9:37 PM, Zeng Guang wrote:
+> Linear Address Space Separation (LASS)[1] is a new mechanism that
+> enforces the same mode-based protections as paging, i.e. SMAP/SMEP but
+> without traversing the paging structures. Because the protections
+> enforced by LASS are applied before paging, "probes" by malicious
+> software will provide no paging-based timing information.
 >
-> On Wed, Apr 19, 2023 at 5:57 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> Uprobes is the user-space counterpart to kprobes, this commit
->> adds uprobes support for LoongArch.
+> LASS works in long mode and partitions the 64-bit canonical linear
+> address space into two halves:
+>      1. Lower half (LA[63]=0) --> user space
+>      2. Upper half (LA[63]=1) --> kernel space
+>
+> When LASS is enabled, a general protection #GP fault or a stack fault
+> #SS will be generated if software accesses the address from the half
+> in which it resides to another half,
 
-...
+The accessor's mode is based on CPL, not the address range,
+so it feels a bit inaccurate of descripton "in which it resides".
 
->> +#define MAX_UINSN_BYTES                8
->> +#define UPROBE_XOL_SLOT_BYTES  MAX_UINSN_BYTES
-> In old versions we define UPROBE_XOL_SLOT_BYTES to 128, why we use 8 now?
 
-I assume "the old version" maybe comes from mips, I am not quite sure 
-the backgrounds. For LoongArch, there are 2 xol slots to save 2 
-instructions, each of them is 32 bit, 2*32bit=8bytes, so 
-UPROBE_XOL_SLOT_BYTES can be 8.
+> e.g., either from user space to
+> upper half, or from kernel space to lower half. This protection applies
+> to data access, code execution.
+>
+> This series add KVM LASS virtualization support.
+>
+> When platform has LASS capability, KVM requires to expose this feature
+> to guest VM enumerated by CPUID.(EAX=07H.ECX=1):EAX.LASS[bit 6], and
+> allow guest to enable it via CR4.LASS[bit 27] on demand. For instruction
+> executed in the guest directly, hardware will perform the LASS violation
+> check, while KVM also needs to apply LASS to instructions emulated by
+> software and injects #GP or #SS fault to the guest.
+>
+> Following LASS voilations check will be taken on KVM emulation path.
 
->> +
->> +#define UPROBE_XOLBP_INSN      larch_insn_gen_break(BRK_UPROBE_XOLBP)
->> +#define UPROBE_SWBP_INSN       larch_insn_gen_break(BRK_UPROBE_BP)
->> +#define UPROBE_SWBP_INSN_SIZE  LOONGARCH_INSN_SIZE
+/s/voilations/violations
 
-...
 
->>         case BRK_UPROBE_XOLBP:
->> -               if (notify_die(DIE_UPROBE_XOL, "Uprobe_XOL", regs, bcode,
->> -                              current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
->> +               if (uprobe_singlestep_handler(regs))
-> As I know, XOL means "execute out of line", is it an alias of "single step"?
+> User-mode access to supervisor space address:
+>          LA[bit 63] && (CPL == 3)
+> Supervisor-mode access to user space address:
+>          Instruction fetch: !LA[bit 63] && (CPL < 3)
+>          Data access: !LA[bit 63] && (CR4.SMAP==1) && ((RFLAGS.AC == 0 &&
+>                       CPL < 3) || Implicit supervisor access)
+>
+> We tested the basic function of LASS virtualization including LASS
+> enumeration and enabling in non-root and nested environment. As current
+> KVM unittest framework is not compatible to LASS rule that kernel should
+> run in the upper half, we use kernel module and application test to verify
+> LASS functionalities in guest instead. The data access related x86 emulator
+> code is verified with forced emulation prefix (FEP) mechanism. Other test
+> cases are working in progress.
+>
+> How to add tests for LASS in KUT or kselftest is still under investigation.
+>
+> [1] Intel Architecutre Instruction Set Extensions and Future Features
 
-I think so, the instruction filled in xol slots is to single step, 
-arm64, riscv, csky also uses "single step" for the related code, 
-powerpc, s390 uses "DIE_SSTEP".
+/s/Architecutre/Architecture
 
-Thanks,
-Tiezhu
 
+> Programming Reference: Chapter Linear Address Space Separation (LASS)
+> https://cdrdv2.intel.com/v1/dl/getContent/671368
+>
+> Zeng Guang (6):
+>    KVM: x86: Virtualize CR4.LASS
+>    KVM: VMX: Add new ops in kvm_x86_ops for LASS violation check
+>    KVM: x86: Add emulator helper for LASS violation check
+>    KVM: x86: LASS protection on KVM emulation when LASS enabled
+>    KVM: x86: Advertise LASS CPUID to user space
+>    KVM: x86: Set KVM LASS based on hardware capability
+>
+>   arch/x86/include/asm/cpuid.h       | 36 +++++++++++++++++++
+>   arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>   arch/x86/include/asm/kvm_host.h    |  7 +++-
+>   arch/x86/kvm/cpuid.c               |  8 +++--
+>   arch/x86/kvm/emulate.c             | 36 ++++++++++++++++---
+>   arch/x86/kvm/kvm_emulate.h         |  1 +
+>   arch/x86/kvm/vmx/nested.c          |  3 ++
+>   arch/x86/kvm/vmx/sgx.c             |  2 ++
+>   arch/x86/kvm/vmx/vmx.c             | 58 ++++++++++++++++++++++++++++++
+>   arch/x86/kvm/vmx/vmx.h             |  2 ++
+>   arch/x86/kvm/x86.c                 |  9 +++++
+>   arch/x86/kvm/x86.h                 |  2 ++
+>   12 files changed, 157 insertions(+), 8 deletions(-)
+>
