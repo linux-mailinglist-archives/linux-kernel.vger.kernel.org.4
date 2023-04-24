@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1456ED672
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7156ED673
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjDXU7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S232262AbjDXU7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjDXU7S (ORCPT
+        with ESMTP id S229634AbjDXU7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:59:18 -0400
+        Mon, 24 Apr 2023 16:59:51 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E46181
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:59:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB8C6181
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:59:50 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7C95D5C0181;
-        Mon, 24 Apr 2023 16:59:14 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id CA5065C0077;
+        Mon, 24 Apr 2023 16:59:49 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 24 Apr 2023 16:59:14 -0400
+  by compute6.internal (MEProxy); Mon, 24 Apr 2023 16:59:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1682369954; x=1682456354; bh=YZR03TenSPMwHMOQYMC6jZ6OC
-        YtJLxUpls1rXekOnhQ=; b=hkPdVoGlfSNfE2YMdriSSkg3sF4pblK8hsqReIbeZ
-        0OUe8EGuVszpcJEqBWGLUrPy0dBXROzDSDOo5eLwDawjQY28YRw2MHYoyvKzks7B
-        Dhqwv8GMSXSYQ+3CQBctyo+8srzNFdhVtczAdEo1hle0cPLryd7wxGl0KM26IXBb
-        jFOSD1yrxdN8LKfSPllnp3YxNze3/k+5e2jRhV3Ba9LjjVTEcunWJlg0bH88xJ+c
-        /52+N3YhfkYNs4ANDgHPyQQuqfqVE87Sa0HzSNH6qJPzJ6a4dTKSpEdYnkmYi8UU
-        CdnHjYW6sbm8M36TkE4dWqJqUhGFnnaXqYqvmoUken9DA==
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1682369989; x=1682456389; bh=n8Mo0Pbe5OdCqzALogFB6jll7EteYUdsR7k
+        Zmbp2m4o=; b=ctj0169M3b05Mfa6gRT9RRAlIqgPbxuHPF9ZAS553w5jof7hSPU
+        c5kgaKBDuk68emzGEeqZvUygl66/0RQqII54xAjo56/vQubTyNlM7Uq18Ru8F82F
+        E399zSrLA4Gk5aRM0NpfVxUZYn8CiFT9QW5HktjH3UBzxA3wsyrLo4vqA3AkQeUi
+        Mgagyr2d9U0IcwMWnO5q7aEQnnWKdXHMXiqS9SD4p/AwzvPjL0yT7mO/wu4JXd1l
+        kgy+Selu1Ya+o990Ddbung/UOFTMMY+eOSJDiRN8EdjCk5bTbVQmPkdEg3XhQacf
+        qvat7VVHEI3p9cjZBJ3hB0g+wCp+JK748Kg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682369954; x=1682456354; bh=YZR03TenSPMwHMOQYMC6jZ6OCYtJLxUpls1
-        rXekOnhQ=; b=exuXq+0yr8hllOhiHFcN4UzkKKZOdgKWNvbu2jlVVcS3u3vsuL5
-        x2aCxgc+MIcaeRWDd52nA7BOf5VUumxGptUviunxvvSF4RgYZx56TE+2iM9d9FpS
-        +18hpfoF59i9wSD+xPjzGikdiKh8se+Mulyz8V/Npd5FKDCzyOM6KyNQQExQ8z6z
-        gscQv+tCHcLVZa3A/aaGCMcxmi8a4or4e7XJOmk5CK/d1FtgRLvRSZXa4KeOvJYy
-        NsdobVXc5xxz/i0Cj3Y//wsq+8aX8tJxSVelaOz5n7q1cJitr+gbttFZI1b+iyNJ
-        HvKkKNilGmULR/BV4AwYeXS51nzWPT812Dw==
-X-ME-Sender: <xms:ou1GZDUF0TKNWeOwNWL4wXjiPoJzdhBpToAFEePkrBFGY0qCA47Nhg>
-    <xme:ou1GZLnxfnioANqg4gyHTpjE3y6IVJ8BBn2CEOVVmEi4MHDuZYUlTV9b3Pg-w-Z2-
-    Aw6PTZIagz0GzTaN0g>
+        1682369989; x=1682456389; bh=n8Mo0Pbe5OdCqzALogFB6jll7EteYUdsR7k
+        Zmbp2m4o=; b=fTjJsvCWx4sCO4qZXERDvnEN0Fsv7AMR31qJaI5KGaEgGPDbaJA
+        hCfesRLLwr3KEj2I898XTFufDreCdoSlEtkmkMopAYOS7dCyGnKPsoewG6Fittg+
+        PS0BsjYkGUhWbEvn+4kf6Kiuq6/B35+2/7GBIkkHMtmNEsidSQwhqVjQ1ryUTfA5
+        j3M7LrrxBrEEAcBnUq9bqYaZZtnQKZx4OXYU5f7wlFA087BQi2HnkgCDyfT1ZaVG
+        GSvCaXNFY+wpYz1RkDNi2zrW+HWAvFg42VKMOWDt1FfmD2jT5DlmAy4c1cbopAYE
+        GbCWSm3vwaqwFZoALrY1xqXbyfb5gOEk2SQ==
+X-ME-Sender: <xms:xe1GZEdms3VZdRmNmR4UEmDbjKL0u1GJtoTMB3z9w9sfqpSfR_Ad4w>
+    <xme:xe1GZGNysG5Js3-WdOsOxcR14TZrp7NWu2CIIXnpl8JHVulB8DOPKrtJGkuSFH6n-
+    Wi2toNMjyNGiJm7H8Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddgudehhecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeeuhfffffdvkefhiedvhfdthfeuvedtfffhheejieefkeeggeeuudegfeehudff
-    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ou1GZPZ5JZdgmmBCJa0I5vnqgYoF4y-l5yB1RGh_QAqzem24G1sBNg>
-    <xmx:ou1GZOVdMw452z83DcEo6XDvj7cmiY1qrtFzH1gboU_eSTWGU4iVgQ>
-    <xmx:ou1GZNl8mpPr5JLZn1Ph4vYgs9q5GTEYVD_aT638Oh1BTxNmPjuelg>
-    <xmx:ou1GZNtgYKTlHXcPwaqfBE_UmYJ7NQKpqFPMOXS0SfFhM6nco2Bsdg>
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgfekhfehtedvtefhjeekiefghedtffeiveeffeetffetjeffheelhfdt
+    ueevjeeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgu
+    segrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:xe1GZFj-ieyAPh-KrwHV-iVvIOCic8WhAc5mnl5KoCu4cUmzNbR1mQ>
+    <xmx:xe1GZJ_HR7_JhOLdQyfvaU54iq7vooQ_M6gz3HgL8auDPKceSCfEVQ>
+    <xmx:xe1GZAudwBMXC_64hnYwBdV77JVPbcq9Tc5_jfUBCdX0N67TUQJcYA>
+    <xmx:xe1GZNWHjvPrHUGgstSUtbTkM3tNwhfnFIC8mmRtXiAy6isuRkjafQ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F3FF6B60086; Mon, 24 Apr 2023 16:59:13 -0400 (EDT)
+        id 8C8CCB60086; Mon, 24 Apr 2023 16:59:49 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
 Mime-Version: 1.0
-Message-Id: <bbd25997-173e-4c3b-930c-65c6232908e3@app.fastmail.com>
-Date:   Mon, 24 Apr 2023 22:58:53 +0200
+Message-Id: <c7193321-21ff-4ac8-9aa2-27e18ef24236@app.fastmail.com>
+In-Reply-To: <bbd25997-173e-4c3b-930c-65c6232908e3@app.fastmail.com>
+References: <bbd25997-173e-4c3b-930c-65c6232908e3@app.fastmail.com>
+Date:   Mon, 24 Apr 2023 22:59:28 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Linus Torvalds" <torvalds@linux-foundation.org>
 Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [GIT PULL 0/4] SoC branches for 6.4
-Content-Type: text/plain
+Subject: [GIT PULL 1/4] ARM: SoC changes for 6.4
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -81,90 +87,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At 1062 non-merge commits, this is another large merge window for the
-SoC tree with the largest chunk coming from the Qualcomm tree, and 80%
-of the total is just devicetree changes.
+The following changes since commit eeac8ede17557680855031c6f305ece2378af=
+326:
 
-There are a couple of new SoCs, but all of them are just variations of
-other ones we already supported. We had submissions for several entirely
-new SoC families, all of which ended up not being ready, so they are
-not included.
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
 
-There were 206 contributors, and the most of active of them by number
-of commits are:
+are available in the Git repository at:
 
-    131 Krzysztof Kozlowski
-     75 Konrad Dybcio
-     54 Manivannan Sadhasivam
-     44 AngeloGioacchino Del Regno
-     36 Neil Armstrong
-     30 Bartosz Golaszewski
-     27 Rob Herring
-     25 Philippe Schenker
-     24 Geert Uytterhoeven
-     21 Marek Vasut
-     18 Douglas Anderson
-     14 Oleksij Rempel
-     14 Janne Grunau
-     14 Cristian Ciocaltea
-     13 Stefan Wahren
-     12 Peng Fan
-     12 Johan Hovold
-     11 Kathiravan T
-     11 Conor Dooley
-     10 Sebastian Krzyszkowiak
-     10 Alexandre Mergnat
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-a=
+rm-6.4
 
-and the dirstat is:
+for you to fetch changes up to bd2c0c4452eea00e22c4008d8e64e58fa73857e5:
 
-   0.2% Documentation/devicetree/bindings/arm/msm/
-   0.1% Documentation/devicetree/bindings/arm/tegra/
-   0.5% Documentation/devicetree/bindings/arm/
-   1.0% Documentation/devicetree/bindings/clock/
-   0.1% Documentation/devicetree/bindings/firmware/
-   0.1% Documentation/devicetree/bindings/soc/amlogic/
-   0.1% Documentation/devicetree/bindings/soc/imx/
-   0.1% Documentation/devicetree/bindings/soc/
-   0.3% Documentation/devicetree/bindings/
-   0.1% Documentation/staging/
-  18.6% arch/arm/boot/dts/
-   0.2% arch/arm/configs/
-   0.2% arch/arm/mach-mv78xx0/
-   0.1% arch/arm/mach-omap2/
-   0.3% arch/arm/mach-oxnas/
-   0.4% arch/arm/
-   1.8% arch/arm64/boot/dts/amlogic/
-   4.5% arch/arm64/boot/dts/apple/
-   0.3% arch/arm64/boot/dts/broadcom/bcmbca/
-  12.9% arch/arm64/boot/dts/freescale/
-   0.3% arch/arm64/boot/dts/marvell/
-   4.4% arch/arm64/boot/dts/mediatek/
-   1.1% arch/arm64/boot/dts/nvidia/
-  20.5% arch/arm64/boot/dts/qcom/
-   4.3% arch/arm64/boot/dts/renesas/
-   2.7% arch/arm64/boot/dts/rockchip/
-   1.5% arch/arm64/boot/dts/sprd/
-   5.9% arch/arm64/boot/dts/ti/
-   0.1% arch/arm64/boot/dts/
-   0.1% arch/arm64/configs/
-   0.1% arch/riscv/boot/dts/allwinner/
-   2.0% arch/riscv/boot/dts/starfive/
-   0.1% drivers/bus/
-   0.1% drivers/edac/
-   0.2% drivers/firmware/arm_scmi/
-   0.1% drivers/firmware/
-   0.1% drivers/mailbox/
-   1.8% drivers/soc/bcm/brcmstb/pm/
-   1.8% drivers/soc/mediatek/
-   0.1% drivers/soc/microchip/
-   3.6% drivers/soc/qcom/
-   0.1% drivers/soc/tegra/
-   0.1% drivers/soc/ti/
-   0.2% drivers/soc/
-   0.7% drivers/tee/optee/
-   0.1% drivers/
-   2.4% include/dt-bindings/clock/
-   0.8% include/dt-bindings/reset/
-   0.2% include/linux/soc/mediatek/
-   0.1% include/linux/soc/qcom/
-   0.1% include/
+  Merge tag 'mvebu-arm64-6.4-1' of git://git.kernel.org/pub/scm/linux/ke=
+rnel/git/gclement/mvebu into soc/arm (2023-04-18 17:04:44 +0200)
+
+----------------------------------------------------------------
+ARM: SoC changes for 6.4
+
+The Oxford Semiconductor OX810/OX820 "oxnas" platform gets retired
+after the ARM11MPcore processor keeps causing problems in certain corner
+cases. OX820 was the only remaining SoC with this core after CNS3xxx got
+retired, and its driver support for never completely merged upstream. The
+Arm "Realview" reference platform still supports ARM11MPCore in principl=
+e,
+but this was never a product, and the CPU support will get cleaned up
+later on.
+
+Another series updates the mv78xx0 platform, which has been similarly
+neglected for a while, but should work properly again now.
+
+The other changes are minor cleanups across platforms, mostly converting
+code to more modern interfaces for DT nodes and removing some more code
+as a follow-up to the large-scale platform removal in linux-6.3.
+
+----------------------------------------------------------------
+Arnd Bergmann (7):
+      Merge tag 'omap-for-v6.4/cleanup-signed' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
+      Merge tag 'omap-for-v6.4/omap1-signed' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
+      Merge tag 'samsung-soc-6.4' of https://git.kernel.org/pub/scm/linu=
+x/kernel/git/krzk/linux into soc/arm
+      Merge tag 'imx-soc-6.4' of git://git.kernel.org/pub/scm/linux/kern=
+el/git/shawnguo/linux into soc/arm
+      Merge tag 'renesas-arm-soc-for-v6.4-tag1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/geert/renesas-devel into soc/arm
+      Merge tag 'arm-soc/for-6.4/soc' of https://github.com/Broadcom/stb=
+linux into soc/arm
+      Merge tag 'mvebu-arm64-6.4-1' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/gclement/mvebu into soc/arm
+
+Jeremy J. Peper (4):
+      ARM: mv78xx0: adjust init logic for ts-wxl to reflect single core =
+dev
+      ARM: mv78xx0: set the correct driver for the i2c RTC
+      ARM: mv78xx0: add code to enable XOR and CRYPTO engines on mv78xx0
+      ARM: mv78xx0: fix entries for gpios, buttons and usb ports
+
+Jilin Yuan (1):
+      ARM: OMAP2+: fix repeated words in comments
+
+Jinpeng Cui (1):
+      ARM: omap1: remove redundant variables err
+
+Juerg Haefliger (1):
+      ARM: omap1: Kconfig: Fix indentation
+
+Kenneth Lee (1):
+      ARM: OMAP2+: hwmod: Use kzalloc for allocating only one element
+
+Lukas Bulwahn (4):
+      ARM: mmp: remove obsolete config USB_EHCI_MV_U2O
+      ARM: spear: remove obsolete config MACH_SPEAR600
+      ARM: mstar: remove unused config MACH_MERCURY
+      ARM: OMAP2+: remove obsolete config OMAP3_SDRC_AC_TIMING
+
+Neil Armstrong (1):
+      ARM: oxnas: remove OXNAS support
+
+Oleksij Rempel (2):
+      ARM: imx6q: skip ethernet refclock reconfiguration if enet_clk_ref=
+ is present
+      ARM: mach-imx: imx6ul: remove not optional ethernet refclock overw=
+rite
+
+Rob Herring (10):
+      ARM: exynos: Use of_property_read_bool() for boolean properties
+      ARM: mxs: Use of_property_present() for testing DT property presen=
+ce
+      ARM: imx: Use of_property_read_bool() for boolean properties
+      ARM: EXYNOS: Use of_address_to_resource()
+      ARM: bcm: Use of_address_to_resource()
+      ARM: OMAP2+: Use of_property_read_bool() for boolean properties
+      ARM: OMAP2+: Use of_address_to_resource()
+      ARM: sh-mobile: Use of_cpu_node_to_id() to read CPU node 'reg'
+      ARM: pxa: Use of_property_read_bool() for boolean properties
+      soc: fsl: Use of_property_present() for testing DT property presen=
+ce
+
+Thomas Wei=C3=9Fschuh (1):
+      firmware: turris-mox-rwtm: make kobj_type structure constant
+
+Uwe Kleine-K=C3=B6nig (1):
+      ARM: Convert to platform remove callback returning void
+
+ye xingchen (1):
+      ARM: OMAP2+: Remove the unneeded result variable
+
+ arch/arm/Kconfig                          |  2 -
+ arch/arm/Makefile                         |  1 -
+ arch/arm/common/locomo.c                  |  6 +-
+ arch/arm/common/sa1111.c                  |  6 +-
+ arch/arm/common/scoop.c                   |  6 +-
+ arch/arm/mach-bcm/bcm_kona_smc.c          | 23 ++------
+ arch/arm/mach-exynos/exynos.c             |  8 ++-
+ arch/arm/mach-exynos/suspend.c            |  2 +-
+ arch/arm/mach-imx/gpc.c                   |  2 +-
+ arch/arm/mach-imx/mach-imx6q.c            | 10 +++-
+ arch/arm/mach-imx/mach-imx6ul.c           | 20 -------
+ arch/arm/mach-imx/mmdc.c                  |  5 +-
+ arch/arm/mach-mmp/Kconfig                 |  6 --
+ arch/arm/mach-mstar/Kconfig               |  7 ---
+ arch/arm/mach-mv78xx0/buffalo-wxl-setup.c | 82 +++++++++++++++++-------=
+--
+ arch/arm/mach-mv78xx0/common.c            | 23 ++++++++
+ arch/arm/mach-mv78xx0/common.h            |  2 +
+ arch/arm/mach-mv78xx0/mv78xx0.h           | 10 ++++
+ arch/arm/mach-mv78xx0/pcie.c              |  2 +-
+ arch/arm/mach-mxs/mach-mxs.c              |  2 +-
+ arch/arm/mach-omap1/Kconfig               |  2 +-
+ arch/arm/mach-omap1/board-ams-delta.c     |  6 +-
+ arch/arm/mach-omap1/omap-dma.c            |  6 +-
+ arch/arm/mach-omap2/Kconfig               | 11 ----
+ arch/arm/mach-omap2/cm33xx.c              |  2 +-
+ arch/arm/mach-omap2/omap_hwmod.c          | 23 ++++----
+ arch/arm/mach-omap2/pm33xx-core.c         |  6 +-
+ arch/arm/mach-oxnas/Kconfig               | 38 ------------
+ arch/arm/mach-oxnas/Makefile              |  2 -
+ arch/arm/mach-oxnas/headsmp.S             | 23 --------
+ arch/arm/mach-oxnas/platsmp.c             | 96 ------------------------=
+-------
+ arch/arm/mach-pxa/irq.c                   |  3 +-
+ arch/arm/mach-pxa/sharpsl_pm.c            |  6 +-
+ arch/arm/mach-sa1100/jornada720_ssp.c     |  5 +-
+ arch/arm/mach-sa1100/neponset.c           |  6 +-
+ arch/arm/mach-shmobile/platsmp-apmu.c     | 36 ++++++------
+ arch/arm/mach-spear/Kconfig               |  6 --
+ drivers/firmware/turris-mox-rwtm.c        |  2 +-
+ drivers/soc/fsl/qbman/dpaa_sys.c          |  8 +--
+ 39 files changed, 167 insertions(+), 345 deletions(-)
+ delete mode 100644 arch/arm/mach-oxnas/Kconfig
+ delete mode 100644 arch/arm/mach-oxnas/Makefile
+ delete mode 100644 arch/arm/mach-oxnas/headsmp.S
+ delete mode 100644 arch/arm/mach-oxnas/platsmp.c
