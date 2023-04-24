@@ -2,167 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2ADF6EC745
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25736EC748
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjDXHjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        id S231392AbjDXHkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbjDXHjT (ORCPT
+        with ESMTP id S231363AbjDXHkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:39:19 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C831BE6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:38:58 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4edc63e066fso10699e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:38:58 -0700 (PDT)
+        Mon, 24 Apr 2023 03:40:18 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0BBE65
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:40:17 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so10690e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682321936; x=1684913936;
+        d=google.com; s=20221208; t=1682322015; x=1684914015;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e//pvNXcoanFwliZ7s+8jS5hr41JlVa9XYAEnl3Aj6k=;
-        b=KBg53HVUoAwH5lT6YouyoqqEcMD4J9sS8sxGp68X/3BMamLG0f6WrquPBcAuJS4Jfy
-         mHAa5PIryNnqx/53u7Ie6bGOHb3mnQpgw3f4hf/eISDq9JDnS3bstirG5odpcnkBO8Do
-         N2xMpwu5rJOF+Te9TJjYr2FQtRXaYDCmytJT0vCu2OHRnY25RwyQQTOIVglH44PQkSx4
-         qqz6DbbvkpR1JOulBonssSDUivBaRoH82DSVfnlxnoXEcXFEE/QpUUAVUFjqe1NJp4v3
-         /zbWW3e4UrXykKCDyk0vzz3l3lxF7X85GyIareRMkz0It/kKlnQYFZWXW6NmKLMRXw+1
-         kE6A==
+        bh=e/4INAiEvkL/u4SkUH+rP897Ygm75rqLZWEjOieY3Sk=;
+        b=GI+B9KLyC192d3zh+6AWwPGb0iKi8EeEovn5mp0zbmbCiBnLdD3awniUO2VvoqFmr3
+         dumVOxIy13GHs/+yAsCbAcCgq1sqj2QF8kwfRLSgNEZfW2RQ+B+45TMB+jOqDq3h3GNA
+         eu2thKPob7VJwiy8O7NV0L2DaMS7rFMZ8Jjv71wHEwCBAW7VZ/3XJHhp8HEqy/WOGJqQ
+         up9YGgqfAIZwICgAUuHZ5H6X4PlEg5cxKGZny/3T9NU3Iz6TRQjWaqu9lnG+cZ0GAN4r
+         Jrb0wq1DSVPpnAfejleuoaxfty5iuA/zU63hGR0ZWLaooZ0KE/TsnMAfIZ0iM6/VhGd2
+         033w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682321936; x=1684913936;
+        d=1e100.net; s=20221208; t=1682322015; x=1684914015;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e//pvNXcoanFwliZ7s+8jS5hr41JlVa9XYAEnl3Aj6k=;
-        b=L2oF2sFiAmpWneUPueA380ZI5htjT4WTSWrq0Rv6L1iXb4JdSr21NS5mfvz875KtB8
-         Xoj7N0lZH2pZhKJ2QmuU3XQUuKHTvhCR+S96MzDVnsY2lKxx8TWGgVveTH4y9TuNQNiG
-         TjwEdtFIDW5wOlk0/vbAIFVbSrsYe+NPz+zXCr6050MfXJ4THwgEkYRp6bCo9e1LNEFD
-         BGSpyg6xRayjrpCSgpvt/jH6Wq25pJjd3RKliW9XodtvXNX5fZSKGnOKrup1v04imZFY
-         CJD25x0GctJQMauBWgtSn+e/WOwKq5tWROaa96sBu7WqLZ1MBhqcQmpldxV2WuRK0Kbw
-         ZSFw==
-X-Gm-Message-State: AAQBX9e59ORU463UHwWFLM0g42fs7LFGc8U043JvPW+wCP8KrAxDQ+mM
-        9+YQYkYj/2bQ7abmiYN7gckLDPSE8BxHwb/0edYCZA==
-X-Google-Smtp-Source: AKy350azvuFUbzB5Ml19ono/FiqTyeKyybdKc07Fahco/IbPFxwXDNo85nc/c50Pm8LNPG7XZeg97i4e8B3wzzEjbRM=
+        bh=e/4INAiEvkL/u4SkUH+rP897Ygm75rqLZWEjOieY3Sk=;
+        b=kstbS9AsTEPjtwvy+ATTclrSmWMB1aw7kIDxJJw5s2HUpuiyttjt/5/gkBfMMxKRd9
+         rem5SaPhhn3sXzh9cBZAYNwNBf5CGkWV15RdGnRqSra15unRm9zi6323DcTWCDR6XNCN
+         FRhs47J5mgnSk+6INWwqbzRtIQ60/3Zyno4+xSeVkNbQR6fMPF8qQGxuEjLv/gG+LGyE
+         Clg7w76yz4tiWH61fzCQsxSL5B/E+XqLlf1mHDp0PtOH5ywjGkOVx5eBVx8XXTjCGNO0
+         qt9V3Ag/8Y/2ME25e2msh+Kr29kG8AitJDK3FnfTbyCSRrV+Ivc81E1Pm69uyDyOFBkP
+         P4uQ==
+X-Gm-Message-State: AAQBX9eFRQ7XQT/4GGUUhCk49E5RZ5/mkilALaM//4v+bcpN/dmJegjo
+        euJAtMUfoMLHPsMFwqY3AEmHO29u1Kob+1kkkVbbcg==
+X-Google-Smtp-Source: AKy350bMbpgql9DEzPColxG4ITLZ5/uJ4hQDUoQddc35HJeGMhejawKhweoTCuJUHj7HqywaEtq2WRyi8zd6iULyV94=
 X-Received: by 2002:a05:6512:3ca2:b0:4ed:b0bd:a96c with SMTP id
- h34-20020a0565123ca200b004edb0bda96cmr217559lfv.6.1682321936088; Mon, 24 Apr
- 2023 00:38:56 -0700 (PDT)
+ h34-20020a0565123ca200b004edb0bda96cmr217656lfv.6.1682322015348; Mon, 24 Apr
+ 2023 00:40:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000d0737c05fa0fd499@google.com>
-In-Reply-To: <000000000000d0737c05fa0fd499@google.com>
+References: <0000000000007470fe05fa0fd8ba@google.com>
+In-Reply-To: <0000000000007470fe05fa0fd8ba@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Apr 2023 09:38:43 +0200
-Message-ID: <CACT4Y+YKt-YvQ5fKimXAP8nsV=X81OymPd3pxVXvmPG-51YjOw@mail.gmail.com>
-Subject: Re: [syzbot] [fs?] [mm?] KCSAN: data-race in __filemap_remove_folio /
- folio_mapping (2)
-To:     syzbot <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com>
-Cc:     djwong@kernel.org, hch@infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Date:   Mon, 24 Apr 2023 09:40:03 +0200
+Message-ID: <CACT4Y+ZyBsAhdE3joUMQ+AtPukws3kDMirAKBqGg+VXgZKEpQQ@mail.gmail.com>
+Subject: Re: [syzbot] [block?] KCSAN: data-race in __filemap_add_folio /
+ invalidate_bdev (3)
+To:     syzbot <syzbot+8a416e3cb063d4787b0f@syzkaller.appspotmail.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 09:19, syzbot
-<syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com> wrote:
+On Mon, 24 Apr 2023 at 09:20, syzbot
+<syzbot+8a416e3cb063d4787b0f@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
 > syzbot found the following issue on:
 >
-> HEAD commit:    622322f53c6d Merge tag 'mips-fixes_6.3_2' of git://git.ker..
+> HEAD commit:    3e7bb4f24617 Merge tag '6.3-rc6-smb311-client-negcontext-f..
 > git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12342880280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa4baf7c6b35b5d5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=606f94dfeaaa45124c90
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13c2e6ebc80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=710057cbb8def08c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8a416e3cb063d4787b0f
 > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 >
 > Unfortunately, I don't have any reproducer for this issue yet.
 >
 > Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/8b5f31d96315/disk-622322f5.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/adca7dc8daae/vmlinux-622322f5.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ed78ddc31ccb/bzImage-622322f5.xz
+> disk image: https://storage.googleapis.com/syzbot-assets/d1f21f86a5e7/disk-3e7bb4f2.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/5769a034d50c/vmlinux-3e7bb4f2.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/82288ce4b761/bzImage-3e7bb4f2.xz
 >
 > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com
+> Reported-by: syzbot+8a416e3cb063d4787b0f@syzkaller.appspotmail.com
 
-If I am reading this correctly, it can lead to NULL derefs in
-folio_mapping() if folio->mapping is read twice. I think
-folio->mapping reads/writes need to use READ/WRITE_ONCE if racy.
+invalidate_bdev() looks at mapping->nrpages to decide to
+invalidate/not-invalidate. If it's updated concurrently, can't
+invalidate_bdev() falsely decide to not invalidate?
 
 
 > ==================================================================
-> BUG: KCSAN: data-race in __filemap_remove_folio / folio_mapping
+> BUG: KCSAN: data-race in __filemap_add_folio / invalidate_bdev
 >
-> write to 0xffffea0004958618 of 8 bytes by task 17586 on cpu 1:
->  page_cache_delete mm/filemap.c:145 [inline]
->  __filemap_remove_folio+0x210/0x330 mm/filemap.c:225
->  invalidate_complete_folio2 mm/truncate.c:586 [inline]
->  invalidate_inode_pages2_range+0x506/0x790 mm/truncate.c:673
->  iomap_dio_complete+0x383/0x470 fs/iomap/direct-io.c:115
->  iomap_dio_rw+0x62/0x90 fs/iomap/direct-io.c:687
->  ext4_dio_write_iter fs/ext4/file.c:597 [inline]
->  ext4_file_write_iter+0x9e6/0x10e0 fs/ext4/file.c:708
->  do_iter_write+0x418/0x700 fs/read_write.c:861
->  vfs_iter_write+0x50/0x70 fs/read_write.c:902
->  iter_file_splice_write+0x456/0x7d0 fs/splice.c:778
->  do_splice_from fs/splice.c:856 [inline]
->  direct_splice_actor+0x84/0xa0 fs/splice.c:1022
->  splice_direct_to_actor+0x2ee/0x5f0 fs/splice.c:977
->  do_splice_direct+0x104/0x180 fs/splice.c:1065
->  do_sendfile+0x3b8/0x950 fs/read_write.c:1255
->  __do_sys_sendfile64 fs/read_write.c:1323 [inline]
->  __se_sys_sendfile64 fs/read_write.c:1309 [inline]
->  __x64_sys_sendfile64+0x110/0x150 fs/read_write.c:1309
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> read to 0xffffea0004958618 of 8 bytes by task 17568 on cpu 0:
->  folio_mapping+0x92/0x110 mm/util.c:774
->  folio_evictable mm/internal.h:156 [inline]
->  lru_add_fn+0x92/0x450 mm/swap.c:181
->  folio_batch_move_lru+0x21e/0x2f0 mm/swap.c:217
->  folio_batch_add_and_move mm/swap.c:234 [inline]
->  folio_add_lru+0xc9/0x130 mm/swap.c:517
->  filemap_add_folio+0xfc/0x150 mm/filemap.c:954
->  page_cache_ra_unbounded+0x15e/0x2e0 mm/readahead.c:251
->  do_page_cache_ra mm/readahead.c:300 [inline]
->  page_cache_ra_order mm/readahead.c:560 [inline]
->  ondemand_readahead+0x550/0x6c0 mm/readahead.c:682
->  page_cache_sync_ra+0x284/0x2a0 mm/readahead.c:709
->  page_cache_sync_readahead include/linux/pagemap.h:1214 [inline]
->  filemap_get_pages+0x257/0xea0 mm/filemap.c:2598
+> read-write to 0xffff8881023fec48 of 8 bytes by task 5672 on cpu 1:
+>  __filemap_add_folio+0x38c/0x720 mm/filemap.c:904
+>  filemap_add_folio+0x6f/0x150 mm/filemap.c:939
+>  filemap_create_folio mm/filemap.c:2545 [inline]
+>  filemap_get_pages+0x5d2/0xea0 mm/filemap.c:2605
 >  filemap_read+0x223/0x680 mm/filemap.c:2693
->  generic_file_read_iter+0x76/0x320 mm/filemap.c:2840
->  ext4_file_read_iter+0x1cc/0x290
+>  blkdev_read_iter+0x2ca/0x370 block/fops.c:606
 >  call_read_iter include/linux/fs.h:1845 [inline]
->  generic_file_splice_read+0xe3/0x290 fs/splice.c:402
->  do_splice_to fs/splice.c:885 [inline]
->  splice_direct_to_actor+0x25a/0x5f0 fs/splice.c:956
->  do_splice_direct+0x104/0x180 fs/splice.c:1065
->  do_sendfile+0x3b8/0x950 fs/read_write.c:1255
->  __do_sys_sendfile64 fs/read_write.c:1323 [inline]
->  __se_sys_sendfile64 fs/read_write.c:1309 [inline]
->  __x64_sys_sendfile64+0x110/0x150 fs/read_write.c:1309
+>  new_sync_read fs/read_write.c:389 [inline]
+>  vfs_read+0x39a/0x560 fs/read_write.c:470
+>  ksys_read+0xeb/0x1a0 fs/read_write.c:613
+>  __do_sys_read fs/read_write.c:623 [inline]
+>  __se_sys_read fs/read_write.c:621 [inline]
+>  __x64_sys_read+0x42/0x50 fs/read_write.c:621
 >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
 >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
 >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 >
-> value changed: 0xffff88810a98f7b0 -> 0x0000000000000000
+> read to 0xffff8881023fec48 of 8 bytes by task 3141 on cpu 0:
+>  invalidate_bdev+0x35/0x80 block/bdev.c:84
+>  bdev_disk_changed+0x102/0xbb0 block/partitions/core.c:668
+>  __loop_clr_fd+0x2b9/0x3b0 drivers/block/loop.c:1189
+>  loop_clr_fd drivers/block/loop.c:1257 [inline]
+>  lo_ioctl+0xe9e/0x12f0 drivers/block/loop.c:1563
+>  blkdev_ioctl+0x3a0/0x490 block/ioctl.c:615
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl+0xc9/0x140 fs/ioctl.c:856
+>  __x64_sys_ioctl+0x43/0x50 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> value changed: 0x0000000000000000 -> 0x0000000000000001
 >
 > Reported by Kernel Concurrency Sanitizer on:
-> CPU: 0 PID: 17568 Comm: syz-executor.2 Not tainted 6.3.0-rc7-syzkaller-00191-g622322f53c6d #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+> CPU: 0 PID: 3141 Comm: syz-executor.2 Not tainted 6.3.0-rc6-syzkaller-00188-g3e7bb4f24617 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
 > ==================================================================
 >
 >
@@ -177,4 +153,4 @@ folio->mapping reads/writes need to use READ/WRITE_ONCE if racy.
 > --
 > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000d0737c05fa0fd499%40google.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000007470fe05fa0fd8ba%40google.com.
