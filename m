@@ -2,86 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50FC6EC339
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608586EC33D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjDXAJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 20:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S230046AbjDXAKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 20:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDXAJF (ORCPT
+        with ESMTP id S229940AbjDXAKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 20:09:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4410FA;
-        Sun, 23 Apr 2023 17:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=be8ZuVxBLCXQ/rvtqMtkSVgFOWYV/d7Ni7V/Z3tuim4=; b=P1Kx8rJupqS+NoQHayDQUbrwCr
-        kf87ihAnX5u9K9BaqE4NpDDDvELJE1jzOwPKb2OP5weF6wrIXtb/QgaJFJ48j4i6qqKBw+s9cu4ZY
-        6Hhoe1ZGF0AZBJBO5rxOL8wt9Lk//3IdYvtP2NPd+pDppxlQP4FmFfA5e5CwWInYXkIPk8z/SZxbr
-        0vIol+8uJX9EinkOYREL8NpnTbE6vSinnZ8244hvWiYjaQherJsxcQFPWRXsq/b9VHV8OAoBeVduu
-        Jp+cAbbtggHbBrolOPNOHjEzBiVx2E+oD727+k0ZSpxZLeaXVlgEHky7Tn2MeaTUTy6yhMEM/qBLN
-        MkITZ7ug==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pqjlM-00ExOS-0J;
-        Mon, 24 Apr 2023 00:09:01 +0000
-Message-ID: <b58dc77c-c975-46cf-581c-368d9a87ae64@infradead.org>
-Date:   Sun, 23 Apr 2023 17:08:57 -0700
+        Sun, 23 Apr 2023 20:10:31 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD51A1702
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 17:10:29 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 12E202C04CD;
+        Mon, 24 Apr 2023 12:10:25 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1682295025;
+        bh=7WQiXrcqQQ7c3nGHXmCe4hTzplkLjyk4E25wr2sE6hY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OB1ZtvKOG/NUnhcpMr9AfU1SFxkdj2MTNcfBc6Ue57atD/71lQVihdqtxTRcJicqC
+         ou4Sc60gvQWOlSdr3p2zAtuDfLadGLIDTayVlwdvnPPZvHL6Owm0Mpj0CFD9ENJSkM
+         7XElIKtCCv+crh1J5R07BtiJ2bbtAzHB0pbd0IRl6uK29zN4dw9aNba2nq4icTCA8Q
+         4XYIO+z7f8MsySksumSHRQNVUeqd/romLLXK7nLKE4QSCphHBgEGlgGazKNWi73BBx
+         fJmik1N5qncRlhLd8sf8ZI+JH6mz8BCrNad7VbA7IR7iwv8MNtx04HApOlvz0aubwT
+         Po7nVUaIYMGjA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6445c8f00000>; Mon, 24 Apr 2023 12:10:24 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id D487913EE32;
+        Mon, 24 Apr 2023 12:10:24 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id CD0FE280B5B; Mon, 24 Apr 2023 12:10:24 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     Ibrahim.Tilki@analog.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeynep.Arslanbenzer@analog.com,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] squash! drivers: rtc: add max313xx series rtc driver
+Date:   Mon, 24 Apr 2023 12:10:21 +1200
+Message-Id: <20230424001021.687057-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] crypto: engine - Fix typo in struct crypto_engine_op doc
-Content-Language: en-US
-To:     David Yang <mmyangfl@gmail.com>, linux-crypto@vger.kernel.org
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-References: <20230423235532.2729539-1-mmyangfl@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230423235532.2729539-1-mmyangfl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=dKHAf1wccvYA:10 a=VwQbUJbxAAAA:8 a=gAnH3GRIAAAA:8 a=DQkKNav9h5akm56ItaIA:9 a=AjGcO6oz07-iQ99wixmX:22 a=oVHKYsEdi7-vN-J5QA_j:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+This is intended to be squashed into [1] for the next round. It deals
+with reporting that there has been an oscillator fail and releasing the
+SWRST on chips that require it.
 
-On 4/23/23 16:55, David Yang wrote:
-> There is a redundant underscore in prepare_request. Remove it.
-> 
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
->  include/crypto/engine.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/crypto/engine.h b/include/crypto/engine.h
-> index ae133e98d813..b9e76ed4085b 100644
-> --- a/include/crypto/engine.h
-> +++ b/include/crypto/engine.h
-> @@ -78,7 +78,7 @@ struct crypto_engine {
->  
->  /*
->   * struct crypto_engine_op - crypto hardware engine operations
-> - * @prepare__request: do some prepare if need before handle the current request
-> + * @prepare_request: do some prepare if need before handle the current request
+I'm not sure what the requirements are for patches like this so I've
+included my sign-off in case it's needed but feel free to drop it if
+it's not needed.
 
-    * @prepare_request: do some preparation if needed before handling the current request
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
->   * @unprepare_request: undo any work done by prepare_request()
->   * @do_one_request: do encryption for current request
->   */
+[1] - https://lore.kernel.org/all/20230403154342.3108-2-Ibrahim.Tilki@ana=
+log.com/
+---
+ drivers/rtc/rtc-max313xx.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Thanks.
--- 
-~Randy
+diff --git a/drivers/rtc/rtc-max313xx.c b/drivers/rtc/rtc-max313xx.c
+index 043528d7d3e0..a7028b901358 100644
+--- a/drivers/rtc/rtc-max313xx.c
++++ b/drivers/rtc/rtc-max313xx.c
+@@ -81,6 +81,7 @@ struct chip_desc {
+=20
+ 	u8 int_en_reg;
+ 	u8 int_status_reg;
++	u8 osf_bit;
+=20
+ 	u8 ram_reg;
+ 	u8 ram_size;
+@@ -88,6 +89,9 @@ struct chip_desc {
+ 	u8 temp_reg;
+=20
+ 	u8 trickle_reg;
++
++	u8 rst_reg;
++	u8 rst_bit;
+ };
+=20
+ #define clk_hw_to_max313xx(_hw) container_of(_hw, struct max313xx, clkou=
+t)
+@@ -156,6 +160,7 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =3D=
+ {
+ 	[ID_MAX31328] =3D {
+ 		.int_en_reg =3D 0x0E,
+ 		.int_status_reg =3D 0x0F,
++		.osf_bit =3D BIT(7),
+ 		.sec_reg =3D 0x00,
+ 		.alarm1_sec_reg =3D 0x07,
+ 		.temp_reg =3D 0x11,
+@@ -165,6 +170,7 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =3D=
+ {
+ 	[ID_MAX31329] =3D {
+ 		.int_en_reg =3D 0x01,
+ 		.int_status_reg =3D 0x00,
++		.osf_bit =3D BIT(6),
+ 		.sec_reg =3D 0x06,
+ 		.alarm1_sec_reg =3D 0x0D,
+ 		.ram_reg =3D 0x22,
+@@ -172,10 +178,13 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =
+=3D {
+ 		.trickle_reg =3D 0x19,
+ 		.clkout =3D &max31329_clkout,
+ 		.clkout_name =3D "max31329-clkout",
++		.rst_reg =3D 0x02,
++		.rst_bit =3D BIT(0),
+ 	},
+ 	[ID_MAX31331] =3D {
+ 		.int_en_reg =3D 0x01,
+ 		.int_status_reg =3D 0x00,
++		.osf_bit =3D BIT(6),
+ 		.sec_reg =3D 0x08,
+ 		.alarm1_sec_reg =3D 0x0F,
+ 		.ram_reg =3D 0x20,
+@@ -183,10 +192,13 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =
+=3D {
+ 		.trickle_reg =3D 0x1B,
+ 		.clkout =3D &max3133x_clkout,
+ 		.clkout_name =3D "max31331-clkout",
++		.rst_reg =3D 0x02,
++		.rst_bit =3D BIT(0),
+ 	},
+ 	[ID_MAX31334] =3D {
+ 		.int_en_reg =3D 0x01,
+ 		.int_status_reg =3D 0x00,
++		.osf_bit =3D BIT(6),
+ 		.sec_reg =3D 0x09,
+ 		.alarm1_sec_reg =3D 0x10,
+ 		.ram_reg =3D 0x30,
+@@ -194,10 +206,13 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =
+=3D {
+ 		.trickle_reg =3D 0x1E,
+ 		.clkout =3D &max3133x_clkout,
+ 		.clkout_name =3D "max31334-clkout",
++		.rst_reg =3D 0x02,
++		.rst_bit =3D BIT(0),
+ 	},
+ 	[ID_MAX31341] =3D {
+ 		.int_en_reg =3D 0x04,
+ 		.int_status_reg =3D 0x05,
++		.osf_bit =3D BIT(6),
+ 		.sec_reg =3D 0x06,
+ 		.alarm1_sec_reg =3D 0x0D,
+ 		.ram_reg =3D 0x16,
+@@ -205,18 +220,24 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =
+=3D {
+ 		.trickle_reg =3D 0x57,
+ 		.clkout =3D &max31341_42_clkout,
+ 		.clkout_name =3D "max31341-clkout",
++		.rst_reg =3D 0x00,
++		.rst_bit =3D BIT(0),
+ 	},
+ 	[ID_MAX31342] =3D {
+ 		.int_en_reg =3D 0x04,
+ 		.int_status_reg =3D 0x05,
++		.osf_bit =3D BIT(6),
+ 		.sec_reg =3D 0x06,
+ 		.alarm1_sec_reg =3D 0x0D,
+ 		.clkout =3D &max31341_42_clkout,
+ 		.clkout_name =3D "max31342-clkout",
++		.rst_reg =3D 0x00,
++		.rst_bit =3D BIT(0),
+ 	},
+ 	[ID_MAX31343] =3D {
+ 		.int_en_reg =3D 0x01,
+ 		.int_status_reg =3D 0x00,
++		.osf_bit =3D BIT(6),
+ 		.sec_reg =3D 0x06,
+ 		.alarm1_sec_reg =3D 0x0D,
+ 		.ram_reg =3D 0x22,
+@@ -225,6 +246,8 @@ static const struct chip_desc chip[MAX313XX_ID_NR] =3D=
+ {
+ 		.trickle_reg =3D 0x19,
+ 		.clkout =3D &max31343_clkout,
+ 		.clkout_name =3D "max31343-clko",
++		.rst_reg =3D 0x02,
++		.rst_bit =3D BIT(0),
+ 	},
+ };
+=20
+@@ -279,6 +302,14 @@ static int max313xx_read_time(struct device *dev, st=
+ruct rtc_time *t)
+ 	struct max313xx *rtc =3D dev_get_drvdata(dev);
+ 	u8 regs[7];
+ 	int ret;
++	unsigned int status;
++
++	ret =3D regmap_read(rtc->regmap, rtc->chip->int_status_reg, &status);
++	if (ret)
++		return ret;
++
++	if (status & rtc->chip->osf_bit)
++		return -EINVAL;
+=20
+ 	ret =3D regmap_bulk_read(rtc->regmap, rtc->chip->sec_reg, regs, 7);
+ 	if (ret)
+@@ -368,6 +399,12 @@ static int max313xx_set_time(struct device *dev, str=
+uct rtc_time *t)
+ 	if (ret)
+ 		return ret;
+=20
++	if (rtc->chip->rst_bit) {
++		ret =3D regmap_clear_bits(rtc->regmap, rtc->chip->rst_reg, rtc->chip->=
+rst_bit);
++		if (ret)
++			return ret;
++	}
++
+ 	ret =3D regmap_bulk_write(rtc->regmap, rtc->chip->sec_reg, regs, 7);
+ 	if (ret)
+ 		return ret;
+--=20
+2.40.0
+
