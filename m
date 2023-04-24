@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0CD6ECAA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062B66ECAB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjDXKu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S231598AbjDXKwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 06:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjDXKuu (ORCPT
+        with ESMTP id S231605AbjDXKv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:50:50 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F8435A2;
-        Mon, 24 Apr 2023 03:50:47 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OAoROo106984;
-        Mon, 24 Apr 2023 05:50:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682333427;
-        bh=1GIZKi464DswWpYYI8PkLUvrxRe5Lbt01DrvEsUrNoA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=oIlDSvPiw+yJCBqGRoptOkevkOjqTY8i6GXoR8lCsQI9K0cLnUrlYcxtDxoez3flH
-         7Hsqr2ScRHuuy8PpxpLYrFcGZ0u5KPG2pSDoxOkuz5Twyco+sMwn1hP8P1XeWkTnPf
-         ngbnhxb9oUVWhBrOHYE9p0DZAp7Rhyv66Du23OFI=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OAoRuR027592
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 05:50:27 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 05:50:26 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 05:50:26 -0500
-Received: from ula0497641.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OAoBPG004376;
-        Mon, 24 Apr 2023 05:50:23 -0500
-From:   Neha Malcom Francis <n-francis@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
-CC:     <n-francis@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <u-kumar1@ti.com>, <kristo@kernel.org>
-Subject: [PATCH RESEND v3 3/3] arm64: dts: ti: k3-j7200: Add ESM support
-Date:   Mon, 24 Apr 2023 16:20:11 +0530
-Message-ID: <20230424105011.70674-4-n-francis@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230424105011.70674-1-n-francis@ti.com>
-References: <20230424105011.70674-1-n-francis@ti.com>
+        Mon, 24 Apr 2023 06:51:58 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5010D1;
+        Mon, 24 Apr 2023 03:51:53 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88A289DE;
+        Mon, 24 Apr 2023 12:51:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1682333501;
+        bh=k41FYnFPuVa5kdvlRxv3/uNLC9gxaLBYMO4s1pcl8sc=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=SBhIRp0/AaG5awrt23WH7HYVNKSZdeYT+K1bFuzeLC3vEEKeAAwaFsdMQpPv1ijcO
+         Qs9ivefncmwybLmxqurAfGdZM1kvxaTEtd808dny/B+iJDRyzEzlhVA4/EGvje7Z8f
+         QHTXCdmjfMSiRvy5xNAHR1mtLyHdXVoqOHcSyzvw=
+Message-ID: <f9be2c5d-1303-1b91-c672-7e5a476277e7@ideasonboard.com>
+Date:   Mon, 24 Apr 2023 13:51:45 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
+To:     Wolfram Sang <wsa@kernel.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
+ <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
+ <ZEZafj6j+EurGWJ7@sai>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZEZafj6j+EurGWJ7@sai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add address entry mapping ESM on J7200.
+On 24/04/2023 13:31, Wolfram Sang wrote:
+> On Fri, Apr 21, 2023 at 01:18:27PM +0300, Tomi Valkeinen wrote:
+>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>>
+>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>> slave "upstream" port and N master "downstream" ports, and forwards
+>> transactions from upstream to the appropriate downstream port. But it
+>> is different in that the forwarded transaction has a different slave
+>> address. The address used on the upstream bus is called the "alias"
+>> and is (potentially) different from the physical slave address of the
+>> downstream chip.
+>>
+>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>> implementing ATR features in a device driver. The helper takes care or
+>> adapter creation/destruction and translates addresses at each transaction.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> This looks good to me. Dunno if the DT folks want the binding as a
+> seperate patch, but this is good to go as far as I am concerned.
 
-Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 6 ++++++
- arch/arm64/boot/dts/ti/k3-j7200.dtsi      | 1 +
- 2 files changed, 7 insertions(+)
+Ah, right. I'll resend with the DT bindings separate.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index ef352e32f19d..89f816f5e53d 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -1010,4 +1010,10 @@ main_r5fss0_core1: r5f@5d00000 {
- 			ti,loczrama = <1>;
- 		};
- 	};
-+
-+	main_esm: esm@700000 {
-+		compatible = "ti,j721e-esm";
-+		reg = <0x0 0x700000 0x0 0x1000>;
-+		ti,esm-pins = <656>, <657>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index bbe380c72a7e..4998eb4fbe75 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -128,6 +128,7 @@ cbass_main: bus@100000 {
- 		#size-cells = <2>;
- 		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
- 			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-+			 <0x00 0x00700000 0x00 0x00700000 0x00 0x00001000>, /* ESM */
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
- 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
--- 
-2.34.1
+  Tomi
 
