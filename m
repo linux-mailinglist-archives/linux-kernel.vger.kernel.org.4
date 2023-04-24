@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CF46ECB34
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63656ECB36
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjDXLU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S231510AbjDXLVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjDXLU4 (ORCPT
+        with ESMTP id S229603AbjDXLVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:20:56 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAFB30F4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:20:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VgtOkQo_1682335243;
-Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgtOkQo_1682335243)
+        Mon, 24 Apr 2023 07:21:40 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF6B26A3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:21:39 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VgtOkqz_1682335295;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgtOkqz_1682335295)
           by smtp.aliyun-inc.com;
-          Mon, 24 Apr 2023 19:20:44 +0800
-Message-ID: <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
-Date:   Mon, 24 Apr 2023 19:20:43 +0800
+          Mon, 24 Apr 2023 19:21:36 +0800
+Message-ID: <e0dac925-b8a5-e08e-d8ca-130bd72617fe@linux.alibaba.com>
+Date:   Mon, 24 Apr 2023 19:21:35 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
+Subject: Re: [PATCH v2 1/2] mm/page_alloc: drop the unnecessary pfn_valid()
+ for start pfn
 To:     Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
         mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
 References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
- <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
- <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
+ <ZEZQ9EpUY8Mj5TwQ@dhcp22.suse.cz>
+ <7525a9f6-b431-4404-2878-898e52905d4a@linux.alibaba.com>
+ <ZEZf1tbao9E8JFBr@dhcp22.suse.cz>
 From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
+In-Reply-To: <ZEZf1tbao9E8JFBr@dhcp22.suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
@@ -50,83 +51,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/24/2023 5:54 PM, Michal Hocko wrote:
-> On Sun 23-04-23 18:59:11, Baolin Wang wrote:
->> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
->> checks whether the given zone contains holes, and uses pfn_to_online_page()
->> to validate if the start pfn is online and valid, as well as using pfn_valid()
->> to validate the end pfn.
+On 4/24/2023 6:54 PM, Michal Hocko wrote:
+> On Mon 24-04-23 18:46:40, Baolin Wang wrote:
 >>
->> However, the __pageblock_pfn_to_page() function may return non-NULL even
->> if the end pfn of a pageblock is in a memory hole in some situations. For
->> example, if the pageblock order is MAX_ORDER, which will fall into 2
->> sub-sections, and the end pfn of the pageblock may be hole even though
->> the start pfn is online and valid.
 >>
->> This did not break anything until now, but the zone continuous is fragile
->> in this possible scenario. So as previous discussion[1], it is better to
->> add some comments to explain this possible issue in case there are some
->> future pfn walkers that rely on this.
+>> On 4/24/2023 5:50 PM, Michal Hocko wrote:
+>>> On Sun 23-04-23 18:59:10, Baolin Wang wrote:
+>>>> We've already used pfn_to_online_page() for start pfn to make sure
+>>>
+>>> Who is we? I do not see any note explicitly requiring that start_pfn has
+>>> to be valid for __pageblock_pfn_to_page.
 >>
->> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
+>> Sorry for confusing, what I mean is the __pageblock_pfn_to_page() function,
+>> which has used pfn_to_online_page() for start pfn. So the pfn_valid() in
+>> __pageblock_pfn_to_page() for start pfn is unnecessary.
+>>
+>> I will update the commit log to make it clear.
 > 
-> Do I remember correctly you've had a specific configuration that would
-> trigger this case?
+> Your comment suggested that the check _has_ already been done. Which is
+> not the case. pfn_to_online_page is called later in the function so I
+> guess you should rephrase as following:
+> 
+> "
+> __pageblock_pfn_to_page currently performs both pfn_valid check and
+> pfn_to_online_page. The former one is redundant because the latter is a
+> stronger check. Drop pfn_valid.
+> "
 
-Yes, I provided an example in previous thread [2] so show the 
-__pageblock_pfn_to_page() is fragile in some cases.
-
-[2] 
-https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
+Yes, will change the commit log.
 
 > 
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->> Changes from v1:
->>   - Update the comments per Ying and Mike, thanks.
->> ---
->>   mm/page_alloc.c | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index 6457b64fe562..9756d66f471c 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
->>    * interleaving within a single pageblock. It is therefore sufficient to check
->>    * the first and last page of a pageblock and avoid checking each individual
->>    * page in a pageblock.
->> + *
->> + * Note: the function may return non-NULL even if the end pfn of a pageblock
->> + * is in a memory hole in some situations. For example, if the pageblock
->> + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
->> + * of the pageblock may be hole even though the start pfn is online and valid.
->> + * This did not break anything until now, but be careful about this possible
->> + * issue when checking whether all pfns of a pageblock are valid.
+> With that or something going along with that. Feel free to add
+> Acked-by: Michal Hocko <mhocko@suse.com>
+
+Thanks.
+
+>>>> it is online and valid, so the pfn_valid() for the start pfn is
+>>>> unnecessary, drop it.
+>>>>
+>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>> Reviewed-by: David Hildenbrand <david@redhat.com>
+>>>> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+>>>> ---
+>>>> Changes from v1:
+>>>>    - Collect reviewed tags. Thanks David and Ying.
+>>>> ---
+>>>>    mm/page_alloc.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>>> index 9de2a18519a1..6457b64fe562 100644
+>>>> --- a/mm/page_alloc.c
+>>>> +++ b/mm/page_alloc.c
+>>>> @@ -1512,7 +1512,7 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>>>>    	/* end_pfn is one past the range we are checking */
+>>>>    	end_pfn--;
+>>>> -	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
+>>>> +	if (!pfn_valid(end_pfn))
+>>>>    		return NULL;
+>>>>    	start_page = pfn_to_online_page(start_pfn);
+>>>> -- 
+>>>> 2.27.0
+>>>
 > 
-> It is not really clear what you should be doing (other than to be
-> careful which is not helpful much TBH) when you encounter this
-> situation. If the reality changes and this would break in the future
-> what would breakage look like? What should be done about that?
-
-That depends on what the future pfn walkers do, which may access some 
-hole memory with zero-init page frame. For example, if checking the 
-__PageMovable() for a zero-init page frame, that will crash the system. 
-But I can not list all the possible cases.
-
-So how about below words?
-
-  * Note: the function may return non-NULL even if the end pfn of a 
-pageblock
-  * is in a memory hole in some situations. For example, if the pageblock
-  * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
-  * of the pageblock may be hole even though the start pfn is online and 
-valid.
-  * This did not break anything until now, but be careful about this 
-possible
-  * issue when checking whether all pfns of a pageblock are valid, that may
-  * lead to accessing empty page frame, and the worst case can crash the 
-system.
-  * So you should use pfn_to_onlie_page() instead of pfn_valid() to 
-valid the
-  * pfns in a pageblock if such case happens.
