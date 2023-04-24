@@ -2,203 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E89C6EC96D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0866EC979
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjDXJvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
+        id S230396AbjDXJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjDXJvS (ORCPT
+        with ESMTP id S231344AbjDXJxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:51:18 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6C310FB
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:51:11 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-247122e9845so2972826a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682329871; x=1684921871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/O13qopzmctziSNmxMv34ISA8PP1ZG4FW+wAiHL6n9E=;
-        b=V1aR6gDAMmcxrTIA8ogOfMbqJNLv/BXqvdVYJe21RUSFwHJNtwzTlzopNjgWiGgmZO
-         ldZ2DP+dRFqymcX2cbrl+tGA/zMcBS/vpHHOjxIkTY2BsVJ1/T28nhNVYm/t0CrGo7tv
-         FQdqjR37c8dGiseMYjQQq20IepxdZf7kgJA6SxkTQ3fgqlsY/xrQaK6rBx7XIqSJwBWo
-         eB3Dt+6TdNs6aMmrH4P4Mk+CZtNdH2eVvsNQm+fR7JigSsG1WXH3Or+jGGICvmqP+Qtt
-         fsi4YsrhqhHPZXf6U9WmDfIRgG/WFrcrDfeOtWninuHk6w/fbUVmynXtoIXhuPRQJqDb
-         jiZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682329871; x=1684921871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/O13qopzmctziSNmxMv34ISA8PP1ZG4FW+wAiHL6n9E=;
-        b=SVK4a8IABINVhaRB4k43WBWSv9XB94E1ncMx5VMlG7Y+Jr2WD4zhS2pJJuKWCuGOPL
-         jxUlQujz3/YI7SgXuIDF8uurzUvc4XokeSGw/i7z72byFahoMVKbAjs0+4uNRHPys6Es
-         9Qz5yR3ktmQ2giMTnEjbons7pZsxFOxeXaIIGJ7LD8S630em0p/ubwS7DUfPwqFyMmlM
-         To/eSlH4DiD7vhWPOVL5zSoHW4f/nont+Sb9xAP/nYZOPxecGcTK4aUJpkvOmpHcldjX
-         36E4UOiTEGaAxHK0kH3RbZ4H/XW/I9F1yKWU0vInpKzbS1ND1mcHzrXkidYHNrpHQUYi
-         TwiA==
-X-Gm-Message-State: AAQBX9fLum6KKRTNgzLD5z4qMRiByTH8bcl7ttYOgzo+OOB5J80xa3fa
-        gBiCXKRNktZD91ntrr1u+htUzQJcuvvHOJ1AScs=
-X-Google-Smtp-Source: AKy350ZGvywolBBm9ifg1befPUZP6EICM2majGckkZ7j0nuV2k/il+WaFmAMnEEMN7PLLlTTeQPp7r3R+StDku/lscA=
-X-Received: by 2002:a17:90a:bb0f:b0:246:63c8:6abf with SMTP id
- u15-20020a17090abb0f00b0024663c86abfmr13792609pjr.20.1682329870678; Mon, 24
- Apr 2023 02:51:10 -0700 (PDT)
+        Mon, 24 Apr 2023 05:53:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081D326BD;
+        Mon, 24 Apr 2023 02:52:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 969AC61F83;
+        Mon, 24 Apr 2023 09:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B832C433EF;
+        Mon, 24 Apr 2023 09:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682329963;
+        bh=8nXbvKN3NVOq1MNMv2BKZhKpGyGFEU9KPwYeI4htA1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FYctiapfbLl+v3aiA7xN8Q4wOwyqvb4gdGU+zMHB9DiPq5oiH9iFm4VyDM/x8l0IK
+         EWBqN4LKCvBxZwuR2nMMHJ8ILfNzMfHJDuCAeGEzHD/G5LYObnKm1Am3lKpnxGomp2
+         b5P9cf7qS26wDU1OxGkEMc9OYD72iutYMkf88wEVbhxyJbkGwrbsO4O/hGrfdYNoud
+         TrQmiiT3OvxjYCh9WWYnt6+gpqN2Wmb+QzMatz1LWVu3vnrPKEE8Jr4GWHhXf7J80/
+         mRuKFKHa5U5Oj6sZGPwVQgJ6jOYJX+qkq6Le/M3nkmp1Bx5FufXOGoZbW/ZcRVvOr1
+         O+kgUXnCW8oJQ==
+Date:   Mon, 24 Apr 2023 10:52:00 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v6 3/7] mfd: Add support for the Lantiq PEF2256 framer
+Message-ID: <20230424095200.GC8035@google.com>
+References: <20230417171601.74656-1-herve.codina@bootlin.com>
+ <20230417171601.74656-4-herve.codina@bootlin.com>
+ <20230420123946.GB996918@google.com>
+ <20230420151551.78c1288b@bootlin.com>
+ <20230420134703.GC996918@google.com>
+ <20230421092645.56127f11@bootlin.com>
+ <20230421074558.GQ996918@google.com>
+ <054a384b-b0ef-2697-4a70-09868694ec6d@linaro.org>
 MIME-Version: 1.0
-References: <20230423121232.1345909-1-aford173@gmail.com> <20230423121232.1345909-5-aford173@gmail.com>
- <CAGXv+5GHcigEahCp+UefxR+AboF7i-kYJjiNftz8fPDLAZVMow@mail.gmail.com>
- <CAHCN7x+i41UkpdqLbK8s+OJmS=ExsctZwZL0YAQAic=N6kCbAw@mail.gmail.com>
- <CGME20230424094440eucas1p1ca3d678493aef1d6a893abdfcaf01584@eucas1p1.samsung.com>
- <CAGXv+5H34ojUAPWWpF+-=XpdF6Jj_Q7nqiPg3TEKVNXu4F6JAQ@mail.gmail.com> <ceee0290-211b-a675-2ba5-9342ee27fc49@samsung.com>
-In-Reply-To: <ceee0290-211b-a675-2ba5-9342ee27fc49@samsung.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 24 Apr 2023 04:50:59 -0500
-Message-ID: <CAHCN7x+koEFVoTOvY16DXYmSE_7+GrYkAk5mnZ02MX9gRmD=DQ@mail.gmail.com>
-Subject: Re: [PATCH V2 4/6] drm: bridge: samsung-dsim: Dynamically configure
- DPHY timing
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, dri-devel@lists.freedesktop.org,
-        Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        dario.binacchi@amarulasolutions.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <054a384b-b0ef-2697-4a70-09868694ec6d@linaro.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 4:47=E2=80=AFAM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> On 24.04.2023 11:44, Chen-Yu Tsai wrote:
-> > On Mon, Apr 24, 2023 at 5:31=E2=80=AFPM Adam Ford <aford173@gmail.com> =
-wrote:
-> >> On Mon, Apr 24, 2023 at 1:12=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.o=
-rg> wrote:
-> >>> On Sun, Apr 23, 2023 at 8:13=E2=80=AFPM Adam Ford <aford173@gmail.com=
-> wrote:
-> >>>> The DPHY timings are currently hard coded. Since the input
-> >>>> clock can be variable, the phy timings need to be variable
-> >>>> too.  Add an additional variable to the driver data to enable
-> >>>> this feature to prevent breaking boards that don't support it.
-> >>>>
-> >>>> The phy_mipi_dphy_get_default_config function configures the
-> >>>> DPHY timings in pico-seconds, and a small macro converts those
-> >>>> timings into clock cycles based on the pixel clock rate.
-> >>>>
-> >>>> Signed-off-by: Adam Ford <aford173@gmail.com>
-> >>>> ---
-> >>>>   drivers/gpu/drm/bridge/samsung-dsim.c | 79 +++++++++++++++++++++++=
-----
-> >>>>   include/drm/bridge/samsung-dsim.h     |  1 +
-> >>>>   2 files changed, 70 insertions(+), 10 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm=
-/bridge/samsung-dsim.c
-> >>>> index 5b6e7825b92f..f165483d5044 100644
-> >>>> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> >>>> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> >>>> @@ -18,9 +18,7 @@
-> >>>>   #include <linux/media-bus-format.h>
-> >>>>   #include <linux/of_device.h>
-> >>>>   #include <linux/phy/phy.h>
-> >>>> -
-> >>>>   #include <video/mipi_display.h>
-> >>>> -
-> >>>>   #include <drm/bridge/samsung-dsim.h>
-> >>>>   #include <drm/drm_panel.h>
-> >>>>   #include <drm/drm_print.h>
-> >>>> @@ -218,6 +216,8 @@
-> >>>>
-> >>>>   #define OLD_SCLK_MIPI_CLK_NAME         "pll_clk"
-> >>>>
-> >>>> +#define PS_TO_CYCLE(PS, MHz) DIV64_U64_ROUND_CLOSEST(((PS) * (MHz))=
-, 1000000000000ULL)
-> >>>> +
-> >>>>   static const char *const clk_names[5] =3D {
-> >>>>          "bus_clk",
-> >>>>          "sclk_mipi",
-> >>>> @@ -487,6 +487,7 @@ static const struct samsung_dsim_driver_data imx=
-8mm_dsi_driver_data =3D {
-> >>>>          .m_min =3D 64,
-> >>>>          .m_max =3D 1023,
-> >>>>          .vco_min =3D 1050,
-> >>>> +       .dynamic_dphy =3D 1,
-> >>>>   };
-> >>>>
-> >>>>   static const struct samsung_dsim_driver_data *
-> >>>> @@ -698,13 +699,50 @@ static void samsung_dsim_set_phy_ctrl(struct s=
-amsung_dsim *dsi)
-> >>>>          const struct samsung_dsim_driver_data *driver_data =3D dsi-=
->driver_data;
-> >>>>          const unsigned int *reg_values =3D driver_data->reg_values;
-> >>>>          u32 reg;
-> >>>> +       struct drm_display_mode *m =3D &dsi->mode;
-> >>>> +       int bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
-> >>>> +       struct phy_configure_opts_mipi_dphy cfg;
-> >>>> +       int clk_prepare, lpx, clk_zero, clk_post, clk_trail;
-> >>>> +       int hs_exit, hs_prepare, hs_zero, hs_trail;
-> >>>> +       unsigned long long clock_in_hz =3D m->clock * 1000;
-> >>>>
-> >>>>          if (driver_data->has_freqband)
-> >>>>                  return;
-> >>>>
-> >>>> +       /* The dynamic_phy has the ability to adjust PHY Timing sett=
-ings */
-> >>>> +       if (driver_data->dynamic_dphy) {
-> >>>> +               phy_mipi_dphy_get_default_config(clock_in_hz, bpp, d=
-si->lanes, &cfg);
-> >>> This requires adding "select GENERIC_PHY_MIPI_DPHY" to DRM_SAMSUNG_DS=
-IM,
-> >>> otherwise with CONFIG_DRM_SAMSUNG_DSIM=3Dm:
-> >>>
-> >>> ERROR: modpost: "phy_mipi_dphy_get_default_config"
-> >>> [drivers/gpu/drm/bridge/samsung-dsim.ko] undefined!
-> >>> make[5]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
-> >>> make[4]: *** [Makefile:1978: modpost] Error 2
-> >>> make[3]: *** [Makefile:357: __build_one_by_one] Error 2
-> >>>
-> >>> I'm sure there'll be a similar error if CONFIG_DRM_SAMSUNG_DSIM=3Dy.
-> >> That's interesting, I didn't come across that.
-> >> What did you use for a starting point when you applied the patches?
-> >> I want to see if I can replicate it.
-> > next-20230421. My config is pretty much tailored to the Hummingbird Pul=
-se.
-> > Device drivers for other hardware or things that I can't enable are all
-> > disabled. For example I don't have PHY_MIXEL_MIPI_DPHY enabled.
-> >
-> > Maybe you have some other bridge or phy that selects it enabled?
->
->
-> I've observed similar issue while building exynos_defconfig for arm 32bit=
-.
+On Fri, 21 Apr 2023, Krzysztof Kozlowski wrote:
 
-Thanks to both of you for the head's up.  I'll add a patch to update
-Kconfig to explicitly select that when I do V3.  I was just using the
-base arm64 'defconfig' option without any customization.
+> On 21/04/2023 09:45, Lee Jones wrote:
+> > On Fri, 21 Apr 2023, Herve Codina wrote:
+> > 
+> >> Hi Lee, Krzysztof,
+> >>
+> >> On Thu, 20 Apr 2023 14:47:03 +0100
+> >> Lee Jones <lee@kernel.org> wrote:
+> >>
+> >>> On Thu, 20 Apr 2023, Herve Codina wrote:
+> >>>
+> >>>> On Thu, 20 Apr 2023 13:39:46 +0100
+> >>>> Lee Jones <lee@kernel.org> wrote:
+> >>>>   
+> >>>>> On Mon, 17 Apr 2023, Herve Codina wrote:
+> >>>>>   
+> >>>>>> The Lantiq PEF2256 is a framer and line interface component designed to
+> >>>>>> fulfill all required interfacing between an analog E1/T1/J1 line and the
+> >>>>>> digital PCM system highway/H.100 bus.
+> >>>>>>
+> >>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >>>>>> ---
+> >>>>>>  drivers/mfd/Kconfig         |  16 +
+> >>>>>>  drivers/mfd/Makefile        |   1 +
+> >>>>>>  drivers/mfd/pef2256-regs.h  | 250 ++++++++++
+> >>>>>>  drivers/mfd/pef2256.c       | 950 ++++++++++++++++++++++++++++++++++++    
+> >>>>>
+> >>>>> 95% of this driver needs to be moved somewhere else.
+> >>>>>
+> >>>>> What is a Framer?  Perhaps sound/ is a good candidate?  
+> >>>>
+> >>>> The pef2256 framer is a device that transfers data to/from a TDM (time-slots
+> >>>> data) from/to quite old telecommunication lines (E1 in my case).
+> >>>> Several subsystem can set/get data to/from the TDM. Each device using their
+> >>>> own time-slots set.
+> >>>>
+> >>>> On my use-case, I have some audio consumer and a not yet upstreamed HDLC
+> >>>> consumer. Both of them uses the framer to know the E1 link state.
+> >>>> The framer needs to be initialized 'globally' and not by a specific consumer
+> >>>> as several consumers can use the framer.  
+> >>>
+> >>> I can't think of a good place for this.
+> >>>
+> >>> If all else fails, it's drivers/misc
+> >>>
+> >>>>>>  include/linux/mfd/pef2256.h |  52 ++
+> >>>>>>  5 files changed, 1269 insertions(+)
+> >>>>>>  create mode 100644 drivers/mfd/pef2256-regs.h
+> >>>>>>  create mode 100644 drivers/mfd/pef2256.c
+> >>>>>>  create mode 100644 include/linux/mfd/pef2256.h    
+> >>>>>
+> >>>>> [...]
+> >>>>>   
+> >>>>>> +static int pef2256_add_audio_devices(struct pef2256 *pef2256)
+> >>>>>> +{
+> >>>>>> +	const char *compatible = "lantiq,pef2256-codec";
+> >>>>>> +	struct mfd_cell *audio_devs;
+> >>>>>> +	struct device_node *np;
+> >>>>>> +	unsigned int count = 0;
+> >>>>>> +	unsigned int i;
+> >>>>>> +	int ret;
+> >>>>>> +
+> >>>>>> +	for_each_available_child_of_node(pef2256->dev->of_node, np) {
+> >>>>>> +		if (of_device_is_compatible(np, compatible))
+> >>>>>> +			count++;
+> >>>>>> +	}    
+> >>>>>
+> >>>>> Converting Device Tree nodes into MFD cells to register with the
+> >>>>> Platform Device API is not a reasonable use-case of MFD.
+> >>>>>
+> >>>>> Have the CODEC driver match on "lantiq,pef2256-codec" and let it
+> >>>>> instantiate itself.  
+> >>>>
+> >>>> As the framer is going to used by several subsystem, I cannot instantiate
+> >>>> it in the specific ASoC subsystem.
+> >>>>   
+> >>>>>
+> >>>>> Your first version using of_platform_populate() was closer to the mark.  
+> >>>>
+> >>>> The issue was that I need MFD cells for the pinctrl part.  
+> >>>
+> >>> Why can't it be represented in DT?
+> >>
+> >> The pinctrl part has no specific compatible string.
+> >> Not sure that a compatible string for pinctrl can be accepted
+> >> as there is only one pinctrl subnode and no specific reg for this
+> >> subnode.
+> >>
+> >> The DT looks like this:
+> >>     framer@2000000 {
+> >>       compatible = "lantiq,pef2256";
+> >>       reg = <0x2000000 0x100>;
+> >>       ...
+> >>       pinctrl {
+> >>         pef2256_rpa_sypr: rpa-pins {
+> >>           pins = "RPA";
+> >>           function = "SYPR";
+> >>         };
+> >>       };
+> >>
+> >>       pef2256_codec0: codec-0 {
+> >>         compatible = "lantiq,pef2256-codec";
+> >>         #sound-dai-cells = <0>;
+> >>         sound-name-prefix = "PEF2256_0";
+> >>       };
+> >>     };
+> >>
+> >> Krzysztof, is it acceptable to have a compatible string in the pinctrl node ?
+> > 
+> > Why wouldn't it be?
+> > 
+> > $ git grep ".compatible" -- drivers/pinctrl/
+> > 
+> >> In this case, it will looks like this:
+> >>     framer@2000000 {
+> >>       compatible = "lantiq,pef2256";
+> >>       reg = <0x2000000 0x100>;
+> >>       ...
+> >>       pinctrl {
+> >>         compatible = "lantiq,pef2256-pinctrl";
+> 
+> If you do not have any resources, there is no point in having separate
+> compatible for separate device node.
 
-adam
->
->
-> Best regards
-> --
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->
+That's a new rule.  Is that documented somewhere?  I'm sure we already
+have device nodes for devices whom only operate on shared resources. 
+
+> Anyway this discussions should not be about DT. How Linux drivers are
+> implementing DT is not really a guide how to write DT. Since these
+> series were brought there were some DT decisions made based how you want
+> to write the driver. No, please don't. I also do not see any problems in
+> handling more-or-less complex driver structures without poking the DT.
+> We have already many such device families.
+
+-- 
+Lee Jones [李琼斯]
