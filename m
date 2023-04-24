@@ -2,187 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E656ECF90
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE296ECF99
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjDXNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S232875AbjDXNuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbjDXNsj (ORCPT
+        with ESMTP id S232865AbjDXNtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:48:39 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2CB9ECF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:48:29 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5052caa1e32so7930112a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:48:29 -0700 (PDT)
+        Mon, 24 Apr 2023 09:49:49 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F387C93D7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:49:18 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4efea87c578so3474e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:49:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682344107; x=1684936107;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OICz6+capf7cuLGRkoyh1qbEASXYaa1MZU6VvGiVato=;
-        b=ZMeGjKlomt2iVACb5S83+zdTVQvIHZxraEYqBRNmmYD/oL6fXL9AkjG2lFFAPpivR2
-         AluNXC8g1SYj7RkHVFoVIw0pD7ZwSgwvsdHjK0F097ssF8VMO7Ijhyw2PQzdsJq4522O
-         sP1Y9rRaWGe82gUg2FipyquvnUhgQWNx7naF0HGVEFkb+SGvpCk/PqMEVTGaT2Nyx7Ew
-         JNP0OR9gtugabLPkcmz4lNy9fnhPkRUxI/8y7gGJAh+Ro+VP7NFeK2mybuiu+lrLO80r
-         h2pSS+ow7Sa0g8Xc9ubRrgnWS8h8zQ9RoJqQX92pQPQlrGExugMsgUn5Pt0Yf4wzknYQ
-         iDrQ==
+        d=google.com; s=20221208; t=1682344157; x=1684936157;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5pP+RxkIYzemZdCZ53UUeyLEz4L6xQOJqoI1Dw7qkHQ=;
+        b=OvPfRmaz3tdzsvigbEso2jGXAWxziIiwH3npny3IJUoaynFsoO9+KIlD4flJ4FbkP8
+         rrRjgevhV/G3mj0QKp9UsIc/d5KhDHg79PBplls+V8MDGZ9JZ9HapY9UOPYxsq75zt8t
+         of4qR9dQMh9ltWU/hFdsgGXE/5lc5yuXcf2QA6h2Kp59/eaunCSedY2PXjWHWIy/SXkZ
+         lU22lbFZDPd0qgXXkqWURh0hrYw14c8+fVZHjjnB5xjewJu2ptZnghvjqnKtNSs5H09w
+         Cb7e/+lB7MTRsiBTfMU/7SYtZjAVWO//su1m3FufzbkGF++CCEkA1lX6w0NRhEDcq2Og
+         6GBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682344107; x=1684936107;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OICz6+capf7cuLGRkoyh1qbEASXYaa1MZU6VvGiVato=;
-        b=kroCrLkKnNcAppsK7vx82Auoe4jOIA+3dykqO5NLYLflCdWx2vvuZtXScdbmc1nCEy
-         Q8Y6gDv3cvo78apcBwGdi+PKocMgwCyXOW8s15ImQ8tFiJLyTfEdP53c6tR4UcCjwACN
-         B8YNmYD4ZXNUSLr9AhFAwylJA5QBf/gnPn7QV5l/vrgPjtVz9/liDz+XRuPkhd5xAabO
-         tGrmBhNmTz+jTqye9oDzusPGvKn/LzUKBmQMcC/ofwLCRA6Su2ywncsWMmH60kCB4tTq
-         jflJ7Xh0LBa/J3+Jl1//BhshzFS/HwYFYib59zLMouyu11hTS4/5doV/FteIg7qMuvJK
-         wPAQ==
-X-Gm-Message-State: AAQBX9dHsRiLn1eDPvXsG5StuG4MPicqw8d73L2CeQikj12Tl6nDemAJ
-        q0m2nrY8+dMIPA/NR2yacs1vGQ==
-X-Google-Smtp-Source: AKy350Z2rB/JGRXOHyK6SBVvOl3r1WgCRC5q0/nMxjjZTatSqtPJEuTYj1DWJetOUSyaDAMX9IgHMg==
-X-Received: by 2002:aa7:ca4e:0:b0:506:b2a3:a8cd with SMTP id j14-20020aa7ca4e000000b00506b2a3a8cdmr10571058edt.40.1682344107632;
-        Mon, 24 Apr 2023 06:48:27 -0700 (PDT)
-Received: from [10.105.146.163] ([88.128.92.195])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b0094e96e46cc0sm5489726ejz.69.2023.04.24.06.48.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 06:48:27 -0700 (PDT)
-Message-ID: <7c6c6584-204a-ada1-d669-2e8bef50e5e5@linaro.org>
-Date:   Mon, 24 Apr 2023 15:48:25 +0200
+        d=1e100.net; s=20221208; t=1682344157; x=1684936157;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5pP+RxkIYzemZdCZ53UUeyLEz4L6xQOJqoI1Dw7qkHQ=;
+        b=e30Sd4LexHLJi+HwMdy9XxuQKKh5QH1iDJExxvraC66saFwQMGpMsfJ4M8jEZlU4qr
+         4na6pDXFYCMp836SmNqbZkPCrNBrk0KsNtxjR1+H+/CF6v82qScN8vhcJ+xnk5pNMf42
+         EyNWwgp4ORzyBZbYWzH4tvLaPgaCyN9/Z64rpc7y7QBtjqC4QWl1r5rQrGIsZNK3OlMI
+         CohcwRYXyQmx37J29D0PJgP9CZSn49jc7+W1EcECx7oxzVxJ2tZ3xvCeaFB9Bk/aPBZ9
+         D8Agkkq5WseP6EOwh3DbPpLM9Z6Lke+PfGlHoNWVWYb73BRX108gHXYDTaFfUArYtVTA
+         yU6w==
+X-Gm-Message-State: AAQBX9fRl1aobuy5kl5dRKU8YA9M+FeujEhJHubvtwZ0IIRXRydaX4qC
+        pYAiC04HzCW/AHutBtAlXhjyTnAZWlCFx1mdl6wLOA==
+X-Google-Smtp-Source: AKy350YKHv6i0YsOKB/k2YG8Y9bmIUVxcsE88sYOazC2VGHdo0q/sQzUcf19ECK3kOBZ9drPl1Jv7Io4F6X/zKxnXAM=
+X-Received: by 2002:a05:6512:3d2a:b0:4ed:d7d:d141 with SMTP id
+ d42-20020a0565123d2a00b004ed0d7dd141mr254260lfv.6.1682344156926; Mon, 24 Apr
+ 2023 06:49:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Patch v7 1/8] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, helgaas@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230424131337.20151-1-sumitg@nvidia.com>
- <20230424131337.20151-2-sumitg@nvidia.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230424131337.20151-2-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000d0737c05fa0fd499@google.com> <CACT4Y+YKt-YvQ5fKimXAP8nsV=X81OymPd3pxVXvmPG-51YjOw@mail.gmail.com>
+ <ZEaCSXG4UTGlHDam@casper.infradead.org>
+In-Reply-To: <ZEaCSXG4UTGlHDam@casper.infradead.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 24 Apr 2023 15:49:04 +0200
+Message-ID: <CACT4Y+YeV8zU2x+3dpJJFez5_33ic3q7B2_+KYrcNOQxooRWpw@mail.gmail.com>
+Subject: Re: [syzbot] [fs?] [mm?] KCSAN: data-race in __filemap_remove_folio /
+ folio_mapping (2)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     syzbot <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com>,
+        djwong@kernel.org, hch@infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 15:13, Sumit Gupta wrote:
-> Add Interconnect framework support to dynamically set the DRAM
-> bandwidth from different clients. Both the MC and EMC drivers are
-> added as ICC providers. The path for any request is:
->  MC-Client[1-n] -> MC -> EMC -> EMEM/DRAM
-> 
-Thank you for your patch. There is something to discuss/improve.
+On Mon, 24 Apr 2023 at 15:21, Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Apr 24, 2023 at 09:38:43AM +0200, Dmitry Vyukov wrote:
+> > On Mon, 24 Apr 2023 at 09:19, syzbot
+> > <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com> wrote:
+> > If I am reading this correctly, it can lead to NULL derefs in
+> > folio_mapping() if folio->mapping is read twice. I think
+> > folio->mapping reads/writes need to use READ/WRITE_ONCE if racy.
+>
+> You aren't reading it correctly.
+>
+>         mapping = folio->mapping;
+>         if ((unsigned long)mapping & PAGE_MAPPING_FLAGS)
+>                 return NULL;
+>
+>         return mapping;
+>
+> The racing write is storing NULL.  So it might return NULL or it might
+> return the old mapping, or it might return NULL.  Either way, the caller
+> has to be prepared for NULL to be returned.
+>
+> It's a false posiive, but probably worth silencing with a READ_ONCE().
 
+Yes, but the end of the function does not limit effects of races. I
+think this can still crash on NULL deref.
 
-> +static int tegra_emc_interconnect_init(struct tegra186_emc *emc)
-> +{
-> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
-> +	const struct tegra_mc_soc *soc = mc->soc;
-> +	struct icc_node *node;
-> +	int err;
-> +
-> +	emc->provider.dev = emc->dev;
-> +	emc->provider.set = tegra_emc_icc_set_bw;
-> +	emc->provider.data = &emc->provider;
-> +	emc->provider.aggregate = soc->icc_ops->aggregate;
-> +	emc->provider.xlate = tegra_emc_of_icc_xlate;
-> +	emc->provider.get_bw = tegra_emc_icc_get_init_bw;
-> +
-> +	icc_provider_init(&emc->provider);
-> +
-> +	/* create External Memory Controller node */
-> +	node = icc_node_create(TEGRA_ICC_EMC);
-> +	if (IS_ERR(node)) {
-> +		err = PTR_ERR(node);
-> +		goto err_msg;
-> +	}
-> +
-> +	node->name = "External Memory Controller";
-> +	icc_node_add(node, &emc->provider);
-> +
-> +	/* link External Memory Controller to External Memory (DRAM) */
-> +	err = icc_link_create(node, TEGRA_ICC_EMEM);
-> +	if (err)
-> +		goto remove_nodes;
-> +
-> +	/* create External Memory node */
-> +	node = icc_node_create(TEGRA_ICC_EMEM);
-> +	if (IS_ERR(node)) {
-> +		err = PTR_ERR(node);
-> +		goto remove_nodes;
-> +	}
-> +
-> +	node->name = "External Memory (DRAM)";
-> +	icc_node_add(node, &emc->provider);
-> +
-> +	err = icc_provider_register(&emc->provider);
-> +	if (err)
-> +		goto remove_nodes;
-> +
-> +	return 0;
-> +
-> +remove_nodes:
-> +	icc_nodes_remove(&emc->provider);
-> +err_msg:
-> +	dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
-> +
-> +	return err;
-> +}
-> +
->  static int tegra186_emc_probe(struct platform_device *pdev)
->  {
-> +	struct tegra_mc *mc = dev_get_drvdata(pdev->dev.parent);
->  	struct mrq_emc_dvfs_latency_response response;
->  	struct tegra_bpmp_message msg;
->  	struct tegra186_emc *emc;
-> @@ -236,6 +339,29 @@ static int tegra186_emc_probe(struct platform_device *pdev)
->  	debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, emc->debugfs.root,
->  			    emc, &tegra186_emc_debug_max_rate_fops);
->  
-> +	if (mc && mc->soc->icc_ops) {
-> +		/*
-> +		 * Initialize the ICC even if BPMP-FW doesn't support 'MRQ_BWMGR_INT'.
-> +		 * Use the flag 'mc->bwmgr_mrq_supported' within MC driver and return
-> +		 * EINVAL instead of passing the request to BPMP-FW later when the BW
-> +		 * request is made by client with 'icc_set_bw()' call.
-> +		 */
-> +		err = tegra_emc_interconnect_init(emc);
-> +		if (err)
-> +			goto put_bpmp;
-> +
-> +		if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
-> +			mc->bwmgr_mrq_supported = true;
-> +
-> +			/*
-> +			 * MC driver probe can't get BPMP reference as it gets probed
-> +			 * earlier than BPMP. So, save the BPMP ref got from the EMC
-> +			 * DT node in the mc->bpmp and use it in MC's icc_set hook.
-> +			 */
-> +			mc->bpmp = emc->bpmp;
+The simplest example would be to compile this:
 
-This (and ()) are called without any locking. You register first the
-interconnect, so set() callback can be used, right? Then set() could be
-called anytime between tegra_emc_interconnect_init() and assignment
-above. How do you synchronize these?
+struct address_space *folio_mapping(struct folio *folio)
+{
+        ...
+        mapping = folio->mapping;
+        if ((unsigned long)mapping & PAGE_MAPPING_FLAGS)
+                return NULL;
 
-Best regards,
-Krzysztof
+        return mapping;
+}
 
+ret = !mapping_unevictable(folio_mapping(folio)) &&
+        !folio_test_mlocked(folio);
+
+static inline bool mapping_unevictable(struct address_space *mapping)
+{
+        return mapping && test_bit(AS_UNEVICTABLE, &mapping->flags);
+}
+
+to this:
+
+if (!((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS) && folio->mapping)
+   if (test_bit(AS_UNEVICTABLE, &folio->mapping->flags))
+
+which does crash.
