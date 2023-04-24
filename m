@@ -2,88 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7756ECB75
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA996ECB77
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjDXLju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S231667AbjDXLkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDXLjs (ORCPT
+        with ESMTP id S229547AbjDXLkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:39:48 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152FD3A8C;
-        Mon, 24 Apr 2023 04:39:47 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 528919DE;
-        Mon, 24 Apr 2023 13:39:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1682336375;
-        bh=EUbi7UFRE4+2j80EmuVSCzh3PaCZh3bXKvkO45pL+aY=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=QQLyWApf0YH0bHN74OYq66Fxp+BFcxWhz/3BU9tVTWJ2o1v+FvZ2xne+PqgEJFpaT
-         5OliG80OS1nnFhMrdCAl+S1xDkwuGo1X78z1SrYye1RpNqGOxsJdXViVpTNhyOPT/l
-         JuxrmAgH3plrn8ZPdfsAfA+QFhrS86dodc4TGzxw=
-Message-ID: <56d49d1d-c85e-4db8-7fb3-a43551dfe213@ideasonboard.com>
-Date:   Mon, 24 Apr 2023 14:39:40 +0300
+        Mon, 24 Apr 2023 07:40:37 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B13A8C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:40:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vgu6NWh_1682336430;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vgu6NWh_1682336430)
+          by smtp.aliyun-inc.com;
+          Mon, 24 Apr 2023 19:40:31 +0800
+Message-ID: <8d4059e3-2e6d-3f0c-2881-13b9bd07aa6c@linux.alibaba.com>
+Date:   Mon, 24 Apr 2023 19:40:30 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
- <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
- <ZEZafj6j+EurGWJ7@sai>
- <f9be2c5d-1303-1b91-c672-7e5a476277e7@ideasonboard.com>
- <30e4656f-63d9-a79c-c1d9-23d0a16cf184@ideasonboard.com>
- <ZEZo1WxjkcMiWKPg@sai>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <ZEZo1WxjkcMiWKPg@sai>
+Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
+ possible hole in __pageblock_pfn_to_page()
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
+ <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
+ <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
+ <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
+ <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 14:32, Wolfram Sang wrote:
-> 
->>> Ah, right. I'll resend with the DT bindings separate.
+
+
+On 4/24/2023 7:34 PM, Michal Hocko wrote:
+> On Mon 24-04-23 19:20:43, Baolin Wang wrote:
 >>
->> Also, looks like I forgot to remove the namespaces for export symbols.
+>>
+>> On 4/24/2023 5:54 PM, Michal Hocko wrote:
+>>> On Sun 23-04-23 18:59:11, Baolin Wang wrote:
+>>>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
+>>>> checks whether the given zone contains holes, and uses pfn_to_online_page()
+>>>> to validate if the start pfn is online and valid, as well as using pfn_valid()
+>>>> to validate the end pfn.
+>>>>
+>>>> However, the __pageblock_pfn_to_page() function may return non-NULL even
+>>>> if the end pfn of a pageblock is in a memory hole in some situations. For
+>>>> example, if the pageblock order is MAX_ORDER, which will fall into 2
+>>>> sub-sections, and the end pfn of the pageblock may be hole even though
+>>>> the start pfn is online and valid.
+>>>>
+>>>> This did not break anything until now, but the zone continuous is fragile
+>>>> in this possible scenario. So as previous discussion[1], it is better to
+>>>> add some comments to explain this possible issue in case there are some
+>>>> future pfn walkers that rely on this.
+>>>>
+>>>> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
+>>>
+>>> Do I remember correctly you've had a specific configuration that would
+>>> trigger this case?
+>>
+>> Yes, I provided an example in previous thread [2] so show the
+>> __pageblock_pfn_to_page() is fragile in some cases.
+>>
+>> [2] https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
 > 
-> And why not keeping them? I understand ATR would be the first user in
-> the Linux I2C world, but someone has to start it...
+> Please make it a part of the changelog.
 
-Well, you requested to remove them =). I originally didn't have them, 
-but added them on Andy's request. I personally don't mind either way.
+Sure.
 
-  Tomi
+>   
+>>>
+>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>> ---
+>>>> Changes from v1:
+>>>>    - Update the comments per Ying and Mike, thanks.
+>>>> ---
+>>>>    mm/page_alloc.c | 7 +++++++
+>>>>    1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>>> index 6457b64fe562..9756d66f471c 100644
+>>>> --- a/mm/page_alloc.c
+>>>> +++ b/mm/page_alloc.c
+>>>> @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
+>>>>     * interleaving within a single pageblock. It is therefore sufficient to check
+>>>>     * the first and last page of a pageblock and avoid checking each individual
+>>>>     * page in a pageblock.
+>>>> + *
+>>>> + * Note: the function may return non-NULL even if the end pfn of a pageblock
+>>>> + * is in a memory hole in some situations. For example, if the pageblock
+>>>> + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
+>>>> + * of the pageblock may be hole even though the start pfn is online and valid.
+>>>> + * This did not break anything until now, but be careful about this possible
+>>>> + * issue when checking whether all pfns of a pageblock are valid.
+>>>
+>>> It is not really clear what you should be doing (other than to be
+>>> careful which is not helpful much TBH) when you encounter this
+>>> situation. If the reality changes and this would break in the future
+>>> what would breakage look like? What should be done about that?
+>>
+>> That depends on what the future pfn walkers do, which may access some hole
+>> memory with zero-init page frame. For example, if checking the
+>> __PageMovable() for a zero-init page frame, that will crash the system. But
+>> I can not list all the possible cases.
+>>
+>> So how about below words?
+>>
+>>   * Note: the function may return non-NULL even if the end pfn of a pageblock
+>>   * is in a memory hole in some situations. For example, if the pageblock
+>>   * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
+>>   * of the pageblock may be hole even though the start pfn is online and
+>> valid.
+>>   * This did not break anything until now, but be careful about this possible
+>>   * issue when checking whether all pfns of a pageblock are valid, that may
+>>   * lead to accessing empty page frame, and the worst case can crash the
+>> system.
+>>   * So you should use pfn_to_onlie_page() instead of pfn_valid() to valid the
+>>   * pfns in a pageblock if such case happens.
+> 
+> Does that mean that struct page is not initialized and PagePoisoned will
+> trigger or it is just zero-prefilled?
 
+In the example I provided[2], these page frames of the hole memory are 
+zero-prefilled.
+
+[2] 
+https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
