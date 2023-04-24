@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B026EC4B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06756EC4B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjDXFSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 01:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S230496AbjDXFS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 01:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDXFSm (ORCPT
+        with ESMTP id S230459AbjDXFSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 01:18:42 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5D926A3
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 22:18:40 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so29686917a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 22:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1682313519; x=1684905519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sMme/ObWE1XqtqiMZ6pEeHuCDa0x+FmPGqWx4VJyi4Y=;
-        b=JspeccNTbD/aZwbTWRtpKIpWvGw3H/ycf7IxvjiRK/XeTzPfJoUWsl9ROqnQfgnkzw
-         pSRSbm/CkVzDKLzYwjlzS0HIkTCxyoP2uEr3P7FHbhEab9QvtKMf1XaXQH5yWmNKs8dX
-         0Vl4tb9w36GjJORSXry5+u08TGxCW/VpuYJzEMizyk3JaMuj9X/8n4jX5vF+cBuDdzdS
-         WKAAW8o/G1WlUueOJzHKOJqY8H61nE4T8FJMtdejTeHduMl7DdrcHwLnUSpNrTyPEEqN
-         KDoLQmFkKC3kKHISc5WRN62BMCHfcX6vLuXzLkIok1wpAYlvI62bUqz+oqA2LX++PDrI
-         fczQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682313519; x=1684905519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sMme/ObWE1XqtqiMZ6pEeHuCDa0x+FmPGqWx4VJyi4Y=;
-        b=JVltNBN+dSQq65sNupLxY3/WDIdt7AA0B4SX08C8IE1ypx1q8Xvev0E3VzPFM638+J
-         kgt5MDE8lHwpvuMqI3L0uCq5WwrNVVPIc97B5QVjtbPchc2X7jXjvXgwLUho4/Sx0HBE
-         tO/EXw+iN29S20CWaA5z0EqcbhqChXoznMUEdWrsr1JBHwxLev7C09YiRwDjDV/+0wBh
-         TIX7h8oSUQ6l4QfFFcnRkq1T7/NqwVqUQpMpXoQ+oJd6BAIaUcCjjPDRk3dyetO7aazp
-         ogEU1LamLYMD1uP6revQuQdsYfxQMTheAYnC2/Ji449ecYtGFbMFWRf8u8eRdMn2xGrS
-         JYdQ==
-X-Gm-Message-State: AAQBX9eyysmeJrDtG/WwG0i+j2SZ6jNsQ/lpAj2kWecb5dHLjv9PtTOa
-        KAkmZJ8pAPP/ATlqqUWI5JD0MZBZB67LHK+eV+k7lg==
-X-Google-Smtp-Source: AKy350Y7qYKAEEiTeRN1tNLajDMCA8RXEmcAKIflt12S8OLivh9JMSQEbHF+QBX0Fg9Y08RyCx6KqzDWsuUepC7hu6k=
-X-Received: by 2002:a05:6402:14d8:b0:504:88fb:8841 with SMTP id
- f24-20020a05640214d800b0050488fb8841mr10312980edx.21.1682313518856; Sun, 23
- Apr 2023 22:18:38 -0700 (PDT)
+        Mon, 24 Apr 2023 01:18:55 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF630D0;
+        Sun, 23 Apr 2023 22:18:50 -0700 (PDT)
+X-UUID: 9476dd373a22469180a2e973793111e1-20230424
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:7420d97c-a4d0-4d8e-a5d9-1f350bed0b31,IP:5,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:-35
+X-CID-INFO: VERSION:1.1.22,REQID:7420d97c-a4d0-4d8e-a5d9-1f350bed0b31,IP:5,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-35
+X-CID-META: VersionHash:120426c,CLOUDID:a527eaeb-db6f-41fe-8b83-13fe7ed1ef52,B
+        ulkID:2304241318451ZBVK5XQ,BulkQuantity:0,Recheck:0,SF:38|24|17|19|44|102,
+        TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 9476dd373a22469180a2e973793111e1-20230424
+X-User: gehao@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <gehao@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1388238916; Mon, 24 Apr 2023 13:18:43 +0800
+From:   Hao Ge <gehao@kylinos.cn>
+To:     viro@zeniv.linux.org.uk, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gehao618@163.com, Hao Ge <gehao@kylinos.cn>
+Subject: [PATCH V3] fs: fix undefined behavior in bit shift for SB_NOUSER
+Date:   Mon, 24 Apr 2023 13:18:35 +0800
+Message-Id: <20230424051835.374204-1-gehao@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230424050158.GN3390869@ZenIV>
+References: <20230424050158.GN3390869@ZenIV>
 MIME-Version: 1.0
-References: <1682213212-2-1-git-send-email-lizhijian@fujitsu.com> <1682213212-2-3-git-send-email-lizhijian@fujitsu.com>
-In-Reply-To: <1682213212-2-3-git-send-email-lizhijian@fujitsu.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Mon, 24 Apr 2023 07:18:27 +0200
-Message-ID: <CAMGffE=TPTi6+Lr6F2-Xh=Q1gndDDY14hRo9LhNbDb43Y8VxBA@mail.gmail.com>
-Subject: Re: [PATCH for-next v2 2/3] RDMA/rtrs: Fix the last iu->buf leak in
- err path
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     haris.iqbal@ionos.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org, guoqing.jiang@linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,39 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 3:27=E2=80=AFAM Li Zhijian <lizhijian@fujitsu.com> =
-wrote:
->
-> The last iu->buf will leak if ib_dma_mapping_error() fails.
->
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-Yes, as guoqing suggested, please add the Fixes tag.
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-> ---
-> V2: new patch to address memory leaking
-> ---
->  drivers/infiniband/ulp/rtrs/rtrs.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs.c b/drivers/infiniband/ulp/=
-rtrs/rtrs.c
-> index 4bf9d868cc52..3696f367ff51 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs.c
-> @@ -37,8 +37,10 @@ struct rtrs_iu *rtrs_iu_alloc(u32 iu_num, size_t size,=
- gfp_t gfp_mask,
->                         goto err;
->
->                 iu->dma_addr =3D ib_dma_map_single(dma_dev, iu->buf, size=
-, dir);
-> -               if (ib_dma_mapping_error(dma_dev, iu->dma_addr))
-> +               if (ib_dma_mapping_error(dma_dev, iu->dma_addr)) {
-> +                       kfree(iu->buf);
->                         goto err;
-> +               }
->
->                 iu->cqe.done  =3D done;
->                 iu->size      =3D size;
-> --
-> 2.29.2
->
+Shifting signed 32-bit value by 31 bits is undefined, so changing
+significant bit to unsigned. It was spotted by UBSAN.
+
+Fixes: e462ec50cb5f ("VFS: Differentiate mount flags (MS_*) from internal superblock flags")
+Signed-off-by: Hao Ge <gehao@kylinos.cn>
+---
+
+v2: add Fixes for changelog
+v3: streamline changelog
+---
+ include/linux/fs.h | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index c85916e9f7db..86ab23a05b61 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1069,19 +1069,19 @@ extern int send_sigurg(struct fown_struct *fown);
+ #define SB_NOATIME	1024	/* Do not update access times. */
+ #define SB_NODIRATIME	2048	/* Do not update directory access times */
+ #define SB_SILENT	32768
+-#define SB_POSIXACL	(1<<16)	/* VFS does not apply the umask */
+-#define SB_INLINECRYPT	(1<<17)	/* Use blk-crypto for encrypted files */
+-#define SB_KERNMOUNT	(1<<22) /* this is a kern_mount call */
+-#define SB_I_VERSION	(1<<23) /* Update inode I_version field */
+-#define SB_LAZYTIME	(1<<25) /* Update the on-disk [acm]times lazily */
++#define SB_POSIXACL	(1U<<16)	/* VFS does not apply the umask */
++#define SB_INLINECRYPT	(1U<<17)	/* Use blk-crypto for encrypted files */
++#define SB_KERNMOUNT	(1U<<22) /* this is a kern_mount call */
++#define SB_I_VERSION	(1U<<23) /* Update inode I_version field */
++#define SB_LAZYTIME	(1U<<25) /* Update the on-disk [acm]times lazily */
+ 
+ /* These sb flags are internal to the kernel */
+-#define SB_SUBMOUNT     (1<<26)
+-#define SB_FORCE    	(1<<27)
+-#define SB_NOSEC	(1<<28)
+-#define SB_BORN		(1<<29)
+-#define SB_ACTIVE	(1<<30)
+-#define SB_NOUSER	(1<<31)
++#define SB_SUBMOUNT     (1U<<26)
++#define SB_FORCE	(1U<<27)
++#define SB_NOSEC	(1U<<28)
++#define SB_BORN		(1U<<29)
++#define SB_ACTIVE	(1U<<30)
++#define SB_NOUSER	(1U<<31)
+ 
+ /* These flags relate to encoding and casefolding */
+ #define SB_ENC_STRICT_MODE_FL	(1 << 0)
+-- 
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
