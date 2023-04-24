@@ -2,173 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227D56ED27B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EB56ED280
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbjDXQa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S232187AbjDXQcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjDXQaX (ORCPT
+        with ESMTP id S230434AbjDXQcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:30:23 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18C3D8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:30:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bG1moTpbGFSE0C+R8lxnkYE5MbntjfK4hZhTL8sUAW7daeU4fD6hkkRueB+cGrKbUE+ujTSM9wsjN7shhnQGL/IYlxk1KsK+slJEcejKCnx3urJu+j9kDm5i1OACRE4bNAIYD1w9PW5RAguO0jn1amAfjynNC9JN/rl5emlArdHIPMcPRTy61gZnZyZmHn54K+m8Tp7Ks7cWEn4gt/YregruCuL3Fzjjz6yxkofnUXXlqnN++GItHeMD1hdYJjw6wV7KzqZFlm/tldUpG/vqwo55iPt8OPgI6csODzQN+tvCSOterWjVZ5nyMH/5glqtwJNtLoaGa5foHw4YnqrGyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LWWoMTJjFzvycKYu4bF4v39mniQ64a+5yTQoeYMd2uA=;
- b=iKCBhvGTnjbuL7PLRhC+rd5utJP/y+FUuJ6SjregVUApUBQ6oE0rPSsbjREa4xDbQuyN4R6/q/u2e2RkA95Hk+WmG0cBLAZzpvT0/6xgjw/0Y17RNjcZchdn/+NhP+hilhgjLO6qxrxQ3mEaIqY1iVy7Wp7F84IifkhUPrDi1NhbdlPxiMpZun2XJpoH19QdaEFq78O4NsI9ZNyl17gMXcjs2nEZMCGvZ/96p0gzG2yu7qeh9y+RxsS7tUJB9DI4H8rqPUCWj55/7mRFmWJi5ScbPJWk0PL8jPa2gV1qXYVyqDzlvZ9jWLRYMjJ91ASDnmuiLMZUDE1QeWsrWqCGuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LWWoMTJjFzvycKYu4bF4v39mniQ64a+5yTQoeYMd2uA=;
- b=IjkafUTwJqB1lwhtvwzeEU/ktCjflKkE39zg6nL2excxZL7Kw0JBoA1onviIcXCGTy1NrH47yT6LEu297xWsF5nB8gJ9rMYByRVl/AuNcthdGEobW7nXS0YIJhQ9ysXHpYuJdsxcGuGtKRnVXm3WpeflK5LD9O711akTcuDZvsk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- PH8PR12MB6795.namprd12.prod.outlook.com (2603:10b6:510:1c6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 16:30:14 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6319.022; Mon, 24 Apr 2023
- 16:30:14 +0000
-Message-ID: <d8f2fd5b-26ce-5b17-60f3-449b10e2b281@amd.com>
-Date:   Mon, 24 Apr 2023 12:31:38 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/amd/display: return status of abm_feature_support
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Leon.Huang1@amd.com, wenjing.liu@amd.com, qingqing.zhuo@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Mon, 24 Apr 2023 12:32:09 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6312D8;
+        Mon, 24 Apr 2023 09:32:05 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1879e28ab04so3760337fac.2;
+        Mon, 24 Apr 2023 09:32:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682353925; x=1684945925;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BG7DxdNxLzIFEHGVmsrA00fMrIOgxDvZjTpItYx9ioY=;
+        b=VcgXDzoHTwjG+aZtpXkYW/mT45XkEbYfhyMbpcebb1mHS2gdnDwxidM3XdNFRev4VM
+         tmwv9OCghKxy+DHpaK/tZSR9CeSUMBRY3dneXMHhxAamz6Kqhza7oX8OWYlUpCoaUhAK
+         QmqJOmfblvQNIjJHggWXWMACkzNOwQhatNflsk2xmZH0xZh0sJ2W/nSLDLiE6pnZoJr5
+         keFeoP4yMyYC7cBJ7D7Cf62xDqRmWVnP6AOd3vyLA/FEYzlS0JvatWcph23XCsgtQyYc
+         i14CsQbDO2kYUQ+gKc+KGhE5r2o+WRFLaENXwFEW5ab8p6mYfAidToANZv9LUJFoHLOq
+         AddQ==
+X-Gm-Message-State: AAQBX9eY0Om30uXXhUbuGmSXK0f4xLxv/txo/uANVFoQKroMq5CtIGow
+        JWhAiU9yjNt4SYk+9gQTWg==
+X-Google-Smtp-Source: AKy350bRcDSJkif0zqdAZxRoHZWawPCThQ4pX2yWrI1Mg/6UVwRKyRCPAfwu7aPbLJbDc6Y4DbDWig==
+X-Received: by 2002:a05:6871:b26:b0:180:3b6:82bd with SMTP id fq38-20020a0568710b2600b0018003b682bdmr9166635oab.33.1682353924833;
+        Mon, 24 Apr 2023 09:32:04 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h19-20020a9d6f93000000b006a62aac5736sm4359159otq.28.2023.04.24.09.32.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 09:32:04 -0700 (PDT)
+Received: (nullmailer pid 2783952 invoked by uid 1000);
+        Mon, 24 Apr 2023 16:32:03 -0000
+Date:   Mon, 24 Apr 2023 11:32:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230420132129.3888917-1-trix@redhat.com>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230420132129.3888917-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQZPR01CA0042.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:86::27) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+Subject: Re: [PATCH 32/43] dt-bindings: gpio: Add DT bindings ep93xx gpio
+Message-ID: <20230424163203.GK2701399-robh@kernel.org>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-33-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|PH8PR12MB6795:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea75b61d-a288-4b37-fc18-08db44e12e4f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yOP7U4Ey2863A1GVW5ieRtjBed+6kA3gEPyl4pdXdK27ymhSAVjQ6iSzsnhhpxSs+g54raHS0LsUMMWZh8h6Zh7kOP3KnmznyWsOpdZpk4q36iPc29WKEvIdpsXlLnHqoIglLBlbgeVNMoWzVl4IU3FO3gE3cmKtpxuau3bYBEtmBSRW5oZ5azw/YwmYlRfSTOuvH3fcX8e6tVUWftsxf4EFGY+4UbAUhR7grcvGc/a+9n5e7YTucAeD2b6fPWF+UoGIKan8h2aX6Xbjjrl3CsI1oGhh5BTEulrirp3xJcmalWSRoWs45q5sgMotimoKrMQzYQn+VBLWENPySOoxRt6rJNh9fEMBl/hz4nEQU0yErf707s6GD3UYu3EOCFZu6bDwY3OOkTN1HmbMkV8XsWODdvj56AulctUKYPZbtskN1sJW9n3pkt7INYu0aED8Nh3XaTF81iQFiwX10Nkj8u+HNPB8w+8JOE2HKMCiwsdEBoA135SmKIl60ZDlleU7AKYgYDDPVFxJZEVU9sG3PWI0xLoaS4pVhhe9auOjKt8+esnn0CwQ2kzFakAHUMP+zaPf9dGNZ5VgEh/vuoz7gA/b+o804uSPOQD2F02uOMYtSdbsy/7Fk6TpK7wcaKdPUEmCM/StBku06Foecf/SNaRAlZIu40a04/a85S1nypQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(451199021)(478600001)(31696002)(6636002)(86362001)(36756003)(186003)(53546011)(6486002)(26005)(6506007)(6512007)(6666004)(4326008)(66476007)(66556008)(316002)(44832011)(83380400001)(66946007)(2906002)(38100700002)(921005)(41300700001)(8676002)(8936002)(31686004)(5660300002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T2ZhazlvbGRYSEFhc0RyRzVvcUpOWXRKdVhVOHlsQ1UxTFJJRGJ1RTVDOWpP?=
- =?utf-8?B?ajZxeWdRY0dHVGRMUXRRSzlNUEZiRFg1bkVTa2lVeUFkM1Rza1ZENGczWXVi?=
- =?utf-8?B?b05mVkw0VVEwUEJ1THVEWElaaytrUzU2T21hQ0c1MnRCUUI4WWUxY3J1eXps?=
- =?utf-8?B?bytHL29GOHBsV3VhYXNUaWlOL29kVnhWZDR5eGpOcU91Ulg3ODNIR01pbk55?=
- =?utf-8?B?b1luYmlvUGI4NERyL084Q3dGdXY5aEtKZmMyVUU3dzZGR1dxYnRpODRVTzBL?=
- =?utf-8?B?S3Myd2ZRa2doRExubU1XdVNudkU2RnMxZ1BzWjVnZVJpb3RVTkY4OHFoUmI5?=
- =?utf-8?B?a1VFZkswWlZvWk9DNVlFUGpidXlJeFpLUFZFU2VXcUl2clpyZUZyNGZSMDBi?=
- =?utf-8?B?TUZyTVZQcEJOOVBSMGVOZ0oxM2k3b09oUTY2di85MWNLNGFXYzRFVEZxQW5p?=
- =?utf-8?B?VXZFekI1U3NHTGlQVzZFSEFhQWxuZmNIOWlGNCtiQjVjOEUwczh6bmxOalVs?=
- =?utf-8?B?R1VXaytjc1grSnhlMWhkU3N5N3RyL0xraDFZRVJGKzRCZklJLzZGSHJ3b0lp?=
- =?utf-8?B?c2QzYUhsY21OV0VPUFR2WGh0MER1Wlp4Zmk0Mi9lL3kvUFhTQmJabEg3enND?=
- =?utf-8?B?S3ozNUNicjI3aHplTTFrM2dLWlFmNnNoYnhDT2JUSUNJc29lOVRBNGF5S1d3?=
- =?utf-8?B?QVZHY1NlMm1xWFBoSzlqLzdRVzlhYXRzSG56QXkwV2c3aU8vczd4QmhacHBY?=
- =?utf-8?B?WW4ydlB2YWtKcWE1Y1dtbUhiQ1dmaDV0UGw3THFvZU9WOGYvdVpKYkdVaVNW?=
- =?utf-8?B?MTloaFBJOURwUFVZWHBKNnRpam1FbkhIa0hYR0tIc0NlN24xWHRFWDFoeXI1?=
- =?utf-8?B?QkxNUUwrcjZoQmVGUWJhckJNc1NXM0N4anJ1TnNLZTREN1NhYnlKN3NUSjJp?=
- =?utf-8?B?ZERLdmVUTVZJcTR3NkVOS1dZM3ducGprVFRRSVppL0RJVGF5M3Qva091UlRY?=
- =?utf-8?B?ZDNid3NLL3RGZXJpMFZ6ZHBBemNMaXBqZFhZVkwzZjE5QVRjeHphYVN2ZXFj?=
- =?utf-8?B?WHV2WTlqYlB2NlNkc3dvVXFXbE5rdnordXNCVUFCVEVLdldWSzVWRU5oeC9y?=
- =?utf-8?B?bU9vMzd0R2hEdFJUbmFsZnBhR3ZPWUhjMVhxR1pNSE1hMGRpMjFRVFd4SVpY?=
- =?utf-8?B?dmsvLzNVRVVIR1NpOE02b0M2Rzd3bFd0aEd6UkswbDJNRXp0dzVNRitYaG5G?=
- =?utf-8?B?eHZxSGVMUzdRN0Q1ZXpvZjhZTm1SdmxRNnY4c2lUM24zWDMva0h5YkhiMlEz?=
- =?utf-8?B?cG5kNTIvVW9KeDEyZ0w2VjhIMXlremxHQUZQWUZwVitZYmFwWGhtYmwrMGgr?=
- =?utf-8?B?SEJ3M0d0RG1WYUpwMzBNbFVJSHc1WTFHYmcyOTFyWDBnM2dQQndOU2djb2cw?=
- =?utf-8?B?cGVBYWdBVFFBRW1hSDlkVGhjN2liTVlScEIxbjFOUEZPK0Y4T2hDMEF6bmtl?=
- =?utf-8?B?UnlQSnZjd3E0UStEbzhLRU9BaXdzRzBEQTlNcDJNV0Rzcys3bEI2ZzFwVFNl?=
- =?utf-8?B?Rmh1bHQycmhSM09aVkNLalEzRUtrSGhTK0VGSWEvc3ZCclF5Wmc2M3ZKeUdx?=
- =?utf-8?B?R2wraDVGTllyQ0NnZTJUSWxHdFpuN0pBL0VqL3dhd1BFdWVYclBrM3hScjdC?=
- =?utf-8?B?MUljTkRkNW1UcFJkQm9aUnlJd2RZYjVoVERVRWZGKzhIOHVFTzljWk1BOWlB?=
- =?utf-8?B?UnIvREErUmd3VGNaR2hTUmNQSHhlWUhLVk1KcHI4OTFIRVg3bmI2Vm5mK0tJ?=
- =?utf-8?B?aVcvK1BScVphYlpQcko0N0dGa012V0pITmsyQ0xtOTc1OCtjS2phdUxScEc2?=
- =?utf-8?B?eG02VnEwUWlIdWRNdXg0bUI4elo3TndBT3FpYUN2S2xKT3FhZkZYZ0RJMDh0?=
- =?utf-8?B?UTNjOENTMEdXTmo4VzdMeTUyTURkd3VzY29kaklBVDlPdHc3Q0VrcElZclNJ?=
- =?utf-8?B?dWZMMktNcGcyN3pZUit2RUpuWThTZzZYTzc4M1VNZ0tzMXpIdnNoRXc5eEdB?=
- =?utf-8?B?em8zVEZuYkl1Uy9SVzVEMGFEMkJxOGM2eG5ta3pkMTVlK0dvVnFLd1VkYnJx?=
- =?utf-8?Q?kwS+FM3Gq8C0Y7nEY0eiZ3Fq2?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea75b61d-a288-4b37-fc18-08db44e12e4f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 16:30:14.1229
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7d18Zj59d/oQHHwKKKSvfyjg5vhms5/KNv75ARlHPUQIcIdDYekgpPXKGHLuLtt9dlRU77QeKFA4/YhYeOxMiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6795
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424123522.18302-33-nikita.shubin@maquefel.me>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 4/20/23 09:21, Tom Rix wrote:
-> gcc with W=1 reports
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dmub_abm.c:
->    In function ‘dmub_abm_set_event_ex’:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dmub_abm.c:138:22: error: variable
->    ‘feature_support’ set but not used [-Werror=unused-but-set-variable]
->    138 |         unsigned int feature_support;
->        |                      ^~~~~~~~~~~~~~~
+On Mon, Apr 24, 2023 at 03:34:48PM +0300, Nikita Shubin wrote:
+> Add YAML bindings for ep93xx SoC.
 > 
-> This variable is not used so remove it.
-> The status of amb_feature_support should have been returned, so
-> set ret and return it.
-> 
-> Fixes: b8fe56375f78 ("drm/amd/display: Refactor ABM feature")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Since set_abm_event() is never used. I would prefer if it was dropped
-entirely.
-
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 > ---
->   drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
+>  .../devicetree/bindings/gpio/gpio-ep93xx.yaml | 161 ++++++++++++++++++
+>  1 file changed, 161 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-ep93xx.yaml
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
-> index a66f83a61402..8f285c3be4c6 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
-> @@ -134,10 +134,9 @@ static bool dmub_abm_set_pipe_ex(struct abm *abm, uint32_t otg_inst, uint32_t op
->   static bool dmub_abm_set_event_ex(struct abm *abm, unsigned int full_screen, unsigned int video_mode,
->   		unsigned int hdr_mode, unsigned int panel_inst)
->   {
-> -	bool ret = false;
-> -	unsigned int feature_support;
-> +	bool ret;
->   
-> -	feature_support = abm_feature_support(abm, panel_inst);
-> +	ret = abm_feature_support(abm, panel_inst);
->   
->   	return ret;
->   }
--- 
-Hamza
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-ep93xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-ep93xx.yaml
+> new file mode 100644
+> index 000000000000..4cf03c325d39
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-ep93xx.yaml
+> @@ -0,0 +1,161 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/gpio-ep93xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: EP93xx GPIO controller
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +  - Bartosz Golaszewski <brgl@bgdev.pl>
+> +  - Nikita Shubin <nikita.shubin@maquefel.me>
+> +
+> +properties:
+> +  compatible:
+> +    const: cirrus,ep9301-gpio
+> +
+> +  chip-label:
+> +    maxItems: 1
+> +    description: human readable name.
 
+Why do you need this? It's not standard and I don't see other GPIO 
+controllers needing it.
+
+
+> +
+> +  reg:
+> +    minItems: 2
+> +    items:
+> +      - description: data register
+> +      - description: direction register
+> +      - description: interrupt registers base
+> +
+> +  reg-names:
+> +    minItems: 2
+> +    items:
+> +      - const: data
+> +      - const: dir
+> +      - const: intr
+> +
+> +  gpio-controller: true
+> +
+> +  gpio-ranges: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  interrupts:
+> +    items:
+> +      - const: 27
+
+The value of the interrupt cells depends on the parent which is outside 
+the scope of this binding. Just 'maxItems: 1' is sufficient.
+
+> +
+> +  interrupts-extended:
+
+'interrupts' covers interrupts-extended. So 'interrupts' should be:
+
+interrupts:
+  oneOf:
+    - maxItems: 1
+    - description: port F has dedicated irq line for each gpio line
+      maxItems: 8
+
+> +    minItems: 8
+> +    maxItems: 8
+> +    description: port F has dedicated irq line for each gpio line.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - gpio-controller
+> +  - "#gpio-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +        gpio0: gpio@80840000 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "A";
+> +                reg = <0x80840000 0x04>,
+> +                      <0x80840010 0x04>,
+> +                      <0x80840090 0x1c>;
+> +                reg-names = "data", "dir", "intr";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +                interrupt-controller;
+> +                interrupt-parent = <&vic1>;
+> +                interrupts = <27>;
+> +        };
+> +
+> +        gpio1: gpio@80840004 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "B";
+> +                reg = <0x80840004 0x04>,
+> +                      <0x80840014 0x04>,
+> +                      <0x808400ac 0x1c>;
+> +                reg-names = "data", "dir", "intr";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +                interrupt-controller;
+> +                interrupt-parent = <&vic1>;
+> +                interrupts = <27>;
+> +        };
+> +
+> +        gpio2: gpio@80840008 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "C";
+> +                reg = <0x80840008 0x04>,
+> +                      <0x80840018 0x04>;
+> +                reg-names = "data", "dir";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +        };
+> +
+> +        gpio3: gpio@8084000c {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "D";
+> +                reg = <0x8084000c 0x04>,
+> +                      <0x8084001c 0x04>;
+> +                reg-names = "data", "dir";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +        };
+> +
+> +        gpio4: gpio@80840020 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "E";
+> +                reg = <0x80840020 0x04>,
+> +                      <0x80840024 0x04>;
+> +                reg-names = "data", "dir";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +        };
+> +
+> +        gpio5: gpio@80840030 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "F";
+> +                reg = <0x80840030 0x04>,
+> +                      <0x80840034 0x04>,
+> +                      <0x8084004c 0x1c>;
+> +                reg-names = "data", "dir", "intr";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +                interrupt-controller;
+> +                interrupts-extended = <&vic0 19>, <&vic0 20>,
+> +                                      <&vic0 21>, <&vic0 22>,
+> +                                      <&vic1 15>, <&vic1 16>,
+> +                                      <&vic1 17>, <&vic1 18>;
+> +        };
+> +
+> +        gpio6: gpio@80840038 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "G";
+> +                reg = <0x80840038 0x04>,
+> +                      <0x8084003c 0x04>;
+> +                reg-names = "data", "dir";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +        };
+> +
+> +        gpio7: gpio@80840040 {
+> +                compatible = "cirrus,ep9301-gpio";
+> +                chip-label = "H";
+> +                reg = <0x80840040 0x04>,
+> +                      <0x80840044 0x04>;
+> +                reg-names = "data", "dir";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +        };
+> +
+> +...
+> -- 
+> 2.39.2
+> 
