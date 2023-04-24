@@ -2,128 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3FF6ECB71
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7756ECB75
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjDXLiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S231684AbjDXLju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDXLiw (ORCPT
+        with ESMTP id S229547AbjDXLjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:38:52 -0400
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932A23A8C;
-        Mon, 24 Apr 2023 04:38:50 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so74187505e9.1;
-        Mon, 24 Apr 2023 04:38:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682336329; x=1684928329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Eglyz+j/occX8WNkEpcLNlY9OWqv/i1uyY+qtuXKrx0=;
-        b=h1oc6OkSzXaUIiu8xVLaoIH/i5VQBCmXcQ3cLNvvdXasTBCJo8bwrQR6con5vXUJco
-         9WBW1obzz6gy3S/jjTzNtm9NlAvxU8KUljaCl8XijtgznI55E6Wq8fVVQJMQQ8XYvXkU
-         j9XGZ73PTdXoqHPPT4CiujN9ZHCNwxapF8WcD9LSr6B8MbyHJGjnSPyRravILLdIypQY
-         hxMfe1qe1LMBhY+UOOtRTrhDnbw8fefehWEuXbo18oTj8uNkyT5NDxO+WeTuulbT2E29
-         Gbrd3Hc405ZNQPJwWUfqc471MvlDNmnfJGLULe4ZtQrUXwtpTiugUnKbXc9VEc8vg3I/
-         b2og==
-X-Gm-Message-State: AAQBX9cWNefnz+qarmb/1pDl2wIgHW/UPCtp8BdLNgI50CYQUnkE+uV+
-        IWhiq0Ih9Y/y25OlTEKEkeU=
-X-Google-Smtp-Source: AKy350bIiGtYQ95Um7VGjxvEpP0Bu+W7VgYMq+aOVIHhgROIjVQNbR2DGGAa6ASUxZR2oIKOoxEPVA==
-X-Received: by 2002:a5d:414c:0:b0:2fa:d00d:cab8 with SMTP id c12-20020a5d414c000000b002fad00dcab8mr9478626wrq.18.1682336328944;
-        Mon, 24 Apr 2023 04:38:48 -0700 (PDT)
-Received: from ryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
-        by smtp.gmail.com with ESMTPSA id e18-20020adffc52000000b002efacde3fc7sm10570820wrs.35.2023.04.24.04.38.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 04:38:48 -0700 (PDT)
-From:   Lucas Tanure <tanure@linux.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        martin.blumenstingl@googlemail.com, narmstrong@baylibre.com,
-        stefan@agner.ch, Lucas Tanure <tanure@linux.com>
-Subject: [PATCH v4] of: fdt: Scan /memreserve/ last
-Date:   Mon, 24 Apr 2023 12:38:46 +0100
-Message-Id: <20230424113846.46382-1-tanure@linux.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 24 Apr 2023 07:39:48 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152FD3A8C;
+        Mon, 24 Apr 2023 04:39:47 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 528919DE;
+        Mon, 24 Apr 2023 13:39:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1682336375;
+        bh=EUbi7UFRE4+2j80EmuVSCzh3PaCZh3bXKvkO45pL+aY=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=QQLyWApf0YH0bHN74OYq66Fxp+BFcxWhz/3BU9tVTWJ2o1v+FvZ2xne+PqgEJFpaT
+         5OliG80OS1nnFhMrdCAl+S1xDkwuGo1X78z1SrYye1RpNqGOxsJdXViVpTNhyOPT/l
+         JuxrmAgH3plrn8ZPdfsAfA+QFhrS86dodc4TGzxw=
+Message-ID: <56d49d1d-c85e-4db8-7fb3-a43551dfe213@ideasonboard.com>
+Date:   Mon, 24 Apr 2023 14:39:40 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
+ <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
+ <ZEZafj6j+EurGWJ7@sai>
+ <f9be2c5d-1303-1b91-c672-7e5a476277e7@ideasonboard.com>
+ <30e4656f-63d9-a79c-c1d9-23d0a16cf184@ideasonboard.com>
+ <ZEZo1WxjkcMiWKPg@sai>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZEZo1WxjkcMiWKPg@sai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the scanning /memreserve/ and /reserved-memory node order to fix
-Kernel panic on Khadas Vim3 Board.
+On 24/04/2023 14:32, Wolfram Sang wrote:
+> 
+>>> Ah, right. I'll resend with the DT bindings separate.
+>>
+>> Also, looks like I forgot to remove the namespaces for export symbols.
+> 
+> And why not keeping them? I understand ATR would be the first user in
+> the Linux I2C world, but someone has to start it...
 
-If /memreserve/ goes first, the memory is reserved, but nomap can't be
-applied to the region. So the memory won't be used by Linux, but it is
-still present in the linear map as normal memory, which allows
-speculation. Legitimate access to adjacent pages will cause the CPU
-to end up prefetching into them leading to Kernel panic.
+Well, you requested to remove them =). I originally didn't have them, 
+but added them on Andy's request. I personally don't mind either way.
 
-So /reserved-memory node should go first, as it has a more updated
-description of the memory regions and can apply flags, like nomap.
-
-Signed-off-by: Lucas Tanure <tanure@linux.com>i
----
-Previous Threads:
-#regzbot link: https://lore.kernel.org/linux-arm-kernel/40ca11f84b7cdbfb9ad2ddd480cb204a@agner.ch/#regzbot
-#regzbot link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
-
-V1: https://lore.kernel.org/all/20230406151429.524591-1-tanure@linux.com/
-v2: https://lore.kernel.org/all/20230410120017.41664-1-tanure@linux.com/
-v3: https://lore.kernel.org/linux-mm/20230412224620.8909-1-tanure@linux.com/T/
-
-Change from V3:
- - Drop cover letter
- - Add more information into the patch
-
-Change from V2:
- - Remove region overlap and reserved checks
-
-Change from V1:
- - Instead of allowing to mark nomap a region already reserved, give
-precedence to /reserved-memory node scan.
----
- drivers/of/fdt.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index d14735a81301..bf502ba8da95 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -635,6 +635,9 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 	if (!initial_boot_params)
- 		return;
- 
-+	fdt_scan_reserved_mem();
-+	fdt_reserve_elfcorehdr();
-+
- 	/* Process header /memreserve/ fields */
- 	for (n = 0; ; n++) {
- 		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
-@@ -643,8 +646,6 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 		memblock_reserve(base, size);
- 	}
- 
--	fdt_scan_reserved_mem();
--	fdt_reserve_elfcorehdr();
- 	fdt_init_reserved_mem();
- }
- 
--- 
-2.40.0
+  Tomi
 
