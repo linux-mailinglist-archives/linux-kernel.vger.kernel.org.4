@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9256ED4BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9426ED4D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjDXStT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S230434AbjDXSvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjDXSsi (ORCPT
+        with ESMTP id S232473AbjDXSvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:48:38 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FBD5B90;
-        Mon, 24 Apr 2023 11:48:19 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OImBtW087511;
-        Mon, 24 Apr 2023 13:48:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682362091;
-        bh=nJ7qevk+C4BYIH4h8NNDIO9iDNa/BpFJKBXbdR/B8pM=;
-        h=From:To:CC:Subject:Date;
-        b=h6YnzudSLEr1WSvZZH9nbV+6lPeTcHOyNaZvIABBm7BAUWcvGHxbc7bASclsv+uMZ
-         6JF048qSpi+Fe8bXclHPMm2T9Nhys4FR9K4g2uhr7/2ti/teNX4MD9aYTX4nI7WmR8
-         WiV0Dr11Pw0Sj79ApwmiqXou9/VF8+vU9LDJbgn8=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OImBgQ012258
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 13:48:11 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 13:48:11 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 13:48:11 -0500
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OImAW5074270;
-        Mon, 24 Apr 2023 13:48:10 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [RFC] mux: mmio: use reg property when parent device is not a syscon
-Date:   Mon, 24 Apr 2023 13:48:10 -0500
-Message-ID: <20230424184810.29453-1-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 24 Apr 2023 14:51:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A73AD10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:50:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 104DF61D84
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 18:49:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15378C433D2;
+        Mon, 24 Apr 2023 18:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682362185;
+        bh=zjlYhHxKHeqUF6RB2iDS2/naizCqGReUTue1BVeagn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lG/OMVmrJgvTuySKWuEx4fhXGQ2goaB8I/oNVDY7qd7r1J6ha0H3csE+jgvHcanlr
+         4Hj82o7HiZVzVItnSY64ao3SSotIt0a8Xnn8wE+umpAKFy1jM4RW20XGu6XP/bRN1g
+         nq8xhUS6QbxLtcRvbbEDIcwUkJ76dP7vDLMnYJ37jC/jwu3OY4Lil9eou7MLTvMCFx
+         SfM6xwa2wWRAOrVcpWplTD3ykegFNzy99jLp0j4HynaEqCU8mHMMEdsvLtMNdhbfuQ
+         +MvqmUlgIKWGubgdq3mrIfIGgQnLSTrKSF7Jl1TyMth0nm6pq5a69E0rUa9UG8KnBm
+         ivG5/enn3fBJw==
+Received: by pali.im (Postfix)
+        id EB778816; Mon, 24 Apr 2023 20:49:41 +0200 (CEST)
+Date:   Mon, 24 Apr 2023 20:49:41 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        kernel test robot <lkp@intel.com>,
+        oe-kbuild-all@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: {standard input}:924: Error: unrecognized opcode: `eieio'
+Message-ID: <20230424184941.44no7rkxjadnyojm@pali>
+References: <202304222120.WcBMaHXo-lkp@intel.com>
+ <20230422135838.3rn67ky2p7jmdk3n@pali>
+ <CAMuHMdX8PP3gH_ctgZgXfV6Psu95eTuCh0MBsEQsRVG_6rEUVg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAMuHMdX8PP3gH_ctgZgXfV6Psu95eTuCh0MBsEQsRVG_6rEUVg@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,38 +63,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT binding for the reg-mux compatible states it can be used when the
-"parent device of mux controller is not syscon device". It also allows
-for a reg property. When the parent device is indeed not a syscon device,
-nor is it a regmap provider, we should fallback to using that reg
-property to identify the address space to use for this mux.
+On Monday 24 April 2023 09:49:07 Geert Uytterhoeven wrote:
+> Hi Pali,
+> 
+> On Sat, Apr 22, 2023 at 4:03 PM Pali Rohár <pali@kernel.org> wrote:
+> > On Saturday 22 April 2023 21:53:23 kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > head:   8e41e0a575664d26bb87e012c39435c4c3914ed9
+> > > commit: ff7c76f66d8bad4e694c264c789249e1d3a8205d powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage
+> > > date:   3 months ago
+> > > config: powerpc-buildonly-randconfig-r006-20230422 (https://download.01.org/0day-ci/archive/20230422/202304222120.WcBMaHXo-lkp@intel.com/config)
+> > > compiler: powerpc-linux-gcc (GCC) 12.1.0
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ff7c76f66d8bad4e694c264c789249e1d3a8205d
+> > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > >         git fetch --no-tags linus master
+> > >         git checkout ff7c76f66d8bad4e694c264c789249e1d3a8205d
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> > >
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Link: https://lore.kernel.org/oe-kbuild-all/202304222120.WcBMaHXo-lkp@intel.com/
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > >    {standard input}: Assembler messages:
+> > > >> {standard input}:924: Error: unrecognized opcode: `eieio'
+> > >    {standard input}:1094: Error: unrecognized opcode: `eieio'
+> > >
+> > > --
+> > > 0-DAY CI Kernel Test Service
+> > > https://github.com/intel/lkp-tests
+> >
+> > Hello! What is that? In this error report there is no compile log, nor
+> > any file / line. And "Link:" line from above error report does not work.
+> >
+> > Intel, can you look at your robot? This looks some bug in error reporting.
+> 
+> Looks fine to me: this is not a compile problem, but an assembler problem.
+> Presumably this is when building a kernel for a PPC platform that does
+> not support the eieio instruction?
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/mux/mmio.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+What is fine on this report? There is completely missing command which
+generated this error; whole error message; input files which caused them
+and also change or commit.
 
-diff --git a/drivers/mux/mmio.c b/drivers/mux/mmio.c
-index 44a7a0e885b8..42e00b9fd0a9 100644
---- a/drivers/mux/mmio.c
-+++ b/drivers/mux/mmio.c
-@@ -44,10 +44,13 @@ static int mux_mmio_probe(struct platform_device *pdev)
- 	int ret;
- 	int i;
- 
--	if (of_device_is_compatible(np, "mmio-mux"))
-+	if (of_device_is_compatible(np, "mmio-mux")) {
- 		regmap = syscon_node_to_regmap(np->parent);
--	else
--		regmap = dev_get_regmap(dev->parent, NULL) ?: ERR_PTR(-ENODEV);
-+	} else {
-+		regmap = dev_get_regmap(dev->parent, NULL);
-+		if (!regmap)
-+			regmap = device_node_to_regmap(np) ?: ERR_PTR(-ENODEV);
-+	}
- 	if (IS_ERR(regmap)) {
- 		ret = PTR_ERR(regmap);
- 		dev_err(dev, "failed to get regmap: %d\n", ret);
--- 
-2.39.2
+And what presumably happened? I'm really not going to spend more time on
+guessing what reporter could probably might wanted to write into the
+report and start looking into crystal ball what could be an issue.
 
+I can say that this issue presumably happened when email operator of
+this robot pushed incorrect button and instead of the real report, it
+sent test report with content of some random error line from the random
+log file.
+
+Are we on the technical discussion about exactness? Or are going to
+discuss what who think that what could happened?
+
+> The Link: works fine for me, sometimes you just have to be a little bit
+> patient for the archiver to catch up...
+
+Sorry, I do not have time to wait undefined amount of time to access
+additional resources which are based on reported details required for
+debugging.
+
+Intel, could you please react on this issue? If not, I'm going to add
+your robot to my black list. It is not first time when I received such
+useless report from you and nobody reacted on it.
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
