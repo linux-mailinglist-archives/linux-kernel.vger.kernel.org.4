@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E644F6ECF23
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8B86ECF53
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjDXNic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S232675AbjDXNj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbjDXNia (ORCPT
+        with ESMTP id S232756AbjDXNjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:38:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56057282;
-        Mon, 24 Apr 2023 06:38:06 -0700 (PDT)
+        Mon, 24 Apr 2023 09:39:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8187AA4;
+        Mon, 24 Apr 2023 06:39:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6784D62418;
-        Mon, 24 Apr 2023 13:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51EF9C433EF;
-        Mon, 24 Apr 2023 13:37:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61CF862457;
+        Mon, 24 Apr 2023 13:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506CFC4339B;
+        Mon, 24 Apr 2023 13:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682343468;
-        bh=yuoU+RSy/IR0u3ITPlDfylO1gXqoLJRoeX4t5n3Dy4Y=;
+        s=korg; t=1682343547;
+        bh=B9v2iOsbHP2zRUjYos0SP/EPuO3OlSQFrfPP6I4y9cw=;
         h=From:To:Cc:Subject:Date:From;
-        b=q/Nn1EJS/w3U3lGn8+jllYladJYhvDpt/7i8oIvEhmUgPsmP5M5AbckbqkVLywILX
-         rvOWnP1h3Dc4OROaMinckLdY7IMmGzXra532/r6A6lTnMEFiFgin3mS2u0bBcZIwQ6
-         ++ugY/YgtYrYtU4Q8d3tweCHrBv3NmDO4Lgjm7wU=
+        b=WjbC3s1nGVwBEeEWcORQgoD7ezkGZJcbk/feR4NoHl7KmNDDZs7HmGI54yKY4uPfe
+         sxmJ8WMR/X3HueyDCPKb2TMskCxflP6HmomyReIAhM3FaoZMU1vGJK4DxViYv2ymdY
+         iWd+KYML+Mmn9SteEDNOkYBszQ7jwwur+VorPiPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,24 +38,24 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.14 00/28] 4.14.314-rc1 review
-Date:   Mon, 24 Apr 2023 15:18:21 +0200
-Message-Id: <20230424131121.331252806@linuxfoundation.org>
+Subject: [PATCH 4.19 00/29] 4.19.282-rc1 review
+Date:   Mon, 24 Apr 2023 15:18:27 +0200
+Message-Id: <20230424131121.155649464@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.314-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.282-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
+X-KernelTest-Branch: linux-4.19.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.314-rc1
+X-KernelTest-Version: 4.19.282-rc1
 X-KernelTest-Deadline: 2023-04-26T13:11+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,8 +64,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.314 release.
-There are 28 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.19.282 release.
+There are 29 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -73,9 +73,9 @@ Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.314-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.282-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
 and the diffstat can be found below.
 
 thanks,
@@ -86,7 +86,7 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.314-rc1
+    Linux 4.19.282-rc1
 
 Ekaterina Orlova <vorobushek.ok@gmail.com>
     ASN.1: Fix check for strdup() success
@@ -148,6 +148,9 @@ Tomas Henzl <thenzl@redhat.com>
 Nick Desaulniers <ndesaulniers@google.com>
     selftests: sigaltstack: fix -Wuninitialized
 
+Jonathan Denose <jdenose@chromium.org>
+    Input: i8042 - add quirk for Fujitsu Lifebook A574/H
+
 Douglas Raillard <douglas.raillard@arm.com>
     f2fs: Fix f2fs_truncate_partial_nodes ftrace event
 
@@ -180,15 +183,16 @@ Diffstat:
  Makefile                                           |  4 +-
  arch/arm/boot/dts/rk3288.dtsi                      |  2 +-
  arch/s390/kernel/ptrace.c                          |  8 +---
- arch/x86/purgatory/Makefile                        |  3 ++
+ arch/x86/purgatory/Makefile                        |  5 ++-
  drivers/iio/adc/at91-sama5d2_adc.c                 |  2 +-
- drivers/iio/counter/104-quad-8.c                   | 10 +----
+ drivers/iio/counter/104-quad-8.c                   | 14 +-----
+ drivers/input/serio/i8042-x86ia64io.h              |  8 ++++
  drivers/memstick/core/memstick.c                   |  5 ++-
  drivers/net/dsa/b53/b53_mmap.c                     | 14 ++++++
  drivers/net/ethernet/intel/e1000e/netdev.c         | 51 +++++++++++-----------
  drivers/net/ethernet/intel/i40e/i40e_main.c        |  9 ++--
  .../ethernet/mellanox/mlxfw/mlxfw_mfa2_tlv_multi.c |  2 +
- drivers/net/virtio_net.c                           |  7 ++-
+ drivers/net/virtio_net.c                           |  8 +++-
  drivers/net/xen-netback/netback.c                  |  6 +--
  drivers/scsi/megaraid/megaraid_sas_base.c          |  2 +-
  drivers/scsi/scsi.c                                | 11 ++++-
@@ -219,6 +223,6 @@ Diffstat:
  scripts/asn1_compiler.c                            |  2 +-
  .../selftests/sigaltstack/current_stack_pointer.h  | 23 ++++++++++
  tools/testing/selftests/sigaltstack/sas.c          |  7 +--
- 42 files changed, 242 insertions(+), 166 deletions(-)
+ 43 files changed, 251 insertions(+), 172 deletions(-)
 
 
