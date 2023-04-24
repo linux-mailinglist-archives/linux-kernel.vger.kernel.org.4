@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E906ECA5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138636ECA5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjDXKcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
+        id S231431AbjDXKci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 06:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjDXKcY (ORCPT
+        with ESMTP id S231203AbjDXKcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:32:24 -0400
+        Mon, 24 Apr 2023 06:32:25 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3523B26BD;
-        Mon, 24 Apr 2023 03:32:23 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 8438B320093A;
-        Mon, 24 Apr 2023 06:32:20 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD21D8;
+        Mon, 24 Apr 2023 03:32:24 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 402C8320092D;
+        Mon, 24 Apr 2023 06:32:23 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 24 Apr 2023 06:32:21 -0400
+  by compute2.internal (MEProxy); Mon, 24 Apr 2023 06:32:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1682332340; x=1682418740; bh=tdIAU1QeGG
-        0LMr63T+Ys43nJbPa8UgQj9W1zWge6JMM=; b=AxRCJ31CHjixpVL64UiWBEaYGP
-        Jh0Qw+ASKQUQb+Yf8t8IK9cgkERQjgP4qS6QpkDZxU/Z73JWqP2LLnbG68ZkvinS
-        eVbc1d/tDVqwmMl0ivDf7ViuOHcRlSJFIJkCtOV54rt7RzSy65r51KzfqrecJW+X
-        ezoSVR0ho+AbI240uPRBIp7FS3z35fWf/4zzH/h/PS09kILtkWVSYO977QdiL3EG
-        L1sbjQ51alseebnK+26UVZo7bS15lGiPP5zSUwn5hbtjpqpZJLStlAdzRbxDBGxv
-        amjTWbPkoPy717zgqbzUFdVmS/V28Ps4tAM/OiILYxbqV0T47dzteTje4fyA==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1682332342; x=
+        1682418742; bh=lLDvZL8csOGSnpmvsIuBINdBPRus+0iDvwakrSAe4s0=; b=R
+        G9yQO+veX+ZJzhvVc5RsIsy2dPd4TYACsDA3gVAW1cNEVlBMPkw2j25DScACpnPe
+        LZ6pAMP7LwHOHwFWi8ex8PmunC0oZ2WPF6qmqBGlI/Qeu3xeOKMy6HxY6GiYrSMq
+        C4bhwFohTdySjgFkrC6ttuKtCnru1If8FAj+PwZNaLEC/WmwWiy27yksj+R9g0k7
+        XMiMUEqZjyMJepDa7RxZCqaJrP2JVUqO8r16T9osZHWoohozFchq4wxPsIKZ9ltF
+        bNtVs59w5LxQ6OZvaQSYzPqsRIgk+UJO0MwY9k78bwcgGza3WnlY+XoIJeKO9BG5
+        dr/mI/fjl3bnsl6XBlddA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682332340; x=1682418740; bh=tdIAU1QeGG0LM
-        r63T+Ys43nJbPa8UgQj9W1zWge6JMM=; b=gyARfQGnU6+VHHPQOsg9O9QhucwuP
-        jg/3eXun6Mj9XIVPdPU2DVrRGSBAwkzQbtwLWVTk4Q+qWZYH2/3E9VtXMBgdXt1f
-        N/c1dO9EjVburbz6o+xd1ZUTDyX/PQ9PZtHtcDTA5RwutuRhYmnSgKGNstwmtDEQ
-        p30a1jg/el/3/LMvdjpZb7KXxSr+zw5rymNm+ZHvJpsdHowVkRxg1K5wb8KuIouf
-        EPq2ENaPbnHex5hs3oWqOKSDRA+eUizTPrXoAtMZep/tVmn91zys1x0qvf94CXxl
-        idEWXyU36o0aQxxXb96EDW2MUXXd81k4XigO2czO6GhBaBOdbHEU7yVoA==
-X-ME-Sender: <xms:s1pGZJFDtcVfwQ0B8GfvcyLyu-DIyKUi0BydIG9yWL_xc7TGe1LcsA>
-    <xme:s1pGZOUmhFjI-TUvF6J7EVj_J2YC70jmxFRPV4_hEKpOH1cOtLRrjDPHidlcK3Fym
-    NQixYexdj3AZuQVlmE>
-X-ME-Received: <xmr:s1pGZLKlstMEwSMJUcQAXz7a-jY-MCNiHyTxiVE3DPA-Db5LXlTUC2kp-dn6>
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1682332342; x=
+        1682418742; bh=lLDvZL8csOGSnpmvsIuBINdBPRus+0iDvwakrSAe4s0=; b=X
+        RhrL777BPNP9IsnUlKPzY2GA7wj2i5n3pWJ/SglHFnxb/7iGm1gEJlOkJz5ZXdCR
+        TrDaEPF0u/cDxxPGdoyuixKFXA5LzyCJJxlTShp3FeHQPlzyifm6XvbBZ0cwfk0I
+        wQeMVjQ8RncEflhsan7QCTNGofISMFrGm9sYmTBAZiKqsoVDij7ajdHP95jUnzce
+        wRHD7g8OXI1yclhT6P/R3u3fv2yWxm6f6ntXijPRnGPDSvtGxW323m4UW9x70xZu
+        vLdnJk0NQpxfjC1Q+Sc8ODxzuzcir8aWr6HlLjTk4FzuJ5sluNZcp6SS9BpBvjPh
+        ip5e5bo2kOdSPeiX+2mTw==
+X-ME-Sender: <xms:tlpGZLTXrF6smFeKOPQu5oi6tTfOa1W6mgBVY0FoJ05_h6y0L34G1A>
+    <xme:tlpGZMyrSdPcmnVklLwXTfrgW8c_FhoNohhsUlCdqTaokONzE3Zo7vg44sjHjHKAI
+    ndHK_N3cRjZXBJIC7Q>
+X-ME-Received: <xmr:tlpGZA3GJ2bw6TvXwZ-Fw97ljfeAXfNFiXKS_KFxY6YXX41x5jnrUKy-vepT>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddgvdelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
-    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:s1pGZPHk6QTopxYaRtSpb8FXvdnXsYR-JKw5BcozYmd90L-rn2CerQ>
-    <xmx:s1pGZPXEtoNNsOI_2VzcjhlKPr7v3glky0KjJwbfrZhYnUjH8JnwwQ>
-    <xmx:s1pGZKOWiNK5aulMQONsKf664q6sR_aBquCi4rujBzdxL1DeC7XKtQ>
-    <xmx:tFpGZFcTGMFdyUaRGnwzGtwFU8T6zIxCbHwj1Qjrk3-vz--aHIVJNw>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
+    ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
+    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
+    dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
+    hgohgrthdrtghomh
+X-ME-Proxy: <xmx:tlpGZLBtvlm5cSwI1asvqxLHoZy09tBXaIB-bAH6YNJRkyKde8K0Kg>
+    <xmx:tlpGZEiYJEf5pNn8KIHFZVU2ZyW2oKIsDpzmXpt58meJZDZltoULlA>
+    <xmx:tlpGZPoirH7L1T-QNf75tZ8POIWVU-YusCLsSrH5a3yALTTdADSV2A>
+    <xmx:tlpGZPWRj0ySyKFdu51k4WPTrccyefyOMOsjMOPZoc7-qlrGjSgZ5Q>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Apr 2023 06:32:18 -0400 (EDT)
+ 24 Apr 2023 06:32:21 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     maz@kernel.org
 Cc:     tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
         tglx@linutronix.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 0/2] irqchip/mips-gic fixes
-Date:   Mon, 24 Apr 2023 11:31:54 +0100
-Message-Id: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
+        linux-kernel@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+Subject: [PATCH 1/2] irqchip/mips-gic: Don't touch vl_map if a local interrupt is not routable
+Date:   Mon, 24 Apr 2023 11:31:55 +0100
+Message-Id: <20230424103156.66753-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
+References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,23 +87,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+When a GIC local interrupt is not routable, it's vl_map will be used
+to control some internal states for core (providing IPTI, IPPCI, IPFDC
+input signal for core). Overriding it will interfere core's intetrupt
+controller.
 
-This patchset fixes two issues in the MIPS GIC driver that may block
-booting on some systems.
+Do not touch vl_map if a local interrupt is not routable, we are not
+going to remap it.
 
-Please review.
+Before dd098a0e0319 (" irqchip/mips-gic: Get rid of the reliance on
+irq_cpu_online()"), if a local interrupt is not routable, then it won't
+be requested from GIC Local domain, and thus gic_all_vpes_irq_cpu_online
+won't be called for that particular interrupt.
 
-Thanks
+Fixes: dd098a0e0319 (" irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ drivers/irqchip/irq-mips-gic.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Jiaxun Yang (2):
-  irqchip/mips-gic: Don't touch vl_map if a local interrupt is not
-    routable
-  irqchip/mips-gic: Use raw spinlock for gic_lock
-
- drivers/irqchip/irq-mips-gic.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index 046c355e120b..b568d55ef7c5 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -399,6 +399,8 @@ static void gic_all_vpes_irq_cpu_online(void)
+ 		unsigned int intr = local_intrs[i];
+ 		struct gic_all_vpes_chip_data *cd;
+ 
++		if (!gic_local_irq_is_routable(intr))
++			continue;
+ 		cd = &gic_all_vpes_chip_data[intr];
+ 		write_gic_vl_map(mips_gic_vx_map_reg(intr), cd->map);
+ 		if (cd->mask)
 -- 
 2.34.1
 
