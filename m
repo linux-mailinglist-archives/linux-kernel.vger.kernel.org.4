@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AB36ED3BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF586ED420
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjDXRjS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 13:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
+        id S232284AbjDXSLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbjDXRjP (ORCPT
+        with ESMTP id S231985AbjDXSL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:39:15 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D33A5F0;
-        Mon, 24 Apr 2023 10:38:34 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-555e853d3c5so31951537b3.2;
-        Mon, 24 Apr 2023 10:38:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682357886; x=1684949886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=43eVrCXPQ3JCvD9a2+R69fZ/LkUiFUI38jpabfj7B7U=;
-        b=TgkboWY74aLy6vHBN94U5NTxLaG+FuJAJDzVjfBdPOvpV73rmMT+jPIrab3HoxDfDI
-         jci+lbAiM8qJDG9AoUQ6h2YHNGW5C+arHVbNHaD1Ze5EfP6g9f7h/qi68Q3IGAkqLY7V
-         7h780hq7UR3uj3STDU5M8lj06FFG3QJEOnCKcQ3d6/tJH8+uvb9A+WUkCH0lq7w2xuTe
-         fVUG6nU9gxlyzy5ZpbygRqy7iyO326SuhBs8YLyEmz47dd3KdAj8C/jlLv4d12lTnWNW
-         Sa0m8slKRhYsqyOnxjRFCTzO3EPoGZbahQZl4bl6qfyvDI+nfl8+MftXRIqYeE29yYk3
-         +c+Q==
-X-Gm-Message-State: AAQBX9fmER9dlQkwdpIZ8A1NOhKDjPkt4R4KFMmXJnbBg4sZ8VbaTZDq
-        yv1m42jYrczBlwoHA1F9HSaiGFxTZCVoAQ==
-X-Google-Smtp-Source: AKy350YGGKQCvcFhIoCo23Pfqo7TjqOkFz8ETKjx1Q4i3RX6Q2NaAsmwLN8QtYUUt1RHYO/M7yLpEg==
-X-Received: by 2002:a0d:f306:0:b0:54e:fad7:7485 with SMTP id c6-20020a0df306000000b0054efad77485mr8306256ywf.31.1682357885646;
-        Mon, 24 Apr 2023 10:38:05 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id t1-20020a0dea01000000b00545a08184fesm3021978ywe.142.2023.04.24.10.38.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 10:38:05 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-555e853d3c5so31951307b3.2;
-        Mon, 24 Apr 2023 10:38:05 -0700 (PDT)
-X-Received: by 2002:a0d:f306:0:b0:54e:fad7:7485 with SMTP id
- c6-20020a0df306000000b0054efad77485mr8306240ywf.31.1682357885170; Mon, 24 Apr
- 2023 10:38:05 -0700 (PDT)
+        Mon, 24 Apr 2023 14:11:29 -0400
+Received: from tiger.tulip.relay.mailchannels.net (tiger.tulip.relay.mailchannels.net [23.83.218.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDA46EAC;
+        Mon, 24 Apr 2023 11:11:26 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 2C38B5C176A;
+        Mon, 24 Apr 2023 18:11:23 +0000 (UTC)
+Received: from pdx1-sub0-mail-a216.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 9FC4F5C0F80;
+        Mon, 24 Apr 2023 18:11:22 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1682359882; a=rsa-sha256;
+        cv=none;
+        b=AZvnCETqaJWrbR/KXJjP8h/fR2udp8hNHI9Prf/2ziuDnRfYFLIBu4+z/xTWlYmoviK1nx
+        6PNQ1UiwFzl9yQEYcfsKY3E7O94ycxakR5YbMqfyOHhs08GV5dw0B/nAa/7jjN3L0zvWES
+        uWCh4XmfGWRYNUb4HFv5TPyQDIffd9yxjWZhMaOA69zbV8wamONi6nAxMi8k4auqm6EC2M
+        2Vrjdh4Bv11Vv52KSeVnjteUVLOkOfiyoC/HjWWK+VwCH9I8+g7WMD2l6r9PPs2Hno1SBW
+        buOyOEKToYysMURAp9///8z8EC3Ro23VVMVTs9HRRePuW+tKtAqCKtI5D8+iGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1682359882;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=2wxLkBR71Y0DyWkZH4ju2khClaI45CxuGX8RryJuv6w=;
+        b=KYACSQ+ongq4fPncv5mUn7bl4ZKZqAmLgmiJYSh5Zc8WMh99Cws7xfDPmNlz4ET6OcZC0P
+        HISx5daTfGGlzEeB5gPcHhHOdhgntDu1gv4ZMMh1tH+Ljr+Wmets+pSOnMIDIQKsWeJ4ju
+        2JsJGhTxLs8LcKdZ30LD972MbyPLy/x+yKl+6Q8wx8XGZWs7W6dsWk9bTQp7uUlzW+BLcT
+        By8x0Eue6+Oi5HULfvp0P21yEKZubR4nVZbWbi+MxZaX7nlhOJyjivvwPyf2C5jIW8x1C9
+        8q+VSqZIjNC4/+dYNJsLPhxRmsWpC7b4OBSgrTNdUFQzKjWW1TA3vYdD9F7IDw==
+ARC-Authentication-Results: i=1;
+        rspamd-7f66b7b68c-zjhh9;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Arch-Turn: 7d8e6e43170ce28d_1682359882951_2513165092
+X-MC-Loop-Signature: 1682359882951:845671132
+X-MC-Ingress-Time: 1682359882951
+Received: from pdx1-sub0-mail-a216.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.114.243.17 (trex/6.7.2);
+        Mon, 24 Apr 2023 18:11:22 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a216.dreamhost.com (Postfix) with ESMTPSA id 4Q4tVd6Qtmz3K;
+        Mon, 24 Apr 2023 11:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1682359882;
+        bh=2wxLkBR71Y0DyWkZH4ju2khClaI45CxuGX8RryJuv6w=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=i7g6EhAUdC28M8k6dmzTcZex8+SkB3kSq4XU78hRl7xv0Drfzi68GmLhm6osQdeLg
+         eM4+1s2fDlxBYGVpcVl6U75u+AID/zqwlE2GV96K3mjC3aVqs23KwFnHVsMVCRjfTp
+         rNHlIm3ApoYQg6QrJJhL3kTuI04EW7ta4biRw8FkOhA9H9CWnQpCT3PeTARNoNNeJD
+         CtwOpLSSwNVx7zMFipvoe56dKPsyL4hT17zHK9fDvGbDyKIq+lYzF6aolz/k5rucpt
+         P5/bVvoUTcYq7t45ROQ7WrBeMQI1ZwrmIVhEbIO/bQu7HvSfV2sYnVKzIgi/hq5BXc
+         EyaB94lm2qxpg==
+Date:   Mon, 24 Apr 2023 10:39:41 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Vishal Verma <vishal.l.verma@intel.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH 0/4] cxl: Add a firmware update mechanism and cxl_test
+ emulation
+Message-ID: <y4cqp7r3tt74igqwtcbwshcca66krcjpiopo6frilx272x6ot7@ji2shc7sqk27>
+References: <20230421-vv-fw_update-v1-0-22468747d72f@intel.com>
 MIME-Version: 1.0
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com> <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Apr 2023 19:37:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVQiMbupkCYhZ86WHND25E==iA1DyVwGf2rg32zJLcV2g@mail.gmail.com>
-Message-ID: <CAMuHMdVQiMbupkCYhZ86WHND25E==iA1DyVwGf2rg32zJLcV2g@mail.gmail.com>
-Subject: Re: [PATCH 05/11] media: renesas: fdp1: remove R-Car H3 ES1.* handling
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230421-vv-fw_update-v1-0-22468747d72f@intel.com>
+User-Agent: NeoMutt/20230407
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+On Fri, 21 Apr 2023, Vishal Verma wrote:
 
-On Tue, Mar 7, 2023 at 5:31 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> R-Car H3 ES1.* was only available to an internal development group and
-> needed a lot of quirks and workarounds. These become a maintenance
-> burden now, so our development group decided to remove upstream support
-> and disable booting for this SoC. Public users only have ES2 onwards.
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>The poll interval for the Transfer FW command is arbitrarily set at 1
+>second, and a poll count of 300, giving us a total wait time of five
+>minutes before which each slice of the transfer times out. This seems
+>like a good mix of responsiveness and a total wait - the spec doesn't
+>have any guidance on any upper or lower bounds for this. This likely
+>does not need to be user-configurable, so for now it is just hard-coded
+>in the driver.
 
-Thanks for your patch, which is now commit af4273b43f2bd9ee ("media:
-renesas: fdp1: remove R-Car H3 ES1.* handling") in media/master
-(next-20230417 and later).
+Nothing against this, just thinking that in general, but we should
+probably limit the poll interval to CXL_MAILBOX_TIMEOUT_MS. I'm not
+sure, however, what would be a proper value across all commands. Or
+would having this limit be per-cmd make more sense instead?
 
-> --- a/drivers/media/platform/renesas/rcar_fdp1.c
-> +++ b/drivers/media/platform/renesas/rcar_fdp1.c
-> @@ -254,7 +254,6 @@ MODULE_PARM_DESC(debug, "activate debug info");
->
->  /* Internal Data (HW Version) */
->  #define FD1_IP_INTDATA                 0x0800
-> -#define FD1_IP_H3_ES1                  0x02010101
->  #define FD1_IP_M3W                     0x02010202
->  #define FD1_IP_H3                      0x02010203
->  #define FD1_IP_M3N                     0x02010204
-> @@ -2359,9 +2358,6 @@ static int fdp1_probe(struct platform_device *pdev)
->
->         hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
->         switch (hw_version) {
-> -       case FD1_IP_H3_ES1:
-> -               dprintk(fdp1, "FDP1 Version R-Car H3 ES1\n");
-> -               break;
->         case FD1_IP_M3W:
->                 dprintk(fdp1, "FDP1 Version R-Car M3-W\n");
->                 break;
-
-Apparently 0x02010101 is also used on (at least) R-Car M2-W ES1.0,
-causing the following annoying (but further harmless?) messages
-during boot:
-
-    rcar_fdp1 fe940000.fdp1: FDP1 Unidentifiable (0x02010101)
-    rcar_fdp1 fe944000.fdp1: FDP1 Unidentifiable (0x02010101)
-
-Note that the R-Car Gen2 documentation states the register's contents
-are all zeroes.  But that value would trigger the error message, too.
-
-Sorry for not noticing before. Apparently I never booted a kernel
-with this patch on koelsch...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Davidlohr
