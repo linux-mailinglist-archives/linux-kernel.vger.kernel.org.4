@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2F96EC968
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E636EC969
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjDXJuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S231343AbjDXJu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjDXJuV (ORCPT
+        with ESMTP id S230396AbjDXJu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:50:21 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79922722;
-        Mon, 24 Apr 2023 02:50:19 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94a342f7c4cso749954366b.0;
-        Mon, 24 Apr 2023 02:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682329818; x=1684921818;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9Is2thnxMX0NfS0ATfXggVukIP4xt06PqoAtrJstbVw=;
-        b=Y863QaepaDFc/zBRlmtqWeoRVTVKKterbJixxWjJYjqZD4Oo5MOaqD2gUS2FjoyFcv
-         oOvOhGMxHoosA3Ja91da4xlxUK+eGWEqATjBaM/1ScTDlK1xQR03BfO3R/XIqW5a3G6d
-         XgsRpbBnJywGLuG0H1K8cp8TR/ojcU7g5jMHMmdOsp1rUDr2qFyCtuOq+Fb5/YhJL5L7
-         8JKWOiqVL4DfyDFbfvYzBAvMyClfWeapNecihQbJ0pHJ4Jm5c3QIvsNWiwSygrRGyZUi
-         OdvcCMf87omaBkOx5i/vXXpJCKtMYqNX370sA5eJG56xieJ4RhcHN/SWlGZFrcQA4RvD
-         /+cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682329818; x=1684921818;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Is2thnxMX0NfS0ATfXggVukIP4xt06PqoAtrJstbVw=;
-        b=a5e/qTRJokcGxCzXkZxvEOW8Zs2nj4r0RkZenHjta1YHsERjA7wQ13EhGi9LTsW6qX
-         kcame1R5lrL4N5v3dsvtscCecPMO8zeXzslC4075eTXwoPSdLcjRktwNsvbZW4VtHnKL
-         5ceBpwk/P7d2Ow4RvQ4woXJkC8utYkYmu2wUMNMCkwFBUuIiMAv0wZNvUt3jz8TZbZA7
-         HpLsTy+iHl2DuSyHr66duTANs/t+UrdUoCUGiuWRSLcdfddIC7/9ze63mp6QOgTaF762
-         cC1vSyJ7vvcqph6LkKnqKC79uRgx3hOZJpu+QyngHoibABIQS2SVjOB9b6vrF5Q/N8e5
-         yJOw==
-X-Gm-Message-State: AAQBX9e1/ZHC8+npnojz9deGoWUcB+LpM2RiOl6NXtlyHPW55uJwhkqB
-        Yz0FyUQPfReZkP6kMZvILpwL8QnK2tzZf5yrk1BxJSqvZcs=
-X-Google-Smtp-Source: AKy350a8PgtY0Rv9tw+XuKO2+y8O6JuUL4PcYTcSolhIOBGMSaCPgR6j0orK/qM1thAKjN0MD/AWnbDXvNKqyHQ0VBM=
-X-Received: by 2002:a17:906:8a44:b0:94f:553:6fd6 with SMTP id
- gx4-20020a1709068a4400b0094f05536fd6mr9465953ejc.24.1682329818094; Mon, 24
- Apr 2023 02:50:18 -0700 (PDT)
+        Mon, 24 Apr 2023 05:50:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5180E2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:50:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5558021A9D;
+        Mon, 24 Apr 2023 09:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1682329845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ZUgSr94Jx/J73nPOpbJJQSBYtauxCEgSgnwexVfHok=;
+        b=DIdAluO2JRmmSp8fUFz7lKfg4S4uiUzaNgWmv5moUiA/xbIWATn03d5WBelqL46BV4D6ZI
+        4lnszhrQH0vM37FJEBF4J7OsE1klxfd+mq+Dv+HmFwM/t5JZPOiPChPdF6rh1mh3pB9HmN
+        gGdDQPNjN+6LWKxycPua9LphFVz8tf4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 358F61390E;
+        Mon, 24 Apr 2023 09:50:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lO/ACvVQRmQjGgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 24 Apr 2023 09:50:45 +0000
+Date:   Mon, 24 Apr 2023 11:50:44 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/page_alloc: drop the unnecessary pfn_valid()
+ for start pfn
+Message-ID: <ZEZQ9EpUY8Mj5TwQ@dhcp22.suse.cz>
+References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 24 Apr 2023 11:50:07 +0200
-Message-ID: <CAKXUXMziSWC9oGVQxCPs6U5GsnuA2KbKsobj1Feo_eNUn3e4dg@mail.gmail.com>
-Subject: In-flight collision: DRM_AMD_DC_DCN renaming
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Michael, dear Harry, dear Alex,
+On Sun 23-04-23 18:59:10, Baolin Wang wrote:
+> We've already used pfn_to_online_page() for start pfn to make sure
 
-The commit 4652ae7a51b7 ("drm/amd/display: Rename DCN config to FP")
-renames config DRM_AMD_DC_DCN to config DRM_AMD_DC_FP. The concurrent
-commit 78f0929884d4 ("powerpc/64: Always build with 128-bit long
-double") overrides the renaming change for the select in config
-DRM_AMD_DC, and this leads to selecting the non-existent
-DRM_AMD_DC_DCN.
+Who is we? I do not see any note explicitly requiring that start_pfn has
+to be valid for __pageblock_pfn_to_page.
 
-It is easy to fix, adjust this one line to the renaming and 'select
-DRM_AMD_DC_FP' once both commits are merged. For now, I am just
-reporting to let you know; probably, it is best to get a quick fix-up
-patch with -rc2, once all the changes landed in -rc1.
+> it is online and valid, so the pfn_valid() for the start pfn is
+> unnecessary, drop it.
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+> ---
+> Changes from v1:
+>  - Collect reviewed tags. Thanks David and Ying.
+> ---
+>  mm/page_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 9de2a18519a1..6457b64fe562 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1512,7 +1512,7 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>  	/* end_pfn is one past the range we are checking */
+>  	end_pfn--;
+>  
+> -	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
+> +	if (!pfn_valid(end_pfn))
+>  		return NULL;
+>  
+>  	start_page = pfn_to_online_page(start_pfn);
+> -- 
+> 2.27.0
 
-
-Best regards,
-
-Lukas
+-- 
+Michal Hocko
+SUSE Labs
