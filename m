@@ -2,153 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED136ED265
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15226ED266
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjDXQZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S232138AbjDXQZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDXQZk (ORCPT
+        with ESMTP id S232016AbjDXQZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:25:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3DD2702;
-        Mon, 24 Apr 2023 09:25:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C2B78218D6;
-        Mon, 24 Apr 2023 16:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682353537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iDnzHHJLtk40MWayxtSf+dzh53e9g56MVO1vqf4UNN0=;
-        b=V9SJ5QLA+9awksYj6lUK96HEi0B73RO0E9E70nJTMig7n0x4+KPxzBYipj3x1E9ztqLd5o
-        Sm4abzI/D+5cDF+Dzr1RGm/7JjKvDvMep/WjVxg68pSJyixGxWY9f5UwG2tk7OoBno2WhY
-        6WkTZ4d618EwCLy0NYlZS8oMMngjr6A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682353537;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iDnzHHJLtk40MWayxtSf+dzh53e9g56MVO1vqf4UNN0=;
-        b=sUUcd+FWpB4njlgGrlN2KwDdm18sy7WLV2+E/smnhYas3uMRYS0UOv8EMRybw0KcJ+z/Cs
-        grogBrftiS7eU0Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B2D831390E;
-        Mon, 24 Apr 2023 16:25:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1i6oK4GtRmQPCQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 24 Apr 2023 16:25:37 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 303D2A0729; Mon, 24 Apr 2023 18:25:37 +0200 (CEST)
-Date:   Mon, 24 Apr 2023 18:25:37 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, yanaijie@huawei.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: Fix unused iterator variable warnings
-Message-ID: <20230424162537.3mptpz3syqfn5u4y@quack3>
-References: <20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org>
+        Mon, 24 Apr 2023 12:25:52 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674399008;
+        Mon, 24 Apr 2023 09:25:50 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-187fc21f6acso1621934fac.2;
+        Mon, 24 Apr 2023 09:25:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682353549; x=1684945549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FYc7VTBHaoCcnGKGN3LHqqJbrueJDpL55HrA0KKEtPA=;
+        b=hxYE3bZhVJmFkAulSQbyrQlPogxO9iln+wQpma1IjVSCpee3/DruKjETI3FhNjK21D
+         9SKm4c4OgfQzyx7f9ByeTYHO+K7xGv5V3jQQrzHvGCEMuefEcw46jUXlG5OpJDUIFX2u
+         ckOKdhT+XGlENm8A6eyX3WiGB2AgXshB5GtGcYm2QCYrIyYM5w98MZDYtqpke8ADTVV3
+         EttngL6LEo21CsToFBFifd+NQipSvNzqxRx1PqZrCAK9rc2EJBnotaWf7Jxbgi5Jx7pf
+         gbTDabZePoUJSRm/WdXv3BLN74XJWjDH0Cyx/MBkTyu0FArvNltgzBwZFoXfJH81dppy
+         uMLA==
+X-Gm-Message-State: AAQBX9dXIbOpsJFNtG6s2SNpynPZ5PAuj+D/eFiKWTD+G7KhJBGZjtbM
+        X/3LLfb5By78geUZSN96Eg==
+X-Google-Smtp-Source: AKy350Yfaz+VuSxsA/jla5dgW+ksuw/am73QFaYWILnHxGr7pfffiqli1vQtsVp5llqNffj1A0VhZw==
+X-Received: by 2002:a05:6870:eca7:b0:184:37a:41f5 with SMTP id eo39-20020a056870eca700b00184037a41f5mr10084299oab.30.1682353549506;
+        Mon, 24 Apr 2023 09:25:49 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s129-20020a4a5187000000b005252e5b6604sm5028167ooa.36.2023.04.24.09.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 09:25:49 -0700 (PDT)
+Received: (nullmailer pid 2777356 invoked by uid 1000);
+        Mon, 24 Apr 2023 16:25:48 -0000
+Date:   Mon, 24 Apr 2023 11:25:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 28/43] dt-bindings: rtc: Add DT binding m48t86 rtc
+Message-ID: <20230424162548.GI2701399-robh@kernel.org>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-29-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230424123522.18302-29-nikita.shubin@maquefel.me>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 20-04-23 09:51:24, Nathan Chancellor wrote:
-> When CONFIG_QUOTA is disabled, there are warnings around unused iterator
-> variables:
+On Mon, Apr 24, 2023 at 03:34:44PM +0300, Nikita Shubin wrote:
+> Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
 > 
->   fs/ext4/super.c: In function 'ext4_put_super':
->   fs/ext4/super.c:1262:13: error: unused variable 'i' [-Werror=unused-variable]
->    1262 |         int i, err;
->         |             ^
->   fs/ext4/super.c: In function '__ext4_fill_super':
->   fs/ext4/super.c:5200:22: error: unused variable 'i' [-Werror=unused-variable]
->    5200 |         unsigned int i;
->         |                      ^
->   cc1: all warnings being treated as errors
-> 
-> The kernel has updated to gnu11, allowing the variables to be declared
-> within the for loop. Do so to clear up the warnings.
-> 
-> Fixes: dcbf87589d90 ("ext4: factor out ext4_flex_groups_free()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 > ---
->  fs/ext4/super.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  .../bindings/rtc/dallas,rtc-m48t86.yaml       | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml
 > 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 403cc0e6cd65..f16492b8c98d 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1259,7 +1259,7 @@ static void ext4_put_super(struct super_block *sb)
->  	struct ext4_sb_info *sbi = EXT4_SB(sb);
->  	struct ext4_super_block *es = sbi->s_es;
->  	int aborted = 0;
-> -	int i, err;
-> +	int err;
->  
->  	/*
->  	 * Unregister sysfs before destroying jbd2 journal.
-> @@ -1311,7 +1311,7 @@ static void ext4_put_super(struct super_block *sb)
->  	ext4_flex_groups_free(sbi);
->  	ext4_percpu_param_destroy(sbi);
->  #ifdef CONFIG_QUOTA
-> -	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-> +	for (int i = 0; i < EXT4_MAXQUOTAS; i++)
->  		kfree(get_qf_name(sb, sbi, i));
->  #endif
->  
-> @@ -5197,7 +5197,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  	ext4_fsblk_t logical_sb_block;
->  	struct inode *root;
->  	int ret = -ENOMEM;
-> -	unsigned int i;
->  	int needs_recovery;
->  	int err = 0;
->  	ext4_group_t first_not_zeroed;
-> @@ -5628,7 +5627,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  #endif
->  
->  #ifdef CONFIG_QUOTA
-> -	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-> +	for (unsigned int i = 0; i < EXT4_MAXQUOTAS; i++)
->  		kfree(get_qf_name(sb, sbi, i));
->  #endif
->  	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
-> 
-> ---
-> base-commit: 519fe1bae7e20fc4e7f179d50b6102b49980e85d
-> change-id: 20230420-ext4-unused-variables-super-c-cabda558d931
-> 
-> Best regards,
+> diff --git a/Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml b/Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml
+> new file mode 100644
+> index 000000000000..51f98bdbc385
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml
+> @@ -0,0 +1,33 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/dallas,rtc-m48t86.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ST M48T86 / Dallas DS12887 RTC bindings
+> +
+> +maintainers:
+> +  - Alessandro Zummo <a.zummo@towertech.it>
+> +
+> +properties:
+> +  compatible:
+> +    const: dallas,rtc-m48t86
+
+'rtc-' is redundant. And haven't you mixed up the vendor and part 
+number? It should be dallas,ds12887 and/or st,m48t86?
+
+This can probably go in the trivial rtc binding.
+
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    rtc1: rtc@10800000 {
+
+Drop unused labels.
+
+> +        compatible = "dallas,rtc-m48t86";
+> +        reg = <0x10800000 0x1>, <0x11700000 0x1>;
+> +    };
+> +
+> +...
+> +
 > -- 
-> Nathan Chancellor <nathan@kernel.org>
+> 2.39.2
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
