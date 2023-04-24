@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D1D6ED5FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891306ED5FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjDXUMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S232518AbjDXUNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDXUMa (ORCPT
+        with ESMTP id S229798AbjDXUNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:12:30 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA3083DC;
-        Mon, 24 Apr 2023 13:12:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bAJHdIflK84B6J5bH8eTyhJwBY+Oe+IGVpvN7JlG9L0ECTeB6q2Z1a4mU2hWbBw3f1WYQ+EJcdhqxAhNUX8RczrqZZOtIsICB/boeOepyPPh6iIyu4d6fFwW+XAa47GbKYToD/L0FeA1grMhbUU8u/q5UL1BZeh+66fTQB2rlhuk88vYZltNbymy2L/jDo8ncso5qkU5zCcHd8a6Agm9tURGkXSyRwCj22ZcBS1Fk/d161bx43od9G7+90dxBD6KadSGmsxnzJE/2sKZuzzqSoGuovMq9YtlSUTRksLhpQHWLdV6JHcYngVtYf5jgnoCmJ27ttDOibrQ5UybKR0cMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B8JMNhUDPRgmbYsnaf7D4ahQKq3z65iGwiNwvB071PU=;
- b=CTbpUQ165p0knL88wN8rruPcZ4lRRHhtR27Y5RSgWSVLityHV+k81z/HJG7nIdHm5z4zYFwPshA+DrfGgelox7t+7sTZEQDClwxhVH2YQCKfoUL8tm8qbT8PgCAo9Sy6As6blQG0etz23HPQH7/5AMhWJXcFvyZbJFnT48Z/YLwEyHj9HGoz5sg4fMdytfYdcKFtYBMTRhFjWy7DacZB7yNVY93EgNz9gs+mdwN3i2+PHV49gfjsVIWbUSoWhxmlPCDrkjVHjAEkYsWqtV+ua+54ppS9lVeqq80ELRczQIcL9R/E6GtA4SpbaNjQfXhTtTodJ7BXvZn2sF4uQzGaMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B8JMNhUDPRgmbYsnaf7D4ahQKq3z65iGwiNwvB071PU=;
- b=LdB3vQHmVaXe58kjPvjt0IbfC9VhuRdTICSJmqRcZ4wsVlN3BzsCf4/vMCcuFKiOXbBb+5/FtXv6yUo24uu8Gx8AthfJlL22gFU3oAH6qt2yiCFJv4lH6eC86ThwUB9Fwv1ukCms3RsUbGcHWWwQmUhl2b+tjv5fiWeA9Z30mC0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- MW4PR12MB8610.namprd12.prod.outlook.com (2603:10b6:303:1ef::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 20:12:15 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6319.022; Mon, 24 Apr 2023
- 20:12:14 +0000
-Message-ID: <6b686a90-d4b5-5f02-92f2-270637736680@amd.com>
-Date:   Mon, 24 Apr 2023 16:13:40 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/amd/display: Fix a test dml32_rq_dlg_get_rq_reg()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-References: <3ba86bbe8cca149774835659885ddf39034a4306.1681767659.git.christophe.jaillet@wanadoo.fr>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <3ba86bbe8cca149774835659885ddf39034a4306.1681767659.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0305.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10e::13) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Mon, 24 Apr 2023 16:13:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6D6AB;
+        Mon, 24 Apr 2023 13:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=SiIDFSU+Z62/XXEHoFp/GyZ6qQOEWoiUcfBeDnbRlro=; b=Lz7wKaxTd2xFXJnfX+OnBeK30T
+        f7G6zAMnxpddqjQIbNU0fpdUtd50O+uwAk9YAweBcXMcu6jF2rdhP8VtLTuYArRb+DV8TGChYgh5j
+        1DUI4FWMBvr8A6xTIZj9/CuYkQ/mpkK9QIVpJzgv4F8DGLhiII4MC9Ki8AbYneznrt2b4ClcDDL/7
+        VNIncW96J7ayjCipRDQm1/Pi8E1B1gw8sHWL5+k9YXGdQxh4uDwxJWM2lnrIbC4n3HQ1RhlqO/wMb
+        SFCpBmiw2nsc5+ur87E2wJ5OnHlrJK/OemD6I+K6Mj90r5C8KcCbbCW3P+H43YFGEmE3mnh09fwys
+        0/OkisNg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pr2ZC-00H7Uw-0M;
+        Mon, 24 Apr 2023 20:13:42 +0000
+Message-ID: <eaff180e-cc09-8997-b7d4-9b0d8c2897d3@infradead.org>
+Date:   Mon, 24 Apr 2023 13:13:41 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|MW4PR12MB8610:EE_
-X-MS-Office365-Filtering-Correlation-Id: 000194a7-4bcd-465e-0d31-08db450031df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wovGoGeZR7NhTPdSfweayQY9imd8d54IAMc79PicB29RRqbykTgBbNs3L9AsrbZvu4d0lQxH5QsG2MYFy1oKUS/C6fCetOV+CUhfUvamDB33Ql1dhbXKZOtmv8xkNIlEI7tGT/2qJZg8d8SVEan3kGkIlqghJJVtr8GIvvvH3llgUOFCl5pQ0VTcfb/nPl76R/9I9tHEPATeR7fwrqIyggZocUiexi38pNkmSAAJzbYLb7F+jECh8WaNYY8fNMegA14ITyD2yVYVkOGBvey70xlEC+5Ygz2NTosE4GjjWbVqjoqX7My+U3W41eknJ9XlZYrqPX4dsNx5tR/f8M4j31GY0L+q2M1yKxtagVD1y0JY+YEKhIwacOivjKUjeY8nWyR0kDRA550HO11e6kRu8QQK0S+1qo+sZiG66DoZ11Cszo/ze6l2PiMxnVRfHOB/wnMCPjn0zgUCGITEQDFWVrvutIvUjHPA1tXhHKzk0Wk09dVXsDW8a+70lRfNd3LfDXi3is3M8xQX1Z4bIh0eqepfuofQdjTOQMLf9n4s36CoYdcrm5+bEzFzhGoK2cCY922yNZdrTMM62uzVKsa5L5KQ09ftbU4q3kqqjIMTpm+RLeA7e/cXypNtnAGKzUONyu4eZRtHFwWrVRMjrLlv5BWIQhNQcrAtcTLNdKg6sYQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(366004)(396003)(376002)(451199021)(31686004)(2906002)(6486002)(83380400001)(86362001)(36756003)(31696002)(8676002)(8936002)(66946007)(66556008)(66476007)(478600001)(41300700001)(4326008)(316002)(6666004)(2616005)(6512007)(6506007)(26005)(53546011)(186003)(921005)(38100700002)(44832011)(110136005)(5660300002)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3p6Rmt2Rk9NWDZPUWZwRGtmbXEwOXUwUjd1NWM5YTM4VG1Hd0RWQTVWaEsw?=
- =?utf-8?B?dHhyZXp6UVI5R0JsUnNhK2xlUzlnZXpZZDZ3eURVdk0vc1NmUTZrZWdnTDFV?=
- =?utf-8?B?eE0rQkhVdWxkT3ZQMjFOUlhNeEhld1NMbVF5WnVzWWd2Z09rTEd2dnJNaFpz?=
- =?utf-8?B?YmdiNFhOem5XU3BRT3U3ZEZUVjdUa1hDcG9vRmUwRUZYV2JoTjFrMGxYNmlC?=
- =?utf-8?B?d0FyaEFUUmdtVVgwbTR3dWZXd3lHQUtLYWF2TXlEVkRQMnNpVHFuZFB1SUE1?=
- =?utf-8?B?WjVmOURWSTNGS0ZnQlFkak1zRFZsV1VXOStvczNWdmlHK01CS1ZmTkwyRDRx?=
- =?utf-8?B?OVlXNnhrcWN0ODMxbVF1UnlNVFFybnFwWitLSGFFQUs2b1cxZmFreWlKRk5v?=
- =?utf-8?B?b1dzc2pjS3VnZ1RMbUtNcXREWWFqWVpoNDVJMU9oT0N2dytTTXdXbkNDbWhs?=
- =?utf-8?B?ejV2MjR1M1d0R3B6U3hGdk5HaHZ6S1poVFZoeE91SWxMZ3MyY0RPZmdaY0FT?=
- =?utf-8?B?T1FEenp6Y0FUTlNrYnJtK3NiZTN1QXVqZm5vZG80WDdtZnFLZDNaTURBakth?=
- =?utf-8?B?WkY1S1B1eGNlcWVwRkFoOHVtZmw4OXBQTGljMkJYaU1CYnBMWURPZUluMHFq?=
- =?utf-8?B?RmpTS3N1eGE1YXh4b0tmV1JZdGoyK1RhSVhOQzJhVk1SazVjdXJqc0lWOWRm?=
- =?utf-8?B?eFc2aldEbFFwSEtMWWR0eWlSWHlVU3pWMFJTYU9FUG5ZNEF0UjN3cHFqa1J0?=
- =?utf-8?B?aURyMk5zQWFzWWlKK0pNN211LytnL1g2TUdTbDZjcmlUYklkNW1nbzNHbmxL?=
- =?utf-8?B?VmRvdENxd1hadzk5dFZDUHg0UXpPSkN4TFdwRXY5QklWVzZpM1pGT3ErbXhY?=
- =?utf-8?B?WHFveEpDRzNEVW9uMjRGcVRvZDIxVDdDeUIrbE5wLzVNVjJoRVVPNng3a1lX?=
- =?utf-8?B?RXEyOVplam9FMDFXNlNoQ3FIUnVkaVdlWlYvaTZDZ1djdWF3NUxPaTZudDV5?=
- =?utf-8?B?WWJ0RnhVWlFKTHJ0Rzg0Y1lVcUV0Q2I1Vm1UMnBvM21iaDVYWTN1Yi90ckR6?=
- =?utf-8?B?eEFJTmt3MWd3aWUwcng1M1VtZGl0MVZQaW9nSFgrdjJySnFwUWo1WVpyMmJw?=
- =?utf-8?B?UktHSlphRHdhVWJGcktXR0N6U0N6WUllZDZ3YVVKZERLYVg0YnQxYUxwRTQr?=
- =?utf-8?B?UDRORzRxS0c0Sng3Vk1KbVRqVFR3K3Y2RFQzckRvSmV0WldBSlBoN3pFeWsx?=
- =?utf-8?B?Y0dpdmFNNnZBMGFiL1NPZzQxRWhpRXVkRk1qZjVjYmtDYjVMSHV1dmhUTGxi?=
- =?utf-8?B?MWVMM1pDeDYxVXBBMlZiUllick1lSlpOdXF4WEVLV25Kb2ZiQ1MrVG1FcUdH?=
- =?utf-8?B?eWJ1bWVSWlpqK0xQL3pQV25vTVZoVlBMb3VhbkJ6QXBZTUtYbjVRcnBtclZL?=
- =?utf-8?B?Y1BVM0lqYXk3aUhHeTA0bkNYRDlXZnM4KzkyZkc4NXR4QmNpcEhNUTFBM21z?=
- =?utf-8?B?N2RwTXg1aE85ejd0eU52U2lPWFEzQm80SEcxeGlKSmdwSVVESEJSaEtoVFcx?=
- =?utf-8?B?WThkTHY3aDdpY3hiaGRuakxTR2d5L3JkVVREQm1sd1F1c0ErZ09qdWtGei9Z?=
- =?utf-8?B?NkFUM0VsNjhwSGJiQ040SUJqcW5KZDR4ektZRytpTnIxaEJMRU53TmRjWVpQ?=
- =?utf-8?B?Wm1EZHpsdjdnaCsvVUNHTXlyYWV1bEVqcC80aHJpNUxMUEdsSFlad1lPNExQ?=
- =?utf-8?B?MVhaZTFmeEJYSGpmSGNHZlEycFh5eWp3RkYyUitSeEoybk43WXJDRmJTR3Fj?=
- =?utf-8?B?U2ZZUWFrNzRsNGZOTUxnaWlpNE5OQk9vckpxTmYwbG5vTWhXa29hOEp1YzNv?=
- =?utf-8?B?N2lvdXh1bEltbG5ySzE3SndRSlgxcndHcWRDUCt2YXdUZ0oxVVNLTjFIQjFN?=
- =?utf-8?B?ZnlmNmJLQVhXVWtiMU5PNDZzQWpQdHRJaTJ4WkprMnl4UXh2OHljY2s2QmtW?=
- =?utf-8?B?bzF5dlpteHhwakFCWExxRTFnNFVaS3RTUXVCT2htK09xKzZqcjU4SjFhOExZ?=
- =?utf-8?B?eFU0OXZ6NWpoaDcyL1lDdU4xMzR3NHVyNUpBNjAzZC9zVEtyazZDMHVJaEti?=
- =?utf-8?Q?YwlKp47+PEumprJ0/b4l+Sh5s?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 000194a7-4bcd-465e-0d31-08db450031df
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 20:12:14.4463
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 746D6BtPNnVctWtISD+UgHM7MHS3Xe0tisawu6joWbs/r19+jmH4nswTWm3uCRhg4impjVeyknRk49hHGTY6gQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB8610
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH linux-doc v3] docs/doc-guide: Clarify how to write tables
+Content-Language: en-US
+To:     Joe Stringer <joe@isovalent.com>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net
+References: <20230424171850.3612317-1-joe@isovalent.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230424171850.3612317-1-joe@isovalent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 17:41, Christophe JAILLET wrote:
-> It is likely p1_min_meta_chunk_bytes was expected here, instead of
-> min_meta_chunk_bytes.
-> 
-> Test the correct variable.
-> 
-> Fixes: dda4fb85e433 ("drm/amd/display: DML changes for DCN32/321")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Applied, thanks!
+
+On 4/24/23 10:18, Joe Stringer wrote:
+> Prior to this commit, the kernel docs writing guide spent over a page
+> describing exactly how *not* to write tables into the kernel docs,
+> without providing a example about the desired format.
+> 
+> This patch provides a positive example first in the guide so that it's
+> harder to miss, then leaves the existing less desirable approach below
+> for contributors to follow if they have some stronger justification for
+> why to use that approach.
+> 
+> Signed-off-by: Joe Stringer <joe@isovalent.com>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
 
 > ---
->   .../gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c   | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> v3: Fix grammar mistake
+> v2: Simplify recommendation for either simple or grid table syntax
+>     Remove example, link to rST user reference
+> ---
+>  Documentation/doc-guide/sphinx.rst | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c
-> index 395ae8761980..9ba6cb67655f 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c
-> @@ -116,7 +116,7 @@ void dml32_rq_dlg_get_rq_reg(display_rq_regs_st *rq_regs,
->   	else
->   		rq_regs->rq_regs_l.min_meta_chunk_size = dml_log2(min_meta_chunk_bytes) - 6 + 1;
->   
-> -	if (min_meta_chunk_bytes == 0)
-> +	if (p1_min_meta_chunk_bytes == 0)
->   		rq_regs->rq_regs_c.min_meta_chunk_size = 0;
->   	else
->   		rq_regs->rq_regs_c.min_meta_chunk_size = dml_log2(p1_min_meta_chunk_bytes) - 6 + 1;
--- 
-Hamza
+> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+> index 23edb427e76f..cd8ad7904491 100644
+> --- a/Documentation/doc-guide/sphinx.rst
+> +++ b/Documentation/doc-guide/sphinx.rst
+> @@ -313,9 +313,18 @@ the documentation build system will automatically turn a reference to
+>  function name exists.  If you see ``c:func:`` use in a kernel document,
+>  please feel free to remove it.
+>  
+> +Tables
+> +------
+> +
+> +ReStructuredText provides several options for table syntax. Kernel style for
+> +tables is to prefer *simple table* syntax or *grid table* syntax. See the
+> +`reStructuredText user reference for table syntax`_ for more details.
+> +
+> +.. _reStructuredText user reference for table syntax:
+> +   https://docutils.sourceforge.io/docs/user/rst/quickref.html#tables
+>  
+>  list tables
+> ------------
+> +~~~~~~~~~~~
+>  
+>  The list-table formats can be useful for tables that are not easily laid
+>  out in the usual Sphinx ASCII-art formats.  These formats are nearly
 
+-- 
+~Randy
