@@ -2,131 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885626EC3EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE066EC3F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjDXDbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S230349AbjDXDii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDXDbc (ORCPT
+        with ESMTP id S229565AbjDXDig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:31:32 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E682136;
-        Sun, 23 Apr 2023 20:31:27 -0700 (PDT)
+        Sun, 23 Apr 2023 23:38:36 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E45212D;
+        Sun, 23 Apr 2023 20:38:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F08b1hMkc4QiCCtMHPdBr9G6WJ4QBtYWVhS753cxXTWpvf59b7Z5UJhqwFYdEZCLUatBCYdO3iEZlCgxwr/MDwmY7qAYxDGnCBCLjNJHy/w5cWODSabc2oXJKeJ+ar6UoB7J/83BJeK37vrBAJbJeXFKZPdJ3bOAKwu4XhQ/cuHFn8E4Jga7By9Yo9nKJ86fdKgMHYY+5GMxpkdZvIVw5RB1LI1HPB0FXI0C95+Zrnf9SLDHq/VI579bHJCdBg4R7c8wRwHkFYQFcbml77cnP2AMIN18w5mt2weTAyuoSYudYIG6KTahhgt24aXnBZAaDHULwsdymYWVixMF/1snwg==
+ b=oHWhbxdW3X916/Dkmyk1HFyvA72SpMNOk9BvP1LHjLRks76cuhD+18Cl2ZKc5cKcgW+RNI6qdaBJD/JB7LQoKKp5x2cd5b263XAxq89a/2r+qQtk4QU/gpVJ2PMJ1Ldxqom7jorHbbQHZjpRNjhQGtgXJzwZZEoR/NwWL1b2u91k5Cc3RimUhe6u3u6EoQdsVErma/K7J8Qw8slnESql9viVDyhukHsLjSvRb82iXgphfW36cheopgWJJVtyP2F5KhzvwbdQMmX7ZzQ43Cx+HEeikpiV4CvTJx4w7AbHhVtVNRj2WipR+VaTqmcieCOb6ihvYNy50J+u6FoZBAUcnw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VqnvjNWbcaBIWl0AHxvj644VkUPrpjv6C1kY8HwFH3U=;
- b=DuaXhqoBE5iW72MVwk8Nk+bevH0IEDLnkCzlSRIgtA0t8y66OxVFAcUBT0Lx/+AvlIuYNfLZR3WIT6UAPQHQpQg/p+BHR3wSYjEVoxhjEHPIKwH+AXkv6HHPvhyrwl0pefUa5W5SrwAhwaTW9BNqgGMPNQSjERXgt096OOCG6FYBh6h2dPQIxdEaIWmSfKyI2jtPZQV064jRXUzOkB11mfJR9IOa9Rwh9N6/WWHRUIoRzombfVaI2XiUCkhjWg4Shtbt7snr/95yJGIgbkCtyxpV+O9pAfj2KORmBwSVB7DEgpQgxtRbZutQ3dt7bVdUbmoauXBcEJo0Q9AeyNL40A==
+ bh=yEOedDruPju3e2YdplmfsoDKiqfGFidu4VM+NH6+kpI=;
+ b=XgsZcOmzYms8fA3c63fPMBaRx62Wr8x7b8NoSkZ6Cft4K44dOhxKsw/YhqF2nntfmgazB1sYoeT6vWev6rCnSHl5afnEgJk7pRGxVUNpMEzPXeuoiqWHcCDbJ5Rnwd+4QiHBdiUF2YIBa1gxELFr3qR9X1Cb/yImeNxAWqimmXYfyKM2w7HyHBbId/PaJITHJFZiEnS9eyx2aWTmzBKB3WB3ZtCI+7+GuNjGKJhLCP4CkLnYpUAJtLK5NzBPoOtZL3RZIApFrTA+Lip2sMqRjHzo/kCt4/ncUkIQcySHXS3IWK1sM7yjTGiz5aF83D5k4BVT8aMzQTaBrDkVeEXcuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
  dkim=pass header.d=labundy.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VqnvjNWbcaBIWl0AHxvj644VkUPrpjv6C1kY8HwFH3U=;
- b=pMpAd/Q6NLEWOsd2z82yKCUSIrs7/ZueTKI25YuKGcm+aQIQ3l6YvM77AAyRTimR8Q1Gzoxf1YfXuXQmOUg09uxsy1BNTH3jA2cZwpe2Pcm4ZSK2T9ZGiHFnPcEd4pwuPUS+11J8PUGasY301H/km2cXiFX5SohsmaNxzTfRhO8=
+ bh=yEOedDruPju3e2YdplmfsoDKiqfGFidu4VM+NH6+kpI=;
+ b=fLgIZHpJnNPA3x2fXvDlweDsy/d7VaRw5QxeM5MdaxILTz1uiIjBV/u+LGRS/AX/8K67rzB9ZrEbn7lOO7IbQuyCQVHtWj8CcS0HmmoKfe+PfOYrQRiZeWcuHGYpizA5RC6ujAnzuUxC/g+JX2JUj0EyVFzdXtIStS2kmtUBf9o=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=labundy.com;
 Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21) by BY3PR08MB7121.namprd08.prod.outlook.com
- (2603:10b6:a03:354::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 03:31:24 +0000
+ (2603:10b6:803:43::21) by MN6PR08MB8617.namprd08.prod.outlook.com
+ (2603:10b6:208:46e::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.32; Mon, 24 Apr
+ 2023 03:38:32 +0000
 Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
  ([fe80::d2d1:7af4:ef32:542]) by SN4PR0801MB3774.namprd08.prod.outlook.com
  ([fe80::d2d1:7af4:ef32:542%3]) with mapi id 15.20.6319.029; Mon, 24 Apr 2023
- 03:31:24 +0000
-Date:   Sun, 23 Apr 2023 22:31:16 -0500
+ 03:38:32 +0000
+Date:   Sun, 23 Apr 2023 22:38:29 -0500
 From:   Jeff LaBundy <jeff@labundy.com>
 To:     Fei Shao <fshao@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         linux-mediatek <linux-mediatek@lists.infradead.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: input: goodix: Add powered-in-suspend
- property
-Message-ID: <ZEX4BEVMf6GtvaAP@nixie71>
+Subject: Re: [PATCH 2/2] HID: i2c-hid: goodix: Add support for
+ powered-in-suspend property
+Message-ID: <ZEX5tc2LSZoVswc2@nixie71>
 References: <20230418124953.3170028-1-fshao@chromium.org>
- <20230418124953.3170028-2-fshao@chromium.org>
- <ZD8z57MBvcfExJx8@nixie71>
- <CAC=S1ngBt9DmBobMkQXWhqE1UUxFv2U6iFd42nT=1N7r8+pFUg@mail.gmail.com>
- <CAD=FV=U_i26a8uJYmqYf6PUgmTUgmEB5L2DkVga0zDX_iDcGQg@mail.gmail.com>
- <ZEAGTiGyvynGA9P1@nixie71>
- <CAD=FV=UB393Z1zhK54Apgr-iRcvgiK0t36jt6-t5-5zz3m8OZQ@mail.gmail.com>
- <CAC=S1nj8VTXOovvianPWDYnsrbek0APD76SBNquFObaw8Vg4BQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+ <20230418124953.3170028-3-fshao@chromium.org>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAC=S1nj8VTXOovvianPWDYnsrbek0APD76SBNquFObaw8Vg4BQ@mail.gmail.com>
-X-ClientProxiedBy: DM5PR08CA0051.namprd08.prod.outlook.com
- (2603:10b6:4:60::40) To SN4PR0801MB3774.namprd08.prod.outlook.com
+In-Reply-To: <20230418124953.3170028-3-fshao@chromium.org>
+X-ClientProxiedBy: SA0PR11CA0057.namprd11.prod.outlook.com
+ (2603:10b6:806:d0::32) To SN4PR0801MB3774.namprd08.prod.outlook.com
  (2603:10b6:803:43::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|BY3PR08MB7121:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3b6ac3f-90a2-4307-8781-08db447460c4
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|MN6PR08MB8617:EE_
+X-MS-Office365-Filtering-Correlation-Id: b76ed4ca-1a8b-456e-24d0-08db44756027
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4EKpB0jKEn4oAFfZYlwB5rYL+Tsi3ZRgM3tkLZkwnj/NUDFsoibToc/MfdBn1nrSz6lBZZpuDDi8dV2Rbdz+4V6IX+0CY5mo1ly/qqKWYnrmkEyys3RskqVBMnE4AWYv3rgpvFvtlrYGMoR7SltAwULI7Ck1lFV3CzCmw8lGJ7Q9A6H5qHV8fKnHVa619h3ieTqQupqiQoZbEr7kYsaa6Yi23iwGK9WG4JWTJTtT0w8dp81LvC3surklidK2hqq6pzJjFdKcIUV50gOBND8UsNu+0D6Sj1X77ZNF5NMExLj0O2z8kuQFniU7HKl1uDp9dNad4TbUJGXi8LAyRBphDqvfbX18KYPlCstPCIe9LQ8cUmBnwj0IMBkcH7Yd4cXuCaQC4PGpo1s8OPMYOWinEKL5CRAfVhRbADfj2cgG1HRu9SYXfaiRw8EPj03k4eYsLfsABCH2lwQfHFLoysagLBWpLjTw13zfALC9/PWPZYvjvM4Y08XSvJ2eZkIqZdsFQuF8Eq4cxvkTmuufWLpkYyHDO57Tx3ItGYqva4F1S5cTYSDJBjgbQe1aehOvQVyf
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(376002)(346002)(39830400003)(136003)(396003)(451199021)(478600001)(66899021)(54906003)(86362001)(186003)(53546011)(6486002)(26005)(9686003)(6506007)(6512007)(33716001)(6666004)(4326008)(6916009)(66476007)(66556008)(316002)(83380400001)(66946007)(2906002)(38100700002)(15650500001)(41300700001)(8676002)(8936002)(5660300002)(7416002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: o3UMJPnSCDynvbeGth4jGM49pZYgyW2rwnpbbvAWf3QlG0hNmpcfWB4tYtCooBYAs0JvDun9ncTNEmFrbS6Ch3udfm0s71kA8r6zxyuvkrq1UL0W9fmurCxU81BG3lybo2Po514QGMZicLih0XkBjYsPFgBrWApvz0qO1FI/wg07+IBt166yonpXb8w+XTq6t9VhIIz5RpqsWpffoEe54R6IleCycYbCmP51pql7f+CElRrV80k5fOz5Nf3uzelM1MLysTUZiB84MPvfi+1C2SlJ5LxU00YyI7xxsMQAkRFdZPRt8O/b1/YaGiTWJDdDhU6cfmtIcfVGqBoyu6WW8x3SJw69Z2EJ7tQtzgi5s1o8zpIyzU49Lz+y1RfgSFPGplSkACT02HMifKAhj9lQAlX2HLkh3zkiCtjvRSmfpG8DMAZITrvwL7P1TUISfIiydMmmB2zg/xbFJty24Y0XtisHlcfFZlmltwCWHwvRwCm3npSbl01lETv9aMXpbAfJn2fvdLCLFQvroNUY/44pjxNgOn/5EdIvGVnezavLTsjKc64olz/Bwerlm0AoWCK3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39830400003)(376002)(346002)(136003)(366004)(451199021)(2906002)(15650500001)(6486002)(6666004)(9686003)(6512007)(6506007)(26005)(186003)(66946007)(66556008)(66476007)(8676002)(8936002)(316002)(41300700001)(6916009)(4326008)(478600001)(5660300002)(7416002)(54906003)(38100700002)(33716001)(86362001)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T215ZVlZSkVFeDZUMExKclFOdVlQWVJWRlJQTzE4TFhZSW9JcDNTalFXZERQ?=
- =?utf-8?B?STVIM2ZrVTdsL25tN05PTUNwN0Yrendhc2lpWGFYSG9qWmIzTGpoVDN6RXIw?=
- =?utf-8?B?UkQ0R0NuN3cyWDJ1TVIxdFBsWEw0dUdYWjBOTFlrckxqeUNCc1hOZDEwZzFr?=
- =?utf-8?B?Yk9uRDhTYjkvYjlKRFJZN1dJWXdnU2htZ2k4SWxaQ0F0Z1BHTmlpOUxic1Bs?=
- =?utf-8?B?TXRXN3ZOcWNFT2ZvMHNhVUxYTzJibDZ2ZzJNTlpBVGcrRDMzMndpMzNzeVJS?=
- =?utf-8?B?c1QvWGxuL0E4Q1hiS0Q4SFNBdnQ3OFdxWGZqUW5LTXBBL1p2NTJDVUlEaDdG?=
- =?utf-8?B?UTdJSFlRQmZSQUY1RzM0SFFNeWsvU3hXNjdJNndFZGVleXQ0ZEVnRG5NZ095?=
- =?utf-8?B?NjFLSkpudWVDRCtxdVFIclVzd1JOanh6MjhsajBNZ0NHUGE1K256RVAzT0VZ?=
- =?utf-8?B?WTVRb3M2RDYvRktCYmJYZHNOY1Q5SlJjU3k5UjNkWDRBcFFWdjZ4ZWgvZHZh?=
- =?utf-8?B?eGhmYTljdkp0ZVU5ZHJOM2ljTjkvbjE3K0RXTDJ6RUFuamVTdkoyeWN3cmZE?=
- =?utf-8?B?S1REWU5aRDFTNGhrU2FBeW9neSs4YmMrdWptbU52NDFSams2dk85MFVFdzlK?=
- =?utf-8?B?N3E3T2xQZGxqK0F3MncvWENvQlg0c0tzVzlveFNTMlpkb0pXcVpLWndoL3Nk?=
- =?utf-8?B?TUV3bXNmSkE1dnlUNDJHeDc5Z1pNR2lwdk1lU0lxUnkxZ0Y5cmhxQmk5czFx?=
- =?utf-8?B?VGcwdzd6Z210cGRFSUl6OWdtcS9mQjI1Rmc4T0FST3k3VFdOZGFpUk9tNHd5?=
- =?utf-8?B?RENYYk91YW9Yb2MwQVNCQ0FONHlrbVdQZzMvaGtrS1dydmtkN0kwaVFxYWEv?=
- =?utf-8?B?Zi9RWG9PZjNBUmJVY1RIOVZwZHNRNUlIeUdRUFJpVC94Y1RFdU1Ec3orWEsz?=
- =?utf-8?B?Q3NTOWx4WlF4Umg3d2t5VjJycXpYUG5nbTVCUXJzQmtXc294dWtVU2x4SUFr?=
- =?utf-8?B?a3p2VzlmTWVBS3hKbHljRElkNVQ2YjJGZjFKZHFsMC9kbm0rbzFtcDdqTW5r?=
- =?utf-8?B?V0Q3UklER0JwZXJvQW0zN0QwTzF0eEFmdlFobnhiUkRQQmhuWjhIYU4xN1B5?=
- =?utf-8?B?M2gxRXpxclFLaDFjTDhWUWN6OWFQSFd2cmRJVmVxa0JsVHRodzU1dW9rUVo3?=
- =?utf-8?B?alVZWm9OVFpaNmFLK2ZFaVYzbERnVXJ6ZG9hWDl6NHRod2YxcGdwcnUyUkgz?=
- =?utf-8?B?NEo2VzA2c0krMEhNTEVnS0pvQ2VsamNNaFAvQlhJWGNnaStWVFJsVVpYN29W?=
- =?utf-8?B?aGd6S1BJbmUwSnMvQitRTnpGekxQSU5kT0xkMTNwZnk3VkVWN2RxVnlFSEYz?=
- =?utf-8?B?cnN2OXFkR1lMK01WYUxrRHNYWVlQcWkxQkdsRzFvY1RhY043czE5RWhST2w2?=
- =?utf-8?B?bVNuR1YzVnoxckxJek8vZU9oU0x6cWJJRWZyR0gwK3FLRnFLMHVQMWMweVhL?=
- =?utf-8?B?ZDZtU3lWUk43Ty9uTGZkdDRXc21zVzNvM0diak9ybVFHWU44RDYvSjhqaFZj?=
- =?utf-8?B?NE9Id3JRRUVrOEppZ2pnbFFtc2s1Mk9LeDBLQUdXWDUzbS9vWmZRNGFjTUFS?=
- =?utf-8?B?UnNmL21CaEMzb2RXbmZnSHhSYjVXNFU1OWJvbWtEcGlzV3kvVFdXekR2Mmd6?=
- =?utf-8?B?Q1BnU1JKT2JId1FwUklXZ3EzN2UxZTA5UGVXRlZIdnU1MlFYT2xkaE5nQU9D?=
- =?utf-8?B?N2kxYlJBZGZKZzhqQlBLLzl1QjhKQldGdlE4eU0rOW90L1BMdXJOSGYydVN1?=
- =?utf-8?B?YjRLYzcwVDlLRGhkWFMzc2ZXUWdwakJXQlBsYmJlYUc4dFVleVB5eG12OHVT?=
- =?utf-8?B?ZUtZUG5VcHozSzhTVzh1Mi9PSWJjTS8wTTZEdm5iY1BlTFc0bWtNNFBOUmVY?=
- =?utf-8?B?bTF4OTJhT3hUdGYxS2NNNVRBOEp0YndZNTRaY0d5ck5iY3pBVVoxSFMrSWVn?=
- =?utf-8?B?SHBHSVJLdWQwVDNYdy8weTNsTDRQNjR2WDZISVJNU3VpcXVTU1VjakZ3Skxk?=
- =?utf-8?B?L2lrbmd3S1JXcGMrUjUrQ25XSFoyOXJUemp6STNSS0NxSlMzV25hWlBxM1la?=
- =?utf-8?Q?23yOT9cybXobGnBELHC9sOqJ2?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Khl6n0Kb7v9FHjDtPd348qamZIudDHS2g8gwdx+RoSaeX+xgCPIY9wU0piL+?=
+ =?us-ascii?Q?07vJkQ2LcepIWzY0MNa5e0m2bvFOptr0BV/p3IF+zrVkHFXN8r+6iD2WsATd?=
+ =?us-ascii?Q?cgSo91wYBWb5xJJ0RMb3upzk0utxwBrk5lD3yBfjqlXdm3YPDEsTqZOg7oVb?=
+ =?us-ascii?Q?dvmxpXl5h7rgmsWScQ8vEkNcsVGQj3u585nisUjA+j7z2V6tflYVP7mQgejW?=
+ =?us-ascii?Q?srSGaCBZbwX5V6aWEgDNu9lot1xPWhagupeE/VZpeiG4eAUkdvo/P2Ecskrp?=
+ =?us-ascii?Q?bTEfUxhwc4XThptKy7dCWiAcbYTrNvuW7KWqTVnq1d44Jtw6VQsWtL861hFc?=
+ =?us-ascii?Q?5EJZR43DMN5R7ckyywlsnyIoKMV6c4aRYnZTHHMN7yBos/6NNXSml2Q+io2W?=
+ =?us-ascii?Q?CYwo8Z1vKt0xYjWQ2ainR8bxuv2AQ0pUj7wc/MNjVOWDfVWjSEC42LmYBu66?=
+ =?us-ascii?Q?nVMHvDqwdcAp2PuPFUqAcQBfHReg/y/YtP0KajY04HS5RgqC3i+7h9DslpGq?=
+ =?us-ascii?Q?8/mYkdxKd0Nsc3c7um1bpNwXe+fIr2JgUgmuBlMbYlDjBIpOrOPTWohyeBSK?=
+ =?us-ascii?Q?r/ENr5s5BjwnRO8EwR0A46PzfAC4JqRg1XyDMwPUAEzsLehI5yd058zTv3hn?=
+ =?us-ascii?Q?+vh7Uuo4+HiCxIMjK/659ZI0WI5mFxatWqMD0NSUoHSF0ODRaamIMafZk9Nf?=
+ =?us-ascii?Q?FkZAXbrc8jA52fc7OA53/wQM3bdPo5UVxZ0+tj/NtDb/7k4MGUZ1mJIdUTx0?=
+ =?us-ascii?Q?8oFA4Febjvx87dO3N4DeQLdw0V4EXCgPDrRCdXoj9eytIedpKRDMmVtuVASZ?=
+ =?us-ascii?Q?aBOD2GC2/enweUSC40rFxk2Kmc3HPNJWeH52Dfu2q7mrzI463swwldts3bbz?=
+ =?us-ascii?Q?ltjo6hfnE50Bz5u/8RRJnS+xiuVEDBcs7vhC3vB69ON3Ox55uOehxPt3OHmd?=
+ =?us-ascii?Q?GF/EGLgy3IoVD10vYgJASWJ/dIWqXCy8okmPRs/qqur3YPxp7jOxfvCU31wM?=
+ =?us-ascii?Q?fE0YwaRlmGlw98d8Y5KnX8H/1bPVKyOojIlzGB3hQOu779ZQf/PSJmKlkPRB?=
+ =?us-ascii?Q?8VT6roGNY8N7a2PJF3/tjuSto9AcQiCLdy5QV7DWQWqL/HyoWiiy8vKrpymh?=
+ =?us-ascii?Q?jZnRQrEhIWYgEYpjdoPQUODdISoeEv4EkO4s7cKgV318kyaGPqYWBq9/XdbQ?=
+ =?us-ascii?Q?bjKs3bXwPd+tqsUwgVMUxX58ClVVikfsCq81M0AVveNZTcyRl7aI/tkDjwMI?=
+ =?us-ascii?Q?M3sa8slGTaP1NcQzLlF3fD8oJhP8tZEN/HVzDTx2/z+adO9X/J5uDfvlkZj0?=
+ =?us-ascii?Q?0ctYQ90iuiFvNteI/Z8zDxQJyox9L4lsMflxDYO+jIkpcqWl7QvQ4/GDbM+B?=
+ =?us-ascii?Q?v6Wh7pRj4uUoepbf13+VCbFakYqv68SExf/cJ80M3H1M8NDfe7L5U0M+EjWW?=
+ =?us-ascii?Q?gf3fy8NTDk7UtCn1TQ3XiuuLvahKr4x9SvykHmu6dGlitNfigtiIc/e+p8Wu?=
+ =?us-ascii?Q?PXSsDh5IMuQj2YfVrxVjhEZZ118EkV7HwqwDSqfuOpog+XBCJMHq7MDvypP+?=
+ =?us-ascii?Q?YyBbSxE5WcIXEP24CpnO1rJ1mDDqGvHdf+V9Z2Rz?=
 X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3b6ac3f-90a2-4307-8781-08db447460c4
+X-MS-Exchange-CrossTenant-Network-Message-Id: b76ed4ca-1a8b-456e-24d0-08db44756027
 X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 03:31:23.5861
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 03:38:31.9635
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rocNyCziSdt/l5W20/ITchZ9bmItbU+TvNEg14Z05YKxinXTNIdm6Q4CCFMOAFmK7AkUlGBmPNBFXnLY5uMZgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR08MB7121
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8JQ4hlcvwmy1ZCUIZLJ7hg4tFRhfFJTjuYG0LKEpqw9eHWRcWj/0BzeGfUDxzjwct5Wv+S7ylDa1nEG8bSa+/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR08MB8617
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -136,190 +121,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug and Fei,
+Hi Fei,
 
-Thank you for this additional information, and your continued patience
-with my many questions :)
-
-On Thu, Apr 20, 2023 at 04:13:37PM +0800, Fei Shao wrote:
-> Hi,
+On Tue, Apr 18, 2023 at 08:49:52PM +0800, Fei Shao wrote:
+> In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
+> reset line to true state of the regulator") introduced a change to tie
+> the reset line of the Goodix touchscreen to the state of the regulator
+> to fix a power leakage issue in suspend.
 > 
-> On Wed, Apr 19, 2023 at 11:41 PM Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Apr 19, 2023 at 8:18 AM Jeff LaBundy <jeff@labundy.com> wrote:
-> > >
-> > > Hi Doug and Fei,
-> > >
-> > > Thank you for the informative discussion; I can empathize with the pain
-> > > these issues bring.
-> > >
-> > > On Wed, Apr 19, 2023 at 07:38:13AM -0700, Doug Anderson wrote:
-> > > > Hi,
-> > > >
-> > > > On Wed, Apr 19, 2023 at 3:44 AM Fei Shao <fshao@chromium.org> wrote:
-> > > > >
-> > > > > Hi Jeff,
-> > > > >
-> > > > > On Wed, Apr 19, 2023 at 8:21 AM Jeff LaBundy <jeff@labundy.com> wrote:
-> > > > > >
-> > > > > > Hi Fei,
-> > > > > >
-> > > > > > On Tue, Apr 18, 2023 at 08:49:51PM +0800, Fei Shao wrote:
-> > > > > > > We observed that on Chromebook device Steelix, if Goodix GT7375P
-> > > > > > > touchscreen is powered in suspend (because, for example, it connects to
-> > > > > > > an always-on regulator) and with the reset GPIO asserted, it will
-> > > > > > > introduce about 14mW power leakage.
-> > > > > > >
-> > > > > > > This property is used to indicate that the touchscreen is powered in
-> > > > > > > suspend. If it's set, the driver will stop asserting the reset GPIO in
-> > > > > > > power-down, and it will do it in power-up instead to ensure that the
-> > > > > > > state is always reset after resuming.
-> > > > > > >
-> > > > > > > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > > > > > > ---
-> > > > > >
-> > > > > > This is an interesting problem; were you able to root-cause why the silicon
-> > > > > > exhibits this behavior? Simply asserting reset should not cause it to draw
-> > > > > > additional power, let alone 14 mW. This almost sounds like a back-powering
-> > > > > > problem during suspend.
-> > > > > >
-> > > > > There was a fix for this behavior before so I didn't dig into it on
-> > > > > the silicon side.
-> > > > > I can ask internally and see if we can have Goodix to confirm this is
-> > > > > a known HW erratum.
-> > > >
-> > > > Certainly it doesn't hurt to check, but it's not really that shocking
-> > > > to me that asserting reset could cause a power draw on some hardware.
-> > > > Reset puts hardware into a default state and that's not necessarily
-> > > > low power. I guess ideally hardware would act like it's "off" when
-> > > > reset is asserted and then then init to the default state on the edge
-> > > > as reset was deasserted, but I not all hardware is designed in an
-> > > > ideal way.
-> > >
-> > > While that is true in theory, I have never, ever seen that to be the case
-> > > when there is not some other underlying problem.
-> > >
-> > > What I have seen, however, is that asserting reset actually causes the GPIO
-> > > to sink current from some other supply and through the IC. I loosely suspect
-> > > that if you probe the IC's rails and digital I/O during the failure condition,
-> > > you may find one of them resting at some mid-rail voltage or diode drop. It
-> > > seems you have a similar suspicion.
-> > >
+> After some time, the change was deemed unnecessary and was reverted in
+> commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line to
+> the regulator") due to difficulties in managing regulator notifiers for
+> designs like Evoker, which provides a second power rail to touchscreen.
 > 
-> I reached out to our EE with your thoughts.
-> He said that he understands the concern, but this doesn't apply in our
-> schematics because there's only one supply.
-> Also he simulated a few scenarios that could explain the
-> back-powering, but none of them is possible without having the
-> problematic circuit/rsense layout from within the IC itself.
+> However, the revert caused a power regression on another Chromebook
+> device Steelix in the field, which has a dedicated always-on regulator
+> for touchscreen and was covered by the workaround in the first commit.
 > 
-> > > In that case, it may mean that some other supply in the system should actually
-> > > be kept on, or that supplies are being brought down out of order. In which
-> > > case, the solution should actually be a patch to the affected platform(s) dts
-> > > and not the mainline driver.
-> >
-> > I agree that it's a bandaid, but I'm not hopeful that a better
-> > solution will be found.
-> >
-> > Specifically, I'd expect a current leak in the system when you turn a
-> > supply off and then assert a GPIO high. That's when the device can
-> > start backpowering itself from a GPIO. In this case, it's the
-> > opposite. We're keeping the supply on and asserting the (active low)
-> > reset GPIO to cause the higher power draw. In another design it was
-> > confirmed that the power draw went away when we were able to turn the
-> > regulator off (but still keep the active low reset GPIO asserted).
-> > We've also confirmed that power is good if we keep the supply on and
-> > _don't_ assert the reset GPIO. Both of these two experiments provide
-> > some evidence that the system is configured properly and we're not
-> > backpowering something.
-
-Back-powering can come in two forms:
-
-1. The one you've described, which is by far the most common. As you mention,
-it is not the case here since the issue happens only when we drive the GPIO
-low and not high.
-
-2. Through a forbidden power supply sequence, an input pin of an IC with
-multiple power supplies becomes a weak power supply itself. Grounding the
-GPIO then sinks current into the SoC.
-
-This problem smelled like (2), especially since asserting the GPIO or powering
-down the supply alleviates the symptom. Most Goodix controllers I've worked
-with have two or more supplies, and the datasheet requires them to be enabled
-or disabled in a specific order.
-
-Based on Fei's feedback, however, this IC does not seem to be one of those
-since there is reportedly only a single rail. I guess either vdd or vddio is
-tied to a dummy regulator? If so, then perhaps we can scratch this theory.
-
-> >
-> > I guess I should revise the above, though. I could believe that there
-> > is a current leak but on the touchscreen controller board itself,
-> > which is a black box to us. I have certainly been involved in products
-> > in the past where the default state of the system at reset caused a
-> > minor current leak (I remember an EE telling me that as soon as
-> > software started running I should quickly change the direction of a
-> > GPIO) and it wouldn't shock me if the touchscreen controller board had
-> > a problem like this. If there is a problem like this on the
-> > touchscreen controller board there's not much we can do to workaround
-> > it.
-> >
-> > Unfortunately, if the problem ends up needing a hardware change to fix
-> > more correctly (which I suspect it does), our hands are tied a bit.
-> > This is not prototype hardware but is final hardware.
-
-Fair enough, I was simply sketpical that this was the _right_ workaround.
-Were this an issue of only supply A left on yet the IC datasheet requires
-supply B to remain on if supply A is on, I would rather see this solved by
-updating a regulator dts node, trusted FW sequence, etc.
-
-> >
-> > I guess one further note is that, at least on the project I was
-> > involved in that had a similar problem, folks in China did a bunch of
-> > analysis on this and went as far as adding an extra regulator to the
-> > main board schematic to "fix" it. Had the issue just been something
-> > where we were misconfiguing GPIOs or leaving a regulator in the wrong
-> > state then they (probably) would have identified it rather than
-> > spinning the board.
+> To address both cases, this patch adds the support for the
+> `powered-in-suspend` property in the driver that allows the driver to
+> determine whether the touchscreen is still powered in suspend, and
+> handle the reset GPIO accordingly as below:
+> - When set to true, the driver does not assert the reset GPIO in power
+>   down. To ensure a clean start and the consistent behavior, it does the
+>   assertion in power up instead.
+>   This is for designs with a dedicated always-on regulator.
+> - When set to false, the driver uses the original control flow and
+>   asserts GPIO and disable regulators normally.
+>   This is for the two-regulator and shared-regulator designs.
 > 
-> Thank you Doug for providing the details and explanation, and sorry
-> that I also missed your original reply...
-> I only considered the ideal scenarios for the always_on usage but not
-> the cases you brought up. The concerns make sense to me.
+> Signed-off-by: Fei Shao <fshao@chromium.org>
 > 
-> I'm still awaiting the response from Goodix, but +1 that if it turns
-> out to be a GT7375P hw issue, we're not able to do much about that
-> except relying on the driver workaround.
-> One more note I want to add is that the first attempt of the fix was
-> added ~2yrs ago, so it's not an one-off on a particular platform, plus
-> `sc7180-trogdor-homestar` and `mt8186-corsola-steelix` are two
-> different designs come from two different teams, but they ended up
-> with the same symptom.
-> With that said, I think we have more confidence to say it's a
-> component misbehavior, and we just fell into the edge case that was
-> not covered or considered by its design.
-
-Thanks for your due diligence; if this really is a silicon issue, then
-the driver should indeed accommodate it.
-
-That being said, the name 'powered-in-suspend' seems a bit conflated. We
-should not be duplicating regulator policy in this driver; the existing
-naming also may cause confusion for other HW configurations that do leave
-vdd and vddio on during suspend, but don't have this problem.
-
-Here, we actually mean to control the behavior of the reset GPIO through
-suspend and therefore something like 'goodix,no-reset-during-suspend' is
-closer to what I understand us to intend to do. I will add more details
-in patch [2/2].
-
+> ---
 > 
-> Regards,
-> Fei
+>  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 46 +++++++++++++++++++++----
+>  1 file changed, 39 insertions(+), 7 deletions(-)
 > 
-> >
-> > -Doug
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+> index 0060e3dcd775..b438db8ca6f4 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+> @@ -28,6 +28,7 @@ struct i2c_hid_of_goodix {
+>  	struct regulator *vdd;
+>  	struct regulator *vddio;
+>  	struct gpio_desc *reset_gpio;
+> +	bool powered_in_suspend;
+>  	const struct goodix_i2c_hid_timing_data *timings;
+>  };
+>  
+> @@ -37,13 +38,34 @@ static int goodix_i2c_hid_power_up(struct i2chid_ops *ops)
+>  		container_of(ops, struct i2c_hid_of_goodix, ops);
+>  	int ret;
+>  
+> -	ret = regulator_enable(ihid_goodix->vdd);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = regulator_enable(ihid_goodix->vddio);
+> -	if (ret)
+> -		return ret;
+> +	/*
+> +	 * This is to ensure that the reset GPIO will be asserted and the
+> +	 * regulators will be enabled for all cases.
+> +	 */
+> +	if (ihid_goodix->powered_in_suspend) {
+> +		/*
+> +		 * This is not mandatory, but we assert reset here (instead of
+> +		 * in power-down) to ensure that the device will have a clean
+> +		 * state later on just like the normal scenarios would have.
+> +		 *
+> +		 * Also, since the regulators were not disabled in power-down,
+> +		 * we don't need to enable them here.
+> +		 */
+> +		gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
+> +	} else {
+> +		/*
+> +		 * In this case, the reset is already asserted (either in
+> +		 * probe or power-down).
+> +		 * All we need is to enable the regulators.
+> +		 */
+> +		ret = regulator_enable(ihid_goodix->vdd);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = regulator_enable(ihid_goodix->vddio);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+Please let me know in case I have misunderstood, but I don't see a need
+to change the regulator_enable/disable() logic if this property is set.
+If the regulators are truly always-on, the regulator core already knows
+what to do and we should not duplicate that logic here.
+
+Based on the alleged silicon erratum discussed in patch [1/2], it seems
+we only want to control the behavior of the reset GPIO. Therefore, only
+the calls to gpiod_set_value_cansleep() should be affected and the name
+of the property updated to reflect what it's actually doing.
+
+>  
+>  	if (ihid_goodix->timings->post_power_delay_ms)
+>  		msleep(ihid_goodix->timings->post_power_delay_ms);
+> @@ -60,6 +82,13 @@ static void goodix_i2c_hid_power_down(struct i2chid_ops *ops)
+>  	struct i2c_hid_of_goodix *ihid_goodix =
+>  		container_of(ops, struct i2c_hid_of_goodix, ops);
+>  
+> +	/*
+> +	 * Don't assert reset GPIO or disable regulators if we're keeping the
+> +	 * device powered in suspend.
+> +	 */
+> +	if (ihid_goodix->powered_in_suspend)
+> +		return;
+> +
+>  	gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
+>  	regulator_disable(ihid_goodix->vddio);
+>  	regulator_disable(ihid_goodix->vdd);
+> @@ -91,6 +120,9 @@ static int i2c_hid_of_goodix_probe(struct i2c_client *client)
+>  	if (IS_ERR(ihid_goodix->vddio))
+>  		return PTR_ERR(ihid_goodix->vddio);
+>  
+> +	ihid_goodix->powered_in_suspend =
+> +		of_property_read_bool(client->dev.of_node, "powered-in-suspend");
+> +
+>  	ihid_goodix->timings = device_get_match_data(&client->dev);
+>  
+>  	return i2c_hid_core_probe(client, &ihid_goodix->ops, 0x0001, 0);
+> -- 
+> 2.40.0.634.g4ca3ef3211-goog
+> 
 
 Kind regards,
 Jeff LaBundy
