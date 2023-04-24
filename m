@@ -2,227 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C970B6ECA12
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE976ECC1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjDXKUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S231656AbjDXMfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbjDXKUj (ORCPT
+        with ESMTP id S231249AbjDXMfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:20:39 -0400
-Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d501])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FCBD8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:20:36 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:261e:0:640:2e3d:0])
-        by forward501c.mail.yandex.net (Yandex) with ESMTP id 148A25EE62;
-        Mon, 24 Apr 2023 12:36:18 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id JZBb1pbWwKo0-6emUVMRt;
-        Mon, 24 Apr 2023 12:36:17 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682328977;
-        bh=s+pdsEhaXejJ3ZUi+ppZ8/CkunFsOa248KpIzEwqhCw=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=ajtf7pN1m7MbOx9L4P8H4r+Y82+evxwyLL7hp32bCAq4FIa+lb2I00PYCqXEWCGtx
-         /uSrgSixLVbaOfevJiEDmrJ+vOA6s37wtIZwZ7WR6QsjwjXMoLjNk0rQgoinseBM0a
-         X/bB9mW44MULXkAZlPUdOE1q93Pmqbt3HNy9qDQA=
-Authentication-Results: mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 43/43] ASoC: cirrus: edb93xx: Delete driver
-Date:   Mon, 24 Apr 2023 15:34:59 +0300
-Message-Id: <20230424123522.18302-44-nikita.shubin@maquefel.me>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+        Mon, 24 Apr 2023 08:35:42 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348611A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 05:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682339741; x=1713875741;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LQb6t4tK7Ded4s/ZP9FLDT1+Gsn+Vtw0F4s14bxTkfE=;
+  b=Wy9odfp4MBL1yz3wt83ReOpjkr+duTJojVUl6nPKtDs5LiUoUBSWx1Sb
+   adUG5VlZJDdxyk3KMD5jx4u7YXf43QWKVoAUQyvAoRbIILucSnUC9WQGo
+   UKb0XxwzYfu8YPjPPQ05MXrPESUN7zEKk9rA1j9K/9v0CI/uovdrCiH8a
+   2RtHezsonfLGbkPPm25Qb9adj7vIHHaq9T05yjNVFFp5icH2n7J9S7Igy
+   crdXxu0Jbup870FmPmuE6dMrBLClsr6vIgWBv/SW8FopzELtId9w2dOSa
+   7eaAsljSoQpyJvJgrY9jnZX2qFU9ngyySUWEIWupXiJ60EYRAtcFLueR7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="348348908"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="348348908"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:35:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="693063701"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="693063701"
+Received: from martapio-mobl1.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.7.53])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:35:35 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@linux.intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Subject: [RFC PATCH] x86/mm: Fix PAT bit missing from page protection modify mask
+Date:   Mon, 24 Apr 2023 14:35:24 +0200
+Message-Id: <20230424123524.17008-1-janusz.krzysztofik@linux.intel.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Visible glitches have been observed when running graphics applications on
+Linux under Xen hypervisor.  Those observations have been confirmed with
+failures from kms_pwrite_crc Intel GPU test that verifies data coherency
+of DRM frame buffer objects using hardware CRC checksums calculated by
+display controllers, exposed to userspace via debugfs.  Affected
+processing paths have then been identified with new test variants that
+mmap the objects using different methods and caching modes.
 
-Can be replaced with "simple-audio-card" for the rates up to 50kHz, refer
-to commit "ARM: dts: ep93xx: Add EDB9302 DT".
+When running as a Xen PV guest, Linux uses Xen provided PAT configuration
+which is different from its native one.  In particular, Xen specific PTE
+encoding of write-combining caching, likely used by graphics applications,
+differs from the Linux default one found among statically defined minimal
+set of supported modes.  Since Xen defines PTE encoding of the WC mode as
+_PAGE_PAT, it no longer belongs to the minimal set, depends on correct
+handling of _PAGE_PAT bit, and can be mismatched with write-back caching.
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+When a user calls mmap() for a DRM buffer object, DRM device specific
+.mmap file operation, called from mmap_region(), takes care of setting PTE
+encoding bits in a vm_page_prot field of an associated virtual memory area
+structure.  Unfortunately, _PAGE_PAT bit is not preserved when the vma's
+.vm_flags are then applied to .vm_page_prot via vm_set_page_prot().  Bits
+to be preserved are determined with _PAGE_CHG_MASK symbol that doesn't
+cover _PAGE_PAT.  As a consequence, WB caching is requested instead of WC
+when running under Xen (also, WP is silently changed to WT, and UC
+downgraded to UC_MINUS).  When running on bare metal, WC is not affected,
+but WP and WT extra modes are unintentionally replaced with WC and UC,
+respectively.
+
+WP and WT modes, encoded with _PAGE_PAT bit set, were introduced by commit
+281d4078bec3 ("x86: Make page cache mode a real type").  Care was taken
+to extend _PAGE_CACHE_MASK symbol with that additional bit, but that
+symbol has never been used for identification of bits preserved when
+applying page protection flags.  Support for all cache modes under Xen,
+including the problematic WC mode, was then introduced by commit
+47591df50512 ("xen: Support Xen pv-domains using PAT").
+
+Extend bitmask used by pgprot_modify() for selecting bits to be preserved
+with _PAGE_PAT bit.  However, since that bit can be reused as _PAGE_PSE,
+and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is likely
+intentionally defined with that bit not set, keep that symbol unchanged.
+
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7648
+Fixes: 281d4078bec3 ("x86: Make page cache mode a real type")
+Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Cc: stable@vger.kernel.org # v3.19+
 ---
- sound/soc/cirrus/Kconfig   |   9 ---
- sound/soc/cirrus/Makefile  |   4 --
- sound/soc/cirrus/edb93xx.c | 119 -------------------------------------
- 3 files changed, 132 deletions(-)
- delete mode 100644 sound/soc/cirrus/edb93xx.c
+ arch/x86/include/asm/pgtable.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/cirrus/Kconfig b/sound/soc/cirrus/Kconfig
-index 34870c2d0cba..a88b7d61b4c1 100644
---- a/sound/soc/cirrus/Kconfig
-+++ b/sound/soc/cirrus/Kconfig
-@@ -27,12 +27,3 @@ config SND_EP93XX_SOC_I2S_WATCHDOG
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 7425f32e52932..f797f8da2e5b6 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -654,8 +654,10 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+ #define pgprot_modify pgprot_modify
+ static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
+ {
+-	pgprotval_t preservebits = pgprot_val(oldprot) & _PAGE_CHG_MASK;
+-	pgprotval_t addbits = pgprot_val(newprot) & ~_PAGE_CHG_MASK;
++	unsigned long mask = _PAGE_CHG_MASK | _PAGE_CACHE_MASK;
++
++	pgprotval_t preservebits = pgprot_val(oldprot) & mask;
++	pgprotval_t addbits = pgprot_val(newprot) & ~mask;
+ 	return __pgprot(preservebits | addbits);
+ }
  
- endif # if SND_EP93XX_SOC_I2S
- 
--config SND_EP93XX_SOC_EDB93XX
--	tristate "SoC Audio support for Cirrus Logic EDB93xx boards"
--	depends on SND_EP93XX_SOC && (MACH_EDB9301 || MACH_EDB9302 || MACH_EDB9302A || MACH_EDB9307A || MACH_EDB9315A)
--	select SND_EP93XX_SOC_I2S
--	select SND_SOC_CS4271_I2C if I2C
--	select SND_SOC_CS4271_SPI if SPI_MASTER
--	help
--	  Say Y or M here if you want to add support for I2S audio on the
--	  Cirrus Logic EDB93xx boards.
-diff --git a/sound/soc/cirrus/Makefile b/sound/soc/cirrus/Makefile
-index 19a86daad660..5916c03888cb 100644
---- a/sound/soc/cirrus/Makefile
-+++ b/sound/soc/cirrus/Makefile
-@@ -6,7 +6,3 @@ snd-soc-ep93xx-i2s-objs	 			:= ep93xx-i2s.o
- obj-$(CONFIG_SND_EP93XX_SOC)			+= snd-soc-ep93xx.o
- obj-$(CONFIG_SND_EP93XX_SOC_I2S)		+= snd-soc-ep93xx-i2s.o
- 
--# EP93XX Machine Support
--snd-soc-edb93xx-objs				:= edb93xx.o
--
--obj-$(CONFIG_SND_EP93XX_SOC_EDB93XX)		+= snd-soc-edb93xx.o
-diff --git a/sound/soc/cirrus/edb93xx.c b/sound/soc/cirrus/edb93xx.c
-deleted file mode 100644
-index 385290202912..000000000000
---- a/sound/soc/cirrus/edb93xx.c
-+++ /dev/null
-@@ -1,119 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * SoC audio for EDB93xx
-- *
-- * Copyright (c) 2010 Alexander Sverdlin <subaparts@yandex.ru>
-- *
-- * This driver support CS4271 codec being master or slave, working
-- * in control port mode, connected either via SPI or I2C.
-- * The data format accepted is I2S or left-justified.
-- * DAPM support not implemented.
-- */
--
--#include <linux/platform_device.h>
--#include <linux/gpio.h>
--#include <linux/module.h>
--#include <linux/soc/cirrus/ep93xx.h>
--#include <sound/core.h>
--#include <sound/pcm.h>
--#include <sound/soc.h>
--#include <asm/mach-types.h>
--
--static int edb93xx_hw_params(struct snd_pcm_substream *substream,
--			     struct snd_pcm_hw_params *params)
--{
--	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
--	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
--	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
--	int err;
--	unsigned int mclk_rate;
--	unsigned int rate = params_rate(params);
--
--	/*
--	 * According to CS4271 datasheet we use MCLK/LRCK=256 for
--	 * rates below 50kHz and 128 for higher sample rates
--	 */
--	if (rate < 50000)
--		mclk_rate = rate * 64 * 4;
--	else
--		mclk_rate = rate * 64 * 2;
--
--	err = snd_soc_dai_set_sysclk(codec_dai, 0, mclk_rate,
--				     SND_SOC_CLOCK_IN);
--	if (err)
--		return err;
--
--	return snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_rate,
--				      SND_SOC_CLOCK_OUT);
--}
--
--static const struct snd_soc_ops edb93xx_ops = {
--	.hw_params	= edb93xx_hw_params,
--};
--
--SND_SOC_DAILINK_DEFS(hifi,
--	DAILINK_COMP_ARRAY(COMP_CPU("ep93xx-i2s")),
--	DAILINK_COMP_ARRAY(COMP_CODEC("spi0.0", "cs4271-hifi")),
--	DAILINK_COMP_ARRAY(COMP_PLATFORM("ep93xx-i2s")));
--
--static struct snd_soc_dai_link edb93xx_dai = {
--	.name		= "CS4271",
--	.stream_name	= "CS4271 HiFi",
--	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
--			  SND_SOC_DAIFMT_CBC_CFC,
--	.ops		= &edb93xx_ops,
--	SND_SOC_DAILINK_REG(hifi),
--};
--
--static struct snd_soc_card snd_soc_edb93xx = {
--	.name		= "EDB93XX",
--	.owner		= THIS_MODULE,
--	.dai_link	= &edb93xx_dai,
--	.num_links	= 1,
--};
--
--static int edb93xx_probe(struct platform_device *pdev)
--{
--	struct snd_soc_card *card = &snd_soc_edb93xx;
--	int ret;
--
--	ret = ep93xx_i2s_acquire();
--	if (ret)
--		return ret;
--
--	card->dev = &pdev->dev;
--
--	ret = snd_soc_register_card(card);
--	if (ret) {
--		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
--			ret);
--		ep93xx_i2s_release();
--	}
--
--	return ret;
--}
--
--static int edb93xx_remove(struct platform_device *pdev)
--{
--	struct snd_soc_card *card = platform_get_drvdata(pdev);
--
--	snd_soc_unregister_card(card);
--	ep93xx_i2s_release();
--
--	return 0;
--}
--
--static struct platform_driver edb93xx_driver = {
--	.driver		= {
--		.name	= "edb93xx-audio",
--	},
--	.probe		= edb93xx_probe,
--	.remove		= edb93xx_remove,
--};
--
--module_platform_driver(edb93xx_driver);
--
--MODULE_AUTHOR("Alexander Sverdlin <subaparts@yandex.ru>");
--MODULE_DESCRIPTION("ALSA SoC EDB93xx");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:edb93xx-audio");
 -- 
-2.39.2
+2.40.0
 
