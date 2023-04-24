@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDAD6ED2EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C5F6ED2F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjDXQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        id S231542AbjDXQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjDXQ5B (ORCPT
+        with ESMTP id S230355AbjDXQ5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:57:01 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3BA1BFF;
-        Mon, 24 Apr 2023 09:56:56 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OFb9kp009958;
-        Mon, 24 Apr 2023 16:55:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ibcvq83T8ea5Zx9L7cpwBc6UOXr5caP2oYnDsWVp1IY=;
- b=n99EL/gGtC3DZ3hVF7p/iZAM6zRz+mw8IJ8KooXvE3GgQe9LrEULLYsPzp5q+EMpB8FD
- j7hHi/tkozlkPEL+XFMamsv/80WENEF3xq67lAImmzR5OgHzh+5J/jU0Xzg3vu6NeSQv
- Er9Dr+OZqa9QfUYLsbwHWr8k5jjG1dVETLRiYaYm+2LaFSFoaK7kwChhWegh46p5DBVq
- HdKTQarpYqkCUzLpcIo7pXapZQ2R0IJR+OGRGQ2atoSfkRpKmGhzy6gKhHwfqihWlb3Y
- bGORnRlxPvDitLj2YsEXvQOcFlDPx3iHLIi+B96NqKrxrgwAPqeYmfv5JADBKtI5PhmG uQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5mnnh9qm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 16:55:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OGtkJd026082
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 16:55:47 GMT
-Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
- 2023 09:55:45 -0700
-Message-ID: <e4a771f2-b390-ea8e-ee8b-b8d0860c834f@quicinc.com>
-Date:   Mon, 24 Apr 2023 09:55:44 -0700
+        Mon, 24 Apr 2023 12:57:21 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620A84EDF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:57:15 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-76074d20a75so109956239f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682355433; x=1684947433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FpAVc8DWHD+kbIihYmiybWX4LCsF6lJLav4KsZanNyY=;
+        b=agiIOhs0tvwlutZ4LxjPEsM4kCuz3uCMEp1Ybdh7LLbr5fgz6nP/IsyAFPKyB3I6bd
+         sKYYwe1C3r38ocXF4peyLc/JZNGTKh5R28ecvhr28ErevDDooXasE5G0GFK9wQIG4EAk
+         s8NGoKX+lnSJOfMwHk+c+q/06pe3nZXHoVFr8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682355433; x=1684947433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FpAVc8DWHD+kbIihYmiybWX4LCsF6lJLav4KsZanNyY=;
+        b=Eft1XMjzIj1kb1tT511ef98+sp63k73vMZCxNn7I7QmCYegywgbSMn+3Hr2haQkxxL
+         KJsHeYONXXbMWuYNaQxihD/G5iUv70UGfGHnI+6dai+q8JM3KeDVStSnwum/VWGkMiq/
+         35KNXdjl2xdN9lwaAX7saJvI50p5ArG+ebf2LMuEhGw1kAMdMOk9kZeddzaUafEp1Jzo
+         8UqO16Qk09oV3C74KVSIDXxKA9QqQ6lcFTY/2cshu/BAOCxbW8ujep+OZVy1tnrBa+qS
+         6FFJfLW1c85/7xnoY8sITG8/mmZKDAoFbfCnM8UWxMfv1NUsarCp+i1FHTc/UcvQqDYw
+         4Z/A==
+X-Gm-Message-State: AAQBX9fAmG3Qef723707GA8yfyt4RC4hTQ1ypxyEAqvo60Tp+VR4RpEz
+        LmNSNqrlqsGjHsHPlY+ssdpWiEStoXh8U8gmknc=
+X-Google-Smtp-Source: AKy350a2JG3lNwF7+gYfnXp/I51kUIY3vYUoZxygXgNNxXvmavYlQWF5cq487MP2vR3U9ueA5/QYuQ==
+X-Received: by 2002:a6b:7b08:0:b0:74c:fe71:5808 with SMTP id l8-20020a6b7b08000000b0074cfe715808mr5932344iop.6.1682355433504;
+        Mon, 24 Apr 2023 09:57:13 -0700 (PDT)
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
+        by smtp.gmail.com with ESMTPSA id k26-20020a6b401a000000b00760c6c68d4asm3174746ioa.21.2023.04.24.09.57.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 09:57:12 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-316d901b2ecso1092435ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:57:12 -0700 (PDT)
+X-Received: by 2002:a05:6e02:156d:b0:315:9823:1308 with SMTP id
+ k13-20020a056e02156d00b0031598231308mr491306ilu.7.1682355432107; Mon, 24 Apr
+ 2023 09:57:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 01/17] drm/msm/dpu: Remove unused INTF0 interrupt mask
- from SM6115/QCM2290
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "Chandan Uddaraju" <chandanu@codeaurora.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        "Jami Kettunen" <jami.kettunen@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-1-ef76c877eb97@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230411-dpu-intf-te-v2-1-ef76c877eb97@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 31_lSA82AM0D1kln3gWakn39Hun2n1mE
-X-Proofpoint-ORIG-GUID: 31_lSA82AM0D1kln3gWakn39Hun2n1mE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_10,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 adultscore=0 mlxlogscore=694 spamscore=0 clxscore=1011
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240151
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230421221249.1616168-1-dianders@chromium.org>
+ <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid> <20230422051858.1696-1-hdanton@sina.com>
+In-Reply-To: <20230422051858.1696-1-hdanton@sina.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 24 Apr 2023 09:56:58 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
+Message-ID: <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yu Zhao <yuzhao@google.com>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On Fri, Apr 21, 2023 at 10:19=E2=80=AFPM Hillf Danton <hdanton@sina.com> wr=
+ote:
+>
+> On 21 Apr 2023 15:12:45 -0700 Douglas Anderson <dianders@chromium.org>
+> > Add a variant of folio_lock() that can timeout. This is useful to
+> > avoid unbounded waits for the page lock in kcompactd.
+>
+> Given no mutex_lock_timeout() (perhaps because timeout makes no sense for
+> spinlock), I suspect your fix lies in the right layer.
+
+I'm not 100% sure I understood the above comment, but I think you're
+saying that the approach my patch takes seems OK.
 
 
-On 4/17/2023 1:21 PM, Marijn Suijten wrote:
-> Neither of these SoCs has INTF0, they only have a DSI interface on index
-> 1.  Stop enabling an interrupt that can't fire.
-> 
-> Fixes: 3581b7062cec ("drm/msm/disp/dpu1: add support for display on SM6115")
-> Fixes: 5334087ee743 ("drm/msm: add support for QCM2290 MDSS")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> If waiting for
+> page under IO causes trouble for you, another simpler option is make
+> IO faster (perhaps all you can do) for instance.
 
-Yes, this is right, Both of these chipsets only have DSI on index 1.
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Yeah, this gets into the discussion about whether our current squashfs
+settings actually make sense. I suspect that they don't and that we
+should look into EROFS like Gao suggested, or at least choose
+different squashfs settings (smaller block sizes, ZSTD instead of
+zlib). Unfortunately I believe that the current squashfs settings were
+chosen because disk space is a concern.
 
 
+> If kcompactd is waken
+> up by kswapd, waiting for slow IO is the right thing to do.
+
+I don't have enough intuition here, so I'm happy to take others'
+advice here. I guess my thought was that kcompactd is explicitly not
+using the full "sync" and instead choosing the "sync light". To me
+that means we shouldn't block for _too_ long.
+
+-Doug
