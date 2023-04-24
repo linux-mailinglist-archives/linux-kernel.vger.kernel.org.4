@@ -2,128 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AAC6EC846
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C70A6EC84D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbjDXJDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S231436AbjDXJEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjDXJDw (ORCPT
+        with ESMTP id S229696AbjDXJEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:03:52 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F423211D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:03:51 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54fb9384c2dso48990487b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1682327030; x=1684919030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6cSv908+XbxMNLsKEbTm9jFklu64ICgFxL9KYAhHv6U=;
-        b=rGaI5R8xnw5jjlLgvyRcDN8MOmGhLU9gutbCOvkCTQbBB+j+2n1wbu+UrIaQX86gRE
-         iX9ivyYi8HeVrwFZZr3hr65F7WfYO0deRCEtc9aUtuMVfCZ1+2Jm/SSZQ+OuUqVDwpT2
-         WOk7s7eTJLqytJMxbB5TAJuIpEEflg/IqVdGo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682327030; x=1684919030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6cSv908+XbxMNLsKEbTm9jFklu64ICgFxL9KYAhHv6U=;
-        b=f4puQUiMESeeCPzcPVKVc46WCGVOqceUvPij+Pn74hc/5K8CorfEYdeOmNGh1Bgkg2
-         3TXVxHDs3Hrqbmg43ZYbXFWEsKt6F3BEAke+4FxU0OUaeia0Ixou+kfkh1+dowa8CMho
-         n1mM61eS9zNFw1P1Jm6qWzpRG3Wy4fBXd6ZqZ1+2KyqpYdoT1oUqJ9b6iDExQJn3gMxb
-         HLPKQ3vD5lXA4IJhv4d3CZWaovgXa9smbuK2cnKaO3Sk/sB9xCw95cax3uVmWRuDsUHX
-         MT2B4voRwaFHScAxTl+V/LYfcxZ/+xjxw+sL76SAjVeyvRqy6aJ6etDJxpnBr9B2xheG
-         HzQw==
-X-Gm-Message-State: AAQBX9f6frvDpbGdwnPi597KSzfrMsX5exYrOx0tlDL5XQe8jus2Xh+z
-        WpK9VkY/SMfqlELMAA6t8rwCtMECTjgQjWpspSiglA==
-X-Google-Smtp-Source: AKy350Z7B0vqLEmVxsm8gwNXz0Mr3uw6c5CelEFXXRS8WBWNscFAnrUucpIycBwqf062sEv89dWQgMEgJ48vn/ek6tc=
-X-Received: by 2002:a0d:de85:0:b0:527:b681:3e62 with SMTP id
- h127-20020a0dde85000000b00527b6813e62mr6741490ywe.23.1682327030489; Mon, 24
- Apr 2023 02:03:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230423121232.1345909-1-aford173@gmail.com> <20230423121232.1345909-2-aford173@gmail.com>
-In-Reply-To: <20230423121232.1345909-2-aford173@gmail.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Mon, 24 Apr 2023 14:33:38 +0530
-Message-ID: <CAMty3ZCn9_AT8SOfFD-MYox16ZcqOEezt_0x6aES6LWQFj8Kpg@mail.gmail.com>
-Subject: Re: [PATCH V2 1/6] drm: bridge: samsung-dsim: fix blanking packet
- size calculation
-To:     Adam Ford <aford173@gmail.com>, l.stach@pengutronix.de
-Cc:     dri-devel@lists.freedesktop.org, m.szyprowski@samsung.com,
-        aford@beaconembedded.com, dario.binacchi@amarulasolutions.com,
-        Inki Dae <inki.dae@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 05:04:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9787CE71;
+        Mon, 24 Apr 2023 02:04:06 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O7VRlh018325;
+        Mon, 24 Apr 2023 09:03:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=mfwvLHtGZSn4fIU8s2F3lAi3aWGCKikPnaZ5jO/yEoI=;
+ b=a34zF1z1qCnacoX5s3xUVA1OXTJ5S0HY53TuRPybtbbhz8MgREsM3UuvPztLy532Ttg5
+ 3mJtvv1PSk1pH3Se5Banda6utTJKZqJrYvBLBjwaw9dBXHIuz+3ATl/IMxRMuxd0cl7I
+ anOA5lFQawMo2QxcFuxvXX8xsCweikSU1spP5APEc+cvB5cVBwnrL7NKoRuWVXVNf80W
+ 89WxLofo04sw6YAipV6c2ipgmPMsBbFd5nQchoD7mVm/7LJrr9vns6Sds2RhaFGm6gtw
+ m13/NVmuc7XS3TnztrdlMdtx+l9yxG412sD+DLaLvco0Q3VCuYrVtAVKA0PumgwbzCDf tQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5ndpr617-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 09:03:57 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 33O93qVJ003278;
+        Mon, 24 Apr 2023 09:03:52 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3q48nkdmym-1;
+        Mon, 24 Apr 2023 09:03:52 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33O93qha003270;
+        Mon, 24 Apr 2023 09:03:52 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 33O93qpx003268;
+        Mon, 24 Apr 2023 09:03:52 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id CE9634D48; Mon, 24 Apr 2023 14:33:51 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v4 0/2] Add pinctrl support for SDX75
+Date:   Mon, 24 Apr 2023 14:33:48 +0530
+Message-Id: <1682327030-25535-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LCGgmgHy2MX-jWrgOSZwGN5XaKj85NcS
+X-Proofpoint-ORIG-GUID: LCGgmgHy2MX-jWrgOSZwGN5XaKj85NcS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-24_06,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ adultscore=0 phishscore=0 impostorscore=0 spamscore=0 mlxlogscore=637
+ mlxscore=0 bulkscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304240080
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 5:42=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
-e:
->
-> From: Lucas Stach <l.stach@pengutronix.de>
->
-> Scale the blanking packet sizes to match the ratio between HS clock
-> and DPI interface clock. The controller seems to do internal scaling
-> to the number of active lanes, so we don't take those into account.
->
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/samsung-dsim.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/brid=
-ge/samsung-dsim.c
-> index e0a402a85787..2be3b58624c3 100644
-> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> @@ -874,17 +874,29 @@ static void samsung_dsim_set_display_mode(struct sa=
-msung_dsim *dsi)
->         u32 reg;
->
->         if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> +               int byte_clk_khz =3D dsi->burst_clk_rate / 1000 / 8;
-> +               int hfp =3D (m->hsync_start - m->hdisplay) * byte_clk_khz=
- / m->clock;
+Hi,
 
-I do not quite understand why it depends on burst_clk_rate, would you
-please explain? does it depends on bpp something like this
+Changes in v4:
+ - Fixed the bindings check and rebased on linux-next.
 
-mipi_dsi_pixel_format_to_bpp(format) / 8
+Changes in v3:
+ - Rebased the bindings on linux-next as suggested by Krzysztof.
 
-> +               int hbp =3D (m->htotal - m->hsync_end) * byte_clk_khz / m=
-->clock;
-> +               int hsa =3D (m->hsync_end - m->hsync_start) * byte_clk_kh=
-z / m->clock;
-> +
-> +               /* remove packet overhead when possible */
-> +               hfp =3D max(hfp - 6, 0);
-> +               hbp =3D max(hbp - 6, 0);
-> +               hsa =3D max(hsa - 6, 0);
+Changes in v2:
+ - Updated the bindings to clear the bindings check.
 
-6 blanking packet overhead here means, 4 bytes + payload + 2 bytes
-format? does this packet overhead depends on the respective porch's
-like hpf, hbp and hsa has different packet overheads?
+This patch series adds pinctrl bindings and tlmm support for SDX75.
 
-Jagan.
+Thanks,
+Rohit.
+
+Rohit Agarwal (2):
+  dt-bindings: pinctrl: qcom: Add SDX75 pinctrl devicetree compatible
+  pinctrl: qcom: Add SDX75 pincontrol driver
+
+ .../bindings/pinctrl/qcom,sdx75-tlmm.yaml          |  169 +++
+ drivers/pinctrl/qcom/Kconfig                       |   30 +-
+ drivers/pinctrl/qcom/Makefile                      |    3 +-
+ drivers/pinctrl/qcom/pinctrl-sdx75.c               | 1603 ++++++++++++++++++++
+ 4 files changed, 1794 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sdx75.c
+
+-- 
+2.7.4
+
