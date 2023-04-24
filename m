@@ -2,123 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682686ED19A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA3B6ED19E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjDXPmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S232067AbjDXPnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjDXPmC (ORCPT
+        with ESMTP id S231378AbjDXPnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:42:02 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD3E114;
-        Mon, 24 Apr 2023 08:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682350921; x=1713886921;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=eON86bjQxLIOpj1Q+K6F2tLoFgRPgNoaWLb8jdjvrLM=;
-  b=Iga/av/7FM1NfoFS8iQqh7xkFm3Aiw2h7cAPpKx/bIixOsxbRlP0RmU0
-   sKIlfDUYxpYSeVPsHXZshXC/Scgn7wJyq5OG02Ay/sreVqmbbFP3+Ok1M
-   jJ+WEyEIKKi8Ry+rAQW9gkyTo6itXSYbumfvkggxN80KoFcdjkNj33ODW
-   5jsziptOJ53ju1vDbsdGDFHqcFRCEGQjUhGIw8ERgOX4G+y2Ha+yqer06
-   TUZUi1C041JC/sz98SzCr3qls2uzhFemXGWX1WeaLvi5nZOz/gT3LXTg5
-   NhitmO+QDSs7oXXAVCvELSEcHSgt8nm38y+9uzO50bUNmbHqsHoqb3bU9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="432760499"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="432760499"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:42:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="723633528"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="723633528"
-Received: from wlwpo-8.amr.corp.intel.com ([10.251.215.143])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:41:59 -0700
-Date:   Mon, 24 Apr 2023 18:41:56 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Subject: Re: [PATCH v2 07/24] selftests/resctrl: Remove duplicated preparation
- for span arg
-In-Reply-To: <59cfa762-24c8-5b53-feca-517250192d65@intel.com>
-Message-ID: <fe28574-eb8-28a-1189-7bd470a8bcb@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-8-ilpo.jarvinen@linux.intel.com> <59cfa762-24c8-5b53-feca-517250192d65@intel.com>
+        Mon, 24 Apr 2023 11:43:18 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE50F449C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:43:15 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so34517680a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682350994; x=1684942994;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Et3nJmRSNCb1Vw6f+DrCEwNWp2TX5DpfAd48y1Pjtg4=;
+        b=LxDlDuuhL5zVWaXMSDMxd7041DmlAjfIdH+cFhGlhbvKXvu8i9kxB1XTs8c2+okjFd
+         EH00k+VHb8SzK+SDTaemsrvr0MBhAE373Oka94x2fxGNVbFVwVnWYHkfq4vvq4FyDh8G
+         21l4eRSw25lK2dpdU90Wijv4yStff3RJGUDWqig6JM7m/9dlUskY1iPQ8MzNaWTN6gZ7
+         iMP7kmPPgPBIJ5/3ibJqc2dnwQ77l0bdB8lAoyd0Kfn6gaC2U/rHitQZ7Qn37XXlg6dz
+         g6TfKaFgDe4cS+oL6oLshmNukjUsgO77pi6obBog1w2WmjF9ac+mE9F/VU3D5TMHrMDn
+         HU0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682350994; x=1684942994;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Et3nJmRSNCb1Vw6f+DrCEwNWp2TX5DpfAd48y1Pjtg4=;
+        b=WZ6ffQ1fQK/uDDqN1Qo14jh9o4Az3QnUO3zez4+MTmjSDkA37Gbb1P2GncMu5vIjV2
+         DJZbTBxDNHs1uzNFanhwW7Af9j7UbNvhr+oO3QotunXVl7stYZ0XNDQDqeIvb5O88Ep6
+         KBEB6mIk1ZU0pmDjuZssGT6ARPQiFvhDTsM28Q+uyqMAXq/VSAJq837HqVt9EO65blzI
+         WofmtI337/pclynze1VoGloQhsRFN8foDPCvkhg25xrCQv/sLTdU4/r/uvVEX8K01zCC
+         yQRNN0aUbGN8w/gBk4mfRv/7MVA72rR+FcvPQqCQYU7Nt/N8F87APP9I3Yhomnl/Vy5u
+         tl7A==
+X-Gm-Message-State: AAQBX9efC6RoGlUGAODHCCmMgh4isZLgABr/va2eg9gdZb7pP+wYYoqw
+        EX669qZcTh8m70htVFG5CQgYLA==
+X-Google-Smtp-Source: AKy350ZAEHEglJIcuQqyFHzfUehIb1i8l3hxDMVyaNYKoWNEOyTPbCx/pXdkvBF7CP6o+HD40UwjmA==
+X-Received: by 2002:a17:906:7e42:b0:94a:8771:fb60 with SMTP id z2-20020a1709067e4200b0094a8771fb60mr9386371ejr.37.1682350994253;
+        Mon, 24 Apr 2023 08:43:14 -0700 (PDT)
+Received: from fedora ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id w11-20020a1709064a0b00b0094f614e43d0sm5678803eju.8.2023.04.24.08.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 08:43:13 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 11:43:11 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 v4 4/5] counter: 104-quad-8: Fix race condition
+ between FLAG and CNTR reads
+Message-ID: <ZEajjyUDN9z8FXYP@fedora>
+References: <20230423232047.12589-1-william.gray@linaro.org>
+ <20230423232047.12589-4-william.gray@linaro.org>
+ <2023042454-cahoots-rotten-f3f7@gregkh>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1821647782-1682350921=:2038"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BcBXM3mkZPra247M"
+Content-Disposition: inline
+In-Reply-To: <2023042454-cahoots-rotten-f3f7@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1821647782-1682350921=:2038
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+--BcBXM3mkZPra247M
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 21 Apr 2023, Reinette Chatre wrote:
-
-> On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
-> > When no benchmark_cmd is given, benchmark_cmd[1] is set to span in
-> > main(). There's no need to do it again in run_mba_test().
-> > 
-> > Remove the duplicated preparation for span argument into
-> > benchmark_cmd[1] from run_mba_test(). It enables also removing has_ben
-> > argument from run_mba_test() as unnecessary.
-> 
-> I find the last sentence a bit hard to read. How about
-> "After this, the has_ben argument to run_mba_test() can be removed.".
-> 
-> > 
-> > Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-> > Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+On Mon, Apr 24, 2023 at 08:33:18AM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Apr 23, 2023 at 07:20:46PM -0400, William Breathitt Gray wrote:
+> > commit 4aa3b75c74603c3374877d5fd18ad9cc3a9a62ed upstream.
+> >=20
+> > The Counter (CNTR) register is 24 bits wide, but we can have an
+> > effective 25-bit count value by setting bit 24 to the XOR of the Borrow
+> > flag and Carry flag. The flags can be read from the FLAG register, but a
+> > race condition exists: the Borrow flag and Carry flag are instantaneous
+> > and could change by the time the count value is read from the CNTR
+> > register.
+> >=20
+> > Since the race condition could result in an incorrect 25-bit count
+> > value, remove support for 25-bit count values from this driver.
+> >=20
+> > Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 10=
+4-QUAD-8")
+> > Cc: <stable@vger.kernel.org> # 5.10.x
+> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 > > ---
-> >  tools/testing/selftests/resctrl/resctrl_tests.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> > index f1ed2c89f228..3c8ec68eb507 100644
-> > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
-> > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> > @@ -99,8 +99,8 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, unsigned long span,
-> >  	umount_resctrlfs();
-> >  }
-> >  
-> > -static void run_mba_test(bool has_ben, char **benchmark_cmd, unsigned long span,
-> > -			 int cpu_no, char *bw_report)
-> > +static void run_mba_test(char **benchmark_cmd, unsigned long span, int cpu_no,
-> > +			 char *bw_report)
-> >  {
-> >  	int res;
-> >  
-> > @@ -117,8 +117,6 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, unsigned long span,
-> >  		goto umount;
-> >  	}
-> >  
-> > -	if (!has_ben)
-> > -		sprintf(benchmark_cmd[1], "%lu", span);
-> 
-> Can "span" also be removed?
+> >  drivers/counter/104-quad-8.c | 18 +++---------------
+> >  1 file changed, 3 insertions(+), 15 deletions(-)
+>=20
+> This patch breaks the build:
+>=20
+>   CC [M]  drivers/counter/104-quad-8.o
+> drivers/counter/104-quad-8.c: In function =E2=80=98quad8_read_raw=E2=80=
+=99:
+> drivers/counter/104-quad-8.c:117:34: error: =E2=80=98QUAD8_FLAG_BT=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98QUAD8_FL=
+AG_E=E2=80=99?
+>   117 |                 borrow =3D flags & QUAD8_FLAG_BT;
+>       |                                  ^~~~~~~~~~~~~
+>       |                                  QUAD8_FLAG_E
+> drivers/counter/104-quad-8.c:117:34: note: each undeclared identifier is =
+reported only once for each function it appears in
+> drivers/counter/104-quad-8.c:118:36: error: =E2=80=98QUAD8_FLAG_CT=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98QUAD8_FL=
+AG_E=E2=80=99?
+>   118 |                 carry =3D !!(flags & QUAD8_FLAG_CT);
+>       |                                    ^~~~~~~~~~~~~
+>       |                                    QUAD8_FLAG_E
+>=20
+>=20
 
-Yes.
+Ah, the 5.4 and 5.10 patches are missing the IIO changes from the 4.19
+patch. I'll adjust and resubmit these two patches.
 
+William Breathitt Gray
 
--- 
- i.
+--BcBXM3mkZPra247M
+Content-Type: application/pgp-signature; name="signature.asc"
 
---8323329-1821647782-1682350921=:2038--
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZEajjwAKCRC1SFbKvhIj
+K4QzAQDAlZG4LRjGl4P3p6a+rXLGeBAsv7SfStWTU+de+505hgD8CkvoHgUUJYA5
+QGrxZFt6xOarz/9S70ib0HzfgJFVjQ0=
+=DY7f
+-----END PGP SIGNATURE-----
+
+--BcBXM3mkZPra247M--
