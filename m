@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03DA6ED35C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DBD6ED35D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjDXRRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S231140AbjDXRRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjDXRRN (ORCPT
+        with ESMTP id S231794AbjDXRRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:17:13 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD551A2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:17:12 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3ef34c49cb9so1587501cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:17:12 -0700 (PDT)
+        Mon, 24 Apr 2023 13:17:18 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632E465A0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:17:16 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so8122977a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682356631; x=1684948631;
+        d=isovalent.com; s=google; t=1682356635; x=1684948635;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M0eRdTeN7jkM57vYYN0vPrAxj3a6rnjVZ2S7PSMzkMk=;
-        b=7NKiu1IiwRRKF1fJQNyjBd8av5/cqtJU9MwybHOmeJ+dADdvaJ+DHco65RXZQcn7X0
-         6JM1kMAWRWTmsRwLfIIpTIne4JD5RbLum/t9IInggIEJOXFzqJ5Btg3SH2BQ/iEayg49
-         khUC9L54LBJse/JTK1luGsjzv3ex8pX8qi8Z9b/yuXuX7MbPT6jx7vYp1Q5wyLKe8V/3
-         9wmskz5xZmaPS3BGEJsZbf5OTzsPTkI3qyOfEJcLpS6d3lzg8PXdje6yMaIi/eb8BipH
-         oZWUdcwrxh54KXDhvz4VCshlClgQWMJHDSkB0sM3NQJzWIV52NuydPQUr9SBJnA4lWmz
-         MLIQ==
+        bh=Bzs6FO+61DdPWf12/xl4T+/amfUemTj+EeZsv8C3WD8=;
+        b=E5InqhAtoXFnvQIX0NMlXMDFpYpLCfXGrcNDvDPrQN8g+T1/HnyUwJHoK2EX9PdD82
+         JFVJM00/6RvpLgtDQJTjdOx7n5xIfJ6bLTuld6X1QF4KDMb1QAWxRyZTyqDeNQ/aw6gu
+         vlTnSpmwTj9cNRnqYN10jevYK/DlVSRzNui9tMfIb+gYwkqLz7s4Fc6yc5tjRxRk1Qax
+         T1g4swfEiyuRRkRF7VpGot0Uk01t3Se7NbAy8lwe3GUv0k2hYFSMF2J1t4JY9XnIwLFl
+         0IchDJuqty+P56/A3yer3SdSXWdsxGJ4/JgIaxsb8SKGCXd8J6vkxSR5bpydBRtUhPOw
+         aZqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682356631; x=1684948631;
+        d=1e100.net; s=20221208; t=1682356635; x=1684948635;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M0eRdTeN7jkM57vYYN0vPrAxj3a6rnjVZ2S7PSMzkMk=;
-        b=ibbGJL6SLMZEW/WJQc2GVSTkSkpi3mAZNdxPV5cWpT0z+4kgeR59rOI26sG2FK0q3e
-         NlQsvKqaRG+1S4HpQH8E4RE4Fe//Tzae8KzenQLiYQRyKvsQkdBns8nlSRYV81jr6IeA
-         v9zeuNtpZanQzQvraza/sCotIEW/iTkN14K+Bd/iYM61z8unaRXjj379qISc3lAezvgX
-         ktR3xaKL2oVbBUG++BprLhBKn5UB2UoB1tj/nfGlKR4qdT9pfo7h+PwgufJxp7d3KTsz
-         K5FRa+rsTFHx1GWXZwMP0WxxkK4p/Hy6L3baIaDo06HfBHBBDx6IuUfQQtPALdyVRQzs
-         gr5g==
-X-Gm-Message-State: AAQBX9cYjvTmqmJb9/Y4PE/KBCaRRw8MtbgXxKcmDJrXoZuvQC0i/wUq
-        v8ldLdz8Gobkdv6bYmjMVOrCKpjvm2te5XeAzSsSVw==
-X-Google-Smtp-Source: AKy350YtgyMieYjr0JvEnoJpmA/ps+11jar/nzBzxWKr51AeAPA8Y30sdbhN2GD3wvfyiHUpCqNYIzx9HSDTJyE3NRk=
-X-Received: by 2002:ac8:5795:0:b0:3ef:3510:7c3a with SMTP id
- v21-20020ac85795000000b003ef35107c3amr693672qta.3.1682356631715; Mon, 24 Apr
- 2023 10:17:11 -0700 (PDT)
+        bh=Bzs6FO+61DdPWf12/xl4T+/amfUemTj+EeZsv8C3WD8=;
+        b=kWUCkdly7XPIMET3er501LOx5ai8CSp+ZMiFB94VcLbqAoyIGXJ/mnTXO1Isi6t/6v
+         JGtcgjF9d3RZgHaZjvWf4jGZIBqqeBDWGTy0NYSmggvxO8kgTzuCTZDjajPEH+ZgJiDR
+         cbcDhX9rNgDN9q9UI4jtW3FlUFXY6jtWc0T5bNfjADZyRtLoXKeVYfXl/8BT50qZUt2o
+         a0wGQpYkaTSngLK1eqpeqCwiUd1DQF/51ZPgBENkKOuJhXWd8UunutGQ2dPx5YRFuY8+
+         zI0CRjNw2twfUbnVI7ostonjJr/RcYdYy45T9WClok90JEEoWiysb4KmWf08ZnniJN5W
+         A+Gg==
+X-Gm-Message-State: AAQBX9fm+ikMgC1/mP+O9Ot7rdyhX5Bd2RmSvyOIuDZg57XupGSj2Xay
+        noR4LgVpC8dNHnUxVpTu4XCjehgIJHqJosi79zx6hA==
+X-Google-Smtp-Source: AKy350Z9k1WElKK/0OpgV+S3KsNqmGmwHXM/f5pAh4OyM83smJJgNWacpwVFM98g0R73O/bQJEillt1T0NWEvtLUrQE=
+X-Received: by 2002:aa7:d90d:0:b0:506:77e5:d157 with SMTP id
+ a13-20020aa7d90d000000b0050677e5d157mr13370358edr.19.1682356634818; Mon, 24
+ Apr 2023 10:17:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230421174020.2994750-1-yosryahmed@google.com> <20230421174020.2994750-6-yosryahmed@google.com>
-In-Reply-To: <20230421174020.2994750-6-yosryahmed@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 24 Apr 2023 10:17:01 -0700
-Message-ID: <CALvZod4Ci1RamjLEk7e9zVnqSuEVKPEWjDUAwy6TWaU+X1WeVQ@mail.gmail.com>
-Subject: Re: [PATCH v5 5/5] cgroup: remove cgroup_rstat_flush_atomic()
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
+References: <20230422175256.3396430-1-joe@isovalent.com> <a1d39a73-9793-2e1f-550a-aa3495cd9414@infradead.org>
+In-Reply-To: <a1d39a73-9793-2e1f-550a-aa3495cd9414@infradead.org>
+From:   Joe Stringer <joe@isovalent.com>
+Date:   Mon, 24 Apr 2023 10:17:03 -0700
+Message-ID: <CADa=RywRFzMy_1_xfmmPyrUKGOJ6ziVAFzG2RLdTM7w0H1LfRQ@mail.gmail.com>
+Subject: Re: [PATCH linux-doc v2] docs/doc-guide: Clarify how to write tables
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:40=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
+On Sat, Apr 22, 2023 at 11:31=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
+g> wrote:
 >
-> Previous patches removed the only caller of cgroup_rstat_flush_atomic().
-> Remove the function and simplify the code.
+> Hi,
 >
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> On 4/22/23 10:52, Joe Stringer wrote:
+> > Prior to this commit, the kernel docs writing guide spent over a page
+> > describing exactly how *not* to write tables into the kernel docs,
+> > without providing a example about the desired format.
+> > > This patch provides a positive example first in the guide so that it'=
+s
+> > harder to miss, then leaves the existing less desirable approach below
+> > for contributors to follow if they have some stronger justification for
+> > why to use that approach.
+> >
+> > Signed-off-by: Joe Stringer <joe@isovalent.com>
+> > ---
+> > v2: Simplify recommendation for either simple or grid table syntax
+> >     Remove example, link to rST user reference
+> > ---
+> >  Documentation/doc-guide/sphinx.rst | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-gui=
+de/sphinx.rst
+> > index 23edb427e76f..77ac7dc27715 100644
+> > --- a/Documentation/doc-guide/sphinx.rst
+> > +++ b/Documentation/doc-guide/sphinx.rst
+> > @@ -313,9 +313,18 @@ the documentation build system will automatically =
+turn a reference to
+> >  function name exists.  If you see ``c:func:`` use in a kernel document=
+,
+> >  please feel free to remove it.
+> >
+> > +Tables
+> > +------
+> > +
+> > +ReStructuredText provides several options for table syntax. Kernel sty=
+le for
+> > +tables is prefer *simple table* syntax or *grid table* syntax. See the
+>
+>    tables is to prefer
+> or
+>    tables prefers
+>
+> Otherwise LGTM. It's good to have positive examples, not just negative on=
+es.
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+Thanks, I'll fix this up and send a fresh version.
