@@ -2,148 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BED6ED029
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1386ED03B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjDXOSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S231768AbjDXOWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjDXOSK (ORCPT
+        with ESMTP id S231694AbjDXOV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:18:10 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CE81AD;
-        Mon, 24 Apr 2023 07:18:08 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a677dffb37so39330155ad.2;
-        Mon, 24 Apr 2023 07:18:08 -0700 (PDT)
+        Mon, 24 Apr 2023 10:21:58 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC927AB8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:21:54 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so12109e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682345888; x=1684937888;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wgz6pGktHqeuQ4Y4H5L+AJiXl1aqMQ4y3UGquhQlAig=;
-        b=Ty53eIAt1IHobjrfSfk6qmCuv/xmbaA+p/YqcxwpbTAc7dCv2X4Jt3DcrocevC/79O
-         p/Uy1z2cnOjwlNOmVpJyXpj+lEOTuNSpICa3SObATJN5VybRkUCoZr+udJa1VDeqGsMB
-         l7TPKHTFsoxKA8MzCei8cL0X+4N86NrxGZ0pB52HVghOZfhYS0t0VWHzQsl9A1LPXVVw
-         AEhPYQ5Zf2f4QVYzfa/xd9dRMyc3FbRKvfUAQfo0w+6jwjKEmNsKFzeAc5Ug+N+WO1uz
-         B8JygVYjN7UOZdHajiZIJu03dcuGqrGm89nkgwwEwbUVaxQxufQzAEZvsQ5xMYxuXgFW
-         z6Zw==
+        d=google.com; s=20221208; t=1682346113; x=1684938113;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=enbgg+lqaw2zyPJZ1pbEEFHlLXGIOHAiWtJzwllHKYk=;
+        b=d/qZRyT5eP+jU3o4eFNHhYxVnfxA6MScMHl7EjDAUKW8eeAqkTfrkneA4vEc9uBXwZ
+         h4ZGQJRzWcXcoXy42qQQAV1i4o0OUT7utHIj2IoI7VFMMkb3DSzd4yHsNk9rQKJ+Q0Ba
+         nMOvmgEa5xIOvPXkoUS0vb2tva2pNXVvMgkmCungv6F2+M0Fwnc1Jl7fLI7rLZaZWeiU
+         o/IcRqlPrSKXcDkM6nZYnx9nYtaTtj80DS33Cf5UiYjI54XuWOklqvx5bm9Ikxcy3ndx
+         QrzsivjDGtZL5voUC900DRzJleGdv4R1Yf5ZDQmV5GoyD/NumwZc188PEi5kVsnKNkNp
+         Ri3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682345888; x=1684937888;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wgz6pGktHqeuQ4Y4H5L+AJiXl1aqMQ4y3UGquhQlAig=;
-        b=Nb2HmW0MSYfWt1Us7ucHPyP1nrV/UNg7EIg+TEg6FK/k69Je0tbz1TZzEx9WPmy9Cm
-         2lvN5vM/YRR6E1Vy4AIPbqXd4u03s56qNRg2zl2EBN805hpjKwwDIdsFgaF4Lxu3Qoa/
-         CdRZCrjxx4qNB2jnKBkXvvyzUm4HZ0yaGC0Ez8nZqIj41TZQ7NMf9jkBlJ0bwlCDq5wE
-         c+YWHv+rjSAymL++l/DtI5oykrtgJYRrlOd00g6TawKegpD2f13BfwzGdynQH5WuSTeU
-         QUaw18OHQ69bS863/weYT6ebxUjItgebt4pzMJmI2k2qDW3VGNVOTtaUnlmUxmsQecnf
-         cytw==
-X-Gm-Message-State: AAQBX9cLnYhFmc2wLqXD2QxkaZHMg3COTO6McO+li0yszk//tTO1lhob
-        7/Vhaah25+eCy33sHCjuRWM=
-X-Google-Smtp-Source: AKy350YRFnPX7pHvHtaSTxI87RqGj1EAdgRzXvQnqI87j56IDGmzabDHr8vRW+W4Fub/VfgBsg5+8g==
-X-Received: by 2002:a17:903:4093:b0:1a4:f295:32fa with SMTP id z19-20020a170903409300b001a4f29532famr11784339plc.15.1682345888127;
-        Mon, 24 Apr 2023 07:18:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k11-20020a170902694b00b0019309be03e7sm6663563plt.66.2023.04.24.07.18.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 07:18:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Apr 2023 07:18:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/43] dt-bindings: watchdog: add DT bindings for Cirrus
- EP93x
-Message-ID: <7353ae3d-baf1-4f7f-9d87-ae322aa37338@roeck-us.net>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-10-nikita.shubin@maquefel.me>
- <b39724a8-5e29-411e-9deb-29dd37609372@roeck-us.net>
+        d=1e100.net; s=20221208; t=1682346113; x=1684938113;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=enbgg+lqaw2zyPJZ1pbEEFHlLXGIOHAiWtJzwllHKYk=;
+        b=UyKtkwymbuWXJDM0gq6ZBJEwdFruEAi+V+Yp9qhISDm5Ip5B781y/boM9HMlSuwu9p
+         +kwj+OIU+MpGbg5v2HQ8aRZMwz2WUuFqPrXePtLAkL67prZhTW0iQkq1ndlc2sziCiw2
+         YzBtp5iwSXpcwoynBTCSaNxyW+cjPuJ0vGEydLn06Sdx/zAKZ3aVA01ZZawjsqiV2Js/
+         sRCi80Wd1X2n5VSrROua9BsLCx0KATfhV886nKIY0/3rRVgfKwEiQnbujKgM9v+mwln6
+         kR4pre1FIQp9gmHICv1IIc/8rw+wy/GLWl29X5SJo23wv4q4swYZcJh5GWvdNtmR6Vub
+         pFxg==
+X-Gm-Message-State: AAQBX9cL/ZDcizJMGMEfmsjFjT4tNKbRO0mRcqri7GO57cU6KdQYbdcU
+        /b2LafncTaMlfrOGJpGIHxTc1szrydE2NAvEQUNk2Q==
+X-Google-Smtp-Source: AKy350by1ELWJ/CmwHDxqXyCll4tWAI6i/5CdlY/6JgR+z+2K/yBvdGz9oOpWc3MDBoV51yKVHZIfVVj7zO9PkuCDIY=
+X-Received: by 2002:a05:6512:39c4:b0:4ef:ef1d:a97b with SMTP id
+ k4-20020a05651239c400b004efef1da97bmr110782lfu.0.1682346112665; Mon, 24 Apr
+ 2023 07:21:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b39724a8-5e29-411e-9deb-29dd37609372@roeck-us.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <000000000000d0737c05fa0fd499@google.com> <CACT4Y+YKt-YvQ5fKimXAP8nsV=X81OymPd3pxVXvmPG-51YjOw@mail.gmail.com>
+ <ZEaCSXG4UTGlHDam@casper.infradead.org> <CACT4Y+YeV8zU2x+3dpJJFez5_33ic3q7B2_+KYrcNOQxooRWpw@mail.gmail.com>
+ <ZEaN7PP794H2vbe/@casper.infradead.org>
+In-Reply-To: <ZEaN7PP794H2vbe/@casper.infradead.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 24 Apr 2023 16:21:40 +0200
+Message-ID: <CACT4Y+aHoUT22Cd3yfBzW78iiwy-4P-L0=SHJJ5qaN--n-D2Ng@mail.gmail.com>
+Subject: Re: [syzbot] [fs?] [mm?] KCSAN: data-race in __filemap_remove_folio /
+ folio_mapping (2)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     syzbot <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com>,
+        djwong@kernel.org, hch@infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 07:16:16AM -0700, Guenter Roeck wrote:
-> On Mon, Apr 24, 2023 at 03:34:25PM +0300, Nikita Shubin wrote:
-> > This adds device tree bindings for the Cirrus Logic EP93xx
-> > watchdog block used in these SoCs.
-> > 
-> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> > ---
-> >  .../bindings/watchdog/cirrus,ep93xx-wdt.yaml  | 38 +++++++++++++++++++
-> >  1 file changed, 38 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml
-> > new file mode 100644
-> > index 000000000000..f39d6b14062d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml
-> > @@ -0,0 +1,38 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/cirrus,ep93xx-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Cirrus Logic EP93xx Watchdog Timer
-> > +
-> > +maintainers:
-> > +  - Wim Van Sebroeck <wim@linux-watchdog.org>
-> > +
-> > +description:
-> > +  Watchdog driver for Cirrus Logic EP93xx family of devices.
-> > +
-> > +allOf:
-> > +  - $ref: "watchdog.yaml#"
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - cirrus,ep9301-wdt
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> 
-> The driver does support reading the timeout from devicetree.
-> It might make sense to mention that here.
-> 
-Never mind - I guess that is includeds in watchdog.yaml.
-Sorry for the noise.
+On Mon, 24 Apr 2023 at 16:10, Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Apr 24, 2023 at 03:49:04PM +0200, Dmitry Vyukov wrote:
+> > On Mon, 24 Apr 2023 at 15:21, Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Mon, Apr 24, 2023 at 09:38:43AM +0200, Dmitry Vyukov wrote:
+> > > > On Mon, 24 Apr 2023 at 09:19, syzbot
+> > > > <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com> wrote:
+> > > > If I am reading this correctly, it can lead to NULL derefs in
+> > > > folio_mapping() if folio->mapping is read twice. I think
+> > > > folio->mapping reads/writes need to use READ/WRITE_ONCE if racy.
+> > >
+> > > You aren't reading it correctly.
+> > >
+> > >         mapping = folio->mapping;
+> > >         if ((unsigned long)mapping & PAGE_MAPPING_FLAGS)
+> > >                 return NULL;
+> > >
+> > >         return mapping;
+> > >
+> > > The racing write is storing NULL.  So it might return NULL or it might
+> > > return the old mapping, or it might return NULL.  Either way, the caller
+> > > has to be prepared for NULL to be returned.
+> > >
+> > > It's a false posiive, but probably worth silencing with a READ_ONCE().
+> >
+> > Yes, but the end of the function does not limit effects of races. I
+>
+> I thought it did.  I was under the impression that the compiler was not
+> allowed to extract loads from within the function and move them outside.
+> Maybe that changed since C99.
+>
+> > to this:
+> >
+> > if (!((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS) && folio->mapping)
+> >    if (test_bit(AS_UNEVICTABLE, &folio->mapping->flags))
+> >
+> > which does crash.
+>
+> Yes, if the compiler is allowed to do that, then that's a possibility.
 
-> > +
-> > +examples:
-> > +  - |
-> > +    wdt0: watchdog@80940000 {
-> > +        compatible = "cirrus,ep9301-wdt";
-> > +        reg = <0x80940000 0x08>;
-> > +    };
-> > +
-> > -- 
-> > 2.39.2
-> > 
+C11/C++11 simply say any data race renders behavior of the whole
+program undefined. There is no discussion about values, functions,
+anything else.
+
+Before that there was no notion of data races, so it wasn't possible
+to talk about possible effects and restrict them. But I don't think
+there ever was an intention to do any practical restrictions around
+function boundaries. That would mean that inlining can only run as the
+latest optimization pass, which would inhibit tons of optimizations.
+Users would throw such a compiler away.
