@@ -2,157 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA056ECBBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563076ECBC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjDXMC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S231752AbjDXMEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjDXMCz (ORCPT
+        with ESMTP id S231360AbjDXMD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:02:55 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F50CE65;
-        Mon, 24 Apr 2023 05:02:54 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id BEBF35C01A8;
-        Mon, 24 Apr 2023 08:02:51 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 24 Apr 2023 08:02:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1682337771; x=
-        1682424171; bh=CRvO6aIzOksETinFwGWymGxM2N+ncqpqbziqE4P90jE=; b=K
-        s8mDDYXrnRqjqrU5BW4+OV7zVGUbFLVjLriun4tmAFCJELjr4REGLRVSHgHjhkjh
-        Xep4y/SqEidGausW58qWVR8jV0yGSvhN/Pkl61At06FSgniI8CibRUvR+YD1b+dh
-        noEgKtRqS7jqcbClfTrEG7qKpk/BLsPKrBL/8wNaYeGng0lPT93tpRlmm5nMvkRO
-        wi4gcS9PXeZGCx7SXYH1LjxMAn79yIinR33/dmBUHCf0uiBgYFB0tfc2MxYSEOY2
-        7f2skw3npSzI0p7FU8AxwJFFqhgj6O9HvOrMi402nmPpIQ/Mrbm5HNknsJC0uGXy
-        pf9CcxKfMg0SPZ/y5z/Gw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682337771; x=1682424171; bh=CRvO6aIzOksET
-        inFwGWymGxM2N+ncqpqbziqE4P90jE=; b=fExb4HuszmPiaoxHgs+cKxDIwLQU+
-        eEdwK2PqGEzrWcrFhpexicu42iT/FXcS1JopTEEOIjoC+XdgRDkrxeInk89/akXe
-        PgZ1PUW+MjIVtohFqSGh+/6W/f9JBBeF1B0vOX/z/0GNNKp8ybiJa/cvEWXD5Bh6
-        uqco/RnE0UyicwnzNTOr80Z6fKImcXU7a35zhWmi2s3LmSL0L9C9dklH/TShrowR
-        VrxsvxS7B30zdia8qb5kzgQhhFD0DSYAr4joSMPH4te8KQoir0o/UxY4XNrXUS+r
-        YHmdaKH+NHa3fUXEZ/GmZqCCZxTQUgUj2/cyvklGRoPFG59SjlT1zPIIA==
-X-ME-Sender: <xms:6m9GZANNYr6TGHymmAD1-8ch6CPDymdpqrqJCHFrWSvrXbg0y9_PAA>
-    <xme:6m9GZG-YxUHkJl6fztunDYkp2nnOQJAM7lEvUe-hY_Yw7_1-wOLbr63PYJNA00LF5
-    HQyk1__Q98Gxh__uCY>
-X-ME-Received: <xmr:6m9GZHT5yUcDaIuEjNwYi078xTrEsa0hHkih8eBHuRE4wyAXL-_SQD3kdB35IUUhS_bu2w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:6m9GZIva8NohubvE-CE0B9aBb6EAGLY58ZvjYHuVRLj-oFgK1r9VUA>
-    <xmx:6m9GZIezTduoYrFkQgeKd--0ZG2lvutgkn4yvHHLo4oWPRIxucHJpg>
-    <xmx:6m9GZM1Wu0LH7Uws3qx8n4fbr0wRPFxLbnj7kTuKLgmA7gzKUDZp2w>
-    <xmx:629GZADcnXNbrlZmost-ak_0YFJdISlmSeeG4Rh7NaAM9e0Zo7Vnzg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Apr 2023 08:02:49 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 1FE9F10A0FA; Mon, 24 Apr 2023 15:02:47 +0300 (+03)
-Date:   Mon, 24 Apr 2023 15:02:47 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] mm/gup: disallow GUP writing to file-backed mappings by
- default
-Message-ID: <20230424120247.k7cjmncmov32yv5r@box.shutemov.name>
-References: <f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com>
+        Mon, 24 Apr 2023 08:03:59 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0463010EA;
+        Mon, 24 Apr 2023 05:03:54 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5113:4140:2ad:3e:4b54] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33OC3g4w013596-33OC3g4x013596
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Mon, 24 Apr 2023 20:03:43 +0800
+Message-ID: <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+Date:   Mon, 24 Apr 2023 20:03:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+To:     Mark Brown <broonie@kernel.org>, Li Ningke <lnk_01@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 02:37:05PM +0100, Lorenzo Stoakes wrote:
-> @@ -959,16 +959,46 @@ static int faultin_page(struct vm_area_struct *vma,
->  	return 0;
->  }
->  
-> +/*
-> + * Writing to file-backed mappings using GUP is a fundamentally broken operation
-> + * as kernel write access to GUP mappings may not adhere to the semantics
-> + * expected by a file system.
-> + *
-> + * In most instances we disallow this broken behaviour, however there are some
-> + * exceptions to this enforced here.
-> + */
-> +static inline bool can_write_file_mapping(struct vm_area_struct *vma,
-> +					  unsigned long gup_flags)
-> +{
-> +	struct file *file = vma->vm_file;
-> +
-> +	/* If we aren't pinning then no problematic write can occur. */
-> +	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
-> +		return true;
-> +
-> +	/* Special mappings should pose no problem. */
-> +	if (!file)
-> +		return true;
-> +
-> +	/* Has the caller explicitly indicated this case is acceptable? */
-> +	if (gup_flags & FOLL_ALLOW_BROKEN_FILE_MAPPING)
-> +		return true;
-> +
-> +	/* shmem and hugetlb mappings do not have problematic semantics. */
-> +	return vma_is_shmem(vma) || is_file_hugepages(file);
 
-Can this be generalized to any fs that doesn't have vm_ops->page_mkwrite()?
+On 2023/4/24 19:48, Mark Brown wrote:
+> On Sun, Apr 23, 2023 at 03:24:46AM +0000, Li Ningke wrote:
+>> Smatch complains that
+>> drivers/spi/spi-davinci.c:915 davinci_spi_probe() warn:
+>> platform_get_irq() does not return zero
+>>
+>> There is no need to check whether the return value is zero as
+>> `platform_get_irq()` only returns non-zero IRQ number on success
+>> or negative error number on failure, removing them to solve this
+>> problem.
+> Is that check valid?  0 was a valid interrupt for some architectures...
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+We just follow the comments of platform_get_irq().
+
+/**
+  * platform_get_irq - get an IRQ for a device
+  * @dev: platform device
+  * @num: IRQ number index
+  *
+  * Gets an IRQ for a platform device and prints an error message if 
+finding the
+  * IRQ fails. Device drivers should check the return value for errors 
+so as to
+  * not pass a negative integer value to the request_irq() APIs.
+  *
+  * For example::
+  *
+  *              int irq = platform_get_irq(pdev, 0);
+  *              if (irq < 0)
+  *                      return irq;
+  *
+  * Return: non-zero IRQ number on success, negative error number on 
+failure.
+  */
+int platform_get_irq(struct platform_device *dev, unsigned int num)
+{
+         int ret;
+
+         ret = platform_get_irq_optional(dev, num);
+         if (ret < 0)
+                 return dev_err_probe(&dev->dev, ret,
+                                      "IRQ index %u not found\n", num);
+
+         return ret;
+}
+
