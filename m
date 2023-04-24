@@ -2,47 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030DE6EC42C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4CC6EC42D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjDXDu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S230270AbjDXDzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDXDuw (ORCPT
+        with ESMTP id S229941AbjDXDzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:50:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92167E67;
-        Sun, 23 Apr 2023 20:50:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uMKfR83C0B9dH2cTA6vwCV+ysD6ryGT7DeWsaB7/c50=; b=N0bDuxkmi9sVSIOfVXutZqafhZ
-        0AVoZT5UTfmlDIZIveXnpkydkBXLTY6lQ+kGH3SbF4/FPb5f+byVW8CZ/sQaLwhzhSKz4YXmxK/pR
-        47m8xz+tbvD+KpDB6UIQhZTkGm9OMf2MNroA6WguHK3l75As47J05GKaLwVgJ8Enzo8jGR4OrwVH1
-        wNGUejgNjW8RcnAj74fzudaKH9Ja28uweMncZl9j7ohZf4GZPf9QVjvJRsw1WuEUNsHYdlQCOgkxq
-        DmEnii623QUp5pfcLLs1KTEuXJ8Qk5y9gxy998/CUSojHgP7qg+n68aHQE4/AKrYqXrxM0r13YrKO
-        u816BZ+Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pqnDp-00046U-JS; Mon, 24 Apr 2023 03:50:37 +0000
-Date:   Mon, 24 Apr 2023 04:50:37 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     david@redhat.com, osalvador@suse.de, gregkh@linuxfoundation.org,
-        rafael@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] mmzone: Introduce for_each_populated_zone_pgdat()
-Message-ID: <ZEX8jV/FQm2gL+2j@casper.infradead.org>
-References: <20230424030756.1795926-1-yajun.deng@linux.dev>
+        Sun, 23 Apr 2023 23:55:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F6526A3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:55:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E27D31FD6F;
+        Mon, 24 Apr 2023 03:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682308499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vg+urJOyPUXiktXOQU10CHhl7LlrECD+nld2cuF6aAk=;
+        b=eXxfKsWNO4lyj2ZqXMq+bLIHNTSri+lag0/Bt6xEzK1A+TjoA/ppj24WE6Z1sF+fGLd+nW
+        gnjU0yXqwXwLBlSV54buUrxRY9QWR1+V4Lxiif+B6xUwwS1UvZcx5J7uamZvAyL869V8k7
+        X3r+wxUpm7KjPh/LX/D6AVZAzNT6XMg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682308499;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vg+urJOyPUXiktXOQU10CHhl7LlrECD+nld2cuF6aAk=;
+        b=6NxXkrOVVasLN3rwHOVjtak0p+7NjeNVXBEJZ/yOqxLmlj/U278PBU9oAc3CIM5kTIw8/H
+        UozyMYX3r89C08Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D374513780;
+        Mon, 24 Apr 2023 03:54:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /PJrM5P9RWSUaAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Mon, 24 Apr 2023 03:54:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424030756.1795926-1-yajun.deng@linux.dev>
+Date:   Mon, 24 Apr 2023 05:54:59 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>
+Subject: Re: [PATCH v4 0/3] page_owner: print stacks and their counter
+In-Reply-To: <CAG_fn=UzFaHrM2X0_X=9aRPe5Wcmzj_snAbY=GJCj8__h9PxCg@mail.gmail.com>
+References: <20230421101415.5734-1-osalvador@suse.de>
+ <CAG_fn=UzFaHrM2X0_X=9aRPe5Wcmzj_snAbY=GJCj8__h9PxCg@mail.gmail.com>
+User-Agent: Roundcube Webmail
+Message-ID: <7718244879ff2b696ea9cbb744cb3805@suse.de>
+X-Sender: osalvador@suse.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,25 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:07:56AM +0800, Yajun Deng wrote:
-> Instead of define an index and determining if the zone has memory,
-> introduce for_each_populated_zone_pgdat() helper that can be used
-> to iterate over each populated zone in pgdat, and convert the most
-> obvious users to it.
+On 2023-04-21 13:19, Alexander Potapenko wrote:
+> I think the implementation of these counters is too specific to
+> page_owner and is hard to use for any other purpose.
+> If we decide to have them, there should be no page_owner-specific
+> logic in the way we initialize/increment/decrement these counters.
 
-I don't think the complexity of the helper justifies the simplification
-of the users.
+Another solution would be to always increment the refcount in 
+__stack_depot_save,
+in this case the "page-owner" specific changes are gone, and
+it is more of a generic thing.
+e.g: Andrey Konovalov mentioned that in a future KASAN remodelation,
+he would be using a stack refcount as well.
 
-> +++ b/include/linux/mmzone.h
-> @@ -1580,6 +1580,14 @@ extern struct zone *next_zone(struct zone *zone);
->  			; /* do nothing */		\
->  		else
->  
-> +#define for_each_populated_zone_pgdat(zone, pgdat, max) \
-> +	for (zone = pgdat->node_zones;                  \
-> +	     zone < pgdat->node_zones + max;            \
-> +	     zone++)                                    \
-> +		if (!populated_zone(zone))		\
-> +			; /* do nothing */		\
-> +		else
-> +
+> The thresholds in "mm,page_owner: Filter out stacks by a threshold
+> counter" should also belong elsewhere.
+
+That can certainly be cleaned up I guess to not polute non-page_owner 
+code.
+
+> Given that no other stackdepot user needs these counters, maybe it
+> should be cleaner to store an opaque struct along with the stack,
+> passing its size to stack_depot_save(), and letting users access it
+> directly using the stackdepot handler.
+> 
+> I am also wondering if a separate hashtable mapping handlers to
+> counters would solve the problem for you?
+
+Let us see first if with the changes from above the code gets to a more
+generic and clean stage, if not we can explore further options.
+
+Thanks for your feedback Alexander!
+
+-- 
+Oscar Salvador
+SUSE Labs
