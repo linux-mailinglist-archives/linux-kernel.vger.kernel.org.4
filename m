@@ -2,375 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D6A6EC8BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF606EC8B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjDXJXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
+        id S229476AbjDXJXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXJXU (ORCPT
+        with ESMTP id S229573AbjDXJXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:23:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A9410F7;
-        Mon, 24 Apr 2023 02:23:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B8461026;
-        Mon, 24 Apr 2023 09:23:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A5EC4339B;
-        Mon, 24 Apr 2023 09:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682328197;
-        bh=9QxxTDqEZuUcu1SqncS6XYTCwXdPgOsgYu/94XoFcg0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IBLR6BB6XL4iRo6H7lF+e/UgspEmTu/rlUW82ZicKtXhIgTqBG4RVgLufemlS+CiQ
-         PSxobCDeJ2hu7pHPGfbVYXbw4ImEV6G2M/kGjCAqTqEDW2XT1w5DEoZG2HwWii0/DO
-         VVYzhEC5LKw/CA5m+Y15dBHbBrbg+VVzmxXBX1wnx6w+k7RVgRnO/2Gk9RyjcMABPl
-         JA4ow51fYKniHAivznokOokZhLkKgSOar4Yq/EnM1Deuug7bjQrXerKHvaRraMAJRW
-         VFhsnETNKCh5jZlaItq+B/MS1BMnkXnE3/naYMjbognybDZdLg00hKx0sWDVajEVt+
-         LN7GAmGyGWhXw==
-Message-ID: <44e5ba0a-7a76-caa8-349d-ced41aaa8836@kernel.org>
-Date:   Mon, 24 Apr 2023 12:23:09 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 4/7] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
+        Mon, 24 Apr 2023 05:23:19 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB65910F0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:23:17 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f178da219bso41550445e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682328196; x=1684920196;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EXcFasvYcCcX5M/Oqzczio5jClnFAANnb2Xvikd7U7A=;
+        b=rw3uoZSD2cv6C8bIkJfrr8Hxzj4xP6HDs9VqlScy9e0jX1XeuIikb1eMqMqq+IfTBi
+         Bua7ZF8W/sP2+9rqKNbZ5bCmJy6fGE47hT6zFnUVDqPnmTK3abMMXu+ssSp9CZgl7rsh
+         oGgvkHi0wgS9oLumPsYvpXu0rloUrjQvdojtvPeENhDeWql3UYihPP3Hpbiyp/4INX8A
+         9ubu6OWpHGxleZ0ogFHdqrE2MM7M1ckuo92zYW1hhYhfJT7bDtIzPNIhTJab0U4rCTEB
+         g8JE1P2iAvsKNRxf6IM/TaHu59mzUxW7fuSPnTt/o0dvm8YuuxjUJ+/WgnNJXvzs903p
+         KNOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682328196; x=1684920196;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EXcFasvYcCcX5M/Oqzczio5jClnFAANnb2Xvikd7U7A=;
+        b=YbTHQjZkeZtIy2sifIsSR3gITIrjGuwBl/NR9qTwlB0r6PHXpBR4u2+ru6s8/fBW7F
+         FwiE0Yf9ysRoS/HC5sBmZb9B0r6ZgvDDT5uttP7ZWWPs2N43hUu20VeX7+BRgJqYifPw
+         VRdcrlSQ9/vqLA1MVsYSUgtNZBbetx9gWL7ltlf7kp5lRqjMf7OrnSOjXTBN9+w/NdZ9
+         QKU93u25/uCrYbq9fk4gVsMg2tHJvXETgKwbBoPAE/GzV7HqnA3o0PiQbL7IpTBUkMJi
+         iYoBdVN9Fp8/2wFHqvLy5CKB+rh5mNvl/8CyJoRee7DuWu81Zm/h4/NGwiAnuUnEqnKV
+         yliw==
+X-Gm-Message-State: AAQBX9fMd9ikP9hJS1YJ22MiXCsjTek0oWTiALBEH2El43sFU0R7Te84
+        qX09PHAthS/b1TJ3T2X/5TpZf2JvFGqctIZ62M0=
+X-Google-Smtp-Source: AKy350ZGA/34dC7i7D2a/hjvz5pLQPYdT9/obwuNRSwU39wOtAvc2iVIM4u0ToVzfv8KAENelqieHQ==
+X-Received: by 2002:a7b:c5c7:0:b0:3f1:75d0:6151 with SMTP id n7-20020a7bc5c7000000b003f175d06151mr7250507wmk.1.1682328195740;
+        Mon, 24 Apr 2023 02:23:15 -0700 (PDT)
+Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id n16-20020adfe350000000b002c71b4d476asm10327819wrj.106.2023.04.24.02.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 02:23:15 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-5-minda.chen@starfivetech.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230420110052.3182-5-minda.chen@starfivetech.com>
+        Conor Dooley <conor@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v10 0/1] riscv: Allow to downgrade paging mode from the command line
+Date:   Mon, 24 Apr 2023 11:23:12 +0200
+Message-Id: <20230424092313.178699-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+his new version gets rid of the limitation that prevented KASAN kernels
+to use the newly introduced parameters.
 
+While looking into KASLR, I fell onto commit aacd149b6238 ("arm64: head:
+avoid relocating the kernel twice for KASLR"): it allows to use the fdt
+functions very early in the boot process with KASAN enabled by simply
+compiling a new version of those functions without instrumentation.
 
-On 20/04/2023 14:00, Minda Chen wrote:
-> Add Starfive JH7110 SoC PCIe 2.0 PHY driver support.
-> PCIe 2.0 PHY default connect to PCIe controller.
-> But pcie0 PHY can connect to USB 3.0 controlller.
+I had to change the handling of the command line parsing to make the
+code self-contained in kernel/pi/cmd_early.c to avoid calling too many
+__pi prefixed functions from outside this file.
 
-s/controlller/controller
+I'll use this approach like arm64 to handle the extraction of the random
+seedi from the device tree for KASLR.
 
-> 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  MAINTAINERS                            |   4 +-
->  drivers/phy/starfive/Kconfig           |  11 ++
->  drivers/phy/starfive/Makefile          |   1 +
->  drivers/phy/starfive/phy-jh7110-pcie.c | 202 +++++++++++++++++++++++++
->  4 files changed, 217 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c09ea66dcd5a..8e0f755ba91b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19968,10 +19968,12 @@ M:	William Qiu <william.qiu@starfivetech.com>
->  S:	Supported
->  F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->  
-> -STARFIVE JH71X0 USB PHY DRIVER
-> +STARFIVE JH71X0 PCIE AND USB PHY DRIVER
->  M:	Minda Chen <minda.chen@starfivetech.com>
->  S:	Supported
-> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-pcie-phy.yaml
->  F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> +F:	drivers/phy/starfive/phy-jh7110-pcie.c
->  F:	drivers/phy/starfive/phy-jh7110-usb.c
->  
->  STATIC BRANCH/CALL
-> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
-> index 2c013c390dee..c21c21d284a6 100644
-> --- a/drivers/phy/starfive/Kconfig
-> +++ b/drivers/phy/starfive/Kconfig
-> @@ -12,6 +12,17 @@ config PHY_STARFIVE_DPHY_RX
->  	  system. If M is selected, the module will be called
->  	  phy-starfive-dphy-rx.
->  
-> +config PHY_STARFIVE_JH7110_PCIE
-> +	tristate "Starfive JH7110 PCIE 2.0/USB 3.0 PHY support"
-> +	depends on USB_SUPPORT
+This patchset is rebased on top:
 
-What if system has PCIE and no USB. Then they can't use this PHY
-as it cannot be built?
+Introduce 64b relocatable kernel
+(https://patchwork.kernel.org/project/linux-riscv/list/?series=734847)
+base-commit-tag: v6.3-rc1
 
-> +	select GENERIC_PHY
-> +	select USB_PHY
-> +	help
-> +	  Enable this to support the StarFive PCIe 2.0 PHY,
-> +	  or used as USB 3.0 PHY.
-> +	  If M is selected, the module will be called
-> +	  phy-jh7110-pcie.ko.
-> +
->  config PHY_STARFIVE_JH7110_USB
->  	tristate "Starfive JH7110 USB 2.0 PHY support"
->  	depends on USB_SUPPORT
-> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
-> index 176443852f4d..03a55aad53a2 100644
-> --- a/drivers/phy/starfive/Makefile
-> +++ b/drivers/phy/starfive/Makefile
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_PHY_STARFIVE_DPHY_RX)      += phy-starfive-dphy-rx.o
-> +obj-$(CONFIG_PHY_STARFIVE_JH7110_PCIE)	+= phy-jh7110-pcie.o
->  obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
-> diff --git a/drivers/phy/starfive/phy-jh7110-pcie.c b/drivers/phy/starfive/phy-jh7110-pcie.c
-> new file mode 100644
-> index 000000000000..fe029daef62e
-> --- /dev/null
-> +++ b/drivers/phy/starfive/phy-jh7110-pcie.c
-> @@ -0,0 +1,202 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * StarFive JH7110 PCIe 2.0 PHY driver
-> + *
-> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> + * Author: Minda Chen <minda.chen@starfivetech.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define PCIE_KVCO_LEVEL_OFF		(0x28)
-> +#define PCIE_USB3_PHY_PLL_CTL_OFF	(0x7c)
-> +#define PCIE_KVCO_TUNE_SIGNAL_OFF	(0x80)
+v10:
+- Compile kernel/pi with -fpie to fix llvm boot issues (arm64 does just
+  that)
+- Rebase on top relocatable patchset that was merged
+- Add -z norelro to all kernels (not just relocatable) to quiet ld.lld
+  warnings
 
-Brackets not required.
+v9:
+- Fix medlow builds by marking pi/ medany, as reported by Palmer
 
-> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
-> +#define PHY_KVCO_FINE_TUNE_LEVEL	0x91
-> +#define PHY_KVCO_FINE_TUNE_SIGNALS	0xc
-> +
-> +#define USB_PDRSTN_SPLIT		BIT(17)
-> +
-> +#define PCIE_PHY_MODE			BIT(20)
-> +#define PCIE_PHY_MODE_MASK		GENMASK(21, 20)
-> +#define PCIE_USB3_BUS_WIDTH_MASK	GENMASK(3, 2)
-> +#define PCIE_USB3_RATE_MASK		GENMASK(6, 5)
-> +#define PCIE_USB3_RX_STANDBY_MASK	BIT(7)
-> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
-> +
-> +struct jh7110_pcie_phy {
-> +	struct phy *phy;
-> +	struct regmap *stg_syscon;
-> +	struct regmap *sys_syscon;
-> +	void __iomem *regs;
-> +	u32 sys_phy_connect;
-> +	u32 stg_pcie_mode;
-> +	u32 stg_pcie_usb;
-> +	enum phy_mode mode;
-> +};
-> +
-> +static int jh7110_usb3_mode_set(struct jh7110_pcie_phy *data)
-> +{
-> +	if (!data->stg_syscon || !data->sys_syscon) {
-> +		dev_info(&data->phy->dev, "don't support usb3 mode\n");
+v8:
+- Fix LLVM ld warning by moving the section .init.sdata from
+  kernel/pi/string.c into the newly created section .init.pidata
 
-s/don't/doesn't
+v7:
+- Rebased on top of for-next which introduces lots of errors (thanks to
+  the patchwork CI)
+- Add __NO_FORTIFY to avoid undefined __pi_fortify_panic
+- Add an alias to our newly introduced strlen
+- Remove __init as sections are already prefixed in the Makefile
+- Introduce new section for kernel/pi/string.c to quiet the following
+  warnings (once we have all the string functions, we'll be able to get
+  rid of this):
 
-dev_err()
+warning: orphan section `.init__bug_table' from `arch/riscv/kernel/pi/string.pi.o' being placed in section `.init__bug_table'
+warning: orphan section `.init.srodata.cst8' from `arch/riscv/kernel/pi/string.pi.o' being placed in section `.init.srodata.cst8'
 
-> +		return -EINVAL;
-> +	}
-> +
-> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_mode,
-> +			   PCIE_PHY_MODE_MASK, PCIE_PHY_MODE);
-> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
-> +			   PCIE_USB3_BUS_WIDTH_MASK, 0);
-> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
-> +			   PCIE_USB3_RATE_MASK, 0);
-> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
-> +			   PCIE_USB3_RX_STANDBY_MASK, 0);
-> +	regmap_update_bits(data->stg_syscon, data->stg_pcie_usb,
-> +			   PCIE_USB3_PHY_ENABLE, PCIE_USB3_PHY_ENABLE);
-> +
-> +	/* Connect usb 3.0 phy mode */
-> +	regmap_update_bits(data->sys_syscon, data->sys_phy_connect,
-> +			   USB_PDRSTN_SPLIT, 0);
-> +
-> +	/* Configuare spread-spectrum mode: down-spread-spectrum */
-> +	writel(PCIE_USB3_PHY_ENABLE, data->regs + PCIE_USB3_PHY_PLL_CTL_OFF);
-> +
-> +	return 0;
-> +}
-> +
-> +static void jh7110_pcie_mode_set(struct jh7110_pcie_phy *phy)
-> +{
-> +	/* PCIe Multi-PHY PLL KVCO Gain fine tune settings: */
-> +	writel(PHY_KVCO_FINE_TUNE_LEVEL, phy->regs + PCIE_KVCO_LEVEL_OFF);
-> +	writel(PHY_KVCO_FINE_TUNE_SIGNALS, phy->regs + PCIE_KVCO_TUNE_SIGNAL_OFF);
+v6:
+- Fix llvm warning by forward declaring set_satp_mode_from_cmdline
 
-In cases where PHY can be connected to both USB and PCIe don't you have to
-make sure PHY is connected to PCIe controller by setting data->sys_syscon
-and data->stg_syscon appropriately?
+v5:
+- Handle null command line, Thanks Björn!
+- Add RB/TB from Björn
 
-> +}
-> +
-> +static int jh7110_pcie_phy_set_mode(struct phy *_phy,
-> +				    enum phy_mode mode, int submode)
-> +{
-> +	struct jh7110_pcie_phy *phy = phy_get_drvdata(_phy);
-> +	int ret;
-> +
-> +	if (mode == phy->mode)
-> +		return 0;
-> +
-> +	switch (mode) {
-> +	case PHY_MODE_USB_HOST:
-> +	case PHY_MODE_USB_DEVICE:
-> +	case PHY_MODE_USB_OTG:
-> +		ret = jh7110_usb3_mode_set(phy);
-> +		if (ret)
-> +			return ret;
-> +		break;
-> +	case PHY_MODE_PCIE:
-> +		jh7110_pcie_mode_set(phy);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	dev_info(&_phy->dev, "Changing phy mode to %d\n", mode);
+v4:
+- Introduce pi/ for KASAN to work
 
-dev_dbg()?
+v3:
+- Massage commit log to make no4lvl clearer, as asked by Conor
+- Add a note to kernel-parameters.txt regarding the impossibility to use
+  those parameters when KASAN is enabled, as suggested by Conor
+- Add RB from Björn
 
-> +	phy->mode = mode;
-> +
-> +	return 0;
-> +}
-> +
-> +static int jh7110_pcie_phy_init(struct phy *_phy)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int jh7110_pcie_phy_exit(struct phy *_phy)
-> +{
-> +	return 0;
-> +}
-> +
-> +static const struct phy_ops jh7110_pcie_phy_ops = {
-> +	.init		= jh7110_pcie_phy_init,
-> +	.exit		= jh7110_pcie_phy_exit,
+v2:
+- Honor CMDLINE_EXTEND and CMDLINE_FORCE as noticed by Björn
 
-As you are not doing anything in init/exit, you don't have to set them.
+Alexandre Ghiti (1):
+  riscv: Allow to downgrade paging mode from the command line
 
-> +	.set_mode	= jh7110_pcie_phy_set_mode,
-> +	.owner		= THIS_MODULE,
-> +};
-> +
-> +static int jh7110_pcie_phy_probe(struct platform_device *pdev)
-> +{
-> +	struct jh7110_pcie_phy *phy;
-> +	struct device *dev = &pdev->dev;
-> +	struct phy_provider *phy_provider;
-> +	u32 args[2];
-> +
-> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
-> +	if (!phy)
-> +		return -ENOMEM;
-> +
-> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(phy->regs))
-> +		return PTR_ERR(phy->regs);
-> +
-> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_pcie_phy_ops);
-> +	if (IS_ERR(phy->phy))
-> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
-> +			"Failed to map phy base\n");
-> +
-> +	phy->sys_syscon =
-> +		syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
-> +						     "starfive,sys-syscon",
-> +						     1, args);
-> +
-> +	if (!IS_ERR_OR_NULL(phy->sys_syscon))
-> +		phy->sys_phy_connect = args[0];
-> +	else
-> +		phy->sys_syscon = NULL;
-> +
-> +	phy->stg_syscon =
-> +		syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
-> +						     "starfive,stg-syscon",
-> +						     2, args);
-> +
-> +	if (!IS_ERR_OR_NULL(phy->stg_syscon)) {
-> +		phy->stg_pcie_mode = args[0];
-> +		phy->stg_pcie_usb = args[1];
-> +	} else {
-> +		phy->stg_syscon = NULL;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, phy);
-> +	phy_set_drvdata(phy->phy, phy);
-> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-> +
-> +	return PTR_ERR_OR_ZERO(phy_provider);
-> +}
-> +
-> +static int jh7110_pcie_phy_remove(struct platform_device *pdev)
-> +{
-> +	platform_set_drvdata(pdev, NULL);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id jh7110_pcie_phy_of_match[] = {
-> +	{ .compatible = "starfive,jh7110-pcie-phy" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, jh7110_pcie_phy_of_match);
-> +
-> +static struct platform_driver jh7110_pcie_phy_driver = {
-> +	.probe	= jh7110_pcie_phy_probe,
-> +	.remove	= jh7110_pcie_phy_remove,
-> +	.driver = {
-> +		.of_match_table	= jh7110_pcie_phy_of_match,
-> +		.name  = "jh7110-pcie-phy",
-> +	}
-> +};
-> +module_platform_driver(jh7110_pcie_phy_driver);
-> +
-> +MODULE_DESCRIPTION("StarFive JH7110 PCIe 2.0 PHY driver");
-> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
-> +MODULE_LICENSE("GPL");
+ .../admin-guide/kernel-parameters.txt         |  5 +-
+ arch/riscv/Makefile                           |  3 +-
+ arch/riscv/kernel/Makefile                    |  2 +
+ arch/riscv/kernel/pi/Makefile                 | 39 ++++++++++++
+ arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
+ arch/riscv/kernel/vmlinux.lds.S               | 11 +++-
+ arch/riscv/lib/memcpy.S                       |  2 +
+ arch/riscv/lib/memmove.S                      |  2 +
+ arch/riscv/lib/strlen.S                       |  1 +
+ arch/riscv/mm/init.c                          | 36 +++++++++--
+ 10 files changed, 154 insertions(+), 9 deletions(-)
+ create mode 100644 arch/riscv/kernel/pi/Makefile
+ create mode 100644 arch/riscv/kernel/pi/cmdline_early.c
 
-cheers,
--roger
+-- 
+2.37.2
+
