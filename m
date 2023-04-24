@@ -2,364 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFF76EC755
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEEC6EC757
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjDXHnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
+        id S231177AbjDXHo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjDXHng (ORCPT
+        with ESMTP id S230516AbjDXHoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:43:36 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CE51BD6;
-        Mon, 24 Apr 2023 00:43:30 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2fa0ce30ac2so3712851f8f.3;
-        Mon, 24 Apr 2023 00:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682322209; x=1684914209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fjdNC4xhs+QxluvD9GzJYp7E/BZY4/oUnsXHbQ3i3o0=;
-        b=VMjDnENYtVCpPnY3IpUNGvYUj+VforToK5/O/1EKmiRDIm1myjqTJfXvKgq1e/aWA4
-         c8kNkLxKGzKfpcMht3GM+gDvST+/dj/4WR46mAOAA1QYid0HGntCWXqIMfJQCpvJBisY
-         7ivPYDOyE+0SnWDTQJNop24X7xagKMoyh3qmneCay3ls5CmDBSNmsa0zGmZ7QRUMYy6e
-         Tu5e6pkH68LYZZu1pPm+KCZcr1HntGVcEXid9W3jQ/Da0SvYEJ+LSQmQHN8hcgYwf1a/
-         b3QLsgDmH/Dc8uYAe10BNjC6iIQB7mQDOywBpIsRLWOqpOLt6QKoEUk+wHvkJjIkrZ7E
-         oNYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682322209; x=1684914209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fjdNC4xhs+QxluvD9GzJYp7E/BZY4/oUnsXHbQ3i3o0=;
-        b=UgysYItDXVSJenWZkZCEYe0kyX4aSDTCrIduezKew8M9BvKudPi9lWek24dPNXQvJP
-         g3uYGffmk31JQv0YDeWg8ZPgRmE21YtIUJbmILtF0Lox9tb4+oY+8JGkqIzoJWiU7Gz/
-         kaKUwg7oaDHEDZ6ibhmk9Gm/1YM6WKCBcrEd3LTrDTMQix/rx9nBoHAnTuVAxM/ZbVXf
-         wpnze4trT3/oNYyzWjOMSKDjKQS8IlgbrcYh2wZmeeoLt2VEDXaeWr/TUDSVUg8RCbqd
-         D826MgljI+dsQVUyhJf1ELHahqEbgLlFXUCbOskAHs0Mj4Wh7NCQFKXzg+ehvRbph9Te
-         0dOg==
-X-Gm-Message-State: AAQBX9d/WFlbrMyegsV1k58Zd5EFdC95rJRKe26Jo/2ZrIyKbdZtERLn
-        SAVhtmg6xopHS/8sZKDS/60=
-X-Google-Smtp-Source: AKy350ZKnmdTNgW0myOwiDxyeVQDtqONhZcMl6t8EjSPgGj0W1iHebmXS3VM1gRoQm9Y/S/liQhdPg==
-X-Received: by 2002:adf:dcc5:0:b0:2f6:620f:92ca with SMTP id x5-20020adfdcc5000000b002f6620f92camr9534182wrm.23.1682322208621;
-        Mon, 24 Apr 2023 00:43:28 -0700 (PDT)
-Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.googlemail.com with ESMTPSA id h15-20020a05600c314f00b003f1978bbcd6sm8755483wmo.3.2023.04.24.00.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 00:43:27 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings by default
-Date:   Mon, 24 Apr 2023 08:43:18 +0100
-Message-Id: <c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 24 Apr 2023 03:44:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11591727;
+        Mon, 24 Apr 2023 00:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682322240; x=1713858240;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ysxOCdd6c2ud/hjGkCp2WM6rGiWACJUsq97pSfnR7zo=;
+  b=lLH+Fmal4mW294mjbiI24iOkVLHXni6ZghI2Ssp4iUsjktGGwWe0qBmy
+   ILP+GNJ84VJYvp2xNhZ9lfIQZway4Nit5YWufo0wwb9CINJkzM+axiQp8
+   h4XYSp1ctRIF/DYzaun4X94Bm0L/hnsCW9ZEZ18zNeHhHjwxyg2EB3uCg
+   HsvqCponhRGFVS2OZjv0osa9qhrARKF+7nnqmKp9Fpak3xAzVQjFYoD5a
+   /Vc4tLWrQk0SHoVAOEkI7YibTVmXjx6AeVf6fs/aa/plMxzyW/cx/Xa4W
+   mv0u27GG60kR6S9/FKwvxBObbhIkTadtkDUQgUmLOmwIUG8sBK/ll/HoY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="374332149"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="374332149"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 00:44:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="695661527"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="695661527"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.3.89]) ([10.238.3.89])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 00:43:57 -0700
+Message-ID: <735e3259-26d4-33f1-0e59-8171d1e832e9@linux.intel.com>
+Date:   Mon, 24 Apr 2023 15:43:55 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
+ violation check
+To:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Gao Chao <chao.gao@intel.com>
+References: <20230420133724.11398-1-guang.zeng@intel.com>
+ <20230420133724.11398-3-guang.zeng@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230420133724.11398-3-guang.zeng@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It isn't safe to write to file-backed mappings as GUP does not ensure that
-the semantics associated with such a write are performed correctly, for
-instance file systems which rely upon write-notify will not be correctly
-notified.
 
-There are exceptions to this - shmem and hugetlb mappings pose no such
-concern so we do permit this operation in these cases.
 
-In addition, if no pinning takes place (neither FOLL_GET nor FOLL_PIN is
-specified and neither flags gets implicitly set) then no writing can occur
-so we do not perform the check in this instance.
+On 4/20/2023 9:37 PM, Zeng Guang wrote:
+> Intel introduce LASS (Linear Address Separation) feature providing
+/s/introduce/introduces
 
-This is an important exception, as populate_vma_page_range() invokes
-__get_user_pages() in this way (and thus so does __mm_populate(), used by
-MAP_POPULATE mmap() and mlock() invocations).
+> an independent mechanism to achieve the mode-based protection.
+>
+> LASS partitions 64-bit linear address space into two halves, user-mode
+> address (LA[bit 63]=0) and supervisor-mode address (LA[bit 63]=1). It
+> stops any code execution or data access
+>      1. from user mode to supervisor-mode address space
+>      2. from supervisor mode to user-mode address space
+> and generates LASS violation fault accordingly.
+IMO, the description of the point 2 may be misleading that LASS stops
+any data access from supervisor mode to user mode address space,
+although the description following adds the conditions.
 
-There are GUP users within the kernel that do nevertheless rely upon this
-behaviour, so we introduce the FOLL_ALLOW_BROKEN_FILE_MAPPING flag to
-explicitly permit this kind of GUP access.
 
-This is required in order to not break userspace in instances where the
-uAPI might permit file-mapped addresses - a number of RDMA users require
-this for instance, as do the process_vm_[read/write]v() system calls,
-/proc/$pid/mem, ptrace and SDT uprobes. Each of these callers have been
-updated to use this flag.
+>
+> A supervisor mode data access causes a LASS violation only if supervisor
+> mode access protection is enabled (CR4.SMAP = 1) and either RFLAGS.AC = 0
+> or the access implicitly accesses a system data structure.
+>
+> Following are the rule of LASS violation check on the linear address(LA).
+/s/rule/rules
 
-Making this change is an important step towards a more reliable GUP, and
-explicitly indicates which callers might encounter issues moving forward.
+> User access to supervisor-mode address space:
+>      LA[bit 63] && (CPL == 3)
+> Supervisor access to user-mode address space:
+>      Instruction fetch: !LA[bit 63] && (CPL < 3)
+>      Data access: !LA[bit 63] && (CR4.SMAP==1) && ((RFLAGS.AC == 0 &&
+> 		 CPL < 3) || Implicit supervisor access)
+>
+> Add new ops in kvm_x86_ops to do LASS violation check.
+>
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> ---
+>   arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>   arch/x86/include/asm/kvm_host.h    |  5 +++
+>   arch/x86/kvm/vmx/vmx.c             | 55 ++++++++++++++++++++++++++++++
+>   arch/x86/kvm/vmx/vmx.h             |  2 ++
+>   4 files changed, 63 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index abccd51dcfca..f76c07f2674b 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -131,6 +131,7 @@ KVM_X86_OP(msr_filter_changed)
+>   KVM_X86_OP(complete_emulated_msr)
+>   KVM_X86_OP(vcpu_deliver_sipi_vector)
+>   KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
+> +KVM_X86_OP_OPTIONAL_RET0(check_lass);
+>   
+>   #undef KVM_X86_OP
+>   #undef KVM_X86_OP_OPTIONAL
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 8ff89a52ef66..31fb8699a1ff 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -69,6 +69,9 @@
+>   #define KVM_X86_NOTIFY_VMEXIT_VALID_BITS	(KVM_X86_NOTIFY_VMEXIT_ENABLED | \
+>   						 KVM_X86_NOTIFY_VMEXIT_USER)
+>   
+> +/* x86-specific emulation flags */
+> +#define KVM_X86_EMULFLAG_SKIP_LASS	_BITULL(1)
+Do you use the flag outside of emulator?
+For LAM patch, it's planned to move the flags inside emulator.
 
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
-v2:
-- Add accidentally excluded ptrace_access_vm() use of
-  FOLL_ALLOW_BROKEN_FILE_MAPPING.
-- Tweak commit message.
+> +
+>   /* x86-specific vcpu->requests bit members */
+>   #define KVM_REQ_MIGRATE_TIMER		KVM_ARCH_REQ(0)
+>   #define KVM_REQ_REPORT_TPR_ACCESS	KVM_ARCH_REQ(1)
+> @@ -1706,6 +1709,8 @@ struct kvm_x86_ops {
+>   	 * Returns vCPU specific APICv inhibit reasons
+>   	 */
+>   	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
+> +
+> +	bool (*check_lass)(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
+The flags may be dropped if the caller knows to skip it or not.
 
-v1:
-https://lore.kernel.org/all/f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com/
+>   };
+>   
+>   struct kvm_x86_nested_ops {
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c923d7599d71..581327ede66a 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -8070,6 +8070,59 @@ static void vmx_vm_destroy(struct kvm *kvm)
+>   	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
+>   }
+>   
+> +/*
+> + * Determine whether an access to the linear address causes a LASS violation.
+> + * LASS protection is only effective in long mode. As a prerequisite, caller
+> + * should make sure VM
+Should be vCPU？
 
- drivers/infiniband/hw/qib/qib_user_pages.c |  3 +-
- drivers/infiniband/hw/usnic/usnic_uiom.c   |  2 +-
- drivers/infiniband/sw/siw/siw_mem.c        |  3 +-
- fs/proc/base.c                             |  3 +-
- include/linux/mm_types.h                   |  8 +++++
- kernel/events/uprobes.c                    |  3 +-
- kernel/ptrace.c                            |  3 +-
- mm/gup.c                                   | 36 +++++++++++++++++++++-
- mm/memory.c                                |  3 +-
- mm/process_vm_access.c                     |  2 +-
- net/xdp/xdp_umem.c                         |  2 +-
- 11 files changed, 58 insertions(+), 10 deletions(-)
+> running in long mode and invoke this api to do LASS
+> + * violation check.
+> + */
+> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
+> +{
+> +	bool user_mode, user_as, rflags_ac;
+> +
+> +	if (!!(flags & KVM_X86_EMULFLAG_SKIP_LASS) ||
+> +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
+> +		return false;
+> +
+> +	WARN_ON_ONCE(!is_long_mode(vcpu));
+> +
+> +	user_as = !(la >> 63);
+> +
+> +	/*
+> +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
+> +	 * accesses a system data structure. For implicit accesses to system
+> +	 * data structure, the processor acts as if RFLAGS.AC is clear.
+> +	 */
+> +	if (access & PFERR_IMPLICIT_ACCESS) {
+> +		user_mode = false;
+> +		rflags_ac = false;
+> +	} else {
+> +		user_mode = vmx_get_cpl(vcpu) == 3;
+> +		if (!user_mode)
+> +			rflags_ac = !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
+> +	}
+> +
+> +	if (user_mode != user_as) {
+> +		/*
+> +		 * Supervisor-mode _data_ accesses to user address space
+> +		 * cause LASS violations only if SMAP is enabled.
+> +		 */
+> +		if (!user_mode && !(access & PFERR_FETCH_MASK)) {
+> +			return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) &&
+> +			       !rflags_ac;
+> +		} else {
+> +			return true;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
+> +{
+> +	return is_long_mode(vcpu) && __vmx_check_lass(vcpu, access, la, flags);
+> +}
+> +
+>   static struct kvm_x86_ops vmx_x86_ops __initdata = {
+>   	.name = "kvm_intel",
+>   
+> @@ -8207,6 +8260,8 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+>   	.complete_emulated_msr = kvm_complete_insn_gp,
+>   
+>   	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
+> +
+> +	.check_lass = vmx_check_lass,
+>   };
+>   
+>   static unsigned int vmx_handle_intel_pt_intr(void)
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index a3da84f4ea45..6569385a5978 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -433,6 +433,8 @@ void vmx_enable_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr, int type);
+>   u64 vmx_get_l2_tsc_offset(struct kvm_vcpu *vcpu);
+>   u64 vmx_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
+>   
+> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
+> +
+>   static inline void vmx_set_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr,
+>   					     int type, bool value)
+>   {
 
-diff --git a/drivers/infiniband/hw/qib/qib_user_pages.c b/drivers/infiniband/hw/qib/qib_user_pages.c
-index f693bc753b6b..b9019dad8008 100644
---- a/drivers/infiniband/hw/qib/qib_user_pages.c
-+++ b/drivers/infiniband/hw/qib/qib_user_pages.c
-@@ -110,7 +110,8 @@ int qib_get_user_pages(unsigned long start_page, size_t num_pages,
- 	for (got = 0; got < num_pages; got += ret) {
- 		ret = pin_user_pages(start_page + got * PAGE_SIZE,
- 				     num_pages - got,
--				     FOLL_LONGTERM | FOLL_WRITE,
-+				     FOLL_LONGTERM | FOLL_WRITE |
-+				     FOLL_ALLOW_BROKEN_FILE_MAPPING,
- 				     p + got, NULL);
- 		if (ret < 0) {
- 			mmap_read_unlock(current->mm);
-diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
-index 2a5cac2658ec..33cf79b248a9 100644
---- a/drivers/infiniband/hw/usnic/usnic_uiom.c
-+++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
-@@ -85,7 +85,7 @@ static int usnic_uiom_get_pages(unsigned long addr, size_t size, int writable,
- 				int dmasync, struct usnic_uiom_reg *uiomr)
- {
- 	struct list_head *chunk_list = &uiomr->chunk_list;
--	unsigned int gup_flags = FOLL_LONGTERM;
-+	unsigned int gup_flags = FOLL_LONGTERM | FOLL_ALLOW_BROKEN_FILE_MAPPING;
- 	struct page **page_list;
- 	struct scatterlist *sg;
- 	struct usnic_uiom_chunk *chunk;
-diff --git a/drivers/infiniband/sw/siw/siw_mem.c b/drivers/infiniband/sw/siw/siw_mem.c
-index f51ab2ccf151..bc3e8c0898e5 100644
---- a/drivers/infiniband/sw/siw/siw_mem.c
-+++ b/drivers/infiniband/sw/siw/siw_mem.c
-@@ -368,7 +368,8 @@ struct siw_umem *siw_umem_get(u64 start, u64 len, bool writable)
- 	struct mm_struct *mm_s;
- 	u64 first_page_va;
- 	unsigned long mlock_limit;
--	unsigned int foll_flags = FOLL_LONGTERM;
-+	unsigned int foll_flags =
-+		FOLL_LONGTERM | FOLL_ALLOW_BROKEN_FILE_MAPPING;
- 	int num_pages, num_chunks, i, rv = 0;
-
- 	if (!can_do_mlock())
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 96a6a08c8235..3e3f5ea9849f 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -855,7 +855,8 @@ static ssize_t mem_rw(struct file *file, char __user *buf,
- 	if (!mmget_not_zero(mm))
- 		goto free;
-
--	flags = FOLL_FORCE | (write ? FOLL_WRITE : 0);
-+	flags = FOLL_FORCE | FOLL_ALLOW_BROKEN_FILE_MAPPING |
-+		(write ? FOLL_WRITE : 0);
-
- 	while (count > 0) {
- 		size_t this_len = min_t(size_t, count, PAGE_SIZE);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 3fc9e680f174..e76637b4c78f 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -1185,6 +1185,14 @@ enum {
- 	FOLL_PCI_P2PDMA = 1 << 10,
- 	/* allow interrupts from generic signals */
- 	FOLL_INTERRUPTIBLE = 1 << 11,
-+	/*
-+	 * By default we disallow write access to known broken file-backed
-+	 * memory mappings (i.e. anything other than hugetlb/shmem
-+	 * mappings). Some code may rely upon being able to access this
-+	 * regardless for legacy reasons, thus we provide a flag to indicate
-+	 * this.
-+	 */
-+	FOLL_ALLOW_BROKEN_FILE_MAPPING = 1 << 12,
-
- 	/* See also internal only FOLL flags in mm/internal.h */
- };
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 59887c69d54c..ec330d3b0218 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -373,7 +373,8 @@ __update_ref_ctr(struct mm_struct *mm, unsigned long vaddr, short d)
- 		return -EINVAL;
-
- 	ret = get_user_pages_remote(mm, vaddr, 1,
--			FOLL_WRITE, &page, &vma, NULL);
-+				    FOLL_WRITE | FOLL_ALLOW_BROKEN_FILE_MAPPING,
-+				    &page, &vma, NULL);
- 	if (unlikely(ret <= 0)) {
- 		/*
- 		 * We are asking for 1 page. If get_user_pages_remote() fails,
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 0786450074c1..db5022b21b8e 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -58,7 +58,8 @@ int ptrace_access_vm(struct task_struct *tsk, unsigned long addr,
- 		return 0;
- 	}
-
--	ret = __access_remote_vm(mm, addr, buf, len, gup_flags);
-+	ret = __access_remote_vm(mm, addr, buf, len,
-+				 gup_flags | FOLL_ALLOW_BROKEN_FILE_MAPPING);
- 	mmput(mm);
-
- 	return ret;
-diff --git a/mm/gup.c b/mm/gup.c
-index 1f72a717232b..68d5570c0bae 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -959,16 +959,46 @@ static int faultin_page(struct vm_area_struct *vma,
- 	return 0;
- }
-
-+/*
-+ * Writing to file-backed mappings using GUP is a fundamentally broken operation
-+ * as kernel write access to GUP mappings may not adhere to the semantics
-+ * expected by a file system.
-+ *
-+ * In most instances we disallow this broken behaviour, however there are some
-+ * exceptions to this enforced here.
-+ */
-+static inline bool can_write_file_mapping(struct vm_area_struct *vma,
-+					  unsigned long gup_flags)
-+{
-+	struct file *file = vma->vm_file;
-+
-+	/* If we aren't pinning then no problematic write can occur. */
-+	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
-+		return true;
-+
-+	/* Special mappings should pose no problem. */
-+	if (!file)
-+		return true;
-+
-+	/* Has the caller explicitly indicated this case is acceptable? */
-+	if (gup_flags & FOLL_ALLOW_BROKEN_FILE_MAPPING)
-+		return true;
-+
-+	/* shmem and hugetlb mappings do not have problematic semantics. */
-+	return vma_is_shmem(vma) || is_file_hugepages(file);
-+}
-+
- static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- {
- 	vm_flags_t vm_flags = vma->vm_flags;
- 	int write = (gup_flags & FOLL_WRITE);
- 	int foreign = (gup_flags & FOLL_REMOTE);
-+	bool vma_anon = vma_is_anonymous(vma);
-
- 	if (vm_flags & (VM_IO | VM_PFNMAP))
- 		return -EFAULT;
-
--	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
-+	if ((gup_flags & FOLL_ANON) && !vma_anon)
- 		return -EFAULT;
-
- 	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
-@@ -978,6 +1008,10 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- 		return -EFAULT;
-
- 	if (write) {
-+		if (!vma_anon &&
-+		    WARN_ON_ONCE(!can_write_file_mapping(vma, gup_flags)))
-+			return -EFAULT;
-+
- 		if (!(vm_flags & VM_WRITE)) {
- 			if (!(gup_flags & FOLL_FORCE))
- 				return -EFAULT;
-diff --git a/mm/memory.c b/mm/memory.c
-index 146bb94764f8..e3d535991548 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5683,7 +5683,8 @@ int access_process_vm(struct task_struct *tsk, unsigned long addr,
- 	if (!mm)
- 		return 0;
-
--	ret = __access_remote_vm(mm, addr, buf, len, gup_flags);
-+	ret = __access_remote_vm(mm, addr, buf, len,
-+				 gup_flags | FOLL_ALLOW_BROKEN_FILE_MAPPING);
-
- 	mmput(mm);
-
-diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
-index 78dfaf9e8990..ef126c08e89c 100644
---- a/mm/process_vm_access.c
-+++ b/mm/process_vm_access.c
-@@ -81,7 +81,7 @@ static int process_vm_rw_single_vec(unsigned long addr,
- 	ssize_t rc = 0;
- 	unsigned long max_pages_per_loop = PVM_MAX_KMALLOC_PAGES
- 		/ sizeof(struct pages *);
--	unsigned int flags = 0;
-+	unsigned int flags = FOLL_ALLOW_BROKEN_FILE_MAPPING;
-
- 	/* Work out address and page range required */
- 	if (len == 0)
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 02207e852d79..b93cfcaccb0d 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -93,7 +93,7 @@ void xdp_put_umem(struct xdp_umem *umem, bool defer_cleanup)
-
- static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
- {
--	unsigned int gup_flags = FOLL_WRITE;
-+	unsigned int gup_flags = FOLL_WRITE | FOLL_ALLOW_BROKEN_FILE_MAPPING;
- 	long npgs;
- 	int err;
-
---
-2.40.0
