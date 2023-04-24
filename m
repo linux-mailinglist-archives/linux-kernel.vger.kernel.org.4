@@ -2,175 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5176ED8AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFF46ED8C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjDXXTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S230093AbjDXXZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbjDXXSZ (ORCPT
+        with ESMTP id S233254AbjDXXZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:18:25 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::609])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A70AF12;
-        Mon, 24 Apr 2023 16:17:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=be+NcpD9/szAUlX+s7D1r4TssJpOD0f1+qOo+BnN8fMr0nsJyDqaHxDN1qrTq+CpopGzSoAdtYkrpflqSEIrAH4xVgDOwwJyS/kugBcoU3Oju8tYtAahqslw0djZ0nya6U56vO1zaM8O41/BEC3P4l1ziJJN7Rchv9yEjylZoH3tvHxg+idXDDUPTonv9M0P+ofUn1d6B5Sn5UgzitGyS2nNkc7RunQVEbgRNKVzWFGv4hUWo7IxzES1lslliGnbtQGn8LGSIFV0g0+pJGs/GXov8p7YvoOJG2Pmn/RUrcbdlP0aSv6JX2XUY0d91Qv3Mo3UG9yfOTpeaeyYhsgLkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cSUFjRyWKGVLa4ap/jushtlwf3zWrldwbevRdhgohfk=;
- b=bleuHglin3vyH+4RNU5oQ87UpNdKqoEsBUGDDOqTYTz33RsWu7FF+X32vnovrBe9xlejsf51Ww+S25H8lG1sGmQlU2FhHi5e6IDGz2lPVV9V8CNjA1sNAK313BNeGPG/nMlqiggqOFpfduHsUVMfqdX0yxcOQo40VFdMSev5NFR668O/itKo9k2JGpSPninfLnGlOYOD3Nt5dGF65xo8H6QcA/fXU3bfQdLPtCNUeraOXtelWIZSxAKX70nWTyt9VY0nu6dpY7NfKUqoVGd8mxV5gPRL8ucy7Tr8s+MkA1YhhZkU5MIzGxkt1SuhAURpeFjlTRxPTARxHIoucpYAXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cSUFjRyWKGVLa4ap/jushtlwf3zWrldwbevRdhgohfk=;
- b=TBxDsJHSEN+2WUIpdQdSLYPPYhaIGKNUmNLT24PackK+3swX2tPzMpWsoYd5GOzrv8I0yfgjK0z11HM0PWCBqMlo+UhtHHaYfHcNUCYhc5vvjXKSPCh7ppZuwfy38s5CXm+9O8IHzSz0KIVd8Qn5h7j8FxplBHe1Ftuhqa6m3G2b5AE/hqA6AxIRCEBSnrIFHB7aF1TySMzf2r8Ymow35FQouzKVW+vdWvryrX7rsBDeAoxMjQuPRJ5A0Jwy4ELKWapKsxDDi6ywPLekNQZLjtt/LXicDZRvGi/p2FD7ymCf58+bT763HLeMgHw+VIrUmfF6s79N0GGbVVmtZvJOUg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ2PR12MB8830.namprd12.prod.outlook.com (2603:10b6:a03:4d0::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 23:17:13 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%5]) with mapi id 15.20.6319.033; Mon, 24 Apr 2023
- 23:17:12 +0000
-Date:   Mon, 24 Apr 2023 20:17:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Mon, 24 Apr 2023 19:25:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708E5AD03
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682378529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lBlguG2xYhqXDyNqVuNALlwUQTuLW6l7WKm5m0RyUvc=;
+        b=gpkIQrJt6fQxQ2HgjcYZ1CZlmRTVgCxF8/+zfs3KI5KQprrFAEYOu5rt0y8WOzmaSGbIM5
+        ee7BlQ2n6G1RushkXb6vHnJHeIuk6/3bLHyJLSYsfztNilF0kNGioD2NZJMLXef+5zz13j
+        QkcK+Ifjau5+uSb8nbANuwHEMuVGRPU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-206-jo8_GkVBMV6nQ4b3jokK5Q-1; Mon, 24 Apr 2023 19:22:02 -0400
+X-MC-Unique: jo8_GkVBMV6nQ4b3jokK5Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 337EA101A531;
+        Mon, 24 Apr 2023 23:22:02 +0000 (UTC)
+Received: from [10.22.18.234] (unknown [10.22.18.234])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BDD1E492B03;
+        Mon, 24 Apr 2023 23:22:00 +0000 (UTC)
+Message-ID: <1a1ed12af47d00e093a81979dc25bcaab7e15e5c.camel@redhat.com>
+Subject: Re: [PATCH] locking/rtmutex: Flush the plug before entering the
+ slowpath.
+From:   Crystal Wood <swood@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        John Keeping <john@metanate.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <ZEcN92iJoe+3ANVc@nvidia.com>
-References: <ZEZ117OMCi0dFXqY@nvidia.com>
- <c8fff8b3-ead6-4f52-bf17-f2ef2e752b57@lucifer.local>
- <ZEaGjad50lqRNTWD@nvidia.com>
- <cd488979-d257-42b9-937f-470cc3c57f5e@lucifer.local>
- <ZEa+L5ivNDhCmgj4@nvidia.com>
- <cfb5afaa-8636-4c7d-a1a2-2e0a85f9f3d3@lucifer.local>
- <ZEbQeImOiaXrydBE@nvidia.com>
- <f00058b8-0397-465f-9db5-ddd30a5efe8e@lucifer.local>
- <ZEcIZspUwWUzH15L@nvidia.com>
- <4f16b1fc-6bc5-4e41-8e94-151c336fcf69@lucifer.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4f16b1fc-6bc5-4e41-8e94-151c336fcf69@lucifer.local>
-X-ClientProxiedBy: BL1PR13CA0276.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::11) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Date:   Mon, 24 Apr 2023 18:22:00 -0500
+In-Reply-To: <20230419140450.qPX3cUl8@linutronix.de>
+References: <20230322162719.wYG1N0hh@linutronix.de>
+         <20230418151838.jNcnnDqL@linutronix.de>
+         <e3f9c399a6ef26a145a9fcc53201bbd98d9428ee.camel@redhat.com>
+         <20230419140450.qPX3cUl8@linutronix.de>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ2PR12MB8830:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1190a044-5fcd-4e73-e8ea-08db451a08c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SBgxsJdabisYKmoc/oJ0mqX7+jPJ2dQzHO4Y4+KmGKBKThQRQrfxuYld4UxrdXiXeZyPoWk26qt89Cb6IIBD3W4sr6tuV4Hvsc49EfoDTiDs8EX52UJGwHadjvxFif9QnNy6aI6qVdRYKgB+trw6uS5e4FoM67l258FWbFZrGmhXbC1gG4giuep7buCskFCWHLQypbynAqQZU2DpCWemGydd1BpV5bMtq0Ju1mYHAreHXRkXOkxGd44k216PE+Kc4I6+mLoG1kKO9o9PqvNs+UpIDrPRm8lz5BRhbh0L8AwocCEEfxkWQsAGi7DQrw+ks4jyDdqKXdcTM7Uf2eZuq75YeQ3OVXN7nmhGPlBFtBZeoornxlYM6hAMTbq1z9S6C2wOwHrQ0+3DeFAgRuwNb45/1IU+mhsvQlJUsm8ZXIehDAK7fE0JZojwhLgtERoa9CNWfwjrpEHAfRsChU/e2q3hbXmsScMyHBO4hla8At+le/VihXYGbkrBcll1wd03ADD9kxLTWjl4Culi98gOidIzMQFgURl5vvedTZqB/jn1Id9al6T+fckfhvlANe3XmYo0nDLgp61z+eb7bzADb27sPJydoUtEEyg5oJ2YFXk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(39860400002)(366004)(376002)(451199021)(6506007)(26005)(6512007)(86362001)(2616005)(186003)(5660300002)(6486002)(36756003)(8936002)(54906003)(8676002)(316002)(41300700001)(4744005)(2906002)(38100700002)(66476007)(66556008)(66946007)(4326008)(6916009)(478600001)(7406005)(7416002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0+iLPiU+p6HZmm6VsdXfrv7LMdu0xh2QmepaTZo/h/pqjzKBQJiW1UaweWSe?=
- =?us-ascii?Q?zTMu38JFoBPwNR9FsYu9mZmLI6b6JK/d/Cp09QP1wXjTycOzrG7QUR+FNK5Q?=
- =?us-ascii?Q?llY6cnHbuMTCDBrMoM1tjSBw3MKc4CUpus2ao06p4wJiY6Z+GpX7E4B0IPSJ?=
- =?us-ascii?Q?haM1xyp2DeBIkShg3t90lcm3w0+YKNnzqd4vTcFqDQmI5dYeaYpGnzNiGim/?=
- =?us-ascii?Q?9WxZWOwCQ1lLDbFF26jPUZdxMqjYTBty4wkSW/tvMrXVhJzp5v6rV1dF5qRq?=
- =?us-ascii?Q?6Ra8czDqF5uV6IOCzxehgkyH+xfihTllAD0K9iqEY1XBl4+Z7qcROiDfFma9?=
- =?us-ascii?Q?9kHqQv5Jvr6gwoOCVNsXw794F8eeCrZ71d5wc/l92gtBNAUgD5WMeH6VaDAT?=
- =?us-ascii?Q?yC3eGVG1LKwf6c/jQKkHNldqCIMdDUxF7Pi6k7k6LS+n217JwYr5PuunGdGN?=
- =?us-ascii?Q?FCAyJfPef+ypbZuzehHrzPjsvXFPUw60Kea5pZkCU21M1Tpd80FFg6YAy7hf?=
- =?us-ascii?Q?VG/vzHOzaPpsUuMZOxDg30Zb97Zes9bHWZNP+/rc3crxKZiZDYKksdbhmXCL?=
- =?us-ascii?Q?gzwjAJZl/hXd7QZkAXx4l2aQ59o9t2Ht5WsRb3yrCNzQvhFLVjoibkhEcncl?=
- =?us-ascii?Q?96EkLLDf5NukmL2QX8cqJmv5LaNwSjRy5jjY5dFeLUbvojJolqjRPQRUcPo5?=
- =?us-ascii?Q?gmKHGqwIfy/OEVgGb75SEUTf0erJmrMiSu30lfAd3k15/NYX5S7Twu/5vtNi?=
- =?us-ascii?Q?oKb/8Ox0kkmh7K9/6dW9Yq/7MHECugkYqL969M41YgoIVSU2Mbqv4k4hprrR?=
- =?us-ascii?Q?4QB2hrN12FYNhArTMEP25tqLqQM8Kamu73xEj9wbA435upwLe38NDX77sXzO?=
- =?us-ascii?Q?yj95a5+psv3KdcFGNZtsuHxyCJmxLU5i9vrO+ueY1F8dtdYGQWcgrv8+dGhH?=
- =?us-ascii?Q?df0JSYkFtQtdpC3KZ0rrw3cgXaf8HvY5fCh4gj2n8vFxYLdk0MhHLmP0s3P4?=
- =?us-ascii?Q?K6ifmFXEy44XV7u1mk6bde5WkDO+Yue96yBRs1fW3M62qDgiq1fJ7kt5M+5y?=
- =?us-ascii?Q?qYqQy/BuFaDRoxT8kEzUZnianqGaMPxpST8cjRJfU5KOcxdJH5iHDofQ+RJq?=
- =?us-ascii?Q?1bbPInzdTU4JO6U4v6iocLCxEPVXtCUI79nSAM8rJ/+v2MH7cpDlbeHNAp2s?=
- =?us-ascii?Q?5IYodo+N/Fi5rqgH52snhatgkaxgX0uZ1bOezxCmN547w81TF92ZgBCkvQ0w?=
- =?us-ascii?Q?oOoof9XHJmky4/Oek27CTwx0e4LCBTwNSmLW/I5mfNENrFblNUvPIXQaqrsl?=
- =?us-ascii?Q?LIi73OTFTf+nrjNMKYc5VkfaYjt0N6pydRXKa9/pWODisWn/vjNohF1XJ0Gc?=
- =?us-ascii?Q?NVFkNnm+amATy8hFC68ZmpUmWUfdibWfnODNOP5/wOjmQdNh4HKdNI6oWNFA?=
- =?us-ascii?Q?67E6K6eFQNKlTut3IZTfWbIpF0Dz1AVEyoW44ZNu6WGlEhjSXshosF0+ujKk?=
- =?us-ascii?Q?mEbSLhWFog8HKu5bHQyZSxLA4vuVg5kEWonbr3hojQzLi3S0kJFzHjQ968lx?=
- =?us-ascii?Q?F5Q/P+/3VoI4uBrHbZ4tMkDRBmxDp06UzN6w+lME?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1190a044-5fcd-4e73-e8ea-08db451a08c3
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 23:17:12.4128
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LpKkJWeouBGfXQ/N5o2HCtSp4cSf5p9d5p74uKWM7C5HS93HweFgDJYeLDkT2Nt6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8830
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 12:03:34AM +0100, Lorenzo Stoakes wrote:
+On Wed, 2023-04-19 at 16:04 +0200, Sebastian Andrzej Siewior wrote:
+> On 2023-04-18 18:43:48 [-0500], Crystal Wood wrote:
+> > Sorry, got distracted.=C2=A0 It does appear to make the asserts go away=
+ but I
+> > ran
+> > into other possibly related stalls when running rteval -- but if I
+> > remove
+> > both the asserts and your patch it hangs in a different way, so I need
+> > to
+> > investigate some more.
+>=20
+> So all is fine with the patch or does it still hang?
 
-> Except you dirty a page that is mapped elsewhere that thought everything
-> was cleaned and... not sure the PTLs really help you much?
+It hangs either way, but with different symptoms.
 
-If we have a writable PTE then while the PTE's PTL is held it is impossible
-for a FS to make the page clean as any cleaning action has to also
-take the PTL to make the PTE non-present or non-writable.
+With unmodified v6.3-rc7-rt9 I get this very quickly after starting rteval:
 
-> If we want to be more adventerous the opt-in variant could default to on
-> for FOLL_LONGTERM too, but that discussion can be had over on that patch
-> series.
+[  178.366305] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[  178.366325] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 80-95): P819/1=
+:b..l
+[  178.366335] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 128-143): P122=
+0/2:b..l P1292/2:b..l
+[  178.366343] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 224-239): P206=
+3/2:b..l
+[  178.366361] rcu: 	(detected by 148, t=3D60002 jiffies, g=3D19421, q=3D12=
+8303 ncpus=3D256)
+[  178.366368] task:irq_work/88     state:R  running task     stack:0     p=
+id:819   ppid:2      flags:0x00004000
+[  178.366375] Call Trace:
+[  178.366378]  <TASK>
+[  178.366385]  __schedule+0x1fe/0x590
+[  178.366400]  ? _raw_spin_lock+0x13/0x40
+[  178.366406]  preempt_schedule_irq+0x39/0x60
+[  178.366409]  asm_sysvec_apic_timer_interrupt+0x16/0x20
+[  178.366418] RIP: 0010:__rcu_read_unlock+0xe/0x30
+[  178.366426] Code: 00 66 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 =
+90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 65 48 8b 3c 25 40 18 03 00 <83=
+> af 74 08 00 00 01 75 0a 8b 87 78 08 00 00 85 c0 75 05 c3 cc cc
+[  178.366428] RSP: 0018:ffffa1218ecfbec0 EFLAGS: 00000246
+[  178.366431] RAX: 0000000000000001 RBX: ffff944c0e032f48 RCX: 00000000000=
+00000
+[  178.366432] RDX: ffff942c173099c0 RSI: ffffffff9b997992 RDI: ffff942c173=
+099c0
+[  178.366433] RBP: ffff942c162e4bb0 R08: ffff942c1730a2f8 R09: ffff942c173=
+0a2f8
+[  178.366434] R10: 0000000000000282 R11: 0000000000000000 R12: 00000000000=
+00000
+[  178.366435] R13: 0000000000000001 R14: 0000000000000058 R15: ffff940cc82=
+29500
+[  178.366441]  rcuwait_wake_up+0x2e/0x40
+[  178.366449]  run_irq_workd+0x39/0x50
+[  178.366456]  smpboot_thread_fn+0x1c3/0x2b0
+[  178.366463]  ? __pfx_smpboot_thread_fn+0x10/0x10
+[  178.366465]  kthread+0x108/0x130
+[  178.366469]  ? __pfx_kthread+0x10/0x10
+[  178.366470]  ret_from_fork+0x2c/0x50
+[  178.366480]  </TASK>
+[  178.366481] task:rcuc/140        state:R  running task     stack:0     p=
+id:1292  ppid:2      flags:0x00004000
+[  178.366484] Call Trace:
+[  178.366485]  <TASK>
+[  178.366486]  __schedule+0x1fe/0x590
+[  178.366489]  preempt_schedule_irq+0x39/0x60
+[  178.366491]  asm_sysvec_apic_timer_interrupt+0x16/0x20
+[  178.366493] RIP: 0010:rcu_cblist_dequeue+0x15/0x30
+[  178.366498] Code: 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 =
+90 90 90 0f 1f 44 00 00 48 8b 07 48 85 c0 74 10 48 83 6f 10 01 48 8b 10 <48=
+> 89 17 48 85 d2 74 05 c3 cc cc cc cc 48 89 7f 08 c3 cc cc cc cc
+[  178.366500] RSP: 0018:ffffa1218fc93e10 EFLAGS: 00000202
+[  178.366501] RAX: ffff940f12aedb80 RBX: 00000000000000c6 RCX: 00000000000=
+00000
+[  178.366501] RDX: ffff940f12aec500 RSI: ffffffff9b94e60e RDI: ffffa1218fc=
+93e28
+[  178.366502] RBP: ffff940cc88c3380 R08: 0000000000000001 R09: ffffffff9a5=
+c1ea3
+[  178.366503] R10: 00000000000002c8 R11: 0000000001a6b00f R12: ffff942b8e1=
+32f00
+[  178.366504] R13: 00000000000000c5 R14: 0000000000000000 R15: ffff942b8e1=
+32f78
+[  178.366505]  ? rcu_do_batch+0x1a3/0x4e0
+[  178.366508]  rcu_do_batch+0x17f/0x4e0
+[  178.366511]  rcu_core+0x2d4/0x4a0
+[  178.366514]  rcu_cpu_kthread+0xb4/0x2f0
+[  178.366517]  smpboot_thread_fn+0x1c3/0x2b0
+[  178.366519]  ? __pfx_smpboot_thread_fn+0x10/0x10
+[  178.366521]  kthread+0x108/0x130
+[  178.366522]  ? __pfx_kthread+0x10/0x10
+[  178.366523]  ret_from_fork+0x2c/0x50
+[  178.366527]  </TASK>
+[  178.366528] task:rcuc/132        state:R  running task     stack:0     p=
+id:1220  ppid:2      flags:0x00004000
+[  178.366530] Call Trace:
+[  178.366531]  <TASK>
+[  178.366532]  __schedule+0x1fe/0x590
+[  178.366534]  preempt_schedule_irq+0x39/0x60
+[  178.366535]  asm_sysvec_apic_timer_interrupt+0x16/0x20
+[  178.366537] RIP: 0010:kmem_cache_free+0xf6/0x430
+[  178.366542] Code: 03 0d 76 de 25 01 48 29 c8 89 c1 48 0f af f1 0f b6 4d =
+24 48 c1 ee 20 29 f0 d3 e8 0f b6 4d 25 01 f0 d3 e8 48 8d 0c c2 4c 8b 39 <4d=
+> 85 ff 74 75 48 c7 01 00 00 00 00 8b 75 18 4c 89 ff 48 83 c6 08
+[  178.366543] RSP: 0018:ffffa1218fa33de0 EFLAGS: 00000212
+[  178.366544] RAX: 0000000000000019 RBX: 0000000000000006 RCX: ffff940fd06=
+3c0c8
+[  178.366545] RDX: ffff940fd063c000 RSI: 00000000000012c0 RDI: ffffffc206e=
+93f40
+[  178.366546] RBP: ffff940cc01f6f00 R08: 0000000000000001 R09: ffffffff9a5=
+c1ea3
+[  178.366546] R10: 000000000000004d R11: 00000000000000b5 R12: ffff940e13e=
+69f40
+[  178.366547] R13: ffffffff9a5c1ea3 R14: ffffcdd8894f9a00 R15: ffff940d62b=
+27500
+[  178.366548]  ? rcu_do_batch+0x1a3/0x4e0
+[  178.366550]  ? rcu_do_batch+0x1a3/0x4e0
+[  178.366553]  rcu_do_batch+0x1a3/0x4e0
+[  178.366555]  rcu_core+0x2d4/0x4a0
+[  178.366557]  rcu_cpu_kthread+0xb4/0x2f0
+[  178.366559]  smpboot_thread_fn+0x1c3/0x2b0
+[  178.366561]  ? __pfx_smpboot_thread_fn+0x10/0x10
+[  178.366564]  kthread+0x108/0x130
+[  178.366565]  ? __pfx_kthread+0x10/0x10
+[  178.366566]  ret_from_fork+0x2c/0x50
+[  178.366570]  </TASK>
+[  178.366571] task:rcuc/225        state:R  running task     stack:0     p=
+id:2063  ppid:2      flags:0x00004000
+[  178.366574] Call Trace:
+[  178.366575]  <TASK>
+[  178.366577]  __schedule+0x1fe/0x590
+[  178.366579]  preempt_schedule_irq+0x39/0x60
+[  178.366581]  asm_sysvec_apic_timer_interrupt+0x16/0x20
+[  178.366583] RIP: 0010:rcu_cblist_dequeue+0x15/0x30
+[  178.366585] Code: 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 =
+90 90 90 0f 1f 44 00 00 48 8b 07 48 85 c0 74 10 48 83 6f 10 01 48 8b 10 <48=
+> 89 17 48 85 d2 74 05 c3 cc cc cc cc 48 89 7f 08 c3 cc cc cc cc
+[  178.366586] RSP: 0018:ffffa121915ffe10 EFLAGS: 00000216
+[  178.366587] RAX: ffff942d4dd9bd40 RBX: 000000000000001f RCX: 00000000000=
+00000
+[  178.366588] RDX: ffff942d4dd99040 RSI: ffffffff9b94e60e RDI: ffffa121915=
+ffe28
+[  178.366588] RBP: ffff942c18908000 R08: 0000000000000001 R09: ffffffff9a5=
+c1ea3
+[  178.366589] R10: 000000000000005e R11: 000000000000000b R12: ffff944c0f2=
+72f00
+[  178.366590] R13: 000000000000001e R14: 0000000000000000 R15: ffff944c0f2=
+72f78
+[  178.366591]  ? rcu_do_batch+0x1a3/0x4e0
+[  178.366593]  rcu_do_batch+0x17f/0x4e0
+[  178.366595]  rcu_core+0x2d4/0x4a0
+[  178.366598]  rcu_cpu_kthread+0xb4/0x2f0
+[  178.366600]  smpboot_thread_fn+0x1c3/0x2b0
+[  178.366602]  ? __pfx_smpboot_thread_fn+0x10/0x10
+[  178.366604]  kthread+0x108/0x130
+[  178.366605]  ? __pfx_kthread+0x10/0x10
+[  178.366606]  ret_from_fork+0x2c/0x50
+[  178.366610]  </TASK>
+[  178.366611] rcu: rcu_preempt kthread timer wakeup didn't happen for 5898=
+9 jiffies! g19421 f0x0 RCU_GP_WAIT_FQS(5) ->state=3D0x402
+[  178.366613] rcu: 	Possible timer handling issue on cpu=3D144 timer-softi=
+rq=3D91
+[  178.366615] rcu: rcu_preempt kthread starved for 58993 jiffies! g19421 f=
+0x0 RCU_GP_WAIT_FQS(5) ->state=3D0x402 ->cpu=3D144
+[  178.366617] rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, O=
+OM is now expected behavior.
+[  178.366618] rcu: RCU grace-period kthread stack dump:
+[  178.366619] task:rcu_preempt     state:I stack:0     pid:19    ppid:2   =
+   flags:0x00004000
+[  178.366620] Call Trace:
+[  178.366621]  <TASK>
+[  178.366622]  __schedule+0x1fe/0x590
+[  178.366624]  schedule+0x5d/0xc0
+[  178.366626]  schedule_timeout+0x88/0x190
+[  178.366629]  ? __pfx_process_timeout+0x10/0x10
+[  178.366634]  rcu_gp_fqs_loop+0x114/0x480
+[  178.366639]  rcu_gp_kthread+0xf8/0x1c0
+[  178.366642]  ? __pfx_rcu_gp_kthread+0x10/0x10
+[  178.366644]  kthread+0x108/0x130
+[  178.366645]  ? __pfx_kthread+0x10/0x10
+[  178.366646]  ret_from_fork+0x2c/0x50
+[  178.366650]  </TASK>
+[  178.366650] rcu: Stack dump where RCU GP kthread last ran:
+[  178.366651] Sending NMI from CPU 148 to CPUs 144:
+[  178.366661] NMI backtrace for cpu 144 skipped: idling at poll_idle+0x5a/=
+0xa4
 
-I think you should at least do this too to explain why io_uring code
-is moving into common code..
+-Crystal
 
-Jason
