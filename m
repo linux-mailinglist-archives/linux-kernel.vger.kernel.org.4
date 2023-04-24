@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C9B6EC684
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506AC6EC686
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjDXGsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 02:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S230525AbjDXGvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 02:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjDXGsa (ORCPT
+        with ESMTP id S229581AbjDXGve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 02:48:30 -0400
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82813A97
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:48:18 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id qpzipjLlVMX1TqpzipkQeM; Mon, 24 Apr 2023 08:48:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682318895;
-        bh=gyBmJlBy0glVXFW89nzgTxh1+ZjN6Gif/sbRlhQAcyU=;
-        h=From:To:Cc:Subject:Date;
-        b=gbmDBljLWzQVCxTBr/GwXL2ntQ7y0nnD/8dvAJ+a5u8j8xMBY8tIYOlmkjdhB2cgo
-         vxk81PJSfmfiXaxWFSqqxQFZR939QwdPIz5dNbERTUwOL5MFwu/ENlho1Aski92m8f
-         roU5JFrKChWxJQqzWKhO48ToZCx9bZyncgqmz0KUr+t39O7JSEQjzIgGXnOnPNGSi6
-         datd/hb+bg1OzlCArYaEl6+9BOPWhcwsmqvyiCdvU6em6hwUt17p4TEChvTf8XMu1Y
-         l8qPrSlSr8MiRkJmj6ZQvIo+8s1Ef5yiBhI9VxmaMMySyUcm+YYOvxP4PdNWe1eSQN
-         DfhQjsKUltKEQ==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 24 Apr 2023 08:48:15 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] mfd: dln2: Remove the unneeded include <linux/i2c.h>
-Date:   Mon, 24 Apr 2023 08:48:12 +0200
-Message-Id: <baf28e7f0fb57e918b76eaa92b94a2ae1a02cce0.1682318879.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Apr 2023 02:51:34 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BD312D
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:51:32 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4edc63e066fso10461e87.1
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682319090; x=1684911090;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+XNRCJOCfLxyZ4cwIPK9OyK5H6tE/ktK9eo2pIRD84=;
+        b=y774HvF/D+C59aXsgi0eSltT2nCuWUYP9VPItZaP+FB2a6Z+NcEf7cf6NUnrMEE8cz
+         mab3mboDj+X56d6oZeoSuc4XU2kywiJu41lte3PsTjqffMbtzkJA+W9lWY+Ky1Jl6aWU
+         Oea8ZXCpaepIFZVqIUtBWjpZXKvzYA1j41OFKwgLO03+QQouKqLsdnLeWuR8N45JUzV+
+         Ft0rRmISzOVnzL9eTw+DjPbXJAv1aoZiThnPAUPk06AheQiXhyd9CJwZfLuHtJtCvidG
+         mgL/qGpcw5lwbg2VD+lJKkVGyv6W7urDp1ysrRw8mn3oAm4oaTaenMpcAe7x2hMro4kI
+         2LBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682319090; x=1684911090;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m+XNRCJOCfLxyZ4cwIPK9OyK5H6tE/ktK9eo2pIRD84=;
+        b=YDPQaUe98CaxKxoewqmAFbdyavdwao0yVPT65lHHz99ncm7XwUIp8CzmLbJSC9ac1m
+         U3N6ZmHR+i23jALwQLV5pM6SRzlKHquEhHVbQ+NhQKc7m7bQm77gbX+uGlxHnH4nPQNi
+         xU1aTh7xrGBekz0h3Hg4c/vfj9SGO9kuBgSto8fJfVXjoMGwVyjAPguCCfzJhHsh0ayB
+         BGEznIjIYXqwkOSAZrc9GimOdT6K8zBbwzMaJzIbzHSylhO6SQ0fxosn5QtiFqY0cXJ2
+         l1HzlQNboKUrz/v8e9Ujp48CJmUZxe9JkuBGq0r6sLKm5eV3zPLsipR2vL5OLuklBNb0
+         s3zw==
+X-Gm-Message-State: AAQBX9cHQogSYyrhKJS1MY1Pk2mSPGBazwCYXPECjKW2JzXuzbRwxUfp
+        Bhmjqk+ocdDlTsWoKGE1xZI1u9nFxp782xH99O8DxO54EGELudTIlOA=
+X-Google-Smtp-Source: AKy350YEIs0+w0xNmn3pZ8WREfvz8JBQCizZcphBBTNmMvjA5yNKCT3JJdWs9yLHRRORXwxkCLYJ/zbYaJEDrPMG4Mg=
+X-Received: by 2002:a05:6512:ac1:b0:4ed:b131:3449 with SMTP id
+ n1-20020a0565120ac100b004edb1313449mr199314lfu.7.1682319090294; Sun, 23 Apr
+ 2023 23:51:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <00000000000058b63f05f9d98811@google.com> <20230421174054.3434533-1-roman.gushchin@linux.dev>
+ <DB1562BC-CAD0-45B4-8C6D-92E583C128DF@linux.dev>
+In-Reply-To: <DB1562BC-CAD0-45B4-8C6D-92E583C128DF@linux.dev>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 24 Apr 2023 08:51:18 +0200
+Message-ID: <CACT4Y+Yy9a8R_oiumdZiE-hwAqrDV63VAWgbrE5nFEk9w-JuPQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: kmem: fix a NULL pointer dereference in obj_stock_flush_required()
+To:     Muchun Song <muchun.song@linux.dev>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org,
+        syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,28 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver does not use i2c, so there is no point in including
-<linux/i2c.h>
+On Sun, 23 Apr 2023 at 04:26, Muchun Song <muchun.song@linux.dev> wrote:
+> > On Apr 22, 2023, at 01:40, Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> >
+> > KCSAN found an issue in obj_stock_flush_required():
+> > stock->cached_objcg can be reset between the check and dereference:
+> >
+> > ==================================================================
+> > BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
+> >
+> > write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
+> > drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
+> > refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
+> > obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
+> > memcg_slab_free_hook mm/slab.h:587 [inline]
+> > __cache_free mm/slab.c:3373 [inline]
+> > __do_kmem_cache_free mm/slab.c:3577 [inline]
+> > kmem_cache_free+0x105/0x280 mm/slab.c:3602
+> > __d_free fs/dcache.c:298 [inline]
+> > dentry_free fs/dcache.c:375 [inline]
+> > __dentry_kill+0x422/0x4a0 fs/dcache.c:621
+> > dentry_kill+0x8d/0x1e0
+> > dput+0x118/0x1f0 fs/dcache.c:913
+> > __fput+0x3bf/0x570 fs/file_table.c:329
+> > ____fput+0x15/0x20 fs/file_table.c:349
+> > task_work_run+0x123/0x160 kernel/task_work.c:179
+> > resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+> > exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
+> > exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
+> > __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+> > syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
+> > do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+> > entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
+> > obj_stock_flush_required mm/memcontrol.c:3319 [inline]
+> > drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
+> > try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
+> > try_charge mm/memcontrol.c:2837 [inline]
+> > mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
+> > sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
+> > sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
+> > udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
+> > udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
+> > sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
+> > __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
+> > __do_sys_setsockopt net/socket.c:2282 [inline]
+> > __se_sys_setsockopt net/socket.c:2279 [inline]
+> > __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
+> > do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> > entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > value changed: 0xffff8881382d52c0 -> 0xffff888138893740
+> >
+> > Reported by Kernel Concurrency Sanitizer on:
+> > CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller-00387-g534293368afa #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+> >
+> > Fix it by reading the cached_objcg with READ_ONCE().
+> >
+> > Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> > Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
+> > Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> > Link: https://lore.kernel.org/linux-mm/CACT4Y+ZfucZhM60YPphWiCLJr6+SGFhT+jjm8k1P-a_8Kkxsjg@mail.gmail.com/T/#t
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+>
+> Acked-by: Muchun Song <songmuchun@bytedance.com>
+>
+> Thanks.
 
-Remove it.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/mfd/dln2.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
-index c3149729cec2..c7510434380a 100644
---- a/drivers/mfd/dln2.c
-+++ b/drivers/mfd/dln2.c
-@@ -14,7 +14,6 @@
- #include <linux/types.h>
- #include <linux/slab.h>
- #include <linux/usb.h>
--#include <linux/i2c.h>
- #include <linux/mutex.h>
- #include <linux/platform_device.h>
- #include <linux/mfd/core.h>
--- 
-2.34.1
-
+This improves things, but strictly speaking the write side also needs
+WRITE_ONCE. Ordering is always a game of two. It's not possible to
+order things on one side, if the other side messes up the ordering.
