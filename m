@@ -2,131 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604856ED164
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7516ED16A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbjDXPbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        id S232001AbjDXPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDXPbu (ORCPT
+        with ESMTP id S231965AbjDXPdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:31:50 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BD47A9B;
-        Mon, 24 Apr 2023 08:31:38 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so34333373a12.1;
-        Mon, 24 Apr 2023 08:31:38 -0700 (PDT)
+        Mon, 24 Apr 2023 11:33:08 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C277A8B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:32:55 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so34424561a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682350297; x=1684942297;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1y6VlpLoyeFDIUhuCEpLwrAfvADTwZBo+tgcsp58GCM=;
-        b=YJwxUq/J9GCdLIL2jCK2dcru87AfR9ie2HyWphb4MArimcUfNEEzuurkCCtAns2I9x
-         +cKbCX3bPNjM+o7eyaDZd4G0YZYZgqI9BgVVjjObwV9rkB/rGtCIk7Gw8GoKqGdMX46D
-         kON81OiQ5KUYPhZZlYXFjPjd2z3CVQ0TD3kQjMG71oosSHBSJV4NbNy0PSoJj23rAdQY
-         QGmeCH2L1hh9+Q/iNevD1hlPc1YthJWB7mbDizRYmlKkCRRbnQlHEE3roOaYdUstheuY
-         XHa/hXyP6okeltFgieCKi1BhzeLcSpzu4kluT7oUFkO9HWXDKdRSkqbAkQy6mpAlq1pS
-         TxQg==
+        d=szeredi.hu; s=google; t=1682350374; x=1684942374;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uAia9ZoCM3Ngt40DYLr2QLseOj/p7pPYWNkC2fjWJmw=;
+        b=qWrSGUzCxRq8qH9ciyQYay96/ootXHgah+P6qqyhGbCAQ2pJ8/OxJrzulk56To27uy
+         09RLg/kTfw37Y4n+Y6DBPHrqNJM86jTGeI+B59T2u0X1ivH2gkzn4r7IIy7tcMBPzleL
+         451KVjoReU+5shixxVPasIdCw/4ump/BEaTRo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350297; x=1684942297;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1y6VlpLoyeFDIUhuCEpLwrAfvADTwZBo+tgcsp58GCM=;
-        b=lr17HvzpZOYZ4FZnbU/Q+O8TOLJazNDNy5fYXz/rb/+6/SH1OS3ZKvtyF5cMA9D+el
-         duRY3g5CVLuzaHO36mIbo1EipOqiNq8xrSV3CTM0bYGzYKMq2oAg2tlvsHJvgJQATlSd
-         2USFAAMIcckTZjhSzUWuaEaOlWqSLibxxaL6cK4o7TGiJzFTowXt/zNuYoJiBDrD4uMk
-         0UEeQsIfTAspcs6Un4jaKj2EghE4wFwzKmv2glzEus+tEs9DD6W64zjCrX2MLoSs0nUQ
-         mU0sJs8E4hTmVl1Q+7r/pMlYgR84Bv8JPOJeGE4XwGMHsmNzdje0ffKBTgdZ2tiQIv/i
-         un+w==
-X-Gm-Message-State: AAQBX9eN6wxZiOfd8KyBhfUtFR9/Y+kP6MnNtvyUjsUFUOOgClf6Citx
-        IRd3Lso3/tKGugm9saBs/G0=
-X-Google-Smtp-Source: AKy350ZJ7YUu8TOixGb73t39jePcGdOuSu946lu2XRcNjnJzhh//CbEJQJbRFD756DxcHWAlOD+SFA==
-X-Received: by 2002:aa7:cd11:0:b0:4ad:738b:6706 with SMTP id b17-20020aa7cd11000000b004ad738b6706mr13752469edw.2.1682350297188;
-        Mon, 24 Apr 2023 08:31:37 -0700 (PDT)
-Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1709062f0a00b0094f62181917sm5597129eji.138.2023.04.24.08.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 08:31:36 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 17:31:34 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        jsnitsel@redhat.com, robh+dt@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <ZEag1lAonYcmNFXk@orome>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-3-kyarlagadda@nvidia.com>
- <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
- <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
- <ZEaWQD_QTs2usVl8@orome>
- <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+        d=1e100.net; s=20221208; t=1682350374; x=1684942374;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uAia9ZoCM3Ngt40DYLr2QLseOj/p7pPYWNkC2fjWJmw=;
+        b=UGlfLSBfdV/+bX9VdgVS1VtQDO/f3vYZY+qScCtpkDdwEocIQ+PV98POur5uvOBaxA
+         8zr45EU4j43/oiLkXZnnTiR2mknKUg88oJ1E4TZGKQHWulADm8qKYTOv/Ym14LM12nIj
+         kM27iXAV+7rzrdOmkd0pclo83iRHgOUEw5fho6DMt8LuzF0c9byKw9oBxk9ovaidyoy+
+         kb8VzRqofBSP3kM9oiX7ZBiWBSEKTUVupbDJpsTT8NvNA+tNbTUQqCrgCezpduoVuAGP
+         R+3k91A2CMryYf4SeHO6qyMRuOojQ6TvCBe2DGNuYzqlJnXRoBrsbQa/RCS9P07rzvQg
+         bKLg==
+X-Gm-Message-State: AAQBX9exXsZZJCLuJS4Z1iwvWff9XRbn9HCBgi0BeRMP7iHyna4KsPO0
+        YDsFgecOkGCYJu/Lq6kNUIHX7Z1bGIkutIgBeSSKgA==
+X-Google-Smtp-Source: AKy350ZlEFYElE3Cz+YrZZbx+udm5MYxX+58hoksQpdxqtGw8JQgjq/51zlo+VJfHxiyRLGkhE1nZhNtsXCZO/Kgvz0=
+X-Received: by 2002:a17:906:d1cb:b0:957:9ddd:8809 with SMTP id
+ bs11-20020a170906d1cb00b009579ddd8809mr8178755ejb.35.1682350374328; Mon, 24
+ Apr 2023 08:32:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HoxvrgZmmApzwDPp"
-Content-Disposition: inline
-In-Reply-To: <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
-User-Agent: Mutt/2.2.10 (2023-03-25)
+References: <20230418014037.2412394-1-drosen@google.com>
+In-Reply-To: <20230418014037.2412394-1-drosen@google.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Mon, 24 Apr 2023 17:32:42 +0200
+Message-ID: <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
+ Extension for FUSE
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 18 Apr 2023 at 03:40, Daniel Rosenberg <drosen@google.com> wrote:
+>
+> These patches extend FUSE to be able to act as a stacked filesystem. This
+> allows pure passthrough, where the fuse file system simply reflects the lower
+> filesystem, and also allows optional pre and post filtering in BPF and/or the
+> userspace daemon as needed. This can dramatically reduce or even eliminate
+> transitions to and from userspace.
 
---HoxvrgZmmApzwDPp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll ignore BPF for now and concentrate on the passthrough aspect,
+which I understand better.
 
-On Mon, Apr 24, 2023 at 04:18:45PM +0100, Mark Brown wrote:
-> On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
->=20
-> > Would it make sense for you to pick up patch 2/3 as well? As far as I
-> > can tell there's a build dependency on patch 1/3 because of the newly
-> > added SPI_TPM_HW_FLOW symbol.
->=20
-> I'll include it in my pull request for spi this time round so it should
-> end up in -rc1, my thinking was that I was happy with the SPI bits and
-> if it was in -rc1 then the TPM bits could be handled without cross tree
-> issues when the review was sorted (which it is now but wasn't at the
-> time).  If the SPI side doesn't make -rc1 for some reason I can pick up
-> the TPM bit as well, and/or do a signed tag.
+The security model needs to be thought about and documented.  Think
+about this: the fuse server now delegates operations it would itself
+perform to the passthrough code in fuse.  The permissions that would
+have been checked in the context of the fuse server are now checked in
+the context of the task performing the operation.  The server may be
+able to bypass seccomp restrictions.  Files that are open on the
+backing filesystem are now hidden (e.g. lsof won't find these), which
+allows the server to obfuscate accesses to backing files.  Etc.
 
-Sounds good.
+These are not particularly worrying if the server is privileged, but
+fuse comes with the history of supporting unprivileged servers, so we
+should look at supporting passthrough with unprivileged servers as
+well.
+
+My other generic comment is that you should add justification for
+doing this in the first place.  I guess it's mainly performance.  So
+how performance can be won in real life cases?   It would also be good
+to measure the contribution of individual ops to that win.   Is there
+another reason for this besides performance?
 
 Thanks,
-Thierry
-
---HoxvrgZmmApzwDPp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRGoNYACgkQ3SOs138+
-s6Hhng//fM8OK3GgVRYeyJIuvFsW9EXaRU/OWm+n4eMdT3wGXOGeJAk4AYdptYJo
-z2dDOlNAlUsKjP6ZVHfLOAH8cdZH/gGSaWRot0hv85KWlDr5pJUKZ65rsBiIPkbd
-EocantA23aFpg837JDnKj1btRUKPWAXTgbAigRuQRbIDB0ZreYCDikk/YZR5vqze
-h4YyeccRq+Uj1OpGzNmQ8YGWHbgRIJs653OlbYmsHiLeyinLNz7bmg3wohSiwR/0
-l1h8O/aL4ZQNbTiQ02mYApcL9N+5PEyIBXj2HC/G+VPFqcRlSzOtBAvRixdnCsVe
-M+/XexW7FkpalITyto2lH9DVauGaKpNI6bfwY5wBcfPT7Li0RsWmDIQe4bKyWpBJ
-U6mQaBI8+rMDCrv6dajKphd7Ml9uO+eefpIYBRcWHeqg6263HaiKXUMf75rtlWAo
-MJ4zCQ/NmFaVTyNf+U+8MhLHAWbh1Cb8jNPEheY7gY9CKvJrC6c5EerH2fJ8q1bU
-mwlDYHqYSXXAXN2MJDC1E21HHe2dA9Guq4i9wE7bSDRw0byP0L7vz3/0nzP6hXn/
-JcIMhda+b8GcYFhzEpgaJWSqC5UJdV19qjluntRLw/9kf5DW5ZO+ErdYsoAnWKs6
-ZCezjFvPdDgGQ6Rhb2GFVUE01xtalPb6qYmHv34+oLMRTyWORCU=
-=0QL7
------END PGP SIGNATURE-----
-
---HoxvrgZmmApzwDPp--
+Miklos
