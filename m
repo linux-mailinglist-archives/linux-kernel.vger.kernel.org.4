@@ -2,210 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD28A6ECCA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D62D6ECCA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjDXNI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S231839AbjDXNIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDXNIZ (ORCPT
+        with ESMTP id S231855AbjDXNIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:08:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6F049F7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:08:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F30561FD80;
-        Mon, 24 Apr 2023 13:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682341697; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=meGbae7Rm1Dm4hStLawtNkGLd4DT75lkTKH92YM9kzw=;
-        b=jL/D7hdUyKl6Al3oqEKoeE5tGlwTDV7xGM1hPtdruRmdKhYecVsbFjrmWTcQ1rZ4wJoYIj
-        6/+E0ys+HWQKJA8eEGuAWZEMhVIBXZDeTtEsBOQ3Bj4wlPlIDhn75fk3TMDOlem2yeNQye
-        LIJIjDmL53VolPR9Jow+nOiM06+uKfQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF98A13780;
-        Mon, 24 Apr 2023 13:08:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gD/uL0B/RmQjEAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 24 Apr 2023 13:08:16 +0000
-Date:   Mon, 24 Apr 2023 15:08:15 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-Message-ID: <ZEZ/P0Wq2rulpWCg@dhcp22.suse.cz>
-References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
- <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
- <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
- <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
- <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
- <8d4059e3-2e6d-3f0c-2881-13b9bd07aa6c@linux.alibaba.com>
- <ZEZxKJA/5aOfbZdX@dhcp22.suse.cz>
- <b07cbdf6-cbff-2bf4-9bba-b8c051ea090c@linux.alibaba.com>
+        Mon, 24 Apr 2023 09:08:40 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C716468A;
+        Mon, 24 Apr 2023 06:08:25 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2a8b766322bso41796691fa.1;
+        Mon, 24 Apr 2023 06:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682341704; x=1684933704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WL7uFoeDkdqYpddaEcXID1doFO9TkVEZpq0BEErd21g=;
+        b=PdGRKMWxs2qOVRcCun4w0093CaT+iYNmy+cQXgFBU33KYpeXLRcuJ07z+trXW9ZnlJ
+         fHk0M6vxp/Morfe53VdYTDEzpC9/yjbGKfPaWqTGjChHi8PRbrB2uMJBlOR24AC3htON
+         SI4ABy6AWt44Z4BTeZYPkswXWLsJerT2oEZbAm/X5Yc/cORT++AWRANjuPpyFpJWbljZ
+         Uoyk0MS7g7lztQrSNZgZA77JrvqeXhkiiurTQH27O9y4Npa20Zh6dD+q5J0gT6AA2OKM
+         6AQAU5GtVmwG46Q8d6VgRxxW+QmvZ8clsPtkJ+lmk9LSioL0jSqZn9Zm7q2yf9vSwttE
+         PyVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682341704; x=1684933704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WL7uFoeDkdqYpddaEcXID1doFO9TkVEZpq0BEErd21g=;
+        b=lUmp+juA0rweR6Ygulfz6irBwaU0yS2JUBxI5f1n3mEo1IAWNImlpwqFvkGUneu9J/
+         4GNo6zSrqH+NA3GcIe4JBaeiR/pZmxFKAFk9IoF3w+4GQIXy+5aiZq0Ih6U6DGezvWpH
+         VP93ENmT/H7FwE3dbeQrrLvUVjOOBxNVmrWKwk6Ziq7KAhba9NZ1Xd4sFF/lZOuk7IzF
+         3L3LH1gu6hTgOp9qW1Ed/XW/unZvn4Gw+zrrPjnZAvJYMxFRjR/gauP+qX+Pa7i8OPjx
+         BdZDE+2ortFMaPXDA1+bKwQZ+RTOId4J977rex46kOBEyy0G+9WxtQKKyaCVYIGZLCGX
+         XQFw==
+X-Gm-Message-State: AAQBX9e0A7QlBhv3Ha48176/yQPYw77lJyfBb9tgZGxMyCq8JCxFYQQV
+        p/r0Pc6NC5JS5v8QZP3cCKc=
+X-Google-Smtp-Source: AKy350YorN9PeKLJZCCwW0zAr2KcGf1kxH97x+LvbsJG0ZvucMnE1fwrHYzjYVyk31jdjpguKRobIA==
+X-Received: by 2002:a2e:7e03:0:b0:2a7:a3b4:7747 with SMTP id z3-20020a2e7e03000000b002a7a3b47747mr2428968ljc.29.1682341703516;
+        Mon, 24 Apr 2023 06:08:23 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id h22-20020a2e9ed6000000b002a8ab13b813sm1746248ljk.41.2023.04.24.06.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 06:08:22 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 16:08:19 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/5] iio:trigger: Add simple trigger_validation helper
+Message-ID: <91fffd0001e8efef90f43fa03026dc0e5e30b4e4.1682340947.git.mazziesaccount@gmail.com>
+References: <cover.1682340947.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WHhLnMZp04aVLHjv"
 Content-Disposition: inline
-In-Reply-To: <b07cbdf6-cbff-2bf4-9bba-b8c051ea090c@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1682340947.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-04-23 20:48:32, Baolin Wang wrote:
-> 
-> 
-> On 4/24/2023 8:08 PM, Michal Hocko wrote:
-> > On Mon 24-04-23 19:40:30, Baolin Wang wrote:
-> > > 
-> > > 
-> > > On 4/24/2023 7:34 PM, Michal Hocko wrote:
-> > > > On Mon 24-04-23 19:20:43, Baolin Wang wrote:
-> > > > > 
-> > > > > 
-> > > > > On 4/24/2023 5:54 PM, Michal Hocko wrote:
-> > > > > > On Sun 23-04-23 18:59:11, Baolin Wang wrote:
-> > > > > > > Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
-> > > > > > > checks whether the given zone contains holes, and uses pfn_to_online_page()
-> > > > > > > to validate if the start pfn is online and valid, as well as using pfn_valid()
-> > > > > > > to validate the end pfn.
-> > > > > > > 
-> > > > > > > However, the __pageblock_pfn_to_page() function may return non-NULL even
-> > > > > > > if the end pfn of a pageblock is in a memory hole in some situations. For
-> > > > > > > example, if the pageblock order is MAX_ORDER, which will fall into 2
-> > > > > > > sub-sections, and the end pfn of the pageblock may be hole even though
-> > > > > > > the start pfn is online and valid.
-> > > > > > > 
-> > > > > > > This did not break anything until now, but the zone continuous is fragile
-> > > > > > > in this possible scenario. So as previous discussion[1], it is better to
-> > > > > > > add some comments to explain this possible issue in case there are some
-> > > > > > > future pfn walkers that rely on this.
-> > > > > > > 
-> > > > > > > [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
-> > > > > > 
-> > > > > > Do I remember correctly you've had a specific configuration that would
-> > > > > > trigger this case?
-> > > > > 
-> > > > > Yes, I provided an example in previous thread [2] so show the
-> > > > > __pageblock_pfn_to_page() is fragile in some cases.
-> > > > > 
-> > > > > [2] https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
-> > > > 
-> > > > Please make it a part of the changelog.
-> > > 
-> > > Sure.
-> > > 
-> > > > > > 
-> > > > > > > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > > > > > > ---
-> > > > > > > Changes from v1:
-> > > > > > >     - Update the comments per Ying and Mike, thanks.
-> > > > > > > ---
-> > > > > > >     mm/page_alloc.c | 7 +++++++
-> > > > > > >     1 file changed, 7 insertions(+)
-> > > > > > > 
-> > > > > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > > > > > index 6457b64fe562..9756d66f471c 100644
-> > > > > > > --- a/mm/page_alloc.c
-> > > > > > > +++ b/mm/page_alloc.c
-> > > > > > > @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
-> > > > > > >      * interleaving within a single pageblock. It is therefore sufficient to check
-> > > > > > >      * the first and last page of a pageblock and avoid checking each individual
-> > > > > > >      * page in a pageblock.
-> > > > > > > + *
-> > > > > > > + * Note: the function may return non-NULL even if the end pfn of a pageblock
-> > > > > > > + * is in a memory hole in some situations. For example, if the pageblock
-> > > > > > > + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
-> > > > > > > + * of the pageblock may be hole even though the start pfn is online and valid.
-> > > > > > > + * This did not break anything until now, but be careful about this possible
-> > > > > > > + * issue when checking whether all pfns of a pageblock are valid.
-> > > > > > 
-> > > > > > It is not really clear what you should be doing (other than to be
-> > > > > > careful which is not helpful much TBH) when you encounter this
-> > > > > > situation. If the reality changes and this would break in the future
-> > > > > > what would breakage look like? What should be done about that?
-> > > > > 
-> > > > > That depends on what the future pfn walkers do, which may access some hole
-> > > > > memory with zero-init page frame. For example, if checking the
-> > > > > __PageMovable() for a zero-init page frame, that will crash the system. But
-> > > > > I can not list all the possible cases.
-> > > > > 
-> > > > > So how about below words?
-> > > > > 
-> > > > >    * Note: the function may return non-NULL even if the end pfn of a pageblock
-> > > > >    * is in a memory hole in some situations. For example, if the pageblock
-> > > > >    * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
-> > > > >    * of the pageblock may be hole even though the start pfn is online and
-> > > > > valid.
-> > > > >    * This did not break anything until now, but be careful about this possible
-> > > > >    * issue when checking whether all pfns of a pageblock are valid, that may
-> > > > >    * lead to accessing empty page frame, and the worst case can crash the
-> > > > > system.
-> > > > >    * So you should use pfn_to_onlie_page() instead of pfn_valid() to valid the
-> > > > >    * pfns in a pageblock if such case happens.
-> > > > 
-> > > > Does that mean that struct page is not initialized and PagePoisoned will
-> > > > trigger or it is just zero-prefilled?
-> > > 
-> > > In the example I provided[2], these page frames of the hole memory are
-> > > zero-prefilled.
-> > 
-> > OK, so make _that_ explicit in the comment. Essentially you want to say
-> > that there are cases where we have zero-initialized struct pages for
-> > memory holes. In general no pfn walker should touch a physical memory
-> > range for pfn where the struct page doesn't contain any metadata it
-> > recognizes. Zero fill struct pages do not contain any distinguishable
-> > state so that makes it less of a problem.
-> > 
-> > All that being said I would reformulate the comment as follows:
-> > 
-> > 	* Note: the function may return non-NULL struct page even for a
-> > 	* page block which contains a memory hole (i.e. there is no
-> > 	* physical memory for a subset of the pfn range). This should be
-> > 	* safe most of the time because struct pages are still zero
-> > 	* pre-filled and pfn walkers shouldn't touch any physical memory
-> > 	* range for which they do not recognize any specific metadata in
-> > 	* struct pages.
-> 
-> Thanks. That makes sense to me. A trivial thing is I still want to add the
-> example in the comments to make it clear. Are you okay with below
-> description?
-> 
-> + * Note: the function may return non-NULL struct page even for a page block
-> + * which contains a memory hole (i.e. there is no physical memory for a
-> subset
-> + * of the pfn range). For example, if the pageblock order is MAX_ORDER,
-> which
-> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be
-> hole
-> + * even though the start pfn is online and valid. This should be safe most
-> of
-> + * the time because struct pages are still zero pre-filled and pfn walkers
-> + * shouldn't touch any physical memory range for which they do not
-> recognize
-> + * any specific metadata in struct pages.
 
-No objections of course. I do not see an additional value, quite
-honestly but if somebody does then it doesn't hurt.
+--WHhLnMZp04aVLHjv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Michal Hocko
-SUSE Labs
+Some triggers can only be attached to the IIO device that corresponds to
+the same physical device. Implement generic helper which can be used as
+a validate_trigger callback for such devices.
+
+Suggested-by: Jonathan Cameron <jic23@kernel.org>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+---
+Revision history
+v2: New patch
+---
+ drivers/iio/industrialio-trigger.c | 22 +++++++++++++++++++++-
+ include/linux/iio/trigger.h        |  1 +
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-=
+trigger.c
+index 784dc1e00310..c616297aa754 100644
+--- a/drivers/iio/industrialio-trigger.c
++++ b/drivers/iio/industrialio-trigger.c
+@@ -322,7 +322,7 @@ int iio_trigger_attach_poll_func(struct iio_trigger *tr=
+ig,
+ 	 * this is the case if the IIO device and the trigger device share the
+ 	 * same parent device.
+ 	 */
+-	if (pf->indio_dev->dev.parent =3D=3D trig->dev.parent)
++	if (iio_validate_own_trigger(pf->indio_dev, trig))
+ 		trig->attached_own_device =3D true;
+=20
+ 	return ret;
+@@ -728,6 +728,26 @@ bool iio_trigger_using_own(struct iio_dev *indio_dev)
+ }
+ EXPORT_SYMBOL(iio_trigger_using_own);
+=20
++/**
++ * iio_validate_own_trigger - Check if a trigger and IIO device belong to
++ *  the same device
++ * @idev: the IIO device to check
++ * @trig: The IIO trigger to check
++ *
++ * This function can be used as the validate_trigger callback for triggers=
+ that
++ * can only be attached to their own device.
++ *
++ * Return: 0 if both the trigger and the IIO device belong to the same
++ * device, -EINVAL otherwise.
++ */
++int iio_validate_own_trigger(struct iio_dev *idev, struct iio_trigger *tri=
+g)
++{
++	if (idev->dev.parent !=3D trig->dev.parent)
++		return -EINVAL;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(iio_validate_own_trigger);
++
+ /**
+  * iio_trigger_validate_own_device - Check if a trigger and IIO device bel=
+ong to
+  *  the same device
+diff --git a/include/linux/iio/trigger.h b/include/linux/iio/trigger.h
+index 51f52c5c6092..bce3b1788199 100644
+--- a/include/linux/iio/trigger.h
++++ b/include/linux/iio/trigger.h
+@@ -171,6 +171,7 @@ void iio_trigger_free(struct iio_trigger *trig);
+  */
+ bool iio_trigger_using_own(struct iio_dev *indio_dev);
+=20
++int iio_validate_own_trigger(struct iio_dev *idev, struct iio_trigger *tri=
+g);
+ int iio_trigger_validate_own_device(struct iio_trigger *trig,
+ 				     struct iio_dev *indio_dev);
+=20
+--=20
+2.40.0
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--WHhLnMZp04aVLHjv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRGf0MACgkQeFA3/03a
+ocWeygf/YonbKkRhkJwY0zx7jfJAAydujuf9/TM5E7CVem+lVGsDvZHkBA96qadP
+0Ecw9RPfiOTL7enDMseqnqeimI7MotT0QN3fSeW2lLEFmkVe52Gh0pp4tmzUSg/Z
+uJXInor+fwlyaizF3ZUDb1sQenGijdldVRv1pDIwsgsk6roSJ8D1rSVcfHu9d0zR
+TP95x7lyXGGXD6kiRUG4RB55nyLq+5EE76jh3zOBgymGIzQEpAPKH7qbeHwhi/Q5
+/f/Tn9f0lkh0QtVXHskc6Yqle9Tbb/R3Vn6oJUKU0QK+eN90/v+t4ECId30cLkHT
+Qz7mo2A2ea/aDzr2Gc0ZckQPZkQ4TQ==
+=kuuo
+-----END PGP SIGNATURE-----
+
+--WHhLnMZp04aVLHjv--
