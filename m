@@ -2,183 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659B26EC822
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E636EC9BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjDXIww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
+        id S231232AbjDXKGG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 06:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbjDXIws (ORCPT
+        with ESMTP id S231203AbjDXKGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:52:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515BE193;
-        Mon, 24 Apr 2023 01:52:43 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q4f4w3rg2zKv7Y;
-        Mon, 24 Apr 2023 16:51:44 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 24 Apr 2023 16:52:40 +0800
-Message-ID: <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
-Date:   Mon, 24 Apr 2023 16:52:40 +0800
+        Mon, 24 Apr 2023 06:06:04 -0400
+X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 03:06:00 PDT
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8183B1BD3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:06:00 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id C66D12E11056;
+        Mon, 24 Apr 2023 03:54:56 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id svnJvML5hHLw; Mon, 24 Apr 2023 03:54:56 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 057812E0FE3B;
+        Mon, 24 Apr 2023 03:54:53 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bfDRRepdzEHn; Mon, 24 Apr 2023 03:54:52 -0500 (-05)
+Received: from [23.172.112.93] (unknown [23.172.112.93])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 934F52E0FE27;
+        Mon, 24 Apr 2023 03:54:45 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
-        <shuah@kernel.org>, <corbet@lwn.net>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <roberto.sassu@huawei.com>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
- <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Content-Language: en-US
-In-Reply-To: <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Se requiere respuesta urgente.
+To:     Recipients <laurethmar.romero@saludzona6.gob.ec>
+From:   "WEBMAIL MAIL ZIMBRA" <laurethmar.romero@saludzona6.gob.ec>
+Date:   Mon, 24 Apr 2023 01:57:14 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230424085445.934F52E0FE27@mail.saludzona6.gob.ec>
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Su cuenta no ha pasado por el proceso de verificaci�n / actualizaci�n. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 d�as h�biles posteriores a la recepci�n de este aviso. El incumplimiento de este aviso dentro de la fecha l�mite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correr� el riesgo de perder su cuenta.
 
-
-On 2023/4/21 1:40, Mickaël Salaün wrote:
-> 
-> On 18/04/2023 12:53, xiujianfeng wrote:
->> Hi Mickael,
->>
->> Sorry about the long silence on this work, As we known this work depends
->> on another work about changing argument from struct dentry to struct
->> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
->> because IMA/EVM is a special security module which is not LSM-based
->> currently, and severely coupled with the file system. so I am waiting
->> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
->> be ready, I think it can make my work more easy. you can find
->> Roberto'work here,
->> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
->>
->> Any good idea are welcome, thanks.
-> 
-> Thanks for the update Xiu.
-> 
-> Which part would be needed from Roberto's patch series?
-> 
-As we discussed before, the two access rights that need to be added and
-their usage is as below:
-LANDLOCK_ACCESS_FS_WRITE_METADATA controls
-1.inode_setattr
-2.inode_setxattr
-3.inode_removexattr
-4.inode_set_acl
-5.inode_remove_acl
-LANDLOCK_ACCESS_FS_READ_METADATA controls
-1.inode_getattr
-2.inode_get_acl
-3.inode_getxattr
-4.inode_listxattr
-
-all these APIs should be changed to use struct path instead of dentry,
-and then several vfs APIs as follows are invovled:
-notify_change,
-__vfs_setxattr_locked,
-__vfs_removexattr_locked,
-__vfs_setxattr_noperm
-vfs_set_acl
-vfs_remove_acl
-vfs_getxattr
-vfs_listxattr
-vfs_get_acl
-and also include some LSM hooks such as inode_post_setxattr and
-inode_setsecctx.
-
-Since the original places where pass dentry to security_inode_xxx may
-not have any struct path, we have to pass it from the top caller, so
-this also touches lots of filesystems(e.g. cachefiles, ecryptfs, ksmbd,
-nfsd, overlayfs...).
-
-Other LSMs such as selinux, smack can be easy to refator because they
-are LSM-based, and if VFS passes path to security_inode_xxx and they can
-just use path->dentry instead inside they own modules.
-
-AS for IMA/EVM, unfortunately they are not LSM-based and coupled with
-the file system. To make things worse, there is a recursive dependency
-situation during the update of extended attribute which happen as follows:
-
-__vfs_setxattr_noperm
-  => security_inode_post_setxattr
-    => evm_inode_post_setxattr
-      => evm_update_evmxattr
-=> __vfs_setxattr_noperm
-
-To change the argument of __vfs_setxattr_noperm from a dentry to the
-path structure, the two EVM functions would have to be altered as well.
-However, evm_update_evmxattr is called by 3 other EVM functions who
-lives in the very heart of the complicated EVM framework. Any change to
-them would cause a nasty chain reaction in EVM and, as IMA would trigger
-EVM directly, in IMA as well.
-
-There is another callchain as follow:
-ima_appraise_measurement
-  =>evm_verifyxattr
-    =>evm_verifyxattr
-      =>evm_verify_hmac
-	=>evm_calc_hash
-	   =>evm_calc_hmac_or_hash
-	     =>vfs_getxattr
-Passing struct path into vfs_getxattr() would also affect this
-callchain. Currently ima_appraise_measurment accepts a struct file, and
-dentry is generated from file_dentry(file) in order to mitigate a
-deadlock issue involving overlayfs(commit e71b9dff0634ed). Once
-&file->f_path is passed through this callchain, and someone wants the
-dentry, it will be using file->f_path.dentry, which is different from
-file_dentry(file). In the overlayfs scenario, may this cause an issue?
-
-The patchset of moving IMA and EVM into the LSM infrastructe would be
-helpfull but still can not completely resolve this situation. more
-refactor would be needed in EVM. That's all that's happening right now.
-
-> 
->>
->>
->> On 2022/8/27 19:12, Xiu Jianfeng wrote:
->>> v2:
->>>   * abstract walk_to_visible_parent() helper
->>>   * chmod and chown rights only take affect on directory's context
->>>   * add testcase for fchmodat/lchown/fchownat
->>>   * fix other review issues
->>>
->>> Xiu Jianfeng (6):
->>>    landlock: expand access_mask_t to u32 type
->>>    landlock: abstract walk_to_visible_parent() helper
->>>    landlock: add chmod and chown support
->>>    landlock/selftests: add selftests for chmod and chown
->>>    landlock/samples: add chmod and chown support
->>>    landlock: update chmod and chown support in document
->>>
->>>   Documentation/userspace-api/landlock.rst     |   9 +-
->>>   include/uapi/linux/landlock.h                |  10 +-
->>>   samples/landlock/sandboxer.c                 |  13 +-
->>>   security/landlock/fs.c                       | 110 ++++++--
->>>   security/landlock/limits.h                   |   2 +-
->>>   security/landlock/ruleset.h                  |   2 +-
->>>   security/landlock/syscalls.c                 |   2 +-
->>>   tools/testing/selftests/landlock/base_test.c |   2 +-
->>>   tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
->>>   9 files changed, 386 insertions(+), 31 deletions(-)
->>>
+Confirme los detalles de la cuenta a continuaci�n.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electr�nico completo en:
+3. Nombre de usuario:
+4. Contrase�a:
+5. Vuelva a escribir la contrase�a:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminar� autom�ticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atenci�n al cliente
+Equipo de soporte t�cnico de Zimbra.
+ 
+Copyright � 2005-2023 Synacor, Inc. Todos los derechos reservados
