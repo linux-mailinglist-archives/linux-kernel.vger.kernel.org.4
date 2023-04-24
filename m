@@ -2,76 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7516ED16A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDD76ED184
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjDXPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S232085AbjDXPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbjDXPdI (ORCPT
+        with ESMTP id S231845AbjDXPg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:33:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C277A8B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:32:55 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so34424561a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1682350374; x=1684942374;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uAia9ZoCM3Ngt40DYLr2QLseOj/p7pPYWNkC2fjWJmw=;
-        b=qWrSGUzCxRq8qH9ciyQYay96/ootXHgah+P6qqyhGbCAQ2pJ8/OxJrzulk56To27uy
-         09RLg/kTfw37Y4n+Y6DBPHrqNJM86jTGeI+B59T2u0X1ivH2gkzn4r7IIy7tcMBPzleL
-         451KVjoReU+5shixxVPasIdCw/4ump/BEaTRo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350374; x=1684942374;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uAia9ZoCM3Ngt40DYLr2QLseOj/p7pPYWNkC2fjWJmw=;
-        b=UGlfLSBfdV/+bX9VdgVS1VtQDO/f3vYZY+qScCtpkDdwEocIQ+PV98POur5uvOBaxA
-         8zr45EU4j43/oiLkXZnnTiR2mknKUg88oJ1E4TZGKQHWulADm8qKYTOv/Ym14LM12nIj
-         kM27iXAV+7rzrdOmkd0pclo83iRHgOUEw5fho6DMt8LuzF0c9byKw9oBxk9ovaidyoy+
-         kb8VzRqofBSP3kM9oiX7ZBiWBSEKTUVupbDJpsTT8NvNA+tNbTUQqCrgCezpduoVuAGP
-         R+3k91A2CMryYf4SeHO6qyMRuOojQ6TvCBe2DGNuYzqlJnXRoBrsbQa/RCS9P07rzvQg
-         bKLg==
-X-Gm-Message-State: AAQBX9exXsZZJCLuJS4Z1iwvWff9XRbn9HCBgi0BeRMP7iHyna4KsPO0
-        YDsFgecOkGCYJu/Lq6kNUIHX7Z1bGIkutIgBeSSKgA==
-X-Google-Smtp-Source: AKy350ZlEFYElE3Cz+YrZZbx+udm5MYxX+58hoksQpdxqtGw8JQgjq/51zlo+VJfHxiyRLGkhE1nZhNtsXCZO/Kgvz0=
-X-Received: by 2002:a17:906:d1cb:b0:957:9ddd:8809 with SMTP id
- bs11-20020a170906d1cb00b009579ddd8809mr8178755ejb.35.1682350374328; Mon, 24
- Apr 2023 08:32:54 -0700 (PDT)
+        Mon, 24 Apr 2023 11:36:58 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2B67EC0;
+        Mon, 24 Apr 2023 08:36:54 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D1858188374C;
+        Mon, 24 Apr 2023 15:36:50 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id C669825004C3;
+        Mon, 24 Apr 2023 15:36:45 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BD4F79B403F7; Mon, 24 Apr 2023 15:36:45 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 6373D9B403F4;
+        Mon, 24 Apr 2023 15:36:45 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net] net: bridge: switchdev: don't notify FDB entries
+ with "master dynamic"
+In-Reply-To: <20230424122631.d7kwfwmlwvqjo3pz@skbuf>
+References: <20230418155902.898627-1-vladimir.oltean@nxp.com>
+ <875y9nt27g.fsf@kapio-technology.com>
+ <20230424122631.d7kwfwmlwvqjo3pz@skbuf>
+Date:   Mon, 24 Apr 2023 17:33:44 +0200
+Message-ID: <87jzy11ehz.fsf@kapio-technology.com>
 MIME-Version: 1.0
-References: <20230418014037.2412394-1-drosen@google.com>
-In-Reply-To: <20230418014037.2412394-1-drosen@google.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 24 Apr 2023 17:32:42 +0200
-Message-ID: <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
- Extension for FUSE
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +59,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 at 03:40, Daniel Rosenberg <drosen@google.com> wrote:
+On Mon, Apr 24, 2023 at 15:26, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> On Sun, Apr 23, 2023 at 10:47:15AM +0200, Hans Schultz wrote:
+>> I do not understand this patch. It seems to me that it basically blocks
+>> any future use of dynamic fdb entries from userspace towards drivers.
+>> 
+>> I would have expected that something would be done in the DSA layer,
+>> where (switchcore) drivers would be able to set some flags to indicate
+>> which features are supported by the driver, including non-static
+>> fdb entries. But as the placement here is earlier in the datapath from
+>> userspace towards drivers it's not possible to do any such thing in the
+>> DSA layer wrt non-static fdb entries.
 >
-> These patches extend FUSE to be able to act as a stacked filesystem. This
-> allows pure passthrough, where the fuse file system simply reflects the lower
-> filesystem, and also allows optional pre and post filtering in BPF and/or the
-> userspace daemon as needed. This can dramatically reduce or even eliminate
-> transitions to and from userspace.
+> As explained too many times already in the thread here:
+> https://patchwork.kernel.org/project/netdevbpf/patch/20230318141010.513424-3-netdev@kapio-technology.com/
+> the plan is:
 
-I'll ignore BPF for now and concentrate on the passthrough aspect,
-which I understand better.
-
-The security model needs to be thought about and documented.  Think
-about this: the fuse server now delegates operations it would itself
-perform to the passthrough code in fuse.  The permissions that would
-have been checked in the context of the fuse server are now checked in
-the context of the task performing the operation.  The server may be
-able to bypass seccomp restrictions.  Files that are open on the
-backing filesystem are now hidden (e.g. lsof won't find these), which
-allows the server to obfuscate accesses to backing files.  Etc.
-
-These are not particularly worrying if the server is privileged, but
-fuse comes with the history of supporting unprivileged servers, so we
-should look at supporting passthrough with unprivileged servers as
-well.
-
-My other generic comment is that you should add justification for
-doing this in the first place.  I guess it's mainly performance.  So
-how performance can be won in real life cases?   It would also be good
-to measure the contribution of individual ops to that win.   Is there
-another reason for this besides performance?
-
-Thanks,
-Miklos
+Ahh yes thanks, I see the comment you wrote on march the 27th.
