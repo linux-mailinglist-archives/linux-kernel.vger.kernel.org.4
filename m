@@ -2,100 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC0F6ED2CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEFB6ED2D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjDXQqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S232125AbjDXQsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjDXQp5 (ORCPT
+        with ESMTP id S231139AbjDXQs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:45:57 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38DA5B98
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:45:55 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-552a6357d02so54943717b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682354755; x=1684946755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cogHEMsVVgTDAgj3gPVUEVuPljtJmFM5khAyIfbROPI=;
-        b=IBOU6rK79gND4DciwLkfyHJXLICK+nm1hfqmlYcnXaImIV8xf915qrkhfvrtFQ1bD9
-         8Z+ZDwfy6VoKjQweFXwu2Ekk2xB4sANXClY8YQV834aQDs+/FEV0pbYJdQjAAZN9rs34
-         f57BlCx+WuwQCSpj22oE82Xg3qgAyLXwOjmFBUce3BRWppaPMfsXHqc33YIYcz+3VNi4
-         XAZAp7pRNW06LclNSKJAgnoHgP+fH1wRI4+4eovVUts+kprnZi5lybCwL9Zgev3v81H7
-         MVICvn7IiG51PLSmT4j4PcXlaBgIbQc7j8zZ0ZG9H7yZWRSpCFId5KXjqGEfZQLGW0Na
-         Tk1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682354755; x=1684946755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cogHEMsVVgTDAgj3gPVUEVuPljtJmFM5khAyIfbROPI=;
-        b=d/4gvTAtUMn7TjLQB4L9mvY2uciE/ga1NLDFd1ThhxdkNFy5rintn+O2m3wr2hMl4q
-         QZG2udcf3K9f2WY0i878wx38XIrg9Oi0SodS1Sg7f1NcsA29rEbFfnbMRMIsQ4VKQlJK
-         Mn+mKOr1zRneF4de/nb2tPgxk3L/POUNQPGBSuZJC7V50BehwqUKRLVzhoamiVrcMuio
-         er1wIyAm/AcBkkQ0a/cKXDEyqIw21YYIbv7EXh43EH89ha38JhXoxLJQKSep3IucagqR
-         SCUaX2f24lU8R5zxXjHT0MFlFTuBMC5BzEJA9Ir/GCCx0eFXddkvYlpXaiB+9Ys6qAmX
-         7kzw==
-X-Gm-Message-State: AAQBX9cuiLStjaORG5J95s7Nk913QcF/73BIblh04RyzP99DPVpBKK5D
-        +spyNtwypkv+Eu5hlyq0JfuToSA0rY1fL+gJ/pv0gw==
-X-Google-Smtp-Source: AKy350bUMi1vCT3z4Q+q+kn/632Ww3gn+vAsPs+FHaqynFi9cqF64KYbnuQ/xodFFgeBsnoDvd5keBpYNYydhUX/nUI=
-X-Received: by 2002:a0d:ccd0:0:b0:541:8735:171e with SMTP id
- o199-20020a0dccd0000000b005418735171emr9340453ywd.11.1682354754795; Mon, 24
- Apr 2023 09:45:54 -0700 (PDT)
+        Mon, 24 Apr 2023 12:48:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1246580;
+        Mon, 24 Apr 2023 09:48:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3886A21979;
+        Mon, 24 Apr 2023 16:48:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682354907;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q0EGwejdLAGL43XPRy5+57KZH/Iv8Vay1sAesVB+mM0=;
+        b=URgZQq3EAqsDrbivzuqTKSpvkS1NlycKh2txTI5/yrV/pVzNWM6TOhddcFfUFtGEHm/EP8
+        9J9gK6Nojzz261PRIApv7FjSnSuvCWknu6den0k2YRHM/ur+KxJPW94XktAr/TKyMqLGHT
+        4sHEliuMIoFw4/nLKJ3EONjBAqHsXDo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682354907;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q0EGwejdLAGL43XPRy5+57KZH/Iv8Vay1sAesVB+mM0=;
+        b=rxtrMnL7QtigII4uWp4ABpOCyRY7/s1rLKQsnehqJp1LDlKVH92VYnQNfTcMpj2pXxRwYv
+        aJs7fV/bJn2MNmDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD3301390E;
+        Mon, 24 Apr 2023 16:48:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WSxSK9qyRmQsFgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 24 Apr 2023 16:48:26 +0000
+Date:   Mon, 24 Apr 2023 18:48:35 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Kevin Brodsky <kevin.brodsky@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] uapi/netfilter: Prefer ISO-friendly __typeof__
+Message-ID: <20230424164835.GA2814761@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20230416210705.2300706-1-pvorel@suse.cz>
+ <f8bd4212-9cca-03ca-884a-c9dec63bb256@arm.com>
 MIME-Version: 1.0
-References: <20230421165305.804301-8-vipinsh@google.com> <202304220315.bpwbgH5n-lkp@intel.com>
-In-Reply-To: <202304220315.bpwbgH5n-lkp@intel.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 24 Apr 2023 09:45:18 -0700
-Message-ID: <CAHVum0cp=wfDmuK87jq7+2t5FnK09v1LownwqgS41EisT4Gc1g@mail.gmail.com>
-Subject: Re: [PATCH 7/9] KVM: mmu: Move mmu lock/unlock to arch code for clear
- dirty log
-To:     kernel test robot <lkp@intel.com>
-Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com,
-        oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8bd4212-9cca-03ca-884a-c9dec63bb256@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 12:43=E2=80=AFPM kernel test robot <lkp@intel.com> =
-wrote:
->
-> Hi Vipin,
->
-> All warnings (new ones prefixed by >>):
->
->    arch/riscv/kvm/mmu.c: In function 'kvm_arch_mmu_enable_log_dirty_pt_ma=
-sked':
-> >> arch/riscv/kvm/mmu.c:399:9: warning: ISO C90 forbids mixed declaration=
-s and code [-Wdeclaration-after-statement]
->      399 |         phys_addr_t base_gfn =3D slot->base_gfn + gfn_offset;
->          |         ^~~~~~~~~~~
->
->
+> On 16/04/2023 23:07, Petr Vorel wrote:
+> > typeof() is a GNU extension, UAPI requires ISO C, therefore __typeof__()
+> > should be used.  Similarly to b4bd35a19df5 ("uapi/linux/const.h: Prefer
+> > ISO-friendly __typeof__") use __typeof__() also in x_tables.h.
 
-I will fix it in v2.
+> Thanks for finishing up the work!
+
+> Minor thing, the hash for my commit in -next seems to be 31088f6f7906 at
+> the moment. As to the Fixes: tag, it looks like it should be (assuming
+> that commit already exported the macro):
+
+> Fixes: 72b2b1dd77e8 ("netfilter: xtables: replace XT_ENTRY_ITERATE macro")
+
+> Aside from that, looks good to me, so:
+
+Thank you!
+
+Andrew, I'll just wait for others to comment and then I'll send v2
+(so that you don't need to update the work yourself).
+
+Kind regards,
+Petr
+
+> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+
+> Kevin
+
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> > Based on [1] merged into linux-next as b4bd35a19df5.
+> > There should be the same Fixes: which we agree in discussion in [1]
+> > (likely a79ff731a1b2, or d6fc9fcbaa65).
+
+> > Kind regards,
+> > Petr
+
+> > [1] https://lore.kernel.org/lkml/20230411092747.3759032-1-kevin.brodsky@arm.com/
+
+
+> >  include/uapi/linux/netfilter/x_tables.h | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+
+> > diff --git a/include/uapi/linux/netfilter/x_tables.h b/include/uapi/linux/netfilter/x_tables.h
+> > index 796af83a963a..d4eced07f2a2 100644
+> > --- a/include/uapi/linux/netfilter/x_tables.h
+> > +++ b/include/uapi/linux/netfilter/x_tables.h
+> > @@ -172,11 +172,11 @@ struct xt_counters_info {
+
+> >  /* pos is normally a struct ipt_entry/ip6t_entry/etc. */
+> >  #define xt_entry_foreach(pos, ehead, esize) \
+> > -	for ((pos) = (typeof(pos))(ehead); \
+> > -	     (pos) < (typeof(pos))((char *)(ehead) + (esize)); \
+> > -	     (pos) = (typeof(pos))((char *)(pos) + (pos)->next_offset))
+> > +	for ((pos) = (__typeof__(pos))(ehead); \
+> > +	     (pos) < (__typeof__(pos))((char *)(ehead) + (esize)); \
+> > +	     (pos) = (__typeof__(pos))((char *)(pos) + (pos)->next_offset))
+
+> > -/* can only be xt_entry_match, so no use of typeof here */
+> > +/* can only be xt_entry_match, so no use of __typeof__ here */
+> >  #define xt_ematch_foreach(pos, entry) \
+> >  	for ((pos) = (struct xt_entry_match *)entry->elems; \
+> >  	     (pos) < (struct xt_entry_match *)((char *)(entry) + \
+
