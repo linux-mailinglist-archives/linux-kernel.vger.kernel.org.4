@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A5D6ED78A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D702B6ED78D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbjDXWIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S233195AbjDXWIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbjDXWID (ORCPT
+        with ESMTP id S232946AbjDXWIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:08:03 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA5B9759
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:07:34 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b621b1dabso1556079b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682374043; x=1684966043;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+dRw3ZuCGQ4L6hUkul9wpsWJC+pumrtpXIkrF71AKzg=;
-        b=3khdx0Pbh7dboOsA/SQbLr+pThfrOhlsUVR9wi/ngcb/YMYufGZY1hhbwTaJZPNEv3
-         O1J130sRQYLR1rGY2zCd5qRceSMqVkIEoJJpxoeKvWOfYTm+sMN3RA2wWxaZ2sjntcRg
-         yKhJG8brRG/tMc0/zViwM///8LGYNcjgDdFqwCYcIBsxMvqGuIZn1OvyB9Sw+SXUKaat
-         /FZNXoxznzO2ful/U38P3afDzHRxMjOJKrJw39/kMhy82MAsNZmnNm/GOfbVH2KO2psN
-         osWBaiHOIBa2RgMCUv6na9fnE7AR0tUHQwcCVpj2ubCZpkXWqPCgHNbw4yeNxslRf28i
-         byfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682374043; x=1684966043;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+dRw3ZuCGQ4L6hUkul9wpsWJC+pumrtpXIkrF71AKzg=;
-        b=gLzhhpXzqXiXno/MYEbUww9MsD+fXRA+OFs0VPXwDyKzfFe3XyAxNqy4MZUjtbDWGK
-         KIJfkTE0h2gZA602SFo44aXsETYLD2rYqsTA8RApLJoI1Z6GxchWfxgwajlM23tDFg25
-         vScYZtljvQKk84rTY/fT6Yl6l839mGgPo3g9pyDRjzPO5hqPBiMYJ9tvVQTyPE9cBhY4
-         gfh+otzG5vbMtVc714ySGR4esyxZN8qHwrKa55wih3DRewYQ+aoOsOkn66FPb+jtVaqG
-         Jl2xwopm/pan9WG6hBqK++OXdLX0Y4On1b/KUJ62/u9LggZttFkWy7kOEVwTC7ubmqur
-         PA1w==
-X-Gm-Message-State: AAQBX9dgB06ycWhr5bgrf54HfnVQiwS3KRodFdgyXahAyBPd6WRLvb1z
-        XzMtYlplWr1kWptwZSpf6LQPDQ==
-X-Google-Smtp-Source: AKy350YJ6Y1ozgYMQvy0Di+6WfdGyjFKUuR/diJvgDuLAk/2d/BmfR/WVPhTyWIZfGtTCit8MFZ8gg==
-X-Received: by 2002:a05:6a21:9982:b0:e8:dcca:d9cb with SMTP id ve2-20020a056a21998200b000e8dccad9cbmr19617367pzb.5.1682374043298;
-        Mon, 24 Apr 2023 15:07:23 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e13-20020a63db0d000000b0050f7208b4bcsm6924377pgg.89.2023.04.24.15.07.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 15:07:23 -0700 (PDT)
-Message-ID: <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
-Date:   Mon, 24 Apr 2023 16:07:21 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
- <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
- <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
- <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 24 Apr 2023 18:08:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AAF5FE4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:07:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C110162987
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 22:07:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB48C4339B;
+        Mon, 24 Apr 2023 22:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1682374047;
+        bh=HByyQifs96c18FNN/v288o+8EnsWfHwi6zdKQPZ0gd8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cZ6Jq8E6rRBrz16vl3O1vh+ktQtbQJchzfkGEkCOIS4TMOJH3tJ93KA8feGoPJ41l
+         0IdDHnI1Oru8/8uWqrzYLZ+GpJ9BMZ5/QcORfOoYwmPhoVcT6yCYGjWBLG9LT5dKpa
+         X040AEif+tnRisK/OlZiPisgI3iX8F6wUVFXPvVs=
+Date:   Mon, 24 Apr 2023 15:07:26 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        David Stevens <stevensd@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH next] mm/khugepaged: fix conflicting mods to
+ collapse_file()
+Message-Id: <20230424150726.a53d3ebe47ad84e55e16d4a6@linux-foundation.org>
+In-Reply-To: <b6c881-c352-bb91-85a8-febeb09dfd71@google.com>
+References: <b6c881-c352-bb91-85a8-febeb09dfd71@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,54 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 3:58?PM, Linus Torvalds wrote:
-> On Mon, Apr 24, 2023 at 2:37?PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> And I completely refuse to add that trylock hack to paper that over.
->> The pipe lock is *not* meant for IO.
-> 
-> If you want to paper it over, do it other ways.
-> 
-> I'd love to just magically fix splice, but hey, that might not be possible.
+On Sat, 22 Apr 2023 21:47:20 -0700 (PDT) Hugh Dickins <hughd@google.com> wrote:
 
-Don't think it is... At least not trivially.
+> Inserting Ivan Orlov's syzbot fix commit 2ce0bdfebc74
+> ("mm: khugepaged: fix kernel BUG in hpage_collapse_scan_file()")
+> ahead of Jiaqi Yan's and David Stevens's commits
+> 12904d953364 ("mm/khugepaged: recover from poisoned file-backed memory")
+> cae106dd67b9 ("mm/khugepaged: refactor collapse_file control flow")
+> ac492b9c70ca ("mm/khugepaged: skip shmem with userfaultfd")
+> (all of which restructure collapse_file()) did not work out well.
+> 
+> xfstests generic/086 on huge tmpfs (with accelerated khugepaged) freezes
+> (if not on the first attempt, then the 2nd or 3rd) in find_lock_entries()
+> while doing drop_caches: the file's xarray seems to have been corrupted,
+> with find_get_entry() returning nonsense which makes no progress.
+> 
+> Bisection led to ac492b9c70ca; and diff against earlier working linux-next
+> suggested that it's probably down to an errant xas_store(), which does not
+> belong with the later changes (and nor does the positioning of warnings).
+> The later changes look as if they fix the syzbot issue independently.
+> 
+> Remove most of what's left of 2ce0bdfebc74: just leave one WARN_ON_ONCE
+> (xas_error) after the final xas_store() of the multi-index entry.
+> 
 
-> But possible fixes papering this over might be to make splice "poison
-> a pipe, and make io_uring falls back on io workers only on pipes that
-> do splice. Make any normal pipe read/write load sane.
-> 
-> And no, don't worry about races. If you have the same pipe used for
-> io_uring IO *and* somebody else then doing splice on it and racing,
-> just take the loss and tell people that they might hit a slow case if
-> they do stupid things.
-> 
-> Basically, the patch might look like something like
-> 
->  - do_pipe() sets FMODE_NOWAIT by default when creating a pipe
-> 
->  - splice then clears FMODE_NOWAIT on pipes as they are used
-> 
-> and now io_uring sees whether the pipe is playing nice or not.
-> 
-> As far as I can tell, something like that would make the
-> 'pipe_buf_confirm()' part unnecessary too, since that's only relevant
-> for splice.
-> 
-> A fancier version might be to only do that "splice then clears
-> FMODE_NOWAIT" thing if the other side of the splice has not set
-> FMODE_NOWAIT.
-> 
-> Honestly, if the problem is "pipe IO is slow", then splice should not
-> be the thing you optimize for.
-
-I think that'd be an acceptable approach, and would at least fix the
-pure pipe case which I suspect is 99.9% of them, if not more. And yes,
-it'd mean that we don't need to do the ->confirm() change either, as the
-pipe is already tainted at that point.
-
-I'll respin a v2, post, and send in later this merge window.
-
--- 
-Jens Axboe
-
+Sigh.  Thanks.  I thought I'd successfully sorted that mess out.
