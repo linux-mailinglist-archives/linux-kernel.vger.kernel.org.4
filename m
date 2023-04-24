@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C2C6ED0A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76336ED0AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjDXOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S231955AbjDXOuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjDXOue (ORCPT
+        with ESMTP id S231868AbjDXOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:50:34 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE8B6A63;
-        Mon, 24 Apr 2023 07:50:20 -0700 (PDT)
+        Mon, 24 Apr 2023 10:50:35 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E058A7D;
+        Mon, 24 Apr 2023 07:50:21 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OEnqVb127597;
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OEnqSv130488;
         Mon, 24 Apr 2023 09:49:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1682347792;
-        bh=LVN1bDXxBwufd6YMIbdEjtUJoptstgMp7twzoVShXXM=;
+        bh=FQ9k2fXVdqWJgvyFNeQ+u4gYVttqaBU9Xu7+6tqHEHI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kd9p8FMgVI9MRV0fVtEOIKI3Z5/KZbfSg9S+k8oFTFsKthRCUgxNtqwDu4sEaEmX2
-         427XHl648eEjfsG5CeLrZQLMMtSQLQ548rGMuR9gxJDjfc9oBC41CgcAyuvodl8aXu
-         XULWU64oO66clgNnZb7UxDRUdkQ1iraw72UizTZI=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OEnq3A064870
+        b=XiOTWYWfBwv5MZkza0m0mYEMUCCk6MwL2UkRFCEVlxsMjDWcp6iNTs0OTEVVfjeXu
+         vxl9eCkyZn5+6IcE8Tz5C1lvkDSdGgxpbm4KtW/vGh5CXcCeQzDA1hZtysBYYuu9YM
+         /QnNTdWGsgVVbhVeoEbfuEAvheV4YCiymiuRXT64=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OEnqiR064873
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Mon, 24 Apr 2023 09:49:52 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
  Apr 2023 09:49:52 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Mon, 24 Apr 2023 09:49:52 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OEnqBn075146;
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OEnqhN108328;
         Mon, 24 Apr 2023 09:49:52 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -48,9 +48,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
         Jan Kiszka <jan.kiszka@siemens.com>
-Subject: [PATCH 5/7] arm64: dts: ti: k3-am65-main: Drop deprecated ti,otap-del-sel property
-Date:   Mon, 24 Apr 2023 09:49:47 -0500
-Message-ID: <20230424144949.244135-6-nm@ti.com>
+Subject: [PATCH 6/7] arm64: dts: ti: k3-am65-mcu: Fix fss node
+Date:   Mon, 24 Apr 2023 09:49:48 -0500
+Message-ID: <20230424144949.244135-7-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230424144949.244135-1-nm@ti.com>
 References: <20230424144949.244135-1-nm@ti.com>
@@ -68,27 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ti,otap-del-sel has been deprecated in favor of ti,otap-del-sel-legacy.
-
-Drop the duplicate and misleading ti,otap-del-sel property.
+Fix fss node name with a bus node and proper reg range.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-index 40fa631f2f3d..4356c5a5f01a 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-@@ -469,7 +469,6 @@ sdhci1: mmc@4fa0000 {
- 		ti,otap-del-sel-ddr52 = <0x4>;
- 		ti,otap-del-sel-hs200 = <0x7>;
- 		ti,clkbuf-sel = <0x7>;
--		ti,otap-del-sel = <0x2>;
- 		ti,trm-icp = <0x8>;
- 		dma-coherent;
+diff --git a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
+index e8bb82d8267e..5aa75b6fee61 100644
+--- a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
+@@ -259,8 +259,9 @@ m_can1: can@40568000 {
+ 		status = "disabled";
  	};
+ 
+-	fss: fss@47000000 {
++	fss: bus@47000000 {
+ 		compatible = "simple-bus";
++		reg = <0x0 0x47000000 0x0 0x70000>;
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
+ 		ranges;
 -- 
 2.40.0
 
