@@ -2,151 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184CF6ED374
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B916ED376
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbjDXRY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S232103AbjDXRZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjDXRYX (ORCPT
+        with ESMTP id S230430AbjDXRZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:24:23 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAF549D0;
-        Mon, 24 Apr 2023 10:24:21 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OHO9qJ035948;
-        Mon, 24 Apr 2023 12:24:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682357049;
-        bh=vrYfILk+8/33VxPwT4F9AJ+MJUhKGzAtHjT8mjTXeVI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=EFQszo9FX4kRocpff6xDv1JNaWG5a0sqwpm3E5QbbeSsnLFrseya4YLGreXZ80Klg
-         Gd4W0yqr9SnDIEn4kbog9j3AdvJwL7/SHGbLEh4gK2hFr+OgIlK6MBsWeckvCqcgx7
-         akaMTpvV0CIqjE3teN/3ieJpwsLcv41uuzdZ8LJs=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OHO9kU016920
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 12:24:09 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 12:24:09 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 12:24:09 -0500
-Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OHO8sk027965;
-        Mon, 24 Apr 2023 12:24:08 -0500
-Message-ID: <76da0b98-3274-b047-db11-ecabc117ae11@ti.com>
-Date:   Mon, 24 Apr 2023 12:24:08 -0500
+        Mon, 24 Apr 2023 13:25:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DAD61B3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:25:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C2A961E7D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 17:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334F9C433D2;
+        Mon, 24 Apr 2023 17:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682357130;
+        bh=EHA9lESPa693uKZf9sQH4aI6ok2NV47j4OsYsTRAfS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BBCyAwqX0KJJrsGMJb0+oRTClQLgp5ElXRv3YRHfyzS06gifXa7yNSziT32Ea4S8s
+         k8lglnBV6QK0e4CL0DjX1J8dgK23cQ8OxcsH7+OYv4A7uDSUNbK2ahqiCH6YVa87yV
+         vc6eOES7w41E9pDK8OZ/1CPQ4QEiukjaEKmkBY8WK53PEOTYmdMoLf5xf+SXE2PqJi
+         /1Ws4X2ffgNUPwpbigTlFQKz5+DhGNV8huNIkt/5TSL4zmrUzQUzw5hDe7DXmuJ9m2
+         b0lTseqk7mHsDd7eIJ+lmqwOPo1Z+HD0IFExX+XhhCshi9gCPOahn4+eKVxM7QKVSE
+         P4WW2L05+5P6g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 19BB9403C5; Mon, 24 Apr 2023 14:25:27 -0300 (-03)
+Date:   Mon, 24 Apr 2023 14:25:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH 1/1] perf evsel: Introduce evsel__name_is() method to
+ check if the evsel name is equal to a given string
+Message-ID: <ZEa7h8ZCAS+dHTBL@kernel.org>
+References: <ZEGLM8VehJbS0gP2@kernel.org>
+ <ZEGOJuJd4uLS2392@kernel.org>
+ <ZEGSU5DrAODcLmc3@kernel.org>
+ <7de5c749-5960-2fa1-d48a-be360b08d5e1@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/7] arm64: dts: ti: k3-am65: Switch to
- "ti,j721e-system-controller" compatible
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-References: <20230424144949.244135-1-nm@ti.com>
- <20230424144949.244135-4-nm@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20230424144949.244135-4-nm@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7de5c749-5960-2fa1-d48a-be360b08d5e1@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 9:49 AM, Nishanth Menon wrote:
-> Switch scm-conf to "ti,j721e-system-controller" compatible to be more
-> specific.
+Em Thu, Apr 20, 2023 at 05:16:18PM -0400, Liang, Kan escreveu:
 > 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 2 +-
->   arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi  | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> index 227573773b26..40fa631f2f3d 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> @@ -475,7 +475,7 @@ sdhci1: mmc@4fa0000 {
->   	};
->   
->   	scm_conf: scm-conf@100000 {
-> -		compatible = "syscon", "simple-mfd";
-> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
->   		reg = <0 0x00100000 0 0x1c000>;
->   		#address-cells = <1>;
->   		#size-cells = <1>;
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-> index 5dfa31840e9c..566dc584d3f3 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-> @@ -7,7 +7,7 @@
->   
->   &cbass_mcu {
->   	mcu_conf: scm-conf@40f00000 {
-> -		compatible = "syscon", "simple-mfd";
-> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+> On 2023-04-20 3:28 p.m., Arnaldo Carvalho de Melo wrote:
+> > Em Thu, Apr 20, 2023 at 04:10:30PM -0300, Arnaldo Carvalho de Melo escreveu:
+> >> Em Thu, Apr 20, 2023 at 03:57:55PM -0300, Arnaldo Carvalho de Melo escreveu:
+> >>> This makes the logic a bit clear by avoiding the !strcmp() pattern and
+> >>> also a way to intercept the pointer if we need to do extra validation on
+> >>> it or to do lazy setting of evsel->name via evsel__name(evsel).
+> >>
+> >> + this, looking if there are others...
+> > 
+> > Somehow the first message didn't go thru, so below is the combined
+> > patch, this is an effort to avoid accessing evsel->name directly as the
+> > preferred way to get an evsel name is evsel__name(), so looking for
+> > direct access and providing accessors that avoid that.
+> 
+> One more
+> 
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 2260e27adf44..3a960a3f6962 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -467,7 +467,7 @@ static int evsel__strcmp(struct evsel *pos, char
+> *evsel_name)
+>  		return 0;
+>  	if (evsel__is_dummy_event(pos))
+>  		return 1;
+> -	return strcmp(pos->name, evsel_name);
+> +	return !evsel__name_is(pos, evsel_name);
+>  }
+> 
+>  static int evlist__is_enabled(struct evlist *evlist)
 
-This node is not a "j721e-system-controller". Only the one in main could be
-said to be one, but even it is different enough that this is not correct IMHO.
-It almost seems like you are using "ti,j721e-system-controller" as a workaround
-for the restriction on raw "syscon", "simple-mfd" nodes. And just replacing all
-instance of those with something that avoids the warning.
+Added
+ 
+> > 
+> > From e60455d6a4e35ba0c376966443294586a1adc3ec Mon Sep 17 00:00:00 2001
+> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Date: Thu, 20 Apr 2023 15:54:11 -0300
+> > Subject: [PATCH 1/1] perf evsel: Introduce evsel__name_is() method to check if
+> >  the evsel name is equal to a given string
+> > 
+> > This makes the logic a bit clear by avoiding the !strcmp() pattern and
+> > also a way to intercept the pointer if we need to do extra validation on
+> > it or to do lazy setting of evsel->name via evsel__name(evsel).
+> > 
+> > Cc: Adrian Hunter <adrian.hunter@intel.com>
+> > Cc: Ian Rogers <irogers@google.com>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: "Liang, Kan" <kan.liang@linux.intel.com>
+> > Cc: Namhyung Kim <namhyung@kernel.org>
+> > Link: https://lore.kernel.org/lkml/ZEGLM8VehJbS0gP2@kernel.org
+> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> 
+> With the above one,
+> 
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-What we should do here is turn both of these nodes into "simple-bus". The sub-nodes
-themselves would describe what they are. This is the normal DT way vs having
-all our device nodes pointing into one big "syscon" node with various offsets (which
-makes it hard to see all users of a node and near impossible to work out the real
-memory map in these "system-controller" nodes).
+Added these extra ones and actually made evsel__name_is() use
+evsel__name().
 
-Worse, if the parent is a "syscon" then the whole memory region gets one big regmap
-over it, and any child nodes that also build a regmap for their smaller sub-range
-leads to having two regmaps pointing to the same memory area. This breaks some
-assumptions around atomic access and reg caching.
+Does your reviewed-by stands after these extra changes?
 
-Taking a quick look I see some of our sub-node drivers expecting the parent to
-always be a syscon, others turn themselves into a syscon, and others still do the
-normal "reg" mapping. What a mess..
+Thanks,
 
-To unwind this I'd suggest we do this:
+- Arnaldo
 
-  * Add support for these sub-node drivers to use the normal "reg" property by
-    default if available, falling back to expecting the parent to be a syscon only
-    for backwards compatibility.
 
-  * Add "reg" properties to the sub-nodes.
-
-  * Remove "syscon" from our system-controller nodes and instead use "simple-bus".
-    Which more accurately describes what these regions are, and prevents issues like
-    having a regmap over gaps (as these system-controller have gaps in between the
-    sub device memory regions)
-
-We would still have to add simple compatibles for the efuse and pcie mode/id regions,
-but that is much more correct than hiding them in the device's node like done in patch
-1/7 of this series.
-
-Andrew
-
->   		reg = <0x0 0x40f00000 0x0 0x20000>;
->   		#address-cells = <1>;
->   		#size-cells = <1>;
+diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+index 2260e27adf44c579..a0504316b06fbcba 100644
+--- a/tools/perf/util/evlist.c
++++ b/tools/perf/util/evlist.c
+@@ -467,7 +467,7 @@ static int evsel__strcmp(struct evsel *pos, char *evsel_name)
+ 		return 0;
+ 	if (evsel__is_dummy_event(pos))
+ 		return 1;
+-	return strcmp(pos->name, evsel_name);
++	return !evsel__name_is(pos, evsel_name);
+ }
+ 
+ static int evlist__is_enabled(struct evlist *evlist)
+@@ -1706,7 +1706,7 @@ struct evsel *evlist__find_evsel_by_str(struct evlist *evlist, const char *str)
+ 	evlist__for_each_entry(evlist, evsel) {
+ 		if (!evsel->name)
+ 			continue;
+-		if (strcmp(str, evsel->name) == 0)
++		if (evsel__name_is(evsel, str))
+ 			return evsel;
+ 	}
+ 
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 81b854650160c2b0..356c07f03be6bfce 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -823,7 +823,7 @@ const char *evsel__name(struct evsel *evsel)
+ 
+ bool evsel__name_is(struct evsel *evsel, const char *name)
+ {
+-	return !strcmp(evsel->name, name);
++	return !strcmp(evsel__name(evsel), name);
+ }
+ 
+ const char *evsel__group_pmu_name(const struct evsel *evsel)
+diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+index 31b1cd0935e277ba..dae81d8e1769c763 100644
+--- a/tools/perf/util/sort.c
++++ b/tools/perf/util/sort.c
+@@ -2893,7 +2893,7 @@ static struct evsel *find_evsel(struct evlist *evlist, char *event_name)
+ 	full_name = !!strchr(event_name, ':');
+ 	evlist__for_each_entry(evlist, pos) {
+ 		/* case 2 */
+-		if (full_name && !strcmp(pos->name, event_name))
++		if (full_name && evsel__name_is(pos->name, event_name))
+ 			return pos;
+ 		/* case 3 */
+ 		if (!full_name && strstr(pos->name, event_name)) {
