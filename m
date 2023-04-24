@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695586ECF84
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF216ECF85
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbjDXNsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S232738AbjDXNsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbjDXNsB (ORCPT
+        with ESMTP id S232124AbjDXNsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:48:01 -0400
+        Mon, 24 Apr 2023 09:48:05 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 123F17AA4;
-        Mon, 24 Apr 2023 06:48:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B2957AB5;
+        Mon, 24 Apr 2023 06:48:04 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA890D75;
-        Mon, 24 Apr 2023 06:48:43 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11D33FEC;
+        Mon, 24 Apr 2023 06:48:48 -0700 (PDT)
 Received: from e127643.arm.com (unknown [10.57.58.229])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 943673F64C;
-        Mon, 24 Apr 2023 06:47:56 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F007E3F64C;
+        Mon, 24 Apr 2023 06:48:00 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
         shy828301@gmail.com
@@ -41,10 +41,12 @@ Cc:     denik@google.com, James Clark <james.clark@arm.com>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] perf: cs-etm: Fixes around timestamped and timeless decoding
-Date:   Mon, 24 Apr 2023 14:47:40 +0100
-Message-Id: <20230424134748.228137-1-james.clark@arm.com>
+Subject: [PATCH 1/7] perf: cs-etm: Fix timeless decode mode detection
+Date:   Mon, 24 Apr 2023 14:47:41 +0100
+Message-Id: <20230424134748.228137-2-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230424134748.228137-1-james.clark@arm.com>
+References: <20230424134748.228137-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -56,38 +58,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first commit contains a fix for a recently introduced regression,
-but was always a shortcoming in the Coresight code anyway.
+In this context, timeless refers to the trace data rather than the perf
+event data. But when detecting whether there are timestamps in the trace
+data or not, the presence of a timestamp flag on any perf event is used.
 
-The following commits are a tidyup in preparation for the last commit,
-which is a fairly major change to the decode logic that's also
-indirectly related to the regression so I thought it would be good time
-to fix that now.
+Since commit f42c0ce573df ("perf record: Always get text_poke events
+with --kcore option") timestamps were added to a tracking event when
+--kcore is used which breaks this detection mechanism. Fix it by
+detecting if trace timestamps exist by looking at the ETM config flags.
+This would have always been a more accurate way of doing it anyway.
 
-Applies to perf/core (9be6ab181b7b)
+This fixes the following error message when using --kcore with
+Coresight:
 
-James Clark (7):
-  perf: cs-etm: Fix timeless decode mode detection
-  perf tools: Add util function for overriding user set config values
-  perf: cs-etm: Don't test full_auxtrace because it's always set
-  perf: cs-etm: Validate options after applying them
-  perf: cs-etm: Allow user to override timestamp and contextid settings
-  perf: cs-etm: Use bool type for boolean values
-  perf: cs-etm: Add separate decode paths for timeless and per-thread
-    modes
+  $ perf record --kcore -e cs_etm// --per-thread
+  $ perf report
+  The perf.data/data data has no samples!
 
- tools/perf/arch/arm/util/cs-etm.c             | 223 +++++++++---------
- tools/perf/arch/arm/util/pmu.c                |   2 +
- tools/perf/arch/arm64/util/arm-spe.c          |  26 +-
- tools/perf/arch/x86/util/intel-pt.c           |  22 +-
- tools/perf/tests/shell/test_arm_coresight.sh  |  24 ++
- .../perf/util/cs-etm-decoder/cs-etm-decoder.h |   8 +-
- tools/perf/util/cs-etm.c                      | 200 +++++++++++-----
- tools/perf/util/cs-etm.h                      |   6 +-
- tools/perf/util/evsel.c                       |  29 +++
- tools/perf/util/evsel.h                       |   3 +
- 10 files changed, 325 insertions(+), 218 deletions(-)
+Fixes: f42c0ce573df ("perf record: Always get text_poke events with --kcore option")
+Reported-by: Yang Shi <shy828301@gmail.com>
+Link: https://lore.kernel.org/lkml/CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com/
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/util/cs-etm.c | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
 
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 8dd81ddd9e4e..50593289d53c 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -2684,26 +2684,29 @@ static int cs_etm__process_auxtrace_event(struct perf_session *session,
+ 	return 0;
+ }
+ 
+-static bool cs_etm__is_timeless_decoding(struct cs_etm_auxtrace *etm)
++static int cs_etm__setup_timeless_decoding(struct cs_etm_auxtrace *etm)
+ {
+ 	struct evsel *evsel;
+ 	struct evlist *evlist = etm->session->evlist;
+-	bool timeless_decoding = true;
+ 
+ 	/* Override timeless mode with user input from --itrace=Z */
+-	if (etm->synth_opts.timeless_decoding)
+-		return true;
++	if (etm->synth_opts.timeless_decoding) {
++		etm->timeless_decoding = true;
++		return 0;
++	}
+ 
+ 	/*
+-	 * Circle through the list of event and complain if we find one
+-	 * with the time bit set.
++	 * Find the cs_etm evsel and look at what its timestamp setting was
+ 	 */
+-	evlist__for_each_entry(evlist, evsel) {
+-		if ((evsel->core.attr.sample_type & PERF_SAMPLE_TIME))
+-			timeless_decoding = false;
+-	}
++	evlist__for_each_entry(evlist, evsel)
++		if (cs_etm__evsel_is_auxtrace(etm->session, evsel)) {
++			etm->timeless_decoding =
++				!(evsel->core.attr.config & BIT(ETM_OPT_TS));
++			return 0;
++		}
+ 
+-	return timeless_decoding;
++	pr_err("CS ETM: Couldn't find ETM evsel\n");
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -3155,7 +3158,6 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
+ 	etm->snapshot_mode = (ptr[CS_ETM_SNAPSHOT] != 0);
+ 	etm->metadata = metadata;
+ 	etm->auxtrace_type = auxtrace_info->type;
+-	etm->timeless_decoding = cs_etm__is_timeless_decoding(etm);
+ 
+ 	/* Use virtual timestamps if all ETMs report ts_source = 1 */
+ 	etm->has_virtual_ts = cs_etm__has_virtual_ts(metadata, num_cpu);
+@@ -3172,6 +3174,10 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
+ 	etm->auxtrace.evsel_is_auxtrace = cs_etm__evsel_is_auxtrace;
+ 	session->auxtrace = &etm->auxtrace;
+ 
++	err = cs_etm__setup_timeless_decoding(etm);
++	if (err)
++		return err;
++
+ 	etm->unknown_thread = thread__new(999999999, 999999999);
+ 	if (!etm->unknown_thread) {
+ 		err = -ENOMEM;
 -- 
 2.34.1
 
