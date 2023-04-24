@@ -2,226 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102096EC95E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702AD6EC960
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjDXJsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
+        id S231574AbjDXJsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjDXJr7 (ORCPT
+        with ESMTP id S231503AbjDXJsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:47:59 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120763C29
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:47:38 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230424094712euoutp01b195bb7e416e336c461a68b1e710cab1~Y1eMcfp-t2381223812euoutp01p
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:47:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230424094712euoutp01b195bb7e416e336c461a68b1e710cab1~Y1eMcfp-t2381223812euoutp01p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682329632;
-        bh=+ECNoN9lOwErDMm+2aZSyoKQLu5elYTteQWVwjBA/Jc=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=QttYVcI2WOecNc3UCI/RX88SJBtLJnrIM0GPLMdODenMdM7f7G8uBzLHiG8RjFrAm
-         UwTe/ZdBXV7jK+ynU2glQ+RyypkmXa4S4jN9GAA/pRoSl2Nk66JPWVFZfvXhdUWWPy
-         dGdMpPxrJkWeUp5WwH9+F2Kp7Bjbb8WF9lql/nr8=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230424094711eucas1p2781b0136735b714193d21cff5590cf74~Y1eMNu4CD1796617966eucas1p2k;
-        Mon, 24 Apr 2023 09:47:11 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 29.DC.09966.F1056446; Mon, 24
-        Apr 2023 10:47:11 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230424094711eucas1p23429bbf3a6b2bf9c1f521d817b4b35be~Y1eLrMjGo2062420624eucas1p2A;
-        Mon, 24 Apr 2023 09:47:11 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230424094711eusmtrp176e1029dd6946ad2185622801bbfcdde~Y1eLqWtFg1647016470eusmtrp1G;
-        Mon, 24 Apr 2023 09:47:11 +0000 (GMT)
-X-AuditID: cbfec7f4-d4fff700000026ee-15-6446501fea58
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 86.A3.22108.F1056446; Mon, 24
-        Apr 2023 10:47:11 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230424094709eusmtip243525c2abb95580c9c7eea2503ff636f~Y1eKWbVrJ0427804278eusmtip2c;
-        Mon, 24 Apr 2023 09:47:09 +0000 (GMT)
-Message-ID: <ceee0290-211b-a675-2ba5-9342ee27fc49@samsung.com>
-Date:   Mon, 24 Apr 2023 11:47:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH V2 4/6] drm: bridge: samsung-dsim: Dynamically configure
- DPHY timing
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>, Adam Ford <aford173@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        dario.binacchi@amarulasolutions.com
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAGXv+5H34ojUAPWWpF+-=XpdF6Jj_Q7nqiPg3TEKVNXu4F6JAQ@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTH89x3GsoupYQTIJg1m8lkIA6z3UXnnG+5sn1wbpjFL1roFdxo
-        Ib3t1GWZ3cBikbkCmcjtKDqcdRJgQ1DelkVwtl03FCwvMqTIJMamgAQwTDOc5bKNb7//Of8n
-        /3NOHgZXjZPxzEGDSTAatHkaSkFcvv7XjZRVu3bo0qY60rmRP3w419F/guYCtbMEV9bqoDj/
-        /DTFzTXZKe5+TQPivKF+grOVnaO5W+3fUFzI+jniptuGEVfuvE1yp623yM1RfP1MgOQfuCw4
-        77D0ErxT8hB8m3SH5h3Hq0i+tvMBxjddtFG8x96H8SMDnRQfOOHG+NmmpF2RexUbdULewY8F
-        49pN+xW5xb2JBYXPHw4NZViQL74EMQyw62HR+1oJUjAq9gICh32YksUcgtLxRlwWswjO9bqe
-        iYilF9ODX2Jyw4WgZdC5LGYQ3Px6gg67lOwmWBgcWGKCfRGmmu8Scj0avFX3ljiWFeALR2jJ
-        E8Puhd4FDwozzsbB8L0aLMxqdjtYKn6kwwE468Xh70kHGW5Q7DoomSyhwhzBvguL14uWH6+C
-        whbH8qg/R4B9HpN5GzSMPqFkjoGgu5mWORF8FaVEOADYYgRnngQwWdgRWO4PI9m1AUZ6HlPh
-        k+HsS9DYvlYuvwW2X1tJ+ZJRMDQZLc8QBeWXK3G5rITjVpXsXg2Su+G/2Ks3+3A70kgrziKt
-        WF9asY30f+4ZRFxEcYJZ1OcI4isG4VCqqNWLZkNOana+vgk9+4a+RfdcK3IFZ1K7EMagLgQM
-        rlErefMWnUqp0x75RDDm7zOa8wSxCyUwhCZOmfyGN1vF5mhNwkeCUCAY/+1iTES8BROL5jfG
-        quuz0C9jD5P8aeqt10xiuit6OlZX4d995bNIp6XtVE/db39uf09h6S7LfP3qhvyBYHVB9Xqp
-        Kv3uDzUZ35v31Tmf7p8oPrLtd7vq8QdvX6vF+4+dbowrDB3LTGsfakioHl3wXKK+83Bb8/0n
-        f0qLTDowJnxVpJi1PqqeCaxO7nSd5w5vZhsv1E6cvULned/M7Yp1nMo90IKPJzzyNc+XZ+x4
-        7v2zu0/qjj5spsumet6JoXfqE+90vKqvqiSyxtQ39nxYYD6Urfg02T0aNIKp/tskOqvPv2cy
-        s/Jl26Xg08QU6YXS7vNbRpwp5M54g4m09q85WqexmW7XJ4jKbg0h5mrXrcGNovYferLpu/UD
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGIsWRmVeSWpSXmKPExsVy+t/xe7ryAW4pBre2ClvcuX2a2WL31W52
-        i/uLP7NYTNwxm83iytf3bBZfNk1gs3g+fx2jxck3V1ksOicuYbe4vGsOm8WbtkZGi/c7bzFa
-        TJp3k9ViRttlVgc+j7Uf77N6vFzewOwxu+Eii8e8WSdYPHbOusvuMbtjJqvH4j0vmTw2repk
-        8zgx4RKTx51re9g87ncfZ/L4vEkugCdKz6Yov7QkVSEjv7jEVina0MJIz9DSQs/IxFLP0Ng8
-        1srIVEnfziYlNSezLLVI3y5BL6P9okxBs2LFmxteDYynpboYOTkkBEwk3l/vZepi5OIQEljK
-        KHGtbSczREJG4uS0BlYIW1jiz7UuNoii94wS63e8ASviFbCT+HH9GjuIzSKgKvFuy0MWiLig
-        xMmZT8BsUYFUiRt7/rCB2MICURIXf5xgBLGZBcQlbj2ZzwRiiwi4SjRM3sgOsoBZ4CSzxINX
-        HSwQ2yYxS5z5ehzsDDYBQ4mut11gkzgFAiX+HWuBmmQm0bW1C8qWl2jeOpt5AqPQLCSHzEKy
-        cBaSlllIWhYwsqxiFEktLc5Nzy021CtOzC0uzUvXS87P3cQITADbjv3cvINx3quPeocYmTgY
-        DzFKcDArifB6lDqlCPGmJFZWpRblxxeV5qQWH2I0BYbGRGYp0eR8YArKK4k3NDMwNTQxszQw
-        tTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLpY+LglGpgEtZkOqqUVb0hs/vjETa9Je6fpfhUSioO
-        zEtc1dHBcEg2JNRQ/PWESX0Ba5M/zTCf+edSRV/sDG+Vx4LvbeU5f+kev1jSk13El6W9q0v0
-        4uL0dK0lsfwLplRMEZvPLWyoaS/150X79rvOtww8jrltezBFT2zyshNsKpYdT4tv3zv6WfnO
-        bT3Gi+fLl+ffE74YfuD7Me179r23TkZHyvYyP5gnG6o68eXrmv2zjY+sjtXijms948tcsX55
-        uXvwyWen/nq+bp5QcZrDWSSZs3ux4cX5jJoO3ScOLHgTL/ar1nRH9y3/EIlVz76w3XTqEBD6
-        VT1xx+TrLKvSDESWTp/0T+irYu3BM/tlIgRYT4gWKLEUZyQaajEXFScCAHpY4AmJAwAA
-X-CMS-MailID: 20230424094711eucas1p23429bbf3a6b2bf9c1f521d817b4b35be
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230424094440eucas1p1ca3d678493aef1d6a893abdfcaf01584
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230424094440eucas1p1ca3d678493aef1d6a893abdfcaf01584
-References: <20230423121232.1345909-1-aford173@gmail.com>
-        <20230423121232.1345909-5-aford173@gmail.com>
-        <CAGXv+5GHcigEahCp+UefxR+AboF7i-kYJjiNftz8fPDLAZVMow@mail.gmail.com>
-        <CAHCN7x+i41UkpdqLbK8s+OJmS=ExsctZwZL0YAQAic=N6kCbAw@mail.gmail.com>
-        <CGME20230424094440eucas1p1ca3d678493aef1d6a893abdfcaf01584@eucas1p1.samsung.com>
-        <CAGXv+5H34ojUAPWWpF+-=XpdF6Jj_Q7nqiPg3TEKVNXu4F6JAQ@mail.gmail.com>
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 24 Apr 2023 05:48:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6406A40C6;
+        Mon, 24 Apr 2023 02:47:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EDA861F8F;
+        Mon, 24 Apr 2023 09:47:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213D9C433D2;
+        Mon, 24 Apr 2023 09:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682329658;
+        bh=FoOMzZ9W2LOp0CpmrKDEkp3PtIM99Y8iatERnmHe6IY=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=jJcFG2URKWfqioGUKJbzEevLZtmaIJr7DjJQ1d6nlyv9LCxU7XrBNs7c0tEyt28hq
+         33LW3Ia69ZD6+NycB98lyZKLwwhj/1GBJlsIP211oSiCdgoZW/Zk7HxwDVQ6svaRqK
+         xudpHB3vz0DMwJGiiftfAb5G1sYawukLKUOhfsz5MKWhUpH3zGbCP0exrHMJg9OtbF
+         wlzkNyfZGhgkGEXOYOoE2ro+PgjZsY0jawZNwwQPz604+pzaBZNvbzGr6XnCpaDYMC
+         zJDJVBMwrMjLZ4F0ykq4OmQRw3ozLS4oaHXWeO+WyVzJ3KeGj5nx5EApoGQrM9J8s9
+         6TCY1h+JfdPNQ==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 09C9327C0054;
+        Mon, 24 Apr 2023 05:47:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 24 Apr 2023 05:47:37 -0400
+X-ME-Sender: <xms:OFBGZP76DiyQa041ys-qc5AqO7C56p-gSnK9FdMokgFN8L38y5wdLA>
+    <xme:OFBGZE4u_yWPuNdTUp92kK_nENXi1OHPeuDsSgUCUxCbXhSrAFPOQrnTl7ISxFCOY
+    _ZOik0sI3z7Tk6THCI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
+    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
+    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
+    guvg
+X-ME-Proxy: <xmx:OFBGZGcjibz-9UjxPrzkgudlniE31wWHVsRCTXZZNbP-Q3mZsWrAhA>
+    <xmx:OFBGZAIJCraGL6lE-7k9Ddbf8mG_6ll_guDAm9Pki0s3gljLZCeWqg>
+    <xmx:OFBGZDJmecykIE2JCvhk-hENB5wQvfZy-Wps_00NiZhUPiLy2e6n7g>
+    <xmx:OFBGZAHmjaG_lsUijBQIfJ0WzL6lTfgC2EC0U7zliyo53oZW37D7Iw>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8BFD5B60086; Mon, 24 Apr 2023 05:47:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <60b87f6c-29ee-4ed8-a78d-3ef632aa0655@app.fastmail.com>
+In-Reply-To: <20230424123522.18302-30-nikita.shubin@maquefel.me>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-30-nikita.shubin@maquefel.me>
+Date:   Mon, 24 Apr 2023 11:47:15 +0200
+From:   "Arnd Bergmann" <arnd@kernel.org>
+To:     "Nikita Shubin" <nikita.shubin@maquefel.me>
+Cc:     "Linus Walleij" <linusw@kernel.org>,
+        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 29/43] rtc: m48t86: add DT support for m48t86
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.04.2023 11:44, Chen-Yu Tsai wrote:
-> On Mon, Apr 24, 2023 at 5:31 PM Adam Ford <aford173@gmail.com> wrote:
->> On Mon, Apr 24, 2023 at 1:12 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
->>> On Sun, Apr 23, 2023 at 8:13 PM Adam Ford <aford173@gmail.com> wrote:
->>>> The DPHY timings are currently hard coded. Since the input
->>>> clock can be variable, the phy timings need to be variable
->>>> too.  Add an additional variable to the driver data to enable
->>>> this feature to prevent breaking boards that don't support it.
->>>>
->>>> The phy_mipi_dphy_get_default_config function configures the
->>>> DPHY timings in pico-seconds, and a small macro converts those
->>>> timings into clock cycles based on the pixel clock rate.
->>>>
->>>> Signed-off-by: Adam Ford <aford173@gmail.com>
->>>> ---
->>>>   drivers/gpu/drm/bridge/samsung-dsim.c | 79 +++++++++++++++++++++++----
->>>>   include/drm/bridge/samsung-dsim.h     |  1 +
->>>>   2 files changed, 70 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
->>>> index 5b6e7825b92f..f165483d5044 100644
->>>> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
->>>> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
->>>> @@ -18,9 +18,7 @@
->>>>   #include <linux/media-bus-format.h>
->>>>   #include <linux/of_device.h>
->>>>   #include <linux/phy/phy.h>
->>>> -
->>>>   #include <video/mipi_display.h>
->>>> -
->>>>   #include <drm/bridge/samsung-dsim.h>
->>>>   #include <drm/drm_panel.h>
->>>>   #include <drm/drm_print.h>
->>>> @@ -218,6 +216,8 @@
->>>>
->>>>   #define OLD_SCLK_MIPI_CLK_NAME         "pll_clk"
->>>>
->>>> +#define PS_TO_CYCLE(PS, MHz) DIV64_U64_ROUND_CLOSEST(((PS) * (MHz)), 1000000000000ULL)
->>>> +
->>>>   static const char *const clk_names[5] = {
->>>>          "bus_clk",
->>>>          "sclk_mipi",
->>>> @@ -487,6 +487,7 @@ static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
->>>>          .m_min = 64,
->>>>          .m_max = 1023,
->>>>          .vco_min = 1050,
->>>> +       .dynamic_dphy = 1,
->>>>   };
->>>>
->>>>   static const struct samsung_dsim_driver_data *
->>>> @@ -698,13 +699,50 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
->>>>          const struct samsung_dsim_driver_data *driver_data = dsi->driver_data;
->>>>          const unsigned int *reg_values = driver_data->reg_values;
->>>>          u32 reg;
->>>> +       struct drm_display_mode *m = &dsi->mode;
->>>> +       int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
->>>> +       struct phy_configure_opts_mipi_dphy cfg;
->>>> +       int clk_prepare, lpx, clk_zero, clk_post, clk_trail;
->>>> +       int hs_exit, hs_prepare, hs_zero, hs_trail;
->>>> +       unsigned long long clock_in_hz = m->clock * 1000;
->>>>
->>>>          if (driver_data->has_freqband)
->>>>                  return;
->>>>
->>>> +       /* The dynamic_phy has the ability to adjust PHY Timing settings */
->>>> +       if (driver_data->dynamic_dphy) {
->>>> +               phy_mipi_dphy_get_default_config(clock_in_hz, bpp, dsi->lanes, &cfg);
->>> This requires adding "select GENERIC_PHY_MIPI_DPHY" to DRM_SAMSUNG_DSIM,
->>> otherwise with CONFIG_DRM_SAMSUNG_DSIM=m:
->>>
->>> ERROR: modpost: "phy_mipi_dphy_get_default_config"
->>> [drivers/gpu/drm/bridge/samsung-dsim.ko] undefined!
->>> make[5]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
->>> make[4]: *** [Makefile:1978: modpost] Error 2
->>> make[3]: *** [Makefile:357: __build_one_by_one] Error 2
->>>
->>> I'm sure there'll be a similar error if CONFIG_DRM_SAMSUNG_DSIM=y.
->> That's interesting, I didn't come across that.
->> What did you use for a starting point when you applied the patches?
->> I want to see if I can replicate it.
-> next-20230421. My config is pretty much tailored to the Hummingbird Pulse.
-> Device drivers for other hardware or things that I can't enable are all
-> disabled. For example I don't have PHY_MIXEL_MIPI_DPHY enabled.
+On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
+> - get regs from device tree
 >
-> Maybe you have some other bridge or phy that selects it enabled?
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-I've observed similar issue while building exynos_defconfig for arm 32bit.
+> 
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id m48t86_rtc_of_ids[] = {
+> +	{ .compatible = "dallas,rtc-m48t86" },
+> +	{ /* end of table */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, m48t86_rtc_of_ids);
+> +#endif
+> +
+>  static struct platform_driver m48t86_rtc_platform_driver = {
+>  	.driver		= {
+>  		.name	= "rtc-m48t86",
+> +		.of_match_table = of_match_ptr(m48t86_rtc_of_ids),
+>  	},
+>  	.probe		= m48t86_rtc_probe,
 
+If you end up doing another revision, I'd suggest you drop the
+of_match_ptr() and the #ifdef: there is no point in saving a
+few bytes of space for non-DT kernel builds if both the machines
+that use this device always rquire CONFIG_OF to be enabled.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+     Arnd
