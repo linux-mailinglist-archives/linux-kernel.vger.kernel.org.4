@@ -2,144 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78616ECF8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E656ECF90
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjDXNss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S231854AbjDXNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjDXNsb (ORCPT
+        with ESMTP id S232844AbjDXNsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:48:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1943D83DE;
-        Mon, 24 Apr 2023 06:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682344104; x=1713880104;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oPqlnm5FAEkzjCzsM5wwOi+X/O97WzQZ5VPCNK7UoWo=;
-  b=BSlADEd7/kIe/sZ0Rqu/+ceaXxHopDQlqj4L8L3b1fx1CLJ69t6C8F2f
-   9UWAxbFOE17aKW7uhHNtmCPcRczn47PjhV3oO+orC5oToJinZtba78T9d
-   gRH/r+dgOytrFrgArMKZEB10FJSDaL61t3lktL19/mz0WkcI2mrr3+hT7
-   /6RtTCSj1nLWbP/8pmC0hK8bow+szUFT/Xvdwu8OHI7PEBSPz4vE10+qP
-   mazCBP2rUxsgfQbSL1UQXfM4JVr1SYNZ+s+xEIZw+AlfAdfbpg+AdCyW9
-   SDi3mXGaGeNfbJW62mkMNyv21wisVEQ7m4Sk7J107fUC+8HB2ZttFoJjQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="346479854"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="346479854"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 06:48:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="693087845"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="693087845"
-Received: from mkavai-mobl2.amr.corp.intel.com (HELO [10.212.196.194]) ([10.212.196.194])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 06:48:09 -0700
-Message-ID: <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com>
-Date:   Mon, 24 Apr 2023 06:48:09 -0700
+        Mon, 24 Apr 2023 09:48:39 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2CB9ECF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:48:29 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5052caa1e32so7930112a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682344107; x=1684936107;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OICz6+capf7cuLGRkoyh1qbEASXYaa1MZU6VvGiVato=;
+        b=ZMeGjKlomt2iVACb5S83+zdTVQvIHZxraEYqBRNmmYD/oL6fXL9AkjG2lFFAPpivR2
+         AluNXC8g1SYj7RkHVFoVIw0pD7ZwSgwvsdHjK0F097ssF8VMO7Ijhyw2PQzdsJq4522O
+         sP1Y9rRaWGe82gUg2FipyquvnUhgQWNx7naF0HGVEFkb+SGvpCk/PqMEVTGaT2Nyx7Ew
+         JNP0OR9gtugabLPkcmz4lNy9fnhPkRUxI/8y7gGJAh+Ro+VP7NFeK2mybuiu+lrLO80r
+         h2pSS+ow7Sa0g8Xc9ubRrgnWS8h8zQ9RoJqQX92pQPQlrGExugMsgUn5Pt0Yf4wzknYQ
+         iDrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682344107; x=1684936107;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OICz6+capf7cuLGRkoyh1qbEASXYaa1MZU6VvGiVato=;
+        b=kroCrLkKnNcAppsK7vx82Auoe4jOIA+3dykqO5NLYLflCdWx2vvuZtXScdbmc1nCEy
+         Q8Y6gDv3cvo78apcBwGdi+PKocMgwCyXOW8s15ImQ8tFiJLyTfEdP53c6tR4UcCjwACN
+         B8YNmYD4ZXNUSLr9AhFAwylJA5QBf/gnPn7QV5l/vrgPjtVz9/liDz+XRuPkhd5xAabO
+         tGrmBhNmTz+jTqye9oDzusPGvKn/LzUKBmQMcC/ofwLCRA6Su2ywncsWMmH60kCB4tTq
+         jflJ7Xh0LBa/J3+Jl1//BhshzFS/HwYFYib59zLMouyu11hTS4/5doV/FteIg7qMuvJK
+         wPAQ==
+X-Gm-Message-State: AAQBX9dHsRiLn1eDPvXsG5StuG4MPicqw8d73L2CeQikj12Tl6nDemAJ
+        q0m2nrY8+dMIPA/NR2yacs1vGQ==
+X-Google-Smtp-Source: AKy350Z2rB/JGRXOHyK6SBVvOl3r1WgCRC5q0/nMxjjZTatSqtPJEuTYj1DWJetOUSyaDAMX9IgHMg==
+X-Received: by 2002:aa7:ca4e:0:b0:506:b2a3:a8cd with SMTP id j14-20020aa7ca4e000000b00506b2a3a8cdmr10571058edt.40.1682344107632;
+        Mon, 24 Apr 2023 06:48:27 -0700 (PDT)
+Received: from [10.105.146.163] ([88.128.92.195])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b0094e96e46cc0sm5489726ejz.69.2023.04.24.06.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 06:48:27 -0700 (PDT)
+Message-ID: <7c6c6584-204a-ada1-d669-2e8bef50e5e5@linaro.org>
+Date:   Mon, 24 Apr 2023 15:48:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap
- hooks
+Subject: Re: [Patch v7 1/8] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, helgaas@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+References: <20230424131337.20151-1-sumitg@nvidia.com>
+ <20230424131337.20151-2-sumitg@nvidia.com>
 Content-Language: en-US
-To:     Atish Kumar Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-References: <20230419221716.3603068-1-atishp@rivosinc.com>
- <20230419221716.3603068-46-atishp@rivosinc.com>
- <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com>
- <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424131337.20151-2-sumitg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/23 12:24, Atish Kumar Patra wrote:
-> On Fri, Apr 21, 2023 at 3:46 AM Dave Hansen <dave.hansen@intel.com> wrote:>> This callback appears to say to the host:
->>
->>         Hey, I (the guest) am treating this guest physical area as MMIO.
->>
->> But the host and guest have to agree _somewhere_ what the MMIO is used
->> for, not just that it is being used as MMIO.
+On 24/04/2023 15:13, Sumit Gupta wrote:
+> Add Interconnect framework support to dynamically set the DRAM
+> bandwidth from different clients. Both the MC and EMC drivers are
+> added as ICC providers. The path for any request is:
+>  MC-Client[1-n] -> MC -> EMC -> EMEM/DRAM
 > 
-> Yes. The TSM (TEE Security Manager) which is equivalent to TDX also 
-> needs to be aware of the MMIO regions so that it can forward the
-> faults accordingly. Most of the MMIO is emulated in the host
-> (userspace or kernel emulation if present). The host is outside the
-> trust boundary of the guest. Thus, guest needs to make sure the host 
-> only emulates the designated MMIO region. Otherwise, it opens an 
-> attack surface from a malicious host.
-How does this mechanism stop the host from emulating something outside
-the designated region?
+Thank you for your patch. There is something to discuss/improve.
 
-On TDX, for instance, the guest page table have a shared/private bit.
-Private pages get TDX protections to (among other things) keep the page
-contents confidential from the host.  Shared pages can be used for MMIO
-and don't have those protections.
 
-If the host goes and tries to flip a page from private->shared, TDX
-protections will kick in and prevent it.
+> +static int tegra_emc_interconnect_init(struct tegra186_emc *emc)
+> +{
+> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
+> +	const struct tegra_mc_soc *soc = mc->soc;
+> +	struct icc_node *node;
+> +	int err;
+> +
+> +	emc->provider.dev = emc->dev;
+> +	emc->provider.set = tegra_emc_icc_set_bw;
+> +	emc->provider.data = &emc->provider;
+> +	emc->provider.aggregate = soc->icc_ops->aggregate;
+> +	emc->provider.xlate = tegra_emc_of_icc_xlate;
+> +	emc->provider.get_bw = tegra_emc_icc_get_init_bw;
+> +
+> +	icc_provider_init(&emc->provider);
+> +
+> +	/* create External Memory Controller node */
+> +	node = icc_node_create(TEGRA_ICC_EMC);
+> +	if (IS_ERR(node)) {
+> +		err = PTR_ERR(node);
+> +		goto err_msg;
+> +	}
+> +
+> +	node->name = "External Memory Controller";
+> +	icc_node_add(node, &emc->provider);
+> +
+> +	/* link External Memory Controller to External Memory (DRAM) */
+> +	err = icc_link_create(node, TEGRA_ICC_EMEM);
+> +	if (err)
+> +		goto remove_nodes;
+> +
+> +	/* create External Memory node */
+> +	node = icc_node_create(TEGRA_ICC_EMEM);
+> +	if (IS_ERR(node)) {
+> +		err = PTR_ERR(node);
+> +		goto remove_nodes;
+> +	}
+> +
+> +	node->name = "External Memory (DRAM)";
+> +	icc_node_add(node, &emc->provider);
+> +
+> +	err = icc_provider_register(&emc->provider);
+> +	if (err)
+> +		goto remove_nodes;
+> +
+> +	return 0;
+> +
+> +remove_nodes:
+> +	icc_nodes_remove(&emc->provider);
+> +err_msg:
+> +	dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
+> +
+> +	return err;
+> +}
+> +
+>  static int tegra186_emc_probe(struct platform_device *pdev)
+>  {
+> +	struct tegra_mc *mc = dev_get_drvdata(pdev->dev.parent);
+>  	struct mrq_emc_dvfs_latency_response response;
+>  	struct tegra_bpmp_message msg;
+>  	struct tegra186_emc *emc;
+> @@ -236,6 +339,29 @@ static int tegra186_emc_probe(struct platform_device *pdev)
+>  	debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, emc->debugfs.root,
+>  			    emc, &tegra186_emc_debug_max_rate_fops);
+>  
+> +	if (mc && mc->soc->icc_ops) {
+> +		/*
+> +		 * Initialize the ICC even if BPMP-FW doesn't support 'MRQ_BWMGR_INT'.
+> +		 * Use the flag 'mc->bwmgr_mrq_supported' within MC driver and return
+> +		 * EINVAL instead of passing the request to BPMP-FW later when the BW
+> +		 * request is made by client with 'icc_set_bw()' call.
+> +		 */
+> +		err = tegra_emc_interconnect_init(emc);
+> +		if (err)
+> +			goto put_bpmp;
+> +
+> +		if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
+> +			mc->bwmgr_mrq_supported = true;
+> +
+> +			/*
+> +			 * MC driver probe can't get BPMP reference as it gets probed
+> +			 * earlier than BPMP. So, save the BPMP ref got from the EMC
+> +			 * DT node in the mc->bpmp and use it in MC's icc_set hook.
+> +			 */
+> +			mc->bpmp = emc->bpmp;
 
-None of this requires the guest to tell the host where it expects MMIO
-to be located.
+This (and ()) are called without any locking. You register first the
+interconnect, so set() callback can be used, right? Then set() could be
+called anytime between tegra_emc_interconnect_init() and assignment
+above. How do you synchronize these?
 
-> All other confidential computing solutions also depend on guest 
-> initiated MMIO as well. AFAIK, the TDX & SEV relies on #VE like
-> exceptions to invoke that while this patch is similar to what pkvm
-> does. This approach lets the enlightened guest control which MMIO
-> regions it wants the host to emulate.
+Best regards,
+Krzysztof
 
-I'm not _quite_ sure what "guest initiated" means.  But SEV and TDX
-don't require an ioremap hook like this.  So, even if they *are* "guest
-initiated", the question still remains how they work without this patch,
-or what they are missing without it.
-
-> It can be a subset of the region's host provided the layout. The
-> guest device filtering solution is based on this idea as well [1].
-> 
-> [1] https://lore.kernel.org/all/20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-
-I don't really see the connection.  Even if that series was going
-forward (I'm not sure it is) there is no ioremap hook there.  There's
-also no guest->host communication in that series.  The guest doesn't
-_tell_ the host where the MMIO is, it just declines to run code for
-devices that it didn't expect to see.
-
-I'm still rather confused here.
