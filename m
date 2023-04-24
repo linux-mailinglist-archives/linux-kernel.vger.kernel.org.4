@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48416EC8EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FFF6EC900
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjDXJc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S230415AbjDXJdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDXJc5 (ORCPT
+        with ESMTP id S230511AbjDXJc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:32:57 -0400
+        Mon, 24 Apr 2023 05:32:58 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ABCE4A;
-        Mon, 24 Apr 2023 02:32:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40DBA9;
+        Mon, 24 Apr 2023 02:32:55 -0700 (PDT)
 Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O810HN021053;
-        Mon, 24 Apr 2023 09:32:48 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O7rBFh006013;
+        Mon, 24 Apr 2023 09:32:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=UyQDTzzQqxum/33pd4jjg9xw/wtGJmqeFRVXu5eOoM8=;
- b=N9gsg2uAY4+IoFtXUDnHI9o7IkG5xjj8qa93mLVnr/MT+9KIhF8H+Aao0sUq6XDGDat8
- VJfyBQhjXUeol9DdZcSVjkpxwf87nSw7tzysAmuMD5L6k3NmudPGHVwkV1nNXfnr4t8W
- u9fiTn8vZMzk0I0DVeo2hbVvgDMU9UILL0S8squnDXhH1ZWSgBl/QRtMuPJD/XsjeIlT
- +D89qBni66jD23UDZ7/39lU6C9V4UFSIb2AmHcl9GziXFci9ntJvhrewRQ68Ln1CkiW8
- z0TzZrnErIw8E/9kr0h8lc/Ym03OdNRqPCR++wxifgFUGOIx8gR2LAKLnCHM5wyoEc7H aw== 
+ bh=dRyzzEsTwFVpPegGND3sac6m6DzZFbXv7juQac38FZg=;
+ b=Biv4N5JiTvOKg25pTplXrsnv8B4FY0Sa7iXsjt+EZX8ElyNmv21epdImA0pMc/+dCB2o
+ g76YHdfl39LlNiKNVbEmXsKgoUdycshK+jTosj7rpiAi9gDmm3qXpmHCXYGTpW65f1Nh
+ 9s2SvALIQ2e9cxSTVJcOlYV6EKrK9jV74ltlFnL31VvsnqyLgD3INWqBvqx+/+3lkEzO
+ dPQ8t74kWelJ1Im2gAjTBts7fvp8DOQ6v1szuzcTZxvGNFCpmh2K8Q42SmUeidnueJ7B
+ bc67XnvpLdihA5IUL4BfqtJv+QRJqWmOZv49MdqoZyLRdtmpLPdxc4JvFJYM/I/YNryn CA== 
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q489may4u-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q489may4v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 09:32:48 +0000
+        Mon, 24 Apr 2023 09:32:49 +0000
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 33O9WjNS021152;
-        Mon, 24 Apr 2023 09:32:45 GMT
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 33O9Wkp6021189;
+        Mon, 24 Apr 2023 09:32:46 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3q48nkpkmk-1;
-        Mon, 24 Apr 2023 09:32:45 +0000
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3q48nkpkms-1;
+        Mon, 24 Apr 2023 09:32:46 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33O9WjQg021145;
-        Mon, 24 Apr 2023 09:32:45 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33O9WjQi021145;
+        Mon, 24 Apr 2023 09:32:46 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 33O9WiFu021144;
-        Mon, 24 Apr 2023 09:32:45 +0000
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 33O9WjUf021166;
+        Mon, 24 Apr 2023 09:32:46 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 6676E47CE; Mon, 24 Apr 2023 15:02:44 +0530 (+0530)
+        id 596EA47CE; Mon, 24 Apr 2023 15:02:45 +0530 (+0530)
 From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         broonie@kernel.org, robh+dt@kernel.org,
@@ -54,9 +54,9 @@ To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
 Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
         swboyd@chromium.org, quic_vtanuku@quicinc.com,
         Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH v5 1/5] spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
-Date:   Mon, 24 Apr 2023 15:02:37 +0530
-Message-Id: <1682328761-17517-2-git-send-email-quic_vnivarth@quicinc.com>
+Subject: [PATCH v5 2/5] arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
+Date:   Mon, 24 Apr 2023 15:02:38 +0530
+Message-Id: <1682328761-17517-3-git-send-email-quic_vnivarth@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com>
 References: <1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com>
@@ -64,13 +64,13 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HNcx1293OXVtsW3zN2X9ula5AzW8ijar
-X-Proofpoint-GUID: HNcx1293OXVtsW3zN2X9ula5AzW8ijar
+X-Proofpoint-ORIG-GUID: hQQIVKAfj0_SqqU-WTZKA_CBijhGGz9z
+X-Proofpoint-GUID: hQQIVKAfj0_SqqU-WTZKA_CBijhGGz9z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-24_06,2023-04-21_01,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=490 malwarescore=0
+ impostorscore=0 priorityscore=1501 mlxlogscore=483 malwarescore=0
  spamscore=0 mlxscore=0 suspectscore=0 phishscore=0 clxscore=1015
  adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304240085
@@ -84,31 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add iommus binding for DMA mode support
+As part of DMA mode support to qspi driver.
 
 Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 ---
-v2 -> v3:
-- modified commit message
----
- Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-index ee8f7ea..1696ac4 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-@@ -29,6 +29,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  iommus:
-+    maxItems: 1
-+
-   interrupts:
-     maxItems: 1
- 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index ea1ffade..4c1bec7 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -2691,6 +2691,7 @@
+ 		qspi: spi@88dc000 {
+ 			compatible = "qcom,sc7180-qspi", "qcom,qspi-v1";
+ 			reg = <0 0x088dc000 0 0x600>;
++			iommus = <&apps_smmu 0x20 0x0>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
