@@ -2,89 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1896EC760
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873AA6EC766
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjDXHqX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 03:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S231431AbjDXHs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjDXHqT (ORCPT
+        with ESMTP id S231177AbjDXHs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:46:19 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCE51FD8;
-        Mon, 24 Apr 2023 00:46:11 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pqqti-0005y7-IZ; Mon, 24 Apr 2023 09:46:06 +0200
-Received: from p5b13a35e.dip0.t-ipconnect.de ([91.19.163.94] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pqqti-001uWA-BT; Mon, 24 Apr 2023 09:46:06 +0200
-Message-ID: <97a8032235be7413665b2f6fbe11a933ab236809.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2] sh: Replace <uapi/asm/types.h> by
- <asm-generic/int-ll64.h>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 24 Apr 2023 09:46:05 +0200
-In-Reply-To: <26932016c83c2ad350db59f5daf96117a38bbbd8.1679566927.git.geert@linux-m68k.org>
-References: <26932016c83c2ad350db59f5daf96117a38bbbd8.1679566927.git.geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.0 
+        Mon, 24 Apr 2023 03:48:56 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB88010D1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:48:52 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4efea87c578so2191e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:48:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682322531; x=1684914531;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sBn9MP8gsO/9Z4/eW6ATiLedWzLjSk/fKcpX7dMZveA=;
+        b=508/yBtlnonuvvT+/PvqrAjIjdJiOjGt/S0cx2WdIneDC1rDxi2GCj+P59chqtm3kr
+         FsEh7PH8fWZJuMbuLUetNWWo5k7EzV8ZyhOBrxdEefOrunjivJ7ptpJyYkR8PNSpetDJ
+         v5k8c+Wy1y2GyJeOYEp+PYbgiaQOJ7+IPQk27D8xKzB02Y5JL5f9WgTDeE1DzuupJz4t
+         l95u6kRFu8DfB9PBQmGAa2HuHsTAwIQ4K/Cbc9w2HT+XGuzXeBGz21kc8KznUkfDGkbu
+         BG+OUbwkvUXPlN4XMZLtuK/WIb2B/XfF5Dxf7RXKQNxpYc8dbXc57Nl04rBVsTy2CfNw
+         pQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682322531; x=1684914531;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sBn9MP8gsO/9Z4/eW6ATiLedWzLjSk/fKcpX7dMZveA=;
+        b=cP1aJJ2930+SkGk2DlYr6DQ10Zciky61632DUmOSvVoo62O0MkJoVGb2Sq8RC4+PKM
+         RoDllTvTCfojhV9fjUa7JfsME9LDrdrfyo/yVYf7pucFgiAdJJB6M+QyH81gZ2TUtOp0
+         v9VgOBsFv51ZYsfuaBYjVGFciosp/++doVTJNMAClGTSoVAsxGottspo3Km+qMvtaQuj
+         Iw4k+8lMpXKtdZAoHB13iVpQfsJQ/fFS2X/3jVtuGoh1pA03dWraw1ppf/APGEO3k4jq
+         poikMK5MgKDjWNrQSNz2uRfk3c68pLzR+H55v5VjYI9G3Mbl5XvYWKEAkM/2UjDQqUze
+         lu2Q==
+X-Gm-Message-State: AAQBX9faM8lWy7IyzTTxrPVYpC+oERESlCF/piWp6Az6pTnBBAUEyFRY
+        7RhEbwGrZeRzfngMrlOb2mh9499nIx25N+WDLhN8Yw==
+X-Google-Smtp-Source: AKy350aQBjeLf7pGBQHnXgI4moJm5eqG1WAVCi9zY6m161Flll023f+bc0gDJapF0elzS0jIdPTFF8YsCe0xnS8l7T4=
+X-Received: by 2002:a05:6512:12ce:b0:4e8:3f1e:de43 with SMTP id
+ p14-20020a05651212ce00b004e83f1ede43mr220567lfg.7.1682322530834; Mon, 24 Apr
+ 2023 00:48:50 -0700 (PDT)
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.163.94
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000fb55ed05fa0fdb4b@google.com>
+In-Reply-To: <000000000000fb55ed05fa0fdb4b@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 24 Apr 2023 09:48:37 +0200
+Message-ID: <CACT4Y+aGqEb-Z9JOR0eccoL9cw2BYZVspTJfB_33y=Q_+PO4QA@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] [fs?] KCSAN: data-race in __filemap_remove_folio / shmem_get_folio_gfp
+To:     syzbot <syzbot+ec4650f158c91a963120@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, hughd@google.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-23 at 11:22 +0100, Geert Uytterhoeven wrote:
-> As arch/sh/include/uapi/asm/types.h doesn't exist, sh doesn't provide
-> any sh-specific uapi definitions, and it can just include
-> <asm-generic/int-ll64.h>, like most other architectures.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+On Mon, 24 Apr 2023 at 09:21, syzbot
+<syzbot+ec4650f158c91a963120@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    cb0856346a60 Merge tag 'mm-hotfixes-stable-2023-04-19-16-3..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=170802cfc80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa4baf7c6b35b5d5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ec4650f158c91a963120
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/a02dd7789fb2/disk-cb085634.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/a1a1eac454f6/vmlinux-cb085634.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/bb0447014913/bzImage-cb085634.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ec4650f158c91a963120@syzkaller.appspotmail.com
+
+shmem_recalc_inode() has a check for "freed > 0", but I think it can
+be violated due to this race, if i_mapping->nrpages is read twice. If
+there are concurrent modifications, the code should use at least
+READ/WRITE_ONCE for accesses.
+
+> ==================================================================
+> BUG: KCSAN: data-race in __filemap_remove_folio / shmem_get_folio_gfp
+>
+> read-write to 0xffff888136bf8960 of 8 bytes by task 19402 on cpu 1:
+>  page_cache_delete mm/filemap.c:147 [inline]
+>  __filemap_remove_folio+0x22f/0x330 mm/filemap.c:225
+>  filemap_remove_folio+0x6c/0x220 mm/filemap.c:257
+>  truncate_inode_folio+0x19f/0x1e0 mm/truncate.c:196
+>  shmem_undo_range+0x24d/0xc20 mm/shmem.c:942
+>  shmem_truncate_range mm/shmem.c:1041 [inline]
+>  shmem_fallocate+0x2fc/0x8d0 mm/shmem.c:2779
+>  vfs_fallocate+0x369/0x3d0 fs/open.c:324
+>  madvise_remove mm/madvise.c:1001 [inline]
+>  madvise_vma_behavior mm/madvise.c:1025 [inline]
+>  madvise_walk_vmas mm/madvise.c:1260 [inline]
+>  do_madvise+0x77b/0x28a0 mm/madvise.c:1439
+>  __do_sys_madvise mm/madvise.c:1452 [inline]
+>  __se_sys_madvise mm/madvise.c:1450 [inline]
+>  __x64_sys_madvise+0x60/0x70 mm/madvise.c:1450
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> read to 0xffff888136bf8960 of 8 bytes by task 19400 on cpu 0:
+>  shmem_recalc_inode mm/shmem.c:359 [inline]
+>  shmem_get_folio_gfp+0xc0a/0x1120 mm/shmem.c:1977
+>  shmem_fault+0xd9/0x3d0 mm/shmem.c:2152
+>  __do_fault mm/memory.c:4155 [inline]
+>  do_read_fault mm/memory.c:4506 [inline]
+>  do_fault mm/memory.c:4635 [inline]
+>  handle_pte_fault mm/memory.c:4923 [inline]
+>  __handle_mm_fault mm/memory.c:5065 [inline]
+>  handle_mm_fault+0x115d/0x21d0 mm/memory.c:5211
+>  faultin_page mm/gup.c:925 [inline]
+>  __get_user_pages+0x363/0xc30 mm/gup.c:1147
+>  populate_vma_page_range mm/gup.c:1543 [inline]
+>  __mm_populate+0x23a/0x360 mm/gup.c:1652
+>  mm_populate include/linux/mm.h:3026 [inline]
+>  vm_mmap_pgoff+0x174/0x210 mm/util.c:547
+>  ksys_mmap_pgoff+0xc5/0x320 mm/mmap.c:1410
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> value changed: 0x0000000000000437 -> 0x0000000000000430
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 0 PID: 19400 Comm: syz-executor.3 Not tainted 6.3.0-rc7-syzkaller-00089-gcb0856346a60 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+> ==================================================================
+>
+>
 > ---
-> v2:
->   - Rebased for SPDX-License-Identifier addition in 2017.
-> 
->  arch/sh/include/asm/types.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/sh/include/asm/types.h b/arch/sh/include/asm/types.h
-> index 68eb24ad201383ef..9b3fc923ee28701c 100644
-> --- a/arch/sh/include/asm/types.h
-> +++ b/arch/sh/include/asm/types.h
-> @@ -2,7 +2,7 @@
->  #ifndef __ASM_SH_TYPES_H
->  #define __ASM_SH_TYPES_H
->  
-> -#include <uapi/asm/types.h>
-> +#include <asm-generic/int-ll64.h>
->  
->  /*
->   * These aren't exported outside the kernel to avoid name space clashes
-
-Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000fb55ed05fa0fdb4b%40google.com.
