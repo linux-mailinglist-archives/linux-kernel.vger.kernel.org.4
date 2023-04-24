@@ -2,92 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850206EC3A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38D06EC3A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjDXCge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 22:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S230255AbjDXChP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 22:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjDXCgc (ORCPT
+        with ESMTP id S230298AbjDXChJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 22:36:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0B0210C
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:36:31 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b46186c03so4951350b3a.3
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:36:31 -0700 (PDT)
+        Sun, 23 Apr 2023 22:37:09 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1987B2688
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:37:01 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4efef769000so783087e87.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682303790; x=1684895790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Er9IodKAhu5Xy/24MmuM3ISnj8SFsqKhcDcV85YYtd4=;
-        b=Myis4J2Z9lmx+G/UGHQV666UFM6OJ8EKtdAre2rvRUUjU2E+rQLKwJ+D0eYgmT72Z9
-         5SaX6H/C77vylvdgFXO4tn7m7ArVvZvZSOxiW6NiLDX5h8w4cEfp1YoxEuHlyRXPz09e
-         5JgUmEmUJwM1H8XEmuezqPmJ+lzP8zXU2UJcc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682303790; x=1684895790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1682303819; x=1684895819;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Er9IodKAhu5Xy/24MmuM3ISnj8SFsqKhcDcV85YYtd4=;
-        b=UoIcqDgQ+YcVnyPIt98ZH2uieSyBpK4ESsYS/yY9b29UuKqbm4kuAaXGCddYYBLxKS
-         I07mqEMWcy6IlMl1SJIf8DmY1o0MMIZlbMNOpNVQxULgbZF59aRdCq3+YEA1kIGfOKoY
-         55ZO8qyxGoTuSoOqqoKV5aIkzBvwgYVnhZ8h1T/ADH/KUIlAc+NuQIEiQ1hMcsSM2xP1
-         Gzj+E26nKOgpVt/re1/0SFVt8gmZHKSgKFnIUFdvo2nnBQyp20Rt/I3/P7wKGCMm3qZI
-         S68ucGEtjHmZFW2yoQsk8QMbIe9tzdcBsTprFu2sAKtXy8AGslUZNKrlaIfN+411MV6l
-         mfeA==
-X-Gm-Message-State: AAQBX9fWAnJFUYqMohLq6k3sdt9SRP1BkN3/NEuJoa71rWn4nCJ1pFmD
-        irfzu5xywM9rJoOyXa/xV4LJoA==
-X-Google-Smtp-Source: AKy350a438RODTsIQbvbOZb4mhoGqhZ1pvzPivBPJ5Ra5hjJQnsR6/IRQqkIVQmM+kaUu2d3rd1IMA==
-X-Received: by 2002:a05:6a00:2406:b0:63d:38aa:5617 with SMTP id z6-20020a056a00240600b0063d38aa5617mr12656579pfh.6.1682303790512;
-        Sun, 23 Apr 2023 19:36:30 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id h8-20020aa786c8000000b0063b8279d3aasm6183422pfo.159.2023.04.23.19.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Apr 2023 19:36:29 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 11:36:23 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, hch@infradead.org,
-        djwong@kernel.org, minchan@kernel.org, senozhatsky@chromium.org,
-        patches@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        willy@infradead.org, hare@suse.de, p.raghav@samsung.com,
-        da.gomez@samsung.com, kbusch@kernel.org
-Subject: Re: [PATCH 5/5] zram: use generic PAGE_SECTORS and PAGE_SECTORS_SHIFT
-Message-ID: <20230424023623.GC1496740@google.com>
-References: <20230421195807.2804512-1-mcgrof@kernel.org>
- <20230421195807.2804512-6-mcgrof@kernel.org>
+        bh=gWLQq8LKSwpKlO+DVpyoCqxpg/jxNQlPguCAnZsIh90=;
+        b=LB9RyMICWe0JD/uPys9DDbmoSRPAmmJfaXSh7z6aOye7DGHlMyjdUmVG4vqJNbp8pV
+         h1r2QDK1jc5KTOZ+HSpzzEmO10TwuVupvw2jitg6mJ0sLVjFQdg+vgRQaC3U3c9YT4qB
+         pBqglMev0wVg65GQPdDAQ2wtC4IqsM+3jq/b0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682303819; x=1684895819;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gWLQq8LKSwpKlO+DVpyoCqxpg/jxNQlPguCAnZsIh90=;
+        b=g7rmitk+8/h8Pu/D9GhpJYRePsc4CjNoDW/RJcPokryaCfPt7WbCSIWlxxwFIWL0PA
+         YxADf8h7HFCcbO98C5Qk2JlhPuCu+k+oKe5Dex7Lgxc4yNrs/j9zB4EE9ZQXuS1sKhJG
+         HyT72rDkrPmjX4qKV/w3JqHehHoXq71mEwUyWtqm9Bdr6qZEKU2HWA0SLaDir1ZrPIie
+         /uB3pB30EWyh1G71mW8YmdTRItPR9E0thRSdDwipPa4H9LtNMxkrc1rXOcugQJRziLCa
+         RgzTM51Y+7axwvtGCBFLd+Jn3y0VZml5IHxqDFKpxa2M/uiPpbiO+pNkBdaEOaM5TIYR
+         S+lQ==
+X-Gm-Message-State: AAQBX9dG88thL6haGYjAQGF083bsRHBGPxL3MJqQDtgA2Z9SK0avBmPt
+        M2+sKUvYFdl3NNBbhsBAOxD++hhtXaMzSYz0+WkUoA==
+X-Google-Smtp-Source: AKy350Z0DyOZjTe/duYuceGdGau6TqY/bAIfJE1PcgLymUgU82dWm7YNaENHYqtRKyqMmaiId2KExqWwUmWVVy0Q5qs=
+X-Received: by 2002:ac2:5285:0:b0:4e8:c81b:1a11 with SMTP id
+ q5-20020ac25285000000b004e8c81b1a11mr2788263lfm.49.1682303819370; Sun, 23 Apr
+ 2023 19:36:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421195807.2804512-6-mcgrof@kernel.org>
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <b6c881-c352-bb91-85a8-febeb09dfd71@google.com>
+ <CAD=HUj5NSXX8a5shf-GVYqkMFC-o26vuyo26hMPpPCnuSD683A@mail.gmail.com> <cf24ea0-92da-cd46-a7cd-87f5449016e8@google.com>
+In-Reply-To: <cf24ea0-92da-cd46-a7cd-87f5449016e8@google.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Mon, 24 Apr 2023 11:36:48 +0900
+Message-ID: <CAD=HUj5EzNc28MFs6m2-RpH0Ao1KNNOBUUSL1OjAj7T+cxqpUg@mail.gmail.com>
+Subject: Re: [PATCH next] mm/khugepaged: fix conflicting mods to collapse_file()
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/04/21 12:58), Luis Chamberlain wrote:
-> 
-> Instead of re-defining the already existing constants use the provided ones:
-> 
-> So replace:
-> 
->  o SECTORS_PER_PAGE_SHIFT with PAGE_SECTORS_SHIFT
->  o SECTORS_PER_PAGE       with PAGE_SECTORS
-> 
-> This produces no functional changes.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+On Mon, Apr 24, 2023 at 11:17=E2=80=AFAM Hugh Dickins <hughd@google.com> wr=
+ote:
+>
+> On Mon, 24 Apr 2023, David Stevens wrote:
+> > On Sun, Apr 23, 2023 at 1:47=E2=80=AFPM Hugh Dickins <hughd@google.com>=
+ wrote:
+> > >
+> > > Inserting Ivan Orlov's syzbot fix commit 2ce0bdfebc74
+> > > ("mm: khugepaged: fix kernel BUG in hpage_collapse_scan_file()")
+> > > ahead of Jiaqi Yan's and David Stevens's commits
+> > > 12904d953364 ("mm/khugepaged: recover from poisoned file-backed memor=
+y")
+> > > cae106dd67b9 ("mm/khugepaged: refactor collapse_file control flow")
+> > > ac492b9c70ca ("mm/khugepaged: skip shmem with userfaultfd")
+> > > (all of which restructure collapse_file()) did not work out well.
+> > >
+> > > xfstests generic/086 on huge tmpfs (with accelerated khugepaged) free=
+zes
+> > > (if not on the first attempt, then the 2nd or 3rd) in find_lock_entri=
+es()
+> > > while doing drop_caches: the file's xarray seems to have been corrupt=
+ed,
+> > > with find_get_entry() returning nonsense which makes no progress.
+> > >
+> > > Bisection led to ac492b9c70ca; and diff against earlier working linux=
+-next
+> > > suggested that it's probably down to an errant xas_store(), which doe=
+s not
+> > > belong with the later changes (and nor does the positioning of warnin=
+gs).
+> > > The later changes look as if they fix the syzbot issue independently.
+> > >
+> > > Remove most of what's left of 2ce0bdfebc74: just leave one WARN_ON_ON=
+CE
+> > > (xas_error) after the final xas_store() of the multi-index entry.
+> > >
+> > > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > > ---
+> > >
+> > >  mm/khugepaged.c | 23 +----------------------
+> > >  1 file changed, 1 insertion(+), 22 deletions(-)
+> > >
+> > > --- a/mm/khugepaged.c
+> > > +++ b/mm/khugepaged.c
+> > > @@ -1941,16 +1941,6 @@ static int collapse_file(struct mm_struct *mm,=
+ unsigned long addr,
+> > >                                         result =3D SCAN_FAIL;
+> > >                                         goto xa_locked;
+> > >                                 }
+> > > -                               xas_store(&xas, hpage);
+> > > -                               if (xas_error(&xas)) {
+> > > -                                       /* revert shmem_charge perfor=
+med
+> > > -                                        * in the previous condition
+> > > -                                        */
+> > > -                                       mapping->nrpages--;
+> > > -                                       shmem_uncharge(mapping->host,=
+ 1);
+> > > -                                       result =3D SCAN_STORE_FAILED;
+> >
+> > With this being removed, SCAN_STORE_FAILED should also be removed from
+> > the scan_result enum and trace event definitions.
+>
+> Only if we also remove your use of SCAN_STORE_FAILED in ac492b9c70ca:
+> what would you want that to say instead?
+>
+> I don't care myself for any of those "SCAN" result codes, nor whether the=
+y
+> are few or many: I'd rather have __LINE__ numbers for my own debugging.
+>
+> But if people want to remove SCAN_STORE_FAILED now, sure, send a patch;
+> my intent was to unbreak the breakage.
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Oh, I had forgotten that I used the code when I rebased v6 of my
+patches. I have no strong opinions one way or the other. Sorry for the
+noise.
+
+-David
