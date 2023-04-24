@@ -2,35 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0656ED5E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530C96ED5EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbjDXUGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
+        id S232268AbjDXUJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjDXUGv (ORCPT
+        with ESMTP id S231276AbjDXUJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:06:51 -0400
+        Mon, 24 Apr 2023 16:09:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4567B1FE6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:06:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4153C5B8C;
+        Mon, 24 Apr 2023 13:09:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C54A4628B9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 20:06:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DF6C433D2;
-        Mon, 24 Apr 2023 20:06:48 +0000 (UTC)
-Date:   Mon, 24 Apr 2023 16:06:46 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D13FD628BF;
+        Mon, 24 Apr 2023 20:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C997BC433EF;
+        Mon, 24 Apr 2023 20:09:14 +0000 (UTC)
+Date:   Mon, 24 Apr 2023 16:09:08 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Hao Zeng <zenghao@kylinos.cn>
-Cc:     chenhuacai@kernel.org, zhangqing@loongson.cn,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] recordmcount: Fix memory leaks in the uwrite function
-Message-ID: <20230424160646.3faf00f1@rorschach.local.home>
-In-Reply-To: <20230412093048.3005276-1-zenghao@kylinos.cn>
-References: <20230412093048.3005276-1-zenghao@kylinos.cn>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Florent Revest <revest@chromium.org>, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com, lihuafei1@huawei.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v6 0/5] Add ftrace direct call for arm64
+Message-ID: <20230424160908.44c80452@rorschach.local.home>
+In-Reply-To: <ZDZ+3dNnIdEpmWiP@FVFF77S0Q05N>
+References: <20230405180250.2046566-1-revest@chromium.org>
+        <ZDWDPUY2tZiMbk8V@FVFF77S0Q05N>
+        <20230411124749.7aeea715@gandalf.local.home>
+        <20230411170807.GA23143@willie-the-truck>
+        <20230411134456.728551f8@gandalf.local.home>
+        <20230411175423.GD23143@willie-the-truck>
+        <ZDZ+3dNnIdEpmWiP@FVFF77S0Q05N>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -44,68 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 17:30:48 +0800
-Hao Zeng <zenghao@kylinos.cn> wrote:
+On Wed, 12 Apr 2023 10:50:21 +0100
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-> Common realloc mistake: 'file_append' nulled but not freed upon failure
-> 
-> Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-> ---
->  scripts/recordmcount.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/scripts/recordmcount.c b/scripts/recordmcount.c
-> index e30216525325..2b7173a86d4c 100644
-> --- a/scripts/recordmcount.c
-> +++ b/scripts/recordmcount.c
-> @@ -110,22 +110,23 @@ static ssize_t uwrite(void const *const buf, size_t const count)
->  {
->  	size_t cnt = count;
->  	off_t idx = 0;
-> -
-> +	void *p = NULL;
->  	file_updated = 1;
->  
->  	if (file_ptr + count >= file_end) {
->  		off_t aoffset = (file_ptr + count) - file_end;
->  
->  		if (aoffset > file_append_size) {
-> -			file_append = realloc(file_append, aoffset);
-> +			p = realloc(file_append, aoffset);
-> +			if (!p) {
-> +				perror("write");
-> +				file_append_cleanup();
-> +				mmap_cleanup();
-> +				return -1;
-> +			}
-> +			file_append = p;
->  			file_append_size = aoffset;
->  		}
+> Perhaps we could queue 1 and 2 via the arm64 tree, 3 and 4 via the ftrace tree,
+> and follow up with patch 5 via the bpf tree after -rc1?
 
-This changes the logic of the function. If file_append is NULL when
-entering, and does not get into the allocate path we still want this to
-error.
-
-Just do:
-
-		p = realloc(file_append, aoffset);
-		if (!p) {
-			free(file_append);
-			file_append = NULL;
-		}
-
-And that keeps the same logic but removes the memory leak.
+Any patches that you want through the ftrace tree, please send as a
+separate queue to the linux-trace-kernel mailing list (and lkml) if you
+haven't done that already. I'm still a thousand emails behind, and
+walking through them while at the airport lounge.
 
 -- Steve
-
-
-> -		if (!file_append) {
-> -			perror("write");
-> -			file_append_cleanup();
-> -			mmap_cleanup();
-> -			return -1;
-> -		}
->  		if (file_ptr < file_end) {
->  			cnt = file_end - file_ptr;
->  		} else {
-
