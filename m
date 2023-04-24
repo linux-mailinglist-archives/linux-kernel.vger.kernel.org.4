@@ -2,412 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB65B6EC9C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4EC6EC9CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbjDXKHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S231131AbjDXKIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 06:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDXKHF (ORCPT
+        with ESMTP id S229603AbjDXKIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:07:05 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE94F35B8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:06:59 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-77858d8dcb5so18158835241.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1682330819; x=1684922819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uPK4RM9urqioHz4+lhToeGtEVxXr+HVXjxPgmNgTnWQ=;
-        b=32Bo0IDA7i2BZdFWZcQOzSHuM8nYvcBGXlG21X66mWD+jFR/OcmwdlH2R0kNYyNfJm
-         OaN7NNklHhzDrdphrsvWlMFPncM3Cxy4Ws6/EpgoGmqAk3mKdreYkPVWr6Y9taD7XJCX
-         asd/jqlbMlB47AXcrpp4/GF771qpyLwagzZ4Ka9S7x++LdBigOVmrQMChgGRAJ3VlfpL
-         EDYkNknkRW9blK5nNQnlL5iup12CHq2E9H5WoZM/nD0i5yzn9HE56wHsGZt7ldxHNnGR
-         HqbS/uiSbWI57O8VHsYWm2z/o4F0mjJJJR3qtYKznqPVVnOtTrO24T1KS7qMvNAiiSGp
-         ZBWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682330819; x=1684922819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uPK4RM9urqioHz4+lhToeGtEVxXr+HVXjxPgmNgTnWQ=;
-        b=KMMFzGnGFzMYObALoFSqfs+Z8APpAqskPps90I/T/H08GQKKqm0XX58CbU926ldt5D
-         RNwSlasY0bVGFglAYeFdIFVZZHniqogmddbIdTLnC/HoQSFgk9N/s1I10u3vrBRRf+C7
-         7tdXBTp0gHmvzZrdHbHkTuYdIG/Cz14I3B0v1ao2lAFRUC026XFsr+yEiO31WjuQodzG
-         0s5O/EhtwIRJelYslk5/9Wkyk10EUYfkQ0Pgp5wNbG4w8hMJ/gDS018equYtDaafUpMK
-         5jysdbeJEQGaF9fioPKC8TeccQch2WmnVKFbk50vPjRMTujI1Iy8a6kRh7ShnfSYN30f
-         MPAQ==
-X-Gm-Message-State: AAQBX9dwOJAu3Uyddp2ek+SwJtJnkzAFkVMtNfPA50ZZtjMUV8WyOR0H
-        rxLdcH2Og+BWJt3acpZMED72NjBhw29WqXXc4sdV1w==
-X-Google-Smtp-Source: AKy350Y6gPpvmoJfLHIOQVSAlJOfE/J8xU6C5kormDvHY+8n4TUxk5QTOPcjSO2Ei+NOjPSCE2ZUxE5B8X2ukLsOULc=
-X-Received: by 2002:a1f:a6d1:0:b0:446:b903:d76c with SMTP id
- p200-20020a1fa6d1000000b00446b903d76cmr3700562vke.5.1682330818096; Mon, 24
- Apr 2023 03:06:58 -0700 (PDT)
+        Mon, 24 Apr 2023 06:08:41 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120D29B;
+        Mon, 24 Apr 2023 03:08:38 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2F41C1C0008;
+        Mon, 24 Apr 2023 10:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682330917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSjwAVriP8NSs8GDNrCwBt3GMm7ESSx/o2pcAH83Wi0=;
+        b=jNylB+SqKQYfJS2hb3gYwyPEocjggyM16Bfv/d4AZBhLmzCFEcDtoc9Iz5zL2NdSx7YQep
+        gOnNcZJ2QrHBUtGkLwbVBPBCHCaHPDKAzYspMqdFfl5hQoXCWaOzrb/n2GXotWRHfEqpF3
+        IlE0+ZTmviM1GkojNcCvxzGOKDD5YoALxvPnf6QDaUalvsyg8Pe5aQOqgt90obBlCO98M+
+        dF6/nX0hHMn3Jg5q8QfYl1auoNNRUD0rfMnlNry/tbGD6jPS+8DTlUgp/QBjOdbGY8v1Zg
+        EEbdRNktcpRM7/cso5gMwKCEqnXlNU8YxbnWDzWnaUDVBh1fpPggIoK64yIjJg==
+Date:   Mon, 24 Apr 2023 12:08:34 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/43] dt-bindings: rtc: add DT bindings for Cirrus EP93xx
+Message-ID: <2023042410083435b9b09b@mail.local>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-8-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
-References: <20230414123903.896914-1-mie@igel.co.jp> <AM6PR04MB483871ADC2BA657BBF3A5A4588999@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <9e9acbf6-3486-56d3-c15a-c3d67557c2a9@igel.co.jp> <AM6PR04MB483893F2A017B54AE29474A9889C9@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <7680d6cd-163d-8648-33da-c3d7d2e2fa3d@igel.co.jp> <AM6PR04MB4838244F1AE7C4CFA50DBCE9889D9@AM6PR04MB4838.eurprd04.prod.outlook.com>
-In-Reply-To: <AM6PR04MB4838244F1AE7C4CFA50DBCE9889D9@AM6PR04MB4838.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Mon, 24 Apr 2023 19:06:47 +0900
-Message-ID: <CANXvt5p87ARDF-bBak9DtyMS-Zv96DE8jtAsKdeHdWJGhNuQpQ@mail.gmail.com>
-Subject: Re: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424123522.18302-8-nikita.shubin@maquefel.me>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023=E5=B9=B44=E6=9C=8819=E6=97=A5(=E6=B0=B4) 1:42 Frank Li <frank.li@nxp.c=
-om>:
->
->
->
-> > -----Original Message-----
-> > From: Shunsuke Mie <mie@igel.co.jp>
-> > Sent: Tuesday, April 18, 2023 5:31 AM
-> > To: Frank Li <frank.li@nxp.com>; Lorenzo Pieralisi <lpieralisi@kernel.o=
-rg>
-> > Cc: Krzysztof Wilczy=C5=84ski <kw@linux.com>; Manivannan Sadhasivam
-> > <mani@kernel.org>; Kishon Vijay Abraham I <kishon@kernel.org>; Bjorn
-> > Helgaas <bhelgaas@google.com>; Michael S. Tsirkin <mst@redhat.com>;
-> > Jason Wang <jasowang@redhat.com>; Jon Mason <jdmason@kudzu.us>;
-> > Randy Dunlap <rdunlap@infradead.org>; Ren Zhijie
-> > <renzhijie2@huawei.com>; linux-kernel@vger.kernel.org; linux-
-> > pci@vger.kernel.org; virtualization@lists.linux-foundation.org
-> > Subject: Re: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio con=
-sole
-> >
-> > Caution: EXT Email
-> >
-> > On 2023/04/18 0:19, Frank Li wrote:
-> > >
-> > >> -----Original Message-----
-> > >> From: Shunsuke Mie <mie@igel.co.jp>
-> > >> Sent: Sunday, April 16, 2023 9:12 PM
-> > >> To: Frank Li <frank.li@nxp.com>; Lorenzo Pieralisi <lpieralisi@kerne=
-l.org>
-> > >> Cc: Krzysztof Wilczy=C5=84ski <kw@linux.com>; Manivannan Sadhasivam
-> > >> <mani@kernel.org>; Kishon Vijay Abraham I <kishon@kernel.org>; Bjorn
-> > >> Helgaas <bhelgaas@google.com>; Michael S. Tsirkin <mst@redhat.com>;
-> > >> Jason Wang <jasowang@redhat.com>; Jon Mason <jdmason@kudzu.us>;
-> > >> Randy Dunlap <rdunlap@infradead.org>; Ren Zhijie
-> > >> <renzhijie2@huawei.com>; linux-kernel@vger.kernel.org; linux-
-> > >> pci@vger.kernel.org; virtualization@lists.linux-foundation.org
-> > >> Subject: Re: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio
-> > console
-> > >>
-> > >> Caution: EXT Email
-> > >>
-> > >> On 2023/04/14 23:39, Frank Li wrote:
-> > >>>> -----Original Message-----
-> > >>>> From: Shunsuke Mie <mie@igel.co.jp>
-> > >>>> Sent: Friday, April 14, 2023 7:39 AM
-> > >>>> To: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > >>>> Cc: Krzysztof Wilczy=C5=84ski <kw@linux.com>; Manivannan Sadhasiva=
-m
-> > >>>> <mani@kernel.org>; Kishon Vijay Abraham I <kishon@kernel.org>;
-> > Bjorn
-> > >>>> Helgaas <bhelgaas@google.com>; Michael S. Tsirkin
-> > <mst@redhat.com>;
-> > >>>> Jason Wang <jasowang@redhat.com>; Shunsuke Mie
-> > <mie@igel.co.jp>;
-> > >>>> Frank Li <frank.li@nxp.com>; Jon Mason <jdmason@kudzu.us>; Randy
-> > >>>> Dunlap <rdunlap@infradead.org>; Ren Zhijie
-> > <renzhijie2@huawei.com>;
-> > >>>> linux-kernel@vger.kernel.org; linux-pci@vger.kernel.org;
-> > >>>> virtualization@lists.linux-foundation.org
-> > >>>> Subject: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio co=
-nsole
-> > >>>>
-> > >>>> Caution: EXT Email
-> > >>>>
-> > >>>> PCIe endpoint framework provides APIs to implement PCIe endpoint
-> > >>>> function.
-> > >>>> This framework allows defining various PCIe endpoint function
-> > behaviors
-> > >> in
-> > >>>> software. This patch extend the framework for virtio pci device. T=
-he
-> > >>>> virtio is defined to communicate guest on virtual machine and host=
- side.
-> > >>>> Advantage of the virtio is the efficiency of data transfer and the
-> > >> conciseness
-> > >>>> of implementation device using software. It also be applied to PCI=
-e
-> > >>>> endpoint function.
-> > >>>>
-> > >>>> We designed and implemented a PCIe EP virtio console function driv=
-er
-> > >> using
-> > >>>> the extended PCIe endpoint framework for virtio. It can be
-> > communicate
-> > >>>> host and endpoint over virtio as console.
-> > >>>>
-> > >>>> An architecture of the function driver is following:
-> > >>>>
-> > >>>>    =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =E2=
-=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80
-> > =E2=94=80
-> > >> =E2=94=80=E2=94=80
-> > >>>> =E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=AC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90
-> > >>>>    =E2=94=82virtio      =E2=94=82         =E2=94=82               =
-       =E2=94=82virtio      =E2=94=82
-> > >>>>    =E2=94=82console drv =E2=94=82         =E2=94=9C=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90      =E2=94=82
-> > >> console
-> > >>>> drv =E2=94=82
-> > >>>>    =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=
-=94=82(virtio console=E2=94=82      =E2=94=9C=E2=94=80=E2=94=80
-> > =E2=94=80
-> > >> =E2=94=80=E2=94=80
-> > >>>> =E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=A4
-> > >>>>    =E2=94=82 virtio bus =E2=94=82         =E2=94=82 device)       =
-=E2=94=82=E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=82 vi=
-rtio bus =E2=94=82
-> > >>>>    =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=
-=94=9C---------------=E2=94=A4      =E2=94=94=E2=94=80=E2=94=80=E2=94=80
-> > =E2=94=80
-> > >> =E2=94=80=E2=94=80
-> > >>>> =E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-> > >>>>    =E2=94=82            =E2=94=82         =E2=94=82 pci ep virtio =
-=E2=94=82                   =E2=94=82
-> > >>>>    =E2=94=82  pci bus   =E2=94=82         =E2=94=82  console drv  =
-=E2=94=82                   =E2=94=82
-> > >>>>    =E2=94=82            =E2=94=82  pcie   =E2=94=9C=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4
-> > =E2=94=82
-> > >>>>    =E2=94=82            =E2=94=82 =E2=97=84=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=96=BA =E2=94=82  pci ep Bus   =E2=94=82        =
-           =E2=94=82
-> > >>>>    =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =E2=
-=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80
-> > =E2=94=80
-> > >> =E2=94=80=E2=94=80
-> > >>>> =E2=94=80=E2=94=B4=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98
-> > >>>>      PCIe Root              PCIe Endpoint
-> > >>>>
-> > >>> [Frank Li] Some basic question,
-> > >>> I see you call register_virtio_device at epf_vcon_setup_vdev,
-> > >>> Why call it as virtio console?  I suppose it should be virtiobus di=
-rectly?
-> > >> I'm sorry I didn't understand your question. What do you mean the
-> > >> virtiobus directly?
-> > > I go through your code again.  I think I understand why you need pci-=
-epf-
-> > vcon.c.
-> > > Actually,  my means is like virtio_mmio_probe.
-> > >
-> > > vm_dev->vdev.id.device =3D readl(vm_dev->base +
-> > VIRTIO_MMIO_DEVICE_ID);
-> > > vm_dev->vdev.id.vendor =3D readl(vm_dev->base +
-> > VIRTIO_MMIO_VENDOR_ID);
-> > >
-> > > I am not sure that if VIRTIO_MMIO_VENDOR_ID and
-> > VIRTIO_MMIO_DEVICE_ID
-> > > reuse PCI's vendor ID and Device ID.  If yes, you can directly get su=
-ch
-> > information
-> > > from epf.  If no,  a customer field can been added at epf driver.
-> > >
-> > > So you needn't write pci-epf-vcon  and pci-epf-vnet .....
-> > >
-> > > Of cause it will be wonderful if directly use virtio_mmio_probe by dy=
-nmatic
-> > create platform
-> > > Devices.  It may have some difficult because pci memory map requireme=
-nt.
-> > I think that some fields are shared between the vdev and epf device.
-> > However, we need to implement device emulation because each virtio
-> > device
-> > has its specific set of tasks. For example, the virtio-net device has a
-> > control queue, and the driver can request MAC filters, VLANs, and other
-> > settings via this queue. These requests have to be processed by the vir=
-tio
-> > device that we are implementing in pci-epf-vnet.
-> >
-> > The simplest virtio-console device doesn=E2=80=99t have these tasks, bu=
-t the other
-> > virtio devices requireprocessing them.
-> >
-> > That's why the current pci-epf-virtio design requires a specific
-> > implementation for each virtio device.
-> >
-> > Is this what you meant
->
-> I see. Thank you for explain.
-> Thing may become complex. How to implement composite at EPF driver?
-> Such as console + net
-I'm not sure your suggestion. Could you tell me the advantages?
-> >
-> > >
-> > >>> Previous you use virtio-net, why change to virtio-console here?  Do=
-es it
-> > >> matter?
-> > >>
-> > >> No, it doesn't. Just I'd like to break down the changes into smaller
-> > >> steps to make it easier to review and merge the changes.
-> > >>
-> > >> As a first step, I propose adding a simplest virtio function driver =
-with
-> > >> the extension defined in pci-epf-virtio.{h,c}.
-> > >>
-> > >>> All virtio-XXX should work?
-> > >> Yes, the extension is designed to use any type of virtio device.
-> > >>> You removed EDMA support this version?
-> > >> I planed the support will be added with epf virtio-net patches.
-> > >>>> Introduced driver is `pci ep virtio console drv` in the figure. It=
- works
-> > >>>> as ep function for PCIe root and virtual virtio console device for=
- PCIe
-> > >>>> endpoint. Each side of virtio console driver has virtqueue, and
-> > >>>> introduced driver transfers data on the virtqueue to each other. A=
- data
-> > >>>> on root tx queue is transfered to endpoint rx queue and vice versa=
-.
-> > >>>>
-> > >>>> This patchset is depend follwing patches which are under discussio=
-n.
-> > >>>>
-> > >>>> - [RFC PATCH 0/3] Deal with alignment restriction on EP side
-> > >>>> link:
-> > >>>>
-> > >>
-> > https://lore.k/
-> > %2F&data=3D05%7C01%7Cfrank.li%40nxp.com%7C80a237184ff4420a96de08db
-> > 3ff80d78%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63817410683
-> > 2489955%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
-> > 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DLSP
-> > LeFzTYpUVTZpymoM00Es9kOpxlN90%2BDM6ceDJMFE%3D&reserved=3D0
-> > >> %2F&data=3D05%7C01%7Cfrank.li%40nxp.com%7Cff59a16f88c643913e3908
-> > db3
-> > >>
-> > ee91ca8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63817294315
-> > >>
-> > 3821831%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
-> > >>
-> > 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DhTB
-> > >> 5UDaJoJfta9ohMG%2BrxCVJY34ANn10iSLP9iCHX3M%3D&reserved=3D0
-> > >>>> ernel.org%2Flinux-pci%2F20230113090350.1103494-1-
-> > >>>>
-> > >>
-> > mie%40igel.co.jp%2F&data=3D05%7C01%7CFrank.Li%40nxp.com%7Cea6513dbf
-> > >>
-> > 4084b80ced208db3ce54133%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
-> > >>
-> > C0%7C638170727558800720%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
-> > >>
-> > LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C
-> > >>>> %7C%7C&sdata=3DjYgy%2Bxk84ZXZRVfqm0GCXoRnCTLMrX4zTfV%2Bs5
-> > Mm
-> > >> svo
-> > >>>> %3D&reserved=3D0
-> > >>>> - [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
-> > >>>> link:
-> > >>>>
-> > >>
-> > https://lore.k/
-> > %2F&data=3D05%7C01%7Cfrank.li%40nxp.com%7C80a237184ff4420a96de08db
-> > 3ff80d78%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63817410683
-> > 2489955%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
-> > 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DLSP
-> > LeFzTYpUVTZpymoM00Es9kOpxlN90%2BDM6ceDJMFE%3D&reserved=3D0
-> > >> %2F&data=3D05%7C01%7Cfrank.li%40nxp.com%7Cff59a16f88c643913e3908
-> > db3
-> > >>
-> > ee91ca8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63817294315
-> > >>
-> > 3821831%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
-> > >>
-> > 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DhTB
-> > >> 5UDaJoJfta9ohMG%2BrxCVJY34ANn10iSLP9iCHX3M%3D&reserved=3D0
-> > >>>> ernel.org%2Fvirtualization%2F20230202090934.549556-1-
-> > >>>>
-> > >>
-> > mie%40igel.co.jp%2F&data=3D05%7C01%7CFrank.Li%40nxp.com%7Cea6513dbf
-> > >>
-> > 4084b80ced208db3ce54133%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
-> > >>
-> > C0%7C638170727558800720%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
-> > >>
-> > LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C
-> > >>>> %7C%7C&sdata=3DK4El76GSAGtsWkNBXJK5%2Fn7flCN20eEMZpZYTX2WI
-> > Z0
-> > >> %3
-> > >>>> D&reserved=3D0
-> > >>>>
-> > >>>> First of this patchset is introduce a helper function to realize p=
-ci
-> > >>>> virtio function using PCIe endpoint framework. The second one is
-> > adding
-> > >>>> a missing definition for virtio pci header. The last one is for PC=
-Ie
-> > >>>> endpoint virtio console driver.
-> > >>>>
-> > >>>> This is tested on linux-20230406 and RCar S4 board as PCIe endpoin=
-t.
-> > >>>>
-> > >>>> Shunsuke Mie (3):
-> > >>>>     PCI: endpoint: introduce a helper to implement pci ep virtio f=
-unction
-> > >>>>     virtio_pci: add a definition of queue flag in ISR
-> > >>>>     PCI: endpoint: Add EP function driver to provide virtio-consol=
-e
-> > >>>>       functionality
-> > >>>>
-> > >>>>    drivers/pci/endpoint/functions/Kconfig        |  19 +
-> > >>>>    drivers/pci/endpoint/functions/Makefile       |   2 +
-> > >>>>    drivers/pci/endpoint/functions/pci-epf-vcon.c | 554
-> > >> ++++++++++++++++++
-> > >>>>    .../pci/endpoint/functions/pci-epf-virtio.c   | 469 +++++++++++=
-++++
-> > >>>>    .../pci/endpoint/functions/pci-epf-virtio.h   | 123 ++++
-> > >>>>    include/uapi/linux/virtio_pci.h               |   3 +
-> > >>>>    6 files changed, 1170 insertions(+)
-> > >>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.=
-c
-> > >>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-virti=
-o.c
-> > >>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-virti=
-o.h
-> > >>>>
-> > >>>> --
-> > >>>> 2.25.1
-Best regards,
-Shunsuike
+On 24/04/2023 15:34:23+0300, Nikita Shubin wrote:
+> This adds device tree bindings for the Cirrus Logic EP93xx
+> RTC block used in these SoCs.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+>  .../bindings/rtc/cirrus,ep93xx-rtc.yaml       | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml b/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> new file mode 100644
+> index 000000000000..d4774e984e7b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+
+I guess this one should go in .Documentation/devicetree/bindings/rtc/trivial-rtc.yaml?
+
+> @@ -0,0 +1,32 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/cirrus,ep93xx-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus EP93xx Real Time Clock controller
+> +
+> +maintainers:
+> +  - Hartley Sweeten <hsweeten@visionengravers.com>
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: cirrus,ep9301-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    rtc0: rtc@80920000 {
+> +        compatible = "cirrus,ep9301-rtc";
+> +        reg = <0x80920000 0x100>;
+> +    };
+> +
+> -- 
+> 2.39.2
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
