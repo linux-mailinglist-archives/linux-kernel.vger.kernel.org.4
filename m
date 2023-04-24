@@ -2,108 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB816ED4E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F686ED4E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjDXSzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S231438AbjDXS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbjDXSzf (ORCPT
+        with ESMTP id S232491AbjDXSz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:55:35 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2246EB6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:55:24 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54f8d59a8a9so58016047b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1682362523; x=1684954523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1+OurL083Y0c7KcWuiM8+QJcAaGH1Ky8yKAH2N6jmoc=;
-        b=IGjUxbT7u2aSvTarjgGfvCfroYNT55WCysowQjHYPRa2hsHqrIV3OadCNlyHtELr9c
-         0rr4fIruJvnpyMdCGFIKrWrfoe89L5D5M/e8cXeHhj2p/B60yfqV8ulddcFu61rSKE3a
-         OM8BiAvVw7M/eJ96SVn6xXCT+T9iUqLnoGbBg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682362523; x=1684954523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1+OurL083Y0c7KcWuiM8+QJcAaGH1Ky8yKAH2N6jmoc=;
-        b=UMx2bMbssWEXJcsGruspcn4s1WJubMxZjJ6lUEofccSvDAw8Icpl6YTCbUvcp9pu6c
-         fHpCtRGio1A9bP94UzG+RyA6jqJQhSG06a8t6M8c+rPf20Ign6aphwcgwwb2LVHZVgCu
-         v5+TAuSAxvf6yPzmqK6zSCZ+HdWKIYV/1qEAEieWvkPqZ9keXuajpWMr2DUIIcL+fNmy
-         MIxJqzpjG5PH6UKckkz/moyeQo1Uuf4SQuMht+25biM0B3pq4n5jbdgLpI0sSUK8dXsK
-         jlWOEYB1vrVv0Iufc58X/fd+DFmFbNcZD9G018RTV8grCZ7G8f4FHd8w3mkgJMprEcLz
-         y4JQ==
-X-Gm-Message-State: AAQBX9e3jOaVCLThsgHxZec39bJVJ5L++uyYdAWQkiTwi0fpapwPGKD8
-        i0jh8wYy3pj/CshjhCoXhs23T/TYjyONuzEjBhzf1w==
-X-Google-Smtp-Source: AKy350aoe2Cg48zE3WTOUfu7kvGjK5v9r+0PwXZqQIgRDlnb/sqo4ljedyjlVhmhjgkFZt6oSOdWn0hsMSQrP78RGPg=
-X-Received: by 2002:a81:4f12:0:b0:541:66e8:d4da with SMTP id
- d18-20020a814f12000000b0054166e8d4damr8695111ywb.29.1682362523439; Mon, 24
- Apr 2023 11:55:23 -0700 (PDT)
+        Mon, 24 Apr 2023 14:55:59 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1701965B7;
+        Mon, 24 Apr 2023 11:55:55 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OItmDX014970;
+        Mon, 24 Apr 2023 13:55:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682362548;
+        bh=QCsbpNC2VDKR//72LdQesXrTAYp7X6UvJ49w9SVyVzI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=j1HeXphgTxf00rl7y2hW8/ouAk7Qxd/rO3qddsPCQ2AUQENQCruDooXYLsWP5OrQU
+         WJwA/aOd8iv4qDE1T047hedeN2YsAMzW2sZ4cy8FduQlAPwpJ0sZRx9EkFldU/8Xb8
+         U6/z+Tbu6sNi1s+JN+uLSFfACotM0tfPO56yqdwI=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OItmBR121511
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 13:55:48 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 13:55:48 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 13:55:48 -0500
+Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OItlV7115983;
+        Mon, 24 Apr 2023 13:55:47 -0500
+Message-ID: <f5861b8b-637a-e127-2945-8994a472015a@ti.com>
+Date:   Mon, 24 Apr 2023 13:55:47 -0500
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
- <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
-In-Reply-To: <ZEagN1jJwg+rUzX4@boqun-archlinux>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 24 Apr 2023 14:55:11 -0400
-Message-ID: <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/3] arm64: dts: ti: k3-j7200-mcu-wakeup: Split fss node
+ up
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>, <vaishnav.a@ti.com>,
+        <u-kumar1@ti.com>
+References: <20230424173623.477577-1-nm@ti.com>
+ <20230424173623.477577-4-nm@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20230424173623.477577-4-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is amazing debugging Boqun, like a boss! One comment below:
+On 4/24/23 12:36 PM, Nishanth Menon wrote:
+> fss node claims to be entirely a syscon node, but it is really two
+> parts of it - one a syscon that controls the hbmc mux and a simple bus
+> where ospi, hbmc peripherals are located. So model it accordingly by
+> splitting the node up and using ti,j721e-system-controller to describe
+> the syscon
+> 
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>   .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 21 +++++++++++++------
+>   1 file changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> index b58a31371bf3..7653cb191be1 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> @@ -338,18 +338,27 @@ mcu_spi2: spi@40320000 {
+>   		status = "disabled";
+>   	};
+>   
+> -	fss: syscon@47000000 {
+> -		compatible = "syscon", "simple-mfd";
+> +	hbmc_syscon: syscon@47000000 {
+> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+>   		reg = <0x00 0x47000000 0x00 0x100>;
+> -		#address-cells = <2>;
+> -		#size-cells = <2>;
+> -		ranges;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x00 0x00 0x47000000 0x100>;
+>   
+> -		hbmc_mux: hbmc-mux {
+> +		hbmc_mux: mux-controller@4 {
+>   			compatible = "mmio-mux";
+> +			reg = <0x4 0x2>;
+>   			#mux-control-cells = <1>;
+>   			mux-reg-masks = <0x4 0x2>; /* HBMC select */
+>   		};
+> +	};
+> +
+> +	fss: bus@47030000 {
+> +		compatible = "simple-bus";
+> +		reg = <0x0 0x47030000 0x0 0x100>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+>   
+>   		hbmc: hyperbus@47034000 {
+>   			compatible = "ti,am654-hbmc";
 
-> > > Or something simple I haven't thought of? :)
-> >
-> > At what points can r13 change?  Only when some particular functions are
-> > called?
-> >
->
-> r13 is the local paca:
->
->         register struct paca_struct *local_paca asm("r13");
->
-> , which is a pointer to percpu data.
->
-> So if a task schedule from one CPU to anotehr CPU, the value gets
-> changed.
 
-It appears the whole issue, per your analysis, is that the stack
-checking code in gcc should not cache or alias r13, and must read its
-most up-to-date value during stack checking, as its value may have
-changed during a migration to a new CPU.
+I hope all the things you had to do here show you what I mean in my
+comments on [0] :)
 
-Did I get that right?
+I've posted a first step patch that allows "reg-mux" node to work with
+regular reg properties[1]. Which means this patch could have been just this:
 
-IMO, even without a reproducer, gcc on PPC should just not do that,
-that feels terribly broken for the kernel. I wonder what clang does,
-I'll go poke around with compilerexplorer after lunch.
+--- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+@@ -305,15 +305,16 @@ wkup_i2c0: i2c@42120000 {
+                 status = "disabled";
+         };
+  
+-       fss: syscon@47000000 {
+-               compatible = "syscon", "simple-mfd";
++       fss: bus@47000000 {
++               compatible = "simple-bus";
+                 reg = <0x00 0x47000000 0x00 0x100>;
+                 #address-cells = <2>;
+                 #size-cells = <2>;
+                 ranges;
+  
+                 hbmc_mux: hbmc-mux {
+-                       compatible = "mmio-mux";
++                       compatible = "reg-mux";
++                       reg = <0x00 0x47000004 0x00 0x2>;
+                         #mux-control-cells = <1>;
+                         mux-reg-masks = <0x4 0x2>; /* HBMC select */
+                 };
 
-Adding +Peter Zijlstra as well to join the party as I have a feeling
-he'll be interested. ;-)
+Andrew
 
-thanks,
-
- - Joel
+[0] https://lore.kernel.org/all/76da0b98-3274-b047-db11-ecabc117ae11@ti.com/
+[1] https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
