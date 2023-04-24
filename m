@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC2F6ECB68
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115DF6ECB6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjDXLex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S231736AbjDXLfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjDXLev (ORCPT
+        with ESMTP id S231708AbjDXLez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:34:51 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154BE3A9A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:50 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f1a6e66c9so767018666b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:50 -0700 (PDT)
+        Mon, 24 Apr 2023 07:34:55 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516543C0D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:54 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f3df30043so653563966b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682336088; x=1684928088;
+        d=gmail.com; s=20221208; t=1682336093; x=1684928093;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=rnBwe/xxNXcbECdM+6fJE9BhNtlcNCnbsvJvDgaRMPg=;
-        b=BE5+DhasXIgwzV9/rUrifzuMR0XeXCkkrMc4T03NejVwBELCf/Zn7cyY1iBqowTg/C
-         fZUYqwJmkJWet0A9axenACl9YZyrVpnNvTDjZOagwjW1cdi7XjbKMGIA89hwgwrka5Qr
-         +nDivC9jAjCJ5abUWytc8A+5SS0Kx06CWtvhKXoNVD3TPhP9cGoQ3NkG/ZqkK0Rqayxo
-         +c13R2Ux9+sFZqflpFP5Rn2cPwX8qq7kxhCnm3nIzc+Em7DoJX+GGodqE7vl1nA8/mNE
-         dhI26ESOcfLUIaQWl1k0qP9LleVoAEbHrRiDX+uKhSGf/Uj8fxDdj0c/n3ZyRVjGoWz8
-         wiCg==
+        bh=phKEvcHVMTqACdLjm8eVzbdGFSMWrSbFNy5E+a4doOw=;
+        b=Vm792uz2b2oSf64pgOvp209eDnItUKJHNuqdOAkWmvbHCzNp9EaPeYpV1IMynY3+if
+         ZXPlaoQNBnm4Mdhc7UxFnq1w5R4QwW9MS3sqcIBzxyUQLTrdBX0131mhPj/i/w5LHwl8
+         ppMAiKCbxQEBGkksXSJ3WH4QWVVsXsedUNBHjbkukOcZPor35mj3wJZBS8HZwfYIumvx
+         RJDgeNZABMjNu3KZjfkH1EiTXisXzDUNjGxL5SpwjE65mgf+m19sellC+YE5kCACZW6g
+         0ZyX/HXNaf4/mTX1aWrZfkoob5yBaQ4zn4OqEvJNeJL0dJdR+vi2V6N5MAsJGBP2cO6X
+         SBhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682336088; x=1684928088;
+        d=1e100.net; s=20221208; t=1682336093; x=1684928093;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rnBwe/xxNXcbECdM+6fJE9BhNtlcNCnbsvJvDgaRMPg=;
-        b=AXM+GWioWwdN1ZOqY7yIOxrBK2QyDgMdVlrMadN2Rjpmux2+xW8vlUKj8Uo4n4OsiG
-         xuI4Dmsene5Wp/WbuAwTJyVj1+lG1fKTY2Le7roZPHWX23u4MwYg5hDk3iHlqSTLtNrK
-         mpfxxD0OwNRPuni5wHk0BuwWJRXYTxNruvzQU3ZDcnrkMmmCX39b5+Whfm/aMAWZ8vO4
-         X4ZxoYWLSCv2yKO6vyDM7SHJPPzCoFxpX3qdhbv51Hl+tCrH23+8B4ib0WLwX6BYkADy
-         i9ogaSnfK78w88Z7UOzx/ms5U5oDiz4SopOAr/WkcPYdtFqcK3FtoN70bzssDI8VwMw+
-         7XUw==
-X-Gm-Message-State: AAQBX9cyEsED0/U9VaDNk59ElZDlhXFPF4cATlzf6gAvVbdsvhGYNJnd
-        myg1FEsKJzWoIuBMzw/1bKo=
-X-Google-Smtp-Source: AKy350brAySoHRwodleIfHAAvUTJBtwdizt9p/uA3TovQvM+vKRzlVPKQocK+NpWi5IhWhLoVW6eFQ==
-X-Received: by 2002:a17:906:c201:b0:953:3736:3b8f with SMTP id d1-20020a170906c20100b0095337363b8fmr9805620ejz.64.1682336088247;
-        Mon, 24 Apr 2023 04:34:48 -0700 (PDT)
+        bh=phKEvcHVMTqACdLjm8eVzbdGFSMWrSbFNy5E+a4doOw=;
+        b=d9F4fhwWawMyoC91AzwspWuPGXIQclGgx/gx2ir8nbej8HfonMKl4TCz0NyM7HVwFA
+         UoNEeafbPvvMTJML6TetZDp0FA4TtVYmQl+15eZ5sqvn3zyNML7gNc84AKwlzS/mmio8
+         uy6S8w8OZU99eTfvU1pq5m5NewkTseWFCREmcJOCWcgiGLsZLylVsSLTHtkEFfSVN+q3
+         lP+mxvb9BqWvSUEf1C9N0hNLC81yAFoA8Z9GeHMSbEJ8wn/nlmKFa7d5kwQoItb8tMzZ
+         ar8kK+x6szGyrxV1tQrz/qu/VToKd6gnpiUvz2Pmw9W6Q5jcYQeuKZyNUm6bBU6txXqK
+         3lKw==
+X-Gm-Message-State: AAQBX9dFb2R1Pg/ZPcDspUW8DLRgusxGDUHbZKRUg+gAEwDzd1/H/30w
+        MEd+puIpNgyunKmHMhdnt90=
+X-Google-Smtp-Source: AKy350ZfpLXvxAHScAzsLdVaJMtRYwDvvKDiDLQBBQ6f7gaeTRgRDPrFGjsbi8FLyHQv9bhB352t6Q==
+X-Received: by 2002:a17:906:151b:b0:94f:562b:2979 with SMTP id b27-20020a170906151b00b0094f562b2979mr9886541ejd.31.1682336092411;
+        Mon, 24 Apr 2023 04:34:52 -0700 (PDT)
 Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id y21-20020a17090614d500b0094b87711c9fsm5442879ejc.99.2023.04.24.04.34.47
+        by smtp.gmail.com with ESMTPSA id jt11-20020a170906ca0b00b00958434d4ecesm2808086ejb.13.2023.04.24.04.34.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 04:34:47 -0700 (PDT)
-Message-ID: <2e0268d352731a188a8302892bb9a404616dcf4a.camel@gmail.com>
-Subject: Re: [PATCH 02/43] soc: Add SoC driver for Cirrus ep93xx
+        Mon, 24 Apr 2023 04:34:52 -0700 (PDT)
+Message-ID: <ea8992e1be827883a78b4729fed55d70c5b33e2e.camel@gmail.com>
+Subject: Re: [PATCH 06/43] clocksource: ep93xx: Add driver for Cirrus Logic
+ EP93xx
 From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
 To:     Nikita Shubin <nikita.shubin@maquefel.me>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sven Peter <sven@svenpeter.dev>,
-        Brian Norris <briannorris@chromium.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Date:   Mon, 24 Apr 2023 13:34:46 +0200
-In-Reply-To: <20230424123522.18302-3-nikita.shubin@maquefel.me>
+Date:   Mon, 24 Apr 2023 13:34:51 +0200
+In-Reply-To: <20230424123522.18302-7-nikita.shubin@maquefel.me>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230424123522.18302-3-nikita.shubin@maquefel.me>
+         <20230424123522.18302-7-nikita.shubin@maquefel.me>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4 
@@ -91,48 +78,27 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, 2023-04-24 at 15:34 +0300, Nikita Shubin wrote:
-> This adds an SoC driver for the ep93xx. Currently there
-> is only one thing not fitting into any other framework,
-> and that is the swlock setting.
+> This us a rewrite of EP93xx timer driver in
+> arch/arm/mach-ep93xx/timer-ep93xx.c trying to do everything
+> the device tree way:
 >=20
-> It's used for clock settings and restart.
+> - Make every IO-access relative to a base address and dynamic
+> =C2=A0 so we can do a dynamic ioremap and get going.
+> - Find register range and interrupt from the device tree.
 >=20
 > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
 > ---
->=20
-> Notes:
-> =C2=A0=C2=A0=C2=A0 rfc -> v0
-> =C2=A0=C2=A0=C2=A0 Alexander Sverdlin:
-> =C2=A0=C2=A0=C2=A0 - replace spinlock with local_irq
-> =C2=A0=C2=A0=C2=A0=20
-> =C2=A0=C2=A0=C2=A0 Arnd Bergmann:
-> =C2=A0=C2=A0=C2=A0 - wildcards changed to ep9301
-> =C2=A0=C2=A0=C2=A0=20
-> =C2=A0=C2=A0=C2=A0 Linus Walleij:
-> =C2=A0=C2=A0=C2=A0 - added tag, i hope changes are not significant enough=
- to drop
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Reviewed-by tag
->=20
-> =C2=A0drivers/soc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/soc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/soc/cirrus/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 11 +++
-> =C2=A0drivers/soc/cirrus/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0=C2=A0 2 +
-> =C2=A0drivers/soc/cirrus/soc-ep93xx.c=C2=A0=C2=A0 | 134 +++++++++++++++++=
-+++++++++++++
-> =C2=A0include/linux/soc/cirrus/ep93xx.h |=C2=A0 16 +++-
-> =C2=A06 files changed, 161 insertions(+), 4 deletions(-)
-> =C2=A0create mode 100644 drivers/soc/cirrus/Kconfig
-> =C2=A0create mode 100644 drivers/soc/cirrus/Makefile
-> =C2=A0create mode 100644 drivers/soc/cirrus/soc-ep93xx.c
+> =C2=A0drivers/clocksource/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0 11 ++
+> =C2=A0drivers/clocksource/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0=C2=A0 1 +
+> =C2=A0drivers/clocksource/timer-ep93xx.c | 191 ++++++++++++++++++++++++++=
++++
+> =C2=A03 files changed, 203 insertions(+)
 
 --=20
 Alexander Sverdlin.
