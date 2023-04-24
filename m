@@ -2,755 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC206ECAE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3DF6ECAE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjDXLDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S231502AbjDXLDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjDXLD2 (ORCPT
+        with ESMTP id S231642AbjDXLDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:03:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D9526BD
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682334161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zR9m9WryA0+sdkXiJ2C0Z9LuHmnYeDZPpjV0NauN8dk=;
-        b=CiYAuXa3Q60Pl6pgy6jNEnr9tRB3o4xIv6zDYBG3iiaO+N4JO2/sChEM0HsQe5hSgGwQ77
-        xG16yl/OVntAIoU9kVG9CLSZ40xc7eC/KfkLkeImO9hj+Ps1+UPuK/Pu1x8HdM0jf8TJ4g
-        L9+7BS3V39CeflSg4MdyHKf/RGfY/2w=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-41-rOKtvxWJPPuKaNwCf2grdA-1; Mon, 24 Apr 2023 07:02:40 -0400
-X-MC-Unique: rOKtvxWJPPuKaNwCf2grdA-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-504ecbc85c2so4592005a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:02:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682334156; x=1684926156;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zR9m9WryA0+sdkXiJ2C0Z9LuHmnYeDZPpjV0NauN8dk=;
-        b=hWWL29l90w/BlsNKU8CNJqgQtksn+3eOUPFCpkqtqIRtTyOvd2alGX1+YNZgLNP0oJ
-         AMeMeqZWvMbnj6qcnU/HCspVpce2AhKzmRMjE+nqsiQ7VHpCoO0E3rs4yMoOga4lw09s
-         ufgtIeub6a9yDTTmZvTmuknlUTmDNMFbk+neoWNL/LOd6L6wVGaixtOur1Ze06AlKpfN
-         3aWHnEfkiW2ToSlLd/fZeoypBMRye7vK2oZqrmpZ2dDr2snhSbn75fAQa4zEnGUOxD9K
-         UXhXj79oap+089tPUodLK3nU8hrI0gOZVkn0a4e8/9WONIruf8Ojs4mfQHbIT56kfDCg
-         v7zg==
-X-Gm-Message-State: AAQBX9c+m5v4Fdc+SFHnQ9osrkfMNkHU0u0bJ3ctokpFWLRWjh/RL+OV
-        ZvRsksomQtTFyNZZbpYV8dkxXQUFez9xF+kEk+L0v0kwN7fZGkhDiOyfP+Wkb7yTlClSvYUusGo
-        kjz9gjSu3GZmkIVFOlaUnP5lX
-X-Received: by 2002:a17:907:c06:b0:949:cb6a:b6f7 with SMTP id ga6-20020a1709070c0600b00949cb6ab6f7mr11863956ejc.56.1682334155597;
-        Mon, 24 Apr 2023 04:02:35 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZorSVCRrRVA4Mgqe0kiB+xQrLDd6sxPTuIO9af40jxYwSk0530hdbZdwJdCm5Fd8/Ne/9zOA==
-X-Received: by 2002:a17:907:c06:b0:949:cb6a:b6f7 with SMTP id ga6-20020a1709070c0600b00949cb6ab6f7mr11863909ejc.56.1682334155110;
-        Mon, 24 Apr 2023 04:02:35 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170906504e00b0094a90d3e385sm5352005ejk.30.2023.04.24.04.02.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 04:02:34 -0700 (PDT)
-Message-ID: <47209259-9e57-f263-bf48-10f233c63b69@redhat.com>
-Date:   Mon, 24 Apr 2023 13:02:33 +0200
+        Mon, 24 Apr 2023 07:03:32 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2084.outbound.protection.outlook.com [40.107.7.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE11B7;
+        Mon, 24 Apr 2023 04:03:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g2j+O/8+82leMLI0wqHeRFdd+A5wt4eXXUSyNd0hp8L9HIeZoinMXrzNqMBTz67Cm7ZvzlZY5EUNSGkhG87u0C73ZGS84Jk6JUB1S32VPn8sidNUjaXgB6tnE8wuBEG0gKjOKxg0Au6QHLuxfJdnTwsNHQ4yacjYwg0txmiEXfGNjamnIIcrT9yftCoCWwiL7YvjbKl6swls/GHRlsjR22kEuo+9xQjwTdhk3bhSAxpjg5HSy7xk64f3NLQRryrzcuIKv7MAKp1gxD+t2zoocpTlnXSaFqTqrXxsmrZbuCTnVpCC5Ag7sBnpp530Ijf/Br200zETywsV3HCGVnSGog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ND3s5AMr8qJoHuA7xePZSVn025ZrmjDrrdg7yhDhn8Y=;
+ b=Gxlr3icXwtnmM5XRuS8wuQkmCP3snQP57WdfY3pJ0G3yEAwvf8RaqOHLYM2pBB6pYX5HzxH4HWwNhi8wRFr1fNYhiDjKmXeQVReLCKKZnzyBtmLjSAprp444Em7W1T7VCRrjv00uWgosgZATRyuOMNd9Nt+mE46DXDOlHYdGCLZ0rKrHRglJ2DMKnBjFho9S9todFYdlxBEgKUhPFKXqT7zFklbLqrfwlKx7KL5sbbrM8lQic10MtJI4zCs6Z4shJNbI7Q5EFH8eRC5ARl0wJcoUsZY9VFCNG+lw4c4fPlvxGJuXj0zLRoj+9lFX+XWtZBnqZqGnMfmfkemp7swqUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ND3s5AMr8qJoHuA7xePZSVn025ZrmjDrrdg7yhDhn8Y=;
+ b=ZWcNuhXT5vhCud0ZiP5rS9pWHrbmHIDNoz08VUcvpb6e8WUJJFw9W61zrVLOezcY4+Jvj3eJk/oTZ+MZIfjvRsHa2cHJ4k+6uruas6pbt6DaaCV+ozLw8d9ykd0/+cXt3++KYcGtyLFJ0HdSYesByqOxejeq3Hzczo8SY0CfvCAhZrP5A0j+mj9buiUHYDOQj4WQKJZFtJzjIMVGWo/CBQ1yJ5alr46KwZM97QIEN2P4AknLNumAgguz38LemTcZ5rQAGUjY8FQbJTX/vkXA0d+Z8piS9NM1E+8eoWV0s22kpDGtxZVpsmAlRTUC4ZbjnLnjpSUrjX5bQNHgqXXREQ==
+Received: from DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:395::21)
+ by DB8PR10MB3226.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:11d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.19; Mon, 24 Apr
+ 2023 11:03:26 +0000
+Received: from DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7235:3b3e:b256:f116]) by DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7235:3b3e:b256:f116%4]) with mapi id 15.20.6340.019; Mon, 24 Apr 2023
+ 11:03:26 +0000
+From:   "Starke, Daniel" <daniel.starke@siemens.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 1/8] tty: n_gsm: add restart parameter to DLC specific
+ ioctl config
+Thread-Topic: [PATCH v3 1/8] tty: n_gsm: add restart parameter to DLC specific
+ ioctl config
+Thread-Index: AQHZdpsxOz9D2E9lQUyuz0phgWyj0K86S5AA
+Date:   Mon, 24 Apr 2023 11:03:26 +0000
+Message-ID: <DB9PR10MB588138A96EE5E7CE96E28221E0679@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+References: <20230424075251.5216-1-daniel.starke@siemens.com>
+ <2023042438-whole-cannot-1945@gregkh>
+In-Reply-To: <2023042438-whole-cannot-1945@gregkh>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Enabled=true;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SetDate=2023-04-24T11:03:24Z;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Method=Privileged;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Name=restricted;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ActionId=b129bda1-af69-47b3-b8da-18dc687d9c98;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ContentBits=0
+document_confidentiality: Restricted
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB9PR10MB5881:EE_|DB8PR10MB3226:EE_
+x-ms-office365-filtering-correlation-id: eb7cd085-5c34-48da-1266-08db44b38792
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wDEphkP3yhJkua+hJKgFWFmiUBNEHpFT8V9DZ7asULscoUiX/CRRXxNaaAMt7yP/nA6S6FKW6ONARJjvlncFeYdLIOzBiHdqOhvlz/L07fthV5gHxKSC1qiGZwB2do2m9+wfXhlwXWqUV3+u9do5df+AwmC/V1mB9bjZRwwnyWl1G+UAnlVaMbgmSravdp2z1Vw1MyDC1n4Z1H+gkM8JpHsgqCIry+zlzjZc0HE+sIjr4PcdhPVZjANax67+tybjqJIKpp7YhwvD9Z14X9Jvb058K6UQNwmrBTy3yc6Yg6djCI86YnTKr1Q29ETaHyfJxHIYIl7DFxryF7BWAgDn7CoPL9IWXuSIPCHVhBVGKQm8sVvKs2/WM5huN5eRUvnxUhY8aTn93e6R5upylG2ad18T5B0SxpyMS8YOBfboGqVKrRgGZRr67PDKgE6tRfmKjoQN/SjS9y8UPlnlaSy7gxQPW9vdK9ED/ygBw1XXlrtwtqi3QVQGXyKazT/rKRTyQPo+71rIjJOYZxvb+yNmDEymxOqvDmNtU3SZmYo31kvQV8xQ29F7yoCUEUizbIoH0EuP2Bq8u7501dZesDqWNG+bmBpxQt3MKnG0pKNn3nM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199021)(82960400001)(54906003)(966005)(7696005)(33656002)(83380400001)(55016003)(6506007)(26005)(9686003)(186003)(71200400001)(478600001)(8936002)(8676002)(41300700001)(38070700005)(6916009)(66946007)(66476007)(64756008)(66446008)(66556008)(76116006)(4326008)(316002)(2906002)(86362001)(52536014)(5660300002)(38100700002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uEnaEOjEluH4M/A+K0qq7Nk+7NeX0LUoJkFgs5oKZjtiuL9Kc+UPjOH8iIWP?=
+ =?us-ascii?Q?/ItoazhSTWXokDNHbNp2eDhYlUrS5EOQOVD8YmFuwUM3V7Ys0EcEscFFCStn?=
+ =?us-ascii?Q?3pM/zDxURaUB+EkjzE97lUC9kFIdfDQIe5wzmuWUcMV3OSYy1uTqmE0UPFpz?=
+ =?us-ascii?Q?vTSq+H+eiqKaJWrsdj1TpZQLOpPxaOnJv7WiAW70N+R8TeLpp9IoZk6PA3g9?=
+ =?us-ascii?Q?QNM/Q03lymHKWp9PtKhLhcBhpFdVdVz8cSaZfXC4+pSG+8R3NbKAySmkROq0?=
+ =?us-ascii?Q?P0mSHBKVeO6zlR8igw61omph1cBLdjiopla4Q+InYluFG/FFo1yML+saYhfQ?=
+ =?us-ascii?Q?2gFwnk6KPScD4vXFG4oAcqhkHoHnV8jQvbJg6moiB9uo/8cHig1uErFaeRup?=
+ =?us-ascii?Q?+/Agozt3HahBb2PoiWzGXUzdSMAaLHj1OzZwiGjxOVxDEXTez/9P9ZcEYs2C?=
+ =?us-ascii?Q?LRMSryZNM6IMsTYuMPCbJ24Kcfi5JNQN+aB3BT6V3V3TM4aDH3j05W27NWYm?=
+ =?us-ascii?Q?Lnw9T/3HpaRtpEQVPy5G9qZxghVsNrvUij9dbiD9RORbt73jOC1GSwFs1sP/?=
+ =?us-ascii?Q?zxYcGe7z3oU+gASaLhtvM9oXI9Qt1p7cPTzK259WdxY3nHkkcaTYS8Xe2Avc?=
+ =?us-ascii?Q?mAHOkfMUbRxoVwjVKde0oz2Sfh88uig9RBm0Uo4Xbo9jRQPYPJN/k5EhHfNf?=
+ =?us-ascii?Q?ZquOkJdcnwuCNebKgJMgS7Jwo2n+1zXNCEua0991wJVh6njq1yiVBGt+njKi?=
+ =?us-ascii?Q?gD63uLd/TG7m2i1Eyd3cqsgCVtsPx0MCPFNGvQCbw4p5Xeidsrz/xzDJIiDA?=
+ =?us-ascii?Q?9xrLSlqkbfPohMjOJNAtDFIRSO4Qky573Rx+r6xeyaXz5ptDUDFV8mnRRUXy?=
+ =?us-ascii?Q?Vx8Cy/sllHJHVCxC7cHERkAlPOUG5AF1vOtE229sb8WljAYWYfd+KTc73vlS?=
+ =?us-ascii?Q?SEFes05zjDC5i/yNT0gt8G8/Dl5cuiPxtRhZsb6Yw3zzh7LMF//xLmr6ZlVX?=
+ =?us-ascii?Q?5l7Um/XNNWkoLfRncTWf7ERN/d0vZCF+dk6Emca65Lr+CDqJN7JDnH0wWryX?=
+ =?us-ascii?Q?AJCQJv/f8ch1kiz7/9wrC4SX80V3Uh/mJsjazyHtmBQfmI6I+dE0Sg55BMZo?=
+ =?us-ascii?Q?wUFf2S6zsUGFJTJYt6PhOiK4/kNlWzg+c1aGEHkIb0bRR3u/F3P0LJNFlOq0?=
+ =?us-ascii?Q?Vnlg5TzQwI5YAGgZmrwkGpseqlzmwyp7z6wdLPsFg/JkxB7SAeYfM0ncCTT8?=
+ =?us-ascii?Q?Ko2eSVAPEVkjd4AbqyDbhdYJZYcm2jHNO6vcX4JSnW82bKU4pkDhQWp89nJL?=
+ =?us-ascii?Q?U2S8EbIxcS3DHDvek929bx8lW98pqwCb3c2Gc3bWwtXX5wI2yqJ1KrUoV9Ij?=
+ =?us-ascii?Q?uAcEY+g31bGs7hmjWI3mvb0xu2OzdbOkoq45/z+c65icEN6+NLxTu+fPUUW1?=
+ =?us-ascii?Q?oU1vTlbX0h/zHM5aH21bh7BK/IVnN34y8bT6MphiZos5ub9AeNCoZa/zJZyB?=
+ =?us-ascii?Q?70o44A21+5brR+nApsRYaTV/r+xOWPN5saf3CWKOfiT59AK8fTDDpPbk/Nqr?=
+ =?us-ascii?Q?x60d+ITf1Cw4KEWx4d5XyOYovgWbrufcAT0jouwhVHeUys0+HxfOeeja5PU2?=
+ =?us-ascii?Q?IQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/5] Input: add driver for Focaltech FTS touchscreen
-To:     Jeff LaBundy <jeff@labundy.com>,
-        Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Cc:     Caleb Connolly <caleb@connolly.tech>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Job Noorman <job@noorman.info>,
-        Alistair Francis <alistair@alistair23.me>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
- <20230415020222.216232-3-joelselvaraj.oss@gmail.com>
- <ZEXr1hC+Q5Bo/3Tc@nixie71>
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZEXr1hC+Q5Bo/3Tc@nixie71>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb7cd085-5c34-48da-1266-08db44b38792
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2023 11:03:26.6780
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rrZdQFz3NXfo881AU9cIuCWa6oYGRrKTwwUwlh0zd9CYgeUgRqCMOnDRerBZykhxqCfx788ADxzVWqMmYYU/LwuE4BGM9TVqzIlG9kJvRtg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3226
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+> > --- a/include/uapi/linux/gsmmux.h
+> > +++ b/include/uapi/linux/gsmmux.h
+> > @@ -58,7 +58,8 @@ struct gsm_dlci_config {
+> >  	__u32 priority;		/* Priority (0 for default value) */
+> >  	__u32 i;		/* Frame type (1 =3D UIH, 2 =3D UI) */
+> >  	__u32 k;		/* Window size (0 for default value) */
+> > -	__u32 reserved[8];	/* For future use, must be initialized to zero */
+> > +	__u32 restart;		/* Force DLCI channel reset? */
+>=20
+> Why are you using a full 32 bits for just 1 bit of data here?  Why not
+> use a bitfield?
 
-On 4/24/23 04:39, Jeff LaBundy wrote:
-> Hi Joel,
-> 
-> Great work so far! It's coming along nicely. Please find my latest
-> feedback below.
-> 
-> On Fri, Apr 14, 2023 at 09:02:19PM -0500, Joel Selvaraj wrote:
->> The Focaltech FTS driver supports several variants of focaltech
->> touchscreens found in ~2018 era smartphones including variants found on
->> the PocoPhone F1 and the SHIFT6mq which are already present in mainline.
->> This driver is loosely based on the original driver from Focaltech
->> but has been simplified and largely reworked.
->>
->> Co-developed-by: Caleb Connolly <caleb@connolly.tech>
->> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
->> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
+The ioctrl guide states:
+  Bitfields and enums generally work as one would expect them to,
+  but some properties of them are implementation-defined, so it is better
+  to avoid them completely in ioctl interfaces.
 
-Sorry for jumping into this thread a bit late.
+Therefore, I tried to avoid them here.
 
-I've been reading the archived discussion, but AFAICT the following question is not answered there:
+> And what happened to the request to turn the documentation for this
+> structure into proper kerneldoc format?
 
-Why do a new driver at all ? I have a couple of devices (Nextbook Ares 8, Nextbook Ares 8A) with focaltech FT5416 touchscreens and they both work fine with the existing drivers/input/touchscreen/edt-ft5x06.c driver.
+That applied to patch 2/8 and is unrelated to this patch. Another patch
+will need to fix this.
 
-Is there any reason we need a whole new driver for the ft5452 instead of
-using (with maybe some tweaks?) the existing edt-ft5x06 driver ?
+Link: https://lore.kernel.org/all/20230424075251.5216-2-daniel.starke@sieme=
+ns.com/
 
-Note that despite the name the edt-ft5x06 is a generic Focaltect touchscreen driver.
-
-Regards,
-
-Hans
-
-
-
->> ---
->>  MAINTAINERS                                   |   8 +
->>  drivers/input/touchscreen/Kconfig             |  12 +
->>  drivers/input/touchscreen/Makefile            |   1 +
->>  drivers/input/touchscreen/focaltech_fts5452.c | 432 ++++++++++++++++++
->>  4 files changed, 453 insertions(+)
->>  create mode 100644 drivers/input/touchscreen/focaltech_fts5452.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 7ec4ce64f66d..1a3ea61e1f52 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -8028,6 +8028,14 @@ L:	linux-input@vger.kernel.org
->>  S:	Maintained
->>  F:	drivers/input/joystick/fsia6b.c
->>  
->> +FOCALTECH FTS5452 TOUCHSCREEN DRIVER
->> +M:	Joel Selvaraj <joelselvaraj.oss@gmail.com>
->> +M:	Caleb Connolly <caleb@connolly.tech>
->> +L:	linux-input@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
->> +F:	drivers/input/touchscreen/focaltech_fts5452.c
->> +
->>  FOCUSRITE SCARLETT GEN 2/3 MIXER DRIVER
->>  M:	Geoffrey D. Bennett <g@b4.vu>
->>  L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
->> diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
->> index 1feecd7ed3cb..11af91504969 100644
->> --- a/drivers/input/touchscreen/Kconfig
->> +++ b/drivers/input/touchscreen/Kconfig
->> @@ -388,6 +388,18 @@ config TOUCHSCREEN_EXC3000
->>  	  To compile this driver as a module, choose M here: the
->>  	  module will be called exc3000.
->>  
->> +config TOUCHSCREEN_FOCALTECH_FTS5452
->> +	tristate "Focaltech FTS Touchscreen"
->> +	depends on I2C
->> +	help
->> +	  Say Y here to enable support for I2C connected Focaltech FTS
->> +	  based touch panels, including the 5452 and 8917 panels.
-> 
-> This language is a bit misleading, as it seems to suggest three or more
-> models are supported. It seems the title should simply be "FocalTech
-> FTS5452 touchscreen controller" with the description as "...FocalTech
-> FTS5452 and compatible touchscreen controllers."
-> 
-> As more are found to be compatible (e.g. FTS8917), the compatible strings
-> can simply be appended.
-> 
->> +
->> +	  If unsure, say N.
->> +
->> +	  To compile this driver as a module, choose M here: the
->> +	  module will be called focaltech_fts.
->> +
->>  config TOUCHSCREEN_FUJITSU
->>  	tristate "Fujitsu serial touchscreen"
->>  	select SERIO
->> diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
->> index 159cd5136fdb..47d78c9cff21 100644
->> --- a/drivers/input/touchscreen/Makefile
->> +++ b/drivers/input/touchscreen/Makefile
->> @@ -45,6 +45,7 @@ obj-$(CONFIG_TOUCHSCREEN_ELO)		+= elo.o
->>  obj-$(CONFIG_TOUCHSCREEN_EGALAX)	+= egalax_ts.o
->>  obj-$(CONFIG_TOUCHSCREEN_EGALAX_SERIAL)	+= egalax_ts_serial.o
->>  obj-$(CONFIG_TOUCHSCREEN_EXC3000)	+= exc3000.o
->> +obj-$(CONFIG_TOUCHSCREEN_FOCALTECH_FTS5452)	+= focaltech_fts5452.o
->>  obj-$(CONFIG_TOUCHSCREEN_FUJITSU)	+= fujitsu_ts.o
->>  obj-$(CONFIG_TOUCHSCREEN_GOODIX)	+= goodix_ts.o
->>  obj-$(CONFIG_TOUCHSCREEN_HIDEEP)	+= hideep.o
->> diff --git a/drivers/input/touchscreen/focaltech_fts5452.c b/drivers/input/touchscreen/focaltech_fts5452.c
->> new file mode 100644
->> index 000000000000..abf8a2f271ca
->> --- /dev/null
->> +++ b/drivers/input/touchscreen/focaltech_fts5452.c
->> @@ -0,0 +1,432 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * FocalTech touchscreen driver.
->> + *
->> + * Copyright (c) 2010-2017, FocalTech Systems, Ltd., all rights reserved.
->> + * Copyright (C) 2018 XiaoMi, Inc.
->> + * Copyright (c) 2021 Caleb Connolly <caleb@connolly.tech>
->> + * Copyright (c) 2023 Joel Selvaraj <joelselvaraj.oss@gmail.com>
->> + */
-> 
-> Nit: inconsistent copyright capitalization.
-> 
->> +
->> +#include <linux/delay.h>
->> +#include <linux/i2c.h>
->> +#include <linux/input.h>
->> +#include <linux/input/mt.h>
->> +#include <linux/input/touchscreen.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/mutex.h>
->> +#include <linux/regmap.h>
->> +#include <linux/regulator/consumer.h>
->> +#include <linux/slab.h>
->> +
->> +#define FTS_REG_CHIP_ID_H		0xA3
->> +#define FTS_REG_CHIP_ID_L		0x9F
->> +
->> +#define FTS_MAX_POINTS_SUPPORT		10
->> +#define FTS_ONE_TOUCH_LEN		6
->> +
->> +#define FTS_TOUCH_X_H_OFFSET		3
->> +#define FTS_TOUCH_X_L_OFFSET		4
->> +#define FTS_TOUCH_Y_H_OFFSET		5
->> +#define FTS_TOUCH_Y_L_OFFSET		6
->> +#define FTS_TOUCH_PRESSURE_OFFSET	7
->> +#define FTS_TOUCH_AREA_OFFSET		8
->> +#define FTS_TOUCH_TYPE_OFFSET		3
->> +#define FTS_TOUCH_ID_OFFSET		5
->> +
->> +#define FTS_TOUCH_DOWN			0
->> +#define FTS_TOUCH_UP			1
->> +#define FTS_TOUCH_CONTACT		2
->> +
->> +#define FTS_INTERVAL_READ_REG_MS	100
->> +#define FTS_TIMEOUT_READ_REG_MS		2000
->> +
->> +#define FTS_DRIVER_NAME			"fts-i2c"
->> +
->> +static const u16 fts_chip_types[] = {
->> +	0x5452,
->> +	0x8719,
->> +};
->> +
->> +struct fts_ts_data {
->> +	struct i2c_client *client;
->> +	struct input_dev *input_dev;
->> +	struct regmap *regmap;
->> +	int irq;
->> +	struct regulator_bulk_data regulators[2];
->> +	u8 max_touch_points;
->> +	u8 *point_buf;
->> +	int point_buf_size;
->> +	struct gpio_desc *reset_gpio;
->> +	struct touchscreen_properties prop;
->> +};
->> +
->> +struct fts_i2c_chip_data {
->> +	int max_touch_points;
->> +};
-> 
-> There is no reason to wrap a single member in a struct; just define an array
-> and point each driver_data member to the appropriate element.
-> 
-> An even better solution, however, would be to merge the device ID into this.
-> Then you would have a single array of structs with very clear association
-> between device ID and number of points.
-> 
->> +
->> +int fts_check_status(struct fts_ts_data *data)
-> 
-> This function can be static. It also seems to be inappropriately named. Here
-> we are checking the device's ID, not its status.
-> 
->> +{
->> +	int error, i = 0, count = 0;
->> +	unsigned int val, id;
->> +
->> +	do {
->> +		error = regmap_read(data->regmap, FTS_REG_CHIP_ID_L, &id);
->> +		if (error)
->> +			dev_err(&data->client->dev, "I2C read failed: %d\n", error);
-> 
-> If this read fails, there is no point in continuing further in this loop. Most
-> likely the second read would fail as well but if it doesn't, you are computing
-> the id using an uninitialized variable.
-> 
-> Can you also explain, and possibly add comments, as to why the device ID must
-> be checked in a retry loop? Is it because the device may be in a deep sleep and
-> must be hit with I2C traffic a couple of times?
-> 
-> If so, then you likely want to briefly sleep and then start over (i.e. continue)
-> in the event of an error.
-> 
->> +
->> +		error = regmap_read(data->regmap, FTS_REG_CHIP_ID_H, &val);
->> +		if (error)
->> +			dev_err(&data->client->dev, "I2C read failed: %d\n", error);
-> 
-> Same problem here.
-> 
->> +
->> +		id |= val << 8;
->> +
->> +		for (i = 0; i < ARRAY_SIZE(fts_chip_types); i++)
->> +			if (id == fts_chip_types[i])
->> +				return 0;
-> 
-> This retry loop in general seems a bit non-optimal. If for example the driver
-> is simply communicating with an incompatible device, there is no need to go
-> through all N loops.
-> 
->> +
->> +		count++;
->> +		msleep(FTS_INTERVAL_READ_REG_MS);
->> +	} while ((count * FTS_INTERVAL_READ_REG_MS) < FTS_TIMEOUT_READ_REG_MS);
-> 
-> This multiplication seems unnecessarily complicated; can we not simply have
-> FTS_MAX_RETRIES or similar?
-> 
->> +
->> +	return -EIO;
->> +}
->> +
->> +static int fts_report_touch(struct fts_ts_data *data)
->> +{
->> +	struct input_dev *input_dev = data->input_dev;
->> +	int base;
->> +	unsigned int x, y, z, maj;
->> +	u8 slot, type;
->> +	int error, i = 0;
->> +
->> +	u8 *buf = data->point_buf;
->> +
->> +	memset(buf, 0, data->point_buf_size);
->> +
->> +	error = regmap_bulk_read(data->regmap, 0, buf, data->point_buf_size);
->> +	if (error) {
->> +		dev_err(&data->client->dev, "I2C read failed: %d\n", error);
->> +		return error;
->> +	}
->> +
->> +	for (i = 0; i < data->max_touch_points; i++) {
->> +		base = FTS_ONE_TOUCH_LEN * i;
->> +
->> +		slot = buf[base + FTS_TOUCH_ID_OFFSET] >> 4;
->> +		if (slot >= data->max_touch_points)
->> +			break;
->> +
->> +		x = ((buf[base + FTS_TOUCH_X_H_OFFSET] & 0x0F) << 8) +
->> +		    (buf[base + FTS_TOUCH_X_L_OFFSET] & 0xFF);
->> +		y = ((buf[base + FTS_TOUCH_Y_H_OFFSET] & 0x0F) << 8) +
->> +		    (buf[base + FTS_TOUCH_Y_L_OFFSET] & 0xFF);
-> 
-> Sorry, I did not quite follow the image that was shared in an earlier thread.
-> It is unclear to me why we cannot represent the interrupt status registers
-> as an array of __be16 values and then do something like the following:
-> 
-> 		x = be16_to_cpu(buf[FTS_TOUCH_X_OFFSET]) & GENMASK(11, 0);
-> 
-> I would be surprised if the mask is even necessary; you would need to refer
-> to a datasheet however. Perhaps the vendor would be willing to give one to
-> you if it means they get an upstream driver?
-> 
->> +
->> +		z = buf[base + FTS_TOUCH_PRESSURE_OFFSET];
->> +		if (z == 0)
->> +			z = 0x3f;
->> +
->> +		maj = buf[base + FTS_TOUCH_AREA_OFFSET] >> 4;
->> +		if (maj == 0)
->> +			maj = 0x09;
-> 
-> I think we need some comments and possibly some #defines to explain what is
-> happening here.
-> 
->> +
->> +		type = buf[base + FTS_TOUCH_TYPE_OFFSET] >> 6;
->> +
->> +		input_mt_slot(input_dev, slot);
->> +		if (type == FTS_TOUCH_DOWN || type == FTS_TOUCH_CONTACT) {
->> +			input_mt_report_slot_state(input_dev, MT_TOOL_FINGER, true);
->> +			touchscreen_report_pos(data->input_dev, &data->prop, x, y, true);
->> +			input_report_abs(input_dev, ABS_MT_PRESSURE, z);
->> +			input_report_abs(input_dev, ABS_MT_TOUCH_MAJOR, maj);
->> +			input_report_key(data->input_dev, BTN_TOUCH, 1);
->> +		} else {
->> +			input_report_key(data->input_dev, BTN_TOUCH, 0);
->> +			input_mt_report_slot_inactive(input_dev);
->> +		}
->> +	}
->> +	input_mt_sync_frame(input_dev);
->> +	input_sync(input_dev);
->> +
->> +	return 0;
->> +}
->> +
->> +static irqreturn_t fts_ts_interrupt(int irq, void *dev_id)
->> +{
->> +	struct fts_ts_data *data = dev_id;
->> +
->> +	return fts_report_touch(data) ? IRQ_NONE : IRQ_HANDLED;
->> +}
->> +
->> +static void fts_power_off(void *d)
->> +{
->> +	struct fts_ts_data *data = d;
->> +
->> +	regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
->> +}
->> +
->> +static int fts_start(struct fts_ts_data *data)
->> +{
->> +	int error;
->> +
->> +	error = regulator_bulk_enable(ARRAY_SIZE(data->regulators),
->> +				      data->regulators);
->> +	if (error) {
->> +		dev_err(&data->client->dev, "failed to enable regulators\n");
->> +		return error;
->> +	}
->> +
->> +	gpiod_set_value_cansleep(data->reset_gpio, 0);
->> +	msleep(200);
-> 
-> Same here with respect to comments; what happens during these first 200 ms after
-> reset is released? Does the interrupt pin toggle several times? 200 ms is also
-> quite a while to wait each time the input handler opens the device; is it really
-> necessary?
-> 
->> +
->> +	enable_irq(data->irq);
->> +
->> +	return 0;
->> +}
->> +
->> +static int fts_stop(struct fts_ts_data *data)
->> +{
->> +	disable_irq(data->irq);
->> +	gpiod_set_value_cansleep(data->reset_gpio, 1);
->> +	fts_power_off(data);
->> +
->> +	return 0;
->> +}
->> +
->> +static int fts_input_open(struct input_dev *dev)
->> +{
->> +	struct fts_ts_data *data = input_get_drvdata(dev);
->> +	int error;
->> +
->> +	error = fts_start(data);
->> +	if (error)
->> +		return error;
->> +
->> +	error = fts_check_status(data);
->> +	if (error) {
->> +		dev_err(&data->client->dev, "Failed to start or unsupported chip");
->> +		return error;
->> +	}
-> 
-> It seems unnecessary and wasteful to check the device ID every time the input
-> handler opens the device. We also don't want to go through all the trouble of
-> registering the device, only to find out later it wasn't even the right part.
-> 
-> Instead, you should power up the device during probe, validate its ID and then
-> power it back down.
-> 
->> +
->> +	return 0;
->> +}
->> +
->> +static void fts_input_close(struct input_dev *dev)
->> +{
->> +	struct fts_ts_data *data = input_get_drvdata(dev);
->> +
->> +	fts_stop(data);
->> +}
->> +
->> +static int fts_input_init(struct fts_ts_data *data)
->> +{
->> +	struct device *dev = &data->client->dev;
->> +	struct input_dev *input_dev;
->> +	int error = 0;
-> 
-> No need to initialize this, only for it to get overwritten later.
-> 
->> +
->> +	input_dev = devm_input_allocate_device(dev);
->> +	if (!input_dev)
->> +		return -ENOMEM;
->> +
->> +	data->input_dev = input_dev;
->> +
->> +	input_dev->name = FTS_DRIVER_NAME;
->> +	input_dev->id.bustype = BUS_I2C;
->> +	input_dev->dev.parent = dev;
->> +	input_dev->open = fts_input_open;
->> +	input_dev->close = fts_input_close;
->> +	input_set_drvdata(input_dev, data);
->> +
->> +	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_X);
->> +	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_Y);
->> +	input_set_abs_params(input_dev, ABS_MT_TOUCH_MAJOR, 0, 255, 0, 0);
->> +	input_set_abs_params(input_dev, ABS_MT_PRESSURE, 0, 255, 0, 0);
->> +
->> +	touchscreen_parse_properties(input_dev, true, &data->prop);
->> +	if (!data->prop.max_x || !data->prop.max_y) {
->> +		dev_err(dev,
->> +			"touchscreen-size-x and/or touchscreen-size-y not set in device properties\n");
-> 
-> "Device properties" is vague; one could interpret it to mean the controller's
-> embedded FW. Just cut the message off at "...not set".
-> 
->> +		return -EINVAL;
->> +	}
->> +
->> +	error = input_mt_init_slots(input_dev, data->max_touch_points,
->> +				    INPUT_MT_DIRECT);
->> +	if (error)
->> +		return error;
->> +
->> +	data->point_buf_size = (data->max_touch_points * FTS_ONE_TOUCH_LEN) + 3;
->> +	data->point_buf = devm_kzalloc(dev, data->point_buf_size, GFP_KERNEL);
->> +	if (!data->point_buf)
->> +		return -ENOMEM;
->> +
->> +	error = input_register_device(input_dev);
->> +	if (error) {
->> +		dev_err(dev, "Failed to register input device\n");
->> +		return error;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct regmap_config fts_ts_i2c_regmap_config = {
->> +	.reg_bits = 8,
->> +	.val_bits = 8,
->> +};
->> +
->> +static int fts_ts_probe(struct i2c_client *client)
->> +{
->> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
->> +	const struct fts_i2c_chip_data *chip_data;
->> +	struct fts_ts_data *data;
->> +	int error = 0;
->> +
->> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
->> +		dev_err(&client->dev, "I2C not supported");
->> +		return -ENODEV;
->> +	}
->> +
->> +	if (!client->irq) {
->> +		dev_err(&client->dev, "No irq specified\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
->> +	if (!data)
->> +		return -ENOMEM;
->> +
->> +	chip_data = device_get_match_data(&client->dev);
->> +	if (!chip_data)
->> +		chip_data = (const struct fts_i2c_chip_data *)id->driver_data;
->> +	if (!chip_data || !chip_data->max_touch_points) {
->> +		dev_err(&client->dev, "invalid or missing chip data\n");
->> +		return -EINVAL;
->> +	}
->> +	if (chip_data->max_touch_points > FTS_MAX_POINTS_SUPPORT) {
->> +		dev_err(&client->dev,
->> +			"invalid chip data, max_touch_points should be less than or equal to %d\n",
->> +			FTS_MAX_POINTS_SUPPORT);
->> +		return -EINVAL;
->> +	}
-> 
-> This check is not necessary; if someone adds an invalid max_touch_points, then the
-> driver was updated incorrectly. There is no need to check it at every runtime.
-> 
->> +	data->max_touch_points = chip_data->max_touch_points;
->> +
->> +	data->client = client;
->> +	i2c_set_clientdata(client, data);
->> +
->> +	data->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset", GPIOD_OUT_HIGH);
->> +	if (IS_ERR(data->reset_gpio)) {
->> +		error = PTR_ERR(data->reset_gpio);
->> +		dev_err(&client->dev, "Failed to request reset gpio, error %d\n", error);
->> +		return error;
->> +	}
->> +
->> +	data->regmap = devm_regmap_init_i2c(client, &fts_ts_i2c_regmap_config);
->> +	if (IS_ERR(data->regmap)) {
->> +		error = PTR_ERR(data->regmap);
->> +		dev_err(&client->dev, "regmap allocation failed, error %d\n", error);
->> +		return error;
->> +	}
->> +
->> +	/*
->> +	 * AVDD is the analog voltage supply (2.6V to 3.3V)
->> +	 * VDDIO is the digital voltage supply (1.8V)
->> +	 */
->> +	data->regulators[0].supply = "avdd";
->> +	data->regulators[1].supply = "vddio";
->> +	error = devm_regulator_bulk_get(&client->dev, ARRAY_SIZE(data->regulators),
->> +					data->regulators);
->> +	if (error) {
->> +		dev_err(&client->dev, "Failed to get regulators %d\n", error);
->> +		return error;
->> +	}
->> +
->> +	error = devm_add_action_or_reset(&client->dev, fts_power_off, data);
->> +	if (error) {
->> +		dev_err(&client->dev, "failed to install power off handler\n");
->> +		return error;
->> +	}
-> 
-> Christophe makes a great point. If this or any other call throughout the rest of
-> probe as you have written it fails, you will try to disable a disabled regulator.
-> 
-> The same will happen when the driver is torn down, as the input handler should
-> have already powered down the device by way of the close callback. Did you build
-> this driver as a module and test removal? I suspect you will get a stack trace.
-> 
-> I think the call needs to go away altogether.
-> 
->> +
->> +	error = devm_request_threaded_irq(&client->dev, client->irq, NULL,
->> +					  fts_ts_interrupt, IRQF_ONESHOT,
->> +					  client->name, data);
->> +	if (error) {
->> +		dev_err(&client->dev, "Failed to request IRQ: %d\n", error);
->> +		return error;
->> +	}
->> +
->> +	error = fts_input_init(data);
->> +	if (error)
->> +		return error;
->> +
->> +	return 0;
-> 
-> This is idiomatic, but I find "return fts_input_init(data);" to be simpler.
-> 
->> +}
->> +
->> +static int fts_pm_suspend(struct device *dev)
->> +{
->> +	struct fts_ts_data *data = dev_get_drvdata(dev);
->> +
->> +	mutex_lock(&data->input_dev->mutex);
->> +
->> +	if (input_device_enabled(data->input_dev))
->> +		fts_stop(data);
->> +
->> +	mutex_unlock(&data->input_dev->mutex);
->> +
->> +	return 0;
->> +}
->> +
->> +static int fts_pm_resume(struct device *dev)
->> +{
->> +	struct fts_ts_data *data = dev_get_drvdata(dev);
->> +	int error = 0;
-> 
-> Same here, there is no point in initializating this.
-> 
->> +
->> +	mutex_lock(&data->input_dev->mutex);
->> +
->> +	if (input_device_enabled(data->input_dev))
->> +		error = fts_start(data);
->> +
->> +	mutex_unlock(&data->input_dev->mutex);
->> +
->> +	return error;
->> +}
->> +
->> +static DEFINE_SIMPLE_DEV_PM_OPS(fts_dev_pm_ops, fts_pm_suspend, fts_pm_resume);
->> +
->> +static const struct fts_i2c_chip_data fts5452_chip_data = {
->> +	.max_touch_points = 5,
->> +};
->> +
->> +static const struct fts_i2c_chip_data fts8719_chip_data = {
->> +	.max_touch_points = 10,
->> +};
->> +
->> +static const struct i2c_device_id fts_i2c_id[] = {
->> +	{ .name = "fts5452", .driver_data = (long)&fts5452_chip_data },
->> +	{ .name = "fts8719", .driver_data = (long)&fts8719_chip_data },
->> +	{ /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(i2c, fts_i2c_id);
->> +
->> +static const struct of_device_id fts_of_match[] = {
->> +	{ .compatible = "focaltech,fts5452", .data = &fts5452_chip_data },
->> +	{ .compatible = "focaltech,fts8719", .data = &fts8719_chip_data },
->> +	{ /* sentinel */ }
->> +};
->> +
->> +MODULE_DEVICE_TABLE(of, fts_of_match);
->> +
->> +static struct i2c_driver fts_ts_driver = {
->> +	.probe_new = fts_ts_probe,
->> +	.id_table = fts_i2c_id,
->> +	.driver = {
->> +		.name = FTS_DRIVER_NAME,
->> +		.pm = pm_sleep_ptr(&fts_dev_pm_ops),
->> +		.of_match_table = fts_of_match,
->> +	},
->> +};
->> +module_i2c_driver(fts_ts_driver);
->> +
->> +MODULE_AUTHOR("Joel Selvaraj <joelselvaraj.oss@gmail.com>");
->> +MODULE_AUTHOR("Caleb Connolly <caleb@connolly.tech>");
->> +MODULE_DESCRIPTION("Focaltech Touchscreen Driver");
-> 
-> Nit: mixing 'FocalTech' and 'Focaltech' throughout.
-> 
->> +MODULE_LICENSE("GPL");
->> -- 
->> 2.40.0
->>
-> 
-> Kind regards,
-> Jeff LaBundy
-> 
-
+Best regards,
+Daniel Starke
