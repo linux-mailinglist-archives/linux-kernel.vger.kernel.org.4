@@ -2,104 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8E36ECC8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0504D6ECC93
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjDXNFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S231750AbjDXNGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjDXNFT (ORCPT
+        with ESMTP id S231445AbjDXNGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:05:19 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E483E3C0F;
-        Mon, 24 Apr 2023 06:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682341519; x=1713877519;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XYOGH4XAmoo3Gyc8RQbwimLR7yjg6nALj5ZROFhLSYY=;
-  b=GklAjTPzB+19/yi7HJUk9NDM4LayfVHBKpMFPkowy+VN+qZsd9jx0R00
-   QMidf3opoQQLueS2tu1U1iDEeKhpcZlduSqRD/EwsaHYBEnXjnG1Av6A7
-   M0E3Mz6jNKA0or6Ocwmgu/0TUVQdL0hQlvTYRekt+htq7QOHCIlMWIVia
-   lpthkOM9fruwn6/GIo1Z8k8gyiJtG9L6u8EMTbH7vcMoGrGYO7KrH6M1Y
-   OZVgEtaogjC7Kf7SzNa4BoSkysfsLKyhoblZ0vFk/vRGQjonKNaKo0M9A
-   OJvpAYUy2mprnI99dRU7pKyjeKZO6quxUqslPKi9CHqtxN13DiSoWE1b4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="432719557"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="432719557"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 06:04:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="836959746"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="836959746"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Apr 2023 06:04:41 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Apr 2023 16:04:40 +0300
-Date:   Mon, 24 Apr 2023 16:04:40 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: mux: Remove some unneeded includes
-Message-ID: <ZEZ+aPo3Ccq64l4+@kuha.fi.intel.com>
-References: <1db1e8bd253cbb652835c0cef6a0a2bb9a4970eb.1682325582.git.christophe.jaillet@wanadoo.fr>
+        Mon, 24 Apr 2023 09:06:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856313AA6;
+        Mon, 24 Apr 2023 06:06:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5D9620F9;
+        Mon, 24 Apr 2023 13:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBADC433D2;
+        Mon, 24 Apr 2023 13:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682341565;
+        bh=QSnFkZkoFX69XCDmzpAUC+OzbmzNwl9i9p1eGhLZ+Us=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ryL4bRKaJP/1BUsyHdbssriX7nUVH5fml0wtPfEO6lfIAzP2reEFLpMQGGos/RXet
+         BvJKHnB/erBiGcdpuvgKK/L58x5VU0ESo4vL1it6B6cxVgxoDW7SI9U68vKjk4dAzp
+         siKj+kiA8V3lFVMHVMNtYIPZP/n8Jxthb88Eo6TTkF844/naPNeukVlxIaBBZjEY0y
+         eUVYVfrKoWiVJUHLmTx0Lxg9LAJOkFF7n0+IM0juHm/3B632UY7IaegKAqATXSRwAR
+         fkLE5DWAZYXWvs/oMrMvvDpjhsBfm+OlHxkxLEqfEfd7TVCgUyTkuoyShu5EYN7tHj
+         VWmpV/7dZa1ag==
+Message-ID: <2772fde600710b99d482edee903f30bd87ea9aa8.camel@kernel.org>
+Subject: Re: [PATCH] tpm: Add !tpm_amd_is_rng_defective() to the
+ hwrng_unregister() call site
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Martin Dimov <martin@dmarto.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 24 Apr 2023 16:06:01 +0300
+In-Reply-To: <20230423154958.805992-1-jarkko@kernel.org>
+References: <20230423154958.805992-1-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1db1e8bd253cbb652835c0cef6a0a2bb9a4970eb.1682325582.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 10:39:56AM +0200, Christophe JAILLET wrote:
-> This driver includes many header files that are unneeded.
-> Remove them and add <linux/device.h> where devm_kzalloc() is defined.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On Sun, 2023-04-23 at 18:49 +0300, Jarkko Sakkinen wrote:
+> The following crash was reported:
+>=20
+> [ 1950.279393] list_del corruption, ffff99560d485790->next is NULL
+> [ 1950.279400] ------------[ cut here ]------------
+> [ 1950.279401] kernel BUG at lib/list_debug.c:49!
+> [ 1950.279405] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> [ 1950.279407] CPU: 11 PID: 5886 Comm: modprobe Tainted: G O 6.2.8_1 #1
+> [ 1950.279409] Hardware name: Gigabyte Technology Co., Ltd. B550M AORUS P=
+RO-P/B550M AORUS PRO-P,
+> BIOS F15c 05/11/2022
+> [ 1950.279410] RIP: 0010:__list_del_entry_valid+0x59/0xc0
+> [ 1950.279415] Code: 48 8b 01 48 39 f8 75 5a 48 8b 72 08 48 39 c6 75 65 b=
+8 01 00 00 00 c3 cc cc cc
+> cc 48 89 fe 48 c7 c7 08 a8 13 9e e8 b7 0a bc ff <0f> 0b 48 89 fe 48 c7 c7=
+ 38 a8 13 9e e8 a6 0a bc
+> ff 0f 0b 48 89 fe
+> [ 1950.279416] RSP: 0018:ffffa96d05647e08 EFLAGS: 00010246
+> [ 1950.279418] RAX: 0000000000000033 RBX: ffff99560d485750 RCX: 000000000=
+0000000
+> [ 1950.279419] RDX: 0000000000000000 RSI: ffffffff9e107c59 RDI: 00000000f=
+fffffff
+> [ 1950.279420] RBP: ffffffffc19c5168 R08: 0000000000000000 R09: ffffa96d0=
+5647cc8
+> [ 1950.279421] R10: 0000000000000003 R11: ffffffff9ea2a568 R12: 000000000=
+0000000
+> [ 1950.279422] R13: ffff99560140a2e0 R14: ffff99560127d2e0 R15: 000000000=
+0000000
+> [ 1950.279422] FS: 00007f67da795380(0000) GS:ffff995d1f0c0000(0000) knlGS=
+:0000000000000000
+> [ 1950.279424] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 1950.279424] CR2: 00007f67da7e65c0 CR3: 00000001feed2000 CR4: 000000000=
+0750ee0
+> [ 1950.279426] PKRU: 55555554
+> [ 1950.279426] Call Trace:
+> [ 1950.279428] <TASK>
+> [ 1950.279430] hwrng_unregister+0x28/0xe0 [rng_core]
+> [ 1950.279436] tpm_chip_unregister+0xd5/0xf0 [tpm]
+>=20
+> Add the forgotten !tpm_amd_is_rng_defective() invariant to the
+> hwrng_unregister() call site inside tpm_chip_unregister().
+>=20
+> Reported-by: Martin Dimov <martin@dmarto.com>
+> Link: https://lore.kernel.org/linux-integrity/3d1d7e9dbfb8c96125bc93b6b58=
+b90a7@dmarto.com/
+> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
+> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untruste=
+d sources")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > ---
-> Based on one of my script, this reduces the number of included files
-> during the build process of this file from 551 to 345.
-> ---
->  drivers/usb/typec/mux/gpio-sbu-mux.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> index f62516dafe8f..c07856069d43 100644
-> --- a/drivers/usb/typec/mux/gpio-sbu-mux.c
-> +++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> @@ -3,14 +3,11 @@
->   * Copyright (C) 2022 Linaro Ltd.
->   */
->  
-> -#include <linux/bits.h>
-> -#include <linux/i2c.h>
-> -#include <linux/kernel.h>
-> +#include <linux/device.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/platform_device.h>
-> -#include <linux/regmap.h>
->  #include <linux/usb/typec_dp.h>
->  #include <linux/usb/typec_mux.h>
->  
-> -- 
-> 2.34.1
+>  drivers/char/tpm/tpm-chip.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 33319a78767f..6fdfa65a00c3 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -692,7 +692,8 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
+>  void tpm_chip_unregister(struct tpm_chip *chip)
+>  {
+>  	tpm_del_legacy_sysfs(chip);
+> -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip))
+> +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip) =
+&&
+> +	    !tpm_amd_is_rng_defective(chip))
+>  		hwrng_unregister(&chip->hwrng);
+>  	tpm_bios_log_teardown(chip);
+>  	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
 
--- 
-heikki
+I'll apply this and apply tested-by from Martin. Thanks for reporting!
+
+BR, Jarkko
+
