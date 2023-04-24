@@ -2,97 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3522C6ED1DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62106ED1E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjDXQAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+        id S231916AbjDXQBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDXQAT (ORCPT
+        with ESMTP id S229625AbjDXQBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:00:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A16F59DF;
-        Mon, 24 Apr 2023 09:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B3A61F17;
-        Mon, 24 Apr 2023 16:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3249C433D2;
-        Mon, 24 Apr 2023 16:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682352017;
-        bh=eyM5xnNO+nA5FQvYcdJGX09nRfAQhTUpzCH0JksIXSk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z/I2bsoJa5DZu+grD8Kh6Glcbxnas9Osj2YpRaimqkveMhjdl8lo+zN3QNMUt3lJB
-         1iXYkkD28QLkzp30cfYP0UxjTAGl8WA8042QaqAC4ZCOaVPxE94J+BH5910qZXpams
-         Gm/2uRvPF1OAkh93iDEVihKg4iKISISMTKTUUyItxxoCvoUotTuEDYgADl0MhfbXkv
-         ZphaVnAlpwbFnVJF+G7OIsL1+tb1+lA3oTwwmMvlfxGYw4FRuC0wV2gFu5lod+W8dH
-         fW5qVXvewhIbO5rr9yrMbgSRyeEDyg8CHkaVCQPnSf+xE6VmLBVcCOBweWPTIcMeH2
-         hhpYSTfBay0TA==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Apr 24
-Date:   Mon, 24 Apr 2023 17:00:10 +0100
-Message-Id: <20230424160010.134527-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 24 Apr 2023 12:01:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BDA6A69
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:01:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-95678d891d6so791987166b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682352072; x=1684944072;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ItXk9sOTul8nHcQoQ5OMTNAOIPvFkgfn2LiOsp6dVh0=;
+        b=A98E6RSSxhUqhBadttwvToEIPQtUZ0mPjxzjyU/Mim0Lf27+ucjlh9vx5EJpiAKR9o
+         s+VdC3LYCGvdDbRpjZqaAaJRDEzr6ZqeulhvVhZ+ked7yhukf0hOni56WkJ2NQTaWBoi
+         wQPgSyFBDgbWNtUId7uZ1HKtmQGE2jusMyJvgpeHu2Tz+MJT8aPBtLWcArcxM5nD+HAJ
+         6Ct5Mlz2q8bbcCl8cNYDXzcBOxgHl7nFNuR/WcHJMiRBuHiArPbpfe4HpruRSOriA3s/
+         xigazvQbMa0by/5CgQwhdGjhT3zeq3J5PK87PMEZwEU//gqYN1lp+5KqNhEL4cFFRkaV
+         j37A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682352072; x=1684944072;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ItXk9sOTul8nHcQoQ5OMTNAOIPvFkgfn2LiOsp6dVh0=;
+        b=kTA0sInI7UijJ1UtBlI6QnQJfi2Y2nXnXjSJWXKAzSqV2XdHkBWebeV9lsnDrpyj3E
+         cZDMLp2Jhyi5JqgOgaIQfpvRWrKe0/8Bj31JyOsRzuyBtyeL0SO3NGi9W4DJH2vyq+1u
+         yQLWGcXqXFTEHk6rPrrGv2/l1fSejWLYhiibpIjG5OKLrceimhKKXjJqV/xPCJFtcQPp
+         ekMv3PDoxNJodI5OXc5DQ36e8cKLw9KzZO4i/cwn/RGVeUidDZ/7mp10HeVZT70ylI9S
+         nNnBmiICCvH1a+6RN26PAJqzUy5aZ0fgpYi53D0g9jSuTvlCoWKu458yLDdpguR6rsBH
+         3FpQ==
+X-Gm-Message-State: AAQBX9fmenVnRbR+qFP9Ywn9ysylawICguz1Bqz22d3FvThumb5U/Z6t
+        oT7y4X+Dv9WGxtJyZ1NVtS7CMI0va4ISBZdpAo1EPw==
+X-Google-Smtp-Source: AKy350a+fhIV7M5cXo7+HmyMP6SNbnABDOalrjajHuvMxEIjPJCMkgiw02UjrpIcuXQxRcLwA+5IRQ==
+X-Received: by 2002:a17:907:6d24:b0:94a:9f9a:b3c4 with SMTP id sa36-20020a1709076d2400b0094a9f9ab3c4mr11161282ejc.49.1682352071911;
+        Mon, 24 Apr 2023 09:01:11 -0700 (PDT)
+Received: from fedora.. ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170906594a00b008cecb8f374asm5665879ejr.0.2023.04.24.09.01.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 09:01:11 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 5.4 v5 1/2] counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
+Date:   Mon, 24 Apr 2023 12:01:04 -0400
+Message-Id: <20230424160106.4415-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+commit 4aa3b75c74603c3374877d5fd18ad9cc3a9a62ed upstream.
 
-Changes since 20230421:
+The Counter (CNTR) register is 24 bits wide, but we can have an
+effective 25-bit count value by setting bit 24 to the XOR of the Borrow
+flag and Carry flag. The flags can be read from the FLAG register, but a
+race condition exists: the Borrow flag and Carry flag are instantaneous
+and could change by the time the count value is read from the CNTR
+register.
 
-The sysctl tree gained a conflict against the hyperv tree.
+Since the race condition could result in an incorrect 25-bit count
+value, remove support for 25-bit count values from this driver.
 
-Non-merge commits (relative to Linus' tree): 12691
- 12842 files changed, 833677 insertions(+), 433726 deletions(-)
+Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-QUAD-8")
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/counter/104-quad-8.c | 30 ++++--------------------------
+ 1 file changed, 4 insertions(+), 26 deletions(-)
 
-----------------------------------------------------------------------------
+diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+index f261a57af1c..919d6f1ced8 100644
+--- a/drivers/counter/104-quad-8.c
++++ b/drivers/counter/104-quad-8.c
+@@ -57,10 +57,6 @@ struct quad8_iio {
+ 
+ #define QUAD8_REG_CHAN_OP 0x11
+ #define QUAD8_REG_INDEX_INPUT_LEVELS 0x16
+-/* Borrow Toggle flip-flop */
+-#define QUAD8_FLAG_BT BIT(0)
+-/* Carry Toggle flip-flop */
+-#define QUAD8_FLAG_CT BIT(1)
+ /* Error flag */
+ #define QUAD8_FLAG_E BIT(4)
+ /* Up/Down flag */
+@@ -97,9 +93,6 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
+ {
+ 	struct quad8_iio *const priv = iio_priv(indio_dev);
+ 	const int base_offset = priv->base + 2 * chan->channel;
+-	unsigned int flags;
+-	unsigned int borrow;
+-	unsigned int carry;
+ 	int i;
+ 
+ 	switch (mask) {
+@@ -110,12 +103,7 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
+ 			return IIO_VAL_INT;
+ 		}
+ 
+-		flags = inb(base_offset + 1);
+-		borrow = flags & QUAD8_FLAG_BT;
+-		carry = !!(flags & QUAD8_FLAG_CT);
+-
+-		/* Borrow XOR Carry effectively doubles count range */
+-		*val = (borrow ^ carry) << 24;
++		*val = 0;
+ 
+ 		mutex_lock(&priv->lock);
+ 
+@@ -639,19 +627,9 @@ static int quad8_count_read(struct counter_device *counter,
+ {
+ 	struct quad8_iio *const priv = counter->priv;
+ 	const int base_offset = priv->base + 2 * count->id;
+-	unsigned int flags;
+-	unsigned int borrow;
+-	unsigned int carry;
+-	unsigned long position;
++	unsigned long position = 0;
+ 	int i;
+ 
+-	flags = inb(base_offset + 1);
+-	borrow = flags & QUAD8_FLAG_BT;
+-	carry = !!(flags & QUAD8_FLAG_CT);
+-
+-	/* Borrow XOR Carry effectively doubles count range */
+-	position = (unsigned long)(borrow ^ carry) << 24;
+-
+ 	mutex_lock(&priv->lock);
+ 
+ 	/* Reset Byte Pointer; transfer Counter to Output Latch */
+@@ -1204,8 +1182,8 @@ static ssize_t quad8_count_ceiling_read(struct counter_device *counter,
+ 
+ 	mutex_unlock(&priv->lock);
+ 
+-	/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
+-	return sprintf(buf, "33554431\n");
++	/* By default 0xFFFFFF (24 bits unsigned) is maximum count */
++	return sprintf(buf, "16777215\n");
+ }
+ 
+ static ssize_t quad8_count_ceiling_write(struct counter_device *counter,
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+base-commit: 58f42ed1cd31238745bddd943c4f5849dc83a2ac
+-- 
+2.40.0
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 358 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
