@@ -2,169 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579136ECB33
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CF46ECB34
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjDXLUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
+        id S230489AbjDXLU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjDXLUI (ORCPT
+        with ESMTP id S230255AbjDXLU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:20:08 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0E230ED;
-        Mon, 24 Apr 2023 04:20:04 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OBJuB7078126;
-        Mon, 24 Apr 2023 06:19:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682335196;
-        bh=znsw8gLLmzY1kmekM/w5JfjECm+1AZE6YR765Rk8j00=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Vk/CiJHukJTAWShImLPqC3oI2WIWkhxfTZLU8TChDkmYIneXrYiCei4cb2qcL+pq8
-         FLi6gJcJNPC9fPKJ76DqbDO+yzIfZAXn/hz0ZiRFq0uppUwn5/91QDK6+Opg9tur0n
-         mOC07pQOBOhSYbWuxfgGLF0WPdqTkFy8L2GtcvAY=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OBJuXE038976
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 06:19:56 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 06:19:56 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 06:19:56 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OBJjiY100294;
-        Mon, 24 Apr 2023 06:19:53 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [RFC PATCH 2/2] arm64: dts: ti: k3-am62a7: Add overlay for second CPSW3G Port
-Date:   Mon, 24 Apr 2023 16:49:45 +0530
-Message-ID: <20230424111945.3865240-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230424111945.3865240-1-s-vadapalli@ti.com>
-References: <20230424111945.3865240-1-s-vadapalli@ti.com>
+        Mon, 24 Apr 2023 07:20:56 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAFB30F4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:20:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VgtOkQo_1682335243;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgtOkQo_1682335243)
+          by smtp.aliyun-inc.com;
+          Mon, 24 Apr 2023 19:20:44 +0800
+Message-ID: <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
+Date:   Mon, 24 Apr 2023 19:20:43 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
+ possible hole in __pageblock_pfn_to_page()
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
+ <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
+ <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SK-Ethernet-DC01 Add-On Ethernet Card for AM62A7-SK board supports
-RGMII mode.
 
-Add overlay to enable the second CPSW3G port in RGMII-RXID mode with the
-Add-On Ethernet Card.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile               |  2 +
- .../dts/ti/k3-am62a7-sk-ethernet-dc01.dtso    | 61 +++++++++++++++++++
- 2 files changed, 63 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62a7-sk-ethernet-dc01.dtso
+On 4/24/2023 5:54 PM, Michal Hocko wrote:
+> On Sun 23-04-23 18:59:11, Baolin Wang wrote:
+>> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
+>> checks whether the given zone contains holes, and uses pfn_to_online_page()
+>> to validate if the start pfn is online and valid, as well as using pfn_valid()
+>> to validate the end pfn.
+>>
+>> However, the __pageblock_pfn_to_page() function may return non-NULL even
+>> if the end pfn of a pageblock is in a memory hole in some situations. For
+>> example, if the pageblock order is MAX_ORDER, which will fall into 2
+>> sub-sections, and the end pfn of the pageblock may be hole even though
+>> the start pfn is online and valid.
+>>
+>> This did not break anything until now, but the zone continuous is fragile
+>> in this possible scenario. So as previous discussion[1], it is better to
+>> add some comments to explain this possible issue in case there are some
+>> future pfn walkers that rely on this.
+>>
+>> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
+> 
+> Do I remember correctly you've had a specific configuration that would
+> trigger this case?
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index c83c9d772b81..62d4c3956495 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -15,6 +15,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-am62-lp-sk.dtb
- 
- # Boards with AM62Ax SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk-ethernet-dc01.dtbo
- 
- # Boards with AM64x SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
-@@ -48,4 +49,5 @@ dtb-$(CONFIG_ARCH_K3) += k3-am69-sk.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- 
- # Enable support for device-tree overlays
-+DTC_FLAGS_k3-am62a7-sk += -@
- DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk-ethernet-dc01.dtso b/arch/arm64/boot/dts/ti/k3-am62a7-sk-ethernet-dc01.dtso
-new file mode 100644
-index 000000000000..c518cd32f697
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk-ethernet-dc01.dtso
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT Overlay for second CPSW3G port in RGMII mode using SK-ETHERNET-DC01
-+ * Add-On Daughtercard with AM62A7-SK.
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/net/ti-dp83867.h>
-+#include "k3-pinctrl.h"
-+
-+&{/} {
-+	aliases {
-+		ethernet1 = "/bus@f0000/ethernet@8000000/ethernet-ports/port@2";
-+	};
-+};
-+
-+&cpsw3g {
-+	pinctrl-0 = <&main_rgmii1_pins_default>, <&main_rgmii2_pins_default>;
-+};
-+
-+&cpsw_port2 {
-+	status = "okay";
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy1>;
-+};
-+
-+&cpsw3g_mdio {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	cpsw3g_phy1: ethernet-phy@1 {
-+		reg = <1>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
-+&main_pmx0 {
-+	main_rgmii2_pins_default: main-rgmii2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x0184, PIN_INPUT, 0) /* (AA21) RGMII2_RD0 */
-+			AM62AX_IOPAD(0x0188, PIN_INPUT, 0) /* (Y20) RGMII2_RD1 */
-+			AM62AX_IOPAD(0x018c, PIN_INPUT, 0) /* (AB21) RGMII2_RD2 */
-+			AM62AX_IOPAD(0x0190, PIN_INPUT, 0) /* (AB20) RGMII2_RD3 */
-+			AM62AX_IOPAD(0x0180, PIN_INPUT, 0) /* (AA20) RGMII2_RXC */
-+			AM62AX_IOPAD(0x017c, PIN_INPUT, 0) /* (W18) RGMII2_RX_CTL */
-+			AM62AX_IOPAD(0x016c, PIN_INPUT, 0) /* (AA19) RGMII2_TD0 */
-+			AM62AX_IOPAD(0x0170, PIN_INPUT, 0) /* (Y18) RGMII2_TD1 */
-+			AM62AX_IOPAD(0x0174, PIN_INPUT, 0) /* (AA18) RGMII2_TD2 */
-+			AM62AX_IOPAD(0x0178, PIN_INPUT, 0) /* (W17) RGMII2_TD3 */
-+			AM62AX_IOPAD(0x0168, PIN_INPUT, 0) /* (AB19) RGMII2_TXC */
-+			AM62AX_IOPAD(0x0164, PIN_INPUT, 0) /* (Y19) RGMII2_TX_CTL */
-+		>;
-+	};
-+};
--- 
-2.25.1
+Yes, I provided an example in previous thread [2] so show the 
+__pageblock_pfn_to_page() is fragile in some cases.
 
+[2] 
+https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
+
+> 
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>> Changes from v1:
+>>   - Update the comments per Ying and Mike, thanks.
+>> ---
+>>   mm/page_alloc.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 6457b64fe562..9756d66f471c 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
+>>    * interleaving within a single pageblock. It is therefore sufficient to check
+>>    * the first and last page of a pageblock and avoid checking each individual
+>>    * page in a pageblock.
+>> + *
+>> + * Note: the function may return non-NULL even if the end pfn of a pageblock
+>> + * is in a memory hole in some situations. For example, if the pageblock
+>> + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
+>> + * of the pageblock may be hole even though the start pfn is online and valid.
+>> + * This did not break anything until now, but be careful about this possible
+>> + * issue when checking whether all pfns of a pageblock are valid.
+> 
+> It is not really clear what you should be doing (other than to be
+> careful which is not helpful much TBH) when you encounter this
+> situation. If the reality changes and this would break in the future
+> what would breakage look like? What should be done about that?
+
+That depends on what the future pfn walkers do, which may access some 
+hole memory with zero-init page frame. For example, if checking the 
+__PageMovable() for a zero-init page frame, that will crash the system. 
+But I can not list all the possible cases.
+
+So how about below words?
+
+  * Note: the function may return non-NULL even if the end pfn of a 
+pageblock
+  * is in a memory hole in some situations. For example, if the pageblock
+  * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
+  * of the pageblock may be hole even though the start pfn is online and 
+valid.
+  * This did not break anything until now, but be careful about this 
+possible
+  * issue when checking whether all pfns of a pageblock are valid, that may
+  * lead to accessing empty page frame, and the worst case can crash the 
+system.
+  * So you should use pfn_to_onlie_page() instead of pfn_valid() to 
+valid the
+  * pfns in a pageblock if such case happens.
