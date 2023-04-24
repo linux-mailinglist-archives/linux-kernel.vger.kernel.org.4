@@ -2,257 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEA66ED275
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227D56ED27B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjDXQ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S232146AbjDXQa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjDXQ2r (ORCPT
+        with ESMTP id S230434AbjDXQaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:28:47 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2D6103;
-        Mon, 24 Apr 2023 09:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682353726; x=1713889726;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=LQJamqxquK4Wabk/eIBuqWgvgvN10z8+4pJsstq8F8E=;
-  b=VJDaW3IdWTwa67RLkdwTplvus8aY2V1eZaugxMFbjf1Ps/gC4YKDIz3n
-   D8oOzKPkHZ17HVJedEfnGPAat9n1X9pVcxt3s8DnchsYdzXuSPYxgE05i
-   GyxHiczeJ7465hsWUsiQmiTX81WMWifoR9xGTa08hT4b95PEn7T5k9XNZ
-   VE+4VtnCxsp4eVQZxcGHEytoXj5C/OqF3qcOKiUlF9IHpa5v/C/wpYhNI
-   XVK63n67jqn2YZnVt5ZT7uYUnmjkEQ5iMKP9O9IpXl0ExfuZhQ3EgV58A
-   T3JJmgF8BLfLvKRKI3LOJRYEHiJLwIVeUSMgTR19tWRWatgV0ISvW8fqn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="346521779"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="346521779"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 09:28:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="686918824"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="686918824"
-Received: from wlwpo-8.amr.corp.intel.com ([10.251.215.143])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 09:28:43 -0700
-Date:   Mon, 24 Apr 2023 19:28:40 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Subject: Re: [PATCH v2 16/24] selftests/resctrl: Create cache_alloc_size()
- helper
-In-Reply-To: <287e5f1f-87d5-473a-2bff-271adca8d458@intel.com>
-Message-ID: <5db5680-4123-17b8-e657-39ba20356259@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-17-ilpo.jarvinen@linux.intel.com> <287e5f1f-87d5-473a-2bff-271adca8d458@intel.com>
+        Mon, 24 Apr 2023 12:30:23 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18C3D8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:30:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bG1moTpbGFSE0C+R8lxnkYE5MbntjfK4hZhTL8sUAW7daeU4fD6hkkRueB+cGrKbUE+ujTSM9wsjN7shhnQGL/IYlxk1KsK+slJEcejKCnx3urJu+j9kDm5i1OACRE4bNAIYD1w9PW5RAguO0jn1amAfjynNC9JN/rl5emlArdHIPMcPRTy61gZnZyZmHn54K+m8Tp7Ks7cWEn4gt/YregruCuL3Fzjjz6yxkofnUXXlqnN++GItHeMD1hdYJjw6wV7KzqZFlm/tldUpG/vqwo55iPt8OPgI6csODzQN+tvCSOterWjVZ5nyMH/5glqtwJNtLoaGa5foHw4YnqrGyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LWWoMTJjFzvycKYu4bF4v39mniQ64a+5yTQoeYMd2uA=;
+ b=iKCBhvGTnjbuL7PLRhC+rd5utJP/y+FUuJ6SjregVUApUBQ6oE0rPSsbjREa4xDbQuyN4R6/q/u2e2RkA95Hk+WmG0cBLAZzpvT0/6xgjw/0Y17RNjcZchdn/+NhP+hilhgjLO6qxrxQ3mEaIqY1iVy7Wp7F84IifkhUPrDi1NhbdlPxiMpZun2XJpoH19QdaEFq78O4NsI9ZNyl17gMXcjs2nEZMCGvZ/96p0gzG2yu7qeh9y+RxsS7tUJB9DI4H8rqPUCWj55/7mRFmWJi5ScbPJWk0PL8jPa2gV1qXYVyqDzlvZ9jWLRYMjJ91ASDnmuiLMZUDE1QeWsrWqCGuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LWWoMTJjFzvycKYu4bF4v39mniQ64a+5yTQoeYMd2uA=;
+ b=IjkafUTwJqB1lwhtvwzeEU/ktCjflKkE39zg6nL2excxZL7Kw0JBoA1onviIcXCGTy1NrH47yT6LEu297xWsF5nB8gJ9rMYByRVl/AuNcthdGEobW7nXS0YIJhQ9ysXHpYuJdsxcGuGtKRnVXm3WpeflK5LD9O711akTcuDZvsk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ PH8PR12MB6795.namprd12.prod.outlook.com (2603:10b6:510:1c6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
+ 2023 16:30:14 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6319.022; Mon, 24 Apr 2023
+ 16:30:14 +0000
+Message-ID: <d8f2fd5b-26ce-5b17-60f3-449b10e2b281@amd.com>
+Date:   Mon, 24 Apr 2023 12:31:38 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] drm/amd/display: return status of abm_feature_support
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Leon.Huang1@amd.com, wenjing.liu@amd.com, qingqing.zhuo@amd.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230420132129.3888917-1-trix@redhat.com>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230420132129.3888917-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQZPR01CA0042.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:86::27) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-354780187-1682353725=:2038"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|PH8PR12MB6795:EE_
+X-MS-Office365-Filtering-Correlation-Id: ea75b61d-a288-4b37-fc18-08db44e12e4f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yOP7U4Ey2863A1GVW5ieRtjBed+6kA3gEPyl4pdXdK27ymhSAVjQ6iSzsnhhpxSs+g54raHS0LsUMMWZh8h6Zh7kOP3KnmznyWsOpdZpk4q36iPc29WKEvIdpsXlLnHqoIglLBlbgeVNMoWzVl4IU3FO3gE3cmKtpxuau3bYBEtmBSRW5oZ5azw/YwmYlRfSTOuvH3fcX8e6tVUWftsxf4EFGY+4UbAUhR7grcvGc/a+9n5e7YTucAeD2b6fPWF+UoGIKan8h2aX6Xbjjrl3CsI1oGhh5BTEulrirp3xJcmalWSRoWs45q5sgMotimoKrMQzYQn+VBLWENPySOoxRt6rJNh9fEMBl/hz4nEQU0yErf707s6GD3UYu3EOCFZu6bDwY3OOkTN1HmbMkV8XsWODdvj56AulctUKYPZbtskN1sJW9n3pkt7INYu0aED8Nh3XaTF81iQFiwX10Nkj8u+HNPB8w+8JOE2HKMCiwsdEBoA135SmKIl60ZDlleU7AKYgYDDPVFxJZEVU9sG3PWI0xLoaS4pVhhe9auOjKt8+esnn0CwQ2kzFakAHUMP+zaPf9dGNZ5VgEh/vuoz7gA/b+o804uSPOQD2F02uOMYtSdbsy/7Fk6TpK7wcaKdPUEmCM/StBku06Foecf/SNaRAlZIu40a04/a85S1nypQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(451199021)(478600001)(31696002)(6636002)(86362001)(36756003)(186003)(53546011)(6486002)(26005)(6506007)(6512007)(6666004)(4326008)(66476007)(66556008)(316002)(44832011)(83380400001)(66946007)(2906002)(38100700002)(921005)(41300700001)(8676002)(8936002)(31686004)(5660300002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T2ZhazlvbGRYSEFhc0RyRzVvcUpOWXRKdVhVOHlsQ1UxTFJJRGJ1RTVDOWpP?=
+ =?utf-8?B?ajZxeWdRY0dHVGRMUXRRSzlNUEZiRFg1bkVTa2lVeUFkM1Rza1ZENGczWXVi?=
+ =?utf-8?B?b05mVkw0VVEwUEJ1THVEWElaaytrUzU2T21hQ0c1MnRCUUI4WWUxY3J1eXps?=
+ =?utf-8?B?bytHL29GOHBsV3VhYXNUaWlOL29kVnhWZDR5eGpOcU91Ulg3ODNIR01pbk55?=
+ =?utf-8?B?b1luYmlvUGI4NERyL084Q3dGdXY5aEtKZmMyVUU3dzZGR1dxYnRpODRVTzBL?=
+ =?utf-8?B?S3Myd2ZRa2doRExubU1XdVNudkU2RnMxZ1BzWjVnZVJpb3RVTkY4OHFoUmI5?=
+ =?utf-8?B?a1VFZkswWlZvWk9DNVlFUGpidXlJeFpLUFZFU2VXcUl2clpyZUZyNGZSMDBi?=
+ =?utf-8?B?TUZyTVZQcEJOOVBSMGVOZ0oxM2k3b09oUTY2di85MWNLNGFXYzRFVEZxQW5p?=
+ =?utf-8?B?VXZFekI1U3NHTGlQVzZFSEFhQWxuZmNIOWlGNCtiQjVjOEUwczh6bmxOalVs?=
+ =?utf-8?B?R1VXaytjc1grSnhlMWhkU3N5N3RyL0xraDFZRVJGKzRCZklJLzZGSHJ3b0lp?=
+ =?utf-8?B?c2QzYUhsY21OV0VPUFR2WGh0MER1Wlp4Zmk0Mi9lL3kvUFhTQmJabEg3enND?=
+ =?utf-8?B?S3ozNUNicjI3aHplTTFrM2dLWlFmNnNoYnhDT2JUSUNJc29lOVRBNGF5S1d3?=
+ =?utf-8?B?QVZHY1NlMm1xWFBoSzlqLzdRVzlhYXRzSG56QXkwV2c3aU8vczd4QmhacHBY?=
+ =?utf-8?B?WW4ydlB2YWtKcWE1Y1dtbUhiQ1dmaDV0UGw3THFvZU9WOGYvdVpKYkdVaVNW?=
+ =?utf-8?B?MTloaFBJOURwUFVZWHBKNnRpam1FbkhIa0hYR0tIc0NlN24xWHRFWDFoeXI1?=
+ =?utf-8?B?QkxNUUwrcjZoQmVGUWJhckJNc1NXM0N4anJ1TnNLZTREN1NhYnlKN3NUSjJp?=
+ =?utf-8?B?ZERLdmVUTVZJcTR3NkVOS1dZM3ducGprVFRRSVppL0RJVGF5M3Qva091UlRY?=
+ =?utf-8?B?ZDNid3NLL3RGZXJpMFZ6ZHBBemNMaXBqZFhZVkwzZjE5QVRjeHphYVN2ZXFj?=
+ =?utf-8?B?WHV2WTlqYlB2NlNkc3dvVXFXbE5rdnordXNCVUFCVEVLdldWSzVWRU5oeC9y?=
+ =?utf-8?B?bU9vMzd0R2hEdFJUbmFsZnBhR3ZPWUhjMVhxR1pNSE1hMGRpMjFRVFd4SVpY?=
+ =?utf-8?B?dmsvLzNVRVVIR1NpOE02b0M2Rzd3bFd0aEd6UkswbDJNRXp0dzVNRitYaG5G?=
+ =?utf-8?B?eHZxSGVMUzdRN0Q1ZXpvZjhZTm1SdmxRNnY4c2lUM24zWDMva0h5YkhiMlEz?=
+ =?utf-8?B?cG5kNTIvVW9KeDEyZ0w2VjhIMXlremxHQUZQWUZwVitZYmFwWGhtYmwrMGgr?=
+ =?utf-8?B?SEJ3M0d0RG1WYUpwMzBNbFVJSHc1WTFHYmcyOTFyWDBnM2dQQndOU2djb2cw?=
+ =?utf-8?B?cGVBYWdBVFFBRW1hSDlkVGhjN2liTVlScEIxbjFOUEZPK0Y4T2hDMEF6bmtl?=
+ =?utf-8?B?UnlQSnZjd3E0UStEbzhLRU9BaXdzRzBEQTlNcDJNV0Rzcys3bEI2ZzFwVFNl?=
+ =?utf-8?B?Rmh1bHQycmhSM09aVkNLalEzRUtrSGhTK0VGSWEvc3ZCclF5Wmc2M3ZKeUdx?=
+ =?utf-8?B?R2wraDVGTllyQ0NnZTJUSWxHdFpuN0pBL0VqL3dhd1BFdWVYclBrM3hScjdC?=
+ =?utf-8?B?MUljTkRkNW1UcFJkQm9aUnlJd2RZYjVoVERVRWZGKzhIOHVFTzljWk1BOWlB?=
+ =?utf-8?B?UnIvREErUmd3VGNaR2hTUmNQSHhlWUhLVk1KcHI4OTFIRVg3bmI2Vm5mK0tJ?=
+ =?utf-8?B?aVcvK1BScVphYlpQcko0N0dGa012V0pITmsyQ0xtOTc1OCtjS2phdUxScEc2?=
+ =?utf-8?B?eG02VnEwUWlIdWRNdXg0bUI4elo3TndBT3FpYUN2S2xKT3FhZkZYZ0RJMDh0?=
+ =?utf-8?B?UTNjOENTMEdXTmo4VzdMeTUyTURkd3VzY29kaklBVDlPdHc3Q0VrcElZclNJ?=
+ =?utf-8?B?dWZMMktNcGcyN3pZUit2RUpuWThTZzZYTzc4M1VNZ0tzMXpIdnNoRXc5eEdB?=
+ =?utf-8?B?em8zVEZuYkl1Uy9SVzVEMGFEMkJxOGM2eG5ta3pkMTVlK0dvVnFLd1VkYnJx?=
+ =?utf-8?Q?kwS+FM3Gq8C0Y7nEY0eiZ3Fq2?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea75b61d-a288-4b37-fc18-08db44e12e4f
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 16:30:14.1229
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7d18Zj59d/oQHHwKKKSvfyjg5vhms5/KNv75ARlHPUQIcIdDYekgpPXKGHLuLtt9dlRU77QeKFA4/YhYeOxMiw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6795
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-354780187-1682353725=:2038
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+On 4/20/23 09:21, Tom Rix wrote:
+> gcc with W=1 reports
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dmub_abm.c:
+>    In function ‘dmub_abm_set_event_ex’:
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dmub_abm.c:138:22: error: variable
+>    ‘feature_support’ set but not used [-Werror=unused-but-set-variable]
+>    138 |         unsigned int feature_support;
+>        |                      ^~~~~~~~~~~~~~~
+> 
+> This variable is not used so remove it.
+> The status of amb_feature_support should have been returned, so
+> set ret and return it.
+> 
+> Fixes: b8fe56375f78 ("drm/amd/display: Refactor ABM feature")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-On Fri, 21 Apr 2023, Reinette Chatre wrote:
+Since set_abm_event() is never used. I would prefer if it was dropped
+entirely.
 
-> On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
-> > CAT and CMT tests calculate the span size from the n-bits cache
-> > allocation on their own.
-> > 
-> > Add cache_alloc_size() helper which calculates size of the cache
-> > allocation for the given number of bits to avoid duplicating code.
+> ---
+>   drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> This patch is very heavy on the usage of allocation when I think it
-> only refers to the cache size ... how that size is used by the caller
-> is independent from this. 
-> 
-> Compare to how it sounds with some small changes to changelog:
-> 
-> 	CAT and CMT tests calculate the span size from the capacity
-> 	bitmask independently.
-> 	
-> 	Add cache_size() helper which calculates the size of the
-> 	cache for the given number of bits to avoid duplicating code.
-> 
-> I think removing "alloc" helps to convey what this code actually does.
-
-Does it? Without something to indicate its not the full cache size, 
-there's possiblity for confusion. While the tests are mostly interested 
-in the allocated size, the full cache size is also collected (solely for 
-printing it out, IIRC). Maybe I should rename those variable to 
-total_cache_size or something like that to mitigate the confusion?
-
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  tools/testing/selftests/resctrl/cache.c    | 27 ++++++++++++++++++++++
-> >  tools/testing/selftests/resctrl/cat_test.c |  8 +++++--
-> >  tools/testing/selftests/resctrl/cmt_test.c |  4 +++-
-> >  tools/testing/selftests/resctrl/resctrl.h  |  2 ++
-> >  4 files changed, 38 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-> > index 6bc912de38be..b983af394e33 100644
-> > --- a/tools/testing/selftests/resctrl/cache.c
-> > +++ b/tools/testing/selftests/resctrl/cache.c
-> > @@ -15,6 +15,33 @@ static struct read_format rf_cqm;
-> >  static int fd_lm;
-> >  char llc_occup_path[1024];
-> >  
-> > +/*
-> > + * cache_alloc_size - Calculate alloc size for given cache alloc mask
-> 
-> "cache_size - Calculate number of bytes represented by bitmask" ?
-> Please feel free to improve.
-> 
-> 
-> > + * @cpu_no:		CPU number
-> > + * @cache_type:		Cache level L2/L3
-> > + * @alloc_mask:		Cache alloc mask
-> 
-> The description is mostly a rewrite of the variable name. Can it be
-> more descriptive?
-> 
-> > + * @alloc_size:		Alloc size returned on success
-> 
-> I do not think the utility should assume anything about how
-> the value it provides should be used. Instead it should just reflect
-> what the value is.
-
-I was just referring to that the value is filled only on success.
-
-> > + * Returns: 0 on success with @alloc_size filled, non-zero on error.
-> > + */
-> > +int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
-> > +		     unsigned long *alloc_size)
-> > +{
-> > +	unsigned long cache_size, full_mask;
-> > +	int ret;
-> > +
-> > +	ret = get_cbm_mask(cache_type, &full_mask);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = get_cache_size(cpu_no, cache_type, &cache_size);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*alloc_size = cache_size * count_bits(alloc_mask) / count_bits(full_mask);
-> > +	return 0;
-> > +}
-> > +
-> >  static void initialize_perf_event_attr(void)
-> >  {
-> >  	pea_llc_miss.type = PERF_TYPE_HARDWARE;
-> > diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> > index 9bf5d05d9e74..d3fbd4de9f8a 100644
-> > --- a/tools/testing/selftests/resctrl/cat_test.c
-> > +++ b/tools/testing/selftests/resctrl/cat_test.c
-> > @@ -140,7 +140,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
-> >  	/* Set param values for parent thread which will be allocated bitmask
-> >  	 * with (max_bits - n) bits
-> >  	 */
-> > -	param.span = cache_size * (count_of_bits - n) / count_of_bits;
-> > +	ret = cache_alloc_size(cpu_no, cache_type, l_mask, &param.span);
-> > +	if (ret)
-> > +		return ret;
-> >  	strcpy(param.ctrlgrp, "c2");
-> >  	strcpy(param.mongrp, "m2");
-> >  	strcpy(param.filename, RESULT_FILE_NAME2);
-> > @@ -162,7 +164,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
-> >  		param.mask = l_mask_1;
-> >  		strcpy(param.ctrlgrp, "c1");
-> >  		strcpy(param.mongrp, "m1");
-> > -		param.span = cache_size * n / count_of_bits;
-> > +		ret = cache_alloc_size(cpu_no, cache_type, l_mask_1, &param.span);
-> > +		if (ret)
-> > +			exit(-1);
-> >  		strcpy(param.filename, RESULT_FILE_NAME1);
-> >  		param.num_of_runs = 0;
-> >  		param.cpu_no = sibling_cpu_no;
-> 
-> Did this change intend to remove the duplicate code mentioned
-> in the changelog?
-
-It removes n CBM bits -> cache size calculations by collecting the 
-calculation into one place.
-
-cache_alloc_size() takes mask instead of n (CBM bits) as input which makes 
-things easier down the line when the new CAT test starts to tweak the 
-alloc size. The new CAT test would otherwise need to track both the mask 
-and n.
-
-cache_alloc_size() is independent of what caller requires so the full mask 
-is not passed from the caller.
-
-> I was expecting the calls to get_cbm_mask() and get_cache_size() within 
-> cat_perf_miss_val() to be removed.
-
-I would have wanted to remove get_cache_size() but it would mean removing 
-cache size print or moving it to elsewhere.
-
-get_cbm_mask() cannot be removed as it's used by the test to calculate the 
-mask the test wants (but it no longer has to determine the size itself but 
-uses this new helper instead).
-
-I can try to amend the changelog to explain things better.
-
-> > diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> > index ae54bbabbd91..efe77e0f1d4c 100644
-> > --- a/tools/testing/selftests/resctrl/cmt_test.c
-> > +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> > @@ -105,10 +105,12 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
-> >  		.cpu_no		= cpu_no,
-> >  		.filename	= RESULT_FILE_NAME,
-> >  		.mask		= ~(long_mask << n) & long_mask,
-> > -		.span		= cache_size * n / count_of_bits,
-> >  		.num_of_runs	= 0,
-> >  		.setup		= cmt_setup,
-> >  	};
-> > +	ret = cache_alloc_size(cpu_no, "L3", param.mask, &param.span);
-> > +	if (ret)
-> > +		return ret;
-> >  
-> >  	if (strcmp(benchmark_cmd[0], "fill_buf") == 0)
-> >  		sprintf(benchmark_cmd[1], "%lu", param.span);
-> 
-> Same here regarding removal of code.
-> 
-> > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> > index bcc95faa5b4e..65425d92684e 100644
-> > --- a/tools/testing/selftests/resctrl/resctrl.h
-> > +++ b/tools/testing/selftests/resctrl/resctrl.h
-> > @@ -108,6 +108,8 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
-> >  void mba_test_cleanup(void);
-> >  int get_cbm_mask(char *cache_type, unsigned long *mask);
-> >  int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
-> > +int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
-> > +		     unsigned long *alloc_size);
-> >  void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
-> >  int signal_handler_register(void);
-> >  void signal_handler_unregister(void);
-> 
-> 
-> Reinette
-> 
-
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> index a66f83a61402..8f285c3be4c6 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> @@ -134,10 +134,9 @@ static bool dmub_abm_set_pipe_ex(struct abm *abm, uint32_t otg_inst, uint32_t op
+>   static bool dmub_abm_set_event_ex(struct abm *abm, unsigned int full_screen, unsigned int video_mode,
+>   		unsigned int hdr_mode, unsigned int panel_inst)
+>   {
+> -	bool ret = false;
+> -	unsigned int feature_support;
+> +	bool ret;
+>   
+> -	feature_support = abm_feature_support(abm, panel_inst);
+> +	ret = abm_feature_support(abm, panel_inst);
+>   
+>   	return ret;
+>   }
 -- 
- i.
+Hamza
 
---8323329-354780187-1682353725=:2038--
