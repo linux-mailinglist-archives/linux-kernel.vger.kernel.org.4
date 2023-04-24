@@ -2,59 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57206EC6E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98736EC6E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjDXHTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S231357AbjDXHT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDXHTm (ORCPT
+        with ESMTP id S231313AbjDXHTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:19:42 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FCEE66;
-        Mon, 24 Apr 2023 00:19:41 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 52A536732D; Mon, 24 Apr 2023 09:19:37 +0200 (CEST)
-Date:   Mon, 24 Apr 2023 09:19:37 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        sagi@grimberg.me, hch@lst.de, kbusch@kernel.org,
-        ming.lei@redhat.com
-Subject: Re: [PATCH v2 1/3] io_uring: Create a helper to return the SQE size
-Message-ID: <20230424071937.GA13287@lst.de>
-References: <20230421114440.3343473-1-leitao@debian.org> <20230421114440.3343473-2-leitao@debian.org>
+        Mon, 24 Apr 2023 03:19:48 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F9FA0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:19:46 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-7606d443ba6so344539239f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:19:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682320786; x=1684912786;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FLByx+tb5N9xClS/DsZomBGA1slNzifZFIuUWr6Dpl4=;
+        b=gloVukPwl491KenwulUet9MxoJrH1N2ESCm9haZ7APBuFBbf7aaxNaF6o0E1VWSrol
+         iji0hWLiSpQ+bJwydCQ9Fsl9dn5VHAjLPBf7SNmNKLy2x2SWDFSxUZB5KyPKjXSJGYwz
+         E9SMF+OgAmwLPWdfZAzppcQTaOXdpqponowJCXfcYRzXIO4RbunvgFrRiJz82tol4Dvz
+         2myRkF134AKLhml/NYRRjAIUpw/faWiAo8yi0ddxiKvK8zurSd0jF4dd7OiQTAC1pkvO
+         eqKY/aNI1I3Gt4lx/i0q4KPmxACNPDPrafJ35D7eNIyFQ+WSC9poTXMSRvHuWyb5H1oA
+         bCxg==
+X-Gm-Message-State: AAQBX9cgP/R6c0IR1/TpLr3+NggtuwkrFjV7gpkGaK77xtRGPObYmbmx
+        lpDVwcpIAauAbD+7PXW5LE7HjZFA2bGq+hw/cojcR7efCzmW
+X-Google-Smtp-Source: AKy350aVSc244kB95vKtt8mVPnmPoRok02FVSpXWyEUhaf0BU4Up28CYBn94FlLM/st5rdqmCdZGccWf7aiRpNP+Gg/m8G2shHFx
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421114440.3343473-2-leitao@debian.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a5d:9703:0:b0:762:e1f2:3ec3 with SMTP id
+ h3-20020a5d9703000000b00762e1f23ec3mr3903854iol.1.1682320785898; Mon, 24 Apr
+ 2023 00:19:45 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 00:19:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d7848305fa0fd413@google.com>
+Subject: [syzbot] [io-uring?] KCSAN: data-race in __io_fill_cqe_req / io_timeout
+From:   syzbot <syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 04:44:38AM -0700, Breno Leitao wrote:
-> +#define uring_sqe_size(ctx) \
-> +	((1 + !!(ctx->flags & IORING_SETUP_SQE128)) * sizeof(struct io_uring_sqe))
+Hello,
 
-Please turn this into an actually readable inline function:
+syzbot found the following issue on:
 
-/*
- * IORING_SETUP_SQE128 contexts allocate twice the normal SQE size for each
- * slot.
- */
-static inline size_t uring_sqe_size(struct io_ring_ctx *ctx)
-{
-	if (ctx->flags & IORING_SETUP_SQE128)
-		return 2 * sizeof(struct io_uring_sqe);
-	return sizeof(struct io_uring_sqe);
-}
+HEAD commit:    3a93e40326c8 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1280071ec80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f7350c77b8056a38
+dashboard link: https://syzkaller.appspot.com/bug?extid=cb265db2f3f3468ef436
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2122926bc9fe/disk-3a93e403.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8392992358bc/vmlinux-3a93e403.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6398a2d19a7e/bzImage-3a93e403.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in __io_fill_cqe_req / io_timeout
+
+read-write to 0xffff888108bf8310 of 4 bytes by task 20447 on cpu 0:
+ io_get_cqe_overflow io_uring/io_uring.h:112 [inline]
+ io_get_cqe io_uring/io_uring.h:124 [inline]
+ __io_fill_cqe_req+0x6c/0x4d0 io_uring/io_uring.h:137
+ io_fill_cqe_req io_uring/io_uring.h:165 [inline]
+ __io_req_complete_post+0x67/0x790 io_uring/io_uring.c:969
+ io_req_complete_post io_uring/io_uring.c:1006 [inline]
+ io_req_task_complete+0xb9/0x110 io_uring/io_uring.c:1654
+ handle_tw_list io_uring/io_uring.c:1184 [inline]
+ tctx_task_work+0x1fe/0x4d0 io_uring/io_uring.c:1246
+ task_work_run+0x123/0x160 kernel/task_work.c:179
+ get_signal+0xe5c/0xfe0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x89/0x2b0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6d/0xe0 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff888108bf8310 of 4 bytes by task 20448 on cpu 1:
+ io_timeout+0x88/0x270 io_uring/timeout.c:546
+ io_issue_sqe+0x147/0x660 io_uring/io_uring.c:1907
+ io_queue_sqe io_uring/io_uring.c:2079 [inline]
+ io_submit_sqe io_uring/io_uring.c:2340 [inline]
+ io_submit_sqes+0x689/0xfe0 io_uring/io_uring.c:2450
+ __do_sys_io_uring_enter io_uring/io_uring.c:3458 [inline]
+ __se_sys_io_uring_enter+0x1e5/0x1b70 io_uring/io_uring.c:3392
+ __x64_sys_io_uring_enter+0x78/0x90 io_uring/io_uring.c:3392
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+value changed: 0x00000c75 -> 0x00000c76
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 20448 Comm: syz-executor.2 Not tainted 6.3.0-rc4-syzkaller-00025-g3a93e40326c8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
