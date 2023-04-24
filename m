@@ -2,703 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08BE6EC48B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 06:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515DF6EC48C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 06:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjDXEws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 00:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S230490AbjDXEwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 00:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjDXEwq (ORCPT
+        with ESMTP id S230486AbjDXEws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 00:52:46 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1ACE61;
-        Sun, 23 Apr 2023 21:52:41 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pqoBe-001d2G-RP; Mon, 24 Apr 2023 12:52:29 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 24 Apr 2023 12:52:27 +0800
-Date:   Mon, 24 Apr 2023 12:52:27 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [GIT PULL] Crypto Update for 6.4
-Message-ID: <ZEYLC6QsKnqlEQzW@gondor.apana.org.au>
-References: <20211112104815.GA14105@gondor.apana.org.au>
- <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
- <YgMn+1qQPQId50hO@gondor.apana.org.au>
- <YjE5yThYIzih2kM6@gondor.apana.org.au>
- <YkUdKiJflWqxBmx5@gondor.apana.org.au>
- <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
- <Yui+kNeY+Qg4fKVl@gondor.apana.org.au>
- <Yzv0wXi4Uu2WND37@gondor.apana.org.au>
- <Y5mGGrBJaDL6mnQJ@gondor.apana.org.au>
- <Y/MDmL02XYfSz8XX@gondor.apana.org.au>
+        Mon, 24 Apr 2023 00:52:48 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2065.outbound.protection.outlook.com [40.107.220.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FED2D60;
+        Sun, 23 Apr 2023 21:52:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BBYCXoXHlqbvodalEglGNh4mrxEYEw8Kl7P7msdTRUII67veZxa9mjIxzg/om7ZXDDSYLQzHxcQMIPHZtDwf+wpt9U2RExzXoA7ckQDFkBiiNh8mAm9wTE2g1meIwbGFBlPaKa51dYNcvt18zgJOG+bwYj4HXctCu+tQSZG8zDFMi6B27SuP6HnVgN6yE3YzUfFD+mTf6NyAMmGjS8nkZfI8YFqz2VO/NZc9ubjDnucSaF/F0eaDQjfQqMCTPkTxuPFzTcacr4lslzp06U2PtPeRchg+5HUHJQtgE5sOqs1VTjmBVOPf/5SXMY6w059sUEpcJ8Rxru0Qv8O0fw+ZWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WQm5lzrS/9BKVCdGrCVRp0kFD/NfKfxgahDGBtnG7EM=;
+ b=VQUF8X3mcThYJaavjmNOBYSTMxjPsrktz4hbgKNtSb/4gjsPhGL56aowYYH3wKwkPUUnij4beu3I8zYOlhU9eKMiKTZd+WlOtEr6lmF6EyfIWB1SulqTI1OIfVFkBOMVXoAiYYVauz53Z4wPFlZhTfH4/BehMNa0bTX8wCUMOBDU8xKu8nqCeKOkAlFcp2oEteb6YjPOlXWqAU49LDiUDkb9mR5AOuW32YW57pPycr7BzQJVxhpgq/lv2gTYwnnX6Eb4Lk+h8ynHnn2iJRq+2+kmx6iw+AvYwOb2CWQdZL9eBFELw2rFJUnp6Ex00feoALIVDeolZKisiWGUBRjOOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WQm5lzrS/9BKVCdGrCVRp0kFD/NfKfxgahDGBtnG7EM=;
+ b=YX++/nehxzoz2y3k3uiC32HypKbvJCZTT+Tz7XWHGp879Ltyzy/TmISiN9XkfBGMPt0ImhT0MQGBh8KFfmI7zputoDU0gYWtwVRkq2E3y42R+kJWHCPCo/yIqlGsEEVmZSvyUIu9kLoDyzZs9pvVA+bHrcH4sDMrIsT3eUyp24M=
+Received: from BY5PR12MB4902.namprd12.prod.outlook.com (2603:10b6:a03:1dd::9)
+ by IA0PR12MB8325.namprd12.prod.outlook.com (2603:10b6:208:407::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
+ 2023 04:52:43 +0000
+Received: from BY5PR12MB4902.namprd12.prod.outlook.com
+ ([fe80::b200:d51b:6fa4:20c2]) by BY5PR12MB4902.namprd12.prod.outlook.com
+ ([fe80::b200:d51b:6fa4:20c2%5]) with mapi id 15.20.6319.033; Mon, 24 Apr 2023
+ 04:52:42 +0000
+From:   "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
+To:     "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "shubhrajyoti.datta@xilinx.com" <shubhrajyoti.datta@xilinx.com>,
+        "srinivas.neeli@xilinx.com" <srinivas.neeli@xilinx.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "inux-gpio@vger.kernel.org" <inux-gpio@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Goud, Srinivas" <srinivas.goud@amd.com>,
+        "manion05gk@gmail.com" <manion05gk@gmail.com>,
+        "Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>
+Subject: RE: [PATCH] gpio: zynq: fix zynqmp_gpio not an immutable chip warning
+Thread-Topic: [PATCH] gpio: zynq: fix zynqmp_gpio not an immutable chip
+ warning
+Thread-Index: AQHZdDxpM1KicXwSSECmXLCZ1ni4pK855vIw
+Date:   Mon, 24 Apr 2023 04:52:42 +0000
+Message-ID: <BY5PR12MB49029372797FC05FC947E31481679@BY5PR12MB4902.namprd12.prod.outlook.com>
+References: <1681311127-6891-1-git-send-email-manikanta.guntupalli@amd.com>
+ <CAA0M9UZXdnduEqKJTL8D4Y3dwSG=R9_g5xFMYw8PtLDQkKnZDg@mail.gmail.com>
+In-Reply-To: <CAA0M9UZXdnduEqKJTL8D4Y3dwSG=R9_g5xFMYw8PtLDQkKnZDg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=e6dd8485-4e88-4866-b39d-5d50f9a8f069;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-04-24T04:46:18Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR12MB4902:EE_|IA0PR12MB8325:EE_
+x-ms-office365-filtering-correlation-id: cc810130-df77-4c15-0890-08db447fbcd6
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GcIfIRuy7Erqrr2JALjNCyfe9+AzugSdR1G/D2l+isPEHY3wQbZO6eGDQhVekCh9UQEN6yXYupO/sXgyMNKoTZC2XVU/zpWTJV9jzXXWISe8bE4fe6tjnjA1ONOlUsgziKo43nl1Ynl7d3aIr2+VY/2gsHK6JA9kPUiwnt1m/066vYM6vH6RlawxRdCz0LUTO+eAS/rFmNBTD+qloyuocEoD+pGETKPSOs6WqKxG1m6NXU+6CaLBEIBNKA9aR77SclysPckCyF4OnGC40+A7KED7ldk26P7lqzM8Y1UtW6KMKGf+aqiMwxaAgNIpBv9k3x3KRKlpWpe+16ZAQJM3TJ3TiEuq9Z4lcaXJmQ5yikHU0zUYFO+UM6+aZzETSQ+8+fUezOCbpcQace9/WrYHqx86J3x7B0SAC11Lnb7zHpy/YEdx0HVyQde3apwZsvmLlL9IzT2KgSsnO+I5qerjmEzj7Zm8Fv0JCNgN36wOPJZuoAoi05R08hQ1M/wo5Pm6ANZbW1pJ0HQNYUb1HGmNOys7FFw9SJRqrbvYYr3jNWv5+/cS1+pK68KVHMesIbYs/zsMueUKe6lSdrWpOZGiyjPQPH7Zmcd1Yzrb4i+I4BblJ09QY4WFDPGKxbL2N9cdkv+53ooCG7N3KFcCN+ZwyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4902.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(451199021)(8676002)(8936002)(38070700005)(110136005)(54906003)(478600001)(66446008)(66476007)(66556008)(55016003)(64756008)(4326008)(66946007)(76116006)(7416002)(122000001)(921005)(316002)(41300700001)(4744005)(2906002)(38100700002)(52536014)(5660300002)(86362001)(186003)(26005)(6506007)(9686003)(33656002)(53546011)(7696005)(71200400001)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWpBV1BhTmZKWkphL1hCWmZWOW42ODZuL3pZNkhXVU1oUitYZzJDNzhKTE5s?=
+ =?utf-8?B?ajIxM1BhazBCZnAvemhxRnk0QS9tNGhrMTQ5SUtUN1pnVSt4a1IxR0NwdjZq?=
+ =?utf-8?B?UHRVNlNpZG96ZWYyb3VzQURxVXBPS2pacjEvejBnYXZVOTRhdkIxTFRITEZP?=
+ =?utf-8?B?TCtZL1hNY2RWWlQwcTN0T0NFN3Q4U3hZdHM3bU0xVmpXOUsyVjFFR3htRUxl?=
+ =?utf-8?B?cndUMlNHQ0pLNHpJWGRlZG5kOFBpdVROKzZ3ZU9qaXJEclZWMHVRT2FoWjVV?=
+ =?utf-8?B?QU45L29MQW9zZ0tnbHA5N28zcDc4NW5ldzBlN204aXpweW9ZSFBlZ0dYYkFy?=
+ =?utf-8?B?UVorUU8yc3hWbThSWXhRZ1ByL0NZNFZ4UG93NkRrU2lET2tQa0ZEWnlkSGto?=
+ =?utf-8?B?RW1LT083bDZlMnVBMmFjdjlFT2h5QzlGMUZBNEc3TXhvT2Q4N2tvRlBZYXk0?=
+ =?utf-8?B?N3I2emFpcG1ob2V6WnJzVVQwUlJWOEUrQXpIN0JWY1ZWWldEdS9NbGdkYjhH?=
+ =?utf-8?B?YjRWWjRMOHhHVnRPSFdwQUxxN2N3aUVDdTE5eFRzV1luczF4ejdZVkxLUXZt?=
+ =?utf-8?B?ZzA1Snh3SUdub0lENGZyRTlHVTBiNEM4Wkdscy9mVzlmM29NSlJWMnVFZVoy?=
+ =?utf-8?B?d1M5OEF3anRVVkpnYk03cmYvZUVWWDFDdkJwVkFRUU1pQlczSUQwT09nUkRT?=
+ =?utf-8?B?RTNjZ1NBWGtJeUwrNEZEVzFWeTBkZW5LTHJaaENzODJ6RFdRYVhrQ05rcW9Q?=
+ =?utf-8?B?YlhVSThaTXY0d2kzVGY3QjFqZVFNbVNZWDBBQWdsL1JLMDJUMm1TVk1EeXA5?=
+ =?utf-8?B?U0FKNWgxQzNWTGlRVFUyUDQzUTFucUptNmNNUFNFY0JNN1M1UWpoQ2NBVlFM?=
+ =?utf-8?B?dFk3K3ZzRmY2VXZvaXpqb0FMSWJoU1Z1c2VBL1RXeXR4VU5nN0l5Y3ZkQ0Rj?=
+ =?utf-8?B?dG4yUGh0NFRHeHdzUHVxMGV6amhRekVXV3I1LzVSLytudGlGWEtSaUNuYVpG?=
+ =?utf-8?B?YlhXTWNOMDlybUY4ajJMNWNWM2dzUG5EVjJlT0VsSXFBbW5qQ1ZKdU5tcXJU?=
+ =?utf-8?B?Y20yZUJFdU1jZDFmQmxXZ1ZPM05JRkl3ZkZYZHRucXJzVG15bFdEK09JZXBa?=
+ =?utf-8?B?MElBMW4xQ1FQazBQNTN6MzZSYjlZdXlhQ004U1J6blZFei9HVmthc0J1bDBB?=
+ =?utf-8?B?UWQvRVBlNUNsVzVKaytrYXloelI0UE1tSFZYVnJ1V0NIN1lJU3RFTFJ0aEhE?=
+ =?utf-8?B?dG9PbUJsTGNrWTRET2JzK25OY1lZTHR3L3N5TTFtZVhaL2htWFJYcWYzNWJX?=
+ =?utf-8?B?QU1DSXo4a0V2UnlRUEl5S0Nua05FLy9sNEx6TENiY3d1Yjk1TXlKV05qbGJq?=
+ =?utf-8?B?djR4RDVJUEVSOVhBaUdYTkRkRmtQVkl2VkJwcCsraXJYV0o1NHJVNHpOZFhT?=
+ =?utf-8?B?YlViNG8zdDA2V2dqSHZzenpRaU8zZWdWbXVtNnhKRVJQakN2ZVF3SzlOMFVa?=
+ =?utf-8?B?UGMxcW1FOWJwdFRPcVhxTVY1MURoTzJqWjdEWHZXRUxMbkg5WXFaQWpCMHcx?=
+ =?utf-8?B?Sk1XSjkzR2Z4bXJ4emk2dnVVcnc4Mi9qRDZRZFVob01sTmRCenYyRFkxcFhD?=
+ =?utf-8?B?Sk96bFJvcERHYi9DUnQ2WHJYMXhMOGIwenU2WkJJTEZldkhEWGo3TVhhSFZa?=
+ =?utf-8?B?dzFQZ1VucnppMXIwaXVWK1ZjeGVzbEloTjNnVmZCM1labXpTdWYxUG0ra01x?=
+ =?utf-8?B?ZmpmOWZpMGZ5SCtvaGVMbE0xUHdaWDdlZlRLcEZ3Y3FnYkNrV2dSOEgwK0tB?=
+ =?utf-8?B?elNYVXR1OTNUV0t6bXc0TzRod21xY2hVT1Yyb0JidFE3UnRYcWlEVitkNzRy?=
+ =?utf-8?B?Y3hyMWJhVTkxRnZRcGtKRDgwUHVtOTBIaHVoMWVSbnIreWVDT2lxN05xc3lp?=
+ =?utf-8?B?a0hqeE1pSTkzYTR3cFVId3p1WUtlUHFydzlTc0JPVmNVc2xQS08zb1hmSFk2?=
+ =?utf-8?B?MkMwbmx4RTJRRlZFdFhhVHlPc09abVUvVkwyRzZVdHBIdHV3UXBhcXVnWFNS?=
+ =?utf-8?B?aktMa1VnMGtqVGxHME5kbkQ4M0ZzV1F2bGtuekdkVjRXTmJXcWJQa2xIQkJj?=
+ =?utf-8?Q?DGVQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/MDmL02XYfSz8XX@gondor.apana.org.au>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4902.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc810130-df77-4c15-0890-08db447fbcd6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2023 04:52:42.2662
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iEqERwTGl0meIZ6ShxcG/PH6BS8+g95/XlsEbZyA4wYi1Zfztl6gUdPOFsbdx3qUZA+JfGLvSrEUZgvoTAOusA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8325
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus:
-
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
-
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.4-p1 
-
-for you to fetch changes up to 482c84e906e535072c55395acabd3a58e9443d12:
-
-  i2c: designware: Add doorbell support for Mendocino (2023-04-20 18:20:05 +0800)
-
-----------------------------------------------------------------
-This update includes the following changes:
-
-API:
-
-- Total usage stats now include all that returned error (instead of some).
-- Remove maximum hash statesize limit.
-- Add cloning support for hmac and unkeyed hashes.
-- Demote BUG_ON in crypto_unregister_alg to a WARN_ON.
-
-Algorithms:
-
-- Use RIP-relative addressing on x86 to prepare for PIE build.
-- Add accelerated AES/GCM stitched implementation on powerpc P10.
-- Add some test vectors for cmac(camellia).
-- Remove failure case where jent is unavailable outside of FIPS mode in drbg.
-- Add permanent and intermittent health error checks in jitter RNG.
-
-Drivers:
-
-- Add support for 402xx devices in qat.
-- Add support for HiSTB TRNG.
-- Fix hash concurrency issues in stm32.
-- Add OP-TEE firmware support in caam.
-----------------------------------------------------------------
-
-Anthony Yznaga (1):
-      padata: use alignment when calculating the number of worker threads
-
-Ard Biesheuvel (13):
-      crypto: x86/aegis128 - Use RIP-relative addressing
-      crypto: x86/aesni - Use RIP-relative addressing
-      crypto: x86/aria - Use RIP-relative addressing
-      crypto: x86/camellia - Use RIP-relative addressing
-      crypto: x86/cast5 - Use RIP-relative addressing
-      crypto: x86/cast6 - Use RIP-relative addressing
-      crypto: x86/crc32c - Use RIP-relative addressing
-      crypto: x86/des3 - Use RIP-relative addressing
-      crypto: x86/ghash - Use RIP-relative addressing
-      crypto: x86/sha256 - Use RIP-relative addressing
-      crypto: x86/aesni - Use local .L symbols for code
-      crypto: x86/crc32 - Use local .L symbols for code
-      crypto: x86/sha - Use local .L symbols for code
-
-Arnd Bergmann (1):
-      crypto: ixp4xx - fix building wiht 64-bit dma_addr_t
-
-Bhupesh Sharma (4):
-      dt-bindings: qcom-qce: Convert bindings to yaml
-      MAINTAINERS: Add qcom-qce dt-binding file to QUALCOMM CRYPTO DRIVERS section
-      dt-bindings: qcom-qce: Add 'interconnects' and 'interconnect-names'
-      dt-bindings: qcom-qce: Add 'iommus' to optional properties
-
-Bjorn Helgaas (6):
-      crypto: qat - drop redundant adf_enable_aer()
-      crypto: cavium/nitrox - remove unnecessary aer.h include
-      crypto: hisilicon/hpre - remove unnecessary aer.h include
-      crypto: hisilicon/qm - remove unnecessary aer.h include
-      crypto: hisilicon/sec - remove unnecessary aer.h include
-      crypto: hisilicon/zip - remove unnecessary aer.h include
-
-Christophe JAILLET (2):
-      crypto: caam - Clear some memory in instantiate_rng
-      crypto: mxs-dcp - Use the devm_clk_get_optional_enabled() helper
-
-Damian Muszynski (1):
-      crypto: qat - add support for 402xx devices
-
-Danny Tsen (8):
-      crypto: p10-aes-gcm - Glue code for AES/GCM stitched implementation
-      crypto: p10-aes-gcm - An accelerated AES/GCM stitched implementation
-      crypto: p10-aes-gcm - Supporting functions for AES
-      crypto: p10-aes-gcm - Supporting functions for ghash
-      crypto: p10-aes-gcm - A perl script to process PowerPC assembler source.
-      crypto: p10-aes-gcm - Update Kconfig and Makefile
-      crypto: p10-aes-gcm - Remove POWER10_CPU dependency
-      powerpc: Move Power10 feature PPC_MODULE_FEATURE_P10
-
-David Howells (1):
-      crypto: testmgr - Add some test vectors for cmac(camellia)
-
-David Yang (1):
-      crypto: hisilicon/trng - add support for HiSTB TRNG
-
-Eric Biggers (2):
-      crypto: arm64/aes-neonbs - fix crash with CFI enabled
-      crypto: testmgr - fix RNG performance in fuzz tests
-
-Gaurav Jain (1):
-      crypto: caam/jr - add .shutdown hook
-
-Heiner Kallweit (3):
-      hwrng: meson - remove unused member of struct meson_rng_data
-      hwrng: meson - use devm_clk_get_optional_enabled
-      hwrng: meson - remove not needed call to platform_set_drvdata
-
-Herbert Xu (34):
-      crypto: acomp - Be more careful with request flags
-      crypto: qat - Include algapi.h for low-level Crypto API
-      crypto: algapi - Move stat reporting into algapi
-      crypto: aead - Count error stats differently
-      crypto: akcipher - Count error stats differently
-      crypto: hash - Count error stats differently
-      crypto: acomp - Count error stats differently
-      crypto: kpp - Count error stats differently
-      crypto: skcipher - Count error stats differently
-      crypto: rng - Count error stats differently
-      crypto: api - Move MODULE_ALIAS_CRYPTO to algapi.h
-      crypto: api - Check CRYPTO_USER instead of NET for report
-      crypto: stm32 - Save 54 CSR registers
-      crypto: stm32 - Move polling into do_one_request
-      crypto: stm32 - Simplify finup
-      crypto: stm32 - Remove unused hdev->err field
-      crypto: stm32 - Move hash state into separate structure
-      crypto: stm32 - Remove unused HASH_FLAGS_ERRORS
-      crypto: stm32 - Fix empty message processing
-      crypto: stm32 - Save and restore between each request
-      crypto: hash - Fix kdoc errors about HASH_ALG_COMMON
-      crypto: ccree - Depend on HAS_IOMEM
-      crypto: lib/utils - Move utilities into new header
-      crypto: drbg - Only fail when jent is unavailable in FIPS mode
-      crypto: algif_hash - Allocate hash state with kmalloc
-      crypto: hash - Remove maximum statesize limit
-      crypto: ixp4xx - Do not check word size when compile testing
-      crypto: api - Move low-level functions into algapi.h
-      crypto: api - Add crypto_tfm_get
-      crypto: api - Add crypto_clone_tfm
-      crypto: hash - Add crypto_clone_ahash/shash
-      crypto: hmac - Add support for cloning
-      crypto: cryptd - Convert hash to use modern init_tfm/exit_tfm
-      crypto: cryptd - Add support for cloning hashes
-
-Horia GeantA (2):
-      crypto: caam - reduce page 0 regs access to minimum
-      crypto: caam - OP-TEE firmware support
-
-Horia Geanta (1):
-      drivers: crypto: caam/jr - Allow quiesce when quiesced
-
-Jeremi Piotrowski (1):
-      crypto: ccp - Clear PSP interrupt status register before calling handler
-
-Jonathan McDowell (2):
-      crypto: safexcel - Raise firmware load failure message to error
-      crypto: safexcel - Cleanup ring IRQ workqueues on load failure
-
-Krzysztof Kozlowski (2):
-      crypto: atmel-sha204a - Mark OF related data as maybe unused
-      crypto: img-hash - Fix img_hash_match unused warning
-
-Luis Chamberlain (1):
-      crypto: fips - simplify one-level sysctl registration for crypto_sysctl_table
-
-Mario Limonciello (13):
-      crypto: ccp - Drop TEE support for IRQ handler
-      crypto: ccp - Add a header for multiple drivers to use `__psp_pa`
-      crypto: ccp - Move some PSP mailbox bit definitions into common header
-      crypto: ccp - Add support for an interface for platform features
-      crypto: ccp - Enable platform access interface on client PSP parts
-      crypto: ccp - Add support for ringing a platform doorbell
-      crypto: ccp - Don't initialize CCP for PSP 0x1649
-      crypto: ccp - Drop extra doorbell checks
-      crypto: ccp - Bump up doorbell debug message to error
-      crypto: ccp - Return doorbell status code as an argument
-      crypto: ccp - Use lower 8 bytes to communicate with doorbell command register
-      i2c: designware: Use PCI PSP driver for communication
-      i2c: designware: Add doorbell support for Mendocino
-
-Neal Liu (2):
-      crypto: aspeed - add error handling if dmam_alloc_coherent() failed
-      crypto: aspeed - fix uninitialized symbol 'idx' warning
-
-Randy Dunlap (1):
-      async_tx: fix kernel-doc notation warnings
-
-Ryan Wanner (4):
-      crypto: atmel-sha - Add zero length message digest support for hmac
-      crypto: atmel-tdes - Detecting in-place operations with two sg lists
-      crypto: atmel-aes - Detecting in-place operations two sg lists
-      crypto: atmel-aes - Match cfb block size with generic implementation
-
-Shashank Gupta (6):
-      crypto: qat - delay sysfs initialization
-      crypto: qat - fix concurrency issue when device state changes
-      crypto: qat - replace state machine calls
-      crypto: qat - refactor device restart logic
-      crypto: qat - make state machine functions static
-      crypto: qat - fix apply custom thread-service mapping for dc service
-
-Stephan Müller (1):
-      crypto: jitter - permanent and intermittent health errors
-
-Suman Anna (1):
-      crypto: sa2ul - Select CRYPTO_DES
-
-Thara Gopinath (2):
-      crypto: qce - Add support to initialize interconnect path
-      crypto: qce - Make clocks optional
-
-Thomas Weißschuh (1):
-      padata: Make kobj_type structure constant
-
-Toke Høiland-Jørgensen (1):
-      crypto: api - Demote BUG_ON() in crypto_unregister_alg() to a WARN_ON()
-
-Tom Zanussi (3):
-      crypto: keembay - Move driver to drivers/crypto/intel/keembay
-      crypto: ixp4xx - Move driver to drivers/crypto/intel/ixp4xx
-      crypto: qat - Move driver to drivers/crypto/intel/qat
-
-Uwe Kleine-König (4):
-      hwrng: xgene - Simplify using dev_err_probe()
-      hwrng: xgene - Simplify using devm_clk_get_optional_enabled()
-      hwrng: xgene - Improve error reporting for problems during .remove()
-      crypto: keembay - Drop if with an always false condition
-
-Vladimir Zapolskiy (4):
-      dt-bindings: qcom-qce: Add new SoC compatible strings for Qualcomm QCE IP
-      dt-bindings: qcom-qce: document optional clocks and clock-names properties
-      arm64: dts: qcom: sm8550: add QCE IP family compatible values
-      crypto: qce - Add a QCE IP family compatible 'qcom,qce'
-
-Yang Li (4):
-      crypto: aspeed - Use devm_platform_ioremap_resource()
-      crypto: ccree - Use devm_platform_get_and_ioremap_resource()
-      crypto: img-hash - Use devm_platform_get_and_ioremap_resource()
-      crypto: stm32 - Use devm_platform_get_and_ioremap_resource()
-
-Ye Xingchen (1):
-      crypto: p10-aes-gcm - remove duplicate include header
-
-Yu Zhe (4):
-      hwrng: xgene - remove unnecessary (void*) conversions
-      crypto: crypto4xx - remove unnecessary (void*) conversions
-      crypto: drivers - remove unnecessary (void*) conversions
-      crypto: caam - remove unnecessary (void*) conversions
-
- .../devicetree/bindings/crypto/qcom-qce.txt        |   25 -
- .../devicetree/bindings/crypto/qcom-qce.yaml       |  123 ++
- MAINTAINERS                                        |   33 +-
- arch/arm64/boot/dts/qcom/sm8550.dtsi               |    2 +-
- arch/arm64/crypto/aes-neonbs-core.S                |    9 +-
- arch/powerpc/crypto/Kconfig                        |   17 +
- arch/powerpc/crypto/Makefile                       |   13 +
- arch/powerpc/crypto/aes-gcm-p10-glue.c             |  343 +++++
- arch/powerpc/crypto/aes-gcm-p10.S                  | 1521 ++++++++++++++++++++
- arch/powerpc/crypto/aesp8-ppc.pl                   |  585 ++++++++
- arch/powerpc/crypto/ghashp8-ppc.pl                 |  370 +++++
- arch/powerpc/crypto/ppc-xlate.pl                   |  229 +++
- arch/powerpc/include/asm/cpufeature.h              |    1 +
- arch/x86/crypto/aegis128-aesni-asm.S               |    6 +-
- arch/x86/crypto/aesni-intel_asm.S                  |  198 +--
- arch/x86/crypto/aesni-intel_avx-x86_64.S           |  254 ++--
- arch/x86/crypto/aria-aesni-avx-asm_64.S            |   28 +-
- arch/x86/crypto/aria-aesni-avx2-asm_64.S           |   28 +-
- arch/x86/crypto/aria-gfni-avx512-asm_64.S          |   24 +-
- arch/x86/crypto/camellia-aesni-avx-asm_64.S        |   30 +-
- arch/x86/crypto/camellia-aesni-avx2-asm_64.S       |   30 +-
- arch/x86/crypto/camellia-x86_64-asm_64.S           |    6 +-
- arch/x86/crypto/cast5-avx-x86_64-asm_64.S          |   38 +-
- arch/x86/crypto/cast6-avx-x86_64-asm_64.S          |   32 +-
- arch/x86/crypto/crc32-pclmul_asm.S                 |   16 +-
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S          |   70 +-
- arch/x86/crypto/des3_ede-asm_64.S                  |   96 +-
- arch/x86/crypto/ghash-clmulni-intel_asm.S          |    4 +-
- arch/x86/crypto/sha1_avx2_x86_64_asm.S             |   25 +-
- arch/x86/crypto/sha256-avx-asm.S                   |   16 +-
- arch/x86/crypto/sha256-avx2-asm.S                  |   54 +-
- arch/x86/crypto/sha256-ssse3-asm.S                 |   16 +-
- arch/x86/crypto/sha512-avx-asm.S                   |    8 +-
- arch/x86/crypto/sha512-avx2-asm.S                  |   16 +-
- arch/x86/crypto/sha512-ssse3-asm.S                 |    8 +-
- arch/x86/kvm/svm/sev.c                             |    1 +
- crypto/acompress.c                                 |   81 +-
- crypto/aead.c                                      |   98 +-
- crypto/ahash.c                                     |  144 +-
- crypto/akcipher.c                                  |   52 +-
- crypto/algapi.c                                    |  219 +--
- crypto/algif_hash.c                                |   19 +-
- crypto/api.c                                       |   63 +-
- crypto/async_tx/async_pq.c                         |   10 +-
- crypto/async_tx/async_tx.c                         |    4 +-
- crypto/compress.h                                  |   26 +
- crypto/cryptd.c                                    |   34 +-
- crypto/crypto_user_stat.c                          |  183 +--
- crypto/drbg.c                                      |    2 +-
- crypto/fips.c                                      |   11 +-
- crypto/hash.h                                      |   40 +
- crypto/hmac.c                                      |   15 +
- crypto/internal.h                                  |   10 +
- crypto/jitterentropy-kcapi.c                       |   51 +-
- crypto/jitterentropy.c                             |  144 +-
- crypto/jitterentropy.h                             |    1 -
- crypto/kpp.c                                       |   53 +-
- crypto/rng.c                                       |   65 +-
- crypto/scompress.c                                 |   39 +-
- crypto/shash.c                                     |  181 ++-
- crypto/skcipher.c                                  |  113 +-
- crypto/tcrypt.c                                    |   11 +-
- crypto/testmgr.c                                   |  272 ++--
- crypto/testmgr.h                                   |   47 +
- drivers/char/hw_random/meson-rng.c                 |   29 +-
- drivers/char/hw_random/xgene-rng.c                 |   46 +-
- drivers/crypto/Kconfig                             |   21 +-
- drivers/crypto/Makefile                            |    4 +-
- drivers/crypto/amcc/crypto4xx_core.c               |    2 +-
- drivers/crypto/aspeed/aspeed-acry.c                |   14 +-
- drivers/crypto/atmel-aes.c                         |   16 +-
- drivers/crypto/atmel-sha.c                         |   34 +-
- drivers/crypto/atmel-sha204a.c                     |    2 +-
- drivers/crypto/atmel-tdes.c                        |   15 +-
- drivers/crypto/caam/caamalg.c                      |   21 +-
- drivers/crypto/caam/caamhash.c                     |   10 +-
- drivers/crypto/caam/caampkc.c                      |    6 +-
- drivers/crypto/caam/caamrng.c                      |    6 +-
- drivers/crypto/caam/ctrl.c                         |  112 +-
- drivers/crypto/caam/debugfs.c                      |   12 +-
- drivers/crypto/caam/debugfs.h                      |    7 +-
- drivers/crypto/caam/dpseci-debugfs.c               |    2 +-
- drivers/crypto/caam/intern.h                       |    1 +
- drivers/crypto/caam/jr.c                           |   61 +-
- drivers/crypto/cavium/nitrox/nitrox_main.c         |    1 -
- drivers/crypto/ccp/Makefile                        |    3 +-
- drivers/crypto/ccp/platform-access.c               |  215 +++
- drivers/crypto/ccp/platform-access.h               |   35 +
- drivers/crypto/ccp/psp-dev.c                       |   38 +-
- drivers/crypto/ccp/psp-dev.h                       |   11 +-
- drivers/crypto/ccp/sev-dev.c                       |   16 +-
- drivers/crypto/ccp/sev-dev.h                       |    2 +-
- drivers/crypto/ccp/sp-dev.h                        |   10 +
- drivers/crypto/ccp/sp-pci.c                        |   11 +-
- drivers/crypto/ccp/tee-dev.c                       |   17 +-
- drivers/crypto/ccree/cc_driver.c                   |    4 +-
- drivers/crypto/hifn_795x.c                         |   24 +-
- drivers/crypto/hisilicon/Kconfig                   |    7 +
- drivers/crypto/hisilicon/Makefile                  |    2 +-
- drivers/crypto/hisilicon/hpre/hpre_main.c          |    1 -
- drivers/crypto/hisilicon/qm.c                      |    1 -
- drivers/crypto/hisilicon/sec2/sec_main.c           |    1 -
- drivers/crypto/hisilicon/trng/Makefile             |    3 +
- drivers/crypto/hisilicon/trng/trng-stb.c           |  176 +++
- drivers/crypto/hisilicon/zip/zip_main.c            |    1 -
- drivers/crypto/img-hash.c                          |    7 +-
- drivers/crypto/inside-secure/safexcel.c            |   39 +-
- drivers/crypto/intel/Kconfig                       |    5 +
- drivers/crypto/intel/Makefile                      |    5 +
- drivers/crypto/intel/ixp4xx/Kconfig                |   14 +
- drivers/crypto/intel/ixp4xx/Makefile               |    2 +
- drivers/crypto/{ => intel/ixp4xx}/ixp4xx_crypto.c  |   15 +-
- drivers/crypto/{ => intel}/keembay/Kconfig         |    0
- drivers/crypto/{ => intel}/keembay/Makefile        |    0
- .../{ => intel}/keembay/keembay-ocs-aes-core.c     |    2 -
- .../crypto/{ => intel}/keembay/keembay-ocs-ecc.c   |    0
- .../{ => intel}/keembay/keembay-ocs-hcu-core.c     |    0
- drivers/crypto/{ => intel}/keembay/ocs-aes.c       |    0
- drivers/crypto/{ => intel}/keembay/ocs-aes.h       |    0
- drivers/crypto/{ => intel}/keembay/ocs-hcu.c       |    0
- drivers/crypto/{ => intel}/keembay/ocs-hcu.h       |    0
- drivers/crypto/{ => intel}/qat/Kconfig             |    0
- drivers/crypto/{ => intel}/qat/Makefile            |    0
- drivers/crypto/{ => intel}/qat/qat_4xxx/Makefile   |    0
- .../{ => intel}/qat/qat_4xxx/adf_4xxx_hw_data.c    |   62 +-
- .../{ => intel}/qat/qat_4xxx/adf_4xxx_hw_data.h    |    9 +-
- drivers/crypto/{ => intel}/qat/qat_4xxx/adf_drv.c  |   31 +-
- drivers/crypto/{ => intel}/qat/qat_c3xxx/Makefile  |    0
- .../{ => intel}/qat/qat_c3xxx/adf_c3xxx_hw_data.c  |    2 +-
- .../{ => intel}/qat/qat_c3xxx/adf_c3xxx_hw_data.h  |    0
- drivers/crypto/{ => intel}/qat/qat_c3xxx/adf_drv.c |   24 +-
- .../crypto/{ => intel}/qat/qat_c3xxxvf/Makefile    |    0
- .../qat/qat_c3xxxvf/adf_c3xxxvf_hw_data.c          |    0
- .../qat/qat_c3xxxvf/adf_c3xxxvf_hw_data.h          |    0
- .../crypto/{ => intel}/qat/qat_c3xxxvf/adf_drv.c   |   13 +-
- drivers/crypto/{ => intel}/qat/qat_c62x/Makefile   |    0
- .../{ => intel}/qat/qat_c62x/adf_c62x_hw_data.c    |    2 +-
- .../{ => intel}/qat/qat_c62x/adf_c62x_hw_data.h    |    0
- drivers/crypto/{ => intel}/qat/qat_c62x/adf_drv.c  |   24 +-
- drivers/crypto/{ => intel}/qat/qat_c62xvf/Makefile |    0
- .../qat/qat_c62xvf/adf_c62xvf_hw_data.c            |    0
- .../qat/qat_c62xvf/adf_c62xvf_hw_data.h            |    0
- .../crypto/{ => intel}/qat/qat_c62xvf/adf_drv.c    |   13 +-
- drivers/crypto/{ => intel}/qat/qat_common/Makefile |    0
- .../{ => intel}/qat/qat_common/adf_accel_devices.h |    5 +-
- .../{ => intel}/qat/qat_common/adf_accel_engine.c  |    0
- .../crypto/{ => intel}/qat/qat_common/adf_admin.c  |    0
- .../crypto/{ => intel}/qat/qat_common/adf_aer.c    |   39 +-
- .../crypto/{ => intel}/qat/qat_common/adf_cfg.c    |    0
- .../crypto/{ => intel}/qat/qat_common/adf_cfg.h    |    0
- .../{ => intel}/qat/qat_common/adf_cfg_common.h    |    0
- .../{ => intel}/qat/qat_common/adf_cfg_strings.h   |    0
- .../{ => intel}/qat/qat_common/adf_cfg_user.h      |    0
- .../{ => intel}/qat/qat_common/adf_common_drv.h    |   10 +-
- .../{ => intel}/qat/qat_common/adf_ctl_drv.c       |   30 +-
- .../{ => intel}/qat/qat_common/adf_dev_mgr.c       |    2 +
- .../{ => intel}/qat/qat_common/adf_gen2_config.c   |    0
- .../{ => intel}/qat/qat_common/adf_gen2_config.h   |    0
- .../{ => intel}/qat/qat_common/adf_gen2_dc.c       |    0
- .../{ => intel}/qat/qat_common/adf_gen2_dc.h       |    0
- .../{ => intel}/qat/qat_common/adf_gen2_hw_data.c  |    0
- .../{ => intel}/qat/qat_common/adf_gen2_hw_data.h  |    0
- .../{ => intel}/qat/qat_common/adf_gen2_pfvf.c     |    0
- .../{ => intel}/qat/qat_common/adf_gen2_pfvf.h     |    0
- .../{ => intel}/qat/qat_common/adf_gen4_dc.c       |    0
- .../{ => intel}/qat/qat_common/adf_gen4_dc.h       |    0
- .../{ => intel}/qat/qat_common/adf_gen4_hw_data.c  |    0
- .../{ => intel}/qat/qat_common/adf_gen4_hw_data.h  |    0
- .../{ => intel}/qat/qat_common/adf_gen4_pfvf.c     |    0
- .../{ => intel}/qat/qat_common/adf_gen4_pfvf.h     |    0
- .../{ => intel}/qat/qat_common/adf_gen4_pm.c       |    0
- .../{ => intel}/qat/qat_common/adf_gen4_pm.h       |    0
- .../{ => intel}/qat/qat_common/adf_hw_arbiter.c    |    2 +-
- .../crypto/{ => intel}/qat/qat_common/adf_init.c   |   96 +-
- .../crypto/{ => intel}/qat/qat_common/adf_isr.c    |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_msg.h      |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_pf_msg.c   |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_pf_msg.h   |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_pf_proto.c |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_pf_proto.h |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_utils.c    |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_utils.h    |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_vf_msg.c   |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_vf_msg.h   |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_vf_proto.c |    0
- .../{ => intel}/qat/qat_common/adf_pfvf_vf_proto.h |    0
- .../crypto/{ => intel}/qat/qat_common/adf_sriov.c  |   10 +-
- .../crypto/{ => intel}/qat/qat_common/adf_sysfs.c  |   23 +-
- .../{ => intel}/qat/qat_common/adf_transport.c     |    0
- .../{ => intel}/qat/qat_common/adf_transport.h     |    0
- .../qat/qat_common/adf_transport_access_macros.h   |    0
- .../qat/qat_common/adf_transport_debug.c           |    0
- .../qat/qat_common/adf_transport_internal.h        |    0
- .../crypto/{ => intel}/qat/qat_common/adf_vf_isr.c |    3 +-
- .../crypto/{ => intel}/qat/qat_common/icp_qat_fw.h |    0
- .../{ => intel}/qat/qat_common/icp_qat_fw_comp.h   |    0
- .../qat/qat_common/icp_qat_fw_init_admin.h         |    0
- .../{ => intel}/qat/qat_common/icp_qat_fw_la.h     |    0
- .../qat/qat_common/icp_qat_fw_loader_handle.h      |    0
- .../{ => intel}/qat/qat_common/icp_qat_fw_pke.h    |    0
- .../{ => intel}/qat/qat_common/icp_qat_hal.h       |    0
- .../crypto/{ => intel}/qat/qat_common/icp_qat_hw.h |    0
- .../qat/qat_common/icp_qat_hw_20_comp.h            |    0
- .../qat/qat_common/icp_qat_hw_20_comp_defs.h       |    0
- .../{ => intel}/qat/qat_common/icp_qat_uclo.h      |    0
- .../crypto/{ => intel}/qat/qat_common/qat_algs.c   |    0
- .../{ => intel}/qat/qat_common/qat_algs_send.c     |    0
- .../{ => intel}/qat/qat_common/qat_algs_send.h     |    0
- .../{ => intel}/qat/qat_common/qat_asym_algs.c     |    0
- drivers/crypto/{ => intel}/qat/qat_common/qat_bl.c |    0
- drivers/crypto/{ => intel}/qat/qat_common/qat_bl.h |    0
- .../{ => intel}/qat/qat_common/qat_comp_algs.c     |    0
- .../{ => intel}/qat/qat_common/qat_comp_req.h      |    0
- .../{ => intel}/qat/qat_common/qat_compression.c   |    0
- .../{ => intel}/qat/qat_common/qat_compression.h   |    0
- .../crypto/{ => intel}/qat/qat_common/qat_crypto.c |    0
- .../crypto/{ => intel}/qat/qat_common/qat_crypto.h |    0
- .../crypto/{ => intel}/qat/qat_common/qat_hal.c    |    1 +
- .../crypto/{ => intel}/qat/qat_common/qat_uclo.c   |    1 +
- .../crypto/{ => intel}/qat/qat_dh895xcc/Makefile   |    0
- .../qat/qat_dh895xcc/adf_dh895xcc_hw_data.c        |    2 +-
- .../qat/qat_dh895xcc/adf_dh895xcc_hw_data.h        |    0
- .../crypto/{ => intel}/qat/qat_dh895xcc/adf_drv.c  |   24 +-
- .../crypto/{ => intel}/qat/qat_dh895xccvf/Makefile |    0
- .../qat/qat_dh895xccvf/adf_dh895xccvf_hw_data.c    |    0
- .../qat/qat_dh895xccvf/adf_dh895xccvf_hw_data.h    |    0
- .../{ => intel}/qat/qat_dh895xccvf/adf_drv.c       |   13 +-
- drivers/crypto/mxs-dcp.c                           |   21 +-
- drivers/crypto/qce/core.c                          |   23 +-
- drivers/crypto/qce/core.h                          |    1 +
- drivers/crypto/sa2ul.c                             |    6 +-
- drivers/crypto/sahara.c                            |    4 +-
- drivers/crypto/stm32/stm32-hash.c                  |  361 ++---
- drivers/i2c/busses/Kconfig                         |    5 +-
- drivers/i2c/busses/i2c-designware-amdpsp.c         |  205 +--
- drivers/i2c/busses/i2c-designware-core.h           |    1 -
- drivers/i2c/busses/i2c-designware-platdrv.c        |    1 -
- drivers/tee/amdtee/call.c                          |    2 +-
- drivers/tee/amdtee/shm_pool.c                      |    2 +-
- include/crypto/acompress.h                         |  132 +-
- include/crypto/aead.h                              |   22 +
- include/crypto/akcipher.h                          |  102 +-
- include/crypto/algapi.h                            |   93 +-
- include/crypto/hash.h                              |   95 +-
- include/crypto/internal/acompress.h                |   43 +-
- include/crypto/internal/hash.h                     |    2 -
- include/crypto/internal/scompress.h                |   15 +-
- include/crypto/kpp.h                               |   73 +-
- include/crypto/rng.h                               |   65 +-
- include/crypto/skcipher.h                          |   22 +
- include/crypto/utils.h                             |   73 +
- include/linux/crypto.h                             |  236 +--
- include/linux/psp-platform-access.h                |   65 +
- include/linux/psp-sev.h                            |    8 -
- include/linux/psp.h                                |   29 +
- kernel/padata.c                                    |    4 +-
- lib/crypto/utils.c                                 |    2 +-
- 257 files changed, 6776 insertions(+), 2730 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/crypto/qcom-qce.txt
- create mode 100644 Documentation/devicetree/bindings/crypto/qcom-qce.yaml
- create mode 100644 arch/powerpc/crypto/aes-gcm-p10-glue.c
- create mode 100644 arch/powerpc/crypto/aes-gcm-p10.S
- create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
- create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
- create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
- create mode 100644 crypto/compress.h
- create mode 100644 crypto/hash.h
- create mode 100644 drivers/crypto/ccp/platform-access.c
- create mode 100644 drivers/crypto/ccp/platform-access.h
- create mode 100644 drivers/crypto/hisilicon/trng/trng-stb.c
- create mode 100644 drivers/crypto/intel/Kconfig
- create mode 100644 drivers/crypto/intel/Makefile
- create mode 100644 drivers/crypto/intel/ixp4xx/Kconfig
- create mode 100644 drivers/crypto/intel/ixp4xx/Makefile
- rename drivers/crypto/{ => intel/ixp4xx}/ixp4xx_crypto.c (99%)
- rename drivers/crypto/{ => intel}/keembay/Kconfig (100%)
- rename drivers/crypto/{ => intel}/keembay/Makefile (100%)
- rename drivers/crypto/{ => intel}/keembay/keembay-ocs-aes-core.c (99%)
- rename drivers/crypto/{ => intel}/keembay/keembay-ocs-ecc.c (100%)
- rename drivers/crypto/{ => intel}/keembay/keembay-ocs-hcu-core.c (100%)
- rename drivers/crypto/{ => intel}/keembay/ocs-aes.c (100%)
- rename drivers/crypto/{ => intel}/keembay/ocs-aes.h (100%)
- rename drivers/crypto/{ => intel}/keembay/ocs-hcu.c (100%)
- rename drivers/crypto/{ => intel}/keembay/ocs-hcu.h (100%)
- rename drivers/crypto/{ => intel}/qat/Kconfig (100%)
- rename drivers/crypto/{ => intel}/qat/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_4xxx/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_4xxx/adf_4xxx_hw_data.c (87%)
- rename drivers/crypto/{ => intel}/qat/qat_4xxx/adf_4xxx_hw_data.h (86%)
- rename drivers/crypto/{ => intel}/qat/qat_4xxx/adf_drv.c (95%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxx/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxx/adf_c3xxx_hw_data.c (98%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxx/adf_c3xxx_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxx/adf_drv.c (93%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxxvf/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxxvf/adf_c3xxxvf_hw_data.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxxvf/adf_c3xxxvf_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c3xxxvf/adf_drv.c (96%)
- rename drivers/crypto/{ => intel}/qat/qat_c62x/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c62x/adf_c62x_hw_data.c (98%)
- rename drivers/crypto/{ => intel}/qat/qat_c62x/adf_c62x_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c62x/adf_drv.c (93%)
- rename drivers/crypto/{ => intel}/qat/qat_c62xvf/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c62xvf/adf_c62xvf_hw_data.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c62xvf/adf_c62xvf_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_c62xvf/adf_drv.c (96%)
- rename drivers/crypto/{ => intel}/qat/qat_common/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_accel_devices.h (97%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_accel_engine.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_admin.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_aer.c (82%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_cfg.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_cfg.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_cfg_common.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_cfg_strings.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_cfg_user.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_common_drv.h (96%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_ctl_drv.c (95%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_dev_mgr.c (99%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_config.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_config.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_dc.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_dc.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_hw_data.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_pfvf.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen2_pfvf.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_dc.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_dc.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_hw_data.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_pfvf.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_pfvf.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_pm.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_gen4_pm.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_hw_arbiter.c (98%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_init.c (85%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_isr.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_msg.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_pf_msg.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_pf_msg.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_pf_proto.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_pf_proto.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_utils.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_utils.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_vf_msg.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_vf_msg.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_vf_proto.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_pfvf_vf_proto.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_sriov.c (96%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_sysfs.c (88%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_transport.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_transport.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_transport_access_macros.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_transport_debug.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_transport_internal.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/adf_vf_isr.c (99%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_fw.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_fw_comp.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_fw_init_admin.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_fw_la.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_fw_loader_handle.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_fw_pke.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_hal.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_hw.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_hw_20_comp.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_hw_20_comp_defs.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/icp_qat_uclo.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_algs.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_algs_send.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_algs_send.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_asym_algs.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_bl.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_bl.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_comp_algs.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_comp_req.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_compression.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_compression.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_crypto.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_crypto.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_hal.c (99%)
- rename drivers/crypto/{ => intel}/qat/qat_common/qat_uclo.c (99%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xcc/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xcc/adf_dh895xcc_hw_data.c (99%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xcc/adf_dh895xcc_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xcc/adf_drv.c (93%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xccvf/Makefile (100%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xccvf/adf_dh895xccvf_hw_data.c (100%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xccvf/adf_dh895xccvf_hw_data.h (100%)
- rename drivers/crypto/{ => intel}/qat/qat_dh895xccvf/adf_drv.c (96%)
- create mode 100644 include/crypto/utils.h
- create mode 100644 include/linux/psp-platform-access.h
- create mode 100644 include/linux/psp.h
-
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCj4gRnJvbTogTWFuaWthbnRhIEd1
+bnR1cGFsbGkgPG1hbmlrYW50YS5ndW50dXBhbGxpQGFtZC5jb20+DQo+IERhdGU6IFdlZCwgQXBy
+IDEyLCAyMDIzIGF0IDg6MjLigK9QTQ0KPiBTdWJqZWN0OiBbUEFUQ0hdIGdwaW86IHp5bnE6IGZp
+eCB6eW5xbXBfZ3BpbyBub3QgYW4gaW1tdXRhYmxlIGNoaXAgd2FybmluZw0KPiBUbzogPG1pY2hh
+bC5zaW1la0B4aWxpbnguY29tPiwgPG1pY2hhbC5zaW1la0BhbWQuY29tPiwNCj4gPGdpdEBhbWQu
+Y29tPiwgPHNodWJocmFqeW90aS5kYXR0YUB4aWxpbnguY29tPiwNCj4gPHNyaW5pdmFzLm5lZWxp
+QHhpbGlueC5jb20+LCA8bGludXMud2FsbGVpakBsaW5hcm8ub3JnPiwgPGJyZ2xAYmdkZXYucGw+
+LA0KPiA8bGludXgtZ3Bpb0B2Z2VyLmtlcm5lbC5vcmc+LCA8bGludXgtYXJtLWtlcm5lbEBsaXN0
+cy5pbmZyYWRlYWQub3JnPiwNCj4gPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+DQo+IENj
+OiA8c3Jpbml2YXMuZ291ZEBhbWQuY29tPiwgPG1hbmlvbjA1Z2tAZ21haWwuY29tPiwgTWFuaWth
+bnRhDQo+IEd1bnR1cGFsbGkgPG1hbmlrYW50YS5ndW50dXBhbGxpQGFtZC5jb20+DQo+DQo+DQo+
+IE1ha2UgdGhlIHN0cnVjdCBpcnFfY2hpcCBjb25zdCBhbmQgZmxhZyBpdCBhcyBJUlFDSElQX0lN
+TVVUQUJMRSB0byBmaXgNCj4gImdwaW8gZ3Bpb2NoaXAxOiAoenlucW1wX2dwaW8pOiBub3QgYW4g
+aW1tdXRhYmxlIGNoaXAiIHdhcm5pbmcuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IE1hbmlrYW50YSBH
+dW50dXBhbGxpIDxtYW5pa2FudGEuZ3VudHVwYWxsaUBhbWQuY29tPg0KUmV2aWV3ZWQtYnk6IFNo
+dWJocmFqeW90aSBEYXR0YSA8c2h1YmhyYWp5b3RpLmRhdHRhQGFtZC5jb20+DQoNCg==
