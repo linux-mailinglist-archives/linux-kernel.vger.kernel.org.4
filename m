@@ -2,135 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AFF6ED25A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1276ED262
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjDXQYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        id S231796AbjDXQY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbjDXQYR (ORCPT
+        with ESMTP id S229906AbjDXQYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:24:17 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B91E69;
-        Mon, 24 Apr 2023 09:24:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D6BE01FD93;
-        Mon, 24 Apr 2023 16:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682353455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XIFqtj5gWVCy/HqqFdgfpfyyCQW7DaFAKwITl1QkuR4=;
-        b=VOYamucX0CJArl2ahuhvzM9fXrWNkaKLzeVVSnDDCqFBvlcmJKanheYyk8g8FyFA4dACtZ
-        HpCx7hdwoznSwbPjdbaxYRDfu4QPnnsargqUCwvp1O1GMA1MHKE0VD250HxvPXkoBput8M
-        xhcG7FG2R2uhbagAKFEGZomgfbIGRGE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682353455;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XIFqtj5gWVCy/HqqFdgfpfyyCQW7DaFAKwITl1QkuR4=;
-        b=SKMV1crk5umBOeseM6cGEBBzSTkerVgIRJcoRySIKZudmJauOBmC6FFuIX9AOyfEO8J2QH
-        iMp0FfxDZ8nYrhAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC94413780;
-        Mon, 24 Apr 2023 16:24:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mj0ELi+tRmRCCAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 24 Apr 2023 16:24:15 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id EFD9DA0729; Mon, 24 Apr 2023 18:24:13 +0200 (CEST)
-Date:   Mon, 24 Apr 2023 18:24:13 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Noah Goldstein <goldstein.w.n@gmail.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] ext4: move `ext4_count_free` to ext4.h so it can be
- easily inlined
-Message-ID: <20230424162413.hiimozuw44fhht4a@quack3>
-References: <20230421014750.2315938-1-goldstein.w.n@gmail.com>
+        Mon, 24 Apr 2023 12:24:55 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286365B95
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:24:54 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5286311be47so335891a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682353493; x=1684945493;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Ec5rnpGl1sXrFHB3DIjsS4ZKrDnQgNacloNoA+YyYQ=;
+        b=D7tq8Eaw7vA261Dwg/q4yomzdKYnXO1D3Uf59Xit37qeJm8PqkSOa/YnIiTewUASGN
+         e9jxzSRVPK4XvKgzMAQpi0LuRTQ5uuheqgXAVyod/IXkvK0y+sjZDodcqdtSNOdOcZWQ
+         kI8Z8G0DTJ/TMko5t6YarnKvu0P+qh/GeUW40=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682353493; x=1684945493;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Ec5rnpGl1sXrFHB3DIjsS4ZKrDnQgNacloNoA+YyYQ=;
+        b=VfZDvCsJm7zxT4XETNxND1afuBolyIgxWZ3FtU8WpkwLocC7xG/msDjrKRIUCIxwmZ
+         hY5AIJDb2FZIurSxvEJSk/LSHnR+vpDE6vkyuIwtL1usnkIyAba6TSnU9pRS8PfCnk85
+         fLC+FZQgPvvZjeUMr+my8zsbbqEhzZLWbPA5a0DMGB0y0MVeGJRMz+xnkJuMv2XR8AOK
+         peMNJ+QhAVguIDjlHdXp1x00+BdcWUCIOoqJwmQyM6aHS4wDpT1348GVbBvLNCAQckra
+         i4n+6HmopOt9CsEe+lcorjBmLbTW6gcD+EnxiCAgNAnycChi8CJMmL1tUj6VxsU+ACxY
+         iKPA==
+X-Gm-Message-State: AAQBX9eM0u/XObPVgbO6PRg0/7ELrJY5FUFYyIsL9V3hk5LD7LY3GLiy
+        1OpPciXry3LD5S2Jhi1vdNphSg==
+X-Google-Smtp-Source: AKy350aKTqSXh6yHEIq6KpoXi00j0ZgJNGRkl4/Lr67APjoo2sYoexotse6/Dw5Srs51ftzpuR3luQ==
+X-Received: by 2002:a17:90a:4e07:b0:247:19ac:9670 with SMTP id n7-20020a17090a4e0700b0024719ac9670mr13749994pjh.26.1682353493627;
+        Mon, 24 Apr 2023 09:24:53 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g9-20020a17090a67c900b002465ff5d829sm6599949pjm.13.2023.04.24.09.24.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 09:24:53 -0700 (PDT)
+Message-ID: <6446ad55.170a0220.c82cd.cedc@mx.google.com>
+X-Google-Original-Message-ID: <202304240922.@keescook>
+Date:   Mon, 24 Apr 2023 09:24:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, elver@google.com, dvyukov@google.com,
+        kasan-dev@googlegroups.com, andy@kernel.org,
+        ndesaulniers@google.com, nathan@kernel.org
+Subject: Re: [PATCH] string: use __builtin_memcpy() in strlcpy/strlcat
+References: <20230424112313.3408363-1-glider@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421014750.2315938-1-goldstein.w.n@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230424112313.3408363-1-glider@google.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 20-04-23 20:47:49, Noah Goldstein wrote:
-> `ext4_count_free` is a one-line helper that is clearly better off
-> being inlined. This saves a handful instructions in `vmlinux` on x86.
+On Mon, Apr 24, 2023 at 01:23:13PM +0200, Alexander Potapenko wrote:
+> lib/string.c is built with -ffreestanding, which prevents the compiler
+> from replacing certain functions with calls to their library versions.
 > 
-> Instruction estimates use `wc -l` on `objdump`
-> Before: 8539271
-> After : 8539248
+> On the other hand, this also prevents Clang and GCC from instrumenting
+> calls to memcpy() when building with KASAN, KCSAN or KMSAN:
+>  - KASAN normally replaces memcpy() with __asan_memcpy() with the
+>    additional cc-param,asan-kernel-mem-intrinsic-prefix=1;
+>  - KCSAN and KMSAN replace memcpy() with __tsan_memcpy() and
+>    __msan_memcpy() by default.
 > 
-> So saves roughly 20 instructions
+> To let the tools catch memory accesses from strlcpy/strlcat, replace
+> the calls to memcpy() with __builtin_memcpy(), which KASAN, KCSAN and
+> KMSAN are able to replace even in -ffreestanding mode.
 > 
-> Signed-off-by: Noah Goldstein <goldstein.w.n@gmail.com>
-
-Looks fine. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> This preserves the behavior in normal builds (__builtin_memcpy() ends up
+> being replaced with memcpy()), and does not introduce new instrumentation
+> in unwanted places, as strlcpy/strlcat are already instrumented.
+> 
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> Link: https://lore.kernel.org/all/20230224085942.1791837-1-elver@google.com/
 > ---
->  fs/ext4/bitmap.c | 5 -----
->  fs/ext4/ext4.h   | 6 +++++-
->  2 files changed, 5 insertions(+), 6 deletions(-)
+>  lib/string.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/ext4/bitmap.c b/fs/ext4/bitmap.c
-> index f63e028c638c..c3cd2b878bbd 100644
-> --- a/fs/ext4/bitmap.c
-> +++ b/fs/ext4/bitmap.c
-> @@ -11,11 +11,6 @@
->  #include <linux/buffer_head.h>
->  #include "ext4.h"
+> diff --git a/lib/string.c b/lib/string.c
+> index 3d55ef8901068..be26623953d2e 100644
+> --- a/lib/string.c
+> +++ b/lib/string.c
+> @@ -110,7 +110,7 @@ size_t strlcpy(char *dest, const char *src, size_t size)
 >  
-> -unsigned int ext4_count_free(char *bitmap, unsigned int numchars)
-> -{
-> -	return numchars * BITS_PER_BYTE - memweight(bitmap, numchars);
-> -}
-> -
->  int ext4_inode_bitmap_csum_verify(struct super_block *sb, ext4_group_t group,
->  				  struct ext4_group_desc *gdp,
->  				  struct buffer_head *bh, int sz)
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 08b29c289da4..6e1d3c175a70 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -2675,7 +2675,11 @@ struct mmpd_data {
->  # define NORET_AND	noreturn,
->  
->  /* bitmap.c */
-> -extern unsigned int ext4_count_free(char *bitmap, unsigned numchars);
-> +static inline unsigned int ext4_count_free(char *bitmap, unsigned int numchars)
-> +{
-> +	return numchars * BITS_PER_BYTE - memweight(bitmap, numchars);
-> +}
-> +
->  void ext4_inode_bitmap_csum_set(struct super_block *sb, ext4_group_t group,
->  				struct ext4_group_desc *gdp,
->  				struct buffer_head *bh, int sz);
-> -- 
-> 2.34.1
-> 
+>  	if (size) {
+>  		size_t len = (ret >= size) ? size - 1 : ret;
+> -		memcpy(dest, src, len);
+> +		__builtin_memcpy(dest, src, len);
+>  		dest[len] = '\0';
+>  	}
+>  	return ret;
+> @@ -260,7 +260,7 @@ size_t strlcat(char *dest, const char *src, size_t count)
+>  	count -= dsize;
+>  	if (len >= count)
+>  		len = count-1;
+> -	memcpy(dest, src, len);
+> +	__builtin_memcpy(dest, src, len);
+>  	dest[len] = 0;
+>  	return res;
+
+I *think* this isn't a problem for CONFIG_FORTIFY, since these will be
+replaced and checked separately -- but it still seems strange that you
+need to explicitly use __builtin_memcpy.
+
+Does this end up changing fortify coverage?
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Kees Cook
