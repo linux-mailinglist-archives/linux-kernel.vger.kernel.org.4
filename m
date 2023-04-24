@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AC76ED410
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E85C6ED411
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjDXSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S232033AbjDXSEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjDXSDy (ORCPT
+        with ESMTP id S230343AbjDXSEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:03:54 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840275258
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:03:53 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b7b54642cso3565592b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:03:53 -0700 (PDT)
+        Mon, 24 Apr 2023 14:04:14 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D857D83
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:04:12 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63d4595d60fso29940831b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682359433; x=1684951433;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T1NUtVt3knB/HcXq8IIUhsyBrwMDib57ziNBiOWDoTI=;
-        b=CkeLkg5KKm0VfGJuk5lq/38olMkTW7PTeFFmDiDckPTrlzJgywQfut52O+UPNqV1A9
-         K5KaXcu5BLzfG9x1VwslhDrA989OPGEx4MvEcr8joRS7ofdpZUuViB0NlLjWps00q/9I
-         a6f77xX+CHYg0L5KwLa/L6MNUI6c3mYdjBVQnrxHNiI15oM5yo81MsoyIZ8OVsmWgR+G
-         yquL/JyhEvfFifD1iLb4KPUDtf8ntADaWP2l8YJ8bj5T4MZSg0Vihn6RuBY4AysV6Yw/
-         qnPzWbTQpjrRHhm1Mqt6+BDa23GOZlx2fGdXSXuglm+76iqK9TQ0HMhY47FLZCD4oTLF
-         XOGg==
+        d=gmail.com; s=20221208; t=1682359452; x=1684951452;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pz7puxVNtolmzcAAwyFjNawuUpApiD7LRdlC7UvoCIo=;
+        b=YjDZliCErZG6eMEe/1BMVzzbVztgISMWDi6eJlA/S29GGNg3j2iwgsvs9h5cFjzBC1
+         Z+bRVuCYOtAdWjxET6awwI4G3zCqkV1Bl+AfxuzwUyvlbED+T6VeYNqa3+vFdujhww3o
+         Wf0LbZFvZDJ7lPyWZD8CZiSnhBVqeqQjlzEyXiYw1PANXpUiEGMbzSVmVNYZ8ej/OKI+
+         p9wBMgYLTfm546yip58JQp1M6Cp2CAE7hkE4W7Di9S+yvYBObwe2jkFbwOYTOevUmfgC
+         1y24XyIjW2mDTBmG2Agkb1I3j3qGeDZ4giudu0qKGmSTQKY1hGzaLpKufuboxDeTFP13
+         1atg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682359433; x=1684951433;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T1NUtVt3knB/HcXq8IIUhsyBrwMDib57ziNBiOWDoTI=;
-        b=Oml5WAfSLDzH5MTlr5MzHX5Yh5NV65rMGtvjGDlnq5VRFxAL7cup/D8wc+K3g/R6hl
-         LUPfRoiVvV7oVWsIm2s68C4zp1YIjZVghHRaCmpt8Xrnn8QX1E3vyXneFTnCELFK2zQ1
-         0pc0OExKE6WGQXeAt2zQlFF+qpcfAC6DWwtbT4YJFers6dgSnofR4M2tRYUCDfRQglx9
-         9T3KcaVWF7NS3hHP46mwAELcRsYB4RyatrimFak9Yf7XeC57oS98kxAND7opa8ewZvY7
-         AVbj+6zkNFgFU5SCSTmYvoKId9NJOf8sCoIfqMPo5lr/Mq6usxVw3+qd9bHe9uSZ3lKy
-         BWzw==
-X-Gm-Message-State: AAQBX9fNBStchgAGhScZhWPuCclWDO23oCe/iJtJo1ikVqngBW/VIg2h
-        3NR50aL4/9r9eJ4au6MoVt92PFg7t2w=
-X-Google-Smtp-Source: AKy350ZA91Hw7jALmRYigNL9sAR+S2RLG796GhOl37Oju8SnrS+eaj2ZhA4j9lhMUwSNn+CXqlijYQ==
-X-Received: by 2002:a05:6a20:1449:b0:d6:91f5:2b10 with SMTP id a9-20020a056a20144900b000d691f52b10mr17617976pzi.58.1682359432995;
-        Mon, 24 Apr 2023 11:03:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682359452; x=1684951452;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pz7puxVNtolmzcAAwyFjNawuUpApiD7LRdlC7UvoCIo=;
+        b=Cz944xZ16Kj9hE6JmAozuwtsg6BSd53wzWnVrjm7G8mE2Cc2a2otDlV57cG6ws3VU2
+         S6At/ofI0k/b4PNki1JHLKvLsK60/EYQaPP9aGvS+F26ZToUUCkb32xd0iQKLp3Ln6nn
+         WQlbLOh4h6ze/p8w4FyaMqH2HXtYAyAR7v/J2dexkKleENaxd/35mg7CWW8UQZHSHUz9
+         knt9hDmCac22QPJgYWJtb9ZRgKVlycrLIgb2jInvhQYNXAw1ZjjqcM3Xtwxh+K68wmvI
+         BaEmX0CXveU5+JCBv5rkdTyCL9y4y8UNbhkBM3el6T2smdTRvxri3Vsm7zjkrDAKQqNs
+         G8Kg==
+X-Gm-Message-State: AAQBX9d2O05WKt5qObognmEVEAoEcZiptNL9CMIt/0c8Pat0mt2ysuED
+        1aR5MZyM/3yEzDwvKp/42K8=
+X-Google-Smtp-Source: AKy350Y/MzBGCSCbMfswcWt5iik0ZWKHLLQhqJonZltK0oLOutZXWUwqz4UGh7hknJKBt96HOtdIKg==
+X-Received: by 2002:a17:90a:6002:b0:246:865d:419a with SMTP id y2-20020a17090a600200b00246865d419amr20810032pji.6.1682359451869;
+        Mon, 24 Apr 2023 11:04:11 -0700 (PDT)
 Received: from pop-os.localdomain ([103.251.210.208])
-        by smtp.gmail.com with ESMTPSA id x185-20020a6286c2000000b0063f00898245sm7948417pfd.146.2023.04.24.11.03.51
+        by smtp.gmail.com with ESMTPSA id u19-20020a17090abb1300b0024b2fc15befsm5797080pjr.44.2023.04.24.11.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 11:03:52 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 23:33:48 +0530
+        Mon, 24 Apr 2023 11:04:11 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 23:34:07 +0530
 From:   Yogesh Hegde <yogi.kernel@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 0/4] Remove unused rf_set_sens variable
-Message-ID: <cover.1682358035.git.yogi.kernel@gmail.com>
+Subject: [PATCH v5 1/4] staging: rtl8192e: Remove unused rf_set_sens variable
+Message-ID: <5a9767fab76b1836ea7881994ffb3593c1ab12bf.1682358035.git.yogi.kernel@gmail.com>
+References: <cover.1682358035.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1682358035.git.yogi.kernel@gmail.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,15 +71,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The rf_set_sens variable is declared but never set, so it is always NULL.
-Cleanup the unused rf_set_sens variable. Remove functions
-_rtl92e_wx_get_sens and _rtl92e_wx_set_sens which always returned 
-error code after removal of rf_set_sens variable. 
-Cleanup unused max_sens and sens variable.
-The patches are required to be applied in sequence.
+This commit cleans up the unused rf_set_sens variable and removes the
+associated code that relied on it.
+
+Specifically, the following changes have been made:
+- Removed the `range->sensitivity` assignment, which was never used.
+- Removed the sensitivity level get implementation, which always returns
+  an error code.
+- Removed the sensitivity level set implementation, which always returns
+  an error code.
+- Removed the `rf_set_sens` variable.
+
+Suggested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
+---
 
 Changes in v5:
-    1. Rebased onto latest staging-testing branch per feedback from
-       philipp.g.hortmann@gmail.com
+    1. Rebased onto latest staging-testing branch
 
 Changes in v4:
     1. Split changes into patch series per feedback from
@@ -95,18 +106,67 @@ Changes in v2:
 
 Changes in v1:
     1. Fix comparison to NULL of variable rf_set_sens
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c   | 19 ++-----------------
+ 2 files changed, 2 insertions(+), 18 deletions(-)
 
-Yogesh Hegde (4):
-  staging: rtl8192e: Remove unused rf_set_sens variable
-  staging: rtl8192e: Remove unused _rtl92e_wx_get_sens function
-  staging: rtl8192e: Remove unused _rtl92e_wx_set_sens function
-  staging: rtl8192e: Remove unused sens and max_sens from r8192_priv
-    struct
-
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  3 --
- drivers/staging/rtl8192e/rtl8192e/rtl_wx.c   | 45 --------------------
- 2 files changed, 48 deletions(-)
-
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 285dac32c074..08145e1f814c 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -231,7 +231,6 @@ struct r8192_priv {
+ 	struct rt_stats stats;
+ 	struct iw_statistics			wstats;
+ 
+-	short (*rf_set_sens)(struct net_device *dev, short sens);
+ 	u8 (*rf_set_chan)(struct net_device *dev, u8 ch);
+ 
+ 	struct rx_desc *rx_ring[MAX_RX_QUEUE];
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+index cb28288a618b..cc1af367f37d 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+@@ -311,10 +311,6 @@ static int _rtl92e_wx_get_range(struct net_device *dev,
+ 	/* ~130 Mb/s real (802.11n) */
+ 	range->throughput = 130 * 1000 * 1000;
+ 
+-	if (priv->rf_set_sens != NULL)
+-		/* signal level threshold range */
+-		range->sensitivity = priv->max_sens;
+-
+ 	range->max_qual.qual = 100;
+ 	range->max_qual.level = 0;
+ 	range->max_qual.noise = 0;
+@@ -813,10 +809,7 @@ static int _rtl92e_wx_get_sens(struct net_device *dev,
+ {
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 
+-	if (priv->rf_set_sens == NULL)
+-		return -1; /* we have not this support for this radio */
+-	wrqu->sens.value = priv->sens;
+-	return 0;
++	return -1;
+ }
+ 
+ static int _rtl92e_wx_set_sens(struct net_device *dev,
+@@ -831,15 +824,7 @@ static int _rtl92e_wx_set_sens(struct net_device *dev,
+ 		return 0;
+ 
+ 	mutex_lock(&priv->wx_mutex);
+-	if (priv->rf_set_sens == NULL) {
+-		err = -1; /* we have not this support for this radio */
+-		goto exit;
+-	}
+-	if (priv->rf_set_sens(dev, wrqu->sens.value) == 0)
+-		priv->sens = wrqu->sens.value;
+-	else
+-		err = -EINVAL;
+-
++	err = -1;
+ exit:
+ 	mutex_unlock(&priv->wx_mutex);
+ 
 -- 
 2.34.1
 
