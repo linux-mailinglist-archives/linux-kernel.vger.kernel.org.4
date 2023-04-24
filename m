@@ -2,185 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF756EC77E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A1E6EC784
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbjDXHzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S230430AbjDXH6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjDXHyl (ORCPT
+        with ESMTP id S229477AbjDXH6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:54:41 -0400
-Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB9010F5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:54:40 -0700 (PDT)
-Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 2023042407543818b8085091f816099a
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Apr 2023 09:54:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=TMiKHVqdPJJ94SJ7CYeAuedDKJjk5C6OoKfwHyNkX74=;
- b=KcyPzwEzxq2cT9bEVkBbcU6KeITsFXBmrV3DKv5X/CId4YV28+aCpg5P5nmoc5aSn7xmUV
- EaguzZ+QCskm9vYOt323mnEieR8xIa1+FgMX1Nw/0AvgtS4KMFWI4zQQ+AKDWq2QhbV1jWUs
- eINdAk2KwYh1y5eBJdr7K0YZi5gCg=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 8/8] tty: n_gsm: add DLCI specific rx/tx statistics
-Date:   Mon, 24 Apr 2023 09:52:51 +0200
-Message-Id: <20230424075251.5216-8-daniel.starke@siemens.com>
-In-Reply-To: <20230424075251.5216-1-daniel.starke@siemens.com>
-References: <20230424075251.5216-1-daniel.starke@siemens.com>
+        Mon, 24 Apr 2023 03:58:50 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCC111B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:58:48 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32b532ee15bso157885965ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:58:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682323128; x=1684915128;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rS/fIEMWMpdB8AcMI+Y4zXjURKrKoFUpJdNl7oWNoq0=;
+        b=eUcNcAdOqBigLumqaSePUBt29Q2HkSI7r4O9c3MCO/JSwM2Rz9da5wFQgtyje0Lkpk
+         UWT2+CBxJVYDDcoJZkqVtG6OlkvzRUF/bV45lNe2YI7MCNkjSqedsKuP4/Fxj8vZU0fR
+         hLytH7tLZ0r5ZKRX9SbCYorUHqQ85Zdbvz8na+FoWJSTPOPogHxePtroAQ4yvp5yzJsF
+         KZvNIxaeF7lUVlvznBBFdAeNIcuhxS9coWQ2q00040ZjOFjzBQYI/AmlyBhufVNMc7Mi
+         3WuMqCk0B2NL8RAwuJKxNHeRX+Fou+fsP7ZPBZhrWHFkskJZW0k+lpsSTTIlQkhcn0+U
+         laqg==
+X-Gm-Message-State: AAQBX9clCFMWbhLjjy0e2gHm0HPExR5Zg7YUwKflt8piiGb5yZhe42fA
+        uhg8Y7yoIal1n3NE82QbKc6bIRIUJqhG52Q3snd85rVUvS8E
+X-Google-Smtp-Source: AKy350YEezMEtjnIJb1UvONmy/IW2spEDeBjQyC9X5a40NbK6+Mh5r0gi+j/CbEjPEA4BImy6kZ7vhsIttNZf9qPzUSjJOSoa9oU
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d344:0:b0:32c:b806:d4a3 with SMTP id
+ a4-20020a92d344000000b0032cb806d4a3mr4373088ilh.1.1682323128135; Mon, 24 Apr
+ 2023 00:58:48 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 00:58:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007337c705fa1060e2@google.com>
+Subject: [syzbot] [mm?] KCSAN: data-race in generic_fillattr / shmem_mknod (2)
+From:   syzbot <syzbot+702361cf7e3d95758761@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+Hello,
 
-Add counters for the number of data bytes received/transmitted per DLCI in
-for preparation for an upcoming patch which will expose these values to the
-user.
+syzbot found the following issue on:
 
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+HEAD commit:    457391b03803 Linux 6.3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13226cf0280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c81c9a3d360ebcf
+dashboard link: https://syzkaller.appspot.com/bug?extid=702361cf7e3d95758761
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6438dcb1c42d/disk-457391b0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/20596c249e47/vmlinux-457391b0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cb715366a3e5/bzImage-457391b0.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+702361cf7e3d95758761@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in generic_fillattr / shmem_mknod
+
+read-write to 0xffff8881049a9408 of 8 bytes by task 3383 on cpu 0:
+ shmem_mknod+0xdd/0x180 mm/shmem.c:2942
+ shmem_create+0x34/0x40 mm/shmem.c:2994
+ lookup_open fs/namei.c:3416 [inline]
+ open_last_lookups fs/namei.c:3484 [inline]
+ path_openat+0xd96/0x1d00 fs/namei.c:3712
+ do_filp_open+0xf6/0x200 fs/namei.c:3742
+ do_sys_openat2+0xb5/0x2a0 fs/open.c:1348
+ do_sys_open fs/open.c:1364 [inline]
+ __do_sys_openat fs/open.c:1380 [inline]
+ __se_sys_openat fs/open.c:1375 [inline]
+ __x64_sys_openat+0xf3/0x120 fs/open.c:1375
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff8881049a9408 of 8 bytes by task 4291 on cpu 1:
+ i_size_read include/linux/fs.h:866 [inline]
+ generic_fillattr+0x13f/0x1e0 fs/stat.c:58
+ shmem_getattr+0x32a/0x3b0 mm/shmem.c:1068
+ vfs_getattr_nosec+0x1e3/0x3c0 fs/stat.c:133
+ vfs_getattr fs/stat.c:170 [inline]
+ vfs_statx+0x156/0x300 fs/stat.c:242
+ vfs_fstatat fs/stat.c:276 [inline]
+ __do_sys_newfstatat fs/stat.c:446 [inline]
+ __se_sys_newfstatat+0x8a/0x2a0 fs/stat.c:440
+ __x64_sys_newfstatat+0x55/0x60 fs/stat.c:440
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+value changed: 0x0000000000001644 -> 0x0000000000001658
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 4291 Comm: udevd Not tainted 6.3.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+==================================================================
+
+
 ---
- drivers/tty/n_gsm.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v2 -> v3:
-No changes.
-
-Link: https://lore.kernel.org/all/20230420085017.7314-9-daniel.starke@siemens.com/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 6bfcaf8fe54c..7377a37320af 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -186,6 +186,9 @@ struct gsm_dlci {
- 	void (*data)(struct gsm_dlci *dlci, const u8 *data, int len);
- 	void (*prev_data)(struct gsm_dlci *dlci, const u8 *data, int len);
- 	struct net_device *net; /* network interface, if created */
-+	/* Statistics (not currently exposed) */
-+	u64 tx;			/* Data bytes sent on this DLCI */
-+	u64 rx;			/* Data bytes received on this DLCI */
- };
- 
- /*
-@@ -1216,6 +1219,7 @@ static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 	tty_port_tty_wakeup(&dlci->port);
- 
- 	__gsm_data_queue(dlci, msg);
-+	dlci->tx += len;
- 	/* Bytes of data we used up */
- 	return size;
- }
-@@ -1283,6 +1287,7 @@ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
- 	memcpy(dp, dlci->skb->data, len);
- 	skb_pull(dlci->skb, len);
- 	__gsm_data_queue(dlci, msg);
-+	dlci->tx += len;
- 	if (last) {
- 		dev_kfree_skb_any(dlci->skb);
- 		dlci->skb = NULL;
-@@ -1461,6 +1466,7 @@ static int gsm_control_command(struct gsm_mux *gsm, int cmd, const u8 *data,
- 	msg->data[1] = (dlen << 1) | EA;
- 	memcpy(msg->data + 2, data, dlen);
- 	gsm_data_queue(dlci, msg);
-+	dlci->tx += dlen;
- 
- 	return 0;
- }
-@@ -1488,6 +1494,7 @@ static void gsm_control_reply(struct gsm_mux *gsm, int cmd, const u8 *data,
- 	msg->data[1] = (dlen << 1) | EA;
- 	memcpy(msg->data + 2, data, dlen);
- 	gsm_data_queue(dlci, msg);
-+	dlci->tx += dlen;
- }
- 
- /**
-@@ -1852,10 +1859,13 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
- 						const u8 *data, int clen)
- {
- 	u8 buf[1];
-+	struct gsm_dlci *dlci = gsm->dlci[0];
-+
-+	if (dlci)
-+		dlci->rx += clen;
- 
- 	switch (command) {
- 	case CMD_CLD: {
--		struct gsm_dlci *dlci = gsm->dlci[0];
- 		/* Modem wishes to close down */
- 		if (dlci) {
- 			dlci->dead = true;
-@@ -1934,6 +1944,8 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
- 
- 	ctrl = gsm->pending_cmd;
- 	dlci = gsm->dlci[0];
-+	if (dlci)
-+		dlci->rx += clen;
- 	command |= 1;
- 	/* Does the reply match our command */
- 	if (ctrl != NULL && (command == ctrl->cmd || command == CMD_NSC)) {
-@@ -2298,6 +2310,9 @@ static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
- 			need_pn = true;
- 	}
- 
-+	dlci->tx = 0;
-+	dlci->rx = 0;
-+
- 	switch (dlci->state) {
- 	case DLCI_CLOSED:
- 	case DLCI_WAITING_CONFIG:
-@@ -2330,6 +2345,9 @@ static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
-  */
- static void gsm_dlci_set_opening(struct gsm_dlci *dlci)
- {
-+	dlci->tx = 0;
-+	dlci->rx = 0;
-+
- 	switch (dlci->state) {
- 	case DLCI_CLOSED:
- 	case DLCI_WAITING_CONFIG:
-@@ -2349,6 +2367,9 @@ static void gsm_dlci_set_opening(struct gsm_dlci *dlci)
-  */
- static void gsm_dlci_set_wait_config(struct gsm_dlci *dlci)
- {
-+	dlci->tx = 0;
-+	dlci->rx = 0;
-+
- 	switch (dlci->state) {
- 	case DLCI_CLOSED:
- 	case DLCI_CLOSING:
-@@ -2425,6 +2446,7 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
- 		fallthrough;
- 	case 1:		/* Line state will go via DLCI 0 controls only */
- 	default:
-+		dlci->rx += clen;
- 		tty_insert_flip_string(port, data, clen);
- 		tty_flip_buffer_push(port);
- 	}
-@@ -2785,6 +2807,7 @@ static void gsm_queue(struct gsm_mux *gsm)
- 			gsm->open_error++;
- 			return;
- 		}
-+		dlci->rx += gsm->len;
- 		if (dlci->dead)
- 			gsm_response(gsm, address, DM|PF);
- 		else {
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
