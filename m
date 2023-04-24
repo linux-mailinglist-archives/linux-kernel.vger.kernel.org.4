@@ -2,74 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E636EC9BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8975B6EC83C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjDXKGG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 06:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S231224AbjDXJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjDXKGE (ORCPT
+        with ESMTP id S231145AbjDXJAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:06:04 -0400
-X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 03:06:00 PDT
-Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8183B1BD3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:06:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id C66D12E11056;
-        Mon, 24 Apr 2023 03:54:56 -0500 (-05)
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id svnJvML5hHLw; Mon, 24 Apr 2023 03:54:56 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 057812E0FE3B;
-        Mon, 24 Apr 2023 03:54:53 -0500 (-05)
-X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id bfDRRepdzEHn; Mon, 24 Apr 2023 03:54:52 -0500 (-05)
-Received: from [23.172.112.93] (unknown [23.172.112.93])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 934F52E0FE27;
-        Mon, 24 Apr 2023 03:54:45 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 24 Apr 2023 05:00:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161AD10CC;
+        Mon, 24 Apr 2023 02:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6A806137C;
+        Mon, 24 Apr 2023 09:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862C3C433EF;
+        Mon, 24 Apr 2023 08:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682326817;
+        bh=wR67sHnfAWD61UY2/6LLn6GjwksJh2dH/l18sPo/gNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dxxTN6KccHqX2+mFxLZ1vSCpxC1nO2QkKA2kc4n5lhUlWDIR4LFiw+81LRYw52Ad5
+         66gQS+ujD5w53YNGywPXDVpusW2cgJk9OnfSH4Gyn6CaYFSmi9npcdwjSgyaI4AeZ+
+         UOWF3SSjQPJ4oIQk5Ry6RFkpFLZVOwO7SGbOpXko1ATzqbvVSx2+PfXHRtUCtwLszk
+         AG8OQOZ/59/TcEJJApKe3KdHb3+HBbt3Qwl/sKFiEXDuARaxGismV+1swYRLvgLpGq
+         62gqS17MHOiAScB8lTe6V1RTEkGjfXUlgF30qQFdjkX/5YNCKmJIbc5Y4UTNsltZzV
+         m0TbFWtPG4sVw==
+Date:   Mon, 24 Apr 2023 09:59:42 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 8/8] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
+ Support
+Message-ID: <20230424085942.GA8035@google.com>
+References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
+ <20230322055628.4441-9-Zeynep.Arslanbenzer@analog.com>
+ <20230330123136.GF434339@google.com>
+ <DM6PR03MB519577728975E086D8EB20F38B669@DM6PR03MB5195.namprd03.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Se requiere respuesta urgente.
-To:     Recipients <laurethmar.romero@saludzona6.gob.ec>
-From:   "WEBMAIL MAIL ZIMBRA" <laurethmar.romero@saludzona6.gob.ec>
-Date:   Mon, 24 Apr 2023 01:57:14 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230424085445.934F52E0FE27@mail.saludzona6.gob.ec>
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM6PR03MB519577728975E086D8EB20F38B669@DM6PR03MB5195.namprd03.prod.outlook.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificaciÛn / actualizaciÛn. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 dÌas h·biles posteriores a la recepciÛn de este aviso. El incumplimiento de este aviso dentro de la fecha lÌmite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correr· el riesgo de perder su cuenta.
+On Sun, 23 Apr 2023, Arslanbenzer, Zeynep wrote:
 
-Confirme los detalles de la cuenta a continuaciÛn.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electrÛnico completo en:
-3. Nombre de usuario:
-4. ContraseÒa:
-5. Vuelva a escribir la contraseÒa:
-_____________________________________
- 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminar· autom·ticamente de nuestro sistema.
- 
-Nos disculpamos por cualquier inconveniente causado.
- 
-Sinceramente
-AtenciÛn al cliente
-Equipo de soporte tÈcnico de Zimbra.
- 
-Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
+> On Thu, 30 Mar 2023, Lee Jones wrote:
+> 
+> >On Wed, 22 Mar 2023, Zeynep Arslanbenzer wrote:
+> >
+> >> MFD driver for MAX77643/MAX77654/MAX77658/MAX77659 to enable its sub
+> >
+> >Please drop all references to 'MFD'.
+> >
+> >What are these devices, really?  I suspect they are PMICs?
+> >
+> >> devices.
+> >>
+> >> The MAX77643 is a multi-function devices. It includes regulator.
+> >>
+> >> The MAX77654 is a multi-function devices. It includes regulator and 
+> >> charger.
+> >>
+> >> The MAX77658 is a multi-function devices. It includes regulator, 
+> >> charger and battery.
+> >>
+> >> The MAX77659 is a multi-function devices. It includes regulator and 
+> >> charger.
+> >>
+> >> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> >> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> >> ---
+> >>  drivers/mfd/Kconfig          |  15 ++
+> >>  drivers/mfd/Makefile         |   1 +
+> >>  drivers/mfd/max77658.c       | 448 +++++++++++++++++++++++++++++++++++
+> >>  include/linux/mfd/max77658.h |  88 +++++++
+> >>  4 files changed, 552 insertions(+)
+> >>  create mode 100644 drivers/mfd/max77658.c  create mode 100644 
+> >> include/linux/mfd/max77658.h
+> >>
+> >> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig index 
+> >> 8b93856de432..7b4be7fb8662 100644
+> >> --- a/drivers/mfd/Kconfig
+> >> +++ b/drivers/mfd/Kconfig
+> >> @@ -821,6 +821,21 @@ config MFD_MAX77650
+> >>  	  the following functionalities of the device: GPIO, regulator,
+> >>  	  charger, LED, onkey.
+> >>
+> >> +config MFD_MAX77658
+> >> +	tristate "Analog Devices MAX77643/MAX77654/MAX77658/MAX77659 PMIC Support"
+> >> +	depends on I2C
+> >> +	depends on OF
+> >> +	select MFD_CORE
+> >> +	select REGMAP_I2C
+> >> +	select REGMAP_IRQ
+> >> +	help
+> >> +	  Say Y here to add support for Analog Devices
+> >> +	  MAX77643/MAX77654/MAX77658/MAX77659 Power Management IC.
+> >
+> >"MAX776xx series"?
+> 
+> As I realized later, max77620, max77650, max77686, and max77693 drivers were merged to Linux before our patch. They are also PMIC devices and our patch does not cover them. Therefore, I think it would not be appropriate to use MAX776xx.
+
+Perhaps you can come up with something a little more scalable then.
+
+What if you added support for another 10 devices?
+
+-- 
+Lee Jones [ÊùéÁêºÊñØ]
