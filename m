@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF7E6EC793
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC226EC794
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjDXIEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
+        id S231296AbjDXIFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjDXIES (ORCPT
+        with ESMTP id S230228AbjDXIF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:04:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA28499;
-        Mon, 24 Apr 2023 01:04:09 -0700 (PDT)
-X-UUID: 93eb9ff2e27611edb6b9f13eb10bd0fe-20230424
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=nArHEf93lLs4kl0maPyf7eFjEu8BzOOYTL22bRX4/1U=;
-        b=Cskj5IUPOnoNhwJSFFqZNQk/WohTdVOEzIw3L2SgeMvAyG101XkDsaf/Sd257wbXcRjEbfzSfg6pTqVUUbDPuZYTc9rGaXWDayYHP2xNyHw3tOrPzrWy4x4cZnkMClpbhNBRZ7f/ywxmNCN2mu7wd0KIYjEle0uxbrIsNBm/738=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:e42e0e36-b421-47c2-aac5-38fa4a4d0cad,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:0a0ef0eb-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 93eb9ff2e27611edb6b9f13eb10bd0fe-20230424
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <alice.chao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1397087668; Mon, 24 Apr 2023 16:04:03 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 24 Apr 2023 16:04:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 24 Apr 2023 16:04:02 +0800
-From:   Alice Chao <alice.chao@mediatek.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Can Guo <quic_cang@quicinc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Manivannan Sadhasivam <mani@kernel.org>
-CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
-        <naomi.chu@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-        <wsd_upstream@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v3 1/1] scsi: ufs: core: Fix &hwq->cq_lock deadlock issue
-Date:   Mon, 24 Apr 2023 16:03:56 +0800
-Message-ID: <20230424080400.8955-1-alice.chao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 24 Apr 2023 04:05:28 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CE399
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:05:27 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54f8e823e47so45662107b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682323527; x=1684915527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zympgsGXJK0H9fEUC44Mmed4PGvFG4LKfOOmAOBmWVo=;
+        b=CFlwITicOUd0drvtoXImi5P+ObED/43JuW+GrEUK00FM+z4l/1sBXlBfgGpFk3fLeG
+         8P5m4kpQGtf4Jb7yFj82Wg4l5wpswsZcim6oZZ8EhEpPoSlgR+4JRuz8vmN+CMv4U6sJ
+         b9yt1f7s/4scSNHof3THudtGnWLPtSIGecYcF2q+Xku5aPXoLTeN/cf7N0+2ahk+22yy
+         YhbuwXzZekIP31wG2XalUfLKMzZiYZaARl8c0z3ZsdYe4ZHR1Os6oYnlgyRmdqNwC/8/
+         GL3PaVO71lAGWQ+Vgoh/Y+yEX34fPH1f7q+Lr7zLkcvBpGJeta3Aoh1qK88wrgklxkmO
+         /ghQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682323527; x=1684915527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zympgsGXJK0H9fEUC44Mmed4PGvFG4LKfOOmAOBmWVo=;
+        b=Ef5bivLwTaTwQCrdk7tDJVjq8RHrduIBRmK2HAZkcRCDrU2C1V3c4tZAQMPO1mgTTZ
+         vBxGHUZF0idASmy7aRam5F49oiey1VYHU1Bj8wPpOAFwuWziZ6yo7SfSin2UXwawnIYL
+         az5l+CHxcI3Cj5+tS0ojCPwBB4joAQxJwjFeJH2YH2Kya3VCEbboycMXX6eWJ0NutGF7
+         iLd3NmP2cbqIMGxRe9Tgyse/K2k+Z/8G+NAeiJ9clBcuFhYJa9QRo/P64hMy8SVSpBCS
+         FrCeheyMZcFViWpDJZTULM6GHEvhfVo4x1qn5G/taKDYoq5TmfrbhXyjAG6vbGrDmbHy
+         Sy8A==
+X-Gm-Message-State: AAQBX9fY6vdwnAb+AyJnAd+gdWluPiWm+ubXe5sR+ArcsJfxG7bEcs09
+        zvsJG6ghOal8s32E4xD4EQhk+2jF1EuiKvWTSxNq/w==
+X-Google-Smtp-Source: AKy350bU3+GRCXOx27f4Xrkltn2TroIypMC/iX0pWtnmX0xp3c9/RsMrEKbvhWeDFm0i6n0B2GZoVlwl9D+D7MfgV78=
+X-Received: by 2002:a81:61c4:0:b0:555:cbdc:c6 with SMTP id v187-20020a8161c4000000b00555cbdc00c6mr8250272ywb.9.1682323527184;
+ Mon, 24 Apr 2023 01:05:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+References: <20230421091319.79744-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20230421091319.79744-1-yang.lee@linux.alibaba.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 24 Apr 2023 10:05:16 +0200
+Message-ID: <CACRpkdaKHkwpdUvYq+usSOmQ8q=WTyMpFLEswpHRaW6qryYVxQ@mail.gmail.com>
+Subject: Re: [PATCH -next] drm/tve200: Use devm_platform_ioremap_resource()
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,102 +68,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[name:lockdep&]WARNING: inconsistent lock state
-[name:lockdep&]--------------------------------
-[name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-[name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
-  ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
-ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-[name:lockdep&]{IN-HARDIRQ-W} state was registered at:
-  lock_acquire+0x17c/0x33c
-  _raw_spin_lock+0x5c/0x7c
-  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-  ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
-  __handle_irq_event_percpu+0x140/0x3ec
-  handle_irq_event+0x50/0xd8
-  handle_fasteoi_irq+0x148/0x2b0
-  generic_handle_domain_irq+0x4c/0x6c
-  gic_handle_irq+0x58/0x134
-  call_on_irq_stack+0x40/0x74
-  do_interrupt_handler+0x84/0xe4
-  el1_interrupt+0x3c/0x78
-<snip>
+On Fri, Apr 21, 2023 at 11:13=E2=80=AFAM Yang Li <yang.lee@linux.alibaba.co=
+m> wrote:
 
-Possible unsafe locking scenario:
-       CPU0
-       ----
-  lock(&hwq->cq_lock);
-  <Interrupt>
-    lock(&hwq->cq_lock);
-  *** DEADLOCK ***
-2 locks held by kworker/u16:4/260:
+> Convert platform_get_resource(),devm_ioremap_resource() to a single
+> call to devm_platform_ioremap_resource(), as this is exactly what this
+> function does.
+>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-[name:lockdep&]
- stack backtrace:
-CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
-6.1.17-mainline-android14-2-g277223301adb #1
-Workqueue: ufs_eh_wq_0 ufshcd_err_handler
+That's a nice optimization.
+Patch applied!
 
- Call trace:
-  dump_backtrace+0x10c/0x160
-  show_stack+0x20/0x30
-  dump_stack_lvl+0x98/0xd8
-  dump_stack+0x20/0x60
-  print_usage_bug+0x584/0x76c
-  mark_lock_irq+0x488/0x510
-  mark_lock+0x1ec/0x25c
-  __lock_acquire+0x4d8/0xffc
-  lock_acquire+0x17c/0x33c
-  _raw_spin_lock+0x5c/0x7c
-  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-  ufshcd_poll+0x68/0x1b0
-  ufshcd_transfer_req_compl+0x9c/0xc8
-  ufshcd_err_handler+0x3bc/0xea0
-  process_one_work+0x2f4/0x7e8
-  worker_thread+0x234/0x450
-  kthread+0x110/0x134
-  ret_from_fork+0x10/0x20
-
-ufs_mtk_mcq_intr() could refer to
-https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
-
-When ufshcd_err_handler() is executed, CQ event interrupt can enter
-waiting for the same lock. It could happened in upstream code path
-ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
-warning message will be generated when &hwq->cq_lock is used in IRQ
-context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
-spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
-
-Fixes: ed975065c31c ("scsi: ufs: core: mcq: Add completion support in poll")
-Reviewed-by: Can Guo <quic_cang@quicinc.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
----
-Change since v2
--Add commit: Add Reviewed-by: tag
----
- drivers/ufs/core/ufs-mcq.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 31df052fbc41..202ff71e1b58 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -299,11 +299,11 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_nolock);
- unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
- 				       struct ufs_hw_queue *hwq)
- {
--	unsigned long completed_reqs;
-+	unsigned long completed_reqs, flags;
- 
--	spin_lock(&hwq->cq_lock);
-+	spin_lock_irqsave(&hwq->cq_lock, flags);
- 	completed_reqs = ufshcd_mcq_poll_cqe_nolock(hba, hwq);
--	spin_unlock(&hwq->cq_lock);
-+	spin_unlock_irqrestore(&hwq->cq_lock, flags);
- 
- 	return completed_reqs;
- }
--- 
-2.18.0
-
+Yours,
+Linus Walleij
