@@ -2,135 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611806ED0BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383A76ED0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjDXOzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S231705AbjDXOzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjDXOzK (ORCPT
+        with ESMTP id S231445AbjDXOzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:55:10 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0485235AC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:55:08 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 759681EC01E0;
-        Mon, 24 Apr 2023 16:55:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1682348107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=RMVSpyKcePMAXubBNzaH8kvv2ei3Xony3FQ7Nm/nZVc=;
-        b=c8sfRkukLktGEBRzcuG+WlLsPMlMUkymfTqEXBqsisgYF9Uz1BcsTZMtxrT/WtV3eguqt7
-        9v/YHrTt5YOMQMxtmyet/UEeXGZXgXWJGXJvnIaQym9s+1OzxNHgVNri6CeyOkBKKej4cA
-        79Xr8AxCT3/lzckx2josmGK6nS16l7I=
-Date:   Mon, 24 Apr 2023 16:55:07 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/sev updates for v6.4-rc1
-Message-ID: <20230424145507.GGZEaYS0KOeYeXHYns@fat_crate.local>
+        Mon, 24 Apr 2023 10:55:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AC96A72;
+        Mon, 24 Apr 2023 07:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682348132; x=1713884132;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=rItGWlNLTd9zQw0ple5th7e2vNOrmGsJxIxk7/cmGBg=;
+  b=iSBDJN4z/1RY1KqhfskgVg9WTGmtbXCYb4M+bnKD/s1HHkp6u6n1Izrd
+   3tQ+v3vQGsjAPpvnerysTGAmdht9DWxVZK57fPreCyK++rEQn7eIUh1ta
+   9GQFitq/1AzBjzg9gLq1nigQe/Q4LCvPG7sFPe4/Hr9C2UckIlpxkf7xd
+   8EE45qR6o5M+9PKHG8jIB6OTgc0MO+EX0M1gTdqU/+uBL1adHtE7plMkN
+   vJEfLgUJQX7nWQ/waTNoMF85/AqJgtDSh/BjD+pEdS1uajYVfN7XJSHfZ
+   e5dgX6NYR5Gci7gYVMemsEGXDsJ4Qv7sRDSlKR7PQpoV3wxEIDL1iUbeg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="349271827"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="349271827"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 07:55:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="837009506"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="837009506"
+Received: from wlwpo-8.amr.corp.intel.com ([10.251.215.143])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 07:55:29 -0700
+Date:   Mon, 24 Apr 2023 17:55:27 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH v2 04/24] selftests/resctrl: Remove mum_resctrlfs
+In-Reply-To: <3df815f8-345e-7089-1c05-f46592ffa393@intel.com>
+Message-ID: <70609aef-f449-b371-9554-527a207946c3@linux.intel.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-5-ilpo.jarvinen@linux.intel.com> <3df815f8-345e-7089-1c05-f46592ffa393@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; CHARSET=US-ASCII
+Content-ID: <744aa094-c3e6-5796-3431-de36ff4a1cb5@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 21 Apr 2023, Reinette Chatre wrote:
 
-please pull a bunch of x86 SEV and x86-SEV-related updates for 6.4.
+> > -int remount_resctrlfs(bool mum_resctrlfs)
+> > +int mount_resctrlfs(void)
+> >  {
+> > -	char mountpoint[256];
+> >  	int ret;
+> >  
+> > -	ret = find_resctrl_mount(mountpoint);
+> > -	if (ret)
+> > -		strcpy(mountpoint, RESCTRL_PATH);
+> > -
+> > -	if (!ret && mum_resctrlfs && umount(mountpoint))
+> > -		ksft_print_msg("Fail: unmounting \"%s\"\n", mountpoint);
+> > -
+> > -	if (!ret && !mum_resctrlfs)
+> > -		return 0;
+> > +	ret = find_resctrl_mount(NULL);
+> > +	if (!ret)
+> > +		return -1;
+> 
+> This seems to assume that resctrl is always unmounted. Should the main 
+> program thus start by unmounting resctrl before it runs any test in case 
+> it is mounted when user space starts the tests?
 
-Thx.
-
----
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sev_for_v6.4_rc1
-
-for you to fetch changes up to 812b0597fb4043240724e4c7bed7ba1fe15c0e3f:
-
-  x86/hyperv: Change vTOM handling to use standard coco mechanisms (2023-03-27 09:31:43 +0200)
-
-----------------------------------------------------------------
-- Add the necessary glue so that the kernel can run as a confidential
-  SEV-SNP vTOM guest on Hyper-V. A vTOM guest basically splits the
-  address space in two parts: encrypted and unencrypted. The use case
-  being running unmodified guests on the Hyper-V confidential computing
-  hypervisor
-
-- Double-buffer messages between the guest and the hardware PSP device
-  so that no partial buffers are copied back'n'forth and thus potential
-  message integrity and leak attacks are possible
-
-- Name the return value the sev-guest driver returns when the hw PSP
-  device hasn't been called, explicitly
-
-- Cleanups
-
-----------------------------------------------------------------
-Borislav Petkov (AMD) (1):
-      crypto: ccp: Get rid of __sev_platform_init_locked()'s local function pointer
-
-Dionna Glaze (2):
-      virt/coco/sev-guest: Double-buffer messages
-      x86/sev: Change snp_guest_issue_request()'s fw_err argument
-
-Michael Kelley (6):
-      x86/ioremap: Add hypervisor callback for private MMIO mapping in coco VM
-      x86/hyperv: Reorder code to facilitate future work
-      Drivers: hv: Explicitly request decrypted in vmap_pfn() calls
-      x86/mm: Handle decryption/re-encryption of bss_decrypted consistently
-      init: Call mem_encrypt_init() after Hyper-V hypercall init is done
-      x86/hyperv: Change vTOM handling to use standard coco mechanisms
-
-Peter Gonda (1):
-      crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
-
- Documentation/virt/coco/sev-guest.rst   |  20 +++--
- arch/x86/coco/core.c                    |  40 ++++++---
- arch/x86/hyperv/hv_init.c               |  11 ---
- arch/x86/hyperv/ivm.c                   | 142 +++++++++++++++++++++-----------
- arch/x86/include/asm/coco.h             |   1 -
- arch/x86/include/asm/mem_encrypt.h      |   1 +
- arch/x86/include/asm/mshyperv.h         |  16 ++--
- arch/x86/include/asm/sev-common.h       |   4 -
- arch/x86/include/asm/sev.h              |  10 ++-
- arch/x86/include/asm/x86_init.h         |   4 +
- arch/x86/kernel/apic/io_apic.c          |  10 ++-
- arch/x86/kernel/cpu/mshyperv.c          |  15 ++--
- arch/x86/kernel/sev.c                   |  15 ++--
- arch/x86/kernel/x86_init.c              |   2 +
- arch/x86/mm/ioremap.c                   |   5 ++
- arch/x86/mm/mem_encrypt_amd.c           |  10 ++-
- arch/x86/mm/pat/set_memory.c            |   3 -
- drivers/crypto/ccp/sev-dev.c            |  22 +++--
- drivers/hv/ring_buffer.c                |   2 +-
- drivers/hv/vmbus_drv.c                  |   1 -
- drivers/virt/coco/sev-guest/sev-guest.c |  99 +++++++++++++---------
- include/asm-generic/mshyperv.h          |   2 +
- include/uapi/linux/psp-sev.h            |   7 ++
- include/uapi/linux/sev-guest.h          |  18 +++-
- init/main.c                             |  19 +++--
- 25 files changed, 311 insertions(+), 168 deletions(-)
+I thought that was the wanted functionality. I've now added a change to 
+the series which does this umount before starting a tests.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+ i.
