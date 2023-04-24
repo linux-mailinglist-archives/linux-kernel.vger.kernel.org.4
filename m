@@ -2,166 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D36E6ED64A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A136ED64C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjDXUqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
+        id S232359AbjDXUsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDXUqA (ORCPT
+        with ESMTP id S229688AbjDXUs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:46:00 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F8B618E;
-        Mon, 24 Apr 2023 13:45:59 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OIdIxI015572;
-        Mon, 24 Apr 2023 20:45:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=NvwkZ6kAkQqlU3nvA+hkJSMUBJeAdRt++vxUhCRkN20=;
- b=hJ7wm7wiqqn5Wi4DCen2DhP/KrF6ahfr6Z9empRGBr+UNgoxQOjAkdAcJ1hBZXjwewyu
- /ElGNZFznPzZVCCh95iBZ/cQpnXv5+hpYDCixQEoJqP5JTkB8LDBESeqCh88ty2kjvyN
- Umgu/hFj3i7IemMAAJWouY3+u/pnMcZTAjXm8oamuywcSngEQoz05S1Gwrgbp9Y95yE0
- ejubPOspqru5e+j0aigDIvoHOSlRCpIF2kZxrOdqQzQITTbdrFMzCr4MPQS3IKNJ62Wl
- BlTeo/yYYWyx4UTkdygKNMJzIRI/MkxLPlyc8Yplx8xX9PKTUrQmtLHWkkHQNBvJcEwx kw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5r0usc9n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 20:44:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OKiwDp026790
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 20:44:58 GMT
-Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
- 2023 13:44:56 -0700
-Message-ID: <62d78d23-e191-a64f-5c4c-cd2c26217bdf@quicinc.com>
-Date:   Mon, 24 Apr 2023 13:44:55 -0700
+        Mon, 24 Apr 2023 16:48:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A9155A1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682369265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fQH34oezOhOySbIrOxG0yATdjM7ylIRk7pfMt6Zg6Ms=;
+        b=B+dweqxEctxbisC6dMxzsZiNW7ZSBQ9xkvUVjtpGnFlfziTBRpuSeTMMM7vV1cWGrOFkfy
+        ctJ6NcZXXZXNhPoxD8h/VO4q5qOGK0VddqgRdltJsFlfS03S0x2AtJIjDppQqFFIs+iTKT
+        kHxi0XngiIdWqyP8Xme1bVQAEzOVAh0=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-563-I3AdV9nFNh2kGOFJnif3yg-1; Mon, 24 Apr 2023 16:47:44 -0400
+X-MC-Unique: I3AdV9nFNh2kGOFJnif3yg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2f48e905299so1449135f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:47:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682369263; x=1684961263;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fQH34oezOhOySbIrOxG0yATdjM7ylIRk7pfMt6Zg6Ms=;
+        b=g7w7pVnJS3/YynyeLWBb0F1EX6nGVP9kcX0eJljMJL6IVrRErHvS+tfmN3gOuVjlA3
+         XITKRY+ZalDDBvKx22ekrOY0p00MXYqus/DvfiKAKw5U9UT29SYDLNwZniXgw7algvDK
+         rz4WDL68J8qTmgSA8hj1FyPTv7k5aFvqOfM35kQQE1blauank1rKQ4jEXbIs4oCH3UZM
+         FZ2VqK0pudXWu+YZNShTUwAoFO9Nbep6ux1deM43OgPW+8uJvI8TU54I8Q1fW13ONnu1
+         EZ5KE55Mm8TcYHtjgnCEBOjKRh3tC3/dAkJOFOnvhtHaMlRh0nJIRvv8EU97s+R49/Om
+         lFpQ==
+X-Gm-Message-State: AAQBX9dAZnVVnrfsg1w1JBPHK8/KWSVz+PdZYf+XotmNuX9UEvc1EAsA
+        OA2n1hubaCDN7PMGaHxKMfMmsXzKwMPTFS66bh3dRnAXn8MGoyO+VOTppZDNjhlVtTEPULaQv2Q
+        R1qUmgPttO/3JxTdROBDd6jzH
+X-Received: by 2002:adf:cc81:0:b0:2ef:b2fc:7e8f with SMTP id p1-20020adfcc81000000b002efb2fc7e8fmr9635310wrj.42.1682369262890;
+        Mon, 24 Apr 2023 13:47:42 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YZ26eTzarbG/YFXBP4LXxcwJf2u6+dbEqzsOd1Pp0OXN8rTlr3OyZhRqzk79zNo4XS/P4Qkw==
+X-Received: by 2002:adf:cc81:0:b0:2ef:b2fc:7e8f with SMTP id p1-20020adfcc81000000b002efb2fc7e8fmr9635294wrj.42.1682369262538;
+        Mon, 24 Apr 2023 13:47:42 -0700 (PDT)
+Received: from redhat.com ([2.55.17.255])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056000008200b002f53fa16239sm11479214wrx.103.2023.04.24.13.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 13:47:42 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 16:47:38 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Igor Mammedov <imammedo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        bhelgaas@google.com, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <20230424164733-mutt-send-email-mst@kernel.org>
+References: <20230424191557.2464760-1-imammedo@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 03/17] drm/msm/dpu: Move non-MDP_TOP INTF_INTR offsets
- out of hwio header
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "Chandan Uddaraju" <chandanu@codeaurora.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        "Jami Kettunen" <jami.kettunen@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-3-ef76c877eb97@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230411-dpu-intf-te-v2-3-ef76c877eb97@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A3vEk8sHJRjI9vUaRaLuFkhpO-rUaah-
-X-Proofpoint-ORIG-GUID: A3vEk8sHJRjI9vUaRaLuFkhpO-rUaah-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 spamscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240187
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424191557.2464760-1-imammedo@redhat.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/17/2023 1:21 PM, Marijn Suijten wrote:
-> These offsets do not fall under the MDP TOP block and do not fit the
-> comment right above.  Move them to dpu_hw_interrupts.c next to the
-> repsective MDP_INTF_x_OFF interrupt block offsets.
+On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:
+> When using ACPI PCI hotplug, hotplugging a device with
+> large BARs may fail if bridge windows programmed by
+> firmware are not large enough.
 > 
-> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reproducer:
+>   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+>       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+>       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+>       disk_image
+> 
+>  wait till linux guest boots, then hotplug device
+>    (qemu) device_add qxl,bus=rp1
+> 
+>  hotplug on guest side fails with:
+>    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+>    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+>    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+>    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+>    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+>    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+>    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+>    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+>    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+>    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+>    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+>    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+>    Unable to create vram_mapping
+>    qxl: probe of 0000:01:00.0 failed with error -12
+> 
+> However when using native PCIe hotplug
+>   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
+> it works fine, since kernel attempts to reassign unused resources.
+> Use the same machinery as native PCIe hotplug to (re)assign resources.
+> 
+> Signed-off-by: Igor Mammedov <imammedo@redhat.com>
 
-This change itself is fine, hence
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-
-One comment below.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 5 ++++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h          | 3 ---
->   2 files changed, 4 insertions(+), 4 deletions(-)
+> tested in QEMU with Q35 machine on PCIE root port and also
+> with nested conventional bridge attached to root port.
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> index 53326f25e40e..85c0bda3ff90 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> @@ -15,7 +15,7 @@
->   
->   /*
->    * Register offsets in MDSS register file for the interrupt registers
-> - * w.r.t. to the MDP base
-> + * w.r.t. the MDP base
->    */
->   #define MDP_SSPP_TOP0_OFF		0x0
->   #define MDP_INTF_0_OFF			0x6A000
-> @@ -24,6 +24,9 @@
->   #define MDP_INTF_3_OFF			0x6B800
->   #define MDP_INTF_4_OFF			0x6C000
->   #define MDP_INTF_5_OFF			0x6C800
-> +#define INTF_INTR_EN			0x1c0
-> +#define INTF_INTR_STATUS		0x1c4
-> +#define INTF_INTR_CLEAR			0x1c8
->   #define MDP_AD4_0_OFF			0x7C000
->   #define MDP_AD4_1_OFF			0x7D000
->   #define MDP_AD4_INTR_EN_OFF		0x41c
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-> index feb9a729844a..5acd5683d25a 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-> @@ -21,9 +21,6 @@
->   #define HIST_INTR_EN                    0x01c
->   #define HIST_INTR_STATUS                0x020
->   #define HIST_INTR_CLEAR                 0x024
-
-Even HIST_INTR_*** need to be moved then.
-
-> -#define INTF_INTR_EN                    0x1C0
-> -#define INTF_INTR_STATUS                0x1C4
-> -#define INTF_INTR_CLEAR                 0x1C8
->   #define SPLIT_DISPLAY_EN                0x2F4
->   #define SPLIT_DISPLAY_UPPER_PIPE_CTRL   0x2F8
->   #define DSPP_IGC_COLOR0_RAM_LUTN        0x300
+> v2:
+>   * fixup subject to match expected style
+>   * drop no longer needed __pci_bus_size_bridges() to avoid
+>     memory leak (Bjorn Helgaas <helgaas@kernel.org>)
+> ---
+>  drivers/pci/hotplug/acpiphp_glue.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
+> diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
+> index 5b1f271c6034..328d1e416014 100644
+> --- a/drivers/pci/hotplug/acpiphp_glue.c
+> +++ b/drivers/pci/hotplug/acpiphp_glue.c
+> @@ -498,7 +498,6 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+>  				acpiphp_native_scan_bridge(dev);
+>  		}
+>  	} else {
+> -		LIST_HEAD(add_list);
+>  		int max, pass;
+>  
+>  		acpiphp_rescan_slot(slot);
+> @@ -512,12 +511,10 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+>  				if (pass && dev->subordinate) {
+>  					check_hotplug_bridge(slot, dev);
+>  					pcibios_resource_survey_bus(dev->subordinate);
+> -					__pci_bus_size_bridges(dev->subordinate,
+> -							       &add_list);
+>  				}
+>  			}
+>  		}
+> -		__pci_bus_assign_resources(bus, &add_list, NULL);
+> +		pci_assign_unassigned_bridge_resources(bus->self);
+>  	}
+>  
+>  	acpiphp_sanitize_bus(bus);
+> -- 
+> 2.39.1
+
