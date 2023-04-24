@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1386ED03B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A9B6ED038
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjDXOWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S231499AbjDXOVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjDXOV6 (ORCPT
+        with ESMTP id S229929AbjDXOVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:21:58 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC927AB8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:21:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so12109e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682346113; x=1684938113;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=enbgg+lqaw2zyPJZ1pbEEFHlLXGIOHAiWtJzwllHKYk=;
-        b=d/qZRyT5eP+jU3o4eFNHhYxVnfxA6MScMHl7EjDAUKW8eeAqkTfrkneA4vEc9uBXwZ
-         h4ZGQJRzWcXcoXy42qQQAV1i4o0OUT7utHIj2IoI7VFMMkb3DSzd4yHsNk9rQKJ+Q0Ba
-         nMOvmgEa5xIOvPXkoUS0vb2tva2pNXVvMgkmCungv6F2+M0Fwnc1Jl7fLI7rLZaZWeiU
-         o/IcRqlPrSKXcDkM6nZYnx9nYtaTtj80DS33Cf5UiYjI54XuWOklqvx5bm9Ikxcy3ndx
-         QrzsivjDGtZL5voUC900DRzJleGdv4R1Yf5ZDQmV5GoyD/NumwZc188PEi5kVsnKNkNp
-         Ri3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682346113; x=1684938113;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=enbgg+lqaw2zyPJZ1pbEEFHlLXGIOHAiWtJzwllHKYk=;
-        b=UyKtkwymbuWXJDM0gq6ZBJEwdFruEAi+V+Yp9qhISDm5Ip5B781y/boM9HMlSuwu9p
-         +kwj+OIU+MpGbg5v2HQ8aRZMwz2WUuFqPrXePtLAkL67prZhTW0iQkq1ndlc2sziCiw2
-         YzBtp5iwSXpcwoynBTCSaNxyW+cjPuJ0vGEydLn06Sdx/zAKZ3aVA01ZZawjsqiV2Js/
-         sRCi80Wd1X2n5VSrROua9BsLCx0KATfhV886nKIY0/3rRVgfKwEiQnbujKgM9v+mwln6
-         kR4pre1FIQp9gmHICv1IIc/8rw+wy/GLWl29X5SJo23wv4q4swYZcJh5GWvdNtmR6Vub
-         pFxg==
-X-Gm-Message-State: AAQBX9cL/ZDcizJMGMEfmsjFjT4tNKbRO0mRcqri7GO57cU6KdQYbdcU
-        /b2LafncTaMlfrOGJpGIHxTc1szrydE2NAvEQUNk2Q==
-X-Google-Smtp-Source: AKy350by1ELWJ/CmwHDxqXyCll4tWAI6i/5CdlY/6JgR+z+2K/yBvdGz9oOpWc3MDBoV51yKVHZIfVVj7zO9PkuCDIY=
-X-Received: by 2002:a05:6512:39c4:b0:4ef:ef1d:a97b with SMTP id
- k4-20020a05651239c400b004efef1da97bmr110782lfu.0.1682346112665; Mon, 24 Apr
- 2023 07:21:52 -0700 (PDT)
+        Mon, 24 Apr 2023 10:21:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9AF61B6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:21:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F8FA1FD87;
+        Mon, 24 Apr 2023 14:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682346102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oS59SRMyvblbYQ/G1blmGCgsVR/u0O42HYVoCKNaGwc=;
+        b=Vil/LZpKUEtewmntDHG7Yrp7JFnWc5IuxrclIFUDBS1KwY7XjqmGVqbH67axq3RIiSLLFe
+        Ak/ScVmBdalNEUSVeSpa73lqzNe88hAstKIeIK45RZa7WhmTPffSUqwtEPj7nj44mpe/3d
+        GMKAhSgJlnysgDC00vxd+mSmnK4JxyA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682346102;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oS59SRMyvblbYQ/G1blmGCgsVR/u0O42HYVoCKNaGwc=;
+        b=i1h6J7pBqXJZarnZ05WykCJwXV+6MX8LtYRm3kGbFNgu6wOg+ue9c+BbaTdok743txiH/q
+        wzN3B0axDhgKifDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 129F81390E;
+        Mon, 24 Apr 2023 14:21:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7pRcA3aQRmQ2PAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 24 Apr 2023 14:21:42 +0000
+Message-ID: <8315a507-3f27-5b08-7d0c-c6056b64c3d6@suse.cz>
+Date:   Mon, 24 Apr 2023 16:21:41 +0200
 MIME-Version: 1.0
-References: <000000000000d0737c05fa0fd499@google.com> <CACT4Y+YKt-YvQ5fKimXAP8nsV=X81OymPd3pxVXvmPG-51YjOw@mail.gmail.com>
- <ZEaCSXG4UTGlHDam@casper.infradead.org> <CACT4Y+YeV8zU2x+3dpJJFez5_33ic3q7B2_+KYrcNOQxooRWpw@mail.gmail.com>
- <ZEaN7PP794H2vbe/@casper.infradead.org>
-In-Reply-To: <ZEaN7PP794H2vbe/@casper.infradead.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Apr 2023 16:21:40 +0200
-Message-ID: <CACT4Y+aHoUT22Cd3yfBzW78iiwy-4P-L0=SHJJ5qaN--n-D2Ng@mail.gmail.com>
-Subject: Re: [syzbot] [fs?] [mm?] KCSAN: data-race in __filemap_remove_folio /
- folio_mapping (2)
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     syzbot <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com>,
-        djwong@kernel.org, hch@infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH linux-next v2] mm: workingset: update description of the
+ source file
+Content-Language: en-US
+To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, rppt@kernel.org
+References: <0ddb50f0-2e2d-e750-3867-3842a3ea12cc@suse.cz>
+ <20230421113130.240586-1-yang.yang29@zte.com.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230421113130.240586-1-yang.yang29@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 16:10, Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Mon, Apr 24, 2023 at 03:49:04PM +0200, Dmitry Vyukov wrote:
-> > On Mon, 24 Apr 2023 at 15:21, Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > On Mon, Apr 24, 2023 at 09:38:43AM +0200, Dmitry Vyukov wrote:
-> > > > On Mon, 24 Apr 2023 at 09:19, syzbot
-> > > > <syzbot+606f94dfeaaa45124c90@syzkaller.appspotmail.com> wrote:
-> > > > If I am reading this correctly, it can lead to NULL derefs in
-> > > > folio_mapping() if folio->mapping is read twice. I think
-> > > > folio->mapping reads/writes need to use READ/WRITE_ONCE if racy.
-> > >
-> > > You aren't reading it correctly.
-> > >
-> > >         mapping = folio->mapping;
-> > >         if ((unsigned long)mapping & PAGE_MAPPING_FLAGS)
-> > >                 return NULL;
-> > >
-> > >         return mapping;
-> > >
-> > > The racing write is storing NULL.  So it might return NULL or it might
-> > > return the old mapping, or it might return NULL.  Either way, the caller
-> > > has to be prepared for NULL to be returned.
-> > >
-> > > It's a false posiive, but probably worth silencing with a READ_ONCE().
-> >
-> > Yes, but the end of the function does not limit effects of races. I
->
-> I thought it did.  I was under the impression that the compiler was not
-> allowed to extract loads from within the function and move them outside.
-> Maybe that changed since C99.
->
-> > to this:
-> >
-> > if (!((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS) && folio->mapping)
-> >    if (test_bit(AS_UNEVICTABLE, &folio->mapping->flags))
-> >
-> > which does crash.
->
-> Yes, if the compiler is allowed to do that, then that's a possibility.
+On 4/21/23 13:31, Yang Yang wrote:
+>> I'm late but FWIW, not supper happy that while the updated calculations are
+>> now accurate wrt the actual code, the explanation (which was written at the
+>> time of page cache-only workinset) was more easier to follow in the simpler
+>> form. Now it's still mostly talking about page cache and explaining the
+>>balance between its active and inactive list only, and then suddenly the
+>> anon lists appear out of nowhere in the final equations.
+> 
+> Thanks for your reviewing! I should update the whole parts. Sorry for
+> hadn't do it better, please drop the patch, I will try to submit patchv3
+> to fix this.
 
-C11/C++11 simply say any data race renders behavior of the whole
-program undefined. There is no discussion about values, functions,
-anything else.
+I think it's too late to drop, and not worth rebasing the git tree in early
+merge window for that.
 
-Before that there was no notion of data races, so it wasn't possible
-to talk about possible effects and restrict them. But I don't think
-there ever was an intention to do any practical restrictions around
-function boundaries. That would mean that inlining can only run as the
-latest optimization pass, which would inhibit tons of optimizations.
-Users would throw such a compiler away.
+>> In other words, I think it would have been better to leave that explanation
+>> as it was, and then add a new part describing the extension to anon pages.
+> 
+> I read the description of the source file again carefully, and think that
+> there is no need to creat a new part, if we explain at the begining that
+> the word 'pages' include page cache and anonymous page, and do some minor 
+> adjustments. For example:
+> Per node, two kinds of clock lists are maintained for pages..
+
+I think it would make following the explanation more complicated, and it's
+already difficult enough. Reasoning just about active vs inactive file list
+is much simpler to follow the equations and observations behind them. Wonder
+what Johannes as the original author thinks, anyway.
