@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9E26EC804
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5856EC80C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjDXInI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S231387AbjDXIqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjDXInF (ORCPT
+        with ESMTP id S230451AbjDXIqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:43:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822E9F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:43:03 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 10:42:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682325780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G2i+ANlboexdfsAFGiKAtoCg29pYlUhZil0sgaeWD6g=;
-        b=44T8aj2w17DL8PADvxQIJi+aJzRbwyK57xXUOjrFNzD62MXgZWNAdprNvHSlFSgxmYC6Rm
-        nAlbEd2+ElKn70k67n+ezUJ8qPl5E9CI+z0NerI5rN89IgZkbVlzC9zkuxV78MiNS+qJS3
-        ZfssEdpFtu2pZjMK4E0+xg3ivrP4hje9kIM+d6xvO1SAPsisvFT2laMhWs9M0uX38mQZym
-        wvdI+gPSUZiEXSGSQyfuBJ8g5yu4xZ2r4miZXZDTJR6xwoccN2rVHqSA7cJsYYhErnBINN
-        WEJJZEny9kYqXpkKHfyNGrZTzG+dOa15AO51zenu6J2WGfcgHvsd0eXZ6LYR1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682325780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G2i+ANlboexdfsAFGiKAtoCg29pYlUhZil0sgaeWD6g=;
-        b=swf6zFmzHIvJjDdOPSileAO766BWKha1ScUkaRR98RpS8w0mCcB/rMNbZ4Y77EihjsDexr
-        tNaKKmz13PZGieCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Crystal Wood <swood@redhat.com>,
-        John Keeping <john@metanate.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] locking/rtmutex: Do the trylock-slowpath with
- DEBUG_RT_MUTEXES enabled.
-Message-ID: <20230424084259.txfDjYNV@linutronix.de>
-References: <20230322162719.wYG1N0hh@linutronix.de>
- <20230328165430.9eOXd-55@linutronix.de>
- <87zg7115ib.ffs@tglx>
+        Mon, 24 Apr 2023 04:46:13 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B79610D;
+        Mon, 24 Apr 2023 01:46:11 -0700 (PDT)
+Received: from lihuya$hust.edu.cn ( [172.16.0.254] ) by ajax-webmail-app2
+ (Coremail) ; Mon, 24 Apr 2023 16:45:14 +0800 (GMT+08:00)
+X-Originating-IP: [172.16.0.254]
+Date:   Mon, 24 Apr 2023 16:45:14 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5qKB5a6H6Iiq?= <lihuya@hust.edu.cn>
+To:     "thinh nguyen" <thinh.nguyen@synopsys.com>
+Cc:     "greg kroah-hartman" <gregkh@linuxfoundation.org>,
+        "dzm91@hust.edu.cn" <dzm91@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] usb: dwc3: remove dead code in dwc3_otg_get_irq
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <20230324182853.rbguxi2lng2mhm3s@synopsys.com>
+References: <20230323053946.53094-1-lihuya@hust.edu.cn>
+ <20230324182853.rbguxi2lng2mhm3s@synopsys.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87zg7115ib.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Message-ID: <4d6dd98f.41e10.187b27043ca.Coremail.lihuya@hust.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: GQEQrAAXaJWaQUZkR_i_Aw--.55381W
+X-CM-SenderInfo: bpsqjjaxrxlko6kx23oohg3hdfq/1tbiAQsLAl7Em5Oi2wABsp
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,28 +52,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-21 19:58:52 [+0200], Thomas Gleixner wrote:
-> On Tue, Mar 28 2023 at 18:54, Sebastian Andrzej Siewior wrote:
-> > On 2023-03-22 17:27:21 [+0100], To Thomas Gleixner wrote:
-> >> > Aside of that for CONFIG_DEBUG_RT_MUTEXES=y builds it flushes on every
-> >> > lock operation whether the lock is contended or not.
-> >> 
-> >> For mutex & ww_mutex operations. rwsem is not affected by
-> >> CONFIG_DEBUG_RT_MUTEXES. As for mutex it could be mitigated by invoking
-> >> try_to_take_rt_mutex() before blk_flush_plug().
-> 
-> > I haven't observed anything in the ww-mutex path so we can ignore it or
-> > do something similar to this.
-> 
-> Yay for consistency !
-> 
-> I fixed it up to the below.
-
-you fixed the ww-mutex path and did with the debug path what I did in
-the follow-up patch. Let me fold this then and drop the other one.
-
-> Thanks,
-> 
->         tglx
-
-Sebastian
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiVGhpbmggTmd1eWVuIiA8VGhp
+bmguTmd1eWVuQHN5bm9wc3lzLmNvbT4KPiBTZW50IFRpbWU6IDIwMjMtMDMtMjUgMDI6Mjg6NTYg
+KFNhdHVyZGF5KQo+IFRvOiBsaWh1eWEgPGxpaHV5YUBodXN0LmVkdS5jbj4KPiBDYzogIlRoaW5o
+IE5ndXllbiIgPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+LCAiR3JlZyBLcm9haC1IYXJ0bWFu
+IiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+LCAiZHptOTFAaHVzdC5lZHUuY24iIDxkem05
+MUBodXN0LmVkdS5jbj4sICJodXN0LW9zLWtlcm5lbC1wYXRjaGVzQGdvb2dsZWdyb3Vwcy5jb20i
+IDxodXN0LW9zLWtlcm5lbC1wYXRjaGVzQGdvb2dsZWdyb3Vwcy5jb20+LCAibGludXgtdXNiQHZn
+ZXIua2VybmVsLm9yZyIgPGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc+LCAibGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZyIgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+Cj4gU3ViamVj
+dDogUmU6IFtQQVRDSF0gdXNiOiBkd2MzOiByZW1vdmUgZGVhZCBjb2RlIGluIGR3YzNfb3RnX2dl
+dF9pcnEKPiAKPiBPbiBUaHUsIE1hciAyMywgMjAyMywgbGlodXlhIHdyb3RlOgo+ID4gcGxhdGZv
+cm1fZ2V0X2lycSgpIG9ubHkgcmV0dXJuIG5vbi16ZXJvIGlycSBudW1iZXIgb24gc3VjY2Vzcywg
+b3IKPiA+IG5lZ2F0aXZlIGVycm9yIG51bWJlciBvbiBmYWlsdXJlLgo+ID4gCj4gPiBUaGVyZSBp
+cyBubyBuZWVkIHRvIGNoZWNrIHRoZSByZXR1cm4gdmFsdWUgb2YgcGxhdGZvcm1fZ2V0X2lycSgp
+Cj4gPiB0byBkZXRlcm1pbmUgdGhlIHJldHVybiB2YWx1ZSBvZiBkd2MzX290Z19nZXRfaXJxKCks
+IHJlbW92aW5nCj4gPiB0aGVtIHRvIHNvbHZlIHRoaXMgcHJvYmxlbS4KPiA+IAo+ID4gU2lnbmVk
+LW9mZi1ieTogbGlodXlhIDxsaWh1eWFAaHVzdC5lZHUuY24+Cj4gPiAtLS0KPiA+ICBkcml2ZXJz
+L3VzYi9kd2MzL2RyZC5jIHwgNSAtLS0tLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGRlbGV0aW9u
+cygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9kcmQuYyBiL2RyaXZl
+cnMvdXNiL2R3YzMvZHJkLmMKPiA+IGluZGV4IDAzOWJmMjQxNzY5YS4uYzJlMDk3MDAyMTJkIDEw
+MDY0NAo+ID4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9kcmQuYwo+ID4gKysrIGIvZHJpdmVycy91
+c2IvZHdjMy9kcmQuYwo+ID4gQEAgLTE1NCwxMSArMTU0LDYgQEAgc3RhdGljIGludCBkd2MzX290
+Z19nZXRfaXJxKHN0cnVjdCBkd2MzICpkd2MpCj4gPiAgCQlnb3RvIG91dDsKPiA+ICAKPiA+ICAJ
+aXJxID0gcGxhdGZvcm1fZ2V0X2lycShkd2MzX3BkZXYsIDApOwo+ID4gLQlpZiAoaXJxID4gMCkK
+PiA+IC0JCWdvdG8gb3V0Owo+ID4gLQo+ID4gLQlpZiAoIWlycSkKPiA+IC0JCWlycSA9IC1FSU5W
+QUw7Cj4gPiAgCj4gPiAgb3V0Ogo+ID4gIAlyZXR1cm4gaXJxOwo+ID4gLS0gCj4gPiAyLjM0LjEK
+PiA+IAo+IAo+IEFja2VkLWJ5OiBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5j
+b20+Cj4gCj4gVGhhbmtzLAo+IFRoaW5oCgpIaSBUaGluaCwKCkknbSBjaGVja2luZyBpbiBhYm91
+dCBteSBwYXRjaCBzdWJtaXNzaW9uIGZvciB1c2IgZHdjMyB0aGF0IHdhcyAKImFjaydlZCIgb24g
+My8yNSwgYnV0IGhhc24ndCBiZWVuIG1lcmdlZCBpbnRvIHRoZSBzdWJ0cmVlIHlldC4gCkNvdWxk
+IHlvdSBwbGVhc2UgcHJvdmlkZSBtZSB3aXRoIGFuIHVwZGF0ZSBvbiBpdHMgc3RhdHVzIGFuZCBs
+ZXQgCm1lIGtub3cgaWYgdGhlcmUgYXJlIGFueSBpc3N1ZXMgb3IgY29uY2VybnMgdGhhdCBuZWVk
+IHRvIGJlIGFkZHJlc3NlZD8K
