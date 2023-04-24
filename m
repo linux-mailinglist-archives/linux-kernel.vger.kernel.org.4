@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D626EC697
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6146EC69A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjDXGyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 02:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S229603AbjDXG4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 02:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjDXGyc (ORCPT
+        with ESMTP id S229610AbjDXG4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 02:54:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3397186
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682319264; x=1713855264;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lFIM3SiRtcb8O9YKp++Jg0PUJfBH52f31PGcowvaHDw=;
-  b=PZ4TEOolTCYZhG1jEFX1qAgyGQ3SIJY3eMU6LFxYCtZ0WJUhj651macz
-   PZjyR1CpoDC7Rl+ZRe8MNBmPE6toJPWRGtpzTEjBiHcHHBQYqZmg4Wyvr
-   X+wV1dp98qBIC7u/1EScT1Tps4fL+GOi5WkOqqHJhWVs1+9XAqHzQ3KKT
-   Hu03xgL794ro6cqTUveB71D0XVAe6pJ14MmMM94aHgySEsl/irYYud/Bn
-   s5XNkglXyw2zBonhxjmUREqt9JXk7ZHVFQadvyxmvvs8r9PlSgVMh0jSN
-   GLcfla7nvz/GCHnLR0g6wmmfQ2UjnfmGrsaTCqTxm/RgnKBlZfyQrjgAF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="326696563"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="326696563"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 23:54:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="867376670"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="867376670"
-Received: from yhuang6-mobl2.sh.intel.com ([10.238.7.50])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 23:54:19 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        haoxin <xhao@linux.alibaba.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH -V2] mm,unmap: avoid flushing TLB in batch if PTE is inaccessible
-Date:   Mon, 24 Apr 2023 14:54:08 +0800
-Message-Id: <20230424065408.188498-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 24 Apr 2023 02:56:18 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD00E41
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:56:15 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54f945a7bddso47874057b3.0
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1682319375; x=1684911375;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tXWOXpU07qWWq5ZBAlNtZKd+azLb+6DwvPUwR9Hj/T8=;
+        b=MYLBm7TYkepV1BobssBHTnsTuOiV5n6qTone3phkpXE/ziPd10/WAMQr+BzInWuP1F
+         oP72ie9zCW7APaiHvuA+CI+OaH+cOQbeA4QLlC9fX9RoX9dQcEH6pxeQDsuWms6EkiFe
+         rzgs3t7Et0ZbOxclIpoNSxDrfgm06i6Dx4lyM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682319375; x=1684911375;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tXWOXpU07qWWq5ZBAlNtZKd+azLb+6DwvPUwR9Hj/T8=;
+        b=QcuhoiQzBwkYbY80Zp+8OhgxhayLD+6bvwpVRtn24arVSjVX9NBCGnS3bPysw5YuFA
+         JmGrOnKvadbmz+P9RRga9eBjivcdgnsqoWa0D+Gvja3upvWkuj/OCwNXDUJTd1rUWF97
+         dk+Bt6Czrui6FJoA/vVo1uYpJtge3mK+2JWKPBgjRX9/rs0ZhLAsnFatKoZh2rk49Olt
+         rgCz5VFf5Gg3bFLK/cAW0NkwhBjuObFPxLGo8jPE+iWGI4LPCa8tpx71MyJkFF9Ix5/5
+         pKtgGPpcmNZe92kgxwygvJl2KRt+fJrNN/zF53qtrmSvvy7Rr4FaUMMDKoFBuvZ67MdP
+         2YMg==
+X-Gm-Message-State: AAQBX9eubNtq5ilPeuLMT6ZEw+FnVZtUYmy6ylikUEBqMZtaTTlwZObz
+        6QA3yrFxlx4BAekQiMWdRDDrMyPRdxQMvPDktkQCoQ==
+X-Google-Smtp-Source: AKy350beb2BRmegGcoc2HSTePZ6TOnKDldVJICyGg/zu0vYmcvvNRdxFA2DXLR71tMTRtd3TCdvkVMxffMkrEsKc91k=
+X-Received: by 2002:a0d:db82:0:b0:555:cce2:8a16 with SMTP id
+ d124-20020a0ddb82000000b00555cce28a16mr6447641ywe.22.1682319374876; Sun, 23
+ Apr 2023 23:56:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
+ <20230423172528.1398158-5-dario.binacchi@amarulasolutions.com> <20230423-surplus-spoon-4e8194434663-mkl@pengutronix.de>
+In-Reply-To: <20230423-surplus-spoon-4e8194434663-mkl@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Mon, 24 Apr 2023 08:56:03 +0200
+Message-ID: <CABGWkvqA2hwgfGvVWS08Qu-2ZUbwc82ynhvq8-FqFuhHoV-vhw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] can: bxcan: add support for single peripheral configuration
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,101 +74,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Andrew,
+Hi Marc,
 
-The version 1 of this patch was merged in mm-unstable branch.  If you
-want to move that patch into mm-stable recently, it may be better to
-update that patch with this new version firstly.  If you want to do
-that after v6.4-rc1, I will rebase this patch and resend it after
-v6.4-rc1 is released.
+On Sun, Apr 23, 2023 at 9:16=E2=80=AFPM Marc Kleine-Budde <mkl@pengutronix.=
+de> wrote:
+>
+> On 23.04.2023 19:25:28, Dario Binacchi wrote:
+> > Add support for bxCAN controller in single peripheral configuration:
+> > - primary bxCAN
+> > - dedicated Memory Access Controller unit
+> > - 512-byte SRAM memory
+> > - 14 fiter banks
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > ---
+> >
+> >  drivers/net/can/bxcan.c | 20 +++++++++++++++++---
+> >  1 file changed, 17 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
+> > index e26ccd41e3cb..9bcbbb85da6e 100644
+> > --- a/drivers/net/can/bxcan.c
+> > +++ b/drivers/net/can/bxcan.c
+> > @@ -155,6 +155,7 @@ struct bxcan_regs {
+> >       u32 reserved0[88];              /* 0x20 */
+> >       struct bxcan_mb tx_mb[BXCAN_TX_MB_NUM]; /* 0x180 - tx mailbox */
+> >       struct bxcan_mb rx_mb[BXCAN_RX_MB_NUM]; /* 0x1b0 - rx mailbox */
+> > +     u32 reserved1[12];              /* 0x1d0 */
+> >  };
+> >
+> >  struct bxcan_priv {
+> > @@ -922,6 +923,12 @@ static int bxcan_get_berr_counter(const struct net=
+_device *ndev,
+> >       return 0;
+> >  }
+> >
+> > +static const struct regmap_config bxcan_gcan_regmap_config =3D {
+> > +     .reg_bits =3D 32,
+> > +     .val_bits =3D 32,
+> > +     .reg_stride =3D 4,
+> > +};
+> > +
+> >  static int bxcan_probe(struct platform_device *pdev)
+> >  {
+> >       struct device_node *np =3D pdev->dev.of_node;
+> > @@ -942,11 +949,18 @@ static int bxcan_probe(struct platform_device *pd=
+ev)
+> >
+> >       gcan =3D syscon_regmap_lookup_by_phandle(np, "st,gcan");
+> >       if (IS_ERR(gcan)) {
+> > -             dev_err(dev, "failed to get shared memory base address\n"=
+);
+> > -             return PTR_ERR(gcan);
+> > +             primary =3D true;
+> > +             gcan =3D devm_regmap_init_mmio(dev,
+> > +                                          regs + sizeof(struct bxcan_r=
+egs),
+> > +                                          &bxcan_gcan_regmap_config);
+> > +             if (IS_ERR(gcan)) {
+> > +                     dev_err(dev, "failed to get filter base address\n=
+");
+> > +                     return PTR_ERR(gcan);
+> > +             }
+>
+> This probably works. Can we do better, i.e. without this additional code?
+>
+> If you add a syscon node for the single instance CAN, too, you don't
+> need a code change here, right?
 
-Hi, Amit,
+I think so.
 
-The patch has been changed based on comments from Xin.  I keep your
-"reviewed-by" because I think the change is trivial.  But if you think
-it's inappropriate,  I will change that.
+I have only one doubt about it. This implementation allows, implicitly, to
+distinguish if the peripheral is in single configuration (without handle to=
+ the
+gcan node) or in double configuration (with handle to the gcan node).
+For example, in single configuration the peripheral has 14 filter banks, wh=
+ile
+in double configuration there are 26 shared banks. Without code changes, th=
+is
+kind of information is lost. Is it better then, for future
+developments, to add a new
+boolean property to the can node of the dts (e.g. single-conf)?
 
-Best Regards,
-Huang, Ying
+Thanks and regards,
 
-------------------------------->8------------------------------------------
-0Day/LKP reported a performance regression for commit
-7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, the
-TLB flushing during page migration is batched.  So, in
-try_to_migrate_one(), ptep_clear_flush() is replaced with
-set_tlb_ubc_flush_pending().  In further investigation, it is found
-that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
-is inaccessible.  In fact, we can optimize in similar way for the
-batched TLB flushing too to improve the performance.
+Dario
 
-So in this patch, we check pte_accessible() before
-set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests show
-that the benchmark score of the anon-cow-rand-mt test case of
-vm-scalability test suite can improve up to 2.1% with the patch on a
-Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
+>
+> > +     } else {
+> > +             primary =3D of_property_read_bool(np, "st,can-primary");
+> >       }
+> >
+> > -     primary =3D of_property_read_bool(np, "st,can-primary");
+> >       clk =3D devm_clk_get(dev, NULL);
+> >       if (IS_ERR(clk)) {
+> >               dev_err(dev, "failed to get clock\n");
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie.liu@intel.com
-Link: https://lore.kernel.org/oe-lkp/ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com/
-Fixes: 7e12beb8ca2a ("migrate_pages: batch flushing TLB")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: Nadav Amit <namit@vmware.com>
-Cc: haoxin <xhao@linux.alibaba.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: David Hildenbrand <david@redhat.com>
----
- mm/rmap.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 8632e02661ac..be19232e94f4 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -641,10 +641,14 @@ void try_to_unmap_flush_dirty(void)
- #define TLB_FLUSH_BATCH_PENDING_LARGE			\
- 	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
- 
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval)
- {
- 	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
- 	int batch, nbatch;
-+	bool writable = pte_dirty(pteval);
-+
-+	if (!pte_accessible(mm, pteval))
-+		return;
- 
- 	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
- 	tlb_ubc->flush_required = true;
-@@ -731,7 +735,7 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
- 	}
- }
- #else
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval)
- {
- }
- 
-@@ -1582,7 +1586,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pteval);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
-@@ -1963,7 +1967,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pteval);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
--- 
-2.39.2
 
+--=20
+
+Dario Binacchi
+
+Senior Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
