@@ -2,212 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4B06ED576
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54D06ED575
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjDXTnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 15:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S231751AbjDXTnD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 15:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjDXTnB (ORCPT
+        with ESMTP id S230093AbjDXTnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Apr 2023 15:43:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32A55B8C
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541915B88
         for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682365380; x=1713901380;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HUBHKBlJQGizF/NBsa9Lu2bpXVfpyy+WxnN2pepG0E8=;
-  b=b1PY5FFIr8CebLKg04zxrbJZ20q7S4MAWLfEID22956BaD8fRkcI/gSr
-   33f5lJJmrSsYinJqIwmrj2x7WHxqBK3P16QPs0dY5A6TRLi7LVdXW9ZGO
-   51gd6UNpx4c464DDh8qt3559K7ccJBOD/sv6j/M5RqEGwkO94uzwPFexu
-   HePrKm45WpYSrsDqJJrqt9VpUBUYk5kOfFY56aft2rcr/bpIrYvPkTIwK
-   KHXJZMuRxF0R6f3IA66tku5PZ623ESZoWOo/YUoIJtY+J1DBg/pir7NxW
-   CjY9Z5D4mRTQ/ghtx4eHr+KpKIianipBexFfKTidhOYjio9wcngs1PSSe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345297733"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="345297733"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 12:43:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="782527126"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="782527126"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Apr 2023 12:42:59 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pr25S-000icv-2m;
-        Mon, 24 Apr 2023 19:42:58 +0000
-Date:   Tue, 25 Apr 2023 03:42:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 01cbd032298654fe4c85e153dd9a224e5bc10194
-Message-ID: <6446db94.AfMzAx1nxUbnyZaE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-54fb8a8a597so57499447b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:43:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682365379; x=1684957379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hzv9DDy8KqR5toIcVytBQed/LqPBtxIbLra1+3vX+mg=;
+        b=K3+Su5o6DkNEAZua8ZvusiHzdE9JlBrahC8JEOWgp+QC6+r9Rz5J10UhXyp7JrBQhw
+         XY5OrGBm5JfmeCb8feP5qBoolPY1aihxtKFcbPp+R9Ynp6awL3FFbPQSkadb2U/JwRQR
+         D/n2ARxlBVR3TxsFwM7QUEMUHwgpLqQb+o7utuP2OYRCuu6/YDUqHeRUzyyE8QeweJD4
+         ekm04slxxtWskwgI/VFIy2O6ad6DmKVkO52F58X+xwoY1/LDBSVx9Nc6/zka8N8iotsI
+         z2m+gh/+clV69W//G8NrS5ocFoqlQHNaKrpFQF3jrHcXplK6CTGCQHu6EUViwnv+B0Yl
+         aM8g==
+X-Gm-Message-State: AAQBX9fPHQMt9+PnwT3PL02VhS5FA7bNAs0FWBSRujArYMTfsrG7NOtt
+        rmICj3qvjQ9cEdYKkVZQDXMmBYanhVDXpg==
+X-Google-Smtp-Source: AKy350a0A1Mln01KPxOziFZQAhS68YPeBOJgj8tehPpFinVBrswI9aF3CM6Ednx7ZhZ8yYFraIkgXw==
+X-Received: by 2002:a81:4849:0:b0:54f:b857:7fdc with SMTP id v70-20020a814849000000b0054fb8577fdcmr8989033ywa.17.1682365378260;
+        Mon, 24 Apr 2023 12:42:58 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id q189-20020a0dcec6000000b00555be5a354dsm3146677ywd.52.2023.04.24.12.42.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 12:42:57 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-b9582901279so7218779276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:42:57 -0700 (PDT)
+X-Received: by 2002:a81:5f83:0:b0:556:300c:d653 with SMTP id
+ t125-20020a815f83000000b00556300cd653mr6938761ywb.40.1682365377354; Mon, 24
+ Apr 2023 12:42:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202304222120.WcBMaHXo-lkp@intel.com> <20230422135838.3rn67ky2p7jmdk3n@pali>
+ <CAMuHMdX8PP3gH_ctgZgXfV6Psu95eTuCh0MBsEQsRVG_6rEUVg@mail.gmail.com> <20230424184941.44no7rkxjadnyojm@pali>
+In-Reply-To: <20230424184941.44no7rkxjadnyojm@pali>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Apr 2023 21:42:45 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWG5uzQCA6TA9n8sNn=WYOyO++AgThADVbLD5z9AiSL5w@mail.gmail.com>
+Message-ID: <CAMuHMdWG5uzQCA6TA9n8sNn=WYOyO++AgThADVbLD5z9AiSL5w@mail.gmail.com>
+Subject: Re: {standard input}:924: Error: unrecognized opcode: `eieio'
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 01cbd032298654fe4c85e153dd9a224e5bc10194  Merge branch into tip/master: 'x86/tdx'
+Hi Pali,
 
-elapsed time: 721m
+On Mon, Apr 24, 2023 at 8:49 PM Pali Rohár <pali@kernel.org> wrote:
+> On Monday 24 April 2023 09:49:07 Geert Uytterhoeven wrote:
+> > On Sat, Apr 22, 2023 at 4:03 PM Pali Rohár <pali@kernel.org> wrote:
+> > > On Saturday 22 April 2023 21:53:23 kernel test robot wrote:
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > > head:   8e41e0a575664d26bb87e012c39435c4c3914ed9
+> > > > commit: ff7c76f66d8bad4e694c264c789249e1d3a8205d powerpc/boot: Don't always pass -mcpu=powerpc when building 32-bit uImage
+> > > > date:   3 months ago
+> > > > config: powerpc-buildonly-randconfig-r006-20230422 (https://download.01.org/0day-ci/archive/20230422/202304222120.WcBMaHXo-lkp@intel.com/config)
+> > > > compiler: powerpc-linux-gcc (GCC) 12.1.0
+> > > > reproduce (this is a W=1 build):
+> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > >         chmod +x ~/bin/make.cross
+> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ff7c76f66d8bad4e694c264c789249e1d3a8205d
+> > > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > > >         git fetch --no-tags linus master
+> > > >         git checkout ff7c76f66d8bad4e694c264c789249e1d3a8205d
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> > > >
+> > > > If you fix the issue, kindly add following tag where applicable
+> > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > | Link: https://lore.kernel.org/oe-kbuild-all/202304222120.WcBMaHXo-lkp@intel.com/
+> > > >
+> > > > All errors (new ones prefixed by >>):
+> > > >
+> > > >    {standard input}: Assembler messages:
+> > > > >> {standard input}:924: Error: unrecognized opcode: `eieio'
+> > > >    {standard input}:1094: Error: unrecognized opcode: `eieio'
+> > > >
+> > > > --
+> > > > 0-DAY CI Kernel Test Service
+> > > > https://github.com/intel/lkp-tests
+> > >
+> > > Hello! What is that? In this error report there is no compile log, nor
+> > > any file / line. And "Link:" line from above error report does not work.
+> > >
+> > > Intel, can you look at your robot? This looks some bug in error reporting.
+> >
+> > Looks fine to me: this is not a compile problem, but an assembler problem.
+> > Presumably this is when building a kernel for a PPC platform that does
+> > not support the eieio instruction?
+>
+> What is fine on this report? There is completely missing command which
+> generated this error; whole error message; input files which caused them
 
-configs tested: 131
-configs skipped: 11
+The file name is indeed missing.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> and also change or commit.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r016-20230424   gcc  
-arc                  randconfig-r024-20230423   gcc  
-arc                  randconfig-r043-20230423   gcc  
-arc                  randconfig-r043-20230424   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r004-20230424   gcc  
-arm                  randconfig-r015-20230424   clang
-arm                  randconfig-r021-20230424   clang
-arm                  randconfig-r025-20230424   clang
-arm                  randconfig-r046-20230423   gcc  
-arm                  randconfig-r046-20230424   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r003-20230423   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r016-20230423   clang
-arm64                randconfig-r022-20230423   clang
-arm64                randconfig-r031-20230423   gcc  
-arm64                randconfig-r035-20230423   gcc  
-csky         buildonly-randconfig-r003-20230424   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r033-20230423   gcc  
-hexagon              randconfig-r011-20230423   clang
-hexagon              randconfig-r025-20230423   clang
-hexagon              randconfig-r041-20230423   clang
-hexagon              randconfig-r041-20230424   clang
-hexagon              randconfig-r045-20230423   clang
-hexagon              randconfig-r045-20230424   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230424   clang
-i386                 randconfig-a002-20230424   clang
-i386                 randconfig-a003-20230424   clang
-i386                 randconfig-a004-20230424   clang
-i386                 randconfig-a005-20230424   clang
-i386                 randconfig-a006-20230424   clang
-i386                 randconfig-a011-20230424   gcc  
-i386                 randconfig-a012-20230424   gcc  
-i386                 randconfig-a013-20230424   gcc  
-i386                 randconfig-a014-20230424   gcc  
-i386                 randconfig-a015-20230424   gcc  
-i386                 randconfig-a016-20230424   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r003-20230424   gcc  
-ia64                 randconfig-r005-20230424   gcc  
-ia64                 randconfig-r012-20230424   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r004-20230423   gcc  
-loongarch            randconfig-r006-20230424   gcc  
-loongarch            randconfig-r014-20230423   gcc  
-loongarch            randconfig-r014-20230424   gcc  
-loongarch            randconfig-r034-20230423   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r002-20230423   gcc  
-microblaze           randconfig-r013-20230424   gcc  
-microblaze           randconfig-r022-20230424   gcc  
-microblaze           randconfig-r026-20230423   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230423   clang
-mips                 randconfig-r031-20230424   gcc  
-nios2        buildonly-randconfig-r004-20230424   gcc  
-nios2        buildonly-randconfig-r006-20230423   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r034-20230424   gcc  
-openrisc     buildonly-randconfig-r001-20230424   gcc  
-openrisc     buildonly-randconfig-r004-20230423   gcc  
-openrisc             randconfig-r032-20230423   gcc  
-openrisc             randconfig-r036-20230423   gcc  
-openrisc             randconfig-r036-20230424   gcc  
-parisc       buildonly-randconfig-r002-20230424   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r012-20230423   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r011-20230424   gcc  
-riscv                randconfig-r042-20230423   clang
-riscv                randconfig-r042-20230424   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230423   clang
-s390                 randconfig-r044-20230424   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r005-20230424   gcc  
-sh                   randconfig-r013-20230423   gcc  
-sh                   randconfig-r024-20230424   gcc  
-sh                   randconfig-r032-20230424   gcc  
-sh                   randconfig-r033-20230424   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230423   gcc  
-sparc64      buildonly-randconfig-r002-20230423   gcc  
-sparc64              randconfig-r015-20230423   gcc  
-sparc64              randconfig-r021-20230423   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r006-20230424   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230424   clang
-x86_64               randconfig-a002-20230424   clang
-x86_64               randconfig-a003-20230424   clang
-x86_64               randconfig-a004-20230424   clang
-x86_64               randconfig-a005-20230424   clang
-x86_64               randconfig-a006-20230424   clang
-x86_64               randconfig-a011-20230424   gcc  
-x86_64               randconfig-a012-20230424   gcc  
-x86_64               randconfig-a013-20230424   gcc  
-x86_64               randconfig-a014-20230424   gcc  
-x86_64               randconfig-a015-20230424   gcc  
-x86_64               randconfig-a016-20230424   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r005-20230423   gcc  
-xtensa               randconfig-r002-20230424   gcc  
+That is mentioned, and looks like a valid possible introducer.
+
+> And what presumably happened? I'm really not going to spend more time on
+> guessing what reporter could probably might wanted to write into the
+> report and start looking into crystal ball what could be an issue.
+>
+> I can say that this issue presumably happened when email operator of
+> this robot pushed incorrect button and instead of the real report, it
+> sent test report with content of some random error line from the random
+> log file.
+>
+> Are we on the technical discussion about exactness? Or are going to
+> discuss what who think that what could happened?
+
+It's randconfig, and the config is provided, incl. steps to reproduce.
+
+> > The Link: works fine for me, sometimes you just have to be a little bit
+> > patient for the archiver to catch up...
+>
+> Sorry, I do not have time to wait undefined amount of time to access
+> additional resources which are based on reported details required for
+> debugging.
+
+The Link is just a reference to the email you received in your mailbox,
+and to all follow-ups.
+
+> Intel, could you please react on this issue? If not, I'm going to add
+> your robot to my black list. It is not first time when I received such
+> useless report from you and nobody reacted on it.
+
+Well, you are the one who authored the offending commit, and at
+first glance, it looks like a reasonable culprit that could introduce the
+failure mentioned ;-)
+
+Presumably you forgot to cater for a very specific combination of
+config option values?
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
