@@ -2,136 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2616ECB63
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EF46ECB66
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjDXLcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S231673AbjDXLdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDXLcm (ORCPT
+        with ESMTP id S229547AbjDXLdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:32:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD37535B7;
-        Mon, 24 Apr 2023 04:32:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F2E61207;
-        Mon, 24 Apr 2023 11:32:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264DCC433EF;
-        Mon, 24 Apr 2023 11:32:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682335960;
-        bh=On0z10g8v8bJG0L3dlEqAFCxUzQwXhp9tdwpKvMEO6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ptWm5oHqP2ADuCuFXvr338IBOVD4THsDiKwMq+/WrRCurE96CmKVNPLMhZTZLWGqY
-         a11gHsCLb/jNhDqHFouS+G0GPNYukfd8MaonhBiPLUW0j0oxj6dGJTO0pZvV59wX7S
-         cg5mJ0isMTenab0YfT6i+h1EnF2JyhXLPqUg9ykrGxEY+nBJOPJqljyF6qr4tH5G3+
-         kbG5CflZ5SBvphaZsHir/NQvkhdgRwzUV5pQXRY7iErE4FUZohFY7AClz3gqF5x7sl
-         vqzkwKD8Oi5DF24kM02a00M3J9TiTSHK+QDdTbGztXffJALLX53eB25Edgy7MIdj2B
-         icapLjnRk9Ohg==
-Date:   Mon, 24 Apr 2023 13:32:37 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
-Message-ID: <ZEZo1WxjkcMiWKPg@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
- <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
- <ZEZafj6j+EurGWJ7@sai>
- <f9be2c5d-1303-1b91-c672-7e5a476277e7@ideasonboard.com>
- <30e4656f-63d9-a79c-c1d9-23d0a16cf184@ideasonboard.com>
+        Mon, 24 Apr 2023 07:33:47 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3CF35BD
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:33:42 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32addcf3a73so163956275ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:33:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682336021; x=1684928021;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6SMJMgZAxqZGdGqU/PGc8+SWsoR2KrJ6Rhefs/d5RoY=;
+        b=XUFNAYOjYFWW7TAqzko7ixCkzZk0xE/PGQ1pTNfuEJZ1rCa7OBkV8NQZBwVpAJVIwX
+         UWVf6xkoMVjyHQucT+ryKf03bWy9gyJPn215E2aEWFafzr3ztsvAeScHw4lLMmWvkGsO
+         HU7dUgD/dMBTmfSaMyTBZoKAMknygO9F1A/BFRUYZdLySxQ6H01NwQJ9w+5tpAEQrx4e
+         Ejcz7mADwF9mvMxYZL12vV401zXIhvn1TZSC/2csOVk8nCdmCcdNkxBW1cMtuGdQiJhb
+         gQ3O0tceA1u77AmxJgok+/Msy2a+maYv3zdjPCGGCDZ1FkstbxkFPAW0q0NvoCHcM7J1
+         CT2g==
+X-Gm-Message-State: AAQBX9eoQ8NA26QWIo2c5vMAGyx34hFZgVovTD+/Ylk+Y56E4a6GU8Gg
+        X3NVU3DQMaXE5JB9rbkR5aoGDMml2hJxDtNT1y5wPsKG1ML8
+X-Google-Smtp-Source: AKy350b7cUA5Ah1nSmU7N+Cnp+pc6T7TQVN7O+yoUh9SH2+oqsVvwgp6Y8Ms3LsUmdpTtdCJ/ZivtiKp+UaBdvHQ4QHUD5dQgoEo
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aEwdzLCz74v3KciV"
-Content-Disposition: inline
-In-Reply-To: <30e4656f-63d9-a79c-c1d9-23d0a16cf184@ideasonboard.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d690:0:b0:325:dae2:4238 with SMTP id
+ p16-20020a92d690000000b00325dae24238mr4671443iln.2.1682336021553; Mon, 24 Apr
+ 2023 04:33:41 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 04:33:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f5275205fa1360ee@google.com>
+Subject: [syzbot] [mm?] kernel BUG in truncate_inode_partial_folio
+From:   syzbot <syzbot+77184b5e843d90d56ec1@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---aEwdzLCz74v3KciV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
+
+HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=132ceedbc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
+dashboard link: https://syzkaller.appspot.com/bug?extid=77184b5e843d90d56ec1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+77184b5e843d90d56ec1@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at include/linux/highmem.h:275!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 6335 Comm: syz-executor.2 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:zero_user_segments include/linux/highmem.h:275 [inline]
+RIP: 0010:folio_zero_range include/linux/highmem.h:507 [inline]
+RIP: 0010:truncate_inode_partial_folio+0x2f1/0x750 mm/truncate.c:237
+Code: 45 16 cf ff 8b 04 24 83 f8 3f 0f 87 a5 f4 4c 08 e8 14 1a cf ff 4c 89 ee 4c 89 f7 e8 c9 15 cf ff 4d 39 ee 76 07 e8 ff 19 cf ff <0f> 0b e8 f8 19 cf ff be 08 00 00 00 48 89 ef e8 6b ff 21 00 48 89
+RSP: 0018:ffffc900038af6b8 EFLAGS: 00010216
+RAX: 000000000003db56 RBX: 00000000fff9e000 RCX: ffffc90010241000
+RDX: 0000000000040000 RSI: ffffffff81b4cb51 RDI: 0000000000000006
+RBP: ffffea00024e0000 R08: 0000000000000006 R09: 00000000fff9e000
+R10: 0000000000200000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000200000 R14: 00000000fff9e000 R15: 0000000000000009
+FS:  00007fcf4ef5f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f3dcd3f21c0 CR3: 000000007736f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ shmem_undo_range+0xb82/0x1240 mm/shmem.c:1039
+ shmem_truncate_range mm/shmem.c:1067 [inline]
+ shmem_fallocate+0xb80/0xef0 mm/shmem.c:3061
+ vfs_fallocate+0x48b/0xe40 fs/open.c:324
+ madvise_remove mm/madvise.c:989 [inline]
+ madvise_vma_behavior+0xa59/0x20a0 mm/madvise.c:1013
+ madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1248
+ do_madvise.part.0+0x287/0x5e0 mm/madvise.c:1428
+ do_madvise mm/madvise.c:1441 [inline]
+ __do_sys_madvise mm/madvise.c:1441 [inline]
+ __se_sys_madvise mm/madvise.c:1439 [inline]
+ __x64_sys_madvise+0x117/0x150 mm/madvise.c:1439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fcf4e28c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fcf4ef5f168 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+RAX: ffffffffffffffda RBX: 00007fcf4e3ac1f0 RCX: 00007fcf4e28c169
+RDX: 0000000000000009 RSI: 0000000000200000 RDI: 000000002019e000
+RBP: 00007fcf4e2e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc789c175f R14: 00007fcf4ef5f300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:zero_user_segments include/linux/highmem.h:275 [inline]
+RIP: 0010:folio_zero_range include/linux/highmem.h:507 [inline]
+RIP: 0010:truncate_inode_partial_folio+0x2f1/0x750 mm/truncate.c:237
+Code: 45 16 cf ff 8b 04 24 83 f8 3f 0f 87 a5 f4 4c 08 e8 14 1a cf ff 4c 89 ee 4c 89 f7 e8 c9 15 cf ff 4d 39 ee 76 07 e8 ff 19 cf ff <0f> 0b e8 f8 19 cf ff be 08 00 00 00 48 89 ef e8 6b ff 21 00 48 89
+RSP: 0018:ffffc900038af6b8 EFLAGS: 00010216
+RAX: 000000000003db56 RBX: 00000000fff9e000 RCX: ffffc90010241000
+RDX: 0000000000040000 RSI: ffffffff81b4cb51 RDI: 0000000000000006
+RBP: ffffea00024e0000 R08: 0000000000000006 R09: 00000000fff9e000
+R10: 0000000000200000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000200000 R14: 00000000fff9e000 R15: 0000000000000009
+FS:  00007fcf4ef5f700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f3b1f50ea70 CR3: 000000007736f000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-> > Ah, right. I'll resend with the DT bindings separate.
->=20
-> Also, looks like I forgot to remove the namespaces for export symbols.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-And why not keeping them? I understand ATR would be the first user in
-the Linux I2C world, but someone has to start it...
-
-
---aEwdzLCz74v3KciV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRGaNUACgkQFA3kzBSg
-KbaI+hAAoe0xI+upFRvtf7uqijad6aE3HQfiZdBweG6IinlHT7lG8v0nS1Iqf+H8
-D48gyYVs4LAt2GzX0q/3DkUDgAKKeBvqeD5a1QLtirvXXxFBYD9SYwz/NF2rXUdf
-Al/ylKPj2BwLMMchgt/gTtroaP77Ig9vMGr8+O9OaMvZU8+D+OPQ05cS/8t2sTG8
-4Jkg3Bsk6mclusvQdb2ZK7vngnxWq1BVBiaDnHiap0NnPU39fi8fR7gXPmBhsMQ2
-8L3+O9vVBEB5tkOv01cM2E/ruWlt4+vzGqaeRaAUTJPBEbBNNnJpAmsRf3TV7b1e
-VmTBj3H+K9CSsvJuWIwxBB9t2yKpGkT2mnL8Adm1UWX7hyrdqVZEL1MW79VwCYrf
-RsLussri6TEJT5S67gVYfLan50o/EzLwY0pCnDN8lo6kCIMQK03gpYzfPneo2ljb
-FGOcXv46WrzFFlzXLd0KYLPLMKpWfDXh4Q26yss3FToJgkLM3c8yWfJmBSNOBaID
-/a3vP57ztZ02PoqOtMi6CtWw1JAB4EzXFJdfAd6Lob+bMmbbekqmsm0NeG68xgCY
-poX2ttycNYZT3462ATrF8nrnY4a79pQwPap7KMA+3XPROcTItb6eizFt4D0ZnjWG
-8k9vqmLIdi2ZoqqVNPuvnErMlOWmUvytnMCLS9CdviZCfxGpZn0=
-=pBgj
------END PGP SIGNATURE-----
-
---aEwdzLCz74v3KciV--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
