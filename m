@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E406ED151
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1396ED15B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjDXP3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        id S231946AbjDXPa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjDXP3P (ORCPT
+        with ESMTP id S232083AbjDXPaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:29:15 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A517A8B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:29:14 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b73203e0aso28624268b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:29:14 -0700 (PDT)
+        Mon, 24 Apr 2023 11:30:07 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50167D9C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:29:57 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f9e465c6cso86124937b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:29:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682350154; x=1684942154;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BwQn07Y16iFJ4fshuTnIaJh3oxGufXQLZ+OStDTOBvc=;
-        b=qj+9Aeezu+DWfQzh183d3LnXfkpkjGbb8LbFKZW74Pljo0ABwbW+lE+H3ZzdKu2qUp
-         jgepbIB1GYA+d9N4QbIoXcLY2JvinxqyM+/uKBwv0Ka4d8J3F4eXjNXK7GdSQGdLBPp8
-         ayhGn/h1NDCki+FdmK9+pO/BSUZak3/NXsm8owR1ZWo+cktWMyTfD6JBQaKoonH1gJUf
-         8teEro+nBqg2zk9uqkuG0/y837t/mAyR+tLwmyyUrzyHoc8/fZd3yCNk00F+0Vwi9NMX
-         x8M/IFJYJCjM9OPX1Gh8SJ9GzeUzzyDx5UgtlDvCo7n9TlQI1B4JAh0mXHq2jhE+Pxz1
-         DHoA==
+        d=google.com; s=20221208; t=1682350197; x=1684942197;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gCgpe6n+jmUxcEJH0eL6xCNrEIEiHzHCJcnHIrPBLxc=;
+        b=G7/E08havS32LLcjGJNwV3zdv/V5VR800w4qAVStO3+3tIfgUVcB6KxYQGQtSi4WxI
+         4ErYbClZWhmokdmkJsrjH5kb5HOU1ZxVpBEpRhqRk2MWG3KZ7txdL2o0K2HS2al/anqA
+         Y2KPb9ipTim4mLpv5gUC1uAuXiDakF0XzeIfRIr+DXu7m2UtkAgqW2GOJvBFoKIIxOIr
+         Z+ke4Fd9SJY1SpjzpXkq4UkZT1Y6SLpEZgpeiCeeRgZqeBsQ7WJ3rO0ygkP85sAwcMna
+         vnsbx4fJwNKg03OxbLet/+UK234+NonnH8MmZlqUkkIpHn7FZjba8DkG9YV2gi1sWvmn
+         IPEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350154; x=1684942154;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BwQn07Y16iFJ4fshuTnIaJh3oxGufXQLZ+OStDTOBvc=;
-        b=ImPoJBPfi9BakMpENjUTkIwaFdUVJgPn0BQic3+3+ZR11CLmkuRQk2vloqSlxQxTpH
-         x3u3thtwQVhPy7pig/oBTsmrUBC6I+R82tchdDi1xFQYtaB1aka7OJVTeUgvyFG0Jvg/
-         NUJminArujO6W+FFUlBYNx6TyUVpcTM8SiXjUijPu9Y+Zi+SZ8UopkrY2cVq9nUF4sVQ
-         B/qoVyTRfM4xF9CTUiZt9799qoQZY62dCPZ8Mz8r2SvA4qI0h5TEqczH8iOl0DyoKK7m
-         xKPjh0mT7IylctKsJodaOqpPwsmqXmiBN6lz6WbI2kJoh0wrD9Zk3UN8Uovqt8PE11ZG
-         Xp9Q==
-X-Gm-Message-State: AAQBX9dbLrDWpAB3QWVEcJnQmt59fSI4KRmnqOF23fJ7VI8X1JnHOrqH
-        FKQWwUqLfEWBK5E4SRiP8Wo=
-X-Google-Smtp-Source: AKy350a85rlM+Wj+fqdXCvALp7o+lUqNXORSVuEO3DfqJwtM4GyhYdB03YPTTTPxBsbdrPAnJ/uFyA==
-X-Received: by 2002:a17:902:f355:b0:1a6:7ea8:9f4f with SMTP id q21-20020a170902f35500b001a67ea89f4fmr13498420ple.26.1682350153707;
-        Mon, 24 Apr 2023 08:29:13 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id r19-20020a170902be1300b001a95680eecesm4047791pls.297.2023.04.24.08.29.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 08:29:13 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 24 Apr 2023 05:29:11 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 4/5] workqueue: Automatically mark CPU-hogging work items
- CPU_INTENSIVE
-Message-ID: <ZEagR7GYUsPN46wm@slm.duckdns.org>
-References: <20230418205159.724789-1-tj@kernel.org>
- <20230418205159.724789-5-tj@kernel.org>
- <CAJhGHyDWJAZj6AYKHpJvTPdRCZa7Yvi00x1n+AtRm1qa_2PmOw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyDWJAZj6AYKHpJvTPdRCZa7Yvi00x1n+AtRm1qa_2PmOw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1682350197; x=1684942197;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gCgpe6n+jmUxcEJH0eL6xCNrEIEiHzHCJcnHIrPBLxc=;
+        b=bx54nzZ0ujUgnmfmsD0n9q/isNXDJ9K2y40n9TibZYS+DUoqtLQhX/ux8bE2ZM/bRT
+         M3174p6X6EPQ2Oi9sSCuF57bTRueo0nQcoX4vdP55Tcjwq2cFG7vASckgUQgjvUEETwn
+         yfGY0HZ/tNiA3FOEdaHp2shUAWltoBFWywm9HkWqbQxjwSha0kXbFmKGowAiaO1qVkhN
+         WDU1ev8PCvWWrR3GH1JBgXDnHKEu8mp96ljN2iURcFvzUm0fN4G/4WgfDvSWMjbtI9OI
+         g+VJq95LF0XlDPd2FJcIl6NWU7cIo2hR0WxRM1vZrTGyrnwFyM++60NUEbCBGS0GHcpN
+         MkxQ==
+X-Gm-Message-State: AAQBX9cAJlk8qbMoi/UjGWebax7YXK8imMoNECMOlDnMfRJGVdJfGAFv
+        1YnLeFvtdcsf670BKjFrnRjfn+jvVPw=
+X-Google-Smtp-Source: AKy350bhQU7OcFUeFKVJtBkNM/PQxjoo0m+R/8S1X+/tHzwa23HbaHcUDw953Xii31aMUVkSQoRTzfKWBnM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:4516:0:b0:552:e3fa:6756 with SMTP id
+ s22-20020a814516000000b00552e3fa6756mr6003733ywa.2.1682350197003; Mon, 24 Apr
+ 2023 08:29:57 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 08:29:55 -0700
+In-Reply-To: <000000000000eca0b905fa0f7756@google.com>
+Mime-Version: 1.0
+References: <000000000000eca0b905fa0f7756@google.com>
+Message-ID: <ZEagczhTT5+dVDzE@google.com>
+Subject: Re: [syzbot] [kvm?] KASAN: slab-use-after-free Read in kvm_tdp_mmu_invalidate_all_roots
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+864ac0b626794668b732@syzkaller.appspotmail.com>
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Lai.
-
-On Sun, Apr 23, 2023 at 11:23:28AM +0800, Lai Jiangshan wrote:
-> wq_worker_stopping() and sched_submit_work() are only called from
-> schedule() and are not called for other various kinds of scheduling,
-> such as schedule_rtlock(), preempt_schedule_*(), __cond_resched().
+On Sun, Apr 23, 2023, syzbot wrote:
+> Hello,
 > 
-> A work item hogging CPU may not call the bare schedule().  To make
-> the new wq_worker_stopping() works, it has to be added to other kinds
-> of scheduling, IMO.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=118a0520280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
+> dashboard link: https://syzkaller.appspot.com/bug?extid=864ac0b626794668b732
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+864ac0b626794668b732@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: slab-use-after-free in kvm_tdp_mmu_invalidate_all_roots+0x2e3/0x370 arch/x86/kvm/mmu/tdp_mmu.c:945
+> Read of size 8 at addr ffff88807c27d528 by task syz-executor.2/5817
+> 
+> CPU: 0 PID: 5817 Comm: syz-executor.2 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+>  print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+>  print_report mm/kasan/report.c:462 [inline]
+>  kasan_report+0x11c/0x130 mm/kasan/report.c:572
+>  kvm_tdp_mmu_invalidate_all_roots+0x2e3/0x370 arch/x86/kvm/mmu/tdp_mmu.c:945
+>  kvm_mmu_uninit_tdp_mmu+0x16/0x100 arch/x86/kvm/mmu/tdp_mmu.c:48
+>  kvm_mmu_uninit_vm+0x6a/0x70 arch/x86/kvm/mmu/mmu.c:6239
+>  kvm_arch_destroy_vm+0x369/0x490 arch/x86/kvm/x86.c:12465
+>  kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1313 [inline]
+>  kvm_put_kvm+0x4da/0xae0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1347
+>  kvm_vcpu_release+0x51/0x70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3846
+>  __fput+0x27c/0xa90 fs/file_table.c:321
+>  task_work_run+0x16f/0x270 kernel/task_work.c:179
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+>  exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+>  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+>  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f426b83e01b
+> Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+> RSP: 002b:00007ffe38a35070 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+> RAX: 0000000000000000 RBX: 0000000000000008 RCX: 00007f426b83e01b
+> RDX: 0000000000000000 RSI: 0000001b32b3a7d4 RDI: 0000000000000007
+> RBP: 00007f426b9ad980 R08: 0000000000000000 R09: 0000000075ee794b
+> R10: 0000000000000000 R11: 0000000000000293 R12: 000000000003d553
+> R13: 00007ffe38a35170 R14: 00007ffe38a35190 R15: 0000000000000032
+>  </TASK>
 
-Yeah, you're right. The proposed code would work fine only on !preempt
-kernels. I guess the right thing to do is splitting out the hook for
-non-sleeping schedulers and adding them in those paths. I'll look into it.
-
-Thanks for spotting the issue.
-
--- 
-tejun
+#syz fix: KVM: x86: Preserve TDP MMU roots until they are explicitly invalidated
