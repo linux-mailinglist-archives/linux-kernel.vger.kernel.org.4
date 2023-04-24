@@ -2,235 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946676EC64D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95096EC64F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjDXG25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 02:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S229565AbjDXGbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 02:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXG2z (ORCPT
+        with ESMTP id S229487AbjDXGbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 02:28:55 -0400
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB83210C;
-        Sun, 23 Apr 2023 23:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682317729;
-        bh=djhr5MfshZUGOTSWt5YmziZxFxkqEBMZM80+QaEbmZg=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=IHbeq3bIXplw6euHBcclHI5Rqs/yl+mO6BSUlK3XTtvGTz5eZ/23wp10C0zLfabnT
-         X25xBJ2XX5WkiN993BbzkufJOOVK0THI339+HyCJ12031ybTf0fxVKlNYR0MHJGXzO
-         sHqTqDxPEoJsvaFYU3oFF32ROnuoSGIFfUAdDkTc=
-Received: from smtpclient.apple ([218.17.26.194])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id 72D9469F; Mon, 24 Apr 2023 14:28:45 +0800
-X-QQ-mid: xmsmtpt1682317725t2oqrawcd
-Message-ID: <tencent_308BB7ACC0063D84152850BB24C06E946A09@qq.com>
-X-QQ-XMAILINFO: NTPE1iKZ8oO7A7QzEXTbUlnzT8MxX51tkFaPk2idN1nx6HZJycgZT8HX5Ajyxp
-         az6pov9QAg+3m1YTLdBysr/MohRb0UeoGM0bu2NQwXbWbZpCEZDArUK6ANa/VfNZH7DCvpSYLYLB
-         rSBwLPzPeiuS0lxBrsM6H15MWCDac+nyxRQUqPsLbXBVC+3B5PLhEbyejfL/p+ig1eDtfEtBr6TO
-         jdsMUyzdzYyUIDiYHgNJ2pCnT7XEN/Ymvx5foN8dkOpMJR0Zxj3YR6P3yGWAEkQLawKNbUCkr7zJ
-         EH+NfQAyjcO8JQm96S9pKv3F34PqJ5glutTUeKiwqVp6ULhu65QWh8I3JwKJFsVDD00vl7yGA+vx
-         KCwJIvVnVIQt2u6sYzpzWqw6J+lAEQ6KgWwOA3cGOhvmueuGubCmecqx8dajrBd9sT+nKLi0+0IS
-         GbHZ21x1ZF+FQE66RYddeWRyfT+S/2sNnLK0VTA1onTjp1cvcQozdGXcSc53fNPiwYV1v4HFlCbf
-         1i3sOSKokluT/Mc5lqPQghDFBqb+rMHxJ7HJJkYz8Q/4n8OsmIPk2DRqWkkhcnUAaVfs5j/RFZzq
-         P6ZgeFxC7iqsIaE5jMysLQlFf1dxaBbMFuJUAxcvSzpw4uLLD8ddoG+RtrmD56CbPT0MOl0dQfo4
-         6+PLz8Jz3AT+FayNrOZLy9YPjC6YA3lbE2tvjniWuqgyfV9uHRmQUo3rKVQlfjeelGOXh2MBgiZO
-         bvZmrKeH1GkX7StUnNZw4iIVwDahxpemfGQPfpbsKaBCaUDR0hhDyQfNZ58Oat5W1zYIG/iVr4J9
-         GdRa9yfyWfUZ/DFWMlKF9kk77PcALyo18VhxsrTLphxdCBa9yyHGNB1xx1DjuV7D0g9EzFs88SDq
-         AfsX0RAp77DatGiR7UlJ0oz8KWUHK5WjehaijpkXRlsrajf9zS6lie6YMSvKsWsVWKSU1F+ps72i
-         Zo9QUTajAU5nyTWQ5x6t8R8aa6OtyvEMO3oxCA43BVf5bEfPlDX0di7S6q+gGnMtGW+LYNbdM=
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 01/10] wifi: rtw88: fix incorrect error codes in
- rtw_debugfs_set_write_reg
-From:   foxmail <zhang_shurong@foxmail.com>
-In-Reply-To: <a3450e1f9ee740478f8215feea6127e4@realtek.com>
-Date:   Mon, 24 Apr 2023 14:28:35 +0800
-Cc:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-X-OQ-MSGID: <37061890-0914-40E4-855F-C843CAE36609@foxmail.com>
-References: <cover.1682156784.git.zhang_shurong@foxmail.com>
- <tencent_6E21370EB57D5B7060611EB60A96A88B1208@qq.com>
- <a3450e1f9ee740478f8215feea6127e4@realtek.com>
-To:     Ping-Ke Shih <pkshih@realtek.com>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 02:31:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D01A210C;
+        Sun, 23 Apr 2023 23:31:33 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E7EE66031C8;
+        Mon, 24 Apr 2023 07:31:31 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682317892;
+        bh=vIqjAc8DZsZDeVQlMULvMNIqSJP7b867eLICQqs065g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PbySQiJiDaNUV2KctH1jYGqojThlZ6RjbdDBAuQNdrCRcek2a7wcEH7uIKjfKQuBX
+         OhFZKS3nBydSNjXth5A5MxzqzqOuXukkB7LFMaHiu6meaw6EN/BiaggqlmEw3JVcZE
+         ItPAzKggU/hTJXhMT3H7D4LWYrEbFf0xjGnTBmjKkOKFQay7koU+g4arLO77YiIRXE
+         hws3VGE1uX/p6IDm0aZhUv6hUWJGHOya2FFwbWXQRENOcDpmIZHRVdND1KR/DC9EoK
+         62GRlbEZmjIhm9XlATEXCgygbUa1TpJvoZq+0jE9A/PWDdzsgJEdM7ViQEmdUvlig8
+         7RoU96ljkdBRA==
+Message-ID: <097d60ba-5604-a2c9-c6d2-121db2d55e36@collabora.com>
+Date:   Mon, 24 Apr 2023 08:31:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/5] arm64: dts: mediatek: cherry: Add platform thermal
+ configuration
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230420094433.42794-1-angelogioacchino.delregno@collabora.com>
+ <20230420094433.42794-2-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5GuEQMxYTKrnia1ipYHLt_B2h6By7EejE7MjCypfavnFg@mail.gmail.com>
+ <5ede9421-54d6-4dda-91af-2acbf46c2d3e@notapiano>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <5ede9421-54d6-4dda-91af-2acbf46c2d3e@notapiano>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you a lot for your kind reply, I will resend it as 2 patches.
+Il 21/04/23 22:53, Nícolas F. R. A. Prado ha scritto:
+> On Fri, Apr 21, 2023 at 03:37:52PM +0800, Chen-Yu Tsai wrote:
+>> On Thu, Apr 20, 2023 at 5:45 PM AngeloGioacchino Del Regno
+>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>
+>>> This platform has three auxiliary NTC thermistors, connected to the
+>>> SoC's ADC pins. Enable the auxadc in order to be able to read the
+>>> ADC values, add a generic-adc-thermal LUT for each and finally assign
+>>> them to the SoC's thermal zones.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>> ---
+>>>   .../boot/dts/mediatek/mt8195-cherry.dtsi      | 105 ++++++++++++++++++
+>>>   1 file changed, 105 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+>>> index 8ac80a136c37..0820e9ba3829 100644
+>>> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+>>> @@ -114,6 +114,77 @@ ppvar_sys: regulator-ppvar-sys {
+>>>                  regulator-boot-on;
+>>>          };
+>>>
+>>> +       /* Murata NCP03WF104F05RL */
+>>> +       tboard_thermistor1: thermal-sensor-t1 {
+>>> +               compatible = "generic-adc-thermal";
+>>> +               #thermal-sensor-cells = <0>;
+>>> +               io-channels = <&auxadc 0>;
+>>> +               io-channel-names = "sensor-channel";
+>>> +               temperature-lookup-table = <    (-10000) 1553
+>>> +                                               (-5000) 1485
+>>> +                                               0 1406
+>>> +                                               5000 1317
+>>> +                                               10000 1219
+>>> +                                               15000 1115
+>>> +                                               20000 1007
+>>> +                                               25000 900
+>>> +                                               30000 796
+>>> +                                               35000 697
+>>> +                                               40000 605
+>>> +                                               45000 523
+>>> +                                               50000 449
+>>> +                                               55000 384
+>>> +                                               60000 327
+>>> +                                               65000 279
+>>> +                                               70000 237
+>>> +                                               75000 202
+>>> +                                               80000 172
+>>> +                                               85000 147
+>>> +                                               90000 125
+>>> +                                               95000 107
+>>> +                                               100000 92
+>>> +                                               105000 79
+>>> +                                               110000 68
+>>> +                                               115000 59
+>>> +                                               120000 51
+>>> +                                               125000 44>;
+>>> +       };
+>>> +
+>>> +       tboard_thermistor2: thermal-sensor-t2 {
+>>> +               compatible = "generic-adc-thermal";
+>>> +               #thermal-sensor-cells = <0>;
+>>> +               io-channels = <&auxadc 1>;
+>>> +               io-channel-names = "sensor-channel";
+>>> +               temperature-lookup-table = <    (-10000) 1553
+>>> +                                               (-5000) 1485
+>>> +                                               0 1406
+>>> +                                               5000 1317
+>>> +                                               10000 1219
+>>> +                                               15000 1115
+>>> +                                               20000 1007
+>>> +                                               25000 900
+>>> +                                               30000 796
+>>> +                                               35000 697
+>>> +                                               40000 605
+>>> +                                               45000 523
+>>> +                                               50000 449
+>>> +                                               55000 384
+>>> +                                               60000 327
+>>> +                                               65000 279
+>>> +                                               70000 237
+>>> +                                               75000 202
+>>> +                                               80000 172
+>>> +                                               85000 147
+>>> +                                               90000 125
+>>> +                                               95000 107
+>>> +                                               100000 92
+>>> +                                               105000 79
+>>> +                                               110000 68
+>>> +                                               115000 59
+>>> +                                               120000 51
+>>> +                                               125000 44>;
+>>> +       };
+>>> +
+>>>          usb_vbus: regulator-5v0-usb-vbus {
+>>>                  compatible = "regulator-fixed";
+>>>                  regulator-name = "usb-vbus";
+>>> @@ -260,6 +331,10 @@ &gpu {
+>>>          mali-supply = <&mt6315_7_vbuck1>;
+>>>   };
+>>>
+>>> +&auxadc {
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>>   &i2c0 {
+>>>          status = "okay";
+>>>
+>>> @@ -1098,6 +1173,36 @@ mt6315_7_vbuck1: vbuck1 {
+>>>          };
+>>>   };
+>>>
+>>> +&thermal_zones {
+>>> +       soc_area_ntc {
+> 
+> Not sure if that's what's causing the issue, but the thermal zone name should
+> end with -thermal as per the binding. Also note that it needs to be under 20
+> characters otherwise it will fail to be registered with -22 like below.
+> (Also, node names shouldn't contain underscore)
+> 
+> Thanks,
+> Nícolas
+> 
+>>> +               polling-delay = <1000>;
+>>> +               polling-delay-passive = <250>;
+>>> +               thermal-sensors = <&tboard_thermistor1>;
+>>> +
+>>> +               trips {
+>>> +                       trip-crit {
+>>> +                               temperature = <95000>;
+>>> +                               hysteresis = <2000>;
+>>> +                               type = "critical";
+>>> +                       };
+>>> +               };
+>>> +       };
+>>> +
+>>> +       pmic_area_ntc {
+>>> +               polling-delay = <1000>;
+>>> +               polling-delay-passive = <0>;
+>>> +               thermal-sensors = <&tboard_thermistor2>;
+>>> +
+>>> +               trips {
+>>> +                       trip-crit {
+>>> +                               temperature = <95000>;
+>>> +                               hysteresis = <2000>;
+>>> +                               type = "critical";
+>>> +                       };
+>>> +               };
+>>> +       };
+>>
+>> I'm still getting:
+>>
+>> thermal_sys: Failed to find 'trips' node
+>> thermal_sys: Failed to find trip points for thermal-sensor-t1 id=0
+>> generic-adc-thermal thermal-sensor-t1: Thermal zone sensor register failed: -22
+>> generic-adc-thermal: probe of thermal-sensor-t1 failed with error -22
+>> thermal_sys: Failed to find 'trips' node
+>> thermal_sys: Failed to find trip points for thermal-sensor-t2 id=0
+>> generic-adc-thermal thermal-sensor-t2: Thermal zone sensor register failed: -22
+>> generic-adc-thermal: probe of thermal-sensor-t2 failed with error -22
+>> thermal_sys: Failed to find 'trips' node
+>> thermal_sys: Failed to find trip points for thermal-sensor-t3 id=0
+>> generic-adc-thermal thermal-sensor-t3: Thermal zone sensor register failed: -22
+>> generic-adc-thermal: probe of thermal-sensor-t3 failed with error -22
+>>
 
-> 2023=E5=B9=B44=E6=9C=8824=E6=97=A5 09:58=EF=BC=8CPing-Ke Shih =
-<pkshih@realtek.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
->> -----Original Message-----
->> From: Zhang Shurong <zhang_shurong@foxmail.com>
->> Sent: Saturday, April 22, 2023 6:05 PM
->> To: tony0620emma@gmail.com
->> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; =
-kuba@kernel.org; pabeni@redhat.com;
->> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; =
-linux-kernel@vger.kernel.org; Zhang Shurong
->> <zhang_shurong@foxmail.com>
->> Subject: [PATCH 01/10] wifi: rtw88: fix incorrect error codes in =
-rtw_debugfs_set_write_reg
->>=20
->> If there is a failure during copy_from_user or user-provided data
->> buffer is invalid, rtw_debugfs_set_write_reg should return negative
->> error code instead of a positive value count.
->>=20
->> Fix this bug by returning correct error code. Moreover, the check
->> of buffer against null is removed since it will be handled by
->> copy_from_user.
->>=20
->> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
->> ---
->> drivers/net/wireless/realtek/rtw88/debug.c | 11 +++++++----
->> 1 file changed, 7 insertions(+), 4 deletions(-)
->>=20
->> diff --git a/drivers/net/wireless/realtek/rtw88/debug.c =
-b/drivers/net/wireless/realtek/rtw88/debug.c
->> index fa3d73b333ba..bc41c5a7acaf 100644
->> --- a/drivers/net/wireless/realtek/rtw88/debug.c
->> +++ b/drivers/net/wireless/realtek/rtw88/debug.c
->> @@ -183,8 +183,8 @@ static int rtw_debugfs_copy_from_user(char tmp[], =
-int size,
->>=20
->>        tmp_len =3D (count > size - 1 ? size - 1 : count);
->>=20
->> -       if (!buffer || copy_from_user(tmp, buffer, tmp_len))
->> -               return count;
->> +       if (copy_from_user(tmp, buffer, tmp_len))
->> +               return -EFAULT;
->=20
-> This patchset is fine to me. The only thing is this chunk can be first =
-patch,
-> and squash other patches to second patch because they do the same =
-thing
-> in the same driver.
->=20
->=20
->>=20
->>        tmp[tmp_len] =3D '\0';
->>=20
->> @@ -338,14 +338,17 @@ static ssize_t rtw_debugfs_set_write_reg(struct =
-file *filp,
->>        char tmp[32 + 1];
->>        u32 addr, val, len;
->>        int num;
->> +       int ret;
->>=20
->> -       rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, count, =
-3);
->> +       ret =3D rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, =
-count, 3);
->> +       if (ret < 0)
->> +               return ret;
->>=20
->>        /* write BB/MAC register */
->>        num =3D sscanf(tmp, "%x %x %x", &addr, &val, &len);
->>=20
->>        if (num !=3D  3)
->> -               return count;
->> +               return -EINVAL;
->>=20
->>        switch (len) {
->>        case 1:
->> --
->> 2.40.0
->=20
->> -----Original Message-----
->> From: Zhang Shurong <zhang_shurong@foxmail.com>
->> Sent: Saturday, April 22, 2023 6:05 PM
->> To: tony0620emma@gmail.com
->> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; =
-kuba@kernel.org; pabeni@redhat.com;
->> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; =
-linux-kernel@vger.kernel.org; Zhang Shurong
->> <zhang_shurong@foxmail.com>
->> Subject: [PATCH 01/10] wifi: rtw88: fix incorrect error codes in =
-rtw_debugfs_set_write_reg
->>=20
->> If there is a failure during copy_from_user or user-provided data
->> buffer is invalid, rtw_debugfs_set_write_reg should return negative
->> error code instead of a positive value count.
->>=20
->> Fix this bug by returning correct error code. Moreover, the check
->> of buffer against null is removed since it will be handled by
->> copy_from_user.
->>=20
->> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
->> ---
->> drivers/net/wireless/realtek/rtw88/debug.c | 11 +++++++----
->> 1 file changed, 7 insertions(+), 4 deletions(-)
->>=20
->> diff --git a/drivers/net/wireless/realtek/rtw88/debug.c =
-b/drivers/net/wireless/realtek/rtw88/debug.c
->> index fa3d73b333ba..bc41c5a7acaf 100644
->> --- a/drivers/net/wireless/realtek/rtw88/debug.c
->> +++ b/drivers/net/wireless/realtek/rtw88/debug.c
->> @@ -183,8 +183,8 @@ static int rtw_debugfs_copy_from_user(char tmp[], =
-int size,
->>=20
->>        tmp_len =3D (count > size - 1 ? size - 1 : count);
->>=20
->> -       if (!buffer || copy_from_user(tmp, buffer, tmp_len))
->> -               return count;
->> +       if (copy_from_user(tmp, buffer, tmp_len))
->> +               return -EFAULT;
->=20
-> This patchset is fine to me. The only thing is this chunk can be first =
-patch,
-> and squash other patches to second patch because they do the same =
-thing
-> in the same driver.
->=20
->=20
->>=20
->>        tmp[tmp_len] =3D '\0';
->>=20
->> @@ -338,14 +338,17 @@ static ssize_t rtw_debugfs_set_write_reg(struct =
-file *filp,
->>        char tmp[32 + 1];
->>        u32 addr, val, len;
->>        int num;
->> +       int ret;
->>=20
->> -       rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, count, =
-3);
->> +       ret =3D rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, =
-count, 3);
->> +       if (ret < 0)
->> +               return ret;
->>=20
->>        /* write BB/MAC register */
->>        num =3D sscanf(tmp, "%x %x %x", &addr, &val, &len);
->>=20
->>        if (num !=3D  3)
->> -               return count;
->> +               return -EINVAL;
->>=20
->>        switch (len) {
->>        case 1:
->> --
->> 2.40.0
+I think you have something wrong locally - there's no thermal-sensor-t3 in this
+devicetree...
 
+Cheers,
+Angelo
 
