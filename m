@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A031B6ED521
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981556ED51D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbjDXTML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 15:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S232453AbjDXTLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 15:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjDXTMI (ORCPT
+        with ESMTP id S231349AbjDXTLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:12:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB216591;
-        Mon, 24 Apr 2023 12:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682363523; x=1713899523;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yXmB4O56FdS7HN2yEs1rka8M14EJ9vI2hHwXGarRAMA=;
-  b=dJPSfhgNKx0lUacFOh0OZeoUVk/iXWZfaPfofkmQwa2onn08GQaow2XY
-   qH20dzld0W0H40d4TnPb3qZ1xmsxv2potKIcIngPNFSaHeeTmUIMjpFsS
-   JSItJb3sCOwjnfikKLn4f6t6dTFQ/ikA1PEqwnKPuoyLcvcnZk0/5x413
-   Le3gBho5xGHGk2DgrarwQWt53pyfz/E050b5Uea9BlRzd39hSzRpV7WDb
-   yB2WgANvsZOSOcfFwCg2djSmGodILCX0yceSuB6AYpKmO5P9xYybKcTBg
-   GIrf2G+pSedgSp4Cw58EobAOBPwF/Hj2CJV63uPUY8idrYlFiNlezSVBW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345291579"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="345291579"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 12:12:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="939456108"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="939456108"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Apr 2023 12:11:59 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pr1bS-000ibk-0u;
-        Mon, 24 Apr 2023 19:11:58 +0000
-Date:   Tue, 25 Apr 2023 03:11:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org,
-        alex.williamson@redhat.com
-Cc:     oe-kbuild-all@lists.linux.dev, dmy@semihalf.com, tn@semihalf.com,
-        dbehr@google.com, dbehr@chromium.org, upstream@semihalf.com,
-        dtor@google.com, jgg@ziepe.ca, kevin.tian@intel.com,
-        cohuck@redhat.com, abhsahu@nvidia.com, yishaih@nvidia.com,
-        yi.l.liu@intel.com, kvm@vger.kernel.org, libvir-list@redhat.com,
-        Grzegorz Jaszczyk <jaz@semihalf.com>
-Subject: Re: [PATCH v2] vfio/pci: Propagate ACPI notifications to user-space
- via eventfd
-Message-ID: <202304250252.8MirvFb0-lkp@intel.com>
-References: <20230424162748.2711945-1-jaz@semihalf.com>
+        Mon, 24 Apr 2023 15:11:43 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14A7134
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:11:40 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4ec9c7c6986so5040571e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682363499; x=1684955499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wD0Di0Fitz4uA3U0bu+BQKjY/3OPz9pKNYaL+s8xOn4=;
+        b=k3h4nmc9zu55vmz/rg9Y1zsKjvuC8usHDIY4bIQxfljinV4PtyASFpMUJ4Xhr9uh66
+         p7Z8M344IP9e1DpyLBq1fKwuiBYIXY8Lt+szKOmoxieYTrd8Rhh07QIGGZgu3WvMfG9V
+         gIwLbtE32yv3MIkupiFUIxYxKTx7RsgUOpUlc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682363499; x=1684955499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wD0Di0Fitz4uA3U0bu+BQKjY/3OPz9pKNYaL+s8xOn4=;
+        b=fy6PdVp4aw8o/aOdVG0S436eKtDT+9131w/iVcsTO9vkCxen9lsvhnRRRtd658zGq2
+         MQxlxnZmPV/2LY0PYf0mGAIAcsxGGkLLLd9saXU6nHqvHMlUfHn40to1+tyujYVu06gV
+         VVSFIold+L6FyidFd4jFlC+ndzfXpDIrRI2zBTDlcz0sBRg62jl6CMwjntTqGmPDEOhI
+         OoF/b8iuhcArcw14bWhh6wyYvWDb8P9Gf2az6/PJBTtNzqurt7+QGc7odP6yyPvZKA9Q
+         pdg+dbuMs/BJvn2YEMm50M68i7Up+2KfCrn0Q3DkXPCe0fLcIeMxJXc0B/AouFQw81Ms
+         9dIg==
+X-Gm-Message-State: AAQBX9egm/Ob0+FkkX5+lAxT17DgJEz3SfDIzNhdXPfvD+iUfSWR7j2s
+        kBlzNOyvPBj+7FkJH+ZnUh1DEoJrY5fRS950TCLDcg==
+X-Google-Smtp-Source: AKy350YQIW7VVLVLVr9A6il9z434/BheTBBSm4idTXqokyJ5uGRdnFKUUfzhamKa6zz53OpZDMtbtFYDlYvH6S7nefw=
+X-Received: by 2002:a19:f509:0:b0:4dd:a73f:aede with SMTP id
+ j9-20020a19f509000000b004dda73faedemr3102210lfb.10.1682363499182; Mon, 24 Apr
+ 2023 12:11:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424162748.2711945-1-jaz@semihalf.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <063c8f77c216ffac463532023009124542d54c19.camel@redhat.com>
+ <20230414092353.v2.1.Ieb687047a5b75c7b7ee5dd258207ef5ca9a3b728@changeid>
+ <CALNJtpXLHHSV8YshUnk0opLNMUJpT7DgBNRYXoP2Yn-fnA8vPA@mail.gmail.com>
+ <CALNJtpV4WsknSSfBBer-MM0y_V=O5Fv2Lc3ei3heEyZwvR2rzQ@mail.gmail.com> <65C23A49-5A55-4CF4-9AFD-2DA504DAABF5@duggan.us>
+In-Reply-To: <65C23A49-5A55-4CF4-9AFD-2DA504DAABF5@duggan.us>
+From:   Jonathan Denose <jdenose@chromium.org>
+Date:   Mon, 24 Apr 2023 14:11:28 -0500
+Message-ID: <CALNJtpWOPRB3-0Jw+GJt_D-vjEhbhDRw-Kb3boC0dOU+525fFQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Input: synaptics - disable intertouch for Lenovo L440
+To:     Andrew Duggan <andrew@duggan.us>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        Andrew Duggan <aduggan@synaptics.com>,
+        "amandhoot12@gmail.com" <amandhoot12@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jdenose@google.com" <jdenose@google.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "markpearson@lenovo.com" <markpearson@lenovo.com>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        benjamin.tissoires@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,92 +77,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Grzegorz,
+Hi Andrew,
 
-kernel test robot noticed the following build warnings:
+Thanks for your reply. As an update, I was able to try the patch here:
+https://lore.kernel.org/all/YgHTYrODoo2ou49J@google.com/ and it
+resolves the suspend/resume issue on this device. I'm not sure what
+the status of the linked patch is, to me it doesn't look like it was
+merged anywhere.
 
-[auto build test WARNING on awilliam-vfio/for-linus]
-[also build test WARNING on linus/master v6.3 next-20230421]
-[cannot apply to awilliam-vfio/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Grzegorz-Jaszczyk/vfio-pci-Propagate-ACPI-notifications-to-user-space-via-eventfd/20230425-002935
-base:   https://github.com/awilliam/linux-vfio.git for-linus
-patch link:    https://lore.kernel.org/r/20230424162748.2711945-1-jaz%40semihalf.com
-patch subject: [PATCH v2] vfio/pci: Propagate ACPI notifications to user-space via eventfd
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20230425/202304250252.8MirvFb0-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/62d759059cd5e6dab70052027e1b69c5d5cdc0f2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Grzegorz-Jaszczyk/vfio-pci-Propagate-ACPI-notifications-to-user-space-via-eventfd/20230425-002935
-        git checkout 62d759059cd5e6dab70052027e1b69c5d5cdc0f2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/vfio/pci/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304250252.8MirvFb0-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/vfio/pci/vfio_pci_core.c:709:6: warning: no previous prototype for 'vfio_pci_acpi_notify_close_device' [-Wmissing-prototypes]
-     709 | void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vfio/pci/vfio_pci_core.c: In function 'vfio_pci_ioctl_acpi_notify_eventfd':
->> drivers/vfio/pci/vfio_pci_core.c:1029:18: warning: variable 'events' set but not used [-Wunused-but-set-variable]
-    1029 |         __poll_t events;
-         |                  ^~~~~~
-
-
-vim +/vfio_pci_acpi_notify_close_device +709 drivers/vfio/pci/vfio_pci_core.c
-
-   708	
- > 709	void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev)
-   710	{
-   711		struct vfio_acpi_notification *acpi_notify = vdev->acpi_notification;
-   712		struct pci_dev *pdev = vdev->pdev;
-   713		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-   714		struct notification_queue *entry, *entry_tmp;
-   715		u64 cnt;
-   716	
-   717		if (!acpi_notify || !acpi_notify->acpi_notify_trigger)
-   718			return;
-   719	
-   720		acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
-   721					   vfio_pci_core_acpi_notify);
-   722	
-   723		eventfd_ctx_remove_wait_queue(acpi_notify->acpi_notify_trigger,
-   724					      &acpi_notify->wait, &cnt);
-   725	
-   726		flush_work(&acpi_notify->acpi_notification_work);
-   727	
-   728		mutex_lock(&acpi_notify->notification_list_lock);
-   729		list_for_each_entry_safe(entry, entry_tmp,
-   730					 &acpi_notify->notification_list,
-   731					 notify_val_next) {
-   732			list_del(&entry->notify_val_next);
-   733			kfree(entry);
-   734		}
-   735		mutex_unlock(&acpi_notify->notification_list_lock);
-   736	
-   737		eventfd_ctx_put(acpi_notify->acpi_notify_trigger);
-   738	
-   739		kfree(acpi_notify);
-   740	
-   741		vdev->acpi_notification = NULL;
-   742	}
-   743	#else
-   744	void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev) {}
-   745	#endif /* CONFIG_ACPI */
-   746	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On Mon, Apr 17, 2023 at 3:14=E2=80=AFPM Andrew Duggan <andrew@duggan.us> wr=
+ote:
+>
+> Hi Lyude and Jonathan,
+>
+> I was just about to reply and suggest that we look into this issue a litt=
+le more since the touchpad in the L440 would benefit from the additional da=
+ta from the intertouch interface. Especially, since it has a large area and=
+ several buttons. PS/2 only reports position data for two fingers so three =
+finger gestures is another example.
+>
+> Generally, these types of suspend / resume issues are the result of the t=
+ouchpad resetting and the firmware expecting commands from the PS/2 interfa=
+ce. On resume, the PS/2 driver should send a command over the PS/2 interfac=
+e to switch the touchpad firmware back into intertouch (SMBus) mode. The lo=
+gs you provided look like that's what is happening here. The SMBus driver i=
+s sending commands, but the touchpad firmware won't respond until it is swi=
+tch back into intertouch mode. It has been a while since I have worked on t=
+hese touchpads, but from what I remember I think there is code in the psmou=
+se-smbus driver to handle these situations. I added Benjamin Tissoires to C=
+C since I think he worked on that handling. I thought suspend / resume was =
+tested on with these "top button" touchpads when support for them was added=
+. I don't know if the L440 specifically included in the testing. I'm curiou=
+s if this is a regression or not.
+>
+> Regarding the patch, I do have one comment below:
+>
+> > On Apr 17, 2023, at 11:52, Jonathan Denose <jdenose@chromium.org> wrote=
+:
+> >
+> > CAUTION: Email originated externally, do not click links or open attach=
+ments unless you recognize the sender and know the content is safe.
+> >
+> >
+> > Sorry, I thought I sent this as plain text but I think maybe not.
+> > Trying once more, the message was:
+> >
+> > I think that disabling synaptics_intertouch would resolve the issue
+> > mentioned in the commit, but cause a regression in the functionality
+> > that intertouch is supposed to bring, like three-finger gestures. I'm
+> > attaching some of the logs that I captured when the touchpad was
+> > failing on resume. I think the main culprit is
+> > i2c_smbus_read_byte_data where the driver is unable to get the SMBus
+> > version number. I get the following lines in dmesg:
+> >
+> > [ 2869.745860] rmi4_smbus 0-002c: failed to get SMBus version number!
+> > [ 2869.746060] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed
+> > to read current IRQ mask.
+> > [ 2869.746260] rmi4_f01 rmi4-00.fn01: Failed to restore normal operatio=
+n: -6.
+> > [ 2869.746262] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
+> > [ 2869.746264] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> > [ 2869.746265] rmi4_smbus 0-002c: Failed to resume device: -6
+> > [ 2869.746268] rmi4_smbus 0-002c: rmi_smb_resume+0x0/0x6b [rmi_smbus]
+> > returned 0 after 549 usecs
+> > [ 2869.746446] rmi4_physical rmi4-00: Failed to read irqs, code=3D-6
+> >
+> > Any ideas on what might be causing this, only on resume from deep sleep=
+?
+> >
+> >
+> > On Mon, Apr 17, 2023 at 1:47=E2=80=AFPM Jonathan Denose <jdenose@chromi=
+um.org> wrote:
+> >>
+> >> I think that disabling synaptics_intertouch would resolve the issue me=
+ntioned in the commit, but cause a regression in the functionality that int=
+ertouch is supposed to bring, like three-finger gestures. I'm attaching som=
+e of the logs that I captured when the touchpad was failing on resume. I th=
+ink the main culprit is i2c_smbus_read_byte_data where the driver is unable=
+ to get the SMBus version number. I get the following lines in dmesg:
+> >>
+> >> [ 2869.745860] rmi4_smbus 0-002c: failed to get SMBus version number!
+> >> [ 2869.746060] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed=
+ to read current IRQ mask.
+> >> [ 2869.746260] rmi4_f01 rmi4-00.fn01: Failed to restore normal operati=
+on: -6.
+> >> [ 2869.746262] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
+> >> [ 2869.746264] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> >> [ 2869.746265] rmi4_smbus 0-002c: Failed to resume device: -6
+> >> [ 2869.746268] rmi4_smbus 0-002c: rmi_smb_resume+0x0/0x6b [rmi_smbus] =
+returned 0 after 549 usecs
+> >> [ 2869.746446] rmi4_physical rmi4-00: Failed to read irqs, code=3D-6
+> >>
+> >> Any ideas on what might be causing this, only on resume from deep slee=
+p?
+> >>
+> >>
+> >> On Fri, Apr 14, 2023 at 11:41=E2=80=AFAM Jonathan Denose <jdenose@chro=
+mium.org> wrote:
+> >>>
+> >>> When intertouch is enabled for the L440 a (deep)sleep/resume
+> >>> cycle causes the touchpad driver to hang which causes the
+> >>> touchpad to become unresponsive. Disable intertouch resolves
+> >>> this issue and the touchpad is fine after resume from sleep.
+> >>>
+> >>> Additionally, when the PNP id for the L440 is only removed
+> >>> from the topbuttonpad_pnp_ids list, a message is logged to
+> >>> enable psmouse.synaptics_intertouch, which would cause the
+> >>> sleep/resume issue again. By removing the PNP id from
+> >>> topbutton_pnp_ids and then adding it to the
+> >>> forcepad_pnp_ids array, intertouch is disabled and the
+> >>> message is not logged.
+> >>>
+> >>> Signed-off-by: Jonathan Denose <jdenose@google.com>
+> >>> ---
+> >>>
+> >>> Changes in v2:
+> >>> - remove debug statement
+> >>>
+> >>> drivers/input/mouse/synaptics.c | 2 +-
+> >>> 1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/input/mouse/synaptics.c b/drivers/input/mouse/sy=
+naptics.c
+> >>> index fa021af8506e4..b7218b7652c20 100644
+> >>> --- a/drivers/input/mouse/synaptics.c
+> >>> +++ b/drivers/input/mouse/synaptics.c
+> >>> @@ -150,7 +150,6 @@ static const char * const topbuttonpad_pnp_ids[] =
+=3D {
+> >>>        "LEN2001", /* Edge E431 */
+> >>>        "LEN2002", /* Edge E531 */
+> >>>        "LEN2003",
+> >>> -       "LEN2004", /* L440 */
+> >>>        "LEN2005",
+> >>>        "LEN2006", /* Edge E440/E540 */
+> >>>        "LEN2007",
+> >>> @@ -198,6 +197,7 @@ static const char * const smbus_pnp_ids[] =3D {
+> >>> static const char * const forcepad_pnp_ids[] =3D {
+> >>>        "SYN300D",
+> >>>        "SYN3014",
+> >>> +       "LEN2004", /* L440 */
+>
+> While this does seem to elliminate the message, the touchpad in the L440 =
+is not a forcepad. Adding the L440 PnP ID here implies that it is one of th=
+ese special forcepads which reports "force" data for contacts and that is n=
+ot the case here.
+>
+> >>>        NULL
+> >>> };
+> >>>
+> >>> =E2=80=94
+> >>> 2.39.2
+> >>>
+>
+>
+> Andrew
+>
