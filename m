@@ -2,115 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249616EC424
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB14E6EC429
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjDXDp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S230228AbjDXDsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDXDpZ (ORCPT
+        with ESMTP id S229559AbjDXDsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:45:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609EC123;
-        Sun, 23 Apr 2023 20:45:24 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q4WC04rGHznf7m;
-        Mon, 24 Apr 2023 11:41:32 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 24 Apr 2023 11:45:22 +0800
-Message-ID: <ffed2428-7016-1431-eaea-14ac28541988@huawei.com>
-Date:   Mon, 24 Apr 2023 11:45:22 +0800
+        Sun, 23 Apr 2023 23:48:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444DC1FD8
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682308047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I584JltpIOHH0XWX0tvqPjwC5qSAM+LcHjOrkleU1aQ=;
+        b=EB8FE+48igLAK2jqqb6QboBBVKm9Fs97uHjad2lhApJE9+iZFphatYj7vtylMBWg8cSKYy
+        dWESqpqfWIcvhivvBoqKxp1+M3kt3Yo5VQwPuT2zfhC7Q+PJhP4zqtQFpahV3th81Utvj5
+        rnEMVOOe+V8kW0W5jUCZVQ7aInl0DUc=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-159-bnIg7zh_OsGQVf8ZeldGQA-1; Sun, 23 Apr 2023 23:47:23 -0400
+X-MC-Unique: bnIg7zh_OsGQVf8ZeldGQA-1
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-5464cf41fbdso2768353eaf.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:47:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682308043; x=1684900043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I584JltpIOHH0XWX0tvqPjwC5qSAM+LcHjOrkleU1aQ=;
+        b=LYlaPyflDthJosw2zdSN1WUcYo22ai2JFwYHNwRMVZB5trb1Hgz7hjyWhYUpLZ2YKA
+         Dg0Lqgbo+Hm/fN65xaEvKWs0lQkKzXutNOmrx44OrCkUMVy/hqBWvd1ph2upQgm5fcPK
+         +o574jmGp9e2eljphpcjRVeIhhIkYr7djvgRA/chxobcG9K1zag05T14rkPG1RohXOPA
+         nOH9CvUDVvg6c8EWWedTUAO/WMLWL9f49TyOHQtqIvh5Ut3DDj664fMxSVHlnId1ma/Z
+         2gVFDo8IPswrO+bnnpA64pOZZGwsamE/fSr1t9ebHo4oNirvGwcPJyzbju8fFRtS6BD2
+         fZIA==
+X-Gm-Message-State: AAQBX9ePEBl0hBvWHqonRhGAqpaGOdyvtRZ/YqoWi+6/SMmiH3hQRDeB
+        L8hdOj4xHFnpbAKH0C7c9dVLg+mHNawEBzEAIXMNolzCq84VqteUeKAJuzAzr9JR9THsoISt5YY
+        /CmJnet9BGQ3wIO+ZCsWwbKGMjYhEUMRjkBdFCw0L
+X-Received: by 2002:a05:6808:24f:b0:38d:ea2e:15f with SMTP id m15-20020a056808024f00b0038dea2e015fmr6603501oie.55.1682308043145;
+        Sun, 23 Apr 2023 20:47:23 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ab9SIDhGschCCjuuNyKJylYRhQJOud0D1ec5vKWIcImJUKSc8v87Kjk0mZxymvmmHmwGVwE71m5NCtO8VfDmc=
+X-Received: by 2002:a05:6808:24f:b0:38d:ea2e:15f with SMTP id
+ m15-20020a056808024f00b0038dea2e015fmr6603496oie.55.1682308042954; Sun, 23
+ Apr 2023 20:47:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-From:   Baokun Li <libaokun1@huawei.com>
-Subject: Re: [PATCH v3 3/8] ext4: use __GFP_NOFAIL if allocating
- extents_status cannot fail
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230412124126.2286716-1-libaokun1@huawei.com>
- <20230412124126.2286716-4-libaokun1@huawei.com>
- <20230413103004.a4hjlxgpfqnhcgtg@quack3>
-Content-Language: en-US
-In-Reply-To: <20230413103004.a4hjlxgpfqnhcgtg@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230420151734.860168-1-lulu@redhat.com>
+In-Reply-To: <20230420151734.860168-1-lulu@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 24 Apr 2023 11:47:12 +0800
+Message-ID: <CACGkMEuV8a0sAJPM0aVq4o9R2uRku1Wgdy8o=YBhZM2ay7ssEg@mail.gmail.com>
+Subject: Re: [PATCH v3] vhost_vdpa: fix unmap process in no-batch mode
+To:     Cindy Lu <lulu@redhat.com>
+Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/13 18:30, Jan Kara wrote:
-> On Wed 12-04-23 20:41:21, Baokun Li wrote:
->> If extent status tree update fails, we have inconsistency between what is
->> stored in the extent status tree and what is stored on disk. And that can
->> cause even data corruption issues in some cases.
->>
->> For extents that cannot be dropped we use __GFP_NOFAIL to allocate memory.
->> And with the above logic, the undo operation in __es_remove_extent that
->> may cause inconsistency if the split extent fails is unnecessary, so we
->> remove it as well.
->>
->> Suggested-by: Jan Kara<jack@suse.cz>
->> Signed-off-by: Baokun Li<libaokun1@huawei.com>
-> When I was looking through this patch, I've realized there's a problem with
-> my plan :-|. See below...
+On Thu, Apr 20, 2023 at 11:17=E2=80=AFPM Cindy Lu <lulu@redhat.com> wrote:
 >
->>   static struct extent_status *
->>   ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
->> -		     ext4_fsblk_t pblk)
->> +		     ext4_fsblk_t pblk, int nofail)
->>   {
->>   	struct extent_status *es;
->> -	es = kmem_cache_alloc(ext4_es_cachep, GFP_ATOMIC);
->> +	gfp_t gfp_flags = GFP_ATOMIC;
->> +
->> +	if (nofail)
->> +		gfp_flags |= __GFP_NOFAIL;
->> +
->> +	es = kmem_cache_alloc(ext4_es_cachep, gfp_flags);
->>   	if (es == NULL)
->>   		return NULL;
-> I have remembered that the combination of GFP_ATOMIC and GFP_NOFAIL is
-> discouraged because the kernel has no sane way of refilling reserves for
-> atomic allocations when in atomic context. So this combination can result
-> in lockups.
-
-Indeed. GFP_NOFAIL is only applicable to sleepable allocations,
-
-GFP_ATOMIC will ignore it. I didn't notice that.
-
-> So what I think we'll have to do is that we'll just have to return error
-> from __es_insert_extent() and __es_remove_extent() and in the callers we
-> drop the i_es_lock, allocate needed status entries (one or two depending on
-> the desired operation) with GFP_KERNEL | GFP_NOFAIL, get the lock again and
-> pass the preallocated entries into __es_insert_extent /
-> __es_remove_extent(). It's a bit ugly but we can at least remove those
-> __es_shrink() calls which are not pretty either.
+> While using the vdpa device with vIOMMU enabled
+> in the guest VM, when the vdpa device bind to vfio-pci and run testpmd
+> then system will fail to unmap.
+> The test process is
+> Load guest VM --> attach to virtio driver--> bind to vfio-pci driver
+> So the mapping process is
+> 1)batched mode map to normal MR
+> 2)batched mode unmapped the normal MR
+> 3)unmapped all the memory
+> 4)mapped to iommu MR
 >
-> 								Honza
+> This error happened in step 3). The iotlb was freed in step 2)
+> and the function vhost_vdpa_process_iotlb_msg will return fail
+> Which causes failure.
+>
+> To fix this, we will not remove the AS while the iotlb->nmaps is 0.
+> This will free in the vhost_vdpa_clean
+>
+> Cc: stable@vger.kernel.org
+> Fixes: aaca8373c4b1 ("vhost-vdpa: support ASID based IOTLB API")
+> Signed-off-by: Cindy Lu <lulu@redhat.com>
 
-Yes, there's really no better way, thank you very much for your review!
-I've sent a patch for v4 as you suggested.
-Thanks again!
+Acked-by: Jason Wang <jasowang@redhat.com>
 
--- 
-With Best Regards,
-Baokun Li
-.
+Thanks
+
+> ---
+>  drivers/vhost/vdpa.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 7be9d9d8f01c..74c7d1f978b7 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -851,11 +851,7 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
+>                 if (!v->in_batch)
+>                         ops->set_map(vdpa, asid, iotlb);
+>         }
+> -       /* If we are in the middle of batch processing, delay the free
+> -        * of AS until BATCH_END.
+> -        */
+> -       if (!v->in_batch && !iotlb->nmaps)
+> -               vhost_vdpa_remove_as(v, asid);
+> +
+>  }
+>
+>  static int vhost_vdpa_va_map(struct vhost_vdpa *v,
+> @@ -1112,8 +1108,6 @@ static int vhost_vdpa_process_iotlb_msg(struct vhos=
+t_dev *dev, u32 asid,
+>                 if (v->in_batch && ops->set_map)
+>                         ops->set_map(vdpa, asid, iotlb);
+>                 v->in_batch =3D false;
+> -               if (!iotlb->nmaps)
+> -                       vhost_vdpa_remove_as(v, asid);
+>                 break;
+>         default:
+>                 r =3D -EINVAL;
+> --
+> 2.34.3
+>
+
