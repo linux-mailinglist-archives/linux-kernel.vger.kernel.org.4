@@ -2,47 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63656ECB36
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980D16ECB3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbjDXLVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S229522AbjDXLXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDXLVk (ORCPT
+        with ESMTP id S229581AbjDXLXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:21:40 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF6B26A3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:21:39 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VgtOkqz_1682335295;
-Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgtOkqz_1682335295)
-          by smtp.aliyun-inc.com;
-          Mon, 24 Apr 2023 19:21:36 +0800
-Message-ID: <e0dac925-b8a5-e08e-d8ca-130bd72617fe@linux.alibaba.com>
-Date:   Mon, 24 Apr 2023 19:21:35 +0800
+        Mon, 24 Apr 2023 07:23:15 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C080211F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:23:13 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Cx_eqfZkZkcQUAAA--.50S3;
+        Mon, 24 Apr 2023 19:23:11 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeWeZkZktrE4AA--.40489S3;
+        Mon, 24 Apr 2023 19:23:11 +0800 (CST)
+Message-ID: <71678ebe-db31-bbcd-7b32-8b29b874d635@loongson.cn>
+Date:   Mon, 24 Apr 2023 19:23:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] mm/page_alloc: drop the unnecessary pfn_valid()
- for start pfn
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
- <ZEZQ9EpUY8Mj5TwQ@dhcp22.suse.cz>
- <7525a9f6-b431-4404-2878-898e52905d4a@linux.alibaba.com>
- <ZEZf1tbao9E8JFBr@dhcp22.suse.cz>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <ZEZf1tbao9E8JFBr@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
+ <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
+ <ZEPteS82TbIhMQxe@lothringen>
+ <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
+ <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
+ <ZEY9UvvuTXYx3QEA@lothringen>
+Content-Language: en-US
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <ZEY9UvvuTXYx3QEA@lothringen>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxAeWeZkZktrE4AA--.40489S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Cr13Cw15KF15Wr4fJF1DWrg_yoW8Cr47p3
+        48Aa1qkFWktr95K34ayw1v9Fn8Kr1DKry5uwn5Kry8AFs0vr15Jw1jqrZ0ga4Sqr4rX3WI
+        qF4rXa4a93W5AaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -51,66 +75,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/24/2023 6:54 PM, Michal Hocko wrote:
-> On Mon 24-04-23 18:46:40, Baolin Wang wrote:
+在 2023/4/24 16:26, Frederic Weisbecker 写道:
+> On Sun, Apr 23, 2023 at 09:52:49PM +0800, bibo, mao wrote:
 >>
 >>
->> On 4/24/2023 5:50 PM, Michal Hocko wrote:
->>> On Sun 23-04-23 18:59:10, Baolin Wang wrote:
->>>> We've already used pfn_to_online_page() for start pfn to make sure
->>>
->>> Who is we? I do not see any note explicitly requiring that start_pfn has
->>> to be valid for __pageblock_pfn_to_page.
->>
->> Sorry for confusing, what I mean is the __pageblock_pfn_to_page() function,
->> which has used pfn_to_online_page() for start pfn. So the pfn_valid() in
->> __pageblock_pfn_to_page() for start pfn is unnecessary.
->>
->> I will update the commit log to make it clear.
-> 
-> Your comment suggested that the check _has_ already been done. Which is
-> not the case. pfn_to_online_page is called later in the function so I
-> guess you should rephrase as following:
-> 
-> "
-> __pageblock_pfn_to_page currently performs both pfn_valid check and
-> pfn_to_online_page. The former one is redundant because the latter is a
-> stronger check. Drop pfn_valid.
-> "
-
-Yes, will change the commit log.
-
-> 
-> With that or something going along with that. Feel free to add
-> Acked-by: Michal Hocko <mhocko@suse.com>
-
-Thanks.
-
->>>> it is online and valid, so the pfn_valid() for the start pfn is
->>>> unnecessary, drop it.
+>> 在 2023/4/22 23:04, Peter Zijlstra 写道:
+>>> On Sat, Apr 22, 2023 at 04:21:45PM +0200, Frederic Weisbecker wrote:
+>>>> On Sat, Apr 22, 2023 at 10:17:00AM +0200, Peter Zijlstra wrote:
+>>>>> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+>>>>> index 44ff1ff64260..5a102ff80de0 100644
+>>>>> --- a/arch/loongarch/kernel/genex.S
+>>>>> +++ b/arch/loongarch/kernel/genex.S
+>>>>> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
+>>>>>   	ori	t0, t0, 0x1f
+>>>>>   	xori	t0, t0, 0x1f
+>>>>>   	bne	t0, t1, 1f
+>>>>> +	addi.d	t0, t0, 0x20
+>>>>>   	LONG_S	t0, sp, PT_ERA
+>>>>>   1:	move	a0, sp
+>>>>>   	move	a1, sp
 >>>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> Reviewed-by: David Hildenbrand <david@redhat.com>
->>>> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
->>>> ---
->>>> Changes from v1:
->>>>    - Collect reviewed tags. Thanks David and Ying.
->>>> ---
->>>>    mm/page_alloc.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>> index 9de2a18519a1..6457b64fe562 100644
->>>> --- a/mm/page_alloc.c
->>>> +++ b/mm/page_alloc.c
->>>> @@ -1512,7 +1512,7 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
->>>>    	/* end_pfn is one past the range we are checking */
->>>>    	end_pfn--;
->>>> -	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
->>>> +	if (!pfn_valid(end_pfn))
->>>>    		return NULL;
->>>>    	start_page = pfn_to_online_page(start_pfn);
->>>> -- 
->>>> 2.27.0
->>>
+>>>> But the interrupts are enabled in C from arch_cpu_idle(), which
+>>>> only then calls the ASM __arch_cpu_idle(). So if the interrupt happens
+>>>> somewhere in between the call, the rollback (or fast-forward now)
+>>>> doesn't apply.
+>> I do not know much details about scheduler and timer, if the interrupt
+>> happens between the call, will flag _TIF_NEED_RESCHED be set? If it is set,
+>> the rollback will still apply.
 > 
+> Nop, TIF_NEED_RESCHED is set only if a task is ready to run after the interrupt,
+> not if the interrupt only modified/added a timer.
+Got it, thanks for your explanation, it is actually one issue in the LoongArch
+ASM code __arch_cpu_idle().
+
+Regards
+Bibo, Mao
+
+> 
+>>> @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
+>>>   	ori	t0, t0, 0x1f
+>>>   	xori	t0, t0, 0x1f
+>>>   	bne	t0, t1, 1f
+>>> +	addi.d	t0, t0, 0x20
+>> It is more reasonable with this patch, this will jump out of idle function
+>> directly after interrupt returns. If so, can we remove checking
+>> _TIF_NEED_RESCHED in idle ASM function?
+> 
+> Indeed we can remove the check to TIF_RESCHED!
+> 
+> Thanks!
+
