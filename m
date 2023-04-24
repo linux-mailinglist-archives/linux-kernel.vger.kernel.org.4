@@ -2,180 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7CE6ED82B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EDE6ED836
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbjDXWxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S233130AbjDXWzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjDXWxg (ORCPT
+        with ESMTP id S233106AbjDXWzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:53:36 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2087.outbound.protection.outlook.com [40.107.212.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472B9900D;
-        Mon, 24 Apr 2023 15:53:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YTzt31VDdhaKHRIpPk0MUGsEi6KBpNMrdhZXCUbeR1+eB78b8JpiP0/wzvv4UR3TTLpV4jIkDEvmR2W2USb7s+ddZqpccsIutq40Mg9M7CuC/pwSJv01gH+25AN3kCgOhdKwetl/DkRl2JerpyDOFFhl7PtQq0QOX1uTaSKsEda3bXzdxsauq/Lk6TOBCm7S+5hAZb5h62zWZi/D3ot+6GyhppnNDBv5snB/ekYJ35t25alnX6NNuZiuFfQi6CZNdzBlqN+FANv98w1abyaWbiG97/1vwoNw79k8SQN7/lG/rGKLsJbzSlfpyP95zljkXqNe/5x9Ma71YvS0dV+VTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+gMjttjyVWGIkGTsOTDAB5kkziD272xbAfNnCdW1+rA=;
- b=fV3bYZzz6TtS1qGHRVV3R9gh0+t8Rs4JgGmHMTTMlt+RHaHGpYKpG/204hTS3H8y5oqwcOyzFKGhwZMH4fRHzdMp2N1/2zkvt3WrWDlqqMn9bGljlCoNroD2R5nkuQaFSwomrcPQx8Q/bx7tl84iJut/z3u5oEDFyQM01BumSww1v71ikV1F91Iltm5HSJYgsKiioxoa5yl9cfk8acruEXFqE6k26v/2sZDILOL5/YwPD87tsMLiy1TnyNNwUM8662ZvQXMBtDg46+XVswHi1V0pUF28GAvc8p4qXebCn5THnZU7m5mOVEVuiMeeIYGjbUadRZ5sek+0jxnvfw3Isw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+gMjttjyVWGIkGTsOTDAB5kkziD272xbAfNnCdW1+rA=;
- b=EKu5smBzYrnz4oWmc5xMY1oT5LCStxJukR/4dxPlKhyCTFH78363a4JFsmjqk/rqIAqTk6Ncf69i26xfJdkGkQq/x4C5IWMD/Cl3FExlIk18gE5RGuFGzNKRmwH3lRGMN0E4BW0SqHWLlk/Qmokz4Grptn4kh/BX72P0b6X81zYEGsMumJUoanTPMekXCJoqJNXn9ITGaNFohZp+drpRXAUIXL8bgHPs+Enh5gv0OCtwpBFN1ooALI4K0rQoBkgVe59seaxJNzpwHpSwre4pEHJybSxX2az59+xy0ZwyECOx3BbgHuVQXNBdC93XX09Epo0pCEqtcIIt7bbUJwKpDw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MN0PR12MB6269.namprd12.prod.outlook.com (2603:10b6:208:3c3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Mon, 24 Apr
- 2023 22:53:28 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%5]) with mapi id 15.20.6319.033; Mon, 24 Apr 2023
- 22:53:28 +0000
-Date:   Mon, 24 Apr 2023 19:53:26 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <ZEcIZspUwWUzH15L@nvidia.com>
-References: <ZEZPXHN4OXIYhP+V@infradead.org>
- <90a54439-5d30-4711-8a86-eba816782a66@lucifer.local>
- <ZEZ117OMCi0dFXqY@nvidia.com>
- <c8fff8b3-ead6-4f52-bf17-f2ef2e752b57@lucifer.local>
- <ZEaGjad50lqRNTWD@nvidia.com>
- <cd488979-d257-42b9-937f-470cc3c57f5e@lucifer.local>
- <ZEa+L5ivNDhCmgj4@nvidia.com>
- <cfb5afaa-8636-4c7d-a1a2-2e0a85f9f3d3@lucifer.local>
- <ZEbQeImOiaXrydBE@nvidia.com>
- <f00058b8-0397-465f-9db5-ddd30a5efe8e@lucifer.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f00058b8-0397-465f-9db5-ddd30a5efe8e@lucifer.local>
-X-ClientProxiedBy: BLAPR03CA0150.namprd03.prod.outlook.com
- (2603:10b6:208:32e::35) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 24 Apr 2023 18:55:04 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB1A7AA3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:55:03 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54fb9384c2dso59946627b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682376902; x=1684968902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=urRO9IkUTIq77dWBTXZerCEWau63FaL24inu94rfVRU=;
+        b=Fj1zGw/wYbq+07TYyjORi45sEzGM7qvwbMznjo8nS4KsNBNm4YzAM1V+WPLq9gsxuI
+         kh0qqol2A8VD75bHUtunyouL5wqCJvHHLwdZ2kIqA9ySn3bhEWrKjlYZtsHegztjKUek
+         La5Yx4yKHV6f5OaZKYUZYPBhjeDEdOVk/Gs+Rw/cLwqKZlSO8OMPqhHjnwHSFZ35IxhL
+         x2DB+Z6QIgVqv2TvjEjVPJdV6A6Ddflyu/S5QJIuXqvqKaim8U35+mA9wGz96CbIQvgW
+         ihtl8N66kc1MVo+ymSNznW98yAKPwYpwDXFDxdxqpYnHXHepsGxigg4Io8lpVJAtAyAA
+         ICVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682376902; x=1684968902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=urRO9IkUTIq77dWBTXZerCEWau63FaL24inu94rfVRU=;
+        b=kckc5BCcp2cSusQTw6IcWpUZvqdz+1DzB5yRVamiHZe9NLesRdHfxchU79FEV0xOWk
+         cHbDaJF2icWC82QCbCwkAdusFMUt/7xK9Oa5KHgZpv+Uzl2472BuOVIrCaJOzFSgwOwb
+         rsb1LfkQ8NLMFupJNs8nxhKNI7gzQ2GKJEm7k044wussxS2Ru6ITeypqNtgMLBpq/YiA
+         Jn0Pvbn+5aOsOOApFnEFTBfFrcyMnZwZzdICWO06jQ28xq7NdeFrWPS97NofnSVNnCrv
+         8O5h2Pe3N+C7/zuMFwp8aEB7vdDzM36xnDsLJdd8Yd20GpKGJMdDsB/g8896veAm89gd
+         cVUA==
+X-Gm-Message-State: AAQBX9fPWQfQaat40qVgnKTQtNZTyUGjOl5qqLM/3YgzPqUlBe2EHRjf
+        NM5MSi4Ef9k0iuhI6TInUx8qRW4MQj64eUWNVXCYVw==
+X-Google-Smtp-Source: AKy350a7hTDcEHQz7tXIlrO4+/3AZkbk17Ezhn1rQv8pT/D+TxdwqMjvZ14uStOuiJ4HRFQt0n/D+sMyLS5x0fXlnIs=
+X-Received: by 2002:a81:4e10:0:b0:54c:16e:6581 with SMTP id
+ c16-20020a814e10000000b0054c016e6581mr9732607ywb.37.1682376902478; Mon, 24
+ Apr 2023 15:55:02 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN0PR12MB6269:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6c033db-f2ce-473b-96f1-08db4516b7aa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2CX1YcVODM7u8wia4NmuuanB44MCuOfBER4zJmFV5sBCQ9yW7FuoZO0m/8T3mxdK4AVAOUx7dpcI1jw5jIjdtUK1EXU27obXht8zG+ZKy1/8sb+zDsXrw3FM+f6OMBX/AtVf74UzCHdImIADG0jPgKBYEmFygctinDperNT+ms2R5RJTbQRW5G3SKvqSOQjlaI1ztE+sOn1T81WzHGTStmS58+me2cZxUBZUsDIHw3tgsm8ZkPiFnnoCcv1q7ydwGHNb0NSSPFq9xcWAO4xeCaAreJ+Z3tGLdfG1YGLu0xweo/ZIWkg9dUPSo/s/0+7zVTKkroOA59UaWnNiRFUENffdlaJlyZcrSvRIssL+6kc0HUL0e7Jhmt55E3vJSlYHbNuDECmMiBM1m3CijLEZaY8ZTYk8qUjav2dvkAEX9Uj63dtYKLAXOQCAeCNxVtTnUEL+hsc6KqOUv/lDDjIgrM52H2K+yHKKIrpI/STNQJP1FwW6QPhwl3IYyXqegnYYsJ9/Ccq5FWCBRssGl4j8RbH9MWUPjc2j+nvl476mjxb6I2srfznBUKbpeKatM/cQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(39860400002)(376002)(366004)(451199021)(186003)(6506007)(26005)(6512007)(6486002)(4744005)(66556008)(5660300002)(66946007)(2616005)(38100700002)(6916009)(4326008)(41300700001)(7416002)(8676002)(8936002)(66476007)(7406005)(2906002)(54906003)(478600001)(316002)(86362001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EcRyB6RaRLMENvnfrGriy0+hRLoo+38zLtuHUjuX9gdIXbMiHpeLnF8xhEAU?=
- =?us-ascii?Q?yF9v/r+Y1Dr5DAMfzYntmB+xLt3GBUr1di8TS053Ctly12dQ+ObI+auT4m+n?=
- =?us-ascii?Q?05ewclsn+00IS7Whydil4sIS6nh/RejQ3TYQxwAGAQ9c69SBV4na6kAVioVw?=
- =?us-ascii?Q?PFutE33tjyDnoAyvekTiKkd6YCcFq3VubozoOb6+lAedptZ/AjBQIwWY9WkZ?=
- =?us-ascii?Q?sIkHXSsxkAM2n4sG8QT6vrbjP5i7xq0Qy72wzdlhtoFDuxwxJeVKV2oCQfwI?=
- =?us-ascii?Q?s3hI6P420ITze8DIG/OLdEeXsTDKfArY050HhP5Ox8yfwb3LSeoUkuzFtjmu?=
- =?us-ascii?Q?Trjy829l9bz72uVqlulMycg0xdlw1kaQjall/sX0oYMavzRrSFBpKnorPTTJ?=
- =?us-ascii?Q?dUgKinueEbTgZhyjcRYqVZ6o4jd7kH8ksltIPKGRWlixLE3U8ICvSwcSI87F?=
- =?us-ascii?Q?Lg3odLHq499TaFg8QTSKmxAq/l65XHoOHyYirZCw8W4wazlbDEWrjmAyuc5d?=
- =?us-ascii?Q?tyxbgspa4lz5Nej8S0zUg83zOJ/bmNYHayJnCwY1PDl1cmi37D5sTap0T4Ia?=
- =?us-ascii?Q?EsbrtdCMSdQvAMAom/8j+yA8+c5onbrgRBvYf2Ty/fMTAVJ+Wpv8ADadbrEK?=
- =?us-ascii?Q?SLDfK0pBO8uH3B2uachFWeYFjODq1m7/1LUt4wk8Ozuy4i/0g2Jt7wDflPtQ?=
- =?us-ascii?Q?F4YCka2q+rFz9Uk+dMXiap1//3M3xPOZAIKltWch07BXg5ojm3+I7xbiZ21G?=
- =?us-ascii?Q?N1CfIoKqnPClh2YH3Ew1rcJontdpoEBfjC+3ztMlc7B1sUxvcWkm2AMeyC3R?=
- =?us-ascii?Q?xRnLKqAxmeNb2hC3ULlRzgub11utC7H7FF3yPDM3y6MibZLOh5rwdyJq6Owl?=
- =?us-ascii?Q?EO3nmmWSwSCEmFvpm57apLrByOfUPnFMNGFCKeHvpqtMNA3rsQxmFBATH+jA?=
- =?us-ascii?Q?a4h+N3C2WWQWvPW/upVGNlgrl5U1bS5f8yNjLCANyuY8T8gzmZ/JjKJlya9j?=
- =?us-ascii?Q?60aIJCKGj9WrGkMn5lM80DdkJe6b3XF4P3r3Vt3tYvzMjUDe3QdDQf7koaI/?=
- =?us-ascii?Q?dctAslhOr4p6/BiBvkci98aZxanskgbE2bED9GBvNlX83fLhmcCTUdSaCBi5?=
- =?us-ascii?Q?zNXpuki89tzzWtmvHj2yrMGXLIG7QBrv9aJbtxNzNwtq/pAM8gKj72l0Z0RS?=
- =?us-ascii?Q?4JdSeaWF9Q5XmvBmpVLoYx4Y9UGG63F605zpaNNrXLRQNe37JS/quyf1M+ja?=
- =?us-ascii?Q?GaDPUVlBov3Fw8I9iJyNCjzuK+dPuyLTUlg5xCCxIp0Jr43MG5Mq9dpEbQ88?=
- =?us-ascii?Q?Zy4P6KzHRcy+63UqKoHllf82oO1BGUu53B2Z50r5OrOdVn4dQRz1dV9OOQcg?=
- =?us-ascii?Q?qm4vAAz63fivi5MJ0w3pthyJv1Zmi7WhRoqAnslrNI/MAVJN/zstdUp1eg6I?=
- =?us-ascii?Q?mh1Xf2BkVilHVRk7+YIvONAvj4b24DJ481TSC0PqxRBPdYUDHRai0WqIrGol?=
- =?us-ascii?Q?PCcAWru8dMg/Sf5IP2nk66OmKwqr8FawwZTN5BZF+SoiQ5EB0t9UyMCbujDl?=
- =?us-ascii?Q?7ynNcQBgmYsgXdpjLijAa4RO9EkOMAndB+wF9l6Z?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6c033db-f2ce-473b-96f1-08db4516b7aa
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 22:53:27.9604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e2qaO/vQ9CmG46IZKDQOC76JaRXEzK3LP4Af7oS2U693mi56h3E+x6qP9midZSmC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6269
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
+ <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
+ <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com> <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
+In-Reply-To: <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 25 Apr 2023 01:54:51 +0300
+Message-ID: <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
+ RM instead of IDs
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 08:18:33PM +0100, Lorenzo Stoakes wrote:
+On Tue, 25 Apr 2023 at 01:03, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
+>
+> On 2023-04-21 16:25:15, Abhinav Kumar wrote:
+> >
+> >
+> > On 4/21/2023 1:53 PM, Marijn Suijten wrote:
+> > > The Resource Manager already iterates over all available blocks from the
+> > > catalog, only to pass their ID to a dpu_hw_xxx_init() function which
+> > > uses an _xxx_offset() helper to search for and find the exact same
+> > > catalog pointer again to initialize the block with, fallible error
+> > > handling and all.
+> > >
+> > > Instead, pass const pointers to the catalog entries directly to these
+> > > _init functions and drop the for loops entirely, saving on both
+> > > readability complexity and unnecessary cycles at boot.
+> > >
+> > > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >
+> > Overall, a nice cleanup!
+> >
+> > One comment below.
+> >
+> > > ---
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
+> > >   23 files changed, 139 insertions(+), 375 deletions(-)
+> > >
+> >
+> > <snipped>
+> >
+> > > -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
+> > > -           void __iomem *addr,
+> > > -           const struct dpu_mdss_cfg *m)
+> > > +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+> > > +           void __iomem *addr)
+> > >   {
+> > >     struct dpu_hw_intf *c;
+> > > -   const struct dpu_intf_cfg *cfg;
+> > > +
+> > > +   if (cfg->type == INTF_NONE) {
+> > > +           pr_err("Cannot create interface hw object for INTF_NONE type\n");
+> > > +           return ERR_PTR(-EINVAL);
+> > > +   }
+> >
+> > The caller of dpu_hw_intf_init which is the RM already has protection
+> > for INTF_NONE, see below
+> >
+> >          for (i = 0; i < cat->intf_count; i++) {
+> >                  struct dpu_hw_intf *hw;
+> >                  const struct dpu_intf_cfg *intf = &cat->intf[i];
+> >
+> >                  if (intf->type == INTF_NONE) {
+> >                          DPU_DEBUG("skip intf %d with type none\n", i);
+> >                          continue;
+> >                  }
+> >                  if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
+> >                          DPU_ERROR("skip intf %d with invalid id\n",
+> > intf->id);
+> >                          continue;
+> >                  }
+> >                  hw = dpu_hw_intf_init(intf->id, mmio, cat);
+> >
+> > So this part can be dropped.
+>
+> I mainly intended to keep original validation where _intf_offset would
+> skip INTF_NONE, and error out.  RM init is hence expected to filter out
+> INTF_NONE instead of running into that `-EINVAL`, which I maintained
+> here.
+>
+> If you think there won't be another caller of dpu_hw_intf_init, and that
+> such validation is hence excessive, I can remove it in a followup v3.
 
-> I think this patch suggestion has scope crept from 'incremental
-> improvement' to 'major rework of GUP' at this point. 
+I'd prefer to see the checks at dpu_rm to be dropped.
+dpu_hw_intf_init() (and other dpu_hw_foo_init() functions) should be
+self-contained. If they can not init HW block (e.g. because the index
+is out of the boundaries), they should return an error.
 
-I don't really expect to you clean up all the callers - but we are
-trying to understand what is actually wrong here to come up with the
-right FOLL_ names and overall strategy. Leave behind a comment, for
-instance.
+>
+> - Marijn
+>
+> > >     c = kzalloc(sizeof(*c), GFP_KERNEL);
+> > >     if (!c)
+> > >             return ERR_PTR(-ENOMEM);
+> > >
+> > > -   cfg = _intf_offset(idx, m, addr, &c->hw);
+> > > -   if (IS_ERR_OR_NULL(cfg)) {
+> > > -           kfree(c);
+> > > -           pr_err("failed to create dpu_hw_intf %d\n", idx);
+> > > -           return ERR_PTR(-EINVAL);
+> > > -   }
+> > > +   c->hw.blk_addr = addr + cfg->base;
+> > > +   c->hw.log_mask = DPU_DBG_MASK_INTF;
+> > >
+> >
+> > <snipped>
 
-I don't think anyone has really thought about the ptrace users too
-much till now, we were all thinking about DMA use cases, it shows we
-still have some areas that need attention.
 
-> Also surely you'd want to obtain the PTL of all mappings to a file?
 
-No, just one is fine. If you do the memcpy under a single PTL that
-points at a writable copy of the page then everything is trivially
-fine because it is very similar to what the CPU itself would do, which
-is fine by definition..
-
-Jason
+-- 
+With best wishes
+Dmitry
