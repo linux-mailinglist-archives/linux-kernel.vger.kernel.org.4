@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE976ECC1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B323D6ECC25
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbjDXMfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S231736AbjDXMix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjDXMfm (ORCPT
+        with ESMTP id S229696AbjDXMiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:35:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348611A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 05:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682339741; x=1713875741;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LQb6t4tK7Ded4s/ZP9FLDT1+Gsn+Vtw0F4s14bxTkfE=;
-  b=Wy9odfp4MBL1yz3wt83ReOpjkr+duTJojVUl6nPKtDs5LiUoUBSWx1Sb
-   adUG5VlZJDdxyk3KMD5jx4u7YXf43QWKVoAUQyvAoRbIILucSnUC9WQGo
-   UKb0XxwzYfu8YPjPPQ05MXrPESUN7zEKk9rA1j9K/9v0CI/uovdrCiH8a
-   2RtHezsonfLGbkPPm25Qb9adj7vIHHaq9T05yjNVFFp5icH2n7J9S7Igy
-   crdXxu0Jbup870FmPmuE6dMrBLClsr6vIgWBv/SW8FopzELtId9w2dOSa
-   7eaAsljSoQpyJvJgrY9jnZX2qFU9ngyySUWEIWupXiJ60EYRAtcFLueR7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="348348908"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="348348908"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:35:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="693063701"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="693063701"
-Received: from martapio-mobl1.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.7.53])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:35:35 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        Mon, 24 Apr 2023 08:38:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7D42D48;
+        Mon, 24 Apr 2023 05:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5OALIrDldLQfwHP9p2ndyFBK2lC4EsP1Af7zzRq70HI=; b=oxHS7/offNNywVCnbgn859E+Z8
+        SYCfU4xYyhNEUEds393rO5wINqj82AoYAyZTELk7z80VjU8UPitXrHw03lV+WplVb4yALgivN41pN
+        3aAEc5YC9KzREtP9upgcMYQc0N1KKAPLZ+z7FvfV1ViOfdWkXk1T7ngxz+2iNiYxm3PlS21Uq1hoM
+        TtTu0HzL22OV0k6O9ljV5DFyhahABI4iimBMUVndpCMvOixeI4d5PXXRr7csMwBevz9x4TWq6CjF7
+        5Alb3RSlH+Df1e2w7PqY2OImD79V0gvwKqS0t9scRcDw3V5AaSCNlNNQmQoVgNsajPeCH4lVvFWrB
+        HpqlZJjQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pqvSu-00GKZp-1o;
+        Mon, 24 Apr 2023 12:38:44 +0000
+Date:   Mon, 24 Apr 2023 05:38:44 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: [RFC PATCH] x86/mm: Fix PAT bit missing from page protection modify mask
-Date:   Mon, 24 Apr 2023 14:35:24 +0200
-Message-Id: <20230424123524.17008-1-janusz.krzysztofik@linux.intel.com>
-X-Mailer: git-send-email 2.40.0
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Chris Mason <clm@fb.com>, John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <ZEZ4VCyfRNCZOO8/@infradead.org>
+References: <c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com>
+ <ZEZPXHN4OXIYhP+V@infradead.org>
+ <90a54439-5d30-4711-8a86-eba816782a66@lucifer.local>
+ <ZEZ117OMCi0dFXqY@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEZ117OMCi0dFXqY@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Visible glitches have been observed when running graphics applications on
-Linux under Xen hypervisor.  Those observations have been confirmed with
-failures from kms_pwrite_crc Intel GPU test that verifies data coherency
-of DRM frame buffer objects using hardware CRC checksums calculated by
-display controllers, exposed to userspace via debugfs.  Affected
-processing paths have then been identified with new test variants that
-mmap the objects using different methods and caching modes.
+On Mon, Apr 24, 2023 at 09:28:07AM -0300, Jason Gunthorpe wrote:
+> On Mon, Apr 24, 2023 at 11:17:55AM +0100, Lorenzo Stoakes wrote:
+> > On Mon, Apr 24, 2023 at 02:43:56AM -0700, Christoph Hellwig wrote:
+> > > I'm pretty sure DIRECT I/O reads that write into file backed mappings
+> > > are out there in the wild.
+> 
+> I wonder if that is really the case? I know people tried this with
+> RDMA and it didn't get very far before testing uncovered data
+> corruption and kernel crashes.. Maybe O_DIRECT has a much smaller race
+> window so people can get away with it?
 
-When running as a Xen PV guest, Linux uses Xen provided PAT configuration
-which is different from its native one.  In particular, Xen specific PTE
-encoding of write-combining caching, likely used by graphics applications,
-differs from the Linux default one found among statically defined minimal
-set of supported modes.  Since Xen defines PTE encoding of the WC mode as
-_PAGE_PAT, it no longer belongs to the minimal set, depends on correct
-handling of _PAGE_PAT bit, and can be mismatched with write-back caching.
+It absolutely causes all kinds of issues even with O_DIRECT.  I'd be
+all for trying to disallow it as it simplies a lot of things, but I fear
+it's not going to stick.
 
-When a user calls mmap() for a DRM buffer object, DRM device specific
-.mmap file operation, called from mmap_region(), takes care of setting PTE
-encoding bits in a vm_page_prot field of an associated virtual memory area
-structure.  Unfortunately, _PAGE_PAT bit is not preserved when the vma's
-.vm_flags are then applied to .vm_page_prot via vm_set_page_prot().  Bits
-to be preserved are determined with _PAGE_CHG_MASK symbol that doesn't
-cover _PAGE_PAT.  As a consequence, WB caching is requested instead of WC
-when running under Xen (also, WP is silently changed to WT, and UC
-downgraded to UC_MINUS).  When running on bare metal, WC is not affected,
-but WP and WT extra modes are unintentionally replaced with WC and UC,
-respectively.
+> So, my suggestion was to mark the places where we want to allow this,
+> eg O_DIRECT, and block everwhere else. Lorenzo, I would significantly
+> par back the list you have.
 
-WP and WT modes, encoded with _PAGE_PAT bit set, were introduced by commit
-281d4078bec3 ("x86: Make page cache mode a real type").  Care was taken
-to extend _PAGE_CACHE_MASK symbol with that additional bit, but that
-symbol has never been used for identification of bits preserved when
-applying page protection flags.  Support for all cache modes under Xen,
-including the problematic WC mode, was then introduced by commit
-47591df50512 ("xen: Support Xen pv-domains using PAT").
+I think an opt-in is a good idea no matter how many places end up
+needing it.  I'd prefer a less dramatic name and a better explanation
+on why it should only be set when needed.
 
-Extend bitmask used by pgprot_modify() for selecting bits to be preserved
-with _PAGE_PAT bit.  However, since that bit can be reused as _PAGE_PSE,
-and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is likely
-intentionally defined with that bit not set, keep that symbol unchanged.
+> I also suggest we force block it at some kernel lockdown level..
+> 
+> Alternatively, perhaps we abuse FOLL_LONGTERM and prevent it from
+> working with filebacked pages since, I think, the ease of triggering a
+> bug goes up the longer the pages are pinned.
 
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7648
-Fixes: 281d4078bec3 ("x86: Make page cache mode a real type")
-Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Cc: stable@vger.kernel.org # v3.19+
----
- arch/x86/include/asm/pgtable.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 7425f32e52932..f797f8da2e5b6 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -654,8 +654,10 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- #define pgprot_modify pgprot_modify
- static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
- {
--	pgprotval_t preservebits = pgprot_val(oldprot) & _PAGE_CHG_MASK;
--	pgprotval_t addbits = pgprot_val(newprot) & ~_PAGE_CHG_MASK;
-+	unsigned long mask = _PAGE_CHG_MASK | _PAGE_CACHE_MASK;
-+
-+	pgprotval_t preservebits = pgprot_val(oldprot) & mask;
-+	pgprotval_t addbits = pgprot_val(newprot) & ~mask;
- 	return __pgprot(preservebits | addbits);
- }
- 
--- 
-2.40.0
-
+FOLL_LONGTERM on file backed pages is a nightmare.  If you think you
+can get away with prohibiting it for RDMA, and KVM doesn't need it
+I'd be all for not allowing that at all.
