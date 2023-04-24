@@ -2,182 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6E36ED37C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49AA6ED37F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjDXR1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S231804AbjDXR2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDXR1q (ORCPT
+        with ESMTP id S232017AbjDXR17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:27:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F975FF7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:27:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6B5361B9F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 17:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15729C433D2;
-        Mon, 24 Apr 2023 17:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682357264;
-        bh=avoYoHlEYfTsKD3q+kaH9OpeUWtHILPV34+r0qjb89s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C9k2/ae3rFnTQLjt5uB1bGVDNf0AB5KsbQ/cp9HBLv6nV6yHa07NwaKYx0kcC0aiu
-         vqlzKSyLMaSQ90z76uNqp4bHJlJP7V3APZTTMs0q7Sg2pMuCxHNF6aJKCZf3DYSnYx
-         9ZvnbVGxtg1esYXyDWUHdBxUB2mi8poreI8F15hlZ572mPd522cGESdt9uhEESlwBk
-         nzQnJGPIJoyJ65J7YeKEBNdcJOEsFTSHi4F3vpHE7svPLnAJufDeZCs/hBIoTRNc5X
-         bHml622Cgjat7lLPQMu9ij/kYqQiRPPMX7jz/hwDqn4rXhMRuPsx6HTOLktc9gOUV7
-         Oi+wj00LewMjA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1250F403C5; Mon, 24 Apr 2023 14:27:41 -0300 (-03)
-Date:   Mon, 24 Apr 2023 14:27:41 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH 1/1] perf evsel: Introduce evsel__name_is() method to
- check if the evsel name is equal to a given string
-Message-ID: <ZEa8DWkBw6GStTzx@kernel.org>
-References: <ZEGLM8VehJbS0gP2@kernel.org>
- <ZEGOJuJd4uLS2392@kernel.org>
- <ZEGSU5DrAODcLmc3@kernel.org>
- <7de5c749-5960-2fa1-d48a-be360b08d5e1@linux.intel.com>
- <ZEa7h8ZCAS+dHTBL@kernel.org>
+        Mon, 24 Apr 2023 13:27:59 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B1E65B3;
+        Mon, 24 Apr 2023 10:27:55 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54f8af6dfa9so68363087b3.2;
+        Mon, 24 Apr 2023 10:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682357275; x=1684949275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tdA6Byrf0lwX48iKKvuKILJgKE3LwYes2nbzbUPvwjQ=;
+        b=agMcbw5SWjFyUNOdq3N/KwNnq+uqHSf5o3sbylnzE5ky2sFKTCZSs+WFh2HzT+bNaH
+         ZoFfdDq+rKPPYtIQI+umDFZzxOnH+MWAK1lxkD1bSXCaQbTIaRDBjEDFe91H7Clyp9DB
+         rdQyoWU5D8EukOUTyc00eHJCNq3df/0yVGLfZD1Gjhf4CzODaHHgF9Ic4sQN/E8NJiQY
+         XfSXEHTxmWoRAjOwog+uCm6QiushxVNXzd7QuHB/cElgrSFkLpcU18dLGTITWRl80Hhn
+         eP401N7XdDccXWEp0NzzrN3An82kdM5T1cG7Ibi4G7xMoTFQTqz5mYP82XBm37wkoLck
+         yY7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682357275; x=1684949275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tdA6Byrf0lwX48iKKvuKILJgKE3LwYes2nbzbUPvwjQ=;
+        b=Loz+N9YrllD6zcDLVXJjL5FACmtbxx/EZsFfGQDTVyYBQGBlZwAL4ICF033BJPMYxS
+         hXydM157f96jaOFN3xpNe85thcNGhaIfwRu96m07Io4CEqPNgL4hd3WC838h9caALnu5
+         JCCgEMm9znTo559Ub0GfYagcS+S2UGDeqhb/pYovfuJ78k56IwZlmKlkQdg6HRyHQUln
+         9ipfF33SXNnggAxwyeO6aUHa3yJSv9rE1ElqEO5fwf/QJ2+MT591+sg31UrSIlSomNcm
+         6Xbolt3Fl5VYdxST0Jg0vsiB8VhrgjYx4B0g0SQeZ5orHT508SmNG4GzBsPdjlWsyu7G
+         A4DQ==
+X-Gm-Message-State: AAQBX9dR/WwHiOtOvKnOePZlBRJnU8ZXO+/4hiOWXQuJFQOufyGr67F3
+        aTCllvf+IJT4DZ2LXD+0cXsqJwprrvIxI/X8JPg=
+X-Google-Smtp-Source: AKy350asbRHC8PDsiNKQs25dnFEaXtgJXtPjtNM7+i463aoBFsKoTYo1Y2MFtqEoiWXRuZufmD63t5ux/BXRK0Udszg=
+X-Received: by 2002:a0d:d5c2:0:b0:54f:b93f:759d with SMTP id
+ x185-20020a0dd5c2000000b0054fb93f759dmr8545103ywd.43.1682357273559; Mon, 24
+ Apr 2023 10:27:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEa7h8ZCAS+dHTBL@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221016182349.49308-1-masahiroy@kernel.org> <20230424162110.11082-1-lrh2000@pku.edu.cn>
+In-Reply-To: <20230424162110.11082-1-lrh2000@pku.edu.cn>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 24 Apr 2023 19:27:42 +0200
+Message-ID: <CANiq72=Kb6ckhU8Ss9=Dg4Zn11Us+DLbKnNWAVaTb-nv7Y=ARA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: Remove ICC-related dead code
+To:     Ruihan Li <lrh2000@pku.edu.cn>
+Cc:     torvalds@linux-foundation.org, masahiroy@kernel.org, arnd@arndb.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, devel@acpica.org,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, mingo@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, ojeda@kernel.org, rafael@kernel.org,
+        robert.moore@intel.com, terrelln@fb.com, tglx@linutronix.de,
+        trix@redhat.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 24, 2023 at 02:25:27PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Apr 20, 2023 at 05:16:18PM -0400, Liang, Kan escreveu:
-> > 
-> > 
-> > On 2023-04-20 3:28 p.m., Arnaldo Carvalho de Melo wrote:
-> > > Em Thu, Apr 20, 2023 at 04:10:30PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > >> Em Thu, Apr 20, 2023 at 03:57:55PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > >>> This makes the logic a bit clear by avoiding the !strcmp() pattern and
-> > >>> also a way to intercept the pointer if we need to do extra validation on
-> > >>> it or to do lazy setting of evsel->name via evsel__name(evsel).
-> > >>
-> > >> + this, looking if there are others...
-> > > 
-> > > Somehow the first message didn't go thru, so below is the combined
-> > > patch, this is an effort to avoid accessing evsel->name directly as the
-> > > preferred way to get an evsel name is evsel__name(), so looking for
-> > > direct access and providing accessors that avoid that.
-> > 
-> > One more
-> > 
-> > diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> > index 2260e27adf44..3a960a3f6962 100644
-> > --- a/tools/perf/util/evlist.c
-> > +++ b/tools/perf/util/evlist.c
-> > @@ -467,7 +467,7 @@ static int evsel__strcmp(struct evsel *pos, char
-> > *evsel_name)
-> >  		return 0;
-> >  	if (evsel__is_dummy_event(pos))
-> >  		return 1;
-> > -	return strcmp(pos->name, evsel_name);
-> > +	return !evsel__name_is(pos, evsel_name);
-> >  }
-> > 
-> >  static int evlist__is_enabled(struct evlist *evlist)
-> 
-> Added
->  
-> > > 
-> > > From e60455d6a4e35ba0c376966443294586a1adc3ec Mon Sep 17 00:00:00 2001
-> > > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > > Date: Thu, 20 Apr 2023 15:54:11 -0300
-> > > Subject: [PATCH 1/1] perf evsel: Introduce evsel__name_is() method to check if
-> > >  the evsel name is equal to a given string
-> > > 
-> > > This makes the logic a bit clear by avoiding the !strcmp() pattern and
-> > > also a way to intercept the pointer if we need to do extra validation on
-> > > it or to do lazy setting of evsel->name via evsel__name(evsel).
-> > > 
-> > > Cc: Adrian Hunter <adrian.hunter@intel.com>
-> > > Cc: Ian Rogers <irogers@google.com>
-> > > Cc: Jiri Olsa <jolsa@kernel.org>
-> > > Cc: "Liang, Kan" <kan.liang@linux.intel.com>
-> > > Cc: Namhyung Kim <namhyung@kernel.org>
-> > > Link: https://lore.kernel.org/lkml/ZEGLM8VehJbS0gP2@kernel.org
-> > > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > With the above one,
-> > 
-> > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> 
-> Added these extra ones and actually made evsel__name_is() use
-> evsel__name().
-> 
-> Does your reviewed-by stands after these extra changes?
+On Mon, Apr 24, 2023 at 6:22=E2=80=AFPM Ruihan Li <lrh2000@pku.edu.cn> wrot=
+e:
+>
+> Intel compiler support has already been completely removed in commit
+> 95207db8166a ("Remove Intel compiler support"). However, it appears that
+> there is still some ICC-related code in scripts/cc-version.sh. There is
+> no harm in leaving the code as it is, but removing the dead code makes
+> the codebase a bit cleaner.
 
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 
-oops, fix that pos->name leftover:
-
-
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 2260e27adf44c579..a0504316b06fbcba 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -467,7 +467,7 @@ static int evsel__strcmp(struct evsel *pos, char *evsel_name)
- 		return 0;
- 	if (evsel__is_dummy_event(pos))
- 		return 1;
--	return strcmp(pos->name, evsel_name);
-+	return !evsel__name_is(pos, evsel_name);
- }
- 
- static int evlist__is_enabled(struct evlist *evlist)
-@@ -1706,7 +1706,7 @@ struct evsel *evlist__find_evsel_by_str(struct evlist *evlist, const char *str)
- 	evlist__for_each_entry(evlist, evsel) {
- 		if (!evsel->name)
- 			continue;
--		if (strcmp(str, evsel->name) == 0)
-+		if (evsel__name_is(evsel, str))
- 			return evsel;
- 	}
- 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 81b854650160c2b0..356c07f03be6bfce 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -823,7 +823,7 @@ const char *evsel__name(struct evsel *evsel)
- 
- bool evsel__name_is(struct evsel *evsel, const char *name)
- {
--	return !strcmp(evsel->name, name);
-+	return !strcmp(evsel__name(evsel), name);
- }
- 
- const char *evsel__group_pmu_name(const struct evsel *evsel)
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 31b1cd0935e277ba..650cd8df40412a38 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -2893,7 +2893,7 @@ static struct evsel *find_evsel(struct evlist *evlist, char *event_name)
- 	full_name = !!strchr(event_name, ':');
- 	evlist__for_each_entry(evlist, pos) {
- 		/* case 2 */
--		if (full_name && !strcmp(pos->name, event_name))
-+		if (full_name && evsel__name_is(pos, event_name))
- 			return pos;
- 		/* case 3 */
- 		if (!full_name && strstr(pos->name, event_name)) {
+Cheers,
+Miguel
