@@ -2,151 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FAB6ED3B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AB36ED3BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbjDXRhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S232032AbjDXRjS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Apr 2023 13:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbjDXRhU (ORCPT
+        with ESMTP id S231579AbjDXRjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:37:20 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2082.outbound.protection.outlook.com [40.107.92.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CF1974D;
-        Mon, 24 Apr 2023 10:37:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nldD+G+ppU2R/zsYDBCHsWO1igr/13TBUKwID0TDdrtp9mDOCPAZQtw194aBfdQ1TNZBsvKdOnAjAwp1jLNCFcegUhOCImFLWrVwN4nxwgriv48ykSaTNGA+eSQNYkVh1UbtsDjlurmkQY/d85QXp1oKSEO8p22ZP3L14UqeBLDwhHPFqH8NAFnsHkOc0kwcHmipFfoOePiyLeO/PfpuSXEJL8ci9Vr5sgit5TLF9ch0uuUegheixnigKYU2GslcAzrs/wBhdZtaUfRr+3TwOaC2LKtB9Q4974HPEHs+Oab74MxiNhmyj9xkROx5OsoO8FXivTC8sG5TJMcYcoAC/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TuIzqzxwk4rNBUXcOjx1dWMmwO4377C1NigcUXvF3/s=;
- b=n/+RbkKFtY5/wjXcs0nQ14XvC5R8xZFzgHwC/lDHwxCUa4GcHxu77O0UfM8BYNK0R2SOeI3lwMHxvcBWwQBWfkyvoTte70B8RJWwRu4DH4GkgLZH96OfGWFFDAgGlhg2vnR9MPwLvwuI8j4gXTdsnQ0gtjd53BPgAsTmftfehbxh8w+5F9CqLRVORjrpjBWt9Hx5uB3NgEOg5vss6GhyMsoh26xAZ2Vjjk5910XBpmdC7puy7VdNbVtKa0RXM4ldZpx7VxJHSc+vGjQwYIrsVT4N+nS9BIU/LMl4bLwqXPqkWAgNp3wQ4LhCHoTc+u1LRjhX/biaBvCzkme0GIrlHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TuIzqzxwk4rNBUXcOjx1dWMmwO4377C1NigcUXvF3/s=;
- b=TBTtqZwKUf/msEaFnBOknRsUrT1zwjrekuog2tc9gkfCIz4vGXEuXSH2rRSZ21xBugWIL2dOiN57Bd+BobpQBv9qrhT2+VRPf5S+r0ccGTD7fhpeobDshNoqW9O5sJWCwOdYHVEcfA/PQb9g4aNaQZlj3tY4XX2rpdha3cDvkgkzh3yXQ/On+Kbs2pImOjhBeqXX7kEd78/EpklAHAWz2p5I01bdtloFsjBHpvDm0wu7scOOVJNPo2hf9Opte4NudFnTztasJVY3AjvmSNXyjka+jbQElapwTeT8gI0aUoMtig4sUCrVkgvPXscNbHC/lwdXtKpt4ibtS4ynCK3cYA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL3PR12MB6523.namprd12.prod.outlook.com (2603:10b6:208:3bf::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 17:36:51 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%5]) with mapi id 15.20.6319.033; Mon, 24 Apr 2023
- 17:36:51 +0000
-Date:   Mon, 24 Apr 2023 14:36:47 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH v2] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <ZEa+L5ivNDhCmgj4@nvidia.com>
-References: <c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com>
- <ZEZPXHN4OXIYhP+V@infradead.org>
- <90a54439-5d30-4711-8a86-eba816782a66@lucifer.local>
- <ZEZ117OMCi0dFXqY@nvidia.com>
- <c8fff8b3-ead6-4f52-bf17-f2ef2e752b57@lucifer.local>
- <ZEaGjad50lqRNTWD@nvidia.com>
- <cd488979-d257-42b9-937f-470cc3c57f5e@lucifer.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd488979-d257-42b9-937f-470cc3c57f5e@lucifer.local>
-X-ClientProxiedBy: YT4PR01CA0181.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:110::8) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 24 Apr 2023 13:39:15 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D33A5F0;
+        Mon, 24 Apr 2023 10:38:34 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-555e853d3c5so31951537b3.2;
+        Mon, 24 Apr 2023 10:38:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682357886; x=1684949886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=43eVrCXPQ3JCvD9a2+R69fZ/LkUiFUI38jpabfj7B7U=;
+        b=TgkboWY74aLy6vHBN94U5NTxLaG+FuJAJDzVjfBdPOvpV73rmMT+jPIrab3HoxDfDI
+         jci+lbAiM8qJDG9AoUQ6h2YHNGW5C+arHVbNHaD1Ze5EfP6g9f7h/qi68Q3IGAkqLY7V
+         7h780hq7UR3uj3STDU5M8lj06FFG3QJEOnCKcQ3d6/tJH8+uvb9A+WUkCH0lq7w2xuTe
+         fVUG6nU9gxlyzy5ZpbygRqy7iyO326SuhBs8YLyEmz47dd3KdAj8C/jlLv4d12lTnWNW
+         Sa0m8slKRhYsqyOnxjRFCTzO3EPoGZbahQZl4bl6qfyvDI+nfl8+MftXRIqYeE29yYk3
+         +c+Q==
+X-Gm-Message-State: AAQBX9fmER9dlQkwdpIZ8A1NOhKDjPkt4R4KFMmXJnbBg4sZ8VbaTZDq
+        yv1m42jYrczBlwoHA1F9HSaiGFxTZCVoAQ==
+X-Google-Smtp-Source: AKy350YGGKQCvcFhIoCo23Pfqo7TjqOkFz8ETKjx1Q4i3RX6Q2NaAsmwLN8QtYUUt1RHYO/M7yLpEg==
+X-Received: by 2002:a0d:f306:0:b0:54e:fad7:7485 with SMTP id c6-20020a0df306000000b0054efad77485mr8306256ywf.31.1682357885646;
+        Mon, 24 Apr 2023 10:38:05 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id t1-20020a0dea01000000b00545a08184fesm3021978ywe.142.2023.04.24.10.38.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 10:38:05 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-555e853d3c5so31951307b3.2;
+        Mon, 24 Apr 2023 10:38:05 -0700 (PDT)
+X-Received: by 2002:a0d:f306:0:b0:54e:fad7:7485 with SMTP id
+ c6-20020a0df306000000b0054efad77485mr8306240ywf.31.1682357885170; Mon, 24 Apr
+ 2023 10:38:05 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL3PR12MB6523:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a25ebf8-1819-489e-160c-08db44ea7cb1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uL8m6NlQxw3mOffdBaxu0SMIWa0o3MUSNIN1bclfhkyXinS89IPjZR80GD+TcEUyZ2bKtxcX124UCz95ffgUMbIGJr4udvzPQEj8mwn0FtXtHr2SRdWaUYZZsOgaY7ZBoD8nX4EPFATd1DKvdqcLutLxBzuKhkae+N+NxOUlpD3B0GPLvrxXSGeaa3usPk4R3iPdw9f5Ad2lshxPEHuBgdRk182x/pNgogYogcNapZvoFn3g+PBxIjCmtwp4n3euhtGI5YFF/Ikktyx84BnL9DF5HFtiu2QBmYUcXZuloL2Kvz2S4xxZLQRpB6jiOM2SsiKPl4Q6F/QFC0SSrq8bnHs3hlPzEnqlpqSEsoT5GCt59F51t5jx3zfrYDzmvQkhAsCGxrARmlmfgwf6VFSaa6wy0FhUJrAmJybtC46hX0NfFHHiK9xjKz+o1r/ELsIDw4qxzWwTVa6C8+g0HutqbjB1r4hWtdcUic57UR74wQomD9uScBYwC84eVWytKT//vQUhPPUh4o+gjCQuZ8JXGhQ2362n3feQGOAVBIRyWP1wj3wUvky/dlB51qBwT0Uh1Q2ph+ay/CZF28Zyt+lVnQBWQDwMn43ZQFmA3CTG9QI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(451199021)(6512007)(26005)(6506007)(8676002)(8936002)(4326008)(6916009)(66476007)(66556008)(66946007)(54906003)(316002)(36756003)(41300700001)(478600001)(7406005)(7416002)(6486002)(6666004)(5660300002)(38100700002)(86362001)(2906002)(2616005)(186003)(83380400001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mzjXt7yZY8DsN5Mb+yWWLnXgFhIdPkQva9YgzpbHmhADnOHTEwAdb6JmxYv8?=
- =?us-ascii?Q?RjH1fuNJDTjDis8I9V5DLV6VQL+7iO3ZgTdYUmGsFEVYZTMdRHRfi+MogJ2I?=
- =?us-ascii?Q?Thn6n/SacdL2bWi0GVA6AnxqCFRup9OY9oKXpfZecNXHlmndaz4rnkak75Hp?=
- =?us-ascii?Q?91cj3enaNtiLxo8TjS1HJqJvS6brUUCrEc7R+xJ6dAZaKnULe6UVob8owTJe?=
- =?us-ascii?Q?ziYkaIhS5CmgLlJGuRASGdtnFjBjd+SOooLF85/SSgI1ztksKVssUFBvDwq6?=
- =?us-ascii?Q?vGQxe8VGJOJcum+kuPFMYokU8sciyfpiPNyjWfhA/wsX0UBFQlUvANsyMBFE?=
- =?us-ascii?Q?o1aJp0SIRiAZkpw/qKcKvf8TEEXXO/BOvmCAWtZ+zU3mn6RPeuhe7P4Lwxul?=
- =?us-ascii?Q?WoRNjuui7L6XWRitsCBRjv0Uhp0Bz3QCefSRm4ghL/RuO8nil3aC0U/n0wzV?=
- =?us-ascii?Q?dnzgrY5h848GGM8mdcHuj8IbSZckHBiMWowWpXS2Aq7LGmvF854H/PFSpmHg?=
- =?us-ascii?Q?rSSjhPENhBUOeRWmkEWdAIkjxeDB2nAF516te3H+0u0fXZ3VlCyvkxqCgM+K?=
- =?us-ascii?Q?sH9cvZg+fPva/s9Cs5yRFbeZmSRsArvfEV2euTkdzJjm0Jlh6E6DeE6xvlOr?=
- =?us-ascii?Q?WNol8xsHYPAGsXxhR1IZmmrHku17xEYzKraLeq2RA9wJMelFoanYfHMw5+pm?=
- =?us-ascii?Q?G58zcJAtd0eO0gi+z05oeJntxEcX2KOnTD8whRXX44NZl7zJ9WfN+uyC7THh?=
- =?us-ascii?Q?BupZ/kkMP9Hn8GluH11cytuoovsmgZC0MtXTkki5uhxiRarC5Julj6CyqcRH?=
- =?us-ascii?Q?M7WFPuVAO/PflCpRnWb3ENn6URaIrYUs+cV2nU3p5yS55VNtlYh6tHO6BR7Q?=
- =?us-ascii?Q?emm7R6eb/PW2BiSxzEsuegS/LpU1zfkgdvzw3E2oxQ/NvVlA4c8BtZXis6fM?=
- =?us-ascii?Q?2wcOBGkY8pWGMDa28rlgbXZpEuznZzyr3ctokfiWKJsmUqumjD9eR4ao7LXc?=
- =?us-ascii?Q?6GP4vfjcHX0G1bgbYJCaa08L+R0C5VBSaLn6+R7zdF0OhDbBDmoEZa0tiF5n?=
- =?us-ascii?Q?e8ys6scr06sPTGU7lcRPOfONNmdNnv8sWSJT4TZUJpNNyhglsDOEuh2Kyua4?=
- =?us-ascii?Q?8gJwxkCTMpIE9xnz/xUXAu+4ovVYua527oU5R6FqNzfPxw3X+QrWmPP1rl96?=
- =?us-ascii?Q?MbLgyraDBsqDtRN94XMsXqhpSCHJ41TktjI68c5oteScLYV2x0B8ZA6nFk/l?=
- =?us-ascii?Q?0DS80tjlfA7f6Vq/ER7WbzOe982TUS7nHxJnd7jgMV06txfEiSfvI/+N0A57?=
- =?us-ascii?Q?RS/nqH8EGnQkL3RyypP0vvnzqhFvnRwZjy1GqYPdkXLcgr47Kh15VcDWKM0h?=
- =?us-ascii?Q?vrsBj5isjRM8RyQTd+X4YJBVY2ro8Zh9yd/qbI1P9hwapEw341lZRbH9BQWO?=
- =?us-ascii?Q?g2Kl6weZWRd71OKUgL4JWod/bGbVXlZR0Y7EK059G9DnQUvApW7cvHhOxi1y?=
- =?us-ascii?Q?JlEwZi6Ru42TlQrk/++fKf9ZqIcseOWEJHmOa6TvfXoAO0DPHh+QxK09dKQ/?=
- =?us-ascii?Q?GhxzIzphNYELIJLhjX4HbKsPQ6wARv7xAp9fHUxa?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a25ebf8-1819-489e-160c-08db44ea7cb1
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 17:36:51.0143
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KpVEdGdBAb2mTr21PmeJt5/jtpeoSR0a7by5TaZQterhLw7uuk9lDjwLutIP62hy
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6523
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com> <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Apr 2023 19:37:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQiMbupkCYhZ86WHND25E==iA1DyVwGf2rg32zJLcV2g@mail.gmail.com>
+Message-ID: <CAMuHMdVQiMbupkCYhZ86WHND25E==iA1DyVwGf2rg32zJLcV2g@mail.gmail.com>
+Subject: Re: [PATCH 05/11] media: renesas: fdp1: remove R-Car H3 ES1.* handling
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,44 +69,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:29:57PM +0100, Lorenzo Stoakes wrote:
-> On Mon, Apr 24, 2023 at 10:39:25AM -0300, Jason Gunthorpe wrote:
-> > On Mon, Apr 24, 2023 at 01:38:49PM +0100, Lorenzo Stoakes wrote:
-> >
-> > > I was being fairly conservative in that list, though we certainly need to
-> > > set the flag for /proc/$pid/mem and ptrace to avoid breaking this
-> > > functionality (I observed breakpoints breaking without it which obviously
-> > > is a no go :). I'm not sure if there's a more general way we could check
-> > > for this though?
-> >
-> > More broadly we should make sure these usages of GUP safe somehow so
-> > that it can reliably write to those types of pages without breaking
-> > the current FS contract..
-> >
-> > I forget exactly, but IIRC, don't you have to hold some kind of page
-> > spinlock while writing to the page memory?
-> >
-> 
-> I think perhaps you're thinking of the mm->mmap_lock? Which will be held
-> for the FOLL_GET cases and simply prevent the VMA from disappearing below
-> us but not do much else.
+Hi Wolfram,
 
-No not mmap_lock, I want to say there is a per-page lock that
-interacts with the write protect, or at worst this needs to use the
-page table spinlocks.
+On Tue, Mar 7, 2023 at 5:31 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> R-Car H3 ES1.* was only available to an internal development group and
+> needed a lot of quirks and workarounds. These become a maintenance
+> burden now, so our development group decided to remove upstream support
+> and disable booting for this SoC. Public users only have ES2 onwards.
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> I wonder whether we should do this check purely for FOLL_PIN to be honest?
-> As this indicates medium to long-term access without mmap_lock held. This
-> would exclude the /proc/$pid/mem and ptrace paths which use gup_remote().
+Thanks for your patch, which is now commit af4273b43f2bd9ee ("media:
+renesas: fdp1: remove R-Car H3 ES1.* handling") in media/master
+(next-20230417 and later).
 
-Everything is buggy. FOLL_PIN is part of a someday solution to solve
-it.
+> --- a/drivers/media/platform/renesas/rcar_fdp1.c
+> +++ b/drivers/media/platform/renesas/rcar_fdp1.c
+> @@ -254,7 +254,6 @@ MODULE_PARM_DESC(debug, "activate debug info");
+>
+>  /* Internal Data (HW Version) */
+>  #define FD1_IP_INTDATA                 0x0800
+> -#define FD1_IP_H3_ES1                  0x02010101
+>  #define FD1_IP_M3W                     0x02010202
+>  #define FD1_IP_H3                      0x02010203
+>  #define FD1_IP_M3N                     0x02010204
+> @@ -2359,9 +2358,6 @@ static int fdp1_probe(struct platform_device *pdev)
+>
+>         hw_version = fdp1_read(fdp1, FD1_IP_INTDATA);
+>         switch (hw_version) {
+> -       case FD1_IP_H3_ES1:
+> -               dprintk(fdp1, "FDP1 Version R-Car H3 ES1\n");
+> -               break;
+>         case FD1_IP_M3W:
+>                 dprintk(fdp1, "FDP1 Version R-Car M3-W\n");
+>                 break;
 
-> That and a very specific use of uprobes are the only places that use
-> FOLL_GET in this instance and each of them are careful in any case to
-> handle setting the dirty page flag.
+Apparently 0x02010101 is also used on (at least) R-Car M2-W ES1.0,
+causing the following annoying (but further harmless?) messages
+during boot:
 
-That is actually the bug :) Broadly the bug is to make a page dirty
-without holding the right locks to actually dirty it.
+    rcar_fdp1 fe940000.fdp1: FDP1 Unidentifiable (0x02010101)
+    rcar_fdp1 fe944000.fdp1: FDP1 Unidentifiable (0x02010101)
 
-Jason
+Note that the R-Car Gen2 documentation states the register's contents
+are all zeroes.  But that value would trigger the error message, too.
+
+Sorry for not noticing before. Apparently I never booted a kernel
+with this patch on koelsch...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
