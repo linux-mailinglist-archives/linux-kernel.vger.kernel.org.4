@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23E76ED529
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BABE6ED533
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 21:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbjDXTPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 15:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
+        id S232587AbjDXTRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 15:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjDXTPR (ORCPT
+        with ESMTP id S232575AbjDXTRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:15:17 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3D459C0;
-        Mon, 24 Apr 2023 12:15:16 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2a8ad872ea5so47031061fa.2;
-        Mon, 24 Apr 2023 12:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682363714; x=1684955714;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y6n9xZ3Im8z9nJ4jY7b8gL+RDR1D2YAMLUav6Vnkki4=;
-        b=RpB5PLaDKL/QSNgL9IWtSeNvmyCnrd5PI5CN2P//xnsrxWZecxOMEmwt0FP/b66wk3
-         1eNohbg7s2j1IYVk2o5MbgSMhIPu/lvyZmBycVMxlHHwWVz+BA5g1QRGWYDbKYsXxqRd
-         +KB6Oz10uG+daPujGB40K8dowtuZ53FW8XbS78s5Fat4iOWLHlTdijak7XFP2XuNWOJp
-         HnXKFv/xrHe+LPe9y+oBFH7qYULfFuENZ6giSWs78B67OhcnVp5pEFfDahY3+je7WUX8
-         m6Zs/QijmuYTXdf/Dwdv1bkUGZfH/YzyfyXvfriGLVME4+1g7kUECHloqcjFTeNhPo4N
-         6KQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682363714; x=1684955714;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6n9xZ3Im8z9nJ4jY7b8gL+RDR1D2YAMLUav6Vnkki4=;
-        b=kgz2KgUC1V0WB1Q2xedicC4GUiW5/l0g7ALsNI82sjh0JOjVQC++EVt5QJCNaY6AYu
-         d05Dh/+y6ftA7qSvR1auOpZy/CCq82TQ54PO+Q+fyMrayRIwaMjVsdnsFo++3LJQCsrk
-         uxM/nwqHLgS5zjjZKWr8XSkcTWBxTbXQqPgqzK5Z+m2EOr6AQeIdzfKAIrm1ddoK1dGk
-         wojWZxV1g5lHR/XZVDBT/WbE+5jbGvRNsHY98t4jJkibwjJtlVTSYyWCbT2hFOUsHnxB
-         0uWKFTVmYcm0X78NPE0JLpDGW1OrUTo8iGjqXrSl+QLYlzUmhHqp23nefP1+AmpgwvbP
-         4T5g==
-X-Gm-Message-State: AAQBX9c4mGUCJHaKrksfKgLsSczilPTmeGP6IGTFPbq3a16PWa7+Yi0T
-        xnKXW3W9D1n6+tMh+tWn6ZHX5NQkZEsxPg==
-X-Google-Smtp-Source: AKy350ZApTJD+Uiv8ZW5yZ6na/BxqZexSxuAsTWeIQKPAY9lHs3sQogBH0Mqk0v/6Bl1N9AAchZPqA==
-X-Received: by 2002:a2e:9a88:0:b0:2a9:ef05:8b7a with SMTP id p8-20020a2e9a88000000b002a9ef058b7amr2759589lji.52.1682363714070;
-        Mon, 24 Apr 2023 12:15:14 -0700 (PDT)
-Received: from [10.0.0.42] (host-85-29-92-32.kaisa-laajakaista.fi. [85.29.92.32])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05651c008900b002a776dbc277sm1825989ljq.124.2023.04.24.12.15.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 12:15:13 -0700 (PDT)
-Message-ID: <d5a29b90-4fdc-9cd3-70cc-2f3ad40bf145@gmail.com>
-Date:   Mon, 24 Apr 2023 22:16:05 +0300
+        Mon, 24 Apr 2023 15:17:37 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021C644B5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 12:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=TqyP53BK1QNJZ0dWGD7gHEmj7/js
+        wK7ug0KpqedoeLw=; b=iU23Iu1X196WF1lXyGx+Bn9NP7tFL5/vw836ufA7M8WP
+        J6epUlS98VSAYzpteUyMRlwWHGabVrsnZYuFKORXktW3OmNuCkQLX4ICNlfK7UXA
+        toSeewdeiJI4AJxo8zJlUZJqPk5yXF7lkp78/w/y8UJqynpl+r6LsTBeebSwieE=
+Received: (qmail 1123223 invoked from network); 24 Apr 2023 21:17:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Apr 2023 21:17:30 +0200
+X-UD-Smtp-Session: l3s3148p1@Vd2z2xn6iLAujnsI
+Date:   Mon, 24 Apr 2023 21:17:30 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: Re: [PATCH 05/11] media: renesas: fdp1: remove R-Car H3 ES1.*
+ handling
+Message-ID: <ZEbVyhjKs15Rj+5h@sai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
+ <20230307163041.3815-6-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVQiMbupkCYhZ86WHND25E==iA1DyVwGf2rg32zJLcV2g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Vaishnav Achath <vaishnav.a@ti.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        "J, KEERTHY" <j-keerthy@ti.com>, u-kumar1@ti.com,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        "Menon, Nishanth" <nm@ti.com>
-References: <291807c9-8d1c-56f0-ee39-4d221e18bd1a@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: Question: dmaengine: dma_request_chan_by_mask() and DMA
- controller probe order
-In-Reply-To: <291807c9-8d1c-56f0-ee39-4d221e18bd1a@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sNz7uPXnCVFL3uVV"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVQiMbupkCYhZ86WHND25E==iA1DyVwGf2rg32zJLcV2g@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 4/19/23 11:27, Vaishnav Achath wrote:
-> Hi,
-> 
-> In dma_request_chan_by_mask() , the probe defer logic returns -EPROBE_DEFER if
-> there are no DMA devices registered yet. But in case of multiple DMA controllers
-> in an SoC and when only one(or a subset) of the controllers have finished probe
-> dma_request_chan_by_mask() can return -ENODEV incorrectly since the first DMA
-> device probed might not support the particular mask requested.
+--sNz7uPXnCVFL3uVV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That change was added by
-ec8ca8e3b4809 ("dmaengine: dma_request_chan_by_mask() to handle deferred
-probing")
-Which apparently only works if we have a single DMA controller or
-multiple with similar capabilities.
+Hi Geert,
 
-> What is the recommended solution to avoid situation like these?
+thanks for reporting!
 
-I would say, that in case of dma_request_chan_by_mask() it might be
-reasonable to return -EPROBE_DEFER if the mask cannot be satisfied with
-the probed DMA controllers.
-With the dma_request_chan() we know which DMA we are waiting for while
-with the give me any channel which can do this, we don't.
+> > -#define FD1_IP_H3_ES1                  0x02010101
 
-On the other hand we have users where they fallback to CPU memcpy or PIO
-mode if a DMA channel is not available, returning -EPROBE_DEFER would
-break them for sure.
+=2E..
 
-Probably a notification system of some sort or deferred channel request
-with a callback?
+> Apparently 0x02010101 is also used on (at least) R-Car M2-W ES1.0,
+> causing the following annoying (but further harmless?) messages
+> during boot:
+>=20
+>     rcar_fdp1 fe940000.fdp1: FDP1 Unidentifiable (0x02010101)
+>     rcar_fdp1 fe944000.fdp1: FDP1 Unidentifiable (0x02010101)
 
-> Consider the following scenario for example:
-> 
-> SoC has two DMA controllers, one instance of system DMA, one dedicated for
-> Camera subsytem which does not support DMA_MEMCPY and has lesser number of channels.
-> 
-> * Camera subsystem DMA is probed first.
-> * Another peripheral requests dma_request_chan_by_mask(DMA_MEMCPY)
-> * dmaengine returns -ENODEV for above as the controller with DMA_MEMCPY support
-> is not ready yet.
-> * System DMA is probed later but peripheral driver failed to start with DMA.
+Hmm, that means before my removal patch, Gen2 has been incorrectly
+defined as H3 ES1?
 
-A while ago I have sent a series to add support for 'dma-domains':
-https://lkml.kernel.org/lkml/20190906141816.24095-1-peter.ujfalusi@ti.com/
+> Note that the R-Car Gen2 documentation states the register's contents
+> are all zeroes.  But that value would trigger the error message, too.
 
-That would handle this use case fine. Looks like I did not had time to
-update (or rewrite?) it based on the comments...
+Bad, but well...
 
--- 
-Péter
+> Sorry for not noticing before. Apparently I never booted a kernel
+> with this patch on koelsch...
+
+We could re-add this version and just let it print "FDP1 Initial
+Version" or something? I could test this on my Lager board.
+
+All the best,
+
+   Wolfram
+
+
+--sNz7uPXnCVFL3uVV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRG1cYACgkQFA3kzBSg
+KbZqMhAAg4xWq1Ob2U4Uuc4wd5dD28eW0sFRhm+Yn/FojNi+I4/fVQXRI18Wajiu
+nBTuVF8HEs91GfARCLKN/h/yi4F7Chit+mtyNl1DQA437iKIJwngAFJelhxKT84y
+fwQbJvKe1nhvch4VmrxTvu3L3/sYZ+KYF2oplkxIqeMux7Yn1V+fHKNgP6NG/7Km
+qaz0yQQ11aByTkb+77dHh9lsUVWDhiTrf+pyIhsq7Ad8RV9zKI5eWNwFu+Qfv74d
+hcAnVsKcn+Dd3qxVeX0p+9cexaEimu+32NkUDX+qA514MiDOR/g5j+kwLjvJlH1j
+0kYvfwRTDKuChXiGC96BN7fIivzxCqz344PXjRImJNY0NCXi1NIoiWfvLUsg20eK
+xjbbpHNeUJrxI1JTjO85gDLIzN0LVj7sq8qrUiwiJzQogXUc7HWk/rcplnEdP3Yx
+L4Mp/uZEuJ/wOyyTEqZzmfqk86h2/IjiWAKzGc483l4VKuPACHlhpluVqzEL+1sN
+e8kwQnkGRG4OI7DmkEMK4M25jxCxaBnx7X2mkY49cSiAkF/HVHn672lCvRhkjkNG
+/fhul+FccKfUX3d8XRwpGf+NTYszNYHzs9bMueWoM5ErMK9GSvCKVt6/+4NqNvvA
+fWpVeVN0Y8l9YbEd8Y4nDkZV0dqMN4oToZrY9K8ZLskohc7p1Ho=
+=ePn6
+-----END PGP SIGNATURE-----
+
+--sNz7uPXnCVFL3uVV--
