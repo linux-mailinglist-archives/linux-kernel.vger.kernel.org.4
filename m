@@ -2,122 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5616EC81B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9D66EC81D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjDXIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S231151AbjDXIwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDXIuY (ORCPT
+        with ESMTP id S229696AbjDXIw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:50:24 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778FA8;
-        Mon, 24 Apr 2023 01:50:22 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VgrC-uE_1682326217;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgrC-uE_1682326217)
-          by smtp.aliyun-inc.com;
-          Mon, 24 Apr 2023 16:50:18 +0800
-Message-ID: <1682326210.6946251-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH bpf-next] xsk: Use pool->dma_pages to check for DMA
-Date:   Mon, 24 Apr 2023 16:50:10 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Kal Conley <kal.conley@dectris.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-References: <20230423180157.93559-1-kal.conley@dectris.com>
-In-Reply-To: <20230423180157.93559-1-kal.conley@dectris.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 24 Apr 2023 04:52:27 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E28B115
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:52:25 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f182d745deso41299245e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1682326344; x=1684918344;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=deVVhPb2N3DmdmKHs5nt2Ad8ZkEvs9U6ZZ+ZaoatAdM=;
+        b=SFPVYK2WVJc/ClTB+cAUWM4TDCYe2emz7Z6SW/oJqgdpzLrclrTa5lXupSJam/HfxL
+         hMk8VDjPu19k1xGPPOsf/RtVieN3kmS1hSsEE0iNvue44L/YSQPFue6lT0UD9fWkjN+R
+         /IVAOqrmc7PsGbtWeqAL6qoS8ShFJNhm2vOePTGHiybfXPGVE3vubGV0E9tC9wPkW6cR
+         8crPr8O/YtrTz3oZc9UWds247wWf3BiCCmOlZ1DsMFnpA3WOtIBxGL8e8KltPDfq/6Xs
+         VrxNXwfWPkKheZssLczIQg2Fgy5oiAX/yEUkL0UtuhfOQXzZ8lJmujjFyk1nh38c82Bu
+         XxIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682326344; x=1684918344;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=deVVhPb2N3DmdmKHs5nt2Ad8ZkEvs9U6ZZ+ZaoatAdM=;
+        b=bve68HjJl93XA9RR8FVubNeevOMJ7L6+Yvf12+tuzklnjEUPO25fkYjqsS4u7Dm7oR
+         xgd+yzf9nnUN/MXjzm5OR3264mHNG5Si/ypcK3qLP1QEYxU/Qi7AuXtYymYlWDTiwcjz
+         d6eeVx74PUUUrzqx+5+dDFCvR35nI/fOxFSH0RLS2ucqrZJxETXgOwr2qkoVk3IGqK+I
+         DbQnsEWd2OMCmxDo4jhLyPf6J0yZlwVjPN1fmr7i/ptd89ADe9YVtzRUuug33D+lvXUx
+         8KKpftXslg/n+yVzj4eHvITPFSWY5Rb8bLwyE19zblb8Evlms4IgC5Jv8slXePe2dtUU
+         x46A==
+X-Gm-Message-State: AAQBX9f+8ub5TWrvBRtf3p5qbLQ5FkgNFpmlfTRtjTUH6WyPGsYryAhJ
+        k5HA4VBNM3V3kt8uI6NNuKQUgg==
+X-Google-Smtp-Source: AKy350ZCWbzGmnFbEoPKwhbt8WKAgauSrM5KFPLAWBXyAEUOJWF6fn29tsFZUf+3jxexBoNeYqS/tg==
+X-Received: by 2002:a7b:c441:0:b0:3f0:7e56:82a4 with SMTP id l1-20020a7bc441000000b003f07e5682a4mr7557927wmi.18.1682326344016;
+        Mon, 24 Apr 2023 01:52:24 -0700 (PDT)
+Received: from [192.168.29.232] ([49.37.170.173])
+        by smtp.gmail.com with ESMTPSA id s1-20020adff801000000b00300aee6c9cesm10327196wrp.20.2023.04.24.01.52.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 01:52:23 -0700 (PDT)
+Message-ID: <fa096963-c173-dacc-647f-21a367c772b0@9elements.com>
+Date:   Mon, 24 Apr 2023 14:22:17 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Add support for multiple
+ supplies
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     zev@bewilderbeest.net, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230420192402.3695265-1-Naresh.Solanki@9elements.com>
+ <20230421213659.GA1786000-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20230421213659.GA1786000-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Apr 2023 20:01:56 +0200, Kal Conley <kal.conley@dectris.com> wrote:
-> Compare pool->dma_pages instead of pool->dma_pages_cnt to check for an
-> active DMA mapping. pool->dma_pages needs to be read anyway to access
-> the map so this compiles to more efficient code.
->
-> Signed-off-by: Kal Conley <kal.conley@dectris.com>
-> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Hi Rob,
 
+On 22-04-2023 03:06 am, Rob Herring wrote:
+> On Thu, Apr 20, 2023 at 09:24:01PM +0200, Naresh Solanki wrote:
+>> Add optional DT property 'regulator-supplies' to handle connectors with
+>> multiple supplies.
+>> If this property is present, it will determine all regulator supplies.
+>> Otherwise, the 'vout' supply will be used as a fallback.
+>>
+>> This change improves support for connector like PCIe connectors on
+>> mainboards that can be powered by 12V and 3.3V supplies.
+>>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ...
+>> Change in V2:
+>> - Added example
+>> - Update property type & description.
+>> - Improve commit message
+>> ---
+>>   .../bindings/regulator/regulator-output.yaml  | 21 ++++++++++++++++---
+>>   1 file changed, 18 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/regulator-output.yaml b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>> index 078b37a1a71a..a9dce26991ff 100644
+>> --- a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>> +++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>> @@ -21,13 +21,22 @@ properties:
+>>     compatible:
+>>       const: regulator-output
+>>   
+>> -  vout-supply:
+>> +  regulator-supplies:
+>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>>       description:
+>> -      Phandle of the regulator supplying the output.
+>> +      Optional property that specifies supply names provided by
+>> +      the regulator. Defaults to "vout" if not specified. The
+>> +      array contains a list of supply names.
+>> +      Each supply name corresponds to a phandle in the
+>> +      patternProperties.
+>> +
+>> +patternProperties:
+>> +  ".*-supply":
+>> +    description:
+>> +      Specifies the phandle for various supplies
+> 
+> While you say use 'vout-supply' for a single supply, nothing enforces
+> that anymore.
+> 
+>>   
+>>   required:
+>>     - compatible
+>> -  - vout-supply
+>>   
+>>   additionalProperties: false
+>>   
+>> @@ -37,3 +46,9 @@ examples:
+>>             compatible = "regulator-output";
+>>             vout-supply = <&output_reg>;
+>>         };
+>> +      out2 {
+>> +          compatible = "regulator-output";
+>> +          regulator-supplies = "sw0", "sw1";
+>> +          sw0-supply = <&out2_sw0>;
+>> +          sw1-supply = <&out2_sw1>;
+> 
+> Names in the consumer are relative to the consumer. You appear to be
+> naming these by the supplier. Just add vout[0-9]-supply and iterate over
+> that name in the driver. Then you don't need "regulator-supplies".
+> Really, you never did. You could just find all properties ending in
+> "-supply".
+Please correct me if I have misunderstood anything
+What I understood is:
+1. Use 'for_each_property_of_node' & iterate each property,
+2. String compare each property name ending with '-supply',
+3. If there is match then initialize accordingly.
+This way all *-supply property are also included including vout-supply.
+This way, regulator-supplies isn't needed.
+Shall I go ahead in this way ?
 
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-
-> ---
->  include/net/xsk_buff_pool.h | 2 +-
->  net/xdp/xsk_buff_pool.c     | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> index d318c769b445..a8d7b8a3688a 100644
-> --- a/include/net/xsk_buff_pool.h
-> +++ b/include/net/xsk_buff_pool.h
-> @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
->  	if (likely(!cross_pg))
->  		return false;
->
-> -	return pool->dma_pages_cnt &&
-> +	return pool->dma_pages &&
->  	       !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
->  }
->
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index b2df1e0f8153..26f6d304451e 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
-> @@ -350,7 +350,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
->  {
->  	struct xsk_dma_map *dma_map;
->
-> -	if (pool->dma_pages_cnt == 0)
-> +	if (!pool->dma_pages)
->  		return;
->
->  	dma_map = xp_find_dma_map(pool);
-> @@ -364,6 +364,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
->
->  	__xp_dma_unmap(dma_map, attrs);
->  	kvfree(pool->dma_pages);
-> +	pool->dma_pages = NULL;
->  	pool->dma_pages_cnt = 0;
->  	pool->dev = NULL;
->  }
-> @@ -503,7 +504,7 @@ static struct xdp_buff_xsk *__xp_alloc(struct xsk_buff_pool *pool)
->  	if (pool->unaligned) {
->  		xskb = pool->free_heads[--pool->free_heads_cnt];
->  		xp_init_xskb_addr(xskb, pool, addr);
-> -		if (pool->dma_pages_cnt)
-> +		if (pool->dma_pages)
->  			xp_init_xskb_dma(xskb, pool, pool->dma_pages, addr);
->  	} else {
->  		xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
-> @@ -569,7 +570,7 @@ static u32 xp_alloc_new_from_fq(struct xsk_buff_pool *pool, struct xdp_buff **xd
->  		if (pool->unaligned) {
->  			xskb = pool->free_heads[--pool->free_heads_cnt];
->  			xp_init_xskb_addr(xskb, pool, addr);
-> -			if (pool->dma_pages_cnt)
-> +			if (pool->dma_pages)
->  				xp_init_xskb_dma(xskb, pool, pool->dma_pages, addr);
->  		} else {
->  			xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
-> --
-> 2.39.2
->
+> 
+> Rob
+Regards,
+Naresh
