@@ -2,175 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A186EC431
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB66E6EC41E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjDXD4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
+        id S230416AbjDXDoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjDXD4H (ORCPT
+        with ESMTP id S229696AbjDXDoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:56:07 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861622688;
-        Sun, 23 Apr 2023 20:56:03 -0700 (PDT)
-X-UUID: d027c6e6e25111edb6b9f13eb10bd0fe-20230424
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=rufuQJCAOdKnUGjIUY2GYqY80xE/3+D5NJdIz0DZjaA=;
-        b=j6hKZXgVSWa0XJrXRpm5HJ0bJo7dnnvdrNrmMwjs/pnv2NhmF++oiNzO6XpilGDDNZGy7QAOku5Tl2rW6hOJgx0pzs0ejHSdvfjIxMdiCEuJAI+s3UdPcdqZ2nOY/o1130LQPyjH2/5BlEbWrWoaDDV/NScjx1StqcA7IZWgLpw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:6c4f33aa-64ec-4f15-8ba7-8541485566d1,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:3c9c45a2-8fcb-430b-954a-ba3f00fa94a5,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: d027c6e6e25111edb6b9f13eb10bd0fe-20230424
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <alice.chao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 442587166; Mon, 24 Apr 2023 11:40:53 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 24 Apr 2023 11:40:52 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 24 Apr 2023 11:40:52 +0800
-From:   Alice Chao <alice.chao@mediatek.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Can Guo <quic_cang@quicinc.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
-        <naomi.chu@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-        <wsd_upstream@mediatek.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2 1/1] scsi: ufs: core: Fix &hwq->cq_lock deadlock issue
-Date:   Mon, 24 Apr 2023 11:40:35 +0800
-Message-ID: <20230424034039.20529-2-alice.chao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Sun, 23 Apr 2023 23:44:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76454226
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682307707;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0/Gqmlp5F3e84VZzqWw27RJ/qxOUG7Vcqc9AjwjGKg=;
+        b=AzTGiB1ZrW+SwucpM3JDSeSyylyq2cDV/Qu82ms9Sit6G284sL998VXFeqeEtOSZNHqRu5
+        TiB25mThqncpt1JWrXBMCE77qQNU3zJErn+UB5eA2qJyWhvfJLALmeNtSnOKWYtKGnlIJg
+        2gk7IEY/H1Cam63VYU9xClEW+Wi7p3M=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-164-y5gjHoYXObGbDSnILzX-nQ-1; Sun, 23 Apr 2023 23:41:46 -0400
+X-MC-Unique: y5gjHoYXObGbDSnILzX-nQ-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4ecb06abc1aso1715363e87.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:41:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682307701; x=1684899701;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x0/Gqmlp5F3e84VZzqWw27RJ/qxOUG7Vcqc9AjwjGKg=;
+        b=iwjxvmdYmYp/lV3EhkOs+bg47F9U5kG9fgU3RRbuWhZILGbW0P4lz9Z67P8UzgmnKl
+         6MFPTOUK9q2LvwlGSRH8GvoSL7trYexfjpERClh24odFPBisRK/AdVPGMUT2ZBcDLiq4
+         0+Lv7ZylnsgLPbO8g6IRfxgJA9hKj0/lIb6Oj1JV9ksu6Syhuv1Yl67vCfXMLeiLfGT2
+         S1DVe8eZdqE2AhM7dk9GJo6dldWfy2wRaZEILIg9Ctl0ZRG5seg3JvwZ94dN6zHyaCpf
+         ZhZXkmFcPGRB2WHTaAIuUKuSQFhylGjLlUeNzKWIgHbR545pCKU0BGFXh7c3xIT9lwWL
+         vywA==
+X-Gm-Message-State: AAQBX9dt9Piw2P0ifFLNRmnf1etGYmzCydO2+GGdhoGbUn4K9bpfuY0s
+        Y8t6+j1wjd8qvS57onHrqCLTd7vN5xgQWc5GatWcT+/UxBmRPs/faH9HYF29xnN/H+Ryi446d8D
+        BTEepTPi37toSClaGuvkk+A0=
+X-Received: by 2002:a19:c503:0:b0:4db:513b:6ef4 with SMTP id w3-20020a19c503000000b004db513b6ef4mr2801670lfe.11.1682307701253;
+        Sun, 23 Apr 2023 20:41:41 -0700 (PDT)
+X-Google-Smtp-Source: AKy350akLmVLz77aNwLtIlKSi4nJUWSFQY6BgoD/WOht8xio4frsi16eCfgOgUB/LaSrLLzhy5Ej9A==
+X-Received: by 2002:a19:c503:0:b0:4db:513b:6ef4 with SMTP id w3-20020a19c503000000b004db513b6ef4mr2801666lfe.11.1682307700896;
+        Sun, 23 Apr 2023 20:41:40 -0700 (PDT)
+Received: from [192.168.1.121] (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
+        by smtp.gmail.com with ESMTPSA id a5-20020a056512374500b004db3d57c3a8sm1510791lfs.96.2023.04.23.20.41.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Apr 2023 20:41:40 -0700 (PDT)
+Message-ID: <4b599782-3512-a177-c5b5-c562a22886c7@redhat.com>
+Date:   Mon, 24 Apr 2023 06:41:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] mm/gup: disallow GUP writing to file-backed mappings by
+ default
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[name:lockdep&]WARNING: inconsistent lock state
-[name:lockdep&]--------------------------------
-[name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-[name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
-  ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
-ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-[name:lockdep&]{IN-HARDIRQ-W} state was registered at:
-  lock_acquire+0x17c/0x33c
-  _raw_spin_lock+0x5c/0x7c
-  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-  ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
-  __handle_irq_event_percpu+0x140/0x3ec
-  handle_irq_event+0x50/0xd8
-  handle_fasteoi_irq+0x148/0x2b0
-  generic_handle_domain_irq+0x4c/0x6c
-  gic_handle_irq+0x58/0x134
-  call_on_irq_stack+0x40/0x74
-  do_interrupt_handler+0x84/0xe4
-  el1_interrupt+0x3c/0x78
-<snip>
 
-Possible unsafe locking scenario:
-       CPU0
-       ----
-  lock(&hwq->cq_lock);
-  <Interrupt>
-    lock(&hwq->cq_lock);
-  *** DEADLOCK ***
-2 locks held by kworker/u16:4/260:
+Hi,
 
-[name:lockdep&]
- stack backtrace:
-CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
-6.1.17-mainline-android14-2-g277223301adb #1
-Workqueue: ufs_eh_wq_0 ufshcd_err_handler
 
- Call trace:
-  dump_backtrace+0x10c/0x160
-  show_stack+0x20/0x30
-  dump_stack_lvl+0x98/0xd8
-  dump_stack+0x20/0x60
-  print_usage_bug+0x584/0x76c
-  mark_lock_irq+0x488/0x510
-  mark_lock+0x1ec/0x25c
-  __lock_acquire+0x4d8/0xffc
-  lock_acquire+0x17c/0x33c
-  _raw_spin_lock+0x5c/0x7c
-  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-  ufshcd_poll+0x68/0x1b0
-  ufshcd_transfer_req_compl+0x9c/0xc8
-  ufshcd_err_handler+0x3bc/0xea0
-  process_one_work+0x2f4/0x7e8
-  worker_thread+0x234/0x450
-  kthread+0x110/0x134
-  ret_from_fork+0x10/0x20
+On 22.4.2023 16.37, Lorenzo Stoakes wrote:
+> It isn't safe to write to file-backed mappings as GUP does not ensure that
+> the semantics associated with such a write are performed correctly, for
+> instance filesystems which rely upon write-notify will not be correctly
+> notified.
+> 
+> There are exceptions to this - shmem and hugetlb mappings are (in effect)
+> anonymous mappings by other names so we do permit this operation in these
+> cases.
+> 
+> In addition, if no pinning takes place (neither FOLL_GET nor FOLL_PIN is
+> specified and neither flags gets implicitly set) then no writing can occur
+> so we do not perform the check in this instance.
+> 
+> This is an important exception, as populate_vma_page_range() invokes
+> __get_user_pages() in this way (and thus so does __mm_populate(), used by
+> MAP_POPULATE mmap() and mlock() invocations).
+> 
+> There are GUP users within the kernel that do nevertheless rely upon this
+> behaviour, so we introduce the FOLL_ALLOW_BROKEN_FILE_MAPPING flag to
+> explicitly permit this kind of GUP access.
+> 
+> This is required in order to not break userspace in instances where the
+> uAPI might permit file-mapped addresses - a number of RDMA users require
+> this for instance, as do the process_vm_[read/write]v() system calls,
+> /proc/$pid/mem, ptrace and SDT uprobes. Each of these callers have been
+> updated to use this flag.
+> 
+> Making this change is an important step towards a more reliable GUP, and
+> explicitly indicates which callers might encouter issues moving forward.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+>   drivers/infiniband/hw/qib/qib_user_pages.c |  3 +-
+>   drivers/infiniband/hw/usnic/usnic_uiom.c   |  2 +-
+>   drivers/infiniband/sw/siw/siw_mem.c        |  3 +-
+>   fs/proc/base.c                             |  3 +-
+>   include/linux/mm_types.h                   |  8 +++++
+>   kernel/events/uprobes.c                    |  3 +-
+>   mm/gup.c                                   | 36 +++++++++++++++++++++-
+>   mm/memory.c                                |  3 +-
+>   mm/process_vm_access.c                     |  2 +-
+>   net/xdp/xdp_umem.c                         |  2 +-
+>   10 files changed, 56 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/infiniband/hw/qib/qib_user_pages.c b/drivers/infiniband/hw/qib/qib_user_pages.c
+> index f693bc753b6b..b9019dad8008 100644
+> --- a/drivers/infiniband/hw/qib/qib_user_pages.c
+> +++ b/drivers/infiniband/hw/qib/qib_user_pages.c
+> @@ -110,7 +110,8 @@ int qib_get_user_pages(unsigned long start_page, size_t num_pages,
+>   	for (got = 0; got < num_pages; got += ret) {
+>   		ret = pin_user_pages(start_page + got * PAGE_SIZE,
+>   				     num_pages - got,
+> -				     FOLL_LONGTERM | FOLL_WRITE,
+> +				     FOLL_LONGTERM | FOLL_WRITE |
+> +				     FOLL_ALLOW_BROKEN_FILE_MAPPING,
+>   				     p + got, NULL);
+>   		if (ret < 0) {
+>   			mmap_read_unlock(current->mm);
+> diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
+> index 2a5cac2658ec..33cf79b248a9 100644
+> --- a/drivers/infiniband/hw/usnic/usnic_uiom.c
+> +++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
+> @@ -85,7 +85,7 @@ static int usnic_uiom_get_pages(unsigned long addr, size_t size, int writable,
+>   				int dmasync, struct usnic_uiom_reg *uiomr)
+>   {
+>   	struct list_head *chunk_list = &uiomr->chunk_list;
+> -	unsigned int gup_flags = FOLL_LONGTERM;
+> +	unsigned int gup_flags = FOLL_LONGTERM | FOLL_ALLOW_BROKEN_FILE_MAPPING;
+>   	struct page **page_list;
+>   	struct scatterlist *sg;
+>   	struct usnic_uiom_chunk *chunk;
+> diff --git a/drivers/infiniband/sw/siw/siw_mem.c b/drivers/infiniband/sw/siw/siw_mem.c
+> index f51ab2ccf151..bc3e8c0898e5 100644
+> --- a/drivers/infiniband/sw/siw/siw_mem.c
+> +++ b/drivers/infiniband/sw/siw/siw_mem.c
+> @@ -368,7 +368,8 @@ struct siw_umem *siw_umem_get(u64 start, u64 len, bool writable)
+>   	struct mm_struct *mm_s;
+>   	u64 first_page_va;
+>   	unsigned long mlock_limit;
+> -	unsigned int foll_flags = FOLL_LONGTERM;
+> +	unsigned int foll_flags =
+> +		FOLL_LONGTERM | FOLL_ALLOW_BROKEN_FILE_MAPPING;
+>   	int num_pages, num_chunks, i, rv = 0;
+>   
+>   	if (!can_do_mlock())
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 96a6a08c8235..3e3f5ea9849f 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -855,7 +855,8 @@ static ssize_t mem_rw(struct file *file, char __user *buf,
+>   	if (!mmget_not_zero(mm))
+>   		goto free;
+>   
+> -	flags = FOLL_FORCE | (write ? FOLL_WRITE : 0);
+> +	flags = FOLL_FORCE | FOLL_ALLOW_BROKEN_FILE_MAPPING |
+> +		(write ? FOLL_WRITE : 0);
+>   
+>   	while (count > 0) {
+>   		size_t this_len = min_t(size_t, count, PAGE_SIZE);
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 3fc9e680f174..e76637b4c78f 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -1185,6 +1185,14 @@ enum {
+>   	FOLL_PCI_P2PDMA = 1 << 10,
+>   	/* allow interrupts from generic signals */
+>   	FOLL_INTERRUPTIBLE = 1 << 11,
+> +	/*
+> +	 * By default we disallow write access to known broken file-backed
+> +	 * memory mappings (i.e. anything other than hugetlb/shmem
+> +	 * mappings). Some code may rely upon being able to access this
+> +	 * regardless for legacy reasons, thus we provide a flag to indicate
+> +	 * this.
+> +	 */
+> +	FOLL_ALLOW_BROKEN_FILE_MAPPING = 1 << 12,
+>   
+>   	/* See also internal only FOLL flags in mm/internal.h */
+>   };
+> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> index 59887c69d54c..ec330d3b0218 100644
+> --- a/kernel/events/uprobes.c
+> +++ b/kernel/events/uprobes.c
+> @@ -373,7 +373,8 @@ __update_ref_ctr(struct mm_struct *mm, unsigned long vaddr, short d)
+>   		return -EINVAL;
+>   
+>   	ret = get_user_pages_remote(mm, vaddr, 1,
+> -			FOLL_WRITE, &page, &vma, NULL);
+> +				    FOLL_WRITE | FOLL_ALLOW_BROKEN_FILE_MAPPING,
+> +				    &page, &vma, NULL);
+>   	if (unlikely(ret <= 0)) {
+>   		/*
+>   		 * We are asking for 1 page. If get_user_pages_remote() fails,
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 1f72a717232b..68d5570c0bae 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -959,16 +959,46 @@ static int faultin_page(struct vm_area_struct *vma,
+>   	return 0;
+>   }
+>   
+> +/*
+> + * Writing to file-backed mappings using GUP is a fundamentally broken operation
+> + * as kernel write access to GUP mappings may not adhere to the semantics
+> + * expected by a file system.
+> + *
+> + * In most instances we disallow this broken behaviour, however there are some
+> + * exceptions to this enforced here.
+> + */
+> +static inline bool can_write_file_mapping(struct vm_area_struct *vma,
+> +					  unsigned long gup_flags)
+> +{
+> +	struct file *file = vma->vm_file;
+> +
+> +	/* If we aren't pinning then no problematic write can occur. */
+> +	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
+> +		return true;
+> +
+> +	/* Special mappings should pose no problem. */
+> +	if (!file)
+> +		return true;
+> +
+> +	/* Has the caller explicitly indicated this case is acceptable? */
+> +	if (gup_flags & FOLL_ALLOW_BROKEN_FILE_MAPPING)
+> +		return true;
+> +
+> +	/* shmem and hugetlb mappings do not have problematic semantics. */
+> +	return vma_is_shmem(vma) || is_file_hugepages(file);
+> +}
+> +
+>   static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>   {
+>   	vm_flags_t vm_flags = vma->vm_flags;
+>   	int write = (gup_flags & FOLL_WRITE);
+>   	int foreign = (gup_flags & FOLL_REMOTE);
+> +	bool vma_anon = vma_is_anonymous(vma);
+>   
+>   	if (vm_flags & (VM_IO | VM_PFNMAP))
+>   		return -EFAULT;
+>   
+> -	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
+> +	if ((gup_flags & FOLL_ANON) && !vma_anon)
+>   		return -EFAULT;
+>   
+>   	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
+> @@ -978,6 +1008,10 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>   		return -EFAULT;
+>   
+>   	if (write) {
+> +		if (!vma_anon &&
+> +		    WARN_ON_ONCE(!can_write_file_mapping(vma, gup_flags)))
+> +			return -EFAULT;
+> +
+>   		if (!(vm_flags & VM_WRITE)) {
+>   			if (!(gup_flags & FOLL_FORCE))
+>   				return -EFAULT;
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 146bb94764f8..e3d535991548 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5683,7 +5683,8 @@ int access_process_vm(struct task_struct *tsk, unsigned long addr,
+>   	if (!mm)
+>   		return 0;
+>   
+> -	ret = __access_remote_vm(mm, addr, buf, len, gup_flags);
+> +	ret = __access_remote_vm(mm, addr, buf, len,
+> +				 gup_flags | FOLL_ALLOW_BROKEN_FILE_MAPPING);
+>   
+>   	mmput(mm);
+>   
+> diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
+> index 78dfaf9e8990..ef126c08e89c 100644
+> --- a/mm/process_vm_access.c
+> +++ b/mm/process_vm_access.c
+> @@ -81,7 +81,7 @@ static int process_vm_rw_single_vec(unsigned long addr,
+>   	ssize_t rc = 0;
+>   	unsigned long max_pages_per_loop = PVM_MAX_KMALLOC_PAGES
+>   		/ sizeof(struct pages *);
+> -	unsigned int flags = 0;
+> +	unsigned int flags = FOLL_ALLOW_BROKEN_FILE_MAPPING;
+>   
+>   	/* Work out address and page range required */
+>   	if (len == 0)
+> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+> index 02207e852d79..b93cfcaccb0d 100644
+> --- a/net/xdp/xdp_umem.c
+> +++ b/net/xdp/xdp_umem.c
+> @@ -93,7 +93,7 @@ void xdp_put_umem(struct xdp_umem *umem, bool defer_cleanup)
+>   
+>   static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
+>   {
+> -	unsigned int gup_flags = FOLL_WRITE;
+> +	unsigned int gup_flags = FOLL_WRITE | FOLL_ALLOW_BROKEN_FILE_MAPPING;
+>   	long npgs;
+>   	int err;
+>   
 
-ufs_mtk_mcq_intr() could refer to
-https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
+Not sure about this in general, but seemss at least ptrace 
+(ptrace_access_vm()) seems to be broken here..
 
-When ufshcd_err_handler() is executed, CQ event interrupt can enter
-waiting for the same lock. It could happened in upstream code path
-ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
-warning message will be generated when &hwq->cq_lock is used in IRQ
-context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
-spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
 
-Fixes: ed975065c31c ("scsi: ufs: core: mcq: Add completion support in poll")
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-Change-Id: Iaff190c061c8e1308b893bff059a8bb556e5b888
----
- drivers/ufs/core/ufs-mcq.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+--Mika
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 31df052fbc41..202ff71e1b58 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -299,11 +299,11 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_nolock);
- unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
- 				       struct ufs_hw_queue *hwq)
- {
--	unsigned long completed_reqs;
-+	unsigned long completed_reqs, flags;
- 
--	spin_lock(&hwq->cq_lock);
-+	spin_lock_irqsave(&hwq->cq_lock, flags);
- 	completed_reqs = ufshcd_mcq_poll_cqe_nolock(hba, hwq);
--	spin_unlock(&hwq->cq_lock);
-+	spin_unlock_irqrestore(&hwq->cq_lock, flags);
- 
- 	return completed_reqs;
- }
--- 
-2.18.0
 
