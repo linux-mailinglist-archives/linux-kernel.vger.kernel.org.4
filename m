@@ -2,258 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0606EC76C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6126EC781
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjDXHuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S231364AbjDXH4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjDXHuu (ORCPT
+        with ESMTP id S230311AbjDXH4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:50:50 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC80EE7C;
-        Mon, 24 Apr 2023 00:50:46 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E3660100004;
-        Mon, 24 Apr 2023 07:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1682322645;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VS1ZKv5KXpYj9fqjt/WtNxB035b/Oax25ToIknOLU6Y=;
-        b=pBVPS/dC5L7Ou/jXMcMTmZwxD2YZyMwzdhS0YXV5SEDIObIjJLEVxsa2zfC/y67ftbuo7n
-        BB6GoeiKhG/nBqfM+0VlXsjOtzBO1E3im62/2SNfYG0c7lCMmUmdIAhOo1ApoBx9Eh4gON
-        9N0oyCD8jNBRdht7wyys81nGFfN7iHxrtYgf2DVVpvaAnYMC/tx5gmtHZzYSF0vm/Gf0Jf
-        wQLJdscpQsNCP2ea6iybUys1U/enPO/c84Xm/FlBrU1dmfkEIvpDz2cdKthgmOiVOvOvPj
-        z9rsPehZVhmXaFWpDcF5Aii2I6iA1pGnMWi6jisEQBeJUXITIiF0f7IoAODI0g==
-Date:   Mon, 24 Apr 2023 09:50:41 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 2/4] iio: inkern: Add a helper to query an available
- minimum raw value
-Message-ID: <20230424095041.540be943@bootlin.com>
-In-Reply-To: <20230422174916.74ccfe00@jic23-huawei>
-References: <20230421124122.324820-1-herve.codina@bootlin.com>
-        <20230421124122.324820-3-herve.codina@bootlin.com>
-        <20230422174916.74ccfe00@jic23-huawei>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 24 Apr 2023 03:56:17 -0400
+X-Greylist: delayed 78 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 00:55:55 PDT
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111C31737
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:55:54 -0700 (PDT)
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202304240754343fbeb7fb65f76aa97e
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Apr 2023 09:54:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=+v3MIb8PNZ4ZgxyCgk4r+KodnCwVlLhLxXYg0SWiEHo=;
+ b=PUI5S/qZHtiME/0oNhuHpCviJ3YzaxRqU25OBtOu7Lw8ANfD1ludQuEAyGuIB9nVHrgBnY
+ 57GBs63dQxYNL+wabT8LutbGG6scReu7HhKMrAx7zaesgTN01oLka4qmDKpWsMfhRI/oerRo
+ wmXDyiGtRY5wUe5WrIdxB2lu1qhVk=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v3 1/8] tty: n_gsm: add restart parameter to DLC specific ioctl config
+Date:   Mon, 24 Apr 2023 09:52:44 +0200
+Message-Id: <20230424075251.5216-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+From: Daniel Starke <daniel.starke@siemens.com>
 
-On Sat, 22 Apr 2023 17:49:16 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+Currently, changing the parameters of a DLCI gives no direct control to the
+user whether this should trigger a channel reset or not. The decision is
+solely made by the driver based on the assumption which parameter changes
+are compatible or not. Therefore, the user has no means to perform an
+automatic channel reset after parameter configuration for non-conflicting
+changes.
 
-> On Fri, 21 Apr 2023 14:41:20 +0200
-> Herve Codina <herve.codina@bootlin.com> wrote:
-> 
-> > A helper, iio_read_max_channel_raw() exists to read the available
-> > maximum raw value of a channel but nothing similar exists to read the
-> > available minimum raw value.
-> > 
-> > This new helper, iio_read_min_channel_raw(), fills the hole and can be
-> > used for reading the available minimum raw value of a channel.
-> > It is fully based on the existing iio_read_max_channel_raw().
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
-> 
-> Hi Herve,
-> 
-> All the comments on this are really comments on the existing code.
-> If you don't mind fixing the first one about checking the error code whilst
-> you are here that would be great.  Don't worry about the docs comment.
-> There are lots of instances of that and the point is rather subtle and probably
-> post dates this code being written.  In a few cases raw doesn't mean ADC counts
-> but rather something slightly modified... Long story for why!
+Add the parameter 'restart' to 'gsm_dlci_config' to force a channel reset
+after ioctl setting regardless of whether the changes made require this or
+not.
 
-A next iteration is already planned for this series.
-I will fix the 'error checking before switch()' on the iio_channel_read_min()
-I introduced and add a new patch (doing the same) on the existing
-iio_channel_read_max().
+Note that the parameter is limited to the values 0 and 1 to allow future
+additions here.
 
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c         | 4 ++++
+ include/uapi/linux/gsmmux.h | 3 ++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/inkern.c         | 67 ++++++++++++++++++++++++++++++++++++
-> >  include/linux/iio/consumer.h | 11 ++++++
-> >  2 files changed, 78 insertions(+)
-> > 
-> > diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> > index 872fd5c24147..914fc69c718a 100644
-> > --- a/drivers/iio/inkern.c
-> > +++ b/drivers/iio/inkern.c
-> > @@ -912,6 +912,73 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val)
-> >  }
-> >  EXPORT_SYMBOL_GPL(iio_read_max_channel_raw);
-> >  
-> > +static int iio_channel_read_min(struct iio_channel *chan,
-> > +				int *val, int *val2, int *type,
-> > +				enum iio_chan_info_enum info)
-> > +{
-> > +	int unused;
-> > +	const int *vals;
-> > +	int length;
-> > +	int ret;
-> > +
-> > +	if (!val2)
-> > +		val2 = &unused;
-> > +
-> > +	ret = iio_channel_read_avail(chan, &vals, type, &length, info);  
-> Obviously this is copied from *_read_max() but look at it here...
-> 
-> We should check for an error first with
-> if (ret < 0)
-> 	return ret;
-> then the switch.
-> 
-> Currently a different positive ret would result in that value
-> being returned which would be odd. Not a problem today, but if we add other
-> iio_avail_type enum entries in future and don't keep up with all the
-> utility functions then a mess may result.
-> 
-> If you agree with change and wouldn't mind adding another patch to this series
-> tidying that up for the _max case that would be great! Otherwise I'll get to
-> fixing that at some point but not anytime soon.
+v2 -> v3:
+No changes.
 
-I will do in the next iteration.
+Link: https://lore.kernel.org/all/20230420085017.7314-2-daniel.starke@siemens.com/
 
-> 
-> > +	switch (ret) {
-> > +	case IIO_AVAIL_RANGE:
-> > +		switch (*type) {
-> > +		case IIO_VAL_INT:
-> > +			*val = vals[0];
-> > +			break;
-> > +		default:
-> > +			*val = vals[0];
-> > +			*val2 = vals[1];
-> > +		}
-> > +		return 0;
-> > +
-> > +	case IIO_AVAIL_LIST:
-> > +		if (length <= 0)
-> > +			return -EINVAL;
-> > +		switch (*type) {
-> > +		case IIO_VAL_INT:
-> > +			*val = vals[--length];
-> > +			while (length) {
-> > +				if (vals[--length] < *val)
-> > +					*val = vals[length];
-> > +			}
-> > +			break;
-> > +		default:
-> > +			/* FIXME: learn about min for other iio values */
-> > +			return -EINVAL;
-> > +		}
-> > +		return 0;
-> > +
-> > +	default:
-> > +		return ret;
-> > +	}
-> > +}
-> > +
-> > +int iio_read_min_channel_raw(struct iio_channel *chan, int *val)
-> > +{
-> > +	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(chan->indio_dev);
-> > +	int ret;
-> > +	int type;
-> > +
-> > +	mutex_lock(&iio_dev_opaque->info_exist_lock);
-> > +	if (!chan->indio_dev->info) {
-> > +		ret = -ENODEV;
-> > +		goto err_unlock;
-> > +	}
-> > +
-> > +	ret = iio_channel_read_min(chan, val, NULL, &type, IIO_CHAN_INFO_RAW);
-> > +err_unlock:
-> > +	mutex_unlock(&iio_dev_opaque->info_exist_lock);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(iio_read_min_channel_raw);
-> > +
-> >  int iio_get_channel_type(struct iio_channel *chan, enum iio_chan_type *type)
-> >  {
-> >  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(chan->indio_dev);
-> > diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
-> > index 6802596b017c..956120d8b5a3 100644
-> > --- a/include/linux/iio/consumer.h
-> > +++ b/include/linux/iio/consumer.h
-> > @@ -297,6 +297,17 @@ int iio_write_channel_raw(struct iio_channel *chan, int val);
-> >   */
-> >  int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
-> >  
-> > +/**
-> > + * iio_read_min_channel_raw() - read minimum available raw value from a given
-> > + *				channel, i.e. the minimum possible value.
-> > + * @chan:		The channel being queried.
-> > + * @val:		Value read back.
-> > + *
-> > + * Note raw reads from iio channels are in adc counts and hence
-> > + * scale will need to be applied if standard units are required.  
-> 
-> Hmm. That comment is almost always true, but not quite.  Not related to
-> your patch but some cleanup of this documentation and pushing it down next
-> to implementations should be done at some point.  If anyone is really
-> bored and wants to take this on that's fine. If not, another one for the
-> todo list ;)
-
-If you are ok, I can change every where in consumer.h the following:
-  * Note raw reads from iio channels are in adc counts and hence
-  * scale will need to be applied if standard units required.
-by
-  * Note raw reads from iio channels are not in standards units and
-  * hence scale will need to be applied if standard units required.
-
-Also the same for raw writes:
-  * Note raw writes to iio channels are in dac counts and hence
-  * scale will need to be applied if standard units required.
-by
-  * Note raw writes to iio channels are not in standards units and
-  * hence scale will need to be applied if standard units required.
-
-> 
-> > + */
-> > +int iio_read_min_channel_raw(struct iio_channel *chan, int *val);
-> > +
-> >  /**
-> >   * iio_read_avail_channel_raw() - read available raw values from a given channel
-> >   * @chan:		The channel being queried.  
-> 
-
-Thanks for the review,
-Hervé
-
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index b411a26cc092..00f692e2e810 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2532,6 +2532,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
+ 		return -EINVAL;
+ 	if (dc->k > 7)
+ 		return -EINVAL;
++	if (dc->restart > 1)   /* allow future extensions */
++		return -EINVAL;
+ 
+ 	/*
+ 	 * See what is needed for reconfiguration
+@@ -2546,6 +2548,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
+ 	/* Requires care */
+ 	if (dc->priority != dlci->prio)
+ 		need_restart = true;
++	if (dc->restart)
++		need_restart = true;
+ 
+ 	if ((open && gsm->wait_config) || need_restart)
+ 		need_open = true;
+diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
+index eb67884e5f38..33ee7b857c52 100644
+--- a/include/uapi/linux/gsmmux.h
++++ b/include/uapi/linux/gsmmux.h
+@@ -58,7 +58,8 @@ struct gsm_dlci_config {
+ 	__u32 priority;		/* Priority (0 for default value) */
+ 	__u32 i;		/* Frame type (1 = UIH, 2 = UI) */
+ 	__u32 k;		/* Window size (0 for default value) */
+-	__u32 reserved[8];	/* For future use, must be initialized to zero */
++	__u32 restart;		/* Force DLCI channel reset? */
++	__u32 reserved[7];	/* For future use, must be initialized to zero */
+ };
+ 
+ #define GSMIOC_GETCONF_DLCI	_IOWR('G', 7, struct gsm_dlci_config)
 -- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
