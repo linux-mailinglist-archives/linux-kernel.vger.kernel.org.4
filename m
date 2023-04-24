@@ -2,114 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FA96ED06C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399766ED070
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjDXOjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S230475AbjDXOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjDXOjt (ORCPT
+        with ESMTP id S229522AbjDXOli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:39:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2235F61AB
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682347142;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BigudKcOA1SWNAOg8hWRkq+6kqvUQ8WQtVHc52aXCFk=;
-        b=QdlHiYhZTLpqw49T+hhMgSsurWxT/MDTOLh8N2V9LB8T3If1qI5chWQ/j13V39UQjD957Q
-        WbV7csIHADxzuks6I9WXI0G2kM3r6YLIJkK/lj37QP2yZfhsxXBrEQWuQe4fiMfi7PjZwD
-        eW5tDa8ouImHLQ8JlIxu7dnpbGVJsP8=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-xhNfswAROjC-cRaQpwCiCQ-1; Mon, 24 Apr 2023 10:39:00 -0400
-X-MC-Unique: xhNfswAROjC-cRaQpwCiCQ-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6a5e616d5d3so4080492a34.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:39:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682347140; x=1684939140;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BigudKcOA1SWNAOg8hWRkq+6kqvUQ8WQtVHc52aXCFk=;
-        b=Sj1EGSfDtPz/2WWUcT764zB3dIoNjWEqdtErXDVOtemPJuoQf92UTtQiZOt/W8RouO
-         9AbzyF66znYZgaKBikvxzKpSwDPANRflGSy3e2kLKscPwHIP+xIY4skSYdm25I+Dac3D
-         Ql98EClmHsWcMw7pKu8INspKcCprJcAmdwtIruWPr68cSd16puVgBfyUJ/bBnaf4u8Qc
-         W5RiKbW6o9YmzbNa4Df+fhTUoaHPtXaWH5hHhHlBNS0bvs1GrcgBs1lOfM1M/5QhHQF5
-         UWzS/mJCet7Xgjtwd8Jld5ClZeYGo18Z44lB0tIWAqkppzorgFtfr5QfpJOBeSi8BPmp
-         TElw==
-X-Gm-Message-State: AAQBX9dFbadCsX1SG8j9CmBldvi//DVfZZlH1yToBdokLV/IrM5u72vO
-        4YGXgMeuiu2CbJSupvT+jVu/H22yuTiEbpqKaSeKSBgCFYHo4WYcqew4EwTZj9jfw/boF44w4HC
-        0zt8DChDYUBGj+CG+Se28qadPu1ML5gGe
-X-Received: by 2002:a05:6830:1603:b0:6a5:f6f6:4ebf with SMTP id g3-20020a056830160300b006a5f6f64ebfmr7763131otr.37.1682347140017;
-        Mon, 24 Apr 2023 07:39:00 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a4cPtmKSKYUPwFELwY06yqIRsIWSQ/yGP+ZB1JxXAGRtizSylDhCPYxVdKzDUhmtvHwVE2aw==
-X-Received: by 2002:a05:6830:1603:b0:6a5:f6f6:4ebf with SMTP id g3-20020a056830160300b006a5f6f64ebfmr7763119otr.37.1682347139827;
-        Mon, 24 Apr 2023 07:38:59 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
-        by smtp.gmail.com with ESMTPSA id z18-20020a05683010d200b006a32ba92994sm349236oto.23.2023.04.24.07.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 07:38:59 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 09:38:57 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] arm64: dts: qcom: sa8155p-adp: Make -cells decimal
-Message-ID: <20230424143857.373kjvi42c7acsbp@halaney-x13s>
-References: <20230421205512.339850-1-ahalaney@redhat.com>
- <20230421205512.339850-2-ahalaney@redhat.com>
- <abd106b1-6650-6a7c-1c8b-3609e47b0161@linaro.org>
+        Mon, 24 Apr 2023 10:41:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2350A61AB;
+        Mon, 24 Apr 2023 07:41:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6500619F4;
+        Mon, 24 Apr 2023 14:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9714FC433D2;
+        Mon, 24 Apr 2023 14:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682347296;
+        bh=fSrcPcZw/GPmGI8FgVzCOdJ5NelYMqDiFY1OsK1Lsgs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z5+L3YkKOEerC6ue9wx2P+AUWTXrB4HFZ452zckBf6Nb9lUGt/oqqRm8l/rCm1Z85
+         6vuyM9+GEIz7wkbvVGET3vQDuWQ1HcKsCrAWcN5XbSwcD5Mnle6oOVOboMS5P3VPbu
+         sLjnTgfPiZZuvk9ebWQAumNrRgx78fYkVAQSNEWeQWeSLdOWRh3k2vA/QrmD1fhSLN
+         o0l+QGEsdSzFptQNxH+OCQVcQUye4gMyeG9unGDClkZ/CvBGmLXzD6tQJd4Tf4Qk6B
+         iLf6NXWbE1IvRuOCOQjmwbKPURtwRQmaGcCZrNG8xqDJUP9i8RDEtCnCYYedApV+lA
+         U9xWUXUslokeA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Martin Dimov <martin@dmarto.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] tpmdd: changes for v6.4-rc1
+Date:   Mon, 24 Apr 2023 17:41:30 +0300
+Message-Id: <20230424144130.1084795-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abd106b1-6650-6a7c-1c8b-3609e47b0161@linaro.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 09:21:45AM +0200, Krzysztof Kozlowski wrote:
-> On 21/04/2023 22:55, Andrew Halaney wrote:
-> > The property logically makes sense in decimal, and is the standard used
-> > elsewhere.
-> > 
-> > Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> > ---
-> > 
-> > Changes since v2:
-> >     * Collect tags
-> > Changes since v1:
-> >     * New patch (Konrad)
-> 
-> Doing such changes per one board will be a lot of churn...
-> 
+The following changes since commit 457391b0380335d5e9a5babdec90ac53928b23b4:
 
-Agreed, are you suggesting I drop this patch (and if we do this sort of
-cleanup to do it in bulk)? Sorry, not entirely sure I am picking up what
-that comment is implying.
+  Linux 6.3 (2023-04-23 12:02:52 -0700)
 
-Personally, I'd prefer to keeping that patch as this series is trying to
-clean up the particular ethernet node.. but if the purpose of the series
-was just to clean -cells up then I'd go with the bulk approach.
+are available in the Git repository at:
 
-So as is, I'm going to leave it like so unless you have specific advice
-against doing so.
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-v6.4-rc1
 
-Thanks,
-Andrew
+for you to fetch changes up to bd8621ca1510e6e802df9855bdc35a04a3cfa932:
 
+  tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site (2023-04-24 16:15:53 +0300)
+
+----------------------------------------------------------------
+Two major features are included into this pull request. The links for
+the landed patch sets are below.
+
+The .machine keyring, used for Machine Owner Keys (MOK), acquired the
+ability to store only CA enforced keys, and put rest to the .platform
+keyring, thus separating the code signing keys from the keys that are
+used to sign certificates. This essentially unlocks the use of the
+.machine keyring as a trust anchor for IMA. It is an opt-in feature,
+meaning that the additional contraints won't brick anyone who does not
+care about them.
+
+The 2nd feature is the enablement of interrupt based transactions with
+discrete TPM chips (tpm_tis). There was code for this existing but it
+never really worked so I consider this a new feature rather than a bug
+fix. Before the driver just falled back to the polling mode.
+
+Link: https://lore.kernel.org/linux-integrity/a93b6222-edda-d43c-f010-a59701f2aeef@gmx.de/
+Link: https://lore.kernel.org/linux-integrity/20230302164652.83571-1-eric.snowberg@oracle.com/
+
+----------------------------------------------------------------
+Eric Snowberg (6):
+      KEYS: Create static version of public_key_verify_signature
+      KEYS: Add missing function documentation
+      KEYS: X.509: Parse Basic Constraints for CA
+      KEYS: X.509: Parse Key Usage
+      KEYS: CA link restriction
+      integrity: machine keyring CA configuration
+
+Haris Okanovic (1):
+      tpm_tis: fix stall after iowrite*()s
+
+Jarkko Sakkinen (1):
+      tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site
+
+Krzysztof Kozlowski (2):
+      tpm: st33zp24: Mark ACPI and OF related data as maybe unused
+      tpm: tpm_tis_spi: Mark ACPI and OF related data as maybe unused
+
+Lino Sanfilippo (14):
+      tpm, tpm_tis: Avoid cache incoherency in test for interrupts
+      tpm, tpm_tis: Claim locality before writing TPM_INT_ENABLE register
+      tpm, tpm_tis: Disable interrupts if tpm_tis_probe_irq() failed
+      tpm, tpm_tis: Do not skip reset of original interrupt vector
+      tpm, tpm_tis: Claim locality before writing interrupt registers
+      tpm, tpm_tis: Only handle supported interrupts
+      tpm, tpm_tis: Move interrupt mask checks into own function
+      tpm, tpm_tis: do not check for the active locality in interrupt handler
+      tpm, tpm: Implement usage counter for locality
+      tpm, tpm_tis: Request threaded interrupt handler
+      tpm, tpm_tis: Claim locality in interrupt handler
+      tpm, tpm_tis: Claim locality when interrupts are reenabled on resume
+      tpm, tpm_tis: startup chip before testing for interrupts
+      tpm, tpm_tis: Enable interrupt test
+
+Mark Hasemeyer (1):
+      tpm: cr50: i2c: use jiffies to wait for tpm ready irq
+
+Uwe Kleine-König (3):
+      tpm/tpm_ftpm_tee: Convert to platform remove callback returning void
+      tpm/tpm_tis: Convert to platform remove callback returning void
+      tpm/tpm_tis_synquacer: Convert to platform remove callback returning void
+
+Yu Zhe (1):
+      tpm: remove unnecessary (void*) conversions
+
+ certs/system_keyring.c                    |  14 +-
+ crypto/asymmetric_keys/restrict.c         |  40 ++++
+ crypto/asymmetric_keys/x509_cert_parser.c |  50 +++++
+ drivers/char/tpm/eventlog/common.c        |   6 +-
+ drivers/char/tpm/st33zp24/i2c.c           |   4 +-
+ drivers/char/tpm/st33zp24/spi.c           |   4 +-
+ drivers/char/tpm/tpm-chip.c               |  41 ++--
+ drivers/char/tpm/tpm.h                    |   1 +
+ drivers/char/tpm/tpm_ftpm_tee.c           |   6 +-
+ drivers/char/tpm/tpm_tis.c                |  51 ++++-
+ drivers/char/tpm/tpm_tis_core.c           | 299 ++++++++++++++++++------------
+ drivers/char/tpm/tpm_tis_core.h           |   5 +-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c       |   3 +-
+ drivers/char/tpm/tpm_tis_spi_main.c       |   4 +-
+ drivers/char/tpm/tpm_tis_synquacer.c      |   6 +-
+ include/crypto/public_key.h               |  28 +++
+ security/integrity/Kconfig                |  23 ++-
+ security/integrity/digsig.c               |   8 +-
+ 18 files changed, 431 insertions(+), 162 deletions(-)
