@@ -2,172 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38BD6EC70D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1111C6EC710
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjDXH1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S231308AbjDXH2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDXH1X (ORCPT
+        with ESMTP id S229625AbjDXH2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:27:23 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEFEE51
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:27:22 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f0a2f8216fso68061cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682321241; x=1684913241;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ahdEQL93PRhlUbZy1YrzF2+fsjVJoQaMUbVlOD7o0GU=;
-        b=OWHzNKDIh5f/Xv52he3IGOyyQUN9IGcya31DKiyDv/p7ov6b6BETUqTYjlamGM1LMA
-         sEfMzsZt51e4g2a3ZenAv5vilSl9Lv1XGLb2k6gOqRGQ/oiLRGQ2pQwvF02wgdX+yJdC
-         odjLtL8xXhgb253+qBCHC+Vsg4wzAzjWm1Kg3oeRgrDK+/Pmeff3yXaKYi3o/lsBUu6B
-         mLqY1Sbpai89QJKjS8awYi+lwXqV15+vM+giIOiNvTTWPpBZvi+Duql8pZCrq/P1mGgv
-         DPyPNwisFFFVZZFzjPCu9f5fArUVKqFtD3hT4FqoyIT4n9SGaooEUiZ7FKCJEIAk6FvP
-         mxRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682321241; x=1684913241;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ahdEQL93PRhlUbZy1YrzF2+fsjVJoQaMUbVlOD7o0GU=;
-        b=cJL4fkJaYSvtGHCNDEfga39dyyxiWtlJ015osDrqcUYULe+qLcHiW+TKTq+F3licA1
-         gALEJkrxugWSGc8Ox880ooiTiIruaklaZpKGA75U93onnSfTWEi0LxoXoOiKzh9p4oLa
-         HePmW5AktIAQJFBggyDOoN77vn7tm3cqB07CRdZdFyEX8UGenKqPHIcgbDtUBarR/nwA
-         OjM1Vw4oEyuNPWieMUy3nrodjuyePf7I8ZtAySi/7Dzjb80Yoer0/QOzZacc7/NU7AAs
-         sTHSCwElrJbauFoNR4lzyrFAZNvS0HNk4FtJ3l3u9EhT+2gSM4+a5YKPlBZF1on6i30q
-         ItrQ==
-X-Gm-Message-State: AAQBX9eDBj2x/Qm4sFTsw0fFo5LQViyiQAtmlQpzy9zgzvojz1rVSPAC
-        Fco2FXU1ah6P0BG1fNVs/3xhGkfHhVmbHyKYpKT+0A==
-X-Google-Smtp-Source: AKy350bWGGOREUaO51p6fbDBec9ga2qR/WR5xh9DJosJU0CekJPlwOYwih39WFr3VRQDASYoi0jizEqSf1Higgp57GU=
-X-Received: by 2002:ac8:5c0c:0:b0:3ef:19fe:230d with SMTP id
- i12-20020ac85c0c000000b003ef19fe230dmr423101qti.17.1682321241170; Mon, 24 Apr
- 2023 00:27:21 -0700 (PDT)
+        Mon, 24 Apr 2023 03:28:47 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99EDE53;
+        Mon, 24 Apr 2023 00:28:45 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C358F1EC0523;
+        Mon, 24 Apr 2023 09:28:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1682321321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=bR93/6gZn9N+r1aZIz3dS9pvjK+zPuw9BOIOYUlC96g=;
+        b=DndZiKJ/e26uLbCm1GlS9mnjxlohKETqUz9I3tkCaXwXAoWSDEs2q5uEayePAlmTAmiffc
+        01UzspziUJ+Qc1K52TrUWRve+VVct8nm2c0QVd3nuGa66Ow+HV/MYZuHIMe4+Z+da2nXFR
+        PwnBcrJP4LFKzYS4iUNVxpWHV7iWvig=
+Date:   Mon, 24 Apr 2023 09:28:36 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.4
+Message-ID: <20230424072836.GAZEYvpDGrV3bXx690@fat_crate.local>
 MIME-Version: 1.0
-References: <000000000000d3b33905fa0fd4a6@google.com>
-In-Reply-To: <000000000000d3b33905fa0fd4a6@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Apr 2023 09:27:00 +0200
-Message-ID: <CACT4Y+a20C5kUHRKbFB08QsLbdia+ELCOcKibJVY_v+xmjMPow@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] KCSAN: data-race in __es_find_extent_range /
- __es_find_extent_range (6)
-To:     syzbot <syzbot+4a03518df1e31b537066@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 09:19, syzbot
-<syzbot+4a03518df1e31b537066@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    44149752e998 Merge tag 'cgroup-for-6.3-rc6-fixes' of git:/..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=100db37bc80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=710057cbb8def08c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4a03518df1e31b537066
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/7bfa303f05cc/disk-44149752.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/4e8ea8730409/vmlinux-44149752.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/e584bce13ba7/bzImage-44149752.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4a03518df1e31b537066@syzkaller.appspotmail.com
+Hi Linus,
 
-The race is here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/extents_status.c?id=44149752e9987a9eac5ad78e6d3a20934b5e018d#n271
+please pull the latest lineup of EDAC changes for v6.4.
 
-If I am reading this correctly, it can lead to returning a wrong
-extent if tree->cache_es is re-read after the range check.
-I think tree->cache_es read/write should use READ/WRITE_ONCE.
+For some stupid reason (juggling gazillion things at the same time,
+probably) I have based the edac-amd64 branch *not* ontop of plain
+v6.3-rc3 but there are a couple more of your merges ontop.
 
-> ==================================================================
-> BUG: KCSAN: data-race in __es_find_extent_range / __es_find_extent_range
->
-> write to 0xffff88810a5a98a8 of 8 bytes by task 10666 on cpu 0:
->  __es_find_extent_range+0x212/0x300 fs/ext4/extents_status.c:296
->  ext4_es_find_extent_range+0x91/0x260 fs/ext4/extents_status.c:318
->  ext4_ext_put_gap_in_cache fs/ext4/extents.c:2284 [inline]
->  ext4_ext_map_blocks+0x120d/0x36c0 fs/ext4/extents.c:4191
->  ext4_map_blocks+0x2a0/0x1050 fs/ext4/inode.c:576
->  ext4_mpage_readpages+0x699/0x1440 fs/ext4/readpage.c:300
->  ext4_read_folio+0xc5/0x1a0 fs/ext4/inode.c:3308
->  filemap_read_folio+0x2c/0x100 mm/filemap.c:2424
->  filemap_fault+0x66f/0xb20 mm/filemap.c:3367
->  __do_fault mm/memory.c:4155 [inline]
->  do_read_fault mm/memory.c:4506 [inline]
->  do_fault mm/memory.c:4635 [inline]
->  handle_pte_fault mm/memory.c:4923 [inline]
->  __handle_mm_fault mm/memory.c:5065 [inline]
->  handle_mm_fault+0x115d/0x21d0 mm/memory.c:5211
->  faultin_page mm/gup.c:925 [inline]
->  __get_user_pages+0x363/0xc30 mm/gup.c:1147
->  populate_vma_page_range mm/gup.c:1543 [inline]
->  __mm_populate+0x23a/0x360 mm/gup.c:1652
->  mm_populate include/linux/mm.h:3026 [inline]
->  vm_mmap_pgoff+0x174/0x210 mm/util.c:547
->  ksys_mmap_pgoff+0x2ac/0x320 mm/mmap.c:1410
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> read to 0xffff88810a5a98a8 of 8 bytes by task 10630 on cpu 1:
->  __es_find_extent_range+0x79/0x300 fs/ext4/extents_status.c:270
->  __es_scan_range fs/ext4/extents_status.c:345 [inline]
->  __es_scan_clu fs/ext4/extents_status.c:399 [inline]
->  ext4_es_scan_clu+0xe4/0x190 fs/ext4/extents_status.c:415
->  ext4_insert_delayed_block fs/ext4/inode.c:1694 [inline]
->  ext4_da_map_blocks fs/ext4/inode.c:1806 [inline]
->  ext4_da_get_block_prep+0x575/0xa70 fs/ext4/inode.c:1870
->  __block_write_begin_int+0x349/0xe50 fs/buffer.c:2034
->  __block_write_begin+0x5e/0x110 fs/buffer.c:2084
->  ext4_da_write_begin+0x2fa/0x610 fs/ext4/inode.c:3084
->  generic_perform_write+0x1c3/0x3d0 mm/filemap.c:3926
->  ext4_buffered_write_iter+0x234/0x3e0 fs/ext4/file.c:289
->  ext4_file_write_iter+0xd7/0x10e0
->  call_write_iter include/linux/fs.h:1851 [inline]
->  new_sync_write fs/read_write.c:491 [inline]
->  vfs_write+0x463/0x760 fs/read_write.c:584
->  ksys_write+0xeb/0x1a0 fs/read_write.c:637
->  __do_sys_write fs/read_write.c:649 [inline]
->  __se_sys_write fs/read_write.c:646 [inline]
->  __x64_sys_write+0x42/0x50 fs/read_write.c:646
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> value changed: 0xffff88810a653dc0 -> 0xffff8881067334d8
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 10630 Comm: syz-executor.0 Not tainted 6.3.0-rc6-syzkaller-00138-g44149752e998 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-> ==================================================================
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I.e., the actual base is v6.3-rc3-12-g17214b70a159, as it says below.
+
+The branch is otherwise fine, those merges are unrelated, it has
+passed testing and has been in linux-next for almost a month now.
+
+I didn't want to rebase to have a clean base because that would've
+altered commit IDs and that's a no-no.
+
+So pls lemme know if there's something I need to do or whether that
+looks ok this way.
+
+Thanks and sorry.
+
+---
+The following changes since commit 17214b70a159c6547df9ae204a6275d983146f6b:
+
+  Merge tag 'fsverity-for-linus' of git://git.kernel.org/pub/scm/fs/fsverity/linux (2023-03-20 15:20:33 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.4
+
+for you to fetch changes up to ce8ac91130b96f651cf6b5245668dfa4969c9c42:
+
+  Merge branches 'edac-drivers', 'edac-amd64' and 'edac-misc' into edac-updates (2023-04-24 09:14:30 +0200)
+
+----------------------------------------------------------------
+- skx_edac: Fix overflow when decoding 32G DIMM ranks
+
+- i10nm_edac: Add Sierra Forest support
+
+- amd64_edac: Split driver code between legacy and SMCA systems. The
+  final goal is adding support for more hw, like GPUs
+
+- The usual minor cleanups and fixes
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (2):
+      EDAC: Sanitize MODULE_AUTHOR strings
+      Merge branches 'edac-drivers', 'edac-amd64' and 'edac-misc' into edac-updates
+
+Deepak R Varma (1):
+      EDAC/altera: Remove redundant error logging
+
+Jonathan Neuschäfer (1):
+      EDAC/amd81[13]1: Remove trailing newline from MODULE_AUTHOR
+
+Jongwoo Han (1):
+      EDAC/i5100: Fix typo in comment
+
+Muralidhara M K (11):
+      EDAC/amd64: Merge struct amd64_family_type into struct amd64_pvt
+      EDAC/amd64: Split prep_chip_selects() into dct/umc functions
+      EDAC/amd64: Split read_base_mask() into dct/umc functions
+      EDAC/amd64: Split determine_memory_type() into dct/umc functions
+      EDAC/amd64: Split read_mc_regs() into dct/umc functions
+      EDAC/amd64: Split ecc_enabled() into dct/umc functions
+      EDAC/amd64: Split setup_mci_misc_attrs() into dct/umc functions
+      EDAC/amd64: Split determine_edac_cap() into dct/umc functions
+      EDAC/amd64: Split init_csrows() into dct/umc functions
+      EDAC/amd64: Split dump_misc_regs() into dct/umc functions
+      EDAC/amd64: Add get_err_info() to pvt->ops
+
+Nick Alcock (1):
+      EDAC/altera: Remove MODULE_LICENSE in non-module
+
+Qiuxu Zhuo (2):
+      EDAC/skx: Fix overflows on the DRAM row address mapping arrays
+      EDAC/i10nm: Add Intel Sierra Forest server support
+
+Yang Li (1):
+      EDAC/amd64: Fix indentation in umc_determine_edac_cap()
+
+Yazen Ghannam (6):
+      EDAC/amd64: Rename debug_display_dimm_sizes()
+      EDAC/amd64: Split get_csrow_nr_pages() into dct/umc functions
+      EDAC/amd64: Drop dbam_to_cs() for Family 17h and later
+      EDAC/amd64: Do not discover ECC symbol size for Family 17h and later
+      EDAC/amd64: Rework hw_info_{get,put}
+      EDAC/amd64: Rename f17h_determine_edac_ctl_cap()
+
+ drivers/edac/altera_edac.c     |   10 +-
+ drivers/edac/amd64_edac.c      | 1020 ++++++++++++++++++----------------------
+ drivers/edac/amd64_edac.h      |   67 +--
+ drivers/edac/amd8111_edac.c    |    2 +-
+ drivers/edac/amd8131_edac.c    |    2 +-
+ drivers/edac/e752x_edac.c      |    2 +-
+ drivers/edac/e7xxx_edac.c      |    3 +-
+ drivers/edac/i10nm_base.c      |    1 +
+ drivers/edac/i5000_edac.c      |    7 +-
+ drivers/edac/i5100_edac.c      |    5 +-
+ drivers/edac/i82860_edac.c     |    3 +-
+ drivers/edac/layerscape_edac.c |    3 +-
+ drivers/edac/mpc85xx_edac.c    |    3 +-
+ drivers/edac/r82600_edac.c     |    3 +-
+ drivers/edac/skx_base.c        |    4 +-
+ 15 files changed, 490 insertions(+), 645 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
