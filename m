@@ -2,79 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A74D6ED78E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A5D6ED78A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbjDXWJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S232369AbjDXWIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbjDXWI7 (ORCPT
+        with ESMTP id S232946AbjDXWID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:08:59 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D763783CF;
-        Mon, 24 Apr 2023 15:08:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Q4zkn6JTQz4wgv;
-        Tue, 25 Apr 2023 08:07:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1682374034;
-        bh=GddNnol6YaHH8rm7F5s2DGk04beKSm23ST/yGyZyL6U=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=TqvT2wbacCDaYEYDw8Cw/06md42z0Ft42g8d2loJiP6oKtJKR9B+BO1tQxknL7O0+
-         xHMtwZupuQ1w7gUsv6IisIF//qd4Y4hZI3kxUd9KfgQF6w/5OjIsXwq8drwcUuMjRe
-         66BZuzYAZ4SM6llfYKshjKJIh5rj20HbevDL5xX/TMB2Y/p8E55gHi+8asUYMixzmc
-         prF8+buWbfVI03axdZdlUUXRvcLURz0GNFS+gWqMFkU98HoirT44IbzLB1J8mKuAv2
-         sdSfKjqJBV24hDiOmhzC7R7Rdo6k+zl1XFqJqEgVRK6uzp4kMSHTKyoAFNG2ukHahK
-         c0ermrBykUYsA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-In-Reply-To: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
-Date:   Tue, 25 Apr 2023 08:07:10 +1000
-Message-ID: <87cz3tylwx.fsf@mail.concordia>
+        Mon, 24 Apr 2023 18:08:03 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA5B9759
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:07:34 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b621b1dabso1556079b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682374043; x=1684966043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+dRw3ZuCGQ4L6hUkul9wpsWJC+pumrtpXIkrF71AKzg=;
+        b=3khdx0Pbh7dboOsA/SQbLr+pThfrOhlsUVR9wi/ngcb/YMYufGZY1hhbwTaJZPNEv3
+         O1J130sRQYLR1rGY2zCd5qRceSMqVkIEoJJpxoeKvWOfYTm+sMN3RA2wWxaZ2sjntcRg
+         yKhJG8brRG/tMc0/zViwM///8LGYNcjgDdFqwCYcIBsxMvqGuIZn1OvyB9Sw+SXUKaat
+         /FZNXoxznzO2ful/U38P3afDzHRxMjOJKrJw39/kMhy82MAsNZmnNm/GOfbVH2KO2psN
+         osWBaiHOIBa2RgMCUv6na9fnE7AR0tUHQwcCVpj2ubCZpkXWqPCgHNbw4yeNxslRf28i
+         byfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682374043; x=1684966043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+dRw3ZuCGQ4L6hUkul9wpsWJC+pumrtpXIkrF71AKzg=;
+        b=gLzhhpXzqXiXno/MYEbUww9MsD+fXRA+OFs0VPXwDyKzfFe3XyAxNqy4MZUjtbDWGK
+         KIJfkTE0h2gZA602SFo44aXsETYLD2rYqsTA8RApLJoI1Z6GxchWfxgwajlM23tDFg25
+         vScYZtljvQKk84rTY/fT6Yl6l839mGgPo3g9pyDRjzPO5hqPBiMYJ9tvVQTyPE9cBhY4
+         gfh+otzG5vbMtVc714ySGR4esyxZN8qHwrKa55wih3DRewYQ+aoOsOkn66FPb+jtVaqG
+         Jl2xwopm/pan9WG6hBqK++OXdLX0Y4On1b/KUJ62/u9LggZttFkWy7kOEVwTC7ubmqur
+         PA1w==
+X-Gm-Message-State: AAQBX9dgB06ycWhr5bgrf54HfnVQiwS3KRodFdgyXahAyBPd6WRLvb1z
+        XzMtYlplWr1kWptwZSpf6LQPDQ==
+X-Google-Smtp-Source: AKy350YJ6Y1ozgYMQvy0Di+6WfdGyjFKUuR/diJvgDuLAk/2d/BmfR/WVPhTyWIZfGtTCit8MFZ8gg==
+X-Received: by 2002:a05:6a21:9982:b0:e8:dcca:d9cb with SMTP id ve2-20020a056a21998200b000e8dccad9cbmr19617367pzb.5.1682374043298;
+        Mon, 24 Apr 2023 15:07:23 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e13-20020a63db0d000000b0050f7208b4bcsm6924377pgg.89.2023.04.24.15.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 15:07:23 -0700 (PDT)
+Message-ID: <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
+Date:   Mon, 24 Apr 2023 16:07:21 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+ <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
+ <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
+ <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
+ <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhouyi Zhou <zhouzhouyi@gmail.com> writes:
-> Dear PowerPC and RCU developers:
-> During the RCU torture test on mainline (on the VM of Opensource Lab
-> of Oregon State University), SRCU-P failed with __stack_chk_fail:
-...
-> by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
-> but if there is a context-switch before c000000000226edc, a false
-> positive will be reported.
->
-> [1] http://154.220.3.115/logs/0422/configformainline.txt
+On 4/24/23 3:58?PM, Linus Torvalds wrote:
+> On Mon, Apr 24, 2023 at 2:37?PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> And I completely refuse to add that trylock hack to paper that over.
+>> The pipe lock is *not* meant for IO.
+> 
+> If you want to paper it over, do it other ways.
+> 
+> I'd love to just magically fix splice, but hey, that might not be possible.
 
-Says:
+Don't think it is... At least not trivially.
 
-CONFIG_CC_VERSION_TEXT="powerpc64le-linux-gnu-gcc-10 (Ubuntu 10.4.0-4ubuntu1~22.04) 10.4.0"
+> But possible fixes papering this over might be to make splice "poison
+> a pipe, and make io_uring falls back on io workers only on pipes that
+> do splice. Make any normal pipe read/write load sane.
+> 
+> And no, don't worry about races. If you have the same pipe used for
+> io_uring IO *and* somebody else then doing splice on it and racing,
+> just take the loss and tell people that they might hit a slow case if
+> they do stupid things.
+> 
+> Basically, the patch might look like something like
+> 
+>  - do_pipe() sets FMODE_NOWAIT by default when creating a pipe
+> 
+>  - splice then clears FMODE_NOWAIT on pipes as they are used
+> 
+> and now io_uring sees whether the pipe is playing nice or not.
+> 
+> As far as I can tell, something like that would make the
+> 'pipe_buf_confirm()' part unnecessary too, since that's only relevant
+> for splice.
+> 
+> A fancier version might be to only do that "splice then clears
+> FMODE_NOWAIT" thing if the other side of the splice has not set
+> FMODE_NOWAIT.
+> 
+> Honestly, if the problem is "pipe IO is slow", then splice should not
+> be the thing you optimize for.
 
-Do you see the same issue with a newer GCC?
+I think that'd be an acceptable approach, and would at least fix the
+pure pipe case which I suspect is 99.9% of them, if not more. And yes,
+it'd mean that we don't need to do the ->confirm() change either, as the
+pipe is already tainted at that point.
 
-There's 12.2.0 here:
-  https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/12.2.0/
-  https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/ppc64le/12.2.0/
+I'll respin a v2, post, and send in later this merge window.
 
-Or if you can build in a Fedora 38 system or container, it has GCC 13.
+-- 
+Jens Axboe
 
-cheers
