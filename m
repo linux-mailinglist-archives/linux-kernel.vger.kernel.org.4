@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F046ECA38
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71E96ECA44
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjDXKVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
+        id S231274AbjDXKWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 06:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbjDXKVF (ORCPT
+        with ESMTP id S231791AbjDXKVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:21:05 -0400
+        Mon, 24 Apr 2023 06:21:54 -0400
 Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADD140FB;
-        Mon, 24 Apr 2023 03:20:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91B540DC;
+        Mon, 24 Apr 2023 03:20:54 -0700 (PDT)
 Received: from mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:261e:0:640:2e3d:0])
-        by forward502b.mail.yandex.net (Yandex) with ESMTP id 9D49D5ED71;
-        Mon, 24 Apr 2023 12:36:00 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id JZBb1pbWwKo0-pSFkK2Mm;
-        Mon, 24 Apr 2023 12:36:00 +0300
+        by forward502b.mail.yandex.net (Yandex) with ESMTP id C6FE65EC79;
+        Mon, 24 Apr 2023 12:36:01 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id JZBb1pbWwKo0-0eocMuTW;
+        Mon, 24 Apr 2023 12:36:01 +0300
 X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682328960;
-        bh=qyIgOCdaAxA/ZmT6JZ72pRqNQLXvT4Bjw+nu8ZCSGLk=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682328961;
+        bh=lZRbxaS0xiq44T/zESI4eXsgKm1tQjdSQS2qMC8kcOI=;
         h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=cji00OIAtPjo/9c1sBW5SB3NHMzdCY0u5pc2PqHE5ymJjgPE/p4wxBGzf53/9Del7
-         gV/Lc+k5xLLfAw3Q8poSd2dD0YnSdAyKzkfNvwMnwIOkVCdy5TZ5/TP3XzPVc3fZJz
-         PcX5efJxRZNg4xE0W2Z5PoH5t483P48nUmmqXHVM=
+        b=VdZETi2KvvQVolaU2tPAozmUDXDxbWuIqXQuqwLYYAVRFgPXhBOcgRFd8tqDq9W6E
+         38AA8AadndV18s2PlZ9Q1ZT0aMqB0D1a7uu9SoAg4ra7qe0fC05mzGKp0hTXP3aKUr
+         186NKY8klPejc8zFQ71UM9OHh33ulANePgB6ArZM=
 Authentication-Results: mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
 From:   Nikita Shubin <nikita.shubin@maquefel.me>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 26/43] dt-bindings: input: Add DT bindings ep93xx keypad
-Date:   Mon, 24 Apr 2023 15:34:42 +0300
-Message-Id: <20230424123522.18302-27-nikita.shubin@maquefel.me>
+Subject: [PATCH 27/43] input: keypad: ep93xx: add DT support for Cirrus EP93xx
+Date:   Mon, 24 Apr 2023 15:34:43 +0300
+Message-Id: <20230424123522.18302-28-nikita.shubin@maquefel.me>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
@@ -55,148 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add YAML bindings ep93xx SoC.
+- get keymap from the device tree
+- find register range from the device tree
+- get interrupts from device tree
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
 
 Notes:
-    Linus Walleij:
-    - replaced hex with proper <KEY_UP>, etc
+    Arnd Bergmann:
+    - wildcards ep93xx to something meaningful, i.e. ep9301
+    - drop wrappers
 
- .../bindings/input/cirrus,ep93xx-keypad.yaml  | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/cirrus,ep93xx-keypad.yaml
+ drivers/input/keyboard/ep93xx_keypad.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/input/cirrus,ep93xx-keypad.yaml b/Documentation/devicetree/bindings/input/cirrus,ep93xx-keypad.yaml
-new file mode 100644
-index 000000000000..0310114de22e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/cirrus,ep93xx-keypad.yaml
-@@ -0,0 +1,123 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/cirrus,ep93xx-keypad.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/input/keyboard/ep93xx_keypad.c b/drivers/input/keyboard/ep93xx_keypad.c
+index 55075addcac2..bf77754fa4c7 100644
+--- a/drivers/input/keyboard/ep93xx_keypad.c
++++ b/drivers/input/keyboard/ep93xx_keypad.c
+@@ -20,6 +20,8 @@
+ #include <linux/bits.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
+ #include <linux/interrupt.h>
+ #include <linux/clk.h>
+ #include <linux/io.h>
+@@ -315,10 +317,17 @@ static int ep93xx_keypad_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct of_device_id ep93xx_keypad_of_ids[] = {
++	{ .compatible = "cirrus,ep9301-keypad" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, ep93xx_keypad_of_ids);
 +
-+title: Cirrus ep93xx keypad
-+
-+maintainers:
-+  - Dmitry Torokhov <dmitry.torokhov@gmail.com>
-+  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-+
-+allOf:
-+  - $ref: "/schemas/input/matrix-keymap.yaml#"
-+
-+description: |
-+  The KPP is designed to interface with a keypad matrix with 2-point contact
-+  or 3-point contact keys. The KPP is designed to simplify the software task
-+  of scanning a keypad matrix. The KPP is capable of detecting, debouncing,
-+  and decoding one or multiple keys pressed simultaneously on a keypad.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - cirrus,ep9301-keypad
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    enum:
-+      - ep93xx-keypad
-+
-+  debounce:
-+    description: |
-+          Time in microseconds that key must be pressed or
-+          released for state change interrupt to trigger.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  prescale:
-+    description: row/column counter pre-scaler load value
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  clk-rate:
-+    description: clock rate setting
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  disable-3-key:
-+    type: boolean
-+    description:
-+      Disable 3 Key reset. Setting this disables the three key reset
-+      output to the watchdog reset block.
-+
-+  diag-mode:
-+    type: boolean
-+    description:
-+      Key scan diagnostic mode. Setting this allows key scanning to be
-+      directly controlled through the key register by writes from the
-+      ARM Core.
-+
-+  back-drive:
-+    type: boolean
-+    description:
-+      Key scan back driving enable. Setting this enables the key
-+      scanning logic to back drive the row and column pins of the
-+      chip high during the first two column counts in the
-+      row/column counter.
-+
-+  test-mode:
-+    type: boolean
-+    description:
-+      Test mode. When this is set, the counter RC_COUNT is advanced
-+      by 8 counts when EN is active. The effect is that only column 0
-+      is checked in each row. This test mode allows a faster test
-+      of the ROW pins.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - linux,keymap
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
-+    #include <dt-bindings/input/input.h>
-+    keypad@800f0000 {
-+        compatible = "cirrus,ep9301-keypad";
-+        reg = <0x800f0000 0x0c>;
-+        interrupt-parent = <&vic0>;
-+        interrupts = <29>;
-+        clocks = <&syscon EP93XX_CLK_KEYPAD>;
-+        clock-names = "ep93xx-keypad";
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&keypad_default_pins>;
-+        linux,keymap = <KEY_UP>,
-+                       <KEY_DOWN>,
-+                       <KEY_VOLUMEDOWN>,
-+                       <KEY_HOME>,
-+                       <KEY_RIGHT>,
-+                       <KEY_LEFT>,
-+                       <KEY_ENTER>,
-+                       <KEY_VOLUMEUP>,
-+                       <KEY_F6>,
-+                       <KEY_F8>,
-+                       <KEY_F9>,
-+                       <KEY_F10>,
-+                       <KEY_F1>,
-+                       <KEY_F2>,
-+                       <KEY_F3>,
-+                       <KEY_POWER>;
-+    };
-+
+ static struct platform_driver ep93xx_keypad_driver = {
+ 	.driver		= {
+ 		.name	= "ep93xx-keypad",
+ 		.pm	= pm_sleep_ptr(&ep93xx_keypad_pm_ops),
++		.of_match_table = ep93xx_keypad_of_ids,
+ 	},
+ 	.probe		= ep93xx_keypad_probe,
+ 	.remove		= ep93xx_keypad_remove,
 -- 
 2.39.2
 
