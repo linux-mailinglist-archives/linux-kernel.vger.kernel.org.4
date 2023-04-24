@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149186EC4D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9EC6EC4DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjDXFcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 01:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S229548AbjDXFdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 01:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDXFco (ORCPT
+        with ESMTP id S230095AbjDXFdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 01:32:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D9A1FD8;
-        Sun, 23 Apr 2023 22:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682314363; x=1713850363;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1n43/fJLjYfG3QHQXcc4cXYaQSDmQZ6CPC6WO9kddpk=;
-  b=T4Dgs1Y98SMWqbiPRd5iaDgidCmAGWcqV51x8sWnk02wwXjeqnmtkF26
-   zbAc3MYH02AjZTMptaQCN5dMIGQgqfRGu4KemCP1JFoRdfUqsCQPwRdo4
-   Wd5iq6+FA9F4pWom57jzNBs8rprzcia2fsXQ8Bq/U1qkzMNMmyQTqCjZ6
-   NSHqEVabBQZh0yLQ+CIWYddPoQWhsA7MVC5ICgqlwcdT6iNs9O4nyW25V
-   4U5mWzJy9pkP4bRvvkcCpD60v9p46PvN9l97WK1slAKmyu/iNJp8yvuQw
-   yFG31YDY02FGRWhQJ9TjAypCNQ1f7bCIvTTsbdo00S1M6oeYkdJM9P0hk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="349164994"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="349164994"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:32:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="836825069"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="836825069"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2023 22:32:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqooa-000iHg-0k;
-        Mon, 24 Apr 2023 05:32:40 +0000
-Date:   Mon, 24 Apr 2023 13:32:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     oe-kbuild-all@lists.linux.dev, Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <202304241303.WkdqPPbt-lkp@intel.com>
-References: <20230423185929.1595056-1-kasper@iki.fi>
+        Mon, 24 Apr 2023 01:33:20 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDDD2D7E;
+        Sun, 23 Apr 2023 22:33:18 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33O5WaDl001627;
+        Mon, 24 Apr 2023 00:32:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682314356;
+        bh=BrB0RCivFs+NE13J+xWDij4MRP3eSr/zOZpAorPXKnQ=;
+        h=From:To:CC:Subject:Date;
+        b=c6vpiR2T6aD5/WF1g4cQjKObCsdInlXJbz809JCTgCwzsja6GwCi1uFmgXEjWjDt2
+         kBU1+WyLPyBS26NNQuqbM46vgYo6u5w+SISCN63cIyeukYpq0SHo+9e8NchmhIxbDX
+         EjctIGeGSxoPNW9//OzqJSKMPe3CESCM5r43eSFI=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33O5WaLI055984
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 00:32:36 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 00:32:36 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 00:32:36 -0500
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33O5WaZd119151;
+        Mon, 24 Apr 2023 00:32:36 -0500
+Received: from localhost (uda0501179.dhcp.ti.com [10.24.69.114])
+        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 33O5WY0O016190;
+        Mon, 24 Apr 2023 00:32:35 -0500
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     "Andrew F. Davis" <afd@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Cochran <richardcochran@gmail.com>
+CC:     <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [RFC PATCH v6 0/2] Introduce ICSSG based ethernet Driver
+Date:   Mon, 24 Apr 2023 11:02:31 +0530
+Message-ID: <20230424053233.2338782-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230423185929.1595056-1-kasper@iki.fi>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,113 +79,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+The Programmable Real-time Unit and Industrial Communication Subsystem
+Gigabit (PRU_ICSSG) is a low-latency microcontroller subsystem in the TI
+SoCs. This subsystem is provided for the use cases like the implementation
+of custom peripheral interfaces, offloading of tasks from the other
+processor cores of the SoC, etc.
 
-kernel test robot noticed the following build warnings:
+The subsystem includes many accelerators for data processing like
+multiplier and multiplier-accumulator. It also has peripherals like
+UART, MII/RGMII, MDIO, etc. Every ICSSG core includes two 32-bit
+load/store RISC CPU cores called PRUs.
 
-[auto build test WARNING on johan-usb-serial/usb-next]
-[also build test WARNING on johan-usb-serial/usb-linus linus/master v6.3 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The above features allow it to be used for implementing custom firmware
+based peripherals like ethernet.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20230423185929.1595056-1-kasper%40iki.fi
-patch subject: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-config: ia64-randconfig-s053-20230423 (https://download.01.org/0day-ci/archive/20230424/202304241303.WkdqPPbt-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/a80fa27b4fe1974bad2427d7f3260012a04b721a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
-        git checkout a80fa27b4fe1974bad2427d7f3260012a04b721a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/serial/
+This series adds the YAML documentation and the driver with basic EMAC
+support for TI AM654 Silicon Rev 2 SoC with the PRU_ICSSG Sub-system.
+running dual-EMAC firmware.
+This currently supports basic EMAC with 1Gbps and 100Mbps link. 10M and
+half-duplex modes are not yet supported because they require the support
+of an IEP, which will be added later.
+Advanced features like switch-dev and timestamping will be added later.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304241303.WkdqPPbt-lkp@intel.com/
+This series depends on a patch series [1] which is yet to be merged. The seires
+[1] is posted to SoC tree, has already been reviewed and is ready to be merged.
+Currently I am posting this series as RFC to get it reviewed. Once [1] is
+merged, this series can also be merged. 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/serial/xr_serial.c:856:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
-   drivers/usb/serial/xr_serial.c:856:26: sparse:     expected void [noderef] __user *to
-   drivers/usb/serial/xr_serial.c:856:26: sparse:     got struct serial_rs485 *argp
->> drivers/usb/serial/xr_serial.c:872:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct serial_rs485 *argp @@
-   drivers/usb/serial/xr_serial.c:872:36: sparse:     expected void const [noderef] __user *from
-   drivers/usb/serial/xr_serial.c:872:36: sparse:     got struct serial_rs485 *argp
-   drivers/usb/serial/xr_serial.c:881:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
-   drivers/usb/serial/xr_serial.c:881:26: sparse:     expected void [noderef] __user *to
-   drivers/usb/serial/xr_serial.c:881:26: sparse:     got struct serial_rs485 *argp
->> drivers/usb/serial/xr_serial.c:893:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
-   drivers/usb/serial/xr_serial.c:893:49: sparse:     expected struct serial_rs485 *argp
-   drivers/usb/serial/xr_serial.c:893:49: sparse:     got void [noderef] __user *argp
-   drivers/usb/serial/xr_serial.c:895:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
-   drivers/usb/serial/xr_serial.c:895:49: sparse:     expected struct serial_rs485 *argp
-   drivers/usb/serial/xr_serial.c:895:49: sparse:     got void [noderef] __user *argp
+This is the v6 of the patch series [v1]. This version of the patchset 
+addresses the comments made on [v5] of the series. 
 
-vim +856 drivers/usb/serial/xr_serial.c
+Changes from v5 to v6 :
+*) Added RB tag of Andrew Lunn in patch 2 of this series.
+*) Addressed Rob's comment on patch 1 of the series.
+*) Rebased patchset on next-20230421 linux-next.
 
-   848	
-   849	static int xr_get_rs485_config(struct tty_struct *tty,
-   850				       struct serial_rs485 *argp)
-   851	{
-   852		struct usb_serial_port *port = tty->driver_data;
-   853		struct xr_data *data = usb_get_serial_port_data(port);
-   854	
-   855		mutex_lock(&data->lock);
- > 856		if (copy_to_user(argp, &data->rs485, sizeof(data->rs485))) {
-   857			mutex_unlock(&data->lock);
-   858			return -EFAULT;
-   859		}
-   860		mutex_unlock(&data->lock);
-   861	
-   862		return 0;
-   863	}
-   864	
-   865	static int xr_set_rs485_config(struct tty_struct *tty,
-   866				       struct serial_rs485 *argp)
-   867	{
-   868		struct usb_serial_port *port = tty->driver_data;
-   869		struct xr_data *data = usb_get_serial_port_data(port);
-   870		struct serial_rs485 rs485;
-   871	
- > 872		if (copy_from_user(&rs485, argp, sizeof(rs485)))
-   873			return -EFAULT;
-   874		xr_sanitize_serial_rs485(&rs485);
-   875	
-   876		mutex_lock(&data->lock);
-   877		data->rs485 = rs485;
-   878		xr_set_flow_mode(tty, port, NULL);
-   879		mutex_unlock(&data->lock);
-   880	
-   881		if (copy_to_user(argp, &rs485, sizeof(rs485)))
-   882			return -EFAULT;
-   883	
-   884		return 0;
-   885	}
-   886	
-   887	static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
-   888	{
-   889		void __user *argp = (void __user *)arg;
-   890	
-   891		switch (cmd) {
-   892		case TIOCGRS485:
- > 893			return xr_get_rs485_config(tty, argp);
-   894		case TIOCSRS485:
-   895			return xr_set_rs485_config(tty, argp);
-   896		}
-   897	
-   898		return -ENOIOCTLCMD;
-   899	}
-   900	
+Changes from v4 to v5 :
+*) Re-arranged properties section in ti,icssg-prueth.yaml file.
+*) Added requirement for minimum one ethernet port.
+*) Fixed some minor formatting errors as asked by Krzysztof.
+*) Dropped SGMII mode from enum mii_mode as SGMII mode is not currently
+   supported by the driver.
+*) Added switch-case block to handle different phy modes by ICSSG driver.
+
+Changes from v3 to v4 :
+*) Addressed Krzysztof's comments and fixed dt_binding_check errors in 
+   patch 1/2.
+*) Added interrupt-extended property in ethernet-ports properties section.
+*) Fixed comments in file icssg_switch_map.h according to the Linux coding
+   style in patch 2/2. Added Documentation of structures in patch 2/2.
+
+Changes from v2 to v3 :
+*) Addressed Rob and Krzysztof's comments on patch 1 of this series.
+   Fixed indentation. Removed description and pinctrl section from 
+   ti,icssg-prueth.yaml file.
+*) Addressed Krzysztof, Paolo, Randy, Andrew and Christophe's comments on 
+   patch 2 of this seires.
+*) Fixed blanklines in Kconfig and Makefile. Changed structures to const 
+   as suggested by Krzysztof.
+*) Fixed while loop logic in emac_tx_complete_packets() API as suggested 
+   by Paolo. Previously in the loop's last iteration 'budget' was 0 and 
+   napi_consume_skb would wrongly assume the caller is not in NAPI context
+   Now, budget won't be zero in last iteration of loop. 
+*) Removed inline functions addr_to_da1() and addr_to_da0() as asked by 
+   Andrew.
+*) Added dev_err_probe() instead of dev_err() as suggested by Christophe.
+*) In ti,icssg-prueth.yaml file, in the patternProperties section of 
+   ethernet-ports, kept the port name as "port" instead of "ethernet-port" 
+   as all other drivers were using "port". Will change it if is compulsory 
+   to use "ethernet-port".
+
+[1] https://lore.kernel.org/all/20230414045542.3249939-1-danishanwar@ti.com/
+
+[v1] https://lore.kernel.org/all/20220506052433.28087-1-p-mohan@ti.com/
+[v2] https://lore.kernel.org/all/20220531095108.21757-1-p-mohan@ti.com/
+[v3] https://lore.kernel.org/all/20221223110930.1337536-1-danishanwar@ti.com/
+[v4] https://lore.kernel.org/all/20230206060708.3574472-1-danishanwar@ti.com/
+[v5] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
+
+Thanks and Regards,
+Md Danish Anwar
+
+MD Danish Anwar (1):
+  dt-bindings: net: Add ICSSG Ethernet
+
+Roger Quadros (1):
+  net: ti: icssg-prueth: Add ICSSG ethernet driver
+
+ .../bindings/net/ti,icssg-prueth.yaml         |  184 ++
+ drivers/net/ethernet/ti/Kconfig               |   13 +
+ drivers/net/ethernet/ti/Makefile              |    2 +
+ drivers/net/ethernet/ti/icssg_classifier.c    |  369 ++++
+ drivers/net/ethernet/ti/icssg_config.c        |  448 ++++
+ drivers/net/ethernet/ti/icssg_config.h        |  200 ++
+ drivers/net/ethernet/ti/icssg_ethtool.c       |  326 +++
+ drivers/net/ethernet/ti/icssg_mii_cfg.c       |  104 +
+ drivers/net/ethernet/ti/icssg_mii_rt.h        |  150 ++
+ drivers/net/ethernet/ti/icssg_prueth.c        | 1863 +++++++++++++++++
+ drivers/net/ethernet/ti/icssg_prueth.h        |  247 +++
+ drivers/net/ethernet/ti/icssg_switch_map.h    |  234 +++
+ 12 files changed, 4140 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+ create mode 100644 drivers/net/ethernet/ti/icssg_classifier.c
+ create mode 100644 drivers/net/ethernet/ti/icssg_config.c
+ create mode 100644 drivers/net/ethernet/ti/icssg_config.h
+ create mode 100644 drivers/net/ethernet/ti/icssg_ethtool.c
+ create mode 100644 drivers/net/ethernet/ti/icssg_mii_cfg.c
+ create mode 100644 drivers/net/ethernet/ti/icssg_mii_rt.h
+ create mode 100644 drivers/net/ethernet/ti/icssg_prueth.c
+ create mode 100644 drivers/net/ethernet/ti/icssg_prueth.h
+ create mode 100644 drivers/net/ethernet/ti/icssg_switch_map.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
