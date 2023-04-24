@@ -2,160 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4966ED638
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF9F6ED640
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbjDXUla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S232473AbjDXUm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjDXUl1 (ORCPT
+        with ESMTP id S232317AbjDXUmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:41:27 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BE959CB;
-        Mon, 24 Apr 2023 13:41:24 -0700 (PDT)
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OHgBGa023037;
-        Mon, 24 Apr 2023 20:40:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=u0w/CiaJLlzh1WLzE+33OY2G0U7eSEYHe0gkezNPBIA=;
- b=JtTSZ5TmljhHxv9giu5jB1g0vMFw4hJFaAxPUcrhl9S6FHakoG9sKd3Q4kBbQcHo1nYK
- 2OAYNiaEUA0fmioCemvV7luuw7dG8J2MMBUwKqvA58W4mf5Thxkvn4Ng9QlMtQINMtNO
- 41GTQPhtwGC8ovXCKklk8k1OCmA4vS+e74lyY8ME7ugCmiJmUSry6BWEW7kfM7XvaS9r
- jzfNIz3BI985Uw+21h773GY9AaH2nloCI3GfU0C1Yr0UULaHHI8f1TDLUSeQUpE79A75
- pf8Ux+SpbLRd7B6ivuZVJtAzieXLCHvfjJGpYm05IR2I3Uhf+2+1v46yYOYs7WU7F3Ku Dg== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3q5st9kp5f-1
+        Mon, 24 Apr 2023 16:42:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E83361B2;
+        Mon, 24 Apr 2023 13:42:24 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OKf9uT026649;
+        Mon, 24 Apr 2023 20:41:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=IsjhE9LHHR+B0RZQMgMZOn/HKJ0BcKSpzl4QRRZhkZA=;
+ b=O3luM5fyy/6Df93zRaWG/YL2T4x6NBggLFquN5M3PexMve3iKc1WtNSLeP8kX8Dl+Yro
+ 3WnMN21xgQRuRtHMvJydinxikYz3fellCaMB66aTYNR74Yx6j3d3L6/IrM2+QG1WxWl/
+ 20stP5n4tVMBq0kcH2hLnptvsyfbztb1qYi6tla7CqoiNtFwa5Wk+pJxuFFUffpqTY1i
+ hWAZu0EHOAGymlkWDbOTgdOXk8JMqdmC10vQyWCt2+skEpxgJ2JYgQoemujQuFb1ZcLh
+ 81dEUot7OvAw6BQmc5fYlayVTzLoDCmB/hLHFSBQCsRKkZq/qlhnSV0JfcgBH5YJp3L4 aQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5qv1sby3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 20:40:56 +0000
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 6EB2580025B;
-        Mon, 24 Apr 2023 20:40:55 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 24 Apr 2023 08:40:55 -1200
-Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
- via Frontend Transport; Mon, 24 Apr 2023 08:40:55 -1200
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 24 Apr 2023 08:40:54 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C4oo2WB6hby2HU9X8ETOmF6tToE38Tz/ztTKhULkPcu4+3Z2xL+pg79rs6TxnWZmdovhJju6bTu4dU5DxOBonc0lmaIJw5aUDUYFGUZePTrLMG5iIg3p+7WUy2zWz/MjzCEnKCj1PoFO8RO06VauiktWBgPJs7ARQ50dX5ZW9VxMw7U75pzCOCwLS4CLiVDkExfR8RQ12sltbgIaFpniKI7pnfKXlMaKsek9GQNaYGHEnX8k8QXweyeYDuL2oK33JhW3BaCriYflT14NDJSIQuQ2a0BV0N5GlhRrJYXLu1m+qPA+LUt7+sAfCaIsMVQMsA1uOioO07BYSL7ApPFFKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u0w/CiaJLlzh1WLzE+33OY2G0U7eSEYHe0gkezNPBIA=;
- b=QmZINnOPkhC+U4uSVlkUxMbYjq+HUJ9hQ/TCAiRvlaeU8Tqljjv7VJExhKJAOSJeiIwyfUTRbxTQ3MW0L/0nXWvCteN2urVAx+Z3y/SCrssEmKjijrYV0FsJ2CanS0mTR7MsX6utnuWmmboteH8J+rd4q9WFE2/Ttvg8gp5kX1vf/jfP7zmhzXvEKlbrrf7kQSo+fx7ZZqUdiyiSqbmjU+v5gGCWJ3uf6lC8KqwE5jw0KUbgYi+q0VdR8ZHqORy/o0MRhvdcDj8gJZXFhjRloCAevAokpIqTIlJVP61xhPJdldXDJWBpEuo9tGse0GXIZRV26D8lIOgLhrvT4N/vAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
- by DM4PR84MB1783.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.22; Mon, 24 Apr 2023 20:40:53 +0000
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::71d7:118b:6b9:c794]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::71d7:118b:6b9:c794%6]) with mapi id 15.20.6319.029; Mon, 24 Apr 2023
- 20:40:53 +0000
-From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
-To:     Danny Tsen <dtsen@linux.ibm.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "leitao@debian.org" <leitao@debian.org>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "appro@cryptogams.org" <appro@cryptogams.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "ltcgcw@linux.vnet.ibm.com" <ltcgcw@linux.vnet.ibm.com>,
-        "dtsen@us.ibm.com" <dtsen@us.ibm.com>
-Subject: RE: [PATCH 1/5] An optimized Chacha20 implementation with 8-way
- unrolling for ppc64le.
-Thread-Topic: [PATCH 1/5] An optimized Chacha20 implementation with 8-way
- unrolling for ppc64le.
-Thread-Index: AQHZdt1sJ94WCLbkHU2RjqVi2vFQYq866lPA
-Date:   Mon, 24 Apr 2023 20:40:53 +0000
-Message-ID: <MW5PR84MB1842E9D9F596D3928B415DBAAB679@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20230424184726.2091-1-dtsen@linux.ibm.com>
- <20230424184726.2091-2-dtsen@linux.ibm.com>
-In-Reply-To: <20230424184726.2091-2-dtsen@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW5PR84MB1842:EE_|DM4PR84MB1783:EE_
-x-ms-office365-filtering-correlation-id: 9107a1da-40d9-4d1b-1526-08db45043288
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uHrz+ZopPeyuu8XYS/tMzGSr9rOwOq7Dt1/kmNZPSvAv2Q0C7AzOTgKUw9dadjWUbsYtiR8GaaXUpWBsPxaNkNIoaCYyIAtaQLnhoT4MUxX5CS7/gziSPLd9A8yLtXrvvzEE3v5I89498XQXHsE1qx7fph63pYRmi+pGIQK0abeUsRS9llJ4bUg7kxwdvlXjRA/89nrYrTS0EN3D5gDDmJeSOm5L6uzeNAao0YEhb9yku8sgLLv6NrRWrk+P9UOgc4OjA7Dc3eXyK/u3YHzPpDQ05aBws9EsqiihBBVNETELpokZQZghsJwrAuklOtEZDhzXgG00RkrW+m8wvsDug8ylPYntE/o/8pzbFMGykXt0wODasH7ermZ4D8pb8rxfGHIaCDjGO/rMk0N1LuCSAgiRCSYnTee7Brbpm9gwawJ0uuBTxqhHdJy/J8KhwbNxDc+dJzyB1tS3rxjcH0JvpwXnrbQ2G/5CftZ6oLyqudEI6vuDMdr0JRGIp8MUVSpcob3fCU4fHXIrZ4ruMiVX2ogs/Yu4W9yAkiOJdfy521WdLAw6sniczlZ818ZDJEp8hnFYTLxAGg8kIF/vahw8sI0AkiK8jW62/sPYsuCmxOpCPmUCBxe5n7sp5EqT2gkr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(136003)(396003)(39860400002)(376002)(451199021)(66476007)(2906002)(82960400001)(38070700005)(41300700001)(5660300002)(52536014)(38100700002)(122000001)(7416002)(8676002)(8936002)(33656002)(558084003)(86362001)(55016003)(7696005)(71200400001)(6506007)(9686003)(26005)(54906003)(478600001)(186003)(4326008)(316002)(66556008)(76116006)(110136005)(64756008)(66946007)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v8z0OTD1FhUoSzolCMzJ9q0Zn51Hf+sH1li5W4nfunSrmHQNWXzQi/B97ZN7?=
- =?us-ascii?Q?o7Bzo3pN2J9v6b+HQI+MHloggCjJ0T02prC/Lf2+JKAKayVGA0BBiB6aJ+qO?=
- =?us-ascii?Q?KnUn5QDYlpx93URzffi8CRnd8snxAdsBenUZVAMmJI8HVL2IOMxWlBOoa2TK?=
- =?us-ascii?Q?ObG0jP2sthQ2GsotOos0TqQP6weVRFRJT1VewguQXNEJN4Cfg/GUd9x1YPda?=
- =?us-ascii?Q?i7UOBkqjR34qHWNGno4FOKB8XjHd91FMnz0C3kr9NSix2C9LEqsE3DuXR+bE?=
- =?us-ascii?Q?NBI3+HdmDCkquUsTQwL4JFSfuxeAELGWeG0ZWa7OI+4XBTf+RRh+eEJV84q3?=
- =?us-ascii?Q?EzlnUnRifW4G571s1Okm2CA+19Wzc6FPb0BlcBLavbbFA6sODkgOYMbBGB+W?=
- =?us-ascii?Q?u1fzp2lB2zd2iArHTifXvRcXcGc76bkXJ6Txh3wFBkrwOdQM9eN7n4FnApZx?=
- =?us-ascii?Q?5K0iRptyv4uxXh69WlMgGQa2nvHsFFVDtPl5QqRCDkTR/zzITwz+1L7jJReX?=
- =?us-ascii?Q?H/5FUE0dhR9gGxbaft9jUnGnQyVZIDuB95WGJAMmun/ZVPSGHINwRUIAB437?=
- =?us-ascii?Q?5rzvXjAC3nf9cBMLDZVO/qsBvQfo63AZU7+MaFWU4q1Bf2cxc8q39NF5qKwc?=
- =?us-ascii?Q?J60BxVzQd2bzWZHsx7ojS1me39jSrmKiMBJpaMepxyGpnCjuego5HWnQKUQ8?=
- =?us-ascii?Q?OJBIJC+jJoZxQowc9CSXg+4ASOC9G0DIM+NA353kaiByE8g0jcid4BzGzNk7?=
- =?us-ascii?Q?FsOe/iVRDf1qxKdb6wD9HQtWQq47RFM3RZ2dzeSZis/q603SFJUoE0+Sy1to?=
- =?us-ascii?Q?72WleN58LoF0vJe5ohuscdDFG0zmvl/f0Z8nUPpUMKvqgxIhmzPrz4Uyi58P?=
- =?us-ascii?Q?EK6he59zItaWTHW6OZlmMo5RALIFdpDTpM0tKQnlljkTjtJU+RhdlRoP47Eu?=
- =?us-ascii?Q?wHL819MzQEM5FUxGOkmm2bizC21hm2vyWyFHmAsA52VwFL+zHKr4aubAtRwM?=
- =?us-ascii?Q?PanVTrJ0GTp7XvWntEVxa16uMDskmMRf2UrHK+UPd+2FzruFf/BF9bvSK0c8?=
- =?us-ascii?Q?xNfQ0igrw4IaMyj5LD0DvCLMiUCUfb5vjjY6SuOcXmqqVbtJR7cpnD4PDd2p?=
- =?us-ascii?Q?UikNOxm/a0qMITAhL/+OFsQW2eDABxGr3d5c6xSenqytQRfAegCtCmndivyI?=
- =?us-ascii?Q?4AVPIxtWeY7AXX6zbrdTkZogXkDgWZtC+JLN8DobZAajpoyjyk7g7OSX93kW?=
- =?us-ascii?Q?jDXuiVLujM46e4EOLupxE2ggt3UBoOUiIVVxQMao0SzsXE+EXIxbSJ+upwAy?=
- =?us-ascii?Q?fzHaMjAUm6BPm8QlZxxFaSoCwn2taT1JyIEGuMjirOYWLPTlRpAJwPdtFfW+?=
- =?us-ascii?Q?K/rL1XYAWZwUPKAff62/AIMW2z5QxUe8myE2FOp27sj/KW1JJt7kSCjcQ5Zt?=
- =?us-ascii?Q?N/sgdC9V79wu90Wz/cCMeiTnI2mfG6RXr07CnLtgdmcN2xI4A33eVgOou2nX?=
- =?us-ascii?Q?KweHwBwas7QS8+vu8qZppTpGUZyw0TrluIG1I2OSjkjscU3q+8kL0V6nm11X?=
- =?us-ascii?Q?mcQ/JeE8wP072o3ze1M=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 24 Apr 2023 20:41:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OKfAMs005179
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 20:41:10 GMT
+Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
+ 2023 13:41:08 -0700
+Message-ID: <ca4012ee-d964-c2e9-b437-b03277d71529@quicinc.com>
+Date:   Mon, 24 Apr 2023 13:41:07 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9107a1da-40d9-4d1b-1526-08db45043288
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2023 20:40:53.2610
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 17injCzu3dadGSiILymUSiVUZdAYc9nTVS6qH2pat0iQYQgfc0SOuiM0N+BM/B+1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1783
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: wblqEc6S08rAExDwGmuHdeZZtcdyJooR
-X-Proofpoint-ORIG-GUID: wblqEc6S08rAExDwGmuHdeZZtcdyJooR
-X-HPE-SCL: -1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 02/17] drm/msm/dpu: Remove TE2 block and feature from
+ DPU >= 7.0.0 hardware
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "Chandan Uddaraju" <chandanu@codeaurora.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-2-ef76c877eb97@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230411-dpu-intf-te-v2-2-ef76c877eb97@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QKAQVALvF4UdfzcbzGVqYpaWvuH9YuHr
+X-Proofpoint-ORIG-GUID: QKAQVALvF4UdfzcbzGVqYpaWvuH9YuHr
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=671
- mlxscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240186
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304240187
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,6 +103,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +# Copyright 2023- IBM Inc. All rights reserved
 
-I don't think any such entity exists - you probably mean IBM Corporation.
+
+On 4/17/2023 1:21 PM, Marijn Suijten wrote:
+> No hardware beyond kona (sm8250) defines the TE2 PINGPONG sub-block
+> offset downstream.  Even though neither downstream nor upstream utilizes
+> these registers in any way, remove the erroneous specification for
+> SC8280XP, SM8350 and SM8450 to prevent confusion.
+> 
+> Note that downstream enables the PPSPLIT (split-FIFO) topology (single
+> LM for 2 PP and 2 INTF) based on the presence of a TE2 block.
+> 
+> Fixes: f0a1bdf64dd7 ("drm/msm/dpu: Introduce SC8280XP")
+> Fixes: 0a72f23f6ef8 ("drm/msm/dpu: Add SM8350 to hw catalog")
+> Fixes: 8cbbc3396065 ("drm/msm/dpu: add support for SM8450")
+
+I cannot find any commits with those hashes.
+
+Should this be
+
+Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
+Fixes: 0e91bcbb0016 ("drm/msm/dpu: Add SM8350 to hw catalog")
+Fixes: 100d7ef6995d ("drm/msm/dpu: add support for SM8450")
+
+Will wait for a day to fix this up, otherwise I will do it while applying.
+
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   |  4 ++--
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 12 ++++++------
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   |  4 ++--
+>   3 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> index ca107ca8de46..41ef0c8fc993 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> @@ -127,10 +127,10 @@ static const struct dpu_dspp_cfg sm8350_dspp[] = {
+>   };
+>   
+>   static const struct dpu_pingpong_cfg sm8350_pp[] = {
+> -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+> -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>   	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> index 9aab110b8c44..12c14d15e386 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> @@ -121,17 +121,17 @@ static const struct dpu_dspp_cfg sc8280xp_dspp[] = {
+>   };
+>   
+>   static const struct dpu_pingpong_cfg sc8280xp_pp[] = {
+> -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8), -1),
+> -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9), -1),
+> -	PP_BLK_TE("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10), -1),
+> -	PP_BLK_TE("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11), -1),
+> -	PP_BLK_TE("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
+> -	PP_BLK_TE("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
+>   };
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> index 02a259b6b426..e409c119b0a2 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> @@ -128,10 +128,10 @@ static const struct dpu_dspp_cfg sm8450_dspp[] = {
+>   };
+>   /* FIXME: interrupts */
+>   static const struct dpu_pingpong_cfg sm8450_pp[] = {
+> -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+> -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>   	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+> 
