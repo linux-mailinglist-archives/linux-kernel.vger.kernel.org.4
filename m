@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E846EC34A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26936EC34C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjDXAhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 20:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S230273AbjDXAom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 20:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjDXAhl (ORCPT
+        with ESMTP id S229929AbjDXAok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 20:37:41 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9853185;
-        Sun, 23 Apr 2023 17:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=YN/HhFoYmlaqYBSztAwFPFcb30CeITtg6OTrqxZ7Ou4=; b=Ru+CLUhdOe/cUD2D23iTWZRJBR
-        3cz2HNriW8ioBKIUnyJzVypzC5C8gfckAyzTQUqHodY+flOPHoCJowEZOTOt9HG56WWaMR1v7CfeU
-        z1eDZTcxHB2Vjplua1YMTVtcukooZ/5yfSirx/oIlTppHHV9QRdX+D4JxMuf6FcFbDL4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pqkCr-00B39G-22; Mon, 24 Apr 2023 02:37:25 +0200
-Date:   Mon, 24 Apr 2023 02:37:25 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [net-next PATCH] net: phy: marvell: Fix inconsistent indenting
- in led_blink_set
-Message-ID: <129b808d-d8b5-4466-b2c1-864bb412bae1@lunn.ch>
-References: <20230423172800.3470-1-ansuelsmth@gmail.com>
+        Sun, 23 Apr 2023 20:44:40 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2B210D7
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 17:44:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KnTrtTm+OMCxuJ2cui1HShdRgBlCVQjiqFOyYRdpUv4=; b=RSfblOJjwSmzlEGHhYs57Ku4Uk
+        +q/ZmAVRNInmIhRwLWGAqo7WDH44SD2SnYL85cuh4prbt8DWsgAhy2QtcEp23PJHyylrflbJpfEyw
+        DsYrdlleZSLqDCbFrgjR3HR5hqD6qCCzDRgVkX8tTeH22XrvNGqwth543XqJdkDBiUksDH+pkfc3y
+        qPh5emtAU9DL8aZtlefwGH9OBXxk98QxUThVg/TL/PMWh9wSwGLOsAd/H1TvKDpDg3gGBJTp6P93j
+        MU1G7qvkCh1sxK2Jhy9FW2X0DsJI4k6j4SZGYFZ/8886p8PVaxQKYrpIZM0NECAz2ETbzaG2eeA2E
+        tiHtjp2w==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pqkJj-00BxTH-0T;
+        Mon, 24 Apr 2023 00:44:31 +0000
+Date:   Mon, 24 Apr 2023 01:44:31 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [kernel?] KCSAN: data-race in __fput / __tty_hangup (4)
+Message-ID: <20230424004431.GG3390869@ZenIV>
+References: <00000000000013aaac05f9d44e7a@google.com>
+ <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
+ <6ff6fdea-c955-f9dd-289e-b0d613a28280@I-love.SAKURA.ne.jp>
+ <20230423233433.GF3390869@ZenIV>
+ <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230423172800.3470-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+In-Reply-To: <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,17 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 07:28:00PM +0200, Christian Marangi wrote:
-> Fix inconsistent indeinting in m88e1318_led_blink_set reported by kernel
-> test robot, probably done by the presence of an if condition dropped in
-> later revision of the same code.
+On Mon, Apr 24, 2023 at 08:55:58AM +0900, Tetsuo Handa wrote:
+> On 2023/04/24 8:34, Al Viro wrote:
+> > As for the original report - add a (failing) ->splice_read() in hung_ut_tty_fops
+> > to deal with the original problem.
 > 
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304240007.0VEX8QYG-lkp@intel.com/
-> Fixes: 46969f66e928 ("net: phy: marvell: Implement led_blink_set()")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Yes, adding a dummy splice_read callback is OK for avoiding NULL pointer dereference.
+> But we need more changes for avoiding KCSAN race reporting.
+> 
+> Are you OK with https://lkml.kernel.org/r/6bec279c-07b3-d6f1-0860-4d6b136a2025@I-love.SAKURA.ne.jp
+> which will require touching so many locations ?
+> 
+> If you want tty layer handle this race without rewriting all f_op dereferences,
+> we would need to replace
+> 
+>   filp->f_op = &hung_up_tty_fops;
+> 
+> with
+> 
+>   data_race(filp->some_flags_for_tty = true);
+> 
+> rather than
+> 
+>   data_race(filp->f_op = &hung_up_tty_fops);
+> 
+> and check
+> 
+>   if (data_race(filp->some_flags_for_tty)) {
+>     return error;
+>   }
+> 
+>  from each "struct tty_operations" callback function.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+What struct tty_operations?  It's file_operations, unfortunately, and
+their calls are on quite a few fast paths.
 
-    Andrew
+Do you mean doing that in method instances that are present in tty_fops
+you mean doing that in method instances that are present in tty_fops
+and different in hung_up_tty_fops?
