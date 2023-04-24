@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B906EC951
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365526EC956
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 11:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjDXJqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 05:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S231343AbjDXJqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 05:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjDXJqV (ORCPT
+        with ESMTP id S231223AbjDXJqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:46:21 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B4C3C27;
-        Mon, 24 Apr 2023 02:45:45 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f193ca059bso18526465e9.3;
-        Mon, 24 Apr 2023 02:45:45 -0700 (PDT)
+        Mon, 24 Apr 2023 05:46:30 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1CD40CE
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:45:51 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f32588c13so585129166b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 02:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682329543; x=1684921543;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=duHeMOPaquEbxpvw/UJxFgzwcL0EWnQUhJm+862ifh4=;
-        b=XoWZSvbbZP6HP8sjR3e73o2+4zC7Glzq8vNFrSUPHO8LgJHIjXNfR19KpEpUxV+q/Y
-         wqenBxHq0v8mFInIeb87EySmlLrvbsHuQzW9eOw28EHYldGKVAM87f4+kuM9Hyvxt+uf
-         s2Tg+WNFuMcxTudO12uiY+XNQ1jkQU1ZCnGWfgFIbSdAmPddP+l/pw03OzjjSN5CEzBq
-         RpZLNFuOtEgFvikU3AOod1ZG/S2NzV9UpBhZcC7p2vXEkb1t0n5mdtwcp7c7hp4bwU/B
-         WrdtXAnBTA8hh11S0kzwvyLC4VYeGJ2gmBxrACVHjYD307YpsLKyPuvsLm/cywmnsDPB
-         oKEg==
+        d=linaro.org; s=google; t=1682329549; x=1684921549;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6MFXkgVpCP/1bbpvk371W/p2qFNZ62l76LxqdbpjYPw=;
+        b=pexz5snrTLVLUJy9+1Rkx5LnVnA8IFqCUFnbiAaGiUem0VZX6DCBXEKWlPuZgbn2Jh
+         AgeZpyprm5FqCGnZmORSIyuzmjohn50cupUPdxbAp5RqpcjFm4a5Pl8SYa6zaG1Ehp5x
+         G0ynkphF5Hi1KrltzR+1/uQOEO+AqlKWuvnBvNaFhKX76GdVMyRtJxVnNXETemUOU6rY
+         XBvT5qgmEMrr2QMT0JWpHQznbtvrF87rkakUNOfv624N9Wc7r6ss+hGNkV+qAd2Vgtyx
+         58xJaXQJTtdWTlbx88QdRpew+LISMVQqhZiKjYGJOZDtFrRqTfuTEPc+a+PS61K7Vs38
+         4cog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682329543; x=1684921543;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682329549; x=1684921549;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=duHeMOPaquEbxpvw/UJxFgzwcL0EWnQUhJm+862ifh4=;
-        b=kFvsETr9wG/gnQ5VqREeZjMzKqH1+zLTDrnGwX57YBrcazpOhwPqYouZAXy8WlRGcn
-         f3CuQ/zOjK0mVSprxMAWH4ERKZzQDQEGtdhXDcRnumkffFrZ3TnwriC6YhLaxtqYOT/P
-         oWbFTgMDSaS09FYB24CykM+JvsKXAbHkS4us8qHJyJBVIl8jU+D00qy52jyh5AZU2/iZ
-         6jvxXjQE6P7vO4uLaP9/xOtcU0/9RlGdYGurMhnzbHsaSUCDAGQbzj7nNe/3uHTxNE7z
-         Uw3KTqCElx1KPYi/NoGBAiyjZfNFEEDrIFBRrtJ+Awbv9HnEjx/5qvBOdG2H8OqpcWdi
-         uckg==
-X-Gm-Message-State: AAQBX9d32mshmFhYHM99uTLFG6D32xLqcz/aAQTIiNUH/IEKCNJkO/iS
-        mluVxkd71wox3pF/PgvSdIGY1IFvBGc=
-X-Google-Smtp-Source: AKy350b8JOCi4aFVszwnNNOtBs79KkORvtY9v75q+pYAGo2XBZ1tU1Uatf1o7f3joLKuJGlp+zIXkg==
-X-Received: by 2002:a7b:ca47:0:b0:3f1:9acf:8670 with SMTP id m7-20020a7bca47000000b003f19acf8670mr4476299wml.22.1682329542994;
-        Mon, 24 Apr 2023 02:45:42 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id m36-20020a05600c3b2400b003edc4788fa0sm15275083wms.2.2023.04.24.02.45.42
+        bh=6MFXkgVpCP/1bbpvk371W/p2qFNZ62l76LxqdbpjYPw=;
+        b=T/ZTIAR6O6kMcQp4WQwq1FiSo66yCH70aEtdIuKjY8wHSh1b8uadmlcx+fasdwhLlw
+         gtm8SWiax381nIqp5lF0JTqF6Qap3X7sJmrUlXhL2/TYS7GpFJgluBTa8NjYs4xoVD4B
+         huXstTzXXizuSVO/zA8HAq497bkVZvq1RVlRnayiP428jf90FsAmG7uSRe1pgrnI5i8B
+         QQ5L6oh/gXvecy+GDs9OPGZHQtMhDmfHQHIVQrUONJSYD4qy3+E2MW26AkKG2NWcmzer
+         T5n9S7pMoaSD/ao+NGCOeNiChaqi+WhppZaWeJ+Q9cbtRrIjAw2tp9VxfPdMxtyeXOgz
+         XPWw==
+X-Gm-Message-State: AAQBX9flj0olc93orlYN+W9JE2DWI6cil0wM0zno+eQye4MMP2mR4O8G
+        GWmgUZLDIDaAYuzoNcIZhYnmkw==
+X-Google-Smtp-Source: AKy350b7bES42d04i6D4v9CMoAzS13SI/cWDLB3UEV3BDuDus8hRcUfX0GD2TekhgGNZhKhzpwNQGw==
+X-Received: by 2002:a17:906:a103:b0:8aa:a9fe:a3fc with SMTP id t3-20020a170906a10300b008aaa9fea3fcmr10033847ejy.8.1682329549394;
+        Mon, 24 Apr 2023 02:45:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:fcdb:bf53:d053:3a52? ([2a02:810d:15c0:828:fcdb:bf53:d053:3a52])
+        by smtp.gmail.com with ESMTPSA id w17-20020a17090649d100b009537ef8eb17sm5289845ejv.217.2023.04.24.02.45.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 02:45:42 -0700 (PDT)
-Message-ID: <a9396dbe-08aa-620c-cb08-7ea9943e1561@gmail.com>
-Date:   Mon, 24 Apr 2023 10:45:41 +0100
+        Mon, 24 Apr 2023 02:45:48 -0700 (PDT)
+Message-ID: <f863aca5-0acd-2eae-7127-819136cd78dc@linaro.org>
+Date:   Mon, 24 Apr 2023 11:45:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] rv: Fix addition on an uninitialized variable 'run'
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230424094446.105133-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: qcom: Add SDX75 pinctrl
+ devicetree compatible
 Content-Language: en-US
-In-Reply-To: <20230424094446.105133-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <1682327030-25535-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1682327030-25535-2-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1682327030-25535-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 10:44, Colin Ian King wrote:
-> The variable run is not initialized however it is being accumulated
-> by the return value from the call to ikm_run_monitor.  Fix this by
-> initializing run to zero at the start of the function.
+On 24/04/2023 11:03, Rohit Agarwal wrote:
+> Add device tree binding Documentation details for Qualcomm SDX75
+> pinctrl driver.
 > 
-> Fixes: 4bc4b131d44c ("rv: Add rv tool")
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 > ---
->   tools/verification/rv/src/rv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/verification/rv/src/rv.c b/tools/verification/rv/src/rv.c
-> index e601cd9c411e..1ddb85532816 100644
-> --- a/tools/verification/rv/src/rv.c
-> +++ b/tools/verification/rv/src/rv.c
-> @@ -74,7 +74,7 @@ static void rv_list(int argc, char **argv)
->   static void rv_mon(int argc, char **argv)
->   {
->   	char *monitor_name;
-> -	int i, run;
-> +	int i, run = 0;
->   
->   	static const char *const usage[] = {
->   		"",
 
-Oops, I forgot the V2, will re-send as a V3. My bad.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
