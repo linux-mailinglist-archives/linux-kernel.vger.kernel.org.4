@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756E56ED7A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064BA6ED7AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 00:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjDXWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 18:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S232833AbjDXWSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 18:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjDXWPZ (ORCPT
+        with ESMTP id S232140AbjDXWSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:15:25 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0576A59;
-        Mon, 24 Apr 2023 15:15:24 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso47788071fa.2;
-        Mon, 24 Apr 2023 15:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682374522; x=1684966522;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5UP7FGVhzXdLz5iNJ9W7/3mzISJ7lFKbYrpdcyd0K4c=;
-        b=rFZhJXyhnhQMxNtKliFDYrs9WJ56GWxeQkyKhAdFXSnV/qEpzJk6s7gKC8APzmAEGC
-         OXFj3OpN/XTjz1IYRu1Rx5dyDyC0xBS1TKiRTFtEjEGLX40zN0j65kwpKsqRYnjiUAmf
-         Y9+I583vBY0i9dprdGPDMzhzlnAD1O8S6f77RLCEbolwA+MC5BXYr5pTCLHrGEFxCivC
-         8Kfj25FVOhFmCl0iz99fO9jGb90mmbzdUNQpEMQad6n4H84FnDKWcvc2W5Sr3uv96lLj
-         a+XjNGZajQaYDCx5mBLFdghlVQ+S9fEeC67JtykVkRPiKoaerYl4cZKWp+3EKvBIrn+I
-         01cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682374522; x=1684966522;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5UP7FGVhzXdLz5iNJ9W7/3mzISJ7lFKbYrpdcyd0K4c=;
-        b=GEFbIhZ9AfGeZLHTjnmwWQxFHPHVIQ7RXGsqf1Tl8gdQ/FqSIeJRbC7i2z2nyLPqf3
-         oj4sSBWxATMnnm8dw9qNoxpfiQyn90Om3Pby+YsxuDoVIY9Y7XwFnZMB6O97OfskErAk
-         qCwIJZBCTIDrdaAyZJ5TuWG8OVfiJuobvNrYmSaMbh2nIINgttxLHyY3ZY6A5jR/I4aP
-         1T9PabDGByEJsCfcPHtAodNiNQp3wLteUYpk+tLns5LYNmIdZ/FH4hhS+V+4fAaOVLBl
-         egDiIDsHiPVPFRT61Y2uOm5eR6YoYGIOHNqm0i2ntJoKgrkQ1QXWgxTOz+sSUj+RoHod
-         87vw==
-X-Gm-Message-State: AAQBX9ehsaIgoka6yz0n+15a5jJCFJiwrlDVwin9Gc9ICeEFcVMplPIp
-        1evxyx/EWfy1a9BNIPIH1ogAM/RsSfFHggARCeA=
-X-Google-Smtp-Source: AKy350bK379v+0wKKHkuBxIPRu/TPM76BjJ5es5FmF246WAd6QmI7UB4BOl2YgvleGyE4WkHOZ159NdHbFybuph58TQ=
-X-Received: by 2002:a2e:80c5:0:b0:2a8:b79b:7e81 with SMTP id
- r5-20020a2e80c5000000b002a8b79b7e81mr2992508ljg.30.1682374522001; Mon, 24 Apr
- 2023 15:15:22 -0700 (PDT)
+        Mon, 24 Apr 2023 18:18:18 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E75526F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 15:18:15 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 378C93F5CF;
+        Tue, 25 Apr 2023 00:18:06 +0200 (CEST)
+Date:   Tue, 25 Apr 2023 00:18:04 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+Subject: Re: [PATCH v2 02/17] drm/msm/dpu: Remove TE2 block and feature from
+ DPU >= 7.0.0 hardware
+Message-ID: <l3adl3saeqovypmluubddp6kqcjducn75ifpf63ylbecuprpi3@gpoks434n4yg>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-2-ef76c877eb97@somainline.org>
+ <ca4012ee-d964-c2e9-b437-b03277d71529@quicinc.com>
 MIME-Version: 1.0
-References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-3-jorge.lopez2@hp.com>
- <b7c49593-13f9-44f8-b3b8-66551b01e966@t-8ch.de> <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
- <67108caf-2a03-4ef0-9f8d-819b0d6f0a2e@t-8ch.de> <CAOOmCE8dru7YOmZeTiEoDMiy7d6nTEih6D2H-AMrOykt=z1bhQ@mail.gmail.com>
-In-Reply-To: <CAOOmCE8dru7YOmZeTiEoDMiy7d6nTEih6D2H-AMrOykt=z1bhQ@mail.gmail.com>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Mon, 24 Apr 2023 17:14:57 -0500
-Message-ID: <CAOOmCE8SGn9JsWVXUDnKgWyxSzuCuiXzjsv3V737uNXPu2jykA@mail.gmail.com>
-Subject: Re: [PATCH v11 02/14] HP BIOSCFG driver - biosattr-interface
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca4012ee-d964-c2e9-b437-b03277d71529@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Thomas,
+On 2023-04-24 13:41:07, Abhinav Kumar wrote:
+> 
+> 
+> On 4/17/2023 1:21 PM, Marijn Suijten wrote:
+> > No hardware beyond kona (sm8250) defines the TE2 PINGPONG sub-block
+> > offset downstream.  Even though neither downstream nor upstream utilizes
+> > these registers in any way, remove the erroneous specification for
+> > SC8280XP, SM8350 and SM8450 to prevent confusion.
+> > 
+> > Note that downstream enables the PPSPLIT (split-FIFO) topology (single
+> > LM for 2 PP and 2 INTF) based on the presence of a TE2 block.
+> > 
+> > Fixes: f0a1bdf64dd7 ("drm/msm/dpu: Introduce SC8280XP")
+> > Fixes: 0a72f23f6ef8 ("drm/msm/dpu: Add SM8350 to hw catalog")
+> > Fixes: 8cbbc3396065 ("drm/msm/dpu: add support for SM8450")
+> 
+> I cannot find any commits with those hashes.
+> 
+> Should this be
+> 
+> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
+> Fixes: 0e91bcbb0016 ("drm/msm/dpu: Add SM8350 to hw catalog")
+> Fixes: 100d7ef6995d ("drm/msm/dpu: add support for SM8450")
 
-Sorry for asking again.  I just want to be understand exactly what I must do.
+Yes they are, thanks for spotting that.  These patches were on drm-msm
+/ msm-next when I made this patch on January 11th, hence these were the
+hashes given to me by git bisect: see how those patches have an author
+timestamp of January 9th, while the proper hashes that landed upstream
+have a hash of January 12th: the branch has been force-pushed after.
 
+Old:
 
-> > > >
-> > > > > +     args->command = command;
-> > > > > +     args->commandtype = query;
-> > > > > +     args->datasize = insize;
-> > > > > +     memcpy(args->data, buffer, flex_array_size(args, data, insize));
-> > > > > +
-> > > > > +     ret = wmi_evaluate_method(HP_WMI_BIOS_GUID, 0, mid, &input, &output);
-> > > >
-> > > > The driver is mixing calls to the UUID based APIs and the wmi_device
-> > > > ones.
-> > > > wmi_devices is newer and preferred.
-> > >
-> > > The driver  calls wmi_evaluate_method when initiating an WMI call.
-> > > Where is the driver mixing calls to the UUID based APIs and the
-> > > wmi_device one?
-> > > WMI calls are made by calling hp_wmi_perform_query() which invokes
-> > > wmi_evaluate_method().
-> > > Did I miss something?
-> >
-> > wmi_evaluate_method() is UUID-based.
-> > struct wmi_driver is wmi_device based.
-> >
-> > The wmi_driver/wmi_device code essentially does nothing and is only used
-> > to validate that a device is present.
-> > The same can be done more easily wmi_has_guid().
-> >
->
+https://gitlab.freedesktop.org/drm/msm/-/commit/f0a1bdf64dd7
+https://gitlab.freedesktop.org/drm/msm/-/commit/0a72f23f6ef8
+https://gitlab.freedesktop.org/drm/msm/-/commit/8cbbc3396065
 
-Are you asking to replace all calls to wmi_evaluate_method() which is
-UUID based API with calls to  wmidev_evaluate_method() which is
-wmi_device based?  Correct?
+New:
+
+https://gitlab.freedesktop.org/drm/msm/-/commit/4a352c2fc15a
+https://gitlab.freedesktop.org/drm/msm/-/commit/0e91bcbb0016
+https://gitlab.freedesktop.org/drm/msm/-/commit/100d7ef6995d
+
+> Will wait for a day to fix this up, otherwise I will do it while applying.
+
+Thanks, that's appreciated.
+
+- Marijn
+
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   |  4 ++--
+> >   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 12 ++++++------
+> >   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   |  4 ++--
+> >   3 files changed, 10 insertions(+), 10 deletions(-)
+
+<snip>
