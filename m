@@ -2,107 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90876ED470
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502CA6ED479
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbjDXScp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S232283AbjDXSdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjDXSci (ORCPT
+        with ESMTP id S231967AbjDXSdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:32:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C00244A4;
-        Mon, 24 Apr 2023 11:32:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C8E61DAE;
-        Mon, 24 Apr 2023 18:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DC2C433EF;
-        Mon, 24 Apr 2023 18:32:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682361155;
-        bh=Qwb6xQXtIp9IK5K1XYNjKtQG2ZIwhMNhHPe94Eain8I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AL1mQRPIK32zEIp1g3UTreatnys6JEiIOElV8WxQ0HCWYrYOh9FUa/pV+J28wkIb0
-         kuYZuUJpavJkOZaHtCtWDI71bQfr8PqKub4qFn3x5yzC4y8fbdLxu7HbJwBzC+XQwm
-         VrE7IOJkHHjP11gDLRWFy86EVLqVWwQrt/B4cpTsksi6B3BO3cBvv6mbtnfmE01ZgB
-         TzxQElbzcDm36YDmuacquU8+DAzm2Bx6Sa8BvlgfPXGSzs47J+MRnxBY/ACBhDqqPE
-         NaKy9ZqKj3mZAujGR2xqbrAlZIyDJXBbelkgz2XIH4N+SG2lVTYr08TXhvRv/t7uAi
-         Q8Hr8qGO9TEdw==
-Message-ID: <679921ee-98d4-d6ef-5934-e009fd4b31fc@kernel.org>
-Date:   Mon, 24 Apr 2023 13:32:28 -0500
+        Mon, 24 Apr 2023 14:33:40 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D230C11A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:33:37 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-4af3773448fso31353a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682361216; x=1684953216;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lh3jgTRgIGWqKM2IdktrZIeojJqwq3KhxD//V3mGwh8=;
+        b=gkAPM+jhkSD8Z1RR8AnR45VmJkXw3cKMmJTIdiGo6o7Refy3pksA25hezvONpr+eNb
+         kQ/EZ6pNCzzXNmP8FS/6ZbJHg7bvh1X5t95vPf5/0Uygq9fX94HgIABlUrG2r9HoiEq6
+         9XiPCMCakG1F75YcVVSq/nZNq6iCgCAn+lGQ3jlCWOARm6+4bmbvo6+VM3eqFzrqzf02
+         Ac9DA+8VODyxVdCC+ZrNeVVZIaCZ77d4I6TXGKqOLkaik5yBHo0db0aFSkbFoaSC2Rt9
+         BMf5Jb/0bmUz1iYzKBqQObAiCewKNs8d8s0/+HYuoO7hsOkz7+LPk8miShQq8ZtSCpOk
+         W3bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682361216; x=1684953216;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lh3jgTRgIGWqKM2IdktrZIeojJqwq3KhxD//V3mGwh8=;
+        b=K4pAcgGz4qUAQy6pO8EvgCy0WkfvM9/GpgshMGmspIyYbxiPAyYcrT3NghRItS59F9
+         L+QSvW4dqmosa3Nt12c0E3OwHBPx7PjgOXYh263qjSZv8w8M7DUcIl+18l4w0zSkLfTz
+         ejHHMheTlHVyntD3BWcIafhoVmM+ntiEfm5DLniFDY2vlgcx7siT21riAxP/IicFlPGW
+         cfiRH8TqPgVXfDbNpydQVdtuTdFaHs0Dj+9SEjrgEB+/K1JD48y1i0MBCedjN1kekNpJ
+         ibQ8KKLp7C/055N/cFdzgCyKVkqsXN8O/JlU5DV/xEUjwrn/H7bpKXLW1eQuUkHxsVdv
+         zLSQ==
+X-Gm-Message-State: AC+VfDzQrp/3m4EWXy/Tfo8WtkEJFWs/du1/Ka+E5WyAD55x1y9+/5x9
+        DgfvHQ1MhUZAjXK+9+jspz6VObYWAwBHWSQABu29hQ==
+X-Google-Smtp-Source: ACHHUZ4OiRgiLof0f2kt65pB5NYAtK+ylGb1JgUO9awGKnVPn8BKsFvtsTwrDsGFRLDtGpp3GNi3vzkjdvk25eFkuuk=
+X-Received: by 2002:a05:6402:1cd0:b0:506:77ec:5c3f with SMTP id
+ ds16-20020a0564021cd000b0050677ec5c3fmr9896edb.2.1682361215807; Mon, 24 Apr
+ 2023 11:33:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 29/65] clk: socfpga: gate: Add a determine_rate hook
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
-Content-Language: en-US
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230420010029.2702543-1-elsk@google.com> <CAK7LNAQxmi7GadEs2b6PA-6R1veRRL0+NW-hmpE1HrhzWKX33g@mail.gmail.com>
+In-Reply-To: <CAK7LNAQxmi7GadEs2b6PA-6R1veRRL0+NW-hmpE1HrhzWKX33g@mail.gmail.com>
+From:   Yifan Hong <elsk@google.com>
+Date:   Mon, 24 Apr 2023 11:32:59 -0700
+Message-ID: <CAABy=s39CCZ1yx11NtdgpTG95hFj6r7Q-g88qWrpdAak6dA7jw@mail.gmail.com>
+Subject: Re: [PATCH v2] kheaders: Follow symlinks to source files.
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nicolas Schier <nicolas@fjasle.eu>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Matthias Maennich <maennich@google.com>,
+        Daniel Mentz <danielmentz@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,66 +73,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+On Sun, Apr 23, 2023 at 4:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Thu, Apr 20, 2023 at 10:01=E2=80=AFAM Yifan Hong <elsk@google.com> wro=
+te:
+> >
+> > When the kernel is built inside a sandbox container,
+> > a forest of symlinks to the source files may be
+> > created in the container. In this case, the generated
+> > kheaders.tar.xz should follow these symlinks
+> > to access the source files, instead of packing
+> > the symlinks themselves.
+> >
+> > Signed-off-by: Yifan Hong <elsk@google.com>
+> > Reviewed-by: Matthias Maennich <maennich@google.com>
+>
+>
+>
+> Please teach me how to reproduce your problem.
 
-On 4/4/23 05:11, Maxime Ripard wrote:
-> The SoCFGPA gate clock implements a mux with a set_parent hook, but
-> doesn't provide a determine_rate implementation.
-> 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
-> 
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
-> 
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
-> 
-> The latter case would be equivalent to setting the flag
-> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> implementation is provided, clk_round_rate() (through
-> clk_core_round_rate_nolock()) will call itself on the parent if
-> CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> CLK_SET_RATE_NO_REPARENT is set.
-> 
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->   drivers/clk/socfpga/clk-gate.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
-> index 32ccda960f28..cbba8462a09e 100644
-> --- a/drivers/clk/socfpga/clk-gate.c
-> +++ b/drivers/clk/socfpga/clk-gate.c
-> @@ -110,6 +110,7 @@ static unsigned long socfpga_clk_recalc_rate(struct clk_hw *hwclk,
->   
->   static struct clk_ops gateclk_ops = {
->   	.recalc_rate = socfpga_clk_recalc_rate,
-> +	.determine_rate = __clk_mux_determine_rate,
->   	.get_parent = socfpga_clk_get_parent,
->   	.set_parent = socfpga_clk_set_parent,
->   };
-> @@ -166,7 +167,7 @@ void __init socfpga_gate_init(struct device_node *node)
->   
->   	init.name = clk_name;
->   	init.ops = ops;
-> -	init.flags = 0;
-> +	init.flags = CLK_SET_RATE_NO_REPARENT;
->   
->   	init.num_parents = of_clk_parent_fill(node, parent_name, SOCFPGA_MAX_PARENTS);
->   	if (init.num_parents < 2) {
-> 
+Thanks for your reply. When I say "container", I mean a forest of
+symlinks that point to the original source files. Here are the steps I
+do to mimic the sandbox that the container program creates.
 
-This patch broke SoCFPGA boot serial port. The characters are mangled.
+On an x86 machine, I have a linux tree checkout at /mnt/sdb/linux, and
+an empty directory at /mnt/sdb/linux2. Then I **created this fake
+sandbox** in /mnt/sdb/linux2 by doing:
+```
+$ cd /mnt/sdb/linux
+$ find . -type d -exec mkdir -p /mnt/sdb/linux2/{} \;
+$ find . -type f -exec ln -sf /mnt/sdb/linux/{} /mnt/sdb/linux2/{} \;
+```
 
-Dinh
+Then, I cross compile an arm64 kernel with tinyconfig. Here are the
+steps I take:
+```
+export ARCH=3Darm64
+export SUBARCH=3Darm
+export CROSS_COMPILE=3D/home/elsk/toolchains/aarch64--glibc--stable-2022.08=
+-1/bin/aarch64-linux-
+# downloaded from https://toolchains.bootlin.com/
+make tinyconfig; make menuconfig # then select CONFIG_SYSFS and CONFIG_IKHE=
+ADERS
+make -j64
+```
+
+This will show that kheaders_data.tar.xz contains the symlinks, e.g. in my =
+case:
+```
+$ tar tvf ./kernel/kheaders_data.tar.xz | head
+[...]
+lrwxrwxrwx 0/0               0 2023-04-24 11:19
+./arch/arm64/include/asm/acenv.h ->
+/mnt/sdb/linux/./arch/arm64/include/asm/acenv.h
+```
+
+However, the issue for me is that these symlinks are no longer useful
+under sysfs when I am booting the kernel on the target arm64 machine,
+because it is a different machine (arm64) than the machine (x86) where
+I compiled this kernel.
+
+>
+>
+>
+> I built the kernel inside a container,
+> but I do not see any difference.
+>
+>
+>
+> We have some symbolic links in include/,
+> but those reference relative paths.
+> How building the kernel in a container
+> makes a difference?
+
+Please see above; the container contains a forest of symlinks pointing
+to the original source tree. Then `make` is executed in that container
+directory.
+
+>
+>
+> masahiro@bc5c2c958b53:/tmp/foo$ tar Jxf kheaders_data.tar.xz
+> masahiro@bc5c2c958b53:/tmp/foo$ find . -type l
+> ./include/dt-bindings/clock/qcom,dispcc-sm8350.h
+> ./include/dt-bindings/clock/qcom,dispcc-sm8150.h
+> ./include/dt-bindings/input/linux-event-codes.h
+> masahiro@bc5c2c958b53:/tmp/foo$ find . -type l | xargs ls -l
+> lrwxrwxrwx 1 masahiro masahiro 20 Apr 23 11:47
+> ./include/dt-bindings/clock/qcom,dispcc-sm8150.h ->
+> qcom,dispcc-sm8250.h
+> lrwxrwxrwx 1 masahiro masahiro 20 Apr 23 11:47
+> ./include/dt-bindings/clock/qcom,dispcc-sm8350.h ->
+> qcom,dispcc-sm8250.h
+> lrwxrwxrwx 1 masahiro masahiro 36 Apr 23 11:47
+> ./include/dt-bindings/input/linux-event-codes.h ->
+> ../../uapi/linux/input-event-codes.h
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> > ---
+> >  kernel/gen_kheaders.sh | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
+> > index 1ef9a87511f5..70a75a9a7535 100755
+> > --- a/kernel/gen_kheaders.sh
+> > +++ b/kernel/gen_kheaders.sh
+> > @@ -87,7 +87,7 @@ find $cpio_dir -type f -print0 |
+> >  # pre-sorted, as --sort=3Dname might not be available.
+> >  find $cpio_dir -printf "./%P\n" | LC_ALL=3DC sort | \
+> >      tar "${KBUILD_BUILD_TIMESTAMP:+--mtime=3D$KBUILD_BUILD_TIMESTAMP}"=
+ \
+> > -    --owner=3D0 --group=3D0 --numeric-owner --no-recursion \
+> > +    --owner=3D0 --group=3D0 --numeric-owner --no-recursion --dereferen=
+ce \
+> >      -I $XZ -cf $tarfile -C $cpio_dir/ -T - > /dev/null
+> >
+> >  echo $headers_md5 > kernel/kheaders.md5
+> > --
+> > 2.40.0.634.g4ca3ef3211-goog
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
