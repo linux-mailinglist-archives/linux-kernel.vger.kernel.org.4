@@ -2,155 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B5F6ECB67
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC2F6ECB68
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjDXLe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S231689AbjDXLex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDXLe1 (ORCPT
+        with ESMTP id S231713AbjDXLev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:34:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A253598
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DF8BE21A84;
-        Mon, 24 Apr 2023 11:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682336064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HMIfA/TnrdlusW1/9QprMQTD2M6SSr1Kzxz81o0jjbg=;
-        b=NvZMB6AOhzTTfvqxMBIo3aqvff5L9LJJzetX19S6QQqyUpRcEDyF3mArEHBbmeburzNugO
-        vzJ9eyzLwTVTDXNlK1HXxyvOxjGq7FC3ET7jy5FP7cYiLg4y1rZzBnzlBmwGMf5+NqkffC
-        5kvwfwWPubZYJ6M0YTLaAtZYDBcFVf8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC82F13780;
-        Mon, 24 Apr 2023 11:34:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7HckK0BpRmTOVQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 24 Apr 2023 11:34:24 +0000
-Date:   Mon, 24 Apr 2023 13:34:23 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-Message-ID: <ZEZpP/ab+zk7GgX7@dhcp22.suse.cz>
-References: <9fc85cce8908938f4fd75ff50bc981c073779aa5.1682229876.git.baolin.wang@linux.alibaba.com>
- <0733a4cf57109a4136de5ae46fac83fb15bdd528.1682229876.git.baolin.wang@linux.alibaba.com>
- <ZEZRv0ycAI0Ated1@dhcp22.suse.cz>
- <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
+        Mon, 24 Apr 2023 07:34:51 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154BE3A9A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:50 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f1a6e66c9so767018666b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682336088; x=1684928088;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rnBwe/xxNXcbECdM+6fJE9BhNtlcNCnbsvJvDgaRMPg=;
+        b=BE5+DhasXIgwzV9/rUrifzuMR0XeXCkkrMc4T03NejVwBELCf/Zn7cyY1iBqowTg/C
+         fZUYqwJmkJWet0A9axenACl9YZyrVpnNvTDjZOagwjW1cdi7XjbKMGIA89hwgwrka5Qr
+         +nDivC9jAjCJ5abUWytc8A+5SS0Kx06CWtvhKXoNVD3TPhP9cGoQ3NkG/ZqkK0Rqayxo
+         +c13R2Ux9+sFZqflpFP5Rn2cPwX8qq7kxhCnm3nIzc+Em7DoJX+GGodqE7vl1nA8/mNE
+         dhI26ESOcfLUIaQWl1k0qP9LleVoAEbHrRiDX+uKhSGf/Uj8fxDdj0c/n3ZyRVjGoWz8
+         wiCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682336088; x=1684928088;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rnBwe/xxNXcbECdM+6fJE9BhNtlcNCnbsvJvDgaRMPg=;
+        b=AXM+GWioWwdN1ZOqY7yIOxrBK2QyDgMdVlrMadN2Rjpmux2+xW8vlUKj8Uo4n4OsiG
+         xuI4Dmsene5Wp/WbuAwTJyVj1+lG1fKTY2Le7roZPHWX23u4MwYg5hDk3iHlqSTLtNrK
+         mpfxxD0OwNRPuni5wHk0BuwWJRXYTxNruvzQU3ZDcnrkMmmCX39b5+Whfm/aMAWZ8vO4
+         X4ZxoYWLSCv2yKO6vyDM7SHJPPzCoFxpX3qdhbv51Hl+tCrH23+8B4ib0WLwX6BYkADy
+         i9ogaSnfK78w88Z7UOzx/ms5U5oDiz4SopOAr/WkcPYdtFqcK3FtoN70bzssDI8VwMw+
+         7XUw==
+X-Gm-Message-State: AAQBX9cyEsED0/U9VaDNk59ElZDlhXFPF4cATlzf6gAvVbdsvhGYNJnd
+        myg1FEsKJzWoIuBMzw/1bKo=
+X-Google-Smtp-Source: AKy350brAySoHRwodleIfHAAvUTJBtwdizt9p/uA3TovQvM+vKRzlVPKQocK+NpWi5IhWhLoVW6eFQ==
+X-Received: by 2002:a17:906:c201:b0:953:3736:3b8f with SMTP id d1-20020a170906c20100b0095337363b8fmr9805620ejz.64.1682336088247;
+        Mon, 24 Apr 2023 04:34:48 -0700 (PDT)
+Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id y21-20020a17090614d500b0094b87711c9fsm5442879ejc.99.2023.04.24.04.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 04:34:47 -0700 (PDT)
+Message-ID: <2e0268d352731a188a8302892bb9a404616dcf4a.camel@gmail.com>
+Subject: Re: [PATCH 02/43] soc: Add SoC driver for Cirrus ep93xx
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sven Peter <sven@svenpeter.dev>,
+        Brian Norris <briannorris@chromium.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 24 Apr 2023 13:34:46 +0200
+In-Reply-To: <20230424123522.18302-3-nikita.shubin@maquefel.me>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230424123522.18302-3-nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a20c0b5-9d8a-2b1d-570a-61c17a4ce5e8@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-04-23 19:20:43, Baolin Wang wrote:
-> 
-> 
-> On 4/24/2023 5:54 PM, Michal Hocko wrote:
-> > On Sun 23-04-23 18:59:11, Baolin Wang wrote:
-> > > Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
-> > > checks whether the given zone contains holes, and uses pfn_to_online_page()
-> > > to validate if the start pfn is online and valid, as well as using pfn_valid()
-> > > to validate the end pfn.
-> > > 
-> > > However, the __pageblock_pfn_to_page() function may return non-NULL even
-> > > if the end pfn of a pageblock is in a memory hole in some situations. For
-> > > example, if the pageblock order is MAX_ORDER, which will fall into 2
-> > > sub-sections, and the end pfn of the pageblock may be hole even though
-> > > the start pfn is online and valid.
-> > > 
-> > > This did not break anything until now, but the zone continuous is fragile
-> > > in this possible scenario. So as previous discussion[1], it is better to
-> > > add some comments to explain this possible issue in case there are some
-> > > future pfn walkers that rely on this.
-> > > 
-> > > [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
-> > 
-> > Do I remember correctly you've had a specific configuration that would
-> > trigger this case?
-> 
-> Yes, I provided an example in previous thread [2] so show the
-> __pageblock_pfn_to_page() is fragile in some cases.
-> 
-> [2] https://lore.kernel.org/all/52dfdd2e-9c99-eac4-233e-59919a24323e@linux.alibaba.com/
+On Mon, 2023-04-24 at 15:34 +0300, Nikita Shubin wrote:
+> This adds an SoC driver for the ep93xx. Currently there
+> is only one thing not fitting into any other framework,
+> and that is the swlock setting.
+>=20
+> It's used for clock settings and restart.
+>=20
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Please make it a part of the changelog.
- 
-> > 
-> > > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > > ---
-> > > Changes from v1:
-> > >   - Update the comments per Ying and Mike, thanks.
-> > > ---
-> > >   mm/page_alloc.c | 7 +++++++
-> > >   1 file changed, 7 insertions(+)
-> > > 
-> > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > index 6457b64fe562..9756d66f471c 100644
-> > > --- a/mm/page_alloc.c
-> > > +++ b/mm/page_alloc.c
-> > > @@ -1502,6 +1502,13 @@ void __free_pages_core(struct page *page, unsigned int order)
-> > >    * interleaving within a single pageblock. It is therefore sufficient to check
-> > >    * the first and last page of a pageblock and avoid checking each individual
-> > >    * page in a pageblock.
-> > > + *
-> > > + * Note: the function may return non-NULL even if the end pfn of a pageblock
-> > > + * is in a memory hole in some situations. For example, if the pageblock
-> > > + * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
-> > > + * of the pageblock may be hole even though the start pfn is online and valid.
-> > > + * This did not break anything until now, but be careful about this possible
-> > > + * issue when checking whether all pfns of a pageblock are valid.
-> > 
-> > It is not really clear what you should be doing (other than to be
-> > careful which is not helpful much TBH) when you encounter this
-> > situation. If the reality changes and this would break in the future
-> > what would breakage look like? What should be done about that?
-> 
-> That depends on what the future pfn walkers do, which may access some hole
-> memory with zero-init page frame. For example, if checking the
-> __PageMovable() for a zero-init page frame, that will crash the system. But
-> I can not list all the possible cases.
-> 
-> So how about below words?
-> 
->  * Note: the function may return non-NULL even if the end pfn of a pageblock
->  * is in a memory hole in some situations. For example, if the pageblock
->  * order is MAX_ORDER, which will fall into 2 sub-sections, and the end pfn
->  * of the pageblock may be hole even though the start pfn is online and
-> valid.
->  * This did not break anything until now, but be careful about this possible
->  * issue when checking whether all pfns of a pageblock are valid, that may
->  * lead to accessing empty page frame, and the worst case can crash the
-> system.
->  * So you should use pfn_to_onlie_page() instead of pfn_valid() to valid the
->  * pfns in a pageblock if such case happens.
+Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-Does that mean that struct page is not initialized and PagePoisoned will
-trigger or it is just zero-prefilled?
+> ---
+>=20
+> Notes:
+> =C2=A0=C2=A0=C2=A0 rfc -> v0
+> =C2=A0=C2=A0=C2=A0 Alexander Sverdlin:
+> =C2=A0=C2=A0=C2=A0 - replace spinlock with local_irq
+> =C2=A0=C2=A0=C2=A0=20
+> =C2=A0=C2=A0=C2=A0 Arnd Bergmann:
+> =C2=A0=C2=A0=C2=A0 - wildcards changed to ep9301
+> =C2=A0=C2=A0=C2=A0=20
+> =C2=A0=C2=A0=C2=A0 Linus Walleij:
+> =C2=A0=C2=A0=C2=A0 - added tag, i hope changes are not significant enough=
+ to drop
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Reviewed-by tag
+>=20
+> =C2=A0drivers/soc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0drivers/soc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0drivers/soc/cirrus/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0 11 +++
+> =C2=A0drivers/soc/cirrus/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0=C2=A0 2 +
+> =C2=A0drivers/soc/cirrus/soc-ep93xx.c=C2=A0=C2=A0 | 134 +++++++++++++++++=
++++++++++++++
+> =C2=A0include/linux/soc/cirrus/ep93xx.h |=C2=A0 16 +++-
+> =C2=A06 files changed, 161 insertions(+), 4 deletions(-)
+> =C2=A0create mode 100644 drivers/soc/cirrus/Kconfig
+> =C2=A0create mode 100644 drivers/soc/cirrus/Makefile
+> =C2=A0create mode 100644 drivers/soc/cirrus/soc-ep93xx.c
 
--- 
-Michal Hocko
-SUSE Labs
+--=20
+Alexander Sverdlin.
+
