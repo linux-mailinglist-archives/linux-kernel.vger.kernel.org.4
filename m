@@ -2,158 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756716EC36B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B638B6EC36D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjDXBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 21:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S230351AbjDXBgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 21:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDXBgS (ORCPT
+        with ESMTP id S230349AbjDXBgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 21:36:18 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D8A10CE;
-        Sun, 23 Apr 2023 18:36:17 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2a8dc00ade2so36639281fa.0;
-        Sun, 23 Apr 2023 18:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682300174; x=1684892174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x6aqoC9dPFtpf3SM23IBF/5iiAH7dEsrwMZeoRqWySc=;
-        b=h7dURazMP4F2Nh70Sh6/I/wMOfK4H5Aof0Bwsai9k0WhGXGYdh9RCDrNnje1Sy8CyL
-         epfkNZFljEa38NoF6otxhl+GYI+NZHNU6bYPK+LH8v5zDUFdPsXb9cQkBsPllruXBua/
-         e0AA9APX4lTV4wZdyO7WkJHv0OjE3Xmp2BtkKOU5zrOJz7aEK7fT1+TBDzrLW3hE0rIT
-         PKgz8/BS+geIHyLYIFH0iiCgX6FnIZycUhlS2i57CpAsKshTho5YF56T2hT17T7KFfI1
-         OF+hwg7D4L/jZXciE44vUQ+nrbsYe0t/SgN1l/bBM3MQPUqgRpQPo+FYdYtdz+WvVBAa
-         iC0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682300174; x=1684892174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x6aqoC9dPFtpf3SM23IBF/5iiAH7dEsrwMZeoRqWySc=;
-        b=O90iezcdbjLGvB0KY0U6yQ6/TgBuOoKXdoq+9Fo3xh+DPR9DOq1KrsuhPVPznwovPM
-         Y2vYQSrmXWSJwEcTfiQyybYRlcoLIWjRkoxVbKdjgMMtOlJrgrH+gUrnHLCmTng/1uSY
-         RBsFgqH4aI5ml2jTCpYK7jqnLOk2BeEfxCT3L60lgssVjgDeZJ8pYN7Wpr6/r2l3jCdX
-         P0N2X/c5f6jvcRxudZNXAUbp7JpxodOK+JlchdRd8gQaMCufnODgIzsx/cNMTHRkdDlo
-         LJEACTKkeYcNRdOKZQ4KvGg1tKAqkss32emRk2pf998eUS1jAABA9yGa9wDGPbuIuO7F
-         W6Wg==
-X-Gm-Message-State: AAQBX9dMrpVcfRc9DvJ07/x67jHFesfUZ0VkDdUhA6ngyzOdya70gICt
-        Q+s9EWpJ8Tycqnyw5elH3mRSvPgPRLUEjNoPwg==
-X-Google-Smtp-Source: AKy350bgD/CUSWWCOBwCf63h+PjnZokihstmsZMZBSNM1B/NhgpICayXhu+ukCYsQYF0/iBspyFHjJHMi/ggotOwTUI=
-X-Received: by 2002:a2e:8187:0:b0:2a8:bb4b:fd94 with SMTP id
- e7-20020a2e8187000000b002a8bb4bfd94mr2460334ljg.0.1682300174012; Sun, 23 Apr
- 2023 18:36:14 -0700 (PDT)
+        Sun, 23 Apr 2023 21:36:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7101997;
+        Sun, 23 Apr 2023 18:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682300201; x=1713836201;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G22SleDyELmqv+4z24qsjjgOeXAlE59i3fa4mNcnIW8=;
+  b=XUXVHW9JKgJY4wMvo1F1sjPAIgqOKAt+iXF7r9sSm6Yja981Qq4HI/rq
+   njUO2EBJPPwVwwyw41RqaWpWWRdBWXyoOvkULU3r50NTDIfui3gSAKhLA
+   c6K1y3ioFshumrh9K+MKssnGBKH7nC2hAMBw6iQlHaT4Grg7UOvqJ1Vrv
+   xrqqf0XmFdj5QGJj7raFdeByEQj/WxQj6lolb9Hic17Np1iC1p+PBAlkC
+   CDhdE9gAkE8kEw65EUZmgQWQ7OtYkeEVzQv1s5PVsZAuAAi7uFNVTMoZl
+   lAlZFhQuIArawZxB5HW/uhaLmVfpUtzsOZR8PtnbuObuaJCbpa0cWkMyu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="432607648"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="432607648"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 18:36:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="670334040"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="670334040"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 23 Apr 2023 18:36:38 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pql89-000iCl-0n;
+        Mon, 24 Apr 2023 01:36:37 +0000
+Date:   Mon, 24 Apr 2023 09:36:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kelvin Cao <kelvin.cao@microchip.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, logang@deltatee.com,
+        george.ge@microchip.com, christophe.jaillet@wanadoo.fr,
+        hch@infradead.org
+Subject: Re: [PATCH v4 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+Message-ID: <202304240915.MYWRJpvn-lkp@intel.com>
+References: <20230423213717.318655-2-kelvin.cao@microchip.com>
 MIME-Version: 1.0
-References: <20230421075636.24946-1-alice.chao@mediatek.com>
-In-Reply-To: <20230421075636.24946-1-alice.chao@mediatek.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Mon, 24 Apr 2023 09:36:02 +0800
-Message-ID: <CAGaU9a-zQTz8hTxkLk-OT6QXqbkMQqYN5svqkJDPpZmiJrzSsw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] ufs: core: fix &hwq->cq_lock deadlock issue
-To:     Alice Chao <alice.chao@mediatek.com>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, stanley.chu@mediatek.com,
-        peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
-        powen.kao@mediatek.com, naomi.chu@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, tun-yu.yu@mediatek.com,
-        eddie.huang@mediatek.com, wsd_upstream@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230423213717.318655-2-kelvin.cao@microchip.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alice,
+Hi Kelvin,
 
-Alice Chao <alice.chao@mediatek.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=8821=E6=
-=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:58=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> [name:lockdep&]WARNING: inconsistent lock state
-> [name:lockdep&]--------------------------------
-> [name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-> [name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
->   ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
-> ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-> [name:lockdep&]{IN-HARDIRQ-W} state was registered at:
->   lock_acquire+0x17c/0x33c
->   _raw_spin_lock+0x5c/0x7c
->   ufshcd_mcq_poll_cqe_lock+0x30/0xe0
->   ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
->   __handle_irq_event_percpu+0x140/0x3ec
->   handle_irq_event+0x50/0xd8
->   handle_fasteoi_irq+0x148/0x2b0
->   generic_handle_domain_irq+0x4c/0x6c
->   gic_handle_irq+0x58/0x134
->   call_on_irq_stack+0x40/0x74
->   do_interrupt_handler+0x84/0xe4
->   el1_interrupt+0x3c/0x78
-> <snip>
->
-> Possible unsafe locking scenario:
->        CPU0
->        ----
->   lock(&hwq->cq_lock);
->   <Interrupt>
->     lock(&hwq->cq_lock);
->   *** DEADLOCK ***
-> 2 locks held by kworker/u16:4/260:
->
-> [name:lockdep&]
->  stack backtrace:
-> CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
-> 6.1.17-mainline-android14-2-g277223301adb #1
-> Workqueue: ufs_eh_wq_0 ufshcd_err_handler
->
->  Call trace:
->   dump_backtrace+0x10c/0x160
->   show_stack+0x20/0x30
->   dump_stack_lvl+0x98/0xd8
->   dump_stack+0x20/0x60
->   print_usage_bug+0x584/0x76c
->   mark_lock_irq+0x488/0x510
->   mark_lock+0x1ec/0x25c
->   __lock_acquire+0x4d8/0xffc
->   lock_acquire+0x17c/0x33c
->   _raw_spin_lock+0x5c/0x7c
->   ufshcd_mcq_poll_cqe_lock+0x30/0xe0
->   ufshcd_poll+0x68/0x1b0
->   ufshcd_transfer_req_compl+0x9c/0xc8
->   ufshcd_err_handler+0x3bc/0xea0
->   process_one_work+0x2f4/0x7e8
->   worker_thread+0x234/0x450
->   kthread+0x110/0x134
->   ret_from_fork+0x10/0x20
->
-> ufs_mtk_mcq_intr() could refer to
-> https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com=
-/
->
-> When ufshcd_err_handler() is executed, CQ event interrupt can enter
-> waiting for the same lock. It could happened in upstream code path
-> ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
-> warning message will be generated when &hwq->cq_lock is used in IRQ
-> context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
-> spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
->
-> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-> ---
+kernel test robot noticed the following build warnings:
 
-After adding a Fixes: tag, feel free to add,
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on linus/master v6.3 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Kelvin-Cao/dmaengine-switchtec-dma-Introduce-Switchtec-DMA-engine-PCI-driver/20230424-065123
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20230423213717.318655-2-kelvin.cao%40microchip.com
+patch subject: [PATCH v4 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA engine PCI driver
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230424/202304240915.MYWRJpvn-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bd3b335b60238af4f01bd6c28a96873988330557
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kelvin-Cao/dmaengine-switchtec-dma-Introduce-Switchtec-DMA-engine-PCI-driver/20230424-065123
+        git checkout bd3b335b60238af4f01bd6c28a96873988330557
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304240915.MYWRJpvn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/dma/switchtec_dma.c: In function 'switchtec_dma_create':
+>> drivers/dma/switchtec_dma.c:1410:13: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+    1410 |         int i;
+         |             ^
+
+
+vim +/i +1410 drivers/dma/switchtec_dma.c
+
+  1400	
+  1401	static int switchtec_dma_create(struct pci_dev *pdev)
+  1402	{
+  1403		struct switchtec_dma_dev *swdma_dev;
+  1404		struct dma_device *dma;
+  1405		struct dma_chan *chan;
+  1406		int chan_cnt;
+  1407		int nr_vecs;
+  1408		int irq;
+  1409		int rc;
+> 1410		int i;
+  1411	
+  1412		/*
+  1413		 * Create the switchtec dma device
+  1414		 */
+  1415		swdma_dev = kzalloc(sizeof(*swdma_dev), GFP_KERNEL);
+  1416		if (!swdma_dev)
+  1417			return -ENOMEM;
+  1418	
+  1419		swdma_dev->bar = ioremap(pci_resource_start(pdev, 0),
+  1420					 pci_resource_len(pdev, 0));
+  1421	
+  1422		pci_info(pdev, "Switchtec PSX/PFX DMA EP\n");
+  1423	
+  1424		RCU_INIT_POINTER(swdma_dev->pdev, pdev);
+  1425	
+  1426		nr_vecs = pci_msix_vec_count(pdev);
+  1427		rc = pci_alloc_irq_vectors(pdev, nr_vecs, nr_vecs, PCI_IRQ_MSIX);
+  1428		if (rc < 0)
+  1429			goto err_exit;
+  1430	
+  1431		tasklet_init(&swdma_dev->chan_status_task,
+  1432			     switchtec_dma_chan_status_task,
+  1433			     (unsigned long)swdma_dev);
+  1434	
+  1435		irq = readw(swdma_dev->bar + SWITCHTEC_REG_CHAN_STS_VEC);
+  1436		pci_dbg(pdev, "Channel pause irq vector %d\n", irq);
+  1437	
+  1438		irq = pci_irq_vector(pdev, irq);
+  1439		if (irq < 0) {
+  1440			rc = irq;
+  1441			goto err_exit;
+  1442		}
+  1443	
+  1444		rc = request_irq(irq, switchtec_dma_chan_status_isr, 0,
+  1445				 KBUILD_MODNAME, swdma_dev);
+  1446		if (rc)
+  1447			goto err_exit;
+  1448	
+  1449		swdma_dev->chan_status_irq = irq;
+  1450	
+  1451		chan_cnt = readl(swdma_dev->bar + SWITCHTEC_REG_CHAN_CNT);
+  1452		if (!chan_cnt) {
+  1453			pci_err(pdev, "No channel configured.\n");
+  1454			rc = -ENXIO;
+  1455			goto err_exit;
+  1456		}
+  1457	
+  1458		chan_cnt = switchtec_dma_chans_enumerate(swdma_dev, chan_cnt);
+  1459		if (chan_cnt < 0) {
+  1460			pci_err(pdev, "Failed to enumerate dma channels: %d\n",
+  1461				chan_cnt);
+  1462			rc = -ENXIO;
+  1463			goto err_exit;
+  1464		}
+  1465	
+  1466		swdma_dev->chan_cnt = chan_cnt;
+  1467	
+  1468		dma = &swdma_dev->dma_dev;
+  1469		dma->copy_align = DMAENGINE_ALIGN_1_BYTE;
+  1470		dma_cap_set(DMA_MEMCPY, dma->cap_mask);
+  1471		dma_cap_set(DMA_PRIVATE, dma->cap_mask);
+  1472		dma->dev = get_device(&pdev->dev);
+  1473	
+  1474		dma->device_alloc_chan_resources = switchtec_dma_alloc_chan_resources;
+  1475		dma->device_free_chan_resources = switchtec_dma_free_chan_resources;
+  1476		dma->device_prep_dma_memcpy = switchtec_dma_prep_memcpy;
+  1477		dma->device_prep_dma_imm_data = switchtec_dma_prep_wimm_data;
+  1478		dma->device_issue_pending = switchtec_dma_issue_pending;
+  1479		dma->device_tx_status = switchtec_dma_tx_status;
+  1480		dma->device_pause = switchtec_dma_pause;
+  1481		dma->device_resume = switchtec_dma_resume;
+  1482		dma->device_terminate_all = switchtec_dma_terminate_all;
+  1483		dma->device_synchronize = switchtec_dma_synchronize;
+  1484		dma->device_release = switchtec_dma_release;
+  1485	
+  1486		rc = dma_async_device_register(dma);
+  1487		if (rc) {
+  1488			pci_err(pdev, "Failed to register dma device: %d\n", rc);
+  1489			goto err_chans_release_exit;
+  1490		}
+  1491	
+  1492		pci_info(pdev, "Channel count: %d\n", chan_cnt);
+  1493	
+  1494		i = 0;
+  1495		list_for_each_entry(chan, &dma->channels, device_node)
+  1496			pci_info(pdev, "%s\n", dma_chan_name(chan));
+  1497	
+  1498		pci_set_drvdata(pdev, swdma_dev);
+  1499	
+  1500		return 0;
+  1501	
+  1502	err_chans_release_exit:
+  1503		switchtec_dma_chans_release(swdma_dev);
+  1504	
+  1505	err_exit:
+  1506		if (swdma_dev->chan_status_irq)
+  1507			free_irq(swdma_dev->chan_status_irq, swdma_dev);
+  1508	
+  1509		iounmap(swdma_dev->bar);
+  1510		kfree(swdma_dev);
+  1511		return rc;
+  1512	}
+  1513	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
