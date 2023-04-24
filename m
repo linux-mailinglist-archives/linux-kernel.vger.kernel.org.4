@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11516EC717
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF326EC72D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjDXHa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S231307AbjDXHcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjDXHaY (ORCPT
+        with ESMTP id S230466AbjDXHcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:30:24 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1729E6C;
-        Mon, 24 Apr 2023 00:30:14 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 46855FF807;
-        Mon, 24 Apr 2023 07:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1682321413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mQS0Q3oeQonBye5lBwhVR1nm1Yd7xoszRIo12e3txQ8=;
-        b=aOaoKZ0+j2I/OtHCfpOZT84Upgd0DsQTjrBCdX8aOVYyNljcedFSV+phcqthS23TI9lcTQ
-        ayC1B5DenY5DBFlTGlAGL6ff4xsavgLpGQW6lwts8jYc/pVSNk6mUXbCF4aLL4ZXhQINCV
-        Iu4lidqs6YevmEEQEZAL9y2KYnIFHMk5d00b/TjrDLJAB03EsOE3pouhoAPvnAQOrmrdxo
-        Vas2srO4dwIJRJuCTWihvBe3sLaXNfnNDY2XJdXpKvvmjEYjQqWN287eezkjCR94llgWn8
-        q5oAoUGfkGPXkEngVu1c+tjlRWSWi+T/JEjdzUE/9dlmTsEYXp/wGvW/idgVHQ==
-Date:   Mon, 24 Apr 2023 09:30:11 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 2/3] iio: potentiometer: Add support for the Renesas
- X9250 potentiometers
-Message-ID: <20230424093011.1301c739@bootlin.com>
-In-Reply-To: <20230422173453.7d083cb4@jic23-huawei>
-References: <20230421085245.302169-1-herve.codina@bootlin.com>
-        <20230421085245.302169-3-herve.codina@bootlin.com>
-        <20230422173453.7d083cb4@jic23-huawei>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 24 Apr 2023 03:32:19 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F77135
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:32:13 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q4cDh3T6Zz17VHY;
+        Mon, 24 Apr 2023 15:28:20 +0800 (CST)
+Received: from localhost.localdomain (10.28.79.22) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 24 Apr 2023 15:32:09 +0800
+From:   Huisong Li <lihuisong@huawei.com>
+To:     <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>
+CC:     <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+        <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
+        <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
+        <lihuisong@huawei.com>
+Subject: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Date:   Mon, 24 Apr 2023 15:30:20 +0800
+Message-ID: <20230424073020.4039-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Originating-IP: [10.28.79.22]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,386 +50,1614 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+for ensuring cache coherent on HiSilicon SoC. The performance of
+the application may be affected if some hccs ports are in non-full
+lane status, have a large number of CRC errors and so on.
 
-On Sat, 22 Apr 2023 17:34:53 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+This driver provides the query interface of the health status and
+port information of HCCS on Kunpeng SoC.
 
-> On Fri, 21 Apr 2023 10:52:44 +0200
-> Herve Codina <herve.codina@bootlin.com> wrote:
-> 
-> > The Renesas X9250 integrates four digitally controlled potentiometers.
-> > On each potentiometer, the X9250T has a 100 kOhms total resistance and
-> > the X9250U has a 50 kOhms total resistance.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
-> 
-> Hi Herve,
-> 
-> Nice clean driver.  Comments are mostly about ways to avoid boilerplate
-> and simplify the code a bit.
-> 
-> Note that the binding comment on regulators should be matched by
-> appropriate devm_get_regulator_enabled() calls in here to ensure they 
-> are turned on.
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ MAINTAINERS                          |    6 +
+ drivers/soc/Kconfig                  |    1 +
+ drivers/soc/Makefile                 |    1 +
+ drivers/soc/hisilicon/Kconfig        |   18 +
+ drivers/soc/hisilicon/Makefile       |    2 +
+ drivers/soc/hisilicon/kunpeng_hccs.c | 1296 ++++++++++++++++++++++++++
+ drivers/soc/hisilicon/kunpeng_hccs.h |  204 ++++
+ 7 files changed, 1528 insertions(+)
+ create mode 100644 drivers/soc/hisilicon/Kconfig
+ create mode 100644 drivers/soc/hisilicon/Makefile
+ create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+ create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
 
-Yes, I will use devm_get_regulator_enabled().
+diff --git a/MAINTAINERS b/MAINTAINERS
+index eddbc48c61e9..fe0e796e8445 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9399,6 +9399,12 @@ S:	Maintained
+ W:	http://www.hisilicon.com
+ F:	drivers/spi/spi-hisi-sfc-v3xx.c
+ 
++HISILICON KUNPENG SOC HCCS DRIVER
++M:	Huisong Li <lihuisong@huawei.com>
++S:	Maintained
++F:	drivers/soc/hisilicon/kunpeng_hccs.c
++F:	drivers/soc/hisilicon/kunpeng_hccs.h
++
+ HMM - Heterogeneous Memory Management
+ M:	Jérôme Glisse <jglisse@redhat.com>
+ L:	linux-mm@kvack.org
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index 4e176280113a..d21e75d69294 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -10,6 +10,7 @@ source "drivers/soc/bcm/Kconfig"
+ source "drivers/soc/canaan/Kconfig"
+ source "drivers/soc/fsl/Kconfig"
+ source "drivers/soc/fujitsu/Kconfig"
++source "drivers/soc/hisilicon/Kconfig"
+ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 3b0f9fb3b5c8..531f46f3ad98 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -14,6 +14,7 @@ obj-$(CONFIG_MACH_DOVE)		+= dove/
+ obj-y				+= fsl/
+ obj-y				+= fujitsu/
+ obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
++obj-y				+= hisilicon/
+ obj-y				+= imx/
+ obj-y				+= ixp4xx/
+ obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+diff --git a/drivers/soc/hisilicon/Kconfig b/drivers/soc/hisilicon/Kconfig
+new file mode 100644
+index 000000000000..81768d47f572
+--- /dev/null
++++ b/drivers/soc/hisilicon/Kconfig
+@@ -0,0 +1,18 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++menu "Hisilicon SoC drivers"
++	depends on ARCH_HISI
++
++config KUNPENG_HCCS
++	tristate "HCCS driver on Kunpeng SoC"
++	depends on ARM64 && ACPI
++	help
++	  The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
++	  for ensuring cache coherent on HiSilicon SoC. The performance of
++	  the application may be affected if some hccs ports are in non-full
++	  lane status, have a large number of CRC errors and so on.
++
++	  Say M here if you want to include support for querying the health
++	  status and port information of HCCS on Kunpeng SoC.
++
++endmenu
+diff --git a/drivers/soc/hisilicon/Makefile b/drivers/soc/hisilicon/Makefile
+new file mode 100644
+index 000000000000..226e747e70d6
+--- /dev/null
++++ b/drivers/soc/hisilicon/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_KUNPENG_HCCS)	+= kunpeng_hccs.o
+diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+new file mode 100644
+index 000000000000..2b52f7dedc78
+--- /dev/null
++++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+@@ -0,0 +1,1296 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * The Huawei Cache-Coherent System (HCCS) is a bus protocol standard for
++ * ensuring cache coherent on HiSilicon SoC.
++ *
++ * Copyright (c) 2023 Hisilicon Limited.
++ * Author: Huisong Li <lihuisong@huawei.com>
++ *
++ * HCCS driver for Kunpeng SoC provides the following features:
++ * - Retrieve info as belows each port:
++ *    - port type
++ *    - lane mode
++ *    - using status
++ *    - current lane mode
++ *    - link state machine
++ *    - lane mask
++ *    - CRC error count
++ *
++ * - Retrieve info as belows all ports on die or chip:
++ *    - if all used ports are in linked
++ *    - if all linked ports are in full lane
++ *    - CRC error count sum
++ */
++#include <linux/sysfs.h>
++#include <linux/acpi.h>
++#include <linux/io.h>
++#include <linux/kobject.h>
++#include <linux/iopoll.h>
++#include <linux/platform_device.h>
++#include <acpi/pcc.h>
++
++#include "kunpeng_hccs.h"
++
++/* PCC defines */
++#define HCCS_PCC_SIGNATURE_MASK		0x50434300
++#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
++
++/*
++ * Arbitrary retries in case the remote processor is slow to respond
++ * to PCC commands
++ */
++#define HCCS_PCC_CMD_WAIT_RETRIES_NUM		500ULL
++#define HCCS_POLL_STATUS_TIME_INTERVAL_US	3
++
++static struct hccs_port_info *kobj_to_port_info(struct kobject *k)
++{
++	return container_of(k, struct hccs_port_info, kobj);
++}
++
++static struct hccs_die_info *kobj_to_die_info(struct kobject *k)
++{
++	return container_of(k, struct hccs_die_info, kobj);
++}
++
++static struct hccs_chip_info *kobj_to_chip_info(struct kobject *k)
++{
++	return container_of(k, struct hccs_chip_info, kobj);
++}
++
++static bool hccs_dev_property_supported(struct hccs_dev *hdev)
++{
++	struct device *dev = hdev->dev;
++
++	if (hdev->intr_mode) {
++		dev_err(dev, "interrupt mode is unsupported.\n");
++		return false;
++	}
++
++	if (hdev->type >= ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE) {
++		dev_err(dev, "PCC type-%u is unsupported.\n", hdev->type);
++		return false;
++	}
++
++	return true;
++}
++
++static int hccs_get_device_property(struct hccs_dev *hdev)
++{
++	struct device *dev = hdev->dev;
++
++	if (device_property_read_u32(dev, "device-flags", &hdev->flags)) {
++		dev_err(hdev->dev, "no device-flags property.\n");
++		return -ENODEV;
++	}
++
++	if (device_property_read_u8(dev, "pcc-type", &hdev->type)) {
++		dev_err(hdev->dev, "no pcc-type property.\n");
++		return -ENODEV;
++	}
++
++	if (device_property_read_u32(dev, "pcc-chan-id", &hdev->chan_id)) {
++		dev_err(hdev->dev, "no pcc-channel property.\n");
++		return -ENODEV;
++	}
++
++	hdev->intr_mode = hccs_get_bit(hdev->flags, HCCS_DEV_FLAGS_INTR_B);
++	if (!hccs_dev_property_supported(hdev))
++		return -EOPNOTSUPP;
++
++	return 0;
++}
++
++static void hccs_chan_tx_done(struct mbox_client *cl, void *msg, int ret)
++{
++	if (ret < 0)
++		pr_debug("TX did not complete: CMD sent:0x%x, ret:%d\n",
++			 *(u8 *)msg, ret);
++	else
++		pr_debug("TX completed. CMD sent:0x%x, ret:%d\n",
++			 *(u8 *)msg, ret);
++}
++
++static void hccs_unregister_pcc_channel(struct hccs_dev *hdev)
++{
++	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
++
++	if (hdev->intr_mode)
++		return;
++
++	if (cl_info->pcc_comm_addr)
++		iounmap(cl_info->pcc_comm_addr);
++	pcc_mbox_free_channel(hdev->cl_info.pcc_chan);
++}
++
++static int hccs_register_pcc_channel(struct hccs_dev *hdev)
++{
++	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
++	struct mbox_client *cl = &cl_info->client;
++	struct pcc_mbox_chan *pcc_chan;
++	struct device *dev = hdev->dev;
++	int rc;
++
++	if (hdev->intr_mode)
++		return 0;
++
++	cl->dev = dev;
++	cl->tx_block = false;
++	cl->knows_txdone = true;
++	cl->tx_done = hccs_chan_tx_done;
++	pcc_chan = pcc_mbox_request_channel(cl, hdev->chan_id);
++	if (IS_ERR(pcc_chan)) {
++		dev_err(dev, "PPC channel request failed.\n");
++		rc = -ENODEV;
++		goto out;
++	}
++	cl_info->pcc_chan = pcc_chan;
++	cl_info->mbox_chan = pcc_chan->mchan;
++	/*
++	 * pcc_chan->latency is just a nominal value. In reality the remote
++	 * processor could be much slower to reply. So add an arbitrary amount
++	 * of wait on top of nominal.
++	 */
++	cl_info->deadline_us =
++			HCCS_PCC_CMD_WAIT_RETRIES_NUM * pcc_chan->latency;
++	if (cl_info->mbox_chan->mbox->txdone_irq) {
++		dev_err(dev, "PCC IRQ in PCCT is enabled.\n");
++		rc = -EINVAL;
++		goto err_mbx_channel_free;
++	}
++
++	if (pcc_chan->shmem_base_addr) {
++		cl_info->pcc_comm_addr = (void __force *)ioremap(
++			pcc_chan->shmem_base_addr, pcc_chan->shmem_size);
++		if (!cl_info->pcc_comm_addr) {
++			dev_err(dev, "Failed to ioremap PCC communication region for channel-%d.\n",
++				hdev->chan_id);
++			rc = -ENOMEM;
++			goto err_mbx_channel_free;
++		}
++	}
++
++	return 0;
++
++err_mbx_channel_free:
++	pcc_mbox_free_channel(cl_info->pcc_chan);
++out:
++	return rc;
++}
++
++static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
++{
++	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
++	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
++	u16 status;
++	int ret;
++
++	/*
++	 * Poll PCC status register every 3us(delay_us) for maximum of
++	 * deadline_us(timeout_us) until PCC command complete bit is set(cond)
++	 */
++	ret = readw_relaxed_poll_timeout(&comm_base->status, status,
++					 status & HCCS_PCC_STATUS_CMD_COMPLETE,
++					 HCCS_POLL_STATUS_TIME_INTERVAL_US,
++					 cl_info->deadline_us);
++	if (unlikely(ret))
++		dev_err(hdev->dev, "poll PCC status failed, ret = %d.\n", ret);
++
++	return ret;
++}
++
++static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
++			     struct hccs_desc *desc)
++{
++	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
++	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
++	void *comm_space = (void *)(comm_base + 1);
++	struct hccs_fw_inner_head *fw_inner_head;
++	struct acpi_pcct_shared_memory tmp = {0};
++	u16 comm_space_size;
++	int ret;
++
++	/* Write signature for this subspace */
++	tmp.signature = HCCS_PCC_SIGNATURE_MASK | hdev->chan_id;
++	/* Write to the shared command region */
++	tmp.command = cmd;
++	/* Clear cmd complete bit */
++	tmp.status = 0;
++	memcpy_toio(comm_base, (void *)&tmp,
++			sizeof(struct acpi_pcct_shared_memory));
++
++	/* Copy the message to the PCC comm space */
++	comm_space_size = HCCS_PCC_SHARE_MEM_BYTES -
++				sizeof(struct acpi_pcct_shared_memory);
++	memcpy_toio(comm_space, (void *)desc, comm_space_size);
++
++	/* Ring doorbell */
++	ret = mbox_send_message(cl_info->mbox_chan, &cmd);
++	if (ret < 0) {
++		dev_err(hdev->dev, "Send PCC mbox message failed, ret = %d.\n",
++			ret);
++		goto end;
++	}
++
++	/* Wait for completion */
++	ret = hccs_check_chan_cmd_complete(hdev);
++	if (ret)
++		goto end;
++
++	/* Copy response data */
++	memcpy_fromio((void *)desc, comm_space, comm_space_size);
++	fw_inner_head = &desc->rsp.fw_inner_head;
++	if (fw_inner_head->retStatus) {
++		dev_err(hdev->dev, "Execute PCC command failed, error code = %u.\n",
++			fw_inner_head->retStatus);
++		ret = -EIO;
++	}
++
++end:
++	mbox_client_txdone(cl_info->mbox_chan, ret);
++	return ret;
++}
++
++static void hccs_init_req_desc(struct hccs_desc *desc)
++{
++	struct hccs_req_desc *req = &desc->req;
++
++	memset(desc, 0, sizeof(*desc));
++	req->req_head.module_code = HCCS_SERDES_MODULE_CODE;
++}
++
++static int hccs_get_dev_caps(struct hccs_dev *hdev)
++{
++	struct hccs_desc desc;
++	int ret;
++
++	hccs_init_req_desc(&desc);
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DEV_CAP, &desc);
++	if (ret) {
++		dev_err(hdev->dev, "Get device capabilities failed, ret = %d.\n",
++			ret);
++		return ret;
++	}
++	memcpy(&hdev->caps, desc.rsp.data, sizeof(hdev->caps));
++
++	return 0;
++}
++
++static int hccs_query_chip_num_on_platform(struct hccs_dev *hdev)
++{
++	struct hccs_desc desc;
++	int ret;
++
++	hccs_init_req_desc(&desc);
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_CHIP_NUM, &desc);
++	if (ret) {
++		dev_err(hdev->dev, "query system chip number failed, ret = %d.\n",
++			ret);
++		return ret;
++	}
++
++	hdev->chip_num = *((u8 *)&desc.rsp.data);
++	if (!hdev->chip_num) {
++		dev_err(hdev->dev, "chip num obtained from firmware is zero.\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int hccs_get_chip_info(struct hccs_dev *hdev,
++			      struct hccs_chip_info *chip)
++{
++	struct hccs_die_num_req_param *req_param;
++	struct hccs_desc desc;
++	int ret;
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_die_num_req_param *)desc.req.data;
++	req_param->chip_id = chip->chip_id;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_NUM, &desc);
++	if (ret)
++		return ret;
++
++	chip->die_num = *((u8 *)&desc.rsp.data);
++
++	return 0;
++}
++
++static int hccs_query_chip_info_on_platform(struct hccs_dev *hdev)
++{
++	struct hccs_chip_info *chip;
++	int ret;
++	u8 idx;
++
++	ret = hccs_query_chip_num_on_platform(hdev);
++	if (ret) {
++		dev_err(hdev->dev, "query chip number on platform failed, ret = %d.\n",
++			ret);
++		return ret;
++	}
++
++	hdev->chips = devm_kzalloc(hdev->dev,
++				hdev->chip_num * sizeof(struct hccs_chip_info),
++				GFP_KERNEL);
++	if (!hdev->chips) {
++		dev_err(hdev->dev, "allocate all chips memory failed.\n");
++		return -ENOMEM;
++	}
++
++	for (idx = 0; idx < hdev->chip_num; idx++) {
++		chip = &hdev->chips[idx];
++		chip->chip_id = idx;
++		ret = hccs_get_chip_info(hdev, chip);
++		if (ret) {
++			dev_err(hdev->dev, "get chip%u info failed, ret = %d.\n",
++				idx, ret);
++			return ret;
++		}
++		chip->hdev = hdev;
++	}
++
++	return 0;
++}
++
++static int hccs_query_die_info_on_chip(struct hccs_dev *hdev, u8 chip_id,
++				       u8 die_idx, struct hccs_die_info *die)
++{
++	struct hccs_die_info_req_param *req_param;
++	struct hccs_die_info_rsp_data *rsp_data;
++	struct hccs_desc desc;
++	int ret;
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_die_info_req_param *)desc.req.data;
++	req_param->chip_id = chip_id;
++	req_param->die_idx = die_idx;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_INFO, &desc);
++	if (ret)
++		return ret;
++
++	rsp_data = (struct hccs_die_info_rsp_data *)desc.rsp.data;
++	die->die_id = rsp_data->die_id;
++	die->port_num = rsp_data->port_num;
++	die->min_port_id = rsp_data->min_port_id;
++	die->max_port_id = rsp_data->max_port_id;
++	if (die->min_port_id > die->max_port_id) {
++		dev_err(hdev->dev, "min port id(%u) > max port id(%u) on die_idx(%u).\n",
++			die->min_port_id, die->max_port_id, die_idx);
++		return -EINVAL;
++	}
++	if (die->max_port_id > HCCS_DIE_MAX_PORT_ID) {
++		dev_err(hdev->dev, "max port id(%u) on die_idx(%u) is too big.\n",
++			die->max_port_id, die_idx);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int hccs_query_all_die_info_on_platform(struct hccs_dev *hdev)
++{
++	struct device *dev = hdev->dev;
++	struct hccs_chip_info *chip;
++	struct hccs_die_info *die;
++	u8 i, j;
++	int ret;
++
++	for (i = 0; i < hdev->chip_num; i++) {
++		chip = &hdev->chips[i];
++		if (!chip->die_num)
++			continue;
++
++		chip->dies = devm_kzalloc(hdev->dev,
++				chip->die_num * sizeof(struct hccs_die_info),
++				GFP_KERNEL);
++		if (!chip->dies) {
++			dev_err(dev, "allocate all dies memory on chip%u failed.\n",
++				i);
++			return -ENOMEM;
++		}
++
++		for (j = 0; j < chip->die_num; j++) {
++			die = &chip->dies[j];
++			ret = hccs_query_die_info_on_chip(hdev, i, j, die);
++			if (ret) {
++				dev_err(dev, "get die idx (%u) info on chip%u failed, ret = %d.\n",
++					j, i, ret);
++				return ret;
++			}
++			die->chip = chip;
++		}
++	}
++
++	return 0;
++}
++
++static int hccs_get_bd_info(struct hccs_dev *hdev, u8 opcode,
++			    struct hccs_desc *desc,
++			    void *buf, size_t buf_len,
++			    struct hccs_rsp_head *rsp_head)
++{
++	struct hccs_rsp_head *head;
++	struct hccs_rsp_desc *rsp;
++	int ret;
++
++	ret = hccs_pcc_cmd_send(hdev, opcode, desc);
++	if (ret)
++		return ret;
++
++	rsp = &desc->rsp;
++	head = &rsp->rsp_head;
++	if (head->data_len > buf_len) {
++		dev_err(hdev->dev,
++			"buffer overflow (buf_len = %lu, data_len = %u)!\n",
++			buf_len, head->data_len);
++		return -ENOMEM;
++	}
++
++	memcpy(buf, rsp->data, head->data_len);
++	*rsp_head = *head;
++
++	return 0;
++}
++
++static int hccs_get_all_port_attr(struct hccs_dev *hdev,
++				  struct hccs_die_info *die,
++				  struct hccs_port_attr *attrs, u16 size)
++{
++	struct hccs_die_comm_req_param *req_param;
++	struct hccs_req_head *req_head;
++	struct hccs_rsp_head rsp_head;
++	struct hccs_desc desc;
++	size_t left_buf_len;
++	u32 data_len = 0;
++	u8 start_id;
++	u8 *buf;
++	int ret;
++
++	buf = (u8 *)attrs;
++	left_buf_len = sizeof(struct hccs_port_attr) * size;
++	start_id = die->min_port_id;
++	while (start_id <= die->max_port_id) {
++		hccs_init_req_desc(&desc);
++		req_head = &desc.req.req_head;
++		req_head->start_id = start_id;
++		req_param = (struct hccs_die_comm_req_param *)desc.req.data;
++		req_param->chip_id = die->chip->chip_id;
++		req_param->die_id = die->die_id;
++
++		ret = hccs_get_bd_info(hdev, HCCS_GET_DIE_PORT_INFO, &desc,
++				       buf + data_len, left_buf_len, &rsp_head);
++		if (ret) {
++			dev_err(hdev->dev,
++				"get the information of port%u on die%u failed, ret = %d.\n",
++				start_id, die->die_id, ret);
++			return ret;
++		}
++
++		data_len += rsp_head.data_len;
++		left_buf_len -= rsp_head.data_len;
++		if (unlikely(rsp_head.next_id <= start_id)) {
++			dev_err(hdev->dev,
++				"next port id (%u) is not greater than last start id (%u) on die%u.\n",
++				rsp_head.next_id, start_id, die->die_id);
++			return -EINVAL;
++		}
++		start_id = rsp_head.next_id;
++	}
++
++	return 0;
++}
++
++static int hccs_get_all_port_info_on_die(struct hccs_dev *hdev,
++					 struct hccs_die_info *die)
++{
++	struct hccs_port_attr *attrs;
++	struct hccs_port_info *port;
++	int ret;
++	u8 i;
++
++	attrs = kcalloc(die->port_num, sizeof(struct hccs_port_attr),
++			GFP_KERNEL);
++	if (!attrs)
++		return -ENOMEM;
++
++	ret = hccs_get_all_port_attr(hdev, die, attrs, die->port_num);
++	if (ret)
++		goto out;
++
++	for (i = 0; i < die->port_num; i++) {
++		port = &die->ports[i];
++		port->port_id = attrs[i].port_id;
++		port->port_type = attrs[i].port_type;
++		port->lane_mode = attrs[i].lane_mode;
++		port->is_used = attrs[i].is_used;
++		port->die = die;
++	}
++
++out:
++	kfree(attrs);
++	return ret;
++}
++
++static int hccs_query_all_port_info_on_platform(struct hccs_dev *hdev)
++{
++
++	struct device *dev = hdev->dev;
++	struct hccs_chip_info *chip;
++	struct hccs_die_info *die;
++	u8 i, j;
++	int ret;
++
++	for (i = 0; i < hdev->chip_num; i++) {
++		chip = &hdev->chips[i];
++		for (j = 0; j < chip->die_num; j++) {
++			die = &chip->dies[j];
++			if (!die->port_num)
++				continue;
++
++			die->ports = devm_kzalloc(dev,
++				die->port_num * sizeof(struct hccs_port_info),
++				GFP_KERNEL);
++			if (!die->ports) {
++				dev_err(dev, "allocate ports memory on chip%u/die%u failed.\n",
++					i, die->die_id);
++				return -ENOMEM;
++			}
++
++			ret = hccs_get_all_port_info_on_die(hdev, die);
++			if (ret) {
++				dev_err(dev, "get die(%u) info on chip%u failed, ret = %d.\n",
++					die->die_id, i, ret);
++				return ret;
++			}
++		}
++	}
++
++	return 0;
++}
++
++static int hccs_get_hw_info(struct hccs_dev *hdev)
++{
++	int ret;
++
++	ret = hccs_query_chip_info_on_platform(hdev);
++	if (ret) {
++		dev_err(hdev->dev, "query chip info on platform  failed, ret = %d.\n",
++			ret);
++		return ret;
++	}
++
++	ret = hccs_query_all_die_info_on_platform(hdev);
++	if (ret) {
++		dev_err(hdev->dev, "query all die info on platform failed, ret = %d.\n",
++			ret);
++		return ret;
++	}
++
++	ret = hccs_query_all_port_info_on_platform(hdev);
++	if (ret) {
++		dev_err(hdev->dev, "query all port info on platform failed, ret = %d.\n",
++			ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int hccs_query_port_link_status(struct hccs_dev *hdev,
++				       const struct hccs_port_info *port,
++				       struct hccs_link_status *link_status)
++{
++	const struct hccs_die_info *die = port->die;
++	const struct hccs_chip_info *chip = die->chip;
++	struct hccs_port_comm_req_param *req_param;
++	struct hccs_desc desc;
++	int ret;
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_port_comm_req_param *)desc.req.data;
++	req_param->chip_id = chip->chip_id;
++	req_param->die_id = die->die_id;
++	req_param->port_id = port->port_id;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_PORT_LINK_STATUS, &desc);
++	if (ret) {
++		dev_err(hdev->dev,
++			"get port link status info failed, ret = %d.\n", ret);
++		return ret;
++	}
++
++	*link_status = *((struct hccs_link_status *)desc.rsp.data);
++
++	return 0;
++}
++
++static int hccs_query_port_crc_err_cnt(struct hccs_dev *hdev,
++				       const struct hccs_port_info *port,
++				       u64 *crc_err_cnt)
++{
++	const struct hccs_die_info *die = port->die;
++	const struct hccs_chip_info *chip = die->chip;
++	struct hccs_port_comm_req_param *req_param;
++	struct hccs_desc desc;
++	int ret;
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_port_comm_req_param *)desc.req.data;
++	req_param->chip_id = chip->chip_id;
++	req_param->die_id = die->die_id;
++	req_param->port_id = port->port_id;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_PORT_CRC_ERR_CNT, &desc);
++	if (ret) {
++		dev_err(hdev->dev,
++			"get port crc error count failed, ret = %d.\n", ret);
++		return ret;
++	}
++
++	memcpy(crc_err_cnt, &desc.rsp.data, sizeof(u64));
++
++	return 0;
++}
++
++static int hccs_get_die_all_link_status(struct hccs_dev *hdev,
++					const struct hccs_die_info *die,
++					u8 *all_linked)
++{
++	struct hccs_die_comm_req_param *req_param;
++	struct hccs_desc desc;
++	int ret;
++
++	if (die->port_num == 0) {
++		*all_linked = 1;
++		return 0;
++	}
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_die_comm_req_param *)desc.req.data;
++	req_param->chip_id = die->chip->chip_id;
++	req_param->die_id = die->die_id;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_PORTS_LANE_STA, &desc);
++	if (ret) {
++		dev_err(hdev->dev,
++			"get link status of all ports failed on die%u, ret = %d.\n",
++			die->die_id, ret);
++		return ret;
++	}
++
++	*all_linked = *((u8 *)&desc.rsp.data);
++
++	return 0;
++}
++
++static int hccs_get_die_all_port_lane_status(struct hccs_dev *hdev,
++					     const struct hccs_die_info *die,
++					     u8 *full_lane)
++{
++	struct hccs_die_comm_req_param *req_param;
++	struct hccs_desc desc;
++	int ret;
++
++	if (die->port_num == 0) {
++		*full_lane = 1;
++		return 0;
++	}
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_die_comm_req_param *)desc.req.data;
++	req_param->chip_id = die->chip->chip_id;
++	req_param->die_id = die->die_id;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_PORTS_LANE_STA, &desc);
++	if (ret) {
++		dev_err(hdev->dev, "get lane status of all ports failed on die%u, ret = %d.\n",
++			die->die_id, ret);
++		return ret;
++	}
++
++	*full_lane = *((u8 *)&desc.rsp.data);
++
++	return 0;
++}
++
++static int hccs_get_die_total_crc_err_cnt(struct hccs_dev *hdev,
++					  const struct hccs_die_info *die,
++					  u64 *total_crc_err_cnt)
++{
++	struct hccs_die_comm_req_param *req_param;
++	struct hccs_desc desc;
++	int ret;
++
++	if (die->port_num == 0) {
++		*total_crc_err_cnt = 0;
++		return 0;
++	}
++
++	hccs_init_req_desc(&desc);
++	req_param = (struct hccs_die_comm_req_param *)desc.req.data;
++	req_param->chip_id = die->chip->chip_id;
++	req_param->die_id = die->die_id;
++	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_PORTS_CRC_ERR_CNT, &desc);
++	if (ret) {
++		dev_err(hdev->dev, "get crc error count sum failed on die%u, ret = %d.\n",
++			die->die_id, ret);
++		return ret;
++	}
++
++	memcpy(total_crc_err_cnt, &desc.rsp.data, sizeof(u64));
++
++	return 0;
++}
++
++static ssize_t hccs_show(struct kobject *k, struct attribute *attr, char *buf)
++{
++	struct kobj_attribute *kobj_attr;
++
++	kobj_attr = container_of(attr, struct kobj_attribute, attr);
++
++	return kobj_attr->show(k, kobj_attr, buf);
++}
++
++static const struct sysfs_ops hccs_comm_ops = {
++	.show = hccs_show,
++};
++
++static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
++			 char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++
++	return sprintf(buf, "HCCS-v%u\n", port->port_type);
++}
++
++static struct kobj_attribute hccs_type_attr =
++			__ATTR(type, 0444, type_show, NULL);
++
++static ssize_t lane_mode_show(struct kobject *kobj, struct kobj_attribute *attr,
++			      char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++
++	return sprintf(buf, "x%u\n", port->lane_mode);
++}
++
++static struct kobj_attribute lane_mode_attr =
++			__ATTR(lane_mode, 0444, lane_mode_show, NULL);
++
++static ssize_t using_status_show(struct kobject *kobj,
++				 struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++
++	return sprintf(buf, "%u\n", port->is_used);
++}
++
++static struct kobj_attribute using_status_attr =
++			__ATTR(using_status, 0444, using_status_show, NULL);
++
++static ssize_t cur_lane_num_show(struct kobject *kobj,
++				 struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++	struct hccs_dev *hdev = port->die->chip->hdev;
++	struct hccs_link_status link_status = {0};
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_query_port_link_status(hdev, port, &link_status);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get current lane num failed\n");
++
++	return sprintf(buf, "%u\n", link_status.lane_num);
++}
++
++static struct kobj_attribute cur_lane_num_attr =
++			__ATTR(cur_lane_num, 0444, cur_lane_num_show, NULL);
++
++static ssize_t link_fsm_show(struct kobject *kobj,
++			     struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++	struct hccs_dev *hdev = port->die->chip->hdev;
++	struct hccs_link_status link_status = {0};
++	const struct {
++		u8 link_fsm;
++		char *str;
++	} link_fsm_map[] = {
++		{HCCS_PORT_RESET, "reset"},
++		{HCCS_PORT_SETUP, "setup"},
++		{HCCS_PORT_CONFIG, "config"},
++		{HCCS_PORT_READY, "link-up"},
++	};
++	const char *link_fsm_str = "unknown";
++	size_t i;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_query_port_link_status(hdev, port, &link_status);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get link fsm failed\n");
++
++	for (i = 0; i < ARRAY_SIZE(link_fsm_map); i++) {
++		if (link_fsm_map[i].link_fsm == link_status.link_fsm) {
++			link_fsm_str = link_fsm_map[i].str;
++			break;
++		}
++	}
++
++	return sprintf(buf, "%s\n", link_fsm_str);
++}
++
++static struct kobj_attribute link_fsm_attr =
++			__ATTR(link_fsm, 0444, link_fsm_show, NULL);
++
++static ssize_t lane_mask_show(struct kobject *kobj,
++			      struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++	struct hccs_dev *hdev = port->die->chip->hdev;
++	struct hccs_link_status link_status = {0};
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_query_port_link_status(hdev, port, &link_status);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get lane mask failed\n");
++
++	return sprintf(buf, "0x%x\n", link_status.lane_mask);
++}
++
++static struct kobj_attribute lane_mask_attr =
++			__ATTR(lane_mask, 0444, lane_mask_show, NULL);
++
++static ssize_t crc_err_cnt_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_port_info *port = kobj_to_port_info(kobj);
++	struct hccs_dev *hdev = port->die->chip->hdev;
++	u64 crc_err_cnt;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_query_port_crc_err_cnt(hdev, port, &crc_err_cnt);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get crc error count failed\n");
++
++	return sprintf(buf, "%llu\n", crc_err_cnt);
++}
++
++static struct kobj_attribute crc_err_cnt_attr =
++			__ATTR(crc_err_cnt, 0444, crc_err_cnt_show, NULL);
++
++static struct attribute *hccs_port_default_attrs[] = {
++	&hccs_type_attr.attr,
++	&lane_mode_attr.attr,
++	&using_status_attr.attr,
++	&cur_lane_num_attr.attr,
++	&link_fsm_attr.attr,
++	&lane_mask_attr.attr,
++	&crc_err_cnt_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(hccs_port_default);
++
++static const struct kobj_type hccs_port_type = {
++	.sysfs_ops = &hccs_comm_ops,
++	.default_groups = hccs_port_default_groups,
++};
++
++static ssize_t all_linked_on_die_show(struct kobject *kobj,
++				      struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_die_info *die = kobj_to_die_info(kobj);
++	struct hccs_dev *hdev = die->chip->hdev;
++	u8 all_linked;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_get_die_all_link_status(hdev, die, &all_linked);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get link status failed\n");
++
++	return sprintf(buf, "%u\n", all_linked);
++}
++static struct kobj_attribute all_linked_on_die_attr =
++		__ATTR(all_linked, 0444, all_linked_on_die_show, NULL);
++
++static ssize_t linked_full_lane_on_die_show(struct kobject *kobj,
++					    struct kobj_attribute *attr,
++					    char *buf)
++{
++	const struct hccs_die_info *die = kobj_to_die_info(kobj);
++	struct hccs_dev *hdev = die->chip->hdev;
++	u8 full_lane;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_get_die_all_port_lane_status(hdev, die, &full_lane);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get full lane status failed\n");
++
++	return sprintf(buf, "%u\n", full_lane);
++}
++static struct kobj_attribute linked_full_lane_on_die_attr =
++	__ATTR(linked_full_lane, 0444, linked_full_lane_on_die_show, NULL);
++
++static ssize_t crc_err_cnt_sum_on_die_show(struct kobject *kobj,
++					   struct kobj_attribute *attr,
++					   char *buf)
++{
++	const struct hccs_die_info *die = kobj_to_die_info(kobj);
++	struct hccs_dev *hdev = die->chip->hdev;
++	u64 total_crc_err_cnt;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	ret = hccs_get_die_total_crc_err_cnt(hdev, die, &total_crc_err_cnt);
++	mutex_unlock(&hdev->lock);
++	if (ret)
++		return sprintf(buf, "get total crc error count failed\n");
++
++	return sprintf(buf, "%llu\n", total_crc_err_cnt);
++}
++static struct kobj_attribute crc_err_cnt_sum_on_die_attr =
++	__ATTR(crc_err_cnt, 0444, crc_err_cnt_sum_on_die_show, NULL);
++
++static struct attribute *hccs_die_default_attrs[] = {
++	&all_linked_on_die_attr.attr,
++	&linked_full_lane_on_die_attr.attr,
++	&crc_err_cnt_sum_on_die_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(hccs_die_default);
++
++static const struct kobj_type hccs_die_type = {
++	.sysfs_ops = &hccs_comm_ops,
++	.default_groups = hccs_die_default_groups,
++};
++
++static ssize_t all_linked_on_chip_show(struct kobject *kobj,
++				       struct kobj_attribute *attr, char *buf)
++{
++	const struct hccs_chip_info *chip = kobj_to_chip_info(kobj);
++	struct hccs_dev *hdev = chip->hdev;
++	const struct hccs_die_info *die;
++	u8 all_linked = 1;
++	u8 i, tmp;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	for (i = 0; i < chip->die_num; i++) {
++		die = &chip->dies[i];
++		ret = hccs_get_die_all_link_status(hdev, die, &tmp);
++		if (ret) {
++			mutex_unlock(&hdev->lock);
++			return sprintf(buf, "get all linked status failed\n");
++		}
++		if (tmp != all_linked) {
++			all_linked = 0;
++			break;
++		}
++	}
++	mutex_unlock(&hdev->lock);
++
++	return sprintf(buf, "%u\n", all_linked);
++}
++static struct kobj_attribute all_linked_on_chip_attr =
++		__ATTR(all_linked, 0444, all_linked_on_chip_show, NULL);
++
++static ssize_t linked_full_lane_on_chip_show(struct kobject *kobj,
++					     struct kobj_attribute *attr,
++					     char *buf)
++{
++	const struct hccs_chip_info *chip = kobj_to_chip_info(kobj);
++	struct hccs_dev *hdev = chip->hdev;
++	const struct hccs_die_info *die;
++	u8 full_lane = 1;
++	u8 i, tmp;
++	int ret;
++
++	mutex_lock(&hdev->lock);
++	for (i = 0; i < chip->die_num; i++) {
++		die = &chip->dies[i];
++		ret = hccs_get_die_all_port_lane_status(hdev, die, &tmp);
++		if (ret) {
++			mutex_unlock(&hdev->lock);
++			return sprintf(buf, "get full lane status failed\n");
++		}
++		if (tmp != full_lane) {
++			full_lane = 0;
++			break;
++		}
++	}
++	mutex_unlock(&hdev->lock);
++
++	return sprintf(buf, "%u\n", full_lane);
++}
++static struct kobj_attribute linked_full_lane_on_chip_attr =
++	__ATTR(linked_full_lane, 0444, linked_full_lane_on_chip_show, NULL);
++
++static ssize_t crc_err_cnt_sum_on_chip_show(struct kobject *kobj,
++					    struct kobj_attribute *attr,
++					    char *buf)
++{
++	const struct hccs_chip_info *chip = kobj_to_chip_info(kobj);
++	u64 crc_err_cnt, total_crc_err_cnt = 0;
++	struct hccs_dev *hdev = chip->hdev;
++	const struct hccs_die_info *die;
++	int ret;
++	u16 i;
++
++	mutex_lock(&hdev->lock);
++	for (i = 0; i < chip->die_num; i++) {
++		die = &chip->dies[i];
++		ret = hccs_get_die_total_crc_err_cnt(hdev, die, &crc_err_cnt);
++		if (ret) {
++			mutex_unlock(&hdev->lock);
++			return sprintf(buf, "get full lane status failed\n");
++		}
++
++		total_crc_err_cnt += crc_err_cnt;
++	}
++	mutex_unlock(&hdev->lock);
++
++	return sprintf(buf, "%llu\n", total_crc_err_cnt);
++}
++static struct kobj_attribute crc_err_cnt_sum_on_chip_attr =
++		__ATTR(crc_err_cnt, 0444, crc_err_cnt_sum_on_chip_show, NULL);
++
++static struct attribute *hccs_chip_default_attrs[] = {
++	&all_linked_on_chip_attr.attr,
++	&linked_full_lane_on_chip_attr.attr,
++	&crc_err_cnt_sum_on_chip_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(hccs_chip_default);
++
++static const struct kobj_type hccs_chip_type = {
++	.sysfs_ops = &hccs_comm_ops,
++	.default_groups = hccs_chip_default_groups,
++};
++
++static void hccs_remove_die_dir(struct hccs_die_info *die)
++{
++	struct hccs_port_info *port;
++	u8 i;
++
++	for (i = 0; i < die->port_num; i++) {
++		port = &die->ports[i];
++		if (port->dir_created)
++			kobject_put(&port->kobj);
++	}
++
++	kobject_put(&die->kobj);
++}
++
++static void hccs_remove_chip_dir(struct hccs_chip_info *chip)
++{
++	struct hccs_die_info *die;
++	u8 i;
++
++	for (i = 0; i < chip->die_num; i++) {
++		die = &chip->dies[i];
++		if (die->dir_created)
++			hccs_remove_die_dir(die);
++	}
++
++	kobject_put(&chip->kobj);
++}
++
++static void hccs_remove_topo_dirs(struct hccs_dev *hdev)
++{
++	u8 i;
++
++	for (i = 0; i < hdev->chip_num; i++)
++		hccs_remove_chip_dir(&hdev->chips[i]);
++}
++
++static int hccs_create_hccs_dir(struct hccs_dev *hdev,
++				struct hccs_die_info *die,
++				struct hccs_port_info *port)
++{
++	int ret;
++
++	ret = kobject_init_and_add(&port->kobj, &hccs_port_type,
++				   &die->kobj, "hccs%d", port->port_id);
++	if (ret) {
++		kobject_put(&port->kobj);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int hccs_create_die_dir(struct hccs_dev *hdev,
++			       struct hccs_chip_info *chip,
++			       struct hccs_die_info *die)
++{
++	struct hccs_port_info *port;
++	int ret;
++	u16 i;
++
++	ret = kobject_init_and_add(&die->kobj, &hccs_die_type,
++				   &chip->kobj, "die%d", die->die_id);
++	if (ret) {
++		kobject_put(&die->kobj);
++		return ret;
++	}
++
++	for (i = 0; i < die->port_num; i++) {
++		port = &die->ports[i];
++		ret = hccs_create_hccs_dir(hdev, die, port);
++		if (ret) {
++			dev_err(hdev->dev, "create hccs%d dir failed.\n",
++				port->port_id);
++			goto err;
++		}
++		port->dir_created = true;
++	}
++
++	return 0;
++err:
++	hccs_remove_die_dir(die);
++
++	return ret;
++}
++
++static int hccs_create_chip_dir(struct hccs_dev *hdev,
++				struct hccs_chip_info *chip)
++{
++	struct hccs_die_info *die;
++	int ret;
++	u16 id;
++
++	ret = kobject_init_and_add(&chip->kobj, &hccs_chip_type,
++				   &hdev->dev->kobj, "chip%d", chip->chip_id);
++	if (ret) {
++		kobject_put(&chip->kobj);
++		return ret;
++	}
++
++	for (id = 0; id < chip->die_num; id++) {
++		die = &chip->dies[id];
++		ret = hccs_create_die_dir(hdev, chip, die);
++		if (ret)
++			goto err;
++		die->dir_created = true;
++	}
++
++	return 0;
++err:
++	hccs_remove_chip_dir(chip);
++
++	return ret;
++}
++
++static int hccs_create_topo_dirs(struct hccs_dev *hdev)
++{
++	struct hccs_chip_info *chip;
++	u8 id, k;
++	int ret;
++
++	for (id = 0; id < hdev->chip_num; id++) {
++		chip = &hdev->chips[id];
++		ret = hccs_create_chip_dir(hdev, chip);
++		if (ret) {
++			dev_err(hdev->dev, "init chip%d dir failed!\n", id);
++			goto err;
++		}
++	}
++
++	return 0;
++err:
++	for (k = 0; k < id; k++)
++		hccs_remove_chip_dir(&hdev->chips[k]);
++
++	return ret;
++}
++
++static int hccs_probe(struct platform_device *pdev)
++{
++	struct acpi_device *acpi_dev;
++	struct hccs_dev *hdev;
++	int rc;
++
++	pr_info("kunpeng_hccs is initializing.\n");
++
++	if (acpi_disabled) {
++		dev_err(&pdev->dev, "acpi is disabled.\n");
++		return -ENODEV;
++	}
++	acpi_dev = ACPI_COMPANION(&pdev->dev);
++	if (!acpi_dev)
++		return -ENODEV;
++
++	hdev = devm_kzalloc(&pdev->dev, sizeof(*hdev), GFP_KERNEL);
++	if (!hdev)
++		return -ENOMEM;
++	hdev->acpi_dev = acpi_dev;
++	hdev->dev = &pdev->dev;
++	platform_set_drvdata(pdev, hdev);
++
++	rc = hccs_get_device_property(hdev);
++	if (rc)
++		return rc;
++
++	mutex_init(&hdev->lock);
++
++	rc = hccs_register_pcc_channel(hdev);
++	if (rc)
++		return rc;
++
++	rc = hccs_get_dev_caps(hdev);
++	if (rc)
++		goto err_uninit_mbox_client;
++
++	rc = hccs_get_hw_info(hdev);
++	if (rc)
++		goto err_uninit_mbox_client;
++
++	rc = hccs_create_topo_dirs(hdev);
++	if (rc)
++		goto err_uninit_mbox_client;
++
++	dev_info(&pdev->dev, "HISI HCCS driver registered!\n");
++
++	return 0;
++
++err_uninit_mbox_client:
++	hccs_unregister_pcc_channel(hdev);
++
++	return rc;
++}
++
++static int hccs_remove(struct platform_device *pdev)
++{
++	struct hccs_dev *hdev = platform_get_drvdata(pdev);
++
++	hccs_remove_topo_dirs(hdev);
++	hccs_unregister_pcc_channel(hdev);
++
++	return 0;
++}
++
++static const struct acpi_device_id hccs_acpi_match[] = {
++	{ "HISI04B1", },
++};
++
++static struct platform_driver hccs_driver = {
++	.probe = hccs_probe,
++	.remove = hccs_remove,
++	.driver = {
++		.name = "kunpeng_hccs",
++		.acpi_match_table = ACPI_PTR(hccs_acpi_match),
++	},
++};
++
++module_platform_driver(hccs_driver);
++
++MODULE_DESCRIPTION("Kunpeng SoC HCCS driver");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Huisong Li <lihuisong@huawei.com>");
+diff --git a/drivers/soc/hisilicon/kunpeng_hccs.h b/drivers/soc/hisilicon/kunpeng_hccs.h
+new file mode 100644
+index 000000000000..ca557ef115ea
+--- /dev/null
++++ b/drivers/soc/hisilicon/kunpeng_hccs.h
+@@ -0,0 +1,204 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/* Copyright (c) 2023 Hisilicon Limited. */
++
++#ifndef __KUNPENG_HCCS_H__
++#define __KUNPENG_HCCS_H__
++
++/*
++ * |---------------  Chip0  ---------------|----------------  ChipN  -------------|
++ * |--------Die0-------|--------DieN-------|--------Die0-------|-------DieN-------|
++ * | P0 | P1 | P2 | P3 | P0 | P1 | P2 | P3 | P0 | P1 | P2 | P3 |P0 | P1 | P2 | P3 |
++ */
++
++/*
++ * This value cannot be 255, otherwise the loop of the multi-BD communication
++ * case cannot end.
++ */
++#define HCCS_DIE_MAX_PORT_ID	254
++
++struct hccs_port_info {
++	u8 port_id;
++	u8 port_type;
++	u8 lane_mode;
++	bool is_used; /* if the link is used. */
++	struct kobject kobj;
++	bool dir_created;
++	struct hccs_die_info *die; /* point to the die the port is located */
++};
++
++struct hccs_die_info {
++	u8 die_id;
++	u8 port_num;
++	u8 min_port_id;
++	u8 max_port_id;
++	struct hccs_port_info *ports;
++	struct kobject kobj;
++	bool dir_created;
++	struct hccs_chip_info *chip; /* point to the chip the die is located */
++};
++
++struct hccs_chip_info {
++	u8 chip_id;
++	u8 die_num;
++	struct hccs_die_info *dies;
++	struct kobject kobj;
++	struct hccs_dev *hdev;
++};
++
++struct hccs_mbox_client_info {
++	struct mbox_client client;
++	struct mbox_chan *mbox_chan;
++	struct pcc_mbox_chan *pcc_chan;
++	u64 deadline_us;
++	void *pcc_comm_addr;
++};
++
++enum HCCS_DEV_FLAG_BITS {
++	/* 1 means that driver works on the interrupt mode. */
++	HCCS_DEV_FLAGS_INTR_B = 0,
++};
++
++struct hccs_dev {
++	struct device *dev;
++	struct acpi_device *acpi_dev;
++	u32 flags;
++	u8 type;
++	bool intr_mode;
++	u64 caps;
++	u8 chip_num;
++	struct hccs_chip_info *chips;
++	u32 chan_id;
++	struct mutex lock;
++	struct hccs_mbox_client_info cl_info;
++};
++
++#define HCCS_SERDES_MODULE_CODE 0x32
++enum hccs_subcmd_type {
++	HCCS_GET_CHIP_NUM = 0x1,
++	HCCS_GET_DIE_NUM,
++	HCCS_GET_DIE_INFO,
++	HCCS_GET_DIE_PORT_INFO,
++	HCCS_GET_DEV_CAP,
++	HCCS_GET_PORT_LINK_STATUS,
++	HCCS_GET_PORT_CRC_ERR_CNT,
++	HCCS_GET_DIE_PORTS_LANE_STA,
++	HCCS_GET_DIE_PORTS_LINK_STA,
++	HCCS_GET_DIE_PORTS_CRC_ERR_CNT,
++	HCCS_SUB_CMD_MAX = 255,
++};
++
++struct hccs_die_num_req_param {
++	u8 chip_id;
++};
++
++struct hccs_die_info_req_param {
++	u8 chip_id;
++	u8 die_idx;
++};
++
++struct hccs_die_info_rsp_data {
++	u8 die_id;
++	u8 port_num;
++	u8 min_port_id;
++	u8 max_port_id;
++};
++
++struct hccs_port_attr {
++	u8 port_id;
++	u8 port_type;
++	u8 lane_mode;
++	u8 is_used : 1; /* if the link is used. */
++	u16 rsv[2];
++};
++
++/*
++ * The common command request for getting the all information of HCCS port on
++ * specified DIE.
++ */
++struct hccs_die_comm_req_param {
++	u8 chip_id;
++	u8 die_id; /* id in hardware */
++};
++
++/* The common command request for getting the information of a specific port */
++struct hccs_port_comm_req_param {
++	u8 chip_id;
++	u8 die_id;
++	u8 port_id;
++};
++
++#define HCCS_PORT_RESET         1
++#define HCCS_PORT_SETUP         2
++#define HCCS_PORT_CONFIG        3
++#define HCCS_PORT_READY         4
++struct hccs_link_status {
++	u8 lane_mask; /* indicate which lanes are used. */
++	u8 link_fsm : 3; /* link fsm, 1: reset 2: setup 3: config 4: link-up */
++	u8 lane_num : 5; /* current lane number */
++};
++
++struct hccs_req_head {
++	u8 module_code; /* set to 0x32 for serdes */
++	u8 start_id;
++	u8 rsv[2];
++};
++
++struct hccs_rsp_head {
++	u8 data_len;
++	u8 next_id;
++	u8 rsv[2];
++};
++
++struct hccs_fw_inner_head {
++	u8 retStatus; /* 0: success, other: failure */
++	u8 rsv[7];
++};
++
++#define HCCS_PCC_SHARE_MEM_BYTES	64
++#define HCCS_FW_INNER_HEAD_BYTES	8
++#define HCCS_RSP_HEAD_BYTES		4
++
++#define HCCS_MAX_RSP_DATA_BYTES		(HCCS_PCC_SHARE_MEM_BYTES - \
++					 HCCS_FW_INNER_HEAD_BYTES - \
++					 HCCS_RSP_HEAD_BYTES)
++#define HCCS_MAX_RSP_DATA_SIZE_MAX	(HCCS_MAX_RSP_DATA_BYTES / 4)
++
++/*
++ * Note: Actual available size of data field also depands on the PCC header
++ * bytes of the specific type. Driver needs to copy the response data in the
++ * communication space based on the real length.
++ */
++struct hccs_rsp_desc {
++	struct hccs_fw_inner_head fw_inner_head; /* 8 Bytes */
++	struct hccs_rsp_head rsp_head; /* 4 Bytes */
++	u32 data[HCCS_MAX_RSP_DATA_SIZE_MAX];
++};
++
++#define HCCS_REQ_HEAD_BYTES		4
++#define HCCS_MAX_REQ_DATA_BYTES		(HCCS_PCC_SHARE_MEM_BYTES - \
++					 HCCS_REQ_HEAD_BYTES)
++#define HCCS_MAX_REQ_DATA_SIZE_MAX	(HCCS_MAX_REQ_DATA_BYTES / 4)
++
++/*
++ * Note: Actual available size of data field also depands on the PCC header
++ * bytes of the specific type. Driver needs to copy the request data to the
++ * communication space based on the real length.
++ */
++struct hccs_req_desc {
++	struct hccs_req_head req_head; /* 4 Bytes */
++	u32 data[HCCS_MAX_REQ_DATA_SIZE_MAX];
++};
++
++struct hccs_desc {
++	union {
++		struct hccs_req_desc req;
++		struct hccs_rsp_desc rsp;
++	};
++};
++
++#define hccs_get_field(origin, mask, shift) \
++	(((origin) & (mask)) >> (shift))
++#define hccs_get_bit(origin, shift) \
++	hccs_get_field((origin), (0x1UL << (shift)), (shift))
++
++#endif /* __KUNPENG_HCCS_H__ */
+-- 
+2.33.0
 
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/potentiometer/Kconfig  |  10 ++
-> >  drivers/iio/potentiometer/Makefile |   1 +
-> >  drivers/iio/potentiometer/x9250.c  | 234 +++++++++++++++++++++++++++++
-> >  3 files changed, 245 insertions(+)
-> >  create mode 100644 drivers/iio/potentiometer/x9250.c
-> > 
-> > diff --git a/drivers/iio/potentiometer/Kconfig b/drivers/iio/potentiometer/Kconfig
-> > index 01dd3f858d99..e6a9a3c67845 100644
-> > --- a/drivers/iio/potentiometer/Kconfig
-> > +++ b/drivers/iio/potentiometer/Kconfig
-> > @@ -136,4 +136,14 @@ config TPL0102
-> >  	  To compile this driver as a module, choose M here: the
-> >  	  module will be called tpl0102.
-> >  
-> > +config X9250
-> > +	tristate "Renesas X9250 quad controlled potentiometers"
-> > +	depends on SPI
-> > +	help
-> > +	  Enable support for the Renesas X9250 quad controlled
-> > +	  potentiometers.
-> > +
-> > +	  To compile this driver as a module, choose M here: the module
-> > +	  will be called x9250.
-> > +
-> >  endmenu
-> > diff --git a/drivers/iio/potentiometer/Makefile b/drivers/iio/potentiometer/Makefile
-> > index 5ebb8e3bbd76..d11fb739176c 100644
-> > --- a/drivers/iio/potentiometer/Makefile
-> > +++ b/drivers/iio/potentiometer/Makefile
-> > @@ -15,3 +15,4 @@ obj-$(CONFIG_MCP4131) += mcp4131.o
-> >  obj-$(CONFIG_MCP4531) += mcp4531.o
-> >  obj-$(CONFIG_MCP41010) += mcp41010.o
-> >  obj-$(CONFIG_TPL0102) += tpl0102.o
-> > +obj-$(CONFIG_X9250) += x9250.o
-> > diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiometer/x9250.c
-> > new file mode 100644
-> > index 000000000000..c6bc959205a3
-> > --- /dev/null
-> > +++ b/drivers/iio/potentiometer/x9250.c
-> > @@ -0,0 +1,234 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + *
-> > + * x9250.c  --  Renesas X9250 potentiometers IIO driver
-> > + *
-> > + * Copyright 2023 CS GROUP France
-> > + *
-> > + * Author: Herve Codina <herve.codina@bootlin.com>
-> > + */
-> > +
-> > +#include <linux/iio/iio.h>
-> > +#include <linux/limits.h>
-> > +#include <linux/module.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/spi/spi.h>
-> > +
-> > +struct x9250_cfg {
-> > +	int kohms;
-> > +};
-> > +
-> > +struct x9250 {
-> > +	struct spi_device *spi;
-> > +	const struct x9250_cfg *cfg;
-> > +	struct mutex lock; /* Protect tx and rx buffers */
-> > +	/* Cannot use stack area for SPI (dma-safe memory) */
-> > +	u8 spi_tx_buf[3] __aligned(IIO_DMA_MINALIGN);
-> > +	u8 spi_rx_buf[3] __aligned(IIO_DMA_MINALIGN);  
-> 
-> Technically you don't need to align the second one.  A particular peripheral
-> is always assumed to not step on it self.  So as long as only that
-> peripheral is accessing data in a cacheline then it's fine.
-> 
-> Note that below I suggest you just use spi_write_then_read() for all these
-> cases allowing  you to drop these and the lock.
-
-Indeed, I will give a try to spi_write_then_read()
-
-> 
-> > +};
-> > +
-> > +#define X9250_ID		0x50
-> > +#define X9250_CMD_RD_WCR(_p)    (0x90 | (_p))
-> > +#define X9250_CMD_WR_WCR(_p)    (0xa0 | (_p))
-> > +
-> > +static int x9250_write8(struct x9250 *x9250, u8 cmd, u8 val)
-> > +{
-> > +	struct spi_transfer xfer = {
-> > +		.tx_buf = &x9250->spi_tx_buf,
-> > +		.len = 3,
-> > +	};
-> > +	int ret;
-> > +
-> > +	BUILD_BUG_ON(sizeof(x9250->spi_tx_buf) < 3);  
-> 
-> I don't see an advantage in this check as the buffer
-> is allocated only a few lines above here and will have size
-> of 3.
-> 
-> If there were lots of different uses of that buffer
-> then it would be fair enough, but there aren't.
-> Anyhow, follow advice below and the buffers go away anyway
-> making this point irrelevant :)
-> 
-> > +
-> > +	mutex_lock(&x9250->lock);
-> > +
-> > +	x9250->spi_tx_buf[0] = X9250_ID;
-> > +	x9250->spi_tx_buf[1] = cmd;
-> > +	x9250->spi_tx_buf[2] = val;
-> > +
-> > +	ret = spi_sync_transfer(x9250->spi, &xfer, 1);  
-> 
-> Given buffer is small, I'd be tempted to use the 'cheat' approach
-> of spi_write_then_read() with a 0 sized read.  Avoids the need
-> for ensuring dma safe buffers etc and having to handle the buffer
-> locking in your driver.
-> 
-> > +
-> > +	mutex_unlock(&x9250->lock);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int x9250_read8(struct x9250 *x9250, u8 cmd, u8 *val)
-> > +{
-> > +	struct spi_transfer xfer = {
-> > +		.tx_buf = &x9250->spi_tx_buf,
-> > +		.rx_buf = &x9250->spi_rx_buf,
-> > +		.len = 3,
-> > +	};
-> > +	int ret;
-> > +
-> > +	BUILD_BUG_ON(sizeof(x9250->spi_tx_buf) < 3);
-> > +	BUILD_BUG_ON(sizeof(x9250->spi_rx_buf) < 3);
-> > +
-> > +	mutex_lock(&x9250->lock);
-> > +
-> > +	x9250->spi_tx_buf[0] = X9250_ID;
-> > +	x9250->spi_tx_buf[1] = cmd;
-> > +
-> > +	ret = spi_sync_transfer(x9250->spi, &xfer, 1);
-> > +	if (ret)
-> > +		goto end;
-> > +
-> > +	*val = x9250->spi_rx_buf[2];  
-> 
-> Cleaner as an spi_write_then_read() as transfer is not actually
-> duplex.  + then you don't need to bother with your own locks
-> for the buffer. The spi core can do that for you (and provide
-> DMA safe buffers as needed).
-> 
-> 
-> > +	ret = 0;
-> > +end:
-> > +	mutex_unlock(&x9250->lock);
-> > +	return ret;
-> > +}
-> > +
-> > +#define X9250_CHANNEL(ch) {						\
-> > +	.type = IIO_RESISTANCE,						\
-> > +	.indexed = 1,							\
-> > +	.output = 1,							\
-> > +	.channel = (ch),						\
-> > +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),			\
-> > +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
-> > +	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_RAW),	\
-> > +}
-> > +
-> > +static const struct iio_chan_spec x9250_channels[] = {
-> > +	X9250_CHANNEL(0),
-> > +	X9250_CHANNEL(1),
-> > +	X9250_CHANNEL(2),
-> > +	X9250_CHANNEL(3),
-> > +};
-> > +
-> > +static int x9250_read_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
-> > +			  int *val, int *val2, long mask)
-> > +{
-> > +	struct x9250 *x9250 = iio_priv(indio_dev);
-> > +	int ch = chan->channel;
-> > +	int ret;
-> > +	u8 v;
-> > +
-> > +	switch (mask) {
-> > +	case IIO_CHAN_INFO_RAW:
-> > +		ret = x9250_read8(x9250, X9250_CMD_RD_WCR(ch), &v);
-> > +		if (ret)
-> > +			return ret;
-> > +		*val = v;
-> > +		return IIO_VAL_INT;
-> > +
-> > +	case IIO_CHAN_INFO_SCALE:
-> > +		*val = 1000 * x9250->cfg->kohms;
-> > +		*val2 = U8_MAX;
-> > +		return IIO_VAL_FRACTIONAL;
-> > +	}
-> > +
-> > +	return -EINVAL;
-> > +}
-> > +
-> > +static int x9250_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
-> > +			    const int **vals, int *type, int *length, long mask)
-> > +{
-> > +	static const int range[] = {0, 1, 255}; /* min, step, max */
-> > +
-> > +	switch (mask) {
-> > +	case IIO_CHAN_INFO_RAW:
-> > +		*length = ARRAY_SIZE(range);
-> > +		*vals = range;
-> > +		*type = IIO_VAL_INT;
-> > +		return IIO_AVAIL_RANGE;
-> > +	}
-> > +
-> > +	return -EINVAL;
-> > +}
-> > +
-> > +static int x9250_write_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
-> > +			   int val, int val2, long mask)
-> > +{
-> > +	struct x9250 *x9250 = iio_priv(indio_dev);
-> > +	int ch = chan->channel;
-> > +
-> > +	if (mask != IIO_CHAN_INFO_RAW)
-> > +		return -EINVAL;
-> > +
-> > +	if (val > U8_MAX || val < 0)
-> > +		return -EINVAL;
-> > +
-> > +	return x9250_write8(x9250, X9250_CMD_WR_WCR(ch), val);
-> > +}
-> > +
-> > +static const struct iio_info x9250_info = {
-> > +	.read_raw = x9250_read_raw,
-> > +	.read_avail = x9250_read_avail,
-> > +	.write_raw = x9250_write_raw,
-> > +};
-> > +
-> > +enum x9250_type {
-> > +	X9250T,
-> > +	X9250U,
-> > +};
-> > +
-> > +static const struct x9250_cfg x9250_cfg[] = {
-> > +	[X9250T] = { .kohms =  100, },
-> > +	[X9250U] = { .kohms =  50, },
-> > +};
-> > +
-> > +static int x9250_probe(struct spi_device *spi)
-> > +{
-> > +	struct iio_dev *indio_dev;
-> > +	struct x9250 *x9250;
-> > +	int ret;
-> > +
-> > +	spi->bits_per_word = 8;  
-> 
-> This is configuring it to the default value.  You shouldn't need to
-> call spi_setup() explicitly. It will already have been called by
-> the spi subsystem as part of adding the device.  If you feel this
-> has important documentation value, then I don't mind it. However
-> we rarely do this unless we need to choose a non default value.
-
-Agree.
-I will remove in next iteration.
-
-> 
-> 
-> > +	ret = spi_setup(spi);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*x9250));
-> > +	if (!indio_dev)
-> > +		return -ENOMEM;
-> > +
-> > +	x9250 = iio_priv(indio_dev);
-> > +	x9250->spi = spi;
-> > +	x9250->cfg = device_get_match_data(&spi->dev);
-> > +	if (!x9250->cfg)
-> > +		x9250->cfg = &x9250_cfg[spi_get_device_id(spi)->driver_data];
-> > +
-> > +	mutex_init(&x9250->lock);
-> > +
-> > +	indio_dev->info = &x9250_info;
-> > +	indio_dev->channels = x9250_channels;
-> > +	indio_dev->num_channels = ARRAY_SIZE(x9250_channels);
-> > +	indio_dev->name = spi_get_device_id(spi)->name;  
-> 
-> Not relying on that preferred because the two tables may get out
-> of sync and spi_get_device_id() fail to match as a result.
-> 
-> Put a const char *name  in the x9250 structure and repeat
-> the names there.  Let the compiler do the magic of fusing the
-> identical strings if it can.
-
-Ok,
-I will add a name field in the x9250_cfg structure and use this new field
-here.
-
-> 
-> 
-> > +
-> > +	spi_set_drvdata(spi, indio_dev);  
-> 
-> Why?  Nothing seems to use it that I can see.
-
-Indeed, nothing use the drv data. I will remove in the next iteration.
-
-> 
-> > +
-> > +	return devm_iio_device_register(&spi->dev, indio_dev);
-> > +}
-> > +
-> > +static const struct of_device_id x9250_of_match[] = {
-> > +	{ .compatible = "renesas,x9250t", &x9250_cfg[X9250T]},
-> > +	{ .compatible = "renesas,x9250u", &x9250_cfg[X9250U]},
-> > +	{ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, x9250_of_match);
-> > +
-> > +static const struct spi_device_id x9250_id_table[] = {
-> > +	{ "x9250t", X9250T },
-> > +	{ "x9250u", X9250U },
-> > +	{ }
-> > +};
-> > +MODULE_DEVICE_TABLE(spi, x9250_id_table);
-> > +
-> > +static struct spi_driver x9250_spi_driver = {
-> > +	.driver  = {
-> > +		.name   = "x9250",  
-> 
-> I'd stick to a single space before the =
-> It just ends up messy if you attempt to align things with
-> extra spaces.
-
-Will be fixed.
-
-> 
-> > +		.of_match_table = x9250_of_match,
-> > +	},
-> > +	.id_table = x9250_id_table,
-> > +	.probe  = x9250_probe,
-> > +};
-> > +
-> > +module_spi_driver(x9250_spi_driver);
-> > +
-> > +MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
-> > +MODULE_DESCRIPTION("X9250 ALSA SoC driver");
-> > +MODULE_LICENSE("GPL");  
-> 
-
-Thanks for the review.
-
-Best regards,
-Hervé
