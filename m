@@ -2,100 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09F6ECB6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3FF6ECB71
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjDXLfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S231267AbjDXLiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjDXLe7 (ORCPT
+        with ESMTP id S229547AbjDXLiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:34:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DF23AA4;
-        Mon, 24 Apr 2023 04:34:58 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f6c285d92so780180666b.3;
-        Mon, 24 Apr 2023 04:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682336096; x=1684928096;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EbSU9RjDYInaXljiYUfVeOZN1Ljlxfq5r8fOJ91jdBw=;
-        b=FAMZ5KCdUlBonqbrUjdWglJ0XsUYCZcNASthRpFCH4Egt4u129lxmnRajJKmfeico3
-         /f0nD9PDvu7xgJ6iFp9vljjQz6V+scC8as9bDFjRXNp02exuT2S0GA2gH3Uwzm/Ht+Ke
-         hIrLSsAGC0P5u9FYMaYeq0LrZU+Nt7oDS5QvzDvfLqjXk8+bo7BWff59N8FV+VyeqrOP
-         0HUbQbyzHZYcv3PqV/VFFbrn9/ArqAkqbPo7U/aWtrDvAervQ5j+wCfVAIUhFze1FlUG
-         kzQomLZTzR0/swn63eOetP1p03d4cUfHrDl80sBSaKg/vRmzWNlRoee2AqIoa9vhFJ67
-         TYog==
+        Mon, 24 Apr 2023 07:38:52 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932A23A8C;
+        Mon, 24 Apr 2023 04:38:50 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so74187505e9.1;
+        Mon, 24 Apr 2023 04:38:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682336096; x=1684928096;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EbSU9RjDYInaXljiYUfVeOZN1Ljlxfq5r8fOJ91jdBw=;
-        b=iBV4/VyaHacIjVS/EYX4yAIm0JNXrTGeLmfW9f4fb3ShPvH8wQF6kFyVGnOjk/w/pF
-         7V1h60saNRNNyTm1XkuzLqpKwlCK18mIoP4Lsz9SSZzGZF1PCckPOlEEvwnWIDgyARjv
-         o3gvsXmePzDvjPrp4u5x1UKfChgzBzW64mLacdJEX7S4MzPaPu19FxeB/bgGBDBkZJsm
-         pP4L7NBK+0MP43rf82s7Q4TTl9PgFSZOeBglRtiT69Oi023s6/zlLK9ieW+pZ0KxlwfA
-         m551ax+eUNIjICRXHBq7O9E/SGVhGdWBjDOxJVNdttjVmqGKBgIcEHy8bslpJSYU4N2p
-         N0uw==
-X-Gm-Message-State: AAQBX9ettDS4IM0W3eR7dztSaFj5ItxxwyXAP9dimXXDLIArr285hz4j
-        N1JspKOeiKVlZVojpDA4ZmDsQCltsjv9Sw==
-X-Google-Smtp-Source: AKy350aHbDnDfjszhYFxHUof03CGll4kNyiiJk9KlQWmsBNW8HJCve+Hnr0Tp9bBXJu9DwSugPZ2+g==
-X-Received: by 2002:a17:906:9b4b:b0:94e:1069:151d with SMTP id ep11-20020a1709069b4b00b0094e1069151dmr8435439ejc.10.1682336096332;
-        Mon, 24 Apr 2023 04:34:56 -0700 (PDT)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id sg9-20020a170907a40900b00959aba150c3sm878730ejc.50.2023.04.24.04.34.55
+        d=1e100.net; s=20221208; t=1682336329; x=1684928329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eglyz+j/occX8WNkEpcLNlY9OWqv/i1uyY+qtuXKrx0=;
+        b=h1oc6OkSzXaUIiu8xVLaoIH/i5VQBCmXcQ3cLNvvdXasTBCJo8bwrQR6con5vXUJco
+         9WBW1obzz6gy3S/jjTzNtm9NlAvxU8KUljaCl8XijtgznI55E6Wq8fVVQJMQQ8XYvXkU
+         j9XGZ73PTdXoqHPPT4CiujN9ZHCNwxapF8WcD9LSr6B8MbyHJGjnSPyRravILLdIypQY
+         hxMfe1qe1LMBhY+UOOtRTrhDnbw8fefehWEuXbo18oTj8uNkyT5NDxO+WeTuulbT2E29
+         Gbrd3Hc405ZNQPJwWUfqc471MvlDNmnfJGLULe4ZtQrUXwtpTiugUnKbXc9VEc8vg3I/
+         b2og==
+X-Gm-Message-State: AAQBX9cWNefnz+qarmb/1pDl2wIgHW/UPCtp8BdLNgI50CYQUnkE+uV+
+        IWhiq0Ih9Y/y25OlTEKEkeU=
+X-Google-Smtp-Source: AKy350bIiGtYQ95Um7VGjxvEpP0Bu+W7VgYMq+aOVIHhgROIjVQNbR2DGGAa6ASUxZR2oIKOoxEPVA==
+X-Received: by 2002:a5d:414c:0:b0:2fa:d00d:cab8 with SMTP id c12-20020a5d414c000000b002fad00dcab8mr9478626wrq.18.1682336328944;
+        Mon, 24 Apr 2023 04:38:48 -0700 (PDT)
+Received: from ryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.gmail.com with ESMTPSA id e18-20020adffc52000000b002efacde3fc7sm10570820wrs.35.2023.04.24.04.38.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 04:34:56 -0700 (PDT)
-Message-ID: <9e5e9b7dc5da40bca285d45618e0f7c15572e6c4.camel@gmail.com>
-Subject: Re: [PATCH 17/43] spi: ep93xx: add DT support for Cirrus EP93xx
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 24 Apr 2023 13:34:55 +0200
-In-Reply-To: <20230424123522.18302-18-nikita.shubin@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230424123522.18302-18-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Mon, 24 Apr 2023 04:38:48 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        martin.blumenstingl@googlemail.com, narmstrong@baylibre.com,
+        stefan@agner.ch, Lucas Tanure <tanure@linux.com>
+Subject: [PATCH v4] of: fdt: Scan /memreserve/ last
+Date:   Mon, 24 Apr 2023 12:38:46 +0100
+Message-Id: <20230424113846.46382-1-tanure@linux.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-24 at 15:34 +0300, Nikita Shubin wrote:
-> - find register range from the device tree
-> - provide clock access via of
-> - use_dma as a DT node
->=20
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Change the scanning /memreserve/ and /reserved-memory node order to fix
+Kernel panic on Khadas Vim3 Board.
 
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+If /memreserve/ goes first, the memory is reserved, but nomap can't be
+applied to the region. So the memory won't be used by Linux, but it is
+still present in the linear map as normal memory, which allows
+speculation. Legitimate access to adjacent pages will cause the CPU
+to end up prefetching into them leading to Kernel panic.
 
-> ---
->=20
-> Notes:
-> =C2=A0=C2=A0=C2=A0 Arnd Bergmann:
-> =C2=A0=C2=A0=C2=A0 - wildcards ep93xx to something meaningful, i.e. ep930=
-1
-> =C2=A0=C2=A0=C2=A0 - drop wrappers
->=20
-> =C2=A0drivers/spi/spi-ep93xx.c | 31 ++++++++++++++++++++++++++++++-
-> =C2=A01 file changed, 30 insertions(+), 1 deletion(-)
+So /reserved-memory node should go first, as it has a more updated
+description of the memory regions and can apply flags, like nomap.
 
---=20
-Alexander Sverdlin.
+Signed-off-by: Lucas Tanure <tanure@linux.com>i
+---
+Previous Threads:
+#regzbot link: https://lore.kernel.org/linux-arm-kernel/40ca11f84b7cdbfb9ad2ddd480cb204a@agner.ch/#regzbot
+#regzbot link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
+
+V1: https://lore.kernel.org/all/20230406151429.524591-1-tanure@linux.com/
+v2: https://lore.kernel.org/all/20230410120017.41664-1-tanure@linux.com/
+v3: https://lore.kernel.org/linux-mm/20230412224620.8909-1-tanure@linux.com/T/
+
+Change from V3:
+ - Drop cover letter
+ - Add more information into the patch
+
+Change from V2:
+ - Remove region overlap and reserved checks
+
+Change from V1:
+ - Instead of allowing to mark nomap a region already reserved, give
+precedence to /reserved-memory node scan.
+---
+ drivers/of/fdt.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index d14735a81301..bf502ba8da95 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -635,6 +635,9 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 	if (!initial_boot_params)
+ 		return;
+ 
++	fdt_scan_reserved_mem();
++	fdt_reserve_elfcorehdr();
++
+ 	/* Process header /memreserve/ fields */
+ 	for (n = 0; ; n++) {
+ 		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
+@@ -643,8 +646,6 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 		memblock_reserve(base, size);
+ 	}
+ 
+-	fdt_scan_reserved_mem();
+-	fdt_reserve_elfcorehdr();
+ 	fdt_init_reserved_mem();
+ }
+ 
+-- 
+2.40.0
 
