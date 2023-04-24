@@ -2,152 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EF36ED663
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1456ED672
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjDXU4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S231716AbjDXU7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbjDXU4e (ORCPT
+        with ESMTP id S229634AbjDXU7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:56:34 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFD172BC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:56:30 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b92309d84c1so23438461276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682369790; x=1684961790;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAxnpNVVBFuzE9GYOOg2/Ftab/EjG3MWY6IMj4Qumjs=;
-        b=ujb5zcd1KBzxKAOR4hk1uqxutbd1kanM+csJA1meOHmJYxrDHyXEUf3s3F1CNaMMTY
-         F2UwG5dJWdwrPjS2m5St4fIIHRJgNJiv0eMCV6hQxhsfJ1N8OaV3vbFI+A7C3y1gHu+y
-         g0M22QeG0lUyYp4TXj6vtk5ieXBXEvHzRFXWxXxCWmZCBUyzVZZz+uPZfQ1GzE18UOXY
-         4M+ZzEilfIiNrA+1l4QqmYZZEjKLkiQH7TBNlsxSgN7UG/arCZzAtq+ArTot61JKzNGT
-         uDp4x5XHVNY6pLU5J2Ri8EtTP4pSnmqQVeQFLhwuYrSz4MJtzFS+UQa7ewmDeHz8iBWN
-         Z39Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682369790; x=1684961790;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAxnpNVVBFuzE9GYOOg2/Ftab/EjG3MWY6IMj4Qumjs=;
-        b=YEUyWGl1rdqbZizzeD1agag2f32gfFL/9NXsgJ5mzf98lyIw8kD5GlKry6UeDjso0h
-         1yqSBYocCEsVQpMbZ29dtT45Nashjd3oKIgevBQ23E8OP1UBYYwp1htDTS10oBa0Yhq/
-         r+9MEYMITPbI4RzNiloUTRjnMyANq+1tKekvlBXJONfxtnhSDmjxU0pWnvumC6CRkQJY
-         Azp/gIymlKaMo/5vVHjGJKKgjvGjwUVfaRs0doMaQeJwIyrQxCwHRTSt5/KgVue5N9vQ
-         vm8lNCpBasTnBPQUjNl3dVh3vVtw1c4eJUXEvElS/4I7FcMfq07tDxWz5KobKUE/sFw8
-         SqLA==
-X-Gm-Message-State: AAQBX9c0kmGUQBnqBZ2AoRuqba1jFsp13GwQeoBPwZGer+SoAJ4cRjWc
-        8rwnUsdYHiyXwf1QaymTwXCkHX1AOVxlKQ==
-X-Google-Smtp-Source: AKy350YYjyTgO+6IXh8tE7lK5L05UhrxABixhGBxviWUwc34wdRKdakSngp8Can2PQClrrENEQ1oz1U4wvGx7A==
-X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a25:cc16:0:b0:b8e:efd8:f2c with SMTP id
- l22-20020a25cc16000000b00b8eefd80f2cmr8406994ybf.1.1682369790208; Mon, 24 Apr
- 2023 13:56:30 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 20:55:48 +0000
-In-Reply-To: <20230424205548.1935192-1-cmllamas@google.com>
+        Mon, 24 Apr 2023 16:59:18 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E46181
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:59:17 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7C95D5C0181;
+        Mon, 24 Apr 2023 16:59:14 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 24 Apr 2023 16:59:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1682369954; x=1682456354; bh=YZR03TenSPMwHMOQYMC6jZ6OC
+        YtJLxUpls1rXekOnhQ=; b=hkPdVoGlfSNfE2YMdriSSkg3sF4pblK8hsqReIbeZ
+        0OUe8EGuVszpcJEqBWGLUrPy0dBXROzDSDOo5eLwDawjQY28YRw2MHYoyvKzks7B
+        Dhqwv8GMSXSYQ+3CQBctyo+8srzNFdhVtczAdEo1hle0cPLryd7wxGl0KM26IXBb
+        jFOSD1yrxdN8LKfSPllnp3YxNze3/k+5e2jRhV3Ba9LjjVTEcunWJlg0bH88xJ+c
+        /52+N3YhfkYNs4ANDgHPyQQuqfqVE87Sa0HzSNH6qJPzJ6a4dTKSpEdYnkmYi8UU
+        CdnHjYW6sbm8M36TkE4dWqJqUhGFnnaXqYqvmoUken9DA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682369954; x=1682456354; bh=YZR03TenSPMwHMOQYMC6jZ6OCYtJLxUpls1
+        rXekOnhQ=; b=exuXq+0yr8hllOhiHFcN4UzkKKZOdgKWNvbu2jlVVcS3u3vsuL5
+        x2aCxgc+MIcaeRWDd52nA7BOf5VUumxGptUviunxvvSF4RgYZx56TE+2iM9d9FpS
+        +18hpfoF59i9wSD+xPjzGikdiKh8se+Mulyz8V/Npd5FKDCzyOM6KyNQQExQ8z6z
+        gscQv+tCHcLVZa3A/aaGCMcxmi8a4or4e7XJOmk5CK/d1FtgRLvRSZXa4KeOvJYy
+        NsdobVXc5xxz/i0Cj3Y//wsq+8aX8tJxSVelaOz5n7q1cJitr+gbttFZI1b+iyNJ
+        HvKkKNilGmULR/BV4AwYeXS51nzWPT812Dw==
+X-ME-Sender: <xms:ou1GZDUF0TKNWeOwNWL4wXjiPoJzdhBpToAFEePkrBFGY0qCA47Nhg>
+    <xme:ou1GZLnxfnioANqg4gyHTpjE3y6IVJ8BBn2CEOVVmEi4MHDuZYUlTV9b3Pg-w-Z2-
+    Aw6PTZIagz0GzTaN0g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddgudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeuhfffffdvkefhiedvhfdthfeuvedtfffhheejieefkeeggeeuudegfeehudff
+    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ou1GZPZ5JZdgmmBCJa0I5vnqgYoF4y-l5yB1RGh_QAqzem24G1sBNg>
+    <xmx:ou1GZOVdMw452z83DcEo6XDvj7cmiY1qrtFzH1gboU_eSTWGU4iVgQ>
+    <xmx:ou1GZNl8mpPr5JLZn1Ph4vYgs9q5GTEYVD_aT638Oh1BTxNmPjuelg>
+    <xmx:ou1GZNtgYKTlHXcPwaqfBE_UmYJ7NQKpqFPMOXS0SfFhM6nco2Bsdg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F3FF6B60086; Mon, 24 Apr 2023 16:59:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
 Mime-Version: 1.0
-References: <20230424205548.1935192-1-cmllamas@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230424205548.1935192-3-cmllamas@google.com>
-Subject: [RFC PATCH 3/3] binder: add lockless binder_alloc_(set|get)_vma()
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Liam Howlett <liam.howlett@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <bbd25997-173e-4c3b-930c-65c6232908e3@app.fastmail.com>
+Date:   Mon, 24 Apr 2023 22:58:53 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL 0/4] SoC branches for 6.4
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bring back the original lockless design in binder_alloc to determine
-whether the buffer setup has been completed by the ->mmap() handler.
-However, this time use smp_load_acquire() and smp_store_release() to
-wrap all the ordering in a single macro call.
+At 1062 non-merge commits, this is another large merge window for the
+SoC tree with the largest chunk coming from the Qualcomm tree, and 80%
+of the total is just devicetree changes.
 
-Also, add comments to make it evident that binder uses alloc->vma to
-determine when the binder_alloc has been fully initialized. In these
-scenarios acquiring the mmap_lock is not required.
+There are a couple of new SoCs, but all of them are just variations of
+other ones we already supported. We had submissions for several entirely
+new SoC families, all of which ended up not being ready, so they are
+not included.
 
-Cc: Liam Howlett <liam.howlett@oracle.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
- drivers/android/binder_alloc.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+There were 206 contributors, and the most of active of them by number
+of commits are:
 
-diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index eb082b33115b..9d166e10315e 100644
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -309,17 +309,16 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
- 	return vma ? -ENOMEM : -ESRCH;
- }
- 
-+static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
-+		struct vm_area_struct *vma)
-+{
-+	smp_store_release(&alloc->vma, vma);
-+}
-+
- static inline struct vm_area_struct *binder_alloc_get_vma(
- 		struct binder_alloc *alloc)
- {
--	struct vm_area_struct *vma = NULL;
--
--	if (alloc->vma) {
--		/* Look at description in binder_alloc_set_vma */
--		smp_rmb();
--		vma = alloc->vma;
--	}
--	return vma;
-+	return smp_load_acquire(&alloc->vma);
- }
- 
- static bool debug_low_async_space_locked(struct binder_alloc *alloc, int pid)
-@@ -382,6 +381,7 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
- 	size_t size, data_offsets_size;
- 	int ret;
- 
-+	/* Check binder_alloc is fully initialized */
- 	if (!binder_alloc_get_vma(alloc)) {
- 		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
- 				   "%d: binder_alloc_buf, no vma\n",
-@@ -777,7 +777,9 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
- 	buffer->free = 1;
- 	binder_insert_free_buffer(alloc, buffer);
- 	alloc->free_async_space = alloc->buffer_size / 2;
--	alloc->vma = vma;
-+
-+	/* Signal binder_alloc is fully initialized */
-+	binder_alloc_set_vma(alloc, vma);
- 
- 	return 0;
- 
-@@ -959,7 +961,7 @@ int binder_alloc_get_allocated_count(struct binder_alloc *alloc)
-  */
- void binder_alloc_vma_close(struct binder_alloc *alloc)
- {
--	alloc->vma = 0;
-+	binder_alloc_set_vma(alloc, NULL);
- }
- 
- /**
--- 
-2.40.0.634.g4ca3ef3211-goog
+    131 Krzysztof Kozlowski
+     75 Konrad Dybcio
+     54 Manivannan Sadhasivam
+     44 AngeloGioacchino Del Regno
+     36 Neil Armstrong
+     30 Bartosz Golaszewski
+     27 Rob Herring
+     25 Philippe Schenker
+     24 Geert Uytterhoeven
+     21 Marek Vasut
+     18 Douglas Anderson
+     14 Oleksij Rempel
+     14 Janne Grunau
+     14 Cristian Ciocaltea
+     13 Stefan Wahren
+     12 Peng Fan
+     12 Johan Hovold
+     11 Kathiravan T
+     11 Conor Dooley
+     10 Sebastian Krzyszkowiak
+     10 Alexandre Mergnat
 
+and the dirstat is:
+
+   0.2% Documentation/devicetree/bindings/arm/msm/
+   0.1% Documentation/devicetree/bindings/arm/tegra/
+   0.5% Documentation/devicetree/bindings/arm/
+   1.0% Documentation/devicetree/bindings/clock/
+   0.1% Documentation/devicetree/bindings/firmware/
+   0.1% Documentation/devicetree/bindings/soc/amlogic/
+   0.1% Documentation/devicetree/bindings/soc/imx/
+   0.1% Documentation/devicetree/bindings/soc/
+   0.3% Documentation/devicetree/bindings/
+   0.1% Documentation/staging/
+  18.6% arch/arm/boot/dts/
+   0.2% arch/arm/configs/
+   0.2% arch/arm/mach-mv78xx0/
+   0.1% arch/arm/mach-omap2/
+   0.3% arch/arm/mach-oxnas/
+   0.4% arch/arm/
+   1.8% arch/arm64/boot/dts/amlogic/
+   4.5% arch/arm64/boot/dts/apple/
+   0.3% arch/arm64/boot/dts/broadcom/bcmbca/
+  12.9% arch/arm64/boot/dts/freescale/
+   0.3% arch/arm64/boot/dts/marvell/
+   4.4% arch/arm64/boot/dts/mediatek/
+   1.1% arch/arm64/boot/dts/nvidia/
+  20.5% arch/arm64/boot/dts/qcom/
+   4.3% arch/arm64/boot/dts/renesas/
+   2.7% arch/arm64/boot/dts/rockchip/
+   1.5% arch/arm64/boot/dts/sprd/
+   5.9% arch/arm64/boot/dts/ti/
+   0.1% arch/arm64/boot/dts/
+   0.1% arch/arm64/configs/
+   0.1% arch/riscv/boot/dts/allwinner/
+   2.0% arch/riscv/boot/dts/starfive/
+   0.1% drivers/bus/
+   0.1% drivers/edac/
+   0.2% drivers/firmware/arm_scmi/
+   0.1% drivers/firmware/
+   0.1% drivers/mailbox/
+   1.8% drivers/soc/bcm/brcmstb/pm/
+   1.8% drivers/soc/mediatek/
+   0.1% drivers/soc/microchip/
+   3.6% drivers/soc/qcom/
+   0.1% drivers/soc/tegra/
+   0.1% drivers/soc/ti/
+   0.2% drivers/soc/
+   0.7% drivers/tee/optee/
+   0.1% drivers/
+   2.4% include/dt-bindings/clock/
+   0.8% include/dt-bindings/reset/
+   0.2% include/linux/soc/mediatek/
+   0.1% include/linux/soc/qcom/
+   0.1% include/
