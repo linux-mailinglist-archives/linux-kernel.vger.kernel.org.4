@@ -2,77 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDD76ED184
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA396ED16D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbjDXPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S231964AbjDXPdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjDXPg6 (ORCPT
+        with ESMTP id S231139AbjDXPds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:36:58 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2B67EC0;
-        Mon, 24 Apr 2023 08:36:54 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D1858188374C;
-        Mon, 24 Apr 2023 15:36:50 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id C669825004C3;
-        Mon, 24 Apr 2023 15:36:45 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BD4F79B403F7; Mon, 24 Apr 2023 15:36:45 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 6373D9B403F4;
-        Mon, 24 Apr 2023 15:36:45 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net] net: bridge: switchdev: don't notify FDB entries
- with "master dynamic"
-In-Reply-To: <20230424122631.d7kwfwmlwvqjo3pz@skbuf>
-References: <20230418155902.898627-1-vladimir.oltean@nxp.com>
- <875y9nt27g.fsf@kapio-technology.com>
- <20230424122631.d7kwfwmlwvqjo3pz@skbuf>
-Date:   Mon, 24 Apr 2023 17:33:44 +0200
-Message-ID: <87jzy11ehz.fsf@kapio-technology.com>
+        Mon, 24 Apr 2023 11:33:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A78187
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682350428; x=1713886428;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=q6c/b6JvPvZ05H87DnLBjtNN0boRhEiG0scByVOexKA=;
+  b=BpV1mWIWm4GyeCIqzbZ0QaiIrqmBzZysmYON+RJebrMMJIN5xETjr2IV
+   gRXOnq2BoIL6K5xc37YMyPjQUc7/VE2y/eD+9jJ9qpLkjaVSshXhsJ9/g
+   KcKsOP0+SZQAIsWiecjEcsbdekxd4A8Qf+Q6/cCbxIAo5KPgZRIAI2VBD
+   tSaU2/Kyi1UUO2v92VI86x2A+2Y3yDXYCADL5WFviT2RhhkuDH5rjNxFS
+   T/GahotNqcnG4E2u5IOV6HKcgcubQ6H4pBLLGkH4l+44GYArmZ4qAnZ8Y
+   CKg7gyFU8ZHzPe/hAKuquvs4d9oSLwA3u1+BKep9TS+X2bkqxsAogRK+B
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="374432909"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="374432909"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:33:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="817311279"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="817311279"
+Received: from sridharn-mobl.amr.corp.intel.com (HELO [10.212.106.191]) ([10.212.106.191])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:33:47 -0700
+Message-ID: <9479d2e4-8147-aee2-3a2b-1cd06a4ad4e0@intel.com>
+Date:   Mon, 24 Apr 2023 08:33:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH] ntb: hw: intel: remove return value check of
+ `ndev_init_debugfs`
+To:     Yinhao Hu <dddddd@hust.edu.cn>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, ntb@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230422155634.483023-1-dddddd@hust.edu.cn>
+Content-Language: en-US
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230422155634.483023-1-dddddd@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 15:26, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-> On Sun, Apr 23, 2023 at 10:47:15AM +0200, Hans Schultz wrote:
->> I do not understand this patch. It seems to me that it basically blocks
->> any future use of dynamic fdb entries from userspace towards drivers.
->> 
->> I would have expected that something would be done in the DSA layer,
->> where (switchcore) drivers would be able to set some flags to indicate
->> which features are supported by the driver, including non-static
->> fdb entries. But as the placement here is earlier in the datapath from
->> userspace towards drivers it's not possible to do any such thing in the
->> DSA layer wrt non-static fdb entries.
->
-> As explained too many times already in the thread here:
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230318141010.513424-3-netdev@kapio-technology.com/
-> the plan is:
 
-Ahh yes thanks, I see the comment you wrote on march the 27th.
+
+On 4/22/23 8:56 AM, Yinhao Hu wrote:
+> Smatch complains that:
+> ndev_init_debugfs() warn: 'ndev->debugfs_dir' is an error pointer or valid
+> 
+> Debugfs checks are generally not supposed to be checked for errors
+> and it is not necessary here.
+
+Can you please provide source on where this is true?
+
+> 
+> Just delete the dead code.
+> 
+> Signed-off-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+> The issue is found by static analysis and remains untested.
+> ---
+>   drivers/ntb/hw/intel/ntb_hw_gen1.c | 11 ++++-------
+>   1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/ntb/hw/intel/ntb_hw_gen1.c b/drivers/ntb/hw/intel/ntb_hw_gen1.c
+> index 9ab836d0d4f1..9b0b2c43f1bb 100644
+> --- a/drivers/ntb/hw/intel/ntb_hw_gen1.c
+> +++ b/drivers/ntb/hw/intel/ntb_hw_gen1.c
+> @@ -778,13 +778,10 @@ static void ndev_init_debugfs(struct intel_ntb_dev *ndev)
+>   		ndev->debugfs_dir =
+>   			debugfs_create_dir(pci_name(ndev->ntb.pdev),
+>   					   debugfs_dir);
+> -		if (!ndev->debugfs_dir)
+> -			ndev->debugfs_info = NULL;
+> -		else
+> -			ndev->debugfs_info =
+> -				debugfs_create_file("info", S_IRUSR,
+> -						    ndev->debugfs_dir, ndev,
+> -						    &intel_ntb_debugfs_info);
+> +		ndev->debugfs_info =
+> +			debugfs_create_file("info", S_IRUSR,
+> +					    ndev->debugfs_dir, ndev,
+> +					    &intel_ntb_debugfs_info);
+>   	}
+>   }
+>   
