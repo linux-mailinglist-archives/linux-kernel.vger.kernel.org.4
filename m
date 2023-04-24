@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C866ECBC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCC16ECBC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjDXMHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S231756AbjDXMIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDXMHJ (ORCPT
+        with ESMTP id S230346AbjDXMIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:07:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDF6E40;
-        Mon, 24 Apr 2023 05:07:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16DC9615CE;
-        Mon, 24 Apr 2023 12:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E082C433EF;
-        Mon, 24 Apr 2023 12:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682338027;
-        bh=ZLvIBgHd8Xg6EPpA6BcTGe7XE4uE+coPaHGOJpY0rUI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AOKHjWyMFXePILFj7uB/Wy9lFgYdyPHnQYYFeTlFXyv+HavVXrC8lxw/PShbKPEJX
-         gNUQ0rivqhuwY7gVK1SA+HmnU9QXGL+fhyjrNz1HS6kzDWRfTqKBhSlEQ+KTYAhkBK
-         ++j/GquM6tUOMb5u3JIsTXgQ4Jc7s1F8R6xsKA8uoUDYFKq6CzDw+5PyFcZ5YTHmSr
-         xB+P+e+ltGBUvJDaYVHUECgrNKt6J4h+xYCc6twDQ+asQCVmfb23WqSr03FdY+sVMH
-         gfTD5cYV/MTxGxLkCttNB8cWlZZWsQgH9a5mw0BM+6VRB9rvO7Ue6hHlTsSbMHydVX
-         /k4yvvHc+c1+Q==
-Date:   Mon, 24 Apr 2023 13:07:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Missing signoffs in the hte tree
-Message-ID: <143a3e5b-ddc9-4ce1-88ea-9e4d80761cc1@sirena.org.uk>
+        Mon, 24 Apr 2023 08:08:02 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20171F2;
+        Mon, 24 Apr 2023 05:08:01 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f4b911570so627432366b.0;
+        Mon, 24 Apr 2023 05:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682338079; x=1684930079;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wmddoLYvCrZv1MC7Bp3ofoIZr5sc+qWYnHRXko8H0X0=;
+        b=eB47Y0UCBp8S8qbwzeSOlc6qVVUEqSWthYWnnlSsAj2vLBGJ3NM9MJxjC8sSXRijrs
+         /g4rnl55w+aXZ8t1HJ/llqzRRB01xCRr3EPvlB+t+PQU//7Mjpq4KU/COmG041ixAeEJ
+         meL4vM9PMead3qBsCfVjF2ZS7sSiCofewFiiT4o6l0TG1ekq4q/glneuijHa/Yd1EgSk
+         MgS8/TUDAzw+0DfHrEdQbFfFT8StwkiapHH426I2bEmwH142SDziKbk2eeYWtlGxHGKZ
+         PyUZrKa0JPDP7GXjhmdNBZ1xcdGpwpBN4LT5vsgGxBUMDS0QoK+wwjSbL6vKP6kfMIX6
+         qqsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682338079; x=1684930079;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wmddoLYvCrZv1MC7Bp3ofoIZr5sc+qWYnHRXko8H0X0=;
+        b=V0JPIS6C299dC94kj2jr/yyiveyP6hpwewRgA1GbP2hNM1DBkC7e1lDjDJRgZfOiJr
+         H4xiA+qM7uShLswPKrdHkIAZ6K+s3KUvvS2HpRo6e+l3qqeAVwfmMrl37fAhUatLYjR4
+         JORCHupk2pn/90euD7J2lbBRA6LWLOoCTjegKs8Cm8g5gWwnzyQ5S7zAQFb1XDzixfD/
+         B5g55s/Wn3wKT8MLnhljhO3nyLDl3BAwZHxF9yIk4sdZKCPLHBZo9ODiDvF7uXjrQnVW
+         xnANDZbnde7OhB7/NJs4W3uoFT2/V/5KEYyoPP1z9UqFCeB3pU6C9jqGL/HaFAN50M1P
+         RmhQ==
+X-Gm-Message-State: AAQBX9dqZI1Jv8ZrIe9p76S+KuBF2fUQa22GlZs0O1A1bK7NVUntNpK4
+        GCFwpBwHGLMrEnnPPR4jTR0=
+X-Google-Smtp-Source: AKy350Y1ZV+uZUzG6NOMeuRU7tZ1ZJbsz59Vwq/vljFPXMuo5gRLms8A8kYR88dLnoG8E55Uj+yAyA==
+X-Received: by 2002:a17:906:8687:b0:94e:e1c7:31b4 with SMTP id g7-20020a170906868700b0094ee1c731b4mr9333679ejx.48.1682338079377;
+        Mon, 24 Apr 2023 05:07:59 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id ho17-20020a1709070e9100b0094edfbd475csm5342630ejc.127.2023.04.24.05.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 05:07:59 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     dmitry.osipenko@collabora.com
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, jonathanh@nvidia.com,
+        lee@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        peterz@infradead.org, rafael.j.wysocki@intel.com,
+        richard.leitner@linux.dev, treding@nvidia.com, wsa@kernel.org
+Subject: Re: [PATCH v4 3/4] mfd: tps6586x: use devm-based power off handler
+Date:   Mon, 24 Apr 2023 14:07:13 +0200
+Message-Id: <20230424120713.1288281-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <7213c148-5cf8-c251-b809-c6ff59292cad@collabora.com>
+References: <7213c148-5cf8-c251-b809-c6ff59292cad@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g/MTGu/LAgKnLx3m"
-Content-Disposition: inline
-X-Cookie: A rolling disk gathers no MOS.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 24 Apr 2023 at 12:42, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+> In general and in case of this driver, it should be more reliable and
+> cleaner to abort the reboot on a error that shall never happen.
 
---g/MTGu/LAgKnLx3m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks! Then I will drop my 4/6 of v5 [1].
 
-Commits
-
-  1af0f6b5060cf ("hte: tegra-194: Use proper includes")
-  3798a6e3b6a89 ("hte: Use device_match_of_node()")
-  981501927e482 ("hte: tegra-194: Fix off by one in tegra_hte_map_to_line_id()")
-  58e1189d075a4 ("hte: tegra: fix 'struct of_device_id' build error")
-  499c35fe9bf2e ("hte: Use of_property_present() for testing DT property presence")
-
-in the hte tree for today are missing a Signed-off-by from their
-committers.
-
---g/MTGu/LAgKnLx3m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGcOYACgkQJNaLcl1U
-h9Dj0Qf/TEEUKMDzKEyGSlm9uhO4nto6A0eNKKtmCqsKWZxK927jLPohFWkoNC5g
-a5AN2yqWfJ7/rpI3g5wqRkkCVD2idjVtyALryjCIV+kwCPdrlKjD+XwvrBcDxDty
-b0g3M2RfmO87IXThErup9J8r5V8K54VQHsMEXLfy4cuuNIz7bswewOWCTa6N9n4a
-PUtiaUNieeTTCqLnsJplEhpV2YkNut53y64/RMX1X/5IZN7d+xw/kifCthOZyHaP
-zRMtGfyT2agyUqfyTsV+UWQg6qfARaghbltkX+vc7Z4XCR5k/L8/nLsSIJPTZ7UO
-uPOoytoSqwbaV/qrInJpHOK4p/FWHw==
-=1lTh
------END PGP SIGNATURE-----
-
---g/MTGu/LAgKnLx3m--
+[1] https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v5-4-ab090e03284d@skidata.com/
