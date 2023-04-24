@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D6A6EC674
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3066EC67A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjDXGpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 02:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S230525AbjDXGqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 02:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDXGpj (ORCPT
+        with ESMTP id S230199AbjDXGqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 02:45:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E1270B;
-        Sun, 23 Apr 2023 23:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682318737; x=1713854737;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ym78hY4nNNMqICkpjm9E14HXIIRZXu25SHXIuxXeSsk=;
-  b=h9x5by5pVo4qEScu2Ilhudq25UDNBl3USu10kq6uFJI3vbFO5L5OtSyL
-   U1hR3BvC/Nnt0g64/2N6RcBS4veLvgDj/CIIScDxd6AQ0x+hGuclXpoK+
-   4eYFMW+Khwrks3346CNeERsy1PphOaY6y2zCyvrYLzGZ6WxB0Gh2kN3Cg
-   Xd0AoftzwLqjgqR33gLcHWbysD5gteMAbODsBc7kHzoFKSLQgzP/45NU3
-   qBirs2JTidaYjbcrDJN7mvEzKZWmkYHl34QiIveUaMmmrr+90hkX9ZIIh
-   1MWcRwyVky2BKIZ6TPgm1PDZMb9BLe5nDY3b77ZRAdebcXnQo/+9W/xJy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="325984010"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="325984010"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 23:45:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="670391750"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="670391750"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.3.89]) ([10.238.3.89])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 23:45:33 -0700
-Message-ID: <9e2a5232-0c74-585c-9f32-ff9cdd22883a@linux.intel.com>
-Date:   Mon, 24 Apr 2023 14:45:31 +0800
+        Mon, 24 Apr 2023 02:46:48 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A8326A3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:46:47 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763646b324aso687778239f.0
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 23:46:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682318806; x=1684910806;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fd6dqJ6vNUfQTtGZs4HkQf1+w0a46JamGTtztlA6UhI=;
+        b=PfZzRhRZcqjaTWLfixaccaEaWamG6TtTM1CRz/ABNUuGuQTHL6tCMGiyoA2xa7Uj5K
+         CGFo2GxM6AcJLwleCLsG+nzLyb+YG+snn7skk9bwRHeIW1KJyRXvxMiI+pyDkPQ1N/e9
+         AhQ9jUnevZyWcBZ4SPjtm6upbmAVCpOkX4MnAiQksTOAn5zI0UtqjMQn3a8uMLrMIFYg
+         CNwfnmOJvtDbBfqONKy+Sj07SfqGWIPAUUGypV5K02d+DQzc/Fbw1Qs+ZlKyKMe1YQZ+
+         djuiYvRFOzoRN9wxvBqoUCAiufVSaeqsdZ9zuKWiZc+kltkctKR0je2GizeSiQUWuo/k
+         8qzg==
+X-Gm-Message-State: AAQBX9dxWIQTVCSWLAQ2J2/UgWS5/XdF9yiP9ya4VYnNdjMlxW66yZI6
+        AHD6XmnEwBPDJTve+yrfPwAvxA6sYDlfWnEjEPLdMK4cqqx1
+X-Google-Smtp-Source: AKy350aA3V2gYwh6fdUSMxWXbjp90iMnNWbFUoVj6F0JzMGcPAxCTzUQk0uyET6ieJ3obaodDQL+mQCPO9Ry9dBONPuxfjS1oy+z
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/6] KVM: x86: Virtualize CR4.LASS
-To:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Gao Chao <chao.gao@intel.com>
-References: <20230420133724.11398-1-guang.zeng@intel.com>
- <20230420133724.11398-2-guang.zeng@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230420133724.11398-2-guang.zeng@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:22bc:b0:40f:8b7d:90db with SMTP id
+ z28-20020a05663822bc00b0040f8b7d90dbmr4307604jas.3.1682318806457; Sun, 23 Apr
+ 2023 23:46:46 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 23:46:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dba36305fa0f5e27@google.com>
+Subject: [syzbot] [btrfs?] WARNING in btrfs_put_block_group
+From:   syzbot <syzbot+e38c6fff39c0d7d6f121@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,70 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Hello,
 
-one nit below
+syzbot found the following issue on:
 
-On 4/20/2023 9:37 PM, Zeng Guang wrote:
-> Virtualize CR4.LASS[bit 27] under KVM control instead of being guest-owned
-under control of KVM or under KVM's control
+HEAD commit:    8e41e0a57566 Revert "ACPICA: Events: Support fixed PCIe wa..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a7e1bfc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4afb87f3ec27b7fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=e38c6fff39c0d7d6f121
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Or just simply use "intercept"?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> as CR4.LASS generally set once for each vCPU at boot time and won't be
-> toggled at runtime. Besides, only if VM has LASS capability enumerated with
-> CPUID.(EAX=07H.ECX=1):EAX.LASS[bit 6], KVM allows guest software to be able
-> to set CR4.LASS. By design CR4.LASS can be manipulated by nested guest as
-> well.
->
-> Notes: Setting CR4.LASS to 1 enable LASS in IA-32e mode. It doesn't take
-> effect in legacy mode even if CR4.LASS is set.
->
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> ---
->   arch/x86/include/asm/kvm_host.h | 2 +-
->   arch/x86/kvm/vmx/vmx.c          | 3 +++
->   arch/x86/kvm/x86.h              | 2 ++
->   3 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 6aaae18f1854..8ff89a52ef66 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -125,7 +125,7 @@
->   			  | X86_CR4_PGE | X86_CR4_PCE | X86_CR4_OSFXSR | X86_CR4_PCIDE \
->   			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
->   			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
-> -			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP))
-> +			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP | X86_CR4_LASS))
->   
->   #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
->   
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 43ff3276918b..c923d7599d71 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7569,6 +7569,9 @@ static void nested_vmx_cr_fixed1_bits_update(struct kvm_vcpu *vcpu)
->   	cr4_fixed1_update(X86_CR4_UMIP,       ecx, feature_bit(UMIP));
->   	cr4_fixed1_update(X86_CR4_LA57,       ecx, feature_bit(LA57));
->   
-> +	entry = kvm_find_cpuid_entry_index(vcpu, 0x7, 1);
-> +	cr4_fixed1_update(X86_CR4_LASS,       eax, feature_bit(LASS));
-> +
->   #undef cr4_fixed1_update
->   }
->   
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index 7c8a30d44c29..218f4c73789a 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -475,6 +475,8 @@ bool kvm_msr_allowed(struct kvm_vcpu *vcpu, u32 index, u32 type);
->   		__reserved_bits |= X86_CR4_VMXE;        \
->   	if (!__cpu_has(__c, X86_FEATURE_PCID))          \
->   		__reserved_bits |= X86_CR4_PCIDE;       \
-> +	if (!__cpu_has(__c, X86_FEATURE_LASS))          \
-> +		__reserved_bits |= X86_CR4_LASS;        \
->   	__reserved_bits;                                \
->   })
->   
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/69cc9a5732ed/disk-8e41e0a5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f32a5c8e9e68/vmlinux-8e41e0a5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0b56460ca80d/bzImage-8e41e0a5.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e38c6fff39c0d7d6f121@syzkaller.appspotmail.com
+
+BTRFS info (device loop5): at unmount dio bytes count 8192
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5108 at fs/btrfs/block-group.c:152 btrfs_put_block_group+0x257/0x2b0
+Modules linked in:
+CPU: 0 PID: 5108 Comm: syz-executor.5 Not tainted 6.3.0-rc7-syzkaller-00181-g8e41e0a57566 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:btrfs_put_block_group+0x257/0x2b0 fs/btrfs/block-group.c:152
+Code: fe e8 fd 28 e2 fd 0f 0b e9 4a fe ff ff e8 f1 28 e2 fd 48 89 df be 03 00 00 00 5b 41 5e 41 5f 5d e9 fe eb 87 00 e8 d9 28 e2 fd <0f> 0b e9 1c ff ff ff e8 cd 28 e2 fd 0f 0b 4c 89 f0 48 c1 e8 03 42
+RSP: 0018:ffffc90003f9fa90 EFLAGS: 00010293
+RAX: ffffffff83a850b7 RBX: 0000000000002000 RCX: ffff888020419d40
+RDX: 0000000000000000 RSI: 0000000000002000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff83a84fcc R09: ffffed100ea7db41
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802f07c318
+R13: dffffc0000000000 R14: ffff88802f07c000 R15: dffffc0000000000
+FS:  0000555555b01400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffa6ebc8300 CR3: 000000002d689000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_free_block_groups+0x9b0/0xe80 fs/btrfs/block-group.c:4272
+ close_ctree+0x742/0xd30 fs/btrfs/disk-io.c:4649
+ generic_shutdown_super+0x134/0x340 fs/super.c:500
+ kill_anon_super+0x3b/0x60 fs/super.c:1107
+ btrfs_kill_super+0x41/0x50 fs/btrfs/super.c:2133
+ deactivate_locked_super+0xa4/0x110 fs/super.c:331
+ cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f03aec8d5d7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffeb62f6788 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f03aec8d5d7
+RDX: 00007ffeb62f685b RSI: 000000000000000a RDI: 00007ffeb62f6850
+RBP: 00007ffeb62f6850 R08: 00000000ffffffff R09: 00007ffeb62f6620
+R10: 0000555555b028b3 R11: 0000000000000246 R12: 00007f03aece6cdc
+R13: 00007ffeb62f7910 R14: 0000555555b02810 R15: 00007ffeb62f7950
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
