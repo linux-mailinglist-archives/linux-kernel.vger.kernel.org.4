@@ -2,143 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98ED86ED117
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566226ED12A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjDXPOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S232048AbjDXPTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjDXPOr (ORCPT
+        with ESMTP id S232042AbjDXPTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:14:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0788110D3;
-        Mon, 24 Apr 2023 08:14:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 508F74B3;
-        Mon, 24 Apr 2023 08:15:26 -0700 (PDT)
-Received: from [10.57.56.16] (unknown [10.57.56.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A26C53F64C;
-        Mon, 24 Apr 2023 08:14:39 -0700 (PDT)
-Message-ID: <8acae291-2c3f-6010-de66-d4e54781d21f@arm.com>
-Date:   Mon, 24 Apr 2023 16:14:38 +0100
+        Mon, 24 Apr 2023 11:19:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26B08A50;
+        Mon, 24 Apr 2023 08:18:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A8E3625F5;
+        Mon, 24 Apr 2023 15:18:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788DCC433EF;
+        Mon, 24 Apr 2023 15:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682349532;
+        bh=WNhrzb+two7LSArpEYTM4KxCfhgBU/6AXoKRPek2FD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+0e9hekrRTYM0TjAunzdz9BezS0atWyS8DcUnKSaTQ5nSraFCAdjaltJtk6yN4nh
+         FbHL1hd6RTSuRbEIOulZtHxybTcYq6v3XYKpF6IFs+IUPFAuEG4VZgRp9nB7rTjkPG
+         Vyy7E52k158r121lPyvmfcrGZzrKrMi6GDyP21wjFxe6/sWy5k+662hJi6O4hhr8Lk
+         6Ped7sexk5PwgjuvyCjfvlcue4MTsCn/wLqWug5u6EbhTDE8XfluyYtuc3ZTH68kzy
+         sbK+Kn/vxP7sHoKmCZ4FBsTay4YhQARymw7i9ztT4Rb44YFYn6RQ/2PbXBhzDLQiPE
+         AqRn5OnfTjuzA==
+Date:   Mon, 24 Apr 2023 16:18:45 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        jsnitsel@redhat.com, robh+dt@kernel.org, peterhuewe@gmx.de,
+        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+ <20230421091309.2672-3-kyarlagadda@nvidia.com>
+ <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
+ <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
+ <ZEaWQD_QTs2usVl8@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH 1/7] perf: cs-etm: Fix timeless decode mode detection
-To:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
-        shy828301@gmail.com
-Cc:     denik@google.com, Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230424134748.228137-1-james.clark@arm.com>
- <20230424134748.228137-2-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230424134748.228137-2-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7lPOdm6vGo8h/yZ6"
+Content-Disposition: inline
+In-Reply-To: <ZEaWQD_QTs2usVl8@orome>
+X-Cookie: A rolling disk gathers no MOS.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 14:47, James Clark wrote:
-> In this context, timeless refers to the trace data rather than the perf
-> event data. But when detecting whether there are timestamps in the trace
-> data or not, the presence of a timestamp flag on any perf event is used.
-> 
-> Since commit f42c0ce573df ("perf record: Always get text_poke events
-> with --kcore option") timestamps were added to a tracking event when
-> --kcore is used which breaks this detection mechanism. Fix it by
-> detecting if trace timestamps exist by looking at the ETM config flags.
-> This would have always been a more accurate way of doing it anyway.
-> 
-> This fixes the following error message when using --kcore with
-> Coresight:
-> 
->    $ perf record --kcore -e cs_etm// --per-thread
->    $ perf report
->    The perf.data/data data has no samples!
-> 
-> Fixes: f42c0ce573df ("perf record: Always get text_poke events with --kcore option")
-> Reported-by: Yang Shi <shy828301@gmail.com>
-> Link: https://lore.kernel.org/lkml/CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com/
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->   tools/perf/util/cs-etm.c | 30 ++++++++++++++++++------------
->   1 file changed, 18 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index 8dd81ddd9e4e..50593289d53c 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -2684,26 +2684,29 @@ static int cs_etm__process_auxtrace_event(struct perf_session *session,
->   	return 0;
->   }
->   
-> -static bool cs_etm__is_timeless_decoding(struct cs_etm_auxtrace *etm)
-> +static int cs_etm__setup_timeless_decoding(struct cs_etm_auxtrace *etm)
 
-minor nit: "setup" sound more like prepare to do what is required to
-do a timeless decoding, while we are doing more like, check if we
-have to do a timeless decoding. So may be:
+--7lPOdm6vGo8h/yZ6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-cs_etm_check_timeless_decoding() ?
+On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
 
->   {
->   	struct evsel *evsel;
->   	struct evlist *evlist = etm->session->evlist;
-> -	bool timeless_decoding = true;
->   
->   	/* Override timeless mode with user input from --itrace=Z */
-> -	if (etm->synth_opts.timeless_decoding)
-> -		return true;
-> +	if (etm->synth_opts.timeless_decoding) {
-> +		etm->timeless_decoding = true;
-> +		return 0;
-> +	}
->   
->   	/*
-> -	 * Circle through the list of event and complain if we find one
-> -	 * with the time bit set.
-> +	 * Find the cs_etm evsel and look at what its timestamp setting was
->   	 */
-> -	evlist__for_each_entry(evlist, evsel) {
-> -		if ((evsel->core.attr.sample_type & PERF_SAMPLE_TIME))
-> -			timeless_decoding = false;
-> -	}
-> +	evlist__for_each_entry(evlist, evsel)
+> Would it make sense for you to pick up patch 2/3 as well? As far as I
+> can tell there's a build dependency on patch 1/3 because of the newly
+> added SPI_TPM_HW_FLOW symbol.
 
-minor nit: please retain the braces
+I'll include it in my pull request for spi this time round so it should
+end up in -rc1, my thinking was that I was happy with the SPI bits and
+if it was in -rc1 then the TPM bits could be handled without cross tree
+issues when the review was sorted (which it is now but wasn't at the
+time).  If the SPI side doesn't make -rc1 for some reason I can pick up
+the TPM bit as well, and/or do a signed tag.
 
-> +		if (cs_etm__evsel_is_auxtrace(etm->session, evsel)) {
-> +			etm->timeless_decoding =
-> +				!(evsel->core.attr.config & BIT(ETM_OPT_TS));
+--7lPOdm6vGo8h/yZ6
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-> +			return 0;
-> +		}
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGndQACgkQJNaLcl1U
+h9ADuAf+K3fSxfQBMYgj1jBglBFx5Ww6piOvrVw4uby6KKj9nDBve1456ikcc80Z
+hOQx1cJ3Cw191WSRTtUPX/I1xzuSEDfeks6kqK0JuaohVmQ3sGrSuo4vg3x8xiCs
+3UTACSsJ4WzHlup+63eWyToow5bigO+kXLz6k/tHUbqrtkiKbgRxjbPePVLzAcox
+dVJzpSFURHMzow92183nneyk+8FCEHeNTGTdYEnSRrtByFoqaCKwn8J1t6OhP46a
+S6whcV5g0AbnNM0eT4W44aLcQTyEnI9wxpq0uF8a4PF+0EWj/lVlayuRQItK/nqN
+D1QAtXhaCHRoCFt473q6C9cjcezxtA==
+=q1nE
+-----END PGP SIGNATURE-----
 
-Otherwise, looks good to me
-
-Suzuki
-
-
+--7lPOdm6vGo8h/yZ6--
