@@ -2,287 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306936ED694
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6F16ED697
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 23:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjDXVKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 17:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S232607AbjDXVL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 17:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjDXVKN (ORCPT
+        with ESMTP id S232071AbjDXVL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 17:10:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6C86184
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682370571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l2DIw9E0DWGPudpd861Kjkn+cGauwIMc/nQBn5q2geI=;
-        b=fi7etyzFccrkDYgR2Xqoeo1hHCYK/FbjNPwevYaCAaYcBXny1r75UEn2AbPFuq1glJp2Gi
-        8M+vwFwU7vUe87b7i74UDOrIWTpzsbGWE6QCrswPTegYws8TeONB0BBpqSZMbeB02yiZYu
-        O0vpsUys2Ahk3nc/TBUH618a0WGWigY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-8iItKPArPeOeVuhuwwOGxw-1; Mon, 24 Apr 2023 17:09:29 -0400
-X-MC-Unique: 8iItKPArPeOeVuhuwwOGxw-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-2ffa43cd733so2662898f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:09:29 -0700 (PDT)
+        Mon, 24 Apr 2023 17:11:26 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CB6C7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:11:24 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-504ecbfddd5so7309303a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 14:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682370683; x=1684962683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=en+fDziQkermLiJrmAgywyXMopFaq5a4hDQGR7+I+b8=;
+        b=Aw81Vs8xODS4N4yCsb8UY7WKISjZiAzaU98K9+SV5cfJefzYEAt3L4hCrVYmdCq/o/
+         6bnbBCEbpVZH1vsqiaP73oHrhnlPgrrq/z853nomhm90GxBnJxr0OzOWRmT82qo9YPgP
+         UBSA98oT6OmEMyOtGbpmowMX/nHDv+ZjTo/aZa7V6RwGKP/K/6cK4SIs0NBMkNjAgSuB
+         TZvjbGYmKaslVKhbjIa5i93pXSfOitzj+zUjttAj746d23+K2zf9i8k2eeyGSa/K/tqP
+         2oixeMajbWGaty4xylGDe/PSUuISU6POOH3xNGZE8b65SLJ9Q7jHaz3YvP07awx3hwbV
+         mNGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682370568; x=1684962568;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l2DIw9E0DWGPudpd861Kjkn+cGauwIMc/nQBn5q2geI=;
-        b=VD1pvy+oXV7VL7fITpCHnYGGggpdqRHW2w3D3VX51ZPxifvEXabZyC8IQfX/KtC4yu
-         6Ry1pbnb0NC+mKrueYWyFV45sLTSSmomHnYBWWvkgzI8d2xhGNisgXp9btJIBATyvT2O
-         6X0St4Jq2vos2VQtuR+OMBecvfPNTPy7DTdQNM2+8kwovDtNmdJXPnHs72E7mINslpRj
-         ib+M7K0wExmi8AWZD3T0tgWs/gdAXwWQT3FKEepE8cWp58hEaGudoMYQrYE7x0+vA6iR
-         +RQbUBw7P8wxi3kO4Ap5ycdU1JogP+3abKsvm1eB8azXwlamL9UlBA8eODwJCpOwYOUy
-         42Cg==
-X-Gm-Message-State: AAQBX9dgoMEhPDSIdhRdKJjdyTZ6jrutgArWqKhu8eFEb+4IKOdWuMyP
-        MqZdykDfs1/f7EqsTtBypTUwxdLO/PidOoGbYDTbSYatGyKVEoYfq0DddnbyioYOSZV9Ynd2m3o
-        X56/clK039o81ditQnZumIDqwOLZgIAxQ
-X-Received: by 2002:a5d:404e:0:b0:2f8:2d4:74ef with SMTP id w14-20020a5d404e000000b002f802d474efmr10698164wrp.43.1682370568254;
-        Mon, 24 Apr 2023 14:09:28 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YHMM9T0V0+QlHyo0phBynPWZ5d4SFmalLRfzRfQMsm6PgmZ6pd6ITCa8CU1e9IDifaQL432g==
-X-Received: by 2002:a5d:404e:0:b0:2f8:2d4:74ef with SMTP id w14-20020a5d404e000000b002f802d474efmr10698158wrp.43.1682370567918;
-        Mon, 24 Apr 2023 14:09:27 -0700 (PDT)
-Received: from redhat.com ([2.55.17.255])
-        by smtp.gmail.com with ESMTPSA id j14-20020adfea4e000000b002fc3d8c134bsm11560929wrn.74.2023.04.24.14.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 14:09:27 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 17:09:23 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Harald Mommer <harald.mommer@opensynergy.com>
-Subject: Re: [PATCH] can: virtio-can: cleanups
-Message-ID: <20230424170901-mutt-send-email-mst@kernel.org>
-References: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
+        d=1e100.net; s=20221208; t=1682370683; x=1684962683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=en+fDziQkermLiJrmAgywyXMopFaq5a4hDQGR7+I+b8=;
+        b=aIaU3l97mBbzzajS+58S5te4ffiOreBdYgzEHn1W/aULqr1ln9ExfO/DZHlA4KD+xy
+         vI7cWcJz6oWjj1IAbhwyBvCBcVUwEeI3LZ4d9HU78ud/rahe39UxCjs4SOJ8WpbvOK6f
+         +jxV7kstuoL1mndbM5V7rEujBnzdrAIfO6qwUSJtk0BLuHEltd96r2pMLMBvZtwyHxW8
+         xfYUNn4LJ8IMAPKCB3u4V0RzRaqc16dyZxZF+toyfOtu+8P4kQ35J+yDhP0poMpcqToh
+         Rn9qCd0RBO/zwXHI+UhlVn1bYPk95lE+vC2Ps3KpwOuVLPYw5X3qrkJ9iYtCdeLYu9ot
+         ZXgw==
+X-Gm-Message-State: AAQBX9cK0efrdS7UwPwnyyUbEz3C5/tA3BrFR17Y40u0+bCJS1Xo0gl/
+        3nU8J0pfGwsZrpYRhQwwPybIC/vPeXDpnmmm650K0Q==
+X-Google-Smtp-Source: AKy350btuw+h0HUnuPC3BgQ5YYh1ckdwk/2bD/XmlcTKvMakQJHu7GokVy0MEpO69cL0WMloaf2bhOWtA07RE7AgOso=
+X-Received: by 2002:a05:6402:603:b0:506:c22e:cbcf with SMTP id
+ n3-20020a056402060300b00506c22ecbcfmr12424759edv.36.1682370683209; Mon, 24
+ Apr 2023 14:11:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <00000000000058b63f05f9d98811@google.com> <20230421174054.3434533-1-roman.gushchin@linux.dev>
+ <DB1562BC-CAD0-45B4-8C6D-92E583C128DF@linux.dev> <CACT4Y+Yy9a8R_oiumdZiE-hwAqrDV63VAWgbrE5nFEk9w-JuPQ@mail.gmail.com>
+ <CAJD7tkY4VH3CDoZHjOTWvCCPXikRScNjwPsV9hf001X_y6i+FA@mail.gmail.com> <CALvZod4bX+vPLAXb5J4TW=BWDfeweuB_h+B1GgHED39N=b=SbA@mail.gmail.com>
+In-Reply-To: <CALvZod4bX+vPLAXb5J4TW=BWDfeweuB_h+B1GgHED39N=b=SbA@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 24 Apr 2023 14:10:45 -0700
+Message-ID: <CAJD7tkZ+Nz5Hh=CfvViaVyprsp9xgoJn3f8GimkJxqsfqeZeVA@mail.gmail.com>
+Subject: Re: [PATCH] mm: kmem: fix a NULL pointer dereference in obj_stock_flush_required()
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>, linux-kernel@vger.kernel.org,
+        syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 09:47:58PM +0200, Marc Kleine-Budde wrote:
-> Address the topics raised in
-> 
-> https://lore.kernel.org/20230424-footwear-daily-9339bd0ec428-mkl@pengutronix.de
-> 
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+On Mon, Apr 24, 2023 at 10:10=E2=80=AFAM Shakeel Butt <shakeelb@google.com>=
+ wrote:
+>
+> On Mon, Apr 24, 2023 at 2:13=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> >
+> > On Sun, Apr 23, 2023 at 11:51=E2=80=AFPM Dmitry Vyukov <dvyukov@google.=
+com> wrote:
+> > >
+> > > On Sun, 23 Apr 2023 at 04:26, Muchun Song <muchun.song@linux.dev> wro=
+te:
+> > > > > On Apr 22, 2023, at 01:40, Roman Gushchin <roman.gushchin@linux.d=
+ev> wrote:
+> > > > >
+> > > > > KCSAN found an issue in obj_stock_flush_required():
+> > > > > stock->cached_objcg can be reset between the check and dereferenc=
+e:
+> > > > >
+> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
+> > > > >
+> > > > > write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
+> > > > > drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
+> > > > > refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
+> > > > > obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
+> > > > > memcg_slab_free_hook mm/slab.h:587 [inline]
+> > > > > __cache_free mm/slab.c:3373 [inline]
+> > > > > __do_kmem_cache_free mm/slab.c:3577 [inline]
+> > > > > kmem_cache_free+0x105/0x280 mm/slab.c:3602
+> > > > > __d_free fs/dcache.c:298 [inline]
+> > > > > dentry_free fs/dcache.c:375 [inline]
+> > > > > __dentry_kill+0x422/0x4a0 fs/dcache.c:621
+> > > > > dentry_kill+0x8d/0x1e0
+> > > > > dput+0x118/0x1f0 fs/dcache.c:913
+> > > > > __fput+0x3bf/0x570 fs/file_table.c:329
+> > > > > ____fput+0x15/0x20 fs/file_table.c:349
+> > > > > task_work_run+0x123/0x160 kernel/task_work.c:179
+> > > > > resume_user_mode_work include/linux/resume_user_mode.h:49 [inline=
+]
+> > > > > exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
+> > > > > exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
+> > > > > __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inlin=
+e]
+> > > > > syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
+> > > > > do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+> > > > > entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > >
+> > > > > read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
+> > > > > obj_stock_flush_required mm/memcontrol.c:3319 [inline]
+> > > > > drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
+> > > > > try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
+> > > > > try_charge mm/memcontrol.c:2837 [inline]
+> > > > > mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
+> > > > > sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
+> > > > > sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
+> > > > > udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
+> > > > > udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
+> > > > > sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
+> > > > > __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
+> > > > > __do_sys_setsockopt net/socket.c:2282 [inline]
+> > > > > __se_sys_setsockopt net/socket.c:2279 [inline]
+> > > > > __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
+> > > > > do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > > > do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> > > > > entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > >
+> > > > > value changed: 0xffff8881382d52c0 -> 0xffff888138893740
+> > > > >
+> > > > > Reported by Kernel Concurrency Sanitizer on:
+> > > > > CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzk=
+aller-00387-g534293368afa #0
+> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine=
+, BIOS Google 03/02/2023
+> > > > >
+> > > > > Fix it by reading the cached_objcg with READ_ONCE().
+> > > > >
+> > > > > Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> > > > > Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.co=
+m
+> > > > > Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> > > > > Link: https://lore.kernel.org/linux-mm/CACT4Y+ZfucZhM60YPphWiCLJr=
+6+SGFhT+jjm8k1P-a_8Kkxsjg@mail.gmail.com/T/#t
+> > > > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > > >
+> > > > Acked-by: Muchun Song <songmuchun@bytedance.com>
+> > > >
+> > > > Thanks.
+> > >
+> > > This improves things, but strictly speaking the write side also needs
+> > > WRITE_ONCE. Ordering is always a game of two. It's not possible to
+> > > order things on one side, if the other side messes up the ordering.
+> > >
+> >
+> > It looks like most other accesses use memcg_stock.stock_lock for
+> > synchronization. Based on the output of obj_stock_flush_required()
+> > we call drain_local_stock(), which acquires that lock as well. Should
+> > we refactor the code to extend the lock section to cover both
+> > obj_stock_flush_required() and drain_local_stock()?
+> >
+> > IIUC this may unify the synchronization handling and
+> > READ_ONCE/WRITE_ONCE may no longer be needed. This should also avoid
+> > any inaccuracies (e.g. unnecessary flushes) that may happen if the
+> > cached objcg changes between obj_stock_flush_required() and
+> > drain_local_stock().
+> >
+> > Did I miss anything here?
+>
+> Yes, drain_local_stock only works on local cpu and
+> obj_stock_flush_required can touch the stock of all the cpus.
 
-given base patch is rfc this should be too?
+Oh right, for other cpus this is infeasible as we schedule the work to
+be done later.
 
-> ---
->  drivers/net/can/Makefile        |  4 +--
->  drivers/net/can/virtio_can.c    | 56 ++++++++++++++-------------------
->  include/uapi/linux/virtio_can.h |  4 +--
->  3 files changed, 28 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-> index e409f61d8e93..19314adaff59 100644
-> --- a/drivers/net/can/Makefile
-> +++ b/drivers/net/can/Makefile
-> @@ -17,8 +17,8 @@ obj-$(CONFIG_CAN_AT91)		+= at91_can.o
->  obj-$(CONFIG_CAN_BXCAN)		+= bxcan.o
->  obj-$(CONFIG_CAN_CAN327)	+= can327.o
->  obj-$(CONFIG_CAN_CC770)		+= cc770/
-> -obj-$(CONFIG_CAN_C_CAN)		+= c_can/
->  obj-$(CONFIG_CAN_CTUCANFD)	+= ctucanfd/
-> +obj-$(CONFIG_CAN_C_CAN)		+= c_can/
->  obj-$(CONFIG_CAN_FLEXCAN)	+= flexcan/
->  obj-$(CONFIG_CAN_GRCAN)		+= grcan.o
->  obj-$(CONFIG_CAN_IFI_CANFD)	+= ifi_canfd/
-> @@ -30,7 +30,7 @@ obj-$(CONFIG_CAN_PEAK_PCIEFD)	+= peak_canfd/
->  obj-$(CONFIG_CAN_SJA1000)	+= sja1000/
->  obj-$(CONFIG_CAN_SUN4I)		+= sun4i_can.o
->  obj-$(CONFIG_CAN_TI_HECC)	+= ti_hecc.o
-> -obj-$(CONFIG_CAN_XILINXCAN)	+= xilinx_can.o
->  obj-$(CONFIG_CAN_VIRTIO_CAN)	+= virtio_can.o
-> +obj-$(CONFIG_CAN_XILINXCAN)	+= xilinx_can.o
->  
->  subdir-ccflags-$(CONFIG_CAN_DEBUG_DEVICES) += -DDEBUG
-> diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
-> index 23f9c1b6446d..c11a652613d0 100644
-> --- a/drivers/net/can/virtio_can.c
-> +++ b/drivers/net/can/virtio_can.c
-> @@ -312,13 +312,12 @@ static netdev_tx_t virtio_can_start_xmit(struct sk_buff *skb,
->  	struct scatterlist sg_in[1];
->  	struct scatterlist *sgs[2];
->  	unsigned long flags;
-> -	size_t len;
->  	u32 can_flags;
->  	int err;
->  	netdev_tx_t xmit_ret = NETDEV_TX_OK;
->  	const unsigned int hdr_size = offsetof(struct virtio_can_tx_out, sdu);
->  
-> -	if (can_dropped_invalid_skb(dev, skb))
-> +	if (can_dev_dropped_skb(dev, skb))
->  		goto kick; /* No way to return NET_XMIT_DROP here */
->  
->  	/* Virtio CAN does not support error message frames */
-> @@ -338,27 +337,25 @@ static netdev_tx_t virtio_can_start_xmit(struct sk_buff *skb,
->  
->  	can_tx_msg->tx_out.msg_type = cpu_to_le16(VIRTIO_CAN_TX);
->  	can_flags = 0;
-> -	if (cf->can_id & CAN_EFF_FLAG)
-> +
-> +	if (cf->can_id & CAN_EFF_FLAG) {
->  		can_flags |= VIRTIO_CAN_FLAGS_EXTENDED;
-> +		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_EFF_MASK);
-> +	} else {
-> +		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_SFF_MASK);
-> +	}
->  	if (cf->can_id & CAN_RTR_FLAG)
->  		can_flags |= VIRTIO_CAN_FLAGS_RTR;
-> +	else
-> +		memcpy(can_tx_msg->tx_out.sdu, cf->data, cf->len);
->  	if (can_is_canfd_skb(skb))
->  		can_flags |= VIRTIO_CAN_FLAGS_FD;
-> +
->  	can_tx_msg->tx_out.flags = cpu_to_le32(can_flags);
-> -	can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_EFF_MASK);
-> -	len = cf->len;
-> -	can_tx_msg->tx_out.length = len;
-> -	if (len > sizeof(cf->data))
-> -		len = sizeof(cf->data);
-> -	if (len > sizeof(can_tx_msg->tx_out.sdu))
-> -		len = sizeof(can_tx_msg->tx_out.sdu);
-> -	if (!(can_flags & VIRTIO_CAN_FLAGS_RTR)) {
-> -		/* Copy if not a RTR frame. RTR frames have a DLC but no payload */
-> -		memcpy(can_tx_msg->tx_out.sdu, cf->data, len);
-> -	}
-> +	can_tx_msg->tx_out.length = cpu_to_le16(cf->len);
->  
->  	/* Prepare sending of virtio message */
-> -	sg_init_one(&sg_out[0], &can_tx_msg->tx_out, hdr_size + len);
-> +	sg_init_one(&sg_out[0], &can_tx_msg->tx_out, hdr_size + cf->len);
->  	sg_init_one(&sg_in[0], &can_tx_msg->tx_in, sizeof(can_tx_msg->tx_in));
->  	sgs[0] = sg_out;
->  	sgs[1] = sg_in;
-> @@ -895,8 +892,8 @@ static int virtio_can_probe(struct virtio_device *vdev)
->  	priv->tx_putidx_list =
->  		kcalloc(echo_skb_max, sizeof(struct list_head), GFP_KERNEL);
->  	if (!priv->tx_putidx_list) {
-> -		free_candev(dev);
-> -		return -ENOMEM;
-> +		err = -ENOMEM;
-> +		goto on_failure;
->  	}
->  
->  	INIT_LIST_HEAD(&priv->tx_putidx_free);
-> @@ -914,7 +911,6 @@ static int virtio_can_probe(struct virtio_device *vdev)
->  	vdev->priv = priv;
->  
->  	priv->can.do_set_mode = virtio_can_set_mode;
-> -	priv->can.state = CAN_STATE_STOPPED;
->  	/* Set Virtio CAN supported operations */
->  	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
->  	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
-> @@ -968,11 +964,10 @@ static int virtio_can_probe(struct virtio_device *vdev)
->  	return err;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  /* Compare with m_can.c/m_can_suspend(), virtio_net.c/virtnet_freeze() and
->   * virtio_card.c/virtsnd_freeze()
->   */
-> -static int virtio_can_freeze(struct virtio_device *vdev)
-> +static int __maybe_unused virtio_can_freeze(struct virtio_device *vdev)
->  {
->  	struct virtio_can_priv *priv = vdev->priv;
->  	struct net_device *ndev = priv->dev;
-> @@ -996,7 +991,7 @@ static int virtio_can_freeze(struct virtio_device *vdev)
->  /* Compare with m_can.c/m_can_resume(), virtio_net.c/virtnet_restore() and
->   * virtio_card.c/virtsnd_restore()
->   */
-> -static int virtio_can_restore(struct virtio_device *vdev)
-> +static int __maybe_unused virtio_can_restore(struct virtio_device *vdev)
->  {
->  	struct virtio_can_priv *priv = vdev->priv;
->  	struct net_device *ndev = priv->dev;
-> @@ -1020,7 +1015,6 @@ static int virtio_can_restore(struct virtio_device *vdev)
->  
->  	return 0;
->  }
-> -#endif /* #ifdef CONFIG_PM_SLEEP */
->  
->  static struct virtio_device_id virtio_can_id_table[] = {
->  	{ VIRTIO_ID_CAN, VIRTIO_DEV_ANY_ID },
-> @@ -1037,18 +1031,16 @@ static unsigned int features[] = {
->  static struct virtio_driver virtio_can_driver = {
->  	.feature_table = features,
->  	.feature_table_size = ARRAY_SIZE(features),
-> -	.feature_table_legacy = NULL,
-> -	.feature_table_size_legacy = 0,
-> -	.driver.name =	KBUILD_MODNAME,
-> -	.driver.owner =	THIS_MODULE,
-> -	.id_table =	virtio_can_id_table,
-> -	.validate =	virtio_can_validate,
-> -	.probe =	virtio_can_probe,
-> -	.remove =	virtio_can_remove,
-> +	.driver.name = KBUILD_MODNAME,
-> +	.driver.owner = THIS_MODULE,
-> +	.id_table = virtio_can_id_table,
-> +	.validate = virtio_can_validate,
-> +	.probe = virtio_can_probe,
-> +	.remove = virtio_can_remove,
->  	.config_changed = virtio_can_config_changed,
->  #ifdef CONFIG_PM_SLEEP
-> -	.freeze =	virtio_can_freeze,
-> -	.restore =	virtio_can_restore,
-> +	.freeze = virtio_can_freeze,
-> +	.restore = virtio_can_restore,
->  #endif
->  };
->  
-> diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
-> index de85918aa7dc..f59a2ca6ebd1 100644
-> --- a/include/uapi/linux/virtio_can.h
-> +++ b/include/uapi/linux/virtio_can.h
-> @@ -35,7 +35,7 @@ struct virtio_can_config {
->  struct virtio_can_tx_out {
->  #define VIRTIO_CAN_TX                   0x0001
->  	__le16 msg_type;
-> -	__le16 length; /* 0..8 CC, 0..64 CAN­FD, 0..2048 CAN­XL, 12 bits */
-> +	__le16 length; /* 0..8 CC, 0..64 CAN-FD, 0..2048 CAN-XL, 12 bits */
->  	__le32 reserved; /* May be needed in part for CAN XL priority */
->  	__le32 flags;
->  	__le32 can_id;
-> @@ -50,7 +50,7 @@ struct virtio_can_tx_in {
->  struct virtio_can_rx {
->  #define VIRTIO_CAN_RX                   0x0101
->  	__le16 msg_type;
-> -	__le16 length; /* 0..8 CC, 0..64 CAN­FD, 0..2048 CAN­XL, 12 bits */
-> +	__le16 length; /* 0..8 CC, 0..64 CAN-FD, 0..2048 CAN-XL, 12 bits */
->  	__le32 reserved; /* May be needed in part for CAN XL priority */
->  	__le32 flags;
->  	__le32 can_id;
-> -- 
-> 2.39.2
-> 
+>
+> The patch is good but I agree with Dmitry that we should add the
+> WRITE_ONCE as well.
 
+Agreed. I guess WRITE_ONCE will be needed in multiple places that
+update the cached objcg.
+
+Thanks.
