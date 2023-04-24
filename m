@@ -2,226 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9786EC393
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850206EC3A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 04:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjDXC3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 22:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S230211AbjDXCge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 22:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDXC3S (ORCPT
+        with ESMTP id S229941AbjDXCgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 22:29:18 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6EB1BE6;
-        Sun, 23 Apr 2023 19:29:16 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-517bfdf55c3so2336146a12.2;
-        Sun, 23 Apr 2023 19:29:16 -0700 (PDT)
+        Sun, 23 Apr 2023 22:36:32 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0B0210C
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:36:31 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b46186c03so4951350b3a.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 19:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682303356; x=1684895356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VydTYC4YKwhPstdajqkkdrOxIjqp+kYdmzBlpVWuf1A=;
-        b=emHG3n3AgGC+Y+ZScZW3d5mSAK6+IrGox/lpskiNYNb7Yr3I2JSS5h7me033wyogHv
-         /tHRnJNWWqKD4AlsniWTsjZQDwjZMilxQtYTq060kLBe4cNSJKjcjAflwYKkh1jEXrEE
-         dKPwl0tlDJN9hhSHPDhjzxp8UG/iwvUIe2PzqiIJtEOD9+vOJ1Zgb6vmyNXaDs9CLk+D
-         s6JiUdLwHoenj4DCgQjBeMCdafRrbtpW+kN4iuDvX6yO/3/br8ZcBC6wuBebC+ue4B8F
-         laxENVQ6i6tQNdkGe9dP6Nzd9gZVduqjEQUaOqXI4enAyhqOiReO16gDdeecDKGnG5fh
-         ephw==
+        d=chromium.org; s=google; t=1682303790; x=1684895790;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Er9IodKAhu5Xy/24MmuM3ISnj8SFsqKhcDcV85YYtd4=;
+        b=Myis4J2Z9lmx+G/UGHQV666UFM6OJ8EKtdAre2rvRUUjU2E+rQLKwJ+D0eYgmT72Z9
+         5SaX6H/C77vylvdgFXO4tn7m7ArVvZvZSOxiW6NiLDX5h8w4cEfp1YoxEuHlyRXPz09e
+         5JgUmEmUJwM1H8XEmuezqPmJ+lzP8zXU2UJcc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682303356; x=1684895356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VydTYC4YKwhPstdajqkkdrOxIjqp+kYdmzBlpVWuf1A=;
-        b=GdIrNx8bX1k/vbOzun3f2DJs43Wmizy2xOhHdkreqRUWMOpCvTPev7PtWa+rjnGdJO
-         CvA9nV//kkPy2JqsBmlrU8ckowCCRU62Y4VzFSwPmrs0zjDjhq0FwFCbpTxE5kN5o5pp
-         qvtJFk+fH4hgQmYk0+NzeRW4lXRAvx77WesTESPuqgQ04v67nyEMYhfb1xtCeCuCGuO8
-         cKEKUWjfnvATI++KMBxX0GReFRY4GPzyZDfMu8xqZxNh+AA6hhoJDYH3HVk+adjYILjv
-         VBTmPv7sY7X+evk7Seso6bQyh9iRu1Vb0wf4ZMEPV7x71EbFBRExCfOTfHBN1hqH73lH
-         NdpA==
-X-Gm-Message-State: AAQBX9eJqolRi+GH9i051w9ZnWKM+hdhaHYqpr8dfUzoMHhO/UW7KK7N
-        RCGuLIEGnzdFzw0mi6iGLlexosayAZU1aUigUFs=
-X-Google-Smtp-Source: AKy350Yvk9JpaxFyE4EavKFrBdiGJgw25zs6Q62IXoMfhGNQTHFp9XIV1WmRopU5nrUH+sKnYi66GlH5frjclzPS29M=
-X-Received: by 2002:a17:90b:3108:b0:247:7597:9382 with SMTP id
- gc8-20020a17090b310800b0024775979382mr12133821pjb.47.1682303355633; Sun, 23
- Apr 2023 19:29:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682303790; x=1684895790;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Er9IodKAhu5Xy/24MmuM3ISnj8SFsqKhcDcV85YYtd4=;
+        b=UoIcqDgQ+YcVnyPIt98ZH2uieSyBpK4ESsYS/yY9b29UuKqbm4kuAaXGCddYYBLxKS
+         I07mqEMWcy6IlMl1SJIf8DmY1o0MMIZlbMNOpNVQxULgbZF59aRdCq3+YEA1kIGfOKoY
+         55ZO8qyxGoTuSoOqqoKV5aIkzBvwgYVnhZ8h1T/ADH/KUIlAc+NuQIEiQ1hMcsSM2xP1
+         Gzj+E26nKOgpVt/re1/0SFVt8gmZHKSgKFnIUFdvo2nnBQyp20Rt/I3/P7wKGCMm3qZI
+         S68ucGEtjHmZFW2yoQsk8QMbIe9tzdcBsTprFu2sAKtXy8AGslUZNKrlaIfN+411MV6l
+         mfeA==
+X-Gm-Message-State: AAQBX9fWAnJFUYqMohLq6k3sdt9SRP1BkN3/NEuJoa71rWn4nCJ1pFmD
+        irfzu5xywM9rJoOyXa/xV4LJoA==
+X-Google-Smtp-Source: AKy350a438RODTsIQbvbOZb4mhoGqhZ1pvzPivBPJ5Ra5hjJQnsR6/IRQqkIVQmM+kaUu2d3rd1IMA==
+X-Received: by 2002:a05:6a00:2406:b0:63d:38aa:5617 with SMTP id z6-20020a056a00240600b0063d38aa5617mr12656579pfh.6.1682303790512;
+        Sun, 23 Apr 2023 19:36:30 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id h8-20020aa786c8000000b0063b8279d3aasm6183422pfo.159.2023.04.23.19.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 19:36:29 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 11:36:23 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, hch@infradead.org,
+        djwong@kernel.org, minchan@kernel.org, senozhatsky@chromium.org,
+        patches@lists.linux.dev, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        willy@infradead.org, hare@suse.de, p.raghav@samsung.com,
+        da.gomez@samsung.com, kbusch@kernel.org
+Subject: Re: [PATCH 5/5] zram: use generic PAGE_SECTORS and PAGE_SECTORS_SHIFT
+Message-ID: <20230424023623.GC1496740@google.com>
+References: <20230421195807.2804512-1-mcgrof@kernel.org>
+ <20230421195807.2804512-6-mcgrof@kernel.org>
 MIME-Version: 1.0
-References: <20230423212656.1381002-1-aford173@gmail.com> <20230424004706.GL21943@pendragon.ideasonboard.com>
- <20230424004902.GN21943@pendragon.ideasonboard.com>
-In-Reply-To: <20230424004902.GN21943@pendragon.ideasonboard.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 23 Apr 2023 21:29:04 -0500
-Message-ID: <CAHCN7xLuJm6_WXFS3eXCf9wF1oyFJFPpEiBMV6UMCAqMRzAqbg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mn: Enable CSI and ISI Nodes
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421195807.2804512-6-mcgrof@kernel.org>
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 7:48=E2=80=AFPM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> On Mon, Apr 24, 2023 at 03:47:13AM +0300, Laurent Pinchart wrote:
-> > Hi Adam,
->
-> Another comment, do you plan to submit a patch with a camera DT overlay
-> for an i.MX8MN board ?
+On (23/04/21 12:58), Luis Chamberlain wrote:
+> 
+> Instead of re-defining the already existing constants use the provided ones:
+> 
+> So replace:
+> 
+>  o SECTORS_PER_PAGE_SHIFT with PAGE_SECTORS_SHIFT
+>  o SECTORS_PER_PAGE       with PAGE_SECTORS
+> 
+> This produces no functional changes.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-My test repo has the ISI driver working with my OV5640 camera, but for
-some reason the mainline doesn't work.  I'm trying to figure out
-what's different between my test repo and the mainline.  I am not
-planning on an overlay, as the Beacon baseboard was only designed with
-one camera module, a TD Next 5640, based on the OV5640.  Newer boards
-have been designed with a more generic camera interface, so I plan to
-use overlays in the future, but for the imx8mn-beacon-kit, I was
-planning to follow a similar design to what was done for the
-imx8mm-beacon-kit.  They share the same baseboard with a different
-processor on the system-on-module.
-
-Do you want me to add a patch to the imx8mn-beacon-kit so there is at
-least one user of this driver, once I get my error resolved?
-
-adam
->
-> > Thank you for the patch.
-> >
-> > On Sun, Apr 23, 2023 at 04:26:55PM -0500, Adam Ford wrote:
-> > > The CSI in the imx8mn is the same as what is used in the imx8mm,
-> > > but it's routed to the ISI on the Nano. Add both the ISI and CSI
-> > > nodes, and pointing them to each other. Since the CSI capture is
-> > > dependent on an attached camera, mark both ISI and CSI as
-> > > disabled by default.
-> >
-> > I'd then write the subject line as "Add CSI and ISI nodes".
-> >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > >
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/b=
-oot/dts/freescale/imx8mn.dtsi
-> > > index 8be8f090e8b8..102550b41f22 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> > > @@ -1104,6 +1104,24 @@ dsim_from_lcdif: endpoint {
-> > >                             };
-> > >                     };
-> > >
-> > > +                   isi: isi@32e20000 {
-> > > +                           compatible =3D "fsl,imx8mn-isi";
-> > > +                           reg =3D <0x32e20000 0x100>;
-> >
-> > The i.MX8MN reference manual documents the ISI registers block size to
-> > be 64kB. Should we use the same here, even if all the registers we need
-> > are within the first 256 bytes ?
-> >
-> > > +                           interrupts =3D <GIC_SPI 16 IRQ_TYPE_LEVEL=
-_HIGH>;
-> > > +                           clocks =3D <&clk IMX8MN_CLK_DISP_AXI_ROOT=
->,
-> > > +                                    <&clk IMX8MN_CLK_DISP_APB_ROOT>;
-> > > +                           clock-names =3D "axi", "apb";
-> > > +                           fsl,blk-ctrl =3D <&disp_blk_ctrl>;
-> > > +                           power-domains =3D <&disp_blk_ctrl IMX8MN_=
-DISPBLK_PD_ISI>;
-> > > +                           status =3D "disabled";
-> > > +
-> > > +                           port {
-> > > +                                   isi_in: endpoint {
-> > > +                                           remote-endpoint =3D <&mip=
-i_csi_out>;
-> > > +                                   };
-> > > +                           };
-> >
-> > This will fail to validate against the ISI DT binding, as they require =
-a
-> > "ports" node. When a single port is present using a "port" node directl=
-y
-> > is fine from an OF graph point of view, but to avoid too much complexit=
-y
-> > in the ISI binding the consensus was to always require a "ports" node
-> > for the ISI.
-> >
-> > > +                   };
-> > > +
-> > >                     disp_blk_ctrl: blk-ctrl@32e28000 {
-> > >                             compatible =3D "fsl,imx8mn-disp-blk-ctrl"=
-, "syscon";
-> > >                             reg =3D <0x32e28000 0x100>;
-> > > @@ -1147,6 +1165,42 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
-> > >                             #power-domain-cells =3D <1>;
-> > >                     };
-> > >
-> > > +                   mipi_csi: mipi-csi@32e30000 {
-> > > +                           compatible =3D "fsl,imx8mm-mipi-csi2";
-> > > +                           reg =3D <0x32e30000 0x1000>;
-> > > +                           interrupts =3D <GIC_SPI 17 IRQ_TYPE_LEVEL=
-_HIGH>;
-> > > +                           assigned-clocks =3D <&clk IMX8MN_CLK_CAME=
-RA_PIXEL>,
-> > > +                                             <&clk IMX8MN_CLK_CSI1_P=
-HY_REF>;
-> > > +                           assigned-clock-parents =3D <&clk IMX8MN_S=
-YS_PLL2_1000M>,
-> > > +                                                     <&clk IMX8MN_SY=
-S_PLL2_1000M>;
-> > > +                           assigned-clock-rates =3D <333000000>;
-> > > +                           clock-frequency =3D <333000000>;
-> > > +                           clocks =3D <&clk IMX8MN_CLK_DISP_APB_ROOT=
->,
-> > > +                                    <&clk IMX8MN_CLK_CAMERA_PIXEL>,
-> > > +                                    <&clk IMX8MN_CLK_CSI1_PHY_REF>,
-> > > +                                    <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
-> > > +                           clock-names =3D "pclk", "wrap", "phy", "a=
-xi";
-> > > +                           power-domains =3D <&disp_blk_ctrl IMX8MN_=
-DISPBLK_PD_MIPI_CSI>;
-> > > +                           status =3D "disabled";
-> > > +
-> > > +                           ports {
-> > > +                                   #address-cells =3D <1>;
-> > > +                                   #size-cells =3D <0>;
-> > > +
-> > > +                                   port@0 {
-> > > +                                           reg =3D <0>;
-> > > +                                   };
-> > > +
-> > > +                                   port@1 {
-> > > +                                           reg =3D <1>;
-> > > +
-> > > +                                           mipi_csi_out: endpoint {
-> > > +                                                   remote-endpoint =
-=3D <&isi_in>;
-> > > +                                           };
-> > > +                                   };
-> > > +                           };
-> > > +                   };
-> > > +
-> > >                     usbotg1: usb@32e40000 {
-> > >                             compatible =3D "fsl,imx8mn-usb", "fsl,imx=
-7d-usb", "fsl,imx27-usb";
-> > >                             reg =3D <0x32e40000 0x200>;
->
-> --
-> Regards,
->
-> Laurent Pinchart
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
