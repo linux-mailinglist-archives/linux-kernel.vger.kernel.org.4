@@ -2,319 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476116EC4CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149186EC4D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjDXF0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 01:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
+        id S230319AbjDXFcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 01:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjDXF0W (ORCPT
+        with ESMTP id S229507AbjDXFco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 01:26:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D04F3AA1;
-        Sun, 23 Apr 2023 22:26:12 -0700 (PDT)
+        Mon, 24 Apr 2023 01:32:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D9A1FD8;
+        Sun, 23 Apr 2023 22:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682313972; x=1713849972;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A4rc31KYeVJBpHTLDvky7O/zbkWT4gnwpXpbYz/2HdE=;
-  b=SmroYSRom92xOV1wkrkqs8SbTrC/VKRLjvz8YWEQsG9js2SEvWYX75JA
-   xqG4g71x3ihnS5KECDf5e2BgYJm1fFAnpgdEeZ0wjydiS4UCLphP+laov
-   vjtJwn6wR4XiSi7rTiV3bYDJIF0k3kCOQQraxHsbQlsReN0tdY2eKBEqt
-   xWXQfYcVYhGWa8FZi9ReNbNyUFfF+ozukpBn7tTNcHaCD27ac/IEsiBLH
-   2Iwwfi/j7hcbS8hVH9ZXsj2DDDu/y93DvIi4b2LXLtpUP//nTteWW+jLW
-   2c4nU5WjG3GpyleL35TLj91p7dNuHnstMMCoXGDMPjyCAYUgsX9Dpfv0g
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="343844865"
+  t=1682314363; x=1713850363;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1n43/fJLjYfG3QHQXcc4cXYaQSDmQZ6CPC6WO9kddpk=;
+  b=T4Dgs1Y98SMWqbiPRd5iaDgidCmAGWcqV51x8sWnk02wwXjeqnmtkF26
+   zbAc3MYH02AjZTMptaQCN5dMIGQgqfRGu4KemCP1JFoRdfUqsCQPwRdo4
+   Wd5iq6+FA9F4pWom57jzNBs8rprzcia2fsXQ8Bq/U1qkzMNMmyQTqCjZ6
+   NSHqEVabBQZh0yLQ+CIWYddPoQWhsA7MVC5ICgqlwcdT6iNs9O4nyW25V
+   4U5mWzJy9pkP4bRvvkcCpD60v9p46PvN9l97WK1slAKmyu/iNJp8yvuQw
+   yFG31YDY02FGRWhQJ9TjAypCNQ1f7bCIvTTsbdo00S1M6oeYkdJM9P0hk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="349164994"
 X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="343844865"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:26:10 -0700
+   d="scan'208";a="349164994"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:32:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="867353775"
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="836825069"
 X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="867353775"
-Received: from faerberc-mobl2.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.217])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:26:06 -0700
-Message-ID: <3a21fe26-9ff3-b04f-4913-84f0cf2b4100@intel.com>
-Date:   Mon, 24 Apr 2023 08:26:03 +0300
+   d="scan'208";a="836825069"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2023 22:32:40 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqooa-000iHg-0k;
+        Mon, 24 Apr 2023 05:32:40 +0000
+Date:   Mon, 24 Apr 2023 13:32:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jarkko Sonninen <kasper@iki.fi>
+Cc:     oe-kbuild-all@lists.linux.dev, Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <202304241303.WkdqPPbt-lkp@intel.com>
+References: <20230423185929.1595056-1-kasper@iki.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v5 3/3] perf: script: add new output field 'dsoff' to
- print dso offset
-Content-Language: en-US
-To:     Changbin Du <changbin.du@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hui Wang <hw.huiwang@huawei.com>
-References: <20230418031825.1262579-1-changbin.du@huawei.com>
- <20230418031825.1262579-4-changbin.du@huawei.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230418031825.1262579-4-changbin.du@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230423185929.1595056-1-kasper@iki.fi>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/23 06:18, Changbin Du wrote:
-> This adds a new 'dsoff' field to print dso offset for resolved symbols,
-> and the offset is appended to dso name.
-> 
-> Default output:
-> $ perf script
->        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1)
-> 
-> Display 'dsoff' field:
-> $ perf script -F +dsoff
->        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so+0x1c4b5)
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1+0x68d0)
->        ls 2695501 3011030.487019:     500000 cycles:  ffffffff992a6db0 [unknown] ([unknown])
-> 
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+Hi Jarkko,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+kernel test robot noticed the following build warnings:
 
-> ---
->  tools/perf/Documentation/perf-script.txt |  2 +-
->  tools/perf/builtin-script.c              | 60 ++++++++++--------------
->  tools/perf/util/evsel_fprintf.c          | 16 +++----
->  tools/perf/util/evsel_fprintf.h          |  1 +
->  4 files changed, 32 insertions(+), 47 deletions(-)
-> 
-> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
-> index 777a0d8ba7d1..ff9a52e44688 100644
-> --- a/tools/perf/Documentation/perf-script.txt
-> +++ b/tools/perf/Documentation/perf-script.txt
-> @@ -130,7 +130,7 @@ OPTIONS
->  -F::
->  --fields::
->          Comma separated list of fields to print. Options are:
-> -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
-> +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoff, addr, symoff,
->          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
->          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
->          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 8fba247b798c..e7cb8d904eb5 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -133,6 +133,7 @@ enum perf_output_field {
->  	PERF_OUTPUT_VCPU            = 1ULL << 38,
->  	PERF_OUTPUT_CGROUP          = 1ULL << 39,
->  	PERF_OUTPUT_RETIRE_LAT      = 1ULL << 40,
-> +	PERF_OUTPUT_DSOFF           = 1ULL << 41,
->  };
->  
->  struct perf_script {
-> @@ -174,6 +175,7 @@ struct output_option {
->  	{.str = "ip",    .field = PERF_OUTPUT_IP},
->  	{.str = "sym",   .field = PERF_OUTPUT_SYM},
->  	{.str = "dso",   .field = PERF_OUTPUT_DSO},
-> +	{.str = "dsoff", .field = PERF_OUTPUT_DSOFF},
->  	{.str = "addr",  .field = PERF_OUTPUT_ADDR},
->  	{.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
->  	{.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
-> @@ -574,6 +576,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
->  	if (PRINT_FIELD(DSO))
->  		output[type].print_ip_opts |= EVSEL__PRINT_DSO;
->  
-> +	if (PRINT_FIELD(DSOFF))
-> +		output[type].print_ip_opts |= EVSEL__PRINT_DSOFF;
-> +
->  	if (PRINT_FIELD(SYMOFFSET))
->  		output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
->  
-> @@ -627,6 +632,10 @@ static int perf_session__check_output_opt(struct perf_session *session)
->  		if (evsel == NULL)
->  			continue;
->  
-> +		/* 'dsoff' implys 'dso' field */
-> +		if (output[j].fields & PERF_OUTPUT_DSOFF)
-> +			output[j].fields |= PERF_OUTPUT_DSO;
-> +
->  		set_print_ip_opts(&evsel->core.attr);
->  		tod |= output[j].fields & PERF_OUTPUT_TOD;
->  	}
-> @@ -929,18 +938,12 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
->  		}
->  
->  		printed += fprintf(fp, " 0x%"PRIx64, from);
-> -		if (PRINT_FIELD(DSO)) {
-> -			printed += fprintf(fp, "(");
-> -			printed += map__fprintf_dsoname(alf.map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (PRINT_FIELD(DSO))
-> +			printed += map__fprintf_dsoname_dsoff(alf.map, PRINT_FIELD(DSOFF), alf.addr, fp);
->  
->  		printed += fprintf(fp, "/0x%"PRIx64, to);
-> -		if (PRINT_FIELD(DSO)) {
-> -			printed += fprintf(fp, "(");
-> -			printed += map__fprintf_dsoname(alt.map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (PRINT_FIELD(DSO))
-> +			printed += map__fprintf_dsoname_dsoff(alt.map, PRINT_FIELD(DSOFF), alt.addr, fp);
->  
->  		printed += print_bstack_flags(fp, entries + i);
->  	}
-> @@ -972,18 +975,12 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
->  		thread__find_symbol_fb(thread, sample->cpumode, to, &alt);
->  
->  		printed += symbol__fprintf_symname_offs(alf.sym, &alf, fp);
-> -		if (PRINT_FIELD(DSO)) {
-> -			printed += fprintf(fp, "(");
-> -			printed += map__fprintf_dsoname(alf.map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (PRINT_FIELD(DSO))
-> +			printed += map__fprintf_dsoname_dsoff(alf.map, PRINT_FIELD(DSOFF), alf.addr, fp);
->  		printed += fprintf(fp, "%c", '/');
->  		printed += symbol__fprintf_symname_offs(alt.sym, &alt, fp);
-> -		if (PRINT_FIELD(DSO)) {
-> -			printed += fprintf(fp, "(");
-> -			printed += map__fprintf_dsoname(alt.map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (PRINT_FIELD(DSO))
-> +			printed += map__fprintf_dsoname_dsoff(alt.map, PRINT_FIELD(DSOFF), alt.addr, fp);
->  		printed += print_bstack_flags(fp, entries + i);
->  	}
->  
-> @@ -1019,17 +1016,11 @@ static int perf_sample__fprintf_brstackoff(struct perf_sample *sample,
->  			to = map__dso_map_ip(alt.map, to);
->  
->  		printed += fprintf(fp, " 0x%"PRIx64, from);
-> -		if (PRINT_FIELD(DSO)) {
-> -			printed += fprintf(fp, "(");
-> -			printed += map__fprintf_dsoname(alf.map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (PRINT_FIELD(DSO))
-> +			printed += map__fprintf_dsoname_dsoff(alf.map, PRINT_FIELD(DSOFF), alf.addr, fp);
->  		printed += fprintf(fp, "/0x%"PRIx64, to);
-> -		if (PRINT_FIELD(DSO)) {
-> -			printed += fprintf(fp, "(");
-> -			printed += map__fprintf_dsoname(alt.map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (PRINT_FIELD(DSO))
-> +			printed += map__fprintf_dsoname_dsoff(alt.map, PRINT_FIELD(DSOFF), alt.addr, fp);
->  		printed += print_bstack_flags(fp, entries + i);
->  	}
->  
-> @@ -1394,11 +1385,8 @@ static int perf_sample__fprintf_addr(struct perf_sample *sample,
->  			printed += symbol__fprintf_symname(al.sym, fp);
->  	}
->  
-> -	if (PRINT_FIELD(DSO)) {
-> -		printed += fprintf(fp, " (");
-> -		printed += map__fprintf_dsoname(al.map, fp);
-> -		printed += fprintf(fp, ")");
-> -	}
-> +	if (PRINT_FIELD(DSO))
-> +		printed += map__fprintf_dsoname_dsoff(al.map, PRINT_FIELD(DSOFF), al.addr, fp);
->  out:
->  	return printed;
->  }
-> @@ -3877,7 +3865,7 @@ int cmd_script(int argc, const char **argv)
->  		     "comma separated output fields prepend with 'type:'. "
->  		     "+field to add and -field to remove."
->  		     "Valid types: hw,sw,trace,raw,synth. "
-> -		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,"
-> +		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,dsoff"
->  		     "addr,symoff,srcline,period,iregs,uregs,brstack,"
->  		     "brstacksym,flags,data_src,weight,bpf-output,brstackinsn,"
->  		     "brstackinsnlen,brstackoff,callindent,insn,insnlen,synth,"
-> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
-> index cc80ec554c0a..79e42d66f55b 100644
-> --- a/tools/perf/util/evsel_fprintf.c
-> +++ b/tools/perf/util/evsel_fprintf.c
-> @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
->  	int print_ip = print_opts & EVSEL__PRINT_IP;
->  	int print_sym = print_opts & EVSEL__PRINT_SYM;
->  	int print_dso = print_opts & EVSEL__PRINT_DSO;
-> +	int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
->  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
->  	int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
->  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
-> @@ -171,11 +172,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
->  				}
->  			}
->  
-> -			if (print_dso && (!sym || !sym->inlined)) {
-> -				printed += fprintf(fp, " (");
-> -				printed += map__fprintf_dsoname(map, fp);
-> -				printed += fprintf(fp, ")");
-> -			}
-> +			if (print_dso && (!sym || !sym->inlined))
-> +				printed += map__fprintf_dsoname_dsoff(map, print_dsoff, addr, fp);
->  
->  			if (print_srcline)
->  				printed += map__fprintf_srcline(map, addr, "\n  ", fp);
-> @@ -209,6 +207,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
->  	int print_ip = print_opts & EVSEL__PRINT_IP;
->  	int print_sym = print_opts & EVSEL__PRINT_SYM;
->  	int print_dso = print_opts & EVSEL__PRINT_DSO;
-> +	int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
->  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
->  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
->  	int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
-> @@ -234,11 +233,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
->  			}
->  		}
->  
-> -		if (print_dso) {
-> -			printed += fprintf(fp, " (");
-> -			printed += map__fprintf_dsoname(al->map, fp);
-> -			printed += fprintf(fp, ")");
-> -		}
-> +		if (print_dso)
-> +			printed += map__fprintf_dsoname_dsoff(al->map, print_dsoff, al->addr, fp);
->  
->  		if (print_srcline)
->  			printed += map__fprintf_srcline(al->map, al->addr, "\n  ", fp);
-> diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
-> index 3093d096c29f..c8a9fac2f2dd 100644
-> --- a/tools/perf/util/evsel_fprintf.h
-> +++ b/tools/perf/util/evsel_fprintf.h
-> @@ -26,6 +26,7 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
->  #define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<6)
->  #define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<7)
->  #define EVSEL__PRINT_SKIP_IGNORED	(1<<8)
-> +#define EVSEL__PRINT_DSOFF		(1<<9)
->  
->  struct addr_location;
->  struct perf_event_attr;
+[auto build test WARNING on johan-usb-serial/usb-next]
+[also build test WARNING on johan-usb-serial/usb-linus linus/master v6.3 next-20230421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
+patch link:    https://lore.kernel.org/r/20230423185929.1595056-1-kasper%40iki.fi
+patch subject: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+config: ia64-randconfig-s053-20230423 (https://download.01.org/0day-ci/archive/20230424/202304241303.WkdqPPbt-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/a80fa27b4fe1974bad2427d7f3260012a04b721a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jarkko-Sonninen/USB-serial-xr-Add-TIOCGRS485-and-TIOCSRS485-ioctls/20230424-030038
+        git checkout a80fa27b4fe1974bad2427d7f3260012a04b721a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/serial/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304241303.WkdqPPbt-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/serial/xr_serial.c:856:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
+   drivers/usb/serial/xr_serial.c:856:26: sparse:     expected void [noderef] __user *to
+   drivers/usb/serial/xr_serial.c:856:26: sparse:     got struct serial_rs485 *argp
+>> drivers/usb/serial/xr_serial.c:872:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct serial_rs485 *argp @@
+   drivers/usb/serial/xr_serial.c:872:36: sparse:     expected void const [noderef] __user *from
+   drivers/usb/serial/xr_serial.c:872:36: sparse:     got struct serial_rs485 *argp
+   drivers/usb/serial/xr_serial.c:881:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got struct serial_rs485 *argp @@
+   drivers/usb/serial/xr_serial.c:881:26: sparse:     expected void [noderef] __user *to
+   drivers/usb/serial/xr_serial.c:881:26: sparse:     got struct serial_rs485 *argp
+>> drivers/usb/serial/xr_serial.c:893:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
+   drivers/usb/serial/xr_serial.c:893:49: sparse:     expected struct serial_rs485 *argp
+   drivers/usb/serial/xr_serial.c:893:49: sparse:     got void [noderef] __user *argp
+   drivers/usb/serial/xr_serial.c:895:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct serial_rs485 *argp @@     got void [noderef] __user *argp @@
+   drivers/usb/serial/xr_serial.c:895:49: sparse:     expected struct serial_rs485 *argp
+   drivers/usb/serial/xr_serial.c:895:49: sparse:     got void [noderef] __user *argp
+
+vim +856 drivers/usb/serial/xr_serial.c
+
+   848	
+   849	static int xr_get_rs485_config(struct tty_struct *tty,
+   850				       struct serial_rs485 *argp)
+   851	{
+   852		struct usb_serial_port *port = tty->driver_data;
+   853		struct xr_data *data = usb_get_serial_port_data(port);
+   854	
+   855		mutex_lock(&data->lock);
+ > 856		if (copy_to_user(argp, &data->rs485, sizeof(data->rs485))) {
+   857			mutex_unlock(&data->lock);
+   858			return -EFAULT;
+   859		}
+   860		mutex_unlock(&data->lock);
+   861	
+   862		return 0;
+   863	}
+   864	
+   865	static int xr_set_rs485_config(struct tty_struct *tty,
+   866				       struct serial_rs485 *argp)
+   867	{
+   868		struct usb_serial_port *port = tty->driver_data;
+   869		struct xr_data *data = usb_get_serial_port_data(port);
+   870		struct serial_rs485 rs485;
+   871	
+ > 872		if (copy_from_user(&rs485, argp, sizeof(rs485)))
+   873			return -EFAULT;
+   874		xr_sanitize_serial_rs485(&rs485);
+   875	
+   876		mutex_lock(&data->lock);
+   877		data->rs485 = rs485;
+   878		xr_set_flow_mode(tty, port, NULL);
+   879		mutex_unlock(&data->lock);
+   880	
+   881		if (copy_to_user(argp, &rs485, sizeof(rs485)))
+   882			return -EFAULT;
+   883	
+   884		return 0;
+   885	}
+   886	
+   887	static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+   888	{
+   889		void __user *argp = (void __user *)arg;
+   890	
+   891		switch (cmd) {
+   892		case TIOCGRS485:
+ > 893			return xr_get_rs485_config(tty, argp);
+   894		case TIOCSRS485:
+   895			return xr_set_rs485_config(tty, argp);
+   896		}
+   897	
+   898		return -ENOIOCTLCMD;
+   899	}
+   900	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
