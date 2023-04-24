@@ -2,160 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF466EC7EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558866EC7F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjDXIbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S231143AbjDXIcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDXIbJ (ORCPT
+        with ESMTP id S229507AbjDXIcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:31:09 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002351AD
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:31:06 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4efd5e4d302so4156e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682325065; x=1684917065;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+OahxMAVmQfev2ZxChkwLH4e1xTOOhd3vvP7QZ00NE=;
-        b=Kf1sD+GUH5ccLoKZlEtdVT0Gp45kr1DeAC2QMBBz/SlJAdlgFOP1Fk/Mvz22XfhHrz
-         yJnkuykq7h/iBuPX0i9HWh2O5uTRZCqs15LYuk7V0FgWGgeBDTAIEmE5YzyK8fPCBZig
-         Z3rsss9yloAPmWnSGh+E91XRnJDZuCdOIc6De6+x8MRng3BdMPhGJv6jyb7GmgCCiEu+
-         gFIHxzrbdYHSCO7a/3ivPnbQb0sScMkpG8xrsqf9jQpkVhZDHKk2zadzcjay+ES9x9Xp
-         WeJNDQosuZkBi85N1Pmz2K1a9ByUz0XnaaoKfgyp2y8IANnjyTInH+bQnrbYl5I2pEkP
-         i6EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682325065; x=1684917065;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R+OahxMAVmQfev2ZxChkwLH4e1xTOOhd3vvP7QZ00NE=;
-        b=I1IrTQ7m4Rp5lAJzjlkgB0vii3l9JmMFd+aSwOqPMPXcvT5syq0wKhm8JdTOcbziz3
-         yFk4XKpXZsshQAb2UlvCv4M0FfClOMMhCfAKiR9t6WLq734+u0zmySEtna96D1Y8j1o4
-         eyIww3d3VFb2Z9naxTkpThUx3bfIut7tGp7mV8W+ISmmG9LUkyJj/Iq5rkMoPQC8QMKh
-         wMwOFVeqyXesqZT+/SZx3xSpLoRpUGC0JlwPXKjLwIP9k3o+wwoPvO3Dixny1x3uFgau
-         mPJSKWVMQMzEK1P+C/x795VyQqDHj5toGZpqvKoBhFaLWL9jH0QgHtrf87Ta3kaiwBDL
-         FpEQ==
-X-Gm-Message-State: AAQBX9cT8XYqZArA2XkvMf0vaik4hs63DELdDfttt/6vud7VariYSxKm
-        /QIoJwcmPXFsDDxOqGpuGoyzOt12T2Gj+6flMog6mw==
-X-Google-Smtp-Source: AKy350Ztz0so1N7bmoRmue+lrejsdK+DfVnS8+93q89Js0Ka/JOL8zPDHbyLP6rvGoNcO/VkuGFFDgchYMO7h73f7Uc=
-X-Received: by 2002:a05:6512:12ce:b0:4e8:3f1e:de43 with SMTP id
- p14-20020a05651212ce00b004e83f1ede43mr228809lfg.7.1682325064945; Mon, 24 Apr
- 2023 01:31:04 -0700 (PDT)
+        Mon, 24 Apr 2023 04:32:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60FF21AD;
+        Mon, 24 Apr 2023 01:32:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84820D75;
+        Mon, 24 Apr 2023 01:33:02 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BF913F5A1;
+        Mon, 24 Apr 2023 01:32:18 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 09:32:16 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     viresh.kumar@linaro.org, rafael@kernel.org, mark.rutland@arm.com,
+        sudeep.holla@arm.com, lpieralisi@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, vsethi@nvidia.com, sdonthineni@nvidia.com,
+        sanjayc@nvidia.com, ksitaraman@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch 6/6] cpufreq: CPPC: use wq to read amu counters on target
+ cpu
+Message-ID: <ZEY+kENTxCvHlhvK@arm.com>
+References: <20230418113459.12860-1-sumitg@nvidia.com>
+ <20230418113459.12860-7-sumitg@nvidia.com>
 MIME-Version: 1.0
-References: <000000000000e7c6d205fa10a3cd@google.com>
-In-Reply-To: <000000000000e7c6d205fa10a3cd@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Apr 2023 10:30:51 +0200
-Message-ID: <CACT4Y+YajDb5QpSziTazoyn587JXwXet2w7Jkqkj9v31HZtJxw@mail.gmail.com>
-Subject: Re: [syzbot] [afs?] [net?] KCSAN: data-race in rxrpc_send_data / rxrpc_set_call_completion
-To:     syzbot <syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marc.dionne@auristor.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418113459.12860-7-sumitg@nvidia.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 10:17, syzbot
-<syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    148341f0a2f5 Merge tag 'vfs.misc.fixes.v6.3-rc6' of git://..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14a62269c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=54d63ee086ae78d0
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ebc945fdb4acd72cba78
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/1c557f92a6e1/disk-148341f0.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/f2c85210e1ce/vmlinux-148341f0.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/b019d0447709/bzImage-148341f0.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com
+Hi Sumit,
 
-If I am reading this correctly, rxrpc_send_data() can read wrong
-call->completion and state and incorrectly exit with an error if
-rxrpc_wait_to_be_connected() exists early right after observing error
-set here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/rxrpc/sendmsg.c?id=148341f0a2f53b5e8808d093333d85170586a15d#n58
-The code seems to assume that at that point all writes done by
-rxrpc_set_call_completion() are already finished, but it's not
-necessarily the case.
+Thank you for the patches!
 
+On Tuesday 18 Apr 2023 at 17:04:59 (+0530), Sumit Gupta wrote:
+> ARM cores which implement the Activity Monitor Unit (AMU)
+> use Functional Fixed Hardware (FFH) to map AMU counters to
+> Delivered_Counter and Reference_Counter registers. Each
+> sysreg is read separately with a smp_call_function_single
+> call. So, total four IPI's are used, one per register.
+> Due to this, the AMU's core counter and constant counter
+> sampling can happen at a non-consistent time interval if
+> an IPI is handled late. This results in unstable frequency
+> value from "cpuinfo_cur_req" node sometimes. To fix, queue
+> work on target CPU to read all counters synchronously in
+> sequence. This helps to remove the inter-IPI latency and
+> make sure that both the counters are sampled at a close
+> time interval.
+> Without this change we observed that the re-generated value
+> of CPU Frequency from AMU counters sometimes deviates by
+> ~25% as the counters are read at non-determenistic time.
+> Currently, kept the change specific to Tegra241. It can be
+> applied to other SoC's having AMU if same issue is observed.
+> 
 
+To be honest I never liked the need for IPIs but it was the most
+generic solution I could find for an FFH implementation that does not
+assume a dependency between different reads, which is usecase specific.
 
+Also, for any kind of caching of the counters I'd have to introduce some
+logic that would assume we'd always have two consecutive reads - one for
+the cycle counter and one for the constant counter, and there should be no
+update between them. And then there's the problem of potentially returning
+the same values if there's no update between two sets of reads.
 
+The only feasible idea based on caching would be to piggy back on the
+frequency invariance engine (FIE) which computes a performance scale
+factor on the tick which can be translated to frequency. But the
+frequency obtained would be an average frequency for the past 4ms, which
+can in turn be at up to 4ms old (or more, if the CPU was idle).
 
+Would something like this work for you?
 
-> ==================================================================
-> BUG: KCSAN: data-race in rxrpc_send_data / rxrpc_set_call_completion
->
-> write to 0xffff888159cf3c50 of 4 bytes by task 25673 on cpu 1:
->  rxrpc_set_call_completion+0x71/0x1c0 net/rxrpc/call_state.c:22
->  rxrpc_send_data_packet+0xba9/0x1650 net/rxrpc/output.c:479
->  rxrpc_transmit_one+0x1e/0x130 net/rxrpc/output.c:714
->  rxrpc_decant_prepared_tx net/rxrpc/call_event.c:326 [inline]
->  rxrpc_transmit_some_data+0x496/0x600 net/rxrpc/call_event.c:350
->  rxrpc_input_call_event+0x564/0x1220 net/rxrpc/call_event.c:464
->  rxrpc_io_thread+0x307/0x1d80 net/rxrpc/io_thread.c:461
->  kthread+0x1ac/0x1e0 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->
-> read to 0xffff888159cf3c50 of 4 bytes by task 25672 on cpu 0:
->  rxrpc_send_data+0x29e/0x1950 net/rxrpc/sendmsg.c:296
->  rxrpc_do_sendmsg+0xb7a/0xc20 net/rxrpc/sendmsg.c:726
->  rxrpc_sendmsg+0x413/0x520 net/rxrpc/af_rxrpc.c:565
->  sock_sendmsg_nosec net/socket.c:724 [inline]
->  sock_sendmsg net/socket.c:747 [inline]
->  ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
->  ___sys_sendmsg net/socket.c:2555 [inline]
->  __sys_sendmmsg+0x263/0x500 net/socket.c:2641
->  __do_sys_sendmmsg net/socket.c:2670 [inline]
->  __se_sys_sendmmsg net/socket.c:2667 [inline]
->  __x64_sys_sendmmsg+0x57/0x60 net/socket.c:2667
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> value changed: 0x00000000 -> 0xffffffea
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 0 PID: 25672 Comm: syz-executor.5 Not tainted 6.3.0-rc5-syzkaller-00005-g148341f0a2f5 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> ==================================================================
->
->
+This could also help with a similar issue described at [1] - not an IPI
+related issue, but an issue with similar symptoms.
+
+[1] https://lore.kernel.org/lkml/20230328193846.8757-1-yang@os.amperecomputing.com/
+
+Thanks,
+Ionela.
+
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000e7c6d205fa10a3cd%40google.com.
+>  drivers/cpufreq/cppc_cpufreq.c | 53 +++++++++++++++++++++++++++-------
+>  1 file changed, 43 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 5e6a132a525e..52b93ac6225e 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -46,6 +46,8 @@ static bool boost_supported;
+>  /* default 2usec delay between sampling */
+>  static unsigned int sampling_delay_us = 2;
+>  
+> +static bool get_rate_use_wq;
+> +
+>  static void cppc_check_hisi_workaround(void);
+>  static void cppc_nvidia_workaround(void);
+>  
+> @@ -99,6 +101,12 @@ struct cppc_freq_invariance {
+>  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+>  static struct kthread_worker *kworker_fie;
+>  
+> +struct feedback_ctrs {
+> +	u32 cpu;
+> +	struct cppc_perf_fb_ctrs fb_ctrs_t0;
+> +	struct cppc_perf_fb_ctrs fb_ctrs_t1;
+> +};
+> +
+>  static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
+>  static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+>  				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+> @@ -851,28 +859,44 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+>  	return (reference_perf * delta_delivered) / delta_reference;
+>  }
+>  
+> +static int cppc_get_perf_ctrs_sync(void *fb_ctrs)
+> +{
+> +	struct feedback_ctrs *ctrs = fb_ctrs;
+> +	int ret;
+> +
+> +	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t0));
+> +	if (ret)
+> +		return ret;
+> +
+> +	udelay(sampling_delay_us);
+> +
+> +	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t1));
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ret;
+> +}
+> +
+>  static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>  {
+> -	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+>  	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+>  	struct cppc_cpudata *cpu_data = policy->driver_data;
+> +	struct feedback_ctrs fb_ctrs = {0};
+>  	u64 delivered_perf;
+>  	int ret;
+>  
+>  	cpufreq_cpu_put(policy);
+> +	fb_ctrs.cpu = cpu;
+>  
+> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+> -	if (ret)
+> -		return ret;
+> -
+> -	udelay(sampling_delay_us);
+> -
+> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+> +	if (get_rate_use_wq)
+> +		ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_sync, &fb_ctrs, false);
+> +	else
+> +		ret = cppc_get_perf_ctrs_sync(&fb_ctrs);
+>  	if (ret)
+>  		return ret;
+>  
+> -	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+> -					       &fb_ctrs_t1);
+> +	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &(fb_ctrs.fb_ctrs_t0),
+> +					       &(fb_ctrs.fb_ctrs_t1));
+>  
+>  	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
+>  }
+> @@ -953,7 +977,16 @@ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu)
+>  
+>  static void cppc_nvidia_workaround(void)
+>  {
+> +	int cpu;
+> +
+>  	sampling_delay_us = 25;
+> +
+> +#ifdef CONFIG_ARM64_AMU_EXTN
+> +	cpu = get_cpu_with_amu_feat();
+> +
+> +	if (cpu < nr_cpu_ids)
+> +		get_rate_use_wq = true;
+> +#endif
+>  }
+>  
+>  static void cppc_check_hisi_workaround(void)
+> -- 
+> 2.17.1
+> 
