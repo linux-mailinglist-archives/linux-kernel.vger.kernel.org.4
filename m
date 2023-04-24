@@ -2,156 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6E66ED095
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2976ED0B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjDXOsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S232009AbjDXOux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 10:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbjDXOsS (ORCPT
+        with ESMTP id S231893AbjDXOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:48:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8C09EE5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 07:47:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 84FF521A79;
-        Mon, 24 Apr 2023 14:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682347670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EguKY0cZkMrWGDpyRY3VFx21djInsbc1dIZ4hVv8EFY=;
-        b=tDVTM+Y0Ku93kVfp41sWODCyjfiJELTwbHKXXk71xwzQbDIjzQ93oVmk2UDwEELuUhXYuL
-        mjo3dmHGoeyyqetHmuEQATcarlO7LSJyr19J3q/uYzDMrI080elHambvdLgQms2l5eqkmI
-        aJE5FqMq4TMc/4g16jncNzibKW0DKrs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5EE8F1390E;
-        Mon, 24 Apr 2023 14:47:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CilcFJaWRmQCTAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 24 Apr 2023 14:47:50 +0000
-Date:   Mon, 24 Apr 2023 16:47:49 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-Message-ID: <ZEaWlf/EanQGN2FV@dhcp22.suse.cz>
-References: <c3868b58c6714c09a43440d7d02c7b4eed6e03f6.1682342634.git.baolin.wang@linux.alibaba.com>
- <50b5e05dbb007e3a969ac946bc9ee0b2b77b185f.1682342634.git.baolin.wang@linux.alibaba.com>
+        Mon, 24 Apr 2023 10:50:35 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E619003;
+        Mon, 24 Apr 2023 07:50:21 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OEnqhQ130483;
+        Mon, 24 Apr 2023 09:49:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682347792;
+        bh=37co4mMWzWHR0FGQIBgLoWPWkErT33NhdlV4SL6RYY0=;
+        h=From:To:CC:Subject:Date;
+        b=y32ZjrPcZZbbYQ79Vrm94Mmv2j4SO3EVeJSN/kUA7GyPIYW2MYTCex6Une4PGuCxH
+         WaEP7IEfrdqx4QHyn1GCE8io+6AIWfphE4j8tCfO1STDBKb4+AHuItCMgQrdjMZSEf
+         vwJktlG7Lw0hERp3vIi5JxuxUwCZy2vXis1Y5TTU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OEnqle064867
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 09:49:52 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 09:49:51 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 09:49:51 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OEnpPY077023;
+        Mon, 24 Apr 2023 09:49:51 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH 0/7] arm64: dts: ti: k3-am65: dtbs_check warnings fixups
+Date:   Mon, 24 Apr 2023 09:49:42 -0500
+Message-ID: <20230424144949.244135-1-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50b5e05dbb007e3a969ac946bc9ee0b2b77b185f.1682342634.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-04-23 21:45:40, Baolin Wang wrote:
-> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
-> checks whether the given zone contains holes, and uses pfn_to_online_page()
-> to validate if the start pfn is online and valid, as well as using pfn_valid()
-> to validate the end pfn.
-> 
-> However, the __pageblock_pfn_to_page() function may return non-NULL even
-> if the end pfn of a pageblock is in a memory hole in some situations. For
-> example, if the pageblock order is MAX_ORDER, which will fall into 2
-> sub-sections, and the end pfn of the pageblock may be hole even though
-> the start pfn is online and valid.
-> 
-> See below memory layout as an example and suppose the pageblock order
-> is MAX_ORDER.
-> 
-> [    0.000000] Zone ranges:
-> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
-> [    0.000000]   DMA32    empty
-> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000001fa3c7ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
-> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
-> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
-> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7dfffff]
-> 
-> Focus on the last memory range, and there is a hole for the range [mem
-> 0x0000001fa7590000-0x0000001fa7dfffff]. That means the last pageblock
-> will contain the range from 0x1fa7c00000 to 0x1fa7ffffff, since the
-> pageblock must be 4M aligned. And in this pageblock, these pfns will
-> fall into 2 sub-section (the sub-section size is 2M aligned).
-> 
-> So, the 1st sub-section (indicates pfn range: 0x1fa7c00000 -
-> 0x1fa7dfffff ) in this pageblock is valid by calling subsection_map_init()
-> in free_area_init(), but the 2nd sub-section (indicates pfn range:
-> 0x1fa7e00000 - 0x1fa7ffffff ) in this pageblock is not valid.
-> 
-> This did not break anything until now, but the zone continuous is fragile
-> in this possible scenario. So as previous discussion[1], it is better to
-> add some comments to explain this possible issue in case there are some
-> future pfn walkers that rely on this.
-> 
-> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Hi,
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+One round of long pending dtbs_checks warnings fixups for am65.
 
-> ---
-> Changes from v2:
->  - Update the commit log and comments per Michal, thanks.
-> Changes from v1:
->  - Update the comments per Ying and Mike, thanks.
-> 
-> Note, I did not add Huang Ying's reviewed tag, since there are some
-> updates per Michal's suggestion. Ying, please review the v3. Thanks.
-> ---
->  mm/page_alloc.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 6457b64fe562..bd124390c79b 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1502,6 +1502,15 @@ void __free_pages_core(struct page *page, unsigned int order)
->   * interleaving within a single pageblock. It is therefore sufficient to check
->   * the first and last page of a pageblock and avoid checking each individual
->   * page in a pageblock.
-> + *
-> + * Note: the function may return non-NULL struct page even for a page block
-> + * which contains a memory hole (i.e. there is no physical memory for a subset
-> + * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
-> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
-> + * even though the start pfn is online and valid. This should be safe most of
-> + * the time because struct pages are still zero pre-filled and pfn walkers
-> + * shouldn't touch any physical memory range for which they do not recognize
-> + * any specific metadata in struct pages.
->   */
->  struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
->  				     unsigned long end_pfn, struct zone *zone)
-> -- 
-> 2.27.0
+Bootlog: https://gist.github.com/nmenon/605142cb4a4ffb2b9d05bea944f8fd32#file-am654-evm-patchset2-txt
+
+Pending warnings: https://gist.github.com/nmenon/605142cb4a4ffb2b9d05bea944f8fd32#file-pending-dtbs_check_warnings
+
+Nishanth Menon (7):
+  arm64: dts: ti: k3-am65-main: Remove "syscon" nodes added for
+    pcieX_ctrl
+  arm64: dts: ti: k3-am65-main: Fix mux controller node name
+  arm64: dts: ti: k3-am65: Switch to "ti,j721e-system-controller"
+    compatible
+  arm64: dts: ti: k3-am65-main: Fix mcan node name
+  arm64: dts: ti: k3-am65-main: Drop deprecated ti,otap-del-sel property
+  arm64: dts: ti: k3-am65-mcu: Fix fss node
+  arm64: dts: ti: k3-am65-iot2050-common: Rename rtc8564 nodename
+
+ .../boot/dts/ti/k3-am65-iot2050-common.dtsi   |  2 +-
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi      | 32 +++++--------------
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi       |  9 +++---
+ 3 files changed, 14 insertions(+), 29 deletions(-)
 
 -- 
-Michal Hocko
-SUSE Labs
+2.40.0
+
