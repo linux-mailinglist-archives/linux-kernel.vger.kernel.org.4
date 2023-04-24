@@ -2,144 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB356ECBED
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5A96ECBF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 14:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjDXMTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 08:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
+        id S231556AbjDXMUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 08:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDXMTk (ORCPT
+        with ESMTP id S229522AbjDXMUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:19:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8FC26B7;
-        Mon, 24 Apr 2023 05:19:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7A0D81FD80;
-        Mon, 24 Apr 2023 12:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682338777; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tH3QxEeyp8kfWcz1bkYSovs9h7ImBxkgM1DNmDxhaJg=;
-        b=U8Ap4Bg2ocGY4N9KLmdiXJ3k3RWwRz6oUO8RZlNHZWwp0un0OpL64bHpI1g3fOxb1woAsH
-        ItgJw2Cfz+eEX4qrSxeIJ7TV4vEFeRG35WWd4R2qNqdsQhU9eLdW3kEbVVo4ns/APWjmbp
-        zt0Ccr2Eo51bBlJsa3aempb+/gVFX88=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682338777;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tH3QxEeyp8kfWcz1bkYSovs9h7ImBxkgM1DNmDxhaJg=;
-        b=LaPP5aHf+gTxAxLtBoghtsddhF6BkLYkqb8AtLbjILPSAiTl5h9wfxFQ0tRi14O8X+GOMN
-        4joBTRBV5KJviMCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B2B21390E;
-        Mon, 24 Apr 2023 12:19:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3kogGtlzRmTzcAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 24 Apr 2023 12:19:37 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E8A34A0729; Mon, 24 Apr 2023 14:19:36 +0200 (CEST)
-Date:   Mon, 24 Apr 2023 14:19:36 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>
-Subject: Re: [RFC PATCH 0/3] permit write-sealed memfd read-only shared
- mappings
-Message-ID: <20230424121936.lwgqty6hifs7eecp@quack3>
-References: <cover.1680560277.git.lstoakes@gmail.com>
- <20230421090126.tmem27kfqamkdaxo@quack3>
- <b18577f5-86fe-4093-9058-07ba899f7dd6@lucifer.local>
+        Mon, 24 Apr 2023 08:20:51 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E832B271D;
+        Mon, 24 Apr 2023 05:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682338850; x=1713874850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4KfjW5andPwqW6uLOs9vLZL8WFNeU3iKh7SfGRSAdnM=;
+  b=fUj8tAEPQ7cO26f/gD55mVT0nMeNivF9OrukEJ4w5XIhHDJtPK2h733k
+   zRap9H/wqt1Uu6J7IID/1DKTm5cBupFYf43OHk5F0McPTnC85m+dcrmkF
+   sHR84EXxRB6/icsEjuG6wLIPYWlUmFzlW0Zxmo31yPagh06R9eYqFaDC5
+   UZmCN5Qg51BYxncLent9s8aQTvc6DZPxZ929YIjMT9HaiPqRU3kkhUnD3
+   zmUaGJ7CL1QACoj4dCGrC63ExfwnF2eybErwHjzx4NsEXxT+VX/hVwBpl
+   qSLcblaSdgh9uN4RTQbb/bW0aLK0RUX+Rzwf26SGhQbi1C0XMvSSEceu1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="411713521"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="411713521"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:20:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="686821618"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="686821618"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 24 Apr 2023 05:20:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqvBV-000iNc-0d;
+        Mon, 24 Apr 2023 12:20:45 +0000
+Date:   Mon, 24 Apr 2023 20:20:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
+Message-ID: <202304242025.fz8SDA8d-lkp@intel.com>
+References: <20230420160923.14127-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b18577f5-86fe-4093-9058-07ba899f7dd6@lucifer.local>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230420160923.14127-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 21-04-23 22:23:12, Lorenzo Stoakes wrote:
-> On Fri, Apr 21, 2023 at 11:01:26AM +0200, Jan Kara wrote:
-> > Hi!
-> >
-> > On Mon 03-04-23 23:28:29, Lorenzo Stoakes wrote:
-> > > This patch series is in two parts:-
-> > >
-> > > 1. Currently there are a number of places in the kernel where we assume
-> > >    VM_SHARED implies that a mapping is writable. Let's be slightly less
-> > >    strict and relax this restriction in the case that VM_MAYWRITE is not
-> > >    set.
-> > >
-> > >    This should have no noticeable impact as the lack of VM_MAYWRITE implies
-> > >    that the mapping can not be made writable via mprotect() or any other
-> > >    means.
-> > >
-> > > 2. Align the behaviour of F_SEAL_WRITE and F_SEAL_FUTURE_WRITE on mmap().
-> > >    The latter already clears the VM_MAYWRITE flag for a sealed read-only
-> > >    mapping, we simply extend this to F_SEAL_WRITE too.
-> > >
-> > >    For this to have effect, we must also invoke call_mmap() before
-> > >    mapping_map_writable().
-> > >
-> > > As this is quite a fundamental change on the assumptions around VM_SHARED
-> > > and since this causes a visible change to userland (in permitting read-only
-> > > shared mappings on F_SEAL_WRITE mappings), I am putting forward as an RFC
-> > > to see if there is anything terribly wrong with it.
-> >
-> > So what I miss in this series is what the motivation is. Is it that you need
-> > to map F_SEAL_WRITE read-only? Why?
-> >
-> 
-> This originated from the discussion in [1], which refers to the bug
-> reported in [2]. Essentially the user is write-sealing a memfd then trying
-> to mmap it read-only, but receives an -EPERM error.
-> 
-> F_SEAL_FUTURE_WRITE _does_ explicitly permit this but F_SEAL_WRITE does not.
-> 
-> The fcntl() man page states:
-> 
->     Furthermore, trying to create new shared, writable memory-mappings via
->     mmap(2) will also fail with EPERM.
-> 
-> So the kernel does not behave as the documentation states.
-> 
-> I took the user-supplied repro and slightly modified it, enclosed
-> below. After this patch series, this code works correctly.
-> 
-> I think there's definitely a case for the VM_MAYWRITE part of this patch
-> series even if the memfd bits are not considered useful, as we do seem to
-> make the implicit assumption that MAP_SHARED == writable even if
-> !VM_MAYWRITE which seems odd.
+Hi Mario,
 
-Thanks for the explanation! Could you please include this information in
-the cover letter (perhaps in a form of a short note and reference to the
-mailing list) for future reference? Thanks!
+kernel test robot noticed the following build warnings:
 
-								Honza
+[auto build test WARNING on 7124d7671af0facf115d70f9d1fadde0d768d325]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
+base:   7124d7671af0facf115d70f9d1fadde0d768d325
+patch link:    https://lore.kernel.org/r/20230420160923.14127-1-mario.limonciello%40amd.com
+patch subject: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
+config: i386-randconfig-a002-20230424 (https://download.01.org/0day-ci/archive/20230424/202304242025.fz8SDA8d-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
+        git checkout e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304242025.fz8SDA8d-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/acpi/x86/s2idle.c:552:6: warning: no previous prototype for function 'lps0_s2idle_wake' [-Wmissing-prototypes]
+   bool lps0_s2idle_wake(void)
+        ^
+   drivers/acpi/x86/s2idle.c:552:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool lps0_s2idle_wake(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/lps0_s2idle_wake +552 drivers/acpi/x86/s2idle.c
+
+   551	
+ > 552	bool lps0_s2idle_wake(void)
+   553	{
+   554		if (!lps0_device_handle || sleep_no_lps0)
+   555			goto out;
+   556	
+   557		/* avoid running on the first go through the s2idle loop */
+   558		if (lps0_dsm_func_mask_microsoft > 0) {
+   559			int target;
+   560	
+   561			if (lps0_dsm_state == ACPI_LPS0_ENTRY ||
+   562			    lps0_dsm_state == ACPI_LPS0_MS_EXIT)
+   563				target = ACPI_LPS0_MS_ENTRY;
+   564			else
+   565				target = ACPI_LPS0_MS_EXIT;
+   566			acpi_sleep_run_lps0_dsm(target,
+   567						lps0_dsm_func_mask_microsoft,
+   568						lps0_dsm_guid_microsoft);
+   569		}
+   570	out:
+   571		return acpi_s2idle_wake();
+   572	}
+   573	
 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
