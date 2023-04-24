@@ -2,214 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288366ED350
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42F06ED357
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjDXRP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S231779AbjDXRQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDXRPz (ORCPT
+        with ESMTP id S231364AbjDXRQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:15:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD956185;
-        Mon, 24 Apr 2023 10:15:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 648B06272B;
-        Mon, 24 Apr 2023 17:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F97AC433D2;
-        Mon, 24 Apr 2023 17:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682356552;
-        bh=hRs/acnkIDX2tBWCp9DVeye/pTM8KlJRW6iseqcPYZk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B3fVlOJYd1jRadwKwhGG99DNMpt6un9zqJ97AumxiIU1FL8bXSaWg8PcHKbmTOhlq
-         4oeSi4DaDS26tGqyB49nssli6RseTe7/ZiSLZvoUewN1L55VJO9ltcKFePBtr95nVe
-         RoskAuuKZuUQjV3AFml3QcFW3+uMfhxz+mewWAenAGs01KZweEqLkJpdEOgGqC7Yr4
-         g3vjq1IloujWIK6hIwiAu2g0srzHO7yOOZl6g4kj75DR8J0XE7lkQFd1zNxlpFQ9qS
-         STzlghmkCqzoK317Mh2vo+fvGZejCPFmJfVBUUefLis4CwOM4MBDgJiC79wn5K2/tI
-         ppnigF1Xz1SEQ==
-Date:   Mon, 24 Apr 2023 18:15:47 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] dt-bindings: soc: starfive: Add StarFive syscon
- module
-Message-ID: <20230424-footsie-compost-d6624c8ef4e8@spud>
-References: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
- <20230414024157.53203-6-xingyu.wu@starfivetech.com>
+        Mon, 24 Apr 2023 13:16:47 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410786187
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:16:46 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f0a2f8216fso209121cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682356605; x=1684948605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GFrKoxBHGprwgkyWOKkqPAUbe8SAzISHnkMGiiR8Aro=;
+        b=UfBxvwVKYODQclpyyYmaFw+7g6vxWtp7h7eOLJzSO+Z4ZTIFraL2+ZKsSs2aXXuwsh
+         HbDf5lyhZa88b5+PXxEI3xiuHA63r0DZqaOTUAqjEiIyw3u7d736t+fN1KOyOsXqKSIA
+         8X2Inx/COF34us2GlZKK5Cq3jAC6buT8baXyjzFdKs6GK//FxdZnoqKt3AevOqfjcddu
+         LL0kCTlD6IvZg2NLITGh0pBzvgbkj8R0+iJtApNuZe+MvXkMU3T07tEhupSemhWHOECT
+         MHOXbbv5i4QMRJGaUVdL+h3BdxuFWUXKUd9nXpgbJQoa3sgZX7tViIMGFDFh0eeD47kC
+         nrlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682356605; x=1684948605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GFrKoxBHGprwgkyWOKkqPAUbe8SAzISHnkMGiiR8Aro=;
+        b=kU+01STjzdxJpX1dcWdqbJ/MOH7AGBfEmg7Z+78T5ul4+182YZQ6m8P0jCld/781KM
+         0hNTrB747NjxzJbhGOPRELtxsim7Ca3ahby2AcSXNlrXZQR8rpMB9mKOB+rH5TlK3tmi
+         zl09Yo6dG1QbexO6aR3rte5sWzRiRASsP+8GHv9mEbsnPahHzWAED2C8yZFR55NaSJ9K
+         2+p2rzozvW85iIeg1nPsiXWQy2hihw5fBjbb0i7tnZI3DAxyTY6LjFY/CEjvZICZCaz9
+         cLU+Ql8tML00MiXXVDQQlGjjkC1tsZGvHJaJBv2dOwNENa0Jd9EKcmM6Bhj7RKs/5SNu
+         YuJA==
+X-Gm-Message-State: AAQBX9f1ALNUEX+fmnA+PovDhELgLfzaa8A5hsIYpiTySxh3SglfAKyX
+        iek6Q3+2G8MEiaA3Seye2UJnMN/MG/EQRERx9egdDQ==
+X-Google-Smtp-Source: AKy350ZnDr71CnPlS6YKCwTlmx4svJxw+adqlJzgwBem4WSs9tOuhtikeDKT3A7ezbeWXxpF8wg8qSWtoeT7Hro+Uj0=
+X-Received: by 2002:a05:622a:1353:b0:3e3:8c75:461 with SMTP id
+ w19-20020a05622a135300b003e38c750461mr2244qtk.6.1682356605323; Mon, 24 Apr
+ 2023 10:16:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6h8NHcwldPvt4iyb"
-Content-Disposition: inline
-In-Reply-To: <20230414024157.53203-6-xingyu.wu@starfivetech.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230421174020.2994750-1-yosryahmed@google.com> <20230421174020.2994750-2-yosryahmed@google.com>
+In-Reply-To: <20230421174020.2994750-2-yosryahmed@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 24 Apr 2023 10:16:34 -0700
+Message-ID: <CALvZod5g9MYjYB5eY4Z9rX5goyh7xSU_b3nfCpJCoUrzmHpyAg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/5] writeback: move wb_over_bg_thresh() call outside
+ lock section
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 10:40=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com=
+> wrote:
+>
+> wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
+> flush, which can be expensive on large systems. Currently,
+> wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
+> have to do the rstat flush atomically. On systems with a lot of
+> cpus and/or cgroups, this can cause us to disable irqs for a long time,
+> potentially causing problems.
+>
+> Move the call to wb_over_bg_thresh() outside the lock section in
+> preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic.
+> The list_empty(&wb->work_list) check should be okay outside the lock
+> section of wb->list_lock as it is protected by a separate lock
+> (wb->work_lock), and wb_over_bg_thresh() doesn't seem like it is
+> modifying any of wb->b_* lists the wb->list_lock is protecting.
+> Also, the loop seems to be already releasing and reacquring the
+> lock, so this refactoring looks safe.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Reviewed-by: Michal Koutn=C3=BD <mkoutny@suse.com>
+> Reviewed-by: Jan Kara <jack@suse.cz>
 
---6h8NHcwldPvt4iyb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Apr 14, 2023 at 10:41:55AM +0800, Xingyu Wu wrote:
-> From: William Qiu <william.qiu@starfivetech.com>
->=20
-> Add documentation to describe StarFive System Controller Registers.
->=20
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> ---
->  .../soc/starfive/starfive,jh7110-syscon.yaml  | 58 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfi=
-ve,jh7110-syscon.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh71=
-10-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh=
-7110-syscon.yaml
-> new file mode 100644
-> index 000000000000..de086e74a229
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
-on.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.y=
-aml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 SoC system controller
-> +
-> +maintainers:
-> +  - William Qiu <william.qiu@starfivetech.com>
-> +
-> +description: |
-> +  The StarFive JH7110 SoC system controller provides register informatio=
-n such
-> +  as offset, mask and shift to configure related modules such as MMC and=
- PCIe.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - starfive,jh7110-aon-syscon
-> +              - starfive,jh7110-sys-syscon
-> +          - const: syscon
-> +          - const: simple-mfd
-> +      - items:
-> +          - const: starfive,jh7110-stg-syscon
-> +          - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clock-controller:
-> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
-> +    type: object
-> +
-> +  power-controller:
-> +    $ref: /schemas/power/starfive,jh7110-pmu.yaml#
-> +    type: object
-
-My plan was to grab this patch after the merge window, but there's been
-some back and forth [1] about what exactly should be a power-controller
-here. Given the merge window is open & I know Emil wants to look at the
-various clock bits for the JH7110, I don't think there's a pressing need
-for you to do anything here, but figured I'd at least mention how things
-are going on this thread too.
-
-Thanks,
-Conor.
-
-1 - https://lore.kernel.org/linux-riscv/20230419035646.43702-1-changhuang.l=
-iang@starfivetech.com/T/#m708770e9596098214df769bcc2bdaf9c1a46ca98
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    syscon@10240000 {
-> +        compatible =3D "starfive,jh7110-stg-syscon", "syscon";
-> +        reg =3D <0x10240000 0x1000>;
-> +    };
-> +
-> +    syscon@13030000 {
-> +        compatible =3D "starfive,jh7110-sys-syscon", "syscon", "simple-m=
-fd";
-> +        reg =3D <0x13030000 0x1000>;
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 03051ae2e9e5..0fafeea8ebdb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19917,6 +19917,11 @@ S:	Supported
->  F:	Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
->  F:	drivers/clk/starfive/clk-starfive-jh7110-pll.*
-> =20
-> +STARFIVE JH7110 SYSCON
-> +M:	William Qiu <william.qiu@starfivetech.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon=
-=2Eyaml
-> +
->  STARFIVE JH71X0 CLOCK DRIVERS
->  M:	Emil Renner Berthing <kernel@esmil.dk>
->  M:	Hal Feng <hal.feng@starfivetech.com>
-> @@ -19954,6 +19959,7 @@ STARFIVE SOC DRIVERS
->  M:	Conor Dooley <conor@kernel.org>
->  S:	Maintained
->  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> +F:	Documentation/devicetree/bindings/soc/starfive/
->  F:	drivers/soc/starfive/
-> =20
->  STARFIVE TRNG DRIVER
-> --=20
-> 2.25.1
->=20
-
---6h8NHcwldPvt4iyb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEa5QwAKCRB4tDGHoIJi
-0l+0AP0e3JscjX9uM8ImqV7QVtI4v8fidKqzUoF260oblriMtwEA54APb/okMY+/
-v17rOEyY6cI2/FIYxQZLySSpbK99Og8=
-=PGj2
------END PGP SIGNATURE-----
-
---6h8NHcwldPvt4iyb--
+Acked-by: Shakeel Butt <shakeelb@google.com>
