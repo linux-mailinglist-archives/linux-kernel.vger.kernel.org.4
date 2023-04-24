@@ -2,178 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C6B6ECF9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0051D6ECFA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbjDXNuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S231418AbjDXNvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbjDXNt6 (ORCPT
+        with ESMTP id S231854AbjDXNv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:49:58 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE9293F8;
-        Mon, 24 Apr 2023 06:49:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a9253d4551so36794275ad.0;
-        Mon, 24 Apr 2023 06:49:34 -0700 (PDT)
+        Mon, 24 Apr 2023 09:51:28 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F5993E5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:51:01 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-77203ae8bd5so1250006241.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:51:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682344173; x=1684936173;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=if+qLJBC6aei07h/TQBMVq0RtLZPNMknfuB7zM+rGdc=;
-        b=SkeEEfCHKLxhZdFgxLT9n810Zk1T2LbV240NhzxldIIJ3bU+Lx+LfDnAJMfuVUku2r
-         wqHrs99cOyFbZ1QVSiK4hTkAUXMMHg9++FI6XkMlzAs8LLRXnhEjKGAkuCu3qX6MpKNR
-         GlKkl/RFIdJeLGZJY/aa09/0M4aIJdMhufPGrWnt9GSbPKJi4ofDK14FIy1XV6Oti6tW
-         ktzeT67IBTChjIukzWZEYnpQzXuMpwRUB4VxsXZg0hVWlsYv94H4k3yVH6xhG+7JEswJ
-         yVWfJrQ6RgqDoRRPiMZ8Cn5fcpM4MeOqcVw0tMV8+HdcWwFGSsb1Y1wSYVgz7QM9VXL2
-         QwBA==
+        d=raspberrypi.com; s=google; t=1682344259; x=1684936259;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=stIu8ClgUckLBUEBsGl276jISixWZ1mw4pn+EsJ7JZw=;
+        b=KSCkfZE/+9pcGuTPdYh0YG+OpxdgMPNE/MyoU8GLGzVZLaVDkcOOOiVlAkC51CgDls
+         k/fWTgHeT+w7yuZ4vQea57YQu81DVgO+cZ1jGkJL1yWt2ZQSix1MMWb0ZK5Jlzqwihy+
+         5/xgbRsi9P5AdCAmMoCyARaTi4gw8eRM7kCZtqBuS0EW/nWMhNJdXeSS3ag6HHdbNlXP
+         HY1yO6yFVPCiSpzU2GmnQRHtsIdW1Yjx7wnD7BQ5BDYeOxGMS4FRqKc15UnJwRrYI8T4
+         vj5jRXWmFN++FWw9ShT9iNFoiJTjP7ObUyZ05BWIZfrgRp+xuoM2C1D6V0Tyk3MCjsLM
+         0QvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682344173; x=1684936173;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=if+qLJBC6aei07h/TQBMVq0RtLZPNMknfuB7zM+rGdc=;
-        b=E4F4GTEtVRIqVLswU5vp05y3/H7s3vxii6giX44fGAhIH+PY/9xa7oSk46Pvkxy5W3
-         ZCX+A1JfNXbH41sY+MZuxM1dd7Hgv0bp4w9+Oo5uqo/N9k1MnyAp2odhNqU4nZAdmA6i
-         VddETwIpbBUKX76pWDlkcQHmPQiCjmnByVWQLxDk2oJ1Oqc3P46R06woKGTuPDxyrzdV
-         r2AaJPH5h/WLrJc3aB0DMadA81TEfY8boLseSgjTJ+7e6REIItPUlM7AY4XBV9mZMuaZ
-         JQtCE+tT+QpLgwrt6o5XHSOcbXLLbwr3a8YmCjArusnJFLkkbrQzFnkUujv97vhgNeAt
-         HR9w==
-X-Gm-Message-State: AAQBX9dr59SkTDH6skEovdwCMjEW0Nrcl7lAFNmCZpPWeULzLBOzbbTU
-        gqrotTzcsUJrs+VItfZqdiE=
-X-Google-Smtp-Source: AKy350aPI3/FpDsR41fVSeGjbJihBRzaLq/za4vCRNQPIQVZqsGsFiRSCRi1RVlBMM978oPwtGrMDQ==
-X-Received: by 2002:a17:903:64e:b0:1a6:a2df:4700 with SMTP id kh14-20020a170903064e00b001a6a2df4700mr13428967plb.9.1682344173112;
-        Mon, 24 Apr 2023 06:49:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090282cb00b0019fcece6847sm6629514plz.227.2023.04.24.06.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 06:49:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Apr 2023 06:49:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Message-ID: <321a84c6-6d74-4042-a6ce-6229073c8d30@roeck-us.net>
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
+        d=1e100.net; s=20221208; t=1682344259; x=1684936259;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=stIu8ClgUckLBUEBsGl276jISixWZ1mw4pn+EsJ7JZw=;
+        b=B7z3xypG+rA3BirS7WV6RJLfBetGBVP2/M8mJMf34ppVcuz7xfiyZsjai0DsngPH8J
+         IZaMPko4/NJFTJNZAhlfs1dag+LXyyffSvGns9EO5egFTUQUaeH8sfmp7lzQ6p+f16Sp
+         gJmNqUkoY7ik/0/f8Yx693HaOqRI6U3Fv9Gt0O9I+5hQOBheFpEowp0Z2F0Wc2wLs38H
+         EwvyaTKflm39kHnnFfhtCn1RgMQwB5yU9wZSGCqVBwO1Wab7FAwuf2YAtvKWo7e1UlGW
+         sfUqCZSZdf+Ytba9r/9wMapgCObsx2EOx5rPIvoF+nhCSAXqO9D/OdkDRfdbfQxOmYg+
+         daGg==
+X-Gm-Message-State: AAQBX9fTeWVrOIlKaCcIO/YX1uSm/AHqKCQiiHU0xnySonJjjDbjsSp0
+        w1H8bfdl9wc17emrKIMB9pei9g1k3lthwlKBeIkeFg==
+X-Google-Smtp-Source: AKy350a4qyB83sh/fBMONyQnHylHjTS1iRVanU7zyJs8OKiEqNzAR2eSAuuca+2K3dXjc7hTvSAfIxsd08BHQGYCe/Y=
+X-Received: by 2002:a1f:d544:0:b0:443:675e:3096 with SMTP id
+ m65-20020a1fd544000000b00443675e3096mr3107100vkg.16.1682344259023; Mon, 24
+ Apr 2023 06:50:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230421162749.360777-1-markyacoub@google.com>
+ <20230421162749.360777-3-markyacoub@google.com> <bc723ffd-73cd-0339-c2aa-42b3db5a3560@linaro.org>
+In-Reply-To: <bc723ffd-73cd-0339-c2aa-42b3db5a3560@linaro.org>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Mon, 24 Apr 2023 14:50:43 +0100
+Message-ID: <CAPY8ntBH_AHp85Ak5YA4wkHxSHOf_3O7vKbLDVY2NVB_q=tpUg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] DRM: Create new Content Protection connector property
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Mark Yacoub <markyacoub@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, seanpaul@chromium.org,
+        dianders@chromium.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 06:13:49PM +0800, Delphine CC Chiu wrote:
-> Add a device tree bindings for ltc4286 driver.
-> 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> ---
->  .../bindings/hwmon/lltc,ltc4286.yaml          | 47 +++++++++++++++++++
->  MAINTAINERS                                   |  9 ++++
->  2 files changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> new file mode 100644
-> index 000000000000..c1c8e310f9c4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/lltc,ltc4286.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: LTC4286 power monitors
-> +
-> +maintainers:
-> +  - Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - lltc,ltc4286
-> +      - lltc,ltc4287
+Hi Mark (and Dmitry)
 
-There is no LTC4287, at least according to the Analog website.
+On Fri, 21 Apr 2023 at 18:07, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On 21/04/2023 19:27, Mark Yacoub wrote:
+> > From: Mark Yacoub <markyacoub@chromium.org>
+>
+> Nit: is there a reason for this header? My first impression is that it
+> matches your outgoing name & email address and as such is not necessary.
+>
+> Nit#2: subject should mention 'Key', as you are creating a property for
+> the key.
+>
+> >
+> > [Why]
+> > To enable Protected Content, some drivers require a key to be injected
+> > from user space to enable HDCP on the connector.
+> >
+> > [How]
+> > Create new "Content Protection Property" of type "Blob"
+>
+> Generic observation is that the ability to inject HDCP keys manually
+> seems to be quite unique to your hardware. As such, I think the debugfs
+> or sysfs suits better in comparison to the DRM property.
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vrange_select_25p6:
-> +    description:
-> +      This property is a bool parameter to represent the
-> +      voltage range is 25.6 or not for this chip.
+I was about to reply to v1 with a very similar comment over the
+requirement to keep HDCP keys secret.
 
-Existing attributes are adi,vrange-high-enable, ti,extended-range-enable,
-ti,bus-range-microvolt, adi,range-double. I would suggest to use
-adi,vrange-high-enable.
+v2 has added WRITE_ONLY blobs so at least another process can't just
+read the blob back out again, but it feels like there are still
+numerous ways to grab those keys. For an unsecured userspace to have
+the keys in the first place seems like a bad move, and IMHO they
+should only be held in either a secure environment, or only held in
+hardware (passed direct from OTP to HDCP block).
 
-> +
-> +  rsense-micro-ohms:
-> +    description:
-> +      Resistor value in micro-Ohm
 
-I would suggest either shunt-resistor-micro-ohms or
-sense-resistor-micro-ohms as used by other bindings.
+There's also the DRM uAPI requirement for having reviewed patches for
+an open source project to go alongside any uAPI change. Do such
+patches exist? https://docs.kernel.org/gpu/drm-uapi.html#open-source-userspace-requirements
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - rsense-micro-ohms
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        status = "okay";
-> +        ltc4286@40 {
-> +            compatible = "lltc,ltc4286";
-> +            reg = <0x40>;
-> +            vrange_select_25p6;
-> +            rsense-micro-ohms = <300>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c6545eb54104..930bdba0f73c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12183,6 +12183,15 @@ S:	Maintained
->  F:	Documentation/hwmon/ltc4261.rst
->  F:	drivers/hwmon/ltc4261.c
->  
-> +LTC4286 HARDWARE MONITOR DRIVER
-> +M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> +L:	linux-i2c@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> +F:	drivers/hwmon/pmbus/Kconfig
-> +F:	drivers/hwmon/pmbus/Makefile
-> +F:	drivers/hwmon/pmbus/ltc4286.c
-> +
->  LTC4306 I2C MULTIPLEXER DRIVER
->  M:	Michael Hennerich <michael.hennerich@analog.com>
->  L:	linux-i2c@vger.kernel.org
-> -- 
-> 2.17.1
-> 
+  Dave
+
+> >
+> > Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> > ---
+> >   drivers/gpu/drm/drm_atomic_uapi.c | 9 +++++++++
+> >   include/drm/drm_connector.h       | 6 ++++++
+> >   include/drm/drm_mode_config.h     | 6 ++++++
+> >   3 files changed, 21 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+> > index d867e7f9f2cd5..e20bc57cdb05c 100644
+> > --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> > +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> > @@ -749,6 +749,11 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
+> >               state->content_protection = val;
+> >       } else if (property == config->hdcp_content_type_property) {
+> >               state->hdcp_content_type = val;
+> > +     } else if (property == config->content_protection_key_property) {
+> > +             ret = drm_atomic_replace_property_blob_from_id(
+> > +                     dev, &state->content_protection_key, val, -1, -1,
+> > +                     &replaced);
+> > +             return ret;
+> >       } else if (property == connector->colorspace_property) {
+> >               state->colorspace = val;
+> >       } else if (property == config->writeback_fb_id_property) {
+> > @@ -843,6 +848,10 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
+> >               *val = state->content_protection;
+> >       } else if (property == config->hdcp_content_type_property) {
+> >               *val = state->hdcp_content_type;
+> > +     } else if (property == config->content_protection_key_property) {
+> > +             *val = state->content_protection_key ?
+> > +                            state->content_protection_key->base.id :
+> > +                            0;
+> >       } else if (property == config->writeback_fb_id_property) {
+> >               /* Writeback framebuffer is one-shot, write and forget */
+> >               *val = 0;
+> > diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> > index 7b5048516185c..2fbe51272bfeb 100644
+> > --- a/include/drm/drm_connector.h
+> > +++ b/include/drm/drm_connector.h
+> > @@ -896,6 +896,12 @@ struct drm_connector_state {
+> >        */
+> >       unsigned int content_protection;
+> >
+> > +     /**
+> > +      * @content_protection_key: DRM blob property for holding the Content
+> > +      * Protection Key injected from user space.
+> > +      */
+> > +     struct drm_property_blob *content_protection_key;
+> > +
+> >       /**
+> >        * @colorspace: State variable for Connector property to request
+> >        * colorspace change on Sink. This is most commonly used to switch
+> > diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+> > index e5b053001d22e..615d1e5f57562 100644
+> > --- a/include/drm/drm_mode_config.h
+> > +++ b/include/drm/drm_mode_config.h
+> > @@ -887,6 +887,12 @@ struct drm_mode_config {
+> >        */
+> >       struct drm_property *hdcp_content_type_property;
+> >
+> > +     /**
+> > +      * @content_protection_key_property: DRM blob property that receives the
+> > +      * content protection key from user space to be injected into the kernel.
+> > +      */
+> > +     struct drm_property *content_protection_key_property;
+> > +
+> >       /* dumb ioctl parameters */
+> >       uint32_t preferred_depth, prefer_shadow;
+> >
+>
+> --
+> With best wishes
+> Dmitry
+>
