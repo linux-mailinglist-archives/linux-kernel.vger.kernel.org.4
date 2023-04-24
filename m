@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6648C6ECB9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093476ECBA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjDXLz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S231700AbjDXL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjDXLz5 (ORCPT
+        with ESMTP id S231502AbjDXL4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:55:57 -0400
+        Mon, 24 Apr 2023 07:56:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDACEE45
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:55:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D933AAF;
+        Mon, 24 Apr 2023 04:56:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E3C62014
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09CC1C433EF;
-        Mon, 24 Apr 2023 11:55:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C89E6620FF;
+        Mon, 24 Apr 2023 11:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5254C4339B;
+        Mon, 24 Apr 2023 11:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682337355;
-        bh=glewMWZKTeNdvbCtF84pldO14qWrt61fP2MSRhuaPCI=;
+        s=k20201202; t=1682337392;
+        bh=2C+OmzOkcznEoV0Ab0AckqNk9Q2kaZkT1tHfjXPMA7I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ST2WdDcN0wSkEVyW6+bVur+jz3manJismlS16g8CLpxUipItW9eZm8OC8oWSQZpJU
-         X0fkNrDwfP4s+j8GCZhAORRr5djlLqXff9UXKcZxtT8BmQMDJFpns/IUgP1/HKnZn6
-         opCkcMSYoUrpQQoZINJ19mNRLHm+7GcJLHWTSWM50Yxf+9671Vdhz0DU9/301zx3Gy
-         JU1ha7RMZJMakzkkmTYWcbqxZAgL0eKJv0xSyq57rvak3iTzlJVoyx0Su48lIfX6K6
-         phoTq5x33ye5FvK3bLqn+gl4mgO729YhpgBCeiv/93qxyJBd3LPHyG8/JWDdLUQ+jZ
-         Q6caGt0fwiYPw==
-Date:   Mon, 24 Apr 2023 12:55:50 +0100
+        b=Rmj3vrsAy4XpmbqzGsIOemgihSFmdGMqVwtGm0G20F4oHnE2SwRPNy/zVpwi+Ca4+
+         /9Q/O6NMbSbr57o57AycmbIoSOh3yDQwMYpI4x42M3ek8azC22WlVJ7p/kJNvsDNYa
+         fBj1NEm72s4qRWjrcYB+DLz1lXQjXsO7CERO++qZbBXbM9bR18nFlLDTYKP4AgbelF
+         f7Kn2pPKKcRme76hG6lhJfHqTU5mG0Q/nF3QLl52mcHQ0+ArqGDuS4nxaVFcp/efoH
+         qrVlVPgus9arWviW+GM/MO0hsxjnalzberPq8FoJ5WxllLgZ4/bghDxa3+oOfSOdMF
+         vvdFdzkxTiMUg==
+Date:   Mon, 24 Apr 2023 12:56:25 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Yuchen Yang <u202114568@hust.edu.cn>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: regulator: core: remove return value check of
- `regulator_init`
-Message-ID: <888091b8-b83e-4999-b5a4-04e6d6d36bc2@sirena.org.uk>
-References: <20230423122732.31135-1-u202114568@hust.edu.cn>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, jsnitsel@redhat.com,
+        robh+dt@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
+References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+ <20230421091309.2672-3-kyarlagadda@nvidia.com>
+ <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mIGrXAIEMSPH6/5l"
+        protocol="application/pgp-signature"; boundary="1Ut5sBOpq6GKRQNb"
 Content-Disposition: inline
-In-Reply-To: <20230423122732.31135-1-u202114568@hust.edu.cn>
+In-Reply-To: <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
 X-Cookie: A rolling disk gathers no MOS.
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,39 +63,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---mIGrXAIEMSPH6/5l
+--1Ut5sBOpq6GKRQNb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 23, 2023 at 08:27:31PM +0800, Yuchen Yang wrote:
-> Smatch complains that:
-> regulator_init() warn: 'debugfs_root' is an error pointer or valid
->=20
-> According to the documentation of the debugfs_create_dir() function,
-> there is no need to check the return value of this function.
-> Just delete the dead code.
+On Sun, Apr 23, 2023 at 06:08:16PM +0300, Jarkko Sakkinen wrote:
 
-This is very much a taste and use case question, you can't just delete
-error checks without thought.
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> Fixes: 247514344492 ("regulator: Remove ifdefs for debugfs code")
+> Should I pick these patches?
 
-Don't just throw random Fixes tags on things :(
+I've queued the spi side already.
 
---mIGrXAIEMSPH6/5l
+--1Ut5sBOpq6GKRQNb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGbkUACgkQJNaLcl1U
-h9AXiAf/XBzcj9QeR1CURHm+U7taFrdDb14xxyuSgSLnNzF38GRpaTkhOHM5wt9z
-gsVlr/XJZfb8NWAOF6WrMcrc3tYSV6CutVJnodwiC7exRAfTHR7h4dfdOnLydSPH
-ZkhxfiPLf2KHrCI7+WZyKCUi/ywVe0fn9z/AOSC204RKZSvq3tiaJ11eJQq0/MYL
-R2jAaG/xZoPCI5ny68RelEYP10UKJrjjSz4myJ7YKftUCpJoCgU4ZF1GxuXlgpWG
-8qU+BvoG6uwKaDZqy32S/nlXwofbramY5TLG1iEV8P3SenpFRKOsAUs6FtbRvUzR
-gckVQ9ARmP4ghLQP6E7UlckSDnf1hg==
-=Zqk4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGbmgACgkQJNaLcl1U
+h9DIJwf/ZUTnNktC/cLRDi3Pv+zIKz9BhX8xNlVL5nLvl6pV67Wo2+Ohc/lJOu81
+6jtwTJG6cquuwoF0U/NKNRTWGJCVHJmfFQ5//TzNuRoqMQgLWn6GkD46q+HxEj7u
+dGzALk6zUrQ1UteWXxDY27JNZ5ValePOGRMuk/JJzJgSbr7CdiSbZMvoO1wHrber
+vPrB2fWtdIMmnPNqV/kPcUqWWQc9FMFsbmJ2OslKDoOs6XWRyY4E+2mOqPVugnki
+4NwsJFRcHuxV0CT47SHkWnKHdBOWi1qW8yI0kRya07sSoA/G7m9rby7tgcCSjEN5
+Un1LDG1dcmeIFFANKffFyN/Vx0VEsQ==
+=g4Dn
 -----END PGP SIGNATURE-----
 
---mIGrXAIEMSPH6/5l--
+--1Ut5sBOpq6GKRQNb--
