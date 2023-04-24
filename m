@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0616EC7DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75F06EC7E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjDXI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S231133AbjDXI1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjDXI0g (ORCPT
+        with ESMTP id S230139AbjDXI1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:26:36 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8371410D2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:26:33 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f173af665fso25695555e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20221208.gappssmtp.com; s=20221208; t=1682324792; x=1684916792;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3pxlWKD7dnb+hgIonOTuPgqaiGVvQd+hXe0K6IdPi2M=;
-        b=BCLvweSQah01sJW9SBAyC5wgM9gcCgmoD6eVt1pixm6TIMPKSMsfDJ/G6pQ7WifY+a
-         jCWSatlOFJoGBGRyqNjpnC83+YZxWwidqcfJV7qrZVFpoOQQ5qGdcpNUfD/1uI304Bsr
-         n5t0aKbFfDOlYu2sfU/KiJsKG+tbC5Q3pej1LUOiQjmwv12srCYdM4fwvJqfC1vIGgHG
-         i7xM2mHs1udxBgFRdzJGUIySnuCvM4rCCc4KxRtFlArnjXACALMboZpw/c8XanndS9Ts
-         WTUnWIGWHkbm7Rk6Wg/mlO7SJDa+qk0PwimjElI9r8oOeFo6sLYUJveYcdOozE2aiQA6
-         piSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682324792; x=1684916792;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pxlWKD7dnb+hgIonOTuPgqaiGVvQd+hXe0K6IdPi2M=;
-        b=bh37d5IqKXpK2jd4LOB/MMNk2/rOYj+Tj4xxfeNJVrtP9qmzXq2jQ4jKNybUO/xV5Q
-         VwEM3Y5yyhymxGPHXWZzUjU+iiYGzFh0+oO0Tq89a7E7A4UNlD9lsO3fizSLgL5cMOxN
-         AfRbD1jMlimZiF05UAG0kAhGRVjJ0Dd+w82VzrskIL1YdcZ1g0zy/KsPLN1i+xLvrYvb
-         cFq73ylt6Z9w1My7LTBbqP0LjziaLQHa6BAWU3/o2grrWmAstFOTHhBVALvPeRq1ZU3M
-         6gGqA7PTZfiX3O7gGS67a5B0P9L9kmNrYJ0lBliACJtAiIYW0wk8MXUcl3WHX0iRuvUn
-         IVbQ==
-X-Gm-Message-State: AAQBX9dRDcuOW9MFG2Obzyq0GpBsbX1nU3BOnxE7ZAtPzp0MNPkr5wlv
-        s0cXI7orNnRmLTyp9NnK9fdwNA==
-X-Google-Smtp-Source: AKy350byXoD5GzDBK8BfQEyK98TvcOHuQxalfYGEuCyUBUv+0C+wGb7Sf32jhfdSzffUY8tfHfxXdw==
-X-Received: by 2002:a05:600c:259:b0:3f1:662a:93d0 with SMTP id 25-20020a05600c025900b003f1662a93d0mr7829493wmj.15.1682324791970;
-        Mon, 24 Apr 2023 01:26:31 -0700 (PDT)
-Received: from [192.168.178.55] (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id l20-20020a05600c16d400b003f19bca8f03sm4904838wmn.43.2023.04.24.01.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 01:26:31 -0700 (PDT)
-Message-ID: <42c89d18-b68f-a7d0-921a-6f45b54da356@linbit.com>
-Date:   Mon, 24 Apr 2023 10:26:30 +0200
+        Mon, 24 Apr 2023 04:27:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ABB2100
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:27:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA1261EF1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8847BC433D2;
+        Mon, 24 Apr 2023 08:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682324822;
+        bh=ArQaSLrgnDLJiG4YpyX6jzpSZ+gme4NU8my4Qc+0eRY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O2fLYGmgfOvLB67GrW7cS+var44Sps+k99SwAn1NlSiNR4+ljmpYtBeUap6buflYM
+         by/6tnUZyWMB7kF6u2/APzLyXWRzHhKDBmWkS+0462YoBYzdv3zCFaU9UEM0XSWoUH
+         ol7Wya0djuGh+g9BB88zIorvvJefpZUVR2XE904wc4XYjS28uOaP+W/6//f0/o5P87
+         Neaujym5Po2AuO/jwnBxvISsXx7ukHT0axqPWulBOW6WccV3TAk6vQY8yKGlhIg4p7
+         tiR2kUa11iOP/wLaXjT/LPzmTg2wSZE8JgOrYzWzLgof2NP3PH17cNnW6ympCYSP6U
+         Et/LpUA5PcYyg==
+Date:   Mon, 24 Apr 2023 10:26:58 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "bibo, mao" <maobibo@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+Message-ID: <ZEY9UvvuTXYx3QEA@lothringen>
+References: <ZEKDZEQmKExv0O7Q@lothringen>
+ <87leil2r7v.ffs@tglx>
+ <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
+ <ZEPteS82TbIhMQxe@lothringen>
+ <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
+ <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/5] drbd: use PAGE_SECTORS_SHIFT and PAGE_SECTORS
-To:     Luis Chamberlain <mcgrof@kernel.org>, axboe@kernel.dk,
-        agk@redhat.com, snitzer@kernel.org, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, hch@infradead.org, djwong@kernel.org,
-        minchan@kernel.org, senozhatsky@chromium.org
-Cc:     patches@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        willy@infradead.org, hare@suse.de, p.raghav@samsung.com,
-        da.gomez@samsung.com, kbusch@kernel.org
-References: <20230421195807.2804512-1-mcgrof@kernel.org>
- <20230421195807.2804512-3-mcgrof@kernel.org>
-Content-Language: en-US
-From:   =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-In-Reply-To: <20230421195807.2804512-3-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.04.23 um 21:58 schrieb Luis Chamberlain:
-> Replace common constants with generic versions.
-> This produces no functional changes.
+On Sun, Apr 23, 2023 at 09:52:49PM +0800, bibo, mao wrote:
 > 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  drivers/block/drbd/drbd_bitmap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
-> index 6ac8c54b44c7..b556e6634f13 100644
-> --- a/drivers/block/drbd/drbd_bitmap.c
-> +++ b/drivers/block/drbd/drbd_bitmap.c
-> @@ -1000,7 +1000,7 @@ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_ho
->  	unsigned int len;
->  
->  	first_bm_sect = device->ldev->md.md_offset + device->ldev->md.bm_offset;
-> -	on_disk_sector = first_bm_sect + (((sector_t)page_nr) << (PAGE_SHIFT-SECTOR_SHIFT));
-> +	on_disk_sector = first_bm_sect + (((sector_t)page_nr) << PAGE_SECTORS_SHIFT);
->  
->  	/* this might happen with very small
->  	 * flexible external meta data device,
-> @@ -1008,7 +1008,7 @@ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_ho
->  	last_bm_sect = drbd_md_last_bitmap_sector(device->ldev);
->  	if (first_bm_sect <= on_disk_sector && last_bm_sect >= on_disk_sector) {
->  		sector_t len_sect = last_bm_sect - on_disk_sector + 1;
-> -		if (len_sect < PAGE_SIZE/SECTOR_SIZE)
-> +		if (len_sect < PAGE_SECTORS)
->  			len = (unsigned int)len_sect*SECTOR_SIZE;
->  		else
->  			len = PAGE_SIZE;
+> 在 2023/4/22 23:04, Peter Zijlstra 写道:
+> > On Sat, Apr 22, 2023 at 04:21:45PM +0200, Frederic Weisbecker wrote:
+> > > On Sat, Apr 22, 2023 at 10:17:00AM +0200, Peter Zijlstra wrote:
+> > > > diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+> > > > index 44ff1ff64260..5a102ff80de0 100644
+> > > > --- a/arch/loongarch/kernel/genex.S
+> > > > +++ b/arch/loongarch/kernel/genex.S
+> > > > @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
+> > > >   	ori	t0, t0, 0x1f
+> > > >   	xori	t0, t0, 0x1f
+> > > >   	bne	t0, t1, 1f
+> > > > +	addi.d	t0, t0, 0x20
+> > > >   	LONG_S	t0, sp, PT_ERA
+> > > >   1:	move	a0, sp
+> > > >   	move	a1, sp
+> > > 
+> > > But the interrupts are enabled in C from arch_cpu_idle(), which
+> > > only then calls the ASM __arch_cpu_idle(). So if the interrupt happens
+> > > somewhere in between the call, the rollback (or fast-forward now)
+> > > doesn't apply.
+> I do not know much details about scheduler and timer, if the interrupt
+> happens between the call, will flag _TIF_NEED_RESCHED be set? If it is set,
+> the rollback will still apply.
 
-Acked-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Nop, TIF_NEED_RESCHED is set only if a task is ready to run after the interrupt,
+not if the interrupt only modified/added a timer.
 
--- 
-Christoph Böhmwalder
-LINBIT | Keeping the Digital World Running
-DRBD HA —  Disaster Recovery — Software defined Storage
+> > @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
+> >   	ori	t0, t0, 0x1f
+> >   	xori	t0, t0, 0x1f
+> >   	bne	t0, t1, 1f
+> > +	addi.d	t0, t0, 0x20
+> It is more reasonable with this patch, this will jump out of idle function
+> directly after interrupt returns. If so, can we remove checking
+> _TIF_NEED_RESCHED in idle ASM function?
+
+Indeed we can remove the check to TIF_RESCHED!
+
+Thanks!
