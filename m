@@ -2,72 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A74D6ED3D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26BF6ED3E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjDXRpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S231681AbjDXRtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjDXRpw (ORCPT
+        with ESMTP id S231134AbjDXRtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:45:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A12E9;
-        Mon, 24 Apr 2023 10:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B77A960EDE;
-        Mon, 24 Apr 2023 17:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC165C433D2;
-        Mon, 24 Apr 2023 17:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682358350;
-        bh=808DQgGPAc1pXUH4EhUIf4sYh1ZGvIS8hF1msuy+Dlc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FkyQPcDyY6n9DkPX6QFR0hKxuEJXcIeXfroyhmpUY76ONRKMVlX2MwjpXZ+8pAa7H
-         2bJJN+MGtO05MirZQDbkqImenMB5dvcDw+zOw4TRnCKqPUV57KDEZCxle55/evBK6C
-         VrAMhtH1JyW5upI4ha/qAk/riiq5QyuAe1LtxqWw+TQt/zmi6ARblMQa3Ewls5QO0X
-         yAS7VZYdl5DDFkEdSq5+0ot8QhRSNEtL3xZhBmWe6eks52i1mh7m31vfIjQdOB1B36
-         trYpKzoXXkbwtKO1aPknzPBJDjT0kGEX+bDAmQnMFZuniwoaYdRqi93ISq7iXo5Kna
-         extIWAtGxTSgg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 440F3403C5; Mon, 24 Apr 2023 14:45:47 -0300 (-03)
-Date:   Mon, 24 Apr 2023 14:45:47 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
-        shy828301@gmail.com, denik@google.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
+        Mon, 24 Apr 2023 13:49:40 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827936A78
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:49:38 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b57c49c4cso4071625b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1682358578; x=1684950578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=edIyrpOkZxkR7qQPvMEjMBtYXDIPtOhEQ7kSltA2Y7E=;
+        b=B0RGu9bSAOqeQFKM2kCfJoKnl08Vl+oe+fwmnFVAivzg30GMkKXPEJIoCB0NsHbaMh
+         y1QOEsnnYJO/COyfiUTW2dtgpEZrqz2vLI1HRdIkW9hABd7zQuI3eeVtbR5A2iA6mCaV
+         5QBQkDfq+xdn7BOEA9dEj6QIjjHMU11j/zgdaVZsVhi8C2oRl6bFxT6thxHV49P2U8UL
+         zYC+DjT2f/NHcPLoSAHdcnqWWaY/yPWwMTsi+NOz2XxNjs9qrmO2DZcxaSVTMPKUaaw8
+         WFfpAud6lL6IcXM5+aRHmp/yuX4VH+U0aJ4N7MhsIExmp9g+j5ts12kN96no48OTOYsl
+         BwRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682358578; x=1684950578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=edIyrpOkZxkR7qQPvMEjMBtYXDIPtOhEQ7kSltA2Y7E=;
+        b=M8bTMpTqbZsvj8EZOoGz6ib0X1FlxUO/7vLCkjlfRuWENks9IJvCZ0SBv3IJa4l6bY
+         i+LzxieSgqV7h9p6SO0NO8KeBXIQ2YFEloLL+nApomka5tsVd0uys9N/RucAYDXXMnT4
+         g3QH0HU7YcEhhrO65CZqHSyBzhoelb5QPXyUZqKqIMtfo1gTK3JRx6kIdrHjXIY811SJ
+         9J3OPcIuH7+YNid2eMl4CSMnGxpkLVYkU0Sim370k7bJsGB4m/ExkHNie9yPFb3i0a2e
+         W5nqXhQMV5DyDW/HjbF1pypaq6Lxxf0s7KYwYIco8i9hkjDcHdM7Ez5u9MzVhM4OvgmW
+         82qA==
+X-Gm-Message-State: AAQBX9fAbBOesxMsGD90vruU9B8l+QmZGvIvnxqkYDcfJtUt/VWAfLmv
+        nA9ixePPUW5lcbQ7g7Re0LkAgA==
+X-Google-Smtp-Source: AKy350a+fQ5RH2pzme3FmdqfnV6Q9HMfXN8/2YLOzRVV6aO9E2YFNfCF27d33yNs3+ss0MWXL38FXg==
+X-Received: by 2002:a05:6a20:269f:b0:f0:7b8:c77b with SMTP id h31-20020a056a20269f00b000f007b8c77bmr14185926pze.59.1682358578033;
+        Mon, 24 Apr 2023 10:49:38 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id b6-20020a63d806000000b005143d3fa0e0sm6814788pgh.2.2023.04.24.10.49.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 10:49:37 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pr0Jj-001Vpp-HL;
+        Mon, 24 Apr 2023 14:49:35 -0300
+Date:   Mon, 24 Apr 2023 14:49:35 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Dave Chinner <david@fromorbit.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] perf tools: Add util function for overriding user
- set config values
-Message-ID: <ZEbAS2yx2fguW60w@kernel.org>
-References: <20230424134748.228137-1-james.clark@arm.com>
- <20230424134748.228137-3-james.clark@arm.com>
- <a7940a4a-fc62-17ca-834b-73628a54cc2a@intel.com>
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] mm/gup: disallow GUP writing to file-backed mappings by
+ default
+Message-ID: <ZEbBLzy4SU8IZR68@ziepe.ca>
+References: <f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com>
+ <20230423222941.GR447837@dread.disaster.area>
+ <14c6f0f3-0747-4800-8718-4f109f7321ea@lucifer.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a7940a4a-fc62-17ca-834b-73628a54cc2a@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <14c6f0f3-0747-4800-8718-4f109f7321ea@lucifer.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +111,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 24, 2023 at 06:36:14PM +0300, Adrian Hunter escreveu:
-> On 24/04/23 16:47, James Clark wrote:
-> > There is some duplicated code to only override config values if they
-> > haven't already been set by the user so make a util function for this.
-> > 
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> 
-> One minor comment, nevertheless:
-> 
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+On Sun, Apr 23, 2023 at 11:56:48PM +0100, Lorenzo Stoakes wrote:
 
-I just moved to  evsel__set_config_if_unset() to util/pmu.c, next to
-some other evsel__ functions to not break the python.so binding, before
-I was getting:
+> This warned upon check should in reality not occur, because it implies the
+> GUP user is trying to do something broken and is _not_ explicitly telling
+> GUP that it knows it's doing it and can live with the consequences. And on
+> that basis, is worthy of a warning so we know we have to go put this flag
+> in that place (and know it is a source of problematic GUP usage), or fix
+> the caller.
 
-[acme@quaco perf-tools-next]$ perf test -v python
-Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
- 19: 'import perf' in python                                         :
---- start ---
-test child forked, pid 500086
-python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf-tools-next/python'); import perf" | '/usr/bin/python3' "
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-ImportError: /tmp/build/perf-tools-next/python/perf.cpython-311-x86_64-linux-gnu.so: undefined symbol: perf_pmu__format_bits
-test child finished with -1
----- end ----
-'import perf' in python: FAILED!
-[acme@quaco perf-tools-next]$
+It is fine for debugging, but we can't merge user triggerable
+WARN_ONs..
 
-Please run 'perf test' and 'make -C tools/perf build-test' prior to
-sending pull requests,
+Since the GUP caller has no idea if userspace might be maliciously
+passing in a file VMA we can't throw warnings.
 
-Thanks, applied.
-
-- Arnaldo
-
+Jason
