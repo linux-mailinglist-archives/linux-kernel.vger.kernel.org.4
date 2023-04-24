@@ -2,155 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017A06EC809
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EED6EC80E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjDXIpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S231439AbjDXIq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjDXIpd (ORCPT
+        with ESMTP id S231429AbjDXIq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:45:33 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543AD9F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:45:32 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so30857886a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682325931; x=1684917931;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H2QhGbPfS5cFQyV2e+dfSoRNu58zlK/LOs70+0DhVQg=;
-        b=JYxpf8QGYxce1yUMh0Qi+Fp1oILpqRp2214cBO7q7NJqGA86odQLx05RtEiAz3qEDZ
-         pYTCQas33oKTGfv4nE3NcOjO6lj37xrTOx/dWm2Ipr2JpAkfnNTxzDG317OzYHMkp9aB
-         M4DSY/0nkneF+otW91G9dj/K12ipUQhLG/kjc1aN/rqNcAbgWRmOHkFeKiOJcjO8xt4Y
-         NkuV4UvLvgm4nDuKc7kJmyndDoMzuK7uDmlNGgcsBWNQu/60v75WPFzcDd4+oI8YU6qc
-         T1I4UuK0qckBjz88XVMhU247waC0pn+3GR+yx5zc9097CTrBxaaQf8GUISMrSDauUehk
-         8eGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682325931; x=1684917931;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H2QhGbPfS5cFQyV2e+dfSoRNu58zlK/LOs70+0DhVQg=;
-        b=TgDF7Zfh2uHC4eaJ4w4+4LE7PwcQGqQTpvIKHDLlMIrKjrUQATKYBO05O4blidkm8y
-         CTPIT2d7iUwGO9RRC+s0bKuGObVPu8qdybVoJWFhJR2lttJY2yC2XyDhbTcnEsV8uzM1
-         Udz/gfGyuh4QCWKtJw8yUatYoEdR0DZYjwz905FfZzBZBSYk/dL3LkpMDoQ0RmXb1qtq
-         0QRM89SvPjvKkMJWPPdIybeBqPsydYEBvx17mvRqXHXKLU/e+omJjk069ctuZmRujuJa
-         6dPZlJSyBVnWx7QrgRkttLWhH8CMzar9ywcjXpCFTNOt298B8kZ4qpPwQums+ZN1cpDH
-         SljQ==
-X-Gm-Message-State: AAQBX9eRY6MCrR20hkpBMrPO+Wyfjp+xGLpV0WLRUxsTQhgLYOkPv6mE
-        uO3ChTOxwfu4c4sKBg0DOf1oPA==
-X-Google-Smtp-Source: AKy350bxdVgo3uacEszB4mUWydB3zlwuBKaof0asY6EntyEMNGr8s1gxCIhCzq9xEWTc75SvmZNj8g==
-X-Received: by 2002:a17:906:cc99:b0:94a:511b:a21d with SMTP id oq25-20020a170906cc9900b0094a511ba21dmr9547736ejb.28.1682325930798;
-        Mon, 24 Apr 2023 01:45:30 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:fcdb:bf53:d053:3a52? ([2a02:810d:15c0:828:fcdb:bf53:d053:3a52])
-        by smtp.gmail.com with ESMTPSA id jt20-20020a170906ca1400b008e54ac90de1sm5250255ejb.74.2023.04.24.01.45.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 01:45:30 -0700 (PDT)
-Message-ID: <169d832c-72c0-6c67-37c3-dbea9e1bc639@linaro.org>
-Date:   Mon, 24 Apr 2023 10:45:28 +0200
+        Mon, 24 Apr 2023 04:46:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24175E53;
+        Mon, 24 Apr 2023 01:46:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A349A61F1F;
+        Mon, 24 Apr 2023 08:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6286C433D2;
+        Mon, 24 Apr 2023 08:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682326014;
+        bh=BxzHUQB3Z0bZMqtecVzotggbecUSmBmH1hXxG3knd7g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jdIvp0lahDwhD5Of5iNaBzJV93J9CmLiSKsfK1wx/EDaULMmI0evPDb9JQTkiL1XP
+         5jKKP4/Y2ucVSWsWg++viia79FEnxT553ndleAu9A1vuaz/a3zdIVk/gE7V0fLHIDh
+         4QX6Komzpjypwyt6yjSDtiHh5biBVitIbcP9muVRxCl/M/+7+Bq2gRVCq00GmwAVUM
+         RUWT7VCJkA1H9gt4I1sPvYBFI+2YQhN8VS/iHBYVmYX7RRkcpvWyj83CTagRAHyv6u
+         03EsgB/Z3j3cPPy2b089AdlQ1B0t0GArQ22uIg47zwYiKSrpnp6K6ssjUUrMlJlhRf
+         s170M+b+8IO5g==
+Message-ID: <f9666a06-8087-f804-202a-dbb744011d3a@kernel.org>
+Date:   Mon, 24 Apr 2023 11:46:47 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
+Subject: Re: [PATCH v5 3/7] phy: starfive: Add JH7110 USB 2.0 PHY driver
 Content-Language: en-US
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1681887790.git.zhoubinbin@loongson.cn>
- <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
- <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
- <CAMpQs4JjHvVOzQz-1Y-q9ut6tWUpakrHeozuwPg0dzoDcUFEGA@mail.gmail.com>
- <75231886-cdf6-cfde-d6b9-183b1fbf98da@linaro.org>
- <CAMpQs4Jp8WPKJEuJD-_83oRPBbPELxS5ufqp-nHow0D9D+R+ig@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMpQs4Jp8WPKJEuJD-_83oRPBbPELxS5ufqp-nHow0D9D+R+ig@mail.gmail.com>
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+References: <20230420110052.3182-1-minda.chen@starfivetech.com>
+ <20230420110052.3182-4-minda.chen@starfivetech.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230420110052.3182-4-minda.chen@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/04/2023 10:30, Binbin Zhou wrote:
-> On Thu, Apr 20, 2023 at 11:52 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 20/04/2023 15:00, Binbin Zhou wrote:
->>>>> +examples:
->>>>> +  - |
->>>>> +    eiointc: interrupt-controller@1fe11600 {
->>>>> +      compatible = "loongson,ls2k0500-eiointc";
->>>>> +      reg = <0x1fe11600 0x10>,
->>>>> +            <0x1fe11700 0x10>,
->>>>> +            <0x1fe11800 0x10>,
->>>>> +            <0x1fe114c0 0x4>;
->>>>
->>>> Binding is OK, but are you sure you want to split the address space like
->>>> this? It looks like two address spaces (enable+clear+status should be
->>>> one). Are you sure this is correct?
->>>>
->>> Hi Krzysztof:
->>>
->>> These registers are all in the range of chip configuration registers,
->>> in the case of LS2K0500, which has a base address of 0x1fe10000.
->>> However, the individual register addresses are not contiguous with
->>> each other, and most are distributed across modules, so I feel that
->>> they should be listed in detail as they are used.
->>
->> Do you want to say that:
->> Between 0x1fe11600 and 0x1fe11700 there are EIOINTC registers and other
->> (independent) module registers?
-> 
-> No, this section is all EIO-related configuration, but there will be
-> undefined space here.
-> 
-> Throughout the chip configuration space, there are some relatively
-> common areas, such as the definition of 0x1fe1_14c0.
-> Because our chip supports two interrupt modes, node legacy I/O
-> interrupt and extended I/O interrupt, both modes require interrupt
-> routing registers.
-> Their registers are then defined together: the legacy interrupt I/O
-> start address is 0x1fe1_1400, while the extended I/O interrupt start
-> address is 0x1fe1_14c0.
-> 
-> Then I have carefully compared the chip configuration space in
-> LS2K0500 and LS2K2000 and can see that:
-> 
-> 1. The chip configuration space base addresses are different, but they
-> both have a size of 64KB;
-> 2. The offset addresses of the EIO related registers are the same, for
-> example the offset of the enable register is 0x1600.
-> 
-> Wouldn't it be better to declare the entire configuration space (64KB)
-> directly in the dts and use the offsets to access the corresponding
-> registers?
-> 
-> Example:
-> reg = <0x1fe10000 0x10000>.
+Hi Minda,
 
-Yes, that's what usually we do.
+On 20/04/2023 14:00, Minda Chen wrote:
+> Add Starfive JH7110 SoC USB 2.0 PHY driver support.
+> USB 2.0 PHY default connect to Cadence USB controller.
+> 
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  MAINTAINERS                           |   6 +
+>  drivers/phy/starfive/Kconfig          |  11 ++
+>  drivers/phy/starfive/Makefile         |   1 +
+>  drivers/phy/starfive/phy-jh7110-usb.c | 162 ++++++++++++++++++++++++++
+>  4 files changed, 180 insertions(+)
+>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1aef5ba46d71..c09ea66dcd5a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19968,6 +19968,12 @@ M:	William Qiu <william.qiu@starfivetech.com>
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>  
+> +STARFIVE JH71X0 USB PHY DRIVER
+> +M:	Minda Chen <minda.chen@starfivetech.com>
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> +F:	drivers/phy/starfive/phy-jh7110-usb.c
+> +
+>  STATIC BRANCH/CALL
+>  M:	Peter Zijlstra <peterz@infradead.org>
+>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
+> index f989b8ff8bcb..2c013c390dee 100644
+> --- a/drivers/phy/starfive/Kconfig
+> +++ b/drivers/phy/starfive/Kconfig
+> @@ -11,3 +11,14 @@ config PHY_STARFIVE_DPHY_RX
+>  	  Choose this option if you have a StarFive D-PHY in your
+>  	  system. If M is selected, the module will be called
+>  	  phy-starfive-dphy-rx.
+> +
+> +config PHY_STARFIVE_JH7110_USB
+> +	tristate "Starfive JH7110 USB 2.0 PHY support"
+> +	depends on USB_SUPPORT
+> +	select GENERIC_PHY
+> +	select USB_PHY
+> +	help
+> +	  Enable this to support the StarFive USB 2.0 PHY,
+> +	  used with the Cadence USB controller.
+> +	  If M is selected, the module will be called
+> +	  phy-jh7110-usb.ko.
+> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
+> index 7ec576cb30ae..176443852f4d 100644
+> --- a/drivers/phy/starfive/Makefile
+> +++ b/drivers/phy/starfive/Makefile
+> @@ -1,2 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_PHY_STARFIVE_DPHY_RX)      += phy-starfive-dphy-rx.o
+> +obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
+> diff --git a/drivers/phy/starfive/phy-jh7110-usb.c b/drivers/phy/starfive/phy-jh7110-usb.c
+> new file mode 100644
+> index 000000000000..4a12df0692cd
+> --- /dev/null
+> +++ b/drivers/phy/starfive/phy-jh7110-usb.c
+> @@ -0,0 +1,162 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * StarFive JH7110 USB 2.0 PHY driver
+> + *
+> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> + * Author: Minda Chen <minda.chen@starfivetech.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/usb/of.h>
+> +
+> +#define USB_125M_CLK_RATE		125000000
+> +#define USB_LS_KEEPALIVE_OFF		0x4
+> +#define USB_LS_KEEPALIVE_ENABLE		BIT(4)
+> +
+> +struct jh7110_usb2_phy {
+> +	struct phy *phy;
+> +	void __iomem *regs;
+> +	struct clk *usb_125m_clk;
+> +	struct clk *app_125m;
+> +	enum phy_mode mode;
+> +};
+> +
+> +static void jh7110_usb2_mode_set(struct jh7110_usb2_phy *phy)
+> +{
+> +	unsigned int val;
+> +
+> +	if (phy->mode != PHY_MODE_USB_HOST) {
+> +		/* Enable the LS speed keep-alive signal */
+> +		val = readl(phy->regs + USB_LS_KEEPALIVE_OFF);
+> +		val |= USB_LS_KEEPALIVE_ENABLE;
+> +		writel(val, phy->regs + USB_LS_KEEPALIVE_OFF);
+> +	}
+> +}
+> +
+> +static int jh7110_usb2_phy_set_mode(struct phy *_phy,
+> +				    enum phy_mode mode, int submode)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +
+> +	switch (mode) {
+> +	case PHY_MODE_USB_HOST:
+> +	case PHY_MODE_USB_DEVICE:
+> +	case PHY_MODE_USB_OTG:
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (mode != phy->mode) {
+> +		dev_info(&_phy->dev, "Changing phy to %d\n", mode);
 
-Best regards,
-Krzysztof
+dev_dbg() please?
 
+> +		phy->mode = mode;
+> +		jh7110_usb2_mode_set(phy);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_usb2_phy_init(struct phy *_phy)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +	int ret;
+> +
+> +	ret = clk_set_rate(phy->usb_125m_clk, USB_125M_CLK_RATE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(phy->app_125m);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_usb2_phy_exit(struct phy *_phy)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +
+> +	clk_disable_unprepare(phy->app_125m);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops jh7110_usb2_phy_ops = {
+> +	.init		= jh7110_usb2_phy_init,
+> +	.exit		= jh7110_usb2_phy_exit,
+> +	.set_mode	= jh7110_usb2_phy_set_mode,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int jh7110_usb_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct jh7110_usb2_phy *phy;
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *phy_provider;
+> +
+> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	phy->usb_125m_clk = devm_clk_get(dev, "125m");
+> +	if (IS_ERR(phy->usb_125m_clk))
+> +		return dev_err_probe(dev, PTR_ERR(phy->usb_125m_clk),
+> +			"Failed to get 125m clock\n");
+> +
+> +	phy->app_125m = devm_clk_get(dev, "app_125m");
+> +	if (IS_ERR(phy->app_125m))
+> +		return dev_err_probe(dev, PTR_ERR(phy->app_125m),
+> +			"Failed to get app 125m clock\n");
+> +
+> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(phy->regs))
+> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+> +			"Failed to map phy base\n");
+> +
+> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_usb2_phy_ops);
+> +	if (IS_ERR(phy->phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy->phy),
+> +			"Failed to create phy\n");
+> +
+> +	platform_set_drvdata(pdev, phy);
+> +	phy_set_drvdata(phy->phy, phy);
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +
+> +	return PTR_ERR_OR_ZERO(phy_provider);
+> +}
+> +
+> +static int jh7110_usb_phy_remove(struct platform_device *pdev)
+> +{
+> +	struct jh7110_usb2_phy *phy = platform_get_drvdata(pdev);
+> +
+> +	clk_disable_unprepare(phy->app_125m);
+
+Why do you need to do clk_disable here? You didn't enable it in probe.
+
+> +	platform_set_drvdata(pdev, NULL);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id jh7110_usb_phy_of_match[] = {
+> +	{ .compatible = "starfive,jh7110-usb-phy" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, jh7110_usb_phy_of_match);
+> +
+> +static struct platform_driver jh7110_usb_phy_driver = {
+> +	.probe	= jh7110_usb_phy_probe,
+> +	.remove	= jh7110_usb_phy_remove,
+> +	.driver = {
+> +		.of_match_table	= jh7110_usb_phy_of_match,
+> +		.name  = "jh7110-usb-phy",
+> +	}
+> +};
+> +module_platform_driver(jh7110_usb_phy_driver);
+> +
+> +MODULE_DESCRIPTION("StarFive JH7110 USB 2.0 PHY driver");
+> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
+> +MODULE_LICENSE("GPL");
+
+cheers,
+-roger
