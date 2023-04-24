@@ -2,262 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8D66EC74A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EE86EC74F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbjDXHks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S231405AbjDXHmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbjDXHkr (ORCPT
+        with ESMTP id S231165AbjDXHmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:40:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B595AE7D;
-        Mon, 24 Apr 2023 00:40:40 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 762376602097;
-        Mon, 24 Apr 2023 08:40:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682322039;
-        bh=cIDw4bo9W+NAgm/8tIV6FQYtHcogF7cLjrNY/+Ashgw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D8MC/8sP905WNAn7bhbIwt6KyjAWrgo2x9YsbL7az82njzG/qtsobZjNCF5xglABp
-         a+nQyw49M6WSnt5HIDxOlUKYe07CTLXfMjIYwbbChP4CPvfYLHnumLoLLNFUZgOI83
-         ldsjmH82nfEUnVrYN6LJ3xsqwbepHq+Ab/YpfP0IOEcarSvkBvkTeG58uXbTReFCSm
-         5su4HEaXF+mAt6ttMSRm1Gdf+5ufboXqJJKi230YGS/BgDsKr8UT6fE1wkyx0FyByf
-         juwIMtwikknFy0Tr5b0+waEFwaScP7CZSOx7gcLFlGJ6XoibB4i7Y+wuIrOlLh0Wy/
-         zoXJhUGLwUFPA==
-Message-ID: <a052b2ba-e211-c997-7508-0d012663dedb@collabora.com>
-Date:   Mon, 24 Apr 2023 09:40:36 +0200
+        Mon, 24 Apr 2023 03:42:38 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF46A7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:42:36 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4efd5e4d302so4016e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 00:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682322155; x=1684914155;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=23a1E0HIFpgHSlb82ihOoDCUEgYGChUX8rdYg8ouJPE=;
+        b=SDk0ywpSJg4VWH1VUThXYnGnxzOmvg4LtOZL4gGtJp7UcvOSs4k35qL7bzjz4Z4TWc
+         X+yDXh84KZtPtQpJjwNGO/WsHQ/YKbbypQZGVI+Csnl5jgBsjakrG7nmruqBskTXk40X
+         HYFqG4J53wgOi2s/3uBwpIZauFj3ouelxfiQ2RSKOtVI/X/Ihonv8zTi+sR1Dastqsra
+         i9lls/9F8V/cbh0M3cTiChbvE5wlEzGOyQiWueAikoCYI4mbP4o+5m1qhcE/YTe6MJuV
+         nbr2uTrhDkwknPOTsVxRfMytJHdKcte4w3+oWI7to9cEl/AfvwsQ42oPM7PbiSt3PIht
+         99Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682322155; x=1684914155;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=23a1E0HIFpgHSlb82ihOoDCUEgYGChUX8rdYg8ouJPE=;
+        b=buMsx6fwLi40S9weoE6JJ+3oT6cCDcWbuZaBhJCUZX38roapJ1UWn27AjE6c9U2LyY
+         FvT75eC8ZPGY87RVL2aPYKeP5/ZnfwZ35zE85x3HeioOsQrIy1G1oDdELNYJYQfu8p/I
+         BJOo/3s3TQqEjLiA4p0xWCdzQ+bhl8Osp8A+Qhf2zYxfovYp3D95JIW7LYNd0exhe5Ph
+         M8RoKKfYWdFQp38bDHIsOMMDKwACCz0P3mPfwP3QRAggPL36oESAGgVgHbRmZJt79nGE
+         D4mP9Ml9h85mOHY5XZlC8kVKNZYWxX1SR1++kBVwFeVvCTop3ATd6zyeNxQO+Ldt1XJ9
+         uuQA==
+X-Gm-Message-State: AAQBX9cAJgp0VvZr6CWaiB3oPl2lsIu/bgH3bcoyupzb2lxXsZn3u03s
+        MUhyF4q7EJ4W9pwUudgDNmqMxqAKCUy/sTxudyr4kg==
+X-Google-Smtp-Source: AKy350Z167ghQt6zojoVa5Lzeq1YqkQgBD6oFOX3LLSAmZyTzOi3rQvaIMTRp8U2WAMJTZUpD+x8EEufVqLYVvvovYE=
+X-Received: by 2002:a05:6512:12ce:b0:4e8:3f1e:de43 with SMTP id
+ p14-20020a05651212ce00b004e83f1ede43mr219269lfg.7.1682322154730; Mon, 24 Apr
+ 2023 00:42:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/5] arm64: dts: mediatek: cherry: Add platform thermal
- configuration
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230420094433.42794-1-angelogioacchino.delregno@collabora.com>
- <20230420094433.42794-2-angelogioacchino.delregno@collabora.com>
- <CAGXv+5GuEQMxYTKrnia1ipYHLt_B2h6By7EejE7MjCypfavnFg@mail.gmail.com>
- <5ede9421-54d6-4dda-91af-2acbf46c2d3e@notapiano>
- <097d60ba-5604-a2c9-c6d2-121db2d55e36@collabora.com>
- <CAGXv+5G9Qh2ftB0NG4Km3wHQCgyxHK+Ae17QWJrv8V9VJaBH4A@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5G9Qh2ftB0NG4Km3wHQCgyxHK+Ae17QWJrv8V9VJaBH4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <00000000000071af7a05fa0fd8dc@google.com>
+In-Reply-To: <00000000000071af7a05fa0fd8dc@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 24 Apr 2023 09:42:22 +0200
+Message-ID: <CACT4Y+aBxmUzoOaG99Wucj7b3pJH1DUMSvKw7SHRiFJ9OuZq2g@mail.gmail.com>
+Subject: Re: [syzbot] [block?] KCSAN: data-race in __get_task_ioprio / set_task_ioprio
+To:     syzbot <syzbot+28ed267c18c614a9376f@syzkaller.appspotmail.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/04/23 09:38, Chen-Yu Tsai ha scritto:
-> On Mon, Apr 24, 2023 at 2:31 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 21/04/23 22:53, Nícolas F. R. A. Prado ha scritto:
->>> On Fri, Apr 21, 2023 at 03:37:52PM +0800, Chen-Yu Tsai wrote:
->>>> On Thu, Apr 20, 2023 at 5:45 PM AngeloGioacchino Del Regno
->>>> <angelogioacchino.delregno@collabora.com> wrote:
->>>>>
->>>>> This platform has three auxiliary NTC thermistors, connected to the
->>>>> SoC's ADC pins. Enable the auxadc in order to be able to read the
->>>>> ADC values, add a generic-adc-thermal LUT for each and finally assign
->>>>> them to the SoC's thermal zones.
->>>>>
->>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>>> ---
->>>>>    .../boot/dts/mediatek/mt8195-cherry.dtsi      | 105 ++++++++++++++++++
->>>>>    1 file changed, 105 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
->>>>> index 8ac80a136c37..0820e9ba3829 100644
->>>>> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
->>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
->>>>> @@ -114,6 +114,77 @@ ppvar_sys: regulator-ppvar-sys {
->>>>>                   regulator-boot-on;
->>>>>           };
->>>>>
->>>>> +       /* Murata NCP03WF104F05RL */
->>>>> +       tboard_thermistor1: thermal-sensor-t1 {
->>>>> +               compatible = "generic-adc-thermal";
->>>>> +               #thermal-sensor-cells = <0>;
->>>>> +               io-channels = <&auxadc 0>;
->>>>> +               io-channel-names = "sensor-channel";
->>>>> +               temperature-lookup-table = <    (-10000) 1553
->>>>> +                                               (-5000) 1485
->>>>> +                                               0 1406
->>>>> +                                               5000 1317
->>>>> +                                               10000 1219
->>>>> +                                               15000 1115
->>>>> +                                               20000 1007
->>>>> +                                               25000 900
->>>>> +                                               30000 796
->>>>> +                                               35000 697
->>>>> +                                               40000 605
->>>>> +                                               45000 523
->>>>> +                                               50000 449
->>>>> +                                               55000 384
->>>>> +                                               60000 327
->>>>> +                                               65000 279
->>>>> +                                               70000 237
->>>>> +                                               75000 202
->>>>> +                                               80000 172
->>>>> +                                               85000 147
->>>>> +                                               90000 125
->>>>> +                                               95000 107
->>>>> +                                               100000 92
->>>>> +                                               105000 79
->>>>> +                                               110000 68
->>>>> +                                               115000 59
->>>>> +                                               120000 51
->>>>> +                                               125000 44>;
->>>>> +       };
->>>>> +
->>>>> +       tboard_thermistor2: thermal-sensor-t2 {
->>>>> +               compatible = "generic-adc-thermal";
->>>>> +               #thermal-sensor-cells = <0>;
->>>>> +               io-channels = <&auxadc 1>;
->>>>> +               io-channel-names = "sensor-channel";
->>>>> +               temperature-lookup-table = <    (-10000) 1553
->>>>> +                                               (-5000) 1485
->>>>> +                                               0 1406
->>>>> +                                               5000 1317
->>>>> +                                               10000 1219
->>>>> +                                               15000 1115
->>>>> +                                               20000 1007
->>>>> +                                               25000 900
->>>>> +                                               30000 796
->>>>> +                                               35000 697
->>>>> +                                               40000 605
->>>>> +                                               45000 523
->>>>> +                                               50000 449
->>>>> +                                               55000 384
->>>>> +                                               60000 327
->>>>> +                                               65000 279
->>>>> +                                               70000 237
->>>>> +                                               75000 202
->>>>> +                                               80000 172
->>>>> +                                               85000 147
->>>>> +                                               90000 125
->>>>> +                                               95000 107
->>>>> +                                               100000 92
->>>>> +                                               105000 79
->>>>> +                                               110000 68
->>>>> +                                               115000 59
->>>>> +                                               120000 51
->>>>> +                                               125000 44>;
->>>>> +       };
->>>>> +
->>>>>           usb_vbus: regulator-5v0-usb-vbus {
->>>>>                   compatible = "regulator-fixed";
->>>>>                   regulator-name = "usb-vbus";
->>>>> @@ -260,6 +331,10 @@ &gpu {
->>>>>           mali-supply = <&mt6315_7_vbuck1>;
->>>>>    };
->>>>>
->>>>> +&auxadc {
->>>>> +       status = "okay";
->>>>> +};
->>>>> +
->>>>>    &i2c0 {
->>>>>           status = "okay";
->>>>>
->>>>> @@ -1098,6 +1173,36 @@ mt6315_7_vbuck1: vbuck1 {
->>>>>           };
->>>>>    };
->>>>>
->>>>> +&thermal_zones {
->>>>> +       soc_area_ntc {
->>>
->>> Not sure if that's what's causing the issue, but the thermal zone name should
->>> end with -thermal as per the binding. Also note that it needs to be under 20
->>> characters otherwise it will fail to be registered with -22 like below.
->>> (Also, node names shouldn't contain underscore)
->>>
->>> Thanks,
->>> Nícolas
->>>
->>>>> +               polling-delay = <1000>;
->>>>> +               polling-delay-passive = <250>;
->>>>> +               thermal-sensors = <&tboard_thermistor1>;
->>>>> +
->>>>> +               trips {
->>>>> +                       trip-crit {
->>>>> +                               temperature = <95000>;
->>>>> +                               hysteresis = <2000>;
->>>>> +                               type = "critical";
->>>>> +                       };
->>>>> +               };
->>>>> +       };
->>>>> +
->>>>> +       pmic_area_ntc {
->>>>> +               polling-delay = <1000>;
->>>>> +               polling-delay-passive = <0>;
->>>>> +               thermal-sensors = <&tboard_thermistor2>;
->>>>> +
->>>>> +               trips {
->>>>> +                       trip-crit {
->>>>> +                               temperature = <95000>;
->>>>> +                               hysteresis = <2000>;
->>>>> +                               type = "critical";
->>>>> +                       };
->>>>> +               };
->>>>> +       };
->>>>
->>>> I'm still getting:
->>>>
->>>> thermal_sys: Failed to find 'trips' node
->>>> thermal_sys: Failed to find trip points for thermal-sensor-t1 id=0
->>>> generic-adc-thermal thermal-sensor-t1: Thermal zone sensor register failed: -22
->>>> generic-adc-thermal: probe of thermal-sensor-t1 failed with error -22
->>>> thermal_sys: Failed to find 'trips' node
->>>> thermal_sys: Failed to find trip points for thermal-sensor-t2 id=0
->>>> generic-adc-thermal thermal-sensor-t2: Thermal zone sensor register failed: -22
->>>> generic-adc-thermal: probe of thermal-sensor-t2 failed with error -22
->>>> thermal_sys: Failed to find 'trips' node
->>>> thermal_sys: Failed to find trip points for thermal-sensor-t3 id=0
->>>> generic-adc-thermal thermal-sensor-t3: Thermal zone sensor register failed: -22
->>>> generic-adc-thermal: probe of thermal-sensor-t3 failed with error -22
->>>>
->>
->> I think you have something wrong locally - there's no thermal-sensor-t3 in this
->> devicetree...
-> 
-> I seem to have run a stale kernel image. Rebuilt the kernel and everything
-> seems to work OK now.
-> 
-> BTW, I think the design went for a lower trip point. At least the hardware
-> thermal protection IC on the Acer device trips at 85 degrees C, instead of
-> 95 degrees C. Maybe that's accounting for the fact that these are external
-> thermal sensors and have some latency and temperature difference. The PMIC
-> specifies 85 degrees C maximum ambient air temperature. The SoC doesn't
-> specify.
-> 
+On Mon, 24 Apr 2023 at 09:20, syzbot
+<syzbot+28ed267c18c614a9376f@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    44149752e998 Merge tag 'cgroup-for-6.3-rc6-fixes' of git:/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=147afc8fc80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=710057cbb8def08c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=28ed267c18c614a9376f
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/7bfa303f05cc/disk-44149752.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/4e8ea8730409/vmlinux-44149752.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/e584bce13ba7/bzImage-44149752.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+28ed267c18c614a9376f@syzkaller.appspotmail.com
 
-Let's play safe then, I'll change that to 85 for the next version.
+It looks like it can lead to reading wrong/uninit ioprio in __get_task_ioprio.
+I think set_task_ioprio() should init ioprio before publishing and
+publish with a release store, __get_task_ioprio needs to use load
+acquire to ensure proper ordering.
 
-> Either way this is
-> 
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-
-Thanks!
-
+> ==================================================================
+> BUG: KCSAN: data-race in __get_task_ioprio / set_task_ioprio
+>
+> write to 0xffff888108c83888 of 8 bytes by task 15748 on cpu 0:
+>  set_task_ioprio+0x23b/0x260 block/blk-ioc.c:291
+>  __do_sys_ioprio_set block/ioprio.c:124 [inline]
+>  __se_sys_ioprio_set+0x272/0x5a0 block/ioprio.c:68
+>  __x64_sys_ioprio_set+0x43/0x50 block/ioprio.c:68
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> read to 0xffff888108c83888 of 8 bytes by task 15749 on cpu 1:
+>  __get_task_ioprio+0x1c/0x110 block/ioprio.c:150
+>  get_current_ioprio include/linux/ioprio.h:60 [inline]
+>  init_sync_kiocb include/linux/fs.h:2003 [inline]
+>  __kernel_write_iter+0xe2/0x380 fs/read_write.c:515
+>  dump_emit_page fs/coredump.c:885 [inline]
+>  dump_user_range+0x258/0x480 fs/coredump.c:912
+>  elf_core_dump+0x1a73/0x1b90 fs/binfmt_elf.c:2142
+>  do_coredump+0xfeb/0x1840 fs/coredump.c:762
+>  get_signal+0xd65/0xff0 kernel/signal.c:2845
+>  arch_do_signal_or_restart+0x89/0x2a0 arch/x86/kernel/signal.c:306
+>  exit_to_user_mode_loop+0x6f/0xe0 kernel/entry/common.c:168
+>  exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
+>  irqentry_exit_to_user_mode+0x9/0x20 kernel/entry/common.c:310
+>  irqentry_exit+0x12/0x40 kernel/entry/common.c:413
+>  exc_general_protection+0x339/0x4c0 arch/x86/kernel/traps.c:728
+>  asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+>
+> value changed: 0x0000000000000000 -> 0xffff8881049b5c90
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 PID: 15749 Comm: syz-executor.5 Tainted: G        W          6.3.0-rc6-syzkaller-00138-g44149752e998 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+> ==================================================================
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000071af7a05fa0fd8dc%40google.com.
