@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218896EC370
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3766EC376
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 03:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjDXBjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 21:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S230382AbjDXBoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 21:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDXBjG (ORCPT
+        with ESMTP id S230369AbjDXBoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 21:39:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F33D10E5;
-        Sun, 23 Apr 2023 18:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682300345; x=1713836345;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LlwKcTbLc1lSGVgS6QXs9Op46VzW+eF+zZrbrebopWY=;
-  b=IAJinQntj8CuQyIKYUxOPBBI1KS2gfbObrk69lzFLESjya+sjQVgxwb1
-   cNZrFxWE6ndtYX95do21B7KYmHga0df2gsn0eBm/vHsjRu9J1zo+z5mN+
-   9M8T46GSKrv/BVE7CQNFmpZdwLe0HaScgl2+NoGnqAzxxU22cL7Fvqj3W
-   WyRwXbdOvb8RqqSiom45uIosX4hdowYpoomqc4G5EB93ZTzeo067YpN/2
-   w8qIyUr0raXEQxrwGVR9hzn2jR5dWJo1Yk63vS2wO4rfYMXOIiWI34c2D
-   fpI4SvJunx8lEHK9MsxEyaVAElNZxjpR/vC/Qx58ZULNHviXCBoyFvF3K
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="348246381"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="348246381"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 18:39:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="686596081"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="686596081"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.168.81]) ([10.249.168.81])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 18:39:01 -0700
-Message-ID: <85f9bf76-05ec-8948-4ef1-42a57d641766@linux.intel.com>
-Date:   Mon, 24 Apr 2023 09:38:59 +0800
+        Sun, 23 Apr 2023 21:44:18 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD41E10CC
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 18:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0Sf6LJiinXD0+Z04+CoBCjhP6xRPg9WnwCH4CvJn44g=; b=JIcVwiky7ofsROMjxVeNT+AQEL
+        gSU2A0P4XNRrWSyZwXgZi/+FOiKwNjUmXLgtMSC3hz+vOL4g/EYOnY170TdlZqVgSFfImBxA5+sFo
+        iPTnAFTQhlifb5rJHjqGpyfhf49jz7pt0yN/UHMkYNQhAgwyslyIB6BdsBlZIenn4GiL/Fv98NYDA
+        gDjFSgCcyQTeR6ls08+hXDWYDf3aGeA9zCejqkMaiEnzaEcH089aZc9Mdl5B++z2groTyLjc1dsvd
+        uEwnjUDOTomCjEfvzlCCPNtq5LZI0vv+SN0/hE1Ll2yuZ85HzJY2PD2SVyNZWUA3DjgMnj0HnB+It
+        xX5CGfEQ==;
+Received: from [152.249.146.45] (helo=steammachine.lan)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1pqlFV-00AeE7-4w; Mon, 24 Apr 2023 03:44:13 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH] drm/amdgpu: Mark contexts guilty for any reset type
+Date:   Sun, 23 Apr 2023 22:43:24 -0300
+Message-Id: <20230424014324.218531-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 07/21] KVM:x86: Refresh CPUID on write to guest
- MSR_IA32_XSS
-To:     Yang Weijiang <weijiang.yang@intel.com>, seanjc@google.com,
-        pbonzini@redhat.com, peterz@infradead.org, john.allen@amd.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rick.p.edgecombe@intel.com, Zhang Yi Z <yi.z.zhang@linux.intel.com>
-References: <20230421134615.62539-1-weijiang.yang@intel.com>
- <20230421134615.62539-8-weijiang.yang@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230421134615.62539-8-weijiang.yang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When a DRM job timeout, the GPU is probably hang and amdgpu have some
+ways to deal with that, ranging from soft recoveries to full device
+reset. Anyway, when userspace ask the kernel the state of the context
+(via AMDGPU_CTX_OP_QUERY_STATE), the kernel reports that the device was
+reset, regardless if a full reset happened or not.
 
-On 4/21/2023 9:46 PM, Yang Weijiang wrote:
-> Update CPUID(EAX=0DH,ECX=1) when the guest's XSS is modified.
-> CPUID(EAX=0DH,ECX=1).EBX reports current required storage size for all
-> features enabled via XCR0 | XSS so that guest can allocate correct xsave
-> buffer.
->
-> Note, KVM does not yet support any XSS based features, i.e. supported_xss
-> is guaranteed to be zero at this time.
->
-> Co-developed-by: Zhang Yi Z <yi.z.zhang@linux.intel.com>
-> Signed-off-by: Zhang Yi Z <yi.z.zhang@linux.intel.com>
-> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
-> ---
->   arch/x86/kvm/cpuid.c | 11 ++++++++---
->   arch/x86/kvm/x86.c   |  6 ++++--
->   2 files changed, 12 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 123bf8b97a4b..dd6d5150d86a 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -276,9 +276,14 @@ static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_e
->   		best->ebx = xstate_required_size(vcpu->arch.xcr0, false);
->   
->   	best = cpuid_entry2_find(entries, nent, 0xD, 1);
-> -	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
-> -		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
-> -		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
-> +	if (best) {
-> +		if (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
-> +		    cpuid_entry_has(best, X86_FEATURE_XSAVEC))  {
+However, amdgpu only marks a context guilty in the ASIC reset path. This
+makes the userspace report incomplete, given that on soft recovery path
+the guilty context is not told that it's the guilty one.
 
-Is it necessary to change to use two ifs?
+Fix this by marking the context guilty for every type of reset when a
+job timeouts.
 
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 3 ---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_job.c    | 8 +++++++-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-> +			u64 xstate = vcpu->arch.xcr0 | vcpu->arch.ia32_xss;
-> +
-> +			best->ebx = xstate_required_size(xstate, true);
-> +		}
-> +	}
->   
->   	best = __kvm_find_kvm_cpuid_features(vcpu, entries, nent);
->   	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 33a780fe820b..ab3360a10933 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3776,8 +3776,10 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   		 */
->   		if (data & ~kvm_caps.supported_xss)
->   			return 1;
-> -		vcpu->arch.ia32_xss = data;
-> -		kvm_update_cpuid_runtime(vcpu);
-> +		if (vcpu->arch.ia32_xss != data) {
-> +			vcpu->arch.ia32_xss = data;
-> +			kvm_update_cpuid_runtime(vcpu);
-> +		}
->   		break;
->   	case MSR_SMI_COUNT:
->   		if (!msr_info->host_initiated)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index ac78caa7cba8..ea169d1689e2 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -4771,9 +4771,6 @@ int amdgpu_device_pre_asic_reset(struct amdgpu_device *adev,
+ 
+ 	amdgpu_fence_driver_isr_toggle(adev, false);
+ 
+-	if (job && job->vm)
+-		drm_sched_increase_karma(&job->base);
+-
+ 	r = amdgpu_reset_prepare_hwcontext(adev, reset_context);
+ 	/* If reset handler not implemented, continue; otherwise return */
+ 	if (r == -ENOSYS)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+index c3d9d75143f4..097ed8f06865 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+@@ -51,6 +51,13 @@ static enum drm_gpu_sched_stat amdgpu_job_timedout(struct drm_sched_job *s_job)
+ 	memset(&ti, 0, sizeof(struct amdgpu_task_info));
+ 	adev->job_hang = true;
+ 
++	amdgpu_vm_get_task_info(ring->adev, job->pasid, &ti);
++
++	if (job && job->vm) {
++		DRM_INFO("marking %s context as guilty", ti.process_name);
++		drm_sched_increase_karma(&job->base);
++	}
++
+ 	if (amdgpu_gpu_recovery &&
+ 	    amdgpu_ring_soft_recovery(ring, job->vmid, s_job->s_fence->parent)) {
+ 		DRM_ERROR("ring %s timeout, but soft recovered\n",
+@@ -58,7 +65,6 @@ static enum drm_gpu_sched_stat amdgpu_job_timedout(struct drm_sched_job *s_job)
+ 		goto exit;
+ 	}
+ 
+-	amdgpu_vm_get_task_info(ring->adev, job->pasid, &ti);
+ 	DRM_ERROR("ring %s timeout, signaled seq=%u, emitted seq=%u\n",
+ 		  job->base.sched->name, atomic_read(&ring->fence_drv.last_seq),
+ 		  ring->fence_drv.sync_seq);
+-- 
+2.40.0
+
