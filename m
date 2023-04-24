@@ -2,132 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1396ED15B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7A06ED188
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjDXPa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S230355AbjDXPhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjDXPaH (ORCPT
+        with ESMTP id S231845AbjDXPhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:30:07 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50167D9C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:29:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f9e465c6cso86124937b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682350197; x=1684942197;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCgpe6n+jmUxcEJH0eL6xCNrEIEiHzHCJcnHIrPBLxc=;
-        b=G7/E08havS32LLcjGJNwV3zdv/V5VR800w4qAVStO3+3tIfgUVcB6KxYQGQtSi4WxI
-         4ErYbClZWhmokdmkJsrjH5kb5HOU1ZxVpBEpRhqRk2MWG3KZ7txdL2o0K2HS2al/anqA
-         Y2KPb9ipTim4mLpv5gUC1uAuXiDakF0XzeIfRIr+DXu7m2UtkAgqW2GOJvBFoKIIxOIr
-         Z+ke4Fd9SJY1SpjzpXkq4UkZT1Y6SLpEZgpeiCeeRgZqeBsQ7WJ3rO0ygkP85sAwcMna
-         vnsbx4fJwNKg03OxbLet/+UK234+NonnH8MmZlqUkkIpHn7FZjba8DkG9YV2gi1sWvmn
-         IPEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350197; x=1684942197;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCgpe6n+jmUxcEJH0eL6xCNrEIEiHzHCJcnHIrPBLxc=;
-        b=bx54nzZ0ujUgnmfmsD0n9q/isNXDJ9K2y40n9TibZYS+DUoqtLQhX/ux8bE2ZM/bRT
-         M3174p6X6EPQ2Oi9sSCuF57bTRueo0nQcoX4vdP55Tcjwq2cFG7vASckgUQgjvUEETwn
-         yfGY0HZ/tNiA3FOEdaHp2shUAWltoBFWywm9HkWqbQxjwSha0kXbFmKGowAiaO1qVkhN
-         WDU1ev8PCvWWrR3GH1JBgXDnHKEu8mp96ljN2iURcFvzUm0fN4G/4WgfDvSWMjbtI9OI
-         g+VJq95LF0XlDPd2FJcIl6NWU7cIo2hR0WxRM1vZrTGyrnwFyM++60NUEbCBGS0GHcpN
-         MkxQ==
-X-Gm-Message-State: AAQBX9cAJlk8qbMoi/UjGWebax7YXK8imMoNECMOlDnMfRJGVdJfGAFv
-        1YnLeFvtdcsf670BKjFrnRjfn+jvVPw=
-X-Google-Smtp-Source: AKy350bhQU7OcFUeFKVJtBkNM/PQxjoo0m+R/8S1X+/tHzwa23HbaHcUDw953Xii31aMUVkSQoRTzfKWBnM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4516:0:b0:552:e3fa:6756 with SMTP id
- s22-20020a814516000000b00552e3fa6756mr6003733ywa.2.1682350197003; Mon, 24 Apr
- 2023 08:29:57 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 08:29:55 -0700
-In-Reply-To: <000000000000eca0b905fa0f7756@google.com>
-Mime-Version: 1.0
-References: <000000000000eca0b905fa0f7756@google.com>
-Message-ID: <ZEagczhTT5+dVDzE@google.com>
-Subject: Re: [syzbot] [kvm?] KASAN: slab-use-after-free Read in kvm_tdp_mmu_invalidate_all_roots
-From:   Sean Christopherson <seanjc@google.com>
-To:     syzbot <syzbot+864ac0b626794668b732@syzkaller.appspotmail.com>
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 11:37:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC413E5E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:37:50 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OFaI8X000941;
+        Mon, 24 Apr 2023 15:36:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=pp1; bh=HdggoQsHxwYoIKSgaW8mjgzyiJ7jKhJof5hERdguU8Q=;
+ b=ON6gp/artNflu0D6S+eFqhgQqrcRJqPc2CTxYn/PQUY4TbUFFdFenuEnN7qeFpMU7n4D
+ DCgs2PPwzmpBVr7J8X1GKBE5G6dwW6i1426CU9kqFJMtiyujCaPMzuJlcVj/4fLyNF6z
+ bpI5qmjA0/XY3+Dtyg40EF2MhBvea6DwzbGgBXaYt+5HU2TMyloCAr+fIRTWXiCUYLAI
+ gHrQqVz1zeQafDRHgSB/+nJ7YI1r3JZ7e6MCdGMhwEIGkM/2DbxYo8Cqig7WwsIBzplg
+ 84rNI3l7/+EZgdiEiBUvWZM6e4BU0eFoN6fIpl2E2LQ0UhRn/MqtB62JRPlbXVdYCqdp JQ== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q47d5c1u1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 15:36:30 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33ODxXJ6014897;
+        Mon, 24 Apr 2023 15:31:33 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3q477710fm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Apr 2023 15:31:33 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33OFVUqR37028176
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Apr 2023 15:31:30 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21F7A20043;
+        Mon, 24 Apr 2023 15:31:30 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD58120040;
+        Mon, 24 Apr 2023 15:31:25 +0000 (GMT)
+Received: from tarunpc (unknown [9.43.70.159])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 24 Apr 2023 15:31:25 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        muchun.song@linux.dev, mike.kravetz@oracle.com,
+        aneesh.kumar@linux.ibm.com, sidhartha.kumar@oracle.com,
+        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
+        jaypatel@linux.ibm.com
+Subject: Re: [PATCH] mm/folio: Avoid special handling for order value 0 in
+ folio_set_order
+In-Reply-To: <ZDmzyag88pO1Kdk8@casper.infradead.org>
+References: <20230414194832.973194-1-tsahu@linux.ibm.com>
+ <ZDmzyag88pO1Kdk8@casper.infradead.org>
+Date:   Mon, 24 Apr 2023 21:01:21 +0530
+Message-ID: <877cu15mba.fsf@linux.ibm.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: a_eVeiLGKeWZ_lcJSOZMPKnEumvBOeK-
+X-Proofpoint-GUID: a_eVeiLGKeWZ_lcJSOZMPKnEumvBOeK-
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-24_09,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ spamscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0 mlxlogscore=679
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304240140
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=118a0520280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
-> dashboard link: https://syzkaller.appspot.com/bug?extid=864ac0b626794668b732
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+864ac0b626794668b732@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: slab-use-after-free in kvm_tdp_mmu_invalidate_all_roots+0x2e3/0x370 arch/x86/kvm/mmu/tdp_mmu.c:945
-> Read of size 8 at addr ffff88807c27d528 by task syz-executor.2/5817
-> 
-> CPU: 0 PID: 5817 Comm: syz-executor.2 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
->  print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
->  print_report mm/kasan/report.c:462 [inline]
->  kasan_report+0x11c/0x130 mm/kasan/report.c:572
->  kvm_tdp_mmu_invalidate_all_roots+0x2e3/0x370 arch/x86/kvm/mmu/tdp_mmu.c:945
->  kvm_mmu_uninit_tdp_mmu+0x16/0x100 arch/x86/kvm/mmu/tdp_mmu.c:48
->  kvm_mmu_uninit_vm+0x6a/0x70 arch/x86/kvm/mmu/mmu.c:6239
->  kvm_arch_destroy_vm+0x369/0x490 arch/x86/kvm/x86.c:12465
->  kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1313 [inline]
->  kvm_put_kvm+0x4da/0xae0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1347
->  kvm_vcpu_release+0x51/0x70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3846
->  __fput+0x27c/0xa90 fs/file_table.c:321
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f426b83e01b
-> Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-> RSP: 002b:00007ffe38a35070 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000008 RCX: 00007f426b83e01b
-> RDX: 0000000000000000 RSI: 0000001b32b3a7d4 RDI: 0000000000000007
-> RBP: 00007f426b9ad980 R08: 0000000000000000 R09: 0000000075ee794b
-> R10: 0000000000000000 R11: 0000000000000293 R12: 000000000003d553
-> R13: 00007ffe38a35170 R14: 00007ffe38a35190 R15: 0000000000000032
->  </TASK>
+Hi, Mathew,
 
-#syz fix: KVM: x86: Preserve TDP MMU roots until they are explicitly invalidated
+I am not sure If I was clear about my intention behind the patch.
+Here, I attempt to answer it again. Please lemme know if you agree.
+
+Matthew Wilcox <willy@infradead.org> writes:
+
+> On Sat, Apr 15, 2023 at 01:18:32AM +0530, Tarun Sahu wrote:
+>> folio_set_order(folio, 0); which is an abuse of folio_set_order as 0-order
+>> folio does not have any tail page to set order.
+>
+> I think you're missing the point of how folio_set_order() is used.
+> When splitting a large folio, we need to zero out the folio_nr_pages
+> in the tail, so it does have a tail page, and that tail page needs to
+> be zeroed.  We even assert that there is a tail page:
+>
+>         if (WARN_ON_ONCE(!folio_test_large(folio)))
+>                 return;
+>
+> Or maybe you need to explain yourself better.
+>
+
+In the upstream, I don't see folio_set_order(folio, 0) being called in
+splitting path. IIUC, we had to zero out _folio_nr_pages during freeing
+gigantic folio as described by Commit ba9c1201beaa
+			 ("mm/hugetlb: clear compound_nr before freeing gigantic pages").
+
+I agree that folio_set_order(folio, 0) is called with folio having
+tail pages. But I meant only that, in general, it is just confusing to
+have setting the folio order to 0.
+
+With this patch, I would like to draw attention to the point that there
+is no need to call folio_set_order(folio, 0) anymore to zero out
+_folio_order and _folio_nr_pages.
+
+In past, it was needed because page->mapping used to overlap with
+_folio_nr_pages and _folio_order. So if these fields were left
+uncleared during freeing gigantic hugepages, they were causing
+"BUG: bad page state" due to non-zero page->mapping. Now, After
+Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
+CMA") page->mapping has explicitly been cleared out for tail pages.
+Also, _folio_order and _folio_nr_pages no longer overlaps with page->mapping.
+
+         struct page {
+         ...
+                        struct address_space * mapping;  /*    24     8 */
+         ...
+         }
+
+         struct folio {
+         ...
+              union {
+                 struct {
+                        long unsigned int _flags_1;      /*    64     8 */
+                        long unsigned int _head_1;       /*    72     8 */
+                        unsigned char _folio_dtor;       /*    80     1 */
+                        unsigned char _folio_order;      /*    81     1 */
+
+                        /* XXX 2 bytes hole, try to pack */
+
+                        atomic_t   _entire_mapcount;     /*    84     4 */
+                        atomic_t   _nr_pages_mapped;     /*    88     4 */
+                        atomic_t   _pincount;            /*    92     4 */
+                        unsigned int _folio_nr_pages;    /*    96     4 */
+                 };                                       /*    64    40 */
+                struct page        __page_1 __attribute__((__aligned__(8))); /*    64    64 */
+             }
+         ...
+         }
+
+So, folio_set_order(folio, 0) can be removed from freeing gigantic
+folio path (__destroy_compound_gigantic_folio).
+
+Another place, where folio_set_order(folio, 0) is called inside
+__prep_compound_gigantic_folio during error path. Here,
+folio_set_order(folio, 0) can also be removed if we move
+folio_set_order(folio, order) after for loop. Also, Mike confirmed that
+it is safe to move the call.
+
+~Tarun
+
+>> folio->_folio_nr_pages is
+>> set to 0 for order 0 in folio_set_order. It is required because
+>> _folio_nr_pages overlapped with page->mapping and leaving it non zero
+>> caused "bad page" error while freeing gigantic hugepages. This was fixed in
+>> Commit ba9c1201beaa ("mm/hugetlb: clear compound_nr before freeing gigantic
+>> pages"). Also commit a01f43901cfb ("hugetlb: be sure to free demoted CMA
+>> pages to CMA") now explicitly clear page->mapping and hence we won't see
+>> the bad page error even if _folio_nr_pages remains unset. Also the order 0
+>> folios are not supposed to call folio_set_order, So now we can get rid of
+>> folio_set_order(folio, 0) from hugetlb code path to clear the confusion.
+>
+> ... this is all very confusing.
+>
+>> The patch also moves _folio_set_head and folio_set_order calls in
+>> __prep_compound_gigantic_folio() such that we avoid clearing them in the
+>> error path.
+>
+> But don't we need those bits set while we operate on the folio to set it
+> up?  It makes me nervous if we don't have those bits set because we can
+> end up with speculative references that point to a head page while that
+> page is not marked as a head page.  It may not be a problem, but I want
+> to see some air-tight analysis of that.
+>
+>> Testing: I have run LTP tests, which all passes. and also I have written
+>> the test in LTP which tests the bug caused by compound_nr and page->mapping
+>> overlapping.
+>> 
+>> https://lore.kernel.org/all/20230413090753.883953-1-tsahu@linux.ibm.com/
+>> 
+>> Running on older kernel ( < 5.10-rc7) with the above bug this fails while
+>> on newer kernel and, also with this patch it passes.
+>> 
+>> Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+>> ---
+>>  mm/hugetlb.c  | 9 +++------
+>>  mm/internal.h | 8 ++------
+>>  2 files changed, 5 insertions(+), 12 deletions(-)
+>> 
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index f16b25b1a6b9..e2540269c1dc 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -1489,7 +1489,6 @@ static void __destroy_compound_gigantic_folio(struct folio *folio,
+>>  			set_page_refcounted(p);
+>>  	}
+>>  
+>> -	folio_set_order(folio, 0);
+>>  	__folio_clear_head(folio);
+>>  }
+>>  
+>> @@ -1951,9 +1950,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>>  	struct page *p;
+>>  
+>>  	__folio_clear_reserved(folio);
+>> -	__folio_set_head(folio);
+>> -	/* we rely on prep_new_hugetlb_folio to set the destructor */
+>> -	folio_set_order(folio, order);
+>>  	for (i = 0; i < nr_pages; i++) {
+>>  		p = folio_page(folio, i);
+>>  
+>> @@ -1999,6 +1995,9 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>>  		if (i != 0)
+>>  			set_compound_head(p, &folio->page);
+>>  	}
+>> +	__folio_set_head(folio);
+>> +	/* we rely on prep_new_hugetlb_folio to set the destructor */
+>> +	folio_set_order(folio, order);
+>>  	atomic_set(&folio->_entire_mapcount, -1);
+>>  	atomic_set(&folio->_nr_pages_mapped, 0);
+>>  	atomic_set(&folio->_pincount, 0);
+>> @@ -2017,8 +2016,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>>  		p = folio_page(folio, j);
+>>  		__ClearPageReserved(p);
+>>  	}
+>> -	folio_set_order(folio, 0);
+>> -	__folio_clear_head(folio);
+>>  	return false;
+>>  }
+>>  
+>> diff --git a/mm/internal.h b/mm/internal.h
+>> index 18cda26b8a92..0d96a3bc1d58 100644
+>> --- a/mm/internal.h
+>> +++ b/mm/internal.h
+>> @@ -425,16 +425,12 @@ int split_free_page(struct page *free_page,
+>>   */
+>>  static inline void folio_set_order(struct folio *folio, unsigned int order)
+>>  {
+>> -	if (WARN_ON_ONCE(!folio_test_large(folio)))
+>> +	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
+>>  		return;
+>>  
+>>  	folio->_folio_order = order;
+>>  #ifdef CONFIG_64BIT
+>> -	/*
+>> -	 * When hugetlb dissolves a folio, we need to clear the tail
+>> -	 * page, rather than setting nr_pages to 1.
+>> -	 */
+>> -	folio->_folio_nr_pages = order ? 1U << order : 0;
+>> +	folio->_folio_nr_pages = 1U << order;
+>>  #endif
+>>  }
+>>  
+>> -- 
+>> 2.31.1
+>> 
