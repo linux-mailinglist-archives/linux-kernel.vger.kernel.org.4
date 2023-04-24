@@ -2,100 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2B86ED1CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126106ED1D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjDXPyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S231775AbjDXP4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjDXPyr (ORCPT
+        with ESMTP id S229906AbjDXP4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:54:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD8F4C2E;
-        Mon, 24 Apr 2023 08:54:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5E2D61E42;
-        Mon, 24 Apr 2023 15:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33B8C433D2;
-        Mon, 24 Apr 2023 15:54:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682351686;
-        bh=wJkYfjrjra0oygKVxhm3cneeeeb81vFNJgDbqDD4x/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FKVPFNaiobdBlPggFdCm4fMaA70Bwfx5gFduFin18Oc7ek30AwXrnOgiur+RWxOLq
-         hH7m8fsB+ytX802FIYddCfco3PncnPbP2YVvtwBZMx5YInKV8NfmDoT+99bt+uW5Cb
-         5DDHqW01tZDSRX003TaIw9wSJiOob0wWdUmq5TdzKz39gfWgrX86fI3qXIG0VnPVc/
-         joR1T7gEIkATxSn0sB9rRKnyBv5gcw87UQJ+fQMwCY7jEGASR/99YXxtTWcMINhFQy
-         ELzcRLdqxnCrJLCvzsK39NxTk0eaF81FpYpmRn5gWMOzi3Ejmf3T7GDcu3UIPgKKbd
-         DdnlsdgCD2bmQ==
-Date:   Mon, 24 Apr 2023 16:54:40 +0100
-From:   Mark Brown <broonie@kernel.org>
+        Mon, 24 Apr 2023 11:56:31 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE69E422A;
+        Mon, 24 Apr 2023 08:56:30 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6a5f765d5b8so3542757a34.3;
+        Mon, 24 Apr 2023 08:56:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682351790; x=1684943790;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ospy+0e+g7CaAevMAfgtm5j51EvWWuU+Q6as+suKlmE=;
+        b=bE8JLpTL2Yp/X4bq787vES61o+o+x62tCx98JpdQ9CV0teWrqzr7EFh1oI4vtsp/Fk
+         HKea0FdkpuUnucvJtCVP67a+nhUwpKgEfyZgEFuw/egnP2tYh8NqmLIm7xW1SwVscu5U
+         I+vrgjKwryW1PDRiDBsPFPxN1+65sDwfV96EIKwX4rYn0kHRKK/x1GUKrrFucEz39LVE
+         dtgYKkbn5xAUUXrxgKtL7s9aOD48wpnCHvhJcdIJLLlbTCqdidTzM3+Pxsjnm1DmBG3J
+         tXTRFFmaRAfh2xNtIwzJtZAjW7oqMsWIF9NYjQA3GXvjD2SmjfPtayjMyjnekRWsdTPG
+         2ZpQ==
+X-Gm-Message-State: AAQBX9eGggcBnqjJCPIYNPQj7fjObIkEZSOoe/raD23hcI//JS0sxsH+
+        3e2oeh+IYvjWEJwOnGqICTPexjl9kQ==
+X-Google-Smtp-Source: AKy350aQBab5M7kAF+uXaFdNg48iN7n8UM9QhRUPI5ShiaOukm/0Mb2cnXeg2yclCJr4/1Y7Yv2L+Q==
+X-Received: by 2002:a9d:7415:0:b0:6a5:ff5f:f923 with SMTP id n21-20020a9d7415000000b006a5ff5ff923mr7803527otk.29.1682351790171;
+        Mon, 24 Apr 2023 08:56:30 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h5-20020a9d6405000000b006a65be836acsm1417089otl.16.2023.04.24.08.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 08:56:29 -0700 (PDT)
+Received: (nullmailer pid 2704587 invoked by uid 1000);
+        Mon, 24 Apr 2023 15:56:29 -0000
+Date:   Mon, 24 Apr 2023 10:56:29 -0500
+From:   Rob Herring <robh@kernel.org>
 To:     Nikita Shubin <nikita.shubin@maquefel.me>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/43] dt-bindings: spi: Add DT bindings ep93xx spi
-Message-ID: <8f02b54d-00c5-4328-9e14-ef77097eaabe@sirena.org.uk>
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/43] rtc: ep93xx: add DT support for Cirrus EP93xx
+Message-ID: <20230424155629.GA2701399-robh@kernel.org>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-17-nikita.shubin@maquefel.me>
+ <20230424123522.18302-9-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qqO6L1/B8uJqiHh5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424123522.18302-17-nikita.shubin@maquefel.me>
-X-Cookie: A rolling disk gathers no MOS.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230424123522.18302-9-nikita.shubin@maquefel.me>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 24, 2023 at 03:34:24PM +0300, Nikita Shubin wrote:
+> - Find register range from the device tree.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+> 
+> Notes:
+>     Arnd Bergmann:
+>     - wildcards ep93xx to something meaningful, i.e. ep9301
+>     - drop wrappers
+> 
+>  drivers/rtc/rtc-ep93xx.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-ep93xx.c b/drivers/rtc/rtc-ep93xx.c
+> index acae7f16808f..8bda20a4940a 100644
+> --- a/drivers/rtc/rtc-ep93xx.c
+> +++ b/drivers/rtc/rtc-ep93xx.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include <linux/module.h>
+>  #include <linux/rtc.h>
+> +#include <linux/of.h>
 
---qqO6L1/B8uJqiHh5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+linux/mod_devicetable.h is the actual header you depend on.
 
-On Mon, Apr 24, 2023 at 03:34:32PM +0300, Nikita Shubin wrote:
-
-> +maintainers:
-> +  - Mark Brown <broonie@kernel.org>
-
-This needs to be someone who actually knows about and works on the
-device.
-
-> +  use_dma:
-> +    type: boolean
-> +    items:
-> +      - description: Flag indicating that the SPI should use dma
-
-There don't seem to be any DMA properties here, and why would this not
-just be done by making them optional rather than having a separate
-specific property?
-
---qqO6L1/B8uJqiHh5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGpj8ACgkQJNaLcl1U
-h9AJmgf+KXQLmqdIYxw937OjV3lA3I+LWg+c5T7eV9/GTC08qMz1dWlkvIAy3C9l
-Zf3T7Y8WCHTQIJcAHz/DablFp9op7PMnBk3YMxEH32qr4+JcDyGB4uhloIsj2puf
-qc7xycstyS+GhCGHoo9y1FCElIF3xi2XqE//Yg22s4rKnkxabo+ddWDXdT9QlT1D
-+CPsKO6yR/b3l6q4N6R6C/I8aXKLwa+muRwek7lETtgvXwPdD4CCe31rT7eCp+GA
-KlZWNJ5Kc61LRt+ngTYI92IwwuAXyqWlm5Q9NmMW2PDBmpybWNZmIftxQoJ+gNwf
-JS8iUhhQSOSW8DmsoK+oa+RZiorSZg==
-=+SnN
------END PGP SIGNATURE-----
-
---qqO6L1/B8uJqiHh5--
+>  #include <linux/platform_device.h>
+>  #include <linux/io.h>
+>  #include <linux/gfp.h>
+> @@ -148,9 +149,16 @@ static int ep93xx_rtc_probe(struct platform_device *pdev)
+>  	return devm_rtc_register_device(ep93xx_rtc->rtc);
+>  }
+>  
+> +static const struct of_device_id ep93xx_rtc_of_ids[] = {
+> +	{ .compatible = "cirrus,ep9301-rtc" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, ep93xx_rtc_of_ids);
+> +
+>  static struct platform_driver ep93xx_rtc_driver = {
+>  	.driver		= {
+>  		.name	= "ep93xx-rtc",
+> +		.of_match_table = ep93xx_rtc_of_ids,
+>  	},
+>  	.probe		= ep93xx_rtc_probe,
+>  };
+> -- 
+> 2.39.2
+> 
