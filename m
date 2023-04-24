@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F456ECA6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735DA6ECA15
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 12:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjDXKfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 06:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S231671AbjDXKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 06:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjDXKer (ORCPT
+        with ESMTP id S231288AbjDXKUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:34:47 -0400
-X-Greylist: delayed 2343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 03:34:24 PDT
-Received: from forward502c.mail.yandex.net (forward502c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53956E42;
-        Mon, 24 Apr 2023 03:34:24 -0700 (PDT)
+        Mon, 24 Apr 2023 06:20:40 -0400
+Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d501])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277981BE6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 03:20:38 -0700 (PDT)
 Received: from mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:261e:0:640:2e3d:0])
-        by forward502c.mail.yandex.net (Yandex) with ESMTP id 2EA505ED20;
-        Mon, 24 Apr 2023 12:36:10 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id JZBb1pbWwKo0-IjRSbbKj;
-        Mon, 24 Apr 2023 12:36:09 +0300
+        by forward501c.mail.yandex.net (Yandex) with ESMTP id 3F6505EEE7;
+        Mon, 24 Apr 2023 12:36:11 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id JZBb1pbWwKo0-uIzrV9z0;
+        Mon, 24 Apr 2023 12:36:10 +0300
 X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682328969;
-        bh=Mx2hqLt4/z50beOgPB+ygINDekWFXL6ATj4afqN4iBs=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682328970;
+        bh=ILW7HQf2U6XIRRdddf7sXhZXt2NIlcnnFnvadaw+a9k=;
         h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=qBdLkkz3cuV/oTDYOawaHRLB0ZiqRfECIW5t2bkr7rltqMAdcfnDqMedsRgH01cBB
-         grZQh/5MRVdXOGnrq8Totopop9u6WEUocg3WxOElfBPrVV3LqYvTRQmjAhn+Dl21Xy
-         piXcb4uyJTL+VRriFrbA6R7YuB8uu1ZsVTwc4INk=
+        b=j5UN+nR4GxEPvjO303ZhccRQk/FFjdl6xNS8wrHhKOIAVHUoBwMU6Gx7cYyymH9yq
+         hJqGkbWtQthzZTOLoCE75g/B4AUQtHYHOGc2luGeBAkiA/wps5ntf+0E7BNwgrmBRG
+         uNmRACHMKjVHOO0DJo3RxdCYjDOByFIfLZp0PMG0=
 Authentication-Results: mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
 From:   Nikita Shubin <nikita.shubin@maquefel.me>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 36/43] pwm: ep93xx: drop legacy pinctrl
-Date:   Mon, 24 Apr 2023 15:34:52 +0300
-Message-Id: <20230424123522.18302-37-nikita.shubin@maquefel.me>
+Subject: [PATCH 37/43] input: keypad: ep93xx: drop legacy pinctrl
+Date:   Mon, 24 Apr 2023 15:34:53 +0300
+Message-Id: <20230424123522.18302-38-nikita.shubin@maquefel.me>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
@@ -55,48 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop legacy gpio request/free since we are using
+Drop legacy acquire/release since we are using
 pinctrl for this now.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/pwm/pwm-ep93xx.c | 16 ----------------
+ drivers/input/keyboard/ep93xx_keypad.c | 16 ----------------
  1 file changed, 16 deletions(-)
 
-diff --git a/drivers/pwm/pwm-ep93xx.c b/drivers/pwm/pwm-ep93xx.c
-index 8bfe6cfbb3db..657adb011aeb 100644
---- a/drivers/pwm/pwm-ep93xx.c
-+++ b/drivers/pwm/pwm-ep93xx.c
-@@ -45,20 +45,6 @@ static inline struct ep93xx_pwm *to_ep93xx_pwm(struct pwm_chip *chip)
- 	return container_of(chip, struct ep93xx_pwm, chip);
- }
+diff --git a/drivers/input/keyboard/ep93xx_keypad.c b/drivers/input/keyboard/ep93xx_keypad.c
+index bf77754fa4c7..a5f5d7d453e7 100644
+--- a/drivers/input/keyboard/ep93xx_keypad.c
++++ b/drivers/input/keyboard/ep93xx_keypad.c
+@@ -222,13 +222,6 @@ static int ep93xx_keypad_resume(struct device *dev)
+ static DEFINE_SIMPLE_DEV_PM_OPS(ep93xx_keypad_pm_ops,
+ 				ep93xx_keypad_suspend, ep93xx_keypad_resume);
  
--static int ep93xx_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
+-static void ep93xx_keypad_release_gpio_action(void *_pdev)
 -{
--	struct platform_device *pdev = to_platform_device(chip->dev);
+-	struct platform_device *pdev = _pdev;
 -
--	return ep93xx_pwm_acquire_gpio(pdev);
+-	ep93xx_keypad_release_gpio(pdev);
 -}
 -
--static void ep93xx_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct platform_device *pdev = to_platform_device(chip->dev);
--
--	ep93xx_pwm_release_gpio(pdev);
--}
--
- static int ep93xx_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 			    const struct pwm_state *state)
+ static int ep93xx_keypad_probe(struct platform_device *pdev)
  {
-@@ -157,8 +143,6 @@ static int ep93xx_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- }
+ 	struct ep93xx_keypad *keypad;
+@@ -256,15 +249,6 @@ static int ep93xx_keypad_probe(struct platform_device *pdev)
+ 	if (IS_ERR(keypad->mmio_base))
+ 		return PTR_ERR(keypad->mmio_base);
  
- static const struct pwm_ops ep93xx_pwm_ops = {
--	.request = ep93xx_pwm_request,
--	.free = ep93xx_pwm_free,
- 	.apply = ep93xx_pwm_apply,
- 	.owner = THIS_MODULE,
- };
+-	err = ep93xx_keypad_acquire_gpio(pdev);
+-	if (err)
+-		return err;
+-
+-	err = devm_add_action_or_reset(&pdev->dev,
+-				       ep93xx_keypad_release_gpio_action, pdev);
+-	if (err)
+-		return err;
+-
+ 	keypad->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(keypad->clk))
+ 		return PTR_ERR(keypad->clk);
 -- 
 2.39.2
 
