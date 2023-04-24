@@ -2,131 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0614F6ED194
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE94C6ED119
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjDXPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S229967AbjDXPPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjDXPkp (ORCPT
+        with ESMTP id S231993AbjDXPOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:40:45 -0400
-X-Greylist: delayed 1044 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Apr 2023 08:40:43 PDT
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 816CB114;
-        Mon, 24 Apr 2023 08:40:43 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 33OFDqb6006351;
-        Mon, 24 Apr 2023 10:13:52 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 33OFDpYA006350;
-        Mon, 24 Apr 2023 10:13:51 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 24 Apr 2023 10:13:51 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-Message-ID: <20230424151351.GP19790@gate.crashing.org>
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com> <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com> <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Mon, 24 Apr 2023 11:14:53 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1162F19F;
+        Mon, 24 Apr 2023 08:14:53 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OFEeu9006345;
+        Mon, 24 Apr 2023 10:14:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682349280;
+        bh=25Mc7hcaPXG/P1qb+ZMbwWTj3CmYxbl7UyEfe0Iu+1M=;
+        h=From:To:CC:Subject:Date;
+        b=xSzl1I05+opM2votEz8RDLGMlybwsZ/6Uf8rtzOK4OzOhJPzqucZVh2Z7Ova5vAOm
+         AwOOcJ5fLQpct3VQEjyOIjU5IJpq/iIXG8eo0hWZUvmvMYDc4kncJJU2pD8ne1ygbG
+         oF62zqvbQ0dZmTKjsIialdrx+hPUDQx8icQRSgZc=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OFEeoK105518
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 10:14:40 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 10:14:38 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 10:14:38 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OFEc86101702;
+        Mon, 24 Apr 2023 10:14:38 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] dt-bindings: leds: Drop redundant cpus enum match
+Date:   Mon, 24 Apr 2023 10:14:37 -0500
+Message-ID: <20230424151437.256073-1-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87fs8pzalj.fsf@mail.concordia>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Commit e91a4d5deb96 ("dt-bindings: leds: Document commonly used
+LED triggers") introduced a enum match for cpu, while a pattern
+'^cpu[0-9]*$' already exists.
 
-On Mon, Apr 24, 2023 at 11:14:00PM +1000, Michael Ellerman wrote:
-> Boqun Feng <boqun.feng@gmail.com> writes:
-> > On Sat, Apr 22, 2023 at 09:28:39PM +0200, Joel Fernandes wrote:
-> >> On Sat, Apr 22, 2023 at 2:47 PM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
-> >> > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
-> >> > but if there is a context-switch before c000000000226edc, a false
-> >> > positive will be reported.
+This causes linux,default-trigger = "cpu" to have more than one match
+and generates the following dtbs_check warning:
 
-> I've never understood why the compiler wants to make a copy of a
-> register variable into another register!? >:#
+arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dtb: leds: led-2:linux,default-trigger: More than one condition true in oneOf schema:
+	{'$ref': '/schemas/types.yaml#/definitions/string',
+	 'oneOf': [{'items': [{'enum': ['backlight',
+	                                'default-on',
+	                                'heartbeat',
+	                                'disk-activity',
+	                                'disk-read',
+	                                'disk-write',
+	                                'timer',
+	                                'pattern',
+	                                'audio-micmute',
+	                                'audio-mute',
+	                                'bluetooth-power',
+	                                'cpu',
+	                                'flash',
+	                                'kbd-capslock',
+	                                'mtd',
+	                                'nand-disk',
+	                                'none',
+	                                'torch',
+	                                'usb-gadget',
+	                                'usb-host',
+	                                'usbport']}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': [{'pattern': '^cpu[0-9]*$'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': [{'pattern': '^hci[0-9]+-power$'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': [{'pattern': '^mmc[0-9]+$'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {'items': [{'pattern': '^phy[0-9]+tx$'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'}]}
 
-It is usually because a) you told it to (maybe via an earlyclobber), or
-b) it looked cheaper.  I don't see either here :-(
+Drop the explicit match against cpu since the pattern match already
+covers the same.
 
-> > here I think that the compiler is using r10 as an alias to r13, since
-> > for userspace program, it's safe to assume the TLS pointer doesn't
-> > change. However this is not true for kernel percpu pointer.
+Fixes: e91a4d5deb96 ("dt-bindings: leds: Document commonly used LED triggers")
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+ Documentation/devicetree/bindings/leds/common.yaml | 2 --
+ 1 file changed, 2 deletions(-)
 
-r13 is a "fixed" register, but that means it has a fixed purpose (so not
-available for allocation), it does not mean "unchanging".
+diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+index 11aedf1650a1..58b492d00246 100644
+--- a/Documentation/devicetree/bindings/leds/common.yaml
++++ b/Documentation/devicetree/bindings/leds/common.yaml
+@@ -105,8 +105,6 @@ properties:
+           - audio-mute
+             # LED indicates bluetooth power state
+           - bluetooth-power
+-            # LED indicates activity of all CPUs
+-          - cpu
+             # LED indicates camera flash state
+           - flash
+             # LED indicated keyboard capslock
+-- 
+2.40.0
 
-> > The real intention here is to compare 40(r1) vs 3192(r13) for stack
-> > guard checking, however since r13 is the percpu pointer in kernel, so
-> > the value of r13 can be changed if the thread gets scheduled to a
-> > different CPU after reading r13 for r10.
-> 
-> Yeah that's not good.
-
-The GCC pattern here makes the four machine insns all stay together.
-That is to make sure to not leak any secret value, which is impossible
-to guarantee otherwise.
-
-What tells GCC r13 can randomly change behind its back?  And, what then
-makes GCC ignore that fact?
-
-> > 	+       asm volatile("" : : : "r13", "memory");
-
-Any asm without output is always volatile.
-
-> > Needless to say, the correct fix is to make ppc stack protector aware of
-> > r13 is volatile.
-> 
-> I suspect the compiler developers will tell us to go jump :)
-
-Why would r13 change over the course of *this* function / this macro,
-why can this not happen anywhere else?
-
-> The problem of the compiler caching r13 has come up in the past, but I
-> only remember it being "a worry" rather than causing an actual bug.
-
-In most cases the compiler is smart enough to use r13 directly, instead
-of copying it to another reg and then using that one.  But not here for
-some strange reason.  That of course is a very minor generated machine
-code quality bug and nothing more :-(
-
-> We've had the DEBUG_PREEMPT checks in get_paca(), which have given us at
-> least some comfort that if the compiler is caching r13, it shouldn't be
-> doing it in preemptable regions.
-> 
-> But obviously that doesn't help at all with the stack protector check.
-> 
-> I don't see an easy fix.
-> 
-> Adding "volatile" to the definition of local_paca seems to reduce but
-> not elimate the caching of r13, and the GCC docs explicitly say *not* to
-> use volatile. It also triggers lots of warnings about volatile being
-> discarded.
-
-The point here is to say some code clobbers r13, not the asm volatile?
-
-> Or something simple I haven't thought of? :)
-
-At what points can r13 change?  Only when some particular functions are
-called?
-
-
-Segher
