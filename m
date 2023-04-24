@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1CD6ED425
+	by mail.lfdr.de (Postfix) with ESMTP id D61B36ED426
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbjDXSNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S232310AbjDXSNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjDXSN2 (ORCPT
+        with ESMTP id S232261AbjDXSN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:13:28 -0400
+        Mon, 24 Apr 2023 14:13:29 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3A849FF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:13:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAE34C35
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 11:13:26 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682360003;
+        s=2020; t=1682360005;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=K9W8NDx80UQqvWkG+atar6d9T4uMp1T5rDH7i9DlOhk=;
-        b=qiVeV3A4OAwU/xPLlZC/66pUD4SIx2FYDMlcM0Wp3JwJNCAQwhyHXbTiGD99eO31OzYMGs
-        It4ljeSJzIlLsI/kPeh/Nc92uGoOfNj2DT5eCRaKVUFVMljhsEftvikFFeSbkvLNKzx6C8
-        9NQoa6gsKqAkrCiZtMQ1sttNosj02nOtmHRVN2iTmiTvpCiHWwFJ5KYnyKk7jXaCm2A9fq
-        8Sb82q8xIiW+NEXFy0z80bMZ2p+cmkdGAwJA1mY7eb52gvQNjXmvIm+tGntv1sc7RuTyhg
-        UpGZpCoVGaJS5r8cRAv/7MiprEsjn45hgdDJA4kL6oiFYWWJDF1Xy9Ciy2Pf1Q==
+         content-transfer-encoding:content-transfer-encoding:  references:references;
+        bh=e+wmQI2U4t0cN/nKLjKEoED1oMCxB/T69gTECdRBsgU=;
+        b=OahCyx2QGvRF05hOsfd3oWePsfLx90rhFlMiJ3rWiI/cOwXh8gFSTXn5c3AY4ppiCq4dOP
+        S7y80amCNih0w+KKn3QFnbJkLV2XnkTm+5hjJ3IJGsWjpYR+zTZxpva1CFRNQM9kCj3/r4
+        4gyYPUAOilkqlIwQbQftcgXBzQ+ZHzKnkf6qkgExFym7J0LL5OoQCiOSgE6s/gIaPIX9CN
+        PX1zalz/Cs7zxiV3n1C1S3Ap+wLlY0FmNVi7HKeCf4ZbV5lcBJHb07CTZfxYX+SZ8PB76a
+        gVVmEzIyXKv2qGA1pIK9tBKav7BvXrODj5aYRmLKH/Qo6EbEiZzUihLOifv3og==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682360003;
+        s=2020e; t=1682360005;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=K9W8NDx80UQqvWkG+atar6d9T4uMp1T5rDH7i9DlOhk=;
-        b=+HqOswjYocaiyCLvot1o/An5CP6/O+5EPKlFdWYR6FBzwYTda3FJ78S2aiqLGfarxguh3p
-        mu5IuYbdZs8HzLAQ==
+         content-transfer-encoding:content-transfer-encoding:  references:references;
+        bh=e+wmQI2U4t0cN/nKLjKEoED1oMCxB/T69gTECdRBsgU=;
+        b=TEY72/gLiQPMFJW5gibCeZ4YsA+ezyIPQXJYzAd+lJHndiBOTfhyACLwnD1akohnbqbcHc
+        WiJm0yF37k9TlSCA==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] core/debugobjects for 6.4-rc1
-Message-ID: <168235968801.840202.17752066425816055574.tglx@xen13>
+Subject: [GIT pull] core/entry for 6.4-rc1
+References: <168235968801.840202.17752066425816055574.tglx@xen13>
+Message-ID: <168235968948.840202.12520465196184040624.tglx@xen13>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Mon, 24 Apr 2023 20:13:23 +0200 (CEST)
+Date:   Mon, 24 Apr 2023 20:13:24 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -55,274 +56,391 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-please pull the latest core/debugobjects branch from:
+please pull the latest core/entry branch from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core-debugobject=
-s-2023-04-24
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core-entry-2023-=
+04-24
 
-up to:  63a759694eed: debugobject: Prevent init race with static objects
+up to:  8c8fa605f7b8: selftest, ptrace: Add selftest for syscall user dispatc=
+h config api
 
 
-A single update to debugobjects:
+Update for entry and ptrace:
 
-  Prevent a race vs. statically initialized objects. Such objects are
-  usually not initialized via an init() function. They are special cased
-  and detected on first use under the assumption that they are already
-  correctly initialized via the static initializer.
+  Provide a ptrace set/get interface for syscall user dispatch. The main
+  purpose is to enable checkpoint/restore (CRIU) to handle processes which
+  utilize syscall user dispatch correctly.
 
-  This works correctly unless there are two concurrent debug object
-  operations on such an object.
-
-  The first one detects that the object is not yet tracked and tries to
-  establish a tracking object after dropping the debug objects hash bucket
-  lock. The concurrent operation does the same. The one which wins the
-  race ends up modifying the state of the object which makes the other one
-  fail resulting in a bogus debug objects warning.
-
-  Prevent this by making the detection of a static object and the
-  allocation of a tracking object atomic under the hash bucket lock. So the
-  first one to acquire the hash bucket lock will succeed and the second one
-  will observe the correct tracking state.
-
-  This race existed forever but was only exposed when the timer wheel code
-  added a debug_object_assert_init() call outside of the timer base locked
-  region. This replaced the previous warning about timer::function being
-  NULL which had to be removed when the timer_shutdown() mechanics were
-  added.
 
 Thanks,
 
 	tglx
 
 ------------------>
-Thomas Gleixner (1):
-      debugobject: Prevent init race with static objects
+Gregory Price (4):
+      syscall_user_dispatch: Split up set_syscall_user_dispatch()
+      syscall_user_dispatch: Untag selector address before access_ok()
+      ptrace: Provide set/get interface for syscall user dispatch
+      selftest, ptrace: Add selftest for syscall user dispatch config api
 
 
- lib/debugobjects.c | 125 ++++++++++++++++++++++++++++-----------------------=
+ .../admin-guide/syscall-user-dispatch.rst          |  4 ++
+ include/linux/syscall_user_dispatch.h              | 18 ++++++
+ include/uapi/linux/ptrace.h                        | 30 +++++++++
+ kernel/entry/syscall_user_dispatch.c               | 74 +++++++++++++++++++-=
 --
- 1 file changed, 66 insertions(+), 59 deletions(-)
+ kernel/ptrace.c                                    |  9 +++
+ tools/testing/selftests/ptrace/.gitignore          |  1 +
+ tools/testing/selftests/ptrace/Makefile            |  2 +-
+ tools/testing/selftests/ptrace/get_set_sud.c       | 72 +++++++++++++++++++++
+ 8 files changed, 200 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
 
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index df86e649d8be..b796799fadb2 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -216,10 +216,6 @@ static struct debug_obj *__alloc_object(struct hlist_hea=
-d *list)
- 	return obj;
- }
+diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentat=
+ion/admin-guide/syscall-user-dispatch.rst
+index 60314953c728..e3cfffef5a63 100644
+--- a/Documentation/admin-guide/syscall-user-dispatch.rst
++++ b/Documentation/admin-guide/syscall-user-dispatch.rst
+@@ -73,6 +73,10 @@ thread-wide, without the need to invoke the kernel directl=
+y.  selector
+ can be set to SYSCALL_DISPATCH_FILTER_ALLOW or SYSCALL_DISPATCH_FILTER_BLOCK.
+ Any other value should terminate the program with a SIGSYS.
 =20
--/*
-- * Allocate a new object. If the pool is empty, switch off the debugger.
-- * Must be called with interrupts disabled.
-- */
- static struct debug_obj *
- alloc_object(void *addr, struct debug_bucket *b, const struct debug_obj_desc=
-r *descr)
++Additionally, a tasks syscall user dispatch configuration can be peeked
++and poked via the PTRACE_(GET|SET)_SYSCALL_USER_DISPATCH_CONFIG ptrace
++requests. This is useful for checkpoint/restart software.
++
+ Security Notes
+ --------------
+=20
+diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_us=
+er_dispatch.h
+index a0ae443fb7df..641ca8880995 100644
+--- a/include/linux/syscall_user_dispatch.h
++++ b/include/linux/syscall_user_dispatch.h
+@@ -22,6 +22,12 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned=
+ long offset,
+ #define clear_syscall_work_syscall_user_dispatch(tsk) \
+ 	clear_task_syscall_work(tsk, SYSCALL_USER_DISPATCH)
+=20
++int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long=
+ size,
++				     void __user *data);
++
++int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long=
+ size,
++				     void __user *data);
++
+ #else
+ struct syscall_user_dispatch {};
+=20
+@@ -35,6 +41,18 @@ static inline void clear_syscall_work_syscall_user_dispatc=
+h(struct task_struct *
  {
-@@ -552,11 +548,49 @@ static void debug_object_is_on_stack(void *addr, int on=
-stack)
- 	WARN_ON(1);
  }
 =20
-+static struct debug_obj *lookup_object_or_alloc(void *addr, struct debug_buc=
-ket *b,
-+						const struct debug_obj_descr *descr,
-+						bool onstack, bool alloc_ifstatic)
++static inline int syscall_user_dispatch_get_config(struct task_struct *task,
++						   unsigned long size, void __user *data)
 +{
-+	struct debug_obj *obj =3D lookup_object(addr, b);
-+	enum debug_obj_state state =3D ODEBUG_STATE_NONE;
-+
-+	if (likely(obj))
-+		return obj;
-+
-+	/*
-+	 * debug_object_init() unconditionally allocates untracked
-+	 * objects. It does not matter whether it is a static object or
-+	 * not.
-+	 *
-+	 * debug_object_assert_init() and debug_object_activate() allow
-+	 * allocation only if the descriptor callback confirms that the
-+	 * object is static and considered initialized. For non-static
-+	 * objects the allocation needs to be done from the fixup callback.
-+	 */
-+	if (unlikely(alloc_ifstatic)) {
-+		if (!descr->is_static_object || !descr->is_static_object(addr))
-+			return ERR_PTR(-ENOENT);
-+		/* Statically allocated objects are considered initialized */
-+		state =3D ODEBUG_STATE_INIT;
-+	}
-+
-+	obj =3D alloc_object(addr, b, descr);
-+	if (likely(obj)) {
-+		obj->state =3D state;
-+		debug_object_is_on_stack(addr, onstack);
-+		return obj;
-+	}
-+
-+	/* Out of memory. Do the cleanup outside of the locked region */
-+	debug_objects_enabled =3D 0;
-+	return NULL;
++	return -EINVAL;
 +}
 +
- static void
- __debug_object_init(void *addr, const struct debug_obj_descr *descr, int ons=
-tack)
- {
- 	enum debug_obj_state state;
--	bool check_stack =3D false;
- 	struct debug_bucket *db;
- 	struct debug_obj *obj;
- 	unsigned long flags;
-@@ -572,16 +606,11 @@ __debug_object_init(void *addr, const struct debug_obj_=
-descr *descr, int onstack
-=20
- 	raw_spin_lock_irqsave(&db->lock, flags);
-=20
--	obj =3D lookup_object(addr, db);
--	if (!obj) {
--		obj =3D alloc_object(addr, db, descr);
--		if (!obj) {
--			debug_objects_enabled =3D 0;
--			raw_spin_unlock_irqrestore(&db->lock, flags);
--			debug_objects_oom();
--			return;
--		}
--		check_stack =3D true;
-+	obj =3D lookup_object_or_alloc(addr, db, descr, onstack, false);
-+	if (unlikely(!obj)) {
-+		raw_spin_unlock_irqrestore(&db->lock, flags);
-+		debug_objects_oom();
-+		return;
- 	}
-=20
- 	switch (obj->state) {
-@@ -607,8 +636,6 @@ __debug_object_init(void *addr, const struct debug_obj_de=
-scr *descr, int onstack
- 	}
-=20
- 	raw_spin_unlock_irqrestore(&db->lock, flags);
--	if (check_stack)
--		debug_object_is_on_stack(addr, onstack);
- }
-=20
- /**
-@@ -648,14 +675,12 @@ EXPORT_SYMBOL_GPL(debug_object_init_on_stack);
-  */
- int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
- {
-+	struct debug_obj o =3D { .object =3D addr, .state =3D ODEBUG_STATE_NOTAVAIL=
-ABLE, .descr =3D descr };
- 	enum debug_obj_state state;
- 	struct debug_bucket *db;
- 	struct debug_obj *obj;
- 	unsigned long flags;
- 	int ret;
--	struct debug_obj o =3D { .object =3D addr,
--			       .state =3D ODEBUG_STATE_NOTAVAILABLE,
--			       .descr =3D descr };
-=20
- 	if (!debug_objects_enabled)
- 		return 0;
-@@ -664,8 +689,8 @@ int debug_object_activate(void *addr, const struct debug_=
-obj_descr *descr)
-=20
- 	raw_spin_lock_irqsave(&db->lock, flags);
-=20
--	obj =3D lookup_object(addr, db);
--	if (obj) {
-+	obj =3D lookup_object_or_alloc(addr, db, descr, false, true);
-+	if (likely(!IS_ERR_OR_NULL(obj))) {
- 		bool print_object =3D false;
-=20
- 		switch (obj->state) {
-@@ -698,24 +723,16 @@ int debug_object_activate(void *addr, const struct debu=
-g_obj_descr *descr)
-=20
- 	raw_spin_unlock_irqrestore(&db->lock, flags);
-=20
--	/*
--	 * We are here when a static object is activated. We
--	 * let the type specific code confirm whether this is
--	 * true or not. if true, we just make sure that the
--	 * static object is tracked in the object tracker. If
--	 * not, this must be a bug, so we try to fix it up.
--	 */
--	if (descr->is_static_object && descr->is_static_object(addr)) {
--		/* track this static object */
--		debug_object_init(addr, descr);
--		debug_object_activate(addr, descr);
--	} else {
--		debug_print_object(&o, "activate");
--		ret =3D debug_object_fixup(descr->fixup_activate, addr,
--					ODEBUG_STATE_NOTAVAILABLE);
--		return ret ? 0 : -EINVAL;
-+	/* If NULL the allocation has hit OOM */
-+	if (!obj) {
-+		debug_objects_oom();
-+		return 0;
- 	}
--	return 0;
++static inline int syscall_user_dispatch_set_config(struct task_struct *task,
++						   unsigned long size, void __user *data)
++{
++	return -EINVAL;
++}
 +
-+	/* Object is neither static nor tracked. It's not initialized */
-+	debug_print_object(&o, "activate");
-+	ret =3D debug_object_fixup(descr->fixup_activate, addr, ODEBUG_STATE_NOTAVA=
-ILABLE);
-+	return ret ? 0 : -EINVAL;
- }
- EXPORT_SYMBOL_GPL(debug_object_activate);
+ #endif /* CONFIG_GENERIC_ENTRY */
 =20
-@@ -869,6 +886,7 @@ EXPORT_SYMBOL_GPL(debug_object_free);
+ #endif /* _SYSCALL_USER_DISPATCH_H */
+diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
+index 195ae64a8c87..72c038fc71d0 100644
+--- a/include/uapi/linux/ptrace.h
++++ b/include/uapi/linux/ptrace.h
+@@ -112,6 +112,36 @@ struct ptrace_rseq_configuration {
+ 	__u32 pad;
+ };
+=20
++#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
++#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
++
++/*
++ * struct ptrace_sud_config - Per-task configuration for Syscall User Dispat=
+ch
++ * @mode:	One of PR_SYS_DISPATCH_ON or PR_SYS_DISPATCH_OFF
++ * @selector:	Tracees user virtual address of SUD selector
++ * @offset:	SUD exclusion area (virtual address)
++ * @len:	Length of SUD exclusion area
++ *
++ * Used to get/set the syscall user dispatch configuration for a tracee.
++ * Selector is optional (may be NULL), and if invalid will produce
++ * a SIGSEGV in the tracee upon first access.
++ *
++ * If mode is PR_SYS_DISPATCH_ON, syscall dispatch will be enabled. If
++ * PR_SYS_DISPATCH_OFF, syscall dispatch will be disabled and all other
++ * parameters must be 0.  The value in *selector (if not null), also determi=
+nes
++ * whether syscall dispatch will occur.
++ *
++ * The Syscall User Dispatch Exclusion area described by offset/len is the
++ * virtual address space from which syscalls will not produce a user
++ * dispatch.
++ */
++struct ptrace_sud_config {
++	__u64 mode;
++	__u64 selector;
++	__u64 offset;
++	__u64 len;
++};
++
+ /*
+  * These values are stored in task->ptrace_message
+  * by ptrace_stop to describe the current syscall-stop.
+diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user=
+_dispatch.c
+index 0b6379adff6b..5340c5aa89e7 100644
+--- a/kernel/entry/syscall_user_dispatch.c
++++ b/kernel/entry/syscall_user_dispatch.c
+@@ -4,6 +4,7 @@
   */
- void debug_object_assert_init(void *addr, const struct debug_obj_descr *desc=
-r)
+ #include <linux/sched.h>
+ #include <linux/prctl.h>
++#include <linux/ptrace.h>
+ #include <linux/syscall_user_dispatch.h>
+ #include <linux/uaccess.h>
+ #include <linux/signal.h>
+@@ -68,8 +69,9 @@ bool syscall_user_dispatch(struct pt_regs *regs)
+ 	return true;
+ }
+=20
+-int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
+-			      unsigned long len, char __user *selector)
++static int task_set_syscall_user_dispatch(struct task_struct *task, unsigned=
+ long mode,
++					  unsigned long offset, unsigned long len,
++					  char __user *selector)
  {
-+	struct debug_obj o =3D { .object =3D addr, .state =3D ODEBUG_STATE_NOTAVAIL=
-ABLE, .descr =3D descr };
- 	struct debug_bucket *db;
- 	struct debug_obj *obj;
- 	unsigned long flags;
-@@ -879,31 +897,20 @@ void debug_object_assert_init(void *addr, const struct =
-debug_obj_descr *descr)
- 	db =3D get_bucket((unsigned long) addr);
+ 	switch (mode) {
+ 	case PR_SYS_DISPATCH_OFF:
+@@ -86,7 +88,16 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned=
+ long offset,
+ 		if (offset && offset + len <=3D offset)
+ 			return -EINVAL;
 =20
- 	raw_spin_lock_irqsave(&db->lock, flags);
-+	obj =3D lookup_object_or_alloc(addr, db, descr, false, true);
-+	raw_spin_unlock_irqrestore(&db->lock, flags);
-+	if (likely(!IS_ERR_OR_NULL(obj)))
-+		return;
+-		if (selector && !access_ok(selector, sizeof(*selector)))
++		/*
++		 * access_ok() will clear memory tags for tagged addresses
++		 * if current has memory tagging enabled.
++
++		 * To enable a tracer to set a tracees selector the
++		 * selector address must be untagged for access_ok(),
++		 * otherwise an untagged tracer will always fail to set a
++		 * tagged tracees selector.
++		 */
++		if (selector && !access_ok(untagged_addr(selector), sizeof(*selector)))
+ 			return -EFAULT;
 =20
--	obj =3D lookup_object(addr, db);
-+	/* If NULL the allocation has hit OOM */
- 	if (!obj) {
--		struct debug_obj o =3D { .object =3D addr,
--				       .state =3D ODEBUG_STATE_NOTAVAILABLE,
--				       .descr =3D descr };
--
--		raw_spin_unlock_irqrestore(&db->lock, flags);
--		/*
--		 * Maybe the object is static, and we let the type specific
--		 * code confirm. Track this static object if true, else invoke
--		 * fixup.
--		 */
--		if (descr->is_static_object && descr->is_static_object(addr)) {
--			/* Track this static object */
--			debug_object_init(addr, descr);
--		} else {
--			debug_print_object(&o, "assert_init");
--			debug_object_fixup(descr->fixup_assert_init, addr,
--					   ODEBUG_STATE_NOTAVAILABLE);
--		}
-+		debug_objects_oom();
- 		return;
+ 		break;
+@@ -94,15 +105,60 @@ int set_syscall_user_dispatch(unsigned long mode, unsign=
+ed long offset,
+ 		return -EINVAL;
  	}
 =20
--	raw_spin_unlock_irqrestore(&db->lock, flags);
-+	/* Object is neither tracked nor static. It's not initialized. */
-+	debug_print_object(&o, "assert_init");
-+	debug_object_fixup(descr->fixup_assert_init, addr, ODEBUG_STATE_NOTAVAILABL=
-E);
- }
- EXPORT_SYMBOL_GPL(debug_object_assert_init);
+-	current->syscall_dispatch.selector =3D selector;
+-	current->syscall_dispatch.offset =3D offset;
+-	current->syscall_dispatch.len =3D len;
+-	current->syscall_dispatch.on_dispatch =3D false;
++	task->syscall_dispatch.selector =3D selector;
++	task->syscall_dispatch.offset =3D offset;
++	task->syscall_dispatch.len =3D len;
++	task->syscall_dispatch.on_dispatch =3D false;
 =20
+ 	if (mode =3D=3D PR_SYS_DISPATCH_ON)
+-		set_syscall_work(SYSCALL_USER_DISPATCH);
++		set_task_syscall_work(task, SYSCALL_USER_DISPATCH);
++	else
++		clear_task_syscall_work(task, SYSCALL_USER_DISPATCH);
++
++	return 0;
++}
++
++int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
++			      unsigned long len, char __user *selector)
++{
++	return task_set_syscall_user_dispatch(current, mode, offset, len, selector);
++}
++
++int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long=
+ size,
++				     void __user *data)
++{
++	struct syscall_user_dispatch *sd =3D &task->syscall_dispatch;
++	struct ptrace_sud_config cfg;
++
++	if (size !=3D sizeof(cfg))
++		return -EINVAL;
++
++	if (test_task_syscall_work(task, SYSCALL_USER_DISPATCH))
++		cfg.mode =3D PR_SYS_DISPATCH_ON;
+ 	else
+-		clear_syscall_work(SYSCALL_USER_DISPATCH);
++		cfg.mode =3D PR_SYS_DISPATCH_OFF;
++
++	cfg.offset =3D sd->offset;
++	cfg.len =3D sd->len;
++	cfg.selector =3D (__u64)(uintptr_t)sd->selector;
++
++	if (copy_to_user(data, &cfg, sizeof(cfg)))
++		return -EFAULT;
+=20
+ 	return 0;
+ }
++
++int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long=
+ size,
++				     void __user *data)
++{
++	struct ptrace_sud_config cfg;
++
++	if (size !=3D sizeof(cfg))
++		return -EINVAL;
++
++	if (copy_from_user(&cfg, data, sizeof(cfg)))
++		return -EFAULT;
++
++	return task_set_syscall_user_dispatch(task, cfg.mode, cfg.offset, cfg.len,
++					      (char __user *)(uintptr_t)cfg.selector);
++}
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index 0786450074c1..443057bee87c 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -32,6 +32,7 @@
+ #include <linux/compat.h>
+ #include <linux/sched/signal.h>
+ #include <linux/minmax.h>
++#include <linux/syscall_user_dispatch.h>
+=20
+ #include <asm/syscall.h>	/* for syscall_get_* */
+=20
+@@ -1259,6 +1260,14 @@ int ptrace_request(struct task_struct *child, long req=
+uest,
+ 		break;
+ #endif
+=20
++	case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
++		ret =3D syscall_user_dispatch_set_config(child, addr, datavp);
++		break;
++
++	case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
++		ret =3D syscall_user_dispatch_get_config(child, addr, datavp);
++		break;
++
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selfte=
+sts/ptrace/.gitignore
+index 792318aaa30c..b7dde152e75a 100644
+--- a/tools/testing/selftests/ptrace/.gitignore
++++ b/tools/testing/selftests/ptrace/.gitignore
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ get_syscall_info
++get_set_sud
+ peeksiginfo
+ vmaccess
+diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftest=
+s/ptrace/Makefile
+index 96ffa94afb91..1c631740a730 100644
+--- a/tools/testing/selftests/ptrace/Makefile
++++ b/tools/testing/selftests/ptrace/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS +=3D -std=3Dc99 -pthread -Wall $(KHDR_INCLUDES)
+=20
+-TEST_GEN_PROGS :=3D get_syscall_info peeksiginfo vmaccess
++TEST_GEN_PROGS :=3D get_syscall_info peeksiginfo vmaccess get_set_sud
+=20
+ include ../lib.mk
+diff --git a/tools/testing/selftests/ptrace/get_set_sud.c b/tools/testing/sel=
+ftests/ptrace/get_set_sud.c
+new file mode 100644
+index 000000000000..5297b10d25c3
+--- /dev/null
++++ b/tools/testing/selftests/ptrace/get_set_sud.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include "../kselftest_harness.h"
++#include <stdio.h>
++#include <string.h>
++#include <errno.h>
++#include <sys/wait.h>
++#include <sys/syscall.h>
++#include <sys/prctl.h>
++
++#include "linux/ptrace.h"
++
++static int sys_ptrace(int request, pid_t pid, void *addr, void *data)
++{
++	return syscall(SYS_ptrace, request, pid, addr, data);
++}
++
++TEST(get_set_sud)
++{
++	struct ptrace_sud_config config;
++	pid_t child;
++	int ret =3D 0;
++	int status;
++
++	child =3D fork();
++	ASSERT_GE(child, 0);
++	if (child =3D=3D 0) {
++		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
++			TH_LOG("PTRACE_TRACEME: %m");
++		}
++		kill(getpid(), SIGSTOP);
++		_exit(1);
++	}
++
++	waitpid(child, &status, 0);
++
++	memset(&config, 0xff, sizeof(config));
++	config.mode =3D PR_SYS_DISPATCH_ON;
++
++	ret =3D sys_ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG, child,
++			 (void *)sizeof(config), &config);
++
++	ASSERT_EQ(ret, 0);
++	ASSERT_EQ(config.mode, PR_SYS_DISPATCH_OFF);
++	ASSERT_EQ(config.selector, 0);
++	ASSERT_EQ(config.offset, 0);
++	ASSERT_EQ(config.len, 0);
++
++	config.mode =3D PR_SYS_DISPATCH_ON;
++	config.selector =3D 0;
++	config.offset =3D 0x400000;
++	config.len =3D 0x1000;
++
++	ret =3D sys_ptrace(PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG, child,
++			 (void *)sizeof(config), &config);
++
++	ASSERT_EQ(ret, 0);
++
++	memset(&config, 1, sizeof(config));
++	ret =3D sys_ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG, child,
++			 (void *)sizeof(config), &config);
++
++	ASSERT_EQ(ret, 0);
++	ASSERT_EQ(config.mode, PR_SYS_DISPATCH_ON);
++	ASSERT_EQ(config.selector, 0);
++	ASSERT_EQ(config.offset, 0x400000);
++	ASSERT_EQ(config.len, 0x1000);
++
++	kill(child, SIGKILL);
++}
++
++TEST_HARNESS_MAIN
 
