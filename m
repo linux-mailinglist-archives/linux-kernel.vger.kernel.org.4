@@ -2,126 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88BA6ECCF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015C06ECCFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjDXNRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
+        id S231868AbjDXNRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbjDXNRO (ORCPT
+        with ESMTP id S231250AbjDXNRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:17:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48E13C35;
-        Mon, 24 Apr 2023 06:16:44 -0700 (PDT)
+        Mon, 24 Apr 2023 09:17:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8DCE76;
+        Mon, 24 Apr 2023 06:17:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30CF1621E2;
-        Mon, 24 Apr 2023 13:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3559AC433D2;
-        Mon, 24 Apr 2023 13:16:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F1DA621EA;
+        Mon, 24 Apr 2023 13:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35AF1C433D2;
+        Mon, 24 Apr 2023 13:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682342199;
-        bh=2rlK0Tu+4HejUDU3oS4OqP3yYSq0vZKT4numa2QvaxA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ObL1F7vaNumRrEBxsCfFxqEacUERCfRXpAwD0bOztpy2ZRaZUvAcFkGNrjO9i8wFB
-         UCpc79o8xeswM6DgwsiuP8/HpdJLcSzhxZK0u1hndebKUQkd+eU9JkojfZzG6vCFU9
-         TTrohRze/oiA/spG3tqj/n6dGrel1VLGIfRK41ewozVEu9f+5s2sLrRS8TUppxqQ9l
-         P9YmrgwtM8mXSxmyRi92HSU2Y0QFNKjkIyfzviLwjc2u6kK6z4qdUolTUmpI0x/T5r
-         Z0SH2Vl410VGMwLzhVK+xASsXPwUlsF6E1gFeHUhkiu5tqhwtu1GzLRGA7Kenuuo+Q
-         HMPAAaY7j8m+A==
-Message-ID: <b6fde790-e43e-693c-19bd-101da9f93632@kernel.org>
-Date:   Mon, 24 Apr 2023 22:16:36 +0900
+        s=k20201202; t=1682342217;
+        bh=Qor63KPZKV7QHdfEndKbYPownrJfBHOA94uMZQ+6dJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m2uDwGyD9Z7nkiTxLkKry8lqsUlqi69KK+ovYC7R0Z67A5H+RqEYaifWly6G9aUtp
+         usw62JHz7T5cuvFTm1Cr2f9niePFXg9+peOrKyBnPPG9MICVZJw0wX42xETSEvU+ZX
+         V9cMEJm+iRxQsJjzJ7lKcVGsL9ACGdEob+610fUPC7pK/IHjch/lZgOVHtdSsAOp8l
+         nI7Vp2T6xzkC95AU/Wxm4AqTCwr+OLxLbKwMWSzHm7KC8FMu5V5cL8t59zFFA/8e4s
+         yoT0mW7YEg8wq6vEhWJpg49XjlSGrpv49o9j3gjJeHZp9dNfS65+qCcOi56XTu6kQi
+         Z8JtKr1xa8euQ==
+Date:   Mon, 24 Apr 2023 14:16:51 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: leds: Add ROHM BD2606MVV LED
+Message-ID: <20230424131651.GD50521@google.com>
+References: <20230419111806.1100437-1-andreas@kemnade.info>
+ <20230419111806.1100437-2-andreas@kemnade.info>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 24/43] dt-bindings: ata: Add DT bindings ep93xx pata
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-25-nikita.shubin@maquefel.me>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230424123522.18302-25-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230419111806.1100437-2-andreas@kemnade.info>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 21:34, Nikita Shubin wrote:
-> Add YAML bindings ep93xx SoC.
+On Wed, 19 Apr 2023, Andreas Kemnade wrote:
+
+> Document ROHM BD2606MVV LED driver devicetree bindings.
 > 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  .../bindings/ata/cirrus,ep93xx-pata.yaml      | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/ata/cirrus,ep93xx-pata.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/ata/cirrus,ep93xx-pata.yaml b/Documentation/devicetree/bindings/ata/cirrus,ep93xx-pata.yaml
-> new file mode 100644
-> index 000000000000..24ed64cfa6d1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/ata/cirrus,ep93xx-pata.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/ata/cirrus,ep93xx-pata.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: EP9312 PATA controller driver
-> +
-> +maintainers:
-> +  - Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>  .../bindings/leds/rohm,bd2606mvv.yaml         | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
 
-Wrong email address. Please use dlemoal@kernel.org as mentioned in the
-MAINTAINERS file.
+Applied, thanks
 
-(other schema files need to be changed as well. Will send a patch for that)
-
-> +
-> +properties:
-> +  compatible:
-> +    const: cirrus,ep9312-pata
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    ide: ide@800a0000 {
-> +        compatible = "cirrus,ep9312-pata";
-> +        reg = <0x800a0000 0x38>;
-> +        interrupt-parent = <&vic1>;
-> +        interrupts = <8>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&ide_default_pins>;
-> +    };
-> +
-> +...
-
+-- 
+Lee Jones [李琼斯]
