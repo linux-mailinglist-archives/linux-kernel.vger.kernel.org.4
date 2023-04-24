@@ -2,68 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AE86ECB1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F556ECB1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjDXLO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S231510AbjDXLPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjDXLOy (ORCPT
+        with ESMTP id S231508AbjDXLPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:14:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC7830DB;
-        Mon, 24 Apr 2023 04:14:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3954861E02;
-        Mon, 24 Apr 2023 11:14:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035B4C433D2;
-        Mon, 24 Apr 2023 11:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682334892;
-        bh=cwGo+ngdI1ixtzZcTiwtleXirbr7LoJyLktw2MG3xC4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BaUFbWjXQ8bRFJpd/oSqzF+N5hRMTZ9yCtdSMyuiqDXrVH4ViEDmgK1NcYJmpgsiH
-         In1s3zRge+ok6le+mXb2Q8WnWdWKMIMyp3N9OaL34yUYAiYbitKaxTken+8KiJGuPl
-         h0NfB+mTw2XI6C2Ye5fUaLknfPjKNA4JAJZIL0yv3kENvyIQLSSbZsGLp7+WY05+tB
-         nc2ecrXsxq5loaDucHRhkKJ8+39cs64T0/xyxwHWGBvpK89xtXsr98ns7/JTfckZFl
-         hMhWr+5uYKnPu0AVzwIPsa32DFEAhjuSzY8kT4Ov2hTZ/MdD7SyhqGQnC73N7xldhJ
-         E1GrjooV+ff3g==
-Date:   Mon, 24 Apr 2023 14:14:49 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     wuych <yunchuan@nfschina.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] net: phy: dp83867: Remove unnecessary (void*) conversions
-Message-ID: <20230424111449.GB10583@unreal>
-References: <20230424101550.664319-1-yunchuan@nfschina.com>
+        Mon, 24 Apr 2023 07:15:39 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D96D3AA7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 04:15:15 -0700 (PDT)
+Received: from fews02-sea.riseup.net (fews02-sea-pn.riseup.net [10.0.1.112])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4Q4jGV2zYkz9tJt;
+        Mon, 24 Apr 2023 11:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1682334914; bh=eXZhgxZ3gSLiN1Dk3zBmzyKLQtCuDkHTvvCzaNHb+/M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RGFW3CGMcxS3QoyZOGf9vmiy8i/brzysGsyDHS1IUXCwfiy7eqMblx7FJMhhCRiKF
+         kCF556nEtiEoj/rDJaN7E+4uTOuL6HUsL9ZGAAYzBbbDWYlaOZMJKXK9tn1x1qsCwM
+         LapxPFZ/Nn2lTWpRzwb0x6gF3fswBcidsVQnsuGs=
+X-Riseup-User-ID: 97066700368D72C7421B5CE4B917102B984FF54652C96645EE0B34F119C783BA
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews02-sea.riseup.net (Postfix) with ESMTPSA id 4Q4jGD14LszFqLB;
+        Mon, 24 Apr 2023 11:14:59 +0000 (UTC)
+Message-ID: <eecbe65c-25d9-1864-dbab-97a626a19b9f@riseup.net>
+Date:   Mon, 24 Apr 2023 08:14:56 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424101550.664319-1-yunchuan@nfschina.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 4/5] drm/sti: Drop of_gpio header
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Alain Volmat <alain.volmat@foss.st.com>
+References: <20220812205746.609107-1-mairacanal@riseup.net>
+ <20220812205746.609107-5-mairacanal@riseup.net>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220812205746.609107-5-mairacanal@riseup.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 06:15:50PM +0800, wuych wrote:
-> Pointer variables of void * type do not require type cast.
+On 8/12/22 17:57, Maíra Canal wrote:
+> This driver includes the deprecated OF GPIO header <linux/of_gpio.h>
+> yet fail to use symbols from it, so drop this include.
 > 
-> Signed-off-by: wuych <yunchuan@nfschina.com>
-> ---
->  drivers/net/phy/dp83867.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
+> Cc: Alain Volmat <alain.volmat@foss.st.com>
+> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Applied to drm/drm-misc (drm-misc-next).
+
+Best Regards,
+- Maíra Canal
+
+> ---
+>   drivers/gpu/drm/sti/sti_dvo.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/sti/sti_dvo.c b/drivers/gpu/drm/sti/sti_dvo.c
+> index b6ee8a82e656..0fc7710b054a 100644
+> --- a/drivers/gpu/drm/sti/sti_dvo.c
+> +++ b/drivers/gpu/drm/sti/sti_dvo.c
+> @@ -8,7 +8,7 @@
+>   #include <linux/component.h>
+>   #include <linux/debugfs.h>
+>   #include <linux/module.h>
+> -#include <linux/of_gpio.h>
+> +#include <linux/of.h>
+>   #include <linux/platform_device.h>
+>   
+>   #include <drm/drm_atomic_helper.h>
