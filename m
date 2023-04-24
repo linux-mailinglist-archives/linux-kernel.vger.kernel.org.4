@@ -2,156 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0966EC79A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58466EC7A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjDXIHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S231510AbjDXIJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjDXIHU (ORCPT
+        with ESMTP id S229715AbjDXII6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:07:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68229E4F;
-        Mon, 24 Apr 2023 01:07:13 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 24 Apr 2023 04:08:58 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A77110F5;
+        Mon, 24 Apr 2023 01:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1682323737; x=1713859737;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=p3wjA/hQJYR8MaFPebNd7S1hnAOnRnPI9Oq3vyiBOfE=;
+  b=OrVGtsZUaKRiPDCflx3Ej8oLEajM9GJHUatGc2OcQLWTrbcSK776a9Tq
+   O4whl/TMWnYzzHS9SMina4vHgSwx9W9+9jFp1nkU9hu1P7eWookqbMucU
+   vCSQsQLze5rXG2VMCwx2DYc9fdIJO1GkHgiVenxZvz+PVc8Kp+y5UBiHa
+   LylJJcmQwz3N9Jv8UpLqYHzhoG8kmcV3RJ8GAI3xl/IA+/ZvAAP4H8Ql2
+   I18c5GTfVXNaWrYMOq+fPeKBRQj1bYdduk46hkTbinikwHeEcwiTH+8ta
+   SA8qOTpZN7hwjYx3fABVrOI4pnadN7fk7TZCbhIkIeoeHJIkKqTXma5vR
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,222,1677538800"; 
+   d="scan'208";a="30508122"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 24 Apr 2023 10:08:54 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 24 Apr 2023 10:08:54 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 24 Apr 2023 10:08:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1682323734; x=1713859734;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=p3wjA/hQJYR8MaFPebNd7S1hnAOnRnPI9Oq3vyiBOfE=;
+  b=ErrNJqRKgHqA9fL/GH0LTY99ZEqiih62SKTLsX/nCOpFycYQ9O8x/wv/
+   SCO/mSyd4oAKoBSoacLkZ86bgF0IgQDQwHwHqyNuHOnIEVyoF53A+16gO
+   lVn5A//8TLX9WzJs3bqTbiHx+KL0VJ186eQAWO1qzfrEiVCWiSHOZB4lV
+   EIbxuVRjqb+F7B0Jykg409ca7IDiNktqQy7iJRalxCpsBseZNZHruPvm9
+   /xWCxpq4Ne99DpogHNQ8DoLfb1VMvDPjCthYeLv1n5G6KG95WxRsNu0ey
+   0rCoEW8iQueryqR4R86o8RasrtnhMQ5bh9h/Iip9YpzPJZ3vA1Zc2ypEW
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,222,1677538800"; 
+   d="scan'208";a="30508120"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 24 Apr 2023 10:08:54 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF3F066031C8;
-        Mon, 24 Apr 2023 09:07:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682323631;
-        bh=fk2JF4cqUutVFMf5ReNQ5Z96Nq9fCMd68NIqprhYP4I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MnGUwRkrnSGoo5I2HpQ1KCjotEMOiHWLBKexRH7q759Dy2mH4gixRn5awN7Gi/NZu
-         dD6TwzsjthF4hzHgSj2Y3IjJ6qT7th+XS4dCDBJHzFjX26vEOdpi48GcGSGQzU7GOy
-         keTScAocTMzmC7GznLLAcu+31IA5HZ+FxSkS4XFUslc1ZE6CjaHV5hdWvRWzHRcXkH
-         o3KdMzNRNiKVkICdhKOX/zTVmQZcU7DR2j0gk8riSVQde61lz+TgJYY8ytdxSQ/fGf
-         BDfVSjES2saNVdhBQKoiienboJ8tM0eDhKUvd4PSPmeqFdCXbRKaACkzWr6+GW598X
-         JxqlYseu52+lA==
-Message-ID: <da2e268a-b209-f16e-7257-336fee2aad52@collabora.com>
-Date:   Mon, 24 Apr 2023 10:07:07 +0200
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4E73D280072;
+        Mon, 24 Apr 2023 10:08:54 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Date:   Mon, 24 Apr 2023 10:08:51 +0200
+Message-ID: <2679028.mvXUDI8C0e@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230310130815.562418-1-alexander.sverdlin@siemens.com>
+References: <20230310130815.562418-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/1] scsi: ufs: core: Fix &hwq->cq_lock deadlock issue
-Content-Language: en-US
-To:     Alice Chao <alice.chao@mediatek.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Can Guo <quic_cang@quicinc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
-        powen.kao@mediatek.com, naomi.chu@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, tun-yu.yu@mediatek.com,
-        eddie.huang@mediatek.com, wsd_upstream@mediatek.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230424080400.8955-1-alice.chao@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230424080400.8955-1-alice.chao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/04/23 10:03, Alice Chao ha scritto:
-> [name:lockdep&]WARNING: inconsistent lock state
-> [name:lockdep&]--------------------------------
-> [name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-> [name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
->    ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
-> ufshcd_mcq_poll_cqe_lock+0x30/0xe0
-> [name:lockdep&]{IN-HARDIRQ-W} state was registered at:
->    lock_acquire+0x17c/0x33c
->    _raw_spin_lock+0x5c/0x7c
->    ufshcd_mcq_poll_cqe_lock+0x30/0xe0
->    ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
->    __handle_irq_event_percpu+0x140/0x3ec
->    handle_irq_event+0x50/0xd8
->    handle_fasteoi_irq+0x148/0x2b0
->    generic_handle_domain_irq+0x4c/0x6c
->    gic_handle_irq+0x58/0x134
->    call_on_irq_stack+0x40/0x74
->    do_interrupt_handler+0x84/0xe4
->    el1_interrupt+0x3c/0x78
-> <snip>
-> 
-> Possible unsafe locking scenario:
->         CPU0
->         ----
->    lock(&hwq->cq_lock);
->    <Interrupt>
->      lock(&hwq->cq_lock);
->    *** DEADLOCK ***
-> 2 locks held by kworker/u16:4/260:
-> 
-> [name:lockdep&]
->   stack backtrace:
-> CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
-> 6.1.17-mainline-android14-2-g277223301adb #1
-> Workqueue: ufs_eh_wq_0 ufshcd_err_handler
-> 
->   Call trace:
->    dump_backtrace+0x10c/0x160
->    show_stack+0x20/0x30
->    dump_stack_lvl+0x98/0xd8
->    dump_stack+0x20/0x60
->    print_usage_bug+0x584/0x76c
->    mark_lock_irq+0x488/0x510
->    mark_lock+0x1ec/0x25c
->    __lock_acquire+0x4d8/0xffc
->    lock_acquire+0x17c/0x33c
->    _raw_spin_lock+0x5c/0x7c
->    ufshcd_mcq_poll_cqe_lock+0x30/0xe0
->    ufshcd_poll+0x68/0x1b0
->    ufshcd_transfer_req_compl+0x9c/0xc8
->    ufshcd_err_handler+0x3bc/0xea0
->    process_one_work+0x2f4/0x7e8
->    worker_thread+0x234/0x450
->    kthread+0x110/0x134
->    ret_from_fork+0x10/0x20
-> 
-> ufs_mtk_mcq_intr() could refer to
-> https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
-> 
-> When ufshcd_err_handler() is executed, CQ event interrupt can enter
-> waiting for the same lock. It could happened in upstream code path
-> ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
-> warning message will be generated when &hwq->cq_lock is used in IRQ
-> context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
-> spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
-> 
-> Fixes: ed975065c31c ("scsi: ufs: core: mcq: Add completion support in poll")
-> Reviewed-by: Can Guo <quic_cang@quicinc.com>
-> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+Am Freitag, 10. M=E4rz 2023, 14:08:15 CEST schrieb A. Sverdlin:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+>=20
+> One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
+> under mutex. The second reason if the (false-positive) lockdep splat caus=
+ed
+> by the recursive feature of the "prepare_lock" (one clock instance is I2C
+> peripheral clock and another is pcf85063 RTC as clock provider):
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> WARNING: possible circular locking dependency detected
+> 5.15.71+... #1 Tainted: G           O
+> ------------------------------------------------------
+> fs-value/2332 is trying to acquire lock:
+> ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock
+>=20
+> but task is already holding lock:
+> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
+> i2c_adapter_lock_bus
+>=20
+> which lock already depends on the new lock.
+>=20
+> the existing dependency chain (in reverse order) is:
+>=20
+> -> #2 (i2c_register_adapter){+.+.}-{3:3}:
+>        lock_acquire
+>        rt_mutex_lock_nested
+>        i2c_adapter_lock_bus
+>        i2c_transfer
+>        regmap_i2c_read
+>        _regmap_raw_read
+>        _regmap_bus_read
+>        _regmap_read
+>        regmap_read
+>        pcf85063_probe
+>        i2c_device_probe
+>        really_probe
+>        __driver_probe_device
+>        driver_probe_device
+>        __device_attach_driver
+>        bus_for_each_drv
+>        __device_attach
+>        device_initial_probe
+>        bus_probe_device
+>        device_add
+>        device_register
+>        i2c_new_client_device
+>        of_i2c_register_devices
+>        i2c_register_adapter
+>        __i2c_add_numbered_adapter
+>        i2c_add_adapter
+>        lpi2c_imx_probe
+>        platform_probe
+>        really_probe
+>        __driver_probe_device
+>        driver_probe_device
+>        __device_attach_driver
+>        bus_for_each_drv
+>        __device_attach
+>        device_initial_probe
+>        bus_probe_device
+>        deferred_probe_work_func
+>        process_one_work
+>        worker_thread
+>        kthread
+>        ret_from_fork
+>=20
+> -> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
+>        lock_acquire
+>        __mutex_lock
+>        mutex_lock_nested
+>        regmap_lock_mutex
+>        regmap_read
+>        pcf85063_clkout_recalc_rate
+>        __clk_register
+>        devm_clk_register
+>        pcf85063_probe
+>        i2c_device_probe
+>        really_probe
+>        __driver_probe_device
+>        driver_probe_device
+>        __device_attach_driver
+>        bus_for_each_drv
+>        __device_attach
+>        device_initial_probe
+>        bus_probe_device
+>        device_add
+>        device_register
+>        i2c_new_client_device
+>        of_i2c_register_devices
+>        i2c_register_adapter
+>        __i2c_add_numbered_adapter
+>        i2c_add_adapter
+>        lpi2c_imx_probe
+>        platform_probe
+>        really_probe
+>        __driver_probe_device
+>        driver_probe_device
+>        __device_attach_driver
+>        bus_for_each_drv
+>        __device_attach
+>        device_initial_probe
+>        bus_probe_device
+>        deferred_probe_work_func
+>        process_one_work
+>        worker_thread
+>        kthread
+>        ret_from_fork
+>=20
+> -> #0 (prepare_lock){+.+.}-{3:3}:
+>        __lock_acquire
+>        lock_acquire.part.0
+>        lock_acquire
+>        __mutex_lock
+>        mutex_lock_nested
+>        clk_prepare_lock
+>        clk_get_rate
+>        lpi2c_imx_xfer
+>        __i2c_transfer
+>        i2c_transfer
+>        regmap_i2c_read
+>        _regmap_raw_read
+>        regmap_raw_read
+>        regmap_bulk_read
+>        at24_read
+>        nvmem_reg_read
+>        bin_attr_nvmem_read
+>        sysfs_kf_bin_read
+>        kernfs_fop_read_iter
+>        new_sync_read
+>        vfs_read
+>        ksys_read
+>        __arm64_sys_read
+>        invoke_syscall
+>        ...
+>=20
+> other info that might help us debug this:
+>=20
+> Chain exists of:
+>   prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock -->
+> i2c_register_adapter
+>=20
+>  Possible unsafe locking scenario:
+>=20
+>        CPU0                    CPU1
+>        ----                    ----
+>   lock(i2c_register_adapter);
+>                              =20
+> lock(rtc_pcf85063:560:(&config->regmap)->lock); lock(i2c_register_adapter=
+);
+>   lock(prepare_lock);
+>=20
+>  *** DEADLOCK ***
+>=20
+> 4 locks held by .../2332:
+>  #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter
+>  #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_it=
+er
+>  #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read
+>  #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
+> i2c_adapter_lock_bus
+>=20
+> stack backtrace:
+> CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
+> Hardware name: ... (DT)
+> Call trace:
+>  dump_backtrace
+>  show_stack
+>  dump_stack_lvl
+>  dump_stack
+>  print_circular_bug
+>  check_noncircular
+>  __lock_acquire
+>  lock_acquire.part.0
+>  lock_acquire
+>  __mutex_lock
+>  mutex_lock_nested
+>  clk_prepare_lock
+>  clk_get_rate
+>  lpi2c_imx_xfer
+>  __i2c_transfer
+>  i2c_transfer
+>  regmap_i2c_read
+>  _regmap_raw_read
+>  regmap_raw_read
+>  regmap_bulk_read
+>  at24_read
+>  nvmem_reg_read
+>  bin_attr_nvmem_read
+>  sysfs_kf_bin_read
+>  kernfs_fop_read_iter
+>  new_sync_read
+>  vfs_read
+>  ksys_read
+>  __arm64_sys_read
+>  invoke_syscall
+>  ...
+>=20
+> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+Note: [1] needs to be applied as well in order to get rid of all the lockde=
+p=20
+errors.
+
+[1] https://lore.kernel.org/linux-i2c/20230424080627.20564-1-alexander.stei=
+n@ew.tq-group.com/T/#u
+
+> ---
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 33 +++++++++++++++++++++++++++---
+>  1 file changed, 30 insertions(+), 3 deletions(-)
+>=20
+> Changelog:
+> v3: fixed build error reported by kernel test robot <lkp@intel.com>
+>   =20
+> https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
+> v2: added clk_notifier as Alexander suggested
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> b/drivers/i2c/busses/i2c-imx-lpi2c.c index 188f2a36d2fd6..5f1d1d4e018bd
+> 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -100,6 +100,8 @@ struct lpi2c_imx_struct {
+>  	__u8			*rx_buf;
+>  	__u8			*tx_buf;
+>  	struct completion	complete;
+> +	struct notifier_block	clk_change_nb;
+> +	unsigned int		rate_per;
+>  	unsigned int		msglen;
+>  	unsigned int		delivered;
+>  	unsigned int		block_data;
+> @@ -198,24 +200,37 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct
+> *lpi2c_imx) } while (1);
+>  }
+>=20
+> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
+> +				   unsigned long action, void *data)
+> +{
+> +	struct clk_notifier_data *ndata =3D data;
+> +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
+> +							  struct=20
+lpi2c_imx_struct,
+> +							 =20
+clk_change_nb);
+> +
+> +	if (action & POST_RATE_CHANGE)
+> +		lpi2c_imx->rate_per =3D ndata->new_rate;
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKHI/=
+2 */
+>  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  {
+>  	u8 prescale, filt, sethold, clkhi, clklo, datavd;
+> -	unsigned int clk_rate, clk_cycle;
+> +	unsigned int clk_cycle;
+>  	enum lpi2c_imx_pincfg pincfg;
+>  	unsigned int temp;
+>=20
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+>=20
+> -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+>  	if (lpi2c_imx->mode =3D=3D HS || lpi2c_imx->mode =3D=3D ULTRA_FAST)
+>  		filt =3D 0;
+>  	else
+>  		filt =3D 2;
+>=20
+>  	for (prescale =3D 0; prescale <=3D 7; prescale++) {
+> -		clk_cycle =3D clk_rate / ((1 << prescale) * lpi2c_imx-
+>bitrate)
+> +		clk_cycle =3D lpi2c_imx->rate_per / ((1 << prescale) *=20
+lpi2c_imx->bitrate)
+>  			    - 3 - (filt >> 1);
+>  		clkhi =3D (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
+>  		clklo =3D clk_cycle - clkhi;
+> @@ -588,6 +603,18 @@ static int lpi2c_imx_probe(struct platform_device
+> *pdev) if (ret)
+>  		return ret;
+>=20
+> +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
+> +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
+> +					 &lpi2c_imx->clk_change_nb);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "can't register peripheral clock=20
+notifier\n");
+> +	lpi2c_imx->rate_per =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+> +	if (!lpi2c_imx->rate_per) {
+> +		dev_err(&pdev->dev, "can't get I2C peripheral clock=20
+rate\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+>  	pm_runtime_get_noresume(&pdev->dev);
 
 
-For readability purposes only - next time please put the actual description at
-the beginning and the log at the end.
-
-Anyway,
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
 
