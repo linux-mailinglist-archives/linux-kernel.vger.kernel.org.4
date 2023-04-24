@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C5F6ED2F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DCD6ED2F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbjDXQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S232075AbjDXQ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjDXQ5V (ORCPT
+        with ESMTP id S231910AbjDXQ5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:57:21 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620A84EDF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:57:15 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-76074d20a75so109956239f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682355433; x=1684947433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FpAVc8DWHD+kbIihYmiybWX4LCsF6lJLav4KsZanNyY=;
-        b=agiIOhs0tvwlutZ4LxjPEsM4kCuz3uCMEp1Ybdh7LLbr5fgz6nP/IsyAFPKyB3I6bd
-         sKYYwe1C3r38ocXF4peyLc/JZNGTKh5R28ecvhr28ErevDDooXasE5G0GFK9wQIG4EAk
-         s8NGoKX+lnSJOfMwHk+c+q/06pe3nZXHoVFr8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682355433; x=1684947433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FpAVc8DWHD+kbIihYmiybWX4LCsF6lJLav4KsZanNyY=;
-        b=Eft1XMjzIj1kb1tT511ef98+sp63k73vMZCxNn7I7QmCYegywgbSMn+3Hr2haQkxxL
-         KJsHeYONXXbMWuYNaQxihD/G5iUv70UGfGHnI+6dai+q8JM3KeDVStSnwum/VWGkMiq/
-         35KNXdjl2xdN9lwaAX7saJvI50p5ArG+ebf2LMuEhGw1kAMdMOk9kZeddzaUafEp1Jzo
-         8UqO16Qk09oV3C74KVSIDXxKA9QqQ6lcFTY/2cshu/BAOCxbW8ujep+OZVy1tnrBa+qS
-         6FFJfLW1c85/7xnoY8sITG8/mmZKDAoFbfCnM8UWxMfv1NUsarCp+i1FHTc/UcvQqDYw
-         4Z/A==
-X-Gm-Message-State: AAQBX9fAmG3Qef723707GA8yfyt4RC4hTQ1ypxyEAqvo60Tp+VR4RpEz
-        LmNSNqrlqsGjHsHPlY+ssdpWiEStoXh8U8gmknc=
-X-Google-Smtp-Source: AKy350a2JG3lNwF7+gYfnXp/I51kUIY3vYUoZxygXgNNxXvmavYlQWF5cq487MP2vR3U9ueA5/QYuQ==
-X-Received: by 2002:a6b:7b08:0:b0:74c:fe71:5808 with SMTP id l8-20020a6b7b08000000b0074cfe715808mr5932344iop.6.1682355433504;
-        Mon, 24 Apr 2023 09:57:13 -0700 (PDT)
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
-        by smtp.gmail.com with ESMTPSA id k26-20020a6b401a000000b00760c6c68d4asm3174746ioa.21.2023.04.24.09.57.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 09:57:12 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-316d901b2ecso1092435ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 09:57:12 -0700 (PDT)
-X-Received: by 2002:a05:6e02:156d:b0:315:9823:1308 with SMTP id
- k13-20020a056e02156d00b0031598231308mr491306ilu.7.1682355432107; Mon, 24 Apr
- 2023 09:57:12 -0700 (PDT)
+        Mon, 24 Apr 2023 12:57:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386F75592;
+        Mon, 24 Apr 2023 09:57:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D279861938;
+        Mon, 24 Apr 2023 16:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8227C433D2;
+        Mon, 24 Apr 2023 16:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682355457;
+        bh=IwUzErAvEsIxyUwV6dzjukx93sULgQiAOKamWXglYUQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JqdGR02vPCKOkvV74LnqaVa1PMRDXMfulxcS05Yfsv4t2NHFyIFM7qG9I3dtguH/z
+         cCQWPW5Y++gWS2vzjHflT7GX5gRVFy4eDmhv7wT+zbjNApmVcuRkbz9y1kImbnbW2T
+         fkSP3QjDCKlFJv6cCsT2o1FeIQmBikYHE9pxctjbHKah5fMtKdO8+mPsHojcu0Ut5Y
+         IAzTqduteM/oWLbmf7EANUc6R98VlVp8QvelDxKCLT6bXkyQtu+UkbCgkmic1cFDiP
+         980RdBqRhOJJuyVZZ/vKYJEEXItPhtmo1KwHAZ8iQP3QlJrBQ9JHNKtQjCslUN/rgY
+         WeDAvY69eBPDg==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-efi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
+Date:   Mon, 24 Apr 2023 18:57:20 +0200
+Message-Id: <20230424165726.2245548-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230421221249.1616168-1-dianders@chromium.org>
- <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid> <20230422051858.1696-1-hdanton@sina.com>
-In-Reply-To: <20230422051858.1696-1-hdanton@sina.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 24 Apr 2023 09:56:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
-Message-ID: <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3630; i=ardb@kernel.org; h=from:subject; bh=IwUzErAvEsIxyUwV6dzjukx93sULgQiAOKamWXglYUQ=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIcVty9uKxIWFLApzWNRVuC/52UhvvBN/OCndsEawqmVa/ KHmaZ87SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwETMVBn+l/85+2em4Y0vJdfn HXyRu4W1cJ3oS+Fy7lXcpcV99yUk8hgZrk2a+NNgj/JHh47p0f9/m0aE9nC9KlcsNT3TcTDuqbE jEwA=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,40 +69,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series is conceptually a combination of Evgeny's series [0] and
+mine [1], both of which attempt to make the early decompressor code more
+amenable to executing in the EFI environment with stricter handling of
+memory permissions.
 
-On Fri, Apr 21, 2023 at 10:19=E2=80=AFPM Hillf Danton <hdanton@sina.com> wr=
-ote:
->
-> On 21 Apr 2023 15:12:45 -0700 Douglas Anderson <dianders@chromium.org>
-> > Add a variant of folio_lock() that can timeout. This is useful to
-> > avoid unbounded waits for the page lock in kcompactd.
->
-> Given no mutex_lock_timeout() (perhaps because timeout makes no sense for
-> spinlock), I suspect your fix lies in the right layer.
+My series [1] implemented zboot for x86, by getting rid of the entire
+x86 decompressor, and replacing it with existing EFI code that does the
+same but in a generic way. The downside of this is that only EFI boot is
+supported, making it unviable for distros, which need to support BIOS
+boot and hybrid EFI boot modes that omit the EFI stub.
 
-I'm not 100% sure I understood the above comment, but I think you're
-saying that the approach my patch takes seems OK.
+Evgeny's series [0] adapted the entire decompressor code flow to allow
+it to execute in the EFI context as well as the bare metal context, and
+this involves changes to the 1:1 mapping code and the page fault
+handlers etc, none of which are really needed when doing EFI boot in the
+first place.
 
+So this series attempts to occupy the middle ground here: it makes
+minimal changes to the existing decompressor so some of it can be called
+from the EFI stub. Then, it reimplements the EFI boot flow to decompress
+the kernel and boot it directly, without relying on the trampoline code,
+page table code or page fault handling code. This allows us to get rid
+of quite a bit of unsavory EFI stub code, and replace it with two clear
+invocations of the EFI firmware APIs to clear NX restrictions from
+allocations that have been populated with executable code. 
 
-> If waiting for
-> page under IO causes trouble for you, another simpler option is make
-> IO faster (perhaps all you can do) for instance.
+The only code that is being reused is the decompression library itself,
+along with the minimal ELF parsing that is required to copy the ELF
+segments in place, and the relocation processing that fixes up absolute
+symbol references to refer to the correct virtual addresses.
 
-Yeah, this gets into the discussion about whether our current squashfs
-settings actually make sense. I suspect that they don't and that we
-should look into EROFS like Gao suggested, or at least choose
-different squashfs settings (smaller block sizes, ZSTD instead of
-zlib). Unfortunately I believe that the current squashfs settings were
-chosen because disk space is a concern.
+Note that some of Evgeny's changes to clean up the PE/COFF header
+generation will still be needed, but I've omitted those here for
+brevity.
 
+Cc: Evgeniy Baskov <baskov@ispras.ru>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc: Peter Jones <pjones@redhat.com>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: Dave Young <dyoung@redhat.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
 
-> If kcompactd is waken
-> up by kswapd, waiting for slow IO is the right thing to do.
+[0] https://lore.kernel.org/all/cover.1678785672.git.baskov@ispras.ru/
+[1] https://lore.kernel.org/all/20230416120729.2470762-1-ardb@kernel.org/
 
-I don't have enough intuition here, so I'm happy to take others'
-advice here. I guess my thought was that kcompactd is explicitly not
-using the full "sync" and instead choosing the "sync light". To me
-that means we shouldn't block for _too_ long.
+Ard Biesheuvel (6):
+  x86: decompressor: Move global symbol references to C code
+  x86: decompressor: Factor out kernel decompression and relocation
+  x86: efistub: Obtain ACPI RSDP address while running in the stub
+  x86: efistub: Perform 4/5 level paging switch from the stub
+  x86: efistub: Prefer EFI memory attributes protocol over DXE services
+  x86: efistub: Avoid legacy decompressor when doing EFI boot
 
--Doug
+ arch/x86/boot/compressed/efi_mixed.S           |  55 ---
+ arch/x86/boot/compressed/head_32.S             |  24 --
+ arch/x86/boot/compressed/head_64.S             |  39 +--
+ arch/x86/boot/compressed/misc.c                |  44 ++-
+ arch/x86/include/asm/efi.h                     |   2 +
+ drivers/firmware/efi/libstub/efi-stub-helper.c |   4 +
+ drivers/firmware/efi/libstub/x86-stub.c        | 360 +++++++++++++-------
+ 7 files changed, 279 insertions(+), 249 deletions(-)
+
+-- 
+2.39.2
+
