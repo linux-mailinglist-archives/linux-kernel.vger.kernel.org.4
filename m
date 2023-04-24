@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355CE6ECB09
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213016ECB0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 13:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjDXLKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 07:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S231608AbjDXLKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 07:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjDXLKL (ORCPT
+        with ESMTP id S231633AbjDXLKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 07:10:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8903E3AA4;
-        Mon, 24 Apr 2023 04:10:03 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O9O0sX013521;
-        Mon, 24 Apr 2023 11:09:55 GMT
+        Mon, 24 Apr 2023 07:10:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B93335B8;
+        Mon, 24 Apr 2023 04:10:07 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33O9rgRh031496;
+        Mon, 24 Apr 2023 11:09:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=Cgn9O+CwQM/MK5GzZppRLeGTOs8mrrTcA1Bt12Wtclw=;
- b=hwQDF9t0eA8TMcS4bgadEOjwzgCCk2XyYzEpwul9wgIsH3efz2rne8Xc6XSv5TeMLGsN
- 7R1lCB2jAJCpKo/t8/iOuZdqhfNal/E/+dNzRDCuYej4dTMrfYN2aXPTA72+lzDznYu8
- RjUSihxkV4Yxwpr86r5HvjtykhJglHQdkdpIG8t5gWuDqWdYOSE6U7Ft+SCYVJol20JL
- D1TVK7FVxTdApc0uMTWJOGaZNKYLJk2X0VZMKtPs9U9L0w0N2Kd5rRL7sZ7Pjzr8c2gC
- qvwLjfTG3rmdldZqGoipS+Xw6/3gELgxap5JLwiCveBfjXEW6VlOnpGfVtBypmMil5bU 6A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5mnnghgs-1
+ bh=W4sivDyQiR1sJqLrzFkVJUpy4fz///ShfG3gX+MxuJY=;
+ b=XUmGtqyks3ZeXi5Pudd4eEEVJIWb1UQJhGNwTNI290cYpuwh2gCbCQ1ltx4TepfWDLvy
+ JUq6CpXXdtSpVDlycAEZtdK2bxjIkM9y27pgRIgrlFULPuJUbQdtUJU1dRDKh1F47v0x
+ l81a2ugIDr9wOWq0XPATz6s6MAiRuyvRRICgWovtbT3jbuI9hbAZvmLtdz77II4dF1jA
+ SNOTCJhQGrKXytsIRY0i6NujcKn84TGXULUiDzMfmZYYHq5FmaQUSlfhFvz8NkcrmadZ
+ fDyDZ1AAyeegmgTOeeypnsbJDreoy2I+yqyFXYk3zoy28x+pvc7QefBE3aGt4Nu0XRl2 ig== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q48s234gr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 11:09:55 +0000
+        Mon, 24 Apr 2023 11:09:59 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OB9r3k029026
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OB9wXZ008975
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 11:09:53 GMT
+        Mon, 24 Apr 2023 11:09:58 GMT
 Received: from hu-mkshah-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 24 Apr 2023 04:09:49 -0700
+ 15.2.986.42; Mon, 24 Apr 2023 04:09:53 -0700
 From:   Maulik Shah <quic_mkshah@quicinc.com>
 To:     <andersson@kernel.org>, <ulf.hansson@linaro.org>,
         <dianders@chromium.org>, <swboyd@chromium.org>,
@@ -47,9 +47,9 @@ CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-pm@vger.kernel.org>, <sudeep.holla@arm.com>,
         <jwerner@chromium.org>, <quic_lsrao@quicinc.com>,
         <quic_rjendra@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>
-Subject: [PATCH v4 1/3] cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
-Date:   Mon, 24 Apr 2023 16:39:31 +0530
-Message-ID: <20230424110933.3908-2-quic_mkshah@quicinc.com>
+Subject: [PATCH v4 2/3] cpuidle: psci: Move enabling OSI mode after power domains creation
+Date:   Mon, 24 Apr 2023 16:39:32 +0530
+Message-ID: <20230424110933.3908-3-quic_mkshah@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230424110933.3908-1-quic_mkshah@quicinc.com>
 References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
@@ -60,97 +60,133 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RA2mrnj29eIkImxuD4lpB1Zqni91h955
-X-Proofpoint-ORIG-GUID: RA2mrnj29eIkImxuD4lpB1Zqni91h955
+X-Proofpoint-ORIG-GUID: W3mJSV8radRcwkV1g_EhARcov3msQ4ox
+X-Proofpoint-GUID: W3mJSV8radRcwkV1g_EhARcov3msQ4ox
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-24_07,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 adultscore=0 mlxlogscore=920 spamscore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ spamscore=0 mlxscore=0 clxscore=1015 suspectscore=0 mlxlogscore=999
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ engine=8.12.0-2303200000 definitions=main-2304240101
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Genpd parent and child domain topology created using dt_idle_pd_init_topology()
-needs to be removed during error cases.
+A switch from OSI to PC mode is only possible if all CPUs other than the
+calling one are OFF, either through a call to CPU_OFF or not yet booted.
 
-Add new helper function dt_idle_pd_remove_topology() for same.
+Currently OSI mode is enabled before power domains are created. In cases
+where CPUidle states are not using hierarchical CPU topology the bail out
+path tries to switch back to PC mode which gets denied by firmware since
+other CPUs are online at this point and creates inconsistent state as
+firmware is in OSI mode and Linux in PC mode.
 
-Reviewed-by: Ulf Hanssson <ulf.hansson@linaro.org>
+This change moves enabling OSI mode after power domains are created,
+this would makes sure that hierarchical CPU topology is used before
+switching firmware to OSI mode.
+
+Fixes: 70c179b49870 ("cpuidle: psci: Allow PM domain to be initialized even if no OSI mode")
 Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 ---
- drivers/cpuidle/dt_idle_genpd.c | 24 ++++++++++++++++++++++++
- drivers/cpuidle/dt_idle_genpd.h |  7 +++++++
- 2 files changed, 31 insertions(+)
+ drivers/cpuidle/cpuidle-psci-domain.c | 39 +++++++++------------------
+ 1 file changed, 13 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/cpuidle/dt_idle_genpd.c b/drivers/cpuidle/dt_idle_genpd.c
-index b37165514d4e..1af63c189039 100644
---- a/drivers/cpuidle/dt_idle_genpd.c
-+++ b/drivers/cpuidle/dt_idle_genpd.c
-@@ -152,6 +152,30 @@ int dt_idle_pd_init_topology(struct device_node *np)
- 	return 0;
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index c2d6d9c3c930..b88af1262f1a 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -120,20 +120,6 @@ static void psci_pd_remove(void)
+ 	}
  }
  
-+int dt_idle_pd_remove_topology(struct device_node *np)
-+{
-+	struct device_node *node;
-+	struct of_phandle_args child, parent;
-+	int ret;
-+
-+	for_each_child_of_node(np, node) {
-+		if (of_parse_phandle_with_args(node, "power-domains",
-+					"#power-domain-cells", 0, &parent))
-+			continue;
-+
-+		child.np = node;
-+		child.args_count = 0;
-+		ret = of_genpd_remove_subdomain(&parent, &child);
-+		of_node_put(parent.np);
+-static bool psci_pd_try_set_osi_mode(void)
+-{
+-	int ret;
+-
+-	if (!psci_has_osi_support())
+-		return false;
+-
+-	ret = psci_set_osi_mode(true);
+-	if (ret)
+-		return false;
+-
+-	return true;
+-}
+-
+ static void psci_cpuidle_domain_sync_state(struct device *dev)
+ {
+ 	/*
+@@ -152,15 +138,12 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device_node *node;
+-	bool use_osi;
++	bool use_osi = psci_has_osi_support();
+ 	int ret = 0, pd_count = 0;
+ 
+ 	if (!np)
+ 		return -ENODEV;
+ 
+-	/* If OSI mode is supported, let's try to enable it. */
+-	use_osi = psci_pd_try_set_osi_mode();
+-
+ 	/*
+ 	 * Parse child nodes for the "#power-domain-cells" property and
+ 	 * initialize a genpd/genpd-of-provider pair when it's found.
+@@ -170,33 +153,37 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ 			continue;
+ 
+ 		ret = psci_pd_init(node, use_osi);
+-		if (ret)
+-			goto put_node;
 +		if (ret) {
 +			of_node_put(node);
-+			return ret;
++			goto exit;
 +		}
-+	}
-+
-+	return 0;
-+}
-+
- struct device *dt_idle_attach_cpu(int cpu, const char *name)
- {
- 	struct device *dev;
-diff --git a/drivers/cpuidle/dt_idle_genpd.h b/drivers/cpuidle/dt_idle_genpd.h
-index a95483d08a02..3be1f70f55b5 100644
---- a/drivers/cpuidle/dt_idle_genpd.h
-+++ b/drivers/cpuidle/dt_idle_genpd.h
-@@ -14,6 +14,8 @@ struct generic_pm_domain *dt_idle_pd_alloc(struct device_node *np,
  
- int dt_idle_pd_init_topology(struct device_node *np);
+ 		pd_count++;
+ 	}
  
-+int dt_idle_pd_remove_topology(struct device_node *np);
+ 	/* Bail out if not using the hierarchical CPU topology. */
+ 	if (!pd_count)
+-		goto no_pd;
++		return 0;
+ 
+ 	/* Link genpd masters/subdomains to model the CPU topology. */
+ 	ret = dt_idle_pd_init_topology(np);
+ 	if (ret)
+ 		goto remove_pd;
+ 
++	/* let's try to enable OSI. */
++	ret = psci_set_osi_mode(use_osi);
++	if (ret)
++		goto remove_pd;
 +
- struct device *dt_idle_attach_cpu(int cpu, const char *name);
- 
- void dt_idle_detach_cpu(struct device *dev);
-@@ -36,6 +38,11 @@ static inline int dt_idle_pd_init_topology(struct device_node *np)
+ 	pr_info("Initialized CPU PM domain topology using %s mode\n",
+ 		use_osi ? "OSI" : "PC");
  	return 0;
+ 
+-put_node:
+-	of_node_put(node);
+ remove_pd:
++	dt_idle_pd_remove_topology(np);
+ 	psci_pd_remove();
++exit:
+ 	pr_err("failed to create CPU PM domains ret=%d\n", ret);
+-no_pd:
+-	if (use_osi)
+-		psci_set_osi_mode(false);
+ 	return ret;
  }
  
-+static inline int dt_idle_pd_remove_topology(struct device_node *np)
-+{
-+	return 0;
-+}
-+
- static inline struct device *dt_idle_attach_cpu(int cpu, const char *name)
- {
- 	return NULL;
 -- 
 2.17.1
 
