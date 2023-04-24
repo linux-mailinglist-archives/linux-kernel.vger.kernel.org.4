@@ -2,67 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723B16ED46B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90876ED470
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 20:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjDXScg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 14:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S231908AbjDXScp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 14:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjDXSce (ORCPT
+        with ESMTP id S229929AbjDXSci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 14:32:34 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A297FFA;
-        Mon, 24 Apr 2023 11:32:33 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f32588c13so679634166b.2;
-        Mon, 24 Apr 2023 11:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682361152; x=1684953152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9j7T0oh2jPBNqIhnL5Zd7ZvIl+BIHbhG56f1IEtAnsk=;
-        b=en79UB4wt62yJCnBGb6twRBbCxYLox2y5I6QJ/26Exf8YCoPS+UJxVXjSPGhXeMw+5
-         PCOyiBJeFMZb0xc3LljzcK469KyXcIZVSZ6TwsAq2sKK43LLvD+J860OvE/4qEASN9xX
-         r/Zso7tM1vb8JPyVXTbOo9LsI/s+N43OXGGYrHSq1vAmUPhIVHIzhqiZTCpaWdlyJess
-         gxlpZTDlMaj9Pw/uCNrIdR9sZRl/BBrshqRy9r7v5rxctn5YexeJS9A+97aTpT86tsTI
-         Ix6n1yiWGzXyAURdojPl8ycDOrJ7w3HsoO3HD7inQf8ZjoF51r4SNKg2A5XejOE6NYi6
-         rOCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682361152; x=1684953152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9j7T0oh2jPBNqIhnL5Zd7ZvIl+BIHbhG56f1IEtAnsk=;
-        b=IMqwCCc15J/4MaDMpsDv/rLxBCs6lipn5Kzksx+BQeKrFTA97MzqQAICQl99dVT7dK
-         E+pNB/HAavOARmnBwKop9mfX1tnvpsnBCpZCcPalsiWi8m7dJSjbG8A7z1wSSTKI87cn
-         nXleIjUK8UiwlltiqQX7DMz+idH16cajxAv4qQ58AZY9QiTrYniICttG4t8bm2ZH69oc
-         M/7+hS6gksGbCS+okjpzUaPhVM3aT4adVcATwloVJ/vdC42yJLf5tCGbSodr+QUojuU9
-         pTsWW/7cfovSYzZtym6f7Yuu8oWPPIg/QZi7oRHWl9C+xpZNo2T76sb6zmN3IQFJU6rQ
-         zL/g==
-X-Gm-Message-State: AAQBX9dUuWPoUSj1+NYzVAAUt3dP0iUzzQQvFuWOokF/6AzvjNhVO0Lu
-        cM8WK84W6nNWpiviEOvgV66fjccUVqA6DObf+a9mP/kw
-X-Google-Smtp-Source: AKy350ZFCjsGX+dkjKKCmINnLibMTKt32R4FmrvVFWLj1lc0yi/LWbG9mFrKkNky/b82XZMceMaE36nPPWlXCD6MxC4=
-X-Received: by 2002:a05:6402:5152:b0:502:2494:b8fc with SMTP id
- n18-20020a056402515200b005022494b8fcmr11096669edd.7.1682361151900; Mon, 24
- Apr 2023 11:32:31 -0700 (PDT)
+        Mon, 24 Apr 2023 14:32:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C00244A4;
+        Mon, 24 Apr 2023 11:32:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C8E61DAE;
+        Mon, 24 Apr 2023 18:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DC2C433EF;
+        Mon, 24 Apr 2023 18:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682361155;
+        bh=Qwb6xQXtIp9IK5K1XYNjKtQG2ZIwhMNhHPe94Eain8I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AL1mQRPIK32zEIp1g3UTreatnys6JEiIOElV8WxQ0HCWYrYOh9FUa/pV+J28wkIb0
+         kuYZuUJpavJkOZaHtCtWDI71bQfr8PqKub4qFn3x5yzC4y8fbdLxu7HbJwBzC+XQwm
+         VrE7IOJkHHjP11gDLRWFy86EVLqVWwQrt/B4cpTsksi6B3BO3cBvv6mbtnfmE01ZgB
+         TzxQElbzcDm36YDmuacquU8+DAzm2Bx6Sa8BvlgfPXGSzs47J+MRnxBY/ACBhDqqPE
+         NaKy9ZqKj3mZAujGR2xqbrAlZIyDJXBbelkgz2XIH4N+SG2lVTYr08TXhvRv/t7uAi
+         Q8Hr8qGO9TEdw==
+Message-ID: <679921ee-98d4-d6ef-5934-e009fd4b31fc@kernel.org>
+Date:   Mon, 24 Apr 2023 13:32:28 -0500
 MIME-Version: 1.0
-References: <20230421014750.2315938-1-goldstein.w.n@gmail.com> <20230424162413.hiimozuw44fhht4a@quack3>
-In-Reply-To: <20230424162413.hiimozuw44fhht4a@quack3>
-From:   Noah Goldstein <goldstein.w.n@gmail.com>
-Date:   Mon, 24 Apr 2023 13:32:20 -0500
-Message-ID: <CAFUsyf+VXZxy98BRwpZ_ikABHDmmC5xMCWnbRzQQoxfs8SZ54g@mail.gmail.com>
-Subject: Re: [PATCH v1] ext4: move `ext4_count_free` to ext4.h so it can be
- easily inlined
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 29/65] clk: socfpga: gate: Add a determine_rate hook
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
+Content-Language: en-US
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,72 +110,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:24=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
->
-> On Thu 20-04-23 20:47:49, Noah Goldstein wrote:
-> > `ext4_count_free` is a one-line helper that is clearly better off
-> > being inlined. This saves a handful instructions in `vmlinux` on x86.
-> >
-> > Instruction estimates use `wc -l` on `objdump`
-> > Before: 8539271
-> > After : 8539248
-> >
-> > So saves roughly 20 instructions
-> >
-> > Signed-off-by: Noah Goldstein <goldstein.w.n@gmail.com>
->
-> Looks fine. Feel free to add:
->
-> Reviewed-by: Jan Kara <jack@suse.cz>
->
-Done, thank you.
+Hi Maxime,
 
->                                                                 Honza
->
-> > ---
-> >  fs/ext4/bitmap.c | 5 -----
-> >  fs/ext4/ext4.h   | 6 +++++-
-> >  2 files changed, 5 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/fs/ext4/bitmap.c b/fs/ext4/bitmap.c
-> > index f63e028c638c..c3cd2b878bbd 100644
-> > --- a/fs/ext4/bitmap.c
-> > +++ b/fs/ext4/bitmap.c
-> > @@ -11,11 +11,6 @@
-> >  #include <linux/buffer_head.h>
-> >  #include "ext4.h"
-> >
-> > -unsigned int ext4_count_free(char *bitmap, unsigned int numchars)
-> > -{
-> > -     return numchars * BITS_PER_BYTE - memweight(bitmap, numchars);
-> > -}
-> > -
-> >  int ext4_inode_bitmap_csum_verify(struct super_block *sb, ext4_group_t=
- group,
-> >                                 struct ext4_group_desc *gdp,
-> >                                 struct buffer_head *bh, int sz)
-> > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> > index 08b29c289da4..6e1d3c175a70 100644
-> > --- a/fs/ext4/ext4.h
-> > +++ b/fs/ext4/ext4.h
-> > @@ -2675,7 +2675,11 @@ struct mmpd_data {
-> >  # define NORET_AND   noreturn,
-> >
-> >  /* bitmap.c */
-> > -extern unsigned int ext4_count_free(char *bitmap, unsigned numchars);
-> > +static inline unsigned int ext4_count_free(char *bitmap, unsigned int =
-numchars)
-> > +{
-> > +     return numchars * BITS_PER_BYTE - memweight(bitmap, numchars);
-> > +}
-> > +
-> >  void ext4_inode_bitmap_csum_set(struct super_block *sb, ext4_group_t g=
-roup,
-> >                               struct ext4_group_desc *gdp,
-> >                               struct buffer_head *bh, int sz);
-> > --
-> > 2.34.1
-> >
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+On 4/4/23 05:11, Maxime Ripard wrote:
+> The SoCFGPA gate clock implements a mux with a set_parent hook, but
+> doesn't provide a determine_rate implementation.
+> 
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+> 
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+> 
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+> 
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>   drivers/clk/socfpga/clk-gate.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
+> index 32ccda960f28..cbba8462a09e 100644
+> --- a/drivers/clk/socfpga/clk-gate.c
+> +++ b/drivers/clk/socfpga/clk-gate.c
+> @@ -110,6 +110,7 @@ static unsigned long socfpga_clk_recalc_rate(struct clk_hw *hwclk,
+>   
+>   static struct clk_ops gateclk_ops = {
+>   	.recalc_rate = socfpga_clk_recalc_rate,
+> +	.determine_rate = __clk_mux_determine_rate,
+>   	.get_parent = socfpga_clk_get_parent,
+>   	.set_parent = socfpga_clk_set_parent,
+>   };
+> @@ -166,7 +167,7 @@ void __init socfpga_gate_init(struct device_node *node)
+>   
+>   	init.name = clk_name;
+>   	init.ops = ops;
+> -	init.flags = 0;
+> +	init.flags = CLK_SET_RATE_NO_REPARENT;
+>   
+>   	init.num_parents = of_clk_parent_fill(node, parent_name, SOCFPGA_MAX_PARENTS);
+>   	if (init.num_parents < 2) {
+> 
+
+This patch broke SoCFPGA boot serial port. The characters are mangled.
+
+Dinh
