@@ -2,211 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5996ECCC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA886ECD14
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbjDXNOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S231944AbjDXNUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjDXNON (ORCPT
+        with ESMTP id S231956AbjDXNUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:14:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613EE3C35;
-        Mon, 24 Apr 2023 06:14:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 24 Apr 2023 09:20:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5924C21;
+        Mon, 24 Apr 2023 06:19:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Q4lvc1NK5z4xFk;
-        Mon, 24 Apr 2023 23:14:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1682342044;
-        bh=rAKfGIpfGUfQJGxo6deg2EVn0G/Z65TZXTVSjeW+nY4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UZJMUxEapjvdGCgfPjbLgLah58rNqMaCXZk/CLhW8lSR3KYbNzGV7Wy7rOCQh1rPm
-         FPufVJM3J2hRt0cz4/lpju9GndP/USzGsSkSsGznvvjwS2d7xVnOir+JXTy4Qq3xOo
-         v8XtlhieBrHHOKgC39Q9AxF6hegs3dTbjg7KQ8inL2GOB6XZm12Kn7hqVD/VtUjkho
-         Ndq20DVImSQpNp1zVCdAoJQNnHtTwIth6ZzUDPzyMctdjmgm7BsLxfr6Ka3YLbRC55
-         CdIYCDmLxtYM9dRuYeBZu89xBQYeJco2CbnlbLYVDmrGw44TH9Afxm0HClqwW961CX
-         AOhTQ8EcRmPxg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-In-Reply-To: <ZEXOMC2casTlobE1@boqun-archlinux>
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux>
-Date:   Mon, 24 Apr 2023 23:14:00 +1000
-Message-ID: <87fs8pzalj.fsf@mail.concordia>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12049621FB;
+        Mon, 24 Apr 2023 13:19:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0654C433D2;
+        Mon, 24 Apr 2023 13:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682342388;
+        bh=MCwwE1aukFBzJTN5lL4a2XAHhRAPvGeQtEzoRTcxX5E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PvX/m5IOOnuZ47bSe2c2P36NgIedBvKzcPuQC1jPiYKS3RmKT6YwxdYDnQSXgnRvH
+         bJWqkKRU8QZeesMUYPIvExUcpRCGcpQE3gA6jPBGa0aSwFIJYSgX3j8XpG0TkP6ewM
+         GWoPXx6Pvg9/htorjckNpDktTLT+1egUFPxVhkto=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.15 00/73] 5.15.109-rc1 review
+Date:   Mon, 24 Apr 2023 15:16:14 +0200
+Message-Id: <20230424131129.040707961@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.109-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.109-rc1
+X-KernelTest-Deadline: 2023-04-26T13:11+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boqun,
+This is the start of the stable review cycle for the 5.15.109 release.
+There are 73 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Thanks for debugging this ...
+Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
+Anything received after that time might be too late.
 
-Boqun Feng <boqun.feng@gmail.com> writes:
-> On Sat, Apr 22, 2023 at 09:28:39PM +0200, Joel Fernandes wrote:
->> On Sat, Apr 22, 2023 at 2:47=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.co=
-m> wrote:
->> >
->> > Dear PowerPC and RCU developers:
->> > During the RCU torture test on mainline (on the VM of Opensource Lab
->> > of Oregon State University), SRCU-P failed with __stack_chk_fail:
->> > [  264.381952][   T99] [c000000006c7bab0] [c0000000010c67c0]
->> > dump_stack_lvl+0x94/0xd8 (unreliable)
->> > [  264.383786][   T99] [c000000006c7bae0] [c00000000014fc94] panic+0x1=
-9c/0x468
->> > [  264.385128][   T99] [c000000006c7bb80] [c0000000010fca24]
->> > __stack_chk_fail+0x24/0x30
->> > [  264.386610][   T99] [c000000006c7bbe0] [c0000000002293b4]
->> > srcu_gp_start_if_needed+0x5c4/0x5d0
->> > [  264.388188][   T99] [c000000006c7bc70] [c00000000022f7f4]
->> > srcu_torture_call+0x34/0x50
->> > [  264.389611][   T99] [c000000006c7bc90] [c00000000022b5e8]
->> > rcu_torture_fwd_prog+0x8c8/0xa60
->> > [  264.391439][   T99] [c000000006c7be00] [c00000000018e37c] kthread+0=
-x15c/0x170
->> > [  264.392792][   T99] [c000000006c7be50] [c00000000000df94]
->> > ret_from_kernel_thread+0x5c/0x64
->> > The kernel config file can be found in [1].
->> > And I write a bash script to accelerate the bug reproducing [2].
->> > After a week's debugging, I found the cause of the bug is because the
->> > register r10 used to judge for stack overflow is not constant between
->> > context switches.
->> > The assembly code for srcu_gp_start_if_needed is located at [3]:
->> > c000000000226eb4:   78 6b aa 7d     mr      r10,r13
->> > c000000000226eb8:   14 42 29 7d     add     r9,r9,r8
->> > c000000000226ebc:   ac 04 00 7c     hwsync
->> > c000000000226ec0:   10 00 7b 3b     addi    r27,r27,16
->> > c000000000226ec4:   14 da 29 7d     add     r9,r9,r27
->> > c000000000226ec8:   a8 48 00 7d     ldarx   r8,0,r9
->> > c000000000226ecc:   01 00 08 31     addic   r8,r8,1
->> > c000000000226ed0:   ad 49 00 7d     stdcx.  r8,0,r9
->> > c000000000226ed4:   f4 ff c2 40     bne-    c000000000226ec8
->> > <srcu_gp_start_if_needed+0x1c8>
->> > c000000000226ed8:   28 00 21 e9     ld      r9,40(r1)
->> > c000000000226edc:   78 0c 4a e9     ld      r10,3192(r10)
->> > c000000000226ee0:   79 52 29 7d     xor.    r9,r9,r10
->> > c000000000226ee4:   00 00 40 39     li      r10,0
->> > c000000000226ee8:   b8 03 82 40     bne     c0000000002272a0
->> > <srcu_gp_start_if_needed+0x5a0>
->> > by debugging, I see the r10 is assigned with r13 on c000000000226eb4,
->> > but if there is a context-switch before c000000000226edc, a false
->> > positive will be reported.
->> >
->> > [1] http://154.220.3.115/logs/0422/configformainline.txt
->> > [2] 154.220.3.115/logs/0422/whilebash.sh
->> > [3] http://154.220.3.115/logs/0422/srcu_gp_start_if_needed.txt
->> >
->> > My analysis and debugging may not be correct, but the bug is easily
->> > reproducible.
->>=20
->> If this is a bug in the stack smashing protection as you seem to hint,
->> I wonder if you see the issue with a specific gcc version and is a
->> compiler-specific issue. It's hard to say, but considering this I
->
-> Very likely, more asm code from Zhouyi's link:
->
-> This is the __srcu_read_unlock_nmisafe(), since "hwsync" is
-> smp_mb__{after,before}_atomic(), and the following code is first
-> barrier then atomic, so it's the unlock.
->
-> 	c000000000226eb4:	78 6b aa 7d 	mr      r10,r13
->
-> ^ r13 is the pointer to percpu data on PPC64 kernel, and it's also
-> the pointer to TLS data for userspace code.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.109-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
 
-I've never understood why the compiler wants to make a copy of a
-register variable into another register!? >:#
+thanks,
 
-> 	c000000000226eb8:	14 42 29 7d 	add     r9,r9,r8
-> 	c000000000226ebc:	ac 04 00 7c 	hwsync
-> 	c000000000226ec0:	10 00 7b 3b 	addi    r27,r27,16
-> 	c000000000226ec4:	14 da 29 7d 	add     r9,r9,r27
-> 	c000000000226ec8:	a8 48 00 7d 	ldarx   r8,0,r9
-> 	c000000000226ecc:	01 00 08 31 	addic   r8,r8,1
-> 	c000000000226ed0:	ad 49 00 7d 	stdcx.  r8,0,r9
-> 	c000000000226ed4:	f4 ff c2 40 	bne-    c000000000226ec8 <srcu_gp_start_i=
-f_needed+0x1c8>
-> 	c000000000226ed8:	28 00 21 e9 	ld      r9,40(r1)
-> 	c000000000226edc:	78 0c 4a e9 	ld      r10,3192(r10)
->
-> here I think that the compiler is using r10 as an alias to r13, since
-> for userspace program, it's safe to assume the TLS pointer doesn't
-> change. However this is not true for kernel percpu pointer.
->
-> The real intention here is to compare 40(r1) vs 3192(r13) for stack
-> guard checking, however since r13 is the percpu pointer in kernel, so
-> the value of r13 can be changed if the thread gets scheduled to a
-> different CPU after reading r13 for r10.
+greg k-h
 
-Yeah that's not good.
+-------------
+Pseudo-Shortlog of commits:
 
-> If I'm correct, the following should be a workaround:
->
-> 	diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> 	index ab4ee58af84b..f5ae3be3d04d 100644
-> 	--- a/kernel/rcu/srcutree.c
-> 	+++ b/kernel/rcu/srcutree.c
-> 	@@ -747,6 +747,7 @@ void __srcu_read_unlock_nmisafe(struct srcu_struct *=
-ssp, int idx)
->
-> 		smp_mb__before_atomic(); /* C */  /* Avoid leaking the critical section=
-. */
-> 		atomic_long_inc(&sdp->srcu_unlock_count[idx]);
-> 	+       asm volatile("" : : : "r13", "memory");
-> 	 }
-> 	 EXPORT_SYMBOL_GPL(__srcu_read_unlock_nmisafe);
->
-> Zhouyi, could you give a try? Note I think the "memory" clobber here is
-> unnecesarry, but I just add it in case I'm wrong.
->
-> Needless to say, the correct fix is to make ppc stack protector aware of
-> r13 is volatile.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.109-rc1
 
-I suspect the compiler developers will tell us to go jump :)
+Yang Yingliang <yangyingliang@huawei.com>
+    soc: sifive: l2_cache: fix missing of_node_put() in sifive_l2_init()
 
-The problem of the compiler caching r13 has come up in the past, but I
-only remember it being "a worry" rather than causing an actual bug.
+Yang Yingliang <yangyingliang@huawei.com>
+    soc: sifive: l2_cache: fix missing free_irq() in error path in sifive_l2_init()
 
-We've had the DEBUG_PREEMPT checks in get_paca(), which have given us at
-least some comfort that if the compiler is caching r13, it shouldn't be
-doing it in preemptable regions.
+Yang Yingliang <yangyingliang@huawei.com>
+    soc: sifive: l2_cache: fix missing iounmap() in error path in sifive_l2_init()
 
-But obviously that doesn't help at all with the stack protector check.
+Ekaterina Orlova <vorobushek.ok@gmail.com>
+    ASN.1: Fix check for strdup() success
 
-I don't see an easy fix.
+Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+    ASoC: fsl_asrc_dma: fix potential null-ptr-deref
 
-Adding "volatile" to the definition of local_paca seems to reduce but
-not elimate the caching of r13, and the GCC docs explicitly say *not* to
-use volatile. It also triggers lots of warnings about volatile being
-discarded.
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+    mm/page_alloc: fix potential deadlock on zonelist_update_seq seqlock
 
-Short term we can make stack protector depend on !PREEMPT.
+Dan Carpenter <error27@gmail.com>
+    iio: adc: at91-sama5d2_adc: fix an error code in at91_adc_allocate_trigger()
 
-Longer term possibly we can move to having current in a register like
-32-bit does, and then use that as the stack protector reg.
+William Breathitt Gray <william.gray@linaro.org>
+    counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
 
-Or something simple I haven't thought of? :)
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+    pwm: hibvt: Explicitly set .polarity in .get_state()
 
-cheers
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+    pwm: iqs620a: Explicitly set .polarity in .get_state()
+
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+    pwm: meson: Explicitly set .polarity in .get_state()
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    sctp: Call inet6_destroy_sock() via sk->sk_destruct().
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    dccp: Call inet6_destroy_sock() via sk->sk_destruct().
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    inet6: Remove inet6_destroy_sock() in sk->sk_prot->destroy().
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    tcp/udp: Call inet6_destroy_sock() in IPv6 sk->sk_destruct().
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    udp: Call inet6_destroy_sock() in setsockopt(IPV6_ADDRFORM).
+
+Miklos Szeredi <mszeredi@redhat.com>
+    fuse: fix deadlock between atomic O_TRUNC and page invalidation
+
+Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+    fuse: always revalidate rename target dentry
+
+Miklos Szeredi <mszeredi@redhat.com>
+    fuse: fix attr version comparison in fuse_read_update_size()
+
+Alyssa Ross <hi@alyssa.is>
+    purgatory: fix disabling debug info
+
+Salvatore Bonaccorso <carnil@debian.org>
+    docs: futex: Fix kernel-doc references after code split-up preparation
+
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+    MIPS: Define RUNTIME_DISCARD_EXIT in LD script
+
+Qais Yousef <qyousef@layalina.io>
+    sched/fair: Fixes for capacity inversion detection
+
+Qais Yousef <qyousef@layalina.io>
+    sched/uclamp: Fix a uninitialized variable warnings
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/fair: Consider capacity inversion in util_fits_cpu()
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/fair: Detect capacity inversion
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/uclamp: Fix fits_capacity() check in feec()
+
+Mel Gorman <mgorman@techsingularity.net>
+    mm: page_alloc: skip regions with hugetlbfs pages when allocating 1G pages
+
+Peter Xu <peterx@redhat.com>
+    mm/khugepaged: check again on anon uffd-wp during isolation
+
+Ville Syrjälä <ville.syrjala@linux.intel.com>
+    drm/i915: Fix fast wake AUX sync len
+
+Bhavya Kapoor <b-kapoor@ti.com>
+    mmc: sdhci_am654: Set HIGH_SPEED_ENA for SDR12 and SDR25
+
+Ondrej Mosnacek <omosnace@redhat.com>
+    kernel/sys.c: fix and improve control flow in __sys_setres[ug]id()
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    memstick: fix memory leak if card device is never registered
+
+Ryusuke Konishi <konishi.ryusuke@gmail.com>
+    nilfs2: initialize unused bytes in segment summary blocks
+
+Brian Masney <bmasney@redhat.com>
+    iio: light: tsl2772: fix reading proximity-diodes from device tree
+
+Mel Gorman <mgorman@techsingularity.net>
+    rtmutex: Add acquire semantics for rtmutex lock acquisition slow path
+
+Hans de Goede <hdegoede@redhat.com>
+    platform/x86: gigabyte-wmi: add support for X570S AORUS ELITE
+
+Juergen Gross <jgross@suse.com>
+    xen/netback: use same error messages for same errors
+
+Sagi Grimberg <sagi@grimberg.me>
+    nvme-tcp: fix a possible UAF when failing to allocate an io queue
+
+Heiko Carstens <hca@linux.ibm.com>
+    s390/ptrace: fix PTRACE_GET_LAST_BREAK error handling
+
+Álvaro Fernández Rojas <noltari@gmail.com>
+    net: dsa: b53: mmap: add phy ops
+
+Damien Le Moal <damien.lemoal@opensource.wdc.com>
+    scsi: core: Improve scsi_vpd_inquiry() checks
+
+Tomas Henzl <thenzl@redhat.com>
+    scsi: megaraid_sas: Fix fw_crash_buffer_show()
+
+Nick Desaulniers <ndesaulniers@google.com>
+    selftests: sigaltstack: fix -Wuninitialized
+
+Frank Crawford <frank@crawford.emu.id.au>
+    platform/x86 (gigabyte-wmi): Add support for A320M-S2H V2
+
+Jonathan Denose <jdenose@chromium.org>
+    Input: i8042 - add quirk for Fujitsu Lifebook A574/H
+
+Douglas Raillard <douglas.raillard@arm.com>
+    f2fs: Fix f2fs_truncate_partial_nodes ftrace event
+
+Sebastian Basierski <sebastianx.basierski@intel.com>
+    e1000e: Disable TSO on i219-LM card to increase speed
+
+Daniel Borkmann <daniel@iogearbox.net>
+    bpf: Fix incorrect verifier pruning due to missing register precision taints
+
+Li Lanzhe <u202212060@hust.edu.cn>
+    spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe()
+
+Ido Schimmel <idosch@nvidia.com>
+    mlxsw: pci: Fix possible crash during initialization
+
+Alexander Aring <aahringo@redhat.com>
+    net: rpl: fix rpl header size calculation
+
+Ido Schimmel <idosch@nvidia.com>
+    bonding: Fix memory leak when changing bond type to Ethernet
+
+Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+    mlxfw: fix null-ptr-deref in mlxfw_mfa2_tlv_next()
+
+Michael Chan <michael.chan@broadcom.com>
+    bnxt_en: Do not initialize PTP on older P3/P4 chips
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: tighten netlink attribute requirements for catch-all elements
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: validate catch-all set elements
+
+Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+    i40e: fix i40e_setup_misc_vector() error handling
+
+Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+    i40e: fix accessing vsi->active_filters without holding lock
+
+Florian Westphal <fw@strlen.de>
+    netfilter: nf_tables: fix ifdef to also consider nf_tables=m
+
+Ding Hui <dinghui@sangfor.com.cn>
+    sfc: Fix use-after-free due to selftest_work
+
+Jonathan Cooper <jonathan.s.cooper@amd.com>
+    sfc: Split STATE_READY in to STATE_NET_DOWN and STATE_NET_UP.
+
+Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+    virtio_net: bugfix overflow inside xdp_linearize_page()
+
+Gwangun Jung <exsociety@gmail.com>
+    net: sched: sch_qfq: prevent slab-out-of-bounds in qfq_activate_agg
+
+Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+    regulator: fan53555: Fix wrong TCS_SLEW_MASK
+
+Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+    regulator: fan53555: Explicitly include bits header
+
+Florian Westphal <fw@strlen.de>
+    netfilter: br_netfilter: fix recent physdev match breakage
+
+Peng Fan <peng.fan@nxp.com>
+    arm64: dts: imx8mm-evk: correct pmic clock source
+
+Marc Gonzalez <mgonzalez@freebox.fr>
+    arm64: dts: meson-g12-common: specify full DMC range
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    arm64: dts: qcom: ipq8074-hk01: enable QMP device, not the PHY node
+
+Jianqun Xu <jay.xu@rock-chips.com>
+    ARM: dts: rockchip: fix a typo error for rk3288 spdif node
+
+
+-------------
+
+Diffstat:
+
+ Documentation/kernel-hacking/locking.rst           |   2 +-
+ .../translations/it_IT/kernel-hacking/locking.rst  |   2 +-
+ Makefile                                           |   4 +-
+ arch/arm/boot/dts/rk3288.dtsi                      |   2 +-
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |   3 +-
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi      |   2 +-
+ arch/arm64/boot/dts/qcom/ipq8074-hk01.dts          |   4 +-
+ arch/mips/kernel/vmlinux.lds.S                     |   2 +
+ arch/s390/kernel/ptrace.c                          |   8 +-
+ arch/x86/purgatory/Makefile                        |   3 +-
+ drivers/counter/104-quad-8.c                       |  29 ++---
+ drivers/gpu/drm/i915/display/intel_dp_aux.c        |   2 +-
+ drivers/iio/adc/at91-sama5d2_adc.c                 |   2 +-
+ drivers/iio/light/tsl2772.c                        |   1 +
+ drivers/input/serio/i8042-x86ia64io.h              |   8 ++
+ drivers/memstick/core/memstick.c                   |   5 +-
+ drivers/mmc/host/sdhci_am654.c                     |   2 -
+ drivers/net/bonding/bond_main.c                    |   7 +-
+ drivers/net/dsa/b53/b53_mmap.c                     |  14 +++
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
+ drivers/net/ethernet/intel/e1000e/netdev.c         |  51 ++++----
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |   9 +-
+ .../ethernet/mellanox/mlxfw/mlxfw_mfa2_tlv_multi.c |   2 +
+ drivers/net/ethernet/mellanox/mlxsw/pci_hw.h       |   2 +-
+ drivers/net/ethernet/sfc/ef100_netdev.c            |   6 +-
+ drivers/net/ethernet/sfc/efx.c                     |  30 +++--
+ drivers/net/ethernet/sfc/efx_common.c              |  12 +-
+ drivers/net/ethernet/sfc/efx_common.h              |   6 +-
+ drivers/net/ethernet/sfc/ethtool_common.c          |   2 +-
+ drivers/net/ethernet/sfc/net_driver.h              |  50 +++++++-
+ drivers/net/virtio_net.c                           |   8 +-
+ drivers/net/xen-netback/netback.c                  |   6 +-
+ drivers/nvme/host/tcp.c                            |  46 ++++----
+ drivers/platform/x86/gigabyte-wmi.c                |   2 +
+ drivers/pwm/pwm-hibvt.c                            |   1 +
+ drivers/pwm/pwm-iqs620a.c                          |   1 +
+ drivers/pwm/pwm-meson.c                            |   7 ++
+ drivers/regulator/fan53555.c                       |  13 ++-
+ drivers/scsi/megaraid/megaraid_sas_base.c          |   2 +-
+ drivers/scsi/scsi.c                                |  11 +-
+ drivers/soc/sifive/sifive_l2_cache.c               |  27 ++++-
+ drivers/spi/spi-rockchip-sfc.c                     |   2 +-
+ fs/fuse/dir.c                                      |   9 +-
+ fs/fuse/file.c                                     |  31 ++---
+ fs/nilfs2/segment.c                                |  20 ++++
+ include/linux/skbuff.h                             |   5 +-
+ include/net/ipv6.h                                 |   2 +
+ include/net/netfilter/nf_tables.h                  |   4 +
+ include/net/udp.h                                  |   2 +-
+ include/net/udplite.h                              |   8 --
+ include/trace/events/f2fs.h                        |   2 +-
+ kernel/bpf/verifier.c                              |  15 +++
+ kernel/locking/rtmutex.c                           |  55 +++++++--
+ kernel/locking/rtmutex_api.c                       |   6 +-
+ kernel/sched/core.c                                |  10 +-
+ kernel/sched/fair.c                                | 128 ++++++++++++++++++---
+ kernel/sched/sched.h                               |  61 +++++++++-
+ kernel/sys.c                                       |  69 ++++++-----
+ mm/khugepaged.c                                    |   4 +
+ mm/page_alloc.c                                    |  19 +++
+ net/bridge/br_netfilter_hooks.c                    |  17 ++-
+ net/dccp/dccp.h                                    |   1 +
+ net/dccp/ipv6.c                                    |  15 +--
+ net/dccp/proto.c                                   |   8 +-
+ net/ipv4/udp.c                                     |   9 +-
+ net/ipv4/udplite.c                                 |   8 ++
+ net/ipv6/af_inet6.c                                |  15 ++-
+ net/ipv6/ipv6_sockglue.c                           |  20 ++--
+ net/ipv6/ping.c                                    |   6 -
+ net/ipv6/raw.c                                     |   2 -
+ net/ipv6/rpl.c                                     |   3 +-
+ net/ipv6/tcp_ipv6.c                                |   8 +-
+ net/ipv6/udp.c                                     |  17 ++-
+ net/ipv6/udp_impl.h                                |   1 +
+ net/ipv6/udplite.c                                 |   9 +-
+ net/l2tp/l2tp_ip6.c                                |   2 -
+ net/mptcp/protocol.c                               |   7 --
+ net/netfilter/nf_tables_api.c                      |  67 +++++++++--
+ net/netfilter/nft_lookup.c                         |  36 +-----
+ net/sched/sch_qfq.c                                |  13 ++-
+ net/sctp/socket.c                                  |  29 +++--
+ scripts/asn1_compiler.c                            |   2 +-
+ sound/soc/fsl/fsl_asrc_dma.c                       |  11 +-
+ .../selftests/sigaltstack/current_stack_pointer.h  |  23 ++++
+ tools/testing/selftests/sigaltstack/sas.c          |   7 +-
+ 85 files changed, 820 insertions(+), 366 deletions(-)
+
+
