@@ -2,187 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0906ED309
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646616ED325
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjDXRAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S231713AbjDXRIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjDXRAx (ORCPT
+        with ESMTP id S229929AbjDXRIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:00:53 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E11BFF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:00:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dkZf5dZKP/yJvoq9LsikQXkuDbI7NcVMtTpQn5CbuHsTwZOKs9AKY2KiBEJUPHdtKwEFTQQaFhJI4FIR4Wd9/zlWjs05VY4YpOdBTUSH/t79CeN2DT7EYRuxLgC7rHRH+d3u5ZKac4nobchDO70lmP/rmWK6Q+QsZ70xGTy9fc8R+nGD41cpp5QHz3scQKJ1tjIsDAfdWrXpBbiZqttfwzue+Cc8ijgvxJnIlHs6Jk2DwWO3DKkSE+XRZaeMKeKK8O/IVkepmkbdB/8tLCFOJcWiW4l12RIqxjYgSmvVCvOO/Ie9D70mnvCurt0f/csSeD4V8jfK4E4Nc/uzTA1X1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qvlNQvv2vBf2bFX+KJV4QDyQZvHqngAC4T3Uc/3oxrM=;
- b=d6a1ceqVMD9cNZoaSizwwZ5cgPfib6GYDmK7g3yOwRwtx83bSL0bfkpVonDFurrnyHXyb5qS+Nn2AYIDSdtY3/h8HU56H1X54dSA1kjIvli5tDVlAUb2z/KI7KjVMNxTSq0I7OUyawjeJ/a99cg8MgUDBIciwZNpAsAZCSgLWBCbDAQqG2By3jo1pnpJaITKTWCknBHR8q+RA0gtP0kPwnkhdRnf938clNiyM/pA2ByijShRvnfvWFhDCCGODMpffmO42ouVwhL4zlk4FynqdhPzY2tVqcyGt9Fdb94c9iSs8F1nQb5Lx0Wg6lqQGU8/x4zl/00KmS3GhzVek51ETg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qvlNQvv2vBf2bFX+KJV4QDyQZvHqngAC4T3Uc/3oxrM=;
- b=1ePLNzUFOJwm8tsXQpWVcZmwPSqrc7xvP5NNrjqZm2EPgqDWbP9TufEBf+ZcfNO7B+8nerJK/fInV1OrsxTdYtQYj7APBiTBuf9GcHexChtxnV7NT7q8ZWqvbSki9qA8xVSGDa+QBgqSbaSEZrX9JyBhARoQYvY4T7Gy2OyBE/A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- DS0PR12MB9040.namprd12.prod.outlook.com (2603:10b6:8:f5::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.33; Mon, 24 Apr 2023 17:00:49 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6319.022; Mon, 24 Apr 2023
- 17:00:49 +0000
-Message-ID: <9910a5e3-a161-edfa-19d4-2bbf3bbf405f@amd.com>
-Date:   Mon, 24 Apr 2023 13:02:14 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/amd/display: return status of
- dmub_srv_get_fw_boot_status
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Alvin.Lee2@amd.com, Jun.Lei@amd.com, qingqing.zhuo@amd.com,
-        Max.Tseng@amd.com, Josip.Pavic@amd.com, Eric.Yang2@amd.com,
-        aurabindo.pillai@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230420135901.3889747-1-trix@redhat.com>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230420135901.3889747-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4PR01CA0244.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10f::17) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Mon, 24 Apr 2023 13:08:04 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECA659FD
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682356082; x=1713892082;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JnvtNP228v6cgRE/nnReiJdO1qjGMe29v41TlRgvhko=;
+  b=Cnp1YxNbki841bdp9QzFyBbATEBpDt1h5T95NgxnQve4x/yKEimswO1n
+   a52DAClLR8ySrkkkp+aLt7eABmsqKIdpMKuUIRsox+bTtvHFHOn+5m+1d
+   Fz9Be0mm4IO6seAMutvEw9x15lFjNK3ldU5EFvtaAEGEwb5E63eu9Qxns
+   uQDukslNgz+YzOGrKNFe+FIbBARhucm2bRj6qC5Yh8j6b27vrFtwKhwv0
+   vZvaSvKKRzRcV0dw+b9UdXT7Dw+4VYFfwGrkuy8rXjy+CN62htpOwnvnk
+   4spVtIdWeVqXtcKRXX1hCOmWDQKVNG+K8sao9Ng50Sl2ap56K5QEYFg9I
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="326115633"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="326115633"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 10:08:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="867549588"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="867549588"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Apr 2023 10:07:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pqzfQ-000iZQ-2j;
+        Mon, 24 Apr 2023 17:07:56 +0000
+Date:   Tue, 25 Apr 2023 01:06:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Justin Stitt <jstitt007@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/interconnect/qcom/icc-rpmh.c:165:28: sparse: sparse:
+ incorrect type in assignment (different base types)
+Message-ID: <202304250022.ZNF62MR9-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS0PR12MB9040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8239dfa0-5b78-450a-e4c6-08db44e57438
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q0np4zcZZ/CGHOqapHg5632TJxz0EsZVdOgw902R2kxHYZx0Tit8vpoZnfRTt+YUHW8ke08k7z27gkYDU01Lzo8uEwVr1n+qb+gEsnrSsGEDNb0EzECqiphtoz5gw5JvFc65KX19nKcTn1k4dYLHnk9y23NAxk8KZG/i2ud3jTZ+hKLic/ocS2IL8JmrgavAyFI1mqcWdB2XYYb/y1pL5BbLaQG1BUyMn3LIr9UGsgcy7jpdM47IyVDLppItr+pXzF+RIN1mRvvllCPPzgCpkDhT563aW88KjRvnPaArjhxXLSZxMfo/wrnESUPqiWtJLydPkydNlW/7ttjK9alfVRZmbjAf/VFvzu3QfXvealvyMzxqu0/KCXyJ2FvFNqvXtg0mgkZX/U0EOVvkdcrKtQsyI3CBQujKokgVUTumYJ0D/X+hQ18Wb1EhFWa5qZowgA3freWySErq2NB0iJhfyg9URwhEAA79cJx4NAwGdonhBoBRNtKTzcyn4sAd3SjowWJvSrZuMheT7iQHxR8BTEFDzoZ7WkpVZa//xz2Zft6jPmAPMZMx1OwTVIkcWaM7odfFN8Wtv4sel/gMVNAFW6JnLTtqXhhdEsCUpomtZvC4wvmGeGJ2B2t3hgKggTUdTC+7YJogUPp98nbZ5l4KyIXddoJH1yKR9srYnegm12Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199021)(31686004)(66556008)(66476007)(6636002)(44832011)(8936002)(8676002)(478600001)(31696002)(66946007)(38100700002)(86362001)(2906002)(41300700001)(4326008)(316002)(6666004)(5660300002)(6486002)(53546011)(26005)(6506007)(6512007)(186003)(921005)(2616005)(83380400001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjE0cStJY0dKSm9WR2hCMUpiL1o1czkxNFJlVTluenJSRVl3Tk5KN0NxM2JX?=
- =?utf-8?B?bXQxZ1M1YmRRS3VnbkhnY2FIOWlNNmltVXNzZDFXMm9QeDMyMDhvdFpWZXE5?=
- =?utf-8?B?Z2traGdrMjJuZFhqcEN1YmdKUWhkcFpLU1Y1Q1M1WElwWXo1cHdVWWsrNm42?=
- =?utf-8?B?L3V1ZllaRERSTWZhaUhYVEJzeFhxdlRSV05aenowVkhrcWtVOGJQMzRSdXBE?=
- =?utf-8?B?OWN0eHIydUtEZkJQWFJxVTFzUUNhNHZKT0JEeGJ4YmEwMHV5L1c2OERzOHZy?=
- =?utf-8?B?ckh5a1hjMHprcmptTTRtTWxrY2hXbUs4emNjVlljOHY0K2VwalMrazhNYTBm?=
- =?utf-8?B?aXlrUDJoYmdUd0R6SnQ3WU5vZ3JEMjJtckErSlJ0cHJLNlBIdG1KZG9WOE5r?=
- =?utf-8?B?K0pDR0g0STRiT2Z5RmZVZDl3aEtrbFhQMmJ5RFgwTDFjZmJ5RWtBMm1tMXE2?=
- =?utf-8?B?SlVOakYzVUQyN25qbXR2U0tlYTU1c2xQTEczZXFPaFNEU0RRWnAzdzgyQUxH?=
- =?utf-8?B?R3NIOEF0RWE1aVVIVkgrQTR4VThMamdqdVNFVFFFeklHWURpT1FIQ28rWHpD?=
- =?utf-8?B?SnFNSkhkdk9CU0RyZTNTb08rWkxoNDU1YlcyLzI1aUVzOWtwZjRUZGlKaTh1?=
- =?utf-8?B?L1pObC95ZWhkYXE1RXBkS0Q3c3lNWFRwU0x3Q2V2TVBrdjN6UmsxVmU0eHZL?=
- =?utf-8?B?NlF3MWNKaWg3ZUlFSkZrcXNuLzBaUW53U0NMMmpoeGR6M0JNdGp3dnZkbnBu?=
- =?utf-8?B?N0IvT2pJUzRlbUllK0FZenFYOTMyYWY5Zm5LMFZYaEpHMlFMQ1UxSGhXbWlF?=
- =?utf-8?B?aFJTQmkwYkdVZ2MySkxpdHI3M1B0aE1aRm4yNzVibFVDc1J4aVc1UFhZVDRT?=
- =?utf-8?B?dG1yWVJCcmVsUkwyT1ZpTTlob2NYQ3ZrQndFOUdIa1Nickw2MjI2cFB6elcw?=
- =?utf-8?B?N0t1Y1Q3OHh2TVRpa2dkN05IWGozdTR1QUlTMllKd2QwWFhNSWV5RzlXWnVB?=
- =?utf-8?B?TGwrYUZxK2lLVk9GNkwyQi8zVlRKOXdlSGZDTk9RcVBYL2NzVWJnTEN4OVpY?=
- =?utf-8?B?Qkk1eXhWRkFCUmY5YWlHMUxCUEM5ZVBJTG1CbHRWRXlTM3pjOUtGVUFwZjBM?=
- =?utf-8?B?K0d1c0x1ZzhNd080aEFnNjZUWXFwWlVRYmZuSml4U3lBTnFUU3ZPZmtTakg5?=
- =?utf-8?B?eFc2SVhyT2RQdlI4bzNZMUVMYjFBNFdXanJoc0duU1N4VFBNUFlJMUxIUkd1?=
- =?utf-8?B?c1ZKand1cXhPSUM0VXBrVURGZUxZR3lNaHBXSnppT1hyY3RlZW92MkQrRVJL?=
- =?utf-8?B?YXMvQ0tpMmhKNVVLOVJzRE5TektYcUxTQVA1ZG5qa0hXbWRSTURrZFl3REE4?=
- =?utf-8?B?Yzd2NlphbFhZNllGQk5odHZwYXdra1N5SjQrOWpsYkRqOGsxSCtMenlPTk10?=
- =?utf-8?B?bmt0dDBqSE02RGlXUkNwUmJadHhQUGhsczJxdnlEdFBPWTRZS3l1ZXFISnpJ?=
- =?utf-8?B?NVJOaEptanpZaUhoRWsrVUtUc1RiZUpmOThaUm9xcWpPeFhtRm0vbTNGSCt0?=
- =?utf-8?B?NW1UY0NicTM3YWZTSms2RitNMUZZNXh5SnBVa2JLM1lKREJMb25PbWsvZmZO?=
- =?utf-8?B?RVZLQ1dwQzNCUXBFY2h2SlZKTEhhQTA3OCs1U1pJUXFFd3VTMjc0R2x3UjZK?=
- =?utf-8?B?cHpCMWQ1bDl4dGZkT09HYkt6S3dHL0dlNERJclJVK3cvV1pUZnptcDB0d0RK?=
- =?utf-8?B?OENNb3ZxdWFCNnpYYUs4L25sN21SbDhQQ2JEeHd0THl1ZWsycWx6VnBVbnJW?=
- =?utf-8?B?UTF5Uk5wVWd0QkpaZzh6MjhxNTU1cjNJU0VuSTRVWUZRK3ZhbHJqUWx6aEhI?=
- =?utf-8?B?VjNob0dCTlpGVmptM1hQTjJGdVF0M2FyL0NBYnU0T3NMei90N21SUlEwOEpP?=
- =?utf-8?B?SldUR0JrRzhwT1hwdmZwaVR2d0JwdFUvMFhTVkE2bUtLYTZkWEZvbDhnN3g2?=
- =?utf-8?B?Ukpuc3BDSlYzYjdDbCs0d3BQSzc5bGlqaWRaYXpNbGdFN0tiL0VhbGl0U0Fh?=
- =?utf-8?B?bDFsdmxvYjJGY3RPTEdTQUpFN0lha2xwNFFHWnhZVUJUUE9wVGtINzRIdVc0?=
- =?utf-8?Q?VYuDEm45ZHEEI+8+pLYtrzIrB?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8239dfa0-5b78-450a-e4c6-08db44e57438
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 17:00:49.3306
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /A+x2jG7Q28oyuSNQ9CwCEfMVjopG/bvIZy03Tm3j3iKOCk9RdB3jR4f5jFFIGGZwZL6hI5e6NmPQT9qOrwYZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9040
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   457391b0380335d5e9a5babdec90ac53928b23b4
+commit: d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7 include/uapi/linux/swab.h: move explicit cast outside ternary
+date:   10 months ago
+config: arm64-randconfig-s051-20230424 (https://download.01.org/0day-ci/archive/20230425/202304250022.ZNF62MR9-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/interconnect/qcom/ drivers/remoteproc/
 
-On 4/20/23 09:59, Tom Rix wrote:
-> gcc with W=1 reports
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:
->    In function ‘dc_dmub_srv_optimized_init_done’:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:26:
->    error: variable ‘dmub’ set but not used [-Werror=unused-but-set-variable]
->    184 |         struct dmub_srv *dmub;
->        |                          ^~~~
-> 
-> The return status is never set.
-> It looks like a call to dmub_srv_get_fw_boot_status is missing.
-> 
-> Fixes: 499e4b1c722e ("drm/amd/display: add mechanism to skip DCN init")
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304250022.ZNF62MR9-lkp@intel.com/
 
-What tree is this based on? I am unable to find that exact commit on
-amd-staging-drm-next.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/interconnect/qcom/icc-rpmh.c:165:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] unit @@     got unsigned int [usertype] @@
+   drivers/interconnect/qcom/icc-rpmh.c:165:28: sparse:     expected restricted __le32 [usertype] unit
+   drivers/interconnect/qcom/icc-rpmh.c:165:28: sparse:     got unsigned int [usertype]
+>> drivers/interconnect/qcom/icc-rpmh.c:166:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] width @@     got unsigned short [usertype] @@
+   drivers/interconnect/qcom/icc-rpmh.c:166:29: sparse:     expected restricted __le16 [usertype] width
+   drivers/interconnect/qcom/icc-rpmh.c:166:29: sparse:     got unsigned short [usertype]
 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->   drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 13 +++++++++++--
->   1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> index d15ec32243e2..36d936ab4300 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> @@ -182,14 +182,23 @@ bool dc_dmub_srv_cmd_run_list(struct dc_dmub_srv *dc_dmub_srv, unsigned int coun
->   bool dc_dmub_srv_optimized_init_done(struct dc_dmub_srv *dc_dmub_srv)
->   {
->   	struct dmub_srv *dmub;
-> -	union dmub_fw_boot_status status;
-> +	struct dc_context *dc_ctx;
-> +	union dmub_fw_boot_status boot_status;
-> +	enum dmub_status status;
->   
->   	if (!dc_dmub_srv || !dc_dmub_srv->dmub)
->   		return false;
->   
->   	dmub = dc_dmub_srv->dmub;
-> +	dc_ctx = dc_dmub_srv->ctx;
-> +
-> +	status = dmub_srv_get_fw_boot_status(dmub, &boot_status);
-> +	if (status != DMUB_STATUS_OK) {
-> +		DC_ERROR("Error querying DMUB boot status: error=%d\n", status);
-> +		return false;
-> +	}
->   
-> -	return status.bits.optimized_init_done;
-> +	return boot_status.bits.optimized_init_done;
->   }
->   
->   bool dc_dmub_srv_notify_stream_mask(struct dc_dmub_srv *dc_dmub_srv,
+vim +165 drivers/interconnect/qcom/icc-rpmh.c
+
+6caa3070fd5955 Georgi Djakov 2020-09-03  127  
+976daac4a1c581 David Dai     2020-02-28  128  /**
+976daac4a1c581 David Dai     2020-02-28  129   * qcom_icc_bcm_init - populates bcm aux data and connect qnodes
+976daac4a1c581 David Dai     2020-02-28  130   * @bcm: bcm to be initialized
+976daac4a1c581 David Dai     2020-02-28  131   * @dev: associated provider device
+976daac4a1c581 David Dai     2020-02-28  132   *
+976daac4a1c581 David Dai     2020-02-28  133   * Return: 0 on success, or an error code otherwise
+976daac4a1c581 David Dai     2020-02-28  134   */
+976daac4a1c581 David Dai     2020-02-28  135  int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev)
+976daac4a1c581 David Dai     2020-02-28  136  {
+976daac4a1c581 David Dai     2020-02-28  137  	struct qcom_icc_node *qn;
+976daac4a1c581 David Dai     2020-02-28  138  	const struct bcm_db *data;
+976daac4a1c581 David Dai     2020-02-28  139  	size_t data_count;
+976daac4a1c581 David Dai     2020-02-28  140  	int i;
+976daac4a1c581 David Dai     2020-02-28  141  
+976daac4a1c581 David Dai     2020-02-28  142  	/* BCM is already initialised*/
+976daac4a1c581 David Dai     2020-02-28  143  	if (bcm->addr)
+976daac4a1c581 David Dai     2020-02-28  144  		return 0;
+976daac4a1c581 David Dai     2020-02-28  145  
+976daac4a1c581 David Dai     2020-02-28  146  	bcm->addr = cmd_db_read_addr(bcm->name);
+976daac4a1c581 David Dai     2020-02-28  147  	if (!bcm->addr) {
+976daac4a1c581 David Dai     2020-02-28  148  		dev_err(dev, "%s could not find RPMh address\n",
+976daac4a1c581 David Dai     2020-02-28  149  			bcm->name);
+976daac4a1c581 David Dai     2020-02-28  150  		return -EINVAL;
+976daac4a1c581 David Dai     2020-02-28  151  	}
+976daac4a1c581 David Dai     2020-02-28  152  
+976daac4a1c581 David Dai     2020-02-28  153  	data = cmd_db_read_aux_data(bcm->name, &data_count);
+976daac4a1c581 David Dai     2020-02-28  154  	if (IS_ERR(data)) {
+976daac4a1c581 David Dai     2020-02-28  155  		dev_err(dev, "%s command db read error (%ld)\n",
+976daac4a1c581 David Dai     2020-02-28  156  			bcm->name, PTR_ERR(data));
+976daac4a1c581 David Dai     2020-02-28  157  		return PTR_ERR(data);
+976daac4a1c581 David Dai     2020-02-28  158  	}
+976daac4a1c581 David Dai     2020-02-28  159  	if (!data_count) {
+976daac4a1c581 David Dai     2020-02-28  160  		dev_err(dev, "%s command db missing or partial aux data\n",
+976daac4a1c581 David Dai     2020-02-28  161  			bcm->name);
+976daac4a1c581 David Dai     2020-02-28  162  		return -EINVAL;
+976daac4a1c581 David Dai     2020-02-28  163  	}
+976daac4a1c581 David Dai     2020-02-28  164  
+976daac4a1c581 David Dai     2020-02-28 @165  	bcm->aux_data.unit = le32_to_cpu(data->unit);
+976daac4a1c581 David Dai     2020-02-28 @166  	bcm->aux_data.width = le16_to_cpu(data->width);
+976daac4a1c581 David Dai     2020-02-28  167  	bcm->aux_data.vcd = data->vcd;
+976daac4a1c581 David Dai     2020-02-28  168  	bcm->aux_data.reserved = data->reserved;
+976daac4a1c581 David Dai     2020-02-28  169  	INIT_LIST_HEAD(&bcm->list);
+976daac4a1c581 David Dai     2020-02-28  170  	INIT_LIST_HEAD(&bcm->ws_list);
+976daac4a1c581 David Dai     2020-02-28  171  
+cb30e0292db258 Mike Tipton   2020-09-03  172  	if (!bcm->vote_scale)
+cb30e0292db258 Mike Tipton   2020-09-03  173  		bcm->vote_scale = 1000;
+cb30e0292db258 Mike Tipton   2020-09-03  174  
+976daac4a1c581 David Dai     2020-02-28  175  	/* Link Qnodes to their respective BCMs */
+976daac4a1c581 David Dai     2020-02-28  176  	for (i = 0; i < bcm->num_nodes; i++) {
+976daac4a1c581 David Dai     2020-02-28  177  		qn = bcm->nodes[i];
+976daac4a1c581 David Dai     2020-02-28  178  		qn->bcms[qn->num_bcms] = bcm;
+976daac4a1c581 David Dai     2020-02-28  179  		qn->num_bcms++;
+976daac4a1c581 David Dai     2020-02-28  180  	}
+976daac4a1c581 David Dai     2020-02-28  181  
+976daac4a1c581 David Dai     2020-02-28  182  	return 0;
+976daac4a1c581 David Dai     2020-02-28  183  }
+976daac4a1c581 David Dai     2020-02-28  184  EXPORT_SYMBOL_GPL(qcom_icc_bcm_init);
+976daac4a1c581 David Dai     2020-02-28  185  
+
+:::::: The code at line 165 was first introduced by commit
+:::::: 976daac4a1c581e5d5fd64047519fd6fcde39738 interconnect: qcom: Consolidate interconnect RPMh support
+
+:::::: TO: David Dai <daidavid1@codeaurora.org>
+:::::: CC: Georgi Djakov <georgi.djakov@linaro.org>
+
 -- 
-Hamza
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
