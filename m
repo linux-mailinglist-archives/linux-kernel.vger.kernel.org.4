@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F086EC6BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C196EC6BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 09:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjDXHDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 03:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S231303AbjDXHD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 03:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjDXHDi (ORCPT
+        with ESMTP id S231252AbjDXHDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 03:03:38 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7064F30E2;
-        Mon, 24 Apr 2023 00:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1682319816; x=1713855816;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8Qh/mGcO5arvIrbknB3KqoLqa6GFPJoOeetSNDovtO4=;
-  b=AJM25UPD1296UsaXpopTqmutqOGKDEa8ybOIv09W/2T6xVf8lDDJl65T
-   LTpoPVNxM2H4l8wKHddYfSMyjqByBZeG6ZtZ21yoxDfOppHVR6oIoPVou
-   ngqmgVzEdqKS8GMB8A9VyFiH0tfh8bf3D0MwLZ8sNMBnxjgIDs7uazcIU
-   cxwqY4l+K5ICfQS6zas8wd6N3/4z8TawrhDQSXqZyQADENnJZyqHUnn35
-   NSVNGPzgj9yCwfSD3Q2kMrz/qlrcDcUFyWB0L7QqejfM2EwyDsdgvTRqZ
-   vCa1CuftZ18z71f+IHO7iQfGxOngaKVKCyHyh1dUbjbLIq/LwUZ1n//bZ
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,222,1677538800"; 
-   d="scan'208";a="30504448"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 24 Apr 2023 09:03:34 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 24 Apr 2023 09:03:34 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 24 Apr 2023 09:03:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1682319814; x=1713855814;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8Qh/mGcO5arvIrbknB3KqoLqa6GFPJoOeetSNDovtO4=;
-  b=ObykGGSrwtABRMz+nng6UIhT5pUgFexwwIU5Ahb26GZy3KZ3o4kNsNCn
-   uBxpKEs/9/gGk5Z6CN1Zcxr0OVr+P5UBMjXHeCWY1EjeSfHf9pFQyCPUS
-   ly9tQGdt/nzfMAl12AsBgV9RMwyq3zTHMgCW4k7fsjSypn2t/WUrBc74g
-   rKG6nihfobh1MIyuc4e2mIOAPRxA0E4VoJePhFxPBDS1iUomkm59s68lp
-   m1yTw0Te8Nj+OBlcwdoJs6tbp8PQWoHXwusyjgk2yFdAZlsmM9k16cyhn
-   EjAWTyOd68nJW5fEMXei7Jx53kCNSX4LLJE/W5HrD+OhVYa3USwh3aEKn
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,222,1677538800"; 
-   d="scan'208";a="30504447"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 24 Apr 2023 09:03:34 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Mon, 24 Apr 2023 03:03:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B83A97;
+        Mon, 24 Apr 2023 00:03:40 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 170A8280056;
-        Mon, 24 Apr 2023 09:03:34 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        "A. Sverdlin" <alexander.sverdlin@siemens.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
-Date:   Mon, 24 Apr 2023 09:03:34 +0200
-Message-ID: <4797405.GXAFRqVoOG@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230421-kinfolk-glancing-e185fd9c47b4-mkl@pengutronix.de>
-References: <20230310130815.562418-1-alexander.sverdlin@siemens.com> <9272339.EvYhyI6sBW@steina-w> <20230421-kinfolk-glancing-e185fd9c47b4-mkl@pengutronix.de>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 77DC8660328C;
+        Mon, 24 Apr 2023 08:03:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682319819;
+        bh=BcRGcHyOxApaTa63eksxruQB/FnnfseF/8/KFtyoPuk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Lc8JE8CfgEckcQWb3q+06AfgNeh+wD7PqhlF225cKHtBjj3q6+JEjIvq18eeuTgZ4
+         Ox/fOnivwwITFtzRXmxCv5EQxSsAZelTGEREfiOrfzmM8b3edaSwjRXRgFKnlf2OvR
+         MoWT+Ro+8j3kfGHw+8anbz+TZY4O2F0bbdG0QI38cOR5YMocC7X45crXNqByTjnVdl
+         IJZVtUcHfS436enWDK8cx+ktt3VP3OS2nOHNL4czNn3I3fowWBrRNy6Dj1Sn0cr9Nw
+         iHy4mQbPJsr4FEIvvQvkMj2HKv82QUTur4zRBK/T7za1CgUsJ8LIVV1sxSyKAC9A0z
+         FfD8PlVjSJB0Q==
+Message-ID: <0a0917f9-756f-6926-8ede-2b087cb0b716@collabora.com>
+Date:   Mon, 24 Apr 2023 09:03:35 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/5] arm64: dts: mediatek: cherry: Assign dp-intf aliases
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230420094433.42794-1-angelogioacchino.delregno@collabora.com>
+ <20230420094433.42794-3-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5EtCdpXtq6q2Cv+QAZPUE6yJiSZhngSc0sftz-_uDrZXw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5EtCdpXtq6q2Cv+QAZPUE6yJiSZhngSc0sftz-_uDrZXw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Il 21/04/23 08:46, Chen-Yu Tsai ha scritto:
+> On Thu, Apr 20, 2023 at 5:45 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> On Cherry boards, the IP at 0x1c015000 (dp_intf0) is used as primary
+>> dp-intf, while the other at 0x1c113000 (dp_intf1) is used as secondary:
+>> assign them to dp-intf{0,1} aliases respectively.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi | 2 ++
+> 
+> This should be applied at the SoC level. The display pipeline is fixed in
+> MMSYS, so it applies to all MT8195 devices.
+> 
 
-Am Freitag, 21. April 2023, 15:59:52 CEST schrieb Marc Kleine-Budde:
-> * PGP Signed by an unknown key
->=20
-> On 21.04.2023 15:48:59, Alexander Stein wrote:
-> [...]
->=20
-> > Now lpi2c_runtime_resume will call into clk_prepare() which also calls
-> > clk_prepare_lock() (identical to clk_get_rate).
->=20
-> IIRC this is a general problem^w limitation of the clock framework,
-> clock providers cannot use clocks themselves in certain callback, e.g.
-> set_rate.
+It's fixed in the MMSYS configuration/driver but - as far as I remember (I can
+recheck on the datasheets) - the dp_intfX function can be inverted meaning that
+the MMSYS paths can be configured such that DP_INTF0 becomes secondary and the
+other becomes primary: this is why I am putting that into mt8195-cherry and not
+mt8195.dtsi.
 
-Well, that's essentially impossible when this clock provider is attached vi=
-a=20
-i2c. i2c transfers potentially need to change or prepare clocks.
+Regards,
+Angelo
 
-One problem is that during clock registration (__clk_core_init) in the call=
- to=20
-clk_ops.recalc_rate an i2c transfer is issued (via regmap). This is the=20
-inverse lock order to a regular transfer runtime resuming the i2c master an=
-d=20
-preparing the clocks.
-
-While looking at this, is_prepared is also affected by this. It's reading a=
-=20
-register, thus issuing a i2c transfer. But this function can also be called=
-=20
-from within clk_unprepare_unused_subtree, which holds clk_prepare_lock as=20
-well.
-
-This might be avoided by using regcache, but I'm not really sure this catch=
-es=20
-every case.
-
-Best regards,
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+>> index 0820e9ba3829..918380697a9a 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+>> @@ -10,6 +10,8 @@
+>>
+>>   / {
+>>          aliases {
+>> +               dp-intf0 = &dp_intf0;
+>> +               dp-intf1 = &dp_intf1;
+>>                  i2c0 = &i2c0;
+>>                  i2c1 = &i2c1;
+>>                  i2c2 = &i2c2;
+>> --
+>> 2.40.0
+>>
+>>
+> 
 
