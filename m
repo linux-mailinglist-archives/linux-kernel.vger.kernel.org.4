@@ -2,47 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C346EC411
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A186EC431
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjDXDkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S230287AbjDXD4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjDXDjv (ORCPT
+        with ESMTP id S230095AbjDXD4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:39:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01142D78;
-        Sun, 23 Apr 2023 20:39:47 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q4W4W6rdDznf6g;
-        Mon, 24 Apr 2023 11:35:55 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 24 Apr
- 2023 11:39:45 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
-        <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH v4 12/12] ext4: make ext4_zeroout_es() return void
-Date:   Mon, 24 Apr 2023 11:38:46 +0800
-Message-ID: <20230424033846.4732-13-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230424033846.4732-1-libaokun1@huawei.com>
-References: <20230424033846.4732-1-libaokun1@huawei.com>
+        Sun, 23 Apr 2023 23:56:07 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861622688;
+        Sun, 23 Apr 2023 20:56:03 -0700 (PDT)
+X-UUID: d027c6e6e25111edb6b9f13eb10bd0fe-20230424
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=rufuQJCAOdKnUGjIUY2GYqY80xE/3+D5NJdIz0DZjaA=;
+        b=j6hKZXgVSWa0XJrXRpm5HJ0bJo7dnnvdrNrmMwjs/pnv2NhmF++oiNzO6XpilGDDNZGy7QAOku5Tl2rW6hOJgx0pzs0ejHSdvfjIxMdiCEuJAI+s3UdPcdqZ2nOY/o1130LQPyjH2/5BlEbWrWoaDDV/NScjx1StqcA7IZWgLpw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:6c4f33aa-64ec-4f15-8ba7-8541485566d1,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:3c9c45a2-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: d027c6e6e25111edb6b9f13eb10bd0fe-20230424
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <alice.chao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 442587166; Mon, 24 Apr 2023 11:40:53 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 24 Apr 2023 11:40:52 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 24 Apr 2023 11:40:52 +0800
+From:   Alice Chao <alice.chao@mediatek.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Can Guo <quic_cang@quicinc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <naomi.chu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
+        <wsd_upstream@mediatek.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2 1/1] scsi: ufs: core: Fix &hwq->cq_lock deadlock issue
+Date:   Mon, 24 Apr 2023 11:40:35 +0800
+Message-ID: <20230424034039.20529-2-alice.chao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,61 +79,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After ext4_es_insert_extent() returns void, the return value in
-ext4_zeroout_es() is also unnecessary, so make it return void too.
+[name:lockdep&]WARNING: inconsistent lock state
+[name:lockdep&]--------------------------------
+[name:lockdep&]inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+[name:lockdep&]kworker/u16:4/260 [HC0[0]:SC0[0]:HE1:SE1] takes:
+  ffffff8028444600 (&hwq->cq_lock){?.-.}-{2:2}, at:
+ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+[name:lockdep&]{IN-HARDIRQ-W} state was registered at:
+  lock_acquire+0x17c/0x33c
+  _raw_spin_lock+0x5c/0x7c
+  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+  ufs_mtk_mcq_intr+0x60/0x1bc [ufs_mediatek_mod]
+  __handle_irq_event_percpu+0x140/0x3ec
+  handle_irq_event+0x50/0xd8
+  handle_fasteoi_irq+0x148/0x2b0
+  generic_handle_domain_irq+0x4c/0x6c
+  gic_handle_irq+0x58/0x134
+  call_on_irq_stack+0x40/0x74
+  do_interrupt_handler+0x84/0xe4
+  el1_interrupt+0x3c/0x78
+<snip>
 
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Possible unsafe locking scenario:
+       CPU0
+       ----
+  lock(&hwq->cq_lock);
+  <Interrupt>
+    lock(&hwq->cq_lock);
+  *** DEADLOCK ***
+2 locks held by kworker/u16:4/260:
+
+[name:lockdep&]
+ stack backtrace:
+CPU: 7 PID: 260 Comm: kworker/u16:4 Tainted: G S      W  OE
+6.1.17-mainline-android14-2-g277223301adb #1
+Workqueue: ufs_eh_wq_0 ufshcd_err_handler
+
+ Call trace:
+  dump_backtrace+0x10c/0x160
+  show_stack+0x20/0x30
+  dump_stack_lvl+0x98/0xd8
+  dump_stack+0x20/0x60
+  print_usage_bug+0x584/0x76c
+  mark_lock_irq+0x488/0x510
+  mark_lock+0x1ec/0x25c
+  __lock_acquire+0x4d8/0xffc
+  lock_acquire+0x17c/0x33c
+  _raw_spin_lock+0x5c/0x7c
+  ufshcd_mcq_poll_cqe_lock+0x30/0xe0
+  ufshcd_poll+0x68/0x1b0
+  ufshcd_transfer_req_compl+0x9c/0xc8
+  ufshcd_err_handler+0x3bc/0xea0
+  process_one_work+0x2f4/0x7e8
+  worker_thread+0x234/0x450
+  kthread+0x110/0x134
+  ret_from_fork+0x10/0x20
+
+ufs_mtk_mcq_intr() could refer to
+https://lore.kernel.org/all/20230328103423.10970-3-powen.kao@mediatek.com/
+
+When ufshcd_err_handler() is executed, CQ event interrupt can enter
+waiting for the same lock. It could happened in upstream code path
+ufshcd_handle_mcq_cq_events() and also in ufs_mtk_mcq_intr(). This
+warning message will be generated when &hwq->cq_lock is used in IRQ
+context with IRQ enabled. Use ufshcd_mcq_poll_cqe_lock() with
+spin_lock_irqsave instead of spin_lock to resolve the deadlock issue.
+
+Fixes: ed975065c31c ("scsi: ufs: core: mcq: Add completion support in poll")
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+Change-Id: Iaff190c061c8e1308b893bff059a8bb556e5b888
 ---
- fs/ext4/extents.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/ufs/core/ufs-mcq.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index d555ed924f37..6c3080830b00 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -3123,7 +3123,7 @@ void ext4_ext_release(struct super_block *sb)
- #endif
- }
- 
--static int ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
-+static void ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 31df052fbc41..202ff71e1b58 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -299,11 +299,11 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_nolock);
+ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+ 				       struct ufs_hw_queue *hwq)
  {
- 	ext4_lblk_t  ee_block;
- 	ext4_fsblk_t ee_pblock;
-@@ -3134,11 +3134,10 @@ static int ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
- 	ee_pblock = ext4_ext_pblock(ex);
+-	unsigned long completed_reqs;
++	unsigned long completed_reqs, flags;
  
- 	if (ee_len == 0)
--		return 0;
-+		return;
+-	spin_lock(&hwq->cq_lock);
++	spin_lock_irqsave(&hwq->cq_lock, flags);
+ 	completed_reqs = ufshcd_mcq_poll_cqe_nolock(hba, hwq);
+-	spin_unlock(&hwq->cq_lock);
++	spin_unlock_irqrestore(&hwq->cq_lock, flags);
  
- 	ext4_es_insert_extent(inode, ee_block, ee_len, ee_pblock,
- 			      EXTENT_STATUS_WRITTEN);
--	return 0;
- }
- 
- /* FIXME!! we need to try to merge to left or right after zero-out  */
-@@ -3288,7 +3287,7 @@ static int ext4_split_extent_at(handle_t *handle,
- 			err = ext4_ext_dirty(handle, inode, path + path->p_depth);
- 			if (!err)
- 				/* update extent status tree */
--				err = ext4_zeroout_es(inode, &zero_ex);
-+				ext4_zeroout_es(inode, &zero_ex);
- 			/* If we failed at this point, we don't know in which
- 			 * state the extent tree exactly is so don't try to fix
- 			 * length of the original extent as it may do even more
-@@ -3641,9 +3640,8 @@ static int ext4_ext_convert_to_initialized(handle_t *handle,
- out:
- 	/* If we have gotten a failure, don't zero out status tree */
- 	if (!err) {
--		err = ext4_zeroout_es(inode, &zero_ex1);
--		if (!err)
--			err = ext4_zeroout_es(inode, &zero_ex2);
-+		ext4_zeroout_es(inode, &zero_ex1);
-+		ext4_zeroout_es(inode, &zero_ex2);
- 	}
- 	return err ? err : allocated;
+ 	return completed_reqs;
  }
 -- 
-2.31.1
+2.18.0
 
