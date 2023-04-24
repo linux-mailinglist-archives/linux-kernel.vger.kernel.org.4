@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285C46EC7FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9E26EC804
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 10:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjDXIls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 04:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
+        id S231382AbjDXInI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 04:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDXIlp (ORCPT
+        with ESMTP id S231344AbjDXInF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 04:41:45 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80F0E48;
-        Mon, 24 Apr 2023 01:41:42 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 46BEAC009; Mon, 24 Apr 2023 10:41:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682325701; bh=eico9CA8NETTY0+AtDEEdQCQcAv+OvlCAUKciOQojjw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tau0J9eSqnJS64en/AQgIDFGmRUWNhYd0ox3xnyQ5zVKfdIpWvC6wAssvaXBp2KzA
-         wT20elrs53lNYrduGVldUJ8xeOLBoL4HIyj41zml15QR4lXGrmeVOFGodCgC/WLmIC
-         mzWTdOoXrBzCca3USZNp7WsJngy2G2UNcLbkWgLSEBPqXLXzAMt16F2USvVMTyjlVp
-         I4s5odRmS2WWzWxSqoinJTehxAGbwQn0eOejgKcg3xXxFHJLG7Iyh/NMEC7pgjo0YX
-         wxdHtj0TMjXQ3xJ+FCwAgXF4RbGvzSIylisLWCqmSkkSWAktNoIAGVPDh/mDpOBF3l
-         Xa+HDa1PILA0g==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 59CB0C009;
-        Mon, 24 Apr 2023 10:41:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682325700; bh=eico9CA8NETTY0+AtDEEdQCQcAv+OvlCAUKciOQojjw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MN9I73+z63Qabgec65lkgNTKom6HV21MWDMdmhLxw/OiLBWNZJSr90Gw5JhA8y1gv
-         3pOzXBXBcHk4ohDcS+LbzAolsRgXYCrIG6pyVlLqY6jkeC99/gGxXBcE5kfp5N3mPs
-         Rr5kCGfk10WsRLxzANY4J4gzOJ5In03ZTPl/WuITJ0j7Ey5YwfRoNlrt5oYNbSIRdx
-         iHJpjsetlYocUMXv3U6GMRJdPtsbICOijw0PMC59rE2ZEwq3Jnf7WYsmdV5p5watE+
-         ve1Np3OCj0m645te0nHhIRRDsUFEUDu97/0wVdyxp2QA/4ayXxa2dIRrIaFJU+Zjew
-         ToAyMDVaqbUqg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 8c0edd9c;
-        Mon, 24 Apr 2023 08:41:33 +0000 (UTC)
-Date:   Mon, 24 Apr 2023 17:41:18 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Clay Harris <bugs@claycon.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
-Message-ID: <ZEZArsLzVZnSMG_o@codewreck.org>
-References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
- <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
- <20230423224045.GS447837@dread.disaster.area>
- <ZEXChAJfCRPv9vbs@codewreck.org>
- <20230424072946.uuzjvuqrch7m4zuk@ps29521.dreamhostps.com>
+        Mon, 24 Apr 2023 04:43:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822E9F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 01:43:03 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 10:42:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682325780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G2i+ANlboexdfsAFGiKAtoCg29pYlUhZil0sgaeWD6g=;
+        b=44T8aj2w17DL8PADvxQIJi+aJzRbwyK57xXUOjrFNzD62MXgZWNAdprNvHSlFSgxmYC6Rm
+        nAlbEd2+ElKn70k67n+ezUJ8qPl5E9CI+z0NerI5rN89IgZkbVlzC9zkuxV78MiNS+qJS3
+        ZfssEdpFtu2pZjMK4E0+xg3ivrP4hje9kIM+d6xvO1SAPsisvFT2laMhWs9M0uX38mQZym
+        wvdI+gPSUZiEXSGSQyfuBJ8g5yu4xZ2r4miZXZDTJR6xwoccN2rVHqSA7cJsYYhErnBINN
+        WEJJZEny9kYqXpkKHfyNGrZTzG+dOa15AO51zenu6J2WGfcgHvsd0eXZ6LYR1g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682325780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G2i+ANlboexdfsAFGiKAtoCg29pYlUhZil0sgaeWD6g=;
+        b=swf6zFmzHIvJjDdOPSileAO766BWKha1ScUkaRR98RpS8w0mCcB/rMNbZ4Y77EihjsDexr
+        tNaKKmz13PZGieCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Crystal Wood <swood@redhat.com>,
+        John Keeping <john@metanate.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] locking/rtmutex: Do the trylock-slowpath with
+ DEBUG_RT_MUTEXES enabled.
+Message-ID: <20230424084259.txfDjYNV@linutronix.de>
+References: <20230322162719.wYG1N0hh@linutronix.de>
+ <20230328165430.9eOXd-55@linutronix.de>
+ <87zg7115ib.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230424072946.uuzjvuqrch7m4zuk@ps29521.dreamhostps.com>
+In-Reply-To: <87zg7115ib.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks!
+On 2023-04-21 19:58:52 [+0200], Thomas Gleixner wrote:
+> On Tue, Mar 28 2023 at 18:54, Sebastian Andrzej Siewior wrote:
+> > On 2023-03-22 17:27:21 [+0100], To Thomas Gleixner wrote:
+> >> > Aside of that for CONFIG_DEBUG_RT_MUTEXES=y builds it flushes on every
+> >> > lock operation whether the lock is contended or not.
+> >> 
+> >> For mutex & ww_mutex operations. rwsem is not affected by
+> >> CONFIG_DEBUG_RT_MUTEXES. As for mutex it could be mitigated by invoking
+> >> try_to_take_rt_mutex() before blk_flush_plug().
+> 
+> > I haven't observed anything in the ww-mutex path so we can ignore it or
+> > do something similar to this.
+> 
+> Yay for consistency !
+> 
+> I fixed it up to the below.
 
-Clay Harris wrote on Mon, Apr 24, 2023 at 02:29:46AM -0500:
-> This also seems like a good place to bring up a point I made with
-> the last attempt at this code.  You're missing an optimization here.
-> getdents knows whether it is returning a buffer because the next entry
-> won't fit versus because there are no more entries.  As it doesn't
-> return that information, callers must always keep calling it back
-> until EOF.  This means a completely unnecessary call is made for
-> every open directory.  In other words, for a directory scan where
-> the buffers are large enough to not overflow, that literally twice
-> as many calls are made to getdents as necessary.  As io_uring is
-> in-kernel, it could use an internal interface to getdents which would
-> return an EOF indicator along with the (probably non-empty) buffer.
-> io_uring would then return that flag with the CQE.
+you fixed the ww-mutex path and did with the debug path what I did in
+the follow-up patch. Let me fold this then and drop the other one.
 
-Sorry I didn't spot that comment in the last iteration of the patch,
-that sounds interesting.
+> Thanks,
+> 
+>         tglx
 
-This isn't straightforward even in-kernel though: the ctx.actor callback
-(filldir64) isn't called when we're done, so we only know we couldn't
-fill in the buffer.
-We could have the callback record 'buffer full' and consider we're done
-if the buffer is full, or just single-handedly declare we are if we have
-more than `MAXNAMLEN + sizeof(struct linux_dirent64)` left over, but I
-assume a filesystem is allowed to return what it has readily available
-and expect the user to come back later?
-In which case we cannot use this as an heuristic...
-
-So if we do this, it'll require a way for filesystems to say they're
-filling in as much as they can, or go the sledgehammer way of adding an
-extra dir_context dir_context callback, either way I'm not sure I want
-to deal with all that immediately unless I'm told all filesystems will
-fill as much as possible without ever failing for any temporary reason
-in the middle of iterate/iterate_shared().
-Call me greedy but I believe such a flag in the CQE could also be added
-later on without any bad side effects (as it's optional to check on it
-to stop calling early and there's no harm in not setting it)?
-
-
-> (* As an aside, the only place I've ever seen a non-zero lseek on a
-> directory, is in a very resource limited environment, e.g. too small
-> open files limit.  In the case of a depth-first directory scan, it
-> must close directories before completely reading them, and reopen /
-> lseek to their previous position in order to continue.  This scenario
-> is certainly not worth bothering with for io_uring.)
-
-(I also thought of userspace NFS/9P servers are these two at least get
-requests from clients with an arbitrary offset, but I'll be glad to
-forget about them for now...)
-
--- 
-Dominique Martinet | Asmadeus
+Sebastian
