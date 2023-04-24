@@ -2,169 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7686ECCAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814D66ECCAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjDXNJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 09:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S231785AbjDXNK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbjDXNJX (ORCPT
+        with ESMTP id S231749AbjDXNKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:09:23 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3CC468A;
-        Mon, 24 Apr 2023 06:08:43 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec94eb6dcaso4714322e87.3;
-        Mon, 24 Apr 2023 06:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682341719; x=1684933719;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WccspPnEbBcrRpc7tjCLxW0vQshJEtnsN0ZPyzTWo8s=;
-        b=n5FsccVK9Gn0Byub+ajDaMLf5X4ddamnxRfGaS+uTlD1AoOubwB4OqDFyKPp5P9cox
-         wAUPqBReZqvZhhKOiQ34hC1U8J/pdNEuwga8biSNFc7GPvizMvSj3Z5G04TwIuWYAHsC
-         3QTfd36UJ/Nnq5TBaXwOKLJcsrwaxq+al08L3Z/yU/d65nZ+kp7mGjMhY5zi2vcGbnCk
-         xUSGSpx6POzPb9gMGXsi/pVrT+lDPh2DmNMaLaRmT0lx2qhNRu5vy105baH2/6lCmQK1
-         spgWYRbUAP3XCK0wg9CfDvnpP0WC/qSWRTeuSonh1Y6izA4JvKSLHcs5NB/qXaX/D4nw
-         gZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682341719; x=1684933719;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WccspPnEbBcrRpc7tjCLxW0vQshJEtnsN0ZPyzTWo8s=;
-        b=Y7+d1IeO/8IeiJpDlD1Y4P76cykXlP0Fuvu/BY6j/7XYG+XzWCXOvhwQQqXyzh/C3o
-         /HkUxeWZC2Usej2/MswGKTf9H/G8fQwX1bBzFOXTdBMl3Fe+THIMUghZ/VzTm7tI5id1
-         X0z/qZDfDSg1dHGU5Z1X5SZ9tf8ZnSAh+xKcvKlOgR+Fg4Qj+I/tPDrinmVRrIqruqua
-         5kDk31/bFJ3DU98xtevCZRVF36FHFc8sS0w97X2zI2Znbc44t/NJcU56C4CPfw71x+SE
-         D7wX3GZvkSJ8bP7coqayXiyGPWz79zHTCrttjmjcqvBuN95KdfVla/OeJ1avI3UxccGx
-         tYAg==
-X-Gm-Message-State: AAQBX9flE6WB0syfo7R0cQT7y9la8DcDu5s4C14pfpHsPZ3zIDe5yvXC
-        3UTlNXkTtpuZXLoHWDur7Qw=
-X-Google-Smtp-Source: AKy350a37VsQnx9sTnnq+ZU7jhDNSrULUErRIXiGr/63SRD0WF9EIh6kIQa1hhDbf7Rq0NjhgnFeXg==
-X-Received: by 2002:ac2:4c30:0:b0:4eb:1158:b24c with SMTP id u16-20020ac24c30000000b004eb1158b24cmr2758085lfq.44.1682341719665;
-        Mon, 24 Apr 2023 06:08:39 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id v25-20020a056512049900b004eff32d6a21sm291447lfq.121.2023.04.24.06.08.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 06:08:38 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 16:08:35 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/5] iio: kx022a: Use new iio_validate_own_trigger()
-Message-ID: <0a8336feba8ccd3a8c71595b85cec36b9ef7b270.1682340947.git.mazziesaccount@gmail.com>
-References: <cover.1682340947.git.mazziesaccount@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kyzXp1xSVyyIdhkZ"
-Content-Disposition: inline
-In-Reply-To: <cover.1682340947.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 09:10:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E8C49D0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 06:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7B94612CA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE442C433EF;
+        Mon, 24 Apr 2023 13:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682341817;
+        bh=ptsUwxDmDFB9kUORGXpqRskpK+VBWczscm00zzcvs+A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SgkPaei3mbN+wePLz3i6H2kEV4w+EbxIu0+PT+qKEoKIetmxw8bOd0MnZCchsYjwP
+         HkdKMj2IVW+AYlbnjCeWN0UvIKCtmU5Dw3rQh4065r4yImvzDnt7O6LM7BaYR96Zw3
+         b14RjVDkdh5JCvGPgvNhjCYunHk+f+UhORNJAsIwz6IIUB3cF7QTwV9MFQefvBOYX3
+         zEooXxWVzavVBB7twtG540lMaea3rlo/NCv2Yuqa+Wuimd4z04RO2tOVHRYRQ6435K
+         0LK2phbbMWJxNxYBUQEYNU9pnherb2E9hF/NZ2qQDvB6Om8WtreTu0ECvr7CWloEJu
+         pJAtlCSeJpbyQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regmap updates for v6.4
+Date:   Mon, 24 Apr 2023 14:10:05 +0100
+Message-Id: <20230424131016.DE442C433EF@smtp.kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
 
---kyzXp1xSVyyIdhkZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
 
-The new generic iio_validate_own_trigger() can be used as
-validate_trigger callback for verifying the used trigger belongs to same
-device as the iio_dev.
+are available in the Git repository at:
 
-Use the generic function instead of rolling own one.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-v6.4
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+for you to fetch changes up to 4a670ac3e75e517c96cbd01ef870dbd598c3ce71:
 
----
-Revision history
-v2: New patch
----
- drivers/iio/accel/kionix-kx022a.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+  regmap: allow upshifting register addresses before performing operations (2023-04-07 17:28:19 +0100)
 
-diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-k=
-x022a.c
-index f98393d74666..09814881f513 100644
---- a/drivers/iio/accel/kionix-kx022a.c
-+++ b/drivers/iio/accel/kionix-kx022a.c
-@@ -516,17 +516,6 @@ static int kx022a_read_raw(struct iio_dev *idev,
- 	return -EINVAL;
- };
-=20
--static int kx022a_validate_trigger(struct iio_dev *idev,
--				   struct iio_trigger *trig)
--{
--	struct kx022a_data *data =3D iio_priv(idev);
--
--	if (data->trig !=3D trig)
--		return -EINVAL;
--
--	return 0;
--}
--
- static int kx022a_set_watermark(struct iio_dev *idev, unsigned int val)
- {
- 	struct kx022a_data *data =3D iio_priv(idev);
-@@ -725,7 +714,7 @@ static const struct iio_info kx022a_info =3D {
- 	.write_raw =3D &kx022a_write_raw,
- 	.read_avail =3D &kx022a_read_avail,
-=20
--	.validate_trigger	=3D kx022a_validate_trigger,
-+	.validate_trigger	=3D iio_validate_own_trigger,
- 	.hwfifo_set_watermark	=3D kx022a_set_watermark,
- 	.hwfifo_flush_to_buffer	=3D kx022a_fifo_flush,
- };
---=20
-2.40.0
+----------------------------------------------------------------
+regmap: Updates for v6.4
 
+This is a much bigger change for regmap than is normal, the main things
+being the addition of some KUnit coverage and a maple tree based
+register cache which longer term is likely to replace the rbtree cache
+except possibly for very small register maps.  While it's complete
+overkill for most applications the code for maple trees is there and
+there are some larger, sparser devices where the data structure is a
+better fit.
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+The maple tree support is still a work in progress but already useful,
+there's some conversions of drivers ready to go after the merge window.
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
+ - Support for shifting register addresses up as well as down, there's a
+   use cases with memory mapped MDIO.
+ - Refactoring of the type configuration in regmap-irq to allow access
+   to driver data in the handler, needed by some GPIO devices.
+ - Some initial KUnit coverage, the bulk of the driver facing API is
+   covered but there's holes and things like the data marshalling for
+   bytestream buses are just not covered in the slightest.
+ - Removal of the compressed cache type, it had zero users and was
+   getting in the way of KUnit.
+ - Addition of a maple tree based register cache, there's more work to
+   do but it's already useful for some devices with a flatter data
+   structure than rbtree and getting to use all the optimisation work
+   Liam is doing.
 
---kyzXp1xSVyyIdhkZ
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Alexander Stein (2):
+      regmap: cache: Return error in cache sync operations for REGCACHE_NONE
+      regmap: cache: Silence checkpatch warning
 
------BEGIN PGP SIGNATURE-----
+Andy Shevchenko (1):
+      regmap-irq: Place kernel doc of struct regmap_irq_chip in order
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRGf1MACgkQeFA3/03a
-ocXlgggAwawpfeouHjta1ek2p5Rhfe2YlpoVIIZlbBYyBvFJN7K51t30DqwgZibz
-0xrOmc/x4lrHy+ci9m32DpAkbdQSgTi7XbLPutzULuBfgUmDYZASRBW3UDyLH77b
-l59uiZKkDbwEAHmOJXn58nfgaDSpLjFtuSBMZSCqDwCf512VfA+DNSWczTvxl+q+
-F1rr5rzTGuf2HxG9BmjGWbmt29PKtaq/QgB/JUOHD7qBd3FnF474CDZskc8nEKIm
-24GLyd/hFiYGfSFixkbjFROlBJsoJRTf4iUT72p67lt9mafw6/YaRav/sSrak4he
-zFJBuNAlrXYfI+bJt2U9rp9sfDZi0w==
-=UOnc
------END PGP SIGNATURE-----
+Charles Keepax (1):
+      regmap: sdw: Update misleading comment
 
---kyzXp1xSVyyIdhkZ--
+Lucas Tanure (1):
+      regmap: sdw: Remove 8-bit value size restriction
+
+Mark Brown (15):
+      Minor SoundWire Regmap Tweaks
+      regmap: Add support for devices with no interrupt readback
+      Merge tag 'v6.3-rc2' into regmap-6.4 to fix clock related boot issues
+      Introduce a helper to translate register addresses
+      regmap: Handle sparse caches in the default sync
+      regmap: Clarify error for unknown cache types
+      regmap: Support paging for buses with reg_read()/reg_write()
+      regmap: Removed compressed cache support
+      regmap: Add RAM backed register map
+      regmap: Add some basic kunit tests
+      regmap: Factor out single value register syncing
+      regmap: Add maple tree based register cache
+      regmap: Fix double unlock in the maple cache
+      regmap: Use mas_walk() instead of mas_find()
+      Migrate the PCIe-IDIO-24 and WS16C48 GPIO drivers
+
+Maxime Chevallier (2):
+      regmap: add a helper to translate the register address
+      regmap: allow upshifting register addresses before performing operations
+
+William Breathitt Gray (2):
+      regmap-irq: Add no_status support
+      regmap: Pass irq_drv_data as a parameter for set_type_config()
+
+ drivers/base/regmap/Kconfig          |  13 +-
+ drivers/base/regmap/Makefile         |   5 +-
+ drivers/base/regmap/internal.h       |  24 +-
+ drivers/base/regmap/regcache-lzo.c   | 368 -----------------
+ drivers/base/regmap/regcache-maple.c | 279 +++++++++++++
+ drivers/base/regmap/regcache.c       |  56 ++-
+ drivers/base/regmap/regmap-irq.c     |  30 +-
+ drivers/base/regmap/regmap-kunit.c   | 739 +++++++++++++++++++++++++++++++++++
+ drivers/base/regmap/regmap-ram.c     |  85 ++++
+ drivers/base/regmap/regmap-sdw.c     |  41 +-
+ drivers/base/regmap/regmap.c         |  53 ++-
+ drivers/mfd/ocelot-spi.c             |   2 +-
+ include/linux/regmap.h               |  36 +-
+ 13 files changed, 1284 insertions(+), 447 deletions(-)
+ delete mode 100644 drivers/base/regmap/regcache-lzo.c
+ create mode 100644 drivers/base/regmap/regcache-maple.c
+ create mode 100644 drivers/base/regmap/regmap-kunit.c
+ create mode 100644 drivers/base/regmap/regmap-ram.c
