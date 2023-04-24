@@ -2,186 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92556ED65D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268786ED660
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 22:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjDXUyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 16:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S229888AbjDXU4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 16:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjDXUyT (ORCPT
+        with ESMTP id S229514AbjDXU4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 16:54:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD3259EF;
-        Mon, 24 Apr 2023 13:54:17 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OKitND032176;
-        Mon, 24 Apr 2023 20:53:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=P7P7XIyOxjme42d9PKi1+WZAsQ0kFeeaap3W0xdA2OI=;
- b=STXt08xOpl0o3NO3DTrRNLYSJApjs4mwkkYVFKd9qx7kwOhWCNvKuyqrLKofGBBYBi9a
- aZAgIADWVJIGy3hdgWuf8kLVJjBCxumMqrrLE6KXpzISV7T1gaJ8o+akyWIEl2jDzrlL
- Ya6dSDz3pGaN8UwDhhN8eD70/aEJcKoFf/CNm3HLSyREKj//CTEM5G+c5GBwf70Mx++k
- LnQk334RFGayRce6y/PbC4XKeAF7l+PL9dUK05e5hz4QAatEcy6LUAX76ZK+pspSQdZF
- yY+uAKd/13guiov7lCfMJpOt+6+ZOPqBVVf/3f06kUzBgH0DtceATCsAm0k25mKmM1Gj 5Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5qv1scgw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 20:53:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33OKrFfJ014500
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 20:53:15 GMT
-Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
- 2023 13:53:13 -0700
-Message-ID: <a0a0b8fb-0d6b-d11b-5596-d61c41aabe7f@quicinc.com>
-Date:   Mon, 24 Apr 2023 13:53:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH v2 04/17] drm/msm/dpu: Fix PP_BLK_DIPHER ->
- DITHER typo
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "Chandan Uddaraju" <chandanu@codeaurora.org>
-CC:     Archit Taneja <architt@codeaurora.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        "Jordan Crouse" <jordan@cosmicpenguin.net>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        <freedreno@lists.freedesktop.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-4-ef76c877eb97@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230411-dpu-intf-te-v2-4-ef76c877eb97@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eoF33-LoodpsB38LAtLN1k7mjpuSHdKN
-X-Proofpoint-ORIG-GUID: eoF33-LoodpsB38LAtLN1k7mjpuSHdKN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240189
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 16:56:24 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2574659EF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:56:23 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8f57401d2aso11004986276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 13:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682369782; x=1684961782;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=B+rpZnEiPYUK5J2wUxrSzfB7CVikqVXo+yeoAdEGQi0=;
+        b=Ax0EdMCT8lYmhYX6rrXsZ6jt/9Y3vZBWSoYKf6LT4XUz+Yp8qOZ8QrJyUBoIIk7mhi
+         5IOZqY9JYF7907iUR1eQxgNqcCzimtFllGX08GxlTYiGVXZA9Ieblsr65xmg7+tiMDJK
+         Q6t3zQPo6cNITlXxZ8NnQB5oxEo+H/sytBXqVAlDTMmdnBBVt/mx8dvZCajyTKTsV+0t
+         r3jkCOBnFWYU8+zCTTw6HieRWaJ77l/TaSi1a+lU05ucQWD7vOwLt0q0Dg6wdJgDnEZw
+         wDT56S3kcBQ4Ry82e0croqI0i8DfbWpen+5HU7ILo2oDoCB/9eIanc9Qnc3k18Vz7afd
+         dDbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682369782; x=1684961782;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B+rpZnEiPYUK5J2wUxrSzfB7CVikqVXo+yeoAdEGQi0=;
+        b=R0M9QNXXPyhCmThVK+PuKVHuJgjv/4H1jeDrwzFO6IQQJ3YyuFxOGTL0LZQvbjjOq/
+         mGHdyKXgTAwmRrnbiYziwzeRHU0r5htdB9C5FVCPQjxXDSl3UAgXyp1y7Qa5/GYc9fS8
+         qtqpOsE5KgbiUnibYwLNJc3mdAenGY96iDSr/yF2G9MOKDJwGvBhK+fTepnO7Gp70/sS
+         ZW9hS/r0r8ac4PeaLNDWM81/hbEobSbeZqJnkeAQa+NF7mIl2LXZ3vdQL7g/kar3ATuR
+         9NTQeL3F4L/JHVfSD535NbScYJdi/hIjPpLF2CvQTaTkfznQc7rq/vuaH8DrTIGHoTxa
+         GEuw==
+X-Gm-Message-State: AAQBX9c8zUnXBceRJ4Co3/o9/hu8apc9TpO8ft2ZBhKdE8ctGC6MojZf
+        F1IPVd25iTDQMnvKAnkKlfE7Zt8eKbhDXg==
+X-Google-Smtp-Source: AKy350a5qP1b/TSYqjkqqSpHr6c8w6XBYeiI+1g+0GnujCmrbmQsCQLEU0lRTn1dciDrMdWdeV2qKF6Bau+EYA==
+X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
+ (user=cmllamas job=sendgmr) by 2002:a25:d8c1:0:b0:b8e:e0db:5b9d with SMTP id
+ p184-20020a25d8c1000000b00b8ee0db5b9dmr5586350ybg.12.1682369782460; Mon, 24
+ Apr 2023 13:56:22 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 20:55:46 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230424205548.1935192-1-cmllamas@google.com>
+Subject: [RFC PATCH 1/3] Revert "binder_alloc: add missing mmap_lock calls
+ when using the VMA"
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Liam Howlett <liam.howlett@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit 44e602b4e52f70f04620bbbf4fe46ecb40170bde.
 
+This caused a performance regression particularly when pages are getting
+reclaimed. We don't need to acquire the mmap_lock to determine when the
+binder buffer has been fully initialized. A subsequent patch will bring
+back the lockless approach for this.
 
-On 4/17/2023 1:21 PM, Marijn Suijten wrote:
-> SM8550 only comes with a DITHER subblock inside the PINGPONG block,
-> hence the name and a block length of zero.  However, the PP_BLK macro
-> name was typo'd to DIPHER rather than DITHER.
-> 
-> Fixes: efcd0107727c ("drm/msm/dpu: add support for SM8550")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+[cmllamas: resolved trivial conflicts with renaming of alloc->mm]
 
-This change itself is fine, hence
+Cc: Liam Howlett <liam.howlett@oracle.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ drivers/android/binder_alloc.c | 31 ++++++++++---------------------
+ 1 file changed, 10 insertions(+), 21 deletions(-)
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 55a3c3c2409f..92c814ec44fe 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -380,15 +380,12 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
+ 	size_t size, data_offsets_size;
+ 	int ret;
+ 
+-	mmap_read_lock(alloc->mm);
+ 	if (!binder_alloc_get_vma(alloc)) {
+-		mmap_read_unlock(alloc->mm);
+ 		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
+ 				   "%d: binder_alloc_buf, no vma\n",
+ 				   alloc->pid);
+ 		return ERR_PTR(-ESRCH);
+ 	}
+-	mmap_read_unlock(alloc->mm);
+ 
+ 	data_offsets_size = ALIGN(data_size, sizeof(void *)) +
+ 		ALIGN(offsets_size, sizeof(void *));
+@@ -916,25 +913,17 @@ void binder_alloc_print_pages(struct seq_file *m,
+ 	 * Make sure the binder_alloc is fully initialized, otherwise we might
+ 	 * read inconsistent state.
+ 	 */
+-
+-	mmap_read_lock(alloc->mm);
+-	if (binder_alloc_get_vma(alloc) == NULL) {
+-		mmap_read_unlock(alloc->mm);
+-		goto uninitialized;
+-	}
+-
+-	mmap_read_unlock(alloc->mm);
+-	for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
+-		page = &alloc->pages[i];
+-		if (!page->page_ptr)
+-			free++;
+-		else if (list_empty(&page->lru))
+-			active++;
+-		else
+-			lru++;
++	if (binder_alloc_get_vma(alloc) != NULL) {
++		for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
++			page = &alloc->pages[i];
++			if (!page->page_ptr)
++				free++;
++			else if (list_empty(&page->lru))
++				active++;
++			else
++				lru++;
++		}
+ 	}
+-
+-uninitialized:
+ 	mutex_unlock(&alloc->mutex);
+ 	seq_printf(m, "  pages: %d:%d:%d\n", active, lru, free);
+ 	seq_printf(m, "  pages high watermark: %zu\n", alloc->pages_high);
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
-one comment below
-
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 16 ++++++++--------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c         |  2 +-
->   2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
-> index 9e403034093f..d0ab351b6a8b 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
-> @@ -132,28 +132,28 @@ static const struct dpu_dspp_cfg sm8550_dspp[] = {
->   		 &sm8150_dspp_sblk),
->   };
->   static const struct dpu_pingpong_cfg sm8550_pp[] = {
-
-dither block should be present on many other chipsets too but looks like 
-on sm8550 was enabling it. Not sure how it was validated there. But we 
-are enabling dither, even other chipsets have this block.
-
-> -	PP_BLK_DIPHER("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_6", PINGPONG_6, 0x66000, MERGE_3D_3, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_6", PINGPONG_6, 0x66000, MERGE_3D_3, sc7280_pp_sblk,
->   			-1,
->   			-1),
-> -	PP_BLK_DIPHER("pingpong_7", PINGPONG_7, 0x66400, MERGE_3D_3, sc7280_pp_sblk,
-> +	PP_BLK_DITHER("pingpong_7", PINGPONG_7, 0x66400, MERGE_3D_3, sc7280_pp_sblk,
->   			-1,
->   			-1),
->   };
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 03f162af1a50..ca8a02debda9 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -491,7 +491,7 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->   	.len = 0x20, .version = 0x20000},
->   };
->   
-> -#define PP_BLK_DIPHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> +#define PP_BLK_DITHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->   	{\
->   	.name = _name, .id = _id, \
->   	.base = _base, .len = 0, \
-> 
