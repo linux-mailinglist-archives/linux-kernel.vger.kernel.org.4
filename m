@@ -2,116 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91426ED909
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDDC6ED908
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjDXXzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S231189AbjDXXz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjDXXz2 (ORCPT
+        with ESMTP id S232969AbjDXXzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:55:28 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D835263;
-        Mon, 24 Apr 2023 16:55:27 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ONfACC015914;
-        Mon, 24 Apr 2023 23:54:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zqZGaOSjUAQJTHScwH8oD4cPGHMaNmoxs19FkizSuf8=;
- b=od/LeIv4wSu+NqjOpDcyQ6q/TidXeJS9GSq9j1LH9lj+akiPhd47yomItb+QN0kQylgk
- 5LsOiMhtHmdVs0kic9oUeurJW49GToVwTw2+HHQgtfzn8LdAV2RK/18JWZRpKbKee4zp
- hyhqMSIBMDGkO9nIvH0KTo8RgmcvqL+6c9M1plq+ayFSrMXZlxlke9HM7baezEAs7JOx
- Yr+9j/25SfeElptLVg5+ir6QjnsGJYKkgUnJ0xOA4F8f6Z43BHwq93F69kiR/3m0nzEy
- jhNTLSNMizW5P9J1makTt8Ol07n6z4UJYOpdMWFbmztsJlcf1lj5ym/eh4g29uWLroIK QA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5r0usn6b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 23:54:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ONsHIF008341
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 23:54:17 GMT
-Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
- 2023 16:54:16 -0700
-Message-ID: <5277878a-75d9-27bd-35d6-6cc2ac4aaeeb@quicinc.com>
-Date:   Mon, 24 Apr 2023 16:54:15 -0700
+        Mon, 24 Apr 2023 19:55:24 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7B13584
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:55:23 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-4404c674cefso1696406e0c.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682380522; x=1684972522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rIp06ywmX0lfxxI9OT2FwiSpXuGSU6q4dMRtZXHd20U=;
+        b=VSR3MR/lpCZRqEQxMdSEB9m9wlwJlM3k+HH7FSqPbDpjJx977/r3olR7BuyQ3/16Ql
+         s8N+sMD1s+jtsk7/62opG5ABBjstHJmiLhe2v+QPcsJ+U/zdXr2Z3t2A9kVGbazOWfL8
+         kINMWjdo9ocOEikko54ju2zprRaNw0/ajTtKs/Ca4dWWPsh1p+O18xXpcFOAwDP39FcO
+         GIeojA8KleffKcEUg3LwZ7FTdsFvR24laN4xb98+5yc/Suozu8MEQzdLhgGENfd2IjMe
+         kvwjszy1Iq/D63qaYxsx9WTv3WWHMr7J0z1cSQArazTPgyrQDy+soL0bS74x1EuUYwSC
+         mgsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682380522; x=1684972522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rIp06ywmX0lfxxI9OT2FwiSpXuGSU6q4dMRtZXHd20U=;
+        b=IdRJhYMaygnRBiBy9huYv8oDMzw/a7wMFkdYsVlnDxcv1rllp9rTtLEuFURDKiyEaW
+         Tzg6+3ZzKYGjODyZREszurTbxgkC0tKAEsC719xQfvWhL8RGsqjoSqLr3+ksWKEHeSQ1
+         uoUtR7Q6NThnFaHDfpSlP63fP1EXBEGH393YAzvBKWCiwEDQnBw2c0Gu+1SzbeYTfXTh
+         QG2w2rvPLT13gXguA12AGS8ipN5W3v9J9iclswsU8h3n0r8TYwCe9+wMK+1jSthOZUVF
+         KFX8SvphAhZg7DuRizYkUiTo11MR9oC3dfgkyGvFmiEI5PIM9XwwN9v8Xee/slh5vcIB
+         Pj+Q==
+X-Gm-Message-State: AAQBX9dfBs9gLjYMyUOGy/bG9qQtTA90Sw+Fbzgbiohx4hBhEVotv//+
+        nrqQ6HM2AQawuZPpMz6CSdD6kYfXWaGNInt+MIN2Ww==
+X-Google-Smtp-Source: AKy350ajS7Zyyl8dYKv9+2/hd1H3Pj9KTWPdcZoxEmEVlJ/pAtL7P8kNXRP16uhOeURa/a1kb//JjhBN+yuPxPJTRyY=
+X-Received: by 2002:a1f:3fce:0:b0:43f:c5fc:b406 with SMTP id
+ m197-20020a1f3fce000000b0043fc5fcb406mr3823429vka.5.1682380522423; Mon, 24
+ Apr 2023 16:55:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 05/17] drm/msm/dpu: Remove duplicate register defines
- from INTF
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "Chandan Uddaraju" <chandanu@codeaurora.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        "Jami Kettunen" <jami.kettunen@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-5-ef76c877eb97@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230411-dpu-intf-te-v2-5-ef76c877eb97@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fPnBC5k4rAYdUxGNjaWHDjNyGroHLFjf
-X-Proofpoint-ORIG-GUID: fPnBC5k4rAYdUxGNjaWHDjNyGroHLFjf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_11,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=636 phishscore=0 mlxscore=0 spamscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304240217
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230421214946.2571580-1-seanjc@google.com> <CALzav=f=TFoqpR5tPDPOujoO6Gix-+zL-sZyyZK27qJvGPP9dg@mail.gmail.com>
+ <ZEM+09p7QBJR7DoI@google.com>
+In-Reply-To: <ZEM+09p7QBJR7DoI@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 24 Apr 2023 16:54:56 -0700
+Message-ID: <CALzav=cOB5rdwutrAa3eqFzHbdR-Dct0BAJWbExf1cTjUq2Mjw@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Preserve TDP MMU roots until they are
+ explicitly invalidated
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 6:56=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, Apr 21, 2023, David Matlack wrote:
+> > On Fri, Apr 21, 2023 at 2:49=E2=80=AFPM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > >
+> > >  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
+> > >  {
+> > >         struct kvm_mmu_page *root;
+> > >
+> > > -       lockdep_assert_held_write(&kvm->mmu_lock);
+> > > -       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
+> > > -               if (!root->role.invalid &&
+> > > -                   !WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root))) {
+> > > +       /*
+> > > +        * Note!  mmu_lock isn't held when destroying the VM!  There =
+can't be
+> > > +        * other references to @kvm, i.e. nothing else can invalidate=
+ roots,
+> > > +        * but walking the list of roots does need to be guarded agai=
+nst roots
+> > > +        * being deleted by the asynchronous zap worker.
+> > > +        */
+> > > +       rcu_read_lock();
+> > > +
+> > > +       list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link)=
+ {
+> >
+> > I see that roots are removed from the list with list_del_rcu(), so I
+> > agree this should be safe.
+> >
+> > KVM could, alternatively, acquire the mmu_lock in
+> > kvm_mmu_uninit_tdp_mmu(), which would let us keep the lockdep
+> > assertion and drop the rcu_read_lock() + comment. That might be worth
+> > it in case someone accidentally adds a call to
+> > kvm_tdp_mmu_invalidate_all_roots() without mmu_lock outside of VM
+> > teardown. kvm_mmu_uninit_tdp_mmu() is not a particularly performance
+> > sensitive path and adding the mmu_lock wouldn't add much overhead
+> > anyway (it would block for at most a few milliseconds waiting for the
+> > async work to reschedule).
+>
+> Heh, I actually started to ping you off-list to specifically discuss this=
+ option,
+> but then decided that not waiting those few milliseconds might be worthwh=
+ile for
+> some use cases.  I also couldn't quite convince myself that it would only=
+ be a few
+> milliseconds, e.g. if the worker is zapping a fully populated 5-level roo=
+t, there
+> are no other tasks scheduled on _its_ CPU, and CONFIG_PREEMPTION=3Dn (whi=
+ch neuters
+> rwlock_needbreak()).
 
+Good point. At some point we're going to have to fix that.
 
-On 4/17/2023 1:21 PM, Marijn Suijten wrote:
-> The INTF_FRAME_LINE_COUNT_EN, INTF_FRAME_COUNT and INTF_LINE_COUNT
-> registers are already defined higher up, in the right place when sorted
-> numerically.
-> 
-> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
+>
+> The other reason I opted for not taking mmu_lock is that, with the persis=
+tent roots
+> approach, I don't think it's actually strictly necessary for kvm_mmu_zap_=
+all_fast()
+> to invaliate roots while holding mmu_lock for write.  Holding slots_lock =
+ensures
+> that only a single task can be doing invalidations, versus the old model =
+where
+> putting the last reference to a root could happen just about anywhere.  A=
+nd
+> allocating a new root and zapping from mmu_noitifiers requires holding mm=
+u_lock for
+> write, so I _think_ we could getaway with holding mmu_lock for read.  May=
+be.
+>
+> It's largely a moot point since kvm_mmu_zap_all_fast() needs to hold mmu_=
+lock for
+> write anyways to play nice with the shadow MMU, i.e. I don't expect us to=
+ ever
+> want to pursue a change in this area.  But at the same time I was struggl=
+ing to
+> write a comment explaining why the VM destruction path "had" to take mmu_=
+lock.
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Yeah, probably because it really isn't necessary :). It'd be nice to keep
+around the lockdep assertion though for the other (and future)
+callers. The cleanest options I can think of are:
+
+1. Pass in a bool "vm_teardown" kvm_tdp_mmu_invalidate_all_roots() and
+use that to gate the lockdep assertion.
+2. Take the mmu_lock for read in kvm_mmu_uninit_tdp_mmu() and pass
+down bool shared to kvm_tdp_mmu_invalidate_all_roots().
+
+Both would satisfy your concern of not blocking teardown on the async
+worker and my concern of keeping the lockdep check. I think I prefer
+(1) since, as you point out, taking the mmu_lock at all is
+unnecessary.
