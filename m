@@ -2,169 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDDC6ED908
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1146D6ED90C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 01:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjDXXz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 19:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S232854AbjDXX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 19:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbjDXXzY (ORCPT
+        with ESMTP id S230340AbjDXXz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 19:55:24 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7B13584
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:55:23 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-4404c674cefso1696406e0c.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 16:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682380522; x=1684972522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rIp06ywmX0lfxxI9OT2FwiSpXuGSU6q4dMRtZXHd20U=;
-        b=VSR3MR/lpCZRqEQxMdSEB9m9wlwJlM3k+HH7FSqPbDpjJx977/r3olR7BuyQ3/16Ql
-         s8N+sMD1s+jtsk7/62opG5ABBjstHJmiLhe2v+QPcsJ+U/zdXr2Z3t2A9kVGbazOWfL8
-         kINMWjdo9ocOEikko54ju2zprRaNw0/ajTtKs/Ca4dWWPsh1p+O18xXpcFOAwDP39FcO
-         GIeojA8KleffKcEUg3LwZ7FTdsFvR24laN4xb98+5yc/Suozu8MEQzdLhgGENfd2IjMe
-         kvwjszy1Iq/D63qaYxsx9WTv3WWHMr7J0z1cSQArazTPgyrQDy+soL0bS74x1EuUYwSC
-         mgsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682380522; x=1684972522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rIp06ywmX0lfxxI9OT2FwiSpXuGSU6q4dMRtZXHd20U=;
-        b=IdRJhYMaygnRBiBy9huYv8oDMzw/a7wMFkdYsVlnDxcv1rllp9rTtLEuFURDKiyEaW
-         Tzg6+3ZzKYGjODyZREszurTbxgkC0tKAEsC719xQfvWhL8RGsqjoSqLr3+ksWKEHeSQ1
-         uoUtR7Q6NThnFaHDfpSlP63fP1EXBEGH393YAzvBKWCiwEDQnBw2c0Gu+1SzbeYTfXTh
-         QG2w2rvPLT13gXguA12AGS8ipN5W3v9J9iclswsU8h3n0r8TYwCe9+wMK+1jSthOZUVF
-         KFX8SvphAhZg7DuRizYkUiTo11MR9oC3dfgkyGvFmiEI5PIM9XwwN9v8Xee/slh5vcIB
-         Pj+Q==
-X-Gm-Message-State: AAQBX9dfBs9gLjYMyUOGy/bG9qQtTA90Sw+Fbzgbiohx4hBhEVotv//+
-        nrqQ6HM2AQawuZPpMz6CSdD6kYfXWaGNInt+MIN2Ww==
-X-Google-Smtp-Source: AKy350ajS7Zyyl8dYKv9+2/hd1H3Pj9KTWPdcZoxEmEVlJ/pAtL7P8kNXRP16uhOeURa/a1kb//JjhBN+yuPxPJTRyY=
-X-Received: by 2002:a1f:3fce:0:b0:43f:c5fc:b406 with SMTP id
- m197-20020a1f3fce000000b0043fc5fcb406mr3823429vka.5.1682380522423; Mon, 24
- Apr 2023 16:55:22 -0700 (PDT)
+        Mon, 24 Apr 2023 19:55:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D345272;
+        Mon, 24 Apr 2023 16:55:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43D7762A56;
+        Mon, 24 Apr 2023 23:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DF9C433D2;
+        Mon, 24 Apr 2023 23:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682380542;
+        bh=/Xy1nbFBL6OoTaN9LfIVZd/HjfssH9pfdGmpPWgQX6o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AuVRgV5wNL6sfYK5/d6lYuMyDy2EFTKyFAmYNJhhXeYhtrHAnBRRK39z1xNFvZyky
+         L15oVP4EmWZ+NUJ+OK+P/qIPGTIkbdHmWll4FkymNxlYveyQcjW1m5b+5vJe3dhQzK
+         mLAdewCek0zuIIeaa8AI316CSqmKRxNyyCFKdCtHCszcNzY6w2MHgehDapMjk7TEWn
+         imGbH4Qm0q+iDNFRlM0lHvj+JoDE+ECDCgfPivE1bYfGLLK5sYlRRZa/EYMUsdzdOy
+         xPxQd5h2Sl65AzJpp5u6a/1VNuDoEQ7AMgnrP86zbHS1lSCWTlY6AVthEhv4m+zkA5
+         pzSEjv9apo2UQ==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2a8b1b51dbdso46948971fa.0;
+        Mon, 24 Apr 2023 16:55:42 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fhIsZ8TiYmWdQXbe8ly9QYMBJ/PCR/zym6ZOe0EnU8q8l7vDOQ
+        Fx0LbO7DhK63fZBViyESdWpsMtVZvgz3x1KbkPg=
+X-Google-Smtp-Source: AKy350YMA6kITZDbZKx3Pm1hFsRyT7meVkV9yVlCuK0wy9PQp8RavGKaILlo7NpZrsZjKijdRKLwgjSp8ci1pS8nkQk=
+X-Received: by 2002:a2e:9989:0:b0:2a9:f114:f168 with SMTP id
+ w9-20020a2e9989000000b002a9f114f168mr3023036lji.46.1682380540697; Mon, 24 Apr
+ 2023 16:55:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230421214946.2571580-1-seanjc@google.com> <CALzav=f=TFoqpR5tPDPOujoO6Gix-+zL-sZyyZK27qJvGPP9dg@mail.gmail.com>
- <ZEM+09p7QBJR7DoI@google.com>
-In-Reply-To: <ZEM+09p7QBJR7DoI@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 24 Apr 2023 16:54:56 -0700
-Message-ID: <CALzav=cOB5rdwutrAa3eqFzHbdR-Dct0BAJWbExf1cTjUq2Mjw@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: x86: Preserve TDP MMU roots until they are
- explicitly invalidated
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Ben Gardon <bgardon@google.com>
+References: <20230420112946.2869956-1-yukuai1@huaweicloud.com> <20230420112946.2869956-2-yukuai1@huaweicloud.com>
+In-Reply-To: <20230420112946.2869956-2-yukuai1@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 24 Apr 2023 16:55:28 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7+autdRECogZiJa0uE-UYG3S7w6Hyz7=R8+19QNvu5RQ@mail.gmail.com>
+Message-ID: <CAPhsuW7+autdRECogZiJa0uE-UYG3S7w6Hyz7=R8+19QNvu5RQ@mail.gmail.com>
+Subject: Re: [PATCH -next 1/8] md/raid10: prevent soft lockup while flush writes
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     neilb@suse.de, akpm@osdl.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 6:56=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
+On Thu, Apr 20, 2023 at 4:31=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
 >
-> On Fri, Apr 21, 2023, David Matlack wrote:
-> > On Fri, Apr 21, 2023 at 2:49=E2=80=AFPM Sean Christopherson <seanjc@goo=
-gle.com> wrote:
-> > >
-> > >  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
-> > >  {
-> > >         struct kvm_mmu_page *root;
-> > >
-> > > -       lockdep_assert_held_write(&kvm->mmu_lock);
-> > > -       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
-> > > -               if (!root->role.invalid &&
-> > > -                   !WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root))) {
-> > > +       /*
-> > > +        * Note!  mmu_lock isn't held when destroying the VM!  There =
-can't be
-> > > +        * other references to @kvm, i.e. nothing else can invalidate=
- roots,
-> > > +        * but walking the list of roots does need to be guarded agai=
-nst roots
-> > > +        * being deleted by the asynchronous zap worker.
-> > > +        */
-> > > +       rcu_read_lock();
-> > > +
-> > > +       list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link)=
- {
-> >
-> > I see that roots are removed from the list with list_del_rcu(), so I
-> > agree this should be safe.
-> >
-> > KVM could, alternatively, acquire the mmu_lock in
-> > kvm_mmu_uninit_tdp_mmu(), which would let us keep the lockdep
-> > assertion and drop the rcu_read_lock() + comment. That might be worth
-> > it in case someone accidentally adds a call to
-> > kvm_tdp_mmu_invalidate_all_roots() without mmu_lock outside of VM
-> > teardown. kvm_mmu_uninit_tdp_mmu() is not a particularly performance
-> > sensitive path and adding the mmu_lock wouldn't add much overhead
-> > anyway (it would block for at most a few milliseconds waiting for the
-> > async work to reschedule).
+> From: Yu Kuai <yukuai3@huawei.com>
 >
-> Heh, I actually started to ping you off-list to specifically discuss this=
- option,
-> but then decided that not waiting those few milliseconds might be worthwh=
-ile for
-> some use cases.  I also couldn't quite convince myself that it would only=
- be a few
-> milliseconds, e.g. if the worker is zapping a fully populated 5-level roo=
-t, there
-> are no other tasks scheduled on _its_ CPU, and CONFIG_PREEMPTION=3Dn (whi=
-ch neuters
-> rwlock_needbreak()).
+> Currently, there is no limit for raid1/raid10 plugged bio. While flushing
+> writes, raid1 has cond_resched() while raid10 doesn't, and too many
+> writes can cause soft lockup.
+>
+> Follow up soft lockup can be triggered easily with writeback test for
+> raid10 with ramdisks:
+>
+> watchdog: BUG: soft lockup - CPU#10 stuck for 27s! [md0_raid10:1293]
+> Call Trace:
+>  <TASK>
+>  call_rcu+0x16/0x20
+>  put_object+0x41/0x80
+>  __delete_object+0x50/0x90
+>  delete_object_full+0x2b/0x40
+>  kmemleak_free+0x46/0xa0
+>  slab_free_freelist_hook.constprop.0+0xed/0x1a0
+>  kmem_cache_free+0xfd/0x300
+>  mempool_free_slab+0x1f/0x30
+>  mempool_free+0x3a/0x100
+>  bio_free+0x59/0x80
+>  bio_put+0xcf/0x2c0
+>  free_r10bio+0xbf/0xf0
+>  raid_end_bio_io+0x78/0xb0
+>  one_write_done+0x8a/0xa0
+>  raid10_end_write_request+0x1b4/0x430
+>  bio_endio+0x175/0x320
+>  brd_submit_bio+0x3b9/0x9b7 [brd]
+>  __submit_bio+0x69/0xe0
+>  submit_bio_noacct_nocheck+0x1e6/0x5a0
+>  submit_bio_noacct+0x38c/0x7e0
+>  flush_pending_writes+0xf0/0x240
+>  raid10d+0xac/0x1ed0
+>
+> This patch fix the problem by adding cond_resched() to raid10 like what
+> raid1 did.
 
-Good point. At some point we're going to have to fix that.
+nit: per submitting-patches.rst:
+
+Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.
 
 >
-> The other reason I opted for not taking mmu_lock is that, with the persis=
-tent roots
-> approach, I don't think it's actually strictly necessary for kvm_mmu_zap_=
-all_fast()
-> to invaliate roots while holding mmu_lock for write.  Holding slots_lock =
-ensures
-> that only a single task can be doing invalidations, versus the old model =
-where
-> putting the last reference to a root could happen just about anywhere.  A=
-nd
-> allocating a new root and zapping from mmu_noitifiers requires holding mm=
-u_lock for
-> write, so I _think_ we could getaway with holding mmu_lock for read.  May=
-be.
+> Note that unlimited plugged bio still need to be optimized because in
+> the case of writeback lots of dirty pages, this will take lots of memory
+> and io latecy is quite bad.
+
+typo: latency.
+
 >
-> It's largely a moot point since kvm_mmu_zap_all_fast() needs to hold mmu_=
-lock for
-> write anyways to play nice with the shadow MMU, i.e. I don't expect us to=
- ever
-> want to pursue a change in this area.  But at the same time I was struggl=
-ing to
-> write a comment explaining why the VM destruction path "had" to take mmu_=
-lock.
-
-Yeah, probably because it really isn't necessary :). It'd be nice to keep
-around the lockdep assertion though for the other (and future)
-callers. The cleanest options I can think of are:
-
-1. Pass in a bool "vm_teardown" kvm_tdp_mmu_invalidate_all_roots() and
-use that to gate the lockdep assertion.
-2. Take the mmu_lock for read in kvm_mmu_uninit_tdp_mmu() and pass
-down bool shared to kvm_tdp_mmu_invalidate_all_roots().
-
-Both would satisfy your concern of not blocking teardown on the async
-worker and my concern of keeping the lockdep check. I think I prefer
-(1) since, as you point out, taking the mmu_lock at all is
-unnecessary.
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  drivers/md/raid10.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 6590aa49598c..a116b7c9d9f3 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -921,6 +921,7 @@ static void flush_pending_writes(struct r10conf *conf=
+)
+>                         else
+>                                 submit_bio_noacct(bio);
+>                         bio =3D next;
+> +                       cond_resched();
+>                 }
+>                 blk_finish_plug(&plug);
+>         } else
+> @@ -1140,6 +1141,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, b=
+ool from_schedule)
+>                 else
+>                         submit_bio_noacct(bio);
+>                 bio =3D next;
+> +               cond_resched();
+>         }
+>         kfree(plug);
+>  }
+> --
+> 2.39.2
+>
