@@ -2,137 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0296ED17B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB7C6ED192
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 17:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjDXPg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 11:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S232008AbjDXPkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 11:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjDXPgx (ORCPT
+        with ESMTP id S231332AbjDXPkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 11:36:53 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC897699
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:36:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5560116959fso36661807b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 08:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682350610; x=1684942610;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=INANXHHXp/T8ARGZo4fEReN514gQsMjnO7qhCuE1g7g=;
-        b=Jflx0T8GwNA/p4xXj8f1eE7a6UTpXo/APEaT4lbrFHprS/9JQewQ7S7u4yiKPLkFam
-         hCelKOxQChH9nGQ3VkaJJ0c+yJVT1K4ehrSMxIx0tSq2Nqj68Ggk1AFIIDubQ0kibppc
-         jMvJWzdleaZVufX+CxbrWH4xr6QT3Vf53YkMNENsj13usjdM+eSPT0+XimJ1NJj3dvVS
-         wK71Di03ulexBM6nsh0r4v3OU1Uxg4fMCP7gf9GRCpNeudm2CPGB/M2k1cclM4DyeBxu
-         POC31sFgrnB5HlxCm/AQoWmaK27d4ECZbNvjp6Bo5al9hmRL6NRP9N2nD6NuRANCljE2
-         A3oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350610; x=1684942610;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=INANXHHXp/T8ARGZo4fEReN514gQsMjnO7qhCuE1g7g=;
-        b=IY0K240YFFLloPxhfHbkuTUOB4hqc/28yscLA9uO3EpqU5xQuwg7LWD1u8TkkZpnOU
-         giZ9QH/VihQa6IeTytmcC0T52eUTjCZjk4H+xH6isF9tjkDGv6FPjQt3/FStFTsmsLGs
-         vkix7Yiv4wBz4dcszEy+j8VytWeYawfmmSt+lobjg3iNiKZ3Xj0jM8DiA19sDBv/4RwU
-         3MSvul/S1fQXLfQcQy2A9DO8zErXg9S3DYQ2/UNBLUEv+XOLBTF40tMhgdjvGwGm03PC
-         UE/1qz01pC1Y6Q36afU4kC6esaePFD0rM4HYir2lv9JYC8hJTXBf90vFCjWzZrybrn5G
-         tPtg==
-X-Gm-Message-State: AAQBX9cYF09g7xRlV15WnJ6I7XmeKlg7ZzVcl75JEpoRClH04/9dGWMy
-        5I/52SMlwfWTu0BtaudxWcL9/hEkVts=
-X-Google-Smtp-Source: AKy350auw3H5+6753WYcSjNQqPKVcCAm7OJQMRFqTSnX4CO2SxtEX9IzR5P8QzlGzMHj+NWagReE7zpHHEQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:70c:b0:54e:8b9a:65be with SMTP id
- bs12-20020a05690c070c00b0054e8b9a65bemr6306993ywb.6.1682350610185; Mon, 24
- Apr 2023 08:36:50 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 08:36:48 -0700
-In-Reply-To: <CACT4Y+Ytpc8zqcyV7xnOJsdz5qoT0mpOE1yZrPZ53D5ZwUrMwA@mail.gmail.com>
-Mime-Version: 1.0
-References: <000000000000a0bc2b05f9dd7fab@google.com> <ZEMFpqxvOHd2kZiu@google.com>
- <CACT4Y+Ytpc8zqcyV7xnOJsdz5qoT0mpOE1yZrPZ53D5ZwUrMwA@mail.gmail.com>
-Message-ID: <ZEaiEISFPbOMbvOG@google.com>
-Subject: Re: [syzbot] [kvm?] WARNING in kvm_tdp_mmu_invalidate_all_roots
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+094a74444165dbcd3a54@syzkaller.appspotmail.com>,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 11:40:13 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31F83C0D;
+        Mon, 24 Apr 2023 08:40:09 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 7EFEF1883611;
+        Mon, 24 Apr 2023 15:40:08 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 7ABE22500328;
+        Mon, 24 Apr 2023 15:40:08 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 754289B403F4; Mon, 24 Apr 2023 15:40:08 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 203879B403E1;
+        Mon, 24 Apr 2023 15:40:08 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net] net: bridge: switchdev: don't notify FDB entries
+ with "master dynamic"
+In-Reply-To: <20230424122631.d7kwfwmlwvqjo3pz@skbuf>
+References: <20230418155902.898627-1-vladimir.oltean@nxp.com>
+ <875y9nt27g.fsf@kapio-technology.com>
+ <20230424122631.d7kwfwmlwvqjo3pz@skbuf>
+Date:   Mon, 24 Apr 2023 17:37:07 +0200
+Message-ID: <87h6t51ecc.fsf@kapio-technology.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023, Dmitry Vyukov wrote:
-> On Fri, 21 Apr 2023 at 23:52, 'Sean Christopherson' via syzkaller-bugs
-> <syzkaller-bugs@googlegroups.com> wrote:
-> >
-> > On Fri, Apr 21, 2023, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
-> > > git tree:       linux-next
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=16ac3de0280000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=094a74444165dbcd3a54
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > >
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+094a74444165dbcd3a54@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 12623 at arch/x86/kvm/mmu/tdp_mmu.c:943 kvm_tdp_mmu_invalidate_all_roots+0x2bd/0x370 arch/x86/kvm/mmu/tdp_mmu.c:943
-> > > Modules linked in:
-> > > CPU: 0 PID: 12623 Comm: syz-executor.3 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-> > > RIP: 0010:kvm_tdp_mmu_invalidate_all_roots+0x2bd/0x370 arch/x86/kvm/mmu/tdp_mmu.c:943
-> > > Call Trace:
-> > >  <TASK>
-> > >  kvm_mmu_uninit_tdp_mmu+0x16/0x100 arch/x86/kvm/mmu/tdp_mmu.c:48
-> > >  kvm_mmu_uninit_vm+0x6a/0x70 arch/x86/kvm/mmu/mmu.c:6239
-> > >  kvm_arch_destroy_vm+0x369/0x490 arch/x86/kvm/x86.c:12465
-> > >  kvm_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1245 [inline]
-> > >  kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:5017 [inline]
-> > >  kvm_dev_ioctl+0x11be/0x1bb0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:5059
-> > >  vfs_ioctl fs/ioctl.c:51 [inline]
-> > >  __do_sys_ioctl fs/ioctl.c:870 [inline]
-> > >  __se_sys_ioctl fs/ioctl.c:856 [inline]
-> > >  __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > Gah, kvm->users_count is elevated when the VM is destroyed if creation fails,
-> > but mmu_lock isn't held in that case, and lockdep yells.  This particular bug is
-> > effectively a false positive, nothing else holds a reference to the VM.
-> >
-> > However, syzbot found another bug that _is_ a real problem (hasn't been reported
-> > upstream yet for whatever reason).
-> 
-> It was staged in the moderation queue for manual moderation:
-> https://github.com/google/syzkaller/blob/master/docs/syzbot.md#moderation-queue
-> 
-> here:
-> https://groups.google.com/g/syzkaller-upstream-moderation/c/pTGA87FeSIE
-> 
-> I've pushed it upstream since you say it's worth fixing.
+On Mon, Apr 24, 2023 at 15:26, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>
+> Obviously we have not reached the end of that plan, and net-next is closed now.
 
-Ah, thanks!  For future reference, does "#syz upstream" also work from our internal
-bug tracker, or do I have to wait for the report to hit the moderation queue first?
+Seems to me that net-next is open. Maybe it will close soon.
