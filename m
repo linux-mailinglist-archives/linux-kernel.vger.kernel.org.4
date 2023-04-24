@@ -2,60 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93816ED2B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EF76ED2BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 18:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjDXQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 12:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S232112AbjDXQo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 12:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjDXQnd (ORCPT
+        with ESMTP id S230319AbjDXQoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:43:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5F3944B1;
-        Mon, 24 Apr 2023 09:43:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D72F4B3;
-        Mon, 24 Apr 2023 09:44:15 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABED23F5A1;
-        Mon, 24 Apr 2023 09:43:28 -0700 (PDT)
-Message-ID: <f2ff24cb-5d62-6366-81dc-d51a79062570@arm.com>
-Date:   Mon, 24 Apr 2023 17:43:13 +0100
+        Mon, 24 Apr 2023 12:44:24 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11844B1;
+        Mon, 24 Apr 2023 09:44:23 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b980e16b27bso3381109276.2;
+        Mon, 24 Apr 2023 09:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682354662; x=1684946662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yKXf0cNAKb6gq2MuqWLjiv+ti6kg7FN3aSwzR4hbx2U=;
+        b=nf6rkWdOPXFKzUX3S+iTvB/fe+NaIdyPTHSVP5LFUd/vkq/C8VDwWT44X2xN+QVl7B
+         Td3HBvRPpFzSQtkYxIFU96dCOeFvARfnvBtbPAzItZUU9ziRdy3gBowHfqyP13YR/Ajj
+         1JjtgILx0J5ltAKj8hT7hYTxXhUcxWWGxc4SqiLNfvDbABVgN37QR4Rq4MWH4iApf8dz
+         IQIGwfpKoE8gL/3bphhDgkBS1PhYcDeGEPw2otP234DWXCY0MAle5PDlBPpOer94UUp9
+         gEetm8nVe1k/fqy88yh4uHnXZYP64sVB30yeIJlkL5+zMcAK68T5IiDEjS+DJBIde32P
+         bTkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682354662; x=1684946662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yKXf0cNAKb6gq2MuqWLjiv+ti6kg7FN3aSwzR4hbx2U=;
+        b=W3zGMlSj845JfudNsRUp3pCu56kLF2Jq7OX4wgJPNJTCaQeB6ezIcNjPAYGLHw2yt/
+         9QoPtkevLUiDzrNZkc+Z+ZndP+Dy01nEJM77VwT7EwpITDfWRqzA5IWS6KdXLV64/+a4
+         65wSSOLyuAgylUEuaqOh+oiTgjmVai3s72Y7r3HlTAd5Il82VQilvC4zDf1+anb9Xnu6
+         bbxU/0K3QoMpCTzWqqCpTlm0Rg1fDFxmeTbRWCRUQFbtVKxoFCU3oqOzw4QyJToGCbWg
+         Gr+D/dGo2CDI5l5ROlajNvR6wNkWBlcFvfrM0swqmIZvf3emvpvY6X9B67J74yUuv3Xu
+         MJWw==
+X-Gm-Message-State: AAQBX9e61u2bJAIRtFxo9shzHQUKF0iy9VZgzXGg4SYbteRtlkalU6M1
+        b2Pol9XFY3Rg6tH4hAHnBhQ=
+X-Google-Smtp-Source: AKy350bDyrtP17MOTW6EJmVaMdUiH/URzoiigdPqpoqt0ErN6nxGBIQhytSuOWM10W2l37Ca0o6iHQ==
+X-Received: by 2002:a25:1885:0:b0:b92:3f59:26e with SMTP id 127-20020a251885000000b00b923f59026emr8625058yby.41.1682354662203;
+        Mon, 24 Apr 2023 09:44:22 -0700 (PDT)
+Received: from ?IPV6:2600:1700:6cf8:1240:1f41:aa7b:6a04:e9ee? ([2600:1700:6cf8:1240:1f41:aa7b:6a04:e9ee])
+        by smtp.gmail.com with ESMTPSA id j1-20020a258b81000000b00b923b9e0a82sm2944946ybl.45.2023.04.24.09.44.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 09:44:21 -0700 (PDT)
+Message-ID: <f804fd67-87a9-4762-7e31-23abacdf6086@gmail.com>
+Date:   Mon, 24 Apr 2023 09:44:18 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/7] perf tools: Add util function for overriding user set
- config values
+ Thunderbird/102.10.0
+Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for
+ map_of_maps types
 Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     denik@google.com, Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
-        shy828301@gmail.com
-References: <20230424134748.228137-1-james.clark@arm.com>
- <20230424134748.228137-3-james.clark@arm.com>
- <a7940a4a-fc62-17ca-834b-73628a54cc2a@intel.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <a7940a4a-fc62-17ca-834b-73628a54cc2a@intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Xueming Feng <kuro@kuroa.me>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230424090935.52707-1-kuro@kuroa.me>
+From:   Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <20230424090935.52707-1-kuro@kuroa.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +87,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 24/04/2023 16:36, Adrian Hunter wrote:
-> On 24/04/23 16:47, James Clark wrote:
->> There is some duplicated code to only override config values if they
->> haven't already been set by the user so make a util function for this.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
+On 4/24/23 02:09, Xueming Feng wrote:
+> When using `bpftool map dump` in plain format, it is usually
+> more convenient to show the inner map id instead of raw value.
+> Changing this behavior would help with quick debugging with
+> `bpftool`, without disrupting scripted behavior. Since user
+> could dump the inner map with id, and need to convert value.
 > 
-> One minor comment, nevertheless:
+> Signed-off-by: Xueming Feng <kuro@kuroa.me>
+> ---
+> Changes in v2:
+>    - Fix commit message grammar.
+> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
+> 	  `n` to `arg_size`.
+>    - Make `print_uint` able to take any size of argument up to `unsigned long`,
+> 		and print it as unsigned decimal.
 > 
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Thanks for the review and suggestions! I have changed my patch accordingly.
+> There is a possibility that `arg_size` is larger than `unsigned long`,
+> but previous review suggested that it should be up to the caller function to
+> set `arg_size` correctly. So I didn't add check for that, should I?
 > 
-
-Thanks for the review
-
->> ---
->>  tools/perf/arch/arm64/util/arm-spe.c | 26 ++-----------------------
->>  tools/perf/arch/x86/util/intel-pt.c  | 22 ++-------------------
->>  tools/perf/util/evsel.c              | 29 ++++++++++++++++++++++++++++
->>  tools/perf/util/evsel.h              |  3 +++
->>  4 files changed, 36 insertions(+), 44 deletions(-)
->>
-[...]
->>  	}
->>  }
->> +
->> +/*
->> + * Set @config_name to @val as long as the user hasn't already set or cleared it
->> + * by passing a config term on the command line.
->> + *
->> + * @val is the value to put into the bits specified by @config_name rather than
->> + * the bit pattern. It is shifted into position by this function, so to set
->> + * something to true, pass 1 for val rather than a pre shifted value.
->> + */
->> +#define field_prep(_mask, _val) (((_val) << (ffsll(_mask) - 1)) & (_mask))
+>   tools/bpf/bpftool/main.c | 15 +++++++++++++++
+>   tools/bpf/bpftool/main.h |  1 +
+>   tools/bpf/bpftool/map.c  |  9 +++++++--
+>   3 files changed, 23 insertions(+), 2 deletions(-)
 > 
-> I notice there is already tools/include/linux/bitfield.h
-> so may FIELD_PREP from there could be used?
+> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> index 08d0ac543c67..810c0dc10ecb 100644
+> --- a/tools/bpf/bpftool/main.c
+> +++ b/tools/bpf/bpftool/main.c
+> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
+>   	return 0;
+>   }
+>   
+> +void print_uint(const void *arg, unsigned int arg_size)
+> +{
+> +	const unsigned char *data = arg;
+> +	unsigned long val = 0ul;
+> +
+> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+> +		memcpy(&val, data, arg_size);
+> +	#else
+> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
+> +		       data, arg_size);
+> +	#endif
 
-I tried that first, but it seems like quite a lot of effort went into it
-to make it work on const only values so it doesn't work here. There is
-this [1] change to make a non const one but it doesn't look like it went
-anywhere:
+Is it possible that arg_size is bigger than sizeof(val)?
 
-[1]:
-https://patchwork.kernel.org/project/linux-omap/patch/3a54a6703879d10f08cf0275a2a69297ebd2b1d4.1637592133.git.geert+renesas@glider.be/#24610749
-
+> +
+> +	fprintf(stdout, "%lu", val);
+> +}
+> +
+>   void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
+>   {
+>   	unsigned char *data = arg;
+> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+> index 0ef373cef4c7..0de671423431 100644
+> --- a/tools/bpf/bpftool/main.h
+> +++ b/tools/bpf/bpftool/main.h
+> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
+>   
+>   bool is_prefix(const char *pfx, const char *str);
+>   int detect_common_prefix(const char *arg, ...);
+> +void print_uint(const void *arg, unsigned int arg_size);
+>   void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+>   void usage(void) __noreturn;
+>   
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index aaeb8939e137..f5be4c0564cf 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+>   		}
+>   
+>   		if (info->value_size) {
+> -			printf("value:%c", break_names ? '\n' : ' ');
+> -			fprint_hex(stdout, value, info->value_size, " ");
+> +			if (map_is_map_of_maps(info->type)) {
+> +				printf("id:%c", break_names ? '\n' : ' ');
+> +				print_uint(value, info->value_size);
+> +			} else {
+> +				printf("value:%c", break_names ? '\n' : ' ');
+> +				fprint_hex(stdout, value, info->value_size, " ");
+> +			}
+>   		}
+>   
+>   		printf("\n");
