@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE82E6ED3C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427C16ED3CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 19:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjDXRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 13:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S231802AbjDXRmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 13:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjDXRmN (ORCPT
+        with ESMTP id S231748AbjDXRmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 13:42:13 -0400
-Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F082E9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 10:42:10 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id r0CUpcWVXvolhr0CUpT3DX; Mon, 24 Apr 2023 19:42:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682358129;
-        bh=RGet4KUq9B1fJpP0L51TGQdjanN5MhnW13ggXU8IDME=;
-        h=From:To:Cc:Subject:Date;
-        b=EeI3HeSgO1T+RpbkqVax1D07SQkY7niWGixqo6V6IiUhuatBwX71Rf4spa/flXjx5
-         +f2rmxEFzxNdx2EPGVUwOAVnmkEKsgI1T015mLAWqkv76eslV1Hh7azG8Zp0BDhqHX
-         SvW2kamNfl8YoUeV6Nm1roaQbjHl+uD1Z7z7QBoYHy4BsZ6P5uOPL19dCxNwJVWN68
-         f8dQ1Z1Aq0d2Ua/NQKIc/+7gpT2n7m115gwStE2Oqs/C3/3yi0liQSaNkt6HLYB5qx
-         Y1GCdFdvDb+rdJ81rz7eVQcRHcfPAUceHxtUAyHJ7bp457GTNuHQnP5j5l+EIGZ3gP
-         rQHT+QD+KjzXw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 24 Apr 2023 19:42:09 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Aloka Dixit <quic_alokad@quicinc.com>,
-        Muna Sinada <quic_msinada@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net] wifi: mac80211: Fix puncturing bitmap handling in __ieee80211_csa_finalize()
-Date:   Mon, 24 Apr 2023 19:42:04 +0200
-Message-Id: <e84a3f80fe536787f7a2c7180507efc36cd14f95.1682358088.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Apr 2023 13:42:18 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9016F83ED;
+        Mon, 24 Apr 2023 10:42:17 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-246f856d751so3417171a91.0;
+        Mon, 24 Apr 2023 10:42:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682358137; x=1684950137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z7Xt9uEIH90evzQPe7fSyIGgVAJj2Yh/Pr2NGEckxCM=;
+        b=WGC2P1dM2wRGtyJkUl+dWdKVmZ2iUiYJd8iw3xygoELLlKGQFZmPY6iuJ8AP8uEiBz
+         upjSaef5UU8CwcO0GI+VLvfqQsl6Pl1ziMu8W5dEBLaOAMMLjwpSOxMr2A3O9dpjHlUl
+         odiyevsKlGEBbRTZol0C8Bw53OOOwZ+FX3XZLWarSDidQ4FNwW5iLXdp9pbpPluJZfhM
+         arNHcrxFKK/XPXJbJrXUONK6ksqIJ0OhrFvUT5M0p85sAEpqSBsBsjDscEc4pFau6eSu
+         pj7sYCBUdOqr+so7j8WpMM/3K3Nv7at4FdsuJ39+6IJADJ+T0YGSijYB+A+aAl43cZn2
+         GJxw==
+X-Gm-Message-State: AAQBX9fID7ifcb75vNF+EOLdm47AeES9kQeCP9lJrbx6ZiFYpIBj8zKv
+        JpSaY/R1PQ5VszM9ztRTAv8=
+X-Google-Smtp-Source: AKy350Z7R6wHgAEU8CddrgRNHJKpqJqvlfxQ/bj77Rl50unombtqBT40M4SAkwqZjBLJh4fcdXGrBA==
+X-Received: by 2002:a17:90b:1d09:b0:246:b60a:290b with SMTP id on9-20020a17090b1d0900b00246b60a290bmr14395359pjb.21.1682358136879;
+        Mon, 24 Apr 2023 10:42:16 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090ae00500b002467717fa60sm6855043pjy.16.2023.04.24.10.42.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 10:42:16 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 17:42:14 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     broonie@kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Long Li <longli@microsoft.com>, Wei Liu <wei.liu@kernel.org>
+Subject: Re: linux-next: manual merge of the sysctl tree with the hyperv tree
+Message-ID: <ZEa/dj2URSx8HPG4@liuwe-devbox-debian-v2>
+References: <20230424154742.131094-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424154742.131094-1-broonie@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'changed' can be OR'ed with BSS_CHANGED_EHT_PUNCTURING which is larger than
-an u32.
-So, turn 'changed' into an u64 and update ieee80211_set_after_csa_beacon()
-accordingly.
+On Mon, Apr 24, 2023 at 04:47:42PM +0100, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the sysctl tree got a conflict in:
+> 
+>   drivers/hv/vmbus_drv.c
+> 
+> between commit:
+> 
+>   9c318a1d9b500 ("Drivers: hv: move panic report code from vmbus to hv early init code")
+> 
+> from the hyperv tree and commit:
+> 
+>   525f23fe58b59 ("hv: simplify sysctl registration")
+> 
+> from the sysctl tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc drivers/hv/vmbus_drv.c
+> index 1c65a6dfb9fae,229353f1e9c29..0000000000000
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
 
-In the commit in Fixes, only ieee80211_start_ap() was updated.
+Although this empty diff looks strange but it is indeed the correct
+resolution, since Long's patch made the same changes as 525f23fe58b59.
 
-Fixes: 2cc25e4b2a04 ("wifi: mac80211: configure puncturing bitmap")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested only.
----
- net/mac80211/cfg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/mac80211/cfg.c b/net/mac80211/cfg.c
-index 7317e4a5d1ff..c5e5f783f137 100644
---- a/net/mac80211/cfg.c
-+++ b/net/mac80211/cfg.c
-@@ -3589,7 +3589,7 @@ void ieee80211_channel_switch_disconnect(struct ieee80211_vif *vif, bool block_t
- EXPORT_SYMBOL(ieee80211_channel_switch_disconnect);
- 
- static int ieee80211_set_after_csa_beacon(struct ieee80211_sub_if_data *sdata,
--					  u32 *changed)
-+					  u64 *changed)
- {
- 	int err;
- 
-@@ -3632,7 +3632,7 @@ static int ieee80211_set_after_csa_beacon(struct ieee80211_sub_if_data *sdata,
- static int __ieee80211_csa_finalize(struct ieee80211_sub_if_data *sdata)
- {
- 	struct ieee80211_local *local = sdata->local;
--	u32 changed = 0;
-+	u64 changed = 0;
- 	int err;
- 
- 	sdata_assert_lock(sdata);
--- 
-2.34.1
-
+Thanks,
+Wei.
