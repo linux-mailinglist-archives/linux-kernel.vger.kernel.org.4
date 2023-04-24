@@ -2,82 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C479E6EC422
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249616EC424
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 05:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjDXDod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 23:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S229941AbjDXDp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 23:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjDXDoV (ORCPT
+        with ESMTP id S229478AbjDXDpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:44:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A964686
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682307755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pNCBa7OjCC7JqsI3cEfxVx1YPRoGVy6yo4FMo1YynBA=;
-        b=H3lDes96y5insWd3PYTcukwIgF+Nz8VX3cYZuRZdTBLqSGi2YL3GKXCpBgbcqetqEjz3lk
-        qsiV8XjD6Vx2RztKHToUMYpCriiMAz7wDkBd5vCPOwwGgUxQ5HOOhn1v8xkz7sLe04O/Mj
-        Ha97uaLu4zDa0X6z60LF6VjVyF6Tl9I=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-656-0Rr10zqKOBWmFIJkAVXm7w-1; Sun, 23 Apr 2023 23:42:34 -0400
-X-MC-Unique: 0Rr10zqKOBWmFIJkAVXm7w-1
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-38beee4e26cso2610998b6e.3
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 20:42:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682307753; x=1684899753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pNCBa7OjCC7JqsI3cEfxVx1YPRoGVy6yo4FMo1YynBA=;
-        b=GbP/ROZd4zzTIiP3yATf8EpjWXCzVTxvuA6zHdcbEI92qOiuS9a87Dg3aTReOhJOSe
-         6HScz7qfVKisoNqxeEkrJ6+Q9BrO9co7xJQtDSH+aeoltVTg3XFs2uQC48S2nr4FRrv1
-         zJO/eR1T+LsfR8j6JiyVus331rRB+2wj5Ymd17/xTWxbzjOjCFZ8Uf7x5r6ylz4NcmMk
-         pSpp+LEkXpaXiIkze/zVbkjS/o3outpL3tptrE2XT05oHGItCxVkN5wY+BeGocQHPFPl
-         X1vuhw4D/NgyCl5pc3nCpX/CdYyPmkxxU88Rf5YuuucpWLtJZilgeU14B7Lmr/3Jj33m
-         Fsmw==
-X-Gm-Message-State: AAQBX9evI5x7HTQiotUj59WjVa+xWKTmCatjq6fjsucb09FqEehSIske
-        2itEgmjvjUwE29zEQ44MQNS59iJWXhk2qWiiPS6PVDvGdpLAyYAX6JFxtqjQEmZuzWIp/ijJ8fE
-        QPjINIReMBlFINkDBk7x8lNgtAv/uKi3yu/lnhSq9
-X-Received: by 2002:a05:6808:196:b0:38e:67c5:50f9 with SMTP id w22-20020a056808019600b0038e67c550f9mr6166229oic.43.1682307753553;
-        Sun, 23 Apr 2023 20:42:33 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bhb4SNjD4VqfNK9W6sYOBQTejlD7JIRYQvUf3qF3wdOgposi7pfPM+x9HFPX2SdLWK6pAXYrgljD8e2NvxZbs=
-X-Received: by 2002:a05:6808:196:b0:38e:67c5:50f9 with SMTP id
- w22-20020a056808019600b0038e67c550f9mr6166217oic.43.1682307753329; Sun, 23
- Apr 2023 20:42:33 -0700 (PDT)
+        Sun, 23 Apr 2023 23:45:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609EC123;
+        Sun, 23 Apr 2023 20:45:24 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q4WC04rGHznf7m;
+        Mon, 24 Apr 2023 11:41:32 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 24 Apr 2023 11:45:22 +0800
+Message-ID: <ffed2428-7016-1431-eaea-14ac28541988@huawei.com>
+Date:   Mon, 24 Apr 2023 11:45:22 +0800
 MIME-Version: 1.0
-References: <20230419134329.346825-1-maxime.coquelin@redhat.com>
- <CACGkMEuiHqPkqYk1ZG3RZXLjm+EM3bmR0v1T1yH-ADEazOwTMA@mail.gmail.com>
- <d7530c13-f1a1-311e-7d5e-8e65f3bc2e50@redhat.com> <CACGkMEuWpHokhwvJ5cF41_C=ezqFhoOyUOposdZ5+==A642OmQ@mail.gmail.com>
- <88a24206-b576-efc6-1bce-7f5075024c63@redhat.com> <CACGkMEuZpk8QcrUQSOxqt6j3F9Ge-HdSs5-18FayMMQmH3Tcmg@mail.gmail.com>
- <CACycT3sbn=DSf0qW5RchV=FauDdn2eoMLEkRGAU3wXZZJwDsrw@mail.gmail.com>
-In-Reply-To: <CACycT3sbn=DSf0qW5RchV=FauDdn2eoMLEkRGAU3wXZZJwDsrw@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 24 Apr 2023 11:42:22 +0800
-Message-ID: <CACGkMEsUdRZEOsJX2H9b7E0uHYktm4BGkhD55Oqpwjna+Xi=vw@mail.gmail.com>
-Subject: Re: [RFC 0/2] vduse: add support for networking devices
-To:     Yongji Xie <xieyongji@bytedance.com>
-Cc:     Maxime Coquelin <maxime.coquelin@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        David Marchand <david.marchand@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Netdev <netdev@vger.kernel.org>, xuanzhuo@linux.alibaba.com,
-        Eugenio Perez Martin <eperezma@redhat.com>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+From:   Baokun Li <libaokun1@huawei.com>
+Subject: Re: [PATCH v3 3/8] ext4: use __GFP_NOFAIL if allocating
+ extents_status cannot fail
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20230412124126.2286716-1-libaokun1@huawei.com>
+ <20230412124126.2286716-4-libaokun1@huawei.com>
+ <20230413103004.a4hjlxgpfqnhcgtg@quack3>
+Content-Language: en-US
+In-Reply-To: <20230413103004.a4hjlxgpfqnhcgtg@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,139 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 4:22=E2=80=AFPM Yongji Xie <xieyongji@bytedance.com=
-> wrote:
+On 2023/4/13 18:30, Jan Kara wrote:
+> On Wed 12-04-23 20:41:21, Baokun Li wrote:
+>> If extent status tree update fails, we have inconsistency between what is
+>> stored in the extent status tree and what is stored on disk. And that can
+>> cause even data corruption issues in some cases.
+>>
+>> For extents that cannot be dropped we use __GFP_NOFAIL to allocate memory.
+>> And with the above logic, the undo operation in __es_remove_extent that
+>> may cause inconsistency if the split extent fails is unnecessary, so we
+>> remove it as well.
+>>
+>> Suggested-by: Jan Kara<jack@suse.cz>
+>> Signed-off-by: Baokun Li<libaokun1@huawei.com>
+> When I was looking through this patch, I've realized there's a problem with
+> my plan :-|. See below...
 >
-> On Sun, Apr 23, 2023 at 2:31=E2=80=AFPM Jason Wang <jasowang@redhat.com> =
-wrote:
-> >
-> > On Fri, Apr 21, 2023 at 10:28=E2=80=AFPM Maxime Coquelin
-> > <maxime.coquelin@redhat.com> wrote:
-> > >
-> > >
-> > >
-> > > On 4/21/23 07:51, Jason Wang wrote:
-> > > > On Thu, Apr 20, 2023 at 10:16=E2=80=AFPM Maxime Coquelin
-> > > > <maxime.coquelin@redhat.com> wrote:
-> > > >>
-> > > >>
-> > > >>
-> > > >> On 4/20/23 06:34, Jason Wang wrote:
-> > > >>> On Wed, Apr 19, 2023 at 9:43=E2=80=AFPM Maxime Coquelin
-> > > >>> <maxime.coquelin@redhat.com> wrote:
-> > > >>>>
-> > > >>>> This small series enables virtio-net device type in VDUSE.
-> > > >>>> With it, basic operation have been tested, both with
-> > > >>>> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
-> > > >>>> adding VDUSE support [0] using split rings layout.
-> > > >>>>
-> > > >>>> Control queue support (and so multiqueue) has also been
-> > > >>>> tested, but require a Kernel series from Jason Wang
-> > > >>>> relaxing control queue polling [1] to function reliably.
-> > > >>>>
-> > > >>>> Other than that, we have identified a few gaps:
-> > > >>>>
-> > > >>>> 1. Reconnection:
-> > > >>>>    a. VDUSE_VQ_GET_INFO ioctl() returns always 0 for avail
-> > > >>>>       index, even after the virtqueue has already been
-> > > >>>>       processed. Is that expected? I have tried instead to
-> > > >>>>       get the driver's avail index directly from the avail
-> > > >>>>       ring, but it does not seem reliable as I sometimes get
-> > > >>>>       "id %u is not a head!\n" warnings. Also such solution
-> > > >>>>       would not be possible with packed ring, as we need to
-> > > >>>>       know the wrap counters values.
-> > > >>>
-> > > >>> Looking at the codes, it only returns the value that is set via
-> > > >>> set_vq_state(). I think it is expected to be called before the
-> > > >>> datapath runs.
-> > > >>>
-> > > >>> So when bound to virtio-vdpa, it is expected to return 0. But we =
-need
-> > > >>> to fix the packed virtqueue case, I wonder if we need to call
-> > > >>> set_vq_state() explicitly in virtio-vdpa before starting the devi=
-ce.
-> > > >>>
-> > > >>> When bound to vhost-vdpa, Qemu will call VHOST_SET_VRING_BASE whi=
-ch
-> > > >>> will end up a call to set_vq_state(). Unfortunately, it doesn't
-> > > >>> support packed ring which needs some extension.
-> > > >>>
-> > > >>>>
-> > > >>>>    b. Missing IOCTLs: it would be handy to have new IOCTLs to
-> > > >>>>       query Virtio device status,
-> > > >>>
-> > > >>> What's the use case of this ioctl? It looks to me userspace is
-> > > >>> notified on each status change now:
-> > > >>>
-> > > >>> static int vduse_dev_set_status(struct vduse_dev *dev, u8 status)
-> > > >>> {
-> > > >>>           struct vduse_dev_msg msg =3D { 0 };
-> > > >>>
-> > > >>>           msg.req.type =3D VDUSE_SET_STATUS;
-> > > >>>           msg.req.s.status =3D status;
-> > > >>>
-> > > >>>           return vduse_dev_msg_sync(dev, &msg);
-> > > >>> }
-> > > >>
-> > > >> The idea was to be able to query the status at reconnect time, and
-> > > >> neither having to assume its value nor having to store its value i=
-n a
-> > > >> file (the status could change while the VDUSE application is stopp=
-ed,
-> > > >> but maybe it would receive the notification at reconnect).
-> > > >
-> > > > I see.
-> > > >
-> > > >>
-> > > >> I will prototype using a tmpfs file to save needed information, an=
-d see
-> > > >> if it works.
-> > > >
-> > > > It might work but then the API is not self contained. Maybe it's
-> > > > better to have a dedicated ioctl.
-> > > >
-> > > >>
-> > > >>>> and retrieve the config
-> > > >>>>       space set at VDUSE_CREATE_DEV time.
-> > > >>>
-> > > >>> In order to be safe, VDUSE avoids writable config space. Otherwis=
-e
-> > > >>> drivers could block on config writing forever. That's why we don'=
-t do
-> > > >>> it now.
-> > > >>
-> > > >> The idea was not to make the config space writable, but just to be=
- able
-> > > >> to fetch what was filled at VDUSE_CREATE_DEV time.
-> > > >>
-> > > >> With the tmpfs file, we can avoid doing that and just save the con=
-fig
-> > > >> space there.
-> > > >
-> > > > Same as the case for status.
-> > >
-> > > I have cooked a DPDK patch to support reconnect with a tmpfs file as
-> > > suggested by Yongji:
-> > >
-> > > https://gitlab.com/mcoquelin/dpdk-next-virtio/-/commit/53913f2b1155b0=
-2c44d5d3d298aafd357e7a8c48
-> >
-> > This seems tricky, for example for status:
-> >
-> > dev->log->status =3D dev->status;
-> >
-> > What if we crash here?
-> >
+>>   static struct extent_status *
+>>   ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
+>> -		     ext4_fsblk_t pblk)
+>> +		     ext4_fsblk_t pblk, int nofail)
+>>   {
+>>   	struct extent_status *es;
+>> -	es = kmem_cache_alloc(ext4_es_cachep, GFP_ATOMIC);
+>> +	gfp_t gfp_flags = GFP_ATOMIC;
+>> +
+>> +	if (nofail)
+>> +		gfp_flags |= __GFP_NOFAIL;
+>> +
+>> +	es = kmem_cache_alloc(ext4_es_cachep, gfp_flags);
+>>   	if (es == NULL)
+>>   		return NULL;
+> I have remembered that the combination of GFP_ATOMIC and GFP_NOFAIL is
+> discouraged because the kernel has no sane way of refilling reserves for
+> atomic allocations when in atomic context. So this combination can result
+> in lockups.
+
+Indeed. GFP_NOFAIL is only applicable to sleepable allocations,
+
+GFP_ATOMIC will ignore it. I didn't notice that.
+
+> So what I think we'll have to do is that we'll just have to return error
+> from __es_insert_extent() and __es_remove_extent() and in the callers we
+> drop the i_es_lock, allocate needed status entries (one or two depending on
+> the desired operation) with GFP_KERNEL | GFP_NOFAIL, get the lock again and
+> pass the preallocated entries into __es_insert_extent /
+> __es_remove_extent(). It's a bit ugly but we can at least remove those
+> __es_shrink() calls which are not pretty either.
 >
-> The message will be re-sent by the kernel if it's not replied. But I
-> think it would be better if we can restore it via some ioctl.
+> 								Honza
 
-Yes, the point is, without a get ioctl, it's very hard to audit the code.
+Yes, there's really no better way, thank you very much for your review!
+I've sent a patch for v4 as you suggested.
+Thanks again!
 
-Thanks
-
->
-> Thanks,
-> Yongji
->
-
+-- 
+With Best Regards,
+Baokun Li
+.
