@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CC36ED047
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 16:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DADE6ECCC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 15:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjDXOZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 10:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        id S231895AbjDXNMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 09:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjDXOZm (ORCPT
+        with ESMTP id S231871AbjDXNMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:25:42 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BBF3598;
-        Mon, 24 Apr 2023 07:25:41 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1878560f69cso3200384fac.1;
-        Mon, 24 Apr 2023 07:25:41 -0700 (PDT)
+        Mon, 24 Apr 2023 09:12:06 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364484C02;
+        Mon, 24 Apr 2023 06:11:32 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-94f7a0818aeso637131066b.2;
+        Mon, 24 Apr 2023 06:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682346340; x=1684938340;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1682341890; x=1684933890;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jS4zaQqcPkNp7M88XvyrTeX0TNUIx13eFiunuAfe8Gk=;
-        b=bWamxTgEtEPof8g2gvxIpztfjws1hLO3qmNdkgEG5wJO+NWhdycLvdemgrR0dNB7wu
-         EJCSWu4ExVsWpZNe8tHB8i8jMtxUwkO7gdTwtfR0vSi5Mvmnpm6Nd1B0yE0pSj0t6bKe
-         XuCX1IyqfnBOxJSn4k40tnOg0Sq+mifXXSzYnOTFjwaQcg9UfdHR24mw+Q2jptFb4ZtT
-         k0cvWSOQ4iY0iUcWHFNkMn24RnkkZyeswST6OfdbT6YXNDRw47XM6F4bZbnb3s5FTEq0
-         rrMg26llwtAwBV39nipsxVN/yAqCPUryroQMQ1sSRFTu0d2aYLy3UEFfI+r3mrutfM27
-         BAJg==
+        bh=hB4vLmqrAXEhyPqrrPRPZhEi6PPe2q2jqKi/upKeICI=;
+        b=NFTZ1T3/fhl+ELYxJt5m7QlLgyW7FMdMcEPW8i70HoUu2QGWb9vh5PtQxwWFYg8+cz
+         4t4hSZywST5aRR8PJPeyuR11kfnmO4RMMErTL+fPww3phz9C3Y/PMehuumKYQ6Fj6kQe
+         9IHhUrkfAOxknppvA1ufe5J+G8GGj0G2fRzhp+kEJt1qosX0/ZnE0gWWph5Vvr2mxMI4
+         SfbbGTr/mbzFy7w+jxiKgN2oz1LHVR8XuIQ4N+zPFmGPt+keA/rcCMc1FVfanujAkWjo
+         ES+jzOyUNxS5uYY4vlkaiES+v64aeFwj3v3AMlheDZs1+hrEZE6ike7rt4gLSCWjrfNb
+         fLZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682346340; x=1684938340;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682341890; x=1684933890;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jS4zaQqcPkNp7M88XvyrTeX0TNUIx13eFiunuAfe8Gk=;
-        b=RJfbkRcnKSjOPIPJ67foUAvvHKrbXbxeknPxLKo4pPhUbRV+l4C+Qn5ZKNAc/myyc8
-         j/5k6g7uwvjmNfEAEF5L1M8OWJXeScKISrbD8pyEl93wHuRkMr+l6hLJZBUmzxjgo5kT
-         KvbUyioTd1K1kaDITmodVROeIG68KsxyGQTC4D4xCDRu+kKuLV2lfBrNiFpQrnwoD6Xf
-         lFAom/qiyXRUBkbCOLl9VOR6dRyI7iTn1o155XyEcyrlxqz78P5QueIJNDsUGhL2xypV
-         THiDXimhQ99TulXYHOdTLABEqtrPIIk61w0P1FChc8bEgnUvtMxL0WXg/F/CzsLdDBYp
-         js4Q==
-X-Gm-Message-State: AAQBX9c8NTgypiHZ/yy+4P8jZ+KwnGCH/N+pj6HqIDbi1l1aMvZsPmNw
-        5BWzKEfSWhH5MACs3WM+AVY=
-X-Google-Smtp-Source: AKy350YUky1Ah+S8bAyZmQVXXdafkGtTGngGunTmbNzzsklDg7fIauaxwQQNVH9tGpcq/6GL7NFxfQ==
-X-Received: by 2002:a05:6870:214:b0:18b:1d56:b846 with SMTP id j20-20020a056870021400b0018b1d56b846mr9400542oad.48.1682346340437;
-        Mon, 24 Apr 2023 07:25:40 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id e7-20020a056870920700b0016b0369f08fsm4531014oaf.15.2023.04.24.07.25.37
+        bh=hB4vLmqrAXEhyPqrrPRPZhEi6PPe2q2jqKi/upKeICI=;
+        b=aS+lpMsHPU4Ayi9RSZfwe5jR9O3Z0r/H0niJn43cax9vM6DQYpR1zonn2eJbNW5Ah2
+         MqXy/83Lhds7EAH+lqNwszxy1bNkIkKF8scm6NSmvYvBNllnOAsPsCDl3MtkSSc9l6FT
+         BYtpYn0ZCJgMtKOUuj67BXliGfyjBizC08AwOvdJzofU1nMOs/qi0AsIj0zfNi50CTLd
+         krYObfouFsHhHNZRoA2FsmiIm4Hy8CctjuIgzn6njbzlcPICR+dc2XR+FyU77TQwwyEH
+         zo7qWMXtq35R91Lf1bByEPLfYyAP2rJswg5eA2aLZNP49hYag97YZUI+yMyH9gfKg4+S
+         GI2Q==
+X-Gm-Message-State: AAQBX9et3fwE4NEU6NGFad2/6Gm9ZZrHNruREEnZbQSewuRX6tRHy72r
+        O3cl+6mQtXYXCAqisMzY8Kc=
+X-Google-Smtp-Source: AKy350ZrV2ic3Cd14zH2ns65MgJDj0xcYyOudCju37d1qjFdKSsjZqSZ80eCWYnhfh5st3f3QooGaQ==
+X-Received: by 2002:a17:906:81d1:b0:94a:62e7:70e1 with SMTP id e17-20020a17090681d100b0094a62e770e1mr9367950ejx.68.1682341890502;
+        Mon, 24 Apr 2023 06:11:30 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::22ef? ([2620:10d:c092:600::2:6e5a])
+        by smtp.gmail.com with ESMTPSA id w27-20020a17090633db00b0094ed0370f8fsm5598217eja.147.2023.04.24.06.11.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 07:25:40 -0700 (PDT)
-Message-ID: <350adcd2-e26e-6b6c-fee5-063cf5540a52@gmail.com>
-Date:   Mon, 24 Apr 2023 10:01:23 -0300
+        Mon, 24 Apr 2023 06:11:30 -0700 (PDT)
+Message-ID: <cacd6e47-15ff-e17f-2e22-f6d5eb007b59@gmail.com>
+Date:   Mon, 24 Apr 2023 14:01:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 2/4] rust: macros: refactor generics parsing of
- `#[pin_data]` into its own function
+Subject: Re: [syzbot] [io-uring?] KCSAN: data-race in __io_fill_cqe_req /
+ io_timeout
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com>
+Cc:     axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000d7848305fa0fd413@google.com>
+ <CACT4Y+bVUkaoyp5OdzGLipof0b1+ec8xwqS+8cgvObuV0BUc5g@mail.gmail.com>
 Content-Language: en-US
-To:     Benno Lossin <benno.lossin@proton.me>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-References: <20230424081112.99890-1-benno.lossin@proton.me>
- <20230424081112.99890-2-benno.lossin@proton.me>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230424081112.99890-2-benno.lossin@proton.me>
-Content-Type: text/plain; charset=UTF-8
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CACT4Y+bVUkaoyp5OdzGLipof0b1+ec8xwqS+8cgvObuV0BUc5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
@@ -82,206 +78,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 05:11, Benno Lossin wrote:
-> Other macros might also want to parse generics. Additionally this makes
-> the code easier to read, as the next commit will introduce more code in
-> `#[pin_data]`. Also add more comments to explain how parsing generics
-> work.
+On 4/24/23 08:37, Dmitry Vyukov wrote:
+> On Mon, 24 Apr 2023 at 09:19, syzbot
+> <syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com> wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    3a93e40326c8 Merge tag 'for-linus' of git://git.kernel.org..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=1280071ec80000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=f7350c77b8056a38
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=cb265db2f3f3468ef436
+>> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+>>
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/2122926bc9fe/disk-3a93e403.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/8392992358bc/vmlinux-3a93e403.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/6398a2d19a7e/bzImage-3a93e403.xz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com
 > 
-> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
-> ---
->  rust/macros/helpers.rs  | 86 ++++++++++++++++++++++++++++++++++++++++-
->  rust/macros/pin_data.rs | 70 +++++----------------------------
->  2 files changed, 94 insertions(+), 62 deletions(-)
-> 
-> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
-> index b2bdd4d8c958..afb0f2e3a36a 100644
-> --- a/rust/macros/helpers.rs
-> +++ b/rust/macros/helpers.rs
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
-> 
-> -use proc_macro::{token_stream, Group, TokenTree};
-> +use proc_macro::{token_stream, Group, Punct, Spacing, TokenStream, TokenTree};
-> 
->  pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
->      if let Some(TokenTree::Ident(ident)) = it.next() {
-> @@ -69,3 +69,87 @@ pub(crate) fn expect_end(it: &mut token_stream::IntoIter) {
->          panic!("Expected end");
->      }
->  }
-> +
-> +pub(crate) struct Generics {
-> +    pub(crate) impl_generics: Vec<TokenTree>,
-> +    pub(crate) ty_generics: Vec<TokenTree>,
-> +}
-> +
-> +/// Parses the given `TokenStream` into `Generics` and the rest.
-> +///
-> +/// The generics are not present in the rest, but a where clause might remain.
-> +pub(crate) fn parse_generics(input: TokenStream) -> (Generics, Vec<TokenTree>) {
-> +    // `impl_generics`, the declared generics with their bounds.
-> +    let mut impl_generics = vec![];
-> +    // Only the names of the generics, without any bounds.
-> +    let mut ty_generics = vec![];
-> +    // Tokens not related to the generics e.g. the `where` token and definition.
-> +    let mut rest = vec![];
-> +    // The current level of `<`.
-> +    let mut nesting = 0;
-> +    let mut toks = input.into_iter();
-> +    // If we are at the beginning of a generic parameter.
-> +    let mut at_start = true;
-> +    for tt in &mut toks {
-> +        match tt.clone() {
-> +            TokenTree::Punct(p) if p.as_char() == '<' => {
-> +                if nesting >= 1 {
-> +                    // This is inside of the generics and part of some bound.
-> +                    impl_generics.push(tt);
-> +                }
-> +                nesting += 1;
-> +            }
-> +            TokenTree::Punct(p) if p.as_char() == '>' => {
-> +                // This is a parsing error, so we just end it here.
-> +                if nesting == 0 {
-> +                    break;
-> +                } else {
-> +                    nesting -= 1;
-> +                    if nesting >= 1 {
-> +                        // We are still inside of the generics and part of some bound.
-> +                        impl_generics.push(tt);
-> +                    }
-> +                    if nesting == 0 {
-> +                        break;
-> +                    }
-> +                }
-> +            }
-> +            tt => {
-> +                if nesting == 1 {
-> +                    // Here depending on the token, it might be a generic variable name.
-> +                    match &tt {
-> +                        // Ignore const.
-> +                        TokenTree::Ident(i) if i.to_string() == "const" => {}
-> +                        TokenTree::Ident(_) if at_start => {
-> +                            ty_generics.push(tt.clone());
-> +                            // We also already push the `,` token, this makes it easier to append
-> +                            // generics.
-> +                            ty_generics.push(TokenTree::Punct(Punct::new(',', Spacing::Alone)));
-> +                            at_start = false;
-> +                        }
-> +                        TokenTree::Punct(p) if p.as_char() == ',' => at_start = true,
-> +                        // Lifetimes begin with `'`.
-> +                        TokenTree::Punct(p) if p.as_char() == '\'' && at_start => {
-> +                            ty_generics.push(tt.clone());
-> +                        }
-> +                        _ => {}
-> +                    }
-> +                }
-> +                if nesting >= 1 {
-> +                    impl_generics.push(tt);
-> +                } else if nesting == 0 {
-> +                    // If we haven't entered the generics yet, we still want to keep these tokens.
-> +                    rest.push(tt);
-> +                }
-> +            }
-> +        }
-> +    }
-> +    rest.extend(toks);
-> +    (
-> +        Generics {
-> +            impl_generics,
-> +            ty_generics,
-> +        },
-> +        rest,
-> +    )
-> +}
-> diff --git a/rust/macros/pin_data.rs b/rust/macros/pin_data.rs
-> index 954149d77181..c593b05d9e8c 100644
-> --- a/rust/macros/pin_data.rs
-> +++ b/rust/macros/pin_data.rs
-> @@ -1,71 +1,19 @@
->  // SPDX-License-Identifier: Apache-2.0 OR MIT
-> 
-> -use proc_macro::{Punct, Spacing, TokenStream, TokenTree};
-> +use crate::helpers::{parse_generics, Generics};
-> +use proc_macro::TokenStream;
-> 
->  pub(crate) fn pin_data(args: TokenStream, input: TokenStream) -> TokenStream {
->      // This proc-macro only does some pre-parsing and then delegates the actual parsing to
->      // `kernel::__pin_data!`.
-> -    //
-> -    // In here we only collect the generics, since parsing them in declarative macros is very
-> -    // elaborate. We also do not need to analyse their structure, we only need to collect them.
-> 
-> -    // `impl_generics`, the declared generics with their bounds.
-> -    let mut impl_generics = vec![];
-> -    // Only the names of the generics, without any bounds.
-> -    let mut ty_generics = vec![];
-> -    // Tokens not related to the generics e.g. the `impl` token.
-> -    let mut rest = vec![];
-> -    // The current level of `<`.
-> -    let mut nesting = 0;
-> -    let mut toks = input.into_iter();
-> -    // If we are at the beginning of a generic parameter.
-> -    let mut at_start = true;
-> -    for tt in &mut toks {
-> -        match tt.clone() {
-> -            TokenTree::Punct(p) if p.as_char() == '<' => {
-> -                if nesting >= 1 {
-> -                    impl_generics.push(tt);
-> -                }
-> -                nesting += 1;
-> -            }
-> -            TokenTree::Punct(p) if p.as_char() == '>' => {
-> -                if nesting == 0 {
-> -                    break;
-> -                } else {
-> -                    nesting -= 1;
-> -                    if nesting >= 1 {
-> -                        impl_generics.push(tt);
-> -                    }
-> -                    if nesting == 0 {
-> -                        break;
-> -                    }
-> -                }
-> -            }
-> -            tt => {
-> -                if nesting == 1 {
-> -                    match &tt {
-> -                        TokenTree::Ident(i) if i.to_string() == "const" => {}
-> -                        TokenTree::Ident(_) if at_start => {
-> -                            ty_generics.push(tt.clone());
-> -                            ty_generics.push(TokenTree::Punct(Punct::new(',', Spacing::Alone)));
-> -                            at_start = false;
-> -                        }
-> -                        TokenTree::Punct(p) if p.as_char() == ',' => at_start = true,
-> -                        TokenTree::Punct(p) if p.as_char() == '\'' && at_start => {
-> -                            ty_generics.push(tt.clone());
-> -                        }
-> -                        _ => {}
-> -                    }
-> -                }
-> -                if nesting >= 1 {
-> -                    impl_generics.push(tt);
-> -                } else if nesting == 0 {
-> -                    rest.push(tt);
-> -                }
-> -            }
-> -        }
-> -    }
-> -    rest.extend(toks);
-> +    let (
-> +        Generics {
-> +            impl_generics,
-> +            ty_generics,
-> +        },
-> +        mut rest,
-> +    ) = parse_generics(input);
->      // This should be the body of the struct `{...}`.
->      let last = rest.pop();
->      quote!(::kernel::__pin_data! {
-> --
-> 2.40.0
-> 
-> 
+> I did not fully grasp what happens here, but it looks suspicious.
+> The comment in io_timeout() says that it computes "events that need to
+> occur for this timeout event to be satisfied". But if the range is
+> racing, it marks a random set of events?
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Right, it's random in a good bunch of cases. There has never been
+a fixed semantics for how it's supposed to work, i.e. cqe caching
+infra should have changed it back in the day.
+
+The good news, I don't think anyone uses it, and the worst case
+scenario is userspace hangs on waiting. I'll drop data_race() /
+spinlocks to make syzbot happy and would also say that we need
+to deprecate and eventually to root it out.
+
+
+>> ==================================================================
+>> BUG: KCSAN: data-race in __io_fill_cqe_req / io_timeout
+>>
+>> read-write to 0xffff888108bf8310 of 4 bytes by task 20447 on cpu 0:
+>>   io_get_cqe_overflow io_uring/io_uring.h:112 [inline]
+>>   io_get_cqe io_uring/io_uring.h:124 [inline]
+>>   __io_fill_cqe_req+0x6c/0x4d0 io_uring/io_uring.h:137
+>>   io_fill_cqe_req io_uring/io_uring.h:165 [inline]
+>>   __io_req_complete_post+0x67/0x790 io_uring/io_uring.c:969
+>>   io_req_complete_post io_uring/io_uring.c:1006 [inline]
+>>   io_req_task_complete+0xb9/0x110 io_uring/io_uring.c:1654
+>>   handle_tw_list io_uring/io_uring.c:1184 [inline]
+>>   tctx_task_work+0x1fe/0x4d0 io_uring/io_uring.c:1246
+>>   task_work_run+0x123/0x160 kernel/task_work.c:179
+>>   get_signal+0xe5c/0xfe0 kernel/signal.c:2635
+>>   arch_do_signal_or_restart+0x89/0x2b0 arch/x86/kernel/signal.c:306
+>>   exit_to_user_mode_loop+0x6d/0xe0 kernel/entry/common.c:168
+>>   exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:204
+>>   __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+>>   syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+>>   do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> read to 0xffff888108bf8310 of 4 bytes by task 20448 on cpu 1:
+>>   io_timeout+0x88/0x270 io_uring/timeout.c:546
+>>   io_issue_sqe+0x147/0x660 io_uring/io_uring.c:1907
+>>   io_queue_sqe io_uring/io_uring.c:2079 [inline]
+>>   io_submit_sqe io_uring/io_uring.c:2340 [inline]
+>>   io_submit_sqes+0x689/0xfe0 io_uring/io_uring.c:2450
+>>   __do_sys_io_uring_enter io_uring/io_uring.c:3458 [inline]
+>>   __se_sys_io_uring_enter+0x1e5/0x1b70 io_uring/io_uring.c:3392
+>>   __x64_sys_io_uring_enter+0x78/0x90 io_uring/io_uring.c:3392
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-- 
+Pavel Begunkov
