@@ -2,180 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3CC6EC5C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 07:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDB96EC5D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 08:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjDXF5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 01:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S230293AbjDXGBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 02:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjDXF5K (ORCPT
+        with ESMTP id S231551AbjDXGAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 01:57:10 -0400
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC49B3599;
-        Sun, 23 Apr 2023 22:56:35 -0700 (PDT)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Q4ZB038G5z4y3PL;
-        Mon, 24 Apr 2023 13:55:52 +0800 (CST)
-Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
-        by mse-fl1.zte.com.cn with SMTP id 33O5tib1097567;
-        Mon, 24 Apr 2023 13:55:44 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Mon, 24 Apr 2023 13:55:46 +0800 (CST)
-Date:   Mon, 24 Apr 2023 13:55:46 +0800 (CST)
-X-Zmail-TransId: 2b03644619e25da-ae8a1
-X-Mailer: Zmail v1.0
-Message-ID: <202304241355464262541@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <davem@davemloft.net>, <willemdebruijn.kernel@gmail.com>
-Cc:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <shuah@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhang.yunkai@zte.com.cn>, <yang.yang29@zte.com.cn>,
-        <xu.xin16@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjNdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfcng6IEZpeCB2ZXJpZnR5IGV4Y2VwdGlvbnM=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 33O5tib1097567
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 644619E8.002/4Q4ZB038G5z4y3PL
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 02:00:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FF640C3;
+        Sun, 23 Apr 2023 22:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682315991; x=1713851991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7fZxlv44jx7mpWlQVRHk0kqq7SqXLfuv7cMllKv067w=;
+  b=kj/xMrNo57ATj7E0J6djSwhgAEehMHhXiGpTfTyxewtgHAnALd6QMIp8
+   L6ByLn0jnra2b+GKOnW4Pgh+mhj9V5APUebYV6Q6Y854sEDyg+IYsAeiS
+   VODtNwV4EmkadFEpujHEuLREsi9/YLZyRIN/2eI2gcF8Ebfsgoo9L2/75
+   QaJys75gAsHLuTLVCnsLw150Ds/baRGH+23JNjVtWHbOMwqGQKXgg1JJW
+   eMNNajA+HIjJcZKCuqr3jxP7zD+d5+lqDWxm15Q3AHgG6mx5pFUuksscO
+   /mm/wc77WIqO+awQozqnVJE0R7kp1hTcCqDWKwHRY3BUjdw667CGo4xjH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="345126010"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="345126010"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 22:58:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="762292510"
+X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
+   d="scan'208";a="762292510"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2023 22:58:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id DF02F11D; Mon, 24 Apr 2023 08:58:51 +0300 (EEST)
+Date:   Mon, 24 Apr 2023 08:58:51 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
+        Sanju.Mehta@amd.com, Takashi Iwai <tiwai@suse.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Clear registers properly when auto clear
+ isn't in use
+Message-ID: <20230424055851.GR66750@black.fi.intel.com>
+References: <20230421140725.495-1-mario.limonciello@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230421140725.495-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+Hi Mario,
 
-The verification function of this test case is likely to encounter the
-following error, which may confuse users. The problem is easily
-reproducible in the latest kernel.
+On Fri, Apr 21, 2023 at 09:07:24AM -0500, Mario Limonciello wrote:
+> When `QUIRK_AUTO_CLEAR_INT` isn't set, interrupt masking should be
+> cleared by writing to Interrupt Mask Clear (IMR) and interrupt
+> status should be cleared properly at shutdown/init.
+> 
+> This fixes an error where interrupts are left enabled during resume
+> from hibernation with `CONFIG_USB4=y`.
+> 
+> Fixes: 468c49f44759 ("thunderbolt: Disable interrupt auto clear for rings")
+> Reported-by: Takashi Iwai <tiwai@suse.de>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217343
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Takashi Iwai <tiwai@suse.de>
+> ---
+> I tried to base this off thunderbolt.git/next (tag: thunderbolt-for-v6.4-rc1)
+> but the following 3 commits are missing from that branch but are in 6.3-rc7:
+> 
+> 58cdfe6f58b3 thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
+> 468c49f44759 thunderbolt: Disable interrupt auto clear for rings
+> 1716efdb0793 thunderbolt: Use const qualifier for `ring_interrupt_index`
+> 
+> I cherry picked them first as this patch builds on them.
 
-Environment A, the sender:
-bash# udpgso_bench_tx -l 4 -4 -D "$IP_B"
-udpgso_bench_tx: write: Connection refused
+Okay, so if I take this after v6.4-rc1 is released and send it forward
+to for -rc2 Greg it should apply just fine?
 
-Environment B, the receiver:
-bash# udpgso_bench_rx -4 -G -S 1472 -v
-udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
+> ---
+>  drivers/thunderbolt/nhi.c      | 28 +++++++++++++++++++++-------
+>  drivers/thunderbolt/nhi_regs.h |  1 +
+>  2 files changed, 22 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+> index d76e923fbc6a..7c543a6a5711 100644
+> --- a/drivers/thunderbolt/nhi.c
+> +++ b/drivers/thunderbolt/nhi.c
+> @@ -61,8 +61,9 @@ static int ring_interrupt_index(const struct tb_ring *ring)
+>   */
+>  static void ring_interrupt_active(struct tb_ring *ring, bool active)
+>  {
+> -	int reg = REG_RING_INTERRUPT_BASE +
+> -		  ring_interrupt_index(ring) / 32 * 4;
+> +	int index = ring_interrupt_index(ring) / 32 * 4;
+> +	int reg = REG_RING_INTERRUPT_BASE + index;
+> +	int clear = REG_RING_INTERRUPT_MASK_CLEAR_BASE + index;
+>  	int interrupt_bit = ring_interrupt_index(ring) & 31;
+>  	int mask = 1 << interrupt_bit;
+>  	u32 old, new;
+> @@ -123,7 +124,11 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
+>  					 "interrupt for %s %d is already %s\n",
+>  					 RING_TYPE(ring), ring->hop,
+>  					 active ? "enabled" : "disabled");
+> -	iowrite32(new, ring->nhi->iobase + reg);
+> +
+> +	if (active)
+> +		iowrite32(new, ring->nhi->iobase + reg);
+> +	else
+> +		iowrite32(mask, ring->nhi->iobase + clear);
 
-If the packet is captured, you will see:
-Environment A, the sender:
-bash# tcpdump -i eth0 host "$IP_B" &
-IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
-IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
-IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+Since it is doing this for all hardware, even for Intel, I will need to
+run some testing to make sure this still works.
 
-Environment B, the receiver:
-bash# tcpdump -i eth0 host "$IP_B" &
-IP $IP_A.41025 > $IP_B.8000: UDP, length 7360
-IP $IP_A.41025 > $IP_B.8000: UDP, length 14720
-IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+>  }
+>  
+>  /*
+> @@ -135,12 +140,21 @@ static void nhi_disable_interrupts(struct tb_nhi *nhi)
+>  {
+>  	int i = 0;
+>  	/* disable interrupts */
+> -	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++)
+> -		iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
+> +	for (i = 0; i < RING_INTERRUPT_REG_COUNT(nhi); i++) {
+> +		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
+> +			iowrite32(0, nhi->iobase + REG_RING_INTERRUPT_BASE + 4 * i);
+> +		else
+> +			iowrite32(0xffffffff,
 
-In one test, the verification data is printed as follows:
-abcd...xyz           | 1...
-..                  |
-abcd...xyz           |
-abcd...opabcd...xyz  | ...1472... Not xyzabcd, messages are merged
-..                  |
+~0
 
-The issue is that the test on receive for expected payload pattern 
-{AB..Z}+ fail for GRO packets if segment payload does not end on a Z.
+> +				  nhi->iobase + REG_RING_INTERRUPT_MASK_CLEAR_BASE + 4 * i);
 
-The issue still exists when using the GRO with -G, but not using the -S
-to obtain gsosize. Therefore, a print has been added to remind users.
+Btw, we have now quite many places with
 
-Changes in v3:
-- Simplify description and adjust judgment order.
+	if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
+		// Intel stuff
+	else
+		// non-Intel stuff
 
-Changes in v2:
-- Fix confusing descriptions.
+I wonder if we could move these behind a wrapper and then here (and
+similar places) just call
 
-Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-Reviewed-by: Xu Xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
-Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
----
- tools/testing/selftests/net/udpgso_bench_rx.c | 34 +++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 5 deletions(-)
+	nhi_mask_interrupt(nhi, ...)
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-index f35a924d4a30..3ad18cbc570d 100644
---- a/tools/testing/selftests/net/udpgso_bench_rx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-@@ -189,26 +189,45 @@ static char sanitized_char(char val)
- 	return (val >= 'a' && val <= 'z') ? val : '.';
- }
 
--static void do_verify_udp(const char *data, int len)
-+static void do_verify_udp(const char *data, int start, int len)
- {
--	char cur = data[0];
-+	char cur = data[start];
- 	int i;
+> +	}
+>  
+>  	/* clear interrupt status bits */
+> -	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++)
+> -		ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
+> +	for (i = 0; i < RING_NOTIFY_REG_COUNT(nhi); i++) {
+> +		if (nhi->quirks & QUIRK_AUTO_CLEAR_INT)
+> +			ioread32(nhi->iobase + REG_RING_NOTIFY_BASE + 4 * i);
+> +		else
+> +			iowrite32(0xffffffff, nhi->iobase + REG_RING_INT_CLEAR + 4 * i);
 
- 	/* verify contents */
- 	if (cur < 'a' || cur > 'z')
- 		error(1, 0, "data initial byte out of range");
+~0
 
--	for (i = 1; i < len; i++) {
-+	for (i = start + 1; i < start + len; i++) {
- 		if (cur == 'z')
- 			cur = 'a';
- 		else
- 			cur++;
+	nhi_clear_interrupt(nhi, ...)
 
--		if (data[i] != cur)
-+		if (data[i] != cur) {
-+			if (cfg_gro_segment && !cfg_expected_gso_size)
-+				error(0, 0, "Use -S to obtain gsosize to guide "
-+					"splitting and verification.");
-+
- 			error(1, 0, "data[%d]: len %d, %c(%hhu) != %c(%hhu)\n",
- 			      i, len,
- 			      sanitized_char(data[i]), data[i],
- 			      sanitized_char(cur), cur);
-+		}
-+	}
-+}
-+
-+static void do_verify_udp_gro(const char *data, int len, int segment_size)
-+{
-+	int start = 0;
-+
-+	while (len - start > 0) {
-+		if (len - start > segment_size)
-+			do_verify_udp(data, start, segment_size);
-+		else
-+			do_verify_udp(data, start, len - start);
-+
-+		start += segment_size;
- 	}
- }
+> +	}
+>  }
+>  
+>  /* ring helper methods */
+> diff --git a/drivers/thunderbolt/nhi_regs.h b/drivers/thunderbolt/nhi_regs.h
+> index faef165a919c..db95ad5d2814 100644
+> --- a/drivers/thunderbolt/nhi_regs.h
+> +++ b/drivers/thunderbolt/nhi_regs.h
+> @@ -92,6 +92,7 @@ struct ring_desc {
+>   */
+>  #define REG_RING_INTERRUPT_BASE	0x38200
+>  #define RING_INTERRUPT_REG_COUNT(nhi) ((31 + 2 * nhi->hop_count) / 32)
 
-@@ -268,7 +287,12 @@ static void do_flush_udp(int fd)
- 			if (ret == 0)
- 				error(1, errno, "recv: 0 byte datagram\n");
+Empty line here.
 
--			do_verify_udp(rbuf, ret);
-+			if (!cfg_gro_segment)
-+				do_verify_udp(rbuf, 0, ret);
-+			else if (gso_size > 0)
-+				do_verify_udp_gro(rbuf, ret, gso_size);
-+			else
-+				do_verify_udp_gro(rbuf, ret, ret);
- 		}
- 		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
- 			error(1, 0, "recv: bad gso size, got %d, expected %d "
--- 
-2.15.2
+> +#define REG_RING_INTERRUPT_MASK_CLEAR_BASE	0x38208
+>  
+>  #define REG_INT_THROTTLING_RATE	0x38c00
+>  
+> -- 
+> 2.34.1
