@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C076EC343
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF816EC346
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Apr 2023 02:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjDXARS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Apr 2023 20:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S230219AbjDXA3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Apr 2023 20:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjDXARN (ORCPT
+        with ESMTP id S229559AbjDXA3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Apr 2023 20:17:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D771BAA
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Apr 2023 17:17:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682295431; x=1713831431;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=zQzAyc+oLBHOEgweof17wjj2fy/1ScIcJB+YP8+nzTQ=;
-  b=anVtz89ImrfgENVeGigQhcMz6rSIzR4jpNADDbxqZLejj3O+/vnU0o8U
-   KY+G0jcPEWddi75widwYTcCLrPF4RfPS8WniW6blUzFeEqb/U2Yy7sk4M
-   c56w9TE9RAmk/LP7tYoEhTVG4LgCYOsdTVzhKcFwh/7LjWrMZp2k84INW
-   gXWvLG4aErsCbjPaeTfCdotKz3kGxpuBXgHz7V0Ge/ckfNuYr6anL+miD
-   onldWkRQ89sGxKxXNui5PutWIkNsFJMV9yZpleEFgQ8ZaEwjSkcDxdIoS
-   6vNrmDzAmsFzp1Ry5/0qdLIo4qflfAFVWxnpxcx+TpJIOXwlpggRtXJR2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="411605283"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="411605283"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 17:17:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="1022502126"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="1022502126"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Apr 2023 17:17:10 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     x86@kernel.org
-Cc:     Andreas Herrmann <aherrmann@suse.com>,
-        Chen Yu <yu.c.chen@intel.com>, Len Brown <len.brown@intel.com>,
-        Pu Wen <puwen@hygon.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v2 2/2] x86/cacheinfo: Clean out init_cache_level()
-Date:   Sun, 23 Apr 2023 17:19:56 -0700
-Message-Id: <20230424001956.21434-3-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230424001956.21434-1-ricardo.neri-calderon@linux.intel.com>
-References: <20230424001956.21434-1-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Sun, 23 Apr 2023 20:29:40 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1293F10F9;
+        Sun, 23 Apr 2023 17:29:40 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a920d484bdso32648585ad.1;
+        Sun, 23 Apr 2023 17:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682296179; x=1684888179;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oeCWAVpzUlJENHWgzzWvjGxllx4bMHHuluovnvNmeI8=;
+        b=pOifgzaZkQGFdRfYtPluK6fpoGzUUcKWgl/jLW1k0aoy5da3TAQivph8S09dNSeH/1
+         FNFO3GlDeD5fzZevt83hSennlHtl4K+opjmYNhO/uc3Fy7FTwstAdKZFzS7VQM+FVDMg
+         yl9kAkFuYayDB1vnd8QXMmNndx7rzd42u/dQp1giaFeAHCGOOHbb+L4y+JFadEfQ1JVg
+         G03x9WeITYQYrXmMrlDV42H6aawNl7CBzTRbgdOeUXU6W0cCfF7+UUp1ru2PnvPs3Y7V
+         ScS+DZEjI6/5lpGy+UOa3KxfAhdLhz2fwdA3CsC3/UyNWS+c27C/NSAFUECf8GaObtYm
+         xswQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682296179; x=1684888179;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oeCWAVpzUlJENHWgzzWvjGxllx4bMHHuluovnvNmeI8=;
+        b=G8Vc4xzwUgSyMsSmP6964bH31hE+u6rjDwVF7X1jpw7seIIjfodCeXr5XfjmfwLH8T
+         wb9d3ik6eANc9IhUY+U3OCs7MYwHN4pGpcOc5ELpV8w5c0cciLjD+kYs9LQU+WApkaWC
+         nicm72rTZKYWYqNuNBHKJfan7sSIQ5HXlVxhrGtyLXbPY2HUAhYtoENWRZhfykdCFArn
+         RJGhQu1YqwWQbxqC8kCDzmfx5xY9x+fU3P//t1+48Ia+Cpbz2F+j4R4xOM4SaXNeDj0B
+         Bd/wsLo/OyTBiW/9l9D7nabjhvkIHdgjEsKmA+iGucFLhlO4sgt2g5akX40+BRF8X+wF
+         n32Q==
+X-Gm-Message-State: AAQBX9c0p4d0hSmgfeunTAuE8iL1mxc1HYF47BPYSlYqLOskU0mJZgxe
+        DkpgAFn0e9lQdVCFEnWhFPYOdaQBZfsngL4D
+X-Google-Smtp-Source: AKy350ZdpKltLt9kzHE3o9pOo2G6n4EUTIdv8tOCpeCWYXPq5ADvPr/6tDjKToTUVvb+w6dV3NYq9A==
+X-Received: by 2002:a17:903:228d:b0:1a8:1d1e:407b with SMTP id b13-20020a170903228d00b001a81d1e407bmr15543230plh.64.1682296179029;
+        Sun, 23 Apr 2023 17:29:39 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.213.199])
+        by smtp.gmail.com with ESMTPSA id z2-20020a170902708200b001a19196af48sm5499577plk.64.2023.04.23.17.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 17:29:38 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] crypto: engine - Fix struct crypto_engine_op doc
+Date:   Mon, 24 Apr 2023 08:29:24 +0800
+Message-Id: <20230424002925.2740296-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-init_cache_level() no longer has a purpose on x86. It no longer needs to
-set num_leaves, and it never had to set num_levels, which was unnecessary
-on x86.
+Remove redundant underscore and fix some grammar in prepare_request doc.
 
-Replace it with "return 0" simply to override the weak function, which
-would return an error.
-
-Cc: Andreas Herrmann <aherrmann@suse.com>
-Cc: Chen Yu <yu.c.chen@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pu Wen <puwen@hygon.cn>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/b58dc77c-c975-46cf-581c-368d9a87ae64@infradead.org
+Signed-off-by: David Yang <mmyangfl@gmail.com>
 ---
-Changes since v1:
- * Introduced this patch.
----
- arch/x86/kernel/cpu/cacheinfo.c | 5 -----
- 1 file changed, 5 deletions(-)
+ include/crypto/engine.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 45c4e9daf3f1..454247e459b1 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -1006,11 +1006,6 @@ static void ci_leaf_init(struct cacheinfo *this_leaf,
+diff --git a/include/crypto/engine.h b/include/crypto/engine.h
+index ae133e98d813..2038764b30c2 100644
+--- a/include/crypto/engine.h
++++ b/include/crypto/engine.h
+@@ -78,7 +78,7 @@ struct crypto_engine {
  
- int init_cache_level(unsigned int cpu)
- {
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
--
--	if (!this_cpu_ci)
--		return -EINVAL;
--	this_cpu_ci->num_levels = 3;
- 	return 0;
- }
- 
+ /*
+  * struct crypto_engine_op - crypto hardware engine operations
+- * @prepare__request: do some prepare if need before handle the current request
++ * @prepare_request: do some preparation if needed before handling the current request
+  * @unprepare_request: undo any work done by prepare_request()
+  * @do_one_request: do encryption for current request
+  */
 -- 
-2.25.1
+2.39.2
 
