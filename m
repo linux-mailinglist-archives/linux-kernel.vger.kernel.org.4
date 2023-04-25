@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22CC6EE0FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A3E6EE104
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbjDYLO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S233805AbjDYLUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbjDYLOt (ORCPT
+        with ESMTP id S233451AbjDYLUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:14:49 -0400
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B395A9;
-        Tue, 25 Apr 2023 04:14:46 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1682421284; bh=vrTSialJD2Li5vjQDpn9fTzt12D3cKs5drm5QZYYqCY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OrJABxrUwNHh6hEAw5k6Y80NDr8Y6rSn1mDeNMtSZmK65oiBYVB6RNr6fmpzYw8PV
-         NT32YOiek5iwEUoqbIAwkT3EsBROUL9aZFcwcjh+Mqmb3YmfmebnI4hbZlklYE0HLq
-         oTl4+NbXXMelRk8u+tVOcpCQM/jZG06MMFc+FZXW4WzD3n37mK8p9IbPFPN78txUxn
-         MuH2zDuAjmWidmU7lY4QJmP2c5h0wbXkS4HkFFthaX5y/JMceqfs+FqP7c2pYFynil
-         NkImXfAXBR6eg7oFkiKHbIZrZVw4AZ+/QkiuHEHWJ0Wxd+8LQ0QA2nbxtX69C+MMuZ
-         OE23MS4NTyK0g==
-To:     Fedor Pchelkin <pchelkin@ispras.ru>, Kalle Vallo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] wifi: ath9k: avoid referencing uninit memory in
- ath9k_wmi_ctrl_rx
-In-Reply-To: <20230424183348.111355-1-pchelkin@ispras.ru>
-References: <20230424183348.111355-1-pchelkin@ispras.ru>
-Date:   Tue, 25 Apr 2023 13:14:43 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87sfcojjrw.fsf@toke.dk>
+        Tue, 25 Apr 2023 07:20:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DD8196;
+        Tue, 25 Apr 2023 04:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WYHkmc6gK/GgjTHZCT7HG42OoUHKVnX5JUVMg0hbRso=; b=QfNLhB5DzekLEkai9G6ZF7BUOm
+        rQv3+I3XgNSEw7nvwc9WNDionRYGlF9vk8vrQscnfDFJ2/K3Co8XBTPNqkc8s6sX6deOARg6TAYF8
+        xq+8BWEsobA86UyX+9n4CW1Imth1Fb3xWkH+cEwG6/8jxULJA9y4kO9eeCQnagW8X+Fd7aDGKXzMo
+        7A5AIoGuUfcKyPJC623/r0rGxC9eM+XI1hvcLkX0ezWwmPNApOp28NbbX9m+1u+2YTYybQovSoKyH
+        ZsMRYRHUyJ86HM56eZkpjxyk3qNhCqrBte3jgepxUuoF0zICPQ+x3kE+3q+MaYn555wOk3rfopS7g
+        uH9Yr3fA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1prGiE-001Ntn-2s; Tue, 25 Apr 2023 11:19:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3114C300380;
+        Tue, 25 Apr 2023 13:19:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 09882241B9566; Tue, 25 Apr 2023 13:19:56 +0200 (CEST)
+Date:   Tue, 25 Apr 2023 13:19:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     kan.liang@linux.intel.com, oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, eranian@google.com, ak@linux.intel.com
+Subject: Re: [PATCH V4 2/2] perf/x86/intel/ds: Delay the threshold update
+Message-ID: <20230425111955.GB1335080@hirez.programming.kicks-ass.net>
+References: <20230421184529.3320912-2-kan.liang@linux.intel.com>
+ <202304251457.d108dbb3-yujie.liu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202304251457.d108dbb3-yujie.liu@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +60,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fedor Pchelkin <pchelkin@ispras.ru> writes:
+On Tue, Apr 25, 2023 at 03:16:29PM +0800, kernel test robot wrote:
+> Hello,
+> 
+> kernel test robot noticed "Kernel_panic-not_syncing:Timeout:Not_all_CPUs_entered_broadcast_exception_handler" on:
+> 
+> commit: a17c97370d1fb9b2eac75c85136a1f70ec44eded ("[PATCH V4 2/2] perf/x86/intel/ds: Delay the threshold update")
+> url: https://github.com/intel-lab-lkp/linux/commits/kan-liang-linux-intel-com/perf-x86-intel-ds-Delay-the-threshold-update/20230422-024743
+> base: https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git 15def34e2635ab7e0e96f1bc32e1b69609f14942
+> patch link: https://lore.kernel.org/all/20230421184529.3320912-2-kan.liang@linux.intel.com/
+> patch subject: [PATCH V4 2/2] perf/x86/intel/ds: Delay the threshold update
+> 
 
-> For the reasons also described in commit b383e8abed41 ("wifi: ath9k: avoid
-> uninit memory read in ath9k_htc_rx_msg()"), ath9k_htc_rx_msg() should
-> validate pkt_len before accessing the SKB.
->
-> For example, the obtained SKB may have been badly constructed with
-> pkt_len =3D 8. In this case, the SKB can only contain a valid htc_frame_h=
-dr
-> but after being processed in ath9k_htc_rx_msg() and passed to
-> ath9k_wmi_ctrl_rx() endpoint RX handler, it is expected to have a WMI
-> command header which should be located inside its data payload.=20
->
-> Implement sanity checking inside ath9k_wmi_ctrl_rx(). Otherwise, uninit
-> memory can be referenced.
->
-> Tested on Qualcomm Atheros Communications AR9271 802.11n .
->
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
->
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-and-tested-by: syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail=
-.com
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> [  224.064675][   C84] mce: CPUs not responding to MCE broadcast (may include false positives): 0-83,85-223
+> [  224.064681][   C84] Kernel panic - not syncing: Timeout: Not all CPUs entered broadcast exception handler
+> [  225.089881][   C84] Shutting down cpus with NMI
+> [  225.129381][   C84] Kernel Offset: disabled
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+That seems very unrelated to the patch at hand; was this bisect double
+checked?
