@@ -2,139 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E006EE50B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EEB6EE50F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234204AbjDYPwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 11:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S234595AbjDYPzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 11:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234585AbjDYPwx (ORCPT
+        with ESMTP id S234518AbjDYPzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 11:52:53 -0400
-Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65A435AC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 08:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682437965;
-        bh=JlYbbOs6z6hz+QzmnaXvi+VrUzPthQqcCo2R3Rs46yk=;
-        h=From:To:Cc:Subject:Date;
-        b=N4zKowrp+DkgWYGqEn2ck72aJy+qhilu/hQKZ7Sx6sipgx4v3DOCukeRfUUpTe+ah
-         FJuPEQFweQTs+JMagWqVNPG16tRI8UQ2p19/KhdzgW6wkBFzsIvnQWeEHgK36b0Ya8
-         OxmAhdzjPUUiwduhQ/VQx9S1zgIoiIu+w4JMsyPQ=
-Received: from wen-VirtualBox.lan ([106.92.97.36])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id D2AA7EF8; Tue, 25 Apr 2023 23:52:42 +0800
-X-QQ-mid: xmsmtpt1682437962trnudvj3a
-Message-ID: <tencent_DFF54DB2A60F3333F97D3F6B5441519B050A@qq.com>
-X-QQ-XMAILINFO: NCCl67D2lQ93xU+TdbuXKJH9/3z14+g0kHC1RIf5AlMXcdy0ey+UTbsytNU0Yl
-         aMMJYE5gEOmNuwFfF+cwQOGgOXWyDvGp36YYooRoKboBuwPGO3Wn83IaRNgFNvDdptpObrbIAt/1
-         qWJatIVZsc3QP0Dy+WedF/p5rx9cG7MiErCUfACU8HXsjZOs+NXOxVkj3kYR+ee8Zdc9VWIaEGrC
-         NgibYn/UXRxUddF+azICdYkcXhFhbQe+X0h6WyqHCkxETfq4Yu7rBgSxzoqC7B76ZLJtLkanU+gz
-         gQQQmgZ6bDk20hYaxwQafdK6Y9ifN1uGdLVIQpX/NWi7ao4RgnR0qykqMAchh1GDT4e7wY/tNISJ
-         dV+1jKUrn9XWul0arhNL5HiTpTqOfUWWHa1f0O2D0ZpXzdHzTIjFNqyowYn6z+MMQUpbtQZXAuRA
-         nKQxuRHnfCtGUV0+7oPO3SUWy5KZFRMRADiu+x4Cezxr5u85WrWiuUsH1/mUPN5LhEbhB7J217fs
-         wE7dJCGoXjz1b9v0cLkbbKs8y/Lmd6jArWKjHHqvB2lMV8IFYM0akbBawuc09tE1RNFNWRD8muto
-         SWr8BArpbJ4KLLZPMYDHlESkWTdmucv0RSkLTSNoliw1OSwOVQOHxVDak9ZrLHGybYV3DXc3LsX5
-         JWqkPzohmXZgv8Sw4M/gY/A0quqtewWr4f1+hGoWsJ3tmhzKRpCPpJmErvXOjCsyYfPoPfnyiORB
-         LCnwZiB3V74DeTRtounqdVFaaJzC7yGsdY1n4nnT3aZpMPtJsC3nD+uau4G+b41NaUlu9B2p9ZSf
-         8npIHfvwL+eKite+dbMk22lkdNUDlqp68aaFPQ7NDs2EYctDQdXC2RGdODb36AcKHoJlcUS6v3Yv
-         8z5uSa0Q9+PS/g8ScwQFNvOZRzzoA/EB0ADDxw/7LuOGSDqHWNgJXxIjxjKI6SXk18xfzphQsQba
-         4ZUZoxlCwNEE0Tns3AYuSBG0MvyLnDVwYtF74M2Lq5TG0y8gEjHI+Kb43daO2pLJ99fyvnKr8ZtY
-         JUu4/4nkFzAsehKfplPQYTIkl0zlJ82c7NtvIVG/jXcSmblRZYtBHoSL45EqMOiwJCMqRYoQ==
-From:   wenyang.linux@foxmail.com
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Wen Yang <wenyang.linux@foxmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        William Lam <william.lam@bytedance.com>,
-        Pintu Kumar <pintu@codeaurora.org>, Fu Wei <wefu@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mm: compaction: optimize compact_memory to comply with the admin-guide
-Date:   Tue, 25 Apr 2023 23:52:35 +0800
-X-OQ-MSGID: <20230425155235.1020-1-wenyang.linux@foxmail.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 25 Apr 2023 11:55:44 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A610EF;
+        Tue, 25 Apr 2023 08:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682438143; x=1713974143;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SctoAXA82p6ubya8177iIuP6SefhFaRORUGaErkssiQ=;
+  b=j1A4Zi1dtQUrrXAGn6g4YxgkSpk7BpXd0QiYWz55kqqe/973hg6FBGxd
+   SWVd17tZQZ7wcPTJmRMDgnBdieo7ApFpaF9rGCtOi7E88yPpRIQF6/p0q
+   Twb+iLQCr4P65T8sfeOoNa07rFoNNDU7FON8TRRcinj19pdhrWbiSSxbQ
+   ISabc7xmQb3+obIFQirU3PJM8nLOqRUqJQjBGtljjTqgcp8p52mUN625a
+   o8XO3JaEeoxY3nhTiZEopCHTSFtILhtIeHIz9vYPpel0k2t+drUDhHue2
+   FmsbK3oBFEdZUy8OioGVumxGV0wKQE990IfBg4MspTZodeVDG0WloETOW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="409763407"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="409763407"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 08:55:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="1023186397"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="1023186397"
+Received: from gbelvis-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.26.247])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 08:55:13 -0700
+Message-ID: <2bd0143cf0e638c88f57409f854c0529a1b12b6b.camel@linux.intel.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: pci-ish:  Fix use after free bug in
+  ish_remove due to race condition
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, rafael@kernel.org,
+        hdegoede@redhat.com, gregkh@linuxfoundation.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
+Date:   Tue, 25 Apr 2023 08:55:12 -0700
+In-Reply-To: <20230412171441.18958-1-zyytlz.wz@163.com>
+References: <20230412171441.18958-1-zyytlz.wz@163.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Yang <wenyang.linux@foxmail.com>
+On Thu, 2023-04-13 at 01:14 +0800, Zheng Wang wrote:
+> In ish_probe, it calls ish_dev_init to init the device. In this
+> function,
+> ishtp_device_init is called and &dev->bh_hbm_work is bound with 
+> bh_hbm_work_fn. recv_hbm may be called to start the timer work.
+> 
+> If we remove the module which will call ish_remove to make cleanup,
+> there may be an unfinished work. The possible sequence is as follows:
+> 
+> Fix it by canceling the work before cleanup in
+> ishtp_bus_remove_all_clients
+> 
+> CPU0                  CPUc1
+> 
+>                     |bh_hbm_work_fn
+> ish_remove      |
+> ishtp_bus_remove_all_clients  |
+> kfree(ishtp_dev->fw_clients); |
+>                     |
+>                     |&dev->fw_clients[...]
+>                     |   //use
+> 
+> Fixes: 3703f53b99e4 ("HID: intel_ish-hid: ISH Transport layer")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-For the /proc/sys/vm/compact_memory file, the admin-guide states:
-When 1 is written to the file, all zones are compacted such that free
-memory is available in contiguous blocks where possible. This can be
-important for example in the allocation of huge pages although processes
-will also directly compact memory as required
+It is a extremely rare case, so it is OK to not mark for stable.
 
-But it was not strictly followed, writing any value would cause all
-zones to be compacted.
-It has been slightly optimized to comply with the admin-guide.
-Enforce the 1 on the unlikely chance that the sysctl handler is ever
-extended to do something different.
-
-Commit ef4984384172 ("mm/compaction: remove unused variable sysctl_compact_memory")
-has also been optimized a bit here, as the declaration in the external header
-file has been eliminated, and sysctl_compact_memory also needs to be verified.
-
-Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: William Lam <william.lam@bytedance.com>
-Cc: Pintu Kumar <pintu@codeaurora.org>
-Cc: Fu Wei <wefu@redhat.com>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
----
- mm/compaction.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/mm/compaction.c b/mm/compaction.c
-index c8bcdea15f5f..ba57d4178866 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1736,6 +1736,7 @@ static int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNE
-  */
- static unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
- static int sysctl_extfrag_threshold = 500;
-+static int sysctl_compact_memory;
- 
- static inline void
- update_fast_start_pfn(struct compact_control *cc, unsigned long pfn)
-@@ -2780,6 +2781,15 @@ static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int
- static int sysctl_compaction_handler(struct ctl_table *table, int write,
- 			void *buffer, size_t *length, loff_t *ppos)
- {
-+	int ret;
-+
-+	ret = proc_dointvec(table, write, buffer, length, ppos);
-+	if (ret)
-+		return ret;
-+
-+	if (sysctl_compact_memory != 1)
-+		return -EINVAL;
-+
- 	if (write)
- 		compact_nodes();
- 
-@@ -3095,7 +3105,7 @@ static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
- static struct ctl_table vm_compaction[] = {
- 	{
- 		.procname	= "compact_memory",
--		.data		= NULL,
-+		.data		= &sysctl_compact_memory,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0200,
- 		.proc_handler	= sysctl_compaction_handler,
--- 
-2.37.2
+> ---
+>  drivers/hid/intel-ish-hid/ishtp/bus.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hid/intel-ish-hid/ishtp/bus.c
+> b/drivers/hid/intel-ish-hid/ishtp/bus.c
+> index 81385ab37fa9..ada7cd08dbeb 100644
+> --- a/drivers/hid/intel-ish-hid/ishtp/bus.c
+> +++ b/drivers/hid/intel-ish-hid/ishtp/bus.c
+> @@ -744,6 +744,7 @@ void ishtp_bus_remove_all_clients(struct
+> ishtp_device *ishtp_dev,
+>                  */
+>         }
+>         spin_unlock_irqrestore(&ishtp_dev->cl_list_lock, flags);
+> +       cancel_work_sync(&ishtp_dev->bh_hbm_work);
+>  
+>         /* Release DMA buffers for client messages */
+>         ishtp_cl_free_dma_buf(ishtp_dev);
 
