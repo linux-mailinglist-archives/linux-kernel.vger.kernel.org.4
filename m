@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFD26EE23D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFFF6EE243
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbjDYMvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S234018AbjDYM4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbjDYMvi (ORCPT
+        with ESMTP id S233800AbjDYM4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:51:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EEADBB8D;
-        Tue, 25 Apr 2023 05:51:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E1934B3;
-        Tue, 25 Apr 2023 05:52:20 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5B7F3F64C;
-        Tue, 25 Apr 2023 05:51:33 -0700 (PDT)
-Message-ID: <108babe4-20cb-e637-e7da-7d04127d2a9e@arm.com>
-Date:   Tue, 25 Apr 2023 13:51:31 +0100
+        Tue, 25 Apr 2023 08:56:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A9D30E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:56:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7EA5616A0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:56:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64233C433D2;
+        Tue, 25 Apr 2023 12:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682427388;
+        bh=WFqdsbjQA1vnRQupRN+CqeKWDQbtJsSTLh4Q8kWeiBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bz9CkJDJSSNnCzcLYr28xns7faj4QIsO0/JpqjpFPybCvR88QDD5j6cVHVCMduRWE
+         qf6hs8GOuZuERt3CYLMkuFUdYdNSqK1MhsOfD4jekuQ4XpOFnzeGfes4t0WdWDTxOP
+         FcboqPS4mh0pUHGUjxUqTN6MOi+mY9ikW4Fb31W17hqis8fP6sqYmNvyOfsEdCrFq7
+         x26VQQ/oOZP8PcfahKaQfu1VKmWwA7p+DDE2Yr+c6ZjGA4OxfFTXINMQQ3F3ue8rR5
+         udrnVlW4bPrT9l0HssFu7ho6WRq+TjawmRs0ZTRHqANAsWxPDNXloIlxkjHmeeB8Ss
+         B2tCqTyQgERsQ==
+Date:   Tue, 25 Apr 2023 13:56:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
+Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
+Message-ID: <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
+References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
+ <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 0/4] devres: Provide krealloc_array
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        michal.simek@amd.com, Jonathan.Cameron@huawei.com,
-        andriy.shevchenko@linux.intel.com
-References: <20230320145710.1120469-1-james.clark@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230320145710.1120469-1-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DiFt6ZB+CLaQPege"
+Content-Disposition: inline
+In-Reply-To: <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
+X-Cookie: The meek don't want it.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,50 +61,60 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--DiFt6ZB+CLaQPege
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 20/03/2023 14:57, James Clark wrote:
-> Changes since v2:
->  
->  * Remove change in qcom_geni_serial.c in the last commmit and replace
->    it with a comment instead
->  * Whitespace fix
-> 
-> Changes since v1:
-> 
->  * Style fix
-> 
-> -----------------------
-> 
-> Hi,
-> 
-> I had a use for a devm realloc_array in a separate change, so I've
-> added one and updated all the obvious existing uses of it that I could
-> find. This is basically a copy paste of the one in slab.h
-> 
-> Applies to v6.3-rc3
-> 
-> Thanks
-> James
-> 
-> James Clark (4):
->   devres: Provide krealloc_array
->   hwmon: pmbus: Use devm_krealloc_array
->   iio: adc: Use devm_krealloc_array
->   serial: qcom_geni: Comment use of devm_krealloc rather than
->     devm_krealloc_array
-> 
->  .../driver-api/driver-model/devres.rst          |  1 +
->  drivers/hwmon/pmbus/pmbus_core.c                |  6 +++---
->  drivers/iio/adc/xilinx-ams.c                    |  9 +++------
->  drivers/iio/adc/xilinx-xadc-core.c              | 17 +++++++----------
->  drivers/tty/serial/qcom_geni_serial.c           |  5 +++++
->  include/linux/device.h                          | 11 +++++++++++
->  6 files changed, 30 insertions(+), 19 deletions(-)
-> 
+On Fri, Apr 21, 2023 at 08:50:30AM -0700, Colin Foster wrote:
+> On Thu, Apr 20, 2023 at 05:06:17PM +0200, Maxime Chevallier wrote:
 
-Hi Greg,
+> > On regmap consumers that require address translation through
+> > up/downshifting, the alignment check in the regmap core doesn't take the
+> > translation into account. This doesn't matter when downshifting the
+> > register address, as any address that fits a given alignment requirement
+> > will still meet it when downshifted (a 4-byte aligned address will
+> > always also be 2-bytes aligned for example).
 
-Is it possible to take this one? Or at least the first commit?
+> > However, when upshifting, this check causes spurious errors, as it
+> > occurs before the upshifting.
 
-Thanks
-James
+> I don't follow why upshifting should make a difference to alignment.
+> Assuming it does though, would it make sense to test
+
+> map->format.reg_shift > 0
+
+> instead of just !map->format.reg_shift?
+
+Yeah, I think the question is more when we should run the alignment
+check than if we should have one.  I think running the check after any
+shifting makes sense, we'd be better off reorganising the checks if
+needed than removing them.
+
+>=20
+> > -	if (!IS_ALIGNED(reg, map->reg_stride))
+> > +	if (!map->format.reg_shift && !IS_ALIGNED(reg, map->reg_stride))
+> >  		return -EINVAL;
+>=20
+> In the case of ocelot_spi, we'd want to flag an invalid access to a
+> register like 0x71070003... Before this patch it would return -EINVAL,
+> after this patch it would access 0x71070000.
+>=20
+> Colin Foster
+
+--DiFt6ZB+CLaQPege
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRHzfYACgkQJNaLcl1U
+h9Cpggf/c7E3rKx9CqXXzBlq45k7DnQbPm0a1LBhR2l4e4Tt8fLdhpImflz2foAJ
+rwiYt18SG3Lr8eXqXrPjItqjiHb79lpjJdB1rlze6rkVJohxVlpxTWZPYnCmhcXu
+7NYMzlQpCiPZZzVqmIDF9/IuA/3pinFBVegyzJxdbjbhBGUZDvIL2hez0D2JfAlD
+97OlNQPwEJ46d/AoWZjhHecb+7gWHZZRzvREkiqTYDAqrg5ZSXm3DJ+v6j0EfCV2
+sWYYyjXdN0x5mLy7yZDiBnDP8FdQh5Fk+A/kQ1gR3Rqh69CJFEuv+O6+mkOgnVmf
+VKTVmhsWvZwsYRp1jTkxeUbuv4CKmQ==
+=+cEC
+-----END PGP SIGNATURE-----
+
+--DiFt6ZB+CLaQPege--
