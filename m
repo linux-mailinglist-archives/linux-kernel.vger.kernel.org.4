@@ -2,206 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6CD6EDFD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA2C6EDFC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjDYJ6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 05:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S233637AbjDYJzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 05:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbjDYJ6f (ORCPT
+        with ESMTP id S233580AbjDYJzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:58:35 -0400
-X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 02:58:18 PDT
-Received: from ms11p00im-hyfv17291101.me.com (ms11p00im-hyfv17291101.me.com [17.58.38.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB0BCC1C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
-        t=1682416361; bh=BOZclCrFL8zwBZy00LVQJcyJUAB/39k6Slgpaa2Yfls=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=EIKOR67wtHzOc2RXSaFO9NM8zbl4/gqZ2ljixm0sHFwhri5Xbx7nfDPGtWbfTfkyg
-         2i3Oyt0eW2nfgmi3ImizkYA+oz5Z6pQJp+YyPj0piLZger0/rko7Vru5pQCiBn3lwd
-         xKb1J23Q8BgrkRsjDwgO6kyFuvS/RmexK+rJ3BFsW7LMK9PvCcezewvf5Q9F683ggl
-         lnY3wIFIST0sLeeDxwMmbpoSpg/prj0rJ0v1xktPR/n56b0Qhd7kcyTYKM7gFeS1GN
-         uRNFUBAHv4BF4dlDNM51HkR0AyQ6srIGO7L2h8c2ScoUMu37g2TSYHOdrTR4myfU43
-         CSpzzLq2hAS9A==
-Received: from localhost.localdomain (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
-        by ms11p00im-hyfv17291101.me.com (Postfix) with ESMTPSA id E0A02760171;
-        Tue, 25 Apr 2023 09:52:36 +0000 (UTC)
-From:   Xueming Feng <kuro@kuroa.me>
-To:     quentin@isovalent.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuro@kuroa.me,
-        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
-        song@kernel.org, yhs@fb.com, yhs@meta.com
-Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for map_of_maps types
-Date:   Tue, 25 Apr 2023 17:52:21 +0800
-Message-Id: <20230425095221.20805-1-kuro@kuroa.me>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
-References: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
+        Tue, 25 Apr 2023 05:55:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C929665AC
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682416492;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a3xd0KrM8HR0k4omEObz64GX2cGiGQ4SAWRK/6hdxxY=;
+        b=RDBzqjtp4R+4OYBOfGt2nzC8HJxctZB8HuBq+Xgp9IFcfji87Y6ey8Tw76e93U5ynzOMHf
+        mK7Cmml+wBYpJ+50LIqbh+RY5/KeoMux40B8MPRtwAX9uuPEc3r/6NI2m+u2Bi9hzGfKWd
+        xdGml2eXJu+SFspxDnkx12CJMi65GBk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-uTocXGi1N2epK3i0K23vCg-1; Tue, 25 Apr 2023 05:54:51 -0400
+X-MC-Unique: uTocXGi1N2epK3i0K23vCg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f195129aa4so24317915e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:54:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682416490; x=1685008490;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a3xd0KrM8HR0k4omEObz64GX2cGiGQ4SAWRK/6hdxxY=;
+        b=MQnwsWhR9If17VS+lyo8EZrdxyfCBirhRUHEbovzrxggQ8Ubuo+NE51q0mwKvu8anZ
+         s4aSpF0nGf1CzgZlWHCf41g3dNHp9kFV0hlvnF0kkEqb+xqWTlpco3NUtYgg/By8nN9+
+         s+guCjttyyjgQN9yxwftp4hrpUwBGAD7RqkZD8lc6J7Kvv8sX+lGemX0VIVPUHZVyLCt
+         U9Jd0Adc+1tKGwFnqlgXizwvNKq0sVqEJmakskzkrnK9a6p/5IpF55BPadyksFl/LBvD
+         WUUN5JUfDLXlmGgYoPNr6nf4QWPq8UWe5g3q9Q4jHg+vUAF2Rj2j+PJYdsNgV+l9oILK
+         p5mQ==
+X-Gm-Message-State: AAQBX9f8tUJKMJw6xUKzs4rrKGGf7BnTW1nDTfV0+V8w9IDzh5rquSz7
+        e/QZA10vzf6cGQ7iItTUU0W6M0zXQpbmEcuUBDnIMDpvL5x8angNBgFN3ExvcUWd09EQLHEu4vI
+        hoxAWXqQu0BkmgcU+zsavQvk7
+X-Received: by 2002:a1c:7714:0:b0:3f1:7277:ea6 with SMTP id t20-20020a1c7714000000b003f172770ea6mr9713893wmi.31.1682416490255;
+        Tue, 25 Apr 2023 02:54:50 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aRmEdQe4zxabwm2pwPMYUidyFQgdgpzZ9JnHFgTD+Y5Jp9VdMFTOZRy9bxOM0CAGUsECTCdg==
+X-Received: by 2002:a1c:7714:0:b0:3f1:7277:ea6 with SMTP id t20-20020a1c7714000000b003f172770ea6mr9713872wmi.31.1682416489997;
+        Tue, 25 Apr 2023 02:54:49 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id t12-20020a5d690c000000b002f74578f494sm12734891wru.41.2023.04.25.02.54.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 02:54:49 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>
+Subject: Re: [PATCH v2 3/8] sched/topology: add for_each_numa_cpu() macro
+In-Reply-To: <20230420051946.7463-4-yury.norov@gmail.com>
+References: <20230420051946.7463-1-yury.norov@gmail.com>
+ <20230420051946.7463-4-yury.norov@gmail.com>
+Date:   Tue, 25 Apr 2023 10:54:48 +0100
+Message-ID: <xhsmh4jp4l21j.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
-X-Proofpoint-ORIG-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- clxscore=1030 malwarescore=0 mlxlogscore=781 phishscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304250088
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
->>> On 4/24/23 9:10 PM, Xueming Feng wrote:
->>>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
->>>>>> When using `bpftool map dump` in plain format, it is usually
->>>>>> more convenient to show the inner map id instead of raw value.
->>>>>> Changing this behavior would help with quick debugging with
->>>>>> `bpftool`, without disrupting scripted behavior. Since user
->>>>>> could dump the inner map with id, and need to convert value.
->>>>>>
->>>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
->>>>>> ---
->>>>>> Changes in v2:
->>>>>>     - Fix commit message grammar.
->>>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
->>>>>> 	  `n` to `arg_size`.
->>>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
->>>>>> 		and print it as unsigned decimal.
->>>>>>
->>>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
->>>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
->>>>>> but previous review suggested that it should be up to the caller function to
->>>>>> set `arg_size` correctly. So I didn't add check for that, should I?
->>>>>>
->>>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
->>>>>>    tools/bpf/bpftool/main.h |  1 +
->>>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
->>>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
->>>>>> index 08d0ac543c67..810c0dc10ecb 100644
->>>>>> --- a/tools/bpf/bpftool/main.c
->>>>>> +++ b/tools/bpf/bpftool/main.c
->>>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
->>>>>>    	return 0;
->>>>>>    }
->>>>>>    
->>>>>> +void print_uint(const void *arg, unsigned int arg_size)
->>>>>> +{
->>>>>> +	const unsigned char *data = arg;
->>>>>> +	unsigned long val = 0ul;
->>>>>> +
->>>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->>>>>> +		memcpy(&val, data, arg_size);
->>>>>> +	#else
->>>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
->>>>>> +		       data, arg_size);
->>>>>> +	#endif
->>>>>> +
->>>>>> +	fprintf(stdout, "%lu", val);
->>>>>> +}
->>>>>> +
->>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
->>>>>>    {
->>>>>>    	unsigned char *data = arg;
->>>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
->>>>>> index 0ef373cef4c7..0de671423431 100644
->>>>>> --- a/tools/bpf/bpftool/main.h
->>>>>> +++ b/tools/bpf/bpftool/main.h
->>>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
->>>>>>    
->>>>>>    bool is_prefix(const char *pfx, const char *str);
->>>>>>    int detect_common_prefix(const char *arg, ...);
->>>>>> +void print_uint(const void *arg, unsigned int arg_size);
->>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
->>>>>>    void usage(void) __noreturn;
->>>>>>    
->>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->>>>>> index aaeb8939e137..f5be4c0564cf 100644
->>>>>> --- a/tools/bpf/bpftool/map.c
->>>>>> +++ b/tools/bpf/bpftool/map.c
->>>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->>>>>>    		}
->>>>>>    
->>>>>>    		if (info->value_size) {
->>>>>> -			printf("value:%c", break_names ? '\n' : ' ');
->>>>>> -			fprint_hex(stdout, value, info->value_size, " ");
->>>>>> +			if (map_is_map_of_maps(info->type)) {
->>>>>> +				printf("id:%c", break_names ? '\n' : ' ');
->>>>> 1> +				print_uint(value, info->value_size);
->>>>
->>>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
->>>>> For all map_in_map types, the inner map value size is 32bit int which
->>>>> represents a fd (for map creation) and a id (for map info), e.g., in
->>>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
->>>>> 	printf("id: %u", *(unsigned int *)value);
->>>>
->>>> That is true, maybe the "id" could also be changed to "map_id" to follow the
->>>> convention. Do you think that `print_uint` could be useful in the future?
->>>> If that is the case, should I keep using it here as an example usage, and to
->>>> avoid dead code? Or should I just remove it?
+On 19/04/23 22:19, Yury Norov wrote:
+> +/**
+> + * for_each_numa_cpu - iterate over cpus in increasing order taking into account
+> + *		       NUMA distances from a given node.
+> + * @cpu: the (optionally unsigned) integer iterator
+> + * @hop: the iterator variable, must be initialized to a desired minimal hop.
+> + * @node: the NUMA node to start the search from.
+> + * @mask: the cpumask pointer
+> + *
+> + * Requires rcu_lock to be held.
+> + */
+> +#define for_each_numa_cpu(cpu, hop, node, mask)					\
+> +	for ((cpu) = 0, (hop) = 0;						\
+> +		(cpu) = sched_numa_find_next_cpu((mask), (cpu), (node), &(hop)),\
+> +		(cpu) < nr_cpu_ids;						\
+> +		(cpu)++)
+> +
 
-On Tue, 25 Apr 2023 09:57:17 +0100, Quentin Monnet wrote:
-> This makes me think we could also have something similar for prog_array
-> maps (but not necessarily as part of your patchset).
+I think we can keep sched_numa_find_next_cpu() as-is, but could we make
+that macro use cpu_possible_mask by default? We can always add a variant
+if/when we need to feed in a different mask.
 
-Good idea, will take a look at that after finishing v3 patch, and possibly
-make a separate patch for it. (This is my first time contributing, better keep 
-it simple).
+>  #endif /* _LINUX_TOPOLOGY_H */
+> -- 
+> 2.34.1
 
->> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
->>> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
->>> element value could be 0, implying "inner_map_id 0", but I think it is
->>> okay, people should know a real inner_map_id (or any map_id) should 
->>> never be 0.
->>>
->>> Function "print_uint" is not needed any more. Please remove it.
->> 
->> Will reflect this in v3.
->> 
->>>
->>> Please add the command line to dump map values triggering the above 
->>> change, also the actual dumps with and without this patch.
->> 
->> $ bpftool map dump id 138
->> Without patch:
->> ```
->> key:
->> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
->> 27 16 06 00
->> value:
->> 8b 00 00 00
->> Found 1 element
->> ```
->> With patch:
->> ```
->> key:
->> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
->> 27 16 06 00
->> inner_map_id:
->> 139 
->> Found 1 element
->> ```
-
-> Thanks! Please add those sample outputs to the commit description for
-> v3. Can you please also add an example with JSON ("-p")?
-
-Sure, will add them in v3! About json output, they are currently not touched
-to avoid breaking scripts. I will add inner_map_id as a new field in v3 like the 
-following patch.
-https://lore.kernel.org/bpf/20230419003651.988865-1-kuifeng@meta.com/
-
-> Quentin
