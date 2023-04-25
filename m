@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6369D6EDB2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32F06EDB2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjDYF0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 01:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S233238AbjDYF2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 01:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjDYF0f (ORCPT
+        with ESMTP id S229637AbjDYF2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 01:26:35 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18DA4C0F;
-        Mon, 24 Apr 2023 22:26:29 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so22852927e87.0;
-        Mon, 24 Apr 2023 22:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682400388; x=1684992388;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ITYzwxnIjWJqarLAZkVNHGuPcqhLd7rHFU45HBz2awM=;
-        b=nS4fRFGd/XQcYH8kR9S7t5AQ+wQLnBjGI22NnMJJnCmelObAJSY37FPnxaMBMsDc9Y
-         zXq2jhZZ1y+SKBpscD76eaVJII/K1D8YLy1UonnHueEs7xHFroHHq6nDiK6gvHx30J4H
-         WgHSR+zFAcjQ47h7YNCRfOcS1S3Gei9w1BTzBwysQFtdbWn3bjrQwya/FpZO4OPDHpkQ
-         ansumiRt8QlDrhQ9SdVrpLwCmkluN+KStQKr/oQ52O1HoJwgXlgQzbjJ8oXTiAwuJ9Zu
-         AsHjzhxST5aScxrfW7KEx/jd8R4PByMBkRuj696dOodEGWW/AmKW4Shfijd8Xk4+3401
-         RVMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682400388; x=1684992388;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITYzwxnIjWJqarLAZkVNHGuPcqhLd7rHFU45HBz2awM=;
-        b=e9bmqftpGUTgUW+tmPgTe8kT3X/42U/mP3KPFpkD0UXP+oakRHkKNcDCNXXXaUPv4H
-         u3eoUfcLkLW3kpoQ4Y/WuUaE+MVw1ovKpzLO77yVzHC9+5ccAU8vR25JT7sT6RFx3kdI
-         lV9GizD2LI75fg4g2iacg/R44Nm1bUeZWkrhjRQbswwySkSpsAM7NAMV0yyb51t7Afi4
-         IcGwn4AfOloqsC7vWhG+Gjhx8y2tPL2Ffm5z5iFubAYq/Poi2l57EJDFnCV/P2A7wqag
-         ag18grCvR4hG4JlGKrd72C10YwciyPERIuuJ4GH3VMnIUKcglojeGvWzyaq12uFunaX0
-         cpZw==
-X-Gm-Message-State: AAQBX9dMg6HIA25MMPVYWMqs55G4Z3mFN7IQWGyRra9vs/c88wbYb7KJ
-        dSZN0XGyb7GEpyHqAj2uaQY=
-X-Google-Smtp-Source: AKy350aeWVwF+R2nqkdARpZPlaVdvOAQlZLjfGKa6gMhlmyRavk9FD6OVpIJBUK2Q+YamnKqlstweg==
-X-Received: by 2002:a05:651c:124c:b0:2a8:3a07:d6c3 with SMTP id h12-20020a05651c124c00b002a83a07d6c3mr3222951ljh.9.1682400387642;
-        Mon, 24 Apr 2023 22:26:27 -0700 (PDT)
-Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id d22-20020a2e9296000000b002a8a5afb87csm1947428ljh.20.2023.04.24.22.26.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Apr 2023 22:26:27 -0700 (PDT)
-Message-ID: <03fb7564-6cd3-bcef-2993-b3b69c9dbdbc@gmail.com>
-Date:   Tue, 25 Apr 2023 08:26:26 +0300
+        Tue, 25 Apr 2023 01:28:05 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B63C6183;
+        Mon, 24 Apr 2023 22:28:04 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 07:28:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1682400482; bh=w7Y9+y7iUqNE/76jkd4Xf0Zw6KPMok+py5RddA3X4vs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pUpp+zY3z7s40Z4uXQxuFKqnuzAnJef7KE6HO9x70xy+JXjpa/tQW0LeUhwroeiez
+         4K5JTJIyzip+xO6yTK0b8Qx9cnowjjMlu/9g5D19LzgL2C1yYqRTjw+I7SN0Yz9ViM
+         kFEstyA4zYS8fzYUx1SA/OvGSXU4Z95v/9lxmAC8=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 02/14] HP BIOSCFG driver - biosattr-interface
+Message-ID: <b4b9fb11-d6d0-42e6-9193-ba3c2c846071@t-8ch.de>
+References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+ <20230420165454.9517-3-jorge.lopez2@hp.com>
+ <b7c49593-13f9-44f8-b3b8-66551b01e966@t-8ch.de>
+ <CAOOmCE_MdHnPb250DDYC6Hoqutod2m=2voBqFz4g0dLcmJ5PRQ@mail.gmail.com>
+ <67108caf-2a03-4ef0-9f8d-819b0d6f0a2e@t-8ch.de>
+ <CAOOmCE8dru7YOmZeTiEoDMiy7d6nTEih6D2H-AMrOykt=z1bhQ@mail.gmail.com>
+ <CAOOmCE8SGn9JsWVXUDnKgWyxSzuCuiXzjsv3V737uNXPu2jykA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 2/7] iio: accel: kionix-kx022a: Remove blank lines
-Content-Language: en-US, en-GB
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1682373451.git.mehdi.djait.k@gmail.com>
- <40c033bc4c139fe450d8785c327f500f6f3ca965.1682373451.git.mehdi.djait.k@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <40c033bc4c139fe450d8785c327f500f6f3ca965.1682373451.git.mehdi.djait.k@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOOmCE8SGn9JsWVXUDnKgWyxSzuCuiXzjsv3V737uNXPu2jykA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/23 01:22, Mehdi Djait wrote:
-> Remove blank lines pointed out by the checkpatch script
+On 2023-04-24 17:14:57-0500, Jorge Lopez wrote:
+> Sorry for asking again.  I just want to be understand exactly what I must do.
+
+No problem!
+
+> > > > >
+> > > > > > +     args->command = command;
+> > > > > > +     args->commandtype = query;
+> > > > > > +     args->datasize = insize;
+> > > > > > +     memcpy(args->data, buffer, flex_array_size(args, data, insize));
+> > > > > > +
+> > > > > > +     ret = wmi_evaluate_method(HP_WMI_BIOS_GUID, 0, mid, &input, &output);
+> > > > >
+> > > > > The driver is mixing calls to the UUID based APIs and the wmi_device
+> > > > > ones.
+> > > > > wmi_devices is newer and preferred.
+> > > >
+> > > > The driver  calls wmi_evaluate_method when initiating an WMI call.
+> > > > Where is the driver mixing calls to the UUID based APIs and the
+> > > > wmi_device one?
+> > > > WMI calls are made by calling hp_wmi_perform_query() which invokes
+> > > > wmi_evaluate_method().
+> > > > Did I miss something?
+> > >
+> > > wmi_evaluate_method() is UUID-based.
+> > > struct wmi_driver is wmi_device based.
+> > >
+> > > The wmi_driver/wmi_device code essentially does nothing and is only used
+> > > to validate that a device is present.
+> > > The same can be done more easily wmi_has_guid().
+> > >
+> >
 > 
-> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> Are you asking to replace all calls to wmi_evaluate_method() which is
+> UUID based API with calls to  wmidev_evaluate_method() which is
+> wmi_device based?  Correct?
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+To be honest I'm not 100% sure.
 
-> ---
-> v3:
-> - no changes, this patch is introduced in the v2
-> 
->   drivers/iio/accel/kionix-kx022a.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
-> index f98393d74666..ff8aa7b9568e 100644
-> --- a/drivers/iio/accel/kionix-kx022a.c
-> +++ b/drivers/iio/accel/kionix-kx022a.c
-> @@ -341,7 +341,6 @@ static int kx022a_turn_on_off_unlocked(struct kx022a_data *data, bool on)
->   		dev_err(data->dev, "Turn %s fail %d\n", str_on_off(on), ret);
->   
->   	return ret;
-> -
->   }
->   
->   static int kx022a_turn_off_lock(struct kx022a_data *data)
-> @@ -1121,7 +1120,6 @@ int kx022a_probe_internal(struct device *dev)
->   	if (ret)
->   		return dev_err_probe(data->dev, ret, "Could not request IRQ\n");
->   
-> -
->   	ret = devm_iio_trigger_register(dev, indio_trig);
->   	if (ret)
->   		return dev_err_probe(data->dev, ret,
+wmi_device is great and perferct for simple drivers binding to a single
+UUID.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+But it does not handle multi-UUID logic as your driver needs very well.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+I would argue to stick to the legacy calls as it allows you to drop a
+bunch of code and makes the initialization flow more straightforward.
 
+But I don't know if somebody else won't ask for wmi_device later.
