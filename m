@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CD86EE1CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA516EE1D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbjDYMYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S234077AbjDYM0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbjDYMYv (ORCPT
+        with ESMTP id S233516AbjDYM0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:24:51 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFEA116;
-        Tue, 25 Apr 2023 05:24:49 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PCOXHE064447;
-        Tue, 25 Apr 2023 07:24:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682425473;
-        bh=k7Ux6DQ0nSZK+7IivtDppNZ1trpjUsbPWKpm4qi7TCk=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=W3N+5ro8X4gOJDx97YaryJ2dDj/mKa8p0OJ5Noyn2T55Mu8a3xTdHJeEGwxHBRGKb
-         UPECzVmId+OePX3wP8nrCieqqPKWxMihDqr0HQ/k78grGHfnenSeu+CYT3IOSmKuSC
-         CRRUc/55OH++E0gY1H9MLFuAnfZgHxm1oogDEZWs=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PCOX16120419
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 07:24:33 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 07:24:32 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 07:24:33 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PCOW1L019505;
-        Tue, 25 Apr 2023 07:24:32 -0500
-Date:   Tue, 25 Apr 2023 07:24:32 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Bryan Brattlof <bb@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Tue, 25 Apr 2023 08:26:53 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51936D312;
+        Tue, 25 Apr 2023 05:26:43 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id A545124E1B7;
+        Tue, 25 Apr 2023 20:26:36 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
+ 2023 20:26:37 +0800
+Received: from [192.168.125.106] (113.72.145.137) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
+ 2023 20:26:35 +0800
+Message-ID: <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
+Date:   Tue, 25 Apr 2023 20:26:35 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm: dts: k3-am62a7-sk: Describe main_uart1 and wkup_uart
-Message-ID: <20230425122432.jhnb7rddrpii3jeg@palpitate>
-References: <20230424183355.68360-1-bb@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230424183355.68360-1-bb@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
+        <linux-phy@lists.infradead.org>
+References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
+ <20230419035646.43702-2-changhuang.liang@starfivetech.com>
+ <20230419-labored-camper-644d51a7ca96@spud>
+ <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
+ <20230424-baffle-punch-ec73098f2b6a@spud>
+ <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
+ <20230425-unquote-eligible-09f743d81981@wendy>
+ <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
+ <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
+ <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
+ <20230425-resale-footrest-de667778c4fe@wendy>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230425-resale-footrest-de667778c4fe@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.137]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,97 +75,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please fix $subject: arm64: dts: ti:
 
-On 13:33-20230424, Bryan Brattlof wrote:
-> From: Nishanth Menon <nm@ti.com>
+
+On 2023/4/25 17:35, Conor Dooley wrote:
+> On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
+>>
+>>
+>> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
+>>> On 25/04/2023 09:57, Changhuang Liang wrote:
+>>>>>>>>>>  
+>>>>>>>>>>  description: |
+>>>>>>>>>>    StarFive JH7110 SoC includes support for multiple power domains which can be
+>>>>>>>>>> @@ -17,6 +18,7 @@ properties:
+>>>>>>>>>>    compatible:
+>>>>>>>>>>      enum:
+>>>>>>>>>>        - starfive,jh7110-pmu
+>>>>>>>>>> +      - starfive,jh7110-aon-pmu
+>>>>>>>
+>>>>>>> I was speaking to Rob about this over the weekend, he asked:
+>>>>>>> 'Why isn't "starfive,jh7110-aon-syscon" just the power-domain provider
+>>>>>>> itself?'
+>>>>>>
+>>>>>> Maybe not, this syscon only offset "0x00" configure power switch.
+>>>>>> other offset configure other functions, maybe not power, so this
+>>>>>> "starfive,jh7110-aon-syscon" not the power-domain itself.
+>>>>>>
+>>>>>>> Do we actually need to add a new binding for this at all?
+>>>>>>>
+>>>>>>> Cheers,
+>>>>>>> Conor.
+>>>>>>>
+>>>>>>
+>>>>>> Maybe this patch do that.
+>>>>>> https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech.com/
+>>>>>
+>>>>> This makes it a child-node right? I think Rob already said no to that in
+>>>>> and earlier revision of this series. What he meant the other day was
+>>>>> making the syscon itself a power domain controller, since the child node
+>>>>> has no meaningful properties (reg, interrupts etc).
+>>>>>
+>>>>> Cheers,
+>>>>> Conor.
+>>>>
+>>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
+>>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
+>>>> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
+>>>> to a power domain controller. I think using the child-node description is closer to
+>>>> JH7110 SoC. 
+>>>
+>>> Unfortunately, I do not see the correlation between these, any
+>>> connection. Why being a child of syscon block would mean that this
+>>> should no be power domain controller? Really, why? These are two
+>>> unrelated things.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+>> Let me summarize what has been discussed above. 
+>>
+>> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x17010000).
+>> 1. (0x17010000) is power-controller node:
+>>
+>> 	aon_pwrc: power-controller@17010000 {
+>> 		compatible = "starfive,jh7110-aon-pmu", "syscon";
+>> 		reg = <0x0 0x17010000 0x0 0x1000>;
+>> 		#power-domain-cells = <1>;
+>> 	};
+>>
+>>
+>> 2. (0x17010000) is syscon node, power-controller is child-node of syscon:
+>>
+>> 	aon_syscon: syscon@17010000 {
+>> 		compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
+>> 		reg = <0x0 0x17010000 0x0 0x1000>;
+>>
+>> 		aon_pwrc: power-controller {
+>> 			compatible = "starfive,jh7110-aon-pmu";
+>> 			#power-domain-cells = <1>;
+>> 		};
+>> 	};
 > 
-> wkup_uart and main_uart1 on this platform is used by tifs and DM
-> firmwares. Describe them for completeness including the pinmux.
+> I thought that Rob was suggesting something like this:
+> 	aon_syscon: syscon@17010000 {
+> 		compatible = "starfive,jh7110-aon-syscon", ...
+> 		reg = <0x0 0x17010000 0x0 0x1000>;
+> 		#power-domain-cells = <1>;
+> 	};
 > 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> [bb@ti.com: updated pinmux]
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 40 +++++++++++++++++++++++--
->  1 file changed, 38 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> index f6a67f072dca6..65caa5611d6d5 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> @@ -17,7 +17,9 @@ / {
->  	model = "Texas Instruments AM62A7 SK";
->  
->  	aliases {
-> +		serial0 = &wkup_uart0;
->  		serial2 = &main_uart0;
-> +		serial3 = &main_uart1;
->  		mmc1 = &sdhci1;
->  	};
->  
-> @@ -114,11 +116,38 @@ led-0 {
->  	};
->  };
->  
-> +&mcu_pmx0 {
-> +	wkup_uart0_pins_default: wkup-uart0-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62AX_MCU_IOPAD(0x0024, PIN_INPUT, 0) /* (C9) WKUP_UART0_RXD */
-> +			AM62AX_MCU_IOPAD(0x0028, PIN_OUTPUT, 0) /* (E9) WKUP_UART0_TXD */
-> +			AM62AX_MCU_IOPAD(0x002c, PIN_INPUT, 0) /* (C10) WKUP_UART0_CTSn */
-> +			AM62AX_MCU_IOPAD(0x0030, PIN_OUTPUT, 0) /* (C8) WKUP_UART0_RTSn */
-> +		>;
-> +	};
-> +};
-> +
-> +/* WKUP UART0 is used for DM firmware logs */
-> +&wkup_uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&wkup_uart0_pins_default>;
-> +	status = "reserved";
-> +};
-> +
->  &main_pmx0 {
->  	main_uart0_pins_default: main-uart0-pins-default {
->  		pinctrl-single,pins = <
-> -			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (D14) UART0_RXD */
-> -			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
-> +			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (E14) UART0_RXD */
-> +			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (D15) UART0_TXD */
-> +		>;
-> +	};
-> +
-> +	main_uart1_pins_default: main-uart1-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62AX_IOPAD(0x01e8, PIN_INPUT, 1) /* (C17) I2C1_SCL.UART1_RXD */
-> +			AM62AX_IOPAD(0x01ec, PIN_OUTPUT, 1) /* (E17) I2C1_SDA.UART1_TXD */
-> +			AM62AX_IOPAD(0x0194, PIN_INPUT, 2) /* (C19) MCASP0_AXR3.UART1_CTSn */
-> +			AM62AX_IOPAD(0x0198, PIN_OUTPUT, 2) /* (B19) MCASP0_AXR2.UART1_RTSn */
->  		>;
->  	};
->  
-> @@ -254,6 +283,13 @@ &main_uart0 {
->  	pinctrl-0 = <&main_uart0_pins_default>;
->  };
->  
-> +/* Main UART1 is used for TIFS firmware logs */
-> +&main_uart1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_uart1_pins_default>;
-> +	status = "reserved";
-> +};
-> +
->  &usbss1 {
->  	status = "okay";
->  };
-> 
-> base-commit: 891db0c48efb48c3af334006f9d7ea6a0aa49cb9
-> -- 
-> 2.40.0
+> Cheers,
+> Conor.
 > 
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+I see the kernel:
+https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediatek/mt8167.dtsi
+this file line 42:
+it's power-controller also has no meaningful properties.
+What do you think?
+
