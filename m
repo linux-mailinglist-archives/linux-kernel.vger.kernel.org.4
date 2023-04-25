@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB5D6EE8C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB556EE8C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbjDYUBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 16:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S236217AbjDYUDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 16:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbjDYUBZ (ORCPT
+        with ESMTP id S235087AbjDYUDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:01:25 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EE68A5F;
-        Tue, 25 Apr 2023 13:01:22 -0700 (PDT)
+        Tue, 25 Apr 2023 16:03:34 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21A619A2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:03:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682452882; x=1713988882;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S9HTOBEJkSIz8FjeW33+XABgFARQXXVWDKz7IsLj3Wc=;
-  b=dscwBrD87kUfNzu4eJ8DAgxrF5Ez5d+xJNSdjwxsVQQbv4QyetvM5aXI
-   KYiiU89dTXBtJSzr10KdRhkLaWGT6l4CRHx7IL7l8RaUaptwbRHdcSKNy
-   w7R+HDv8ugP/IrM89a7SYucfDblKAjNJqMUPp//4Sf5LjG2OkvUt12UMo
-   MCyXiAolJ1OAeHySDwrrKyP9xFXcM09DK+jKFXe8p4v5pw2RzJoBperYf
-   S2BKGuabwGGEAT2fD3OSjhC+7XE2PuJgTDNm1OQk6bEWdaH/QR6ZiOnFF
-   opbwpzbsfENVB7FyFl2JvuDwtUDLwqoZ1aTrbBt2duUgnd0R8dlXfz2R4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="345644817"
+  t=1682453013; x=1713989013;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=reHRQOre2NO1+iT/Sg5jDcvNmur/+KiCLnVwPnJYHxI=;
+  b=DraTa1bSjYxfH1NEfFfhpnx762mNwWNhucPX5vmJp4u4fgaLfpNUuEz4
+   f4c7A6JBNsVWYFDR/8s6dz5Qb9I+X35o/b6EpVpk9P0eyvXfVPvJC7QrT
+   LbYxPjnm8zRQNeE3Qfjl1GbjgDPQAQj14m0lgd39PSF5gpSAQs3crYXVI
+   e40ZSx4ma/n6JaXFDTV/LNfC1d+t194NaR2rUZYiabDJxzdmt8HriNZWQ
+   2wepXrm2RAw6vx/XyJwWbckMLls5bQUiSHykJzt8BwQ7Zhr7RyB/CXsTL
+   WvQdaBZcTxs0/FXY7dMVgYgCyvTH1G8WYt6uQtX/SEsOdLngxpTAqrl8W
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="374837854"
 X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="345644817"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 13:01:22 -0700
+   d="scan'208";a="374837854"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 13:03:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="868009718"
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="687604650"
 X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="868009718"
-Received: from cpetruta-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.59.107])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 13:01:17 -0700
-Date:   Tue, 25 Apr 2023 22:01:15 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH v8 0/7] drm/i915: use ref_tracker library for tracking
- wakerefs
-Message-ID: <ZEgxi3+eaG5Xf6bl@ashyti-mobl2.lan>
-References: <20230224-track_gt-v8-0-4b6517e61be6@intel.com>
+   d="scan'208";a="687604650"
+Received: from gchacko-mobl1.gar.corp.intel.com (HELO [10.215.145.52]) ([10.215.145.52])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 13:03:27 -0700
+Message-ID: <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com>
+Date:   Tue, 25 Apr 2023 13:03:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224-track_gt-v8-0-4b6517e61be6@intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
+Content-Language: en-US
+To:     Tony Battersby <tonyb@cybernetics.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,19 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 4/25/23 12:26, Tony Battersby wrote:
+> -	if (cpuid_eax(0x8000001f) & BIT(0))
+> +	if (c->extended_cpuid_level >= 0x8000001f &&
+> +	    (cpuid_eax(0x8000001f) & BIT(0)))
+>  		native_wbinvd();
 
-> Andrzej Hajda (7):
->       lib/ref_tracker: add unlocked leak print helper
->       lib/ref_tracker: improve printing stats
->       lib/ref_tracker: add printing to memory buffer
->       lib/ref_tracker: remove warnings in case of allocation failure
->       drm/i915: Correct type of wakeref variable
->       drm/i915: Replace custom intel runtime_pm tracker with ref_tracker library
->       drm/i915: Track gt pm wakerefs
+Oh, so the existing code is running into the
 
-where are we going to get this series merged? Should we merge it
-in our intel repository? In the netdev repository? or do we split
-it (which will cause some dependency delay)?
+> If a value entered for CPUID.EAX is higher than the maximum input
+> value for basic or extended function for that processor then the data
+> for the highest basic information leaf is returned
+behavior.  It's basically looking at BIT(0) of some random extended
+leaf.  Probably 0x80000008 based on your 'cpuid -r' output.
 
-Andi
+
