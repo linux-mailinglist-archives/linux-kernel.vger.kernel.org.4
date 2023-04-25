@@ -2,111 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85706EE3F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB4B6EE3FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbjDYOcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S234127AbjDYOdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjDYOcj (ORCPT
+        with ESMTP id S233838AbjDYOda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:32:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A22D4EC0;
-        Tue, 25 Apr 2023 07:32:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02B1262E53;
-        Tue, 25 Apr 2023 14:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACECEC4339B;
-        Tue, 25 Apr 2023 14:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682433157;
-        bh=7RpIH8pPGjDhRtE9/Kdc51ixqRzPM/NZxvw0ejyXGV4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WS1zZ3CS2VXAufJewBP0pT3wmeUdW+sboDNdHxucQDaMg+JS0MOGO0iXkjlHVlkcl
-         4tSTKKdsKZPLywKPG/tSx+bna6F2HO4rE+LwNrE4dFqrXC/Dnxj2icYa4Qw2wl1f46
-         q3xCGYjCg9RhCF4aKhb6kQ/tnNwFd6Jjhb4aN7Zoj2eqMmCfxVQZZYM2TrAlCMsK+l
-         +3qRdkCkY3wxnpTqBb9b3g7HLpWZSt5qLRDzUor8wcq4xUqHaHZv9ryiG/Hd2zBhSb
-         vcUOUY809sMdwYeBAN6oHSO4DM75SaL6ebdOmcZrjwUEmxs19ipcre9kJCZccvuqKO
-         u3XFkrgTgeRDg==
-Date:   Tue, 25 Apr 2023 23:32:33 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     rostedt@goodmis.org, corbet@lwn.net, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH tracing 0/3] tracing: support > 8 byte filter predicates
-Message-Id: <20230425233233.2ad5168c630b4c1349ab3398@kernel.org>
-In-Reply-To: <1682414197-13173-1-git-send-email-alan.maguire@oracle.com>
-References: <1682414197-13173-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 25 Apr 2023 10:33:30 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7C113FB9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:33:22 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-7782debbc4bso3965883241.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682433201; x=1685025201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WQ2CLAjMPgKbOZe4brMjde1QLHkIgbVunV88zomi5KY=;
+        b=QSOxF8e2muGNZob7KuS75YfJBtMdxjOuLe46O21qktQ+fC1TxNejM/vKZelejgPkSJ
+         Z2cQVvS8kWWMKlVg5wlM5bsl5FzNx6n4HkbqFHmC0BS6FeJq2zVuSMnIPOCqdApDolC8
+         wrLd9RRJJapVfcfLySyGHOMmgG3TIGGmolWSzjlkSc1d63pgfiNQMRXc98EYnz/PlGgN
+         oJXqqtCY+nm0Y8FaMWXxO4XGUose6KR2aaYWwfe6Jb3bub7G2BlvBn9GLWAmiiTuLvts
+         osduTNr0RZZ7LksOlBptFLuAePl8noMgCOF653i/zNg8vCJFZP+WOsu0RBt0InLcYYH8
+         xUFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682433201; x=1685025201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WQ2CLAjMPgKbOZe4brMjde1QLHkIgbVunV88zomi5KY=;
+        b=UM/IIknapqHb8p9e35aB8pCDbfBK5a3vzktHD2hlqLts95Z1e9V1rGGfrr35XEVRa1
+         DkZa5RrT/dd8W1pfax3tg5GqZ/Z2Pw57tutU+bDtWdBZopjQllLCRN28p4/vKJy6Nsbs
+         OLRRYVSIwrW44xx7EuT1rpxfObLb6q5ulLL9zHJLXI+2Ql2gXFBGdLCqg9W/g7HBpnlP
+         fVjP2mAyeU+wgn4b8TlkxFWiAH95jCNezZMG7oR7QsmU2mK0eXekEqmzTDTQ+Vh+QxLM
+         5TtCamPwzQ+wRbc8Gq8ASEdOU3+oUhHGnB4V3HczwHUA6HypD9IOoJvUX9UPHuiUKM7B
+         r0/w==
+X-Gm-Message-State: AAQBX9d1S5aHwWaxdVUW9oCK0ei1HT2eNcmJx68a8RxlHJ3EMRUom/b8
+        vPPB0ZFpbQhfCDV+Z7ZwJOQq5etOaeLE4p8uBamR9Q==
+X-Google-Smtp-Source: AKy350YX6AwO0pQHfBFGLNBOTtx5pYpGmcG+rrY+6QopEdOgUNUrMvxAJKNFhncmK2TEboB273ZjpmyipgS8gxjrLrU=
+X-Received: by 2002:a1f:bd0f:0:b0:440:d7:da79 with SMTP id n15-20020a1fbd0f000000b0044000d7da79mr5766207vkf.2.1682433201450;
+ Tue, 25 Apr 2023 07:33:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230424131133.829259077@linuxfoundation.org>
+In-Reply-To: <20230424131133.829259077@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 25 Apr 2023 15:33:10 +0100
+Message-ID: <CA+G9fYvc__9umKyeMWk1mmO6K6hfCt=MDt3BTHpr_XfJc4HXXA@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/98] 6.1.26-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023 10:16:34 +0100
-Alan Maguire <alan.maguire@oracle.com> wrote:
+On Mon, 24 Apr 2023 at 14:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.26 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.26-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> For cases like IPv6 addresses, having a means to supply tracing
-> predicates for fields with more than 8 bytes would be convenient.
-> This series provides a simple way to support this by allowing
-> simple ==, != memory comparison with the predicate supplied when
-> the size of the field exceeds 8 bytes.  For example, to trace
-> ::1, the predicate
-> 
-> 	"dst == 0x00000000000000000000000000000001"
-> 
-> ..could be used.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Nice!
-And I also would like to use something like "dst == ipv6(::1)" because
-it seems easy to make a mistake on the number of zeros.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Can we add such type casting feature to the filter?
+## Build
+* kernel: 6.1.26-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: e4ff6ff54dea67f94036a357201b0f9807405cc6
+* git describe: v6.1.22-574-ge4ff6ff54dea
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
+2-574-ge4ff6ff54dea
 
-Thank you,
+## Test Regressions (compared to v6.1.22-475-g45df5d9a8cbd)
 
-> 
-> Patch 1 provides the support for > 8 byte fields via a memcmp()-style
-> predicate. Patch 2 adds tests for filter predicates, and patch 3
-> documents the fact that for > 8 bytes. only == and != are supported.
-> 
-> Changes since RFC [1]:
-> 
-> - originally a fix was intermixed with the new functionality as
->   patch 1 in series [1]; the fix landed separately
-> - small tweaks to how filter predicates are defined via fn_num as
->   opposed to via fn directly
-> 
-> [1] https://lore.kernel.org/lkml/1659910883-18223-1-git-send-email-alan.maguire@oracle.com/
-> 
-> Alan Maguire (3):
->   tracing: support > 8 byte array filter predicates
->   selftests/ftrace: add test coverage for filter predicates
->   tracing: document > 8 byte numeric filtering support
-> 
->  Documentation/trace/events.rst                |  9 +++
->  kernel/trace/trace_events_filter.c            | 55 +++++++++++++++-
->  .../selftests/ftrace/test.d/event/filter.tc   | 62 +++++++++++++++++++
->  3 files changed, 125 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/event/filter.tc
-> 
-> -- 
-> 2.31.1
-> 
+## Metric Regressions (compared to v6.1.22-475-g45df5d9a8cbd)
 
+## Test Fixes (compared to v6.1.22-475-g45df5d9a8cbd)
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+## Metric Fixes (compared to v6.1.22-475-g45df5d9a8cbd)
+
+## Test result summary
+total: 155536, pass: 137480, fail: 4021, skip: 13697, xfail: 338
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 52 total, 51 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* timesync-off
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
