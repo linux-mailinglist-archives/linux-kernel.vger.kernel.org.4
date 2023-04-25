@@ -2,198 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED11E6ED91D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA22E6ED930
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjDYADp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 20:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S232797AbjDYAKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 20:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbjDYADm (ORCPT
+        with ESMTP id S232369AbjDYAKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 20:03:42 -0400
+        Mon, 24 Apr 2023 20:10:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD115274;
-        Mon, 24 Apr 2023 17:03:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBBE4EE4;
+        Mon, 24 Apr 2023 17:10:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A7D462A62;
-        Tue, 25 Apr 2023 00:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BB5C433A0;
-        Tue, 25 Apr 2023 00:03:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BCBE629FB;
+        Tue, 25 Apr 2023 00:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7BCC433D2;
+        Tue, 25 Apr 2023 00:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682381020;
-        bh=trnIgor0xX4q/91c1oebGULzgj8kBzmPIz2WyUUR4fs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dsfphbNwZy7ol45+HO89fFOFBVmbtLKbVFYU0+3lRL47HiJpa9sHbkNeu0acGZDcH
-         RaYMGES44ByO2JY0pyqpUsucD8TQJvyhwHquSnu5mfTOK1ctKl8hspfTPmvrC7rOWo
-         vXjmS/s7bRIP7nWuDV0rzNvUpqk84YX7PSDz9xeJFZul4hjgd981THJWdaIunfBQm3
-         tV5eImY6lSCVLEmgQR3bRqFmecC9WtkV0X18EuXi/1DjcadULIAB5j3JW9g7dUwOku
-         uM1ppt6wnHBzvVfN16WWpQmSgvphrlVCkEFR9E9PKIgClRUTtyRqmaIHg+d9sAK9B3
-         Dj/gTmXGNB8UQ==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2a8ad872ea5so49564221fa.2;
-        Mon, 24 Apr 2023 17:03:40 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eSaF3AgWXHPbCRyhrvNV7pO94+A9L6ZbAVBIXogDMvyKQKxJ3k
-        ziNb1c3pQjIcjRtRjjiYbmVtXyduESEINkWRsOA=
-X-Google-Smtp-Source: AKy350ZiHWzjvuohgc2eExj8R1+yFM6oSnpZL9ryV43iQZLSMYrd9ACKtxWUQihomvfECH65Xw2YSp2gSRleLGF+78g=
-X-Received: by 2002:a2e:9595:0:b0:2a8:c249:63a4 with SMTP id
- w21-20020a2e9595000000b002a8c24963a4mr2976379ljh.47.1682381018366; Mon, 24
- Apr 2023 17:03:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230420112946.2869956-1-yukuai1@huaweicloud.com> <20230420112946.2869956-3-yukuai1@huaweicloud.com>
-In-Reply-To: <20230420112946.2869956-3-yukuai1@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 24 Apr 2023 17:03:26 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6QSuB3vVCPN3Dt3tab-_4C8_7+kmAAe05GB0oBNX-bSA@mail.gmail.com>
-Message-ID: <CAPhsuW6QSuB3vVCPN3Dt3tab-_4C8_7+kmAAe05GB0oBNX-bSA@mail.gmail.com>
-Subject: Re: [PATCH -next 2/8] md/raid1-10: rename raid1-10.c to raid1-10.h
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     neilb@suse.de, akpm@osdl.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1682381442;
+        bh=wZyN09T0fe+lRCHquhmAigLJLxkKN0q1pAhmCmC2Xt0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AsJXxRpDkdFrIoLOb4o/24u41BZMDNu74kQ/yMg3xQG9yPih4TuZMvxhF8KnJRf2O
+         ouz5OHfzvToSKo1R92qrpfHzJvGX3IQylSPOPI6hoyAdxLlPmu0r+Bm/UHkedWUEHX
+         2OKSiRpwPhXmMqZStQN6DHO3WQWWtp0wjJ2Lz5kXK4f55ZVNmMd2+Otcl5/oprxJAV
+         G7rnMfYFbPYJnjQDaDb0sGowwbRlgLCiTaKB1AmwJqSdkpTjE4YUK0I8kRMU3a0kde
+         cs4u82s50hfJ+Q+YCrqqblYoAKjffC33G1HNrIpw2i/5/5/qU5cd/PPguvOnBN0Dd/
+         kUa44uTt7j9rA==
+Date:   Tue, 25 Apr 2023 09:10:39 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Akanksha J N <akanksha@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rostedt@goodmis.org, mhiramat@kernel.org, shuah@kernel.org,
+        naveen.n.rao@linux.ibm.com
+Subject: Re: [PATCH v2 2/2] selftests/ftrace: Add new test case which checks
+ for optimized probes
+Message-Id: <20230425091039.9fd523dfdf7be5e800bac4fe@kernel.org>
+In-Reply-To: <20230418095557.19061-3-akanksha@linux.ibm.com>
+References: <20230418095557.19061-1-akanksha@linux.ibm.com>
+        <20230418095557.19061-3-akanksha@linux.ibm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 4:31=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> raid1-10.c contains definitions that are used both for raid1 and raid10,
-> it's werid to use ".c" suffix.
+On Tue, 18 Apr 2023 15:25:57 +0530
+Akanksha J N <akanksha@linux.ibm.com> wrote:
 
-type: weird.
-
-Please see the original discussion about raid1-10.c here:
-
-https://lore.kernel.org/linux-raid/20170712082912.491-1-ming.lei@redhat.com=
-/
-
-Let's keep raid1-10.c for now.
-
-Thanks,
-Song
-
->
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Add new test case kprobe_opt_types.tc which enables and checks
+> if each probe has been optimized in order to test potential issues with
+> optimized probes.
+> The '|| continue' is added with the echo statement to ignore errors that
+> are caused by trying to add kprobes to non probeable lines and continue
+> with the test.
+> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
 > ---
->  drivers/md/{raid1-10.c =3D> raid1-10.h} | 10 +++++++---
->  drivers/md/raid1.c                    |  2 --
->  drivers/md/raid1.h                    |  2 ++
->  drivers/md/raid10.c                   |  2 --
->  drivers/md/raid10.h                   |  2 ++
->  5 files changed, 11 insertions(+), 7 deletions(-)
->  rename drivers/md/{raid1-10.c =3D> raid1-10.h} (92%)
->
-> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.h
-> similarity index 92%
-> rename from drivers/md/raid1-10.c
-> rename to drivers/md/raid1-10.h
-> index e61f6cad4e08..04beef35142d 100644
-> --- a/drivers/md/raid1-10.c
-> +++ b/drivers/md/raid1-10.h
-> @@ -1,4 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#ifndef _RAID1_10_H
-> +#define _RAID1_10_H
+>  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> new file mode 100644
+> index 000000000000..54e4800b8a13
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> @@ -0,0 +1,34 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +# Copyright (C) 2023 Akanksha J N, IBM corporation
+> +# description: Register/unregister optimized probe
+> +# requires: kprobe_events
 > +
->  /* Maximum size of each resync request */
->  #define RESYNC_BLOCK_SIZE (64*1024)
->  #define RESYNC_PAGES ((RESYNC_BLOCK_SIZE + PAGE_SIZE-1) / PAGE_SIZE)
-> @@ -33,7 +36,7 @@ struct raid1_plug_cb {
->         struct bio_list         pending;
->  };
->
-> -static void rbio_pool_free(void *rbio, void *data)
-> +static inline void rbio_pool_free(void *rbio, void *data)
->  {
->         kfree(rbio);
->  }
-> @@ -91,8 +94,8 @@ static inline struct resync_pages *get_resync_pages(str=
-uct bio *bio)
->  }
->
->  /* generally called after bio_reset() for reseting bvec */
-> -static void md_bio_reset_resync_pages(struct bio *bio, struct resync_pag=
-es *rp,
-> -                              int size)
-> +static inline void md_bio_reset_resync_pages(struct bio *bio,
-> +                                            struct resync_pages *rp, int=
- size)
->  {
->         int idx =3D 0;
->
-> @@ -109,3 +112,4 @@ static void md_bio_reset_resync_pages(struct bio *bio=
-, struct resync_pages *rp,
->                 size -=3D len;
->         } while (idx++ < RESYNC_PAGES && size > 0);
->  }
-> +#endif
-> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-> index 2f1011ffdf09..84724b9b20b8 100644
-> --- a/drivers/md/raid1.c
-> +++ b/drivers/md/raid1.c
-> @@ -49,8 +49,6 @@ static void lower_barrier(struct r1conf *conf, sector_t=
- sector_nr);
->  #define raid1_log(md, fmt, args...)                            \
->         do { if ((md)->queue) blk_add_trace_msg((md)->queue, "raid1 " fmt=
-, ##args); } while (0)
->
-> -#include "raid1-10.c"
-> -
->  #define START(node) ((node)->start)
->  #define LAST(node) ((node)->last)
->  INTERVAL_TREE_DEFINE(struct serial_info, node, sector_t, _subtree_last,
-> diff --git a/drivers/md/raid1.h b/drivers/md/raid1.h
-> index 468f189da7a0..80de4d66f010 100644
-> --- a/drivers/md/raid1.h
-> +++ b/drivers/md/raid1.h
-> @@ -2,6 +2,8 @@
->  #ifndef _RAID1_H
->  #define _RAID1_H
->
-> +#include "raid1-10.h"
+> +case `uname -m` in
+> +x86_64)
+> +;;
+> +arm*)
+> +;;
+> +ppc*)
+> +;;
+> +*)
+> +  echo "Please implement other architecture here"
+> +  exit_unsupported
+> +esac
 > +
->  /*
->   * each barrier unit size is 64MB fow now
->   * note: it must be larger than RESYNC_DEPTH
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index a116b7c9d9f3..50d56b6af42f 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -77,8 +77,6 @@ static void end_reshape(struct r10conf *conf);
->  #define raid10_log(md, fmt, args...)                           \
->         do { if ((md)->queue) blk_add_trace_msg((md)->queue, "raid10 " fm=
-t, ##args); } while (0)
->
-> -#include "raid1-10.c"
-> -
->  #define NULL_CMD
->  #define cmd_before(conf, cmd) \
->         do { \
-> diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
-> index 63e48b11b552..63e88dd774f7 100644
-> --- a/drivers/md/raid10.h
-> +++ b/drivers/md/raid10.h
-> @@ -2,6 +2,8 @@
->  #ifndef _RAID10_H
->  #define _RAID10_H
->
-> +#include "raid1-10.h"
-> +
->  /* Note: raid10_info.rdev can be set to NULL asynchronously by
->   * raid10_remove_disk.
->   * There are three safe ways to access raid10_info.rdev.
-> --
-> 2.39.2
->
+> +DEFAULT=$(cat /proc/sys/debug/kprobes-optimization)
+> +echo 1 > /proc/sys/debug/kprobes-optimization
+> +for i in `seq 0 255`; do
+> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || continue
+> +        echo 1 > events/kprobes/enable || continue
+> +        (echo "forked")
+> +        PROBE_TYPE=$(cat /sys/kernel/debug/kprobes/list | grep $FUNCTION_FORK | awk '{print $4}' | awk '{print substr($0,2,length($0)-2)}')
+
+I think we can make it simply;
+
+PROBE=$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
+
+> +        echo 0 > events/kprobes/enable
+> +        echo > kprobe_events
+> +        if [ $PROBE_TYPE = "OPTIMIZED" ]; then
+
+and
+
+if echo $PROBE | grep -q OPTIMIZED; then
+
+> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
+> +                exit_pass
+> +        fi
+> +done
+> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
+> +echo "Done"
+
+Hmm, this test does NOT return any error. It always returns success.
+I understand that optimization may not be possible within 256 bytes
+from the beginning of the function. In that case, you can return
+"unresolved", and not echoing "Done" but the reason why it is
+unresolved.
+
+Thank you,
+
+> -- 
+> 2.31.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
