@@ -2,147 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4F36EE073
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27266EE079
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbjDYKiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S233762AbjDYKii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbjDYKiE (ORCPT
+        with ESMTP id S233628AbjDYKig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:38:04 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E274FF
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:38:02 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so41918749a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1682419081; x=1685011081;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RQbVV5oFtqD8s7pQD8RC1iJUAO1cx6YB2hV383hEmHM=;
-        b=X4A8yPy4O2ZWaGepFwmkfkj1x8IgV6AClLH9YT3M08LijBuX1Wju1dKF5BSj7Y+JbW
-         p7m1SeiLUhcFtnvDxUdGMc3DHlcN2LpXwQjYjgK/7HkhMRHS8gjrTn0II4P3qUDt/h7S
-         TaByY7OWxSVqunYKKUmdIp55FUSn7ppwFn0ew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682419081; x=1685011081;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RQbVV5oFtqD8s7pQD8RC1iJUAO1cx6YB2hV383hEmHM=;
-        b=gQz5W2RVMIEkSIxlSs6cQkO4c+5Ae2JyGYyEbtllFzac3PTEW50OF1jDoceUqkvh4T
-         AkdxV1AIAPzliHc1+B1erAxQTuIl93x5PAjopHHX5NQCMSTjf5YCy+o+cszXZi88x8IW
-         j+3BAr+oRJ4go+VtKvRNWF4QYSp+9t5v3Tf+HSCsMchu24ilq5xJM/FH8ZsOAHmuHong
-         WjQJMMdzzcOwX8jqqwg4wK1Bw9rv/nrPZ8MP/MzSae7T7LzAVFs3kzGPeqRrpc4uffJj
-         Ve8XMx+imlbEYl7LjuLUWl4TlSTiAWx8PmYOw1BGDAz1Q4c4rS09AWf5LaEU/2inWj/c
-         wCcg==
-X-Gm-Message-State: AAQBX9dkqMZ8ZV6Qu2NzpZJN3fRJz1v62uWGgs8usl8fjpS8+BShBTkm
-        Cu6VJT6e3Ra7eGlNsBx9ymagbCw4X0Y56ea4qMgK6w==
-X-Google-Smtp-Source: AKy350aPsjzcRn4vSkaG2WH8TE6JDcGXVHn8SZwlybVEftI+43TQ5g6f833EvwiDoqOVYfFfbZUAma51h4+L+P//bUM=
-X-Received: by 2002:a17:906:9399:b0:94e:ec0f:5f70 with SMTP id
- l25-20020a170906939900b0094eec0f5f70mr12147954ejx.10.1682419080863; Tue, 25
- Apr 2023 03:38:00 -0700 (PDT)
+        Tue, 25 Apr 2023 06:38:36 -0400
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66092D52
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:38:30 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id rG3ypeIHUNW2mrG3ypVMX1; Tue, 25 Apr 2023 12:38:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682419107;
+        bh=bkk4QMvO+SU95aOVCgFeXzN50c8wR2cps94Hazrj99M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=azJNp5Wh2l54tl+VJUaEY34NL7noPHC6JNnHnvMSTjuYsan1uiAD+M757wxK5Zqyc
+         xH0hpIjJLvkd4R4AR97xl4DcjymHieX6wxYC6QanXg8me7DKOYUohPQ27huO26+6Z7
+         s7fVwelRDd2nsn8jnyDbUArYeTqGmbSJByknzKneWmS4wfNczl82upknJgH61C4dSL
+         fyrsdIK5y9A12QuIJWwxYFno/13LG3VqAFVqtBVKZDWVs+n0yIY9SMvjIny6w8+w6Q
+         nkTRUd0tpQR29m9oqQWAMpMmvzUqkaqjUvMVevO9hf4xBl2yXzVbxNlYpY1v9EpUO9
+         oOUYn/utIqZ9Q==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 25 Apr 2023 12:38:27 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <46933536-2999-c3b0-f3d3-60e8830f50a6@wanadoo.fr>
+Date:   Tue, 25 Apr 2023 12:38:21 +0200
 MIME-Version: 1.0
-References: <20230423075335.92597-1-kal.conley@dectris.com>
- <6446d34f9568_338f220872@john.notmuch> <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
- <ZEej6ZJVAgzRueyA@boxer>
-In-Reply-To: <ZEej6ZJVAgzRueyA@boxer>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Tue, 25 Apr 2023 12:37:49 +0200
-Message-ID: <CAHApi-mt18_RZeikzK-LXjybdc9Y2ZzPcWHmHQEREC-BKcb+8g@mail.gmail.com>
-Subject: Re: [PATCH] xsk: Use pool->dma_pages to check for DMA
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 10/11] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+Content-Language: fr
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230425102418.185783-1-ychuang570808@gmail.com>
+ <20230425102418.185783-11-ychuang570808@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230425102418.185783-11-ychuang570808@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Okay, 2-3% but with what settings? rxdrop for unaligned mode? what chunk
-> size etc? We need this kind of info, "compiles to more efficient code"
-> from original commit message is too generic and speculative to me. 2-3% of
-> perf diff against specific xdpsock setup is real improvement and is a
-> strong argument for getting this patch as-is, by its own.
+Le 25/04/2023 à 12:24, Jacky Huang a écrit :
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> This adds UART and console driver for Nuvoton ma35d1 Soc.
+> It supports full-duplex communication, FIFO control, and
+> hardware flow control.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>   drivers/tty/serial/Kconfig         |  18 +
+>   drivers/tty/serial/Makefile        |   1 +
+>   drivers/tty/serial/ma35d1_serial.c | 781 +++++++++++++++++++++++++++++
+>   3 files changed, 800 insertions(+)
+>   create mode 100644 drivers/tty/serial/ma35d1_serial.c
+> 
 
-I don't have the exact numbers anymore. I measured a performance
-difference (up to 2-3%) with different settings including rxdrop and
-unaligned mode. The exact settings you have in the commit message from
-the linked patch. I didn't go into details in the commit message
-because I thought this change would be a slam dunk. I don't think
-there is any reason to believe the code is slower with this patch. If
-anything, it should generally be faster. At the very least it will
-lead to more efficient code in terms of size since dma_pages_cnt is no
-longer read. Also I think the code is more readable with this patch.
+[...]
 
->
-> >
-> > > > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> > > > index d318c769b445..a8d7b8a3688a 100644
-> > > > --- a/include/net/xsk_buff_pool.h
-> > > > +++ b/include/net/xsk_buff_pool.h
-> > > > @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
-> > > >       if (likely(!cross_pg))
-> > > >               return false;
-> > > >
-> > > > -     return pool->dma_pages_cnt &&
-> > > > +     return pool->dma_pages &&
-> > > >              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
-> > > >  }
-> >
-> > I would consider the above code part of the "fast path". It may be
-> > executed approximately once per frame in unaligned mode.
-> >
-> > > This seems to be used in the setup/tear-down paths so your optimizing
-> > > a control side. Is there a fast path with this code? I walked the
-> > > ice driver. If its just setup code we should do whatever is more
-> > > readable.
-> >
-> > It is not only used in setup/tear-down paths (see above).
-> > Additionally, I believe the code is also _more_ readable with this
-> > patch applied. In particular, this patch reduces cognitive complexity
-> > since people (and compilers) reading the code don't need to
-> > additionally think about pool->dma_pages_cnt.
->
-> John was referring to xp_dma_unmap() with the comment above which indeed
-> is a teardown path, so probably this doesn't matter from performance
-> perspective and you could avoid this chunk from your patch.
+> +static int ma35d1serial_probe(struct platform_device *pdev)
+> +{
+> +	struct resource *res_mem;
+> +	struct uart_ma35d1_port *up;
+> +	int ret = 0;
+> +	struct clk *clk;
+> +	int err;
+> +
+> +	if (pdev->dev.of_node) {
+> +		ret = of_alias_get_id(pdev->dev.of_node, "serial");
+> +		if (ret < 0) {
+> +			dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +	up = &ma35d1serial_ports[ret];
+> +	up->port.line = ret;
+> +	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res_mem)
+> +		return -ENODEV;
+> +
+> +	up->port.iobase = res_mem->start;
+> +	up->port.membase = devm_ioremap(&pdev->dev, up->port.iobase, UART_REG_SIZE);
+> +	up->port.ops = &ma35d1serial_ops;
+> +
+> +	spin_lock_init(&up->port.lock);
+> +
+> +	clk = of_clk_get(pdev->dev.of_node, 0);
 
-The setup/tear-down lines were also changed to keep the code
-consistent. It doesn't make sense to sometimes check dma_pages_cnt and
-other times dma_pages.
+Does this...
 
->
-> >
-> > > Both the _alloc_ cases read neighboring free_heads_cnt so your saving a load I guess?
-> > > This is so deep into micro-optimizing I'm curious if you could measure it?
-> >
-> > It is saving a load which also reduces code size. This will affect
-> > other decisions such as what to inline. Also in the linked patchset,
-> > dma_pages and dma_pages_cnt do not share a cache line (on x86_64).
->
-> Yes I believe that the with your patch on unaligned mode by touching the
-> dma_pages you're warming the relevant cache line for your setup.
+> +	if (IS_ERR(clk)) {
+> +		err = PTR_ERR(clk);
+> +		dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
+> +		return -ENOENT;
+> +	}
+> +
+> +	err = clk_prepare_enable(clk);
 
-dma_pages is touched anyway right after. That is the point of this
-patch: since dma_pages already needs to be loaded into a register,
-just check that instead of loading an additional field possibly from a
-different cache line.
+... and this be undone in the remove function?
+
+CJ
+
+> +	if (err)
+> +		return -ENOENT;
+> +
+> +	if (up->port.line != 0)
+> +		up->port.uartclk = clk_get_rate(clk);
+> +
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +	up->port.irq = ret;
+> +	up->port.dev = &pdev->dev;
+> +	up->port.flags = UPF_BOOT_AUTOCONF;
+> +
+> +	platform_set_drvdata(pdev, up);
+> +
+> +	return uart_add_one_port(&ma35d1serial_reg, &up->port);
+> +}
+
+[...]
+
