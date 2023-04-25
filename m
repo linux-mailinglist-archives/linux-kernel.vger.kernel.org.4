@@ -2,169 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5986EE9CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20ABC6EE9CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbjDYVpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 17:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S235325AbjDYVvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 17:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjDYVpE (ORCPT
+        with ESMTP id S231629AbjDYVvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 17:45:04 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C6FB239
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682459103; x=1713995103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QykCodoxCjYPsvFBT9BYYHLb2+QG8EOs85UQFzRc+2E=;
-  b=T4xM1l3LRDBUL/ig5517wP9sPxbH4TMKUp2noR77ntgadcp/ttK5SJh5
-   d9aalHNk+36f9r2GlRu5qtSp8d1pkoJkYFVvdzKV+19YbMmrhkiyPj/sX
-   gxXjnQ3lKXXPvURmEQvrqmouSGgwI+e2vY6H138H15ouYfO4VCW6Fx/5P
-   ip4kUVoO9tm6WLR7mUmiDxEAJ96mooALrJnL9YHS4uo9w0ihIbopDPoLh
-   drbdYGJT1qMEBDubcPSd3ddSKv7JgS7J0dRcgUWfpZd0pUkBElsb01jcr
-   4bGvzP/QQjHZrnfsJ+uUPWgkkmexbgyLRUliiwWdNJ0uZ3vhkZBO4TZaJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="344369486"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="344369486"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 14:45:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="696368234"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="696368234"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2023 14:45:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prQT7-000jnc-0N;
-        Tue, 25 Apr 2023 21:45:01 +0000
-Date:   Wed, 26 Apr 2023 05:44:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fsfa3-next-20230425 1/1]
- kernel/bpf/net_namespace.c:437:27: warning: array subscript [0, 1] is
- outside array bounds of 'struct bpf_prog *[2]'
-Message-ID: <202304260539.vm2qQLzo-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 25 Apr 2023 17:51:13 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6026BB8D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:51:12 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2E61D5C00E9;
+        Tue, 25 Apr 2023 17:51:12 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 25 Apr 2023 17:51:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682459472; x=1682545872; bh=Q0
+        nzMIL9J1DjTJF8V79wook06vhKzjXIK3anlxaXiXI=; b=GDc/RoLbFkvoGPSQ/W
+        66mNY5lY/V8N2mlX4mu2RY70HKCIw3N0cMQ1igucTzc5f1APepurvZVv8ZYt5q73
+        JgckPPR55SSc+Mufqt9N/FjppjNVa53k3oQ3w7ef5KGB6sOmt6GVCOpBFwfcFII9
+        WHgXlQD0L2hnrAVUkk8wuIM68SCeMR3FwcMl/DWA4aeLxjayFI+S1ttYAHYysJUc
+        CD5Bs7Xh+hCYtyVsDEf8pKO5AIfitxipBCCBrMH/ryKem5Nzm1tjuFTw5scnHwlQ
+        s8Wq3Yz03HrcjK0qUlBv9R/VKMkLAaBUj0dXvrklYcUz7gO/liuUghVTafxE+XCi
+        YWqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682459472; x=1682545872; bh=Q0nzMIL9J1DjT
+        JF8V79wook06vhKzjXIK3anlxaXiXI=; b=gpkQP/jnCLnfQxEw6FZDtXIgDg44u
+        vaCFTAaaU7DL2eO2s/jeUHAJT3/a1P+D0bqToERzdYxAKBJLdAh97uOu6TgumrU8
+        OqCFWUk8/XdQntCzRUffc/X78i8pFbI37SL9W6NhHeZ2LjUWBIiJOJTYJy7aIoa3
+        IaiA9iSjXtJ755RZSesJWIHSrtTKMXf5iisoEwmy31l81E+YRUb2lf25Q3MH5GxI
+        5nLeIpN3r8F7NrzLDV+N+NnUuucyO1Ym4dIJL005dU8V00oFcPwVM5QbMsVInQ6I
+        cw2xJMky+LGkr4/XbDOQTqouwN2TrTN6OT3UVBdZA+7sk2DeX3Sbt9Jgw==
+X-ME-Sender: <xms:T0tIZFd9XPiudzm9JBWtyudS6BgsW4gTZfAHZRyS9aLruiluNPetxQ>
+    <xme:T0tIZDOkJx5x4XOuuZKWaJUXd9GRXmPjQHEOUePFdNV0w9C80TEB3gqxd3mvbtpyV
+    funLVSTmyymz24E6z4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedufedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:T0tIZOgTywTE2HYtYawAsA6Ep34aJk854FQbnycGbdMVVtsAw8yXgA>
+    <xmx:T0tIZO9VHU3LaUfV-bUIvo-KIwJLTt0h8DjuKv1YtyJLSEtNY7mS9Q>
+    <xmx:T0tIZBsVSucz5PzrAm0gQmITHSRlW0uRPmzaljWOuuY-ywGxFRR1Og>
+    <xmx:UEtIZK6KWmJDQVbo29Gmro4IjCVj-rHCKKDwGhkkyu-GRIU-h0K8og>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A5E55B60086; Tue, 25 Apr 2023 17:51:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <a8840c41-6245-4531-8b23-5c4e594c1ca9@app.fastmail.com>
+In-Reply-To: <20230425152720.GA4155584@angband.pl>
+References: <20230423135124.55196-1-kilobyte@angband.pl>
+ <MN2PR11MB409305D13E46C371321AC2F0E5649@MN2PR11MB4093.namprd11.prod.outlook.com>
+ <20230425115210.GA4151911@angband.pl>
+ <2023042502-resolute-divisible-fbff@gregkh>
+ <20230425152720.GA4155584@angband.pl>
+Date:   Tue, 25 Apr 2023 22:51:01 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Adam Borowski" <kilobyte@angband.pl>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Winkler, Tomas" <tomas.winkler@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Usyskin, Alexander" <alexander.usyskin@intel.com>
+Subject: Re: [PATCH] mei: make hdcp and pxp depend on X86 && PCI
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3-next-20230425
-head:   b82a35ff486df1d6737f532e08e060c466f9e652
-commit: b82a35ff486df1d6737f532e08e060c466f9e652 [1/1] Makefile: Enable -Wstringop-overflow and -Warray-bounds
-config: microblaze-randconfig-r002-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260539.vm2qQLzo-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=b82a35ff486df1d6737f532e08e060c466f9e652
-        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
-        git fetch --no-tags gustavoars testing/fsfa3-next-20230425
-        git checkout b82a35ff486df1d6737f532e08e060c466f9e652
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash kernel/bpf/
+On Tue, Apr 25, 2023, at 16:27, Adam Borowski wrote:
+> On Tue, Apr 25, 2023 at 03:40:10PM +0200, Greg Kroah-Hartman wrote:
+>> On Tue, Apr 25, 2023 at 01:52:10PM +0200, Adam Borowski wrote:
+>> > On Tue, Apr 25, 2023 at 04:39:23AM +0000, Winkler, Tomas wrote:
+>> > > What is the exact issue you are experiencing, can you add the error message this fixes? 
+>> > 
+>> > The problem doesn't trigger in mainline
+>> 
+>> Then it's nothing we need to worry about in mainline.  If/when other
+>> changes ever happen to need it here in mainline, we will gladly take the
+>> change.
+>> 
+>> For obvious reasons, we can't take patches for issues outside of our
+>> codebase.  Nor do you want us to, as that way lies madness and an
+>> unmaintainable mess.
+>
+> The problem in mainline is inconsistency: out of 6 config items, 4 repeat
+> the "depends on X86 && PCI" line, the other 2 do not.  There's indeed no
+> immediate functional issue, but I'd argue that a dormant bug is still a bug.
+>
+> So we can fix the cosmetic (currently) issue on its own, or as part of the
+> large patchset -- the latter having a side effect of stuffing your mailboxes
+> more than needed (neither Greg, Arnd, nor Tomas are involved in other bits).
+>
+> But do the selects really require so much duplication?  Perhaps I'm trying
+> to fix the underlying issue wrong? 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304260539.vm2qQLzo-lkp@intel.com/
+I think something along these lines would do (untested):
 
-All warnings (new ones prefixed by >>):
-
-   kernel/bpf/net_namespace.c: In function 'netns_bpf_link_attach':
->> kernel/bpf/net_namespace.c:437:27: warning: array subscript [0, 1] is outside array bounds of 'struct bpf_prog *[2]' [-Warray-bounds]
-     437 |         if (net->bpf.progs[type]) {
-         |             ~~~~~~~~~~~~~~^~~~~~
-   In file included from include/linux/bpf-netns.h:6,
-                    from kernel/bpf/net_namespace.c:4:
-   include/net/netns/bpf.h:24:26: note: while referencing 'progs'
-      24 |         struct bpf_prog *progs[MAX_NETNS_BPF_ATTACH_TYPE];
-         |                          ^~~~~
-
-
-vim +437 kernel/bpf/net_namespace.c
-
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  420  
-7f045a49fee04b Jakub Sitnicki 2020-05-31  421  static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
-7f045a49fee04b Jakub Sitnicki 2020-05-31  422  				 enum netns_bpf_attach_type type)
-7f045a49fee04b Jakub Sitnicki 2020-05-31  423  {
-ab53cad90eb10c Jakub Sitnicki 2020-06-25  424  	struct bpf_netns_link *net_link =
-ab53cad90eb10c Jakub Sitnicki 2020-06-25  425  		container_of(link, struct bpf_netns_link, link);
-695c12147a4018 Jakub Sitnicki 2020-06-25  426  	struct bpf_prog_array *run_array;
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  427  	int cnt, err;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  428  
-7f045a49fee04b Jakub Sitnicki 2020-05-31  429  	mutex_lock(&netns_bpf_mutex);
-7f045a49fee04b Jakub Sitnicki 2020-05-31  430  
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  431  	cnt = link_count(net, type);
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  432  	if (cnt >= netns_bpf_max_progs(type)) {
-7f045a49fee04b Jakub Sitnicki 2020-05-31  433  		err = -E2BIG;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  434  		goto out_unlock;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  435  	}
-7f045a49fee04b Jakub Sitnicki 2020-05-31  436  	/* Links are not compatible with attaching prog directly */
-695c12147a4018 Jakub Sitnicki 2020-06-25 @437  	if (net->bpf.progs[type]) {
-7f045a49fee04b Jakub Sitnicki 2020-05-31  438  		err = -EEXIST;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  439  		goto out_unlock;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  440  	}
-7f045a49fee04b Jakub Sitnicki 2020-05-31  441  
-7f045a49fee04b Jakub Sitnicki 2020-05-31  442  	switch (type) {
-7f045a49fee04b Jakub Sitnicki 2020-05-31  443  	case NETNS_BPF_FLOW_DISSECTOR:
-3b7016996c4c44 Jakub Sitnicki 2020-06-25  444  		err = flow_dissector_bpf_prog_attach_check(net, link->prog);
-7f045a49fee04b Jakub Sitnicki 2020-05-31  445  		break;
-e9ddbb7707ff58 Jakub Sitnicki 2020-07-17  446  	case NETNS_BPF_SK_LOOKUP:
-e9ddbb7707ff58 Jakub Sitnicki 2020-07-17  447  		err = 0; /* nothing to check */
-e9ddbb7707ff58 Jakub Sitnicki 2020-07-17  448  		break;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  449  	default:
-7f045a49fee04b Jakub Sitnicki 2020-05-31  450  		err = -EINVAL;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  451  		break;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  452  	}
-7f045a49fee04b Jakub Sitnicki 2020-05-31  453  	if (err)
-7f045a49fee04b Jakub Sitnicki 2020-05-31  454  		goto out_unlock;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  455  
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  456  	run_array = bpf_prog_array_alloc(cnt + 1, GFP_KERNEL);
-695c12147a4018 Jakub Sitnicki 2020-06-25  457  	if (!run_array) {
-695c12147a4018 Jakub Sitnicki 2020-06-25  458  		err = -ENOMEM;
-695c12147a4018 Jakub Sitnicki 2020-06-25  459  		goto out_unlock;
-695c12147a4018 Jakub Sitnicki 2020-06-25  460  	}
-695c12147a4018 Jakub Sitnicki 2020-06-25  461  
-ab53cad90eb10c Jakub Sitnicki 2020-06-25  462  	list_add_tail(&net_link->node, &net->bpf.links[type]);
-7f045a49fee04b Jakub Sitnicki 2020-05-31  463  
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  464  	fill_prog_array(net, type, run_array);
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  465  	run_array = rcu_replace_pointer(net->bpf.run_array[type], run_array,
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  466  					lockdep_is_held(&netns_bpf_mutex));
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  467  	bpf_prog_array_free(run_array);
-ce3aa9cc510936 Jakub Sitnicki 2020-07-17  468  
-1559b4aa1db443 Jakub Sitnicki 2020-07-17  469  	/* Mark attach point as used */
-1559b4aa1db443 Jakub Sitnicki 2020-07-17  470  	netns_bpf_attach_type_need(type);
-1559b4aa1db443 Jakub Sitnicki 2020-07-17  471  
-7f045a49fee04b Jakub Sitnicki 2020-05-31  472  out_unlock:
-7f045a49fee04b Jakub Sitnicki 2020-05-31  473  	mutex_unlock(&netns_bpf_mutex);
-7f045a49fee04b Jakub Sitnicki 2020-05-31  474  	return err;
-7f045a49fee04b Jakub Sitnicki 2020-05-31  475  }
-7f045a49fee04b Jakub Sitnicki 2020-05-31  476  
-
-:::::: The code at line 437 was first introduced by commit
-:::::: 695c12147a40181fe9221d321c3f2de33c9574ed bpf, netns: Keep attached programs in bpf_prog_array
-
-:::::: TO: Jakub Sitnicki <jakub@cloudflare.com>
-:::::: CC: Alexei Starovoitov <ast@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+diff --git a/drivers/misc/mei/Kconfig b/drivers/misc/mei/Kconfig
+index d21486d69df2..8e5d79cff80b 100644
+--- a/drivers/misc/mei/Kconfig
++++ b/drivers/misc/mei/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Copyright (c) 2003-2019, Intel Corporation. All rights reserved.
+-config INTEL_MEI
++menuconfig INTEL_MEI
+        tristate "Intel Management Engine Interface"
+        depends on X86 && PCI
+        help
+@@ -13,8 +13,6 @@ config INTEL_MEI
+ 
+ config INTEL_MEI_ME
+        tristate "ME Enabled Intel Chipsets"
+-       select INTEL_MEI
+-       depends on X86 && PCI
+        help
+          MEI support for ME Enabled Intel chipsets.
+ 
+@@ -38,8 +36,6 @@ config INTEL_MEI_ME
+ 
+ config INTEL_MEI_TXE
+        tristate "Intel Trusted Execution Environment with ME Interface"
+-       select INTEL_MEI
+-       depends on X86 && PCI
+        help
+          MEI Support for Trusted Execution Environment device on Intel SoCs
+ 
+@@ -48,9 +44,7 @@ config INTEL_MEI_TXE
+ 
+ config INTEL_MEI_GSC
+        tristate "Intel MEI GSC embedded device"
+-       depends on INTEL_MEI
+        depends on INTEL_MEI_ME
+-       depends on X86 && PCI
+        depends on DRM_I915
+        help
+          Intel auxiliary driver for GSC devices embedded in Intel graphics devices.
+@@ -63,3 +57,4 @@ config INTEL_MEI_GSC
+ source "drivers/misc/mei/hdcp/Kconfig"
+ source "drivers/misc/mei/pxp/Kconfig"
+ 
++endmenu
