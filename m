@@ -2,293 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287526EE1EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C7D6EE1E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbjDYMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S234099AbjDYMck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbjDYMdQ (ORCPT
+        with ESMTP id S229653AbjDYMci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:33:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CFD212B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682425948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bohgohGspBTeimM/lqZBb2hWhzf/LeNklzg3aDphm7A=;
-        b=NNxlNlSF5UzGGeOb6RKZQjpQ5eJjhg/MbB8Uyi4SeJKDOV3xJisBtIge+BiaIBkYd/U+qL
-        321TptBDpIuD+RVyWH+TfV6Kw4sFvZy8G18+FEa6Au6/zMnQwz07ImNpJW0wLD1+m7amo9
-        fKmv5medA5pWWQeCNDnOdskWDYiLTfs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-r_72zvwCNC-UAAbbXtxzIQ-1; Tue, 25 Apr 2023 08:32:26 -0400
-X-MC-Unique: r_72zvwCNC-UAAbbXtxzIQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D4828886463;
-        Tue, 25 Apr 2023 12:32:08 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.16.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1B99B49AF0;
-        Tue, 25 Apr 2023 12:32:07 +0000 (UTC)
-Date:   Tue, 25 Apr 2023 08:32:05 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
-        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de,
-        jhladky@redhat.com
-Subject: Re: [PATCH 00/17] sched: EEVDF using latency-nice
-Message-ID: <20230425123205.GB414327@lorien.usersys.redhat.com>
-References: <20230328092622.062917921@infradead.org>
+        Tue, 25 Apr 2023 08:32:38 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517294EC0;
+        Tue, 25 Apr 2023 05:32:37 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PCWAhk066095;
+        Tue, 25 Apr 2023 07:32:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682425930;
+        bh=CFPzwDmySEzg1N62RTR8ZiaR751KuV8ALtFldAAMJJ4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=NWqJp9FsU8dhh+M/g5toTnXg1tkP8GLMCqgpCmGsz45eoV8Eq9q4uGB6l1IvYYW5F
+         I/iBa4mX73qoV55kDZODjK5hNl2AiQORw6xikm6ZTnKiwMTkIYsgFWp3+6+y3EhMpu
+         sChzTE1lqOYOyPzlS/c4Atkdq5Yd7V07dGgJq0Z4=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PCW9ce065338
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 07:32:10 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 07:32:09 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 07:32:09 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PCW9SC021943;
+        Tue, 25 Apr 2023 07:32:09 -0500
+Date:   Tue, 25 Apr 2023 07:32:09 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Judith Mendez <jm@ti.com>
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH v2 2/4] dt-bindings: net: can: Add poll-interval for MCAN
+Message-ID: <20230425123209.g3jocqvnnpkv4jk5@stingy>
+References: <20230424195402.516-1-jm@ti.com>
+ <20230424195402.516-3-jm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230328092622.062917921@infradead.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230424195402.516-3-jm@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Peter,
-
-On Tue, Mar 28, 2023 at 11:26:22AM +0200 Peter Zijlstra wrote:
-> Hi!
+On 14:54-20230424, Judith Mendez wrote:
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt by
+> hrtimer. To enable timer method, interrupts should be optional so
+> remove interrupts property from required section and introduce
+> poll-interval property.
 > 
-> Latest version of the EEVDF [1] patches.
-> 
-> Many changes since last time; most notably it now fully replaces CFS and uses
-> lag based placement for migrations. Smaller changes include:
-> 
->  - uses scale_load_down() for avg_vruntime; I measured the max delta to be ~44
->    bits on a system/cgroup based kernel build.
->  - fixed a bunch of reweight / cgroup placement issues
->  - adaptive placement strategy for smaller slices
->  - rename se->lag to se->vlag
-> 
-> There's a bunch of RFC patches at the end and one DEBUG patch. Of those, the
-> PLACE_BONUS patch is a mixed bag of pain. A number of benchmarks regress
-> because EEVDF is actually fair and gives a 100% parent vs a 50% child a 67%/33%
-> split (stress-futex, stress-nanosleep, starve, etc..) instead of a 50%/50%
-> split that sleeper bonus achieves. Mostly I think these benchmarks are somewhat
-> artificial/daft but who knows.
-> 
-> The PLACE_BONUS thing horribly messes up things like hackbench and latency-nice
-> because it places things too far to the left in the tree. Basically it messes
-> with the whole 'when', by placing a task back in history you're putting a
-> burden on the now to accomodate catching up. More tinkering required.
-> 
-> But over-all the thing seems to be fairly usable and could do with more
-> extensive testing.
-
-I had Jirka run his suite of perf workloads on this. These are macro benchmarks
-on baremetal (NAS, SPECjbb etc). I can't share specific results because it
-comes out in nice html reports on an internal website. There was no noticeable
-performance change, which is a good thing. Overall performance was comparable
-to CFS.
-
-There was a win in stability though. A number of the error boxes across the
-board were smaller. So less variance.
-
-These are mostly performance/throughput tests. We're going to run some more
-latency sensitive tests now.
-
-So, fwiw, EEVDF is performing well on macro workloads here.
-
-
-
-Cheers,
-Phil
-
-> 
-> [1] https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=805acf7726282721504c8f00575d91ebfd750564
-> 
-> Results:
-> 
->   hackbech -g $nr_cpu + cyclictest --policy other results:
-> 
-> 			EEVDF			 CFS
-> 
-> 		# Min Latencies: 00054
->   LNICE(19)	# Avg Latencies: 00660
-> 		# Max Latencies: 23103
-> 
-> 		# Min Latencies: 00052		00053
->   LNICE(0)	# Avg Latencies: 00318		00687
-> 		# Max Latencies: 08593		13913
-> 
-> 		# Min Latencies: 00054
->   LNICE(-19)	# Avg Latencies: 00055
-> 		# Max Latencies: 00061
-> 
-> 
-> Some preliminary results from Chen Yu on a slightly older version:
-> 
->   schbench  (95% tail latency, lower is better)
->   =================================================================================
->   case                    nr_instance            baseline (std%)    compare% ( std%)
->   normal                   25%                     1.00  (2.49%)    -81.2%   (4.27%)
->   normal                   50%                     1.00  (2.47%)    -84.5%   (0.47%)
->   normal                   75%                     1.00  (2.5%)     -81.3%   (1.27%)
->   normal                  100%                     1.00  (3.14%)    -79.2%   (0.72%)
->   normal                  125%                     1.00  (3.07%)    -77.5%   (0.85%)
->   normal                  150%                     1.00  (3.35%)    -76.4%   (0.10%)
->   normal                  175%                     1.00  (3.06%)    -76.2%   (0.56%)
->   normal                  200%                     1.00  (3.11%)    -76.3%   (0.39%)
->   ==================================================================================
-> 
->   hackbench (throughput, higher is better)
->   ==============================================================================
->   case                    nr_instance            baseline(std%)  compare%( std%)
->   threads-pipe              25%                      1.00 (<2%)    -17.5 (<2%)
->   threads-socket            25%                      1.00 (<2%)    -1.9 (<2%)
->   threads-pipe              50%                      1.00 (<2%)     +6.7 (<2%)
->   threads-socket            50%                      1.00 (<2%)    -6.3  (<2%)
->   threads-pipe              100%                     1.00 (3%)     +110.1 (3%)
->   threads-socket            100%                     1.00 (<2%)    -40.2 (<2%)
->   threads-pipe              150%                     1.00 (<2%)    +125.4 (<2%)
->   threads-socket            150%                     1.00 (<2%)    -24.7 (<2%)
->   threads-pipe              200%                     1.00 (<2%)    -89.5 (<2%)
->   threads-socket            200%                     1.00 (<2%)    -27.4 (<2%)
->   process-pipe              25%                      1.00 (<2%)    -15.0 (<2%)
->   process-socket            25%                      1.00 (<2%)    -3.9 (<2%)
->   process-pipe              50%                      1.00 (<2%)    -0.4  (<2%)
->   process-socket            50%                      1.00 (<2%)    -5.3  (<2%)
->   process-pipe              100%                     1.00 (<2%)    +62.0 (<2%)
->   process-socket            100%                     1.00 (<2%)    -39.5  (<2%)
->   process-pipe              150%                     1.00 (<2%)    +70.0 (<2%)
->   process-socket            150%                     1.00 (<2%)    -20.3 (<2%)
->   process-pipe              200%                     1.00 (<2%)    +79.2 (<2%)
->   process-socket            200%                     1.00 (<2%)    -22.4  (<2%)
->   ==============================================================================
-> 
->   stress-ng (throughput, higher is better)
->   ==============================================================================
->   case                    nr_instance            baseline(std%)  compare%( std%)
->   switch                  25%                      1.00 (<2%)    -6.5 (<2%)
->   switch                  50%                      1.00 (<2%)    -9.2 (<2%)
->   switch                  75%                      1.00 (<2%)    -1.2 (<2%)
->   switch                  100%                     1.00 (<2%)    +11.1 (<2%)
->   switch                  125%                     1.00 (<2%)    -16.7% (9%)
->   switch                  150%                     1.00 (<2%)    -13.6 (<2%)
->   switch                  175%                     1.00 (<2%)    -16.2 (<2%)
->   switch                  200%                     1.00 (<2%)    -19.4% (<2%)
->   fork                    50%                      1.00 (<2%)    -0.1 (<2%)
->   fork                    75%                      1.00 (<2%)    -0.3 (<2%)
->   fork                    100%                     1.00 (<2%)    -0.1 (<2%)
->   fork                    125%                     1.00 (<2%)    -6.9 (<2%)
->   fork                    150%                     1.00 (<2%)    -8.8 (<2%)
->   fork                    200%                     1.00 (<2%)    -3.3 (<2%)
->   futex                   25%                      1.00 (<2%)    -3.2 (<2%)
->   futex                   50%                      1.00 (3%)     -19.9 (5%)
->   futex                   75%                      1.00 (6%)     -19.1 (2%)
->   futex                   100%                     1.00 (16%)    -30.5 (10%)
->   futex                   125%                     1.00 (25%)    -39.3 (11%)
->   futex                   150%                     1.00 (20%)    -27.2% (17%)
->   futex                   175%                     1.00 (<2%)    -18.6 (<2%)
->   futex                   200%                     1.00 (<2%)    -47.5 (<2%)
->   nanosleep               25%                      1.00 (<2%)    -0.1 (<2%)
->   nanosleep               50%                      1.00 (<2%)    -0.0% (<2%)
->   nanosleep               75%                      1.00 (<2%)    +15.2% (<2%)
->   nanosleep               100%                     1.00 (<2%)    -26.4 (<2%)
->   nanosleep               125%                     1.00 (<2%)    -1.3 (<2%)
->   nanosleep               150%                     1.00 (<2%)    +2.1  (<2%)
->   nanosleep               175%                     1.00 (<2%)    +8.3 (<2%)
->   nanosleep               200%                     1.00 (<2%)    +2.0% (<2%)
->   ===============================================================================
-> 
->   unixbench (throughput, higher is better)
->   ==============================================================================
->   case                    nr_instance            baseline(std%)  compare%( std%)
->   spawn                   125%                      1.00 (<2%)    +8.1 (<2%)
->   context1                100%                      1.00 (6%)     +17.4 (6%)
->   context1                75%                       1.00 (13%)    +18.8 (8%)
->   =================================================================================
-> 
->   netperf  (throughput, higher is better)
->   ===========================================================================
->   case                    nr_instance          baseline(std%)  compare%( std%)
->   UDP_RR                  25%                   1.00    (<2%)    -1.5%  (<2%)
->   UDP_RR                  50%                   1.00    (<2%)    -0.3%  (<2%)
->   UDP_RR                  75%                   1.00    (<2%)    +12.5% (<2%)
->   UDP_RR                 100%                   1.00    (<2%)    -4.3%  (<2%)
->   UDP_RR                 125%                   1.00    (<2%)    -4.9%  (<2%)
->   UDP_RR                 150%                   1.00    (<2%)    -4.7%  (<2%)
->   UDP_RR                 175%                   1.00    (<2%)    -6.1%  (<2%)
->   UDP_RR                 200%                   1.00    (<2%)    -6.6%  (<2%)
->   TCP_RR                  25%                   1.00    (<2%)    -1.4%  (<2%)
->   TCP_RR                  50%                   1.00    (<2%)    -0.2%  (<2%)
->   TCP_RR                  75%                   1.00    (<2%)    -3.9%  (<2%)
->   TCP_RR                 100%                   1.00    (2%)     +3.6%  (5%)
->   TCP_RR                 125%                   1.00    (<2%)    -4.2%  (<2%)
->   TCP_RR                 150%                   1.00    (<2%)    -6.0%  (<2%)
->   TCP_RR                 175%                   1.00    (<2%)    -7.4%  (<2%)
->   TCP_RR                 200%                   1.00    (<2%)    -8.4%  (<2%)
->   ==========================================================================
-> 
-> 
+> Signed-off-by: Judith Mendez <jm@ti.com>
 > ---
-> Also available at:
+> Changelog:
+> v2:
+>   1. Add poll-interval property to enable timer polling method
+>   2. Add example using poll-interval property
+>   
+>  .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/eevdf
-> 
-> ---
-> Parth Shah (1):
->       sched: Introduce latency-nice as a per-task attribute
-> 
-> Peter Zijlstra (14):
->       sched/fair: Add avg_vruntime
->       sched/fair: Remove START_DEBIT
->       sched/fair: Add lag based placement
->       rbtree: Add rb_add_augmented_cached() helper
->       sched/fair: Implement an EEVDF like policy
->       sched: Commit to lag based placement
->       sched/smp: Use lag to simplify cross-runqueue placement
->       sched: Commit to EEVDF
->       sched/debug: Rename min_granularity to base_slice
->       sched: Merge latency_offset into slice
->       sched/eevdf: Better handle mixed slice length
->       sched/eevdf: Sleeper bonus
->       sched/eevdf: Minimal vavg option
->       sched/eevdf: Debug / validation crud
-> 
-> Vincent Guittot (2):
->       sched/fair: Add latency_offset
->       sched/fair: Add sched group latency support
-> 
->  Documentation/admin-guide/cgroup-v2.rst |   10 +
->  include/linux/rbtree_augmented.h        |   26 +
->  include/linux/sched.h                   |    6 +
->  include/uapi/linux/sched.h              |    4 +-
->  include/uapi/linux/sched/types.h        |   19 +
->  init/init_task.c                        |    3 +-
->  kernel/sched/core.c                     |   65 +-
->  kernel/sched/debug.c                    |   49 +-
->  kernel/sched/fair.c                     | 1199 ++++++++++++++++---------------
->  kernel/sched/features.h                 |   29 +-
->  kernel/sched/sched.h                    |   23 +-
->  tools/include/uapi/linux/sched.h        |    4 +-
->  12 files changed, 794 insertions(+), 643 deletions(-)
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 67879aab623b..1c64c7a0c3df 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -40,6 +40,10 @@ properties:
+>        - const: int1
+>      minItems: 1
+>  
+> +  poll-interval:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: Poll interval time in milliseconds.
+> +
+>    clocks:
+>      items:
+>        - description: peripheral clock
+> @@ -122,15 +126,13 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+> -  - interrupt-names
+>    - clocks
+>    - clock-names
+>    - bosch,mram-cfg
+>  
+>  additionalProperties: false
+>  
+> -examples:
+> +example with interrupts:
+>    - |
+>      #include <dt-bindings/clock/imx6sx-clock.h>
+>      can@20e8000 {
+> @@ -149,4 +151,22 @@ examples:
+>        };
+>      };
+>  
+> +example with timer polling:
+
+did you run dt_binding_check?
+make -j`nproc` ARCH=arm64 LLVM=1 dt_binding_check DT_CHECKER_FLAGS=-m DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+
+tells me:
+
+  LINT    Documentation/devicetree/bindings
+  DTEX    Documentation/devicetree/bindings/net/can/bosch,m_can.example.dts
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+/workdir/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with interrupts' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/workdir/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with timer polling' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+
+> +  - |
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +    can@20e8000 {
+> +      compatible = "bosch,m_can";
+> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
+> +      reg-names = "m_can", "message_ram";
+> +      poll-interval;
+> +      clocks = <&clks IMX6SX_CLK_CANFD>,
+> +               <&clks IMX6SX_CLK_CANFD>;
+> +      clock-names = "hclk", "cclk";
+> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
+> +
+> +      can-transceiver {
+> +        max-bitrate = <5000000>;
+> +      };
+> +    };
+> +
+>  ...
+> -- 
+> 2.17.1
 > 
 
 -- 
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
