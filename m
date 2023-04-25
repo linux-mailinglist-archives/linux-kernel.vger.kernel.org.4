@@ -2,311 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD20D6EDDB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11996EDDB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjDYIL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
+        id S233339AbjDYIMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbjDYIL1 (ORCPT
+        with ESMTP id S233520AbjDYIMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:11:27 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC92119BC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:11:22 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230425081120epoutp04684e4e4264abb76f48ffeee196ce28ea~ZHzx2JAsn2180321803epoutp04-
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 08:11:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230425081120epoutp04684e4e4264abb76f48ffeee196ce28ea~ZHzx2JAsn2180321803epoutp04-
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682410280;
-        bh=N9nZClz1ANv1MSriHoOK5Bg8AtRXHwknq59cqaN77a4=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=JPa8CrndElNzSJWpeOsGXwQC+8o6nAe5vbZIuIT7Trin2OzMPOe03uAWRa2V70hpR
-         qtSv176bCa9oVUFdrt2gTns5vKovX0whwoDnmzUDiry2hvE64bCuS58u0FrSxfb0lV
-         3zj28oAoUOOUtXZuvnXmyVokfhYolURM+bT0An9o=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20230425081119epcas2p362a5ce622a454811946cb125facd264a~ZHzxQFGPs1780917809epcas2p3A;
-        Tue, 25 Apr 2023 08:11:19 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.97]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Q5F7q19vfz4x9QN; Tue, 25 Apr
-        2023 08:11:19 +0000 (GMT)
-X-AuditID: b6c32a48-c8660a8000005998-9c-64478b26d1f2
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        69.24.22936.62B87446; Tue, 25 Apr 2023 17:11:19 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2] f2fs: add async reset zone command support
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>
-CC:     Daejun Park <daejun7.park@samsung.com>,
-        Seokhwan Kim <sukka.kim@samsung.com>,
-        Yonggil Song <yonggil.song@samsung.com>,
-        beomsu kim <beomsu7.kim@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230425081018epcms2p8fefa94810f0b341d2cbd70ba587e9e8c@epcms2p8>
-Date:   Tue, 25 Apr 2023 17:10:18 +0900
-X-CMS-MailID: 20230425081018epcms2p8fefa94810f0b341d2cbd70ba587e9e8c
+        Tue, 25 Apr 2023 04:12:16 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBEE46BD;
+        Tue, 25 Apr 2023 01:12:14 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4edc114c716so5886730e87.1;
+        Tue, 25 Apr 2023 01:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682410333; x=1685002333;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YfisbPoLjz5PhUaD+ahIoRzTjg2nrG8aK3yeqZRTwxo=;
+        b=gflmUaVA1Ytpl8RIq547O40wIPaQbX7mpj5zmxqbDnFCzjvjWYIbri4F4Q7aER4ry/
+         sHuAugcGjD2KZifQyHmmBVCAbAlWLnaOnMeT+B//YwHCTmSf4CzcY22hRcj5JtAa2BxZ
+         sEvtqBhSL1lpTHWOh4ugahjKn/vFeHP5FDNenkobDowWDkiUdN8xwuShQmFZ5fylTQGg
+         ZGvE5d2uUDTxG5lcpA3MA04ryPaqo5VlwA85e7XyWScnk+Fx0QD0SzaAFBIrpZnBNZxW
+         u8ZJMvZijCWVOdZ/36MjgUOQocFLhQOki/EEDdpm2u4KLdzkHHc3FfrEOAgP9Vx+sNrz
+         zzaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682410333; x=1685002333;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YfisbPoLjz5PhUaD+ahIoRzTjg2nrG8aK3yeqZRTwxo=;
+        b=RS/dsKpcduZC8bcCmlpM30DgUxuIgUp2TSJrjUf0d7c0IzJTFNCDQAQDYptrhUSSmQ
+         sdbR86LluUud1cHI4vlT/Mc88wlLWPUafYMq9L0pOE5pobvmux3JZFdYk+gpp7PVbVrA
+         yr2UNXcKmF7mTytW5lWFillqXntwuOfkWXvZg9eMYbWA85mLgxs6K7SX0HxZSGnqQLg9
+         596jNHIw5G7rRk9WZMWbYBBod8PXUi3kQvFA4Y9oG1EOrEXgFqA47tIcGlYbEjR/bIGO
+         W/yobRPzkRAV/XWbKZBCE3J4BbDqkEhQGTvRCwtGfGa0tk/oOxJk4Qw3rOSQjqcPtyeG
+         YDTA==
+X-Gm-Message-State: AAQBX9cVRgrwLd6yboLPhl/iyeHo6evPlSFByDK3bcBWAQduie0xSebh
+        xmzw8POa9qSGjyDDOjzr5nU=
+X-Google-Smtp-Source: AKy350a5lIINEppltKCVp/jaxAERL6A0Q3WkARvZd72fnUjaLu+x4Uu55nnAB2SPa/h0a74EN5a61Q==
+X-Received: by 2002:a19:ee17:0:b0:4e9:c327:dd81 with SMTP id g23-20020a19ee17000000b004e9c327dd81mr3957936lfb.63.1682410332581;
+        Tue, 25 Apr 2023 01:12:12 -0700 (PDT)
+Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id r4-20020ac25a44000000b004edb0882ce7sm1969340lfn.133.2023.04.25.01.12.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 01:12:12 -0700 (PDT)
+Message-ID: <c0958e31-b477-34e0-d824-b017efadd0df@gmail.com>
+Date:   Tue, 25 Apr 2023 11:12:11 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 5/7] iio: accel: kionix-kx022a: Refactor driver and add
+ chip_info structure
+Content-Language: en-US, en-GB
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>
+Cc:     jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <cover.1682373451.git.mehdi.djait.k@gmail.com>
+ <bf0269aff66483f2323914170707203749b33f0f.1682373451.git.mehdi.djait.k@gmail.com>
+ <867ac7b4-b666-854f-69f7-2d7d7d92c94e@gmail.com> <ZEeAGN3TBcao3CNA@carbian>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <ZEeAGN3TBcao3CNA@carbian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmha56t3uKwbm7TBYX5n1ktjg99SyT
-        xctDmharHoRbPFk/i9ni0iJ3i8u75rBZHFl/lsVi8XI1i30dD5gsVnXMZbSYev4IkwOPR8u+
-        W+wem1Z1snnsXvCZyaNvyypGj8+b5AJYo7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1
-        DS0tzJUU8hJzU22VXHwCdN0yc4BuU1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQU
-        mBfoFSfmFpfmpevlpZZYGRoYGJkCFSZkZ0x7s4+5YJlhxeT791gbGN9qdDFyckgImEgs+HGf
-        vYuRi0NIYAejRO/tZpYuRg4OXgFBib87hEFqhAXsJDYt3sYIYgsJKEmsvziLHSKuJ3Hr4Rqw
-        OJuAjsT0E/fB4iICU5klDm9KBZnJLLCYUWLtohlMEMt4JWa0P2WBsKUlti/fyghha0j8WNbL
-        DGGLStxc/ZYdxn5/bD5UjYhE672zUDWCEg9+7oaKS0rcnrsJqj5f4v+V5VB2jcS2A/OgbH2J
-        ax0bwfbyCvhKnF14GizOIqAq8XLfA1aIGheJ21vegc1nFpCX2P52DjMoHJgFNCXW79IHMSUE
-        lCWO3GKBqOCT6Dj8lx3mq4aNv7Gyd8x7AvW5msS6n+uZIMbISNyaxziBUWkWIpxnIVk7C2Ht
-        AkbmVYxiqQXFuempxUYFJvCoTc7P3cQITqRaHjsYZ7/9oHeIkYmD8RCjBAezkggvb6V7ihBv
-        SmJlVWpRfnxRaU5q8SFGU6CHJzJLiSbnA1N5Xkm8oYmlgYmZmaG5kamBuZI478cO5RQhgfTE
-        ktTs1NSC1CKYPiYOTqkGpujkxt8rwpxr2WZX/Sk/2cfSlVm6nkGna4bOM4d/r+zn3m+ffuhR
-        fsG0jb8iNljeZdq5UshX7Nbv+hgxqcs6E+a6uX2u843wu6ye/EjyeZVlybK+e9dvP1x7hXfT
-        id1Psg48/n/+p4xL/QrxJfrqfjWbF54NYfX6z8y+WlvOOeV6MNeUWRfeyBv9uh/OfZz1stXG
-        NzOrzfaL3VuaKr/N826L3M4rR3dpz1BeaxRnm5b8/8irM8Knclc7Xj9a8vudZ6pzd3qi3jXl
-        jq6adze2rilx/BV9QX6vTeCfnSxnVz9MXVYvuH7GhMsfLBR9l6mb/mRb/JI9IJ5rbcasjNCf
-        ruHmM1LPMnGmOmSczcpzXaTEUpyRaKjFXFScCABwcRX+LQQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230425081018epcms2p8fefa94810f0b341d2cbd70ba587e9e8c
-References: <CGME20230425081018epcms2p8fefa94810f0b341d2cbd70ba587e9e8c@epcms2p8>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changelog:
+On 4/25/23 10:24, Mehdi Djait wrote:
+> Hi Matti,
+> 
+> On Tue, Apr 25, 2023 at 09:50:11AM +0300, Matti Vaittinen wrote:
+>> On 4/25/23 01:22, Mehdi Djait wrote:
+>>> Add the chip_info structure to the driver's private data to hold all
+>>> the device specific infos.
+>>> Refactor the kx022a driver implementation to make it more generic and
+>>> extensible.
+>>>
+>>> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+>>> ---
+>>> v3:
+>>> - added the change of the buffer's allocation in the __kx022a_fifo_flush
+>>>     to this patch
+>>> - added the chip_info to the struct kx022a_data
+>>>
+>>> v2:
+>>> - mentioned the introduction of the i2c_device_id table in the commit
+>>> - get i2c_/spi_get_device_id only when device get match fails
+>>> - removed the generic KX_define
+>>> - removed the kx022a_device_type enum
+>>> - added comments for the chip_info struct elements
+>>> - fixed errors pointed out by the kernel test robot
+>>>
+>>>    drivers/iio/accel/kionix-kx022a-i2c.c |  15 +++-
+>>>    drivers/iio/accel/kionix-kx022a-spi.c |  15 +++-
+>>>    drivers/iio/accel/kionix-kx022a.c     | 114 +++++++++++++++++---------
+>>>    drivers/iio/accel/kionix-kx022a.h     |  54 +++++++++++-
+>>>    4 files changed, 147 insertions(+), 51 deletions(-)
+>>>
+>>> diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
+>>> index 8f23631a1fd3..ce299d0446f7 100644
+>>> --- a/drivers/iio/accel/kionix-kx022a-i2c.c
+>>> +++ b/drivers/iio/accel/kionix-kx022a-i2c.c
+>>> @@ -15,6 +15,7 @@
+>>
+>> ...
+>>
+>>
+>>>    static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+>>> @@ -600,13 +600,17 @@ static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+>>>    {
+>>>    	struct kx022a_data *data = iio_priv(idev);
+>>>    	struct device *dev = regmap_get_device(data->regmap);
+>>> -	__le16 buffer[KX022A_FIFO_LENGTH * 3];
+>>> +	__le16 *buffer;
+>>>    	uint64_t sample_period;
+>>>    	int count, fifo_bytes;
+>>>    	bool renable = false;
+>>>    	int64_t tstamp;
+>>>    	int ret, i;
+>>> +	buffer = kmalloc(data->chip_info->fifo_length * KX022A_FIFO_SAMPLES_SIZE_BYTES, GFP_KERNEL);
+>>> +	if (!buffer)
+>>> +		return -ENOMEM;
+>>
+>> Do you think we could get rid of allocating and freeing the buffer for each
+>> flush? I feel it is a bit wasteful, and with high sampling frequencies this
+>> function can be called quite often. Do you think there would be a way to
+>> either use stack (always reserve big enough buffer no matter which chip we
+>> have - or is the buffer too big to be safely taken from the stack?), or a
+>> buffer stored in private data and allocated at probe or buffer enable?
+> 
+> I tried using the same allocation as before but a device like the KX127
+> has a fifo_length of 342 (compared to 86 for kx132, and 43 for kx022a).
+> Allocating this much using the stack will result in a Warning.
+> 
 
-v1 -> v2
-Changed to apply the optional async reset write pointer by default.
+Right. Maybe you could then have the buffer in private-data and allocate 
+it in buffer pre-enable? Do you think that would work?
 
+>>
+>> Also, please avoid such long lines. I know many people don't care about the
+>> line length - but for example I tend to have 3 terminal windows open
+>> side-by-side on my laptop screen. Hence long lines tend to be harder to read
+>> for me.
+> 
+> That is the case for me also, but Jonathan asked me to change
+> "fifo_length * 6" and the KX022A_FIFO_SAMPLES_SIZE_BYTES is already
+> defined.
 
-This patch enables submit reset zone command asynchornously. It helps
-decrease average latency of write IOs in high utilization scenario by
-faster checkpointing.
+then please maybe split the line from appropriate point like:
+buffer = kmalloc(data->chip_info->fifo_length *
+		 KX022A_FIFO_SAMPLES_SIZE_BYTES, GFP_KERNEL);
 
-Signed-off-by: Daejun Park <daejun7.park@samsung.com>
----
- fs/f2fs/segment.c           | 95 ++++++++++++++++++++++++++++++++++---
- include/trace/events/f2fs.h | 18 ++++++-
- 2 files changed, 105 insertions(+), 8 deletions(-)
+> 
+>>
+>>> +
+>>>    	ret = regmap_read(data->regmap, KX022A_REG_BUF_STATUS_1, &fifo_bytes);
+>>>    	if (ret) {
+>>>    		dev_err(dev, "Error reading buffer status\n");
+>>> @@ -621,8 +625,10 @@ static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+>>>    		dev_warn(data->dev, "Bad FIFO alignment. Data may be corrupt\n");
+>>>    	count = fifo_bytes / KX022A_FIFO_SAMPLES_SIZE_BYTES;
+>>> -	if (!count)
+>>> +	if (!count) {
+>>> +		kfree(buffer);
+>>>    		return 0;
+>>> +	}
+>>>    	/*
+>>>    	 * If we are being called from IRQ handler we know the stored timestamp
+>>> @@ -679,7 +685,7 @@ static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+>>>    	}
+>>>    	fifo_bytes = count * KX022A_FIFO_SAMPLES_SIZE_BYTES;
+>>> -	ret = regmap_noinc_read(data->regmap, KX022A_REG_BUF_READ,
+>>> +	ret = regmap_noinc_read(data->regmap, data->chip_info->buf_read,
+>>>    				&buffer[0], fifo_bytes);
+>>>    	if (ret)
+>>>    		goto renable_out;
+>>> @@ -704,6 +710,7 @@ static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+>>>    	if (renable)
+>>>    		enable_irq(data->irq);
+>>> +	kfree(buffer);
+>>>    	return ret;
+>>>    }
+>>>
+>> ...
+>>
+>>> -int kx022a_probe_internal(struct device *dev)
+>>> +const struct kx022a_chip_info kx022a_chip_info = {
+>>> +	.name		  = "kx022-accel",
+>>> +	.regmap_config	  = &kx022a_regmap_config,
+>>> +	.channels	  = kx022a_channels,
+>>> +	.num_channels	  = ARRAY_SIZE(kx022a_channels),
+>>> +	.fifo_length	  = KX022A_FIFO_LENGTH,
+>>> +	.who		  = KX022A_REG_WHO,
+>>> +	.id		  = KX022A_ID,
+>>> +	.cntl		  = KX022A_REG_CNTL,
+>>> +	.cntl2		  = KX022A_REG_CNTL2,
+>>> +	.odcntl		  = KX022A_REG_ODCNTL,
+>>> +	.buf_cntl1	  = KX022A_REG_BUF_CNTL1,
+>>> +	.buf_cntl2	  = KX022A_REG_BUF_CNTL2,
+>>> +	.buf_clear	  = KX022A_REG_BUF_CLEAR,
+>>> +	.buf_status1	  = KX022A_REG_BUF_STATUS_1,
+>>> +	.buf_read	  = KX022A_REG_BUF_READ,
+>>> +	.inc1		  = KX022A_REG_INC1,
+>>> +	.inc4		  = KX022A_REG_INC4,
+>>> +	.inc5		  = KX022A_REG_INC5,
+>>> +	.inc6		  = KX022A_REG_INC6,
+>>> +	.xout_l		  = KX022A_REG_XOUT_L,
+>>> +};
+>>> +EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
+>>
+>> Do you think the fields (or at least some of them) in this struct could be
+>> named based on the (main) functionality being used, not based on the
+>> register name? Something like "watermark_reg", "buf_en_reg", "reset_reg",
+>> "output_rate_reg", "int1_pinconf_reg", "int1_src_reg", "int2_pinconf_reg",
+>> "int1_src_reg" ...
+>>
+>> I would not be at all surprized to see for example some IRQ control to be
+>> shifted from INC<X> to INC<Y> or cntl<X> / buf_cntl<X> stuff to be moved to
+>> cntl<Y> or to buf_cntl<Y> for next sensor we want to support. Especially
+>> when new cool feature is added to next sensor, resulting also adding a new
+>> cntl<Z> or buf_cntl<Z> or INC<Z>.
+>>
+>> I, however, believe the _functionality_ will be there (in some register) -
+>> at least for the ICs for which we can re-use this driver. Hence, it might be
+>> nice - and if you can think of better names for these fields - to rename
+>> them based on the _functionality_ we use.
+>>
+>> Another benefit would be added clarity to the code. Writing a value to
+>> "buf_en_reg", "watermark_reg" or to "int1_src_reg" is much clearer (to me)
+>> than writing a value to "buf_cntl1", "buf_cntl2" or "INC4". Especially if
+>> you don't have a datasheet at your hands.
+>>
+>> I am not "demanding" this (at least not for now :]) because it seems these
+>> two Kionix sensors have been pretty consistent what comes to maintaining the
+>> same functionality in the registers with same naming - but I believe this is
+>> something that may in any case be lurking around the corner.
+> 
+> I agree, this seems to be the better solution. I will look into this.
+> 
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 82430f80c5da..27074a6eaf20 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1195,6 +1195,46 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
- static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
- 				struct block_device *bdev, block_t lstart,
- 				block_t start, block_t len);
-+
-+#ifdef CONFIG_BLK_DEV_ZONED
-+static int __submit_zone_reset_cmd(struct f2fs_sb_info *sbi,
-+				   struct discard_cmd *dc, blk_opf_t flag,
-+				   struct list_head *wait_list,
-+				   unsigned int *issued)
-+{
-+	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
-+	struct block_device *bdev = dc->bdev;
-+	struct bio *bio = bio_alloc(bdev, 0, REQ_OP_ZONE_RESET | flag, GFP_NOFS);
-+	unsigned long flags;
-+
-+	trace_f2fs_issue_reset_zone(bdev, SECTOR_FROM_BLOCK(dc->di.start));
-+
-+	spin_lock_irqsave(&dc->lock, flags);
-+	dc->state = D_SUBMIT;
-+	dc->bio_ref++;
-+	spin_unlock_irqrestore(&dc->lock, flags);
-+
-+	if (issued)
-+		(*issued)++;
-+
-+	atomic_inc(&dcc->queued_discard);
-+	dc->queued++;
-+	list_move_tail(&dc->list, wait_list);
-+
-+	/* sanity check on discard range */
-+	__check_sit_bitmap(sbi, dc->di.lstart, dc->di.lstart + dc->di.len);
-+
-+	bio->bi_iter.bi_sector = SECTOR_FROM_BLOCK(dc->di.start);
-+	bio->bi_private = dc;
-+	bio->bi_end_io = f2fs_submit_discard_endio;
-+	submit_bio(bio);
-+
-+	atomic_inc(&dcc->issued_discard);
-+
-+	return 0;
-+}
-+#endif
-+
- /* this function is copied from blkdev_issue_discard from block/blk-lib.c */
- static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
- 				struct discard_policy *dpolicy,
-@@ -1216,6 +1256,11 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
- 	if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
- 		return 0;
- 
-+#ifdef CONFIG_BLK_DEV_ZONED
-+	if (f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(bdev))
-+		return __submit_zone_reset_cmd(sbi, dc, flag, wait_list, issued);
-+#endif
-+
- 	trace_f2fs_issue_discard(bdev, dc->di.start, dc->di.len);
- 
- 	lstart = dc->di.lstart;
-@@ -1460,21 +1505,42 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
- 	}
- }
- 
-+#ifdef CONFIG_BLK_DEV_ZONED
-+static void __queue_zone_reset_cmd(struct f2fs_sb_info *sbi,
-+		struct block_device *bdev, block_t blkstart, block_t blklen)
-+{
-+	block_t lblkstart = blkstart;
-+
-+	if (f2fs_is_multi_device(sbi)) {
-+		int devi = f2fs_target_device_index(sbi, blkstart);
-+
-+		blkstart -= FDEV(devi).start_blk;
-+	}
-+
-+	trace_f2fs_queue_reset_zone(bdev, blkstart);
-+
-+	mutex_lock(&SM_I(sbi)->dcc_info->cmd_lock);
-+	__insert_discard_cmd(sbi, bdev, lblkstart, blkstart, blklen);
-+	mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
-+}
-+#endif
-+
- static void __queue_discard_cmd(struct f2fs_sb_info *sbi,
- 		struct block_device *bdev, block_t blkstart, block_t blklen)
- {
- 	block_t lblkstart = blkstart;
- 
-+	trace_f2fs_queue_discard(bdev, blkstart, blklen);
-+
- 	if (!f2fs_bdev_support_discard(bdev))
- 		return;
- 
--	trace_f2fs_queue_discard(bdev, blkstart, blklen);
--
- 	if (f2fs_is_multi_device(sbi)) {
- 		int devi = f2fs_target_device_index(sbi, blkstart);
- 
- 		blkstart -= FDEV(devi).start_blk;
- 	}
-+
- 	mutex_lock(&SM_I(sbi)->dcc_info->cmd_lock);
- 	__update_discard_tree_range(sbi, bdev, lblkstart, blkstart, blklen);
- 	mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
-@@ -1725,7 +1791,18 @@ static void f2fs_wait_discard_bio(struct f2fs_sb_info *sbi, block_t blkaddr)
- 	dc = __lookup_discard_cmd(sbi, blkaddr);
- 	if (dc) {
- 		if (dc->state == D_PREP) {
--			__punch_discard_cmd(sbi, dc, blkaddr);
-+			if (f2fs_sb_has_blkzoned(sbi) &&
-+			    bdev_is_zoned(dc->bdev)) {
-+				struct discard_policy dpolicy;
-+				/* force submit zone reset */
-+				__init_discard_policy(sbi, &dpolicy,
-+						      DPOLICY_FORCE, 1);
-+				__submit_discard_cmd(sbi, &dpolicy, dc, NULL);
-+				dc->ref++;
-+				need_wait = true;
-+			} else {
-+				__punch_discard_cmd(sbi, dc, blkaddr);
-+			}
- 		} else {
- 			dc->ref++;
- 			need_wait = true;
-@@ -1875,9 +1952,15 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
- 				 blkstart, blklen);
- 			return -EIO;
- 		}
--		trace_f2fs_issue_reset_zone(bdev, blkstart);
--		return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
--					sector, nr_sects, GFP_NOFS);
-+
-+		if (unlikely(!is_sbi_flag_set(sbi, SBI_POR_DOING))) {
-+			trace_f2fs_issue_reset_zone(bdev, blkstart);
-+			return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
-+						sector, nr_sects, GFP_NOFS);
-+		}
-+
-+		__queue_zone_reset_cmd(sbi, bdev, lblkstart, blklen);
-+		return 0;
- 	}
- 
- 	/* For conventional zones, use regular discard if supported */
-diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-index 99cbc5949e3c..ee1477de8324 100644
---- a/include/trace/events/f2fs.h
-+++ b/include/trace/events/f2fs.h
-@@ -1512,7 +1512,7 @@ DEFINE_EVENT(f2fs_discard, f2fs_remove_discard,
- 	TP_ARGS(dev, blkstart, blklen)
- );
- 
--TRACE_EVENT(f2fs_issue_reset_zone,
-+DECLARE_EVENT_CLASS(f2fs_reset_zone,
- 
- 	TP_PROTO(struct block_device *dev, block_t blkstart),
- 
-@@ -1528,11 +1528,25 @@ TRACE_EVENT(f2fs_issue_reset_zone,
- 		__entry->blkstart = blkstart;
- 	),
- 
--	TP_printk("dev = (%d,%d), reset zone at block = 0x%llx",
-+	TP_printk("dev = (%d,%d), zone at block = 0x%llx",
- 		show_dev(__entry->dev),
- 		(unsigned long long)__entry->blkstart)
- );
- 
-+DEFINE_EVENT(f2fs_reset_zone, f2fs_queue_reset_zone,
-+
-+	TP_PROTO(struct block_device *dev, block_t blkstart),
-+
-+	TP_ARGS(dev, blkstart)
-+);
-+
-+DEFINE_EVENT(f2fs_reset_zone, f2fs_issue_reset_zone,
-+
-+	TP_PROTO(struct block_device *dev, block_t blkstart),
-+
-+	TP_ARGS(dev, blkstart)
-+);
-+
- TRACE_EVENT(f2fs_issue_flush,
- 
- 	TP_PROTO(struct block_device *dev, unsigned int nobarrier,
+Thanks for going the extra mile :)
+
+Yours,
+	-- Matti
+
 -- 
-2.25.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
