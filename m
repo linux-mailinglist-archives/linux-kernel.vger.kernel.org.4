@@ -2,242 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB4B6EE3FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDF16EE3FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234127AbjDYOdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S234110AbjDYOeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbjDYOda (ORCPT
+        with ESMTP id S233838AbjDYOe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:33:30 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7C113FB9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:33:22 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-7782debbc4bso3965883241.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:33:22 -0700 (PDT)
+        Tue, 25 Apr 2023 10:34:29 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EBD4EDF;
+        Tue, 25 Apr 2023 07:34:28 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so7291850b3a.2;
+        Tue, 25 Apr 2023 07:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682433201; x=1685025201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WQ2CLAjMPgKbOZe4brMjde1QLHkIgbVunV88zomi5KY=;
-        b=QSOxF8e2muGNZob7KuS75YfJBtMdxjOuLe46O21qktQ+fC1TxNejM/vKZelejgPkSJ
-         Z2cQVvS8kWWMKlVg5wlM5bsl5FzNx6n4HkbqFHmC0BS6FeJq2zVuSMnIPOCqdApDolC8
-         wrLd9RRJJapVfcfLySyGHOMmgG3TIGGmolWSzjlkSc1d63pgfiNQMRXc98EYnz/PlGgN
-         oJXqqtCY+nm0Y8FaMWXxO4XGUose6KR2aaYWwfe6Jb3bub7G2BlvBn9GLWAmiiTuLvts
-         osduTNr0RZZ7LksOlBptFLuAePl8noMgCOF653i/zNg8vCJFZP+WOsu0RBt0InLcYYH8
-         xUFQ==
+        d=gmail.com; s=20221208; t=1682433268; x=1685025268;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IqwUK/4eDJzCyEyFFhnH/3a1vPRmvk8A4cA3eKhviTk=;
+        b=quJ+O1JlEpa0/H7U9zxcAuDqT+96tvcHOGzW2761RkODSrwBIzReeuokM+2BIehR25
+         DZHnZziOGE2b55/n5niAtH2oGOqNU1EWGVoE+Si6hltvPCjw8xh9xQu+gjWQtj6n9yio
+         9WbQGHC9lhSnx3fpHcS5/4+E5ga2yLKcFiYJPhpvdsZaJJoxoZPab7DtQY6fVzUPGmo6
+         pQTVY3fmbuqLFQ9iwGU9aPo3etOD3aq9VQMzxv9pQia35k5yWICtiTjuKnpXs0J5ABP3
+         54v8nNfmdTIdKNk3ogwoR9Zgvw7WDveDDR4tTWYO4enThTwO/t9U6h3XH7D6APl5IbFX
+         uyrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682433201; x=1685025201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WQ2CLAjMPgKbOZe4brMjde1QLHkIgbVunV88zomi5KY=;
-        b=UM/IIknapqHb8p9e35aB8pCDbfBK5a3vzktHD2hlqLts95Z1e9V1rGGfrr35XEVRa1
-         DkZa5RrT/dd8W1pfax3tg5GqZ/Z2Pw57tutU+bDtWdBZopjQllLCRN28p4/vKJy6Nsbs
-         OLRRYVSIwrW44xx7EuT1rpxfObLb6q5ulLL9zHJLXI+2Ql2gXFBGdLCqg9W/g7HBpnlP
-         fVjP2mAyeU+wgn4b8TlkxFWiAH95jCNezZMG7oR7QsmU2mK0eXekEqmzTDTQ+Vh+QxLM
-         5TtCamPwzQ+wRbc8Gq8ASEdOU3+oUhHGnB4V3HczwHUA6HypD9IOoJvUX9UPHuiUKM7B
-         r0/w==
-X-Gm-Message-State: AAQBX9d1S5aHwWaxdVUW9oCK0ei1HT2eNcmJx68a8RxlHJ3EMRUom/b8
-        vPPB0ZFpbQhfCDV+Z7ZwJOQq5etOaeLE4p8uBamR9Q==
-X-Google-Smtp-Source: AKy350YX6AwO0pQHfBFGLNBOTtx5pYpGmcG+rrY+6QopEdOgUNUrMvxAJKNFhncmK2TEboB273ZjpmyipgS8gxjrLrU=
-X-Received: by 2002:a1f:bd0f:0:b0:440:d7:da79 with SMTP id n15-20020a1fbd0f000000b0044000d7da79mr5766207vkf.2.1682433201450;
- Tue, 25 Apr 2023 07:33:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682433268; x=1685025268;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqwUK/4eDJzCyEyFFhnH/3a1vPRmvk8A4cA3eKhviTk=;
+        b=jyovsDe1kk+7vooogB7OzEp2xZoH/ICgpwsHjNmLkaZEpxiQJhFCzwjJHZz1ZLxWK7
+         cQGI7P6rX69PA7xUB6IfykbO3n5ij3EbAig4S3/fgwjkStMqCmV9bwssYcQFjFMVof6Z
+         r1+diBeJ5VMPpV+AzengDdDQExONLEKqPq8zpEeUTO7uCkdEUIB3ewcT/lSUDoxt3puk
+         jrffgwccmkdzTDXvksanQOpni02LpKmVnoUn7zTanH63TODgoJmcXSU2UveUwBWhnP0H
+         /vc5F/flktF4UkWlXwETbQmwVn/altKQs8WZccdByVq4/0NSzcw5n3rkoHS639LQSjXV
+         BkOg==
+X-Gm-Message-State: AAQBX9eXcnQK41SMc8weefPYVyqNxOYudeTWFntfGNTocMhL8gHEhN4K
+        CqGEiuAMSsc+TVp4VKhMkx4=
+X-Google-Smtp-Source: AKy350Y/E8488smZu+2JGMu6TX8xn7ALx3Mxgu5yA+GFI+yG+/7nEkaAj10nUbQhH/HxbbANkIq0Iw==
+X-Received: by 2002:a05:6a00:b51:b0:628:1b3:d499 with SMTP id p17-20020a056a000b5100b0062801b3d499mr23898372pfo.21.1682433267834;
+        Tue, 25 Apr 2023 07:34:27 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h133-20020a62838b000000b0063b8a30b571sm9329133pfe.9.2023.04.25.07.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 07:34:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a1e940aa-7ede-572a-80ca-d950273e5ba6@roeck-us.net>
+Date:   Tue, 25 Apr 2023 07:34:25 -0700
 MIME-Version: 1.0
-References: <20230424131133.829259077@linuxfoundation.org>
-In-Reply-To: <20230424131133.829259077@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Apr 2023 15:33:10 +0100
-Message-ID: <CA+G9fYvc__9umKyeMWk1mmO6K6hfCt=MDt3BTHpr_XfJc4HXXA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/98] 6.1.26-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Neha Malcom Francis <n-francis@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Cc:     nm@ti.com, vigneshr@ti.com, u-kumar1@ti.com, kristo@kernel.org
+References: <20230424105011.70674-1-n-francis@ti.com>
+ <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
+ <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH RESEND v3 0/3] Add support for ESM
+In-Reply-To: <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 14:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.26 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.26-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 4/25/23 01:49, Neha Malcom Francis wrote:
+> Hi Guenter
+> 
+> On 24/04/23 20:27, Guenter Roeck wrote:
+>> On 4/24/23 03:50, Neha Malcom Francis wrote:
+>>> Resending as no major changes, commit subject change only.
+>>>
+>>
+>> Maybe you consider changing the subject of the bindings from "misc"
+>> to "hwmon" as not being a major change, but it made me aware that you
+>> are trying to sneak bindings which in my opinion don't belong there
+>> into the hwmon bindings directory. This is not a hardware monitoring
+>> device, it doesn't have anything to do with hardware monitoring, and the
+>> bindings do not belong into bindings/hwmon/.
+>>
+> 
+> I understand, it's a thin line across which I pushed ESM into hwmon; my reasoning was ESM also actively looks for signals that it aggregates, and is overall monitoring the device health. But if there was an option, in order of fitting: fault/ > misc/ > hwmon/
+> 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+That is really a stretch. It doesn't monitor anything. It is a signal
+routing mechanism.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+With that logic every transistor would be a hardware monitoring device.
 
-## Build
-* kernel: 6.1.26-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: e4ff6ff54dea67f94036a357201b0f9807405cc6
-* git describe: v6.1.22-574-ge4ff6ff54dea
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
-2-574-ge4ff6ff54dea
+Guenter
 
-## Test Regressions (compared to v6.1.22-475-g45df5d9a8cbd)
-
-## Metric Regressions (compared to v6.1.22-475-g45df5d9a8cbd)
-
-## Test Fixes (compared to v6.1.22-475-g45df5d9a8cbd)
-
-## Metric Fixes (compared to v6.1.22-475-g45df5d9a8cbd)
-
-## Test result summary
-total: 155536, pass: 137480, fail: 4021, skip: 13697, xfail: 338
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 52 total, 51 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 16 total, 15 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 44 total, 44 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* timesync-off
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
