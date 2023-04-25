@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CD16EE323
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600BA6EE32F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbjDYNdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
+        id S234063AbjDYNfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjDYNdT (ORCPT
+        with ESMTP id S234158AbjDYNf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:33:19 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70191CC1E;
-        Tue, 25 Apr 2023 06:32:46 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PDWb2m045265;
-        Tue, 25 Apr 2023 08:32:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682429557;
-        bh=c46MKi09eru97iqyhoS/ej5Bk+10vEhDoBCZ9O5a9wo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ekC/RwAsOGBHOi/ZQa1F7tsf+vby4R9emzpO45mERgMifKXjaEWYyUWlCgkEIsFI4
-         T7Ib4Tb638XFeqcAn43htaB8X03J3DnSSRdfDDsB/jUEHpjUhBcJMTa/+KK40DZIxP
-         L0SViypAn6gfHatzwNAEmPXpAy/JqLKbZt/MKb/Y=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PDWbaq114558
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 08:32:37 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 08:32:37 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 08:32:37 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PDWNHK042485;
-        Tue, 25 Apr 2023 08:32:34 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [RFC PATCH 3/3] arm64: dts: ti: k3-j784s4: Add overlay for dual port USXGMII mode
-Date:   Tue, 25 Apr 2023 19:02:23 +0530
-Message-ID: <20230425133223.4060752-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230425133223.4060752-1-s-vadapalli@ti.com>
-References: <20230425133223.4060752-1-s-vadapalli@ti.com>
+        Tue, 25 Apr 2023 09:35:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70EE14444;
+        Tue, 25 Apr 2023 06:35:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37DAB62E7B;
+        Tue, 25 Apr 2023 13:35:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC30C433EF;
+        Tue, 25 Apr 2023 13:35:00 +0000 (UTC)
+Date:   Tue, 25 Apr 2023 19:04:57 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH] dt-bindings: leds: Drop redundant cpus enum match
+Message-ID: <20230425133457.GA5640@thinkpad>
+References: <20230424151437.256073-1-nm@ti.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230424151437.256073-1-nm@ti.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CPSW9G instance of the CPSW Ethernet Switch supports USXGMII mode
-with MAC Ports 1 and 2 of the instance, which are connected to ENET
-Expansion 1 and ENET Expansion 2 slots on the EVM respectively, through
-the Serdes2 instance of the SERDES.
+On Mon, Apr 24, 2023 at 10:14:37AM -0500, Nishanth Menon wrote:
+> Commit e91a4d5deb96 ("dt-bindings: leds: Document commonly used
+> LED triggers") introduced a enum match for cpu, while a pattern
+> '^cpu[0-9]*$' already exists.
+> 
+> This causes linux,default-trigger = "cpu" to have more than one match
+> and generates the following dtbs_check warning:
+> 
+> arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dtb: leds: led-2:linux,default-trigger: More than one condition true in oneOf schema:
+> 	{'$ref': '/schemas/types.yaml#/definitions/string',
+> 	 'oneOf': [{'items': [{'enum': ['backlight',
+> 	                                'default-on',
+> 	                                'heartbeat',
+> 	                                'disk-activity',
+> 	                                'disk-read',
+> 	                                'disk-write',
+> 	                                'timer',
+> 	                                'pattern',
+> 	                                'audio-micmute',
+> 	                                'audio-mute',
+> 	                                'bluetooth-power',
+> 	                                'cpu',
+> 	                                'flash',
+> 	                                'kbd-capslock',
+> 	                                'mtd',
+> 	                                'nand-disk',
+> 	                                'none',
+> 	                                'torch',
+> 	                                'usb-gadget',
+> 	                                'usb-host',
+> 	                                'usbport']}],
+> 	            'maxItems': 1,
+> 	            'minItems': 1,
+> 	            'type': 'array'},
+> 	           {'items': [{'pattern': '^cpu[0-9]*$'}],
+> 	            'maxItems': 1,
+> 	            'minItems': 1,
+> 	            'type': 'array'},
+> 	           {'items': [{'pattern': '^hci[0-9]+-power$'}],
+> 	            'maxItems': 1,
+> 	            'minItems': 1,
+> 	            'type': 'array'},
+> 	           {'items': [{'pattern': '^mmc[0-9]+$'}],
+> 	            'maxItems': 1,
+> 	            'minItems': 1,
+> 	            'type': 'array'},
+> 	           {'items': [{'pattern': '^phy[0-9]+tx$'}],
+> 	            'maxItems': 1,
+> 	            'minItems': 1,
+> 	            'type': 'array'}]}
+> 
+> Drop the explicit match against cpu since the pattern match already
+> covers the same.
+> 
+> Fixes: e91a4d5deb96 ("dt-bindings: leds: Document commonly used LED triggers")
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
 
-Enable CPSW9G MAC Ports 1 and 2 in fixed-link configuration USXGMII mode
-at 5 Gbps each.
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile               |  1 +
- .../ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtso   | 72 +++++++++++++++++++
- 2 files changed, 73 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtso
+- Mani
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 88c43f1f211b..8ac7507f60ba 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -47,6 +47,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am69-sk.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm-quad-port-eth-exp1.dtbo
-+dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm-usxgmii-exp1-exp2.dtbo
- 
- # Enable support for device-tree overlays
- DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtso b/arch/arm64/boot/dts/ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtso
-new file mode 100644
-index 000000000000..90f045a6a9ad
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtso
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT Overlay for CPSW9G in dual port fixed-link USXGMII mode using ENET-1
-+ * and ENET-2 Expansion slots of J784S4 EVM.
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/mux/ti-serdes.h>
-+#include <dt-bindings/phy/phy-cadence.h>
-+#include <dt-bindings/phy/phy.h>
-+
-+&main_cpsw0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+};
-+
-+&main_cpsw0_port1 {
-+	status = "okay";
-+	phy-mode = "usxgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 1>, <&serdes2_usxgmii_link>;
-+	phy-names = "mac", "serdes";
-+	fixed-link {
-+		speed = <5000>;
-+		full-duplex;
-+	};
-+};
-+
-+&main_cpsw0_port2 {
-+	status = "okay";
-+	phy-mode = "usxgmii";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 2>, <&serdes2_usxgmii_link>;
-+	phy-names = "mac", "serdes";
-+	fixed-link {
-+		speed = <5000>;
-+		full-duplex;
-+	};
-+};
-+
-+&serdes_wiz2 {
-+	status = "okay";
-+	assigned-clock-parents = <&k3_clks 406 9>;
-+};
-+
-+&serdes2 {
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	serdes2_usxgmii_link: phy@2 {
-+		reg = <2>;
-+		cdns,num-lanes = <2>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_USXGMII>;
-+		resets = <&serdes_wiz2 3>, <&serdes_wiz2 4>;
-+	};
-+};
-+
-+&serdes_ln_ctrl {
-+	idle-states = <J784S4_SERDES0_LANE0_PCIE1_LANE0>, <J784S4_SERDES0_LANE1_PCIE1_LANE1>,
-+		      <J784S4_SERDES0_LANE2_IP3_UNUSED>, <J784S4_SERDES0_LANE3_USB>,
-+		      <J784S4_SERDES1_LANE0_PCIE0_LANE0>, <J784S4_SERDES1_LANE1_PCIE0_LANE1>,
-+		      <J784S4_SERDES1_LANE2_PCIE0_LANE2>, <J784S4_SERDES1_LANE3_PCIE0_LANE3>,
-+		      <J784S4_SERDES2_LANE0_IP2_UNUSED>, <J784S4_SERDES2_LANE1_IP2_UNUSED>,
-+		      <J784S4_SERDES2_LANE2_QSGMII_LANE1>, <J784S4_SERDES2_LANE3_QSGMII_LANE2>;
-+};
+> ---
+>  Documentation/devicetree/bindings/leds/common.yaml | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+> index 11aedf1650a1..58b492d00246 100644
+> --- a/Documentation/devicetree/bindings/leds/common.yaml
+> +++ b/Documentation/devicetree/bindings/leds/common.yaml
+> @@ -105,8 +105,6 @@ properties:
+>            - audio-mute
+>              # LED indicates bluetooth power state
+>            - bluetooth-power
+> -            # LED indicates activity of all CPUs
+> -          - cpu
+>              # LED indicates camera flash state
+>            - flash
+>              # LED indicated keyboard capslock
+> -- 
+> 2.40.0
+> 
+
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்
