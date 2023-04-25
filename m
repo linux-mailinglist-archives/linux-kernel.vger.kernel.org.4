@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1790F6EE7C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011776EE7D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbjDYSug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S234998AbjDYSxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjDYSuM (ORCPT
+        with ESMTP id S234806AbjDYSxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:50:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44A218E89
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:49:29 -0700 (PDT)
-Message-ID: <20230425183313.888493625@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682448567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=lI8eS5ZquZQ/AMFm1A5eHZZeDCd9KNgXFYHgrZ2R29Q=;
-        b=j2EKBJZ5X7e1Nm5GIqHiop5hf9MbIyUvk9Kdrbd7zpz+e11Vytn077EGh4KEgxK5BwF5MA
-        IRFft7VHcxvu05IszyA855/hOG2Vbm4NkJoc5hLHK35V7nYw25a2cznxLDFLGPEH1s1Atl
-        qdXXGx2JR0OTA5h1MSc8PGnDES7sxYi/5DUKxW+JJLRn2JRAhy3A+x+BPH5oa37Z4ZE2ex
-        pUO2jgJnSnh26UIWaidPZzx487JTIU/DNsqZBrFtkO2Sr5kxfY6gywLIHYliUkreWh4cY8
-        fzgCKz+O5gG1HVrVWC4eco+I+S/SJFtIhXkkH1OkCkWodQ9Xf5XR3JDnkDpCfg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682448567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=lI8eS5ZquZQ/AMFm1A5eHZZeDCd9KNgXFYHgrZ2R29Q=;
-        b=7gRrfeT744csD7sjDoLvP27jRI8wBPWscgtEWH+bQuW3x6z1k+0DfBSnhm0DT3ctK8zMv/
-        +/OvEIcJ9j1gTcAw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: [patch 20/20] posix-timers: Polish coding style in a few places
-References: <20230425181827.219128101@linutronix.de>
+        Tue, 25 Apr 2023 14:53:11 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4727A17A32;
+        Tue, 25 Apr 2023 11:52:51 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1879fc89e67so4065507fac.0;
+        Tue, 25 Apr 2023 11:52:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682448703; x=1685040703;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UikZ9QXYdXTQtvhUyv/lQ7QWK7IHC52OKirQxX/ASjw=;
+        b=ZasKw8Ddl3Vlom+JzQEiJLDw2rsTXCTooG9vXfWJqGOiojBwRLMM2vBwMpnOf81utb
+         xoxXsyd0kO4weg+SNzB4RyVz+zABgwjX+IWppM2b5DMGnBxFVJ75VNT2wSTWLxvmlMoP
+         vUxxO9JlixyyUmnC+55pUjEZ7l0ewRd0wK2pYM0mUXo3mXtRchLTA7rcP3kZyJzq7C/B
+         yph+vpy8Qp2b8usK1/Ffgv/Tr5qkdiMHovKdoLmruAajwuFYsQ6ZiZHfFIes0uighlIx
+         KJCDyEqqdmsnzBbY1FO5sJAr8HywTdB/uZlAc3Dkg2vpKyv9wwm0jJda6QAfl5+pMphs
+         Xy2A==
+X-Gm-Message-State: AAQBX9cqXAD+bjotjE29JNfRf3hP0eYvkSCtO+wG4cZupIo5M4D3HKjE
+        KE9pqvaHGOWcVvvP7PLTqA==
+X-Google-Smtp-Source: AKy350aKeKHxBsyU0oVHol9rrTst7OaLguL14eolfZwMFamb8qWN0SPzusU+rrDs+pi8Z83LRg9ubw==
+X-Received: by 2002:a05:6870:c222:b0:18e:2db1:215d with SMTP id z34-20020a056870c22200b0018e2db1215dmr8694265oae.12.1682448703024;
+        Tue, 25 Apr 2023 11:51:43 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q1-20020a056870e88100b001727d67f2dbsm5814455oan.40.2023.04.25.11.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 11:51:42 -0700 (PDT)
+Received: (nullmailer pid 2076040 invoked by uid 1000);
+        Tue, 25 Apr 2023 18:51:41 -0000
+Date:   Tue, 25 Apr 2023 13:51:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Suman Anna <s-anna@ti.com>, ssantosh@kernel.org,
+        Roger Quadros <rogerq@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, srk@ti.com, nm@ti.com,
+        Paolo Abeni <pabeni@redhat.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [RFC PATCH v6 1/2] dt-bindings: net: Add ICSSG Ethernet
+Message-ID: <168244870080.2075982.15308799170658396149.robh@kernel.org>
+References: <20230424053233.2338782-1-danishanwar@ti.com>
+ <20230424053233.2338782-2-danishanwar@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 25 Apr 2023 20:49:27 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424053233.2338782-2-danishanwar@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make it consistent with the TIP tree documentation.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- kernel/time/posix-timers.c |   14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+On Mon, 24 Apr 2023 11:02:32 +0530, MD Danish Anwar wrote:
+> Add a YAML binding document for the ICSSG Programmable real time unit
+> based Ethernet hardware. The ICSSG driver uses the PRU and PRUSS consumer
+> APIs to interface the PRUs and load/run the firmware for supporting
+> ethernet functionality.
+> 
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  .../bindings/net/ti,icssg-prueth.yaml         | 184 ++++++++++++++++++
+>  1 file changed, 184 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> 
 
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -308,10 +308,10 @@ int posix_timer_event(struct k_itimer *t
-  */
- static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
- {
-+	enum hrtimer_restart ret = HRTIMER_NORESTART;
- 	struct k_itimer *timr;
- 	unsigned long flags;
- 	int si_private = 0;
--	enum hrtimer_restart ret = HRTIMER_NORESTART;
- 
- 	timr = container_of(timer, struct k_itimer, it.real.timer);
- 	spin_lock_irqsave(&timr->it_lock, flags);
-@@ -395,8 +395,8 @@ static struct pid *good_sigevent(sigeven
- 
- static struct k_itimer * alloc_posix_timer(void)
- {
--	struct k_itimer *tmr;
--	tmr = kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
-+	struct k_itimer *tmr = kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
-+
- 	if (!tmr)
- 		return tmr;
- 	if (unlikely(!(tmr->sigq = sigqueue_alloc()))) {
-@@ -690,8 +690,8 @@ void common_timer_get(struct k_itimer *t
- 
- static int do_timer_gettime(timer_t timer_id,  struct itimerspec64 *setting)
- {
--	struct k_itimer *timr;
- 	const struct k_clock *kc;
-+	struct k_itimer *timr;
- 	unsigned long flags;
- 	int ret = 0;
- 
-@@ -762,8 +762,8 @@ SYSCALL_DEFINE2(timer_gettime32, timer_t
- SYSCALL_DEFINE1(timer_getoverrun, timer_t, timer_id)
- {
- 	struct k_itimer *timr;
--	int overrun;
- 	unsigned long flags;
-+	int overrun;
- 
- 	timr = lock_timer(timer_id, &flags);
- 	if (!timr)
-@@ -936,8 +936,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t,
- 		const struct __kernel_itimerspec __user *, new_setting,
- 		struct __kernel_itimerspec __user *, old_setting)
- {
--	struct itimerspec64 new_spec, old_spec;
--	struct itimerspec64 *rtn = old_setting ? &old_spec : NULL;
-+	struct itimerspec64 new_spec, old_spec, *rtn;
- 	int error = 0;
- 
- 	if (!new_setting)
-@@ -946,6 +945,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t,
- 	if (get_itimerspec64(&new_spec, new_setting))
- 		return -EFAULT;
- 
-+	rtn = old_setting ? &old_spec : NULL;
- 	error = do_timer_settime(timer_id, flags, &new_spec, rtn);
- 	if (!error && old_setting) {
- 		if (put_itimerspec64(&old_spec, old_setting))
+Reviewed-by: Rob Herring <robh@kernel.org>
 
