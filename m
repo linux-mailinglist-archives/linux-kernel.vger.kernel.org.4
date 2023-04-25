@@ -2,84 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECDC6EDE82
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178D16EDE94
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbjDYIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S233453AbjDYIzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbjDYIuV (ORCPT
+        with ESMTP id S231741AbjDYIzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:50:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8940C35B7;
-        Tue, 25 Apr 2023 01:50:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 25 Apr 2023 04:55:47 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D4EC3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:55:45 -0700 (PDT)
+Received: from SoMainline.org (82-72-63-87.cable.dynamic.v4.ziggo.nl [82.72.63.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04E9B62CEC;
-        Tue, 25 Apr 2023 08:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5845DC433A0;
-        Tue, 25 Apr 2023 08:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682412619;
-        bh=Mfq8yrxnuMMNRYzupPlRcoJpox8xhQLPPCGmRCRHJ/4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c0PuCEPKicdGzchx3Of5e7Iln5M0hRCqnElvFj7guEKzvTE8bZ9CM2dgtW5DTyIwI
-         Q7dKPtD5pY+o4o3M0oSsKhtwlvtePG071TrpkFZiK/CjVPfJE6ZmZx5G3q1hMdY4QD
-         aqAuZ5faA2ax6M9a6HC+NvD5up+WJSwhamqWvNLCT1iYY0lOo5xSN48GLXRfdVpHLe
-         b8L8ZMIn3pplLTV4fgF8tZGEGOjdEegs/N+QMmntAEE73dbpkai6REZ7dyAnzdiZbH
-         eRrBi+4g78J8nVK9jUeqEDd+0Xi8Yqety+b00J8hCRs8TIpi55TSv3cUSuY3mLBOwf
-         j4WYZKLWKcmPg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40C25E5FFCA;
-        Tue, 25 Apr 2023 08:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3D0EF1F6C6;
+        Tue, 25 Apr 2023 10:55:43 +0200 (CEST)
+Date:   Tue, 25 Apr 2023 10:55:41 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
+ RM instead of IDs
+Message-ID: <m5z5mv5hbdgpjbfo3mqo5s3egshnlu77nla4b7txddlsbk5fvi@jitwvapbr7wr>
+References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
+ <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
+ <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com>
+ <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
+ <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
+ <c809476f-74bc-0399-08f9-1bf26e7170fa@quicinc.com>
+ <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
+ <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: phy: marvell-88x2222: remove unnecessary (void*)
- conversions
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168241261926.1225.2701872674893598922.git-patchwork-notify@kernel.org>
-Date:   Tue, 25 Apr 2023 08:50:19 +0000
-References: <20230425051532.44830-1-yunchuan@nfschina.com>
-In-Reply-To: <20230425051532.44830-1-yunchuan@nfschina.com>
-To:     wuych <yunchuan@nfschina.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 25 Apr 2023 13:15:32 +0800 you wrote:
-> Pointer variables of void * type do not require type cast.
+On 2023-04-25 10:54:47, Dmitry Baryshkov wrote:
+> On 25/04/2023 10:16, Marijn Suijten wrote:
+> > On 2023-04-24 16:23:17, Abhinav Kumar wrote:
+> >>
+> >>
+> >> On 4/24/2023 3:54 PM, Dmitry Baryshkov wrote:
+> >>> On Tue, 25 Apr 2023 at 01:03, Marijn Suijten
+> >>> <marijn.suijten@somainline.org> wrote:
+> >>>>
+> >>>> On 2023-04-21 16:25:15, Abhinav Kumar wrote:
+> >>>>>
+> >>>>>
+> >>>>> On 4/21/2023 1:53 PM, Marijn Suijten wrote:
+> >>>>>> The Resource Manager already iterates over all available blocks from the
+> >>>>>> catalog, only to pass their ID to a dpu_hw_xxx_init() function which
+> >>>>>> uses an _xxx_offset() helper to search for and find the exact same
+> >>>>>> catalog pointer again to initialize the block with, fallible error
+> >>>>>> handling and all.
+> >>>>>>
+> >>>>>> Instead, pass const pointers to the catalog entries directly to these
+> >>>>>> _init functions and drop the for loops entirely, saving on both
+> >>>>>> readability complexity and unnecessary cycles at boot.
+> >>>>>>
+> >>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> >>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >>>>>
+> >>>>> Overall, a nice cleanup!
+> >>>>>
+> >>>>> One comment below.
+> >>>>>
+> >>>>>> ---
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
+> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
+> >>>>>>     23 files changed, 139 insertions(+), 375 deletions(-)
+> >>>>>>
+> >>>>>
+> >>>>> <snipped>
+> >>>>>
+> >>>>>> -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
+> >>>>>> -           void __iomem *addr,
+> >>>>>> -           const struct dpu_mdss_cfg *m)
+> >>>>>> +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+> >>>>>> +           void __iomem *addr)
+> >>>>>>     {
+> >>>>>>       struct dpu_hw_intf *c;
+> >>>>>> -   const struct dpu_intf_cfg *cfg;
+> >>>>>> +
+> >>>>>> +   if (cfg->type == INTF_NONE) {
+> >>>>>> +           pr_err("Cannot create interface hw object for INTF_NONE type\n");
+> >>>>>> +           return ERR_PTR(-EINVAL);
+> >>>>>> +   }
+> >>>>>
+> >>>>> The caller of dpu_hw_intf_init which is the RM already has protection
+> >>>>> for INTF_NONE, see below
+> >>>>>
+> >>>>>            for (i = 0; i < cat->intf_count; i++) {
+> >>>>>                    struct dpu_hw_intf *hw;
+> >>>>>                    const struct dpu_intf_cfg *intf = &cat->intf[i];
+> >>>>>
+> >>>>>                    if (intf->type == INTF_NONE) {
+> >>>>>                            DPU_DEBUG("skip intf %d with type none\n", i);
+> >>>>>                            continue;
+> >>>>>                    }
+> >>>>>                    if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
+> >>>>>                            DPU_ERROR("skip intf %d with invalid id\n",
+> >>>>> intf->id);
+> >>>>>                            continue;
+> >>>>>                    }
+> >>>>>                    hw = dpu_hw_intf_init(intf->id, mmio, cat);
+> >>>>>
+> >>>>> So this part can be dropped.
+> >>>>
+> >>>> I mainly intended to keep original validation where _intf_offset would
+> >>>> skip INTF_NONE, and error out.  RM init is hence expected to filter out
+> >>>> INTF_NONE instead of running into that `-EINVAL`, which I maintained
+> >>>> here.
+> >>>>
+> >>>> If you think there won't be another caller of dpu_hw_intf_init, and that
+> >>>> such validation is hence excessive, I can remove it in a followup v3.
+> >>>
+> >>> I'd prefer to see the checks at dpu_rm to be dropped.
+> >>> dpu_hw_intf_init() (and other dpu_hw_foo_init() functions) should be
+> >>> self-contained. If they can not init HW block (e.g. because the index
+> >>> is out of the boundaries), they should return an error.
+> >>>
+> >>
+> >> They already do that today because even without this it will call into
+> >> _intf_offset() and that will bail out for INTF_NONE.
+> >>
+> >> I feel this is a duplicated check because the caller with the loop needs
+> >> to validate the index before passing it to dpu_hw_intf_init() otherwise
+> >> the loop will get broken at the first return of the error and rest of
+> >> the blocks will also not be initialized.
+> > 
+> > To both: keep in mind that the range-checks we want to remove from
+> > dpu_rm_init validate the ID (index?) of a block.  This check is for the
+> > *TYPE* of an INTF block, to skip it gracefully if no hardware is mapped
+> > there.  As per the first patch of this series SM6115/QCM2290 only have a
+> > DSI interface which always sits at ID 1, and ID 0 has its TYPE set to
+> > INTF_NONE and is skipped.
+> > 
+> > Hence we _should_ keep the graceful TYPE check in dpu_rm_init() to skip
+> > calling this function _and assigning it to the rm->hw_intf array_.  But
+> > I can remove the second TYPE check here in dpu_hw_intf_init() if you
+> > prefer.
 > 
-> Signed-off-by: wuych <yunchuan@nfschina.com>
-> ---
->  drivers/net/phy/marvell-88x2222.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> We can return NULL from dpu_hw_foo_init(), which would mean that the 
+> block was skipped or is not present.
 
-Here is the summary with links:
-  - net: phy: marvell-88x2222: remove unnecessary (void*) conversions
-    https://git.kernel.org/netdev/net-next/c/28b17f6270f1
+An then replace the `if INTF_NONE continue` logic in dpu_rm_init with a
+check for NULL that skips, and a check for IS_ERR` that goes to `fail`?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Should I do that in a new or the same patch for v3?
 
+Note that there's a similar check for the `pingpong` "id" member of
+every Layer Mixer.
 
+- Marijn
