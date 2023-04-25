@@ -2,173 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C7D6EE1E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1966EE1ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234099AbjDYMck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
+        id S234115AbjDYMdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjDYMci (ORCPT
+        with ESMTP id S233329AbjDYMdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:32:38 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517294EC0;
-        Tue, 25 Apr 2023 05:32:37 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PCWAhk066095;
-        Tue, 25 Apr 2023 07:32:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682425930;
-        bh=CFPzwDmySEzg1N62RTR8ZiaR751KuV8ALtFldAAMJJ4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=NWqJp9FsU8dhh+M/g5toTnXg1tkP8GLMCqgpCmGsz45eoV8Eq9q4uGB6l1IvYYW5F
-         I/iBa4mX73qoV55kDZODjK5hNl2AiQORw6xikm6ZTnKiwMTkIYsgFWp3+6+y3EhMpu
-         sChzTE1lqOYOyPzlS/c4Atkdq5Yd7V07dGgJq0Z4=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PCW9ce065338
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 07:32:10 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 07:32:09 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 07:32:09 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PCW9SC021943;
-        Tue, 25 Apr 2023 07:32:09 -0500
-Date:   Tue, 25 Apr 2023 07:32:09 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Judith Mendez <jm@ti.com>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v2 2/4] dt-bindings: net: can: Add poll-interval for MCAN
-Message-ID: <20230425123209.g3jocqvnnpkv4jk5@stingy>
-References: <20230424195402.516-1-jm@ti.com>
- <20230424195402.516-3-jm@ti.com>
+        Tue, 25 Apr 2023 08:33:35 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF226D314;
+        Tue, 25 Apr 2023 05:33:08 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 71A9B5FD05;
+        Tue, 25 Apr 2023 15:33:06 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682425986;
+        bh=M8TJz6TMqm7slfXEipNmibDQJ7voQTFLqHG+/oEd4jc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=s9kUrL+T6Zn4L1hYQXkZPtfb5nCqgVi5eojV/l3rBAA12rYmOn7TiAAuw1FcVm04X
+         H0udYw/FFlfCPMMChyes0CubfCt/lquS07lpaAO9rjRauSmIgn0nSBQnsaadh30nYi
+         d22INMAJPcrjAgRZK48IszAfv2bSJgdCERitydKeKlKnN4NxbvDc/ibCi7VQR17GJ0
+         jFXNTwEGfeqc5br/Rc79cofD/kRRUJx5qV7u47XJtN6AQK2TqQFctg75/MC5UrgVpY
+         ghuzBSxS37f8+Kwhy20kTi/BYga3kabJPsBmkwBX1HEpjncwlaI2nLmSD9wfa2jX6h
+         cuW6PQoyVBt9g==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 25 Apr 2023 15:33:05 +0300 (MSK)
+Date:   Tue, 25 Apr 2023 15:33:04 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v13 4/6] clk: meson: a1: add Amlogic A1 PLL clock
+ controller driver
+Message-ID: <20230425123304.xjmrkraybp2siwdw@CAB-WSD-L081021>
+References: <20230405195927.13487-1-ddrokosov@sberdevices.ru>
+ <20230405195927.13487-5-ddrokosov@sberdevices.ru>
+ <CAFBinCA3uZXzr3RgnWnKV5Qr-CPaZQX5joDg319i_cgzhLJy2g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230424195402.516-3-jm@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCA3uZXzr3RgnWnKV5Qr-CPaZQX5joDg319i_cgzhLJy2g@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/25 07:55:00 #21159618
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14:54-20230424, Judith Mendez wrote:
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use software interrupt by
-> hrtimer. To enable timer method, interrupts should be optional so
-> remove interrupts property from required section and introduce
-> poll-interval property.
+Hello Martin,
+
+On Sun, Apr 23, 2023 at 11:12:27PM +0200, Martin Blumenstingl wrote:
+> Hello Dmitry,
 > 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
-> Changelog:
-> v2:
->   1. Add poll-interval property to enable timer polling method
->   2. Add example using poll-interval property
->   
->  .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
+> currently Jerome is busy so I am trying to continue where he left off.
+> I have followed the previous iterations a bit but may have missed some
+> details. So apologies if I'm repeating some questions that Jerome
+> previously asked.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index 67879aab623b..1c64c7a0c3df 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -40,6 +40,10 @@ properties:
->        - const: int1
->      minItems: 1
->  
-> +  poll-interval:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: Poll interval time in milliseconds.
-> +
->    clocks:
->      items:
->        - description: peripheral clock
-> @@ -122,15 +126,13 @@ required:
->    - compatible
->    - reg
->    - reg-names
-> -  - interrupts
-> -  - interrupt-names
->    - clocks
->    - clock-names
->    - bosch,mram-cfg
->  
->  additionalProperties: false
->  
-> -examples:
-> +example with interrupts:
->    - |
->      #include <dt-bindings/clock/imx6sx-clock.h>
->      can@20e8000 {
-> @@ -149,4 +151,22 @@ examples:
->        };
->      };
->  
-> +example with timer polling:
 
-did you run dt_binding_check?
-make -j`nproc` ARCH=arm64 LLVM=1 dt_binding_check DT_CHECKER_FLAGS=-m DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+Thank you very much for your effort! Please feel free to ask any
+questions you may have, without any hesitation.
 
-tells me:
+> On Wed, Apr 5, 2023 at 9:59 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> [...]
+> > +config COMMON_CLK_A1_PLL
+> > +       tristate "Meson A1 SoC PLL controller support"
+> Should this be "Amlogic A1 SoC PLL controller support"?
+> My understanding is that the "meson" name was dropped for this
+> generation of SoCs.
+> 
+> [...]
 
-  LINT    Documentation/devicetree/bindings
-  DTEX    Documentation/devicetree/bindings/net/can/bosch,m_can.example.dts
-  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-/workdir/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with interrupts' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/workdir/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with timer polling' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+Yep, that's good point. Will change it in the next version.
 
-> +  - |
-> +    #include <dt-bindings/clock/imx6sx-clock.h>
-> +    can@20e8000 {
-> +      compatible = "bosch,m_can";
-> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
-> +      reg-names = "m_can", "message_ram";
-> +      poll-interval;
-> +      clocks = <&clks IMX6SX_CLK_CANFD>,
-> +               <&clks IMX6SX_CLK_CANFD>;
-> +      clock-names = "hclk", "cclk";
-> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
-> +
-> +      can-transceiver {
-> +        max-bitrate = <5000000>;
-> +      };
-> +    };
-> +
->  ...
-> -- 
-> 2.17.1
+> > +static const struct of_device_id a1_pll_clkc_match_table[] = {
+> > +       { .compatible = "amlogic,a1-pll-clkc", },
+> > +       {},
+> nit-pick: please drop the comma after {}
+> This empty entry is a sentinel, no other entries are supposed to come
+> after this - so a trailing comma is not necessary.
+> 
+> [...]
+
+OK
+
+> > +/* PLL register offset */
+> > +#define ANACTRL_FIXPLL_CTRL0   0x0
+> > +#define ANACTRL_FIXPLL_CTRL1   0x4
+> > +#define ANACTRL_FIXPLL_STS     0x14
+> > +#define ANACTRL_HIFIPLL_CTRL0  0xc0
+> > +#define ANACTRL_HIFIPLL_CTRL1  0xc4
+> > +#define ANACTRL_HIFIPLL_CTRL2  0xc8
+> > +#define ANACTRL_HIFIPLL_CTRL3  0xcc
+> > +#define ANACTRL_HIFIPLL_CTRL4  0xd0
+> > +#define ANACTRL_HIFIPLL_STS    0xd4
+> Here I have a question that will potentially affect patch 3/6
+> ("dt-bindings: clock: meson: add A1 PLL clock controller bindings").
+> In the cover-letter you mentioned that quite a few clocks have been omitted.
+> Any dt-bindings that we create need to be stable going forward. That
+> means: the dt-bindings will always need to describe what the hardware
+> is capable of, not what the driver implements.
+> So my question is: do we have all needed inputs described in the
+> dt-bindings (even though we're omitting quite a few registers here
+> that will only be added/used in the future)?
+> Older SoCs require (temporarily) using the XTAL clock for CPU clock
+> tree changes. To make a long story short: I'm wondering if - at least
+> - the XTAL clock input is missing.
+
+The Amlogic A1 clock engine comprises four clock controllers for
+peripherals, PLL, CPU, and audio. While the first two have been
+introduced in the current patch series, the last two will be sent in the
+next iteration.
+Presently, the PLL controller driver includes all the required bindings,
+and the peripherals controller driver has all bindings except for the
+CPU-related clock.
+However, I do not believe this to be a significant issue. The clock DT
+bindings are organized to simplify the process of introducing new bindings,
+whether public or private. For instance, we may add new bindings to
+include/dt-bindings at the end of the list and increase the overall number,
+without disrupting the DT bindings ABI (the old numbers will remain
+unchanged).
+
+> 
+> PS: I don't have an A1 datasheet nor a vendor kernel source (and even
+> less a board for testing). So I can't verify any of this myself and
+> I'm asking questions instead.
 > 
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Thank you,
+Dmitry
