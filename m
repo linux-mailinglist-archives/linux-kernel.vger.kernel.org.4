@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3716EE836
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5188A6EE8B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236027AbjDYT0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S236155AbjDYT5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236009AbjDYT0b (ORCPT
+        with ESMTP id S234754AbjDYT5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:26:31 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D217DDF;
-        Tue, 25 Apr 2023 12:26:21 -0700 (PDT)
-Received: from fpc.intra.ispras.ru (unknown [10.10.165.4])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C1ADC40737C6;
-        Tue, 25 Apr 2023 19:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C1ADC40737C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1682450779;
-        bh=elNBmHMXHbOyemTHL7bhh7PqCcdux0Jfn0kEsJT4fzU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BYEZNmtjDpJENcCCfwHWpZvY5ouS159P94EXKKrZQ4bfMaAx0hiSpDrUVGl7XWDKF
-         t19EbC8tRVUvo5YQ3wYnyG7ZcXxbH786i4LtH8byn3p8DNCQgEpNBkXXjuF50cY1vd
-         N7JmaYElz8QmtJroukWSYSK+2ffg8Rf+2ZOHOb1U=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Vallo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com,
-        Hillf Danton <hdanton@sina.com>
-Subject: [PATCH v3 2/2] wifi: ath9k: protect WMI command response buffer replacement with a lock
-Date:   Tue, 25 Apr 2023 22:26:07 +0300
-Message-Id: <20230425192607.18015-2-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230425192607.18015-1-pchelkin@ispras.ru>
-References: <20230425192607.18015-1-pchelkin@ispras.ru>
+        Tue, 25 Apr 2023 15:57:14 -0400
+X-Greylist: delayed 1817 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 12:57:12 PDT
+Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC25C19A2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:57:12 -0700 (PDT)
+X-ASG-Debug-ID: 1682450813-1cf4391215313690001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id UJmp3BejnK1cjIIr; Tue, 25 Apr 2023 15:26:53 -0400 (EDT)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=NKoTw0X5ggn4GP4rCHMZBRbxnmfIguEqeaihKcA5REk=;
+        h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:Content-Language:
+        MIME-Version:Date:Message-ID; b=XjJvQNfRCimTBY0NYTJiqaV9m5jO6rqZsItwTv2jCDwOE
+        avvzTgWVFYvLTXnDb4GXZREDk1+OzndudyR/3Q9FlskrpRtPaFaczQNSQ12HBhOF1DvPeBiMCO0zE
+        njol8uefnZ/keDtObWbQu/fhnYfYYmZHFqIc9bRsxOj06gv4o=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 12590162; Tue, 25 Apr 2023 15:26:53 -0400
+Message-ID: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
+Date:   Tue, 25 Apr 2023 15:26:53 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Tony Battersby <tonyb@cybernetics.com>
+Subject: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
+Content-Type: text/plain; charset=UTF-8
+X-ASG-Orig-Subj: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
+Content-Transfer-Encoding: 7bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1682450813
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 1697
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -62,73 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If ath9k_wmi_cmd() has exited with a timeout, it is possible that during
-next ath9k_wmi_cmd() call the wmi_rsp callback for previous wmi command
-writes to new wmi->cmd_rsp_buf and makes a completion. This results in an
-invalid ath9k_wmi_cmd() return value.
+In stop_this_cpu(), make sure the CPUID leaf exists before accessing the
+leaf.  This fixes a lockup on poweroff 50% of the time due to the wrong
+branch being taken randomly on some CPUs (seen on Supermicro X8DTH-6F
+with Intel Xeon X5650).
 
-Move the replacement of WMI command response buffer and length under
-wmi_lock. Note that last_seq_id value is updated there, too.
-
-Thus, the buffer cannot be written to by a belated wmi_rsp callback
-because that path is properly rejected by the last_seq_id check.
-
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Fixes: 08f253ec3767 ("x86/cpu: Clear SME feature flag when not in use")
+Cc: <stable@vger.kernel.org> # 5.18+
+Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
 ---
-v2: do not extract ath9k_wmi_rsp_callback() internals, rephrase
-description
-v3: per Hillf Danton's comment, protect last_seq_id with wmi_lock on
-timeout path, divide the v2 version into two separate patches; the first
-one is concerned with last_seq_id and completion under wmi_lock, the
-second one is for moving rsp buffer and length recording under wmi lock.
-Note that it's been only tested with Syzkaller and on basic driver
-scenarios with real hardware.
 
- drivers/net/wireless/ath/ath9k/wmi.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+NOTE: I don't have any AMD CPUs to test, so I was unable to fully test
+this patch.  Could someone with an AMD CPU that supports SME please test
+this and make sure it calls native_wbinvd()?
 
-diff --git a/drivers/net/wireless/ath/ath9k/wmi.c b/drivers/net/wireless/ath/ath9k/wmi.c
-index 04f363cb90fe..1476b42b52a9 100644
---- a/drivers/net/wireless/ath/ath9k/wmi.c
-+++ b/drivers/net/wireless/ath/ath9k/wmi.c
-@@ -283,7 +283,8 @@ int ath9k_wmi_connect(struct htc_target *htc, struct wmi *wmi,
+
+ arch/x86/kernel/process.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index b650cde3f64d..26aa32e8f636 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -754,13 +754,15 @@ bool xen_set_default_idle(void)
  
- static int ath9k_wmi_cmd_issue(struct wmi *wmi,
- 			       struct sk_buff *skb,
--			       enum wmi_cmd_id cmd, u16 len)
-+			       enum wmi_cmd_id cmd, u16 len,
-+			       u8 *rsp_buf, u32 rsp_len)
+ void __noreturn stop_this_cpu(void *dummy)
  {
- 	struct wmi_cmd_hdr *hdr;
- 	unsigned long flags;
-@@ -293,6 +294,11 @@ static int ath9k_wmi_cmd_issue(struct wmi *wmi,
- 	hdr->seq_no = cpu_to_be16(++wmi->tx_seq_id);
- 
- 	spin_lock_irqsave(&wmi->wmi_lock, flags);
++	struct cpuinfo_x86 *c = this_cpu_ptr(&cpu_info);
 +
-+	/* record the rsp buffer and length */
-+	wmi->cmd_rsp_buf = rsp_buf;
-+	wmi->cmd_rsp_len = rsp_len;
-+
- 	wmi->last_seq_id = wmi->tx_seq_id;
- 	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
+ 	local_irq_disable();
+ 	/*
+ 	 * Remove this CPU:
+ 	 */
+ 	set_cpu_online(smp_processor_id(), false);
+ 	disable_local_APIC();
+-	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
++	mcheck_cpu_clear(c);
  
-@@ -333,11 +339,7 @@ int ath9k_wmi_cmd(struct wmi *wmi, enum wmi_cmd_id cmd_id,
- 		goto out;
- 	}
- 
--	/* record the rsp buffer and length */
--	wmi->cmd_rsp_buf = rsp_buf;
--	wmi->cmd_rsp_len = rsp_len;
--
--	ret = ath9k_wmi_cmd_issue(wmi, skb, cmd_id, cmd_len);
-+	ret = ath9k_wmi_cmd_issue(wmi, skb, cmd_id, cmd_len, rsp_buf, rsp_len);
- 	if (ret)
- 		goto out;
- 
+ 	/*
+ 	 * Use wbinvd on processors that support SME. This provides support
+@@ -774,7 +776,8 @@ void __noreturn stop_this_cpu(void *dummy)
+ 	 * Test the CPUID bit directly because the machine might've cleared
+ 	 * X86_FEATURE_SME due to cmdline options.
+ 	 */
+-	if (cpuid_eax(0x8000001f) & BIT(0))
++	if (c->extended_cpuid_level >= 0x8000001f &&
++	    (cpuid_eax(0x8000001f) & BIT(0)))
+ 		native_wbinvd();
+ 	for (;;) {
+ 		/*
 -- 
-2.34.1
+2.25.1
 
