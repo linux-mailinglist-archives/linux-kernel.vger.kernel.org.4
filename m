@@ -2,148 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044406EE09E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77746EE0B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjDYKr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S233825AbjDYK5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbjDYKrx (ORCPT
+        with ESMTP id S233516AbjDYK5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:47:53 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D70A13C38;
-        Tue, 25 Apr 2023 03:47:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RmUmUODAmVcn3t+h4GiOkcVaJ4oXpsvYzvgzhTiTtkKF9x8i6Z3B9m7Ht0nrU+4dt1dND/KPIPo3XfhsjOoRTxifFeuoHDOG/4rXTL46HZBxJkr3CLXBrBi/HopTJG0BHYgifI9YH/FRV3mq+8k0+T57xHxeHGlxlW2YwytjVjWNG7aHF+SoXx/fzRyI6ju3ed5esxGNZg6+5Bi0I58OMucuE0j94F24ojQqrJueMdcmGsW6oSmTnMY4VgLvYRu/uQLP1vT1U5tgKW/E1Ulhhm+mBZEeif5JDP7daljcU48fqs8oLNwJlwVJCy1DokWtqhcYiLdFyxHq773xnbzsSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vB4y/WKTJACB506PGnFVQhsKMeVamHJjveYfJLv0GDc=;
- b=hYvEd0jZ4xcELNcJtSG7wqnxWvhVNfsHl/pmGQOeoJ8aWvtBpUE0mK+vbIFkYtfNMoRgifdjnK+WhkOhTBJ2xH/mf9xeR7CUhd3QBJmv77fXQi/yjppT7ejc7VIgzLNYXoYVAgVKvp/KU5I02eE3pGPv277TrpzWuGAxBWDrq5pVHve1xCfnVmueTJofYwy+Y/EcTqAOwii6YMI1DJIYz1aX74WkxfzPjSkyyotNzUXqP3U4mioAlsAYTdmV4tM+mjRfJQhUTOv56sMijAX3Djayw44TO05MQOvj3/BZE+96APKWbd3FWkXw46CuH+TPxa+BwSZe5Wp9n9Gp+1PxKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vB4y/WKTJACB506PGnFVQhsKMeVamHJjveYfJLv0GDc=;
- b=SC2w0KcYwyq3tTm8E5mG2VdYXmjXvPbRmx4oUBllZ+iUmLiigPmSj+vL99ZFmnMMmpTNnJo+B2030VurpcxE4IaBlIAedZ2SExA5VJ/3MbwpXit4bwhkvwVF55you6ZrG1OFzRe8yGnfSJMpI5WEB66cFieN8Evre1J4qJNoypYLKlVcCMIhrNfY+CbTpekk72Y+ngOcNciT6y7gT3ocVKWX7xKTQva1NmW4+dQIrJ/QTfgwo92/AZxLsyKuJAUPdMJZoPEqgpX77lcN5537Z/EQcZ0ioaZBoAuVwlqu6KThU4yiyrFBpO6C0XhdCE2raETmTGg076MmgE4Z951NXw==
-Received: from BN9PR03CA0775.namprd03.prod.outlook.com (2603:10b6:408:13a::30)
- by CH2PR12MB5003.namprd12.prod.outlook.com (2603:10b6:610:68::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
- 2023 10:46:01 +0000
-Received: from BL02EPF0000C406.namprd05.prod.outlook.com
- (2603:10b6:408:13a:cafe::80) by BN9PR03CA0775.outlook.office365.com
- (2603:10b6:408:13a::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34 via Frontend
- Transport; Tue, 25 Apr 2023 10:46:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF0000C406.mail.protection.outlook.com (10.167.241.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.15 via Frontend Transport; Tue, 25 Apr 2023 10:46:00 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 25 Apr 2023
- 03:45:40 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 25 Apr
- 2023 03:45:40 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 25 Apr 2023 03:45:40 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.1 00/98] 6.1.26-rc1 review
-In-Reply-To: <20230424131133.829259077@linuxfoundation.org>
-References: <20230424131133.829259077@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Apr 2023 06:57:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB00E40EC;
+        Tue, 25 Apr 2023 03:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682420233; x=1713956233;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=CTvshU3JWVoVJwwI7FYpM3f/eI/ZQ/U++dCfjJ+PJk8=;
+  b=kUKWA0Wq8gYOodYLMaN7DFrcLWoIWKzCpQgKG8VHlNLVARxHq7HaHRD3
+   ESjBMp1b4qQyDRgcii89Os79iIY+KqOrAcf/6XNCAY52l1V2iA4Nmh1s6
+   eQyUnuZDnHOesLToVMw6VCQNh+DIL6enGXskmt75Pf7KEQxZZNfLaPbYG
+   w50PtINnWOz7jpe4WJXobwD3eZV4MmXOqpaUZV40S3qZk7pOTjpUX14LI
+   31XJJoL+lhtUb1VXowYWVX6q//YnKuG/idWQFipDzPThURnNf+QZkvku2
+   3kH5+5G2KsWQvFVN3b8mJttDyNrBIJr8fbNYmAl/W6UVPeurK6YA0UWOR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="327034309"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="327034309"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 03:57:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="939729574"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="939729574"
+Received: from rolfneux-mobl.ger.corp.intel.com ([10.252.34.113])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 03:57:07 -0700
+Date:   Tue, 25 Apr 2023 13:57:05 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jacky Huang <ychuang570808@gmail.com>
+cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, tmaimon77@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-serial <linux-serial@vger.kernel.org>, arnd@arndb.de,
+        schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v8 09/11] reset: Add Nuvoton ma35d1 reset driver
+ support
+In-Reply-To: <20230425102418.185783-10-ychuang570808@gmail.com>
+Message-ID: <17afcef9-39ff-ef25-6c24-38726b30cf90@linux.intel.com>
+References: <20230425102418.185783-1-ychuang570808@gmail.com> <20230425102418.185783-10-ychuang570808@gmail.com>
 MIME-Version: 1.0
-Message-ID: <ba53ed52-7fb7-4c17-aa00-e1e6a4c5bb9d@rnnvmail205.nvidia.com>
-Date:   Tue, 25 Apr 2023 03:45:40 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C406:EE_|CH2PR12MB5003:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8197b990-5cd1-422d-7c0f-08db457a42a8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sfIoTKinRmeJU8yey1J454NrGKF3lME5pK9pmxE/ofZDMIdmJM8pj377cYFu1TtR1/ypyREqDmB8dWXoYBs1xIxGc7rA0oKtgOS59/2XEJQzwhto6fX2SZNQOoKK3wgGn1X/GdOUCMsd8FVoVFBmMCfqPo2BR71qSsts+W74m5wrgIZresixoD+/mcJJzVhS0AUeGYzmlcIWytu8ocerUFx/U4qTxk8JaDV2CO1yWRx4lDpglUGA4DKg7pC1hPc2XZvicgVaVcNPRF8fJa0cybZFnppJ6oZ4p7ZbMJj8hxJ/nFHwSVcxOl02bhZb6VMy+AW0OafDoCANSe8dN/MAZU8C0+0XoBwSt/bZ4zrwRud6xBCUQAPOXbSsatyFGkblNeBKc1lqCHncJ6uJD43gzVI4jpaGtmKmi9gFXW2S9MMQrcEVc4l0XMnQ8iyceo0HiVzyj2mMAGmevSMXsJTusD8Q2b/PPM7ryJUacJY6bfHV13/8s2Ad4ENE2SzDQWS6kHGZXg2NCowdtIgOkunJmcXTFu1WBVJMbu6hkmOWHaYV8zT707dpEIITI9NIjBQQrl1jWczhg/XnPzs2/W0c4/v6vA62SXUdIOXrGLghqRA+goYYMCFcy2Kdvgjzf+uKCPWvXwfdDQ4Bs6GY/dyUUvldbKHPlh3jjynX2IOFPWpMLjvG0sNTnZc/VYESeqLCj8oA+biT/00jzulV4AgpTLDsprcp902NFT3R7KMKA2IaHckpzXWy7Yc2FGWJBifP
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(396003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(8676002)(31686004)(54906003)(7416002)(8936002)(478600001)(31696002)(70206006)(6916009)(86362001)(70586007)(82310400005)(41300700001)(2906002)(316002)(4326008)(5660300002)(966005)(26005)(186003)(47076005)(82740400003)(7636003)(356005)(40460700003)(336012)(426003)(40480700001)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 10:46:00.7690
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8197b990-5cd1-422d-7c0f-08db457a42a8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C406.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5003
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 15:16:23 +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.26 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 25 Apr 2023, Jacky Huang wrote:
+
+> From: Jacky Huang <ychuang3@nuvoton.com>
 > 
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
+> This driver supports individual IP reset for ma35d1. The reset
+> control registers is a subset of system control registers.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.26-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  drivers/reset/Kconfig        |   6 +
+>  drivers/reset/Makefile       |   1 +
+>  drivers/reset/reset-ma35d1.c | 229 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 236 insertions(+)
+>  create mode 100644 drivers/reset/reset-ma35d1.c
 > 
-> thanks,
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index 2a52c990d4fe..58477c6ca9b8 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -143,6 +143,12 @@ config RESET_NPCM
+>  	  This enables the reset controller driver for Nuvoton NPCM
+>  	  BMC SoCs.
+>  
+> +config RESET_NUVOTON_MA35D1
+> +	bool "Nuvton MA35D1 Reset Driver"
+> +	default ARCH_NUVOTON || COMPILE_TEST
+> +	help
+> +	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
+> +
+>  config RESET_OXNAS
+>  	bool
+>  
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 3e7e5fd633a8..fd52dcf66a99 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -20,6 +20,7 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+>  obj-$(CONFIG_RESET_MESON) += reset-meson.o
+>  obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+>  obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
+> +obj-$(CONFIG_RESET_NUVOTON_MA35D1) += reset-ma35d1.o
+>  obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
+>  obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
+>  obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
+> new file mode 100644
+> index 000000000000..648b380becf7
+> --- /dev/null
+> +++ b/drivers/reset/reset-ma35d1.c
+> @@ -0,0 +1,229 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Nuvoton Technology Corp.
+> + * Author: Chi-Fang Li <cfli0@nuvoton.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/reset-controller.h>
+> +#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
+> +
+> +struct ma35d1_reset_data {
+> +	struct reset_controller_dev rcdev;
+> +	struct notifier_block restart_handler;
+> +	void __iomem *base;
+> +};
+> +
+> +static const struct {
+> +	u32 reg_ofs;
+> +	u32 bit;
+> +} ma35d1_reset_map[] = {
+> +	[MA35D1_RESET_CHIP] =    {0x20, 0},
+> +	[MA35D1_RESET_CA35CR0] = {0x20, 1},
+> +	[MA35D1_RESET_CA35CR1] = {0x20, 2},
+> +	[MA35D1_RESET_CM4] =     {0x20, 3},
+> +	[MA35D1_RESET_PDMA0] =   {0x20, 4},
+> +	[MA35D1_RESET_PDMA1] =   {0x20, 5},
+> +	[MA35D1_RESET_PDMA2] =   {0x20, 6},
+> +	[MA35D1_RESET_PDMA3] =   {0x20, 7},
+> +	[MA35D1_RESET_DISP] =    {0x20, 9},
+> +	[MA35D1_RESET_VCAP0] =   {0x20, 10},
+> +	[MA35D1_RESET_VCAP1] =   {0x20, 11},
+> +	[MA35D1_RESET_GFX] =     {0x20, 12},
+> +	[MA35D1_RESET_VDEC] =    {0x20, 13},
+> +	[MA35D1_RESET_WHC0] =    {0x20, 14},
+> +	[MA35D1_RESET_WHC1] =    {0x20, 15},
+> +	[MA35D1_RESET_GMAC0] =   {0x20, 16},
+> +	[MA35D1_RESET_GMAC1] =   {0x20, 17},
+> +	[MA35D1_RESET_HWSEM] =   {0x20, 18},
+> +	[MA35D1_RESET_EBI] =     {0x20, 19},
+> +	[MA35D1_RESET_HSUSBH0] = {0x20, 20},
+> +	[MA35D1_RESET_HSUSBH1] = {0x20, 21},
+> +	[MA35D1_RESET_HSUSBD] =  {0x20, 22},
+> +	[MA35D1_RESET_USBHL] =   {0x20, 23},
+> +	[MA35D1_RESET_SDH0] =    {0x20, 24},
+> +	[MA35D1_RESET_SDH1] =    {0x20, 25},
+> +	[MA35D1_RESET_NAND] =    {0x20, 26},
+> +	[MA35D1_RESET_GPIO] =    {0x20, 27},
+> +	[MA35D1_RESET_MCTLP] =   {0x20, 28},
+> +	[MA35D1_RESET_MCTLC] =   {0x20, 29},
+> +	[MA35D1_RESET_DDRPUB] =  {0x20, 30},
+> +	[MA35D1_RESET_TMR0] =    {0x24, 2},
+> +	[MA35D1_RESET_TMR1] =    {0x24, 3},
+> +	[MA35D1_RESET_TMR2] =    {0x24, 4},
+> +	[MA35D1_RESET_TMR3] =    {0x24, 5},
+> +	[MA35D1_RESET_I2C0] =    {0x24, 8},
+> +	[MA35D1_RESET_I2C1] =    {0x24, 9},
+> +	[MA35D1_RESET_I2C2] =    {0x24, 10},
+> +	[MA35D1_RESET_I2C3] =    {0x24, 11},
+> +	[MA35D1_RESET_QSPI0] =   {0x24, 12},
+> +	[MA35D1_RESET_SPI0] =    {0x24, 13},
+> +	[MA35D1_RESET_SPI1] =    {0x24, 14},
+> +	[MA35D1_RESET_SPI2] =    {0x24, 15},
+> +	[MA35D1_RESET_UART0] =   {0x24, 16},
+> +	[MA35D1_RESET_UART1] =   {0x24, 17},
+> +	[MA35D1_RESET_UART2] =   {0x24, 18},
+> +	[MA35D1_RESET_UART3] =   {0x24, 19},
+> +	[MA35D1_RESET_UART4] =   {0x24, 20},
+> +	[MA35D1_RESET_UART5] =   {0x24, 21},
+> +	[MA35D1_RESET_UART6] =   {0x24, 22},
+> +	[MA35D1_RESET_UART7] =   {0x24, 23},
+> +	[MA35D1_RESET_CANFD0] =  {0x24, 24},
+> +	[MA35D1_RESET_CANFD1] =  {0x24, 25},
+> +	[MA35D1_RESET_EADC0] =   {0x24, 28},
+> +	[MA35D1_RESET_I2S0] =    {0x24, 29},
+> +	[MA35D1_RESET_SC0] =     {0x28, 0},
+> +	[MA35D1_RESET_SC1] =     {0x28, 1},
+> +	[MA35D1_RESET_QSPI1] =   {0x28, 4},
+> +	[MA35D1_RESET_SPI3] =    {0x28, 6},
+> +	[MA35D1_RESET_EPWM0] =   {0x28, 16},
+> +	[MA35D1_RESET_EPWM1] =   {0x28, 17},
+> +	[MA35D1_RESET_QEI0] =    {0x28, 22},
+> +	[MA35D1_RESET_QEI1] =    {0x28, 23},
+> +	[MA35D1_RESET_ECAP0] =   {0x28, 26},
+> +	[MA35D1_RESET_ECAP1] =   {0x28, 27},
+> +	[MA35D1_RESET_CANFD2] =  {0x28, 28},
+> +	[MA35D1_RESET_ADC0] =    {0x28, 31},
+> +	[MA35D1_RESET_TMR4] =    {0x2C, 0},
+> +	[MA35D1_RESET_TMR5] =    {0x2C, 1},
+> +	[MA35D1_RESET_TMR6] =    {0x2C, 2},
+> +	[MA35D1_RESET_TMR7] =    {0x2C, 3},
+> +	[MA35D1_RESET_TMR8] =    {0x2C, 4},
+> +	[MA35D1_RESET_TMR9] =    {0x2C, 5},
+> +	[MA35D1_RESET_TMR10] =   {0x2C, 6},
+> +	[MA35D1_RESET_TMR11] =   {0x2C, 7},
+> +	[MA35D1_RESET_UART8] =   {0x2C, 8},
+> +	[MA35D1_RESET_UART9] =   {0x2C, 9},
+> +	[MA35D1_RESET_UART10] =  {0x2C, 10},
+> +	[MA35D1_RESET_UART11] =  {0x2C, 11},
+> +	[MA35D1_RESET_UART12] =  {0x2C, 12},
+> +	[MA35D1_RESET_UART13] =  {0x2C, 13},
+> +	[MA35D1_RESET_UART14] =  {0x2C, 14},
+> +	[MA35D1_RESET_UART15] =  {0x2C, 15},
+> +	[MA35D1_RESET_UART16] =  {0x2C, 16},
+> +	[MA35D1_RESET_I2S1] =    {0x2C, 17},
+> +	[MA35D1_RESET_I2C4] =    {0x2C, 18},
+> +	[MA35D1_RESET_I2C5] =    {0x2C, 19},
+> +	[MA35D1_RESET_EPWM2] =   {0x2C, 20},
+> +	[MA35D1_RESET_ECAP2] =   {0x2C, 21},
+> +	[MA35D1_RESET_QEI2] =    {0x2C, 22},
+> +	[MA35D1_RESET_CANFD3] =  {0x2C, 23},
+> +	[MA35D1_RESET_KPI] =     {0x2C, 24},
+> +	[MA35D1_RESET_GIC] =     {0x2C, 28},
+> +	[MA35D1_RESET_SSMCC] =   {0x2C, 30},
+> +	[MA35D1_RESET_SSPCC] =   {0x2C, 31}
+> +};
+> +
+> +static int ma35d1_restart_handler(struct notifier_block *this,
+> +				  unsigned long mode, void *cmd)
+> +{
+> +	u32 id = MA35D1_RESET_CHIP;
+> +	struct ma35d1_reset_data *data = container_of(this,
+> +						      struct ma35d1_reset_data,
+> +						      restart_handler);
+
+Reverse xmas tree order.
+
+Try to fit declarations with container_of() to single line, if they fit <= 
+100 chars, avoid the line splits.
+
+Missing #include for container_of().
+
+> +
+> +	writel_relaxed(BIT(ma35d1_reset_map[id].bit),
+
+Missing #include for BIT().
+
+> +		       data->base + ma35d1_reset_map[id].reg_ofs);
+> +	return 0;
+> +}
+> +
+> +static int ma35d1_reset_update(struct reset_controller_dev *rcdev,
+> +			       unsigned long id, bool assert)
+> +{
+> +	u32 reg;
+> +	struct ma35d1_reset_data *data = container_of(rcdev,
+> +						      struct ma35d1_reset_data,
+> +						      rcdev);
+
+Reverse xmas tree.
+
+Add an array size trap to detect potential id bugs:
+	if (WARN_ON_ONCE(id >= ARRAY_SIZE(ma35d1_reset_map)))
+		return -EINVAL;
+
+> +	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
+> +	if (assert)
+> +		reg |= BIT(ma35d1_reset_map[id].bit);
+> +	else
+> +		reg &= ~(BIT(ma35d1_reset_map[id].bit));
+> +	writel_relaxed(reg, data->base + ma35d1_reset_map[id].reg_ofs);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ma35d1_reset_assert(struct reset_controller_dev *rcdev,
+> +			       unsigned long id)
+> +{
+> +	return ma35d1_reset_update(rcdev, id, true);
+> +}
+> +
+> +static int ma35d1_reset_deassert(struct reset_controller_dev *rcdev,
+> +				 unsigned long id)
+> +{
+> +	return ma35d1_reset_update(rcdev, id, false);
+> +}
+> +
+> +static int ma35d1_reset_status(struct reset_controller_dev *rcdev,
+> +			       unsigned long id)
+> +{
+> +	u32 reg;
+> +	struct ma35d1_reset_data *data = container_of(rcdev,
+> +						      struct ma35d1_reset_data,
+> +						      rcdev);
+
+Reverse xmas tree.
+
+Add ARRAY_SIZE trap here too.
+
+> +	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
+> +	return !!(reg & BIT(ma35d1_reset_map[id].bit));
+> +}
+> +
+> +static const struct reset_control_ops ma35d1_reset_ops = {
+> +	.assert = ma35d1_reset_assert,
+> +	.deassert = ma35d1_reset_deassert,
+> +	.status = ma35d1_reset_status,
+> +};
+> +
+> +static const struct of_device_id ma35d1_reset_dt_ids[] = {
+> +	{ .compatible = "nuvoton,ma35d1-reset" },
+> +	{ },
+> +};
+> +
+> +static int ma35d1_reset_probe(struct platform_device *pdev)
+> +{
+> +	int err;
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	struct ma35d1_reset_data *reset_data;
+
+Reverse xmas tree order.
+
+> +
+> +	if (!pdev->dev.of_node) {
+> +		dev_err(&pdev->dev, "Device tree node not found\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
+> +	if (!reset_data)
+> +		return -ENOMEM;
+> +
+> +	reset_data->base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(reset_data->base))
+
+Missing include for IS_ERR()
+
+> +		return PTR_ERR(reset_data->base);
+> +
+> +	reset_data->rcdev.owner = THIS_MODULE;
+> +	reset_data->rcdev.nr_resets = MA35D1_RESET_COUNT;
+> +	reset_data->rcdev.ops = &ma35d1_reset_ops;
+> +	reset_data->rcdev.of_node = dev->of_node;
+> +	reset_data->restart_handler.notifier_call = ma35d1_restart_handler;
+> +	reset_data->restart_handler.priority = 192;
+> +
+> +	err = register_restart_handler(&reset_data->restart_handler);
+> +	if (err)
+> +		dev_warn(&pdev->dev, "failed to register restart handler\n");
+> +
+> +	return devm_reset_controller_register(dev, &reset_data->rcdev);
+> +}
+> +
+> +static struct platform_driver ma35d1_reset_driver = {
+> +	.probe = ma35d1_reset_probe,
+> +	.driver = {
+> +		.name = "ma35d1-reset",
+> +		.of_match_table	= ma35d1_reset_dt_ids,
+> +	},
+> +};
+> +
+> +builtin_platform_driver(ma35d1_reset_driver);
 > 
-> greg k-h
 
-All tests passing for Tegra ...
+-- 
+ i.
 
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
-
-Linux version:	6.1.26-rc1-ge4ff6ff54dea
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
