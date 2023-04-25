@@ -2,203 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E676EE78E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806D26EE794
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbjDYSgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S234585AbjDYShp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbjDYSgN (ORCPT
+        with ESMTP id S233992AbjDYShm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:36:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79FFC173
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:36:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5001B6299D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 18:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945E9C433D2;
-        Tue, 25 Apr 2023 18:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682447770;
-        bh=ai2eDZjdIlPTRpRxYqniC77LrA1HSD9tpG1QN3G8gqM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=j4xE6o/nI2Mfq6F/NdSzxq/dl6Y23ATp1ZY7dQtg97i5EvsNQb7nj8tsk9QCLZlXj
-         iepyd9QP6jDPa18XgKlMSiSrF8Ty+k74baIKaK/Z4s/D2b5kczG+UA/NHiXKlFVGZS
-         kVBe0kNKmakJpRuPmVpagyRf+FcoPZE8jPd0x+PkT5nCMrtZTMwnfCJ3qEsY+xhW0U
-         fcDfOL2Vus59sVjDi7+b52cIygpjxsRxdvHUGKvochF/D9jsjWqSifra8W7QzMZ54s
-         rZODztOP7DLDxdRdvm0E+MfrbcuCkWFqGQCG6bIJn9QklI6VVuJvBSe5ZsKZGKNv6I
-         2sAbs801+uiZA==
-Date:   Tue, 25 Apr 2023 11:36:08 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>
-Subject: [GIT PULL] f2fs update for 6.4
-Message-ID: <ZEgdmJWhJX9NJ0fG@google.com>
+        Tue, 25 Apr 2023 14:37:42 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E9B26A8;
+        Tue, 25 Apr 2023 11:37:41 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6a5dd070aa1so2414047a34.3;
+        Tue, 25 Apr 2023 11:37:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682447860; x=1685039860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iRaUadFCSKE/QoppZMed0RxSBw/AjnCOvErTwInNFFk=;
+        b=CJxqLtzYgWX7ha9EhX5hbkG5iwhRcymhYi/fuUarhw1nGEnSJE/u82sX1aNr/zUZ5l
+         atRsiZyVrQJ1K4riSfRI4ybC1Kt3+BzFZoLSB4C3Zr1cOICn38EKESGhk1b1vEt7ePqG
+         WrETsCvrQNo8QR2dIeEJYsWGFg7iWw3LQs37K2X3fCwqKo1Sx7bPSYq11eP9ptjZaP5S
+         3whA4cWn3X8yR1GlEdgCBEy3oaI64Sc4FMxuEk8pmGqi3lfhZO2Upi8mn68SLoReDRFm
+         fO14p1gVl43NDUPUc+rTjvtY9uwuP9++1hmvd3F0Pgok5Whl53+psdaBvU5QmWP7/+Xg
+         mt9A==
+X-Gm-Message-State: AAQBX9ehCpGbD0GntFk3lELlnp/kQKpvpn3bkTF1+yTn5HwWvCyjpFH7
+        H+MiZSd5gVKmny4mS8Qa3w==
+X-Google-Smtp-Source: AKy350Zkmeo+/KqUAL8RCuMQa36bWUyJkm9hsLv/I+bgaWDPIGEFpGOsdVC2hJi0uLO21uhFBLH8IQ==
+X-Received: by 2002:a05:6830:3a93:b0:6a4:4286:e7da with SMTP id dj19-20020a0568303a9300b006a44286e7damr8808493otb.37.1682447860386;
+        Tue, 25 Apr 2023 11:37:40 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d2-20020a0568301b6200b0069f0794861asm5964175ote.63.2023.04.25.11.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 11:37:40 -0700 (PDT)
+Received: (nullmailer pid 2060265 invoked by uid 1000);
+        Tue, 25 Apr 2023 18:37:39 -0000
+Date:   Tue, 25 Apr 2023 13:37:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v9 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Message-ID: <20230425183739.GA2032053-robh@kernel.org>
+References: <cover.1682092324.git.quic_varada@quicinc.com>
+ <b00042df41420ac337703ca99ac7876c46552946.1682092324.git.quic_varada@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b00042df41420ac337703ca99ac7876c46552946.1682092324.git.quic_varada@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Apr 21, 2023 at 09:24:44PM +0530, Varadarajan Narayanan wrote:
+> * Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+> 
+> * Making power-domains as optional since IPQ9574 doesn't have GDSCs
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> 
+> ---
+>  Changes in v9:
+> 	- Move 'allOf' to the correct position
+> 
+>  Changes in v8:
+> 	- Update clock names for ipq9574
+> 
+>  Changes in v6:
+> 	- Made power-domains optional
+> 
+> Note: In the earlier patch sets, had used the (legacy)
+> specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
+> to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> ---
+>  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
+>  1 file changed, 37 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> index 16fce10..b9dcda2 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> @@ -16,6 +16,7 @@ description:
+>  properties:
+>    compatible:
+>      enum:
+> +      - qcom,ipq9574-qmp-usb3-phy
+>        - qcom,sc8280xp-qmp-usb3-uni-phy
+>  
+>    reg:
+> @@ -25,11 +26,7 @@ properties:
+>      maxItems: 4
+>  
+>    clock-names:
+> -    items:
+> -      - const: aux
+> -      - const: ref
+> -      - const: com_aux
+> -      - const: pipe
+> +    maxItems: 4
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -60,7 +57,6 @@ required:
+>    - reg
+>    - clocks
+>    - clock-names
+> -  - power-domains
+>    - resets
+>    - reset-names
+>    - vdda-phy-supply
+> @@ -69,6 +65,41 @@ required:
+>    - clock-output-names
+>    - "#phy-cells"
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,ipq9574-qmp-usb3-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 4
 
-Could you please consider this pull request?
+Doesn't the top-level already say this?
 
-Thanks,
-
-The following changes since commit ffe78bbd512166e0ef1cc4858010b128c510ed7d:
-
-  Merge tag 'xtensa-20230327' of https://github.com/jcmvbkbc/linux-xtensa (2023-03-29 10:24:07 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-6.4-rc1
-
-for you to fetch changes up to 8375be2b6414577487486a92995bdc97a7934033:
-
-  f2fs: remove unnessary comment in __may_age_extent_tree (2023-04-24 11:03:10 -0700)
-
-----------------------------------------------------------------
-f2fs update for 6.4-rc1
-
-In this round, we've mainly modified to support non-power-of-two zone size,
-which is not required for f2fs by design. In order to avoid arch dependency,
-we refactored the messy rb_entry structure shared across different extent_cache.
-In addition to the improvement, we've also fixed several subtle bugs and
-error cases.
-
-Enhancement:
-- support non-power-of-two zone size for zoned device
-- remove sharing the rb_entry structure in extent cache
-- refactor f2fs_gc to call checkpoint in urgent condition
-- support iopoll
-
-Bug fix:
-- fix potential corruption when moving a directory
-- fix to avoid use-after-free for cached IPU bio
-- fix the folio private usage
-- avoid kernel warnings or panics in the cp_error case
-- fix to recover quota data correctly
-- fix some bugs in atomic operations
-- fix system crash due to lack of free space in LFS
-- fix null pointer panic in tracepoint in __replace_atomic_write_block
-- fix iostat lock protection
-- fix scheduling while atomic in decompression path
-- preserve direct write semantics when buffering is forced
-- fix to call f2fs_wait_on_page_writeback() in f2fs_write_raw_pages()
-
-----------------------------------------------------------------
-Chao Yu (10):
-      f2fs: use f2fs_hw_is_readonly() instead of bdev_read_only()
-      f2fs: remove unneeded in-memory i_crtime copy
-      f2fs: fix to avoid use-after-free for cached IPU bio
-      f2fs: fix to drop all dirty pages during umount() if cp_error is set
-      f2fs: fix to keep consistent i_gc_rwsem lock order
-      f2fs: fix to check readonly condition correctly
-      f2fs: fix to recover quota data correctly
-      f2fs: fix to check return value of f2fs_do_truncate_blocks()
-      f2fs: fix to check return value of inc_valid_block_count()
-      f2fs: remove folio_detach_private() in .invalidate_folio and .release_folio
-
-Daeho Jeong (3):
-      f2fs: fix passing relative address when discard zones
-      f2fs: use cow inode data when updating atomic write
-      f2fs: allocate node blocks for atomic write block replacement
-
-Hans Holmberg (1):
-      f2fs: preserve direct write semantics when buffering is forced
-
-Jaegeuk Kim (10):
-      f2fs: factor out victim_entry usage from general rb_tree use
-      f2fs: factor out discard_cmd usage from general rb_tree use
-      f2fs: remove entire rb_entry sharing
-      f2fs: apply zone capacity to all zone type
-      f2fs: fix scheduling while atomic in decompression path
-      f2fs: fix null pointer panic in tracepoint in __replace_atomic_write_block
-      f2fs: fix potential corruption when moving a directory
-      f2fs: refactor f2fs_gc to call checkpoint in urgent condition
-      f2fs: relax sanity check if checkpoint is corrupted
-      f2fs: remove power-of-two limitation of zoned device
-
-Li Zetao (1):
-      f2fs: make f2fs_sync_inode_meta() static
-
-Qi Han (1):
-      f2fs: remove unnessary comment in __may_age_extent_tree
-
-Qilin Tan (1):
-      f2fs: fix iostat lock protection
-
-Wang Han (1):
-      docs: f2fs: Correct instruction to disable checkpoint
-
-Weizhao Ouyang (1):
-      f2fs: use common implementation of file type
-
-Wu Bo (2):
-      f2fs: support iopoll method
-      f2fs: allocate trace path buffer from names_cache
-
-Yangtao Li (16):
-      f2fs: export compress_percent and compress_watermark entries
-      f2fs: convert to use bitmap API
-      f2fs: handle dqget error in f2fs_transfer_project_quota()
-      f2fs: convert to MAX_SBI_FLAG instead of 32 in stat_show()
-      f2fs: fix to handle filemap_fdatawrite() error in f2fs_ioc_decompress_file/f2fs_ioc_compress_file
-      f2fs: remove else in f2fs_write_cache_pages()
-      f2fs: compress: fix to call f2fs_wait_on_page_writeback() in f2fs_write_raw_pages()
-      f2fs: convert is_extension_exist() to return bool type
-      f2fs: add compression feature check for all compress mount opt
-      f2fs: remove struct victim_selection default_v_ops
-      f2fs: set default compress option only when sb_has_compression
-      f2fs: convert to use sysfs_emit
-      f2fs: merge lz4hc_compress_pages() to lz4_compress_pages()
-      f2fs: remove batched_trim_sections node description
-      f2fs: remove bulk remove_proc_entry() and unnecessary kobject_del()
-      f2fs: add has_enough_free_secs()
-
-Yohan Joung (2):
-      f2fs: fix align check for npo2
-      f2fs: add radix_tree_preload_end in error case
-
-Yonggil Song (3):
-      f2fs: fix uninitialized skipped_gc_rwsem
-      f2fs: Fix discard bug on zoned block devices with 2MiB zone size
-      f2fs: Fix system crash due to lack of free space in LFS
-
- Documentation/ABI/testing/sysfs-fs-f2fs |  23 +-
- Documentation/filesystems/f2fs.rst      |   2 +-
- fs/f2fs/checkpoint.c                    |  52 ++---
- fs/f2fs/compress.c                      |  47 ++--
- fs/f2fs/data.c                          |  71 +++---
- fs/f2fs/debug.c                         |  37 +--
- fs/f2fs/dir.c                           |  47 +---
- fs/f2fs/extent_cache.c                  | 264 +++++++--------------
- fs/f2fs/f2fs.h                          | 252 ++++++++++-----------
- fs/f2fs/file.c                          |  76 +++++--
- fs/f2fs/gc.c                            | 205 ++++++++++-------
- fs/f2fs/gc.h                            |  16 +-
- fs/f2fs/inline.c                        |   2 +-
- fs/f2fs/inode.c                         |   5 +-
- fs/f2fs/namei.c                         |  28 ++-
- fs/f2fs/node.h                          |  20 +-
- fs/f2fs/recovery.c                      |  17 +-
- fs/f2fs/segment.c                       | 390 +++++++++++++++++---------------
- fs/f2fs/segment.h                       |  57 +++--
- fs/f2fs/super.c                         | 111 +++++++--
- fs/f2fs/sysfs.c                         |  50 ++--
- include/linux/f2fs_fs.h                 |  24 +-
- 22 files changed, 899 insertions(+), 897 deletions(-)
+> +        clock-names:
+> +          items:
+> +            - const: aux
+> +            - const: ref
+> +            - const: cfg_ahb
+> +            - const: pipe
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sc8280xp-qmp-usb3-uni-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 4
+> +        clock-names:
+> +          items:
+> +            - const: aux
+> +            - const: ref
+> +            - const: com_aux
+> +            - const: pipe
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> -- 
+> 2.7.4
+> 
