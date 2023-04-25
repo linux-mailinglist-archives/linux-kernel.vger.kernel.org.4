@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B03D6EDD3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70D06EDD42
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbjDYHxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 03:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S233330AbjDYHym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 03:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbjDYHxk (ORCPT
+        with ESMTP id S231137AbjDYHyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 03:53:40 -0400
-Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED5C9F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:53:38 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id rDUWpfoNtvolhrDUWpTpgz; Tue, 25 Apr 2023 09:53:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682409217;
-        bh=5mXZM2+8CUq1MLkMg5pCYcpJ5YHT+aXC4TWjV894QWw=;
-        h=From:To:Cc:Subject:Date;
-        b=TnvJO9+WncBBDJvXwGxUGPZpoAVDCM9dCNOGEU0rqOTlm0gCl3atNvsuo/MZ8D0rH
-         hc0nxV3G5j9dk4MjnbEt5pxtRu3a51zzcVgZfeMTyvBzTvsvj1AxTgp4ivP59Mm0x8
-         bKanJ+IA/L/Kx3eKki/wsL6JLYoQy/dlOeOJxG4J4y04j1lanRs8//O8NRG9KlgURY
-         20CRQc+UCFa85ucEXacBZQbNhRusWfHXpxn9PfQP84aFcZSoEV2jbnfW0vHdun4dpF
-         1DSX9oeWmHjOJ25XWrYw+0p17UkCu0dT4oyE3FMZLHjSAxnNTE4pAjHCH4IF1g3u1v
-         xLNqU7hYp7wzw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 25 Apr 2023 09:53:37 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/amd/display: Correctly initialize some memory in get_available_dsc_slices()
-Date:   Tue, 25 Apr 2023 09:53:34 +0200
-Message-Id: <f7953bb41b7d5e28ec6bc3abfa06c8aaa0193ca4.1682409190.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Apr 2023 03:54:40 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC44A93;
+        Tue, 25 Apr 2023 00:54:38 -0700 (PDT)
+Received: from fpc (unknown [10.10.165.13])
+        by mail.ispras.ru (Postfix) with ESMTPSA id B178F4076B3E;
+        Tue, 25 Apr 2023 07:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru B178F4076B3E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1682409273;
+        bh=x/dcm2H+pi6gUOqFCVOxGTCuLDZsjOAvdeX9hDCiq50=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ha5x9mUs3UEtB19J1XCR4MRHoL6FR6LT2yNTo2JYsvcMVjPHA/bq8OmLTktyraXoP
+         4/NlJ+NtnRg2/Kn+PNV3/5ADOUAnJwDLm9OT+nhQsXJColKxExzaplOSPtM7HygpfJ
+         +ysErXCQ/eOuCMgonfLq9PWYyVCbcoQv3zfUOLYU=
+Date:   Tue, 25 Apr 2023 10:54:26 +0300
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
+        syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com,
+        syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH v2] wifi: ath9k: fix races between ath9k_wmi_cmd and
+ ath9k_wmi_ctrl_rx
+Message-ID: <20230425075426.ubfnohsqe3c2cjdq@fpc>
+References: <20230424191826.117354-1-pchelkin@ispras.ru>
+ <20230425033832.2041-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425033832.2041-1-hdanton@sina.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The intent here is to clear the 'available_slices' buffer before setting
-some values in it.
+On Tue, Apr 25, 2023 at 11:38:32AM +0800, Hillf Danton wrote:
+> On 24 Apr 2023 22:18:26 +0300 Fedor Pchelkin <pchelkin@ispras.ru>
+> > Currently, the synchronization between ath9k_wmi_cmd() and
+> > ath9k_wmi_ctrl_rx() is exposed to a race condition which, although being
+> > rather unlikely, can lead to invalid behaviour of ath9k_wmi_cmd().
+> > 
+> > Consider the following scenario:
+> > 
+> > CPU0					CPU1
+> > 
+> > ath9k_wmi_cmd(...)
+> >   mutex_lock(&wmi->op_mutex)
+> >   ath9k_wmi_cmd_issue(...)
+> >   wait_for_completion_timeout(...)
+> >   ---
+> >   timeout
+> >   ---
+> > 					/* the callback is being processed
+> > 					 * before last_seq_id became zero
+> > 					 */
+> > 					ath9k_wmi_ctrl_rx(...)
+> > 					  spin_lock_irqsave(...)
+> > 					  /* wmi->last_seq_id check here
+> > 					   * doesn't detect timeout yet
+> > 					   */
+> > 					  spin_unlock_irqrestore(...)
+> >   /* last_seq_id is zeroed to
+> >    * indicate there was a timeout
+> >    */
+> >   wmi->last_seq_id = 0
+> 
+> Without	wmi->wmi_lock held, updating last_seq_id on the waiter side
+> means it is random on the waker side, so the fix below is incorrect.
+> 
 
-This is an array of int, so in order to fully initialize it, we must clear
-MIN_AVAILABLE_SLICES_SIZE * sizeof(int) bytes.
+Thank you for noticing! Of course that should be done.
 
-Compute the right length of the buffer when calling memset().
+> >   mutex_unlock(&wmi->op_mutex)
+> >   return -ETIMEDOUT
+> > 
+> > ath9k_wmi_cmd(...)
+> >   mutex_lock(&wmi->op_mutex)
+> >   /* the buffer is replaced with
+> >    * another one
+> >    */
+> >   wmi->cmd_rsp_buf = rsp_buf
+> >   wmi->cmd_rsp_len = rsp_len
+> >   ath9k_wmi_cmd_issue(...)
+> >     spin_lock_irqsave(...)
+> >     spin_unlock_irqrestore(...)
+> >   wait_for_completion_timeout(...)
+> > 					/* the continuation of the
+> > 					 * callback left after the first
+> > 					 * ath9k_wmi_cmd call
+> > 					 */
+> > 					  ath9k_wmi_rsp_callback(...)
+> > 					    /* copying data designated
+> > 					     * to already timeouted
+> > 					     * WMI command into an
+> > 					     * inappropriate wmi_cmd_buf
+> > 					     */
+> > 					    memcpy(...)
+> > 					    complete(&wmi->cmd_wait)
+> >   /* awakened by the bogus callback
+> >    * => invalid return result
+> >    */
+> >   mutex_unlock(&wmi->op_mutex)
+> >   return 0
+> > 
+> > To fix this, move ath9k_wmi_rsp_callback() under wmi_lock inside
+> > ath9k_wmi_ctrl_rx() so that the wmi->cmd_wait can be completed only for
+> > initially designated wmi_cmd call, otherwise the path would be rejected
+> > with last_seq_id check.
+> > 
+> > Also move recording the rsp buffer and length into ath9k_wmi_cmd_issue()
+> > under the same wmi_lock with last_seq_id update to avoid their racy
+> > changes.
+> 
+> Better in a seperate one.
 
-Fixes: 97bda0322b8a ("drm/amd/display: Add DSC support for Navi (v2)")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-NOT even compile-tested.
-
-make -j7  drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.o
-
-on my setup, it fails with:
-  CC      drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.o
-drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c:27:10: fatal error: dc_hw_types.h: Aucun fichier ou dossier de ce type
-   27 | #include "dc_hw_types.h"
-      |          ^~~~~~~~~~~~~~~
-
-I've not investigated why.
----
- drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c b/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
-index b9a05bb025db..1d7384b2be28 100644
---- a/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
-+++ b/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
-@@ -645,7 +645,7 @@ static int get_available_dsc_slices(union dsc_enc_slice_caps slice_caps, int *av
- {
- 	int idx = 0;
- 
--	memset(available_slices, -1, MIN_AVAILABLE_SLICES_SIZE);
-+	memset(available_slices, -1, MIN_AVAILABLE_SLICES_SIZE * sizeof(*available_slices));
- 
- 	if (slice_caps.bits.NUM_SLICES_1)
- 		available_slices[idx++] = 1;
--- 
-2.34.1
-
+Well, they are parts of the same problem but now it seems more relevant
+to divide the patch in two: the first one for incorrect last_seq_id
+synchronization and the second one for recording rsp buffer under the
+lock. Thanks!
