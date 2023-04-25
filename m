@@ -2,374 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D806EE445
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C716EE447
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234287AbjDYOvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S234386AbjDYOwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbjDYOvm (ORCPT
+        with ESMTP id S233617AbjDYOwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:51:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02D189;
-        Tue, 25 Apr 2023 07:51:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 485CF21994;
-        Tue, 25 Apr 2023 14:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682434296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ooAyF9pS62NXBvcqS9VCxUkPrUWAa9g2Snay2e75hgI=;
-        b=enNtfXP/ipX2ABlj48YWS3Km9xgR053P5UqwUy5hV+LW7O+fWZ9qTBAleDWMR8uvMj9MrR
-        kfQlKDY62aixrOfuMqSgsBAAoVto4tLF3MW8AANKSNlq8Q/WmRcR/OiCHdRtoTaxr2oyXR
-        O5vny4s0Ib6o62tHtX1UGvIIqdf0tM0=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 33A1D2C141;
-        Tue, 25 Apr 2023 14:51:36 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 5F29BDA8D8; Tue, 25 Apr 2023 16:51:24 +0200 (CEST)
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        Tue, 25 Apr 2023 10:52:03 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6558E7DB0;
+        Tue, 25 Apr 2023 07:51:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eTy60Hlv8umpiHMA9zZUAMrNaM9vyrvw0pGddD0OrOcCFmEbHjZvoPCodcLbbXaIxJ7DsFJx4haYDiilwwVuTkGEd+hkmdgH999Hp3/XrCh3fq0te8bnrnzAkee6zSiAkadZskwV4fB1LXr2iNtYUlPl/mAvAl5tY7qBrG0ysqRl7JA9M8lKYF9IWYXd/X+yTHuEcEfpJbVUvpReONj1YdKqbSmPl8Be6JTL1fD2Wjyvpf/89Hi03L603o568txQ4zkl1OBJWA02lkYNSFMXoKPIlqZJUEcmFKbBAX28UaK6RTDQZvM8DhGyPzfffE/1QhXQfbcjeyGcIBDCkSrZ6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hNS+mLFLSufWqHJ7Nih0A0wK5eAK7F+tJGXYfT6LgN4=;
+ b=LK+jv8I0DTXhEHXwlE/zbgxYwVT2GS71N0783+WNAwS635I27Pdqk56YP/rvBUGyNz151eNC/yivq5eaF8srIXm+R1yhldHlxzswuw3UhZu3XVQyvjARSfpI/Omb7d9I/Psf4MCf0Di8k0rXXkFQgEeSocwbwt9jWGEYh3TRzgOKq69FEToOf5cTwjU3w0G00PhscMVvF8WIsRkp/eWchbi3dkZabdmOnz8KU8gwZM6+EuQ+kTSexqqRDXi0tYIknBz3MsgXBRvBH/QgydlYnNDShc4ohFFc9JlUq3Qc6f721b1edb2E0F1nR7t4WGrn3aXtl9xy5OGWMWiz2QP5yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hNS+mLFLSufWqHJ7Nih0A0wK5eAK7F+tJGXYfT6LgN4=;
+ b=ZdCDxiC4DZ3C7rTRqfy90q5bp5gPhgO7A0UpZnZd0LnbftgfDxBYgaqB9RIBCFRijc/l32rY/DgJnb4NR5xCTcHJL9SEnLOKpWAenHwtPRii3U1/2Ts5d8sYljPxsCv3+ReBiUHuYZxipx0zvarzb2emUZS0XtFX5zbQZRytlLhTlAP0Bn6GI8TccTAjr6C2kIWb+9K0ewH7U0d6Cg3E2W/1JAdceXEPSylifanBphVtWhuYCoTHg350anhLWAgCHtOomBUbIUrpwt5wc4Gq0z2rWNPdfKTfink7xu4vh3D6Lx5i+ncBtEKb74/4azX/n/0mKT26+LJqz5+6C+Y/+A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB6007.namprd12.prod.outlook.com (2603:10b6:8:7e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34; Tue, 25 Apr
+ 2023 14:51:54 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%5]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
+ 14:51:54 +0000
+Date:   Tue, 25 Apr 2023 11:51:51 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
+        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
+        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
         linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Btrfs updates for 6.4
-Date:   Tue, 25 Apr 2023 16:51:23 +0200
-Message-Id: <cover.1682378675.git.dsterba@suse.com>
-X-Mailer: git-send-email 2.40.0
+Subject: Re: [PATCH V3 08/10] vfio/pci: Probe and store ability to support
+ dynamic MSI-X
+Message-ID: <ZEfpB7m3bWr1bPlv@nvidia.com>
+References: <cover.1681837892.git.reinette.chatre@intel.com>
+ <0da4830176e9c4a7877aac0611869f341dda831c.1681837892.git.reinette.chatre@intel.com>
+ <20230418163803.46a96fdc.alex.williamson@redhat.com>
+ <64b99d1c-073f-cbc3-6c5a-100fa23bcb13@intel.com>
+ <ZEa/rTKja3Xpy/j5@nvidia.com>
+ <5167f01d-fcfd-d821-40fd-c53f4fc135ff@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5167f01d-fcfd-d821-40fd-c53f4fc135ff@intel.com>
+X-ClientProxiedBy: SJ0PR03CA0169.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::24) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6007:EE_
+X-MS-Office365-Filtering-Correlation-Id: 949baca7-d766-4489-dbe3-08db459c9c29
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mTEmiwW9LKzdg/bKaI1s1x6RG6uGXMAdw1WG/pu5ARbwz9XvaFu9t3jyt5n3dMdtPBODwMtNxo8TX5KTh892n2z5RMp4iK7bOYM6iSExis7dGwCfssxHFTgyH3qmxWJEU41sH8PE9z9DTBSxoPN29IoknzeKyze0G/qn9R67cCsQs/MUW4WR1si0X4MQT8IEzsqUJRGLjgm2O1JhNUXMiEDNKj+aiwAhV7Aer1y2h/6gXMlX6JIEwWV046zGFkNECLcI6spNabEETsYOO32Ji4fiBkwAHkG4ajVhJwyi4LXalR880mLj1eAQNdNKkvcLuQ19oBXLbbHbtFfoKeyMvxL8HOVtn0h5mQ/5kDzcAW9V7t7z8BEjgk07K5VyCUKnHUZjb1H43JhYhZcNwHpDvhKJwiNBqey1ETLiLEx8QMAzLX2WoDF5wyFzHLrLcdSgt+fqzrJmLfOM7E/b3SpG/61nfcVn/KNdeBkibqkLBYzWq2Wm0CwF5clLSbHh5x3xtp6Cy5mm147CtnGYTrneyiVG9oxKLXXDos/YDseSCL5tjbmdw4jYDNfKfcgYN0HiqDwpd2g2lFqWyp2gQ8k4JOtckaUVNR2eKk8ykGG4YNA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199021)(83380400001)(966005)(478600001)(6486002)(6666004)(2616005)(6512007)(6506007)(26005)(186003)(53546011)(2906002)(7416002)(5660300002)(36756003)(38100700002)(66946007)(6916009)(66476007)(66556008)(4326008)(41300700001)(86362001)(8936002)(316002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LTDiz3y6ktC1LgCvuP8aOVdlnJE3kOQYeqGdiqNt31+dgIKzTb0MijE0BAZB?=
+ =?us-ascii?Q?bm/2otIF8JzI+cmNB6sllWnV7QW6BKJEkSQLqJcj2LR3oWOfCIcodT+xmmuo?=
+ =?us-ascii?Q?nihSHFAcWMBdlRNDMBSajYa9deOhh9Z6wR6Jm33CzycaeoLbfmLd42wadiZi?=
+ =?us-ascii?Q?+qEnBvhjsgFoUxuOvehhJkJhuY7MWcQDqBwqN4CF+CvOX0NECwuIkrntoXR8?=
+ =?us-ascii?Q?94wOAUfw3kG0Fp7Zdo+Cx1/cy640qD5ZtzNvnh/nvga1/BXVITbrkT+0n06p?=
+ =?us-ascii?Q?ru5TS5JeTELDznRIy8xq9/6Z487WqdSWpO+qxFHre37AnRju/EDnp7G85I/S?=
+ =?us-ascii?Q?qf5j2ZSdfiBRi4o+BQ98D5Qm0FwXeFB5PEF0JGMlbU0FVxhrLj8wqDBl9g0s?=
+ =?us-ascii?Q?LOga+OZKLsHI4Dcj66KJy1G6e03Rtg6WqHlf9APnPzBeqyHP0JTP5XIzHjfc?=
+ =?us-ascii?Q?R5ROl2S9nMVx1YNQ8w0I2Q7t5H1OUlpzbsDbvZXFDSJFuwpwcP0fO7Ei26cj?=
+ =?us-ascii?Q?qFKp/jFZQKckxhuFgGDjTDivUgIvsp5TQhZfjBrsT7QziCNu5CfsounL/FcZ?=
+ =?us-ascii?Q?Y85su5gOAvAKn3dhEn/DIXdVdUusbrN6Pjv7Hbl5VKQ/R+jded8B81HhOrvP?=
+ =?us-ascii?Q?E2Ioq/VoBvgVpYDud0wwbnVMU5zJpDK4/B/FtLU9UBJFpj6phpGuR7F4RJ4d?=
+ =?us-ascii?Q?gqbTZESxbgU6wpSmoCQ+yfmyjjQklH0wRlkQje26tJ9djOMQZ3VanbLV7tXQ?=
+ =?us-ascii?Q?7px8L3QNt0hsEoUsXIxlTwNNWmHJkXM9otTqLfQGMR90CezcYzQdZtgoDPVU?=
+ =?us-ascii?Q?T/5PDgFmtFi1lHYV8WLWg5YJ1snWI+wdOEFhoBkIYLwqE1kDGWCHa7GyLeHH?=
+ =?us-ascii?Q?jtna5yi7H7d3/6ptamAo8So6kvZ+ssN+RnZWJPYxK9+9ilwiixXNsnGbNWvg?=
+ =?us-ascii?Q?oo9mdadCBi2m1UlOeTBdnSoYukgzeDVlF86cqxqBJwsUbJZ36YqfXhDs2i0s?=
+ =?us-ascii?Q?Uco4q6Fyb9jU6RBeiPhdC0xkP7P6OE3QIJFd1lYZBz59r3XwloZ+sMj3omAc?=
+ =?us-ascii?Q?jOk8B/clOxnHIDOgQu7x3bHqkPejKre9ITy4lZzV2CaqkfW6j1vM53LKOZX1?=
+ =?us-ascii?Q?+RFzoJryLAQg7yDrhDRWxLMsVCES0eEpyQ06Bvk/FCwtySyDmpJTPt6RuA6s?=
+ =?us-ascii?Q?1/9YPblAky/3qLIimOSGhHfuABjwSZOqZNMaBZyCl7zTADsud499gUywP8Ob?=
+ =?us-ascii?Q?ErQxMXfVEVybXiwuTouPr9PKifjspGSQALv3l/qMT3aLENJiCwCVlgnYMFiB?=
+ =?us-ascii?Q?jz5R2fDWiyc0Mk9m+yrwMMpeJW0Aq5msIqEt2zlbaVJqPA3+/uzu/7SeVA3B?=
+ =?us-ascii?Q?xT3NUUmscCn7QV8NvOmgZHPMMRJp4vuLX2lkmv+cHVBobCQIi/JPqmuG8TC6?=
+ =?us-ascii?Q?A6yozLGW6dQixe7wNuKOcH24+4inkBgz6eVwZU4v6ErVq34QAne9hXm/oeoX?=
+ =?us-ascii?Q?PIPY/JQaBH0+bf0K9nRDrXd+S8zEvw434UYWTExBwcuZnrS7rGy7Sp8OB1We?=
+ =?us-ascii?Q?IKfU+Sz0xbqeT5OjxLnsuuIh4Q2odWhhh/O43aLn?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 949baca7-d766-4489-dbe3-08db459c9c29
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 14:51:54.2004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rg8XzlSRhxjNYA2VLji8ujsGmXJqq4SKEXg5A3ctQWeFZJTsSFhZ6nElPiOyMN0+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6007
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 24, 2023 at 04:52:08PM -0700, Reinette Chatre wrote:
+> Hi Jason,
+> 
+> On 4/24/2023 10:43 AM, Jason Gunthorpe wrote:
+> > On Wed, Apr 19, 2023 at 11:11:48AM -0700, Reinette Chatre wrote:
+> >> On 4/18/2023 3:38 PM, Alex Williamson wrote:
+> >>> On Tue, 18 Apr 2023 10:29:19 -0700
+> >>> Reinette Chatre <reinette.chatre@intel.com> wrote:
+> 
+> ...
+> 
+> >> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> >> index 4f070f2d6fde..d730d78754a2 100644
+> >> --- a/include/linux/vfio_pci_core.h
+> >> +++ b/include/linux/vfio_pci_core.h
+> >> @@ -67,8 +67,8 @@ struct vfio_pci_core_device {
+> >>  	u8			msix_bar;
+> >>  	u16			msix_size;
+> >>  	u32			msix_offset;
+> >> -	bool			has_dyn_msix;
+> >>  	u32			rbar[7];
+> >> +	bool			has_dyn_msix;
+> >>  	bool			pci_2_3;
+> >>  	bool			virq_disabled;
+> >>  	bool			reset_works;
+> > 
+> > Also, Linus on record as strongly disliking these lists of bools
+> 
+> This looks like an example:
+> https://lkml.org/lkml/2017/11/21/384
+> 
+> > 
+> > If they don't need read_once/etc stuff then use a list of bitfields
+> 
+> I do not see any direct usage of read_once in the driver, but it is not
+> clear to me what falls under the "etc" umbrella.
 
-there are mostly core changes and cleanups, some notable fixes and two
-performance improvements in directory logging. The IO path cleanups are
-removing or refactoring old code, scrub main loop has been completely
-rewritten also refactoring old code.
+Anything that might assume atomicity, smp_store_release, set_bit, and others
 
-There are some changes to non-btrfs code, mostly trivial, the cgroup
-punt bio logic is only moved from generic code.
+>  Do you consider all the bools in struct vfio_pci_core_device to be
+> candidates for transition?
 
-Please pull, thanks.
+Yes, group them ito into a bitfield.
 
-Performance improvements:
+> I think a base type of unsigned int since it appears to be the custom
+> and (if I understand correctly) was preferred at the time Linus wrote
+> the message I found.
 
-- improve logging changes in a directory during one transaction, avoid
-  iterating over items and reduce lock contention (fsync time 4x lower)
+It doesn't matter a lot, using "bool" means the compiler adds extra
+code to ensure "foo = 4" stores true, and the underyling size is not
+well defined (but we don't care here)
+ 
+> Looking ahead there seems be be a bigger task here. A quick search
+> revealed a few other instances of vfio using "bool" in a struct. It
+> does not all qualify for your "lists of bools" comment, but they
+> may need a closer look because of the "please don't use "bool" in
+> structures at all" comment made by Linus in the email I found.
 
-- when logging directory entries during one transaction, reduce locking
-  of subvolume trees by checking tree-log instead (improvement in
-  throughput and latency for concurrent access to a subvolume)
+IMHO bool is helpful for clarity, it says it is a flag. In these cases
+we won't gain anything by using u8 instead
 
-Notable fixes:
+Lists of bools however start to get a little silly when we use maybe 4
+bytes per bool (though x86-64 is using 1 byte in structs)
 
-- dev-replace
-  - properly honor read mode when requested to avoid reading from source
-    device
-  - target device won't be used for eventual read repair, this is
-    unreliable for NODATASUM files
-  - when there are unpaired (and unrepairable) metadata during replace,
-    exit early with error and don't try to finish whole operation
-
-- scrub ioctl properly rejects unknown flags
-
-- fix global block reserve calculations
-
-- fix partial direct io write when there's a page fault in the middle,
-  iomap will try to continue with partial request but the btrfs part did
-  not match that, this can lead to zeros written instead of data
-
-Core changes:
-
-- io path
-  - continued cleanups and refactoring around bio handling
-  - extent io submit path simplifications and cleanups
-  - flush write path simplifications and cleanups
-  - rework logic of passing sync mode of bio, with further cleanups
-
-- rewrite scrub code flow, restructure how the stripes are enumerated
-  and verified in a more unified way
-
-- allow to set lower threshold for block group reclaim in debug mode to
-  aid zoned mode testing
-
-- remove obsolete time-based delayed ref throttling logic when
-  truncating items
-
-- DREW locks are not using percpu variables anymore
-
-- more warning fixes (-Wmaybe-uninitialized)
-
-- u64 division simplifications
-
-- error handling improvements
-
-Non-btrfs code changes:
-
-- push cgroup punt bio logic to btrfs code (there was no other user of
-  that), the functionality can be now selected separately by
-  BLK_CGROUP_PUNT_BIO
-
-- crc32c_impl removed after removing last uses in btrfs code
-
-- add btrfs_assertfail() to objtool table
-
-----------------------------------------------------------------
-The following changes since commit 6a8f57ae2eb07ab39a6f0ccad60c760743051026:
-
-  Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.4-tag
-
-for you to fetch changes up to f372463124df5f980de6ee0cd6000a3e43df0e01:
-
-  btrfs: mark btrfs_assertfail() __noreturn (2023-04-17 19:52:19 +0200)
-
-----------------------------------------------------------------
-Anand Jain (11):
-      btrfs: avoid reusing return variable in nested block in btrfs_lookup_bio_sums
-      btrfs: switch search_file_offset_in_bio to return bool
-      btrfs: open code btrfs_bin_search()
-      btrfs: avoid repetitive define BTRFS_FEATURE_INCOMPAT_SUPP
-      btrfs: remove redundant clearing of NODISCARD
-      btrfs: move last_flush_error to write_dev_flush and wait_dev_flush
-      btrfs: open code check_barrier_error()
-      btrfs: change wait_dev_flush() return type to bool
-      btrfs: use test_and_clear_bit() in wait_dev_flush()
-      btrfs: warn for any missed cleanup at btrfs_close_one_device
-      btrfs: remove redundant release of btrfs_device::alloc_state
-
-Boris Burkov (7):
-      btrfs: add function to create and return an ordered extent
-      btrfs: pass flags as unsigned long to btrfs_add_ordered_extent
-      btrfs: stash ordered extent in dio_data during iomap dio
-      btrfs: don't split NOCOW extent_maps in btrfs_extract_ordered_extent
-      btrfs: split partial dio bios before submit
-      btrfs: set default discard iops_limit to 1000
-      btrfs: reinterpret async discard iops_limit=0 as no delay
-
-Christoph Hellwig (52):
-      btrfs: raid56: no need for irqsafe locking
-      btrfs: move all btree inode initialization into btrfs_init_btree_inode
-      btrfs: embed a btrfs_bio into struct compressed_bio
-      btrfs: remove redundant free_extent_map in btrfs_submit_compressed_read
-      btrfs: use the bbio file offset in btrfs_submit_compressed_read
-      btrfs: use the bbio file offset in add_ra_bio_pages
-      btrfs: factor out a btrfs_add_compressed_bio_pages helper
-      btrfs: factor out a btrfs_free_compressed_pages helper
-      btrfs: don't clear page->mapping in btrfs_free_compressed_pages
-      btrfs: fold finish_compressed_bio_write into btrfs_finish_compressed_write_work
-      btrfs: don't set force_bio_submit in read_extent_buffer_subpage
-      btrfs: remove the force_bio_submit to submit_extent_page
-      btrfs: store the bio opf in struct btrfs_bio_ctrl
-      btrfs: remove the sync_io flag in struct btrfs_bio_ctrl
-      btrfs: add a wbc pointer to struct btrfs_bio_ctrl
-      btrfs: move the compress_type check out of btrfs_bio_add_page
-      btrfs: rename the this_bio_flag variable in btrfs_do_readpage
-      btrfs: remove the compress_type argument to submit_extent_page
-      btrfs: remove the submit_extent_page return value
-      btrfs: simplify the error handling in __extent_writepage_io
-      btrfs: check for contiguity in submit_extent_page
-      btrfs: simplify main loop in submit_extent_page
-      btrfs: remove search_file_offset_in_bio
-      btrfs: cleanup the main loop in btrfs_lookup_bio_sums
-      btrfs: remove unused members from struct btrfs_encoded_read_private
-      btrfs: cleanup main loop in btrfs_encoded_read_regular_fill_pages
-      btrfs: move zero filling of compressed read bios into common code
-      btrfs: pass a btrfs_bio to btrfs_submit_bio
-      btrfs: pass a btrfs_bio to btrfs_submit_compressed_read
-      btrfs: store a pointer to the original btrfs_bio in struct compressed_bio
-      btrfs: simplify finding the inode in submit_one_bio
-      btrfs: store a pointer to a btrfs_bio in struct btrfs_bio_ctrl
-      btrfs: return a btrfs_bio from btrfs_bio_alloc
-      btrfs: make btrfs_split_bio work on struct btrfs_bio
-      btrfs: move the bi_sector assignment out of btrfs_add_compressed_bio_pages
-      btrfs: simplify adding pages in btrfs_add_compressed_bio_pages
-      btrfs: move ordered_extent internal sanity checks into btrfs_split_ordered_extent
-      btrfs: simplify splitting logic in btrfs_extract_ordered_extent
-      btrfs: sink parameter len to btrfs_split_ordered_extent
-      btrfs: fold btrfs_clone_ordered_extent into btrfs_split_ordered_extent
-      btrfs: simplify extent map splitting and rename split_zoned_em
-      btrfs: pass an ordered_extent to btrfs_extract_ordered_extent
-      btrfs: move kthread_associate_blkcg out of btrfs_submit_compressed_write
-      btrfs: don't free the async_extent in submit_uncompressed_range
-      btrfs: also use kthread_associate_blkcg for uncompressible ranges
-      btrfs, mm: remove the punt_to_cgroup field in struct writeback_control
-      btrfs, block: move REQ_CGROUP_PUNT to btrfs
-      block: async_bio_lock does not need to be bh-safe
-      block: make blkcg_punt_bio_submit optional
-      btrfs: tree-log: factor out a clean_log_buffer helper
-      btrfs: don't print the crc32c implementation at module load time
-      libcrc32c: remove crc32c_impl
-
-David Sterba (1):
-      btrfs: locking: use atomic for DREW lock writers
-
-Filipe Manana (30):
-      btrfs: remove btrfs_lru_cache_is_full() inline function
-      btrfs: pass a bool to btrfs_block_rsv_migrate() at evict_refill_and_join()
-      btrfs: pass a bool size update argument to btrfs_block_rsv_add_bytes()
-      btrfs: remove check for NULL block reserve at btrfs_block_rsv_check()
-      btrfs: update documentation for BTRFS_RESERVE_FLUSH_EVICT flush method
-      btrfs: update flush method assertion when reserving space
-      btrfs: initialize ret to -ENOSPC at __reserve_bytes()
-      btrfs: simplify btrfs_should_throttle_delayed_refs()
-      btrfs: collapse should_end_transaction() into btrfs_should_end_transaction()
-      btrfs: remove bytes_used argument from btrfs_make_block_group()
-      btrfs: count extents before taking inode's spinlock when reserving metadata
-      btrfs: remove redundant counter check at btrfs_truncate_inode_items()
-      btrfs: simplify variables in btrfs_block_rsv_refill()
-      btrfs: remove obsolete delayed ref throttling logic when truncating items
-      btrfs: don't throttle on delayed items when evicting deleted inode
-      btrfs: calculate the right space for a single delayed ref when refilling
-      btrfs: accurately calculate number of delayed refs when flushing
-      btrfs: constify fs_info argument of the metadata size calculation helpers
-      btrfs: constify fs_info argument for the reclaim items calculation helpers
-      btrfs: add helper to calculate space for delayed references
-      btrfs: calculate correct amount of space for delayed reference when evicting
-      btrfs: fix calculation of the global block reserve's size
-      btrfs: use a constant for the number of metadata units needed for an unlink
-      btrfs: calculate the right space for delayed refs when updating global reserve
-      btrfs: simplify exit paths of btrfs_evict_inode()
-      btrfs: make btrfs_block_rsv_full() check more boolean when starting transaction
-      btrfs: correctly calculate delayed ref bytes when starting transaction
-      btrfs: remove pointless loop at btrfs_get_next_valid_item()
-      btrfs: avoid iterating over all indexes when logging directory
-      btrfs: use log root when iterating over index keys when logging directory
-
-Genjian Zhang (1):
-      btrfs: fix uninitialized variable warnings
-
-Johannes Thumshirn (4):
-      btrfs: open code btrfs_csum_ptr
-      btrfs: sink calc_bio_boundaries into its only caller
-      btrfs: use __bio_add_page for adding a single page in repair_one_sector
-      btrfs: use __bio_add_page to add single a page in rbio_add_io_sector
-
-Josef Bacik (7):
-      btrfs: use btrfs_handle_fs_error in btrfs_fill_super
-      btrfs: replace BUG_ON with ASSERT in btrfs_read_node_slot
-      btrfs: handle errors from btrfs_read_node_slot in split
-      btrfs: add missing iputs on orphan cleanup failure
-      btrfs: drop root refs properly when orphan cleanup fails
-      btrfs: handle errors in walk_down_tree properly
-      btrfs: abort the transaction if we get an error during snapshot drop
-
-Josh Poimboeuf (1):
-      btrfs: mark btrfs_assertfail() __noreturn
-
-Naohiro Aota (1):
-      btrfs: sysfs: relax bg_reclaim_threshold for debugging purposes
-
-Qu Wenruo (32):
-      btrfs: replace map_lookup->stripe_len by BTRFS_STRIPE_LEN
-      btrfs: reduce div64 calls by limiting the number of stripes of a chunk to u32
-      btrfs: simplify the bioc argument for handle_ops_on_dev_replace()
-      btrfs: reduce type width of btrfs_io_contexts
-      btrfs: use an efficient way to represent source of duplicated stripes
-      btrfs: replace btrfs_io_context::raid_map with a fixed u64 value
-      btrfs: dev-replace: properly follow its read mode
-      btrfs: open_ctree() error handling cleanup
-      btrfs: do not use replace target device as an extra mirror
-      btrfs: scrub: remove unused path inside scrub_stripe()
-      btrfs: scrub: remove root and csum_root arguments from scrub_simple_mirror()
-      btrfs: scrub: use dedicated super block verification function to scrub one super block
-      btrfs: introduce btrfs_bio::fs_info member
-      btrfs: introduce a new helper to submit write bio for repair
-      btrfs: scrub: introduce structure for new BTRFS_STRIPE_LEN based interface
-      btrfs: scrub: introduce helper to find and fill sector info for a scrub_stripe
-      btrfs: scrub: introduce a helper to verify one metadata block
-      btrfs: scrub: introduce a helper to verify one scrub_stripe
-      btrfs: scrub: introduce the main read repair worker for scrub_stripe
-      btrfs: scrub: introduce a writeback helper for scrub_stripe
-      btrfs: scrub: introduce error reporting functionality for scrub_stripe
-      btrfs: scrub: introduce helper to queue a stripe for scrub
-      btrfs: scrub: switch scrub_simple_mirror() to scrub_stripe infrastructure
-      btrfs: scrub: use scrub_stripe to implement RAID56 P/Q scrub
-      btrfs: scrub: remove scrub_parity structure
-      btrfs: scrub: remove the old writeback infrastructure
-      btrfs: scrub: remove the old scrub recheck code
-      btrfs: scrub: remove scrub_block and scrub_sector structures
-      btrfs: scrub: remove scrub_bio structure
-      btrfs: remove unused raid56 functions which were dedicated for scrub
-      btrfs: scrub: reject unsupported scrub flags
-      btrfs: dev-replace: error out if we have unrepaired metadata error during
-
- block/Kconfig                     |    3 +
- block/blk-cgroup.c                |   78 +-
- block/blk-cgroup.h                |   15 +-
- block/blk-core.c                  |    3 -
- fs/btrfs/Kconfig                  |    1 +
- fs/btrfs/bio.c                    |  211 +-
- fs/btrfs/bio.h                    |   22 +-
- fs/btrfs/block-group.c            |   40 +-
- fs/btrfs/block-group.h            |   13 +-
- fs/btrfs/block-rsv.c              |   21 +-
- fs/btrfs/block-rsv.h              |    2 +-
- fs/btrfs/btrfs_inode.h            |   35 +-
- fs/btrfs/compression.c            |  299 +--
- fs/btrfs/compression.h            |   20 +-
- fs/btrfs/ctree.c                  |   91 +-
- fs/btrfs/ctree.h                  |   17 +-
- fs/btrfs/delalloc-space.c         |    2 +-
- fs/btrfs/delayed-ref.c            |   49 +-
- fs/btrfs/delayed-ref.h            |   22 +-
- fs/btrfs/discard.c                |   21 +-
- fs/btrfs/disk-io.c                |  147 +-
- fs/btrfs/extent-tree.c            |   37 +-
- fs/btrfs/extent_io.c              |  550 ++---
- fs/btrfs/file-item.c              |   93 +-
- fs/btrfs/file-item.h              |    3 +-
- fs/btrfs/fs.h                     |   53 +-
- fs/btrfs/inode-item.c             |   15 +-
- fs/btrfs/inode.c                  |  375 ++--
- fs/btrfs/ioctl.c                  |    5 +
- fs/btrfs/locking.c                |   25 +-
- fs/btrfs/locking.h                |    5 +-
- fs/btrfs/lru_cache.h              |    5 -
- fs/btrfs/lzo.c                    |   17 +-
- fs/btrfs/messages.c               |    2 +-
- fs/btrfs/messages.h               |    2 +-
- fs/btrfs/ordered-data.c           |  120 +-
- fs/btrfs/ordered-data.h           |   10 +-
- fs/btrfs/raid56.c                 |  162 +-
- fs/btrfs/raid56.h                 |   12 +-
- fs/btrfs/relocation.c             |    6 +-
- fs/btrfs/scrub.c                  | 4142 ++++++++++++-------------------------
- fs/btrfs/send.c                   |    2 +-
- fs/btrfs/space-info.c             |   32 +-
- fs/btrfs/space-info.h             |    1 +
- fs/btrfs/super.c                  |    3 +-
- fs/btrfs/sysfs.c                  |    5 +
- fs/btrfs/tests/extent-map-tests.c |    1 -
- fs/btrfs/transaction.c            |   28 +-
- fs/btrfs/tree-checker.c           |   14 +
- fs/btrfs/tree-log.c               |  171 +-
- fs/btrfs/volumes.c                |  593 +++---
- fs/btrfs/volumes.h                |   85 +-
- fs/btrfs/zlib.c                   |    2 -
- fs/btrfs/zoned.c                  |    4 +-
- fs/btrfs/zstd.c                   |    1 -
- include/linux/bio.h               |    5 +
- include/linux/blk_types.h         |   18 +-
- include/linux/crc32c.h            |    1 -
- include/linux/writeback.h         |    5 -
- include/trace/events/btrfs.h      |    2 +-
- include/uapi/linux/btrfs.h        |    1 +
- lib/libcrc32c.c                   |    6 -
- tools/objtool/check.c             |    1 +
- 63 files changed, 2880 insertions(+), 4852 deletions(-)
+Jason
