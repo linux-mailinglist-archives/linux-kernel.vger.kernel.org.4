@@ -2,252 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BE96EE60F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149BA6EE611
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbjDYQsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S234663AbjDYQtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbjDYQsh (ORCPT
+        with ESMTP id S234664AbjDYQtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:48:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FE0273D;
-        Tue, 25 Apr 2023 09:48:36 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PDoAwb015135;
-        Tue, 25 Apr 2023 16:47:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9Ld+VXrozW/SFgpHvJs4oqGe3L3QX8NyeB2cv6mkWa0=;
- b=PqX5UdJEEnIjkEHNcLzRTa4Jg1/vl1Z/6vJOraqnoXjxRoC2KVB4JftqPGKHlTFpyOdx
- YPgX2nY+AkcQDpRKvGonf0VqpQYbJFN0hppzUnIPp2xEZptmjurn1uGs2rEM2O8UxQEu
- FwqdLpEhsjv/dRkiIzkxd41P1ohwMuF79Y1qCwaPhJyn5DC7jRxyX+sec3WqPW6ebdBk
- TkZIwivk6Jm/cYnKRR3JJJfZ+6nkX8+2i5K2WvGxhgCSfqmUi3dBPiLbHBGDUYoGl7mS
- k5WwY8AUnps+hkpre4T36aHBjqlmk/GJHEwSoSUd3kgt7dQdhnxDtZAZGvQP0REKgRya NA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6brdsaqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 16:47:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33PGlX2w012540
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 16:47:33 GMT
-Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
- 2023 09:47:31 -0700
-Message-ID: <cc537736-a555-dc3e-2e53-f1d4479eab21@quicinc.com>
-Date:   Tue, 25 Apr 2023 09:47:30 -0700
+        Tue, 25 Apr 2023 12:49:07 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B801619F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:49:02 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-76359b8d29dso956655039f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:49:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682441342; x=1685033342;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mvlu2S6IOj0P66TUGmZILlb9E1nqtEeM3M9ymLjgqa0=;
+        b=iqT0zAt/whZP8qCwvn+DgZmw18QkegkkseyIW0zyG0JUgtm31iw1cylZYlMfSGlP8Z
+         YRAEV2dZxjofsFtjjpXdk7egUAwwmzEv4r2Bd4xpbt4+a9Z8itNe8lc2Ahwgkuw8EkXn
+         VJTV9PtJxtdmi+e/e7tUYkAQcOojo/+o0ed5ERm0rt+QFovqNQAQPwTzdBZwM9v/9AgB
+         rF0NUXpO0E9zlrCfPMteKcxpSN02fpcIzSmVePdllJ27Cwftgc2rRbLTpFIUgMcl8OHF
+         ONEKfa3T//x2w0D8wx2T/U6iYJLJ6P0IRTZL8JR5X5EzfjVUuO7XCI8Ut5zn+oSW8rjL
+         YzBQ==
+X-Gm-Message-State: AAQBX9eeBgw1fBwhGlqu52EpQJrthVpXy6c27d/ImzCi6xAxgjSUHlms
+        8RwFge/8WEdzJZBS3idOUwt7OsePNAx64y+nK/B08IpXRxeE
+X-Google-Smtp-Source: AKy350b+GZPyDeJcZB0TQ5O5WE7vay9NPoF6gobFS/+212QAsO0QFx6Pr3opvz59pXBSW+RUWoYoLJf2arXpwRJmoAtf75RDaf/I
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH v2 04/17] drm/msm/dpu: Fix PP_BLK_DIPHER ->
- DITHER typo
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <dri-devel@lists.freedesktop.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        Archit Taneja <architt@codeaurora.org>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Sean Paul <sean@poorly.run>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        "Jami Kettunen" <jami.kettunen@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-4-ef76c877eb97@somainline.org>
- <a0a0b8fb-0d6b-d11b-5596-d61c41aabe7f@quicinc.com>
- <bhatfkgdkjt2bih4lcwa5cxcp3w2tkjrqmbdhqhzqa2cizrmxs@py3gr5vifsoc>
- <65bb4d8a-c607-4152-0ae3-bf3134955925@quicinc.com>
- <5td7ikd76obc5bn5sndnt7fbzjuwmyxtu35ma3lykzmmbyfffk@b24jh6imaocy>
- <7541b780-482e-ea92-f788-18c8fbf45d77@quicinc.com>
- <o536qdkbrqob5wux7jvmo7expwn4bdlj7vy7egjfsyydxp5myb@xjhmolci5jzl>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <o536qdkbrqob5wux7jvmo7expwn4bdlj7vy7egjfsyydxp5myb@xjhmolci5jzl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3inz_K8dxvfrobHMfJMUQ3SnJhkwDdL6
-X-Proofpoint-GUID: 3inz_K8dxvfrobHMfJMUQ3SnJhkwDdL6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_07,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 phishscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=685 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250150
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:3285:b0:761:22af:1e3f with SMTP id
+ d5-20020a056602328500b0076122af1e3fmr7113021ioz.3.1682441341846; Tue, 25 Apr
+ 2023 09:49:01 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 09:49:01 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000894c7e05fa2be628@google.com>
+Subject: [syzbot] [ntfs3?] WARNING in evict
+From:   syzbot <syzbot+6310a7df6baca255f9cc@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    2af3e53a4dc0 Merge tag 'drm-fixes-2023-04-21' of git://ano..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f3bf57c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4afb87f3ec27b7fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=6310a7df6baca255f9cc
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/845f21360f64/disk-2af3e53a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3b9925dc3504/vmlinux-2af3e53a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/021758261c12/bzImage-2af3e53a.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6310a7df6baca255f9cc@syzkaller.appspotmail.com
+
+loop5: detected capacity change from 0 to 4096
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 4955 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:232 [inline]
+WARNING: CPU: 0 PID: 4955 at kernel/locking/lockdep.c:232 mark_lock+0x14c/0x340 kernel/locking/lockdep.c:4613
+Modules linked in:
+CPU: 0 PID: 4955 Comm: syz-executor.5 Not tainted 6.3.0-rc7-syzkaller-00152-g2af3e53a4dc0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:hlock_class kernel/locking/lockdep.c:232 [inline]
+RIP: 0010:mark_lock+0x14c/0x340 kernel/locking/lockdep.c:4613
+Code: 03 42 0f b6 04 28 84 c0 0f 85 d2 01 00 00 83 3d 01 fd e8 0c 00 75 9d 48 c7 c7 40 7c ea 8a 48 c7 c6 e0 7e ea 8a e8 14 fb e7 ff <0f> 0b eb 86 e8 7b 47 ff ff 85 c0 0f 84 33 01 00 00 45 89 f6 4c 89
+RSP: 0000:ffffc90005487778 EFLAGS: 00010046
+RAX: 15fb29a09693de00 RBX: 0000000000001b00 RCX: 0000000000040000
+RDX: ffffc9000e3ef000 RSI: 0000000000007ab5 RDI: 0000000000007ab6
+RBP: 0000000000000002 R08: ffffffff81528022 R09: ffffed101730515b
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888046b9c4b0
+R13: dffffc0000000000 R14: 0000000000000004 R15: ffff888046b9c4df
+FS:  00007f42a5e55700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7ddc767000 CR3: 0000000053d39000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mark_usage kernel/locking/lockdep.c:4544 [inline]
+ __lock_acquire+0xc0d/0x1f80 kernel/locking/lockdep.c:5010
+ lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ inode_sb_list_del fs/inode.c:503 [inline]
+ evict+0x161/0x620 fs/inode.c:654
+ ntfs_fill_super+0x3ffc/0x47f0 fs/ntfs3/super.c:1239
+ get_tree_bdev+0x402/0x620 fs/super.c:1303
+ vfs_get_tree+0x8c/0x270 fs/super.c:1510
+ do_new_mount+0x28f/0xae0 fs/namespace.c:3042
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3571
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f42a508d69a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f42a5e54f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 000000000001f6cc RCX: 00007f42a508d69a
+RDX: 000000002001f700 RSI: 000000002001f740 RDI: 00007f42a5e54fe0
+RBP: 00007f42a5e55020 R08: 00007f42a5e55020 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 000000002001f700
+R13: 000000002001f740 R14: 00007f42a5e54fe0 R15: 000000002001f780
+ </TASK>
 
 
-On 4/25/2023 9:33 AM, Marijn Suijten wrote:
-> On 2023-04-25 09:18:58, Abhinav Kumar wrote:
->>
->>
->> On 4/24/2023 11:54 PM, Marijn Suijten wrote:
->>> On 2023-04-24 16:09:45, Abhinav Kumar wrote:
->>> <snip>
->>>>>> dither block should be present on many other chipsets too but looks like
->>>>>> on sm8550 was enabling it. Not sure how it was validated there. But we
->>>>>> are enabling dither, even other chipsets have this block.
->>>>>
->>>>> Correct, they all seem to have it starting at sdm845.  My patch message
->>>>> seems to lack the word "exclusively" as the PP on sm8550 appears to
->>>>> exclusively contain a DITHER subblock (unless other blocks are available
->>>>> that simply aren't supported within this driver yet) and no other
->>>>> registers.  Hence this aptly named macro exist to emit just the feature
->>>>> bitflag for that and a .len of zero.
->>>>>
->>>>
->>>> I think after the TE blocks were moved to INTF, dither is the only
->>>> sub-block for all Ping-Pongs not just in sm8550.
->>>
->>> So you are asking / leaving context to make all >= 5.0.0 pingpong blocks
->>> use this macro with only a single DITHER sblk in PP?
->>>
->>> As far as I recall SM8550 is the first SoC to use zero registers in PP,
->>> which is specifically what this macro takes care of too.  Then, there
->>> are only a few SoCs downstream still (erroneously?) referencing TE2 as
->>> the only other sub-blk, those SoCs still use sdm845_pp_sblk_te.
->>>
->>
->> So, what I didnt follow is why should sm8450 use PP_BLK_TE Vs sm8550
->> should use PP_BLK_DIPHER?
->>
->> Atleast for those two, both should be using PP_BLK_DIPHER.
->>
->> Thats what I was trying to note here.
->>
->> This isnt even right as there is no PP_BLK_TE in sm8450.
-> 
-> SM8450 doesn't use PP_BLK_TE (TE2) anymore since the second patch in
-> this series.  If you think it should use the DITHER (not DIPHER!) macro
-> instead of the regular PP_BLK with a size of 0xd4, we can do that in
-> another patch as that's not strictly related to this series.
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Yes, thanks for pointing the TE2 was removed in the prev patch of this 
-series for sm8450. I was just focusing too much on this patch.
-
-And Yes, I think we should use the DIPHER ..... oh sorry .... DITHER ;)
-
-Yes, it can go as a different series, like I already wrote many times in 
-this.
-
-But atleast now, someone will remember to do it.
-
-> Note that that's the only difference between these macros.  The size
-> becomes 0 but the .features mask is the same (SM8450 uses
-> PINGPONG_SM8150_MASK).
-> 
-> These patches are anyway already distracting from my series, but were
-> easier to do in one go as I was touching the PP and INTF catalog blocks
-> regardless.
-> 
-> While at it, perhaps we should check if the version and offset for the
-> DITHER block are correct?  SM8450 uses SDM845 sblk definitions.
-> 
-
-Yes I already checked. the version and offset of dither are same between 
-sm8450 and sm8550.
-
-> - Marijn
-> 
->>>>> Now, whether we should have the features contain subblock flags rather
->>>>> than just scanning for their id's or presence in the subblocks is a
->>>>> different discussion / cleanup we should have.
->>>>>
->>>>
->>>> Yes, separate patch and hence I gave R-b on this one. But had to leave
->>>> this comment to not lose context.
->>>
->>> Fwiw this is a different suggestion: we already have these flags in the
->>> sub-block `.id` field so there seems to be no reason to duplicate info
->>> in the top-level `.features` field, deduplicating some info and
->>> simplifying some defines.
->>>
->>> - Marijn
->>>
->>>>> - Marijn
->>>>>
->>>>>>> -	PP_BLK_DIPHER("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
->>>>>>>      			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
->>>>>>>      			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
->>>>>>>      			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
->>>>>>>      			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
->>>>>>>      			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
->>>>>>>      			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_6", PINGPONG_6, 0x66000, MERGE_3D_3, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_6", PINGPONG_6, 0x66000, MERGE_3D_3, sc7280_pp_sblk,
->>>>>>>      			-1,
->>>>>>>      			-1),
->>>>>>> -	PP_BLK_DIPHER("pingpong_7", PINGPONG_7, 0x66400, MERGE_3D_3, sc7280_pp_sblk,
->>>>>>> +	PP_BLK_DITHER("pingpong_7", PINGPONG_7, 0x66400, MERGE_3D_3, sc7280_pp_sblk,
->>>>>>>      			-1,
->>>>>>>      			-1),
->>>>>>>      };
->>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>> index 03f162af1a50..ca8a02debda9 100644
->>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>> @@ -491,7 +491,7 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->>>>>>>      	.len = 0x20, .version = 0x20000},
->>>>>>>      };
->>>>>>>      
->>>>>>> -#define PP_BLK_DIPHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->>>>>>> +#define PP_BLK_DITHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->>>>>>>      	{\
->>>>>>>      	.name = _name, .id = _id, \
->>>>>>>      	.base = _base, .len = 0, \
->>>>>>>
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
