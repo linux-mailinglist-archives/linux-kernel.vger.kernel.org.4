@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD186EE8A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D466EE8BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbjDYTvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S236204AbjDYT6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbjDYTvR (ORCPT
+        with ESMTP id S236198AbjDYT6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:51:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79BC122;
-        Tue, 25 Apr 2023 12:51:15 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682452273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=epqrrIP9XVMR1rQYOgUv6OMHFSXsoKyAhdvov9JTG3c=;
-        b=hcfCyrdfQ/+yHnKF3T+I49mLvnN7Y7S69gBRQL7PhhKJcZIQM6dUY5pvAbw4x5UtKBksj5
-        +gNdAWyqbtppxTS6xk/OOGkQEgCKZ50daZMUpYiSsjHUolnRQ63od8fRIwCIy22iqsL7Jz
-        ptuYgLF2Vyi6TxSoYJlRddHoLRBh0aBb/2ut263viqoCn4L8IM34OuGeUFz0vHjf3uDsn9
-        kzIwMYp79iEd+cDm0M3l/TvJoQ8Ebljb98ttQPEip+uioS6jdgokPZm34PxDLgh8kTLkX7
-        Tk0Brm7tWOMbl31MYKpF+X1fNVmxtHUKna8IUJdeJdt+TiqryaL2tjxt/WxUaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682452273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=epqrrIP9XVMR1rQYOgUv6OMHFSXsoKyAhdvov9JTG3c=;
-        b=mlbSRhNUu/9kpluKPqwDbDiOM+hdImwLPmR+/CiZOtx2CU7HgipiQ7bg9V2pgBimVEqMmi
-        qqHiWR0zzWYsg/Bg==
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org, Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 22/37] arm64: smp: Switch to hotplug core state
- synchronization
-In-Reply-To: <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
-References: <20230414225551.858160935@linutronix.de>
- <20230414232310.569498144@linutronix.de> <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
-Date:   Tue, 25 Apr 2023 21:51:12 +0200
-Message-ID: <87ttx3zqof.ffs@tglx>
+        Tue, 25 Apr 2023 15:58:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7235A13C04
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:58:32 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94a34a14a54so1160406166b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682452710; x=1685044710;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zmFvEr7UT0kKTHeRCnhl0YaDOUCd72om/F3+jxN9fN8=;
+        b=eBZU9icy1IvhZm96iTzUE+oFx80JU5P3k5faPclDa7qJVmMnr5Yl+H35JGAd3hnu3K
+         4KOwBPsLrrrDRY8OTdOjYbgCfJUYIUItxy3UXbKtcsMPX8GAldDOUNeefQI0EMopqezD
+         Re3Stv+VyTz7YenACdv8yvWi9KtO1JVB8Oa8Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682452710; x=1685044710;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zmFvEr7UT0kKTHeRCnhl0YaDOUCd72om/F3+jxN9fN8=;
+        b=bMJjWiDbx8jeGWiqSFPvQcPX1E03ImKAdvkhSYDVBScPL1wUHeIP+i6b6SGulm0Iu4
+         YOJRQaxyImsrTvM8b1SjQAxoyfgy2CW8JCeqyJnwBApAMWtOPi4wWLTLn//x+LEbH+PN
+         N950Xn5ssOt3G9zOGZFaJsG8fGWGr/9ABDpxtM+0J0OFv78gPmTnGGCHGbdz+oRvaRYf
+         n9FcPQ+besWA3BO/b/QxJJxVEm/U/3VUEVNRsSVlT/JquiupjuIzHBxNnJ1HDnEy3J4+
+         FG5QV+G8Q2Ks+8+C6rDe9NzEVNNl2j4EClrq+RMqP24DbudP+KGee1UyPFNhLZ0pgpAn
+         s2MA==
+X-Gm-Message-State: AAQBX9fQ0O4zjWEteFAxfvvGdnxiLeWdXG304y4/3nIXyekFHFXKNTeC
+        JLOsfTurOiCfNF2BDObatOrvYFra7BDFhA6U4nCu3w==
+X-Google-Smtp-Source: AKy350b7Bj6CBun5qkxjuZRsje9PzutiOPPDuaJd/et54PAnn5dK71cycAL6Zq5O1lP7Lx3Ddqc6Dg==
+X-Received: by 2002:a17:906:cf89:b0:94a:6a7a:52d8 with SMTP id um9-20020a170906cf8900b0094a6a7a52d8mr14565261ejb.71.1682452710657;
+        Tue, 25 Apr 2023 12:58:30 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id bv7-20020a170907934700b00959c6cb82basm2228768ejc.105.2023.04.25.12.58.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 12:58:29 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso11104432a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:58:29 -0700 (PDT)
+X-Received: by 2002:a50:ee83:0:b0:4fe:19cb:4788 with SMTP id
+ f3-20020a50ee83000000b004fe19cb4788mr15857790edr.42.1682452709422; Tue, 25
+ Apr 2023 12:58:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+ <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
+ <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk> <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
+ <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
+ <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk> <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
+ <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
+ <CAHk-=wjSuGTLrmygUSNh==u81iWUtVzJ5GNSz0A-jbr4WGoZyw@mail.gmail.com> <20230425194910.GA1350354@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230425194910.GA1350354@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 25 Apr 2023 12:58:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
+Message-ID: <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
+Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17 2023 at 16:50, Mark Rutland wrote:
-> On Sat, Apr 15, 2023 at 01:44:49AM +0200, Thomas Gleixner wrote:
-> I gave this a spin on arm64 (in a 64-vCPU VM on an M1 host), and it seems to
-> work fine with a bunch of vCPUs being hotplugged off and on again randomly.
+On Tue, Apr 25, 2023 at 12:49=E2=80=AFPM Peter Zijlstra <peterz@infradead.o=
+rg> wrote:
 >
-> FWIW:
+> The last time this came up I shared your view however Mark argued for
+> the READ_ONCE() thusly:
 >
-> Tested-by: Mark Rutland <mark.rutland@arm.com>
->
-> I also hacked the code to have the dying CPU spin forever before the call to
-> cpuhp_ap_report_dead(). In that case I see a warning, and that we don't call
-> arch_cpuhp_cleanup_dead_cpu(), and that the CPU is marked as offline (per
-> /sys/devices/system/cpu/$N/online).
+>   https://lore.kernel.org/all/Y71LoCIl+IFdy9D8@FVFF77S0Q05N/T/#u
 
-Nice!
+Hmm.
 
-> As a tangent/aside, we might need to improve that for confidential compute
-> architectures, and we might want to generically track cpus which might still be
-> using kernel text/data. On arm64 we ensure that via our cpu_kill() callback
-> (which'll use PSCI CPU_AFFINITY_INFO), but I'm not sure if TDX and/or SEV-SNP
-> have a similar mechanism.
->
-> Otherwise, a malicious hypervisor can pause a vCPU just before it leaves the
-> kernel (e.g. immediately after the arch_cpuhp_cleanup_dead_cpu() call), wait
-> for a kexec (or resuse of stack memroy), and unpause the vCPU to cause things
-> to blow up.
+Yes, I think Mark is right. It's not that 'old' might be wrong - that
+doesn't matter because cmpxchg will work it out - it's just that 'new'
+might not be consistent with the old value we then use.
 
-There are a gazillion ways for a malicious hypervisor to blow up a
-'squint enough to be confident' guest.
+Ok. I'll try to remember this, but maybe it might be worth documenting.
 
-The real question is whether it can utilize such a blow up to extract
-confidential information from the guest.
+Jens - I don't think this actually matters for the f_mode value issue,
+since the only thing that might change is that FMODE_NOWAIT bit, but I
+was clearly wrong on READ_ONCE(). So that loop should have it, just to
+have the right pattern after all.
 
-If not then it's just yet another way of DoS which is an "acceptable"
-attack as it only affects availability but not confidentiality.
+My bad.
 
-Thanks,
-
-        tglx
+             Linus
