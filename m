@@ -2,105 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5BC6EE808
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920796EE80C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbjDYTJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S234649AbjDYTLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjDYTJD (ORCPT
+        with ESMTP id S234513AbjDYTLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:09:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1375C4EC5;
-        Tue, 25 Apr 2023 12:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682449742; x=1713985742;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IkzakWAuXj34HRebZUnZn8CkJY1BxzjaueXh9MF6O2U=;
-  b=jErurDDwYsl7/cSN9UUbREl/QR8iqm9Kg0MyP0kHvdDJRJtr6acEJ/pH
-   fmZpNPVPi21tFQRQoE5UVXrwuNHW5xtK7FIIJVsB/eCqUR7r4sH83zaw7
-   CkVtJyYq8kwHS9V8kZuKiEZgrp0cYgq0VQWOVgeJ3dVaLOaG8PvhSMzmQ
-   lRxSkBn1/Q0snjAfAIgahRvBYVasMoJphu9xjcgXX1VGUFwrL/Su5P1Zr
-   Rc0j5fxN+B2IeHR1Qr774PlmUyiOnrHnLvus36LJJbAzMaFZnnc/R57xC
-   BFC3jr4tkJdMOn8nlaEaskaMjf1mnyg0rxGSgk37km5CK5RSINouVb6iL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="346896026"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="346896026"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 12:04:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="805185256"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="805185256"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.232])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 12:04:26 -0700
-Message-ID: <80f4ba1d-ab8f-ce22-267e-0d49c8b90a1e@intel.com>
-Date:   Tue, 25 Apr 2023 22:04:21 +0300
+        Tue, 25 Apr 2023 15:11:20 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87BD83D0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:11:17 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3ef36d814a5so196781cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682449877; x=1685041877;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+el9HnAEkjAwcIZXHJipWv7CnhoGdX3eWtO34Q1+csc=;
+        b=wl+vbZqUf4Yzyu94qIYHS4scGC2UaPSsAE+Cqii5fIizO2OMMc1SWJ43+ZAxE2swGJ
+         EZ1gZf6yYAvLPReAH8Pb5Y3ySeOatOMV5reJCTVgW5KnV/5SbZObLyc0DqR0MHiFg5+W
+         5jr9+hcp7BzWyw/wQOOhfKI6k8ni81GLy7HYKR8XOI49+39Ss0WhyFdXGVVAVCIP46/l
+         QC5kXL46bjn2Ngu8ulJ7t5D7G5L0Kh2ThOx7N2z0pEP1++SLjPiycvmjSOofZZ9dSx05
+         /Qp6bK4njzmgztK9/o1nJrLlroHVAspinRKFceiinQJSpWOdWJhMYYpcK4rgZjsTqSe1
+         /1ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682449877; x=1685041877;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+el9HnAEkjAwcIZXHJipWv7CnhoGdX3eWtO34Q1+csc=;
+        b=RhK0dLyid3GZny1+Ki+yarozZuHNS5h5E1qOoBD1bP1NaSMz9EDI1UWM1li3sOjZcf
+         5ZbE2JLMaE+AyMVXlwTedXOOWIgX25qahukKCo3mZVWenky3zE/Fc3FAYrFu7tVZ6mCE
+         TZUyCYquv0+0jSLgerbFoT8rkRxx6+QGfdpvqWXIWQeN6lkaY0YxXPJrzGXuOD4YtzRM
+         o+Rva3BLxNkbEAY3v2Fa0lX7r75VPIilEzt3nb8DiFn5cMtnACcI1ewYTZkfc+n0N6O4
+         rPSekRHFosVwla0pJHW+jGILsaVUxsZf9XelNldiyGqN0xIAUIdRjVqinBd4OvX5GlAC
+         ivcQ==
+X-Gm-Message-State: AC+VfDx51UBMMJuCtVPBiz/gCF2jL7JWZT7oKWgPHz76IX2F4PhrmJqm
+        vPGvesT0Ayi5Nab2kI0cnAvkZsFl/41ART3mPjdnyboS6AtQy0SVs7Y=
+X-Google-Smtp-Source: ACHHUZ5gyvxZ6/VVecCj50kIZMLvP7Q2BZmfrPDjXDGiWXdqIWJieT6NtYd2TO+kGzqAXo/D43kOvGkphSCa9OAEXJ8=
+X-Received: by 2002:ac8:4e89:0:b0:3de:b0b0:557c with SMTP id
+ 9-20020ac84e89000000b003deb0b0557cmr44534qtp.18.1682449876862; Tue, 25 Apr
+ 2023 12:11:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH] mmc: sdhci-cadence: Fix an error handling path in
- sdhci_cdns_probe()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Brad Larson <blarson@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-References: <f61599a9ef23767c2d66e5af9c975f05ef1cec6b.1682430069.git.christophe.jaillet@wanadoo.fr>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <f61599a9ef23767c2d66e5af9c975f05ef1cec6b.1682430069.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230421040218.2156548-1-davidgow@google.com> <20230421040218.2156548-4-davidgow@google.com>
+In-Reply-To: <20230421040218.2156548-4-davidgow@google.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 25 Apr 2023 15:11:04 -0400
+Message-ID: <CA+GJov4+-u3fnqDWCgsp8EjGkm2efbqtaqMFq+_0pWpTnfkurw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] kunit: example: Provide example exit functions
+To:     David Gow <davidgow@google.com>
+Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>, maxime@cerno.tech,
+        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/23 16:41, Christophe JAILLET wrote:
-> If devm_reset_control_get_optional_exclusive() fails, some resources still
-> need to be released. So branch to the error handling path instead of
-> returning directly.
-> 
-> Fixes: aad53d4ee756 ("mmc: sdhci-cadence: Support mmc hardware reset")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Fri, Apr 21, 2023 at 12:02=E2=80=AFAM David Gow <davidgow@google.com> wr=
+ote:
+>
+> Add an example .exit and .suite_exit function to the KUnit example
+> suite. Given exit functions are a bit more subtle than init functions
+> (due to running in a different kthread, and running even after tests or
+> test init functions fail), providing an easy place to experiment with
+> them is useful.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Hi David!
+
+I have reviewed this patch and the overall changes to the cleanup
+structure. It looks good to me (other than that kernel test robot
+error). Nice to see an example of how to use exit functions in our
+example test.
+
+Thanks!
+-Rae
+
+Reviewed-by: Rae Moar <rmoar@google.com>
 
 > ---
->  drivers/mmc/host/sdhci-cadence.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> index b24aa27da50c..d2f625054689 100644
-> --- a/drivers/mmc/host/sdhci-cadence.c
-> +++ b/drivers/mmc/host/sdhci-cadence.c
-> @@ -540,9 +540,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
->  
->  	if (host->mmc->caps & MMC_CAP_HW_RESET) {
->  		priv->rst_hw = devm_reset_control_get_optional_exclusive(dev, NULL);
-> -		if (IS_ERR(priv->rst_hw))
-> -			return dev_err_probe(mmc_dev(host->mmc), PTR_ERR(priv->rst_hw),
-> -					     "reset controller error\n");
-> +		if (IS_ERR(priv->rst_hw)) {
-> +			ret = dev_err_probe(mmc_dev(host->mmc), PTR_ERR(priv->rst_hw),
-> +					    "reset controller error\n");
-> +			goto free;
-> +		}
->  		if (priv->rst_hw)
->  			host->mmc_host_ops.card_hw_reset = sdhci_cdns_mmc_hw_reset;
->  	}
-
+>
+> This patch was introduced in v3.
+>
+> ---
+>  lib/kunit/kunit-example-test.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-tes=
+t.c
+> index cd8b7e51d02b..24315c882b31 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -41,6 +41,16 @@ static int example_test_init(struct kunit *test)
+>         return 0;
+>  }
+>
+> +/*
+> + * This is run once after each test case, see the comment on
+> + * example_test_suite for more information.
+> + */
+> +static void example_test_exit(struct kunit *test)
+> +{
+> +       kunit_info(test, "cleaning up\n");
+> +}
+> +
+> +
+>  /*
+>   * This is run once before all test cases in the suite.
+>   * See the comment on example_test_suite for more information.
+> @@ -52,6 +62,16 @@ static int example_test_init_suite(struct kunit_suite =
+*suite)
+>         return 0;
+>  }
+>
+> +/*
+> + * This is run once after all test cases in the suite.
+> + * See the comment on example_test_suite for more information.
+> + */
+> +static void example_test_exit_suite(struct kunit_suite *suite)
+> +{
+> +       kunit_info(suite, "exiting suite\n");
+> +}
+> +
+> +
+>  /*
+>   * This test should always be skipped.
+>   */
+> @@ -211,7 +231,9 @@ static struct kunit_case example_test_cases[] =3D {
+>  static struct kunit_suite example_test_suite =3D {
+>         .name =3D "example",
+>         .init =3D example_test_init,
+> +       .exit =3D example_test_exit,
+>         .suite_init =3D example_test_init_suite,
+> +       .suite_exit =3D example_test_exit_suite,
+>         .test_cases =3D example_test_cases,
+>  };
+>
+> --
+> 2.40.0.634.g4ca3ef3211-goog
+>
