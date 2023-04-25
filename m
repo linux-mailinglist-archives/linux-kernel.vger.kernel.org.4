@@ -2,164 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C816EE62D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3360E6EE637
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjDYQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S234854AbjDYQ6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbjDYQ5F (ORCPT
+        with ESMTP id S234611AbjDYQ6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:57:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C003D32E;
-        Tue, 25 Apr 2023 09:57:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2CCC62C34;
-        Tue, 25 Apr 2023 16:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13196C4339C;
-        Tue, 25 Apr 2023 16:56:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682441823;
-        bh=cUDv7w0pj/dy7GYFDIBt/oc/4E1U2yx8meJnVqD9X/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PYHdqVra8pVt5vIloxWIOlZzNWPHB97kBVaD8zgRIdazyyvvdDc//MVDzgjTsi6qb
-         SR3RNWqiX+8O73EBTrj85JSM+TlenznTLp5se1SYsQFBvMOqtozZDCENNcyOq6xbqf
-         NqfdhgqX8zq+1VsXIeZCM2c6oDtbKx/YTtczx6Ombg8cxkm8YsdVKKKIW2DGnGW+0y
-         0pdnTnx+hrVn7NqzopgkiuqR4uHuDqgUhyqCmId8Lsk+qpwdUcW8UTX75Ve72iaCXn
-         lRDud2C/nI9OQJ9Mz9V008Mxvf7T6PMor/2QdiXoKn9zoZv42fWWQPTWAeUdpd3i+r
-         Eu7TwFD4U3iYA==
-Date:   Tue, 25 Apr 2023 17:56:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Message-ID: <20230425-commotion-prewashed-876247bed4ab@spud>
-References: <20230419-labored-camper-644d51a7ca96@spud>
- <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
- <20230424-baffle-punch-ec73098f2b6a@spud>
- <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
- <20230425-unquote-eligible-09f743d81981@wendy>
- <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
- <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
- <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
- <20230425-resale-footrest-de667778c4fe@wendy>
- <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
+        Tue, 25 Apr 2023 12:58:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E950F6A4B;
+        Tue, 25 Apr 2023 09:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682441895; x=1713977895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YqqMtoC9cWi/0V4GCglSo1y9g8dhnon56YoIruvJfJw=;
+  b=BogFYqJEfIEKMXgkxWpruTnPRnURQPHEhyeGAGE80D8T913wntjvL79D
+   6NdeDaQwp3YBfmPRAiCsOT5iEhmeflPromNhvTlMfJ1HvufdrWYM1PHHp
+   kbw2Y3F6p0CzGMv1giCHPstxtXIljcv4CK1ytFmIE3CyYHyjzrvu2+jxm
+   dwXZFSX96CKAcfhnlXPbWm2s5HR9U02U606GfDF3GHy5xvnGjtCF0rrV5
+   wezesDAX3h1YYmkTIbo69Dvzef1lhGJqb2HTedzk6bHnI3YMKuPc4EUpI
+   uwqFFDvsWdZHg357I5DGS3iBNLtYlTayPmP6ASaz1q3c2eunSj4oTp+kd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="335736973"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="335736973"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 09:58:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="696262494"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="696262494"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2023 09:57:52 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prLzD-000jbM-1u;
+        Tue, 25 Apr 2023 16:57:51 +0000
+Date:   Wed, 26 Apr 2023 00:56:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ziqin Liu <ziqin_l@hust.edu.cn>, dzm91@hust.edu.cn,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        hust-os-kernel-patches@googlegroups.com,
+        Ziqin Liu <ziqin_l@hust.edu.cn>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] clk: mediatek: clk-mt8173: fix memory leak in
+ clk_mt8173_apmixed_probe
+Message-ID: <202304260006.3Am8FGjt-lkp@intel.com>
+References: <20230425132601.106181-1-ziqin_l@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2jPozkJrlsTQK/jH"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230425132601.106181-1-ziqin_l@hust.edu.cn>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ziqin,
 
---2jPozkJrlsTQK/jH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-On Tue, Apr 25, 2023 at 08:26:35PM +0800, Changhuang Liang wrote:
-> On 2023/4/25 17:35, Conor Dooley wrote:
-> > On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
-> >> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
-> >>> On 25/04/2023 09:57, Changhuang Liang wrote:
-> >>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-a=
-on-syscon".
-> >>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this =
-"aon-pmu" is just=20
-> >>>> a part of "aon-syscon" function, so I think it is inappropriate to m=
-ake "aon-syscon"
-> >>>> to a power domain controller. I think using the child-node descripti=
-on is closer to
-> >>>> JH7110 SoC.=20
-> >>>
-> >>> Unfortunately, I do not see the correlation between these, any
-> >>> connection. Why being a child of syscon block would mean that this
-> >>> should no be power domain controller? Really, why? These are two
-> >>> unrelated things.
-> >>
-> >> Let me summarize what has been discussed above.=20
-> >>
-> >> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x170=
-10000).
-> >> 1. (0x17010000) is power-controller node:
-> >>
-> >> 	aon_pwrc: power-controller@17010000 {
-> >> 		compatible =3D "starfive,jh7110-aon-pmu", "syscon";
-> >> 		reg =3D <0x0 0x17010000 0x0 0x1000>;
-> >> 		#power-domain-cells =3D <1>;
-> >> 	};
-> >>
-> >>
-> >> 2. (0x17010000) is syscon node, power-controller is child-node of sysc=
-on:
-> >>
-> >> 	aon_syscon: syscon@17010000 {
-> >> 		compatible =3D "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
-> >> 		reg =3D <0x0 0x17010000 0x0 0x1000>;
-> >>
-> >> 		aon_pwrc: power-controller {
-> >> 			compatible =3D "starfive,jh7110-aon-pmu";
-> >> 			#power-domain-cells =3D <1>;
-> >> 		};
-> >> 	};
-> >=20
-> > I thought that Rob was suggesting something like this:
-> > 	aon_syscon: syscon@17010000 {
-> > 		compatible =3D "starfive,jh7110-aon-syscon", ...
-> > 		reg =3D <0x0 0x17010000 0x0 0x1000>;
-> > 		#power-domain-cells =3D <1>;
-> > 	};
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> I see the kernel:
-> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediat=
-ek/mt8167.dtsi
-> this file line 42:
-> it's power-controller also has no meaningful properties.
-> What do you think?
+url:    https://github.com/intel-lab-lkp/linux/commits/Ziqin-Liu/clk-mediatek-clk-mt8173-fix-memory-leak-in-clk_mt8173_apmixed_probe/20230425-212917
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230425132601.106181-1-ziqin_l%40hust.edu.cn
+patch subject: [PATCH] clk: mediatek: clk-mt8173: fix memory leak in clk_mt8173_apmixed_probe
+config: arm64-randconfig-r011-20230423 (https://download.01.org/0day-ci/archive/20230426/202304260006.3Am8FGjt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cb4be4dcd48924984a6d0e3df7809cfc26286032
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ziqin-Liu/clk-mediatek-clk-mt8173-fix-memory-leak-in-clk_mt8173_apmixed_probe/20230425-212917
+        git checkout cb4be4dcd48924984a6d0e3df7809cfc26286032
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/mediatek/
 
-I'm not sure that I follow. It has a bunch of child-nodes does it not,
-each of which is a domain?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304260006.3Am8FGjt-lkp@intel.com/
 
-I didn't see such domains in your dts patch, they're defined directly in
-the driver instead AFAIU. Assuming I have understood that correctly,
-your situation is different to that mediatek one?
+All errors (new ones prefixed by >>):
 
-Cheers,
-Conor.
+>> drivers/clk/mediatek/clk-mt8173-apmixedsys.c:149:23: error: passing 'struct device' to parameter of incompatible type 'struct device *'; take the address with &
+           base = devm_of_iomap(pdev->dev, node, 0, NULL);
+                                ^~~~~~~~~
+                                &
+   include/linux/device.h:241:44: note: passing argument to parameter 'dev' here
+   void __iomem *devm_of_iomap(struct device *dev,
+                                              ^
+   1 error generated.
 
---2jPozkJrlsTQK/jH
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +149 drivers/clk/mediatek/clk-mt8173-apmixedsys.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEgGWQAKCRB4tDGHoIJi
-0n5hAQCXOV1SrfD6iA2QcZe3hIYyiXSLArZEvyZM7JlrkXLP+QD/dv8/MQyPmHPt
-hLWQvz3H3XVzqkslQ4ihE4QPcfIn8wI=
-=AfU5
------END PGP SIGNATURE-----
+   139	
+   140	static int clk_mt8173_apmixed_probe(struct platform_device *pdev)
+   141	{
+   142		const u8 *fhctl_node = "mediatek,mt8173-fhctl";
+   143		struct device_node *node = pdev->dev.of_node;
+   144		struct clk_hw_onecell_data *clk_data;
+   145		void __iomem *base;
+   146		struct clk_hw *hw;
+   147		int r;
+   148	
+ > 149		base = devm_of_iomap(pdev->dev, node, 0, NULL);
+   150		if (!base)
+   151			return PTR_ERR(base);
+   152	
+   153		clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+   154		if (IS_ERR_OR_NULL(clk_data))
+   155			return -ENOMEM;
+   156	
+   157		fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
+   158		r = mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
+   159					    pllfhs, ARRAY_SIZE(pllfhs), clk_data);
+   160		if (r)
+   161			goto free_clk_data;
+   162	
+   163		hw = mtk_clk_register_ref2usb_tx("ref2usb_tx", "clk26m", base + REGOFF_REF2USB);
+   164		if (IS_ERR(hw)) {
+   165			r = PTR_ERR(hw);
+   166			dev_err(&pdev->dev, "Failed to register ref2usb_tx: %d\n", r);
+   167			goto unregister_plls;
+   168		}
+   169		clk_data->hws[CLK_APMIXED_REF2USB_TX] = hw;
+   170	
+   171		hw = devm_clk_hw_register_divider(&pdev->dev, "hdmi_ref", "tvdpll_594m", 0,
+   172						  base + REGOFF_HDMI_REF, 16, 3,
+   173						  CLK_DIVIDER_POWER_OF_TWO, NULL);
+   174		clk_data->hws[CLK_APMIXED_HDMI_REF] = hw;
+   175	
+   176		r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+   177		if (r)
+   178			goto unregister_ref2usb;
+   179	
+   180		return 0;
+   181	
+   182	unregister_ref2usb:
+   183		mtk_clk_unregister_ref2usb_tx(clk_data->hws[CLK_APMIXED_REF2USB_TX]);
+   184	unregister_plls:
+   185		mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
+   186					  ARRAY_SIZE(pllfhs), clk_data);
+   187	free_clk_data:
+   188		mtk_free_clk_data(clk_data);
+   189		return r;
+   190	}
+   191	
 
---2jPozkJrlsTQK/jH--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
