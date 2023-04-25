@@ -2,92 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBFB6EE682
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3616EE686
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbjDYRTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 13:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S234664AbjDYRUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 13:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbjDYRTT (ORCPT
+        with ESMTP id S234084AbjDYRUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:19:19 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEAE5FE5;
-        Tue, 25 Apr 2023 10:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yDubOCq/+Vw3wavnP55GMuOqZln836LcQTpmhi0jZi4=; b=ghMeWmxhirt11vOp4eAtKZbadH
-        B6ePNjFGtgZhoU0MLHVdAgLjV6Bpum94P7zP3n/I7H45jfufZ7y5CUgkLKDLLIwJFvWpVqz0zoiD2
-        GffHpPmrhNrgA0G4mRVfHwtjNlPlf+8XL7szZbJF9UPOANZ9XL9vadnX44tP+DscVDrPXdjwql/dx
-        70bOR+67suUyLL7IUh/UlX8P9u4lmpnEGj8t5VA9zt4C3OqDNPASWhiztGYy2vMFMqU3en7g1YCTM
-        eF2cUuue3hPHpJ383f+DnxdgZuGV8bcKkqKn7crEkoMjrOUvGE+D3E35LCPLDsHcfQCycOybXgxlP
-        t+U0CwAg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1prMJt-00CTTD-1K;
-        Tue, 25 Apr 2023 17:19:13 +0000
-Date:   Tue, 25 Apr 2023 18:19:13 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] pidfd updates
-Message-ID: <20230425171913.GT3390869@ZenIV>
-References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
- <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
- <20230425060427.GP3390869@ZenIV>
- <20230425-sturheit-jungautor-97d92d7861e2@brauner>
- <CAHk-=wjpBq2D97ih_AA0D7+KJ8ihT6WW_cn1BQc43wVgUioH2w@mail.gmail.com>
+        Tue, 25 Apr 2023 13:20:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945D1E5F;
+        Tue, 25 Apr 2023 10:20:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EE0662647;
+        Tue, 25 Apr 2023 17:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA29C433D2;
+        Tue, 25 Apr 2023 17:20:31 +0000 (UTC)
+Date:   Tue, 25 Apr 2023 13:20:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, corbet@lwn.net,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH tracing 0/3] tracing: support > 8 byte filter predicates
+Message-ID: <20230425132028.7d16e04c@gandalf.local.home>
+In-Reply-To: <9c4cebb7-514c-f7fd-1f95-50837460eb66@oracle.com>
+References: <1682414197-13173-1-git-send-email-alan.maguire@oracle.com>
+        <20230425233233.2ad5168c630b4c1349ab3398@kernel.org>
+        <9c4cebb7-514c-f7fd-1f95-50837460eb66@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjpBq2D97ih_AA0D7+KJ8ihT6WW_cn1BQc43wVgUioH2w@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 09:28:54AM -0700, Linus Torvalds wrote:
+On Tue, 25 Apr 2023 18:15:03 +0100
+Alan Maguire <alan.maguire@oracle.com> wrote:
 
-> Now, since they are inline functions, the code generation doesn't
-> really change (compilers are smart enough to not actually generate any
-> pointer stuff), but I prefer to make things like that expliict, and
-> have source code that matches the code generation.
+> that's a great idea; what would be the most consistent ftrace syntax
+> for this do you think? I noticed that hist triggers append a modifier
+> to the field name so would something like
 > 
-> (Which is also why I do *not* endorse passing bigger structs by value,
-> because then the compiler will just pass it as a "pointer to a copy"
-> instead, again violating the whole concept of "source matches what
-> happens in reality")
-> 
-> I think the above helper could be improved further with Al's
-> suggestion to make 'fd_publish()' return an error code, and allow the
-> file pointer (and maybe even the fd index) to be an error pointer (and
-> error number), so that you could often unify the error/success paths.
-> 
-> IOW, I like this, and I think it's superior to my stupid original suggestion.
+> "dst.ipv6 == ::1"
 
-We'd better collect the data on the current callers first.  There are
-several patterns; I'm going through the old (fairly sparse) notes and
-the grep over the current tree right now, will post when I get through
-that.
+Yeah, I think just having ":" in the name without quotes can help the filter
+know that it's a ipv6 id.
 
-That's one area where we had a *lot* of recurring bugs - mostly of
-leak/double put variety.  So we'd better have the calling conventions
-right wrt how easy it is to fuck up in failure exits.  And we need
-to document the patterns/rules for each/reasons for choosing one over
-another.
+Hmm, although we may want to do the same for mac addresses. But we can
+determine the difference by the field size. If it's 6 bytes, it's a mac, if
+it's 128 bits, then ipv6.
 
-Note that there's also "set the file up, then get descriptor and either
-fd_install or fput, depending on get_unused_fd_flags() success";
-sometimes it's the only approach (SCM_RIGHTS, for example), sometimes
-it's better than "get descriptor, set the file up, then either install
-or release descriptor", sometimes it's definitely worse (e.g. for
-O_CREAT it's a non-starter).  It should be a deliberate choice.
+-- Steve
