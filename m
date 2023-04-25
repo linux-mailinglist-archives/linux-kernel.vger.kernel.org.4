@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230396EE8CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605436EE8D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbjDYUGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 16:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S236242AbjDYUHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 16:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbjDYUGo (ORCPT
+        with ESMTP id S235372AbjDYUHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:06:44 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D97B463
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:06:43 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7635a2dd490so963006339f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:06:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682453202; x=1685045202;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p4fMexIJHfqxhZnypL/zvA27ZdlKr/POdpuWq1kaqlA=;
-        b=B4UXrarBN+v7iRo58BYjJx+frnILjt0DIG+CyRcbnLBJUHuj9jdtux3slp/zy0+V2f
-         ruVVOddCo1Niu0YiEoLVZvJGIJuHFiDvSvwEsm06x5hQtq/Pjd2rV++PDAmT7oX4kmQB
-         zq6Lr5+Kalpv8qGrjC0rY3W7ls0IKeKomK9wANMFj/9SajgMesz5qVAn3CKizqDaWQBe
-         2ErWhsWCSsbQyfZU7G7XActRL0IlumDdLf+KuED279u7C4hnv0RfvfvgPdB5WIjYPPLK
-         p2auCWGeQv7bnSPF4UtXpmXoowKNWw5L1Ytqwe30ZqfQANfP7yT1sMhb/AqYmqxD5KOm
-         irgA==
-X-Gm-Message-State: AAQBX9ev+1ri8LFxMNcbHk/cttVlI7PLz36jbotU2frHIFIRn4oC+ZWk
-        Ad8zzJbawXJzb16wj1eygyAkIdbrgXcT6xw445uDx3PjiE2A
-X-Google-Smtp-Source: AKy350aQpy7LmHkX25TQItyrllevYSOkpnrGATU0KYX8z+pBI37JoSpVyiOL7HDqHPER/bQraSij19oH8DEO5YVadTcKjm/ZyXqj
+        Tue, 25 Apr 2023 16:07:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435EEA5E0;
+        Tue, 25 Apr 2023 13:07:50 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682453268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4O15691mL3gwOERb5M8WwZ/BXXDNqH0+MWC0TCs50QE=;
+        b=Bwuzz8Nz/BV6G/VL2bb+kha7mVj8/IRkuvbsjwjzk4USnPr2OW7n7gum3YLTay29fSKm4l
+        VIaAVviF4DxNGn2wYM6o0v57oY64CRe+VgXsYQv76pd/utkcrBMIA+Hlh315Cm54VqTo7K
+        atpyanHwbqEDa1wx0+1kk6JnSgmhiayROO89bvR9xqhG5h5fXOyJHuELCWZOaAN84arMeq
+        GGcJ4Ir8foJBLeP8ch9gHIy9jvOiKYJ4asV3QtfyaAgXR2pzDWC3evufPz0x9jkOlulsT0
+        C2Q9I3DEe4BIAOmlzxJr0oVN2tLwYUOfQk+hTo1aBm1XqujojvIZxEYvbxiQIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682453268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4O15691mL3gwOERb5M8WwZ/BXXDNqH0+MWC0TCs50QE=;
+        b=RrFYGWkb9+Sr7TGoFVSkR/dCgulbRZuvJgUFeQBLzx1gsWc2Iv3HT6T4XcF1FLb33wIMzq
+        mCdHr2bCd+lRBoCA==
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+In-Reply-To: <87v8hq35sk.ffs@tglx>
+References: <87r0sh4m7a.ffs@tglx>
+ <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
+ <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
+ <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
+ <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
+ <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
+ <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
+Date:   Tue, 25 Apr 2023 22:07:47 +0200
+Message-ID: <87r0s7zpws.ffs@tglx>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7e4b:0:b0:745:70d7:4962 with SMTP id
- k11-20020a6b7e4b000000b0074570d74962mr7687052ioq.0.1682453202331; Tue, 25 Apr
- 2023 13:06:42 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 13:06:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000079eebe05fa2ea9ad@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in __dabt_svc
-From:   syzbot <syzbot+d692037148a8169fc9dd@syzkaller.appspotmail.com>
-To:     alex.gaynor@gmail.com, andriy.shevchenko@linux.intel.com,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
-        bpf@vger.kernel.org, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, linux@rasmusvillemoes.dk,
-        ojeda@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        rust-for-linux@vger.kernel.org, senozhatsky@chromium.org,
-        syzkaller-bugs@googlegroups.com, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Apr 20 2023 at 17:57, Thomas Gleixner wrote:
+> On Thu, Apr 20 2023 at 07:51, Sean Christopherson wrote:
+> Something like the completely untested below should just work whatever
+> APIC ID the BIOS decided to dice.
+>
+> That might just work on SEV too without that GHCB muck, but what do I
+> know.
 
-syzbot found the following issue on:
+It does not.
 
-HEAD commit:    de10553fce40 Merge tag 'x86-apic-2023-04-24' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14bdae68280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=975b8311f6b96bca
-dashboard link: https://syzkaller.appspot.com/bug?extid=d692037148a8169fc9dd
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
+RDMSR(X2APIC_ID) is trapped via #VC which cannot be handled at that
+point. Unfortunately the GHCB protocol does not provide a RDMSR
+mechanism similar to the CPUID mechanism. Neither does the secure
+firmware enforce CPUID(0xb):APICID to real APIC ID consistency.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d692037148a8169fc9dd@syzkaller.appspotmail.com
+So the hypervisor can dice the APIC IDs as long as they are consistent
+with the provided ACPI/MADT table.
 
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 000005fc when read
-[000005fc] *pgd=80000080004003, *pmd=00000000
-Internal error: Oops: 206 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-Insufficient stack space to handle exception!
-Task stack:     [0xdf85c000..0xdf85e000]
-IRQ stack:      [0xdf804000..0xdf806000]
-Overflow stack: [0x828ae000..0x828af000]
-Internal error: kernel stack overflow: 0 [#2] PREEMPT SMP ARM
-Modules linked in:
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-PC is at __dabt_svc+0x14/0x60 arch/arm/kernel/entry-armv.S:210
-LR is at vsnprintf+0x378/0x408 lib/vsprintf.c:2862
-pc : [<80200a74>]    lr : [<817ad5d8>]    psr: 00000193
-sp : df804028  ip : df805868  fp : df805864
-r10: 00000060  r9 : ffffffff  r8 : 00000010
-r7 : 00000020  r6 : 00000004  r5 : ffffffff  r4 : df805960
-r3 : ffffffff  r2 : 00000040  r1 : ffffffff  r0 : 8264d250
-Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 30c5387d  Table: 80003000  DAC: 00000000
-Register r0 information:
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 000001ff when read
-[000001ff] *pgd=80000080004003, *pmd=00000000
-Internal error: Oops: 206 [#3] PREEMPT SMP ARM
-Modules linked in:
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
-PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
-PC is at find_vm_area mm/vmalloc.c:2571 [inline]
-PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4108
-LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
-LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
-pc : [<8046b2f0>]    lr : [<817db0f4>]    psr: 20000193
-sp : 828aeef8  ip : 828aeee0  fp : 828aef0c
-r10: 828f3980  r9 : 8241c964  r8 : 8264d41c
-r7 : 60000193  r6 : 00000001  r5 : 8264e000  r4 : 00000207
-r3 : 80216bd4  r2 : 00001d4c  r1 : 00000000  r0 : 00000001
-Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 30c5387d  Table: 80003000  DAC: 00000000
+So no parallel startup for SEV for now.
 
+Thanks,
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+        tglx
