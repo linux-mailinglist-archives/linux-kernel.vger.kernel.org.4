@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDE76EEA50
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41366EEA53
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236122AbjDYW3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 18:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S236169AbjDYWfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 18:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbjDYW3w (ORCPT
+        with ESMTP id S232154AbjDYWfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 18:29:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C200D14443
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682461791; x=1713997791;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m40LO4zU2cr5G6B0sLHNH6L6vAl4ntL8Zd7e76IQPgc=;
-  b=TIYZ1rMeVqOZ1wM0pXfLtuLWpSCXEFeDRZeObEeNuTfLczapsqKW0LMN
-   4jLg1WKAAb5EMTBukNUpn4MZ/DqJNeQNghrwOOkONEFhQlRefVk3o2Eau
-   iQLv5vXDbu0Dp/2wi6sIFVzIEsz0pm/jvIzHWvSqjiHGcx7XMVNtD8DL/
-   3UOVLpSAeI7iK7KB1qdzPxI9NebpCYdBIUbw/xu8Sfm5GofvzhRJaLyfW
-   ECfWgMLKrRuMD9UPPvZUvIV1fxxOL0UWlMbLzejEUZJTlN8Wx7a0e/n9A
-   xSz/yuDRmvhTy0TGCuBUncN4DuioWKiVAJLfWrpdDy82w8v1T16hOuVeI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="409884195"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="409884195"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 15:29:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="671107681"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="671107681"
-Received: from smahadev-mobl.amr.corp.intel.com (HELO [10.209.78.92]) ([10.209.78.92])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 15:29:51 -0700
-Message-ID: <ecdea7a8-a748-6ecb-5fc1-93d7eda3c54d@intel.com>
-Date:   Tue, 25 Apr 2023 15:29:49 -0700
+        Tue, 25 Apr 2023 18:35:52 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A93314468
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:35:51 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 2EC3A3F094;
+        Wed, 26 Apr 2023 00:35:49 +0200 (CEST)
+Date:   Wed, 26 Apr 2023 00:35:47 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Daniel Vetter <daniel@ffwll.ch>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Sean Paul <sean@poorly.run>
+Subject: Re: [Freedreno] [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers
+ directly from RM instead of IDs
+Message-ID: <ecopixnagol7yd5znvmjanknqbv7vi4ayy36vchaeyyhuavu4w@rkdfllrd4uzb>
+References: <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
+ <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
+ <c809476f-74bc-0399-08f9-1bf26e7170fa@quicinc.com>
+ <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
+ <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org>
+ <m5z5mv5hbdgpjbfo3mqo5s3egshnlu77nla4b7txddlsbk5fvi@jitwvapbr7wr>
+ <CAA8EJpoCeCkucvb=a+1ken_yR=8FvcECrvajOk5MxgO-j2nD6A@mail.gmail.com>
+ <2c3ef118-d7b1-83bd-f789-3e5c5212a6e5@quicinc.com>
+ <CAA8EJpq8i4YxRc4yM-BGyV0uM4WyDOoFAgsU8bOoZL963wRMkQ@mail.gmail.com>
+ <fc3089b6-5511-7046-9c70-f0535d8f4ba3@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>
-References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
- <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <87o7nbzn8w.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc3089b6-5511-7046-9c70-f0535d8f4ba3@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/23 14:05, Thomas Gleixner wrote:
-> The only consequence of looking at bit 0 of some random other leaf is
-> that all CPUs which run stop_this_cpu() issue WBINVD in parallel, which
-> is slow but should not be a fatal issue.
-> 
-> Tony observed this is a 50% chance to hang, which means this is a timing
-> issue.
+On 2023-04-25 14:32:51, Abhinav Kumar wrote:
+<snip>
+> >>>>> We can return NULL from dpu_hw_foo_init(), which would mean that the
+> >>>>> block was skipped or is not present.
+> >>>>
+> >>>> An then replace the `if INTF_NONE continue` logic in dpu_rm_init with a
+> >>>> check for NULL that skips, and a check for IS_ERR` that goes to `fail`?
+> >>>
+> >>> You can just drop the INTF_NONE in dpu_rm. If dpu_hw_intf_init()
+> >>> returns NULL, the rest of the code in dpu_rm will work correctly.
 
-I _think_ the system in question is a dual-socket Westmere.  I don't see
-any obvious errata that we could pin this on:
+Sure, I'll keep the check exclusively in dpu_hw_intf_init().  Should I
+also move the pingpong==PINGPONG_MAX check into dpu_hw_lm_init()?
 
-> https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/xeon-5600-specification-update.pdf
+> >> The only thing lost will be that the loop in the RM will break at the
+> >> first instance of NULL so if the loop has valid intf blocks later, those
+> >> will also not get initialized.
+> >
+> > No, it won't. There is the IS_ERR check, not the IS_ERR_OR_NULL()
 
-Andi Kleen had an interesting theory.  WBINVD is a pretty expensive
-operation.  It's possible that it has some degenerative behavior when
-it's called on a *bunch* of CPUs all at once (which this path can do).
-If the instruction takes too long, it could trigger one of the CPU's
-internal lockup detectors and trigger a machine check.  At that point,
-all hell breaks loose.
+Only DSC currently uses IS_ERR_OR_NULL... We should fix that as
+rc=PTR_ERR(hw) on the next should be 0 (actually, the intent is for it
+to be undefined I think) for that...
 
-I don't know the cache coherency protocol well enough to say for sure,
-but I wonder if there's a storm of cache coherency traffic as all those
-lines get written back.  One of the CPUs gets starved from making enough
-forward progress and trips a CPU-internal watchdog.
+> Ack, but isnt that an issue since rm->hw_intf[intf->id - INTF_0] can be 
+> assigned to a NULL hw.
 
-Andi also says that it _should_ log something in the machine check banks
-when this happens so there should be at least some kind of breadcrumb.
+Yes, that is exactly the intent here.
 
-Either way, I'm hoping this hand waving satiates tglx's morbid curiosity
-about hardware that came out from before I even worked at Intel. ;)
+> >> That wont happen today because catalog doesnt have such entries but just
+> >> wanted to note what gets lost with this change.
+
+It does, we have a few SoCs with type=INTF_NONE.  Quoting myself from
+above:
+
+    As per the first patch of this series SM6115/QCM2290 only have a DSI
+    interface which always sits at ID 1, and ID 0 has its TYPE set to
+    INTF_NONE and is skipped.
+
+- Marijn
