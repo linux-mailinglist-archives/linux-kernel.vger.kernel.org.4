@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA516EE1D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2936EE1D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbjDYM0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S234085AbjDYM1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbjDYM0x (ORCPT
+        with ESMTP id S233789AbjDYM1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:26:53 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51936D312;
-        Tue, 25 Apr 2023 05:26:43 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A545124E1B7;
-        Tue, 25 Apr 2023 20:26:36 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
- 2023 20:26:37 +0800
-Received: from [192.168.125.106] (113.72.145.137) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
- 2023 20:26:35 +0800
-Message-ID: <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
-Date:   Tue, 25 Apr 2023 20:26:35 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
+        Tue, 25 Apr 2023 08:27:54 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABABFCC2E;
+        Tue, 25 Apr 2023 05:27:51 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PCRisC031241;
+        Tue, 25 Apr 2023 07:27:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682425664;
+        bh=ipiUSnmA2+1WIk0HkySkOwI9+HpDpHtuOrmd8pbEBQc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LLp1TG/LTVkyTJODVxQ+iFjnO3CPPNMSoeDoAVMxXeIctcGbRg8ekE6Mpl+ULZwE5
+         rS9btWwaEwvbNy8KOWRhjcTbWoVgTrC+MXSQiOteBWfE96Fv0MG9obqyDKQ09EYron
+         4P9po4zePwbPWNDHaAoy++qK5me5+dmXQoWKJx3o=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PCRifO023020
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 07:27:44 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 07:27:44 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 07:27:44 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PCRiG5111194;
+        Tue, 25 Apr 2023 07:27:44 -0500
+Date:   Tue, 25 Apr 2023 07:27:44 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Andrew Davis <afd@ti.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
-        <linux-phy@lists.infradead.org>
-References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
- <20230419035646.43702-2-changhuang.liang@starfivetech.com>
- <20230419-labored-camper-644d51a7ca96@spud>
- <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
- <20230424-baffle-punch-ec73098f2b6a@spud>
- <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
- <20230425-unquote-eligible-09f743d81981@wendy>
- <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
- <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
- <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
- <20230425-resale-footrest-de667778c4fe@wendy>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230425-resale-footrest-de667778c4fe@wendy>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.137]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>, <vaishnav.a@ti.com>,
+        <u-kumar1@ti.com>
+Subject: Re: [PATCH 3/3] arm64: dts: ti: k3-j7200-mcu-wakeup: Split fss node
+ up
+Message-ID: <20230425122744.hkahpv6yvprd6qzy@creature>
+References: <20230424173623.477577-1-nm@ti.com>
+ <20230424173623.477577-4-nm@ti.com>
+ <f5861b8b-637a-e127-2945-8994a472015a@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f5861b8b-637a-e127-2945-8994a472015a@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,101 +71,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/4/25 17:35, Conor Dooley wrote:
-> On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
->>
->>
->> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
->>> On 25/04/2023 09:57, Changhuang Liang wrote:
->>>>>>>>>>  
->>>>>>>>>>  description: |
->>>>>>>>>>    StarFive JH7110 SoC includes support for multiple power domains which can be
->>>>>>>>>> @@ -17,6 +18,7 @@ properties:
->>>>>>>>>>    compatible:
->>>>>>>>>>      enum:
->>>>>>>>>>        - starfive,jh7110-pmu
->>>>>>>>>> +      - starfive,jh7110-aon-pmu
->>>>>>>
->>>>>>> I was speaking to Rob about this over the weekend, he asked:
->>>>>>> 'Why isn't "starfive,jh7110-aon-syscon" just the power-domain provider
->>>>>>> itself?'
->>>>>>
->>>>>> Maybe not, this syscon only offset "0x00" configure power switch.
->>>>>> other offset configure other functions, maybe not power, so this
->>>>>> "starfive,jh7110-aon-syscon" not the power-domain itself.
->>>>>>
->>>>>>> Do we actually need to add a new binding for this at all?
->>>>>>>
->>>>>>> Cheers,
->>>>>>> Conor.
->>>>>>>
->>>>>>
->>>>>> Maybe this patch do that.
->>>>>> https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech.com/
->>>>>
->>>>> This makes it a child-node right? I think Rob already said no to that in
->>>>> and earlier revision of this series. What he meant the other day was
->>>>> making the syscon itself a power domain controller, since the child node
->>>>> has no meaningful properties (reg, interrupts etc).
->>>>>
->>>>> Cheers,
->>>>> Conor.
->>>>
->>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
->>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
->>>> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
->>>> to a power domain controller. I think using the child-node description is closer to
->>>> JH7110 SoC. 
->>>
->>> Unfortunately, I do not see the correlation between these, any
->>> connection. Why being a child of syscon block would mean that this
->>> should no be power domain controller? Really, why? These are two
->>> unrelated things.
->>>
->>> Best regards,
->>> Krzysztof
->>>
->>
->> Let me summarize what has been discussed above. 
->>
->> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x17010000).
->> 1. (0x17010000) is power-controller node:
->>
->> 	aon_pwrc: power-controller@17010000 {
->> 		compatible = "starfive,jh7110-aon-pmu", "syscon";
->> 		reg = <0x0 0x17010000 0x0 0x1000>;
->> 		#power-domain-cells = <1>;
->> 	};
->>
->>
->> 2. (0x17010000) is syscon node, power-controller is child-node of syscon:
->>
->> 	aon_syscon: syscon@17010000 {
->> 		compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
->> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>
->> 		aon_pwrc: power-controller {
->> 			compatible = "starfive,jh7110-aon-pmu";
->> 			#power-domain-cells = <1>;
->> 		};
->> 	};
+On 13:55-20230424, Andrew Davis wrote:
+> On 4/24/23 12:36 PM, Nishanth Menon wrote:
+> > fss node claims to be entirely a syscon node, but it is really two
+> > parts of it - one a syscon that controls the hbmc mux and a simple bus
+> > where ospi, hbmc peripherals are located. So model it accordingly by
+> > splitting the node up and using ti,j721e-system-controller to describe
+> > the syscon
+> > 
+> > Signed-off-by: Nishanth Menon <nm@ti.com>
+> > ---
+> >   .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 21 +++++++++++++------
+> >   1 file changed, 15 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> > index b58a31371bf3..7653cb191be1 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> > +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> > @@ -338,18 +338,27 @@ mcu_spi2: spi@40320000 {
+> >   		status = "disabled";
+> >   	};
+> > -	fss: syscon@47000000 {
+> > -		compatible = "syscon", "simple-mfd";
+> > +	hbmc_syscon: syscon@47000000 {
+> > +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+> >   		reg = <0x00 0x47000000 0x00 0x100>;
+> > -		#address-cells = <2>;
+> > -		#size-cells = <2>;
+> > -		ranges;
+> > +		#address-cells = <1>;
+> > +		#size-cells = <1>;
+> > +		ranges = <0x00 0x00 0x47000000 0x100>;
+> > -		hbmc_mux: hbmc-mux {
+> > +		hbmc_mux: mux-controller@4 {
+> >   			compatible = "mmio-mux";
+> > +			reg = <0x4 0x2>;
+> >   			#mux-control-cells = <1>;
+> >   			mux-reg-masks = <0x4 0x2>; /* HBMC select */
+> >   		};
+> > +	};
+> > +
+> > +	fss: bus@47030000 {
+> > +		compatible = "simple-bus";
+> > +		reg = <0x0 0x47030000 0x0 0x100>;
+> > +		#address-cells = <2>;
+> > +		#size-cells = <2>;
+> > +		ranges;
+> >   		hbmc: hyperbus@47034000 {
+> >   			compatible = "ti,am654-hbmc";
 > 
-> I thought that Rob was suggesting something like this:
-> 	aon_syscon: syscon@17010000 {
-> 		compatible = "starfive,jh7110-aon-syscon", ...
-> 		reg = <0x0 0x17010000 0x0 0x1000>;
-> 		#power-domain-cells = <1>;
-> 	};
 > 
-> Cheers,
-> Conor.
+> I hope all the things you had to do here show you what I mean in my
+> comments on [0] :)
+
+yup.
+
 > 
+> I've posted a first step patch that allows "reg-mux" node to work with
+> regular reg properties[1]. Which means this patch could have been just this:
+> 
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> @@ -305,15 +305,16 @@ wkup_i2c0: i2c@42120000 {
+>                 status = "disabled";
+>         };
+> -       fss: syscon@47000000 {
+> -               compatible = "syscon", "simple-mfd";
+> +       fss: bus@47000000 {
+> +               compatible = "simple-bus";
+>                 reg = <0x00 0x47000000 0x00 0x100>;
+>                 #address-cells = <2>;
+>                 #size-cells = <2>;
+>                 ranges;
+>                 hbmc_mux: hbmc-mux {
+> -                       compatible = "mmio-mux";
+> +                       compatible = "reg-mux";
+> +                       reg = <0x00 0x47000004 0x00 0x2>;
+>                         #mux-control-cells = <1>;
+>                         mux-reg-masks = <0x4 0x2>; /* HBMC select */
+>                 };
+> 
+> Andrew
+> 
+> [0] https://lore.kernel.org/all/76da0b98-3274-b047-db11-ecabc117ae11@ti.com/
+> [1] https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
 
-I see the kernel:
-https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-this file line 42:
-it's power-controller also has no meaningful properties.
-What do you think?
+yes, this is a better approach. Lets see the conclusion of the
+discussion.
 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
