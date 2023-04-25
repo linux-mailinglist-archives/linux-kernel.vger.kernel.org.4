@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55D46EE41A
+	by mail.lfdr.de (Postfix) with ESMTP id F03386EE41B
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbjDYOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S234223AbjDYOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbjDYOla (ORCPT
+        with ESMTP id S234220AbjDYOlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:41:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15E0335A4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:41:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF3934B3;
-        Tue, 25 Apr 2023 07:42:11 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 974993F587;
-        Tue, 25 Apr 2023 07:41:26 -0700 (PDT)
-Message-ID: <73717cc1-3444-e9fa-ddfc-01254fb94f1d@arm.com>
-Date:   Tue, 25 Apr 2023 15:41:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 13/13] coresight: Fix CTI module refcount leak by
- making it a helper device
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
-        mike.leach@linaro.org
-References: <20230404155121.1824126-1-james.clark@arm.com>
- <20230404155121.1824126-14-james.clark@arm.com>
- <51111c59-064f-1458-44ea-5fdae9f26211@arm.com>
- <2c6cbccb-44e9-edaf-f1a1-ac9c5175537f@arm.com>
- <7dab2287-97ce-7603-9b9e-445135758d09@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <7dab2287-97ce-7603-9b9e-445135758d09@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Tue, 25 Apr 2023 10:41:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632B419A2;
+        Tue, 25 Apr 2023 07:41:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDAF262B0F;
+        Tue, 25 Apr 2023 14:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC08C433EF;
+        Tue, 25 Apr 2023 14:41:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682433689;
+        bh=lZk+EFWneQATzI/nj3p2fQd2Dgt+Z7L2bXldLPZN7ao=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tyDqjLiA/h2M63/HcxIIofyoWsVIe8PRXh1frH+MBnH3pL3LxhcVM6gHkcc86vQ+e
+         v2amCqwpWA2iZ9LaZnjatfu96VVon0bjkRDLJ0kibijE+7v+OXAixeaBEy6Qx0T78b
+         5IP6BaKn5VpMdYfxAPdSM6dUr44Djy3Ttjp/j7CopJ1heRXEpNcKM54gQxbkGfWFlo
+         mG7mGZ6NsEW7t6T/X6HysIHrMgy7So2igThhJIVVzvHuTUtBN0LAk0a+KFsnPCH9eT
+         LLTOycxhkMum1rTb9T+Z5HfSes8OqH2d6n3Bm1NnaE9wcSGXs4VRGUNn5Rjb2Zmh2f
+         PG4HtbKRzqPAA==
+Date:   Tue, 25 Apr 2023 23:41:25 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc:     Akanksha J N <akanksha@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+        shuah@kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/ftrace: Add new test case which checks
+ for optimized probes
+Message-Id: <20230425234125.51455711c4388481c13be5ad@kernel.org>
+In-Reply-To: <1682400251.pez54ergiy.naveen@linux.ibm.com>
+References: <20230418095557.19061-1-akanksha@linux.ibm.com>
+        <20230418095557.19061-3-akanksha@linux.ibm.com>
+        <20230425091039.9fd523dfdf7be5e800bac4fe@kernel.org>
+        <1682400251.pez54ergiy.naveen@linux.ibm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,171 +61,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 25 Apr 2023 10:58:30 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.ibm.com> wrote:
+
+> Masami Hiramatsu wrote:
+> > On Tue, 18 Apr 2023 15:25:57 +0530
+> > Akanksha J N <akanksha@linux.ibm.com> wrote:
+> > 
+> >> Add new test case kprobe_opt_types.tc which enables and checks
+> >> if each probe has been optimized in order to test potential issues with
+> >> optimized probes.
+> >> The '|| continue' is added with the echo statement to ignore errors that
+> >> are caused by trying to add kprobes to non probeable lines and continue
+> >> with the test.
+> >> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
+> >> ---
+> >>  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++++
+> >>  1 file changed, 34 insertions(+)
+> >>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> >> 
+> >> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> >> new file mode 100644
+> >> index 000000000000..54e4800b8a13
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> >> @@ -0,0 +1,34 @@
+> >> +#!/bin/sh
+> >> +# SPDX-License-Identifier: GPL-2.0-or-later
+> >> +# Copyright (C) 2023 Akanksha J N, IBM corporation
+> >> +# description: Register/unregister optimized probe
+> >> +# requires: kprobe_events
+> >> +
+> >> +case `uname -m` in
+> >> +x86_64)
+> >> +;;
+> >> +arm*)
+> >> +;;
+> >> +ppc*)
+> >> +;;
+> >> +*)
+> >> +  echo "Please implement other architecture here"
+> >> +  exit_unsupported
+> >> +esac
+> >> +
+> >> +DEFAULT=$(cat /proc/sys/debug/kprobes-optimization)
+> >> +echo 1 > /proc/sys/debug/kprobes-optimization
+> >> +for i in `seq 0 255`; do
+> >> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || continue
+> >> +        echo 1 > events/kprobes/enable || continue
+> >> +        (echo "forked")
+> >> +        PROBE_TYPE=$(cat /sys/kernel/debug/kprobes/list | grep $FUNCTION_FORK | awk '{print $4}' | awk '{print substr($0,2,length($0)-2)}')
+> > 
+> > I think we can make it simply;
+> > 
+> > PROBE=$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
+> > 
+> >> +        echo 0 > events/kprobes/enable
+> >> +        echo > kprobe_events
+> >> +        if [ $PROBE_TYPE = "OPTIMIZED" ]; then
+> > 
+> > and
+> > 
+> > if echo $PROBE | grep -q OPTIMIZED; then
+> > 
+> >> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
+> >> +                exit_pass
+> >> +        fi
+> >> +done
+> >> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
+> >> +echo "Done"
+> > 
+> > Hmm, this test does NOT return any error. It always returns success.
+> 
+> Good catch!
+> 
+> > I understand that optimization may not be possible within 256 bytes
+> > from the beginning of the function.
+> 
+> Is that true in practice? Looking at x86 and ppc64le, it looks like we 
+> will almost always be able to optimize at least one of the instructions 
+> within the first 256 bytes of kernel_clone(). That's one of the primary 
+> purposes of this test.
+
+Yeah, usually it should not happen. But since we don't disassemble it,
+we can not ensure that. So this depends on the compiler at last.
+
+> 
+> Are there valid reasons why we may not be able to optimize instructions?
+
+For example, if the compiler starts inserting some checker instruction
+on each instruction boundary for security, it may prevent optimizing
+kprobes. Usually it should not happen (because it bloat up the kernel size)
+but we cannot deny the possibility of such new feature as an option
+in the future.
+
+> 
+> > In that case, you can return
+> > "unresolved", and not echoing "Done" but the reason why it is
+> > unresolved.
+
+Even in that case, it can notify such case as "unresolved", then we
+can notice it. (something like WARN_ON)
+
+Thank you,
+
+> 
+> 
+> - Naveen
+> 
 
 
-On 24/04/2023 14:22, Suzuki K Poulose wrote:
-> On 24/04/2023 12:09, James Clark wrote:
->>
->>
->> On 24/04/2023 11:43, Suzuki K Poulose wrote:
->>> On 04/04/2023 16:51, James Clark wrote:
->>>> The CTI module has some hard coded refcounting code that has a leak.
->>>> For example running perf and then trying to unload it fails:
->>>>
->>>>     perf record -e cs_etm// -a -- ls
->>>>     rmmod coresight_cti
->>>>
->>>>     rmmod: ERROR: Module coresight_cti is in use
->>>>
->>>> The coresight core already handles references of devices in use, so by
->>>> making CTI a normal helper device, we get working refcounting for free.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>    drivers/hwtracing/coresight/coresight-core.c  | 104
->>>> ++++++------------
->>>>    .../hwtracing/coresight/coresight-cti-core.c  |  52 +++++----
->>>>    .../hwtracing/coresight/coresight-cti-sysfs.c |   4 +-
->>>>    drivers/hwtracing/coresight/coresight-cti.h   |   4 +-
->>>>    drivers/hwtracing/coresight/coresight-priv.h  |   4 +-
->>>>    drivers/hwtracing/coresight/coresight-sysfs.c |   4 +
->>>>    include/linux/coresight.h                     |  30 +----
->>>>    7 files changed, 75 insertions(+), 127 deletions(-)
->>>>
->>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
->>>> b/drivers/hwtracing/coresight/coresight-core.c
->>>> index 16689fe4ba98..2af416bba983 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-core.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
->>>> @@ -236,60 +236,44 @@ void coresight_disclaim_device(struct
->>>> coresight_device *csdev)
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(coresight_disclaim_device);
->>>>    -/* enable or disable an associated CTI device of the supplied CS
->>>> device */
->>>> -static int
->>>> -coresight_control_assoc_ectdev(struct coresight_device *csdev, bool
->>>> enable)
->>>> +/*
->>>> + * Add a helper as an output device. This function takes the
->>>> @coresight_mutex
->>>> + * because it's assumed that it's called from the helper device,
->>>> outside of the
->>>> + * core code where the mutex would already be held. Don't add new
->>>> calls to this
->>>> + * from inside the core code, instead try to add the new helper to
->>>> the DT and
->>>> + * ACPI where it will be picked up and linked automatically.
->>>> + */
->>>> +void coresight_add_helper(struct coresight_device *csdev,
->>>> +              struct coresight_device *helper)
->>>>    {
->>>> -    int ect_ret = 0;
->>>> -    struct coresight_device *ect_csdev = csdev->ect_dev;
->>>> -    struct module *mod;
->>>> +    int i;
->>>> +    struct coresight_connection conn = {};
->>>> +    struct coresight_connection *new_conn;
->>>>    -    if (!ect_csdev)
->>>> -        return 0;
->>>> -    if ((!ect_ops(ect_csdev)->enable) ||
->>>> (!ect_ops(ect_csdev)->disable))
->>>> -        return 0;
->>>> +    mutex_lock(&coresight_mutex);
->>>> +    conn.dest_fwnode = fwnode_handle_get(dev_fwnode(&helper->dev));
->>>> +    conn.dest_dev = helper;
->>>> +    conn.dest_port = conn.src_port = -1;
->>>> +    conn.src_dev = csdev;
->>>>    -    mod = ect_csdev->dev.parent->driver->owner;
->>>> -    if (enable) {
->>>> -        if (try_module_get(mod)) {
->>>> -            ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
->>>> -            if (ect_ret) {
->>>> -                module_put(mod);
->>>> -            } else {
->>>> -                get_device(ect_csdev->dev.parent);
->>>> -                csdev->ect_enabled = true;
->>>> -            }
->>>> -        } else
->>>> -            ect_ret = -ENODEV;
->>>> -    } else {
->>>> -        if (csdev->ect_enabled) {
->>>> -            ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
->>>> -            put_device(ect_csdev->dev.parent);
->>>> -            module_put(mod);
->>>> -            csdev->ect_enabled = false;
->>>> -        }
->>>> -    }
->>>> +    /*
->>>> +     * Check for duplicates because this is called every time a helper
->>>> +     * device is re-loaded. Existing connections will get re-linked
->>>> +     * automatically.
->>>> +     */
->>>> +    for (i = 0; i < csdev->pdata->nr_outconns; ++i)
->>>> +        if (csdev->pdata->out_conns[i]->dest_fwnode ==
->>>> conn.dest_fwnode)
->>>> +            goto unlock;
->>>>    -    /* output warning if ECT enable is preventing trace
->>>> operation */
->>>> -    if (ect_ret)
->>>> -        dev_info(&csdev->dev, "Associated ECT device (%s) %s
->>>> failed\n",
->>>> -             dev_name(&ect_csdev->dev),
->>>> -             enable ? "enable" : "disable");
->>>> -    return ect_ret;
->>>> -}
->>>> +    new_conn =
->>>> +        coresight_add_out_conn(csdev->dev.parent, csdev->pdata,
->>>> &conn);
->>>
->>> ultra minor nit:
->>>      new_conn = coresight_add_out_conn(....,
->>>                        .... );
->>
->> This whole patchset is now formatted with the kernel clang-format rules.
->> Are you sure this one is against the conventions?
-> 
-> It is not against convention, but there are no hard line rules for
-> these.
-> 
-> The only suggestion is to split the lines sensibly with
-> readability stressed.
-> 
-> https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
-> 
-> "Statements longer than 80 columns should be broken into sensible
-> chunks, unless exceeding 80 columns significantly increases readability
-> and does not hide information.
-> 
-> Descendants are always substantially shorter than the parent and are
-> placed substantially to the right. A very commonly used style is to
-> align descendants to a function open parenthesis."
-> 
-> 
-> I personally find it :
-> 
->     result = rather_long_function_statement(arg1, arg2,
->                             ........);
-> 
-> way better readable than :
-> 
->     result =
->         rather_long_function_statement(.....);
-> 
->>
->> The problem is running the formatter on all changed lines makes it
->> almost impossible to go back and undo indents like this.
-> 
-> Haven't used it, but it does seem to say it may not be perfect ;-).
-> That said, I am not too strict about this. You may leave it unchanged
-> if it is painful.
-> > Suzuki
->
-
-Upon further inspection I think it might actually be a bug in
-clang-format. When only the ); falls over the column limit it doesn't
-know that it needs to wrap the previous token to stick with the rules.
-Or something like that.
-
-I'll probably leave that debugging rabbit hole for another time. Anyway
-I fixed this one in v6.
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
