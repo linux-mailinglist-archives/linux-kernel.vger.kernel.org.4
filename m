@@ -2,191 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E166EE6B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A96EE6BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbjDYRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 13:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S234732AbjDYRcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 13:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbjDYRad (ORCPT
+        with ESMTP id S234720AbjDYRcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:30:33 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9C75BBA;
-        Tue, 25 Apr 2023 10:30:32 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-549d9c295dfso1132541eaf.2;
-        Tue, 25 Apr 2023 10:30:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682443831; x=1685035831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kx2MBexI4IdwwU3HpEq9VlXt44gc2MaIIVYzDB9fIV4=;
-        b=AiliSyTg6nIo/kjAS7JyEfIFAxQx5OP69OvrF/lHoicVsFxHrJ3MTfNr6pNE6YaPib
-         6Qt3GL776p8K20uVJAPDosy4HYR/ZBKKNRG9mEYsdyraWurdZo4p2P3rktJl8RC09/0w
-         qu/AAV2fFMje8Z3pDev8I5hSd7MSb3fC5fm6lt5cPS7VtJTVUFj+6Iq5MbR8VjyFe4PZ
-         Jj3nkM6MghSZV/WWEW/hqFn5WJb1hn+A2aNX+xpM4w9CNZ2WOYLmPHeMzQ+g7scn1mXM
-         IkBLo1rhxcWd2KrlGhkcEUdp5AgK8hAdSHgRE9uwIzXy+VRqdLSDman0/adrwUALisdu
-         1EPQ==
-X-Gm-Message-State: AAQBX9dZv60rKG+eziQgVTxZGYMNLxiy7nvCYrUiUW5LI0Y+v8de5BmM
-        lcQM2zdgADFZ7wJHMAPEPtltYizOeQ==
-X-Google-Smtp-Source: AKy350YWtCrrLr3UM/3y9aq2ToOzHzoeNJ5TSClKRGZBXj25jO0yAiVnnnhvDs1DjJXnxt3FzDRMHw==
-X-Received: by 2002:a4a:e058:0:b0:545:62bf:fd6c with SMTP id v24-20020a4ae058000000b0054562bffd6cmr6727843oos.0.1682443831133;
-        Tue, 25 Apr 2023 10:30:31 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m41-20020a4a952c000000b005251e3f92ecsm6259455ooi.47.2023.04.25.10.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 10:30:30 -0700 (PDT)
-Received: (nullmailer pid 1984548 invoked by uid 1000);
-        Tue, 25 Apr 2023 17:30:29 -0000
-Date:   Tue, 25 Apr 2023 12:30:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/4] dt-bindings: sound: Add simple-iio-aux
-Message-ID: <20230425173029.GA1967523-robh@kernel.org>
-References: <20230421124122.324820-1-herve.codina@bootlin.com>
- <20230421124122.324820-2-herve.codina@bootlin.com>
+        Tue, 25 Apr 2023 13:32:48 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDD672A2;
+        Tue, 25 Apr 2023 10:32:46 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-14-243-nat.elisa-mobile.fi [85.76.14.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Q5Tbb1zXFz49Q1p;
+        Tue, 25 Apr 2023 20:32:43 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1682443964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=lbrxOnN4RUlQpF+DUNLaZwqcHrQk40EoKmo3esYa/jA=;
+        b=U1KQ948AdfqrPZ7fcQPrqJkibPgm3Hh27BClFMsbmHXbSFN0YhjvSyhbc9PM+On/mOuRG9
+        esUoYinab/eeOC/GSIuAElNvjmYjD9pL+OUE6wlH4EJYW7W++reOcq4NiuzmHuKEw3iJ9a
+        sJCKjLZYkODyuSx5lANzhrj1zVMr5Bj2sjCgRIqN/xhVY/8tpHvHdfR+kFAp/FzXJeJK+T
+        ONOmGA4AdL28sRibkvOpCeoqx+xoofWMkiph3X3pG+n6gVFQpi49QgdHzO71Nu8mLJfC1c
+        s2XgNgzAY4QzjSJV+vaGG/Zc8HJbXY0JBvJ33ePYlTkHDfnOLiwecuMPugXmxA==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1682443964; a=rsa-sha256;
+        cv=none;
+        b=nbr+6nkvzNhF9bpjcjoCKKgredwk0TYz0M4hiJPRHi3HaDWDmBJzdY3N5zZPBjWy11oXGd
+        +N1jArD5Z3I9rJW14NQeDveRIi7A7NpBkc1L0Zwz0bSm7eBTsz9Pd0QB7lPsL3t6YVi0GJ
+        RPHCVSiCHu9xBGLhR1dLZtn5ULgwe+pVSq8dpD5CeqKUNUhIFdD79A1ktB5KfENbakUhIR
+        FbLeCzAXUKFFPK12vcW4O47X3g66Gq17B2zTPMu/MosfQ4zaITzhiLp7xK1u2oHWSyDt6f
+        XmjvzWm9zyx+tT9JGcuF3hvgv3BJq6z+/83oTk83WMjsDVbZmZY+8opjvLBFbw==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1682443964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=lbrxOnN4RUlQpF+DUNLaZwqcHrQk40EoKmo3esYa/jA=;
+        b=Xv694WbwM5khTimG9/hw/LL0UCGAwhLbA69rA1ApcmS3Tc7g/Gm5GUGQqNEmvA4eJZn2VI
+        6Diqhl7TpmveruuOGt3Jo1Yk3qDsI4YO1pmiISLLZGHyPlGHtSlEZunEctTQNUo1t0BBT4
+        KQQ0WH/SMF+UDwUOr0gYm/0YoWSO7n5xmqv8WAbkQ2G508J45N5c5QcNv/seSRqn4ffQMD
+        fRWjvzXMz47yrsXbQJo41dpChV8ZkAaaITwdzJZnrB/WRrR5M3Pq/d8DWp3omwgeYKQb50
+        mOW/cl+AybV+DFxk1P2t+q9nYIQNDd4ylrYe3zw5mydn9qNhIzOeYy4ufxHFSA==
+Date:   Tue, 25 Apr 2023 20:32:41 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [BISECTED REGRESSION] OMAP1 GPIO breakage
+Message-ID: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421124122.324820-2-herve.codina@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:41:19PM +0200, Herve Codina wrote:
-> Industrial I/O devices can be present in the audio path.
-> These devices needs to be viewed as audio components in order to be
-> fully integrated in the audio path.
-> 
-> simple-iio-aux allows to consider these Industrial I/O devices as
-> auxliary audio devices.
+Hi,
 
-What makes it simple? Any binding called simple or generic is a trigger 
-for me. Best to avoid those terms. :)
+It seems GPIOs on OMAP1 boards are somewhat broken after:
 
-Examples of devices would be useful here.
+commit 92bf78b33b0b463b00c6b0203b49aea845daecc8
+Author: Andreas Kemnade <andreas@kemnade.info>
+Date:   Fri Jan 13 21:59:22 2023 +0100
 
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  .../bindings/sound/simple-iio-aux.yaml        | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/simple-iio-aux.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/simple-iio-aux.yaml b/Documentation/devicetree/bindings/sound/simple-iio-aux.yaml
-> new file mode 100644
-> index 000000000000..fab128fce4fc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/simple-iio-aux.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/simple-iio-aux.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Simple IIO auxiliary
-> +
-> +maintainers:
-> +  - Herve Codina <herve.codina@bootlin.com>
-> +
-> +description: |
+    gpio: omap: use dynamic allocation of base
 
-Don't need '|'
+E.g. on OSK1 the ethernet IRQ cannot (omap_gpio.0) no longer be requested:
 
-> +  Auxiliary device based on Industrial I/O device channels
-> +
-> +allOf:
-> +  - $ref: /schemas/iio/iio-consumer.yaml
+[    0.277252] Error requesting gpio 0 for smc91x irq
 
-You don't need to reference consumer schemas.
+Also the tps65010 (still using static allocation) will now conflict:
 
-> +  - $ref: dai-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: simple-iio-aux
-> +
-> +  io-channels:
-> +    description:
-> +      Industrial I/O device channels used
-> +
-> +  io-channel-names:
-> +    description:
-> +      Industrial I/O channel names related to io-channels.
-> +      These names are used to provides sound controls, widgets and routes names.
-> +
-> +  invert:
+[    0.400726] gpio gpiochip5: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.400848] gpio gpiochip5: (tps65010): GPIO integer space overlap, cannot add chip
+[    0.400970] gpiochip_add_data_with_key: GPIOs 208..214 (tps65010) failed to register, -16
+[    0.401092] tps65010 i2c-tps65010: can't add gpiochip, err -16
 
-Property names should globally only have 1 type definition. This is 
-generic enough I'd be concerned that's not the case.
+I think this change should be reverted until the board files and other
+gpiochips are fixed accordingly.
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: |
-> +      A list of 0/1 flags defining whether or not the related channel is
-> +      inverted
-> +    items:
-> +      enum: [0, 1]
-> +      default: 0
-> +      description: |
-> +        Invert the sound control value compared to the IIO channel raw value.
-> +          - 1: The related sound control value is inverted meaning that the
-> +               minimum sound control value correspond to the maximum IIO channel
-> +               raw value and the maximum sound control value correspond to the
-> +               minimum IIO channel raw value.
-> +          - 0: The related sound control value is not inverted meaning that the
-> +               minimum (resp maximum) sound control value correspond to the
-> +               minimum (resp maximum) IIO channel raw value.
-> +
-> +required:
-> +  - compatible
-> +  - io-channels
-> +  - io-channel-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    aux {
-> +        compatible = "simple-iio-aux";
-> +        io-channels = <&iio 0>, <&iio 1>, <&iio 2>, <&iio 3>;
-> +        io-channel-names = "CH0", "CH1", "CH2", "CH3";
-
-Not really useful names. Do you have a real example?
-
-> +        /* Invert CH1 and CH2 */
-> +        invert = <0 1 1>;
-
-IMO, invert should be same length as io-channels.
-
-> +    };
-
-How do support multiple instances? Say you have 2 sound cards (or 1 
-sound card with multiple audio paths) each with different sets of IIO 
-channels associated with it. You'd need a link to each 'aux' node. Why 
-not just add io-channels to the sound card nodes directly? That's 
-already just a virtual, top-level container node grouping all the 
-components. I don't see why we need another virtual node grouping a 
-subset of them.
-
-Rob
+A.
