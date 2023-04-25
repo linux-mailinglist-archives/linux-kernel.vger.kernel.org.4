@@ -2,148 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A316EDBFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2F76EDC02
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjDYG6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 02:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S233238AbjDYHAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 03:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbjDYG6i (ORCPT
+        with ESMTP id S233400AbjDYHAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 02:58:38 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2135.outbound.protection.outlook.com [40.107.237.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E415FF0;
-        Mon, 24 Apr 2023 23:58:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n2pzIfBZQgCM8hDlCqtPKJUyq18RzQjO+1a4iNkq3Vd9UvXh3kTIFWNh0tmQy05ybM+ckHhytyR4+am/ifI0FeQrSGCE0TllPLLXkJA3hY97o0XHS7AqUbVrONxpQJ+xrKdCR/Bnin9YIfNR5R7G1lG+LRFWnniypM6vxPdJ4WcRfw3g+7n6hKgAJeSfUweaCPfqlO8LHupMV3ge4rSQn/8gWfJzqntI9BkGjqAXHtSlFZ5VWmYbi8/A5pAwcL7dLein694OCfIUKFtk7p+qxd/ZyNpDQ0AyRZQeTbq6BRBllEEFhSi0Rq44YHXf7Xo0pCrPqIwEQZtpbks+Up9uSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BrErqXJC53VxM2wB/OXNQ/V63QIPSlJVlK1UaYSJrmQ=;
- b=KGvN5QjhWIh6C/vWvLWQm0qrBqdM5VhKWF98ssxkH3b2ms6UAtGbgA9IksUna6Jlq6thF4f4ed2mDu6dnFrYaGbjagE8r7n3es+USTynFzfCZcdRZ77kE5QosBZI85ejig1dOA2DbNAZzxWzocomUphPlXie2sf0UPB1KDV4RQ/y6/ZXWalBM8TuF2xmXyldBY2iDLMXDwaX2Bv8KBQrTqpwcaAKLcvy3ZWeHGmty11nfXn0oDeAURgBIFKV2YFmrjxLTAbV1eJqQvi1b/zgA/c2ctEkokb2pVgV0LdT0Zw08p51IKQuxe5m1bPVppja6ZlOiRzu54hRpkb35vPphA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BrErqXJC53VxM2wB/OXNQ/V63QIPSlJVlK1UaYSJrmQ=;
- b=j1n61RUF3cJ6ecrjD1P4JyRH/Adua5yDftsTcwyFXqKdjn3w6TwGX7bvJZkNWU+7mubw2lSklthNecClHkfLRdsJ+qtdAqTtvhK9ONo1E+CxknvyD9xh2rC6C8zacGPo1kjyjXK6Amn6cTsAghv3LmWtYx/8lcljrBtUY+CwZAA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from BYAPR01MB4966.prod.exchangelabs.com (2603:10b6:a03:7e::28) by
- PH0PR01MB6504.prod.exchangelabs.com (2603:10b6:510:b::14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.19; Tue, 25 Apr 2023 06:58:24 +0000
-Received: from BYAPR01MB4966.prod.exchangelabs.com
- ([fe80::46c3:3b44:d2f8:4c3]) by BYAPR01MB4966.prod.exchangelabs.com
- ([fe80::46c3:3b44:d2f8:4c3%4]) with mapi id 15.20.6340.019; Tue, 25 Apr 2023
- 06:58:24 +0000
-From:   Chanh Nguyen <chanh@os.amperecomputing.com>
-To:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 25 Apr 2023 03:00:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03F0BBA4;
+        Tue, 25 Apr 2023 00:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682406005; x=1713942005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qlzMot14ZbRwpU+p0kHRrBvsH2BXDjmtgQ5WyFC/dCk=;
+  b=p+VBUVaGOtfieV8NYSrEt2rtNXAGI7/SEru/2od6RbU0KoVV/lRZhzSF
+   nhGMZi3xpMvsmTzVw2gbFOQ6S44sv1bMbA+4zL7E89vWFaOfCm3qtQG8Q
+   nav9A/AtUPE03UlIir+CxWBufR1jcIwtWUc8xQfk31yUMTNTspDpJNSVG
+   UglVs4+xkopQcaU1IDVchPq8sl641M1TdcnBznFO7N64gC1NZ0xFQXA1R
+   uwIjSAc+ru3zovijXAAoyn29iZN8b1LVW66rYPZxvZwsN0BrczzvKJacC
+   hW0zrJYU5QcHbWoM8HrGXiBIAhSS76wCzqwsb1j1MYGXH/SdEGnSgsmws
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,224,1677567600"; 
+   d="asc'?scan'208";a="210551944"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Apr 2023 00:00:04 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 25 Apr 2023 00:00:04 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 25 Apr 2023 00:00:02 -0700
+Date:   Tue, 25 Apr 2023 07:59:44 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+CC:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Chanh Nguyen <chanh@os.amperecomputing.com>
-Subject: [PATCH 4/4] ARM: dts: aspeed: mtmitchell: Add MCTP
-Date:   Tue, 25 Apr 2023 13:57:15 +0700
-Message-Id: <20230425065715.21871-5-chanh@os.amperecomputing.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230425065715.21871-1-chanh@os.amperecomputing.com>
-References: <20230425065715.21871-1-chanh@os.amperecomputing.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0051.apcprd02.prod.outlook.com
- (2603:1096:4:54::15) To BYAPR01MB4966.prod.exchangelabs.com
- (2603:10b6:a03:7e::28)
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
+        <linux-phy@lists.infradead.org>
+Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
+Message-ID: <20230425-unquote-eligible-09f743d81981@wendy>
+References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
+ <20230419035646.43702-2-changhuang.liang@starfivetech.com>
+ <20230419-labored-camper-644d51a7ca96@spud>
+ <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
+ <20230424-baffle-punch-ec73098f2b6a@spud>
+ <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR01MB4966:EE_|PH0PR01MB6504:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30bba879-403e-43d9-897c-08db455a76c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: weDf+Qln3h2ISa/Mgs8IQVTeru+ZdJpJ2+wUolOTCCeIH8sSDibVCeDHPVLWLgsWzBY5sBN2lk7+81CIEhvW6F+/IhhrqjmXgkANgrlx0zmA7e33d1VGI6L1HYZ1NhlmjJdPJlZ+h1KfN5cdfyOcmcOxHPUfSMQg3qoRfa2sJMFErYTyaqDjEpeqyAVXoDpyV5EfUKqaGuCMYA73BvuH8IxoIhZSgSh1bJmqJGQnRZU6LfxUG9Mz8C/2+JhaMZBZmT2/LcAq01vH8OGegDYjNIoD/LS8ytklK2l2eKkYoDsojHG2oosCWZ5uQWiRLgh7SleBz+j1K9viURuiDNEvsKVgx0lxO48GIeO0MTNYRF3PSLK1KV9os8XMoHQTjQZToS8rZUuC+gaq5mKdhes8Tj5Z8wtWy5+NvdtVbrjBbCP4ZKJhEDw/f0vFZsvz913vsP1NRDsWU4fk+Xeou6TqpZnGV10xRBxg2U0WE1lkItmx620cYDw9wkMyup9PUIO+Wlr8IbtgtWE2bV+6iJnksCg8JibJ1d5kRnqSol9ZOANkcEzoYYHVxiJxxNow4ZTTGHDVz2Y3j7QTPLwA9Hc6S3KlhOVg071s5tU1/+udBeRkO/su9j8EDSDxC3395hJt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR01MB4966.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(39850400004)(376002)(136003)(451199021)(107886003)(6506007)(1076003)(26005)(6512007)(2616005)(186003)(38350700002)(38100700002)(66946007)(478600001)(86362001)(66556008)(66476007)(8676002)(8936002)(110136005)(5660300002)(52116002)(6486002)(41300700001)(2906002)(4744005)(4326008)(6666004)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yWsTi82feKNNXNI2DJkbuS49cBtIARX7I3yxgKPFd+t4St26Jog7CoEylAix?=
- =?us-ascii?Q?NrDX+1rKX9LfqgnKyDd79ImoxgCdem8iHPK/fEUx+sYeAh9cElB5nrFbWIim?=
- =?us-ascii?Q?T2yjwN9qwFXFD0auJFnGfkG5QLsE/gAbOBQ8PVWw3mBNSdatofKHBvhFbcSz?=
- =?us-ascii?Q?i86iqcS5dNRNN8kHbVdHZkrdYX4amCT0PiBXfo315z6EMD8EXZNvW08uQnUc?=
- =?us-ascii?Q?SODqTlM1v3cMhiP1CfQNIvzGbH3SiVo8idhksrHBLz9EIklwtZbEp17rghlA?=
- =?us-ascii?Q?eOFjJdX2TwdFVBxAAY5j4zEW70L8NZyVnKjSpVg86CAfq5o11NnVu8Zka4GX?=
- =?us-ascii?Q?oGzwcR/QdHHbClrmCeTZRjM2b0T9pnK00Pk5w7uLP6+RpTWWc0mRPkVfDyiy?=
- =?us-ascii?Q?ZtiWuE3QmaYfFnHlk0i63TSdCwQe9fPqPw+cPmJot1g5A72C62FVqRAyhvLQ?=
- =?us-ascii?Q?XnMidu3oCGCKjIg1rCksrlCd5VKbDrYj+xi0RgAYcdTwpJ5/eoHj7L5ejc68?=
- =?us-ascii?Q?gB2nn14wDzbVp2kSMR2Wr5/nxwsvJ+Ekl77/d3bzZjzwwzQT6Lk7JEBxUz83?=
- =?us-ascii?Q?4PhQFZQCxilb2On7YAXEZPfNbkH5txZ2MEYMF4T7C0foRCaIIEZy9ypSg41u?=
- =?us-ascii?Q?uSoHlcYyWiRgOTOlNfSI2pVNJ/miyNyVAg2uYrvleyH9vfn1rbYj66+AJR3z?=
- =?us-ascii?Q?zjAic9qKx3mNozwFNITvgO4c3NoJIrDhIpq48Acjn9nSoGJxzVtU34WWgCFF?=
- =?us-ascii?Q?pCths9ZUsciJ3/omJsIlK96BBMGsXOU8S8MRDq4d8hU3RVKLhsMl5ljPZybk?=
- =?us-ascii?Q?mU3q3oGoa/2al/rrikYKGPoMwU4C/bvf1xSFL/uMiK7diMD6INBIxzezFy7I?=
- =?us-ascii?Q?+/G5+Xs0aNpJGTCgr5I/+SiKGwfCFNSY2awDHNBXieCW91G2rLvZ8x3yLz1h?=
- =?us-ascii?Q?iUuLbkS8KqCoHjLAvIaJXfEvs2oO/cXzwBLqUjCA6Rve47Ol6lCAmPfElPHj?=
- =?us-ascii?Q?rm+Tz9CDEUDKlVR9Irlfm6oyiULtS5FkcM9LoOwRD3xB8E+7R5G6aqTg2VeI?=
- =?us-ascii?Q?i/A1Vb+Uii77KZ44b33myWRFVX6ctckYTr9MB94scSR2wWuskvbWqFsGIlhf?=
- =?us-ascii?Q?FRaUfP+2tNin/pK0tK5nNyfQNl7mUeVyFnDuOnZVMdkJh5ZUcXEFY/cEJPaM?=
- =?us-ascii?Q?nNnqFwDFOg5P25/y6/QFpmT2Vf/z5veExi0v0v0qBIH/c2hx1fkoUCsNxssP?=
- =?us-ascii?Q?A/YyVeVDjQTu2HRRtxyUGx+KcAwMetuZRr9CbjqRhMBNXLM5PZikscqa1027?=
- =?us-ascii?Q?uALUoTGnfrdtEB57NQpUN4JpHeIQA/vemZxJMzwEolZnIo75mV1u1msKCuLy?=
- =?us-ascii?Q?4Hei/H5OZQ3nt0ZB0JzubV483elhT1QVe7vsSSOuhir/hOgJCyxjJpio2hMZ?=
- =?us-ascii?Q?0fDKnFNIZc3VH4b9pfYyD9OzuaHqymZUDwsMwXpKMWog2Jnu0W6r4QmcMoxh?=
- =?us-ascii?Q?0pu81yP3COzWQGeyQx642jQmcvEYBiJVElFMHaEOEWRxKi5+jWI9OFV4KZZM?=
- =?us-ascii?Q?X5Y+kT9xP1J6KmoArziVLv6b9L6GEt9tL+p2ZHAVSd7lnXQTUOxW201igjig?=
- =?us-ascii?Q?h3yeUKJlC7KV7FVuozFryf8=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30bba879-403e-43d9-897c-08db455a76c5
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR01MB4966.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 06:58:24.8583
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jZJj5hf+uYrgVCoa2kHXcZuZpom0h/fVXzvuRsuRuvppo0W11SRu1pIZlmeFZFrQsYb7ZsSXG7OD6T0g4AXyPMLAkE2wyq3MjTNTnqCNaO+jL+xvxR25ZRNPBfR7zO3u
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6504
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="u5FAAPmwStIUzOwr"
+Content-Disposition: inline
+In-Reply-To: <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable MCTP driver on I2C3 bus for MCTP transaction
+--u5FAAPmwStIUzOwr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
----
- arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Tue, Apr 25, 2023 at 11:41:38AM +0800, Changhuang Liang wrote:
+> On 2023/4/25 0:52, Conor Dooley wrote:
+> > On Thu, Apr 20, 2023 at 03:00:10PM +0800, Changhuang Liang wrote:
+> >> On 2023/4/20 2:29, Conor Dooley wrote:
+> >>> On Tue, Apr 18, 2023 at 08:56:41PM -0700, Changhuang Liang wrote:
+> >>>> Add AON PMU for StarFive JH7110 SoC, it can be used to turn on/off D=
+PHY
+> >>>> rx/tx power switch, and it don't need the properties of reg and
+> >>>> interrupts.
+> >>>
+> >>> Putting this here since the DT guys are more likely to see it this wa=
+y..
+> >>> Given how the implementation of the code driving this new
+> >>> power-controller and the code driving the existing one are rather
+> >>> different (you've basically re-written the entire driver in this seri=
+es),
+> >>> should the dphy driver implement its own power-controller?
+> >>>
+> >>> I know originally Changuang had tried something along those lines:
+> >>> https://lore.kernel.org/linux-riscv/5dc4ddc2-9d15-ebb2-38bc-8a544ca67=
+e0d@starfivetech.com/
+> >>>
+> >>> I see that that was shut down pretty much, partly due to the
+> >>> non-standard property, hence this series adding the dphy power domain=
+ to
+> >>> the existing driver.
+> >>>
+> >>> If it was done by looking up the pmu with a
+> >>> of_find_compatible_node(NULL, "power-controller", "starfive,jh7110-ao=
+n-pmu")
+> >>> type thing, would that make sense? Although, maybe that is not a
+> >>> question for you, and this series may actually have been better entir=
+ely
+> >>> bundled with the dphy series so the whole thing can be reviewed as a
+> >>> unit. I've added=20
+> >>>
+> >>> IOW, don't change this patch, or the dts patch, but move all of the
+> >>> code back into the phy driver..
+> >>>
+> >>
+> >> Maybe this way can not do that? power domain is binding before driver =
+probe,
+> >> if I use "of_find_compatible_node" it phy(DPHY rx) probe. Maybe I can =
+only operate=20
+> >> this power switch in my phy(DPHY rx) driver, so the all patch of this =
+series isn't=20
+> >> make sense.
+> >=20
+> > I'm a wee bit lost here, as I unfortunately know little about how Linux
+> > handles this power-domain stuff. If the DPHY tries to probe and some
+> > pre-requisite does not yet exist, you can return -EPROBE_DEFER right?
+> >=20
+> > But I don't think that's what you are asking, as using
+> > of_find_compatible_node() doesn't depend on there being a driver AFAIU.
+> >=20
+> >> In my opinion, We will also submit DPHY TX module later which use this=
+ series.
+> >> Maybe this series should independent?
+> >=20
+> > Is the DPHY tx module a different driver to the rx one?> If yes, does i=
+t have a different bit you must set in the syscon?
+> >=20
+>=20
+> Yes, DPHY tx module is a different driver to the DPHY rx. And I have do a
+> different bit in PATCH 1:
+>=20
+> #define JH7110_PD_DPHY_TX	0
+> #define JH7110_PD_DPHY_RX	1
+>=20
+> also in PATCH 5:
+>=20
+> static const struct jh71xx_domain_info jh7110_aon_power_domains[] =3D {
+> 	[JH7110_PD_DPHY_TX] =3D {
+> 		.name =3D "DPHY-TX",
+> 		.bit =3D 30,
+> 	},
+> 	[JH7110_PD_DPHY_RX] =3D {
+> 		.name =3D "DPHY-RX",
+> 		.bit =3D 31,
+> 	},
+> };
+>=20
+> > +CC Walker, do you have a register map for the jh7110? My TRM only says
+> > what the registers are, but not the bits in them. Would make life easier
+> > if I had that info.
+> >=20
+> > I'm fine with taking this code, I just want to make sure that the soc
+> > driver doing this is the right thing to do.
+> > I was kinda hoping that combining with the DPHY-rx series might allow
+> > the PHY folk to spot if you are doing something here with the power
+> > domains that doesn't make sense.
+> >=20
+>=20
+> I asked about our soc colleagues. This syscon register,
+> offset 0x00:
+> bit[31] ---> dphy rx power switch
+> bit[30] ---> dphy tx power switch=20
+> other bits ---> Reserved
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-index 0b5ea8620063..33e06eafed31 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-@@ -366,6 +366,13 @@
- 
- &i2c3 {
- 	status = "okay";
-+	bus-frequency = <1000000>;
-+	multi-master;
-+	mctp-controller;
-+	mctp@10 {
-+		compatible = "mctp-i2c-controller";
-+		reg = <0x10>;
-+	};
- };
- 
- &i2c4 {
--- 
-2.17.1
+Okay. Unless someone explicitly disagrees, I'm fine with doing this
+stand-alone from the DPHY drivers.
 
+> >>> Sorry for not asking this sooner Changhuang,
+> >>> Conor.
+> >>>
+> >>> (hopefully this didn't get sent twice, mutt complained of a bad email
+> >>> addr during sending the first time)
+> >>>
+> >>
+> >> I'm sorry for that, I will notice later.
+> >=20
+> > No, this was my mail client doing things that I was unsure of. You
+> > didn't do anything wrong.
+> >=20
+> [...]
+> >>>>    - Walker Chen <walker.chen@starfivetech.com>
+> >>>> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> >>>> =20
+> >>>>  description: |
+> >>>>    StarFive JH7110 SoC includes support for multiple power domains w=
+hich can be
+> >>>> @@ -17,6 +18,7 @@ properties:
+> >>>>    compatible:
+> >>>>      enum:
+> >>>>        - starfive,jh7110-pmu
+> >>>> +      - starfive,jh7110-aon-pmu
+> >=20
+> > I was speaking to Rob about this over the weekend, he asked:
+> > 'Why isn't "starfive,jh7110-aon-syscon" just the power-domain provider
+> > itself?'
+>=20
+> Maybe not, this syscon only offset "0x00" configure power switch.
+> other offset configure other functions, maybe not power, so this
+> "starfive,jh7110-aon-syscon" not the power-domain itself.
+>=20
+> > Do we actually need to add a new binding for this at all?
+> >=20
+> > Cheers,
+> > Conor.
+> >=20
+>=20
+> Maybe this patch do that.
+> https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech=
+=2Ecom/
+
+This makes it a child-node right? I think Rob already said no to that in
+and earlier revision of this series. What he meant the other day was
+making the syscon itself a power domain controller, since the child node
+has no meaningful properties (reg, interrupts etc).
+
+Cheers,
+Conor.
+
+--u5FAAPmwStIUzOwr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEd6YAAKCRB4tDGHoIJi
+0oKpAQDFnJYW5Eb3bRjk0mIg+8hCRF6NN7S2yzKmqgK2KdAX8gEAu3+zX+61QS1D
+0ABpJMSxeeX+lhfTvOD2BUnjxmNo/g4=
+=1sQ7
+-----END PGP SIGNATURE-----
+
+--u5FAAPmwStIUzOwr--
