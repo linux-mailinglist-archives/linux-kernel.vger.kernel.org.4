@@ -2,115 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF006EE0D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C5B6EE0D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbjDYLGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S233655AbjDYLHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbjDYLGE (ORCPT
+        with ESMTP id S233938AbjDYLG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:06:04 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B064B12CA4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:54 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b50a02bffso4706316b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:54 -0700 (PDT)
+        Tue, 25 Apr 2023 07:06:59 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B4314445
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:06:25 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b992e28c141so7008207276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:06:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682420754; x=1685012754;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=joelfernandes.org; s=google; t=1682420779; x=1685012779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SdvAl/rsZlyn6jAT/y3p3/RJdLkd5U9SZ/gjDoLgWfw=;
-        b=WZB2irIoBxS6GfGWbmO853Yh/UPd4puaaWuwwy6+RSHHRD9B00WbRPCkiKPVrIbRII
-         1pcfPq9bubluGJJeyOkwLw/XxAmdroXH+PyguDhLNWvGNXvKzmSCKSKO6fYtvqXgbO04
-         iz99DVGSY1h2LtWFUVD+x7fZ0tz+TLSL781orthWvsF2rwarXtXFcU4IV/V5a7zQRQq8
-         wuPrNWCDq6Ow9r9Vn27Ha/PmX//TkDUedK1Mow/rbV9iqKf015dWHpqGcO+uuA500v//
-         WqsfSrj40q7HE8zDHZhcIzZCKsjjFNTglOGyr4KegnKNRbr3XDs9pNjqWtA0TXgPVef1
-         xngQ==
+        bh=yxnh6Hi9HqlHGEwie6ZZICYaa0bP7KY/+WuMwYNYTmY=;
+        b=VdR3wwmAEjxfeujbEcL+VAXT+xd04RRZcqXvF6U5icWhnGsOEohwg7vARx9yoOTROC
+         hbiMXGNFSBxAXxwprIgOE8Xq0QItgGv02in+lMvVZuq8Klm4WI0CUFQ2Hrac/yWECqi4
+         md5KxCiyVN7a9X+oAjBZ3b9rrFEPZpDwnbm2U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682420754; x=1685012754;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682420779; x=1685012779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SdvAl/rsZlyn6jAT/y3p3/RJdLkd5U9SZ/gjDoLgWfw=;
-        b=XIcupWrDYFCFTEM4Ww3q/sQNKQgMbDwP1oPqpxtfzzIaH1nibyNudh4KFuM5TbYMFl
-         0P93kPteUSyjnoUY2fcC6qIsbaNl0xLEMtrvfTqevRYEVBoHaJxCGicjnck/F/jLvKZ1
-         cn1QMg2lckkM/qVG1TtZOvDH4w1bfjlYAYYNoxg8zoG12mtDEWFb+gOECYhPmsulTE25
-         M7HeyftagLJ5JLAXI9lDGwLmpqnSI30I9MRu58T4AH9Xmu93w0eGve1ztXOyFBhEAxP7
-         buC+0irYkJDB/dKp8xk1rPp96NZ3R4p9fuUaMmRmzMkONbYW4HU3eCo5BKnzIY9ZyAoT
-         wqsA==
-X-Gm-Message-State: AAQBX9d36nlaaWn1kDmwsF5LKENUrkfoi6bPPXdEp5+8G1EZ3FrWclRe
-        FUtAA0Kd1nXi+Etco449F9QWaA==
-X-Google-Smtp-Source: AKy350YosWlGcJzLz6lD6ztODg+LACdFQKhZ99bcfSueMS7rUjCsz9/sQVqQTb0SfTKSFkZeLRnrXg==
-X-Received: by 2002:a05:6a21:1014:b0:ec:86a7:4fa5 with SMTP id nk20-20020a056a21101400b000ec86a74fa5mr19512176pzb.30.1682420753957;
-        Tue, 25 Apr 2023 04:05:53 -0700 (PDT)
-Received: from GL4FX4PXWL.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056a00158300b0063f3aac78b9sm4422169pfk.79.2023.04.25.04.05.51
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 25 Apr 2023 04:05:53 -0700 (PDT)
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-To:     Liam.Howlett@oracle.com
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH 9/9] maple_tree: Move declaration of mas_empty_area_rev() to a better place
-Date:   Tue, 25 Apr 2023 19:05:11 +0800
-Message-Id: <20230425110511.11680-10-zhangpeng.00@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
-References: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
+        bh=yxnh6Hi9HqlHGEwie6ZZICYaa0bP7KY/+WuMwYNYTmY=;
+        b=G8cGF5pkTzmdxqtPcTvpvP5HLV6SlW1SGXWywSXebjDOCV23ycElgnLhCKPsh7Np1q
+         DiF8zz7BYHNpanuMrji7wLidLQ/X3O9g/bcWWzfaWvse3FdZRmICRo2zHWXdKS0fGSlN
+         fOsaDWiTzOejWH59ax7fThOSBqcBJqzXw7KRfmZb3nKNLd81gdwPxkf2isxH+eRvtGo2
+         xhkBejcMja0gPP3UNOogXjWCAn6Eu9TQ+0KVzk8R4Nim6xZOT/i7rmwza+I/N7zNgl+2
+         g/JQSGi+jAlMfNNhVjqPn1zYJjxHjCwo4G1Gf/tYzzVsfKuJtPEVcpkJoSe9FMXAgqH5
+         gu1Q==
+X-Gm-Message-State: AAQBX9fidV1jL6SRxuZZoR/4k2Kz88E7y1FvK3WiX4jxBkS49iwF9QuA
+        +8Nw1eNPortatl8DzHt2YMw+ljRRPc/TJviG2ExGsQ==
+X-Google-Smtp-Source: AKy350Z2MMGY9lUYIgZ/RTFuuaAQUwutf3WfAlP93ocKcWEfXzN5niDO7fXLYWQHI48oJKslRzKoaFZSHENDyb2u5I0=
+X-Received: by 2002:a81:5288:0:b0:54f:ba9d:c9c4 with SMTP id
+ g130-20020a815288000000b0054fba9dc9c4mr9756341ywb.16.1682420779531; Tue, 25
+ Apr 2023 04:06:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+ <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
+ <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
+ <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
+ <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
+ <20230425101324.GD1331236@hirez.programming.kicks-ass.net> <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
+In-Reply-To: <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 25 Apr 2023 07:06:08 -0400
+Message-ID: <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mas_empty_area() and mas_empty_area_rev() are a pair, move
-mas_empty_area_rev() so that their declarations are together.
+On Tue, Apr 25, 2023 at 6:58=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.com> =
+wrote:
+>
+> hi
+>
+> On Tue, Apr 25, 2023 at 6:13=E2=80=AFPM Peter Zijlstra <peterz@infradead.=
+org> wrote:
+> >
+> > On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
+> > > This is amazing debugging Boqun, like a boss! One comment below:
+> > >
+> > > > > > Or something simple I haven't thought of? :)
+> > > > >
+> > > > > At what points can r13 change?  Only when some particular functio=
+ns are
+> > > > > called?
+> > > > >
+> > > >
+> > > > r13 is the local paca:
+> > > >
+> > > >         register struct paca_struct *local_paca asm("r13");
+> > > >
+> > > > , which is a pointer to percpu data.
+> > > >
+> > > > So if a task schedule from one CPU to anotehr CPU, the value gets
+> > > > changed.
+> > >
+> > > It appears the whole issue, per your analysis, is that the stack
+> > > checking code in gcc should not cache or alias r13, and must read its
+> > > most up-to-date value during stack checking, as its value may have
+> > > changed during a migration to a new CPU.
+> > >
+> > > Did I get that right?
+> > >
+> > > IMO, even without a reproducer, gcc on PPC should just not do that,
+> > > that feels terribly broken for the kernel. I wonder what clang does,
+> > > I'll go poke around with compilerexplorer after lunch.
+> > >
+> > > Adding +Peter Zijlstra as well to join the party as I have a feeling
+> > > he'll be interested. ;-)
+> >
+> > I'm a little confused; the way I understand the whole stack protector
+> > thing to work is that we push a canary on the stack at call and on
+> > return check it is still valid. Since in general tasks randomly migrate=
+,
+> > the per-cpu validation canary should be the same on all CPUs.
+> >
+> > Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions use
+> > raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local cpu,
+> > but no guarantees.
+> >
+> > Both cases use r13 (paca) in a racy manner, and in both cases it should
+> > be safe.
+> New test results today: both gcc build from git (git clone
+> git://gcc.gnu.org/git/gcc.git) and Ubuntu 22.04 gcc-12.1.0
+> are immune from the above issue. We can see the assembly code on
+> http://140.211.169.189/0425/srcu_gp_start_if_needed-gcc-12.txt
+>
+> while
+> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
+> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
 
-Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
----
- include/linux/maple_tree.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Do you know what fixes the issue? I would not declare victory yet. My
+feeling is something changes in timing, or compiler codegen which
+hides the issue. So the issue is still there but it is just a matter
+of time before someone else reports it.
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index 1fadb5f5978b6..3130c1f822ddf 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -470,6 +470,12 @@ void *mas_next(struct ma_state *mas, unsigned long max);
- 
- int mas_empty_area(struct ma_state *mas, unsigned long min, unsigned long max,
- 		   unsigned long size);
-+/*
-+ * This finds an empty area from the highest address to the lowest.
-+ * AKA "Topdown" version,
-+ */
-+int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
-+		       unsigned long max, unsigned long size);
- 
- static inline void mas_init(struct ma_state *mas, struct maple_tree *tree,
- 			    unsigned long addr)
-@@ -493,12 +499,6 @@ static inline bool mas_is_paused(struct ma_state *mas)
- 	return mas->node == MAS_PAUSE;
- }
- 
--/*
-- * This finds an empty area from the highest address to the lowest.
-- * AKA "Topdown" version,
-- */
--int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
--		       unsigned long max, unsigned long size);
- /**
-  * mas_reset() - Reset a Maple Tree operation state.
-  * @mas: Maple Tree operation state.
--- 
-2.20.1
+Out of curiosity for PPC folks, why cannot 64-bit PPC use per-task
+canary? Michael, is this an optimization? Adding Christophe as well
+since it came in a few years ago via the following commit:
 
+commit 06ec27aea9fc84d9c6d879eb64b5bcf28a8a1eb7
+Author: Christophe Leroy <christophe.leroy@c-s.fr>
+Date:   Thu Sep 27 07:05:55 2018 +0000
+
+    powerpc/64: add stack protector support
+
+    On PPC64, as register r13 points to the paca_struct at all time,
+    this patch adds a copy of the canary there, which is copied at
+    task_switch.
+    That new canary is then used by using the following GCC options:
+    -mstack-protector-guard=3Dtls
+    -mstack-protector-guard-reg=3Dr13
+    -mstack-protector-guard-offset=3Doffsetof(struct paca_struct, canary))
+
+    Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+    Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+
+ - Joel
