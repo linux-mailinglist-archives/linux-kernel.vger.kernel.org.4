@@ -2,166 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC416EE414
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55D46EE41A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbjDYOkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S234131AbjDYOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbjDYOkB (ORCPT
+        with ESMTP id S234210AbjDYOla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:40:01 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB90D1544D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:39:21 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-5ef8aaf12bdso24323246d6.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682433554; x=1685025554;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hAymwB2ajYRlu+sRIxNbgxXmCl1PbjcxmIoXSAKN4EM=;
-        b=4M8NDPSQ1aHK3VBE0rM8aYdsDyZfgRRXN8P8uij4AX+H6Q8elgffA+4W04vlkKzSKo
-         K2DIfH3mCWrULuyoR6pbpEylqv3+wAhLDMuYxVKm+7uhYUVdjEluXTTY1T/Tt+jJEVtY
-         EQcxQrB6Yue3WPtcmImi1ErLKfBZFiVAqt1d38UN+Z+g+mTsXVWX2c0NKBdeSWX3az5I
-         cNHdSDqjQ/OntfmA3Q9LRqQ7bh6mtr34CKRHzAfdJ3C3Ek1MXFn+GMjmx0rMHome7lxh
-         LRUzjBJlHTcb5tZxWkBgKK09BirhcyeFEje81qul7ieUkouf4kk7fqag2dw4TCMBgo74
-         x/CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682433554; x=1685025554;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hAymwB2ajYRlu+sRIxNbgxXmCl1PbjcxmIoXSAKN4EM=;
-        b=guPXz1S7zfcQZyMiRp+d8B6lryHoXc9PCaMQE2/Xfxboaov4T9QXimdv+x+Twwsogk
-         8JQqc/xLjwWm9hXVQEYbFpaPZSpD2CIb1J+7h12sEq8FOzO1h9Iew/ZqfC6cknTn37Pj
-         vsE6e6IggBTa2JIDK6LEMieNX0U5Z97+XPqq7n0tZxqXTQKDTQ4UVRWyP3rZ4UsIcLnc
-         3EWI89L6PFfkvsacfSGVDJTRhoZaud+QWma63w8EzpsONyuYXOxKRq5LcgLHCgOrqGyk
-         Fw5C9f0N4mjU1sH9htsQVkGlMUZO7z0NeUa92sajoJtOzUFAh98cTezus60lMUqkx2qq
-         rGBQ==
-X-Gm-Message-State: AAQBX9dxzlF+gYQ8knnFWNQibgNirYJTFrnyhxy3ibUPr/kmjPx5ftSX
-        4Dgjg7PFFyeJqr2z/JmK6c4aJw==
-X-Google-Smtp-Source: AKy350ZTSn0jDkuxQukJ6AV2BrYyovduzY60WhUsXHFsDIidfr84v7R33z9T6nervRAGqLIFzemhcQ==
-X-Received: by 2002:a05:6214:1bc9:b0:5e3:d150:3163 with SMTP id m9-20020a0562141bc900b005e3d1503163mr29654593qvc.20.1682433553123;
-        Tue, 25 Apr 2023 07:39:13 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:9fc5])
-        by smtp.gmail.com with ESMTPSA id hr6-20020a05621423c600b005f2dba7a5b0sm4122128qvb.132.2023.04.25.07.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 07:39:12 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 10:39:12 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 08/26] mm: page_alloc: claim blocks during compaction
- capturing
-Message-ID: <20230425143912.GB17132@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-9-hannes@cmpxchg.org>
- <20230421131227.k2afmhb6kejdbhui@techsingularity.net>
+        Tue, 25 Apr 2023 10:41:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15E0335A4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:41:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF3934B3;
+        Tue, 25 Apr 2023 07:42:11 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 974993F587;
+        Tue, 25 Apr 2023 07:41:26 -0700 (PDT)
+Message-ID: <73717cc1-3444-e9fa-ddfc-01254fb94f1d@arm.com>
+Date:   Tue, 25 Apr 2023 15:41:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421131227.k2afmhb6kejdbhui@techsingularity.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 13/13] coresight: Fix CTI module refcount leak by
+ making it a helper device
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        mike.leach@linaro.org
+References: <20230404155121.1824126-1-james.clark@arm.com>
+ <20230404155121.1824126-14-james.clark@arm.com>
+ <51111c59-064f-1458-44ea-5fdae9f26211@arm.com>
+ <2c6cbccb-44e9-edaf-f1a1-ac9c5175537f@arm.com>
+ <7dab2287-97ce-7603-9b9e-445135758d09@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <7dab2287-97ce-7603-9b9e-445135758d09@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:12:27PM +0100, Mel Gorman wrote:
-> On Tue, Apr 18, 2023 at 03:12:55PM -0400, Johannes Weiner wrote:
-> > When capturing a whole block, update the migratetype accordingly. For
-> > example, a THP allocation might capture an unmovable block. If the THP
-> > gets split and partially freed later, the remainder should group up
-> > with movable allocations.
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > ---
-> >  mm/internal.h   |  1 +
-> >  mm/page_alloc.c | 42 ++++++++++++++++++++++++------------------
-> >  2 files changed, 25 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/mm/internal.h b/mm/internal.h
-> > index 024affd4e4b5..39f65a463631 100644
-> > --- a/mm/internal.h
-> > +++ b/mm/internal.h
-> > @@ -432,6 +432,7 @@ struct compact_control {
-> >   */
-> >  struct capture_control {
-> >  	struct compact_control *cc;
-> > +	int migratetype;
-> >  	struct page *page;
-> >  };
-> >  
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 4d20513c83be..8e5996f8b4b4 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -615,6 +615,17 @@ void set_pageblock_migratetype(struct page *page, int migratetype)
-> >  				page_to_pfn(page), MIGRATETYPE_MASK);
-> >  }
-> >  
-> > +static void change_pageblock_range(struct page *pageblock_page,
-> > +					int start_order, int migratetype)
-> > +{
-> > +	int nr_pageblocks = 1 << (start_order - pageblock_order);
-> > +
-> > +	while (nr_pageblocks--) {
-> > +		set_pageblock_migratetype(pageblock_page, migratetype);
-> > +		pageblock_page += pageblock_nr_pages;
-> > +	}
-> > +}
-> > +
-> >  #ifdef CONFIG_DEBUG_VM
-> >  static int page_outside_zone_boundaries(struct zone *zone, struct page *page)
-> >  {
-> > @@ -962,14 +973,19 @@ compaction_capture(struct capture_control *capc, struct page *page,
-> >  	    is_migrate_isolate(migratetype))
-> >  		return false;
-> >  
-> > -	/*
-> > -	 * Do not let lower order allocations pollute a movable pageblock.
-> > -	 * This might let an unmovable request use a reclaimable pageblock
-> > -	 * and vice-versa but no more than normal fallback logic which can
-> > -	 * have trouble finding a high-order free page.
-> > -	 */
-> > -	if (order < pageblock_order && migratetype == MIGRATE_MOVABLE)
-> > +	if (order >= pageblock_order) {
-> > +		migratetype = capc->migratetype;
-> > +		change_pageblock_range(page, order, migratetype);
-> > +	} else if (migratetype == MIGRATE_MOVABLE) {
-> > +		/*
-> > +		 * Do not let lower order allocations pollute a
-> > +		 * movable pageblock.  This might let an unmovable
-> > +		 * request use a reclaimable pageblock and vice-versa
-> > +		 * but no more than normal fallback logic which can
-> > +		 * have trouble finding a high-order free page.
-> > +		 */
-> >  		return false;
-> > +	}
-> >  
+
+
+On 24/04/2023 14:22, Suzuki K Poulose wrote:
+> On 24/04/2023 12:09, James Clark wrote:
+>>
+>>
+>> On 24/04/2023 11:43, Suzuki K Poulose wrote:
+>>> On 04/04/2023 16:51, James Clark wrote:
+>>>> The CTI module has some hard coded refcounting code that has a leak.
+>>>> For example running perf and then trying to unload it fails:
+>>>>
+>>>>     perf record -e cs_etm// -a -- ls
+>>>>     rmmod coresight_cti
+>>>>
+>>>>     rmmod: ERROR: Module coresight_cti is in use
+>>>>
+>>>> The coresight core already handles references of devices in use, so by
+>>>> making CTI a normal helper device, we get working refcounting for free.
+>>>>
+>>>> Signed-off-by: James Clark <james.clark@arm.com>
+>>>> ---
+>>>>    drivers/hwtracing/coresight/coresight-core.c  | 104
+>>>> ++++++------------
+>>>>    .../hwtracing/coresight/coresight-cti-core.c  |  52 +++++----
+>>>>    .../hwtracing/coresight/coresight-cti-sysfs.c |   4 +-
+>>>>    drivers/hwtracing/coresight/coresight-cti.h   |   4 +-
+>>>>    drivers/hwtracing/coresight/coresight-priv.h  |   4 +-
+>>>>    drivers/hwtracing/coresight/coresight-sysfs.c |   4 +
+>>>>    include/linux/coresight.h                     |  30 +----
+>>>>    7 files changed, 75 insertions(+), 127 deletions(-)
+>>>>
+>>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
+>>>> b/drivers/hwtracing/coresight/coresight-core.c
+>>>> index 16689fe4ba98..2af416bba983 100644
+>>>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>>>> @@ -236,60 +236,44 @@ void coresight_disclaim_device(struct
+>>>> coresight_device *csdev)
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(coresight_disclaim_device);
+>>>>    -/* enable or disable an associated CTI device of the supplied CS
+>>>> device */
+>>>> -static int
+>>>> -coresight_control_assoc_ectdev(struct coresight_device *csdev, bool
+>>>> enable)
+>>>> +/*
+>>>> + * Add a helper as an output device. This function takes the
+>>>> @coresight_mutex
+>>>> + * because it's assumed that it's called from the helper device,
+>>>> outside of the
+>>>> + * core code where the mutex would already be held. Don't add new
+>>>> calls to this
+>>>> + * from inside the core code, instead try to add the new helper to
+>>>> the DT and
+>>>> + * ACPI where it will be picked up and linked automatically.
+>>>> + */
+>>>> +void coresight_add_helper(struct coresight_device *csdev,
+>>>> +              struct coresight_device *helper)
+>>>>    {
+>>>> -    int ect_ret = 0;
+>>>> -    struct coresight_device *ect_csdev = csdev->ect_dev;
+>>>> -    struct module *mod;
+>>>> +    int i;
+>>>> +    struct coresight_connection conn = {};
+>>>> +    struct coresight_connection *new_conn;
+>>>>    -    if (!ect_csdev)
+>>>> -        return 0;
+>>>> -    if ((!ect_ops(ect_csdev)->enable) ||
+>>>> (!ect_ops(ect_csdev)->disable))
+>>>> -        return 0;
+>>>> +    mutex_lock(&coresight_mutex);
+>>>> +    conn.dest_fwnode = fwnode_handle_get(dev_fwnode(&helper->dev));
+>>>> +    conn.dest_dev = helper;
+>>>> +    conn.dest_port = conn.src_port = -1;
+>>>> +    conn.src_dev = csdev;
+>>>>    -    mod = ect_csdev->dev.parent->driver->owner;
+>>>> -    if (enable) {
+>>>> -        if (try_module_get(mod)) {
+>>>> -            ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
+>>>> -            if (ect_ret) {
+>>>> -                module_put(mod);
+>>>> -            } else {
+>>>> -                get_device(ect_csdev->dev.parent);
+>>>> -                csdev->ect_enabled = true;
+>>>> -            }
+>>>> -        } else
+>>>> -            ect_ret = -ENODEV;
+>>>> -    } else {
+>>>> -        if (csdev->ect_enabled) {
+>>>> -            ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
+>>>> -            put_device(ect_csdev->dev.parent);
+>>>> -            module_put(mod);
+>>>> -            csdev->ect_enabled = false;
+>>>> -        }
+>>>> -    }
+>>>> +    /*
+>>>> +     * Check for duplicates because this is called every time a helper
+>>>> +     * device is re-loaded. Existing connections will get re-linked
+>>>> +     * automatically.
+>>>> +     */
+>>>> +    for (i = 0; i < csdev->pdata->nr_outconns; ++i)
+>>>> +        if (csdev->pdata->out_conns[i]->dest_fwnode ==
+>>>> conn.dest_fwnode)
+>>>> +            goto unlock;
+>>>>    -    /* output warning if ECT enable is preventing trace
+>>>> operation */
+>>>> -    if (ect_ret)
+>>>> -        dev_info(&csdev->dev, "Associated ECT device (%s) %s
+>>>> failed\n",
+>>>> -             dev_name(&ect_csdev->dev),
+>>>> -             enable ? "enable" : "disable");
+>>>> -    return ect_ret;
+>>>> -}
+>>>> +    new_conn =
+>>>> +        coresight_add_out_conn(csdev->dev.parent, csdev->pdata,
+>>>> &conn);
+>>>
+>>> ultra minor nit:
+>>>      new_conn = coresight_add_out_conn(....,
+>>>                        .... );
+>>
+>> This whole patchset is now formatted with the kernel clang-format rules.
+>> Are you sure this one is against the conventions?
 > 
-> For capturing pageblock order or larger, why not unconditionally make
-> the block MOVABLE? Even if it's a zero page allocation, it would be nice
-> to keep the pageblock for movable pages after the split as long as
-> possible.
+> It is not against convention, but there are no hard line rules for
+> these.
+> 
+> The only suggestion is to split the lines sensibly with
+> readability stressed.
+> 
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
+> 
+> "Statements longer than 80 columns should be broken into sensible
+> chunks, unless exceeding 80 columns significantly increases readability
+> and does not hide information.
+> 
+> Descendants are always substantially shorter than the parent and are
+> placed substantially to the right. A very commonly used style is to
+> align descendants to a function open parenthesis."
+> 
+> 
+> I personally find it :
+> 
+>     result = rather_long_function_statement(arg1, arg2,
+>                             ........);
+> 
+> way better readable than :
+> 
+>     result =
+>         rather_long_function_statement(.....);
+> 
+>>
+>> The problem is running the formatter on all changed lines makes it
+>> almost impossible to go back and undo indents like this.
+> 
+> Haven't used it, but it does seem to say it may not be perfect ;-).
+> That said, I am not too strict about this. You may leave it unchanged
+> if it is painful.
+> > Suzuki
+>
 
-The zero page isn't split, but if some other unmovable allocation does
-a split and free later on I want to avoid filling a block with an
-unmovable allocation with movables. That block is already lost to
-compaction, and this way future unmovable allocations are more likely
-to group into that block rather than claim an additional unmovable.
+Upon further inspection I think it might actually be a bug in
+clang-format. When only the ); falls over the column limit it doesn't
+know that it needs to wrap the previous token to stick with the rules.
+Or something like that.
 
-I had to double take for block merges beyond pageblock order,
-wondering if we can claim multiple blocks for requests (capc->order)
-smaller than a block. But that can't happen. Once we reach
-pageblock_order during merging we claim, capture and exit. That means
-order > pageblock_order can only happen if capc->order is actually
-larger than a pageblock as well. I'll add a comment.
+I'll probably leave that debugging rabbit hole for another time. Anyway
+I fixed this one in v6.
