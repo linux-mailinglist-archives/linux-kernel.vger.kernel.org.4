@@ -2,61 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8596EE479
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EEF6EE46E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbjDYPI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 11:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
+        id S234212AbjDYPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 11:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjDYPIZ (ORCPT
+        with ESMTP id S233875AbjDYPGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 11:08:25 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06909EEF;
-        Tue, 25 Apr 2023 08:08:22 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1prKGx-0004W6-1Y;
-        Tue, 25 Apr 2023 17:08:03 +0200
-Date:   Tue, 25 Apr 2023 16:06:13 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 03/24] net: dsa: mt7530: use p5_interface_select
- as data type for p5_intf_sel
-Message-ID: <ZEfsZY0crdV2qryM@makrotopia.org>
-References: <20230425082933.84654-1-arinc.unal@arinc9.com>
- <20230425082933.84654-4-arinc.unal@arinc9.com>
+        Tue, 25 Apr 2023 11:06:45 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B606A5265;
+        Tue, 25 Apr 2023 08:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=NTydD/4nmJMk9g8LBuujDGSajQHQAPuZ1GWEmRpTPp0=; b=VJ
+        G7bZhMV2slmfqhKXGrbz9rcAbY5oYr/3hNC02kVy82nE3DLy6yZc+RJr9j3yufOVH9U//7QiQusFG
+        cRcrexdMlw9L/9VqkA8KYN1Mhppx3+npgLJx4JNRe5FdFOwN2dulUITdGPd00sKoLvpTOvPWtcgcy
+        qVPjtH25VyVsrzY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1prKFZ-00BCJR-Ix; Tue, 25 Apr 2023 17:06:37 +0200
+Date:   Tue, 25 Apr 2023 17:06:37 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?utf-8?B?5byg572R?= <m202171703@hust.edu.cn>
+Cc:     Peter Korsgaard <peter@korsgaard.com>,
+        hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
+Message-ID: <b5c00122-0fe0-4020-9036-e4cc37d1b51a@lunn.ch>
+References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
+ <20230422123253.137368-1-silver_code@hust.edu.cn>
+ <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
+ <85952de.43bfe.187b8e24612.Coremail.m202171703@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230425082933.84654-4-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <85952de.43bfe.187b8e24612.Coremail.m202171703@hust.edu.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 11:29:12AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Tue, Apr 25, 2023 at 10:47:29PM +0800, 张网 wrote:
+> Hi Andrew,
 > 
-> Use the p5_interface_select enumeration as the data type for the
-> p5_intf_sel field. This ensures p5_intf_sel can only take the values
-> defined in the p5_interface_select enumeration.
+> I would like to express my sincere gratitude for taking the time and effort to review 
+> my submitted patch. I understand that reviewing can be a time-consuming process 
+> and I truly appreciate your dedication.
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-
-Acked-by: Daniel Golle <daniel@makrotopia.org>
-
+> As we move forward, I would like to inquire about the first version[1] of the patch I submitted. 
+> As clk_disable_unprepare() has checks for error pointer and NULL already, I think there is no 
+> need to add the check. So both the first version of the patch and this one can work on this 
+> branch.
+> 
+> If there are any further changes or revisions needed, please do not hesitate to let me know. 
+> I am committed to learning and improving, and I welcome any feedback you may have. 
+> Thank you again for your support and guidance throughout this process.
+> 
+> Best regards,
+> Wang Zhang
 > ---
->  drivers/net/dsa/mt7530.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
-> index 845f5dd16d83..415d8ea07472 100644
-> --- a/drivers/net/dsa/mt7530.h
-> +++ b/drivers/net/dsa/mt7530.h
-> @@ -675,7 +675,7 @@ struct mt7530_port {
->  
->  /* Port 5 interface select definitions */
->  enum p5_interface_select {
-> -	P5_DISABLED = 0,
-> +	P5_DISABLED,
->  	P5_INTF_SEL_PHY_P0,
->  	P5_INTF_SEL_PHY_P4,
->  	P5_INTF_SEL_GMAC5,
-> @@ -768,7 +768,7 @@ struct mt7530_priv {
->  	bool			mcm;
->  	phy_interface_t		p6_interface;
->  	phy_interface_t		p5_interface;
-> -	unsigned int		p5_intf_sel;
-> +	enum p5_interface_select p5_intf_sel;
->  	u8			mirror_rx;
->  	u8			mirror_tx;
->  	struct mt7530_port	ports[MT7530_NUM_PORTS];
-> -- 
-> 2.37.2
-> 
+> [1] http://patchwork.ozlabs.org/project/linux-i2c/patch/20230416071854.58335-1-silver_code@hust.edu.cn/
+
+So this patch is about the IRQ being an error code, and doing the
+correct cleanup.
+
+With the change to devm_clk_get_ there is no need to disabled the
+clock, it will be done automatically. This means there is no cleanup
+the driver needs to do itself. So the patch is no longer needed.
+
+    Andrew
