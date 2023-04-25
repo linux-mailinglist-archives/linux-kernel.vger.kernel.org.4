@@ -2,115 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE196EDA9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 05:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB396EDA9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 05:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjDYDXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 23:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S233212AbjDYDY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 23:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbjDYDXg (ORCPT
+        with ESMTP id S230195AbjDYDYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 23:23:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1C9A8;
-        Mon, 24 Apr 2023 20:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TDZKORwzEt+eX2u0tCokEp9eJLCllrYXgwK+Hx7Vcpk=; b=GefC/jvFTqeaTIMWQN69ufb2Me
-        sAIXG1NtP1yjyItvIAQpV0D4kpWWMhKNhQ1j7uhKMIIODYwXfUda7IdDsaBIhpXIsyyQw26Sif0xU
-        GJZGrm/HqpFBiMyB/OCvROv64NNHzEONcn4r9rYmrzYE8JEe1lhDl64E/NbQHEVVgLEYVLDf7XKAi
-        0SpwJfGx2NfwRrdjwnDsO45GmhdvYbJzPdco38YI9bjf7cE5XFGQ42/LX9kwn2tJodQ+6PsDqbShV
-        5rAe0q8HQVGBAIm743Vmp0GETWCgQXfu4wG2x7rWLxS4ZB1Xz+HQWvzswUlMKnTru3B82Q7Q7VY0C
-        FT4X0aWw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pr9Gx-0014cq-LB; Tue, 25 Apr 2023 03:23:19 +0000
-Date:   Tue, 25 Apr 2023 04:23:19 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yajun Deng <yajun.deng@linux.dev>, david@redhat.com,
-        osalvador@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] mmzone: Introduce for_each_populated_zone_pgdat()
-Message-ID: <ZEdHpxPRwcGVOctJ@casper.infradead.org>
-References: <20230424030756.1795926-1-yajun.deng@linux.dev>
- <ZEX8jV/FQm2gL+2j@casper.infradead.org>
- <20230424145823.b8e8435dd3242614371be6d5@linux-foundation.org>
+        Mon, 24 Apr 2023 23:24:25 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EC6A8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 20:24:23 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=tianruidong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VgyI3jM_1682393057;
+Received: from localhost(mailfrom:tianruidong@linux.alibaba.com fp:SMTPD_---0VgyI3jM_1682393057)
+          by smtp.aliyun-inc.com;
+          Tue, 25 Apr 2023 11:24:21 +0800
+From:   Ruidong Tian <tianruidong@linux.alibaba.com>
+To:     tianruidong@linux.alibaba.com, coresight@lists.linaro.org
+Cc:     suzuki.poulose@arm.com, mike.leach@linaro.org, leo.yan@linaro.org,
+        alexander.shishkin@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] coresight: perf: Release Coresight path when alloc trace id failed
+Date:   Tue, 25 Apr 2023 11:24:16 +0800
+Message-Id: <20230425032416.125542-1-tianruidong@linux.alibaba.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424145823.b8e8435dd3242614371be6d5@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 02:58:23PM -0700, Andrew Morton wrote:
-> On Mon, 24 Apr 2023 04:50:37 +0100 Matthew Wilcox <willy@infradead.org> wrote:
-> 
-> > On Mon, Apr 24, 2023 at 11:07:56AM +0800, Yajun Deng wrote:
-> > > Instead of define an index and determining if the zone has memory,
-> > > introduce for_each_populated_zone_pgdat() helper that can be used
-> > > to iterate over each populated zone in pgdat, and convert the most
-> > > obvious users to it.
-> > 
-> > I don't think the complexity of the helper justifies the simplification
-> > of the users.
-> 
-> Are you sure?
-> 
-> > > +++ b/include/linux/mmzone.h
-> > > @@ -1580,6 +1580,14 @@ extern struct zone *next_zone(struct zone *zone);
-> > >  			; /* do nothing */		\
-> > >  		else
-> > >  
-> > > +#define for_each_populated_zone_pgdat(zone, pgdat, max) \
-> > > +	for (zone = pgdat->node_zones;                  \
-> > > +	     zone < pgdat->node_zones + max;            \
-> > > +	     zone++)                                    \
-> > > +		if (!populated_zone(zone))		\
-> > > +			; /* do nothing */		\
-> > > +		else
-> > > +
-> 
-> But each of the call sites is doing this, so at least the complexity is
-> now seen in only one place.
+Error handler for etm_setup_aux can not release coresight path because
+cpu mask was cleared when coresight_trace_id_get_cpu_id failed.
 
-But they're not doing _that_.  They're doing something normal and
-obvious like:
+Call coresight_release_path function explicitly when alloc trace id filed.
 
-	for (zone = pgdat->node_zones; zone < pgdat->node_zones + max; zone++) {
-		if (!populated_zone(zone)
-			continue;
-		...
-	}
+Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
+---
+ drivers/hwtracing/coresight/coresight-etm-perf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-which clearly does what it's supposed to.  But with this patch, there's
-macro expansion involved, and it's not a nice simple macro, it has a loop
-_and_ an if-condition, and there's an else, and now I have to think hard
-about whether flow control is going to do the right thing if the body
-of the loop isn't simple.
+diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
+index 711f451b6946..89e8ed214ea4 100644
+--- a/drivers/hwtracing/coresight/coresight-etm-perf.c
++++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
+@@ -402,6 +402,7 @@ static void *etm_setup_aux(struct perf_event *event, void **pages,
+ 		trace_id = coresight_trace_id_get_cpu_id(cpu);
+ 		if (!IS_VALID_CS_TRACE_ID(trace_id)) {
+ 			cpumask_clear_cpu(cpu, mask);
++			coresight_release_path(path);
+ 			continue;
+ 		}
+ 
+-- 
+2.33.1
 
-> btw, do we need to do the test that way?  Why won't this work?
-> 
-> #define for_each_populated_zone_pgdat(zone, pgdat, max) \
-> 	for (zone = pgdat->node_zones;                  \
-> 	     zone < pgdat->node_zones + max;            \
-> 	     zone++)                                    \
-> 		if (populated_zone(zone))
-
-I think it will work, except that this is now legal:
-
-	for_each_populated_zone_pgdat(zone, pgdat, 3)
-	else i++;
-
-and really, I think that demonstrates why we don't want macros that are
-that darn clever.
