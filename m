@@ -2,101 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5D26EE6C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2B96EE6CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbjDYRdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 13:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S234805AbjDYRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 13:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234607AbjDYRdO (ORCPT
+        with ESMTP id S234752AbjDYRde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:33:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0837AAD;
-        Tue, 25 Apr 2023 10:33:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 699F361009;
-        Tue, 25 Apr 2023 17:33:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D622AC433EF;
-        Tue, 25 Apr 2023 17:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682443989;
-        bh=mcnUcuZCsp42gOl0koyvCmjFpEs0zWYiqO16h08PCjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aMVYvKWDZ4NCuDhOb1y5atMlF1Y0M9iCVAWPsMGKAJrdFeuPJ0gC1F2uxB8nbcSiz
-         dqR13DU+eu0L58BuFuDvnHdjpiAMtLSxQIEGYN3h+2WiiU61WQgz07AD7Q2qVt0eJt
-         jP94kH2s2qdtjDbjOWXmYaGpSR/ZKSc8Ye4mmFBbuM8QO6Q+8zhcY+FtLBXC019Msb
-         j7t4LVSoq62WmLyVDQiFcw4t4Cl0YSbwQopnBQ4f0WFe41aHswhlDQBh5goRQR91Rd
-         rlYvFzwXMr/AxCKV2fIgOAtWmIFeNMxsLjSXq2D1cBTjvfZ2mrD4MRvEESRk9mcVvR
-         uys9mkE0bMcMA==
-Date:   Tue, 25 Apr 2023 18:33:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        Tue, 25 Apr 2023 13:33:34 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9607472A9;
+        Tue, 25 Apr 2023 10:33:32 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-187b70ab997so32337039fac.0;
+        Tue, 25 Apr 2023 10:33:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682444012; x=1685036012;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h0GzhAD/cpdUlKsg6wh1agdAmhpzLWYRrNexUcUBt5g=;
+        b=jV5zFtK9FTIKzYF71xvfU2+YUrBgK74Hez7GrAUmjOY6fWezxsqBR7hjGUKYNBh50r
+         9Ye1T12YqcLg8ddJtu78dTcEzDIgS3Gi2UDw7oTtNtzoAKuR9joNAFOMGKc36SOVXTx1
+         FaoigT7CGWRWNxLrzPs8WTrCVIhvQhVFAcCnnTolXLNcI2ASN5YQH7nP/f0q0HaLaxlE
+         6+bskl57nAW9jVMUb6OdSePz/cYsJHMN+h+zAr1b/uqxzAZeykDHH5ImpQAMogzd5I+m
+         P2S1Je2Z6tm/LSGv4CB/QsoUmlDhx6oMVh7VyHNAjGcr/wf/qaNhfptPclRbMEMq21cM
+         suUQ==
+X-Gm-Message-State: AAQBX9cxe1Gl6a+iOXC6v9HX3FOlBryllMlp6X7nC0xX8d+5j4ovhFIf
+        DUhq6y9h5j1HeMLli/MPHvZPeDzMPg==
+X-Google-Smtp-Source: AKy350aaMAg5yDe8SN3HyF3NKHcU7PGZ0yJJj/9pI2IQM4ze/LthkJzH0HafpAs1JK7w4HfSqZJ2LA==
+X-Received: by 2002:a05:6870:3325:b0:188:b12:5db8 with SMTP id x37-20020a056870332500b001880b125db8mr9833518oae.5.1682444011715;
+        Tue, 25 Apr 2023 10:33:31 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dy14-20020a056870c78e00b0017197629658sm5691099oab.56.2023.04.25.10.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 10:33:31 -0700 (PDT)
+Received: (nullmailer pid 1987956 invoked by uid 1000);
+        Tue, 25 Apr 2023 17:33:30 -0000
+Date:   Tue, 25 Apr 2023 12:33:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, mani@kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/4] dt-bindings: sound: Add simple-iio-aux
-Message-ID: <7682a443-7ae2-4bc2-9581-304c7e72942d@sirena.org.uk>
-References: <20230421124122.324820-1-herve.codina@bootlin.com>
- <20230421124122.324820-2-herve.codina@bootlin.com>
- <20230425173029.GA1967523-robh@kernel.org>
+        linux-pci@vger.kernel.org, linux-clk@vger.kernel.org,
+        quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
+Subject: Re: [PATCH V3 3/6] dt-bindings: PCI: qcom: Add IPQ9574
+Message-ID: <20230425173330.GA1985131-robh@kernel.org>
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
+ <20230421124938.21974-4-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QVyLAfDfdBkSU7kb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425173029.GA1967523-robh@kernel.org>
-X-Cookie: The meek don't want it.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230421124938.21974-4-quic_devipriy@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 06:19:35PM +0530, Devi Priya wrote:
+> Add bindings for PCIe hosts on IPQ9574 platform and allow
+> msi-parent property.
 
---QVyLAfDfdBkSU7kb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Go see the long discussion about why msi-parent with msi-map is wrong. 
+If something changed, explain that here.
 
-On Tue, Apr 25, 2023 at 12:30:29PM -0500, Rob Herring wrote:
-> On Fri, Apr 21, 2023 at 02:41:19PM +0200, Herve Codina wrote:
-
-> > +    aux {
-> > +        compatible = "simple-iio-aux";
-> > +        io-channels = <&iio 0>, <&iio 1>, <&iio 2>, <&iio 3>;
-> > +        io-channel-names = "CH0", "CH1", "CH2", "CH3";
-
-> Not really useful names. Do you have a real example?
-
-I fear those might be real names for channels on an IIO device...
-
---QVyLAfDfdBkSU7kb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRIDs4ACgkQJNaLcl1U
-h9B3TAf/cTeNpl+HMeW2P0Vb5nstfBc6zxXBQOKy5lEeUHK8Gl78nKrJyAGI1j2A
-XfAyeEhz4pNgn/xIQ/8bV41cnTMawrGJeZiNiq/+3ns2u2V+2XkUPBv6R1B5i629
-xI2lyb4p5VlnX6sRCzcvnXFyl1aT71+Rw9xOAjuJB+l8Y6k86eHVlV9bDIM2w6/3
-TrJtACmWndoZhtS9PK86WA9WYrMnjBflNG6KmeeKxDHl0k/PsCvbpijSZBb6e3QO
-zg8BcfitzHMyCcmTt643bGufvXRarx+y2OdU2glNckGHXPSeCmXHCU/jUNgnLwqW
-d2OEVBQZOmA3Btwz9T+eAUuggPGb6A==
-=ax2u
------END PGP SIGNATURE-----
-
---QVyLAfDfdBkSU7kb--
+> 
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  Changes in V3:
+> 	- Rebased on linux-next/master
+> 
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index 81971be4e554..a92cecc5fe6f 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -26,6 +26,7 @@ properties:
+>            - qcom,pcie-ipq8064-v2
+>            - qcom,pcie-ipq8074
+>            - qcom,pcie-ipq8074-gen3
+> +          - qcom,pcie-ipq9574
+>            - qcom,pcie-msm8996
+>            - qcom,pcie-qcs404
+>            - qcom,pcie-sa8540p
+> @@ -113,6 +114,8 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  msi-parent: true
+> +
+>    perst-gpios:
+>      description: GPIO controlled connection to PERST# signal
+>      maxItems: 1
+> @@ -138,6 +141,8 @@ anyOf:
+>    - required:
+>        - msi-map
+>        - msi-map-mask
+> +  - required:
+> +      - msi-parent
+>  
+>  allOf:
+>    - $ref: /schemas/pci/pci-bus.yaml#
+> @@ -171,6 +176,7 @@ allOf:
+>              enum:
+>                - qcom,pcie-ipq6018
+>                - qcom,pcie-ipq8074-gen3
+> +              - qcom,pcie-ipq9574
+>      then:
+>        properties:
+>          reg:
+> @@ -382,6 +388,39 @@ allOf:
+>              - const: ahb # AHB Reset
+>              - const: axi_m_sticky # AXI Master Sticky reset
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,pcie-ipq9574
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 6
+> +          maxItems: 6
+> +        clock-names:
+> +          items:
+> +            - const: ahb  # AHB clock
+> +            - const: aux  # Auxiliary clock
+> +            - const: axi_m # AXI Master clock
+> +            - const: axi_s # AXI Slave clock
+> +            - const: axi_bridge # AXI bridge clock
+> +            - const: rchng
+> +        resets:
+> +          minItems: 8
+> +          maxItems: 8
+> +        reset-names:
+> +          items:
+> +            - const: pipe # PIPE reset
+> +            - const: sticky # Core Sticky reset
+> +            - const: axi_s_sticky # AXI Slave Sticky reset
+> +            - const: axi_s # AXI Slave reset
+> +            - const: axi_m_sticky # AXI Master Sticky reset
+> +            - const: axi_m # AXI Master reset
+> +            - const: aux # AUX Reset
+> +            - const: ahb # AHB Reset
+> +
+>    - if:
+>        properties:
+>          compatible:
+> @@ -767,6 +806,7 @@ allOf:
+>                  - qcom,pcie-ipq8064v2
+>                  - qcom,pcie-ipq8074
+>                  - qcom,pcie-ipq8074-gen3
+> +                - qcom,pcie-ipq9574
+>                  - qcom,pcie-qcs404
+>      then:
+>        required:
+> -- 
+> 2.17.1
+> 
