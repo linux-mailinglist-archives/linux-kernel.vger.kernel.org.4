@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C50E6EDFAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429AF6EDF77
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjDYJsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 05:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S233682AbjDYJmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 05:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbjDYJsR (ORCPT
+        with ESMTP id S233672AbjDYJmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:48:17 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CCA12CB5;
-        Tue, 25 Apr 2023 02:47:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id CE1ED6015F;
-        Tue, 25 Apr 2023 11:47:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682416047; bh=7yxZu0Emw84OkpuQ1sf7+2iZskuUnjHQc2X91hkquQk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lDwrjC9y6XA+afif1yRsJfJyDjHdXFCI3Dm/AQhg0VQZZtQHpTvyiBK42GVO+Yiv3
-         JBpl7TEa72NPqEYnfBdm/svg/pWCsb2FhBX4Ntx6mLeoq7tigAMdQ+5rwvy4q8rmih
-         GDBLuq3+37SkjpG2RYX8HkaRHkGR+V1i55KF+Afn9GMQManB6uLk2MiNm/6QWChTgv
-         cf9RWn7k8lViMmykbOHt7Pz/gKkCzgG2SuqkwhBcawq5uDJkOwjR8FacBhv4TAaBIt
-         1HKhhvwRokEIxxcZoTheO5IReWmQZxlXFszJHEKBkjlbEULjGld9f1nHUo1pcH2NDU
-         g7AMePdnl7VZA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id b8MUtoYMLe1w; Tue, 25 Apr 2023 11:47:23 +0200 (CEST)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id 3740E60161; Tue, 25 Apr 2023 11:47:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682416043; bh=7yxZu0Emw84OkpuQ1sf7+2iZskuUnjHQc2X91hkquQk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0EKZlnKR9EENnvvgBisYAiHjccl97DjOFMDo+IabYY33VrmZO3GXb60JDOGIROqlE
-         +2mT+7CVlbEkSQKVT4reqcZy7CB+usY5Xtk/5tox2oyIz5/ebIoaSn35MELBDJzDno
-         Ps10tb1UIu2nLrYmZA43QuNSPBQHMC6ujD7ANFJ+SkSujt2+N4WbZ59FZ5xcobG/eM
-         7uxLOxUHxonJrlhC+hIRU208KHWU5PVF6u7KMV6L4lydNjwNkS21UUb0FzHtfFtZZx
-         OUnLwn2PrrlOeczdzG38ipG1S75Bm6UQXsYsz5TQN74LI4fedNyfy30tMBAaYUJvWe
-         wR/38vLKq8SyA==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Alexander Wetzel <alexander@wetzel-home.de>
-Subject: [PATCH v3 1/1] wifi: mac80211: fortify the spinlock against deadlock by interrupt
-Date:   Tue, 25 Apr 2023 11:35:48 +0200
-Message-Id: <20230425093547.1131-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.30.2
+        Tue, 25 Apr 2023 05:42:47 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D078C5BBA;
+        Tue, 25 Apr 2023 02:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682415766; x=1713951766;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=bftSZwIs1nOeFyqVaNVBQT2KhTtuH2e3mtNCB3+bL3Q=;
+  b=PjhhkZa5cGompLxX4aEGvM4a5gTH/922311z5yZkECU+knjeerOVzZHt
+   lzdqeG6rba4YqvwGUda579wRpUPMPvTw1BAE2JDe3dRoKQw/PGHA33jcp
+   /63ELTkZVmEakQbFPp+bbi7p2Uejx0IFbQ/Ao4Ju8SKLZUQC6HkfNhrNH
+   I1saxONet5OqddXiHFivXipK/qQlla0Ufk8Rw4/V2PUxPEEBmZ1889oA7
+   v5HscHJnE5fLtx33kjHRafMCF7v8bHHjVCQA6E5skmPEgF6TjKpDEXEuR
+   ZYFIn9ZAw9V4t1ezli+btQA/jDpLJ3nveMoCEdnd5dIcUjJ59WTX0Q2s9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345468573"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="345468573"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 02:42:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="805014078"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="805014078"
+Received: from linux.bj.intel.com ([10.238.156.127])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 02:42:44 -0700
+Date:   Tue, 25 Apr 2023 17:41:20 +0800
+From:   Tao Su <tao1.su@linux.intel.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
+Subject: Re: [PATCH] Remove blkg node after destroying blkg
+Message-ID: <ZEegQCCZ96ij6mw5@linux.bj.intel.com>
+References: <20230425075911.839539-1-tao1.su@linux.intel.com>
+ <aa5de32c-c92b-d032-e9bb-83d2436ff72c@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+In-Reply-To: <aa5de32c-c92b-d032-e9bb-83d2436ff72c@huawei.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,82 +63,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the function ieee80211_tx_dequeue() there is a particular locking
-sequence:
+On Tue, Apr 25, 2023 at 04:09:34PM +0800, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2023/04/25 15:59, Tao Su 写道:
+> > Kernel hang when poweroff or reboot, due to infinite restart in function
+> > blkg_destroy_all. It will goto restart label when a batch of blkgs are
+> > destroyed, but not remove blkg node in blkg_list. So the blkg_list is
+> > same in every 'restart' and result in kernel hang.
+> > 
+> > By adding list_del to remove blkg node after destroying, can solve this
+> > kernel hang issue and satisfy the previous will to 'restart'.
+> > 
+> > Reported-by: Xiangfei Ma <xiangfeix.ma@intel.com>
+> > Tested-by: Xiangfei Ma <xiangfeix.ma@intel.com>
+> > Tested-by: Farrah Chen <farrah.chen@intel.com>
+> > Signed-off-by: Tao Su <tao1.su@linux.intel.com>
+> > ---
+> >   block/blk-cgroup.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> > index bd50b55bdb61..960eb538a704 100644
+> > --- a/block/blk-cgroup.c
+> > +++ b/block/blk-cgroup.c
+> > @@ -530,6 +530,7 @@ static void blkg_destroy_all(struct gendisk *disk)
+> >   		spin_lock(&blkcg->lock);
+> >   		blkg_destroy(blkg);
+> > +		list_del(&blkg->q_node);
+> 
+> blkg should stay on the queue list until blkg_free_workfn(), otherwise
+> parent blkg can be freed before child, which will cause some known
+> issue.
 
-begin:
-	spin_lock(&local->queue_stop_reason_lock);
-	q_stopped = local->queue_stop_reasons[q];
-	spin_unlock(&local->queue_stop_reason_lock);
+Yes, directly removing blkg node is not appropriate, which I noticed some
+comments in blkg_destroy(), thanks for pointing out this issue.
 
-However small the chance (increased by ftracetest), an asynchronous
-interrupt can occur in between of spin_lock() and spin_unlock(),
-and the interrupt routine will attempt to lock the same
-&local->queue_stop_reason_lock again.
+> 
+> I think this hung happens when total blkg is greater than
+> BLKG_DESTROY_BATCH_SIZE, right?
 
-This will cause a costly reset of the CPU and the wifi device or an
-altogether hang in the single CPU and single core scenario.
+Yes, you are right.
 
-This is the probable trace of the deadlock:
+> 
+> Can you try if following patch fix your problem?
 
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  Possible unsafe locking scenario:
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        CPU0
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        ----
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   lock(&local->queue_stop_reason_lock);
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   <Interrupt>
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:     lock(&local->queue_stop_reason_lock);
-Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:
-                                                 *** DEADLOCK ***
+This patch can also fix my problem, and indeed is a more secure way.
 
-Fixes: 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs for resumption")
-Link: https://lore.kernel.org/all/1f58a0d1-d2b9-d851-73c3-93fcc607501c@alu.unizg.hr/
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc: Gregory Greenman <gregory.greenman@intel.com>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Link: https://lore.kernel.org/all/cdc80531-f25f-6f9d-b15f-25e16130b53a@alu.unizg.hr/
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Alexander Wetzel <alexander@wetzel-home.de>
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
-v2 -> v3:
-- Fix the Fixes: tag as advised.
-- change the net: to wifi: to comply with the original patch that
-  is being fixed.
-v1 -> v2:
-- Minor rewording and clarification.
-- Cc:-ed people that replied to the original bug report (forgotten
-  in v1 by omission).
+Thanks,
+Tao
 
- net/mac80211/tx.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-index 7699fb410670..45cb8e7bcc61 100644
---- a/net/mac80211/tx.c
-+++ b/net/mac80211/tx.c
-@@ -3781,6 +3781,7 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- 	ieee80211_tx_result r;
- 	struct ieee80211_vif *vif = txq->vif;
- 	int q = vif->hw_queue[txq->ac];
-+	unsigned long flags;
- 	bool q_stopped;
- 
- 	WARN_ON_ONCE(softirq_count() == 0);
-@@ -3789,9 +3790,9 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- 		return NULL;
- 
- begin:
--	spin_lock(&local->queue_stop_reason_lock);
-+	spin_lock_irqsave(&local->queue_stop_reason_lock, flags);
- 	q_stopped = local->queue_stop_reasons[q];
--	spin_unlock(&local->queue_stop_reason_lock);
-+	spin_unlock_irqrestore(&local->queue_stop_reason_lock, flags);
- 
- 	if (unlikely(q_stopped)) {
- 		/* mark for waking later */
--- 
-2.30.2
-
+> 
+> index 1c1ebeb51003..0ecb4cce8af2 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -527,6 +527,9 @@ static void blkg_destroy_all(struct gendisk *disk)
+>         list_for_each_entry_safe(blkg, n, &q->blkg_list, q_node) {
+>                 struct blkcg *blkcg = blkg->blkcg;
+> 
+> +               if (hlist_unhashed(&blkg->blkcg_node))
+> +                       continue;
+> +
+>                 spin_lock(&blkcg->lock);
+>                 blkg_destroy(blkg);
+>                 spin_unlock(&blkcg->lock);
+> 
+> >   		spin_unlock(&blkcg->lock);
+> >   		/*
+> > 
