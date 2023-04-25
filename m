@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564F66EE128
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875116EE12A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbjDYLjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S233847AbjDYLl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbjDYLjv (ORCPT
+        with ESMTP id S232851AbjDYLly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:39:51 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9018A468A;
-        Tue, 25 Apr 2023 04:39:50 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9505214c47fso1051246566b.1;
-        Tue, 25 Apr 2023 04:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682422789; x=1685014789;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uhlme4gt9b2fIoSYooiRDG3nPCx1SJPD3Moq8dts520=;
-        b=fbWcdU0NnREyJWMw07Co+ZsxBZbKAj1Cx9JfSqAwf3b2I48vKE9GJQXbX8wPUe4teX
-         frAT8e9R7SVXOsR2Jw++gkW+IgJZOjxKHBemFCK5GtgfkPhBzm7rTqSHUa2LRj/EmVJH
-         SnkIdWk/hQCSxGdr1Kq5L1/hU0i/kHh/d+Q/h02KMIAwSuZr5GQn2GCvNPLDRhUFdtr8
-         cKywu+/X3WHqyjnPUgNL8UzYy0WEOxe91zBQqCrabLYL2I3qTUNRW7phU8BPcgYNo0qL
-         M4wa9wkN6nA9pK3CKNqzkCQXZuMYHKS2QMCTMCvmRTDBj2GQkr0NYhEkNNFjgc+UsOkO
-         IUgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682422789; x=1685014789;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uhlme4gt9b2fIoSYooiRDG3nPCx1SJPD3Moq8dts520=;
-        b=V3ypEVbEejzmp/FgSll7IqtBXnYViZQVIyQKQXf4QNHC12NTaPLr357f2cI6r/mQdL
-         UFD3Otq7ND2yNqBdSZrzXBgUcZETMAmLNrmkJjp2gePaFH26cNhmu0ttbAdgxDMlIY+a
-         9JZE820ThBgfA/N5YlU/6vS5AbNtEMHA4TjWsA2a7xQkZi0xGdlVB3G2wJdMCjflGXVQ
-         82xeZm4QFQf4rM+bldx654RApB1YF7PGMhQ/lfPELJWTwiU+nXZaHqdD81MA9ST9WTFe
-         CFJnD0kHbEVgoNDr8yiTFNir2iLqFzlSy95vV+IWz0yZYIVgp7ychkrAYZW4S3MHYXkq
-         IMqw==
-X-Gm-Message-State: AAQBX9f2q9aRCb0lEKnr6slw3rTLsujW6JJ2/c4+4E+V7nfXM2NuNooj
-        sE7CDqQcgSkbhVqlDfXID2RCaKiOo6rp5g==
-X-Google-Smtp-Source: AKy350YEc8MxPrvdXklvc0+f/36x5cuiax3Yc3EXcEg6VE1CFp59poyc100VNtaRzdDsb7fpGfMt9Q==
-X-Received: by 2002:a17:906:b314:b0:94f:3521:396 with SMTP id n20-20020a170906b31400b0094f35210396mr12750769ejz.23.1682422788691;
-        Tue, 25 Apr 2023 04:39:48 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id q27-20020a170906361b00b0094e1026bc66sm6703216ejb.140.2023.04.25.04.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 04:39:47 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: [PATCH] KVM: x86/mmu: Add comment on try_cmpxchg64 usage in tdp_mmu_set_spte_atomic
-Date:   Tue, 25 Apr 2023 13:39:32 +0200
-Message-Id: <20230425113932.3148-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 25 Apr 2023 07:41:54 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B54468A;
+        Tue, 25 Apr 2023 04:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682422912; x=1713958912;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=92nD2nFX4b4wdJozm12atNE8oXhLy20Dg1Gg1HUpNUU=;
+  b=A7DnH6bwq5RrT0SU/v7zmWltGr9eq98uTlGMXfkv1MZY8kCbh6tlGC1X
+   7JJ6qKixO7KOFk5uY4+y3tSJHKSiuiPRZA+uLrUadfKATQetuE/lT870H
+   n7AJE6vpmz8Gd/cOAGuOc6J3sY/afcfakXDssp9hQjFJeonndTc9eo7uI
+   XKAE/L5G5HNq83MjwTuIyveb8JdZhr5qI/Q/Byqa/CmviMhPQVoIM/Hz8
+   t6O+WmY5qkVV+xbz15Pw92PKYysDdZfdBBWiJZy3bEA0sWtnuftFQafqY
+   KVH66McOlWrBnCjZO8qLvdiAPKlibIR1GgtEoPZfdfkXDgH3Nye8BrLsu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345492856"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="345492856"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 04:41:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="817658146"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="817658146"
+Received: from rolfneux-mobl.ger.corp.intel.com ([10.252.34.113])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 04:41:50 -0700
+Date:   Tue, 25 Apr 2023 14:41:48 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH v2 17/24] selftests/resctrl: Replace count_bits with
+ count_consecutive_bits()
+In-Reply-To: <455c986a-0d51-0302-d5c3-c6c0f1cc6bad@intel.com>
+Message-ID: <7bb3f116-2f4d-b81a-3f49-dae7175e82c1@linux.intel.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-18-ilpo.jarvinen@linux.intel.com> <455c986a-0d51-0302-d5c3-c6c0f1cc6bad@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1286874631-1682422390=:1992"
+Content-ID: <8aad71a6-8ed-59f9-388-47bba28647c@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit aee98a6838d5 ("KVM: x86/mmu: Use try_cmpxchg64 in
-tdp_mmu_set_spte_atomic") removed the comment that iter->old_spte is
-updated when different logical CPU modifies the page table entry.
-Although this is what try_cmpxchg does implicitly, it won't hurt
-if this fact is explicitly mentioned in a restored comment.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: David Matlack <dmatlack@google.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+--8323329-1286874631-1682422390=:1992
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <6d1bdaef-dd2d-13ca-344a-21a83bd677c5@linux.intel.com>
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 7c25dbf32ecc..5d126b015086 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -655,8 +655,16 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
- 	 * Note, fast_pf_fix_direct_spte() can also modify TDP MMU SPTEs and
- 	 * does not hold the mmu_lock.
- 	 */
--	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
-+	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte)) {
-+		/*
-+		 * The page table entry was modified by a different logical
-+		 * CPU. In this case the above try_cmpxchg updates
-+		 * iter->old_spte with the current value, so the caller
-+		 * operates on fresh data, e.g. if it retries
-+		 * tdp_mmu_set_spte_atomic().
-+		 */
- 		return -EBUSY;
-+	}
- 
- 	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
- 			      new_spte, iter->level, true);
+On Fri, 21 Apr 2023, Reinette Chatre wrote:
+> On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
+> > CAT and CMT tests depends on masks being continuous.
+> 
+> The term used in the spec is "contiguous", using it here
+> may help to convey the goal.
+> 
+> > 
+> > Replace count_bits with more appropriate variant that counts
+> > consecutive bits.
+> 
+> Could you please elaborate why this is more appropriate and
+> why this is necessary? What is wrong with current solution?
+> 
+> Please note that cbm_mask in resctrl will always be contiguous.
+
+Hi,
+
+It's good that you asked this question.
+
+This comes from a change (not by me originally) that also excluded the 
+shareable bits from the mask the CAT test uses. I assumed (w/o better 
+knowledge) that those shareable bits could create a hole into the mask.
+
+It could be wrong assumption and the shareable bits are always at one end 
+of the CBM mask.
+
+Do you happen to know how the shareable bits are positioned within the 
+mask?
+
+
 -- 
-2.40.0
-
+ i.
+--8323329-1286874631-1682422390=:1992--
