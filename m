@@ -2,91 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F56EDD7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284036EDD7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbjDYH7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 03:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S233201AbjDYIAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbjDYH7b (ORCPT
+        with ESMTP id S233383AbjDYIAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 03:59:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE0AE4E;
-        Tue, 25 Apr 2023 00:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682409570; x=1713945570;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Gocix4vBihVS2BVVbk9Z88th8E0zeu5NrQL381uKtvk=;
-  b=ZQbyszvvJQ3k/bVwlHm0JKpwPubxESydTSY4zjIiZggljrpuhGEErtj4
-   4DjLtPqJ9S4BsmZuFeqgZUfiCpKvl8S+KVPwopRbE6dlXL+0wctlKCNt3
-   SnTKJbASd5JPhLY7xvIbJWQNMqn1WP0JKSe+p5mgIaKo7iEsA5+u1OC7w
-   juuq7DBfOaCUGuUvEPkhjojvTuXVZ+u2tABb5AKB0p0ltZMfRHCieZPE6
-   8dvegy95WdsCy3ujpPrVt9KFUA5HffzC5JwTqXroDHLvcAbZ5aBmfHy2+
-   BxI+4u4iOJNGkvDlHOSbLSv19a0BHyAN+vMTNlsKyf2PnDiofpNFIbsVm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="409630585"
-X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
-   d="scan'208";a="409630585"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 00:59:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="1023038048"
-X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
-   d="scan'208";a="1023038048"
-Received: from st-server.bj.intel.com ([10.240.193.90])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Apr 2023 00:59:14 -0700
-From:   Tao Su <tao1.su@linux.intel.com>
-To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        tao1.su@linux.intel.com
-Subject: [PATCH] Remove blkg node after destroying blkg
-Date:   Tue, 25 Apr 2023 15:59:11 +0800
-Message-Id: <20230425075911.839539-1-tao1.su@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Apr 2023 04:00:21 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBC32D52
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:00:19 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so23393598e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682409618; x=1685001618;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wJcVKVJA3HgnW7bSvVOddaHKG/ERA+dvV0Lub2llU+Q=;
+        b=EOkcITT5Rq6XWK3ejRIWqvQTkMe0ymO3UjoLJxHU/nMXd+kJfjuDnngRLl0056SRHm
+         ThA9qKaCSDNobvcy6jnV68/ursuWUy1LRvfcOiMnvJd6umM5gBHUqjEii9P0KObi7KGh
+         BAFvn/jnFZdpnznd05oLdmPYj0b3vIN6GQEhpBNTdSfL4z+ZwxB1QMA9d150A+77EI3i
+         plazI1uNEF7MssMeARqn6HbaKObj7K0qUBZHDm45tsXJspZswccglcpyVh33k/az8cYf
+         7sxktCdB7+YpplssXVz1+FDrVlx5NHqwNlTaeiZQzIojqvTIoBPoyIpW8YSps41cN/xv
+         Ujqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682409618; x=1685001618;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wJcVKVJA3HgnW7bSvVOddaHKG/ERA+dvV0Lub2llU+Q=;
+        b=ZP8aq8DuFfQae9D+qG1skpzsiGmAEKTi7A8OKXEpaL1zRNXscNdVlBehHKWb9ikN29
+         lDSRtbzbk6FqhqbvyPcD6pmTsrdsNpMscgNe55Q/tjWmGFtZVi9xorju2wuGOSQjpc0H
+         1s3C/zUpo8tm8N+HlZOiA0C+LUTled9XmgKyTRLf2F2Ua11+uBwZrY0rrU4pznveXrZ/
+         tA2GhXWCirKk0819z3ImrtuS+xeuiohpE37bbwyAjpGrrkCafeazKTO49ooIlClEwpiZ
+         +cQ9teUVG1lIrplz+2fMdKuYT31L8brOKmd4GSGjuBBs76CS4H0S9Sy3A1vW4PYxdSDU
+         sW4g==
+X-Gm-Message-State: AAQBX9eq9gM0uMpNa7u/6FnxN1tonPc2Ya67k9bgP5a4LT+Rh3VDfduv
+        3ew5feY9eXPazMZTpxWhJCFZkGJVP/ikvTGMdjq/lQ==
+X-Google-Smtp-Source: AKy350ZxdfhaQD3I1+8v331wKiSztM8EPfAn2hc331pKYjbFsrskYvBdyUu9x9mXAh7RJVZWCXfYiGyWTG2NjZzD97c=
+X-Received: by 2002:a2e:9b87:0:b0:2aa:4550:9169 with SMTP id
+ z7-20020a2e9b87000000b002aa45509169mr3099317lji.20.1682409617717; Tue, 25 Apr
+ 2023 01:00:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-46-atishp@rivosinc.com>
+ <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com> <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
+ <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com>
+In-Reply-To: <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com>
+From:   Atish Kumar Patra <atishp@rivosinc.com>
+Date:   Tue, 25 Apr 2023 13:30:06 +0530
+Message-ID: <CAHBxVyHg7vTaQJWKoVSD8budVZEYSo1eDOyZyZK7gcJApR7SbA@mail.gmail.com>
+Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap hooks
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
+        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Uladzislau Rezki <urezki@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel hang when poweroff or reboot, due to infinite restart in function
-blkg_destroy_all. It will goto restart label when a batch of blkgs are
-destroyed, but not remove blkg node in blkg_list. So the blkg_list is
-same in every 'restart' and result in kernel hang.
+On Mon, Apr 24, 2023 at 7:18=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> On 4/21/23 12:24, Atish Kumar Patra wrote:
+> > On Fri, Apr 21, 2023 at 3:46=E2=80=AFAM Dave Hansen <dave.hansen@intel.=
+com> wrote:>> This callback appears to say to the host:
+> >>
+> >>         Hey, I (the guest) am treating this guest physical area as MMI=
+O.
+> >>
+> >> But the host and guest have to agree _somewhere_ what the MMIO is used
+> >> for, not just that it is being used as MMIO.
+> >
+> > Yes. The TSM (TEE Security Manager) which is equivalent to TDX also
+> > needs to be aware of the MMIO regions so that it can forward the
+> > faults accordingly. Most of the MMIO is emulated in the host
+> > (userspace or kernel emulation if present). The host is outside the
+> > trust boundary of the guest. Thus, guest needs to make sure the host
+> > only emulates the designated MMIO region. Otherwise, it opens an
+> > attack surface from a malicious host.
+> How does this mechanism stop the host from emulating something outside
+> the designated region?
+>
+> On TDX, for instance, the guest page table have a shared/private bit.
+> Private pages get TDX protections to (among other things) keep the page
+> contents confidential from the host.  Shared pages can be used for MMIO
+> and don't have those protections.
+>
+> If the host goes and tries to flip a page from private->shared, TDX
+> protections will kick in and prevent it.
+>
+> None of this requires the guest to tell the host where it expects MMIO
+> to be located.
+>
+> > All other confidential computing solutions also depend on guest
+> > initiated MMIO as well. AFAIK, the TDX & SEV relies on #VE like
+> > exceptions to invoke that while this patch is similar to what pkvm
+> > does. This approach lets the enlightened guest control which MMIO
+> > regions it wants the host to emulate.
+>
+> I'm not _quite_ sure what "guest initiated" means.  But SEV and TDX
+> don't require an ioremap hook like this.  So, even if they *are* "guest
+> initiated", the question still remains how they work without this patch,
+> or what they are missing without it.
+>
 
-By adding list_del to remove blkg node after destroying, can solve this
-kernel hang issue and satisfy the previous will to 'restart'.
+Maybe I misunderstood your question earlier. Are you concerned about guests
+invoking any MMIO region specific calls in the ioremap path or passing
+that information to the host ?
+Earlier, I assumed the former but it seems you are also concerned
+about the latter as well. Sorry for the confusion in that case.
+The guest initiation is necessary while the host notification can be
+made optional.
+The "guest initiated" means the guest tells the TSM (equivalent of TDX
+module in RISC-V) the MMIO region details.
+The TSM keeps a track of this and any page faults that happen in that
+region are forwarded
+to the host by the TSM after the instruction decoding. Thus TSM can
+make sure that only ioremapped regions are
+considered MMIO regions. Otherwise, all memory outside the guest
+physical region will be considered as the MMIO region.
 
-Reported-by: Xiangfei Ma <xiangfeix.ma@intel.com>
-Tested-by: Xiangfei Ma <xiangfeix.ma@intel.com>
-Tested-by: Farrah Chen <farrah.chen@intel.com>
-Signed-off-by: Tao Su <tao1.su@linux.intel.com>
----
- block/blk-cgroup.c | 1 +
- 1 file changed, 1 insertion(+)
+In the current CoVE implementation, that MMIO region information is also
+passed to the host to provide additional flexibility. The host may
+choose to do additional
+sanity check and bail if the fault address does not belong to
+requested MMIO regions without
+going to the userspace. This is purely an optimization and may not be manda=
+tory.
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index bd50b55bdb61..960eb538a704 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -530,6 +530,7 @@ static void blkg_destroy_all(struct gendisk *disk)
- 
- 		spin_lock(&blkcg->lock);
- 		blkg_destroy(blkg);
-+		list_del(&blkg->q_node);
- 		spin_unlock(&blkcg->lock);
- 
- 		/*
--- 
-2.34.1
 
+> > It can be a subset of the region's host provided the layout. The
+> > guest device filtering solution is based on this idea as well [1].
+> >
+> > [1] https://lore.kernel.org/all/20210930010511.3387967-1-sathyanarayana=
+n.kuppuswamy@linux.intel.com/
+>
+> I don't really see the connection.  Even if that series was going
+> forward (I'm not sure it is) there is no ioremap hook there.  There's
+> also no guest->host communication in that series.  The guest doesn't
+> _tell_ the host where the MMIO is, it just declines to run code for
+> devices that it didn't expect to see.
+>
+
+This is a recent version of the above series from tdx github. This is
+a WIP as well and has not been posted to
+the mailing list. Thus, it may be going under revisions as well.
+As per my understanding the above ioremap changes for TDX mark the
+ioremapped pages as shared.
+The guest->host communication happen in the #VE exception handler
+where the guest converts this to a hypercall by invoking TDG.VP.VMCALL
+with an EPT violation set. The host would emulate an MMIO address if
+it gets an VMCALL with EPT violation.
+Please correct me if I am wrong.
+
+As I said above, the objective here is to notify the TSM where the
+MMIO is. Notifying the host
+is just an optimization that we choose to add. In fact, in this series
+the KVM code doesn't do anything with that information.
+The commit text probably can be improved to clarify that.
+
+
+> I'm still rather confused here.
