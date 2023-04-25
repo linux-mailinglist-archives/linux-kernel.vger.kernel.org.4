@@ -2,259 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D360F6EE962
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973766EE9DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236337AbjDYVJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 17:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S236297AbjDYV7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 17:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbjDYVJ0 (ORCPT
+        with ESMTP id S236172AbjDYV7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 17:09:26 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A91C178
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:09:22 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b990eb5dc6bso8498388276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682456962; x=1685048962;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N73TLwrYRCrQN2GTzbAh9yYUSj2Rplskiyx39x5Gq80=;
-        b=Prj2X/jVGHHho5dQDzs7WBLsFpJIDixE0MvGj1Y+IX/wXqlFIx8DCLeYCGLaw5TuPg
-         iwuRnaYejuwNtSF3Qwz8+RjT8CBHQ0tXEXHrsmrVsQMJuOHJQSWNYKPK8PaK3A9BVjfG
-         eFanMPsuyu60bHkOe/N/GPTM8SfpxeGieqrotdHqvPDF2qQL9h9XIGCl/Mk1obHLFa1h
-         EqXK14DwsFXpgJhyAAmkvyL18cnUl767tynpTFV5xoelxBUnYCOyT6wSSMfp30x8wGhN
-         wbf9d/J5b1MuZwhUYzmNgxluRCPGr84s7yV0e4VdqQ0UFeKpXAImMlUk/iB4OaEA7cdR
-         n52A==
+        Tue, 25 Apr 2023 17:59:03 -0400
+X-Greylist: delayed 2932 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 14:59:02 PDT
+Received: from mx0b-00256a01.pphosted.com (mx0a-00256a01.pphosted.com [148.163.150.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B862A7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:59:02 -0700 (PDT)
+Received: from pps.filterd (m0142700.ppops.net [127.0.0.1])
+        by mx0b-00256a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PJj3oG036664
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:10:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyu.edu; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=20180315;
+ bh=HKURM7lQwvlytFLh5YItjG4WpOjT7MPq3+fMeQnQZXU=;
+ b=Q0+DTDrSpss/DG8Ckj0tfoNanZ2FghIYMzB1+ROTlVeANZgFMnRQi6GKHqKtatrly87L
+ cNSP1vZUQi2tWZQ+gkfzgIp4rlgpk7CavDmOizj0EjQuAkT+bN+kIsi9yphkxV8iC34F
+ GTPDn0LPWFG1yVaUECZ6nBNeBMx54HjcbM9z84nuwUsKaYL9fQNVCc+hycSgrueYY07R
+ ptFb0Qi7J0CF/hbHvJ/l1QPNtD2omu6aW9KnuyeI7wCDgSnofKYdx897lCo55Mr5i7Ip
+ YXrAoiZwjM3g9tlAk132Ui54OLHpU/rchNo1C4lMSTe2KtMpQyrwVncrpQeJCBmXbDJ4 1g== 
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+        by mx0b-00256a01.pphosted.com (PPS) with ESMTPS id 3q60k7vkja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:10:09 -0400
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5ef4b68f47bso39218506d6.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:10:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682456962; x=1685048962;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N73TLwrYRCrQN2GTzbAh9yYUSj2Rplskiyx39x5Gq80=;
-        b=eeiSTOB/MZOxeXZGdzleIM8+mPixZniYGLjxXNjvvNsggYVueByV62S+QUvoEVe6GI
-         v9PtSLynDCz7cGFJZxQa18FezF7j5nEUK9tnMQy+l6qeJ+00a+yEsV3GYhzqWUktWd27
-         BhAd/SSkDTUWNCeJXm7XG/LZYbrEc2c8NZoMWkbKbLxu0tFa/TnozGNHDpDpqDDCjkcS
-         5j1KnhBL4/yT84gIFwzq8n7t9ppCR2jFaxD4G92+89k8vCYi0IOQRZ+2DQKF1QIES8wK
-         rvOnjakbHjM1kOXFCLMYLTJL33zshHlGHzBkkDjn9tYjjLHu7mRL5KZldYVialLV+3jr
-         b8pA==
-X-Gm-Message-State: AAQBX9dS8nE/axCwD3YQ1RvgTO4+zauJslnWkv9E6GOD3ki5TUxXIACm
-        kMPwvBKQ0KeDUT8z5zlY+rEKWzKXjPe9GAO9oqqbVw==
-X-Google-Smtp-Source: AKy350YSvb0tNeGZVlfD1RpvBgd9pIOuBo5XYmcdTkN99XA3GNoIf50uRyFEz/2ciYOp6voVMzgJvGL0DUTS5OnAUsg=
-X-Received: by 2002:a25:dfd0:0:b0:b98:cf1d:89ff with SMTP id
- w199-20020a25dfd0000000b00b98cf1d89ffmr13892414ybg.23.1682456961694; Tue, 25
- Apr 2023 14:09:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682457008; x=1685049008;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HKURM7lQwvlytFLh5YItjG4WpOjT7MPq3+fMeQnQZXU=;
+        b=BydGrv/ljoYW/pGEQBcGVz9oxFzP/5/wZfcdMrUCVAD04lK1XnRVmGAVCy9QIPrtrV
+         S0tBUWnsXjyw7TiLednZvN+TklMhtL4tJgG3exmMW/gw8eeZV1FKuCnnlMsEtc0HFqlm
+         O9CtDek5gtEpuZLRlj3gn+bgfhEUWPgU4FutQpGudhgBrCIx3l0L7oYFlFGnu5Htz0VW
+         loOgr77WuHRMYKOVYmSYwEg1ouquVMFcEvlVVh6WtjTZaIm3BE11oBVam/xQXQx6Ywld
+         OpSEwIDddFXc840tTKrTW0+YSBtEZn3nbz5Vi3guHS4oZhUDJ+8BW668HSbt0WJOsinY
+         KSQg==
+X-Gm-Message-State: AAQBX9d+0dWZpVViZXBs0cUVceZb0BJKQA6pOaaklMlRtlzw+AHnJHDz
+        Hfc3gV5WrTRS23dPRTWb+a+aIGEflHEOA8URXHE87HbiPXU+slVMiSjr/Ha7nxTwiTl4IhYWJ3t
+        AbCz8o8gKne02Er/2v++8y2A=
+X-Received: by 2002:a05:6214:501c:b0:56e:a9c6:d2c6 with SMTP id jo28-20020a056214501c00b0056ea9c6d2c6mr34737617qvb.6.1682457008174;
+        Tue, 25 Apr 2023 14:10:08 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b8H6oImKBsfMaSxwrjO9SgDN2vDovPneV/eC15FQgUsEGJOE/Q4cqdZT8/846IvUJYy9B0VA==
+X-Received: by 2002:a05:6214:501c:b0:56e:a9c6:d2c6 with SMTP id jo28-20020a056214501c00b0056ea9c6d2c6mr34737591qvb.6.1682457007932;
+        Tue, 25 Apr 2023 14:10:07 -0700 (PDT)
+Received: from enviable.nyu.edu (216-165-95-139.natpool.nyu.edu. [216.165.95.139])
+        by smtp.gmail.com with ESMTPSA id n16-20020a0cdc90000000b005ef589381a8sm4341426qvk.52.2023.04.25.14.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 14:10:07 -0700 (PDT)
+From:   Jonathan Singer <jes965@nyu.edu>
+To:     platform-driver-x86@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jonathan Singer <jes965@nyu.edu>
+Subject: Re: Function of the camera key on windows
+Date:   Tue, 25 Apr 2023 17:09:53 -0400
+Message-Id: <20230425210953.14597-1-jes965@nyu.edu>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <MN0PR12MB6101D9688E7904FF52634520E2649@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <MN0PR12MB6101D9688E7904FF52634520E2649@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
- <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com> <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
- <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
- <c809476f-74bc-0399-08f9-1bf26e7170fa@quicinc.com> <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
- <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org> <m5z5mv5hbdgpjbfo3mqo5s3egshnlu77nla4b7txddlsbk5fvi@jitwvapbr7wr>
- <CAA8EJpoCeCkucvb=a+1ken_yR=8FvcECrvajOk5MxgO-j2nD6A@mail.gmail.com> <2c3ef118-d7b1-83bd-f789-3e5c5212a6e5@quicinc.com>
-In-Reply-To: <2c3ef118-d7b1-83bd-f789-3e5c5212a6e5@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 26 Apr 2023 00:09:11 +0300
-Message-ID: <CAA8EJpq8i4YxRc4yM-BGyV0uM4WyDOoFAgsU8bOoZL963wRMkQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
- RM instead of IDs
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: bnWunJyKVm1U8Q5s0LT4iINqhFU2AWHM
+X-Proofpoint-GUID: bnWunJyKVm1U8Q5s0LT4iINqhFU2AWHM
+X-Orig-IP: 209.85.219.70
+X-Proofpoint-Spam-Details: rule=outbound_bp_notspam policy=outbound_bp score=1 mlxscore=1 bulkscore=0
+ adultscore=0 impostorscore=0 spamscore=1 mlxlogscore=201 malwarescore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304250188
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023 at 19:11, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->
->
->
-> On 4/25/2023 7:26 AM, Dmitry Baryshkov wrote:
-> > On Tue, 25 Apr 2023 at 11:55, Marijn Suijten
-> > <marijn.suijten@somainline.org> wrote:
-> >>
-> >> On 2023-04-25 10:54:47, Dmitry Baryshkov wrote:
-> >>> On 25/04/2023 10:16, Marijn Suijten wrote:
-> >>>> On 2023-04-24 16:23:17, Abhinav Kumar wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 4/24/2023 3:54 PM, Dmitry Baryshkov wrote:
-> >>>>>> On Tue, 25 Apr 2023 at 01:03, Marijn Suijten
-> >>>>>> <marijn.suijten@somainline.org> wrote:
-> >>>>>>>
-> >>>>>>> On 2023-04-21 16:25:15, Abhinav Kumar wrote:
-> >>>>>>>>
-> >>>>>>>>
-> >>>>>>>> On 4/21/2023 1:53 PM, Marijn Suijten wrote:
-> >>>>>>>>> The Resource Manager already iterates over all available blocks from the
-> >>>>>>>>> catalog, only to pass their ID to a dpu_hw_xxx_init() function which
-> >>>>>>>>> uses an _xxx_offset() helper to search for and find the exact same
-> >>>>>>>>> catalog pointer again to initialize the block with, fallible error
-> >>>>>>>>> handling and all.
-> >>>>>>>>>
-> >>>>>>>>> Instead, pass const pointers to the catalog entries directly to these
-> >>>>>>>>> _init functions and drop the for loops entirely, saving on both
-> >>>>>>>>> readability complexity and unnecessary cycles at boot.
-> >>>>>>>>>
-> >>>>>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >>>>>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >>>>>>>>
-> >>>>>>>> Overall, a nice cleanup!
-> >>>>>>>>
-> >>>>>>>> One comment below.
-> >>>>>>>>
-> >>>>>>>>> ---
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
-> >>>>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
-> >>>>>>>>>      23 files changed, 139 insertions(+), 375 deletions(-)
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> <snipped>
-> >>>>>>>>
-> >>>>>>>>> -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
-> >>>>>>>>> -           void __iomem *addr,
-> >>>>>>>>> -           const struct dpu_mdss_cfg *m)
-> >>>>>>>>> +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
-> >>>>>>>>> +           void __iomem *addr)
-> >>>>>>>>>      {
-> >>>>>>>>>        struct dpu_hw_intf *c;
-> >>>>>>>>> -   const struct dpu_intf_cfg *cfg;
-> >>>>>>>>> +
-> >>>>>>>>> +   if (cfg->type == INTF_NONE) {
-> >>>>>>>>> +           pr_err("Cannot create interface hw object for INTF_NONE type\n");
-> >>>>>>>>> +           return ERR_PTR(-EINVAL);
-> >>>>>>>>> +   }
-> >>>>>>>>
-> >>>>>>>> The caller of dpu_hw_intf_init which is the RM already has protection
-> >>>>>>>> for INTF_NONE, see below
-> >>>>>>>>
-> >>>>>>>>             for (i = 0; i < cat->intf_count; i++) {
-> >>>>>>>>                     struct dpu_hw_intf *hw;
-> >>>>>>>>                     const struct dpu_intf_cfg *intf = &cat->intf[i];
-> >>>>>>>>
-> >>>>>>>>                     if (intf->type == INTF_NONE) {
-> >>>>>>>>                             DPU_DEBUG("skip intf %d with type none\n", i);
-> >>>>>>>>                             continue;
-> >>>>>>>>                     }
-> >>>>>>>>                     if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
-> >>>>>>>>                             DPU_ERROR("skip intf %d with invalid id\n",
-> >>>>>>>> intf->id);
-> >>>>>>>>                             continue;
-> >>>>>>>>                     }
-> >>>>>>>>                     hw = dpu_hw_intf_init(intf->id, mmio, cat);
-> >>>>>>>>
-> >>>>>>>> So this part can be dropped.
-> >>>>>>>
-> >>>>>>> I mainly intended to keep original validation where _intf_offset would
-> >>>>>>> skip INTF_NONE, and error out.  RM init is hence expected to filter out
-> >>>>>>> INTF_NONE instead of running into that `-EINVAL`, which I maintained
-> >>>>>>> here.
-> >>>>>>>
-> >>>>>>> If you think there won't be another caller of dpu_hw_intf_init, and that
-> >>>>>>> such validation is hence excessive, I can remove it in a followup v3.
-> >>>>>>
-> >>>>>> I'd prefer to see the checks at dpu_rm to be dropped.
-> >>>>>> dpu_hw_intf_init() (and other dpu_hw_foo_init() functions) should be
-> >>>>>> self-contained. If they can not init HW block (e.g. because the index
-> >>>>>> is out of the boundaries), they should return an error.
-> >>>>>>
-> >>>>>
-> >>>>> They already do that today because even without this it will call into
-> >>>>> _intf_offset() and that will bail out for INTF_NONE.
-> >>>>>
-> >>>>> I feel this is a duplicated check because the caller with the loop needs
-> >>>>> to validate the index before passing it to dpu_hw_intf_init() otherwise
-> >>>>> the loop will get broken at the first return of the error and rest of
-> >>>>> the blocks will also not be initialized.
-> >>>>
-> >>>> To both: keep in mind that the range-checks we want to remove from
-> >>>> dpu_rm_init validate the ID (index?) of a block.  This check is for the
-> >>>> *TYPE* of an INTF block, to skip it gracefully if no hardware is mapped
-> >>>> there.  As per the first patch of this series SM6115/QCM2290 only have a
-> >>>> DSI interface which always sits at ID 1, and ID 0 has its TYPE set to
-> >>>> INTF_NONE and is skipped.
-> >>>>
-> >>>> Hence we _should_ keep the graceful TYPE check in dpu_rm_init() to skip
-> >>>> calling this function _and assigning it to the rm->hw_intf array_.  But
-> >>>> I can remove the second TYPE check here in dpu_hw_intf_init() if you
-> >>>> prefer.
-> >>>
-> >>> We can return NULL from dpu_hw_foo_init(), which would mean that the
-> >>> block was skipped or is not present.
-> >>
-> >> An then replace the `if INTF_NONE continue` logic in dpu_rm_init with a
-> >> check for NULL that skips, and a check for IS_ERR` that goes to `fail`?
-> >
-> > You can just drop the INTF_NONE in dpu_rm. If dpu_hw_intf_init()
-> > returns NULL, the rest of the code in dpu_rm will work correctly.
-> >
->
-> The only thing lost will be that the loop in the RM will break at the
-> first instance of NULL so if the loop has valid intf blocks later, those
-> will also not get initialized.
+The key itself triggers a hardware response both on windows and linux.
+It disconnects power from the camera USB module and raises a cover in front
+of the camera aperature. The keycode is as far as I know only to notify the
+operating system in case it wanted to show a message.
 
-No, it won't. There is the IS_ERR check, not the IS_ERR_OR_NULL()
-
->
-> That wont happen today because catalog doesnt have such entries but just
-> wanted to note what gets lost with this change.
->
-> Otherwise, I am okay with that.
->
-> >>
-> >> Should I do that in a new or the same patch for v3?
-> >>
-> >> Note that there's a similar check for the `pingpong` "id" member of
-> >> every Layer Mixer.
-> >>
-> >> - Marijn
-> >
-> >
-> >
-
-
-
--- 
-With best wishes
-Dmitry
+Is that the kind of use case that would benefit from emitting a KEY_CAMERA?
