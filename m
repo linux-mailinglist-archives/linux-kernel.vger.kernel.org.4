@@ -2,214 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE716EDE98
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192476EDE9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbjDYI5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S233559AbjDYI5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjDYI5X (ORCPT
+        with ESMTP id S233568AbjDYI5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:57:23 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142410CE
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:57:20 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f1728c2a57so56997615e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:57:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1682413039; x=1685005039;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IatPhWkS7kXHNYw/LMRL8AKSu2Xban6SY9XiEQ0UbuE=;
-        b=A4qlge16yFv+9UUBED8DwB3CpwcMvkHy47I9ZPC3tVY2qFmyQkVEAT+Ifre5YvtJt2
-         Xb5SNcrz9qpm4DgOO4DmjrN6dZqkqvbTygoRXDF3YdJHiEDFF0NZd/zySjhHERKg/bWa
-         LNSvaOQvBBl1EOZfh6GywgBChs3CS5MZHtaZ8VS+NeizsM/I/qQFQWkoOpAzI7+qsz7z
-         RmaMhP9x2oqtrrxq3QkmYvqOGyazp0qtrnzpNxQLoRm9e45M2UdYX92KxXIapjz99gHe
-         lPKZxByRISbqo46iqL6ExBUZkjQTJ1RXQQulHAHcW6Hx34ZZoTiMUaeOWhOgncfGlT4h
-         0LQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682413039; x=1685005039;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IatPhWkS7kXHNYw/LMRL8AKSu2Xban6SY9XiEQ0UbuE=;
-        b=ltCOXyhDWxOHdtMAE5viNkg181N2VDbRVcvDZx3L4uKEWUx4PF2NivFS7FQXQdIKdv
-         Cip4e0kJHQwRnUv867X45XFAZKXBZiO1VuKIK7OhNfzMoJaXVAab+MxcF3D2D6hqB2nQ
-         UTJPnNm9kz6dWDq3XJklJ0DF+wzIQAnDLtqIIAieAOc4e9UM+HLYoRD1wB7BPJqdTJ5I
-         6K0++OTTSJyK+7C2h7zQWHRUfSzW8d987y/Yak6EeadSHbbOIX5tPIz8rKH1InL8RGnX
-         65HH8vpAiV7uo0MXMe536Yruww96xmAMQqvpmg57MC8AyFmMwvCXeg6VwEp0JeomXQrR
-         6bIA==
-X-Gm-Message-State: AAQBX9cVYKYWaJrTtz7ImFya8V6Q058EWN5MF+iZD1fN3a1/xP/EyKLy
-        sWBs2Tvib8qjliMh7oVJvLc+9w==
-X-Google-Smtp-Source: AKy350ZfqbGzh3y7nA6BysMdjdjoeKVHTAZG8yejEO8cIxrcwf4n7Z9FsaXanJbDCjOudEBOO/ZeMg==
-X-Received: by 2002:a05:600c:24cd:b0:3f1:79ad:f3a8 with SMTP id 13-20020a05600c24cd00b003f179adf3a8mr9037127wmu.16.1682413038872;
-        Tue, 25 Apr 2023 01:57:18 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:fc75:a52a:6ef6:7ac6? ([2a02:8011:e80c:0:fc75:a52a:6ef6:7ac6])
-        by smtp.gmail.com with ESMTPSA id y21-20020a05600c365500b003f182a10106sm14443185wmq.8.2023.04.25.01.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 01:57:18 -0700 (PDT)
-Message-ID: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
-Date:   Tue, 25 Apr 2023 09:57:17 +0100
+        Tue, 25 Apr 2023 04:57:31 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64B4768A;
+        Tue, 25 Apr 2023 01:57:28 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.79.165) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 25 Apr
+ 2023 11:57:18 +0300
+Subject: Re: [PATCH RESEND] usb: dwc3: remove dead code in dwc3_otg_get_irq
+To:     lihuya <lihuya@hust.edu.cn>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <hust-os-kernel-patches@googlegroups.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230424105930.49944-1-lihuya@hust.edu.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <887b6226-ea4f-e75c-bfde-0785ccf30c77@omp.ru>
+Date:   Tue, 25 Apr 2023 11:57:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for
- map_of_maps types
-Content-Language: en-GB
-To:     Xueming Feng <kuro@kuroa.me>, yhs@meta.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, sdf@google.com, song@kernel.org, yhs@fb.com
-References: <561b0f03-4a3a-89d3-5793-a0d69535ca0f@meta.com>
- <20230425063750.72642-1-kuro@kuroa.me>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230425063750.72642-1-kuro@kuroa.me>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230424105930.49944-1-lihuya@hust.edu.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [178.176.79.165]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/25/2023 08:35:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 176957 [Apr 25 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.165 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.165 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.79.165:7.4.1,7.1.2,7.7.3
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.165
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/25/2023 08:41:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 4/25/2023 7:02:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
->> On 4/24/23 9:10 PM, Xueming Feng wrote:
->>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
->>>>> When using `bpftool map dump` in plain format, it is usually
->>>>> more convenient to show the inner map id instead of raw value.
->>>>> Changing this behavior would help with quick debugging with
->>>>> `bpftool`, without disrupting scripted behavior. Since user
->>>>> could dump the inner map with id, and need to convert value.
->>>>>
->>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
->>>>> ---
->>>>> Changes in v2:
->>>>>     - Fix commit message grammar.
->>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
->>>>> 	  `n` to `arg_size`.
->>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
->>>>> 		and print it as unsigned decimal.
->>>>>
->>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
->>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
->>>>> but previous review suggested that it should be up to the caller function to
->>>>> set `arg_size` correctly. So I didn't add check for that, should I?
->>>>>
->>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
->>>>>    tools/bpf/bpftool/main.h |  1 +
->>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
->>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
->>>>> index 08d0ac543c67..810c0dc10ecb 100644
->>>>> --- a/tools/bpf/bpftool/main.c
->>>>> +++ b/tools/bpf/bpftool/main.c
->>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
->>>>>    	return 0;
->>>>>    }
->>>>>    
->>>>> +void print_uint(const void *arg, unsigned int arg_size)
->>>>> +{
->>>>> +	const unsigned char *data = arg;
->>>>> +	unsigned long val = 0ul;
->>>>> +
->>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->>>>> +		memcpy(&val, data, arg_size);
->>>>> +	#else
->>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
->>>>> +		       data, arg_size);
->>>>> +	#endif
->>>>> +
->>>>> +	fprintf(stdout, "%lu", val);
->>>>> +}
->>>>> +
->>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
->>>>>    {
->>>>>    	unsigned char *data = arg;
->>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
->>>>> index 0ef373cef4c7..0de671423431 100644
->>>>> --- a/tools/bpf/bpftool/main.h
->>>>> +++ b/tools/bpf/bpftool/main.h
->>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
->>>>>    
->>>>>    bool is_prefix(const char *pfx, const char *str);
->>>>>    int detect_common_prefix(const char *arg, ...);
->>>>> +void print_uint(const void *arg, unsigned int arg_size);
->>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
->>>>>    void usage(void) __noreturn;
->>>>>    
->>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->>>>> index aaeb8939e137..f5be4c0564cf 100644
->>>>> --- a/tools/bpf/bpftool/map.c
->>>>> +++ b/tools/bpf/bpftool/map.c
->>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->>>>>    		}
->>>>>    
->>>>>    		if (info->value_size) {
->>>>> -			printf("value:%c", break_names ? '\n' : ' ');
->>>>> -			fprint_hex(stdout, value, info->value_size, " ");
->>>>> +			if (map_is_map_of_maps(info->type)) {
->>>>> +				printf("id:%c", break_names ? '\n' : ' ');
->>>> 1> +				print_uint(value, info->value_size);
->>>
->>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
->>>> For all map_in_map types, the inner map value size is 32bit int which
->>>> represents a fd (for map creation) and a id (for map info), e.g., in
->>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
->>>> 	printf("id: %u", *(unsigned int *)value);
->>>
->>> That is true, maybe the "id" could also be changed to "map_id" to follow the
->>> convention. Do you think that `print_uint` could be useful in the future?
->>> If that is the case, should I keep using it here as an example usage, and to
->>> avoid dead code? Or should I just remove it?
+Hello!
 
-This makes me think we could also have something similar for prog_array
-maps (but not necessarily as part of your patchset).
+On 4/24/23 1:59 PM, lihuya wrote:
 
+> platform_get_irq() only return non-zero irq number on success, or
+> negative error number on failure.
 > 
-> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
->> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
->> element value could be 0, implying "inner_map_id 0", but I think it is
->> okay, people should know a real inner_map_id (or any map_id) should 
->> never be 0.
->>
->> Function "print_uint" is not needed any more. Please remove it.
-> 
-> Will reflect this in v3.
-> 
->>
->> Please add the command line to dump map values triggering the above 
->> change, also the actual dumps with and without this patch.
-> 
-> $ bpftool map dump id 138
-> Without patch:
-> ```
-> key:
-> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
-> 27 16 06 00
-> value:
-> 8b 00 00 00
-> Found 1 element
-> ```
-> With patch:
-> ```
-> key:
-> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
-> 27 16 06 00
-> inner_map_id:
-> 139 
-> Found 1 element
-> ```
+> There is no need to check the return value of platform_get_irq()
+> to determine the return value of dwc3_otg_get_irq(), removing
+> them to solve this problem.
 
-Thanks! Please add those sample outputs to the commit description for
-v3. Can you please also add an example with JSON ("-p")?
+   I was going to submit such patch myself at some point... which
+has never happened. :-/
 
-Quentin
+> Signed-off-by: lihuya <lihuya@hust.edu.cn>
 
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
+
+MBR, Sergey
