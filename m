@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED61C6ED93F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DD86ED94F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbjDYANW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 20:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S231814AbjDYAYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 20:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjDYANU (ORCPT
+        with ESMTP id S230355AbjDYAYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 20:13:20 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3883B4C16;
-        Mon, 24 Apr 2023 17:13:19 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-38e4c98e5ceso1738347b6e.1;
-        Mon, 24 Apr 2023 17:13:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682381598; x=1684973598;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pFwtgW0wvfFjibNHY+PyADwbRVqhSb57mZWqoTJnZz4=;
-        b=NtQ83Wkc0rMiMEIdF7D5L1qpsogTz9NbZR4moigHipQhtkKpIxF2lmkqwlvxkpsiPb
-         CsRu0nSA2Q2Ce+81W++eJfAZU8ZY0/c2iDeGkaUawYOKaMRX86fetaP38HLUqFTIlsOJ
-         lBdXTe+2A2QgzMxVGG962NRacgqoUE4d/k3O/t9vayN5lNLMB66k1LTAxwa2eAopcR7K
-         8laTmKU4AB/WS/tpR2GBueO0wPSGfSUtwy5QpIyxQ4EiDkcqP5QAaL0skCRvDmdriwvy
-         MrwrNCPv2YT8nHadBVJXJ5yL4Om3WsIiZbihGXj0jCg7iXy7f4cRLCpvbnV//RAMzbTW
-         NPgQ==
-X-Gm-Message-State: AAQBX9cMLyRo6Jd2MU4TZ4SxK3rGeKLrS3SeTwrurzLPD0iysUOAwDHD
-        I7GOWhD79BZR30Tln/Ku5Q==
-X-Google-Smtp-Source: AKy350ZBoEkCK7vqTj0PueqwGaZpxLzKNT2QhoPIdll+DNVILUuxcLSXtlVd1pmbxqFa/wSrqUeXjg==
-X-Received: by 2002:a05:6870:a706:b0:17e:dc2b:f4b4 with SMTP id g6-20020a056870a70600b0017edc2bf4b4mr11693226oam.15.1682381598317;
-        Mon, 24 Apr 2023 17:13:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056870e40300b00172ac40356csm4963304oag.50.2023.04.24.17.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 17:13:17 -0700 (PDT)
-Received: (nullmailer pid 4124744 invoked by uid 1000);
-        Tue, 25 Apr 2023 00:13:16 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Mon, 24 Apr 2023 20:24:09 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CC259FF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 17:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682382247; x=1713918247;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=Ggl6Dk7a57sbHO8EsDno0qdkPR9T5Q9oeWBPCCIvkIc=;
+  b=b19uWuBU5oNPCODesglnjjKyo2QX1cJGmWBVk/iL7bOVVnpUTsCJHbEX
+   R4baoLNlrOF3q1P9jKH3mDvDJNVQLOYS9wai5JOlxb83LqnlikNC5+5Ue
+   zFHHS9uJCWRlDEfChdCZM7NVD46E2mHQRKYhXsICGPT+gXNQcY2HUtQIZ
+   Jvna6CQ4FNDtXA7oHnDrZoNgCz9JpUGVpx3yEMsvtyMoW7D5WIxHbQJjU
+   xF87HHMosrr5N1wLx+WOMEwrpdPagu/gXmmTjlQka3VTodLueCeUZbuFL
+   8hvbBOzFX7w374JmWxbvYmZ3nwHe+v0W8DzQZbOzeRQJUQWH0H05ROMWz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="326216071"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="326216071"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 17:24:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="693276416"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="693276416"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 17:24:04 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     <akpm@linux-foundation.org>, <rppt@kernel.org>,
+        <mgorman@techsingularity.net>, <vbabka@suse.cz>, <mhocko@suse.com>,
+        <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] mm/page_alloc: add some comments to explain the
+ possible hole in __pageblock_pfn_to_page()
+References: <c3868b58c6714c09a43440d7d02c7b4eed6e03f6.1682342634.git.baolin.wang@linux.alibaba.com>
+        <50b5e05dbb007e3a969ac946bc9ee0b2b77b185f.1682342634.git.baolin.wang@linux.alibaba.com>
+Date:   Tue, 25 Apr 2023 08:22:55 +0800
+In-Reply-To: <50b5e05dbb007e3a969ac946bc9ee0b2b77b185f.1682342634.git.baolin.wang@linux.alibaba.com>
+        (Baolin Wang's message of "Mon, 24 Apr 2023 21:45:40 +0800")
+Message-ID: <87zg6wkdy8.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Schuyler Patton <spatton@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230424195402.516-3-jm@ti.com>
-References: <20230424195402.516-1-jm@ti.com>
- <20230424195402.516-3-jm@ti.com>
-Message-Id: <168238155801.4123790.14706903991436332296.robh@kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: net: can: Add poll-interval for
- MCAN
-Date:   Mon, 24 Apr 2023 19:13:16 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-On Mon, 24 Apr 2023 14:54:00 -0500, Judith Mendez wrote:
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use software interrupt by
-> hrtimer. To enable timer method, interrupts should be optional so
-> remove interrupts property from required section and introduce
-> poll-interval property.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
+> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(), which
+> checks whether the given zone contains holes, and uses pfn_to_online_page()
+> to validate if the start pfn is online and valid, as well as using pfn_valid()
+> to validate the end pfn.
+>
+> However, the __pageblock_pfn_to_page() function may return non-NULL even
+> if the end pfn of a pageblock is in a memory hole in some situations. For
+> example, if the pageblock order is MAX_ORDER, which will fall into 2
+> sub-sections, and the end pfn of the pageblock may be hole even though
+> the start pfn is online and valid.
+>
+> See below memory layout as an example and suppose the pageblock order
+> is MAX_ORDER.
+>
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000001fa3c7ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7dfffff]
+>
+> Focus on the last memory range, and there is a hole for the range [mem
+> 0x0000001fa7590000-0x0000001fa7dfffff]. That means the last pageblock
+> will contain the range from 0x1fa7c00000 to 0x1fa7ffffff, since the
+> pageblock must be 4M aligned. And in this pageblock, these pfns will
+> fall into 2 sub-section (the sub-section size is 2M aligned).
+>
+> So, the 1st sub-section (indicates pfn range: 0x1fa7c00000 -
+> 0x1fa7dfffff ) in this pageblock is valid by calling subsection_map_init()
+> in free_area_init(), but the 2nd sub-section (indicates pfn range:
+> 0x1fa7e00000 - 0x1fa7ffffff ) in this pageblock is not valid.
+>
+> This did not break anything until now, but the zone continuous is fragile
+> in this possible scenario. So as previous discussion[1], it is better to
+> add some comments to explain this possible issue in case there are some
+> future pfn walkers that rely on this.
+>
+> [1] https://lore.kernel.org/all/87r0sdsmr6.fsf@yhuang6-desk2.ccr.corp.intel.com/
+>
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > ---
-> Changelog:
-> v2:
->   1. Add poll-interval property to enable timer polling method
->   2. Add example using poll-interval property
-> 
->  .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
-> 
+> Changes from v2:
+>  - Update the commit log and comments per Michal, thanks.
+> Changes from v1:
+>  - Update the comments per Ying and Mike, thanks.
+>
+> Note, I did not add Huang Ying's reviewed tag, since there are some
+> updates per Michal's suggestion. Ying, please review the v3. Thanks.
+> ---
+>  mm/page_alloc.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 6457b64fe562..bd124390c79b 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1502,6 +1502,15 @@ void __free_pages_core(struct page *page, unsigned int order)
+>   * interleaving within a single pageblock. It is therefore sufficient to check
+>   * the first and last page of a pageblock and avoid checking each individual
+>   * page in a pageblock.
+> + *
+> + * Note: the function may return non-NULL struct page even for a page block
+> + * which contains a memory hole (i.e. there is no physical memory for a subset
+> + * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
+> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
+> + * even though the start pfn is online and valid. This should be safe most of
+> + * the time because struct pages are still zero pre-filled and pfn walkers
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I don't think the pfn is just zero-filled even it's a hole.  Can you
+confirm that?  In memmap_init() and memmap_init_zone_range(),
+init_unavailable_range() is called to initialize the struct page.
 
-yamllint warnings/errors:
+Best Regards,
+Huang, Ying
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with interrupts' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with timer polling' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230424195402.516-3-jm@ti.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> + * shouldn't touch any physical memory range for which they do not recognize
+> + * any specific metadata in struct pages.
+>   */
+>  struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>  				     unsigned long end_pfn, struct zone *zone)
