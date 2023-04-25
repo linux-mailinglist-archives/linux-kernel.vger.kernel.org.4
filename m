@@ -2,69 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0BE6EE215
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D676EE21E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbjDYMpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
+        id S233424AbjDYMq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbjDYMpc (ORCPT
+        with ESMTP id S233943AbjDYMqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:45:32 -0400
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25ECD307
+        Tue, 25 Apr 2023 08:46:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1220D319
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682426733;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=krc+SiJhBUwO2ug/XwTx3KTJqkkR2CFS+eg5Dz5ylJc=;
+        b=GNel7tYtecy0XSojQ9FZCgQu1lm14KPC8XQY1NEnpffzLSVyjYDRvvmeyx/ybELipkrOCI
+        NllPj47FEjC+ok1shSg62LsW2PC2BPJf8YyM4AcD+TsFVYzje+MCGXYVwr7E97gGhOV/rp
+        eNwM4l0kVZRQCk7bSe2HdiWnSckkFHc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-252-nk5lSKfPN2GL-BR2zna0xg-1; Tue, 25 Apr 2023 08:45:30 -0400
+X-MC-Unique: nk5lSKfPN2GL-BR2zna0xg-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f18c2b2110so20080895e9.3
         for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-        t=1682426719; bh=nwrv+FTl9Z30CBHNh9Viy2EMWijwUXnZBpXvdSxeKaU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=RlYHHPpry1tcRW++kuMdT3R33TyERVYAx+cE9x49Lz3+qGXG612izzAB8mnDiM7j2
-         cAh7Mu/md8q9wQNaMGrt+hzYOkyS9+ELfbFU1LVpyHMt7F+NyqmWFnTdjKWLGLVjuW
-         ACzyow2P6hvXkUeQXHMw5pJj105gkAPUZlit2MAI=
-Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id B42AA6DE; Tue, 25 Apr 2023 20:45:02 +0800
-X-QQ-mid: xmsmtpt1682426702tnajkdbja
-Message-ID: <tencent_2451ED25C705DC8A18A290EEC6373E344107@qq.com>
-X-QQ-XMAILINFO: Mdc3TkmnJyI/LAcuiDQ/3C4t3AsD+E24+X5IsV39QQuYR4YjVHEiY8aUzcQGdQ
-         y7rfI+QuFHWwsEWPiyv+EyT+dZngY5T13qR5k/LKIrqU73zYQktPhSob6bWE19isVJWzo/r6Krev
-         mGqImZ4CzGsfq1FfpAmhvgUQgD9fzvow9nmKogary9jrKTimTpHnMD4kTt9BoT+Q8j7EsyioOPlA
-         Riydp2siRxA8Ftsmdh90LjQQKPBrDN0eiuYp84Qyc5FQmKy8QxXcombCIDSy2Qv5+PgeC4J6MqlM
-         VD8kme2yovflI4EWr0b4LkR/mIoS1iWaL18+DMpDJjo3SPQVwpNjSE1/DLkXMKv8r9whXsaO3pxu
-         MMdUurhY0EwFkqkNJkAoXMmndLaZ1VjMf/OSQ1NkQg+eKxj3fYXcVtLK+16bRHyRabu4vl30IMBP
-         U9qq/t8s1QTlFOOMM0NAXaFsrEkdd2oTlnNwXDw8glOW6x+98NMOihYIOBsLllNMy55ZehW7ZMoT
-         +VgZ7DyGqtZB0g1VZPQeMXyNBhDqjHblo/sFtXa/JvL2n2EG04Se044WL06bjkZRZF/GZkS5caSG
-         /hawxG3vfZsOGeEvU47Nze9gWrGjtxcmPauP4MPa8II5ywp1Z3Me6aw1mLaKRcAsSVazmNYDKf7z
-         v4F+pDF9xuIf43iHim7mGgaxM07sQXoXg942u1SzZt6za1CFVO7feI7z5uHWdOwKMhk1M0U6AFJt
-         t5Gt11j4isDS4YMwk8PGmeI48GiGWVYisxraFcBHKKXV1+r5pM/uGZ6r42GFO6ykthkmCdVe4+ou
-         0872cZmhBwxI5mgJeBqO/Uv/Kef8P+X1Q03KUUEi2/uO35Jj72aHTeneNR5mmEsCGDkZ2RIKnuEc
-         w/9pjZ5+Zpwgx7CvkIXW/511kVl/c4A8muPxbM62ai79yNkdNC0LvfcK3rNJghvEefuN8VMZcPgu
-         7vH7GNpehSxxG3jztBKuff4pIFn8xm65Kgqwe4pcBYh1icTnC4OW1kkMaawLGWBj/BRnHydYk=
-From:   Yangyu Chen <cyy@cyyself.name>
-To:     cyy@cyyself.name
-Cc:     aou@eecs.berkeley.edu, i@zenithal.me, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, soha@lohu.info, twd2.me@gmail.com
-Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
-Date:   Tue, 25 Apr 2023 20:45:00 +0800
-X-OQ-MSGID: <20230425124500.194036-1-cyy@cyyself.name>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <tencent_63090269FF399AE30AC774848C344EF2F10A@qq.com>
-References: <tencent_63090269FF399AE30AC774848C344EF2F10A@qq.com>
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682426728; x=1685018728;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=krc+SiJhBUwO2ug/XwTx3KTJqkkR2CFS+eg5Dz5ylJc=;
+        b=QNxcqn/ENK8NQ/G/PZ/b+YFIYqG6Pc+I+UUZlhkqStuXzw61EIaZ1eI7xEDRlE2EIr
+         ev72YeJYttq14xm+nZjJNw4Ph7azntQr1plrasFMPwv76O7iP0CQfNz69E9sPCCrerd/
+         50gKV9DER9F3pgyuUwV2AxT/wGA4BSqkifjSpg+/VccLPxAqVxMWBe4YcLEBnfIaUN69
+         fFjRw7itowo0CugpVdDT+pADZ1beoz7c56euwch+ohgkkq2yGvt7LShDI2dJ760gFvDZ
+         VH5MiitfraWxxgt+AQFfq0kVVsrF6oyT5Xo9XT4DMJXIHOBi0rADDW06bPakyDYqYu8j
+         Y5Gw==
+X-Gm-Message-State: AAQBX9f3BS7s1503zXPW5wMcQQ1bWMhhfkssfe1oTFbfm8KKOSZPgz8p
+        J9m1Oe+5O47C4UiaD6An3aFzI+qVAPtdCDJwI+/GkNKHLUOG+PHufWJ5sWApd6yvbX8W1CBTQlF
+        XqVvEH2wUwmuZEMWI9PPL/HEg
+X-Received: by 2002:a05:600c:2214:b0:3f1:987b:7a28 with SMTP id z20-20020a05600c221400b003f1987b7a28mr7195384wml.29.1682426728236;
+        Tue, 25 Apr 2023 05:45:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bIPgn166ZA/wJ8PFmg9nFmKKBjNCYwRGQ/sI+aE3t+loxoVTTzjiSf9BdLyfiT4aA9pr1zIA==
+X-Received: by 2002:a05:600c:2214:b0:3f1:987b:7a28 with SMTP id z20-20020a05600c221400b003f1987b7a28mr7195359wml.29.1682426727867;
+        Tue, 25 Apr 2023 05:45:27 -0700 (PDT)
+Received: from redhat.com ([2.55.17.255])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003f1738e64c0sm18301465wmq.20.2023.04.25.05.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 05:45:27 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 08:45:23 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Harald Mommer <harald.mommer@opensynergy.com>
+Subject: Re: [PATCH] can: virtio-can: cleanups
+Message-ID: <20230425084503-mutt-send-email-mst@kernel.org>
+References: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
+ <20230424170901-mutt-send-email-mst@kernel.org>
+ <20230425-oxidizing-blandness-ca9cc2cf114e-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425-oxidizing-blandness-ca9cc2cf114e-mkl@pengutronix.de>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cover letter is at:
+On Tue, Apr 25, 2023 at 11:17:20AM +0200, Marc Kleine-Budde wrote:
+> On 24.04.2023 17:09:23, Michael S. Tsirkin wrote:
+> > On Mon, Apr 24, 2023 at 09:47:58PM +0200, Marc Kleine-Budde wrote:
+> > > Address the topics raised in
+> > > 
+> > > https://lore.kernel.org/20230424-footwear-daily-9339bd0ec428-mkl@pengutronix.de
+> > > 
+> > > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > 
+> > given base patch is rfc this should be too?
+> 
+> This is an incremental patch that fixes the topics I raised in the
+> review of "[RFC PATCH v2] can: virtio: Initial virtio CAN driver.", see
+> linked discussion thread.
+> 
+> regards,
+> Marc
 
-https://lore.kernel.org/linux-riscv/tencent_1647475C9618C390BEC601BE2CC1206D0C07@qq.com/
+and that's fine, just pls put RFC in the subject.
+
+-- 
+MST
 
