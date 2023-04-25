@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183176EE39D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7436EE3A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbjDYOGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
+        id S234327AbjDYOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjDYOGs (ORCPT
+        with ESMTP id S234220AbjDYOJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:06:48 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BD0210A;
-        Tue, 25 Apr 2023 07:06:46 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a920d484bdso47548245ad.1;
-        Tue, 25 Apr 2023 07:06:46 -0700 (PDT)
+        Tue, 25 Apr 2023 10:09:25 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14A10EB;
+        Tue, 25 Apr 2023 07:09:24 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b73203e0aso35703074b3a.1;
+        Tue, 25 Apr 2023 07:09:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682431606; x=1685023606;
+        d=gmail.com; s=20221208; t=1682431763; x=1685023763;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pgVL/zYIF4XcbODFmxnXkOmVcf6q9IMBOAtXThWZzgc=;
-        b=InxUH49EiiW3ppy/iRWuLl0rW4LGgc8lOv5f/kIGO7ZHHTeYfQnBuYhS+CkV0l6hr9
-         aKYi3mdJSD8nLqxyd5NkhIH0a0VJSZyugpgRSIbDnVqmo78/8JdibYimEBYMVp76EQvZ
-         5M6x1N/8Xx3BHurcz9zaUYH0m9hhY2DSGXtSJChe//hL6o71/SuaBqDr0kP2VwuGyvK8
-         5Y+pc/ft0jaRk/xc8/VjBTLZTxpYTd2BWWdLHOGVJcjqqiNuA7Y6Am20hja8p4n+nez4
-         TuTuapn9z7M4tjaw5/wSOzchqkm4sPTXQBnbxYPd//hLw8jphLSDV7GGlMmN0AXZgfim
-         NNTw==
+        bh=3xw+BHdORTGVKTA8blkRS/DTjnBNoDy+SuKaT8k7XdY=;
+        b=msswW182Tyq0PSGUu7Weqp4+k0V9RWFRWUxa7nA81uhcXyAbGUDXqj+gRDf+diBp2c
+         2uHeODOIamsabfhANrwTdGh2FYWnKB09fAeJn3Ek8Iqz5IQvtvTeidsHEwD3K8AizUOg
+         iiWGx+NqTJRzCijWAqLwupWs1YGI13fC4ijCidxzLdBcZJ6aI6YQv0uEvLkfTHM6MoRT
+         y44920VH1JLyjQpJdCIkYDn+FA61vhdswxqknrnHWpImlWWhCTKSr7lqXXIquTq48ns+
+         5ek4j9a07czgUo8vkDIfW+Ednu0ouFzXjGCV1tolg5cwYh416zMVr3ejO4upV/opnbKp
+         yQDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682431606; x=1685023606;
+        d=1e100.net; s=20221208; t=1682431763; x=1685023763;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pgVL/zYIF4XcbODFmxnXkOmVcf6q9IMBOAtXThWZzgc=;
-        b=WnIqAzBuE/s1OLDC/UETyAyKimvOdwkomoU022FJW0LMyb9Gl2qnbIRvJFsYbBwbKc
-         F0NtUDtYL8mGhndw7eojK/kBTPByeDAmN5SaLGNCn390lrpHcyLNIPYmdoKJFq16dUNE
-         LwffMa4ehBZk/ClTfgNtr+naOVVrN9Jjc1pVjNxcDBBeGqCqboQ2oBSfLLS8ySeCGXQT
-         zYWf8csw29R8WLNLsCbGgrkR9PG6u7k1QYY0f5m3bMOB4sN40NhHsi9JHlVxuqqfPtZS
-         oH+OVTMtFHO6F+dGTTAVyrVdy0bnNTwebnV1NHsR4jVjFxGrhUYxVHlVKos5wfiSY8+s
-         Np4g==
-X-Gm-Message-State: AAQBX9cnPMl+GsbM1FDB8xa+p/Q5mhv3kNLHy8LAAs5m/8SMjNnK4MSs
-        9TRK13qdXNe+wi+Znldaawk1upsPhRY=
-X-Google-Smtp-Source: AKy350bNRWXukim0EYjXvnfjtsCVq2HHeVAnc2lBBPPxJStsWuRE3QZF2cGIc1Lmrd53Lyr3dodPJw==
-X-Received: by 2002:a17:903:2441:b0:1a6:ff6a:83ed with SMTP id l1-20020a170903244100b001a6ff6a83edmr20912153pls.65.1682431605894;
-        Tue, 25 Apr 2023 07:06:45 -0700 (PDT)
+        bh=3xw+BHdORTGVKTA8blkRS/DTjnBNoDy+SuKaT8k7XdY=;
+        b=gSdrpzd9xm72ahr+RcisRZ1UuxjMaELCo01dxkhnQpgIC1VlNnCJrGz8830KsWeE/8
+         sIXGbcBEEVC4Qxz7sXXfaihCM5ZU0pW7pd8t37Rxp9dH6gDr0ugtbBhpBWvKKHEpyKoX
+         nLs2lxUSX1NRB0C49fCGXAcZn3bJMAy0VqYkyUuQQreP7yqLxrG5AVrUqZ6APLhn3ROn
+         U3efoV54MPzG6pONoB1icKSz7GyBDfDMjn257nLz4zmSYUdbvYbp17/ZWMXLHyhWEOc4
+         ktzv/8MrHE40Xxl+BKjvcxMXC04KhqfOUmNXj+ZFUHnwnb0oXyy2Yex5WckvlFf5yg8l
+         zXBQ==
+X-Gm-Message-State: AAQBX9dC4O6AKjlPojsYJIFW3mBYAH2Qpls2vVU61NUzkuqExpm1RkuA
+        u6ru+txO29gHnTdo4tdM+u8=
+X-Google-Smtp-Source: AKy350a2npN+62JYHbVOqk1QSV0NuQTdqIKvT8rZHPSvkfX7ovD6A/q/cH1c5IC+6K5ecKeU8ha49w==
+X-Received: by 2002:a17:903:1c1:b0:1a1:cb18:7f99 with SMTP id e1-20020a17090301c100b001a1cb187f99mr19550907plh.30.1682431763570;
+        Tue, 25 Apr 2023 07:09:23 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id az1-20020a170902a58100b0019cbe436b87sm8385610plb.81.2023.04.25.07.06.44
+        by smtp.gmail.com with ESMTPSA id t10-20020a170902b20a00b001a6b02659c0sm6266958plr.159.2023.04.25.07.09.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 07:06:45 -0700 (PDT)
+        Tue, 25 Apr 2023 07:09:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2ea16959-4525-90fb-b928-d652a4613574@roeck-us.net>
-Date:   Tue, 25 Apr 2023 07:06:43 -0700
+Message-ID: <ccbced2f-0258-cfd7-2f91-e246dadae8fb@roeck-us.net>
+Date:   Tue, 25 Apr 2023 07:09:20 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v1] watchdog: starfive: Fix the probe return error if PM
- and early_enable are both disabled
+Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
 Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+ <20230425134537.pzsplcpkrog2552r@intel.intel>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
+In-Reply-To: <20230425134537.pzsplcpkrog2552r@intel.intel>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,49 +84,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/23 03:04, Xingyu Wu wrote:
-> When the starfive watchdog driver uses 'pm_runtime_put_sync()' as probe
-> return value at last and 'early_enable' is disabled, it could return the
-> error '-ENOSYS' if the CONFIG_PM is disabled, but the driver should works
-> normally.
+On 4/25/23 06:45, Andi Shyti wrote:
+> Hi Delphine,
 > 
-> Add a check to make sure the PM is enabled and then use
-> 'pm_runtime_put_sync()' as return value when 'early_enable' is disabled.
+> On top of Guenter's comments,
 > 
-> Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
+> [...]
 > 
-> Hi, Guenter and Wim,
+>> +config SENSORS_LTC4286
+>> +	bool "Linear Technologies LTC4286"
+>> +	help
+>> +	  If you say yes here you get hardware monitoring support for Linear
+>> +	  Technology LTC4286.
 > 
-> This patch fixes the issue of StarFive watchdog driver and rebases on
-> the master branch of linux-next.
+> could you add a couple of words more here?
 > 
-> Thanks.
->   
-> ---
->   drivers/watchdog/starfive-wdt.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> [...]
 > 
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-> index 1995cceca51e..51e487e09960 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -492,7 +492,8 @@ static int starfive_wdt_probe(struct platform_device *pdev)
->   		goto err_exit;
->   
->   	if (!early_enable)
-> -		return pm_runtime_put_sync(&pdev->dev);
-> +		if (pm_runtime_enabled(&pdev->dev))
-> +			return pm_runtime_put_sync(&pdev->dev);
->   
+>> +static int ltc4286_probe(struct i2c_client *client,
+>> +			 const struct i2c_device_id *id)
+>> +{
+>> +	int ret;
+>> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
+>> +	struct device *dev = &client->dev;
+>> +	struct pmbus_driver_info *info;
+>> +	u32 rsense;
+>> +
+>> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
+>> +	if (ret < 0) {
+>> +		dev_err(&client->dev, "failed to read manufacturer id\n");
+> 
+> you can use dev_err_probe() here:
+> 
+> 	return dev_err_probe(&client->dev, err, "failed to read manufacturer id\n");
+> 
+>> +		return ret;
+>> +	}
+>> +
+>> +	/* Refer to ltc4286 datasheet page 20
+>> +	 * the default manufacturer id is LTC
+>> +	 */
+>> +	if (ret != LTC4286_MFR_ID_SIZE ||
+>> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
+>> +		dev_err(&client->dev, "unsupported manufacturer id\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+>> +	if (ret < 0) {
+>> +		dev_err(&client->dev, "failed to read manufacturer model\n");
+>> +		return ret;
+>> +	}
+> 
+> Is this read really needed?
+> 
 
-Why not just
-
-	if (!early_enable)
-		pm_runtime_put_sync(&pdev->dev)
-
-like almost every other caller of pm_runtime_put_sync() ?
+It only makes sense if the returned string is actually validated.
+Otherwise no.
 
 Guenter
 
