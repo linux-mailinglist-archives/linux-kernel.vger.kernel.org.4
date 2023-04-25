@@ -2,318 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2916D6EE130
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443B56EE13C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbjDYLpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S233871AbjDYLr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233972AbjDYLpH (ORCPT
+        with ESMTP id S229822AbjDYLrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:45:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42166A45
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682423049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIn6jOD/NeIKj2oP7nKtWE4+cRY7zlmSfjRegYEWY78=;
-        b=O5fSBrrjWFAFn4BhQ+kU29pmHIAZa8A5HHq21XBHpAVfxj0HnBObkB9r8va9SdsgQGQ9F5
-        pyqQ9BAyNlNaPygMl7487x4Fc80sLVV0sav3fu1R/z7w8GIAD+rQHliKzF0P/KIi4eo4Q0
-        N/CYP3PyofaZhFjGtbbFYY0Dj5rN9S0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-k5AQPd14OvSQiUNg_thmAA-1; Tue, 25 Apr 2023 07:44:04 -0400
-X-MC-Unique: k5AQPd14OvSQiUNg_thmAA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 85060884EC0;
-        Tue, 25 Apr 2023 11:44:03 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.32.181])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A3A30C15BA0;
-        Tue, 25 Apr 2023 11:43:56 +0000 (UTC)
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS
-        SUBSYSTEM)
-Subject: [PATCH v7 3/3] treewide: replace put_task_struct() with the atomic safe version
-Date:   Tue, 25 Apr 2023 08:43:03 -0300
-Message-Id: <20230425114307.36889-4-wander@redhat.com>
-In-Reply-To: <20230425114307.36889-1-wander@redhat.com>
-References: <20230425114307.36889-1-wander@redhat.com>
+        Tue, 25 Apr 2023 07:47:22 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9122B19AB;
+        Tue, 25 Apr 2023 04:47:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 7ACED6015F;
+        Tue, 25 Apr 2023 13:47:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682423231; bh=lK3t2FX+Y0YLPmB+ojyBIUSPIxd8F7uwZURJHu1cnUQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=yAA1U8tO0rmeT6zxY3FPg7PbGqS7VqxVvokE55cPRYxLT42glVWpD5iITiRkui3w/
+         aW7wv9B9gvqgr4rVBRpHaSJP35a0kn/uJ/9HIXqJYRZOX+vc57RekQCWwHoAdUdubg
+         YLpBr1JioJdXbnAf4LgtdIY0Cu2L0EQUCtJt+OmMSFM4ADa8weIN/6fpYGWarbxKtU
+         mVetZ32rYefFOwSGRv4Iv5q+e9B82p1KU6hegyAzNelqYJn6yd9qkXQOwqynaLd3e+
+         OcI4fTh4brF7gDvqLXqWAacAHLniuJc35I/GL3w/PDoY4gqRuxDq3+qfHNpt5IScU6
+         EtDKHVSMvbR8g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kmIMX-z_7TnB; Tue, 25 Apr 2023 13:47:07 +0200 (CEST)
+Received: by domac.alu.hr (Postfix, from userid 1014)
+        id 9AC076016E; Tue, 25 Apr 2023 13:47:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682423227; bh=lK3t2FX+Y0YLPmB+ojyBIUSPIxd8F7uwZURJHu1cnUQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jRzu8o0xv+QSQuJIbDCc2VVfqoLW5b9pAHvwaNpVWJYP5T0TNj40jBxv3eTgb/O2R
+         jlHiAq44b0/COjKkB+wvOVwGmOAt2IwPQcyRmcy+LFJY4oZjgRx4bAO60wtiAlOwpq
+         c6VMi3QbpeMebFYtWmqhbEs4vRdjkuA2kgh7Qj8Tlki1hXXJQSWhvY1CJRhCJaRTPM
+         nPez4fvqZffFEjQBYftsJ4qOKmr8V0VTocnSXGR8l15uPy5kJmOqJpGT7sjJTBpy9O
+         +4ftvkIoEU9aKURO6I0YDRdhqoDxhdf4ypaglBRDYYq47ZhDOEbX10GymYeBb2KN1u
+         TsxaXa92bKvVw==
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     nic_swsd@realtek.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [RFC PATCH v1 1/1] net: r8169: fix the pci setup so the Realtek RTL8111/8168/8411 ethernet speeds up
+Date:   Tue, 25 Apr 2023 13:44:56 +0200
+Message-Id: <20230425114455.22706-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In places where put_task_struct() is called in a non-sleepable context,
-we replace those calls by put_task_struct_atomic_safe().
+It was noticed that Ookla Speedtest had shown only 250 Mbps download and
+310 Mbps upload where Windows 10 on the same box showed 440/310 Mbps, which
+is the link capacity.
 
-These call sites were found by running internal regression tests and
-looking for warnings generated by put_task_might_resched().
+This article: https://www.phoronix.com/news/Intel-i219-LM-Linux-60p-Fix
+inspired to check our speeds. (Previously I used to think it was a network
+congestion, or reduction on our ISP, but now each time Windows 10 downlink
+speed is 440 compared to 250 Mbps in Linuxes Linux is performing at 60% of
+the speed.)
 
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
+The latest 6.3 kernel shows 95% speed up with this patch as compared to the
+same commit without it:
+
+::::::::::::::
+speedtest/6.3.0-00436-g173ea743bf7a-dirty-1
+::::::::::::::
+[marvin@pc-mtodorov ~]$ speedtest -s 41437
+
+   Speedtest by Ookla
+
+      Server: A1 Hrvatska d.o.o. - Zagreb (id: 41437)
+         ISP: Croatian Academic and Research Network
+Idle Latency:     1.53 ms   (jitter: 0.15ms, low: 1.30ms, high: 1.71ms)
+    Download:   225.13 Mbps (data used: 199.3 MB)
+                  1.65 ms   (jitter: 20.15ms, low: 0.81ms, high: 418.27ms)
+      Upload:   350.00 Mbps (data used: 157.9 MB)
+                  3.35 ms   (jitter: 19.46ms, low: 1.61ms, high: 474.55ms)
+ Packet Loss:     0.0%
+  Result URL: https://www.speedtest.net/result/c/a0084fd8-c275-4019-899a-a1590e49a34b
+[marvin@pc-mtodorov ~]$ speedtest -s 41437
+
+   Speedtest by Ookla
+
+      Server: A1 Hrvatska d.o.o. - Zagreb (id: 41437)
+         ISP: Croatian Academic and Research Network
+Idle Latency:     1.54 ms   (jitter: 0.28ms, low: 1.17ms, high: 1.64ms)
+    Download:   222.88 Mbps (data used: 207.9 MB)
+                 10.23 ms   (jitter: 31.76ms, low: 0.75ms, high: 353.79ms)
+      Upload:   349.91 Mbps (data used: 157.7 MB)
+                  3.27 ms   (jitter: 13.05ms, low: 1.67ms, high: 236.76ms)
+ Packet Loss:     0.0%
+  Result URL: https://www.speedtest.net/result/c/f4c663ba-830d-44c6-8033-ce3b3b818c42
+[marvin@pc-mtodorov ~]$
+::::::::::::::
+speedtest/6.3.0-r8169-00437-g323fe5352af6-dirty-2
+::::::::::::::
+[marvin@pc-mtodorov ~]$ speedtest -s 41437
+
+   Speedtest by Ookla
+
+      Server: A1 Hrvatska d.o.o. - Zagreb (id: 41437)
+         ISP: Croatian Academic and Research Network
+Idle Latency:     0.84 ms   (jitter: 0.05ms, low: 0.82ms, high: 0.93ms)
+    Download:   432.37 Mbps (data used: 360.5 MB)
+                142.43 ms   (jitter: 76.45ms, low: 1.02ms, high: 1105.19ms)
+      Upload:   346.29 Mbps (data used: 164.6 MB)
+                  7.72 ms   (jitter: 29.80ms, low: 0.92ms, high: 283.48ms)
+ Packet Loss:    12.8%
+  Result URL: https://www.speedtest.net/result/c/e473359e-c37e-4f29-aa9f-4b008210cf7c
+[marvin@pc-mtodorov ~]$ speedtest -s 41437
+
+   Speedtest by Ookla
+
+      Server: A1 Hrvatska d.o.o. - Zagreb (id: 41437)
+         ISP: Croatian Academic and Research Network
+Idle Latency:     0.82 ms   (jitter: 0.16ms, low: 0.75ms, high: 1.05ms)
+    Download:   440.97 Mbps (data used: 427.5 MB)
+                 72.50 ms   (jitter: 52.89ms, low: 0.91ms, high: 865.08ms)
+      Upload:   342.75 Mbps (data used: 166.6 MB)
+                  3.26 ms   (jitter: 22.93ms, low: 1.07ms, high: 239.41ms)
+ Packet Loss:    13.4%
+  Result URL: https://www.speedtest.net/result/c/f393e149-38d4-4a34-acc4-5cf81ff13708
+
+440 Mbps is the speed achieved in Windows 10, and Linux 6.3 with
+the patch, while 225 Mbps without this patch is running at 51% of
+the nominal speed with the same hardware and Linux kernel commit.
+
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: nic_swsd@realtek.com
+Cc: netdev@vger.kernel.org
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=1671958#c60
+Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 ---
- kernel/events/core.c     |  6 +++---
- kernel/locking/rtmutex.c | 10 +++++-----
- kernel/sched/core.c      |  6 +++---
- kernel/sched/deadline.c  | 16 ++++++++--------
- kernel/sched/rt.c        |  4 ++--
- 5 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/net/ethernet/realtek/r8169_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 435815d3be3f..8f823da02324 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1181,7 +1181,7 @@ static void put_ctx(struct perf_event_context *ctx)
- 		if (ctx->parent_ctx)
- 			put_ctx(ctx->parent_ctx);
- 		if (ctx->task && ctx->task != TASK_TOMBSTONE)
--			put_task_struct(ctx->task);
-+			put_task_struct_atomic_safe(ctx->task);
- 		call_rcu(&ctx->rcu_head, free_ctx);
- 	}
- }
-@@ -13019,7 +13019,7 @@ static void perf_event_exit_task_context(struct task_struct *child)
- 	RCU_INIT_POINTER(child->perf_event_ctxp, NULL);
- 	put_ctx(child_ctx); /* cannot be last */
- 	WRITE_ONCE(child_ctx->task, TASK_TOMBSTONE);
--	put_task_struct(current); /* cannot be last */
-+	put_task_struct_atomic_safe(current); /* cannot be last */
+diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+index 45147a1016be..b8a04301d130 100644
+--- a/drivers/net/ethernet/realtek/r8169_main.c
++++ b/drivers/net/ethernet/realtek/r8169_main.c
+@@ -3239,6 +3239,7 @@ static void rtl_hw_start_8168h_1(struct rtl8169_private *tp)
+ 	r8168_mac_ocp_write(tp, 0xc094, 0x0000);
+ 	r8168_mac_ocp_write(tp, 0xc09e, 0x0000);
  
- 	clone_ctx = unclone_ctx(child_ctx);
- 	raw_spin_unlock_irq(&child_ctx->lock);
-@@ -13124,7 +13124,7 @@ void perf_event_free_task(struct task_struct *task)
- 	 */
- 	RCU_INIT_POINTER(task->perf_event_ctxp, NULL);
- 	WRITE_ONCE(ctx->task, TASK_TOMBSTONE);
--	put_task_struct(task); /* cannot be last */
-+	put_task_struct_atomic_safe(task); /* cannot be last */
- 	raw_spin_unlock_irq(&ctx->lock);
- 
- 
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 728f434de2bb..3ecb8d6ae039 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -509,7 +509,7 @@ static __always_inline void rt_mutex_wake_up_q(struct rt_wake_q_head *wqh)
- {
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT) && wqh->rtlock_task) {
- 		wake_up_state(wqh->rtlock_task, TASK_RTLOCK_WAIT);
--		put_task_struct(wqh->rtlock_task);
-+		put_task_struct_atomic_safe(wqh->rtlock_task);
- 		wqh->rtlock_task = NULL;
- 	}
- 
-@@ -649,7 +649,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 			       "task: %s (%d)\n", max_lock_depth,
- 			       top_task->comm, task_pid_nr(top_task));
- 		}
--		put_task_struct(task);
-+		put_task_struct_atomic_safe(task);
- 
- 		return -EDEADLK;
- 	}
-@@ -817,7 +817,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 		 * No requeue[7] here. Just release @task [8]
- 		 */
- 		raw_spin_unlock(&task->pi_lock);
--		put_task_struct(task);
-+		put_task_struct_atomic_safe(task);
- 
- 		/*
- 		 * [9] check_exit_conditions_3 protected by lock->wait_lock.
-@@ -886,7 +886,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 
- 	/* [8] Release the task */
- 	raw_spin_unlock(&task->pi_lock);
--	put_task_struct(task);
-+	put_task_struct_atomic_safe(task);
- 
- 	/*
- 	 * [9] check_exit_conditions_3 protected by lock->wait_lock.
-@@ -990,7 +990,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
-  out_unlock_pi:
- 	raw_spin_unlock_irq(&task->pi_lock);
-  out_put_task:
--	put_task_struct(task);
-+	put_task_struct_atomic_safe(task);
- 
- 	return ret;
- }
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0d18c3969f90..a4783f0c9f01 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1007,7 +1007,7 @@ void wake_up_q(struct wake_q_head *head)
- 		 * the queueing in wake_q_add() so as not to miss wakeups.
- 		 */
- 		wake_up_process(task);
--		put_task_struct(task);
-+		put_task_struct_atomic_safe(task);
- 	}
++	pci_disable_link_state(tp->pci_dev, PCIE_LINK_STATE_CLKPM);
+ 	rtl_hw_aspm_clkreq_enable(tp, true);
  }
  
-@@ -2528,7 +2528,7 @@ int push_cpu_stop(void *arg)
- 	raw_spin_rq_unlock(rq);
- 	raw_spin_unlock_irq(&p->pi_lock);
- 
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 	return 0;
- }
- 
-@@ -9316,7 +9316,7 @@ static int __balance_push_cpu_stop(void *arg)
- 	rq_unlock(rq, &rf);
- 	raw_spin_unlock_irq(&p->pi_lock);
- 
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 
- 	return 0;
- }
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 71b24371a6f7..0f8b8a490dc0 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -327,7 +327,7 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
- 		 * so we are still safe.
- 		 */
- 		if (hrtimer_try_to_cancel(&p->dl.inactive_timer) == 1)
--			put_task_struct(p);
-+			put_task_struct_atomic_safe(p);
- 	}
- 	__sub_rq_bw(p->dl.dl_bw, &rq->dl);
- 	__add_rq_bw(new_bw, &rq->dl);
-@@ -467,7 +467,7 @@ static void task_contending(struct sched_dl_entity *dl_se, int flags)
- 		 * so we are still safe.
- 		 */
- 		if (hrtimer_try_to_cancel(&dl_se->inactive_timer) == 1)
--			put_task_struct(dl_task_of(dl_se));
-+			put_task_struct_atomic_safe(dl_task_of(dl_se));
- 	} else {
- 		/*
- 		 * Since "dl_non_contending" is not set, the
-@@ -1207,7 +1207,7 @@ static enum hrtimer_restart dl_task_timer(struct hrtimer *timer)
- 	 * This can free the task_struct, including this hrtimer, do not touch
- 	 * anything related to that after this.
- 	 */
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 
- 	return HRTIMER_NORESTART;
- }
-@@ -1442,7 +1442,7 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
- 	dl_se->dl_non_contending = 0;
- unlock:
- 	task_rq_unlock(rq, p, &rf);
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 
- 	return HRTIMER_NORESTART;
- }
-@@ -1899,7 +1899,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 		 * so we are still safe.
- 		 */
- 		if (hrtimer_try_to_cancel(&p->dl.inactive_timer) == 1)
--			put_task_struct(p);
-+			put_task_struct_atomic_safe(p);
- 	}
- 	sub_rq_bw(&p->dl, &rq->dl);
- 	rq_unlock(rq, &rf);
-@@ -2351,7 +2351,7 @@ static int push_dl_task(struct rq *rq)
- 			/* No more tasks */
- 			goto out;
- 
--		put_task_struct(next_task);
-+		put_task_struct_atomic_safe(next_task);
- 		next_task = task;
- 		goto retry;
- 	}
-@@ -2366,7 +2366,7 @@ static int push_dl_task(struct rq *rq)
- 	double_unlock_balance(rq, later_rq);
- 
- out:
--	put_task_struct(next_task);
-+	put_task_struct_atomic_safe(next_task);
- 
- 	return ret;
- }
-@@ -2633,7 +2633,7 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
- static void switched_to_dl(struct rq *rq, struct task_struct *p)
- {
- 	if (hrtimer_try_to_cancel(&p->dl.inactive_timer) == 1)
--		put_task_struct(p);
-+		put_task_struct_atomic_safe(p);
- 
- 	/* If p is not queued we will update its parameters at next wakeup. */
- 	if (!task_on_rq_queued(p)) {
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 0a11f44adee5..e58a84535f61 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2150,7 +2150,7 @@ static int push_rt_task(struct rq *rq, bool pull)
- 		/*
- 		 * Something has shifted, try again.
- 		 */
--		put_task_struct(next_task);
-+		put_task_struct_atomic_safe(next_task);
- 		next_task = task;
- 		goto retry;
- 	}
-@@ -2163,7 +2163,7 @@ static int push_rt_task(struct rq *rq, bool pull)
- 
- 	double_unlock_balance(rq, lowest_rq);
- out:
--	put_task_struct(next_task);
-+	put_task_struct_atomic_safe(next_task);
- 
- 	return ret;
- }
 -- 
-2.40.0
+2.30.2
 
