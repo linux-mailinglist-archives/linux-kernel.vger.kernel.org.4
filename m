@@ -2,46 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388896EE1DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D251D6EE1E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbjDYM31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
+        id S234112AbjDYMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjDYM30 (ORCPT
+        with ESMTP id S234107AbjDYMcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:29:26 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C18E43
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:29:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vh-Qtpb_1682425758;
-Received: from 30.15.221.179(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vh-Qtpb_1682425758)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Apr 2023 20:29:19 +0800
-Message-ID: <98fa0a22-77d1-cdb3-1ce2-48a00c3ed5a9@linux.alibaba.com>
-Date:   Tue, 25 Apr 2023 20:29:16 +0800
+        Tue, 25 Apr 2023 08:32:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B33F133
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:32:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682425921;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xUCCLfKIJcIMQQC1+iJEFgXpJl2oC+XHJLW7QTm0PdU=;
+        b=YoL28ba05koO80K6LURlUTxgFY7nm+2OT6PeWfy93lNqLP/tP3tOC/aiUaymEQk0rmRpWU
+        ctAvICSpQFzIy9oAqrIysTqThJm98f+mdRDgDOdAwThSM6gUDqYSbotkCZTh7PXR97yDQH
+        nfkvpz8OmTLQFIZlmmDpmf9PInW8hcw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-390-EDFbfHTHNqy6U_msS6ZOtA-1; Tue, 25 Apr 2023 08:32:00 -0400
+X-MC-Unique: EDFbfHTHNqy6U_msS6ZOtA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2f40f52c604so3215091f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:31:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682425919; x=1685017919;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xUCCLfKIJcIMQQC1+iJEFgXpJl2oC+XHJLW7QTm0PdU=;
+        b=B0pdz8uxSvHJ+y5SzsvDTCFdEv8lDzQVqZkCTfs3RcIdRzs4LVrtW8oo0Dl0H3+7My
+         4gqI46bfBwFhguO2iPqU6x22j6VB8qNZtiPN4uOPQaPdNruBBxi4pHlnA/1ud997zuRQ
+         rVcl5nyqCOH4ac1esqYMI3uxcYBDHmlNcbDpTIl0kKA/fgFQY1MgZ80CcQRejZz6U3Q3
+         npExMiGUJ8Kx2kBJY8cS0Jh9p1CVYwaSN3CPbkAfggyUgWPTun9NOLHzh5NPYqoN46hg
+         lKVgp3yev7xHD1xc3D127n8uw474/V5hFlDpfRj8fy/i2TaWEYvo/avL49Q7UTv4HO8j
+         k45w==
+X-Gm-Message-State: AAQBX9fdQ9H3zGIVBTtlLV89OdQf++fuRZi+s4ZvMIGO/kTDe7ryf4w3
+        +n9flcIqqw47WIjwjEQ5prPF5p3IyaohOVHS1VazcucPErZLbKmuuZqsAaqsLwnno4Ii+MWFruV
+        31wbxAKVILSf4ZuCaPtDcE/2I
+X-Received: by 2002:adf:ffcf:0:b0:301:8551:446a with SMTP id x15-20020adfffcf000000b003018551446amr12600273wrs.2.1682425918926;
+        Tue, 25 Apr 2023 05:31:58 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YNPM6rmdz9nqud0Gs0uKp5JlWWQ13dR/vmTBC10HPYXJvjvSupNGyK5SYEMtOckP8U65WVkg==
+X-Received: by 2002:adf:ffcf:0:b0:301:8551:446a with SMTP id x15-20020adfffcf000000b003018551446amr12600255wrs.2.1682425918573;
+        Tue, 25 Apr 2023 05:31:58 -0700 (PDT)
+Received: from redhat.com ([2.55.17.255])
+        by smtp.gmail.com with ESMTPSA id a15-20020adfdd0f000000b003048d07f9absm1411810wrm.70.2023.04.25.05.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 05:31:57 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 08:31:54 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Message-ID: <20230425082150-mutt-send-email-mst@kernel.org>
+References: <20230417073830-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417075645-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA90465186B5A8A5C001D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230423031308-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47233B680283E892C45430BCD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230423065132-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47237D46ADE7954289025B66D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230425041352-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723CE2A9B8BFA7963A66A98D4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 2/2] mm/page_alloc: add some comments to explain the
- possible hole in __pageblock_pfn_to_page()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>, akpm@linux-foundation.org,
-        rppt@kernel.org, mgorman@techsingularity.net, vbabka@suse.cz,
-        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <c3868b58c6714c09a43440d7d02c7b4eed6e03f6.1682342634.git.baolin.wang@linux.alibaba.com>
- <50b5e05dbb007e3a969ac946bc9ee0b2b77b185f.1682342634.git.baolin.wang@linux.alibaba.com>
- <87zg6wkdy8.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <060aab79-8170-56ad-797d-9d339f6c0b61@linux.alibaba.com>
- <ZEeXyZuTGT7CDuU7@dhcp22.suse.cz>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <ZEeXyZuTGT7CDuU7@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM0PR04MB4723CE2A9B8BFA7963A66A98D4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,49 +93,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/25/2023 5:05 PM, Michal Hocko wrote:
-> On Tue 25-04-23 09:27:23, Baolin Wang wrote:
->>
->>
->> On 4/25/2023 8:22 AM, Huang, Ying wrote:
->>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> [...]
->>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>> index 6457b64fe562..bd124390c79b 100644
->>>> --- a/mm/page_alloc.c
->>>> +++ b/mm/page_alloc.c
->>>> @@ -1502,6 +1502,15 @@ void __free_pages_core(struct page *page, unsigned int order)
->>>>     * interleaving within a single pageblock. It is therefore sufficient to check
->>>>     * the first and last page of a pageblock and avoid checking each individual
->>>>     * page in a pageblock.
->>>> + *
->>>> + * Note: the function may return non-NULL struct page even for a page block
->>>> + * which contains a memory hole (i.e. there is no physical memory for a subset
->>>> + * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
->>>> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
->>>> + * even though the start pfn is online and valid. This should be safe most of
->>>> + * the time because struct pages are still zero pre-filled and pfn walkers
->>>
->>> I don't think the pfn is just zero-filled even it's a hole.  Can you
->>> confirm that?  In memmap_init() and memmap_init_zone_range(),
->>> init_unavailable_range() is called to initialize the struct page.
->>
->> Yes, what I mean is the page frames were initialized to zero firstly, and
->> some fields were initialized to default value. The "zero pre-filled" seems
->> confusing, may be change to "initialized"?
+On Tue, Apr 25, 2023 at 09:41:35AM +0000, Alvaro Karsz wrote:
+> > So, let's add some funky flags in virtio device to block out
+> > features, have core compare these before and after,
+> > detect change, reset and retry?
 > 
-> Huang Ying is correct. Holes should have struct pages initialized and
-> init_unavailable_range actually marks those pages reserved. Which
-> is really good because they mean "do not touch unless this page is
-> yours". For some reason I thought those struct pages are simply zero
-> filled. I was clearly wrong. Maybe it would be good to reference
-> init_unavailable_range in the comment so that it is easier to track the
-> whole code path.
+> In the virtnet case, we'll decide which features to block based on the ring size.
+> 2 < ring < MAX_FRAGS + 2  -> BLOCK GRO + MRG_RXBUF
+> ring < 2  -> BLOCK GRO + MRG_RXBUF + CTRL_VQ
 
-OK, will do as you and Huang Ying suggested. Thank you both.
+why MRG_RXBUF? what does it matter?
 
-> Sorry about that!
+> So we'll need a new virtio callback instead of flags.
+> Furthermore, other virtio drivers may decide which features to block based on parameters different than ring size (I don't have a good example at the moment).
+> So maybe we should leave it to the driver to handle (during probe), and offer a virtio core function to re-negotiate the features?
+> 
+> In the solution I'm working on, I expose a new virtio core function that resets the device and renegotiates the received features.
+> + A new virtio_config_ops callback peek_vqs_len to peek at the VQ lengths before calling find_vqs. (The callback must be called after the features negotiation)
+> 
+> So, the flow is something like:
+> 
+> * Super early in virtnet probe, we peek at the VQ lengths and decide if we are 
+>    using small vrings, if so, we reset and renegotiate the features.
 
-never mind:)
+Using which APIs? What does peek_vqs_len do and why does it matter that
+it is super early?
+
+> * We continue normally and create the VQs.
+> * We check if the created rings are small.
+>    If they are and some blocked features were negotiated anyway (may occur if 
+>    the re-negotiation fails, or if the transport has no implementation for 
+>    peek_vqs_len), we fail probe.
+>    If the ring is small and the features are ok, we mark the virtnet device as 
+>    vring_small and fixup some variables.
+>  
+> 
+> peek_vqs_len is needed because we must know the VQ length before calling init_vqs.
+> 
+> During virtnet_find_vqs we check the following:
+> vi->has_cvq
+> vi->big_packets
+> vi->mergeable_rx_bufs
+> 
+> But these will change if the ring is small..
+> 
+> (Of course, another solution will be to re-negotiate features after init_vqs, but this will make a big mess, tons of things to clean and reconfigure)
+> 
+> 
+> The 2 < ring < MAX_FRAGS + 2 part is ready, I have tested a few cases and it is working.
+> 
+> I'm considering splitting the effort into 2 series.
+> A 2 < ring < MAX_FRAGS + 2  series, and a follow up series with the ring < 2 case.
+> 
+> I'm also thinking about sending the first series as an RFC soon, so it will be more broadly tested.
+> 
+> What do you think?
+
+Lots of work spilling over to transports.
+
+And I especially don't like that it slows down boot on good path.
+
+I have the following idea:
+- add a blocked features value in virtio_device
+- before calling probe, core saves blocked features
+- if probe fails, checks blocked features.
+  if any were added, reset, negotiate all features
+  except blocked ones and do the validate/probe dance again
+
+
+This will mean mostly no changes to drivers: just check condition,
+block feature and fail probe.
+
+
+-- 
+MST
+
