@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB436EE193
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F54A6EE196
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbjDYMFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S233655AbjDYMFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjDYMFC (ORCPT
+        with ESMTP id S233907AbjDYMFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:05:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB133AA9;
-        Tue, 25 Apr 2023 05:05:01 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PBqFac007063;
-        Tue, 25 Apr 2023 12:04:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=/8ly7NB0EZiI9RE6wDMPvrgIWMIFuN3yFNswmt8ospk=;
- b=olL/tHMn1R50/Qy/51hfVODQtkWyG0ReUdGDWOuwbuC4otXgrxfiBPIMh2IUpWTzXFsD
- i0kpN5o4gmRXZI5IvJc+U/BRnETgsph9TdCE9kcBWjndeRLphabWDVN3x0YJcTP3Uo97
- siWMW/s42pbGFA1mP512GMcLRJEjUogAiLUqtyLK66HiNrnDyNgQWDoAArhxChT8z+4M
- q/RwbH2P6wJlUHf6ELFre5htcfgvwO3NcdTqaeLqUfwZMe6Mjbc56ZzFh+rq/ka1KXC7
- cRBRviBYcy9lUfqhTyLeuUdRDBQ8NFgIcHumn2WA7gMQzAY/SJln6T4IDPOjQwpHgFDM TA== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q6ec98ew4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 12:04:52 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33P8oQ9V006400;
-        Tue, 25 Apr 2023 12:04:13 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3q4778v2rh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 12:04:13 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33PC4B1j15663732
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Apr 2023 12:04:12 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBB8F58056;
-        Tue, 25 Apr 2023 12:04:11 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 813635803F;
-        Tue, 25 Apr 2023 12:04:10 +0000 (GMT)
-Received: from [9.160.16.18] (unknown [9.160.16.18])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Apr 2023 12:04:10 +0000 (GMT)
-Message-ID: <1202328d-de94-7e9d-c0e8-bb1bd3e9a988@linux.ibm.com>
-Date:   Tue, 25 Apr 2023 07:04:09 -0500
+        Tue, 25 Apr 2023 08:05:12 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8667C49F8;
+        Tue, 25 Apr 2023 05:05:09 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 889195FD05;
+        Tue, 25 Apr 2023 15:05:06 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682424306;
+        bh=/7k2hmgzdS0RWThtX1QVPv33A+h1jqDTdyLWRVz4PtQ=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=rUHWN1H28wH6iCXoGWFuo0Owuh5UxXgiiUvT9oyGwOMOEYDF9gByjamwqDuIWOuXt
+         PFRpBZGx1+BZ2xn4eMdt0SqXge2rJxNeT0x9tXzGu0XVPV0Hdp2hBsvPqDbNOc4xhL
+         HAQWve0wxkYfvK9MJl6HSqSWQHGuNFMNXHXZqHP3gaumSc62gXiduIh8LvEJsbPIux
+         m4y9fIin/257IMbKn4Hvu5dMU2kd4c71/ejzWTYrHGyBZ4JAtFsfuIR60QKya+AOW9
+         aqnwRYUBFFa92VWgdYHCYhAhxIlI8GFovBlj1F0QArwb+0dIYT9P+H9t15CZr06HK3
+         J1XB8AUGCaTGQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 25 Apr 2023 15:05:05 +0300 (MSK)
+Date:   Tue, 25 Apr 2023 15:05:05 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v13 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+ controller driver
+Message-ID: <20230425120505.xrgrjrxcxennrzct@CAB-WSD-L081021>
+References: <20230405195927.13487-1-ddrokosov@sberdevices.ru>
+ <20230405195927.13487-7-ddrokosov@sberdevices.ru>
+ <CAFBinCBGWOB2XLb6su=R3W684rKdK3pOgPFsCGx+Oyo_pgdeBg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH 5/5] Update Kconfig and Makefile.
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com
-References: <20230424184726.2091-1-dtsen@linux.ibm.com>
- <20230424184726.2091-6-dtsen@linux.ibm.com>
- <ZEdpHDpm19XwN3dG@gondor.apana.org.au>
-From:   Danny Tsen <dtsen@linux.ibm.com>
-In-Reply-To: <ZEdpHDpm19XwN3dG@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JOMv6Qr3aSMatP0sBxYQFbwXkjutJ7Bu
-X-Proofpoint-GUID: JOMv6Qr3aSMatP0sBxYQFbwXkjutJ7Bu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_05,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=979 malwarescore=0
- suspectscore=0 impostorscore=0 clxscore=1015 phishscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250108
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <CAFBinCBGWOB2XLb6su=R3W684rKdK3pOgPFsCGx+Oyo_pgdeBg@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/25 07:55:00 #21159618
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,20 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I was not sure at the time when I use IS_REACHABLE.  Will fix it in init 
-code.
+On Sun, Apr 23, 2023 at 11:30:38PM +0200, Martin Blumenstingl wrote:
+> On Wed, Apr 5, 2023 at 9:59 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> [...]
+> > +static const struct of_device_id a1_periphs_clkc_match_table[] = {
+> > +       { .compatible = "amlogic,a1-clkc", },
+> > +       {},
+> nit-pick: please remove the comma after the sentinel
+> 
 
-Thanks.
+Thank you for bringing up that point! There's no problem with removing
+it in the next version of the product. I'll prepare it.
 
--Danny
+> > +MODULE_DEVICE_TABLE(of, a1_periphs_clkc_match_table);
+> > +
+> > +static struct platform_driver a1_periphs_clkc_driver = {
+> > +       .probe = meson_a1_periphs_probe,
+> > +       .driver = {
+> > +               .name = "a1-clkc",
+> > +               .of_match_table = of_match_ptr(a1_periphs_clkc_match_table),
+> I wonder if we should drop of_match_ptr() here as no other meson clock
+> driver uses it.
+> Also there's commits like 00cb754ac622 ("clk: imx8mq: drop
+> of_match_ptr from of_device_id table") which explicitly remove it from
+> other drivers.
 
-On 4/25/23 12:46 AM, Herbert Xu wrote:
-> On Mon, Apr 24, 2023 at 02:47:26PM -0400, Danny Tsen wrote:
->> +config CRYPTO_CHACHA20_P10
->> +	tristate "Ciphers: ChaCha20, XChacha20, XChacha12 (P10 or later)"
->> +	depends on PPC64 && CPU_LITTLE_ENDIAN
->> +	select CRYPTO_SKCIPHER
-> I thought your IS_REACHABLE test was so that you could build this
-> without the Crypto API? Colour me confused.
->
-> Cheers,
+Exactly, all Meson clock drivers depend on the ARM64 config, which in
+turn selects CONFIG_OF by default. So of_match_ptr can be dropped.
+
+> 
+> Apart form these two this patch looks great to me.
+> 
+
+-- 
+Thank you,
+Dmitry
