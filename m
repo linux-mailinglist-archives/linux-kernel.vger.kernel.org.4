@@ -2,109 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A346EE911
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123586EE914
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236157AbjDYU3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 16:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S236055AbjDYUaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 16:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236055AbjDYU3q (ORCPT
+        with ESMTP id S232214AbjDYUaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:29:46 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45877146C1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:29:45 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94f7a7a3351so1178881666b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:29:45 -0700 (PDT)
+        Tue, 25 Apr 2023 16:30:23 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE07D333;
+        Tue, 25 Apr 2023 13:30:19 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f0596e2c00so14104121cf.3;
+        Tue, 25 Apr 2023 13:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682454583; x=1685046583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5OoYLtgXDECRIcYzlRafhWyTnCuP0UwAEGivrVP3VPE=;
-        b=T4rl6c9hcqkyEw6xTUeEuUj2PmjQ3ZvQCtyBg8II39A6yyuB8H7zRZ5Mp35nYlU1Vr
-         t/bd7hoSsem7i4X0IRnL7ZbuPiNgi5Sd4lXJE0QPp3tBJhdVTSMcca5p5rXmZrCbi4ED
-         fHzylIxiqVluhUXLDwYPlDSml/QLuuicAVHHc=
+        d=gmail.com; s=20221208; t=1682454618; x=1685046618;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RXQsS7DdiSemVpvOd/+IAfNyN39Y2Q7DpC+A5PL+xNA=;
+        b=LvmYZzqI9WmhHAK/C0BbetjeKBmdMLaYDLV99Seog7ajhUKTDkWqE6PvrZdOvBvCXN
+         oC7VTli22EVS1ikyQt0522xLSWD12OSwHiooP9tL3rg71Aj3Xxon4nzhsTbLqsx5PO9r
+         VMgXUQ/GJPYsCCzsO05W/ZKXce93EqsMdOIhlt9B4XkVKAq10tRVyK3T6sP5cqkEPmtt
+         lja6E0MQDX094Fla9w69pA169SDGqRHsdf0Quxam31sFtdWwt6eXE9cowOcBHoN/l4Vz
+         HpslOs9fc+DSO8BONaDjoqbaAWwq65jBknxlbQbQZeQJ/Xvy2OqnPz+XDhgc9KGpaOnv
+         3qsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682454583; x=1685046583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5OoYLtgXDECRIcYzlRafhWyTnCuP0UwAEGivrVP3VPE=;
-        b=jQakaE9Vw9Wr/1AzclopdAcpO0MG5PFNGLQITUBpUdE1HpH41MVocaxDumuVfO1NR2
-         yxVRUi8Ekno5jSCeGVuvi3RPxmeo/AS5oZCu5N0CV5OTLQX8vH8J/N7ReIAG6EjMjO8v
-         y3v/BzMCwACTivZM9O1sx6H6h7TTbDKpxju3x6idZR4iXBAq/8Jocw4To7EkNibWOMbj
-         vNUVhmAnJsyeOEv+TO1vGs9YzNcFTKptDAhh6s0TTe4nHhGvyWuEL/AyhLTKFHnYtRZy
-         pGt8MtdOqANmowvsy/GFmvy3Mzd+LaRA0bgesS0Fee9tJ2+6K9gdTmAVlZQp9QppPOFt
-         6jHA==
-X-Gm-Message-State: AAQBX9dFJypTicJ6WivB6XeNmHjFHVrQKhOkClxRoBNDuiw4d8nG9B2a
-        JullPQTzAv6FIEt4Me+YQ+W+KNGkjY2uwIuvfEQ/zw==
-X-Google-Smtp-Source: AKy350YH3ch4sx5zP9g3p/kYfVfU5i2wUclek5I3hrMUa+y/ZgvFtFWUSsLlWZIlDlKA+WLmEH3KvQ==
-X-Received: by 2002:a17:906:4fca:b0:958:4870:8d09 with SMTP id i10-20020a1709064fca00b0095848708d09mr11911846ejw.37.1682454583500;
-        Tue, 25 Apr 2023 13:29:43 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id fh22-20020a1709073a9600b0094efc389980sm7137111ejc.58.2023.04.25.13.29.42
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1682454618; x=1685046618;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RXQsS7DdiSemVpvOd/+IAfNyN39Y2Q7DpC+A5PL+xNA=;
+        b=IBLB8AkjL4kbgKdmyWdOvKeo89LJF7ZijuDnYR0oP5ALAEsNQgWfwT0n/FUSKvkpbr
+         Hy4tJt4bbhYFONGqBSF66x97t5MFWYNLQqyrey1giOrXxpQcpizD/tP9HFik7K17p9Yu
+         lUb3hUDVqJ6d9FXETjSSYrG2iAwgCQiVQTv1hqxYjsxssC/C1hDFwHHP5bsFebPIADAF
+         QGJGkkvdPtV3qmFvzDaond2LvMMlZLZZ9EwqumkmUONmHHq2iojFZiEIWL0jLb+jkx6u
+         4p4CvK1Vj9zPmdXY0G6bKQmmsIk4aVoPkC+LoDRpInN7M1+WRrlPjB70r+SxhWSubeW1
+         Y4UQ==
+X-Gm-Message-State: AAQBX9egWEUBcsTMJJ6dWJDMaNW6PMfB2noeRQtamnm/3TRtz4/VdJDy
+        O5ljlxBjhdic7EZyUMSWsdA6u+1/oC6HfA==
+X-Google-Smtp-Source: AKy350ZE6zOs2gNMe9NE/LoM0KeCVhu1NrakcyKqVddHUGUANhpxJa8T2n3LZWhvQHdJ/Oj5Xgmi6w==
+X-Received: by 2002:a05:622a:101:b0:3e4:e8be:c3a4 with SMTP id u1-20020a05622a010100b003e4e8bec3a4mr30445538qtw.56.1682454618432;
+        Tue, 25 Apr 2023 13:30:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id b2-20020ac812c2000000b003e8160cf93asm4716700qtj.80.2023.04.25.13.30.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 13:29:43 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-506bfe81303so10578778a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:29:42 -0700 (PDT)
-X-Received: by 2002:aa7:da41:0:b0:506:8660:77a3 with SMTP id
- w1-20020aa7da41000000b00506866077a3mr17103894eds.37.1682454582655; Tue, 25
- Apr 2023 13:29:42 -0700 (PDT)
+        Tue, 25 Apr 2023 13:30:17 -0700 (PDT)
+Message-ID: <37c7ce6e-4e01-9c5c-1c2f-ac55d06f0ec2@gmail.com>
+Date:   Tue, 25 Apr 2023 13:30:10 -0700
 MIME-Version: 1.0
-References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
- <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
- <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk> <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
- <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk> <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
- <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
- <CAHk-=wjSuGTLrmygUSNh==u81iWUtVzJ5GNSz0A-jbr4WGoZyw@mail.gmail.com>
- <20230425194910.GA1350354@hirez.programming.kicks-ass.net> <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
-In-Reply-To: <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 25 Apr 2023 13:29:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjVi5U_DF2Y+fnBuy=RH9OKfK7-MRmpnuZP2wmCdNCqYw@mail.gmail.com>
-Message-ID: <CAHk-=wjVi5U_DF2Y+fnBuy=RH9OKfK7-MRmpnuZP2wmCdNCqYw@mail.gmail.com>
-Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.15 00/73] 5.15.109-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230424131129.040707961@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20230424131129.040707961@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 12:58=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Ok. I'll try to remember this, but maybe it might be worth documenting.
 
-We might document it by just making it clear that it's not that we
-want to read it "once", it's that we want to have a stable value.
 
-There might be other situations where that is all we want.
+On 4/24/2023 6:16 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.109 release.
+> There are 73 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.109-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-IOW, maybe we could have something like
 
-  #define READ_STABLE(x) \
-      ({ __auto_type __val =3D (x); OPTIMIZER_HIDE_VAR(__val); __val; })
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-instead - although from a quick look, the code generation is pretty
-much exactly the same.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-I dunno. Just throwing that idea out there as a "if reading _once_
-isn't the issue, maybe we shouldn't make the code look like it is"...
-
-                Linus
