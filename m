@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5036EE62A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002076EE62E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbjDYQ4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S234832AbjDYQ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbjDYQ42 (ORCPT
+        with ESMTP id S234813AbjDYQ5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:56:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FC0D307;
-        Tue, 25 Apr 2023 09:56:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFE4962699;
-        Tue, 25 Apr 2023 16:56:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B901EC433D2;
-        Tue, 25 Apr 2023 16:56:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682441782;
-        bh=22mPNmkUVHl+VVe7JN/fIv8NuIT+SW8vRSUhM5SEw18=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YHazUVu7uEXa/CUAumf1vdTfPwZ3kOoIumXwpjEuAww5ie1isrYoXmTIeMKDTnX+1
-         3/g2NnbxeyflDVxa48sovr5yskrHJTDf7W6+kwyF1aA826C6+1OFN0MpxHbCFpBnE/
-         rAPNmhNyb0GMwrsRLb1A4Eur7t7MlXei+uD8VFBKfEt7AsS4jhwjoDZhnDhC30nNhy
-         wVsn+zHStUxjYoaAh6nT+ImJSbKkaCtFqiCMEsTqMuX6yklP/o4LKHESBFF82JiLoC
-         QX9qX1oKiyKPuRx/6Q4qw3adV/pjr/Vwxcsa+fhcPjWcBqZrC51UXV8fGnsL6NiXIr
-         lzv7Nat3L2f5Q==
-Date:   Tue, 25 Apr 2023 18:56:18 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-samsung-soc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH] drm/exynos: fix g2d_open/close helper function
- definitions
-Message-ID: <20230425165618.2ztg4mecuvpkdg3a@intel.intel>
-References: <20230417210423.2517593-1-arnd@kernel.org>
+        Tue, 25 Apr 2023 12:57:06 -0400
+Received: from new-shark9.inbox.lv (new-shark9.inbox.lv [194.152.32.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB8313FA1;
+        Tue, 25 Apr 2023 09:57:04 -0700 (PDT)
+Received: from shark4.inbox.lv (shark4 [10.0.1.84])
+        by new-shark9.inbox.lv (Postfix) with ESMTP id 733CA48052F;
+        Tue, 25 Apr 2023 19:57:01 +0300 (EEST)
+Received: from shark4.inbox.lv (localhost [127.0.0.1])
+        by shark4-out.inbox.lv (Postfix) with ESMTP id 5C0C8C018B;
+        Tue, 25 Apr 2023 19:57:01 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
+        s=p20220324; t=1682441821; x=1682443621;
+        bh=Qq9ls3B214o+xFbtaX+maHmcXec0gagOLT9ZANiZIxc=;
+        h=From:To:Cc:Subject:Date:Message-Id:X-ESPOL:From:Date:To:Cc:
+         Message-ID:Subject:Reply-To;
+        b=bERv3ZNQ5JBDYpoXs1JXI1oQ3+XsqTlceOeeOiSKTTDY3Tw3vLNVh1nQS8jyIzlsh
+         8PTiiVwLcCyoT3l1y2hqRmDVd6qfdozIfbZYr1DQe5xUnd1d1tVZsQyPqJ0/pzo/HY
+         G3FsQtnLxGRhks6zbIMFSfDQfzGJ79AmB7zOM5Mw=
+Received: from localhost (localhost [127.0.0.1])
+        by shark4-in.inbox.lv (Postfix) with ESMTP id 4EBD1C018A;
+        Tue, 25 Apr 2023 19:57:01 +0300 (EEST)
+Received: from shark4.inbox.lv ([127.0.0.1])
+        by localhost (shark4.inbox.lv [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id LtyJlcPy_xEg; Tue, 25 Apr 2023 19:57:01 +0300 (EEST)
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+        by shark4-in.inbox.lv (Postfix) with ESMTP id 05A32C016B;
+        Tue, 25 Apr 2023 19:57:01 +0300 (EEST)
+From:   Karl Chan <exkcmailist@inbox.lv>
+To:     linux-amlogic@lists.infradead.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Karl Chan <exkcmailist@inbox.lv>
+Subject: [PATCH v5 0/2] arm64: dts: meson-gxl: add support for Xiaomi Mibox 3
+Date:   Wed, 26 Apr 2023 00:56:22 +0800
+Message-Id: <20230425165624.11999-1-exkcmailist@inbox.lv>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417210423.2517593-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: OK
+X-ESPOL: EZeEAiZdmGU/2M26KZpu+eHlxMi6UUZBzir7z6FSnX9YsLvButt3c2iUB/ecFHrCbg==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,26 +63,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+The Xiaomi Mibox 3 is a TV box based on the Amlogic S905X chipset.
+There are two variants:
+- 2 GiB/8GIB
+- 1 GiB/4GIB
 
-On Mon, Apr 17, 2023 at 11:04:11PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The empty stub functions are defined as global functions, which
-> causes a warning because of missing prototypes:
-> 
-> drivers/gpu/drm/exynos/exynos_drm_g2d.h:37:5: error: no previous prototype for 'g2d_open'
-> drivers/gpu/drm/exynos/exynos_drm_g2d.h:42:5: error: no previous prototype for 'g2d_close'
-> 
-> Mark them as 'static inline' to avoid the warning and to make
-> them behave as intended.
-> 
-> Fixes: eb4d9796fa34 ("drm/exynos: g2d: Convert to driver component API")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Both variants come with:
+- 802.11a/b/g/n/ac wifi (BCM4345)
+- HDMI , AV (CVBS) and S/PDIF optical output
+- 1x USB
 
-Cc: <stable@vger.kernel.org> # v4.19+
+Karl Chan (2):
+  dt-bindings: arm: amlogic: add Xiaomi Mi box 3 binding
+  arm64: dts: meson-gxl: add support for Xiaomi Mi box 3
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+ .../devicetree/bindings/arm/amlogic.yaml      |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile          |   1 +
+ .../amlogic/meson-gxl-s905x-xiaomi-mibox3.dts | 138 ++++++++++++++++++
+ list                                          |   1 +
+ 4 files changed, 141 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s905x-xiaomi-mibox3.dts
+ create mode 100644 list
 
-Thanks,
-Andi
+-- 
+2.40.0
+
