@@ -2,77 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4DE6EDB42
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D105C6EDB4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233303AbjDYFl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 01:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S233318AbjDYFpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 01:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjDYFl6 (ORCPT
+        with ESMTP id S233349AbjDYFpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 01:41:58 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F3D65BC;
-        Mon, 24 Apr 2023 22:41:56 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1prBQr-001ztQ-9V; Tue, 25 Apr 2023 13:41:43 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 25 Apr 2023 13:41:42 +0800
-Date:   Tue, 25 Apr 2023 13:41:42 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Danny Tsen <dtsen@linux.ibm.com>
-Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com
-Subject: Re: [PATCH 2/5] Glue code for optmized Chacha20 implementation for
- ppc64le.
-Message-ID: <ZEdoFv4tS69ELyNo@gondor.apana.org.au>
-References: <20230424184726.2091-1-dtsen@linux.ibm.com>
- <20230424184726.2091-3-dtsen@linux.ibm.com>
+        Tue, 25 Apr 2023 01:45:10 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CF47DA9;
+        Mon, 24 Apr 2023 22:45:03 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33P5iYDh025758;
+        Tue, 25 Apr 2023 00:44:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682401474;
+        bh=EshFoB8Mkf7rfZOTlHpL7ZYxF50voA5/6L7VAz4DBuk=;
+        h=From:To:CC:Subject:Date;
+        b=A8UEcL8kzWG6LYxClhrFz3/cwk7rXeRHd1Cpd/M08VryRSrzMW4j3YKxhRpkPHIf0
+         4+QZSsORPe74PHudM3LwvU8O5wIK99EGS3D384XvVqf6oB72c4U+tRgkTCeeX8IxfT
+         6cTqA+GMYMygl83nS93dRteddrEJxdakDwnH7m6Y=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33P5iY8x025760
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 00:44:34 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 00:44:34 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 00:44:34 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33P5iURn124283;
+        Tue, 25 Apr 2023 00:44:31 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [RFC PATCH 0/2] DP83867/DP83869 Ethernet PHY workaround/fix
+Date:   Tue, 25 Apr 2023 11:14:27 +0530
+Message-ID: <20230425054429.3956535-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424184726.2091-3-dtsen@linux.ibm.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 02:47:23PM -0400, Danny Tsen wrote:
->
-> +static int chacha_p10_stream_xor(struct skcipher_request *req,
-> +				 const struct chacha_ctx *ctx, const u8 *iv)
-> +{
-> +	struct skcipher_walk walk;
-> +	u32 state[16];
-> +	int err;
-> +
-> +	err = skcipher_walk_virt(&walk, req, false);
-> +	if (err)
-> +		return err;
-> +
-> +	chacha_init_generic(state, ctx->key, iv);
-> +
-> +	while (walk.nbytes > 0) {
-> +		unsigned int nbytes = walk.nbytes;
-> +
-> +		if (nbytes < walk.total)
-> +			nbytes = rounddown(nbytes, walk.stride);
-> +
-> +		if (!static_branch_likely(&have_p10) ||
+Hello,
 
-You don't need the static branch in the Crypto API code since
-the registration is already conditional.
+This series adds a workaround for the DP83867 Ethernet PHY to fix packet
+errors observed with short cables, when both ends of the link use the
+DP83867 Ethernet PHY. This issue is described in Section 3.8 at [0].
 
-Cheers,
+Also, for the DP83869 Ethernet PHY which supports both RGMII and MII
+modes of operation, support is added to allow switching to MII mode by
+configuring the OP_MODE_DECODE Register in Section 9.6.1.65 at [1].
+
+Regards,
+Siddharth.
+
+---
+[0]: https://www.ti.com/lit/an/snla246b/snla246b.pdf
+[1]: https://www.ti.com/lit/ds/symlink/dp83869hm.pdf
+
+Grygorii Strashko (2):
+  net: phy: dp83867: add w/a for packet errors seen with short cables
+  net: phy: dp83869: fix mii mode when rgmii strap cfg is used
+
+ drivers/net/phy/dp83867.c | 15 ++++++++++++++-
+ drivers/net/phy/dp83869.c |  5 ++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+
