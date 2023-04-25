@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A52C6EEA4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFEB6EEA4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbjDYWY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 18:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S236386AbjDYWZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 18:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjDYWY5 (ORCPT
+        with ESMTP id S236190AbjDYWY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 18:24:57 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58808CC1E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:24:56 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-32b0cc0eb43so53434375ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:24:56 -0700 (PDT)
+        Tue, 25 Apr 2023 18:24:58 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636DB5FF1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:24:57 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-76355514e03so549679739f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682461495; x=1685053495;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CuJKxfEGJnOY6oqokaUbcqI0hvo9kY/6oilZjxK5wcg=;
-        b=rtE+w3+EToaewzliFYao4Gx1k1pEZ50a7374ouPdyz4c9KyTOyvd0qX4+vebjUT91O
-         1ehLcOt1ZPq7IzncS6xzKdJ79V0s3ZCo3kcZ75G/bvNsoRy14lqGkvTxe68CAylZVZYM
-         qGyvp0tFX/j14geYVbbAFAT5byjRneS86DEmz9rYYvxcmaesNBelbG95489L/VrsFOtQ
-         316WnTF7sBRgxos/V7TCcVznwNurt5hIIeXNeOLZoZx+G6jUUDWN255/qQfiAFtAz3kQ
-         n6YtmMdgn8mX8nKUTx1zhh2ppHt9lHH1qB5AfIyGFFcAXG8avY/NWw6P0HIs7pAoYUPh
-         2Kcg==
+        d=gmail.com; s=20221208; t=1682461496; x=1685053496;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=72+eO6KwavTo94Q3dwD5X6q19DNV6pOCYjiHiYVA/Vw=;
+        b=Grk8BdnodSaCw+q2KEGxiYiB/BWivAhKBG3jYwZhxGLowfMkRBXpthNBz0x+pd+T3P
+         6CAtDSNrOHaEJsadCy0ZB8775sPskCbqboCd8pgull+tCAZAhHrSBr2yYvnChZ429l1W
+         aNLhgWELCQPxiDcM9nKlOy4UJVJqEDTGoYpug3z4DVq5egXl9vztA77qAbCwgUwqoInQ
+         7ZYsWmtZ80pXz/WM7d2RuwccAsEaNdfmcMISDUD4XhhkFwyBq8TeJFRqYqN9kxZlR3KB
+         5bD+ekaggIS6DwCjFeDGRUXZP6rxMkCM3/nmhEJGxgEO4NP6+N5SRHHBKImsVGhgq95e
+         SMMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682461495; x=1685053495;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CuJKxfEGJnOY6oqokaUbcqI0hvo9kY/6oilZjxK5wcg=;
-        b=J69Uf/BbpNEb+ZgqRtbbaeNS2G/uD+YGqTgZe6Zigy1lWri7/gG63hhcmlpLHuA6JD
-         0pugitixXOoRdusAr9iHGSpA9z1TFZNNcNBwFEDHThL3yaq/d6YymM6m5V9uw2k7rL2U
-         REr/BgsoglmvqRjtiNyYSytzc8TW5M026NlIrVVXkc80TDFp/lI9nuWrcoMrKddZtZ05
-         xd6YAsQZe6zAAKSjicB9ifhl4DoE64e2lYK3eEQy8rfM/P3Q87UYhNJXeSabHJaImHMl
-         yJfA2d6VPXAZm666zVhF+46u+cyk4xcAbTHRa8Y4U3fGzXGapFjOtIFQYL5WZo0Gwhlj
-         59hw==
-X-Gm-Message-State: AAQBX9fit6CfVUDftmbX8a8JTY+saFFKWxjlI6f3VqGvumBoqLIAfOd+
-        WEVcKeThBr5hWtelmvmhz5I=
-X-Google-Smtp-Source: AKy350a8yjGj8+9pDxme1/97N0vQc1KuCnae7bWnGIYBb0cQDqinbFIbGE3MZ3Vhrzx+/3bDXvetmA==
-X-Received: by 2002:a92:d40d:0:b0:317:c80f:b416 with SMTP id q13-20020a92d40d000000b00317c80fb416mr8313209ilm.20.1682461495601;
-        Tue, 25 Apr 2023 15:24:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682461496; x=1685053496;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=72+eO6KwavTo94Q3dwD5X6q19DNV6pOCYjiHiYVA/Vw=;
+        b=CSMmm/OxKtL+S1gAsG/rjyfCZkx9GIot2TBNsp9o/sQ9idi8CIfF1RxEsWh/9ZzvMx
+         aINQMGuhqWobjWUWZRuCi29zjrUmJEGr0kWeLwnPRYxqgfVfcVqR+h469qaWV98sLkOV
+         B3LsP3NxPVl0qBHZoJRYZm4eicriNDfA911B6nAuGi6lWxAt2XCqPRggKwmixTPdGyhN
+         Y1KNcj+MSeOIt7HTOY8XhWfL4CQIUuP5kA9cx6261lOK8w6U90vkFkQJbheSyqeubSsV
+         I4oDiID8AHWaaR+2SvPXmf3wr3QqatoaB/Ld6w7CGTQue6l1SLa1AyVJD08oEunpRBhc
+         xsLw==
+X-Gm-Message-State: AAQBX9codZ9ky4Cj7tIhET23yAxelcQKcbiX2SBMm4iudc6pLHc+AZED
+        mySTVIGGYDsofW6FSyTf20MGCtvkRRE=
+X-Google-Smtp-Source: AKy350bcOPFaqZU/Q8Y4YjEKceAGvIRSYtdv5UXWCB8wrA6JhTBamchaYYBw4d9VwQnkTuRpNfmbdA==
+X-Received: by 2002:a92:c809:0:b0:328:bfbd:1e87 with SMTP id v9-20020a92c809000000b00328bfbd1e87mr8356225iln.27.1682461496560;
+        Tue, 25 Apr 2023 15:24:56 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id 13-20020a92180d000000b003244d7f2292sm3833008ily.32.2023.04.25.15.24.54
+        by smtp.googlemail.com with ESMTPSA id 13-20020a92180d000000b003244d7f2292sm3833008ily.32.2023.04.25.15.24.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 15:24:55 -0700 (PDT)
+        Tue, 25 Apr 2023 15:24:56 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     catalin.marinas@arm.com, linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 0/3] kmemleak report format changes
-Date:   Tue, 25 Apr 2023 16:24:43 -0600
-Message-Id: <20230425222446.170486-1-jim.cromie@gmail.com>
+Subject: [PATCH 1/3] kmemleak: drop (age <increasing>) from leak record
+Date:   Tue, 25 Apr 2023 16:24:44 -0600
+Message-Id: <20230425222446.170486-2-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230425222446.170486-1-jim.cromie@gmail.com>
+References: <20230425222446.170486-1-jim.cromie@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,56 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If format changes are not /sys/** ABI violating, heres 3 minor ones:
+Displaying age is pretty, but counter-productive; it surrenders
+idempotency of the output, which breaks simple hash-based cataloging
+of the records by the user.
 
-1st strips "age <increasing>" from output.  This makes the output
-idempotent; unchanging until a new leak is reported.
+The trouble: sequential reads, wo new leaks, get new results:
 
-2nd adds the backtrace.checksum to the "backtrace:" line.  This lets a
-user see repeats without actually reading the whole backtrace.  So now
-the backtrace line looks like this:
+  :#> sum /sys/kernel/debug/kmemleak
+  53439    74 /sys/kernel/debug/kmemleak
+  :#> sum /sys/kernel/debug/kmemleak
+  59066    74 /sys/kernel/debug/kmemleak
 
-  backtrace (ck 603070071):  # also see below
+and age is why (nothing else changes):
 
-Q: should ck be spelled crc ? it feels more communicative.
+  :#> grep -v age /sys/kernel/debug/kmemleak | sum
+  58894    67
+  :#> grep -v age /sys/kernel/debug/kmemleak | sum
+  58894    67
 
-NB: with ck exposed, it becomes possible to do a "selective clear",
-something like:
+Further, age is not an intrinsic property of the leak, its an artifact
+of when it was scanned, and relative age is embedded in leak order.
 
-  echo drop 603070071 > /sys/kernel/debug/kmemleak
+While userspace could work around the always-changing output, ISTM
+none could be relying upon age in any important way, and having
+idempotent output is just better.
 
-The 3rd patch takes __init off of kmemleak_test_init().  This fixes a
-bare-pointer in the 2nd line of the backtrace below, which previously
-looked like:
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+ mm/kmemleak.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-    [<00000000ef738764>] 0xffffffffc02350a2
-
-NB: this happens still/again, after rmmod kmemleak-test.
-
-unreferenced object 0xffff888005d9ca40 (size 32):
-  comm "modprobe", pid 412, jiffies 4294703300
-  hex dump (first 32 bytes):
-    00 cd d9 05 80 88 ff ff 40 cf d9 05 80 88 ff ff  ........@.......
-    14 a7 c4 f6 7d f9 87 10 00 00 00 00 00 00 00 00  ....}...........
-  backtrace (ck 1354775490):
-    [<000000002c474f61>] kmalloc_trace+0x26/0x90
-    [<00000000b26599c1>] kmemleak_test_init+0x58/0x2d0 [kmemleak_test]
-    [<0000000044d13990>] do_one_initcall+0x43/0x210
-    [<00000000131bc505>] do_init_module+0x4a/0x210
-    [<00000000b2902890>] __do_sys_finit_module+0x93/0xf0
-    [<00000000673fdce2>] do_syscall_64+0x34/0x80
-    [<00000000357a2d80>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-
-Jim Cromie (3):
-  kmemleak: drop (age <increasing>) from leak record
-  kmemleak: add checksum to backtrace report
-  kmemleak-test: drop __init to get better backtrace
-
- mm/kmemleak.c                    | 8 +++-----
- samples/kmemleak/kmemleak-test.c | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
-
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index a2d34226e3c8..f025c7bc845b 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -355,14 +355,12 @@ static void print_unreferenced(struct seq_file *seq,
+ 	int i;
+ 	unsigned long *entries;
+ 	unsigned int nr_entries;
+-	unsigned int msecs_age = jiffies_to_msecs(jiffies - object->jiffies);
+ 
+ 	nr_entries = stack_depot_fetch(object->trace_handle, &entries);
+ 	warn_or_seq_printf(seq, "unreferenced object 0x%08lx (size %zu):\n",
+ 			  object->pointer, object->size);
+-	warn_or_seq_printf(seq, "  comm \"%s\", pid %d, jiffies %lu (age %d.%03ds)\n",
+-			   object->comm, object->pid, object->jiffies,
+-			   msecs_age / 1000, msecs_age % 1000);
++	warn_or_seq_printf(seq, "  comm \"%s\", pid %d, jiffies %lu\n",
++			   object->comm, object->pid, object->jiffies);
+ 	hex_dump_object(seq, object);
+ 	warn_or_seq_printf(seq, "  backtrace:\n");
+ 
 -- 
 2.40.0
 
