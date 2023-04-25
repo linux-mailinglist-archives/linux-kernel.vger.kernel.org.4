@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783486EE52D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9DB6EE52F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbjDYQBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S234191AbjDYQBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjDYQBP (ORCPT
+        with ESMTP id S234638AbjDYQBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:01:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D32013C19;
-        Tue, 25 Apr 2023 09:01:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE4EA62F7E;
-        Tue, 25 Apr 2023 16:01:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BE3C433EF;
-        Tue, 25 Apr 2023 16:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682438472;
-        bh=6Yrx9edyKSHeZsGFemGRrrlnf8qH6XswXiSIsdYmwXQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ush8rZM3eb00Hb51tg+A8ZXm+shFZhNHKvT5BIaiTGIc6+U/u6xcXnuvf4RxgN2br
-         +1vbJ9ssyO7AmzqOv2z29KgUyJSmptxH63jNTKLj/tpyP1b0KPBi6H0Zrpa6SNKqps
-         UGrzkHvbcLzCno1M5PktVHdbdurffu9oZ/vuWHysfnzODopEBsyrzwlY4MYI/LMdTH
-         D9Xla0z0n8WYStFbY7nAqqjbwC8E0bjdYB+txBTDoWpvKS4NpRQAhkkkMcsn/1/0ey
-         1ZtsnTF5kFS0j34Vt3mTimh5TYV4FX3ixWLHTWW06AQr5xzBIFOZvPgwDI1S3bMCzR
-         P8/aJshUQSOCw==
-Date:   Wed, 26 Apr 2023 01:01:07 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RESEND] selftests/ftrace: Improve integration with
- kselftest runner
-Message-Id: <20230426010107.0858c3c8f435734624221a21@kernel.org>
-In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
-References: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 25 Apr 2023 12:01:37 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD1915471
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:01:29 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94eff00bcdaso1089881366b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1682438488; x=1685030488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2qZwe+g9Dxagr64hvkp0DhXSjVEAgZXo7VQunQF7wJI=;
+        b=s6lxl/bNCKB74RDhUWpS6sp3eZRcXFwdRnzT/5iAvi8qIT7vmatOaU+ON5LbTlP1Ke
+         t40qJ2JzqOyRd6/Emtfw9AC27BFIDI6WXh/J+u2QKv1Yt7zvcYLmsRa+sIUfwIocsX64
+         8W92McU54ZiLTZcKDTRLEax1MOUzMe95jVR3CbWaMGtAQLpH8bJriauESPZfAjun81xG
+         I70XpVc/9k8RjAmUo59/nDUIgYSeOmf0yRuY7jYB/MMk/g+1GMfySEuYRtnTq0FD9wWj
+         4iRebKqersE7iF/XG5HV9k06kmh6hKvLI3Evj0XuX755mnRNBeXUjqOcif2pRr55fVGW
+         th+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682438488; x=1685030488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2qZwe+g9Dxagr64hvkp0DhXSjVEAgZXo7VQunQF7wJI=;
+        b=NEk++B/9gOQyEnZXl2xf38sW3g23XQhlwJWQZNpZjaqTW7q9aABsvRjAPGySsIqitu
+         vn40upzo//fsaHCcnvkqdD2T0HIM+f3tAH461k1NLU6MyXqBZVsWkpt8eUOhVdjsnM+Z
+         JP0pEGYhuLk31W3sIPwMZPvtFcQ4P+YKgXMNrC0r28TcWEyVzuFRo+ZUTiAPKN+9s/YH
+         MGObDkvdxNkmw8w1RUftfR596IwgP94KF6KrzM1NvzQvPZeXJxl7P0ehoejxnLW9DbZM
+         uoo+PFIfSJngrX0ax2I/I5bsNc/SUDeLJkIvKByHrGQHMrub56eZQq1BCE3D1BDSYpol
+         99pQ==
+X-Gm-Message-State: AAQBX9cHqhcyCwV2MieH1v/KRAT/Mf+MjVQwWQNlWYlvO3R39uQXpwL/
+        8gbg239wVocnUYwoOVrwWqbvgyeol8iw5ANd4fLau6syyHjiOgjK65w=
+X-Google-Smtp-Source: AKy350bCTCO5FEN3I9Rp+cI+k9IsgEyugAx+bZ7mqb2EP6CD9TQx690F5KVSw5g1qGf64xP5J4DwvncWgDkwOqAS+4I=
+X-Received: by 2002:a17:907:168d:b0:94a:82ca:12e5 with SMTP id
+ hc13-20020a170907168d00b0094a82ca12e5mr17161732ejc.45.1682438487931; Tue, 25
+ Apr 2023 09:01:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230414140203.707729-1-pan@semihalf.com> <20230414140203.707729-3-pan@semihalf.com>
+ <5544de12-396c-29d4-859c-a6e17b2e2de4@linaro.org>
+In-Reply-To: <5544de12-396c-29d4-859c-a6e17b2e2de4@linaro.org>
+From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Date:   Tue, 25 Apr 2023 18:01:17 +0200
+Message-ID: <CAF9_jYRXsdQX22bOVG5Dp20GnC7JniqGC6popTS5dSxmiqjizQ@mail.gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: ASoC: Add chv3-i2s
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dinguyen@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,250 +74,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 12:19:30 +0100
-Mark Brown <broonie@kernel.org> wrote:
+On Fri, Apr 14, 2023 at 7:00=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 14/04/2023 16:01, Pawe=C5=82 Anikiel wrote:
+> > Add binding for chv3-i2s device.
+>
+> Your subject needs improvements:
+> 1. ASoC goes before bindings
+> 2. You miss some meaningful title of device. "chv3-i2s" can be anything,
+> so add Google or Google Chameleon. Or use entire compatible.
 
-> The ftrace selftests do not currently produce KTAP output, they produce a
-> custom format much nicer for human consumption. This means that when run in
-> automated test systems we just get a single result for the suite as a whole
-> rather than recording results for individual test cases, making it harder
-> to look at the test data and masking things like inappropriate skips.
-> 
-> Address this by adding support for KTAP output to the ftracetest script and
-> providing a trivial wrapper which will be invoked by the kselftest runner
-> to generate output in this format by default, users using ftracetest
-> directly will continue to get the existing output.
-> 
-> This is not the most elegant solution but it is simple and effective. I
-> did consider implementing this by post processing the existing output
-> format but that felt more complex and likely to result in all output being
-> lost if something goes seriously wrong during the run which would not be
-> helpful. I did also consider just writing a separate runner script but
-> there's enough going on with things like the signal handling for that to
-> seem like it would be duplicating too much.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/ftrace/Makefile        |  3 +-
->  tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
->  tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
->  3 files changed, 70 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-> index d6e106fbce11..a1e955d2de4c 100644
-> --- a/tools/testing/selftests/ftrace/Makefile
-> +++ b/tools/testing/selftests/ftrace/Makefile
-> @@ -1,7 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  all:
->  
-> -TEST_PROGS := ftracetest
-> +TEST_PROGS_EXTENDED := ftracetest
-> +TEST_PROGS := ftracetest-ktap
->  TEST_FILES := test.d settings
->  EXTRA_CLEAN := $(OUTPUT)/logs/*
->  
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index c3311c8c4089..539c8d6d5d71 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
->  echo " Options:"
->  echo "		-h|--help  Show help message"
->  echo "		-k|--keep  Keep passed test logs"
-> +echo "		-K|--KTAP  Output in KTAP format"
+Would "ASoC: dt-bindings: Add Google Chameleon v3 I2S device" be better?
 
-This should be "-K|--ktap".
+>
+>
+> >
+> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+> > ---
+> >  .../bindings/sound/google,chv3-i2s.yaml       | 42 +++++++++++++++++++
+> >  1 file changed, 42 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/sound/google,chv3=
+-i2s.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/sound/google,chv3-i2s.ya=
+ml b/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
+> > new file mode 100644
+> > index 000000000000..6f49cf059ac5
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/sound/google,chv3-i2s.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Google Chameleon v3 I2S device
+> > +
+> > +maintainers:
+> > +  - Pawe=C5=82 Anikiel <pan@semihalf.com>
+> > +
+> > +description: |
+> > +  I2S device for the Google Chameleon v3. The device handles both RX
+> > +  and TX using a producer/consumer ring buffer design.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: google,chv3-i2s
+>
+> Missing blank line.
+>
+> Is chv3 the name of your SoC? Where are the SoC bindings? What's exactly
+> the versioning scheme for it (compatibles must be specific, not generic).
 
-Others looks good to me. Can you update it with my Ack?
+The Chameleon v3 is based around an Intel Arria 10 SoC FPGA. The i2s
+device is implemented inside the FPGA. Does this case require SoC
+bindings?
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org> # with above fix.
+>
+> > +  reg:
+> > +    items:
+> > +      - description: core registers
+> > +      - description: irq registers
+>
+> As well...
+>
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    i2s0: i2s@c0060300 {
+> > +        compatible =3D "google,chv3-i2s";
+> > +        reg =3D <0xc0060300 0x100>,
+> > +              <0xc0060f00 0x10>;
+> > +        interrupts =3D <0 20 IRQ_TYPE_LEVEL_HIGH>;
+>
+> Isn't 0 also a known define?
 
-Thank you,
+Do you mean this?
+interrupts =3D <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
 
-
->  echo "		-v|--verbose Increase verbosity of test messages"
->  echo "		-vv        Alias of -v -v (Show all results in stdout)"
->  echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-> @@ -85,6 +86,10 @@ parse_opts() { # opts
->        KEEP_LOG=1
->        shift 1
->      ;;
-> +    --ktap|-K)
-> +      KTAP=1
-> +      shift 1
-> +    ;;
->      --verbose|-v|-vv|-vvv)
->        if [ $VERBOSE -eq -1 ]; then
->  	usage "--console can not use with --verbose"
-> @@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
->  TEST_CASES=`find_testcases $TEST_DIR`
->  LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
->  KEEP_LOG=0
-> +KTAP=0
->  DEBUG=0
->  VERBOSE=0
->  UNSUPPORTED_RESULT=0
-> @@ -229,7 +235,7 @@ prlog() { # messages
->      newline=
->      shift
->    fi
-> -  printf "$*$newline"
-> +  [ "$KTAP" != "1" ] && printf "$*$newline"
->    [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
->  }
->  catlog() { #file
-> @@ -260,11 +266,11 @@ TOTAL_RESULT=0
->  
->  INSTANCE=
->  CASENO=0
-> +CASENAME=
->  
->  testcase() { # testfile
->    CASENO=$((CASENO+1))
-> -  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
-> -  prlog -n "[$CASENO]$INSTANCE$desc"
-> +  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
->  }
->  
->  checkreq() { # testfile
-> @@ -277,40 +283,68 @@ test_on_instance() { # testfile
->    grep -q "^#[ \t]*flags:.*instance" $1
->  }
->  
-> +ktaptest() { # result comment
-> +  if [ "$KTAP" != "1" ]; then
-> +    return
-> +  fi
-> +
-> +  local result=
-> +  if [ "$1" = "1" ]; then
-> +    result="ok"
-> +  else
-> +    result="not ok"
-> +  fi
-> +  shift
-> +
-> +  local comment=$*
-> +  if [ "$comment" != "" ]; then
-> +    comment="# $comment"
-> +  fi
-> +
-> +  echo $CASENO $result $INSTANCE$CASENAME $comment
-> +}
-> +
->  eval_result() { # sigval
->    case $1 in
->      $PASS)
->        prlog "	[${color_green}PASS${color_reset}]"
-> +      ktaptest 1
->        PASSED_CASES="$PASSED_CASES $CASENO"
->        return 0
->      ;;
->      $FAIL)
->        prlog "	[${color_red}FAIL${color_reset}]"
-> +      ktaptest 0
->        FAILED_CASES="$FAILED_CASES $CASENO"
->        return 1 # this is a bug.
->      ;;
->      $UNRESOLVED)
->        prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-> +      ktaptest 0 UNRESOLVED
->        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
->        return $UNRESOLVED_RESULT # depends on use case
->      ;;
->      $UNTESTED)
->        prlog "	[${color_blue}UNTESTED${color_reset}]"
-> +      ktaptest 1 SKIP
->        UNTESTED_CASES="$UNTESTED_CASES $CASENO"
->        return 0
->      ;;
->      $UNSUPPORTED)
->        prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-> +      ktaptest 1 SKIP
->        UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
->        return $UNSUPPORTED_RESULT # depends on use case
->      ;;
->      $XFAIL)
->        prlog "	[${color_green}XFAIL${color_reset}]"
-> +      ktaptest 1 XFAIL
->        XFAILED_CASES="$XFAILED_CASES $CASENO"
->        return 0
->      ;;
->      *)
->        prlog "	[${color_blue}UNDEFINED${color_reset}]"
-> +      ktaptest 0 error
->        UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
->        return 1 # this must be a test bug
->      ;;
-> @@ -371,6 +405,7 @@ __run_test() { # testfile
->  run_test() { # testfile
->    local testname=`basename $1`
->    testcase $1
-> +  prlog -n "[$CASENO]$INSTANCE$CASENAME"
->    if [ ! -z "$LOG_FILE" ] ; then
->      local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
->    else
-> @@ -405,6 +440,17 @@ run_test() { # testfile
->  # load in the helper functions
->  . $TEST_DIR/functions
->  
-> +if [ "$KTAP" = "1" ]; then
-> +  echo "TAP version 13"
-> +
-> +  casecount=`echo $TEST_CASES | wc -w`
-> +  for t in $TEST_CASES; do
-> +    test_on_instance $t || continue
-> +    casecount=$((casecount+1))
-> +  done
-> +  echo "1..${casecount}"
-> +fi
-> +
->  # Main loop
->  for t in $TEST_CASES; do
->    run_test $t
-> @@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
->  prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
->  prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
->  
-> +if [ "$KTAP" = "1" ]; then
-> +  echo -n "# Totals:"
-> +  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-> +  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-> +  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-> +  echo -n " xpass:0"
-> +  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-> +  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-> +  echo
-> +fi
-> +
->  cleanup
->  
->  # if no error, return 0
-> diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-> new file mode 100755
-> index 000000000000..b3284679ef3a
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-> @@ -0,0 +1,8 @@
-> +#!/bin/sh -e
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-> +#
-> +# Copyright (C) Arm Ltd., 2023
-> +
-> +./ftracetest -K
-> 
-> ---
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-> change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
-> 
-> Best regards,
-> -- 
-> Mark Brown <broonie@kernel.org>
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Regards,
+Pawe=C5=82
