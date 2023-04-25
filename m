@@ -2,94 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864D46EDFF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6960A6EE008
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbjDYKFP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Apr 2023 06:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S233704AbjDYKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbjDYKFK (ORCPT
+        with ESMTP id S233615AbjDYKMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:05:10 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3DECC11;
-        Tue, 25 Apr 2023 03:05:07 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5D1B624E2D6;
-        Tue, 25 Apr 2023 18:04:57 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
- 2023 18:04:57 +0800
-Received: from localhost.localdomain (113.72.145.137) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
- 2023 18:04:56 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1] watchdog: starfive: Fix the probe return error if PM and early_enable are both disabled
-Date:   Tue, 25 Apr 2023 18:04:56 +0800
-Message-ID: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 25 Apr 2023 06:12:07 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044CDC15B;
+        Tue, 25 Apr 2023 03:12:05 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 1B7DD2B0671D;
+        Tue, 25 Apr 2023 06:12:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 25 Apr 2023 06:12:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1682417521; x=
+        1682424721; bh=6ykmRoJ2ViKku45z63OOrhQO86nvESrAdiWG+K7bYwg=; b=c
+        TDVrrJwJKmBSLCZheZhCKbfhHj89iyuDI9vXtVPgz7Ym9svXdHwoke8YmZXCqthh
+        Dw/yM/Yh6/Jv7G+J6l6Hz8flfXI8blB1z1RdOTyprn4atgk5r/DyuW3RMbxU5w5R
+        Si1LutW9YV4Ae12xbcNxhUZ6Z0mRfVihmRIuRAt3clBMGEoo68fwSqrMZtChKUZD
+        vtUDX/Ybm48ar48ml6553kpg21Diy6e3UNUHLcKlx+Wmw0n6bt/9aNBmpO2rsJ2g
+        9jb58e80XBwgakjaHtHw/nkJ0wasVCDg+Kvn6VcIvfTlQ/NiJJyWfBkmhvmETTEj
+        zHTqFHPh2Hhe3XEIN54aw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682417521; x=1682424721; bh=6ykmRoJ2ViKku
+        45z63OOrhQO86nvESrAdiWG+K7bYwg=; b=WJYj4cV/CB4Wt++zgV0y3XLrBW2V8
+        IdDYNBmyW2TZ1BrHyTSM9xB23HAFhIxnRPIIfMUl4cwi3LitMeI4niSUQDfl9LDx
+        OPYbWpYhJlZmJg03JnqcJmvWCtPqpqA/6HouMN/xIHvYuPM5P5dx0vYavhlOn8Tm
+        5LsAwNBieltv76YqxmRogvh50Xm6vyEAdzjio6lCgUIoZsNnqvgWFgioK8zPaaKw
+        hMhwsBKgdekr/gn033pJNRMzyaELXGIdSWOA4MneADwWnj/xsxdsheSx2jvrh+oG
+        UnZN4Re0NkR2JE7gRX8TD+r9w+ApJAQWuqc3dDXd9mB2rjvlwdtOVKDMw==
+X-ME-Sender: <xms:badHZHZYeUEJENgpRE-Mpgrt1Kvgbk2MbTmcyCjfaBtU_2hp4c4IQA>
+    <xme:badHZGbK4g4wsD9GCgR3WiRiO_Iia6kZTZANxPHNHZF7XueO7yYEp0ernSM95mBun
+    XnNqO-UuaPRKcTMugA>
+X-ME-Received: <xmr:badHZJ8p0BmVMjsWocvSADfdKF8pvgWXCejORpFkadjfYUkLpzXhOisfhMbwrbdPYMUaVw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhepgfdtveeugeethfffffeklefgkeelgfekfedt
+    heeileetuefhkeefleduvddtkeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:badHZNr-fYgDaMsdl0i06VFTXfz4uwQu1qn-h1U2NkURVghgIOZnjA>
+    <xmx:badHZCoj2YlNzXGd--O7PUdLSPYnUr9pSyEqOofDPvkdLLGnyL_tTA>
+    <xmx:badHZDRRqh6NXkdKb-2c7-BTlI6SRGXQ9rU1uFuPtofbAfFpt2ZXzQ>
+    <xmx:cadHZPqdozY9VQMi-DJd91YwjAyNau4zQj66k-gSVvDIlBKXdE7pyUOlFp8>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Apr 2023 06:11:57 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id F3F9D10BAC9; Tue, 25 Apr 2023 13:11:53 +0300 (+03)
+Date:   Tue, 25 Apr 2023 13:11:53 +0300
+From:   "Kirill A . Shutemov" <kirill@shutemov.name>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: Re: [PATCH v3] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <20230425101153.xxi4arpwkz7ijnvm@box.shutemov.name>
+References: <23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.145.137]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the starfive watchdog driver uses 'pm_runtime_put_sync()' as probe
-return value at last and 'early_enable' is disabled, it could return the
-error '-ENOSYS' if the CONFIG_PM is disabled, but the driver should works
-normally.
+On Tue, Apr 25, 2023 at 08:14:14AM +0100, Lorenzo Stoakes wrote:
+> GUP does not correctly implement write-notify semantics, nor does it
+> guarantee that the underlying pages are correctly dirtied, which could lead
+> to a kernel oops or data corruption when writing to file-backed mappings.
+> 
+> This is only relevant when the mappings are file-backed and the underlying
+> file system requires folio dirty tracking. File systems which do not, such
+> as shmem or hugetlb, are not at risk and therefore can be written to
+> without issue.
+> 
+> Unfortunately this limitation of GUP has been present for some time and
+> requires future rework of the GUP API in order to provide correct write
+> access to such mappings.
+> 
+> In the meantime, we add a check for the most broken GUP case -
+> FOLL_LONGTERM - which really under no circumstances can safely access
+> dirty-tracked file mappings.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+> v3:
+> - Rebased on latest mm-unstable as of 24th April 2023.
+> - Explicitly check whether file system requires folio dirtying. Note that
+>   vma_wants_writenotify() could not be used directly as it is very much focused
+>   on determining if the PTE r/w should be set (e.g. assuming private mapping
+>   does not require it as already set, soft dirty considerations).
 
-Add a check to make sure the PM is enabled and then use
-'pm_runtime_put_sync()' as return value when 'early_enable' is disabled.
+Hm. Okay. Have you considered having a common base for your case and
+vma_wants_writenotify()? Code duplication doesn't look good.
 
-Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
 
-Hi, Guenter and Wim,
-
-This patch fixes the issue of StarFive watchdog driver and rebases on
-the master branch of linux-next.
-
-Thanks.
- 
----
- drivers/watchdog/starfive-wdt.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-index 1995cceca51e..51e487e09960 100644
---- a/drivers/watchdog/starfive-wdt.c
-+++ b/drivers/watchdog/starfive-wdt.c
-@@ -492,7 +492,8 @@ static int starfive_wdt_probe(struct platform_device *pdev)
- 		goto err_exit;
- 
- 	if (!early_enable)
--		return pm_runtime_put_sync(&pdev->dev);
-+		if (pm_runtime_enabled(&pdev->dev))
-+			return pm_runtime_put_sync(&pdev->dev);
- 
- 	return 0;
- 
 -- 
-2.25.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
