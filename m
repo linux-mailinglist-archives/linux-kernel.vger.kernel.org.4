@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4536EDA34
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 04:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6B36EDA39
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 04:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjDYCQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 22:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S232969AbjDYCY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 22:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDYCQB (ORCPT
+        with ESMTP id S229822AbjDYCY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 22:16:01 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69121A249
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 19:16:00 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ef3887e3c0so22273751cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 19:16:00 -0700 (PDT)
+        Mon, 24 Apr 2023 22:24:26 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE8DA5CB
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 19:24:25 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so743139966b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 19:24:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682388959; x=1684980959;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3CUi8Pu2aq3PZJRR6Wmf7E6lNE8E6L2aFBDpceT4KFs=;
-        b=m2OuU8z6lXuImyl6itdLMAK9t4leD5YS4aq2+/YRI09MklwI98oBG9WDJoN/meMbNB
-         eXdMPeb70Hyf0Kus4sor21h3pwJdOI4uU/xQbuydlx4t4C9pCoOidXyfSrODYtWhSz4x
-         I3ZyMIZQezTs4wqX8+fHlJKKAMmciZ4FOW7A3GCT5e+N7pML/L56xxy/Qc6oM76Wh7zQ
-         POYWwVViWSYTJig7BlcY8Gtji4T3hG3BeIPajyITtxA2ZKt0Neg+3cGXqlXGHnleM7gG
-         USp3aD4UYLhUYIXvCX/cD+ys/zRWcsqM+r0HzK1Gkgb65TOzlcgKqSjWLoe/Lk5Gm8kM
-         27og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682388959; x=1684980959;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linux-foundation.org; s=google; t=1682389464; x=1684981464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3CUi8Pu2aq3PZJRR6Wmf7E6lNE8E6L2aFBDpceT4KFs=;
-        b=FDF0jddRVrzuws4/xUsEQQw5QNWzoAG0u94Aakz+JdUgI5DBI55XJ/5IcZhE81JByG
-         vqA+rqZl8ji08xGJ1xYST1vPZ5Pep8fKxjkm3fXkxdQEjaILmKKv5ofeeox4wQqKwlNH
-         6P2fjakHPK9SGgifGBWceZDaA1gz27h+SHSHri2Kz3yImFBgq7TX37A9cigd6Z4tF/Pa
-         /V63R1pV5kOpVzoM+KtBsf6eZkSp5HZr2Nf/4fau09XXqTxOdyhDHvZX/9mMBAi8pviY
-         7XeEvL7RpDZQniJS1eVNvsykpyuU2Zs0OL9/6K4ac2TCsglsQPOLMdEzhs6JztANxM+1
-         /XQA==
-X-Gm-Message-State: AAQBX9dbAvVhGM3HCnagrBB4mpUZjQ/bmp/+M8L/+w+XiHLHw2WZ2evx
-        BY9VlMGqA22/U4q7mNlqUH7RdQ==
-X-Google-Smtp-Source: AKy350Y1l9vZ8aSitNTEyliRuPSOSXC2TggqdvnlTDYsZZz27IVvS/tI6xxrM7Cr/jakm2DIBOzbMQ==
-X-Received: by 2002:ac8:5c46:0:b0:3ef:58f5:9ff7 with SMTP id j6-20020ac85c46000000b003ef58f59ff7mr25700800qtj.53.1682388959560;
-        Mon, 24 Apr 2023 19:15:59 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:9fc5])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05620a091100b0074e003c55f0sm3993712qkv.102.2023.04.24.19.15.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 19:15:59 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 22:15:58 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 14/26] mm: compaction: simplify should_compact_retry()
-Message-ID: <20230425021558.GB5666@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-15-hannes@cmpxchg.org>
- <20230421143654.g6ta3kd6ea7fsmp6@techsingularity.net>
+        bh=XOVclYKRWNV3JGuq2gLOY6hCBQpyxUe3mzcJx3TTPwU=;
+        b=a0elG3YFwWJIvXEqchJXO39RR9pnx5UzsJ0iyHEreb4o2DoYKPIwJ1w/yPJ1TJDLFZ
+         g42+s4At/tL+mWfVqjZzK39m4HeFwAi2GyenUZ+yBBAm9grOMYahxkIxkKTBJxKJV7/6
+         pMxGxcI2mNtdEfEMIMM5jjTne/wmXnIhQboqE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682389464; x=1684981464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XOVclYKRWNV3JGuq2gLOY6hCBQpyxUe3mzcJx3TTPwU=;
+        b=Sl0d5U0lxWpgfESx+YjdrwX8p+gybRqI2WW5/gpE/NTiOcPfaFxB1bC1tILdaSFz6h
+         8sJ9ud7yCovHr1wkcebCRP0KZH6mrWZ5HAqv8hnYVTD3q2ldioina5N9Vget5EdbGJgk
+         AtRJzlQQ0ZEEVlJ/ZAjZKGt6a3Lb7m+t0Xn3c3Ab6/xJvPW0JhBy0kM6KMKp6kV6w/Gb
+         n8jTyxA35d0LikwyN3EcVLcJyP1zLl6OsBU65y1CbzThUCYAAg706Dq4/893NsXCCyQS
+         lrq46rZieyyQEuWJuRW3qXzro+ShxfwYTYc1f1Rv+myIonbD9wuXFoH0AC6XhCECWLxx
+         p9sQ==
+X-Gm-Message-State: AAQBX9e5FXQvPXMy3mM8Qq9ZPN2lrP+wG2wAr4a8kMuwNU/9hhD2A8MJ
+        c6ZEeITKz+nB6wtXNB+U/ZZVRkI1DoZ7YrA2LKHtSIoj
+X-Google-Smtp-Source: AKy350bMGRwYlwB9cvHT9idM4JjAQf3PEbhlyLaeU4nlynqZaouSdgBv9ue1XYKMuHCk9sCK5asU5w==
+X-Received: by 2002:a17:906:555:b0:94f:1ac0:850b with SMTP id k21-20020a170906055500b0094f1ac0850bmr10970940eja.71.1682389463978;
+        Mon, 24 Apr 2023 19:24:23 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id op14-20020a170906bcee00b0094f07545d43sm6072428ejb.188.2023.04.24.19.24.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 19:24:23 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-50674656309so7952188a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 19:24:23 -0700 (PDT)
+X-Received: by 2002:a50:ee86:0:b0:506:a446:b926 with SMTP id
+ f6-20020a50ee86000000b00506a446b926mr14495282edr.19.1682389462745; Mon, 24
+ Apr 2023 19:24:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421143654.g6ta3kd6ea7fsmp6@techsingularity.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230424042638.GJ3390869@ZenIV>
+In-Reply-To: <20230424042638.GJ3390869@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 24 Apr 2023 19:24:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wibAWqh3JqWaWfi=JWNAz3v_qb7LZ+76qF+PKEJciHbGA@mail.gmail.com>
+Message-ID: <CAHk-=wibAWqh3JqWaWfi=JWNAz3v_qb7LZ+76qF+PKEJciHbGA@mail.gmail.com>
+Subject: Re: [git pull] the rest of write_one_page() series
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 03:36:54PM +0100, Mel Gorman wrote:
-> On Tue, Apr 18, 2023 at 03:13:01PM -0400, Johannes Weiner wrote:
-> > The different branches for retry are unnecessarily complicated. There
-> > is really only three outcomes: progress, skipped, failed. Also, the
-> > retry counter only applies to loops that made progress, move it there.
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > ---
-> >  mm/page_alloc.c | 60 +++++++++++++++++--------------------------------
-> >  1 file changed, 20 insertions(+), 40 deletions(-)
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index c3b7dc479936..18fa2bbba44b 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -4608,7 +4608,6 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
-> >  		     enum compact_priority *compact_priority,
-> >  		     int *compaction_retries)
-> >  {
-> > -	int max_retries = MAX_COMPACT_RETRIES;
-> >  	int min_priority;
-> >  	bool ret = false;
-> >  	int retries = *compaction_retries;
-> 
-> Think this breaks build because of trace_compact_retry and max_retries is
-> declared in a different scope on the next hunk.
+On Sun, Apr 23, 2023 at 9:26=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
+>
+> write_one_page series
 
-Right you are. Will fix. Thanks!
+Hmm. These pull requests really could have done with better descriptions.
 
+Yes, I see what it's doing, but I'd really like to have better merge
+messages from the pull request.
 
+                 Linus
