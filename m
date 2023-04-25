@@ -2,117 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DC46EE38D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6306EE396
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234107AbjDYOCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
+        id S234322AbjDYOCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbjDYOCC (ORCPT
+        with ESMTP id S234304AbjDYOCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:02:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE5CC1E;
-        Tue, 25 Apr 2023 07:01:58 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P7ddLL010956;
-        Tue, 25 Apr 2023 14:01:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5sDebuCS3ZY67b7mDVj0PQsBdF0GrchmOu0ms0J8w1o=;
- b=ZaenPkSbN452uWmhDMtuFXccPDgXFmPH/Hn69jzr+wGoNw9tcrJpKtr56t/MWcMe/TJL
- 2jFvUZoCA8r5HpF8dG7vA0ULihEY2fAsGL6RdlWi6mGsPwQGhcNnVtBTHwE4b5FHbP3Q
- 4DOoW3Xlbu1NK8jkDkRdxplMkNy+BofDI8Cm+BPehsVqYV3S4wR7qYdz7wpCXg4pChFk
- v4MfaMrdd0MoO0pNL0BT+tbG7g/31EqQ6xON4hSWh8ZltYhhaeEETmeUENssV6po5YZe
- /r1MJ13ODJBM4nZc53kfnpLyjO+gr8/Ziqz0SeMGpAxYtDriCjRVZiVuTL35pXJAMhW9 Qg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6an20yut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 14:01:45 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33PE1ibB025297
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 14:01:44 GMT
-Received: from [10.110.33.34] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
- 2023 07:01:44 -0700
-Message-ID: <e5f7ba28-65b8-30f4-78e6-b3e242054110@quicinc.com>
-Date:   Tue, 25 Apr 2023 07:01:43 -0700
+        Tue, 25 Apr 2023 10:02:52 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B25B61A4;
+        Tue, 25 Apr 2023 07:02:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682431368; x=1713967368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l6q1dc5C1/q1Geq8yt82kUpPLs/7UC9mtgVUN2I56UE=;
+  b=h5LpmLC4zIWnHrVCNUQ/ECOWOAd+4R/QT75d9q2qc5VctZZaxAc3Gj6y
+   Xjp+cxDNpW3Si7YkTZ1H5p0OJMi8VRLamHllThRqBLou1Eu0ngqQGhZn5
+   G63f4GyiGr/ZtnV91Fhl36qYN9F972kpIbqBp0XzB+ISpJRWxT9BFPTUk
+   4YMpZdXj0U9Aq0CDkvfOG6QNs3rzgBbdF9agu/Iy4w1xrGtMkk3ISVX7Z
+   834mf+lwqAG3NIl+IOs0HsECaBIseIEaFZ+FD33lmXRoboRFN/WsYoYUz
+   RiFC/bD+PCU4+SSosNOZ4/3WXaV5soFRZsw7FA6xV2I6ezOhxGc1Fac51
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="412062305"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="412062305"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 07:02:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="837448058"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="837448058"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2023 07:02:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prJFh-000jRg-39;
+        Tue, 25 Apr 2023 14:02:41 +0000
+Date:   Tue, 25 Apr 2023 22:01:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v8 10/11] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+Message-ID: <202304252118.P0ZCvlQO-lkp@intel.com>
+References: <20230425102418.185783-11-ychuang570808@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 0/2] Allow parameter in smc/hvc calls
-To:     <sudeep.holla@arm.com>
-CC:     <cristian.marussi@arm.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230409181918.29270-1-quic_nkela@quicinc.com>
- <20230418185659.29745-1-quic_nkela@quicinc.com>
-Content-Language: en-US
-From:   Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <20230418185659.29745-1-quic_nkela@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8bEMc0AuzzmYFdmo7xf8W5XaWumZOJie
-X-Proofpoint-ORIG-GUID: 8bEMc0AuzzmYFdmo7xf8W5XaWumZOJie
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_06,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=778 bulkscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 spamscore=0 malwarescore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250126
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425102418.185783-11-ychuang570808@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep, could you please review v4 patches. Thanks!
+Hi Jacky,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on clk/clk-next linus/master v6.3 next-20230424]
+[cannot apply to pza/reset/next pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230425-182746
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230425102418.185783-11-ychuang570808%40gmail.com
+patch subject: [PATCH v8 10/11] tty: serial: Add Nuvoton ma35d1 serial driver support
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230425/202304252118.P0ZCvlQO-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9f299bce6e0e871aa112e06e2451e88198a75d97
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230425-182746
+        git checkout 9f299bce6e0e871aa112e06e2451e88198a75d97
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/tty/serial/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304252118.P0ZCvlQO-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/tty/serial/ma35d1_serial.c: In function 'ma35d1serial_probe':
+   drivers/tty/serial/ma35d1_serial.c:675:28: error: implicit declaration of function 'devm_ioremap'; did you mean 'of_ioremap'? [-Werror=implicit-function-declaration]
+     675 |         up->port.membase = devm_ioremap(&pdev->dev, up->port.iobase, UART_REG_SIZE);
+         |                            ^~~~~~~~~~~~
+         |                            of_ioremap
+>> drivers/tty/serial/ma35d1_serial.c:675:26: warning: assignment to 'unsigned char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     675 |         up->port.membase = devm_ioremap(&pdev->dev, up->port.iobase, UART_REG_SIZE);
+         |                          ^
+   cc1: some warnings being treated as errors
 
 
-On 4/18/2023 11:56 AM, Nikunj Kela wrote:
-> Currently, smc/hvc calls are made with parameters set
-> to zeros. We are using multiple scmi instances within
-> a VM. We are sharing the same smc-id(func_id) with all
-> scmi instance. The hypervisor needs a way to distinguish
-> among hvc calls made from different instances.
->
-> This patch series introduces new compatible string which
-> can be used to pass shmem channel address as parameters
-> to smc/hvc calls.
->
-> ---
-> v4 -> split shmem address into 4KB-pages and offset
->
-> v3 -> pass shmem channel address as parameter
->
-> v2 -> fix the compilation erros on 32bit platform(see below)
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202304100606.kUjhsRYf-lkp@intel.com/
->
-> v1 -> original patches
->
-> Nikunj Kela (2):
->    dt-bindings: firmware: arm,scmi: support for parameter in smc/hvc call
->    firmware: arm_scmi: Augment SMC/HVC to allow optional parameters
->
->   .../devicetree/bindings/firmware/arm,scmi.yaml     |  8 +++++++-
->   drivers/firmware/arm_scmi/driver.c                 |  1 +
->   drivers/firmware/arm_scmi/smc.c                    | 14 +++++++++++++-
->   3 files changed, 21 insertions(+), 2 deletions(-)
->
+vim +675 drivers/tty/serial/ma35d1_serial.c
+
+   647	
+   648	/*
+   649	 * Register a set of serial devices attached to a platform device.
+   650	 * The list is terminated with a zero flags entry, which means we expect
+   651	 * all entries to have at least UPF_BOOT_AUTOCONF set.
+   652	 */
+   653	static int ma35d1serial_probe(struct platform_device *pdev)
+   654	{
+   655		struct resource *res_mem;
+   656		struct uart_ma35d1_port *up;
+   657		int ret = 0;
+   658		struct clk *clk;
+   659		int err;
+   660	
+   661		if (pdev->dev.of_node) {
+   662			ret = of_alias_get_id(pdev->dev.of_node, "serial");
+   663			if (ret < 0) {
+   664				dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
+   665				return ret;
+   666			}
+   667		}
+   668		up = &ma35d1serial_ports[ret];
+   669		up->port.line = ret;
+   670		res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   671		if (!res_mem)
+   672			return -ENODEV;
+   673	
+   674		up->port.iobase = res_mem->start;
+ > 675		up->port.membase = devm_ioremap(&pdev->dev, up->port.iobase, UART_REG_SIZE);
+   676		up->port.ops = &ma35d1serial_ops;
+   677	
+   678		spin_lock_init(&up->port.lock);
+   679	
+   680		clk = of_clk_get(pdev->dev.of_node, 0);
+   681		if (IS_ERR(clk)) {
+   682			err = PTR_ERR(clk);
+   683			dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
+   684			return -ENOENT;
+   685		}
+   686	
+   687		err = clk_prepare_enable(clk);
+   688		if (err)
+   689			return -ENOENT;
+   690	
+   691		if (up->port.line != 0)
+   692			up->port.uartclk = clk_get_rate(clk);
+   693	
+   694		ret = platform_get_irq(pdev, 0);
+   695		if (ret < 0)
+   696			return ret;
+   697		up->port.irq = ret;
+   698		up->port.dev = &pdev->dev;
+   699		up->port.flags = UPF_BOOT_AUTOCONF;
+   700	
+   701		platform_set_drvdata(pdev, up);
+   702	
+   703		return uart_add_one_port(&ma35d1serial_reg, &up->port);
+   704	}
+   705	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
