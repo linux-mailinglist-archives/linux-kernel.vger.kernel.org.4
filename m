@@ -2,219 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D646EE389
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF1B6EE38B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbjDYOBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S234193AbjDYOBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjDYOBN (ORCPT
+        with ESMTP id S234216AbjDYOB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:01:13 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0066D2D76;
-        Tue, 25 Apr 2023 07:01:07 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PDicFx005260;
-        Tue, 25 Apr 2023 14:00:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=slAHzkdmv/fsKJpEfY5v80zI+lbDpvehZJzyTCKquWQ=;
- b=0nliqMxjbhU8g4vHw2IcADYHNSxToSQ5WT46qTscYPVlliVITr3WcRDuW86q115sF3fI
- 24hPJ4TtJiBMS4QUDNPqysKnJiR00Mb0BGaT4toDwwfeesuUkSM2td5EL6wSqsETvS6f
- 61S8OCFJDU5SlpGRVvd0jkqx972lxxTLWqTcLlbfYM0qctzq5a5noIlwuyZrb3tb92d4
- +PF8TJn8gyzL4YdMqUFxP3HAkvPQmzzSeLWbooyCvqpEjSjo1qX5i2pyqHUzc0Vi2YhQ
- /hJCakc0u1Su3qKhu07safcaBArrPsYzdU+HPJ0uMe+8xbkSApGWXI4RzPblS0GjVAkp xw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q46gbnf38-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Apr 2023 14:00:16 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33PDtTbh024915;
-        Tue, 25 Apr 2023 14:00:15 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3q461cqqk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Apr 2023 14:00:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LKmSWBYgZcPEVg3NjDn2NLzs/aqmQsfbG1ehThMV3p29MVb+yRpkUZgfxiEoJEWX4rz07xfTXWtxyBre4OXizNl8z5RtTUX0Unf6jI0a3gFsze7+sGoPm4ouoUI08h/fMAaM6PQYyBkkb8lObE1GAvVtmhi0pd3UCs8AYL7S766AZnjCuT3LLAPoi1hVFoWt/hxC9xgtEChmHQZxlcxcB4IuAIgBaOP6s+QF3yUdYH5h4uO3g3eCCFmRn7+6OC3rcVCIcyfvupqDd+kOxRxXnr6BwfH2AUYc8tv5976RrfXX0p+LgHuVzZ/fPj1hD/fighiwrrzzXp0CJvCcrTfItw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=slAHzkdmv/fsKJpEfY5v80zI+lbDpvehZJzyTCKquWQ=;
- b=FqnF7yaD92wDDgWYzX4/gkwhUAt0OQhNW0GPbyNDbMQxV9yVcPLa8nw1HYDNlnyyYAfdrAIaqz0rdpWfnEDF2FPhuGswtZJMln3RANcN3yCiTj2GmUbJNGJ6v85Ox5tTZpDMHiYFzQrwbaAgmkIVdzt6V2K25KIBgYa9wowopFHVlehUWZHt8CRsiK2ssrHsKfaFOjfSjh96vXsHSt/nTgIh9CjSmcgmh1Wem5L5itVJQmg66RX9gR8zjo3LmWHw+NmRbG2z2I1uN0AVYRUVPOqLsnBlymLM6GI7LCTC5HebzDmbeuwlkJYwPentB9krERoK+r2ev3nDlYT66JsFWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=slAHzkdmv/fsKJpEfY5v80zI+lbDpvehZJzyTCKquWQ=;
- b=t+xaQz/xovq0E6Wr+gYmV8oUZG2zGVRk16VRnJIJKocPcVOew9Eq0Tfy1rS9OVzOOmJBLZ2RRi0ngExNYab4nWc/zW+VwnBt9IWYfx/Q73/8ufLLDHcmDuCvBImnoyUGNdKJmrMq3esLiV2pqf8KVtkoiVN+seU7+ZSawKiN5LQ=
-Received: from PH8PR10MB6290.namprd10.prod.outlook.com (2603:10b6:510:1c1::7)
- by PH0PR10MB5846.namprd10.prod.outlook.com (2603:10b6:510:14c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.31; Tue, 25 Apr
- 2023 14:00:12 +0000
-Received: from PH8PR10MB6290.namprd10.prod.outlook.com
- ([fe80::68c5:330c:d234:3834]) by PH8PR10MB6290.namprd10.prod.outlook.com
- ([fe80::68c5:330c:d234:3834%6]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
- 14:00:12 +0000
-Message-ID: <5793aeda-f59c-7b82-caac-a13c83b0cd6c@oracle.com>
-Date:   Tue, 25 Apr 2023 19:29:59 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 5.4 00/39] 5.4.242-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Darren Kenny <darren.kenny@oracle.com>
-References: <20230424131123.040556994@linuxfoundation.org>
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-In-Reply-To: <20230424131123.040556994@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2P153CA0021.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::20) To PH8PR10MB6290.namprd10.prod.outlook.com
- (2603:10b6:510:1c1::7)
+        Tue, 25 Apr 2023 10:01:27 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D87212C88;
+        Tue, 25 Apr 2023 07:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682431286; x=1713967286;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=N3z8FGrgtImvZfi1kiCTSF7mBfn712lLb68G3NVBLEw=;
+  b=knqX3fxKdxqz2Ljxwb/ndM5yPzTE4Yv7d4hMndTZQuzokkiv1DSfHeoG
+   +J6JjkhfGaQV93niLVQ1H/ssr6SX0uteHGu/h+8KQFmPCMDkR5aO6PzmL
+   +mfu4nYigKT4/ZOKlWEdAW6saThcONPAAoC1lIxzWQYUaLNUqIE43+8bf
+   eJDUNDDYHzI5Y0fsbP8Re9o39cvghJ+XeNeM5w3u5F9rMfiQU0MYFLkge
+   FTNXmeFpyDo9cH91wGTU2LegBg3mfYr6oUhlEGCcBCdEjOJYT/QUgsF6m
+   xLEAw7S1D/ZhVeefWMTLxFP5TxynK4ZnUKZbkHRgP0KN5BdPSlXxznusP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="433035253"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="433035253"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 07:01:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="762869936"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="762869936"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.232])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 07:01:20 -0700
+Message-ID: <ca1277a2-f5f7-f3fd-0a9f-57cdf5ea3464@intel.com>
+Date:   Tue, 25 Apr 2023 17:01:16 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR10MB6290:EE_|PH0PR10MB5846:EE_
-X-MS-Office365-Filtering-Correlation-Id: 701933d4-a4ae-44b0-7fd0-08db4595634f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xl24JcCfznoo4IZoJIK5HZ4bIHH4sztpremXzljB044HFU0h/yHxCWARrD6V3FZRZ9jJLPRTOaTze1fqVE56y1k09hn3+NzdZm2YlT/17/ziTlvL2rSl8lVQtw+z4pTuLKBqMTBVvO71MbDLCzxC6o/Mz4sEwYvwx2RA+WUcpzgM535r99PvPNTjcYhcpXAa7Qxkm/31IPA+NlOn4c9TXYmcE9VnuM3bFGUrPs0hZMN/dMIveLALZ2hgVswodWl5h1DMnDBUv+15b4WuNqfvs0LF9f6M32MK5YN+/NR6SckwiIqMMc5eNALDXpQhiGfN3vgIeE/Q6N7YJW0z74xksuxZytV2hTGHEEAqm/tXHH2ZC9pTZEkrJu8TBRUrtOE7ZaZm9iXQnXkLDr+Q37Nw/hNOAxFP6//hEKlzFpxLW1HtMOOzd8zggKoWGah7Wd7ohCvuEojC/FrrizV0AhwikUZkw4YEcBu+mdcoACy6JxZlivlH7ZvbBk2AIbhS/26/v10kpGKZ7gQo7LDQDDt68jIzQdEdQbr7yKO8FAs6WCkPwuAJfOvAzhqw0wxdGfTfGwH7Frhz3ckuBqlYTGU22RpHckrwhHNtdvakZ1L4u05uHZTxJnTnOnbkJoa+z9TU5Duc/kzqz61m0CXRa2EZLw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6290.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(376002)(396003)(39860400002)(346002)(451199021)(66946007)(66556008)(4326008)(66476007)(5660300002)(31686004)(107886003)(966005)(53546011)(6512007)(2616005)(6506007)(26005)(186003)(6666004)(6486002)(54906003)(478600001)(36756003)(2906002)(4744005)(7416002)(38100700002)(31696002)(86362001)(316002)(8936002)(8676002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YlFNbi9jaEdlSnVQZW1hWEw3UWV2VTdGT0RidTN3c0NHNDhhR2JEQlk1eDZX?=
- =?utf-8?B?TW5PbjJsZEdGeXJNeWhXV1RHNXNpVnR1WEVFZ09iZkgvLytLNEVUL21oU3Jp?=
- =?utf-8?B?TXBhUW0rR29MbzZ1eWpQaUZzVkJzdXl5WHU0NXM4N00xbURlSDVzZGE3bGJR?=
- =?utf-8?B?dFhMRmFPZFBoMkFWbkthcy9qUGtENlFkR2hvelg1b2ErajJhM003MElnaS9M?=
- =?utf-8?B?MUtTdVJIQk11amFwQjVlelFTZ0RJZ1RvV2tqeWtaNWxFRjAvR1dvek1YM3lv?=
- =?utf-8?B?a1QwOEx1VjNjUjFIai85dWd2aGdiQzJYTGp5TTVjNThFQnk1MnU3cTFCK2xS?=
- =?utf-8?B?Q3p1dkFTMVNmdTh4c1JaUnVTdDM1bFBLdU1tUE4xbEZ4OGZZVDlMS1VGOUo5?=
- =?utf-8?B?cW9tYWFDK0YxaUtKVWZpZUF4WEV6bGlwSVhiMGlFTVZ2VTRhQzRIaGRGdld3?=
- =?utf-8?B?WVhWQllHSzRkSmp5NENmSDdHVlNxSytSZnV3Z05qUG1mVGpVRlZBam5uL1Zq?=
- =?utf-8?B?ZnJRcHhiak5sNVR1T2NRNHNVc2NNVW5NcmhMMVUyVmJVOU5id25SWGYxZ2dt?=
- =?utf-8?B?SUJrV1h3WG15NHFZMnZsVWQzaGllcEtPYmVtb0tnbmd4TmhQb1RjRWdRT3Nl?=
- =?utf-8?B?T3VDVENsZWhad0s1bDAvOG04NEVFdmdmYnk1Mm5OWmlramM1R3cvLysyRi9G?=
- =?utf-8?B?SXFqeDdyZmZoWmZsUzRrWmZoZmJzbXZIY0xud1ZvWlk2OXhqMUZaSzVTR1du?=
- =?utf-8?B?d3V3VzlGcjV3UC9heHg4UERRVTljdGtPTTRuVjdldk5qTDg3VS9xN1ZyQzRG?=
- =?utf-8?B?T0hxNU51SitwMGpHQlpUeHlMQXI5NjBLelZvZEVqWjIxR0x3UlhrWkhNeVcr?=
- =?utf-8?B?S2FFOTMwQnpMcTFmTTNyVkJsbzVZTmlkbzUvaWkvelhCQVRvdFpkVkR5RnA2?=
- =?utf-8?B?ZjliaHRnSWgzMGk3SWc0UEJKUXVuWnloSGhXYWR4aUplUEFOZ1NYR3QzNGZq?=
- =?utf-8?B?dlkzWTNOTm1QSjRZUkd4VlMycU4vck1hQlJlQnBTV3hMdExpL0ZsQ1dqYitI?=
- =?utf-8?B?V2pTUTBBN09zYTJPM3BINWtoOFNUL2JYWDJlamZ4NHY0YUJvTDFHMmMxZjFy?=
- =?utf-8?B?NHVjclovbzdzRHNvSFhNUzNqN2J1RHYyTlZHYktwTlRSY0RyLzVRcEI0djQz?=
- =?utf-8?B?S1A1SmRRTXV0aHVwU0JaYXh2MWJiTjQzcmFPVHNmK0VpblVRaFJLUDg4VVMv?=
- =?utf-8?B?bXkrclBOK0hLMzFBeWttZ3l6TGR1Y3I3REtXdSs4d3YrVVNCaXVReDlSNGtS?=
- =?utf-8?B?QWYzenI2bEZLOWJvSFNad1lRNmw0ZTJWOVJvY2FRSkxyTlg3M2hOVi94a3VV?=
- =?utf-8?B?L1UycUdFa3Y5dWppY3B3NC9qNXJMRk1BVFNubENCTGpZTTJnbjhtNGRhU1Nh?=
- =?utf-8?B?c3hpTndvbU1ZNTRXdmhWM29WdTNLMHlNdkk2N1V0c1J1ZlBWTW8rODZESElj?=
- =?utf-8?B?a09jVHVZVXlHZTl3SWF1QXlCaUNLbUhpZXhqYWM3NDFOMWdLeGxHNERwS1Vh?=
- =?utf-8?B?WktWTlI1eG9iZXhoUmN2SDRESjd0ODFmQnQ0YUJKVkJnMmR2c3llK2JzNEg5?=
- =?utf-8?B?UWRyVXYvL1VNVkJPbkszWlB6QmYxRmpWQ0lEOCswbDBTcG9zVStvZkNtTXhO?=
- =?utf-8?B?MUE5d09vTmU2SXZrbStqUWdtZDZyN2pZM0xrZnkrblRBR2d0RmN2OEVRVi9Q?=
- =?utf-8?B?ZEhCbEpoU2tYQU4rZU94WmRoMjBOdThLbDA2aEZpcG1MOWUwNGJZNVJkYUxl?=
- =?utf-8?B?bXF3MXdHRmFEL3dmWjhQb2pHN3R6N2lhN1dHbXVuMVZhRStESVJCV3NSMWhi?=
- =?utf-8?B?VElmb2s5UlMrTndjaWFtcEFETTd3aU01bmhBanQ4OFVrcCs2dldtdGV2U3JL?=
- =?utf-8?B?Vk1XSk5VSVZ6ZHFHcGRMVWk5d01ZZUVCRy9NM1l4LzR1a3JGZ2VTSWJKRTgr?=
- =?utf-8?B?aC8rWlNoSWdhTHN1QnRwMFdVRjVrVy9jODhQbzdmbCtlc2tjM3c4c2F0VDBO?=
- =?utf-8?B?RTlsdmY3OGthTXZ1cFcwVVdxb29taDI4QkhUM09hekFOQUd2Y3R3WExNL1ZU?=
- =?utf-8?B?QTRoSzdaWERIYjJVNVIrcTlheVdYancrU1o3ZU1PcmJ3QzZQZXJ4VWhJRUVv?=
- =?utf-8?Q?piKi223u7nL3R0/wUJaUuWg=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RlhiekpZOWVzMlF1aXdNMzcvSGZIK3dEN2dUSllzNklqaS9rQlNuMzBxa01l?=
- =?utf-8?B?R0JoQWxlS2poYmZOcFVTRGFEUVJQTWppT2hmckovUTE2ZVVHVG00c29QU0xU?=
- =?utf-8?B?RTNyVFdBeC9GSXQrNjBtVjNxMG9GSzh1NEdXN3JJUXpSYWlXaUxySENheExp?=
- =?utf-8?B?NUVWRFd0V2w4enNwRjRqWXF5UUhYM0FCSlZhUnVnZ1I1Vk4xTnVKa2FZZWdB?=
- =?utf-8?B?cjk2WEIveXI2L3MwZFVqWThvTnJqSThSaXZuM0ZqTmFaQkNib3NIZDFrLzBw?=
- =?utf-8?B?SHlWdlNEdFc4Z0ZEdjgzWkY5OUo5NXBOY2FmVURiTEhhaDlTWW0wdVZKLzVW?=
- =?utf-8?B?WVZsQThaOHo4MUk5YXBPblluWk8wSjhqUkxGbkNmOG9jeGg5L2ZWVjJ1WUU3?=
- =?utf-8?B?NGFnSTM2Vzh2d1o0Z1loOXZ2NjByby92cXVucENQZEV0ZmxabjVzMWFnYjhw?=
- =?utf-8?B?S3dhSDUzOEhDMkloMXhlUS9xdFhhTXYwSDBFQTBCTi9uNExleDNxd1YvM09r?=
- =?utf-8?B?ZjZqbjJjOWdZOGZ1V2ZaeVlJL0FyMEUzZi81M0NjSlJPVDBWdzdDaktBMzB3?=
- =?utf-8?B?dGlZc2dKK2xxaXpGTG5KRmFxMG5RNjVwWWZOL0VOTGNsbEgwb0hmeXdwQ1Ev?=
- =?utf-8?B?d1NWTm5uOVNsQzM1Zm9oaFpKUVNCZWhSM1hUbDlZSXA0RXFXYTZ1bXZ5M3d1?=
- =?utf-8?B?cWVHWkU0S2s1VXhRbHQrUXQ2SjErLzlobGt0NEVXeFFFSkIwcUFOd3BkNGtV?=
- =?utf-8?B?NC9tMXRyOGtERVdvbjNmMGlzbjJkTXZhbkRsUDA1UmVZelh0RlMzbWJ5aVMw?=
- =?utf-8?B?d2NOZDY3UGRqR1Nzb09rUldpejQrVkZ1TWV6N0FZZHk0SEduM1YrTkpmZ1Ry?=
- =?utf-8?B?WkZPTVE4c1kwK0loeVdIeXZFeUIzZkVxTlA0MXhtUzg4WmV2ckhmMCs4U2la?=
- =?utf-8?B?MXFLdGwwSmFHU2JOZVFMTVNhZElrd1R5M3pEeTkwREUxeVFRc3dPak1OaVo2?=
- =?utf-8?B?YXc1cDVqa0ViRS95V2VqekJDcHFnVUx6Z1JXaUlDSkFxQk5hY1puWVZaQSs5?=
- =?utf-8?B?YWpxci9qanpPSm1VSU5EZzBlQ2lObXBObldMMGdxdXRDdnd1MWZHek1nSHVj?=
- =?utf-8?B?MUV2bUZ5OVUydC80MkFXOEpVd2EzSmN1SXlHbHErL2NDcVNuK0RHTDhVSm1I?=
- =?utf-8?B?b205REJsVzBiRGJ2SzhUVmRQbEZBR2N4bWViRlZaQmNvVVh3bjJyNU5YRTFn?=
- =?utf-8?B?ODVHNVJHa2duMFMyM090WXVQYmRDTjloLzNkRGtHMXRCTEZmTVAzbktYTzlU?=
- =?utf-8?B?SGRMMGYvdmYzWW9RRUNvZndyQXR4UEZNT0o1YkRIWW5LcnhXMml0MDA2Zmsy?=
- =?utf-8?B?MXNIc0kzY0kwS2xpYkVqeENOR1RWSStuY2RGWkdUQysvUzZXSkZzVDhGeDhC?=
- =?utf-8?B?K09BQW9iSE9zMW1scjJwa3p0ZndMdnNvOUIwT3h6WkZYMnYvbG11MGFyNzhR?=
- =?utf-8?B?T0ZLby8vQWQrRVErWmxwdFA3Q2hCK0dXRk1iSE84Y2RYV05hbUZ3TU5lWE9s?=
- =?utf-8?Q?Wpagx4TInUP6nLuh378NjPc7516DoM/QWD86OU9kwILuqJ?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 701933d4-a4ae-44b0-7fd0-08db4595634f
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6290.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 14:00:12.4854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jTvjjPrGJrl8EIbZ/fTvCxa+tcC73A1zVllu7sxnkpBAI/XGtEmsDIpZkCIZKNnOfYVq8CX6I9U4tF0RDBocj4YO7hoYxDnDxs4cRdsExbEevUTpg/ScCQ6GDwpB1XgZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5846
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_06,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=975 suspectscore=0
- malwarescore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250126
-X-Proofpoint-GUID: 1fyz7oj_7tNN7a8IdISTSwXLM57x8RMN
-X-Proofpoint-ORIG-GUID: 1fyz7oj_7tNN7a8IdISTSwXLM57x8RMN
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH] mmc: queue: ensure error propagation for non-blk
+Content-Language: en-US
+To:     Christian Loehle <CLoehle@hyperstone.com>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Avri Altman <avri.altman@wdc.com>,
+        Christoph Hellwig <hch@infradead.org>
+References: <1d8ce997934c4395bb5dd235525bf7a2@hyperstone.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <1d8ce997934c4395bb5dd235525bf7a2@hyperstone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 24/04/23 6:47 pm, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.242 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 24/04/23 19:22, Christian Loehle wrote:
+> Requests to the mmc layer usually come through a block device.
+> The exceptions are the RPMB chardev and debugfs, which issue their
+> own blk_mq requests through blk_execute_rq and do not query
+> the BLK_STS error but the mmc-internal drv_op_result.
+> This patch ensures that drv_op_result is set as error whenever
+> a BLK_STS error is set.
 > 
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
+> The behavior leads to a bug where the request never sees the error,
+> e.g. by directly erroring out at mmc_blk_mq_issue_rq if
+> mmc_blk_part_switch fails. The ioctl caller of the rpmb chardev then
+> can never see the error and thus may assume that their call executed
+> successfully when it did not.
 > 
-
-No problems seen on x86_64 and aarch64.
-
-Tested-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-
-Thanks,
-Harshit
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.242-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> While always checking the blk_execute_rq return value would be
+> advised, let's eliminate the error completely by always setting
+> drv_op_result in case of a BLK_STS error.
 > 
-> thanks,
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+
+Fixes tag?
+
+> ---
+>  drivers/mmc/core/queue.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> greg k-h
+> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+> index b396e3900717..8240962e28f3 100644
+> --- a/drivers/mmc/core/queue.c
+> +++ b/drivers/mmc/core/queue.c
+> @@ -334,6 +334,9 @@ static blk_status_t mmc_mq_queue_rq(struct blk_mq_hw_ctx *hctx,
+>  		WRITE_ONCE(mq->busy, false);
+>  	}
+>  
+> +	/* Ensure request error propagates to non-blk callers, too. */
+> +	if (!req_to_mmc_queue_req(req)->drv_op_result && ret)
+> +		req_to_mmc_queue_req(req)->drv_op_result = ret;
+
+That is not the only path out.
+
+It might be better to initialize drv_op_result to an
+error code to start with e.g.
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 00c33edb9fb9..d920c4178389 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -264,6 +264,7 @@ static ssize_t power_ro_lock_store(struct device *dev,
+ 		goto out_put;
+ 	}
+ 	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_BOOT_WP;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	blk_execute_rq(req, false);
+ 	ret = req_to_mmc_queue_req(req)->drv_op_result;
+ 	blk_mq_free_request(req);
+@@ -651,6 +652,7 @@ static int mmc_blk_ioctl_cmd(struct mmc_blk_data *md,
+ 	idatas[0] = idata;
+ 	req_to_mmc_queue_req(req)->drv_op =
+ 		rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	req_to_mmc_queue_req(req)->drv_op_data = idatas;
+ 	req_to_mmc_queue_req(req)->ioc_count = 1;
+ 	blk_execute_rq(req, false);
+@@ -722,6 +724,7 @@ static int mmc_blk_ioctl_multi_cmd(struct mmc_blk_data *md,
+ 	}
+ 	req_to_mmc_queue_req(req)->drv_op =
+ 		rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	req_to_mmc_queue_req(req)->drv_op_data = idata;
+ 	req_to_mmc_queue_req(req)->ioc_count = n;
+ 	blk_execute_rq(req, false);
+@@ -2806,6 +2809,7 @@ static int mmc_dbg_card_status_get(void *data, u64 *val)
+ 	if (IS_ERR(req))
+ 		return PTR_ERR(req);
+ 	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_CARD_STATUS;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	blk_execute_rq(req, false);
+ 	ret = req_to_mmc_queue_req(req)->drv_op_result;
+ 	if (ret >= 0) {
+@@ -2844,6 +2848,7 @@ static int mmc_ext_csd_open(struct inode *inode, struct file *filp)
+ 		goto out_free;
+ 	}
+ 	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_EXT_CSD;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	req_to_mmc_queue_req(req)->drv_op_data = &ext_csd;
+ 	blk_execute_rq(req, false);
+ 	err = req_to_mmc_queue_req(req)->drv_op_result;
+
+
+>  	return ret;
+>  }
+>  
+
