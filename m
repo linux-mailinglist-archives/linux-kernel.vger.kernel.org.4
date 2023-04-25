@@ -2,198 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141A66ED9AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF656ED9B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjDYBO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 21:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S233080AbjDYBSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 21:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbjDYBOr (ORCPT
+        with ESMTP id S229822AbjDYBSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 21:14:47 -0400
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01552AF1C;
-        Mon, 24 Apr 2023 18:14:45 -0700 (PDT)
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5208be24dcbso3988158a12.1;
-        Mon, 24 Apr 2023 18:14:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682385285; x=1684977285;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bIyc/FhGSLGUNO65BKhIHQXYYAfMnELOdho78LsCz0A=;
-        b=aSdtzCsbu3M9XxO8oAW5oJ05tXRfWSaRxj54C0Nt6K690dRGcWDVnHOEUIIf0PbnVx
-         +zo9Qt8c2KLcfRqEvDhdcliox0EROFglkcdeM+9IAvIDjEROWafTHlbbf2jK1QIYgspI
-         YaWhDNql1C9iPdAPAnvpjyiYu6RuIhjD00xylJabDcwBobJ3iah6iWNjFr8AmEs5nOSN
-         PlOrlTQrn3qUCQ21rADITr6bP5MorkpK0/K0qhqA1qkHaxed+uE6Xs33tf3aq0EdHCd1
-         kueXtMPXQeXcIOIbB4TSwF2OxIE9HkV9709EgvqXQ84LS6ijsxPBavGXJhYmDdb14JKs
-         AZTw==
-X-Gm-Message-State: AAQBX9egADTLh2kB87cmNSvsvt2qtzxQKVDfINlup4/vcCpRLwEAgr1f
-        CD0WOPiVCvj4ZGXKL6oFS3Q=
-X-Google-Smtp-Source: AKy350YRScr0fAIw9O5ya3BjZUHQ2tZNhNgGnzAb2IJ2MODhfx22xjjPGTv4bgMhriP7YVN1IGK7vw==
-X-Received: by 2002:a17:90a:4597:b0:247:42bf:380e with SMTP id v23-20020a17090a459700b0024742bf380emr15621740pjg.4.1682385285197;
-        Mon, 24 Apr 2023 18:14:45 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id y10-20020a63ce0a000000b004ff6b744248sm6958528pgf.48.2023.04.24.18.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 18:14:44 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 01:14:43 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V commits for 6.4
-Message-ID: <ZEcpgwRj8kDvjfSK@liuwe-devbox-debian-v2>
+        Mon, 24 Apr 2023 21:18:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877F64ED9;
+        Mon, 24 Apr 2023 18:18:03 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P17Zh9018261;
+        Tue, 25 Apr 2023 01:17:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LERFdXcjVsFCSOZUAfrxaZzzvQVZ0km1XAFRXQ+kCQ0=;
+ b=AnQnZy3xIwN8Ianz46csf3zMDVKU8wO+r3Me9Iho4hjOJ7WU0yzAI0DL6SxiY3tkfPkC
+ cSni4Thg1hZtO3V6AulkxnGBuTyfp9gfWLX0z2JbtKNfbqb9+Eq3i2nGYSXGtipai4TA
+ +E+R0SBrg5NDaOOaQpZ00KYo6QdIwmh0MKCTprKlgi0lQOVQYfYVBla76inxLi7OCEgy
+ gH1HK1Myoo4wx2HUkwrfefMeDFZPtkGSHWSlU3mLkv7OUvB0p+5W8lU9AMvAeNQHlOrW
+ K5i/wyGWpy2Ae796fmE8YHKycFvo2PO/bTfxwf0ReMoro6n32zSPK8S7FTcHQJgnHdpB LQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5ndpt2vj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 01:17:30 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33P1HTbl012769
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 01:17:29 GMT
+Received: from [10.110.17.95] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
+ 2023 18:17:26 -0700
+Message-ID: <579b6a18-624d-8071-e326-fc69028d3fc5@quicinc.com>
+Date:   Mon, 24 Apr 2023 18:17:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 01/28] xhci: Add support to allocate several
+ interrupters
+Content-Language: en-US
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-2-quic_wcheng@quicinc.com>
+ <a45ff335-0563-85c7-3b31-d6ca23a54a3f@linux.intel.com>
+ <6024f762-6085-10cd-e73a-9031722b2334@quicinc.com>
+In-Reply-To: <6024f762-6085-10cd-e73a-9031722b2334@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: z0dwS-2-H847QR2W6V6IV0XIC_kqxSbN
+X-Proofpoint-ORIG-GUID: z0dwS-2-H847QR2W6V6IV0XIC_kqxSbN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_01,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ adultscore=0 phishscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ mlxscore=0 bulkscore=0 clxscore=1011 priorityscore=1501 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304250008
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Mathias,
 
-The following changes since commit 6a8f57ae2eb07ab39a6f0ccad60c760743051026:
+On 3/13/2023 1:08 PM, Wesley Cheng wrote:
+> Hi Mathias,
+> 
+> On 3/10/2023 7:07 AM, Mathias Nyman wrote:
+>> On 9.3.2023 1.57, Wesley Cheng wrote:
+>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>
+>>> Introduce xHCI APIs to allow for clients to allocate and free
+>>> interrupters.  This allocates an array of interrupters, which is 
+>>> based on
+>>> the max_interrupters parameter.  The primary interrupter is set as the
+>>> first entry in the array, and secondary interrupters following after.
+>>>
+>>
+>> I'm thinking about changing this offloading xHCI API
+>> xhci should be aware and keep track of which devices and endpoints that
+>> are offloaded to avoid device getting offloaded twice, avoid xhci driver
+>> from queuing anything itself for these, and act properly if the offloaded
+>> device or entire host is removed.
+>>
+>> So first thing audio side would need to do do is register/create an
+>> offload entry for the device using the API:
+>>
+>> struct xhci_sideband *xhci_sideband_register(struct usb_device *udev)
+>>
+>> (xHCI specs calls offload sideband)
+>> Then endpoints and interrupters can be added and removed from this
+>> offload entry
+>>
+>> I have some early thoughts written as non-compiling code in:
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
+>> feature_interrupters
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
+>>
+>>
+>> Let me know what you think about this.
+>>
+> 
+> The concept/framework you built looks good to me.  Makes sense to have 
+> XHCI better maintain the offloading users.  One thing I would request is 
+> to move xhci-sideband.h to the include directory since the class driver 
+> levels would need to be able to reference the structure and APIs you've 
+> exposed.
+> 
+> I have yet to try it with our implementation, but I'll work on plugging 
+> it in and fix any issues I see along the way.
 
-  Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
+Sorry for the late reply on some of the efforts on adding your new 
+xhci-sideband driver.
 
-are available in the Git repository at:
+I saw your comments with respect to building the SG table for rings with 
+multiple segments, ie stream xfer rings.  I had tried some things to 
+achieve the page links, but after reviewing some of the Linux memory 
+APIs, I'm not sure we can achieve it.  This is because we're not simply 
+relying on the direct DMA ops here to build the SG table.  In the IOMMU 
+mapped cases, it calls in iommu_dma_get_sgtable(), which has some 
+convoluted logic to build the sgt.
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20230424
+Instead of allocating one sgt with multiple sgls (based on # of ring 
+segments), would it make sense to just build multiple sgts for each ring 
+segment?  The vendor class driver could still fetch the required memory 
+information to translate each sgt to a physical address and ring segment 
+linking can happen within the external DSP if it supports it.
 
-for you to fetch changes up to a494aef23dfc732945cb42e22246a5c31174e4a5:
-
-  PCI: hv: Replace retarget_msi_interrupt_params with hyperv_pcpu_input_arg (2023-04-21 21:25:23 +0000)
-
-Note that I needed to do a merge with tip/x86/sev because some of
-Michael's patches were merged into that branch first. I've written down
-the rationale in the merge commit.
-
-This PR can conflict with sysctl-next, because both branches modified
-VMBus code. A correct resolution can be found here:
-
-https://lore.kernel.org/linux-next/20230424154742.131094-1-broonie@kernel.org/
-
-Although the resolution is empty, it is correct, because Long rebased
-his patch multiple times on both linux-next and linux-hyperv, the patch
-ended up containing the same changes as Luis' patch.
-
-----------------------------------------------------------------
-hyperv-next for v6.4
- - PCI passthrough for Hyper-V confidential VMs (Michael Kelley)
- - Hyper-V VTL mode support (Saurabh Sengar)
- - Move panic report initialization code earlier (Long Li)
- - Various improvements and bug fixes (Dexuan Cui and Michael Kelley)
-----------------------------------------------------------------
-Borislav Petkov (AMD) (2):
-      crypto: ccp: Get rid of __sev_platform_init_locked()'s local function pointer
-      x86/coco: Export cc_vendor
-
-Dexuan Cui (3):
-      clocksource: hyper-v: make sure Invariant-TSC is used if it is available
-      Drivers: hv: vmbus: Remove the per-CPU post_msg_page
-      PCI: hv: Replace retarget_msi_interrupt_params with hyperv_pcpu_input_arg
-
-Dionna Glaze (2):
-      virt/coco/sev-guest: Double-buffer messages
-      x86/sev: Change snp_guest_issue_request()'s fw_err argument
-
-Long Li (1):
-      Drivers: hv: move panic report code from vmbus to hv early init code
-
-Michael Kelley (14):
-      x86/ioremap: Add hypervisor callback for private MMIO mapping in coco VM
-      x86/hyperv: Reorder code to facilitate future work
-      Drivers: hv: Explicitly request decrypted in vmap_pfn() calls
-      x86/mm: Handle decryption/re-encryption of bss_decrypted consistently
-      init: Call mem_encrypt_init() after Hyper-V hypercall init is done
-      x86/hyperv: Change vTOM handling to use standard coco mechanisms
-      swiotlb: Remove bounce buffer remapping for Hyper-V
-      Drivers: hv: vmbus: Remove second mapping of VMBus monitor pages
-      Drivers: hv: vmbus: Remove second way of mapping ring buffers
-      hv_netvsc: Remove second mapping of send and recv buffers
-      Drivers: hv: Don't remap addresses that are above shared_gpa_boundary
-      PCI: hv: Enable PCI pass-thru devices in Confidential VMs
-      x86/hyperv: Add callback filter to cpumask_to_vpset()
-      x86/hyperv: Exclude lazy TLB mode CPUs from enlightened TLB flushes
-
-Peter Gonda (1):
-      crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
-
-Saurabh Sengar (10):
-      drivers/clocksource/hyper-v: non ACPI support in hyperv clock
-      ACPI: bus: Add stub acpi_sleep_state_supported() in non-ACPI cases
-      Drivers: hv: vmbus: Convert acpi_device to more generic platform_device
-      dt-bindings: bus: Add Hyper-V VMBus
-      Driver: VMBus: Add Devicetree support
-      x86/init: Make get/set_rtc_noop() public
-      x86/hyperv: Add VTL specific structs and hypercalls
-      x86/hyperv: Make hv_get_nmi_reason public
-      Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
-      x86/hyperv: VTL support for Hyper-V
-
-Thomas Gleixner (1):
-      Merge branch 'x86/cc' into x86/sev
-
-Wei Liu (1):
-      Merge remote-tracking branch 'tip/x86/sev' into hyperv-next
-
- .../devicetree/bindings/bus/microsoft,vmbus.yaml   |  54 ++++
- Documentation/virt/coco/sev-guest.rst              |  20 +-
- MAINTAINERS                                        |   1 +
- arch/x86/coco/core.c                               |  53 ++--
- arch/x86/hyperv/Makefile                           |   1 +
- arch/x86/hyperv/hv_apic.c                          |  12 +-
- arch/x86/hyperv/hv_init.c                          |  18 +-
- arch/x86/hyperv/hv_vtl.c                           | 227 +++++++++++++++
- arch/x86/hyperv/ivm.c                              | 148 ++++++----
- arch/x86/hyperv/mmu.c                              |  11 +-
- arch/x86/include/asm/coco.h                        |  24 +-
- arch/x86/include/asm/hyperv-tlfs.h                 |  78 +++++
- arch/x86/include/asm/mem_encrypt.h                 |   1 +
- arch/x86/include/asm/mshyperv.h                    |  31 +-
- arch/x86/include/asm/sev-common.h                  |   4 -
- arch/x86/include/asm/sev.h                         |  10 +-
- arch/x86/include/asm/x86_init.h                    |   6 +
- arch/x86/kernel/apic/io_apic.c                     |  10 +-
- arch/x86/kernel/cpu/mshyperv.c                     |  28 +-
- arch/x86/kernel/sev.c                              |  15 +-
- arch/x86/kernel/x86_init.c                         |   6 +-
- arch/x86/mm/ioremap.c                              |   5 +
- arch/x86/mm/mem_encrypt_amd.c                      |  10 +-
- arch/x86/mm/pat/set_memory.c                       |   3 -
- drivers/clocksource/hyperv_timer.c                 |  21 +-
- drivers/crypto/ccp/sev-dev.c                       |  22 +-
- drivers/hv/Kconfig                                 |  30 +-
- drivers/hv/channel_mgmt.c                          |   2 +-
- drivers/hv/connection.c                            | 113 ++------
- drivers/hv/hv.c                                    |  79 ++---
- drivers/hv/hv_common.c                             | 242 +++++++++++++++-
- drivers/hv/hyperv_vmbus.h                          |   6 -
- drivers/hv/ring_buffer.c                           |  62 ++--
- drivers/hv/vmbus_drv.c                             | 322 ++++++---------------
- drivers/net/hyperv/hyperv_net.h                    |   2 -
- drivers/net/hyperv/netvsc.c                        |  48 +--
- drivers/pci/controller/pci-hyperv.c                | 280 +++++++++++-------
- drivers/virt/coco/sev-guest/sev-guest.c            |  99 ++++---
- include/asm-generic/hyperv-tlfs.h                  |  26 ++
- include/asm-generic/mshyperv.h                     |  26 +-
- include/linux/acpi.h                               |   5 +
- include/linux/swiotlb.h                            |   2 -
- include/uapi/linux/psp-sev.h                       |   7 +
- include/uapi/linux/sev-guest.h                     |  18 +-
- init/main.c                                        |  19 +-
- kernel/dma/swiotlb.c                               |  45 +--
- 46 files changed, 1388 insertions(+), 864 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
- create mode 100644 arch/x86/hyperv/hv_vtl.c
+Thanks
+Wesley Cheng
