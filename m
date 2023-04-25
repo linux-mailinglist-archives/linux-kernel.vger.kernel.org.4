@@ -2,169 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D251D6EE1E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287526EE1EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbjDYMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S234108AbjDYMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbjDYMcx (ORCPT
+        with ESMTP id S233424AbjDYMdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:32:53 -0400
+        Tue, 25 Apr 2023 08:33:16 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B33F133
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:32:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CFD212B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:32:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682425921;
+        s=mimecast20190719; t=1682425948;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xUCCLfKIJcIMQQC1+iJEFgXpJl2oC+XHJLW7QTm0PdU=;
-        b=YoL28ba05koO80K6LURlUTxgFY7nm+2OT6PeWfy93lNqLP/tP3tOC/aiUaymEQk0rmRpWU
-        ctAvICSpQFzIy9oAqrIysTqThJm98f+mdRDgDOdAwThSM6gUDqYSbotkCZTh7PXR97yDQH
-        nfkvpz8OmTLQFIZlmmDpmf9PInW8hcw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-390-EDFbfHTHNqy6U_msS6ZOtA-1; Tue, 25 Apr 2023 08:32:00 -0400
-X-MC-Unique: EDFbfHTHNqy6U_msS6ZOtA-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2f40f52c604so3215091f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:31:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682425919; x=1685017919;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xUCCLfKIJcIMQQC1+iJEFgXpJl2oC+XHJLW7QTm0PdU=;
-        b=B0pdz8uxSvHJ+y5SzsvDTCFdEv8lDzQVqZkCTfs3RcIdRzs4LVrtW8oo0Dl0H3+7My
-         4gqI46bfBwFhguO2iPqU6x22j6VB8qNZtiPN4uOPQaPdNruBBxi4pHlnA/1ud997zuRQ
-         rVcl5nyqCOH4ac1esqYMI3uxcYBDHmlNcbDpTIl0kKA/fgFQY1MgZ80CcQRejZz6U3Q3
-         npExMiGUJ8Kx2kBJY8cS0Jh9p1CVYwaSN3CPbkAfggyUgWPTun9NOLHzh5NPYqoN46hg
-         lKVgp3yev7xHD1xc3D127n8uw474/V5hFlDpfRj8fy/i2TaWEYvo/avL49Q7UTv4HO8j
-         k45w==
-X-Gm-Message-State: AAQBX9fdQ9H3zGIVBTtlLV89OdQf++fuRZi+s4ZvMIGO/kTDe7ryf4w3
-        +n9flcIqqw47WIjwjEQ5prPF5p3IyaohOVHS1VazcucPErZLbKmuuZqsAaqsLwnno4Ii+MWFruV
-        31wbxAKVILSf4ZuCaPtDcE/2I
-X-Received: by 2002:adf:ffcf:0:b0:301:8551:446a with SMTP id x15-20020adfffcf000000b003018551446amr12600273wrs.2.1682425918926;
-        Tue, 25 Apr 2023 05:31:58 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YNPM6rmdz9nqud0Gs0uKp5JlWWQ13dR/vmTBC10HPYXJvjvSupNGyK5SYEMtOckP8U65WVkg==
-X-Received: by 2002:adf:ffcf:0:b0:301:8551:446a with SMTP id x15-20020adfffcf000000b003018551446amr12600255wrs.2.1682425918573;
-        Tue, 25 Apr 2023 05:31:58 -0700 (PDT)
-Received: from redhat.com ([2.55.17.255])
-        by smtp.gmail.com with ESMTPSA id a15-20020adfdd0f000000b003048d07f9absm1411810wrm.70.2023.04.25.05.31.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 05:31:57 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 08:31:54 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] virtio-net: reject small vring sizes
-Message-ID: <20230425082150-mutt-send-email-mst@kernel.org>
-References: <20230417073830-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417075645-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723FA90465186B5A8A5C001D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230423031308-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47233B680283E892C45430BCD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230423065132-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47237D46ADE7954289025B66D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230425041352-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723CE2A9B8BFA7963A66A98D4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
+        bh=bohgohGspBTeimM/lqZBb2hWhzf/LeNklzg3aDphm7A=;
+        b=NNxlNlSF5UzGGeOb6RKZQjpQ5eJjhg/MbB8Uyi4SeJKDOV3xJisBtIge+BiaIBkYd/U+qL
+        321TptBDpIuD+RVyWH+TfV6Kw4sFvZy8G18+FEa6Au6/zMnQwz07ImNpJW0wLD1+m7amo9
+        fKmv5medA5pWWQeCNDnOdskWDYiLTfs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-r_72zvwCNC-UAAbbXtxzIQ-1; Tue, 25 Apr 2023 08:32:26 -0400
+X-MC-Unique: r_72zvwCNC-UAAbbXtxzIQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D4828886463;
+        Tue, 25 Apr 2023 12:32:08 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.16.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1B99B49AF0;
+        Tue, 25 Apr 2023 12:32:07 +0000 (UTC)
+Date:   Tue, 25 Apr 2023 08:32:05 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de,
+        jhladky@redhat.com
+Subject: Re: [PATCH 00/17] sched: EEVDF using latency-nice
+Message-ID: <20230425123205.GB414327@lorien.usersys.redhat.com>
+References: <20230328092622.062917921@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR04MB4723CE2A9B8BFA7963A66A98D4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <20230328092622.062917921@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 09:41:35AM +0000, Alvaro Karsz wrote:
-> > So, let's add some funky flags in virtio device to block out
-> > features, have core compare these before and after,
-> > detect change, reset and retry?
-> 
-> In the virtnet case, we'll decide which features to block based on the ring size.
-> 2 < ring < MAX_FRAGS + 2  -> BLOCK GRO + MRG_RXBUF
-> ring < 2  -> BLOCK GRO + MRG_RXBUF + CTRL_VQ
 
-why MRG_RXBUF? what does it matter?
+Hi Peter,
 
-> So we'll need a new virtio callback instead of flags.
-> Furthermore, other virtio drivers may decide which features to block based on parameters different than ring size (I don't have a good example at the moment).
-> So maybe we should leave it to the driver to handle (during probe), and offer a virtio core function to re-negotiate the features?
+On Tue, Mar 28, 2023 at 11:26:22AM +0200 Peter Zijlstra wrote:
+> Hi!
 > 
-> In the solution I'm working on, I expose a new virtio core function that resets the device and renegotiates the received features.
-> + A new virtio_config_ops callback peek_vqs_len to peek at the VQ lengths before calling find_vqs. (The callback must be called after the features negotiation)
+> Latest version of the EEVDF [1] patches.
 > 
-> So, the flow is something like:
+> Many changes since last time; most notably it now fully replaces CFS and uses
+> lag based placement for migrations. Smaller changes include:
 > 
-> * Super early in virtnet probe, we peek at the VQ lengths and decide if we are 
->    using small vrings, if so, we reset and renegotiate the features.
+>  - uses scale_load_down() for avg_vruntime; I measured the max delta to be ~44
+>    bits on a system/cgroup based kernel build.
+>  - fixed a bunch of reweight / cgroup placement issues
+>  - adaptive placement strategy for smaller slices
+>  - rename se->lag to se->vlag
+> 
+> There's a bunch of RFC patches at the end and one DEBUG patch. Of those, the
+> PLACE_BONUS patch is a mixed bag of pain. A number of benchmarks regress
+> because EEVDF is actually fair and gives a 100% parent vs a 50% child a 67%/33%
+> split (stress-futex, stress-nanosleep, starve, etc..) instead of a 50%/50%
+> split that sleeper bonus achieves. Mostly I think these benchmarks are somewhat
+> artificial/daft but who knows.
+> 
+> The PLACE_BONUS thing horribly messes up things like hackbench and latency-nice
+> because it places things too far to the left in the tree. Basically it messes
+> with the whole 'when', by placing a task back in history you're putting a
+> burden on the now to accomodate catching up. More tinkering required.
+> 
+> But over-all the thing seems to be fairly usable and could do with more
+> extensive testing.
 
-Using which APIs? What does peek_vqs_len do and why does it matter that
-it is super early?
+I had Jirka run his suite of perf workloads on this. These are macro benchmarks
+on baremetal (NAS, SPECjbb etc). I can't share specific results because it
+comes out in nice html reports on an internal website. There was no noticeable
+performance change, which is a good thing. Overall performance was comparable
+to CFS.
 
-> * We continue normally and create the VQs.
-> * We check if the created rings are small.
->    If they are and some blocked features were negotiated anyway (may occur if 
->    the re-negotiation fails, or if the transport has no implementation for 
->    peek_vqs_len), we fail probe.
->    If the ring is small and the features are ok, we mark the virtnet device as 
->    vring_small and fixup some variables.
->  
-> 
-> peek_vqs_len is needed because we must know the VQ length before calling init_vqs.
-> 
-> During virtnet_find_vqs we check the following:
-> vi->has_cvq
-> vi->big_packets
-> vi->mergeable_rx_bufs
-> 
-> But these will change if the ring is small..
-> 
-> (Of course, another solution will be to re-negotiate features after init_vqs, but this will make a big mess, tons of things to clean and reconfigure)
-> 
-> 
-> The 2 < ring < MAX_FRAGS + 2 part is ready, I have tested a few cases and it is working.
-> 
-> I'm considering splitting the effort into 2 series.
-> A 2 < ring < MAX_FRAGS + 2  series, and a follow up series with the ring < 2 case.
-> 
-> I'm also thinking about sending the first series as an RFC soon, so it will be more broadly tested.
-> 
-> What do you think?
+There was a win in stability though. A number of the error boxes across the
+board were smaller. So less variance.
 
-Lots of work spilling over to transports.
+These are mostly performance/throughput tests. We're going to run some more
+latency sensitive tests now.
 
-And I especially don't like that it slows down boot on good path.
-
-I have the following idea:
-- add a blocked features value in virtio_device
-- before calling probe, core saves blocked features
-- if probe fails, checks blocked features.
-  if any were added, reset, negotiate all features
-  except blocked ones and do the validate/probe dance again
+So, fwiw, EEVDF is performing well on macro workloads here.
 
 
-This will mean mostly no changes to drivers: just check condition,
-block feature and fail probe.
 
+Cheers,
+Phil
+
+> 
+> [1] https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=805acf7726282721504c8f00575d91ebfd750564
+> 
+> Results:
+> 
+>   hackbech -g $nr_cpu + cyclictest --policy other results:
+> 
+> 			EEVDF			 CFS
+> 
+> 		# Min Latencies: 00054
+>   LNICE(19)	# Avg Latencies: 00660
+> 		# Max Latencies: 23103
+> 
+> 		# Min Latencies: 00052		00053
+>   LNICE(0)	# Avg Latencies: 00318		00687
+> 		# Max Latencies: 08593		13913
+> 
+> 		# Min Latencies: 00054
+>   LNICE(-19)	# Avg Latencies: 00055
+> 		# Max Latencies: 00061
+> 
+> 
+> Some preliminary results from Chen Yu on a slightly older version:
+> 
+>   schbench  (95% tail latency, lower is better)
+>   =================================================================================
+>   case                    nr_instance            baseline (std%)    compare% ( std%)
+>   normal                   25%                     1.00  (2.49%)    -81.2%   (4.27%)
+>   normal                   50%                     1.00  (2.47%)    -84.5%   (0.47%)
+>   normal                   75%                     1.00  (2.5%)     -81.3%   (1.27%)
+>   normal                  100%                     1.00  (3.14%)    -79.2%   (0.72%)
+>   normal                  125%                     1.00  (3.07%)    -77.5%   (0.85%)
+>   normal                  150%                     1.00  (3.35%)    -76.4%   (0.10%)
+>   normal                  175%                     1.00  (3.06%)    -76.2%   (0.56%)
+>   normal                  200%                     1.00  (3.11%)    -76.3%   (0.39%)
+>   ==================================================================================
+> 
+>   hackbench (throughput, higher is better)
+>   ==============================================================================
+>   case                    nr_instance            baseline(std%)  compare%( std%)
+>   threads-pipe              25%                      1.00 (<2%)    -17.5 (<2%)
+>   threads-socket            25%                      1.00 (<2%)    -1.9 (<2%)
+>   threads-pipe              50%                      1.00 (<2%)     +6.7 (<2%)
+>   threads-socket            50%                      1.00 (<2%)    -6.3  (<2%)
+>   threads-pipe              100%                     1.00 (3%)     +110.1 (3%)
+>   threads-socket            100%                     1.00 (<2%)    -40.2 (<2%)
+>   threads-pipe              150%                     1.00 (<2%)    +125.4 (<2%)
+>   threads-socket            150%                     1.00 (<2%)    -24.7 (<2%)
+>   threads-pipe              200%                     1.00 (<2%)    -89.5 (<2%)
+>   threads-socket            200%                     1.00 (<2%)    -27.4 (<2%)
+>   process-pipe              25%                      1.00 (<2%)    -15.0 (<2%)
+>   process-socket            25%                      1.00 (<2%)    -3.9 (<2%)
+>   process-pipe              50%                      1.00 (<2%)    -0.4  (<2%)
+>   process-socket            50%                      1.00 (<2%)    -5.3  (<2%)
+>   process-pipe              100%                     1.00 (<2%)    +62.0 (<2%)
+>   process-socket            100%                     1.00 (<2%)    -39.5  (<2%)
+>   process-pipe              150%                     1.00 (<2%)    +70.0 (<2%)
+>   process-socket            150%                     1.00 (<2%)    -20.3 (<2%)
+>   process-pipe              200%                     1.00 (<2%)    +79.2 (<2%)
+>   process-socket            200%                     1.00 (<2%)    -22.4  (<2%)
+>   ==============================================================================
+> 
+>   stress-ng (throughput, higher is better)
+>   ==============================================================================
+>   case                    nr_instance            baseline(std%)  compare%( std%)
+>   switch                  25%                      1.00 (<2%)    -6.5 (<2%)
+>   switch                  50%                      1.00 (<2%)    -9.2 (<2%)
+>   switch                  75%                      1.00 (<2%)    -1.2 (<2%)
+>   switch                  100%                     1.00 (<2%)    +11.1 (<2%)
+>   switch                  125%                     1.00 (<2%)    -16.7% (9%)
+>   switch                  150%                     1.00 (<2%)    -13.6 (<2%)
+>   switch                  175%                     1.00 (<2%)    -16.2 (<2%)
+>   switch                  200%                     1.00 (<2%)    -19.4% (<2%)
+>   fork                    50%                      1.00 (<2%)    -0.1 (<2%)
+>   fork                    75%                      1.00 (<2%)    -0.3 (<2%)
+>   fork                    100%                     1.00 (<2%)    -0.1 (<2%)
+>   fork                    125%                     1.00 (<2%)    -6.9 (<2%)
+>   fork                    150%                     1.00 (<2%)    -8.8 (<2%)
+>   fork                    200%                     1.00 (<2%)    -3.3 (<2%)
+>   futex                   25%                      1.00 (<2%)    -3.2 (<2%)
+>   futex                   50%                      1.00 (3%)     -19.9 (5%)
+>   futex                   75%                      1.00 (6%)     -19.1 (2%)
+>   futex                   100%                     1.00 (16%)    -30.5 (10%)
+>   futex                   125%                     1.00 (25%)    -39.3 (11%)
+>   futex                   150%                     1.00 (20%)    -27.2% (17%)
+>   futex                   175%                     1.00 (<2%)    -18.6 (<2%)
+>   futex                   200%                     1.00 (<2%)    -47.5 (<2%)
+>   nanosleep               25%                      1.00 (<2%)    -0.1 (<2%)
+>   nanosleep               50%                      1.00 (<2%)    -0.0% (<2%)
+>   nanosleep               75%                      1.00 (<2%)    +15.2% (<2%)
+>   nanosleep               100%                     1.00 (<2%)    -26.4 (<2%)
+>   nanosleep               125%                     1.00 (<2%)    -1.3 (<2%)
+>   nanosleep               150%                     1.00 (<2%)    +2.1  (<2%)
+>   nanosleep               175%                     1.00 (<2%)    +8.3 (<2%)
+>   nanosleep               200%                     1.00 (<2%)    +2.0% (<2%)
+>   ===============================================================================
+> 
+>   unixbench (throughput, higher is better)
+>   ==============================================================================
+>   case                    nr_instance            baseline(std%)  compare%( std%)
+>   spawn                   125%                      1.00 (<2%)    +8.1 (<2%)
+>   context1                100%                      1.00 (6%)     +17.4 (6%)
+>   context1                75%                       1.00 (13%)    +18.8 (8%)
+>   =================================================================================
+> 
+>   netperf  (throughput, higher is better)
+>   ===========================================================================
+>   case                    nr_instance          baseline(std%)  compare%( std%)
+>   UDP_RR                  25%                   1.00    (<2%)    -1.5%  (<2%)
+>   UDP_RR                  50%                   1.00    (<2%)    -0.3%  (<2%)
+>   UDP_RR                  75%                   1.00    (<2%)    +12.5% (<2%)
+>   UDP_RR                 100%                   1.00    (<2%)    -4.3%  (<2%)
+>   UDP_RR                 125%                   1.00    (<2%)    -4.9%  (<2%)
+>   UDP_RR                 150%                   1.00    (<2%)    -4.7%  (<2%)
+>   UDP_RR                 175%                   1.00    (<2%)    -6.1%  (<2%)
+>   UDP_RR                 200%                   1.00    (<2%)    -6.6%  (<2%)
+>   TCP_RR                  25%                   1.00    (<2%)    -1.4%  (<2%)
+>   TCP_RR                  50%                   1.00    (<2%)    -0.2%  (<2%)
+>   TCP_RR                  75%                   1.00    (<2%)    -3.9%  (<2%)
+>   TCP_RR                 100%                   1.00    (2%)     +3.6%  (5%)
+>   TCP_RR                 125%                   1.00    (<2%)    -4.2%  (<2%)
+>   TCP_RR                 150%                   1.00    (<2%)    -6.0%  (<2%)
+>   TCP_RR                 175%                   1.00    (<2%)    -7.4%  (<2%)
+>   TCP_RR                 200%                   1.00    (<2%)    -8.4%  (<2%)
+>   ==========================================================================
+> 
+> 
+> ---
+> Also available at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/eevdf
+> 
+> ---
+> Parth Shah (1):
+>       sched: Introduce latency-nice as a per-task attribute
+> 
+> Peter Zijlstra (14):
+>       sched/fair: Add avg_vruntime
+>       sched/fair: Remove START_DEBIT
+>       sched/fair: Add lag based placement
+>       rbtree: Add rb_add_augmented_cached() helper
+>       sched/fair: Implement an EEVDF like policy
+>       sched: Commit to lag based placement
+>       sched/smp: Use lag to simplify cross-runqueue placement
+>       sched: Commit to EEVDF
+>       sched/debug: Rename min_granularity to base_slice
+>       sched: Merge latency_offset into slice
+>       sched/eevdf: Better handle mixed slice length
+>       sched/eevdf: Sleeper bonus
+>       sched/eevdf: Minimal vavg option
+>       sched/eevdf: Debug / validation crud
+> 
+> Vincent Guittot (2):
+>       sched/fair: Add latency_offset
+>       sched/fair: Add sched group latency support
+> 
+>  Documentation/admin-guide/cgroup-v2.rst |   10 +
+>  include/linux/rbtree_augmented.h        |   26 +
+>  include/linux/sched.h                   |    6 +
+>  include/uapi/linux/sched.h              |    4 +-
+>  include/uapi/linux/sched/types.h        |   19 +
+>  init/init_task.c                        |    3 +-
+>  kernel/sched/core.c                     |   65 +-
+>  kernel/sched/debug.c                    |   49 +-
+>  kernel/sched/fair.c                     | 1199 ++++++++++++++++---------------
+>  kernel/sched/features.h                 |   29 +-
+>  kernel/sched/sched.h                    |   23 +-
+>  tools/include/uapi/linux/sched.h        |    4 +-
+>  12 files changed, 794 insertions(+), 643 deletions(-)
+> 
 
 -- 
-MST
 
