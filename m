@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C266EE365
+	by mail.lfdr.de (Postfix) with ESMTP id B2C3A6EE366
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbjDYNpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S233852AbjDYNpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234253AbjDYNpf (ORCPT
+        with ESMTP id S234264AbjDYNph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:45:35 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E7CCC18
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:34 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94f7a0818aeso872250366b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:34 -0700 (PDT)
+        Tue, 25 Apr 2023 09:45:37 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B29E58
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:35 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94ef8b88a5bso861106666b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682430333; x=1685022333;
+        d=rasmusvillemoes.dk; s=google; t=1682430334; x=1685022334;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E4sRdWC2cDHZjejBYhhOCUr1iFuyu6C1Fz1Mden7vTg=;
-        b=Z+SKr1Ux8TXyogmCHsNc4/c9jBYnw/ezmC0VGtD1fZH6kazcZAF/QNVU+NXutbp4tt
-         gDMLMyvaf3VlLPBJN6PxnB9PSBlCbSGoN3hQ67YfPy85ej2Efk2mrrPj5C3R+yEeu5bj
-         b+ID2oi1EGUK8rhRUgZpj6hu8zzOpzOdayHS8=
+        bh=zRgabKLq7eTacDKoRbI9FK/SG7BfFMCRKhP9HGH7/VI=;
+        b=DpdsldsksNbrlYrHx72q3FsmVTygzQ8+ILEy/6Z47oNp9+CIsnm7sxSovUbiQbZgg7
+         imHgDTz+AF0pXiJXTeaGHUgYJ3ib0U2en5rmsPCF0yP23sLsX4UntZCS+HMGFgBqxlkA
+         Cj5e7wrWZ+8OKjCeMrv7BQItLrjPiqb0hugP8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682430333; x=1685022333;
+        d=1e100.net; s=20221208; t=1682430334; x=1685022334;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E4sRdWC2cDHZjejBYhhOCUr1iFuyu6C1Fz1Mden7vTg=;
-        b=dh/S/w2m8E1DclEAH+OywuBFfYXLu+dRuhvWB1u78BUXqigjuDazKcgKMCk7vGPNwX
-         n4qdlEW5w7rhqdR5lnyey0NRa/RFeX8r8CrgXqFLhk/kx8RRxDfS0BiSD2Z4Dr6bDpt9
-         XoygN3Kr3iU3cRVVW3SlolQerNNThxiL4m/God3CaH4TSQZx2rLHX9PZetOnVJPwZHf/
-         qSaUGQWYP1OLLyenqJSaVFCfrcie6guYP77j2T6znZa/wzWvFlj5BHIt+mEjYi68pJJE
-         zvIeU3WPJ3Tgny+ajajY4PpHbh05REnwTY2ktKv8mPEDKn/gIilWCQlrVi9+/XeNcFIK
-         A3wA==
-X-Gm-Message-State: AAQBX9eEmcqMUCYhuoA0tEA27QK0Xv60iK7m48tDwYe1vqiW03D3LsB+
-        gZN9vvbAcTdXih8WBpr8MMPbAw==
-X-Google-Smtp-Source: AKy350bel0saz0NNkLMsNuHNUBFgQRefYyEt6zhsCW5VrBurn20Uw4hMW3itsS+i0T2zY7/JuQWDyw==
-X-Received: by 2002:a17:906:7686:b0:956:f4f8:23b6 with SMTP id o6-20020a170906768600b00956f4f823b6mr13168543ejm.43.1682430332774;
-        Tue, 25 Apr 2023 06:45:32 -0700 (PDT)
+        bh=zRgabKLq7eTacDKoRbI9FK/SG7BfFMCRKhP9HGH7/VI=;
+        b=ZcTkgptSsrW1VVVEc44dFsJ0IueJn2zmx1R1pUlJCUG5nnb8eYY/YUK3pUtJdz+muV
+         K6wqaGJmQBcxbn5iRS3f+XHaZihiO0kLggGBmSE6rcf8V8d012bVidobPHdIthNZIBpA
+         PJY2LEoUyhTNrVLot2viA7sLoH/hn9JV6nRJ+U/UcUC86G2HoLqc2qPQ1sMK3dxmb30b
+         HqFbrGgMrmUMzDTgPngJKvnKSeHdo8LTwLGoufL7o1ZnyVOn4A58gMV53JOJN7jrw58v
+         sHkXFkSghhmtFCUWS+0yvFIujf37+j+7iZ/xNEAucZE4RVXJC7L/Y9Se4XCyoVZuyW8M
+         lTNg==
+X-Gm-Message-State: AAQBX9eZP2DptnRC+aceAAM3CmD5MR+ATcGXGQnRN/Otk+xkWi0Ybdir
+        tRUvTUPxkOD4vpWQdKN+3Xngrg==
+X-Google-Smtp-Source: AKy350Z83jsGizwNJRA+mohLxhjiEvtuoiSejIRimuqtdjKMN2jPVPuP7+Lhh1bC8E1iH8chq3akuw==
+X-Received: by 2002:a17:907:7e9c:b0:957:28b2:560a with SMTP id qb28-20020a1709077e9c00b0095728b2560amr13750121ejc.46.1682430334339;
+        Tue, 25 Apr 2023 06:45:34 -0700 (PDT)
 Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm6806822eja.114.2023.04.25.06.45.31
+        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm6806822eja.114.2023.04.25.06.45.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 06:45:32 -0700 (PDT)
+        Tue, 25 Apr 2023 06:45:34 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -57,9 +57,9 @@ Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] spi: spi-imx: use "controller" variable consistently in spi_imx_probe()
-Date:   Tue, 25 Apr 2023 15:45:25 +0200
-Message-Id: <20230425134527.483607-2-linux@rasmusvillemoes.dk>
+Subject: [PATCH 2/3] spi: spi-imx: set max_native_cs for imx51/imx53/imx6 variants
+Date:   Tue, 25 Apr 2023 15:45:26 +0200
+Message-Id: <20230425134527.483607-3-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
 References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
@@ -75,61 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Near the top of the function, spi_imx->controller is set to
-controller (and is of course never modified again). The rest of the
-function uses a mix of the two expressions.
+The ecspi IP block on imx51/imx53/imx6 have four native chip
+selects. Tell that to the spi core so that any non-gpio chip selects
+get validated against that upper bound.
 
-For consistency, readability and better code generation, drop all the
-spi_imx-> indirections.
+Also set the SPI_MASTER_GPIO_SS so that the core verifies that, in the
+case where both native and gpio chip selects are in use, there is at
+least one leftover native chip select (or "channel", in the ecspi
+language) for use by the slaves sitting on gpio chip selects.
 
 Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- drivers/spi/spi-imx.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/spi/spi-imx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index e4ccd0c329d0..6fa53a82674a 100644
+index 6fa53a82674a..e8f7afbd9847 100644
 --- a/drivers/spi/spi-imx.c
 +++ b/drivers/spi/spi-imx.c
-@@ -1725,20 +1725,20 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	else
- 		controller->num_chipselect = 3;
- 
--	spi_imx->controller->transfer_one = spi_imx_transfer_one;
--	spi_imx->controller->setup = spi_imx_setup;
--	spi_imx->controller->cleanup = spi_imx_cleanup;
--	spi_imx->controller->prepare_message = spi_imx_prepare_message;
--	spi_imx->controller->unprepare_message = spi_imx_unprepare_message;
--	spi_imx->controller->slave_abort = spi_imx_slave_abort;
--	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
-+	controller->transfer_one = spi_imx_transfer_one;
-+	controller->setup = spi_imx_setup;
-+	controller->cleanup = spi_imx_cleanup;
-+	controller->prepare_message = spi_imx_prepare_message;
-+	controller->unprepare_message = spi_imx_unprepare_message;
-+	controller->slave_abort = spi_imx_slave_abort;
-+	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
- 
- 	if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
- 	    is_imx53_ecspi(spi_imx))
--		spi_imx->controller->mode_bits |= SPI_LOOP | SPI_READY;
-+		controller->mode_bits |= SPI_LOOP | SPI_READY;
- 
- 	if (is_imx51_ecspi(spi_imx) || is_imx53_ecspi(spi_imx))
--		spi_imx->controller->mode_bits |= SPI_RX_CPHA_FLIP;
-+		controller->mode_bits |= SPI_RX_CPHA_FLIP;
- 
- 	if (is_imx51_ecspi(spi_imx) &&
- 	    device_property_read_u32(&pdev->dev, "cs-gpios", NULL))
-@@ -1747,7 +1747,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 		 * setting the burst length to the word size. This is
- 		 * considerably faster than manually controlling the CS.
+@@ -1749,6 +1749,11 @@ static int spi_imx_probe(struct platform_device *pdev)
  		 */
--		spi_imx->controller->mode_bits |= SPI_CS_WORD;
-+		controller->mode_bits |= SPI_CS_WORD;
+ 		controller->mode_bits |= SPI_CS_WORD;
  
++	if (is_imx51_ecspi(spi_imx) || is_imx53_ecspi(spi_imx)) {
++		controller->max_native_cs = 4;
++		controller->flags |= SPI_MASTER_GPIO_SS;
++	}
++
  	spi_imx->spi_drctl = spi_drctl;
  
+ 	init_completion(&spi_imx->xfer_done);
 -- 
 2.37.2
 
