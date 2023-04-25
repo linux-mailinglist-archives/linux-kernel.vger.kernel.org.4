@@ -2,107 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192476EDE9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3A26EDEA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbjDYI5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S233543AbjDYJCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 05:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233568AbjDYI5b (ORCPT
+        with ESMTP id S229927AbjDYJB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:57:31 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64B4768A;
-        Tue, 25 Apr 2023 01:57:28 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.79.165) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 25 Apr
- 2023 11:57:18 +0300
-Subject: Re: [PATCH RESEND] usb: dwc3: remove dead code in dwc3_otg_get_irq
-To:     lihuya <lihuya@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <hust-os-kernel-patches@googlegroups.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230424105930.49944-1-lihuya@hust.edu.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <887b6226-ea4f-e75c-bfde-0785ccf30c77@omp.ru>
-Date:   Tue, 25 Apr 2023 11:57:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20230424105930.49944-1-lihuya@hust.edu.cn>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.79.165]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/25/2023 08:35:21
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176957 [Apr 25 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.165 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.165 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.79.165:7.4.1,7.1.2,7.7.3
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.165
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/25/2023 08:41:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/25/2023 7:02:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 25 Apr 2023 05:01:58 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604DF10DE
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:01:55 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 037C55C00CD;
+        Tue, 25 Apr 2023 05:01:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 25 Apr 2023 05:01:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1682413312; x=1682499712; bh=R0z5Zs+wnEsIT1a8y/eZUxxArXE6qSZmRoh
+        kAXezjZQ=; b=TzdRGTV2hO5JedwLX2OH2c1ohRTSGKu0BV1mcu4k29f/wMYONi1
+        5kUeO8gw7bqkaAn7CHeoDEtaO7V0IujFVTqgWsb00ooBp87ZjGGlDqJ3qrnNxubS
+        kWkJS3sf4U3dr/894BbN6ajEwk9Wfhro5QnfvHZHKn6Eqh2kVXGGyNFz0iG1Adty
+        0cFij0usNnxVdc7ZbjGTbw4MV6UM6cWckn6LVOt4zhwOWzQrjknlZQtHYxgZfapb
+        D0Ugd3uTRsJ30jSfca5/hREueVrgV6hSJc/QYM1v55o5P4sVFdHQ/YaM8r1nTCo0
+        mbnY1Eydy7mpuZlrJDW/aYEO4VlNCZyCb8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682413312; x=1682499712; bh=R0z5Zs+wnEsIT1a8y/eZUxxArXE6qSZmRoh
+        kAXezjZQ=; b=dETx4Eje6jqkXHZfDAN1w4Z2QYI6v+22QFbitdpKZpmsP34Jnh6
+        3XCvtuBxJj9lD5/Dz58wZBgT3IaAw8VhKe4FfAHsfy+H4vTlCwOeNNq83Q325psH
+        Gizu/NVv4OwEGuP5w43EwdjiE16mSlmJcnTQEMEHwRdnsGG127x/rkilMSUYXN7J
+        IYCzArom7aJfoGQLR8byHUhNpdPzZ4/qH/bflKJUZLIgWEHRuKb1P0tu3RDRFkW5
+        QhngQjBPmbwdrOi7G7lCInLltSCKgGPzIBnS0Pi8/6QY1/yBNEtFiLr03FNCacT3
+        kToS46wUsTLKxXsVcpFbTvSHUyJGb4yN6qw==
+X-ME-Sender: <xms:_5ZHZJs_B7hg1lzne89QzMmORS9hGvNk8o8M4iA1Gy7iL7X2yVwgAQ>
+    <xme:_5ZHZCdzFTOKhsfaifdVoqmUVJ2xykOm3TsZggZg1JCRFohW8-2SdwK2xQVw0KUT8
+    NTXEDgRN5obyWGtm_Q>
+X-ME-Received: <xmr:_5ZHZMxp6_a7Xz5O87kbYLMKnNqCtf6aJ15Phl84LBwtQGgsCDZO60xnTlG7Oo_VM_-i>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:_5ZHZAPAPFgLWOmgcyL-rILyIUiedFqHBFOFuA-xqK6Aet5uxAkr4g>
+    <xmx:_5ZHZJ83aP9yDKsd9R6qKwGJODAnnfu8ZAN3mrUq9qmq9BkwofxEGA>
+    <xmx:_5ZHZAUl0wp_xKPEHQzLWjsdxjfVHcgHRPoJcc38D5nHJ9qqABAnqA>
+    <xmx:AJdHZMmh4uGwnwHmO4_3yRVNUwlGSQApy14d_RwCjDzFKL4vdUpItQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Apr 2023 05:01:50 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
+ a CPU feature not currently enabled
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230424200155.GA2605117@dev-arch.thelio-3990X>
+Date:   Tue, 25 Apr 2023 10:01:39 +0100
+Cc:     Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <FF433BBA-3723-4B4D-BBAC-664419EA52D0@flygoat.com>
+References: <202304170748.Fg9VIgGd-lkp@intel.com>
+ <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
+ <20230419231834.GA1269248@dev-arch.thelio-3990X>
+ <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
+ <20230424200155.GA2605117@dev-arch.thelio-3990X>
+To:     Nathan Chancellor <nathan@kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 4/24/23 1:59 PM, lihuya wrote:
 
-> platform_get_irq() only return non-zero irq number on success, or
-> negative error number on failure.
-> 
-> There is no need to check the return value of platform_get_irq()
-> to determine the return value of dwc3_otg_get_irq(), removing
-> them to solve this problem.
+> 2023=E5=B9=B44=E6=9C=8824=E6=97=A5 21:01=EF=BC=8CNathan Chancellor =
+<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Thu, Apr 20, 2023 at 12:41:50AM +0100, Jiaxun Yang wrote:
+>>=20
+>>=20
+>>> 2023=E5=B9=B44=E6=9C=8820=E6=97=A5 00:18=EF=BC=8CNathan Chancellor =
+<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> + Jiaxun, who has been looking into MIPS + LLVM issues recently and =
+has
+>>> been a big help :)
+>>=20
+>> I think this patch[1] may fix the problem.
+>=20
+> I have the following patch stack:
+>=20
+> $ git log --oneline origin/master^..
+> c6cd9f17692e MIPS: Replace assembly isa level directives with macros
+> 60508ba7d92f MIPS: Limit MIPS_MT_SMP support by ISA reversion
+> c9e250105de4 MIPS: Fallback CPU -march CFLAG to ISA level if =
+unsupported
+> 49c0420e59bb MIPS: Remove cc-option checks for -march=3Docteon
+> b7ea7e959023 MIPS: Detect toolchain support of o32 ABI with 64 bit CPU
+> 51f2d93245ba MIPS: Detect toolchain support of workarounds in Kconfig
+> 7382a07eb105 MIPS: Add toolchain feature dependency for microMIPS =
+smartMIPS
+> de0621fbedd3 MIPS: Move various toolchain ASE check to Kconfig
+> 3b85b9b39960 Add linux-next specific files for 20230424
+>=20
+> but with the robot's configuration, I still see that error. I notice
+> that the 'if (sel =3D=3D 0)' branch of ___read_32bit_c0_register() has =
+no
+> '.set push' directive, could that matter here?
 
-   I was going to submit such patch myself at some point... which
-has never happened. :-/
+Sorry I was identifying the wrong problem.
 
-> Signed-off-by: lihuya <lihuya@hust.edu.cn>
+The real problem is LLVM IAS (or the whole LLVM stack)=E2=80=99s =
+microMIPS is broken,
+It unable to handle =E2=80=9Cmfc0=E2=80=9D and many other instructions.
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Perhaps we should come up a method to block this config to happen.
 
-[...]
+Thanks
+Jiaxun
 
-MBR, Sergey
+>=20
+> Cheers,
+> Nathan
