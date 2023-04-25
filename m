@@ -2,142 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3256EDDCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56776EDDD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjDYIT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S232430AbjDYIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjDYITZ (ORCPT
+        with ESMTP id S233571AbjDYIT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:19:25 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157173C3A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:19:21 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94a34a14a54so1009786666b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682410759; x=1685002759;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=znRV0nWYnqPOSY77B900qlMay8TPNkGb3s+FapEpgN0=;
-        b=LrmBxu2EGogQSTBkcCYzasNpZW/pKKd+LqTsGa/ifcmlV7SrWEsRCLujLGcNA137kR
-         lgwXt02NGHCJSzACgRty3LrKWmIf7PuMckGMm8d0LuQHfa3kRMdEE7xcneEgoDnt30pU
-         ICbLRprS81Q5+UWB1qUS+Xz8ejauuXRB00g3emna+Fc5Uq0YzQKXiO1HCgOSVUYsofLg
-         HAyRSdTObW2jp7yFUero1cT0zWgI5o8AgwOUvzA7wvYF/P5Igdaa8PA9CIAotIyyWhPE
-         HQyi2HqeCP3YbfrWZ9wHHbqpVkFD2C3LQt4yqEcG14S1CGYcQHSyqFmpM6tPjofJhhJ9
-         MN3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682410759; x=1685002759;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=znRV0nWYnqPOSY77B900qlMay8TPNkGb3s+FapEpgN0=;
-        b=HHEl7BWKfS1mHdbKRDrSj8l8uBdlBqErbaxbLa2nSiKKKurxyQ79jSAeSopTDHbjjQ
-         xa/ZEFyhmRIbUyvLZGyyWZJrrE6h4VL35KFRxbd12PXNFCf2cLIJ3q78jCTVfggI+Jy3
-         EMe8Rqu6qOAhRPILcc9F33ZZ35AU8QC6772Sb1wNoyWe58zEvZJcxZN1qy+RfXGbMV47
-         TpD/mkXLs2SUZfQvoSGEcrPYPFe/NsUl3O8V1jEGYzQZXFxXoDLm0HJiHNvfc1sVMvGa
-         kKovOmSlAupv96iWs1D+qt3fS1UIP3szjjX/bkiplUDGpdaEtiTYXSHKkmM7xqxrg1Gp
-         KhKg==
-X-Gm-Message-State: AAQBX9d6Sl/rSgzzVNDUAUGBY7lq+UOdd3Y/yCbeMHuLRixokFLbZ1kJ
-        CpeDc1SgkeUi/AKZ6//022PbUw==
-X-Google-Smtp-Source: AKy350baIrrRrmfaPcUDOSj2l2OdIXPrZ1RbEUf1vTKFBK8BjYDz6c/Q0be38k6esdo6bxwhgxnskg==
-X-Received: by 2002:a17:907:76ea:b0:94f:7486:85a7 with SMTP id kg10-20020a17090776ea00b0094f748685a7mr12083094ejc.31.1682410759554;
-        Tue, 25 Apr 2023 01:19:19 -0700 (PDT)
-Received: from [192.168.9.102] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id la5-20020a170906ad8500b0094e877ec197sm6587131ejb.148.2023.04.25.01.19.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 01:19:18 -0700 (PDT)
-Message-ID: <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
-Date:   Tue, 25 Apr 2023 10:19:18 +0200
+        Tue, 25 Apr 2023 04:19:57 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E85A40DF;
+        Tue, 25 Apr 2023 01:19:56 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P7SiGQ010233;
+        Tue, 25 Apr 2023 01:19:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=qFPVHmLhj79eFNNRMNhao3E5XytVQl0KAYfinko41M8=;
+ b=QqsEMDUJ20pT8WeK9wc1Syq4aKF1PDcGjRl5iMeCyAMMrmZlPGR7+5uzdwRZWZ+84OdG
+ wzpKT1I8M89fDOBSTobUSyotHSBqJujlAl8VybeEYsErjza1mlc+Zuehp+cIL9gFIB//
+ V7TB0jiSgwdFK7uUXbqvDCiO3fYnbUGfokWZJ7P54uYuKYysc0b697JtjpuBWetIPxu9
+ ZiD0l0JKL9iIH68vMijcHLi1xGv5tsdOtO7OiSTvUHjHk2+EGCqG4snofRrgwPzOpRoi
+ jdOcogcEYNDKa301/AdiJXWYlKctIBx4NDmV7QgmgOKCO7co55CjBMhi+yVBuRgqEFVQ 5w== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q4f3p9ak3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 01:19:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 25 Apr
+ 2023 01:19:32 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Tue, 25 Apr 2023 01:19:29 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2 v3] dt-bindings: watchdog: marvell octeonTX2 GTI system watchdog driver
+Date:   Tue, 25 Apr 2023 13:49:25 +0530
+Message-ID: <20230425081926.9234-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Content-Language: en-US
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org
-References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
- <20230419035646.43702-2-changhuang.liang@starfivetech.com>
- <20230419-labored-camper-644d51a7ca96@spud>
- <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
- <20230424-baffle-punch-ec73098f2b6a@spud>
- <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
- <20230425-unquote-eligible-09f743d81981@wendy>
- <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: agZTlasKd6PpLPmuzVmWGwt7chIJj-gQ
+X-Proofpoint-GUID: agZTlasKd6PpLPmuzVmWGwt7chIJj-gQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_03,2023-04-21_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2023 09:57, Changhuang Liang wrote:
->>>>>>>  
->>>>>>>  description: |
->>>>>>>    StarFive JH7110 SoC includes support for multiple power domains which can be
->>>>>>> @@ -17,6 +18,7 @@ properties:
->>>>>>>    compatible:
->>>>>>>      enum:
->>>>>>>        - starfive,jh7110-pmu
->>>>>>> +      - starfive,jh7110-aon-pmu
->>>>
->>>> I was speaking to Rob about this over the weekend, he asked:
->>>> 'Why isn't "starfive,jh7110-aon-syscon" just the power-domain provider
->>>> itself?'
->>>
->>> Maybe not, this syscon only offset "0x00" configure power switch.
->>> other offset configure other functions, maybe not power, so this
->>> "starfive,jh7110-aon-syscon" not the power-domain itself.
->>>
->>>> Do we actually need to add a new binding for this at all?
->>>>
->>>> Cheers,
->>>> Conor.
->>>>
->>>
->>> Maybe this patch do that.
->>> https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech.com/
->>
->> This makes it a child-node right? I think Rob already said no to that in
->> and earlier revision of this series. What he meant the other day was
->> making the syscon itself a power domain controller, since the child node
->> has no meaningful properties (reg, interrupts etc).
->>
->> Cheers,
->> Conor.
-> 
-> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
-> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
-> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
-> to a power domain controller. I think using the child-node description is closer to
-> JH7110 SoC. 
+Add binding documentation for the Marvell octeonTX2
+GTI system watchdog driver.
 
-Unfortunately, I do not see the correlation between these, any
-connection. Why being a child of syscon block would mean that this
-should no be power domain controller? Really, why? These are two
-unrelated things.
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+v3:
+ - Used 4 spaces for entire DTS example
 
-Best regards,
-Krzysztof
+ .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+new file mode 100644
+index 000000000000..eb06d78242bf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell OcteonTX2 GTI system watchdog
++
++allOf:
++  - $ref: watchdog.yaml#
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++properties:
++  compatible:
++    const: marvell,octeontx2-wdt
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++            compatible = "marvell,octeontx2-wdt";
++            reg = <0x00008020 0x00040000 0x00000000 0x00020000>;
++            interrupts = <0 38 IRQ_TYPE_EDGE_RISING>;
++        };
++    };
++
++...
+-- 
+2.17.1
 
