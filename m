@@ -2,161 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E8F6EDE4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB566EDE4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbjDYIkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        id S233664AbjDYIkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234058AbjDYIkI (ORCPT
+        with ESMTP id S233940AbjDYIjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:40:08 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9457E14F48
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:38:18 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94a39f6e8caso1019656166b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:38:18 -0700 (PDT)
+        Tue, 25 Apr 2023 04:39:52 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D4AAD39
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:37:59 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so1037e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682411849; x=1685003849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=35rY/v6zf6GtIET4fBOnZv9nYjXqazObgmroXAHCvWo=;
-        b=IbFEWZMaLeo9gL3Fnhqb/dfjJleRavs7Fbz2ayDxgLNZt9F9InIHDPhZC1yvBMjiDl
-         dltpobCqtqSb3dW9KRXtTNjS2wIKjtP0AxhXcw0TIbPB8SNsk1cnMZTdy5lCjVeA5wzF
-         ofwXDEBMMurgbOq8Xk2aznBDOGJElJ8pHwmlk=
+        d=google.com; s=20221208; t=1682411823; x=1685003823;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XXW/aseN5mXuotIa/yEkh2bdTo682NvMfHu/VUn7fZ4=;
+        b=XmgtDHUuBipVTZPUOiFntnaV3plFHTBEUMVX6ZzTveiI5RNHzhbJAS4owqd5Uf2wdn
+         LjSPgp8P/AjOCVqQ4+KDy8PQz8x4RdUBEuE0+g57YZ6FHmT9UDb+GW1Lk1ufgDXCLvzQ
+         qWUcl1Skk1nk80BbsQg0k+VxjT/IihbMtTcn5bIUVqybGx+D36N/C6ESx8tSWvRJLnoX
+         HY1uEjN5nF4WDQwLN/BUDaZDLJdhL8q4gs+tbq9+2u2HweRVgD9MhhF7Fp8Z1NoM7OmQ
+         wxlsn04NTFHfFINdrNryFOjrXFFOx00CtfMs0zXW5Mkf8UQuzpVEk7GH6Xb5wQikgDRz
+         Qifg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682411849; x=1685003849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=35rY/v6zf6GtIET4fBOnZv9nYjXqazObgmroXAHCvWo=;
-        b=AUmhJS93M7hzHCQwc3hB4znWaWw6Zuz5sAcewiq8rGBowIZVOT9xZYbSu6NiMG4ODs
-         lTWgAqN/E48Ulbu420wtrFnzfJw30xA2X3/3sKTX28wfSotq6dO3UcDn0+2aqEY6RZyJ
-         8rw5a4XApSFhcJ5SmZkaF4k6Evl4CFcPakFtgY8kWqLKR0Rd5JI2PweOnsJ2WbwncfeM
-         +nmICd1JtlWsGNg4DuCjufaWHC4DAzzZNBkaE+1NeMe6lyjCyIMShEp7ZABYPZFG6o7w
-         498HdQP0nc/IlV/8iAIX1SL97y6jFtPViDsOY7ITa8//xJ7OqaLzBCTY+kopQa/Lu0lq
-         UmiQ==
-X-Gm-Message-State: AAQBX9dS8dIGC39lnNTyJHUkVu6uDtM8OvmXjjeO63/WC9V5YphOSez0
-        3OMQYjGcM8StkRMHH+zSfGyXz2ggsjpDkmR3Vj6jEw==
-X-Google-Smtp-Source: AKy350YGk19OnslFIK766gkwtUplBq+OuYO97SimHdAhSg+IGrRWJBekED19H/3CMiaLEA/VyeP8Iw==
-X-Received: by 2002:a17:906:853:b0:93e:8791:7d8e with SMTP id f19-20020a170906085300b0093e87917d8emr11317773ejd.2.1682411849260;
-        Tue, 25 Apr 2023 01:37:29 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906328a00b009599c3a019fsm2346238ejw.60.2023.04.25.01.37.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 01:37:28 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-2f7a7f9667bso3288908f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:37:28 -0700 (PDT)
-X-Received: by 2002:adf:d091:0:b0:2f9:338:743d with SMTP id
- y17-20020adfd091000000b002f90338743dmr9864217wrh.23.1682411847907; Tue, 25
- Apr 2023 01:37:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682411823; x=1685003823;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XXW/aseN5mXuotIa/yEkh2bdTo682NvMfHu/VUn7fZ4=;
+        b=KHVLz8b0g5FBl5va8eb3jK9T9yAb0VeBrHzNxcIh7yYEU9vxFCRhQPi78SNPuUwQ5v
+         FDgG2QRQua3nxL0WdRdWs8K27zcAPZQgI2MRp1i/GYK9EmNp0hlvb0K7i6pJC1FXaQl4
+         mhaY0NNqI967ZiG2Eb/KUVtZV2NnIK9y+NISWL2wHBuPjTJAfawL43xXwX3goSUGr/BS
+         0HDPUFjozckh8UfizYNWKFY2uJ8qUvguDeYBjDUb38tH377SeQfWvdAhspa1nPtBxfqu
+         eBkdW9cUhymmK+9JQr5bpkvg3BFsNqGvJb2FaQjlATKyOKtfcSWblSZ6/wGlwbxhaBJu
+         EHYA==
+X-Gm-Message-State: AC+VfDytIRjkQd8wAMMTR0vILmyloUm5a5coKVBcC7dx1ggagt4FWM+2
+        eP6FUmYXjlfQ+6A6O6x94kmHKLHEIflsq4bK7aA8+A==
+X-Google-Smtp-Source: ACHHUZ4ZQVitrq0MqOhQ4d7dv8Gnc3ryLTlv8xLgz1rnFURT2OfEFSn0WQ5z358EeBKQM+qPXMw0XCAFzTwwaiWgez8=
+X-Received: by 2002:a05:6512:3e17:b0:4ed:af48:f8bb with SMTP id
+ i23-20020a0565123e1700b004edaf48f8bbmr96406lfv.5.1682411823172; Tue, 25 Apr
+ 2023 01:37:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230418124953.3170028-1-fshao@chromium.org> <20230418124953.3170028-3-fshao@chromium.org>
- <ZEX5tc2LSZoVswc2@nixie71> <CAD=FV=XnrSskS=0UKRGGPBxSnPYQtUkJeoBm44bDnwKVBHJLyA@mail.gmail.com>
-In-Reply-To: <CAD=FV=XnrSskS=0UKRGGPBxSnPYQtUkJeoBm44bDnwKVBHJLyA@mail.gmail.com>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Tue, 25 Apr 2023 16:36:50 +0800
-X-Gmail-Original-Message-ID: <CAC=S1njkYWfvqs5x4nYk0YxoFEcivunKP1T0pG3pO_tapfHivA@mail.gmail.com>
-Message-ID: <CAC=S1njkYWfvqs5x4nYk0YxoFEcivunKP1T0pG3pO_tapfHivA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] HID: i2c-hid: goodix: Add support for
- powered-in-suspend property
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Jeff LaBundy <jeff@labundy.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <00000000000059e1b705fa2494e4@google.com>
+In-Reply-To: <00000000000059e1b705fa2494e4@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 25 Apr 2023 10:36:51 +0200
+Message-ID: <CACT4Y+YDzXb6WoMtBu5O-dpWOkVYwhUNKM7szC5gJ9ewtMUPDQ@mail.gmail.com>
+Subject: Re: [syzbot] [can?] KCSAN: data-race in bcm_can_tx / bcm_tx_setup (3)
+To:     syzbot <syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
+        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 25, 2023 at 2:16=E2=80=AFAM Doug Anderson <dianders@chromium.or=
-g> wrote:
+On Tue, 25 Apr 2023 at 10:05, syzbot
+<syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com> wrote:
 >
-> Hi,
+> Hello,
 >
-> On Sun, Apr 23, 2023 at 8:38=E2=80=AFPM Jeff LaBundy <jeff@labundy.com> w=
-rote:
-> >
-> > > @@ -37,13 +38,34 @@ static int goodix_i2c_hid_power_up(struct i2chid_=
-ops *ops)
-> > >               container_of(ops, struct i2c_hid_of_goodix, ops);
-> > >       int ret;
-> > >
-> > > -     ret =3D regulator_enable(ihid_goodix->vdd);
-> > > -     if (ret)
-> > > -             return ret;
-> > > -
-> > > -     ret =3D regulator_enable(ihid_goodix->vddio);
-> > > -     if (ret)
-> > > -             return ret;
-> > > +     /*
-> > > +      * This is to ensure that the reset GPIO will be asserted and t=
-he
-> > > +      * regulators will be enabled for all cases.
-> > > +      */
-> > > +     if (ihid_goodix->powered_in_suspend) {
-> > > +             /*
-> > > +              * This is not mandatory, but we assert reset here (ins=
-tead of
-> > > +              * in power-down) to ensure that the device will have a=
- clean
-> > > +              * state later on just like the normal scenarios would =
-have.
-> > > +              *
-> > > +              * Also, since the regulators were not disabled in powe=
-r-down,
-> > > +              * we don't need to enable them here.
-> > > +              */
-> > > +             gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> > > +     } else {
-> > > +             /*
-> > > +              * In this case, the reset is already asserted (either =
-in
-> > > +              * probe or power-down).
-> > > +              * All we need is to enable the regulators.
-> > > +              */
-> > > +             ret =3D regulator_enable(ihid_goodix->vdd);
-> > > +             if (ret)
-> > > +                     return ret;
-> > > +
-> > > +             ret =3D regulator_enable(ihid_goodix->vddio);
-> > > +             if (ret)
-> > > +                     return ret;
-> > > +     }
-> >
-> > Please let me know in case I have misunderstood, but I don't see a need
-> > to change the regulator_enable/disable() logic if this property is set.
-> > If the regulators are truly always-on, the regulator core already knows
-> > what to do and we should not duplicate that logic here.
-
-Your understanding is totally right, let me restore that in the next
-revision. Thanks!
-
-Regards,
-Fei
-
-> >
-> > Based on the alleged silicon erratum discussed in patch [1/2], it seems
-> > we only want to control the behavior of the reset GPIO. Therefore, only
-> > the calls to gpiod_set_value_cansleep() should be affected and the name
-> > of the property updated to reflect what it's actually doing.
+> syzbot found the following issue on:
 >
-> This would be OK w/ me.
+> HEAD commit:    1a0beef98b58 Merge tag 'tpmdd-v6.4-rc1' of git://git.kerne..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1485f1dbc80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=501f7c86f7a05a13
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e1786f049e71693263bf
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/f06c11683242/disk-1a0beef9.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/5c0a1cd5a059/vmlinux-1a0beef9.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/e4c318183ce3/bzImage-1a0beef9.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com
+
+op->currframe and probably other op fields are concurrently
+read/modified by both bcm_tx_setup() and bcm_can_tx().
+If I am reading the code correctly, it can lead to a wide range of
+misbehavior, e.g. sending wrong/uninit data, reading/writing data
+out-of-bounds, etc.
+I think these functions need to be somehow serialized (stopping timers
+before doing any modifications to op?).
+
+> ==================================================================
+> BUG: KCSAN: data-race in bcm_can_tx / bcm_tx_setup
+>
+> write to 0xffff888137fcff10 of 4 bytes by task 10792 on cpu 0:
+>  bcm_tx_setup+0x698/0xd30 net/can/bcm.c:995
+>  bcm_sendmsg+0x38b/0x470 net/can/bcm.c:1355
+>  sock_sendmsg_nosec net/socket.c:724 [inline]
+>  sock_sendmsg net/socket.c:747 [inline]
+>  ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
+>  ___sys_sendmsg net/socket.c:2555 [inline]
+>  __sys_sendmsg+0x1e3/0x270 net/socket.c:2584
+>  __do_sys_sendmsg net/socket.c:2593 [inline]
+>  __se_sys_sendmsg net/socket.c:2591 [inline]
+>  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2591
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> write to 0xffff888137fcff10 of 4 bytes by interrupt on cpu 1:
+>  bcm_can_tx+0x38a/0x410
+>  bcm_tx_timeout_handler+0xdb/0x260
+>  __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+>  __hrtimer_run_queues+0x217/0x700 kernel/time/hrtimer.c:1749
+>  hrtimer_run_softirq+0xd6/0x120 kernel/time/hrtimer.c:1766
+>  __do_softirq+0xc1/0x265 kernel/softirq.c:571
+>  invoke_softirq kernel/softirq.c:445 [inline]
+>  __irq_exit_rcu+0x57/0xa0 kernel/softirq.c:650
+>  sysvec_apic_timer_interrupt+0x6d/0x80 arch/x86/kernel/apic/apic.c:1107
+>  asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+>  kcsan_setup_watchpoint+0x3fe/0x410 kernel/kcsan/core.c:696
+>  string_nocheck lib/vsprintf.c:648 [inline]
+>  string+0x16c/0x200 lib/vsprintf.c:726
+>  vsnprintf+0xa09/0xe20 lib/vsprintf.c:2796
+>  add_uevent_var+0xf0/0x1c0 lib/kobject_uevent.c:665
+>  kobject_uevent_env+0x225/0x5b0 lib/kobject_uevent.c:539
+>  kobject_uevent+0x1c/0x20 lib/kobject_uevent.c:642
+>  __loop_clr_fd+0x1e0/0x3b0 drivers/block/loop.c:1167
+>  lo_release+0xe4/0xf0 drivers/block/loop.c:1745
+>  blkdev_put+0x3fb/0x470
+>  kill_block_super+0x83/0xa0 fs/super.c:1410
+>  deactivate_locked_super+0x6b/0xd0 fs/super.c:331
+>  deactivate_super+0x9b/0xb0 fs/super.c:362
+>  cleanup_mnt+0x272/0x2e0 fs/namespace.c:1177
+>  __cleanup_mnt+0x19/0x20 fs/namespace.c:1184
+>  task_work_run+0x123/0x160 kernel/task_work.c:179
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop+0xd1/0xe0 kernel/entry/common.c:171
+>  exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+>  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+>  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> value changed: 0x00000059 -> 0x00000000
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 PID: 3096 Comm: syz-executor.5 Not tainted 6.3.0-syzkaller-00113-g1a0beef98b58 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+> ==================================================================
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000059e1b705fa2494e4%40google.com.
