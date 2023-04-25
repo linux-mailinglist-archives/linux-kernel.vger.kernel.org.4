@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18F16EDB1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816096EDB17
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbjDYFP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 01:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
+        id S232430AbjDYFPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 01:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbjDYFPv (ORCPT
+        with ESMTP id S230195AbjDYFPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 01:15:51 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6104C8682;
-        Mon, 24 Apr 2023 22:15:49 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 7DB9B180509A0C;
-        Tue, 25 Apr 2023 13:15:46 +0800 (CST)
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   wuych <yunchuan@nfschina.com>
-To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        wuych <yunchuan@nfschina.com>
-Subject: [PATCH] net: phy: marvell-88x2222: remove unnecessary (void*) conversions
-Date:   Tue, 25 Apr 2023 13:15:32 +0800
-Message-Id: <20230425051532.44830-1-yunchuan@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 25 Apr 2023 01:15:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA0083CB;
+        Mon, 24 Apr 2023 22:15:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99279622E7;
+        Tue, 25 Apr 2023 05:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2F9C433EF;
+        Tue, 25 Apr 2023 05:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682399742;
+        bh=rsBha+TxrWP7EfBGpjDX9i+tOjwFVeXBTrNnvpzrmsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wmjx1jJVIP6+tVyr0+p1Uhggc6kkBzBl3ejTh5mFVZra4vmERsalUyhxzXIwYSLPd
+         hb/HGdYgb7mRAScua9/RXT4p3Q6usyuDa3uw89uNcSvugICSgTQbmaJ0igNVG6xQf6
+         55Yx/hj87t+5EU8cE2h7czFbVYL2z/Ryyv9X9mKA=
+Date:   Tue, 25 Apr 2023 07:15:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     ktestrobot@126.com, U201911841@hust.edu.cn
+Cc:     lidaxian@hust.edu.cn, hust-os-kernel-patches@googlegroups.com,
+        dzm91@hust.edu.cn, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, balbi@kernel.org, s.shtylyov@omp.ru
+Subject: Re: [PATCH v2] usb: phy: phy-tahvo: fix memory leak in
+ tahvo_usb_probe()
+Message-ID: <ZEdh-_Jv02qb6K4n@kroah.com>
+References: <644741EB.013E97.00008@m126.mail.126.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <644741EB.013E97.00008@m126.mail.126.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+On Tue, Apr 25, 2023 at 10:58:51AM +0800, ktestrobot@126.com wrote:
+> Hi, Li Yang
+> This email is automatically replied by KTestRobot(Beta). Please do not reply to this email.
 
-Signed-off-by: wuych <yunchuan@nfschina.com>
----
- drivers/net/phy/marvell-88x2222.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But I will!
 
-diff --git a/drivers/net/phy/marvell-88x2222.c b/drivers/net/phy/marvell-88x2222.c
-index fd9ad4820192..f83cae64585d 100644
---- a/drivers/net/phy/marvell-88x2222.c
-+++ b/drivers/net/phy/marvell-88x2222.c
-@@ -487,7 +487,7 @@ static int mv2222_sfp_insert(void *upstream, const struct sfp_eeprom_id *id)
- 
- 	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_supported) = { 0, };
- 
--	priv = (struct mv2222_data *)phydev->priv;
-+	priv = phydev->priv;
- 	dev = &phydev->mdio.dev;
- 
- 	sfp_parse_support(phydev->sfp_bus, id, sfp_supported, interfaces);
-@@ -524,7 +524,7 @@ static void mv2222_sfp_remove(void *upstream)
- 	struct phy_device *phydev = upstream;
- 	struct mv2222_data *priv;
- 
--	priv = (struct mv2222_data *)phydev->priv;
-+	priv = phydev->priv;
- 
- 	priv->line_interface = PHY_INTERFACE_MODE_NA;
- 	linkmode_zero(priv->supported);
--- 
-2.30.2
+> If you have any questions or suggestions about KTestRobot, please contact ZhongYong <U201911841@hust.edu.cn>
 
+First question, why are you responding from an email that is not allowed
+to be responded to and forced to have us manually add an address?
+That's not very nice or helpful for us who have to see these messages,
+please fix that.
+
+> --- Changed Paths ---
+> drivers/usb/phy/phy-tahvo.c
+> --- Log Message ---
+> Smatch reports:
+> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
+> warn: missing unwind goto?
+> 
+> After geting irq, if ret < 0, it will return without error handling to
+> free memory.
+> Just add error handling to fix this problem.
+> 
+> --- Test Result ---
+> *** CheckPatch	PASS ***
+> *** CheckSmatch	PASS ***
+> *** ApplyToLinuxNext	PASS ***
+
+Why is only "does the patch apply" matter for this bot?  What is it
+supposed to be doing here?  Is it going to run on every single patch to
+this mailing list, and if so, how can we turn it off as "it applied!" is
+a very very low bar to be testing something for, and we already have a
+bot that does this.
+
+thanks,
+
+greg k-h
