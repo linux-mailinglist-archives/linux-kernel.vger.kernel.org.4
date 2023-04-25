@@ -2,49 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48456EDB7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139ED6EDB7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbjDYGEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 02:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S233196AbjDYGIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 02:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjDYGEf (ORCPT
+        with ESMTP id S231186AbjDYGIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 02:04:35 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE321AD28;
-        Mon, 24 Apr 2023 23:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9Mao8Fd980ctu+JkZbtOuyLu6ZD3b3EkMiAg/6KGfDU=; b=LgOnoI/Ajcu7DGP9ey7GeYfZ1L
-        tfzP97YQdEf+ZYu+Aa3Le7w+bzTFDg241DQmWFVxyNVo6AhS/iTNs1cuANOPuaZtDb9C11f9gtnAW
-        cpzr6Z8Gx+h9k7i/xmXBgeUvF7e7H07sHhOpKoG++xm3KAUi0YXk01tTkWxpB3embzxKhcOTlP0pc
-        SLMkfQ/64+D5oSw0BXRw5tHmj6wvH8ZzdFJq/N0VrEvwB9wsaGiNXs5AVW2gO6rH089MpUVRILOkJ
-        VT1N4lUmRdKqfe5DHemucTVhFDCUWdEUBq/Eh4kJQ+ElHpoaShzns0CxyFA7H5UAbwvisDcvNJgcB
-        K/c3LOkw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1prBmt-00CKtN-2v;
-        Tue, 25 Apr 2023 06:04:28 +0000
-Date:   Tue, 25 Apr 2023 07:04:27 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] pidfd updates
-Message-ID: <20230425060427.GP3390869@ZenIV>
-References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
- <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Tue, 25 Apr 2023 02:08:39 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16CE5271;
+        Mon, 24 Apr 2023 23:08:33 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id A8F365C00AC;
+        Tue, 25 Apr 2023 02:08:30 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 25 Apr 2023 02:08:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1682402910; x=1682489310; bh=aJgi4spPsFQMfOdmy5CVQvlkrVppKGiGa4z
+        XRLkCvhw=; b=PUyyiP7uvMsLeJ4aMHmXRJqlthrOClNFs1rTtuqwn7hczrza5Xj
+        ArZQuKjNOBZ5dzgph04QngM3idcNQRiaq9V1qPxADUeA2IEtInPHMpBHQK+mbwpR
+        nVykboFKchlNSHM73ZCcWLLcmnyhb+dcKWY0nzjQWPzUvcy8jrQv8SJUslImF5MM
+        /MdKAjE7tSg9TBD0I0pHkWuESYtYzZ58SSutWirNoQqC/C2IsACI6welHx14Xj77
+        JfZghkFow0AGDtBqLjkhScJNQyidA6Dih380GZkvG/az5BnPRfdfkJh3QqIJPr+h
+        b5sEgMt/5m0I47oIoj44QImDPDeKm0ifYdA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682402910; x=1682489310; bh=aJgi4spPsFQMfOdmy5CVQvlkrVppKGiGa4z
+        XRLkCvhw=; b=ZZmgqeQiihJAmXaoMLh9ch8IMYKc4EuYPCVG8KbGrwiSBsurPeg
+        CJBncCrM8jD9ws9n4smPrWoK0QWjXNJAmVphUXxGlTV9lbVA6cLcyp6xtnahBspZ
+        7VNm2hYg1EUkoMy+7UkIgPVwYNN+aLHcDvsO8YoE6oI6QT8VdR/6gJ/7DVGD1mJK
+        K1p0vlfVSNH8VB+3DRu61+8kLLxTS99CClaCtX8E7NJR0WBraZPrP5NxY+a599tx
+        fV1Ad7oiM5CGy1TdZjR5aQJ+0yUh8lS/qmWHPBe/TtcoDsziuqt1bSyN9VHylHiH
+        FShSUH2rod449TNkDJ3vcXKk/Kfascz/vTA==
+X-ME-Sender: <xms:Xm5HZOk5GbNgi8EqvtVOrx02eB9RHBsm5bwBsbLMSxejQJTg-8S6rw>
+    <xme:Xm5HZF0ah6RYyU2fPcXs1A232j43IrvSzWRTJwsmGFikdszDccakxJNzaC_Q-yQAG
+    n54crXtaSg6fLi6jQ0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduuddguddtiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Xm5HZMofUlrleyL3tbizc0XPyn0QLtOkkur-zWnt1eh8Exg-Ht1wAw>
+    <xmx:Xm5HZClxovzsbCpkLVNOujEpGlyFcW7xsx0BBJqBZgHw63-ULHipWQ>
+    <xmx:Xm5HZM3I5J7MbPmwaSVio56fLvwqYiDaHbfVwr4jZwiUmgpUYNqyPg>
+    <xmx:Xm5HZP2D-_sVHNyFLu6tVhd2bY1S_6Q4wNiXE3G-ixS7qo0zUiWwZw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0BFE0B60086; Tue, 25 Apr 2023 02:08:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <16ba11f1-5aa2-48c9-81cf-e3d98f547657@app.fastmail.com>
+In-Reply-To: <90d4aba4-d0a5-9868-583b-b3a4dd7ca6d6@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
+ <90d4aba4-d0a5-9868-583b-b3a4dd7ca6d6@huawei.com>
+Date:   Tue, 25 Apr 2023 08:08:08 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Huisong Li" <lihuisong@huawei.com>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        "Shawn Guo" <shawnguo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, soc@kernel.org,
+        wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+        liuyonglong@huawei.com, huangdaode@huawei.com,
+        linux-acpi@vger.kernel.org, "Len Brown" <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, "Rob Herring" <robh+dt@kernel.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,75 +100,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 01:24:24PM -0700, Linus Torvalds wrote:
+On Tue, Apr 25, 2023, at 05:04, lihuisong (C) wrote:
+> =E5=9C=A8 2023/4/24 16:09, Arnd Bergmann =E5=86=99=E9=81=93:
+>> On Mon, Apr 24, 2023, at 09:30, Huisong Li wrote:
 
-> But I really think a potentially much nicer model would have been to
-> extend our "get_unused_fd_flags()" model.
-> 
-> IOW, we could have instead marked the 'struct file *' in the file
-> descriptor table as being "not ready yet".
-> 
-> I wonder how nasty it would have been to have the low bit of the
-> 'struct file *' mark "not ready to be used yet" or something similar.
-> You already can't just access the 'fdt->fd[]' array willy-nilly since
-> we have both normal RCU issues _and_ the somewhat unusual spectre
-> array indexing issues.
-> 
-> So looking around with
-> 
->     git grep -e '->fd\['
-> 
-> we seem to be pretty good about that and it probably wouldn't be too
-> horrid to add a "check low bit isn't set" to the rules.
-> 
-> Then pidfd_prepare() could actually install the file pointer in the fd
-> table, just marked as "not ready", and then instead of "fd_install()",
-> yuo'd have "fd_expose(fd)" or something.
-> 
-> I dislike interfaces that return two different things. Particularly
-> ones that are supposed to be there to make things easy for the user. I
-> think your pidfd_prepare() helper fails that "make it easy to use"
-> test.
-> 
-> Hmm?
+>>         depends on ACPI
+>>         depends on (ARM64 && ARCH_HISI) || COMPILE_TEST
+> What do you think of adjusting it as below?
+> menu "Hisilicon SoC drivers"
+>  =C2=A0=C2=A0 =C2=A0depends on ARCH_HISI || COMPILE_TEST
+>
+> config KUNPENG_HCCS
+>  =C2=A0=C2=A0 =C2=A0depends on ACPI
+>  =C2=A0=C2=A0 =C2=A0depends on ARM64 || COMPILE_TEST
 
-I'm not fond of "return two things" kind of helpers, but I'm even less
-fond of "return fd, file is already there" ones, TBH.  {__,}pidfd_prepare()
-users are thankfully very limited in the things they do to the file that
-had been returned, but that really invites abuse.
+Yes, that's perfect.
 
-The deeper in call chain we mess with descriptor table, the more painful it
-gets, IME.
+>>
+>>> +
+>>> +#include "kunpeng_hccs.h"
+>>> +
+>>> +/* PCC defines */
+>>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
+>>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
+>> Should these perhaps be in include/acpi/pcc.h? The 0x50434300
+>> number is just "PCC\0", so it appears to not be HCCS specific.
+> This is a PCC signature. As stated in the APCI,
+> "The signature of a subspace is computed by a bitwiseor of the value=20
+> 0x50434300
+> with the subspace ID. For example, subspace 3 has the signature 0x5043=
+4303."
+>
+> I am not sure if all driver need to use this fixed signature mask.
+> As far as I know, cppc_acpi.c didn't use this signature and=20
+> xgene-hwmon.c used another mask defined in its driver.
+> So I place it here.
 
-Speaking of {__,}pidfd_prepare(), I wonder if we wouldn't be better off
-with get_unused_fd_flags() lifted into the callers - all three of those
-(fanotify copy_event_to_user(), copy_process() and pidfd_create()).
-Switch from anon_inode_getfd() to anon_inode_getfile() certainly
-made sense, ditto for combining it with get_pid(), but mixing
-get_unused_fd_flags() into that is a mistake, IMO.
+I would still put it into the generic header, but it doesn't
+really matter much, so do it whichever way you prefer. No need
+for a separate patch if you decide to use the global header,
+it can just be part of your normal patch.
 
-As for your suggestion... let's see what it leads to.
+>>> +
+>>> +static int hccs_get_device_property(struct hccs_dev *hdev)
+>>> +{
+>>> +	struct device *dev =3D hdev->dev;
+>>> +
+>>> +	if (device_property_read_u32(dev, "device-flags", &hdev->flags)) {
+>>> +		dev_err(hdev->dev, "no device-flags property.\n");
+>>> +		return -ENODEV;
+>>> +	}
+>>> +
+>>> +	if (device_property_read_u8(dev, "pcc-type", &hdev->type)) {
+>>> +		dev_err(hdev->dev, "no pcc-type property.\n");
+>>> +		return -ENODEV;
+>>> +	}
+>>> +
+>>> +	if (device_property_read_u32(dev, "pcc-chan-id", &hdev->chan_id)) {
+>>> +		dev_err(hdev->dev, "no pcc-channel property.\n");
+>>> +		return -ENODEV;
+>>> +	}
+>>> +
+>>> +	hdev->intr_mode =3D hccs_get_bit(hdev->flags, HCCS_DEV_FLAGS_INTR_=
+B);
+>>> +	if (!hccs_dev_property_supported(hdev))
+>>> +		return -EOPNOTSUPP;
+>>> +
+>> Where are the device properties documented? I'm never quite sure how
+>> to handle these for ACPI-only drivers, since we don't normally have t=
+he
+>> bindings in Documentation/devicetree/bindings/, but it feels like the=
+re
+>> should be some properly reviewed document somewhere else.
+> These are ACPI-only, instead of DT.
+> I will add a comment here as Krzysztof suggested.
 
-	Suppose we add such entries (reserved, hold a reference to file,
-marked "not yet available" in the LSB).  From the current tree POV those
-would be equivalent to descriptor already reserved, but fd_install() not
-done.  So behaviour of existing primitives should be the same as for this
-situation, except for fd_install() and put_unused_fd().
+I understand that they are ACPI-only, what I'm more interested here is
+the general question of how we should document them, to ensure these
+are handled consistently across drivers.
 
-	* pick_file(), __fget_files_rcu(), iterate_fd(), files_lookup_fd_raw(),
-	  loop in dup_fd(), io_close() - treat odd pointers as NULL.
-	* close_files() should, AFAICS, treat an odd pointer as "should never
-happen" (and that xchg() in there needs to go anyway - it's pointless, since
-we are freeing the the array immediately afterwards.
-	* do_close_on_exec() should probably treat them as "should never happen".
-	* do_dup2() - odd value should be treated as -EBUSY.
+>>> --- /dev/null
+>>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.h
+>>> @@ -0,0 +1,204 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0+ */
+>>> +/* Copyright (c) 2023 Hisilicon Limited. */
+>>> +
+>>> +#ifndef __KUNPENG_HCCS_H__
+>>> +#define __KUNPENG_HCCS_H__
+>> Are you planning to add more drivers that share this file? If not,
+>> just fold the contents into the driver itself.
+> Yes, we will add more drivers in this file.
 
-The interesting part, of course, is how to legitimize (or dispose of) such
-a beast.  The former is your "fd_expose()" - parallel to fd_install(),
-AFAICS.  The latter... another primitive that would
-	grab ->files_lock
-	pick_file() variant that *expects* an odd value
-	drop ->files_lock
-	clear LSB and pass to fput().
+Ok.
 
-It's doable, but AFAICS doesn't make callers all that happier...
+
+       Arnd
