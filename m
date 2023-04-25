@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE8C6ED91A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED11E6ED91D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjDYAB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 20:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S232823AbjDYADp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 20:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbjDYAB0 (ORCPT
+        with ESMTP id S232336AbjDYADm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 20:01:26 -0400
+        Mon, 24 Apr 2023 20:03:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6180865A0;
-        Mon, 24 Apr 2023 17:01:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD115274;
+        Mon, 24 Apr 2023 17:03:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E893C62A62;
-        Tue, 25 Apr 2023 00:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83958C433EF;
-        Tue, 25 Apr 2023 00:01:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A7D462A62;
+        Tue, 25 Apr 2023 00:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BB5C433A0;
+        Tue, 25 Apr 2023 00:03:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682380881;
-        bh=DOtLRFklRFNIwZwR+mJSNOC+/SMlST+wjhFM31DemZU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YI0iQsJDzXLdF4K3zTSApDcaUBWn9bHvayuO0rQWGCq+s9Z0Rx4zWYGy1kQE0dpf4
-         L+843nKU0eXmKvlbaK51nYQOBeNu7hB8e0cnIl9BX8ZNYmkQvemsQADHsJ0kMFacHo
-         Dh7RP9kcb37iT39U86Oe06X8pTB/VNpsjMJgaD0DdgIoo9JIYRt18wYZFXFoagNoBO
-         zx2gzzC55BHVVhuJXz6QVNlF1cN42IgJQrSsqV6i+diMwdy6cnL0TxCdS4Ta8w8Zns
-         N01FWvAtskWhlNsWN26V6y0slo5reC62c1iluzpBQwSVJ0h6OJu16KVe37pSFjMvPL
-         rnWFjCSTt9mHQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        "David Gow" <davidgow@google.com>,
-        =?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= 
-        <sergio.collado@gmail.com>, "Richard Weinberger" <richard@nod.at>,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com, x86@kernel.org
-Subject: Re: [PATCH AUTOSEL 6.1 04/13] rust: arch/um: Disable FP/SIMD instruction to match x86
-Date:   Tue, 25 Apr 2023 00:01:18 +0000
-Message-Id: <20230425000118.45838-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314124325.470931-4-sashal@kernel.org>
-References: 
+        s=k20201202; t=1682381020;
+        bh=trnIgor0xX4q/91c1oebGULzgj8kBzmPIz2WyUUR4fs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dsfphbNwZy7ol45+HO89fFOFBVmbtLKbVFYU0+3lRL47HiJpa9sHbkNeu0acGZDcH
+         RaYMGES44ByO2JY0pyqpUsucD8TQJvyhwHquSnu5mfTOK1ctKl8hspfTPmvrC7rOWo
+         vXjmS/s7bRIP7nWuDV0rzNvUpqk84YX7PSDz9xeJFZul4hjgd981THJWdaIunfBQm3
+         tV5eImY6lSCVLEmgQR3bRqFmecC9WtkV0X18EuXi/1DjcadULIAB5j3JW9g7dUwOku
+         uM1ppt6wnHBzvVfN16WWpQmSgvphrlVCkEFR9E9PKIgClRUTtyRqmaIHg+d9sAK9B3
+         Dj/gTmXGNB8UQ==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2a8ad872ea5so49564221fa.2;
+        Mon, 24 Apr 2023 17:03:40 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eSaF3AgWXHPbCRyhrvNV7pO94+A9L6ZbAVBIXogDMvyKQKxJ3k
+        ziNb1c3pQjIcjRtRjjiYbmVtXyduESEINkWRsOA=
+X-Google-Smtp-Source: AKy350ZiHWzjvuohgc2eExj8R1+yFM6oSnpZL9ryV43iQZLSMYrd9ACKtxWUQihomvfECH65Xw2YSp2gSRleLGF+78g=
+X-Received: by 2002:a2e:9595:0:b0:2a8:c249:63a4 with SMTP id
+ w21-20020a2e9595000000b002a8c24963a4mr2976379ljh.47.1682381018366; Mon, 24
+ Apr 2023 17:03:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230420112946.2869956-1-yukuai1@huaweicloud.com> <20230420112946.2869956-3-yukuai1@huaweicloud.com>
+In-Reply-To: <20230420112946.2869956-3-yukuai1@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 24 Apr 2023 17:03:26 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6QSuB3vVCPN3Dt3tab-_4C8_7+kmAAe05GB0oBNX-bSA@mail.gmail.com>
+Message-ID: <CAPhsuW6QSuB3vVCPN3Dt3tab-_4C8_7+kmAAe05GB0oBNX-bSA@mail.gmail.com>
+Subject: Re: [PATCH -next 2/8] md/raid1-10: rename raid1-10.c to raid1-10.h
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     neilb@suse.de, akpm@osdl.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,68 +64,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sasha and Greg,
+On Thu, Apr 20, 2023 at 4:31=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> raid1-10.c contains definitions that are used both for raid1 and raid10,
+> it's werid to use ".c" suffix.
 
+type: weird.
 
-On Tue, 14 Mar 2023 08:43:16 -0400 Sasha Levin <sashal@kernel.org> wrote:
+Please see the original discussion about raid1-10.c here:
 
-> From: David Gow <davidgow@google.com>
-> 
-> [ Upstream commit 8849818679478933dd1d9718741f4daa3f4e8b86 ]
-> 
-> The kernel disables all SSE and similar FP/SIMD instructions on
-> x86-based architectures (partly because we shouldn't be using floats in
-> the kernel, and partly to avoid the need for stack alignment, see:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383 )
-> 
-> UML does not do the same thing, which isn't in itself a problem, but
-> does add to the list of differences between UML and "normal" x86 builds.
-> 
-> In addition, there was a crash bug with LLVM < 15 / rustc < 1.65 when
-> building with SSE, so disabling it fixes rust builds with earlier
-> compiler versions, see:
-> https://github.com/Rust-for-Linux/linux/pull/881
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Sergio González Collado <sergio.collado@gmail.com>
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+https://lore.kernel.org/linux-raid/20170712082912.491-1-ming.lei@redhat.com=
+/
 
-There is a followup fix of this patch that merged into the mainline by commit
-a3046a618a28 ("um: Only disable SSE on clang to work around old GCC bugs"), but
-it has not added to 6.1.y so far.  Without it, compiling on some setup using an
-old version of gcc fails, as the followup is also mentioning.  I also confirmed
-the issue can be reproduced on latest 6.1.y.
-
-Could you please add the followup fix to 6.1.y?  I confirmed the commit can be
-cleanly cherry-picked on latest 6.1.y, and fixes the issue as expected.
-
+Let's keep raid1-10.c for now.
 
 Thanks,
-SJ
+Song
 
+>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
->  arch/x86/Makefile.um | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
-> index b3c1ae084180d..d2e95d1d4db77 100644
-> --- a/arch/x86/Makefile.um
-> +++ b/arch/x86/Makefile.um
-> @@ -1,6 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0
->  core-y += arch/x86/crypto/
->  
-> +#
-> +# Disable SSE and other FP/SIMD instructions to match normal x86
-> +#
-> +KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
-> +KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
+>  drivers/md/{raid1-10.c =3D> raid1-10.h} | 10 +++++++---
+>  drivers/md/raid1.c                    |  2 --
+>  drivers/md/raid1.h                    |  2 ++
+>  drivers/md/raid10.c                   |  2 --
+>  drivers/md/raid10.h                   |  2 ++
+>  5 files changed, 11 insertions(+), 7 deletions(-)
+>  rename drivers/md/{raid1-10.c =3D> raid1-10.h} (92%)
+>
+> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.h
+> similarity index 92%
+> rename from drivers/md/raid1-10.c
+> rename to drivers/md/raid1-10.h
+> index e61f6cad4e08..04beef35142d 100644
+> --- a/drivers/md/raid1-10.c
+> +++ b/drivers/md/raid1-10.h
+> @@ -1,4 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#ifndef _RAID1_10_H
+> +#define _RAID1_10_H
 > +
->  ifeq ($(CONFIG_X86_32),y)
->  START := 0x8048000
->  
-> -- 
+>  /* Maximum size of each resync request */
+>  #define RESYNC_BLOCK_SIZE (64*1024)
+>  #define RESYNC_PAGES ((RESYNC_BLOCK_SIZE + PAGE_SIZE-1) / PAGE_SIZE)
+> @@ -33,7 +36,7 @@ struct raid1_plug_cb {
+>         struct bio_list         pending;
+>  };
+>
+> -static void rbio_pool_free(void *rbio, void *data)
+> +static inline void rbio_pool_free(void *rbio, void *data)
+>  {
+>         kfree(rbio);
+>  }
+> @@ -91,8 +94,8 @@ static inline struct resync_pages *get_resync_pages(str=
+uct bio *bio)
+>  }
+>
+>  /* generally called after bio_reset() for reseting bvec */
+> -static void md_bio_reset_resync_pages(struct bio *bio, struct resync_pag=
+es *rp,
+> -                              int size)
+> +static inline void md_bio_reset_resync_pages(struct bio *bio,
+> +                                            struct resync_pages *rp, int=
+ size)
+>  {
+>         int idx =3D 0;
+>
+> @@ -109,3 +112,4 @@ static void md_bio_reset_resync_pages(struct bio *bio=
+, struct resync_pages *rp,
+>                 size -=3D len;
+>         } while (idx++ < RESYNC_PAGES && size > 0);
+>  }
+> +#endif
+> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+> index 2f1011ffdf09..84724b9b20b8 100644
+> --- a/drivers/md/raid1.c
+> +++ b/drivers/md/raid1.c
+> @@ -49,8 +49,6 @@ static void lower_barrier(struct r1conf *conf, sector_t=
+ sector_nr);
+>  #define raid1_log(md, fmt, args...)                            \
+>         do { if ((md)->queue) blk_add_trace_msg((md)->queue, "raid1 " fmt=
+, ##args); } while (0)
+>
+> -#include "raid1-10.c"
+> -
+>  #define START(node) ((node)->start)
+>  #define LAST(node) ((node)->last)
+>  INTERVAL_TREE_DEFINE(struct serial_info, node, sector_t, _subtree_last,
+> diff --git a/drivers/md/raid1.h b/drivers/md/raid1.h
+> index 468f189da7a0..80de4d66f010 100644
+> --- a/drivers/md/raid1.h
+> +++ b/drivers/md/raid1.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _RAID1_H
+>  #define _RAID1_H
+>
+> +#include "raid1-10.h"
+> +
+>  /*
+>   * each barrier unit size is 64MB fow now
+>   * note: it must be larger than RESYNC_DEPTH
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index a116b7c9d9f3..50d56b6af42f 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -77,8 +77,6 @@ static void end_reshape(struct r10conf *conf);
+>  #define raid10_log(md, fmt, args...)                           \
+>         do { if ((md)->queue) blk_add_trace_msg((md)->queue, "raid10 " fm=
+t, ##args); } while (0)
+>
+> -#include "raid1-10.c"
+> -
+>  #define NULL_CMD
+>  #define cmd_before(conf, cmd) \
+>         do { \
+> diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
+> index 63e48b11b552..63e88dd774f7 100644
+> --- a/drivers/md/raid10.h
+> +++ b/drivers/md/raid10.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _RAID10_H
+>  #define _RAID10_H
+>
+> +#include "raid1-10.h"
+> +
+>  /* Note: raid10_info.rdev can be set to NULL asynchronously by
+>   * raid10_remove_disk.
+>   * There are three safe ways to access raid10_info.rdev.
+> --
 > 2.39.2
-> 
-> 
+>
