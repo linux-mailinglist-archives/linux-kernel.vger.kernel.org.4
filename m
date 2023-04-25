@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F17C6EE952
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC7D6EE954
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236297AbjDYVDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 17:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S236311AbjDYVEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 17:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjDYVDH (ORCPT
+        with ESMTP id S236151AbjDYVE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 17:03:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BEC16F2F;
-        Tue, 25 Apr 2023 14:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682456586; x=1713992586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jw66GbpVDrNQLpIB5E1F9gDZmk+UiU7wloECDprBEi0=;
-  b=PT8wfXujAkAeowdCA8BYMXFqcejBycN1eGaNXFjrQYAlumG3N3hieLJ8
-   P03dJgbQ63VsKuskjQ6Edpzrp5g+9IZ7MT9RghIvXb2N8nu1+5lRH5k+p
-   ULtLhylfVmYrYQ5cspAvIlivX0Y/mZiywD9XAiWAMN49CD5j9GLmjPACQ
-   W1MfKlSZagYxXa/S2+aGIUXHjKhsbrBXZwWWFacw4YcORHXfy9VHYc2oD
-   Qazx39HTlUC6tGJmiNJSMR7pnCsvQtZHrZlW+F6WOgDzkyNn56rMtdP5J
-   DO/R3R3RKFTDaKHOIvwt0Xli1cZX3cNP0pX1iFDmEHAh38gKNJhmebFa4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="346926808"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="346926808"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 14:03:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="724151023"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="724151023"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2023 14:03:00 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prPoR-000jm0-2X;
-        Tue, 25 Apr 2023 21:02:59 +0000
-Date:   Wed, 26 Apr 2023 05:02:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     hildawu@realtek.com, marcel@holtmann.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mmandlik@google.com, apusaka@chromium.org, yinghsu@chromium.org,
-        alex_lu@realsil.com.cn, max.chou@realtek.com, kidman@realtek.com
-Subject: Re: [PATCH v3] Bluetooth: btrtl: Add Realtek devcoredump support
-Message-ID: <202304260422.XHBgACOW-lkp@intel.com>
-References: <20230420105343.2014-1-hildawu@realtek.com>
+        Tue, 25 Apr 2023 17:04:29 -0400
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF3416186
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:04:28 -0700 (PDT)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 3C634802FC48
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:04:28 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id EE2431004E50D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:03:57 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id rPpNp16KiNX2arPpNpcgqk; Tue, 25 Apr 2023 21:03:57 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=6448403d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dKHAf1wccvYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7FJTG0tBB6y0otyCyPnNUcNQhQyKrli8Nxvq5nQGkN4=; b=nxZGohxAnAu7cMDpk2uDm8ElrJ
+        vJAzimJkquF5g5zmw6oZsru+YUm0ANtI/AxR6iAMIz58+7hiZLq14xCOHF7uLuinPMFiNu1x1y5V4
+        Rva9S5DJr4sSFurg82HvDcUrpOmUupVLmWCAyI2C/y54CKPyB/pcSC5ka9w3ujCym0RdRtjuoL+Kh
+        nmUWaUqeXMPALh7Iuy73xBpVdTSkQqiKQyIeEDliOrpUeGUI2ZJfQyCx0Xr8R3n8c+qJNi7Kvdq2c
+        MY3TXi649VMc3XZcyXyilXNYSyCP3qU6p8OMt5ytjvK0RErB+ZuW8ind0zb7vdMzSwgCjEhX2K96A
+        W8h5ia+A==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36114 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1prPpN-003lKw-4a;
+        Tue, 25 Apr 2023 15:03:57 -0600
+Subject: Re: [PATCH 5.15 00/73] 5.15.109-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230424131129.040707961@linuxfoundation.org>
+In-Reply-To: <20230424131129.040707961@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <1b632c4b-88cd-ef76-d399-7860626027a3@w6rz.net>
+Date:   Tue, 25 Apr 2023 14:03:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420105343.2014-1-hildawu@realtek.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1prPpN-003lKw-4a
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:36114
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 4/24/23 6:16 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.109 release.
+> There are 73 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.109-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-kernel test robot noticed the following build errors:
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on next-20230425]
-[cannot apply to bluetooth/master linus/master v6.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Ron Economos <re@w6rz.net>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-btrtl-Add-Realtek-devcoredump-support/20230420-185852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20230420105343.2014-1-hildawu%40realtek.com
-patch subject: [PATCH v3] Bluetooth: btrtl: Add Realtek devcoredump support
-config: arm-randconfig-r013-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260422.XHBgACOW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/dd7adb785f34ba9037f5c73dac879071302c636a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-btrtl-Add-Realtek-devcoredump-support/20230420-185852
-        git checkout dd7adb785f34ba9037f5c73dac879071302c636a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304260422.XHBgACOW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/bluetooth/btusb.c:27:
->> drivers/bluetooth/btrtl.h:188:2: error: void function 'btrtl_set_driver_name' should not return a value [-Wreturn-type]
-           return -EOPNOTSUPP;
-           ^      ~~~~~~~~~~~
-   1 error generated.
-
-
-vim +/btrtl_set_driver_name +188 drivers/bluetooth/btrtl.h
-
-   185	
-   186	static inline void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name)
-   187	{
- > 188		return -EOPNOTSUPP;
-   189	}
-   190	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
