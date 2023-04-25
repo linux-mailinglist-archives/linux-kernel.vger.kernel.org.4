@@ -2,152 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6045F6EDE56
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89A36EDE1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233700AbjDYIlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S233784AbjDYIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjDYIkg (ORCPT
+        with ESMTP id S229705AbjDYIbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:40:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255CD13C3C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682411823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZJYULa21bRSiosmoi3/4DldsRTvT4wpxgitPcs2X3GU=;
-        b=IcPucyqTAnsQugHazkxLDCm+X5e/+f1qIEWie8iLVulmfJs+KGsHKLnQfju6//EPB0pkKw
-        KUeBO713p+i/w8XuRadCJ5SFoPcDrhU2GcwDFPm6W0GxKM1L+U3lPA6vGSfP6IH+d3oshp
-        idiS6gxLjA0qMUqfYtMV6jCIPlsJGcA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-396-fxzR9FbANCSO0wONI3r1UA-1; Tue, 25 Apr 2023 04:30:36 -0400
-X-MC-Unique: fxzR9FbANCSO0wONI3r1UA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61D97887402;
-        Tue, 25 Apr 2023 08:30:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 185AC44007;
-        Tue, 25 Apr 2023 08:30:30 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1957131.PYKUYFuaPT@suse>
-References: <1957131.PYKUYFuaPT@suse> <20230331160914.1608208-1-dhowells@redhat.com> <20230331160914.1608208-42-dhowells@redhat.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH v3 41/55] iscsi: Assume "sendpage" is okay in iscsi_tcp_segment_map()
+        Tue, 25 Apr 2023 04:31:16 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76059BB96
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:30:29 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94ef8b88a5bso804713966b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=smartx-com.20221208.gappssmtp.com; s=20221208; t=1682411420; x=1685003420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=88Xr0yx58XqZJmxu4bMMhXYH0sWThF6GMrgw+s7HUak=;
+        b=F0IISRr4sT3y7mi4tVPSLZr3osIYsuNdqnruDnQVwYBhuw1h6u975I178mVxu7vdJJ
+         CxYOrM7fpGC8yyNmXo+0chvXJKJ8VVR7YDV33KfBo6o9QhK352xX62uCfaEu76F8ndMO
+         rki4xStOT/wZC3rLUxC4AAFw+iKDh4Crue/vCGfpASVf40SYA38T3jT7stkU+1cot3Pa
+         55QuHcALpf38tmbItkd/US1Y8TIERWm2X3n8oQN1EcWKPGMKtAOXNvRm0J6PYLcX04hE
+         x1EP2Awqfq9FYlT2f3hj0GuHx39UEnTV8TwIQDnVLVew1Jvxw+UNGAiQI2BEBVrX8bg0
+         tPaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682411420; x=1685003420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=88Xr0yx58XqZJmxu4bMMhXYH0sWThF6GMrgw+s7HUak=;
+        b=lCB1EM5urT4LOxZDUS3y8V0jbK4As16L0sMACMDNoBq75qy8qk0qutNOkRwuhfV30g
+         yR+nq7AWVkwDQkUFLKKzXPyoCjfabAfVBZU+PTbqayYwoO2CkHItKDGgMCLvrP1ona5F
+         YufIpEumQtd/XRk7R2Z6to4Q85TlPOjZD6/RKZWrcujHQIgolv4UqADK4wq9GDPyHDkK
+         KnhRLfv1zhVuOnzb/VlnH8Zs8WA+vDlmwtJXwYuxu87QPxbGgG+bd8WzaYewVSQvCE4I
+         dmEiX5ZUtQr06EXvLQWnPRbLVkvpwwtcJNF3h4mZWdj4AhXoevp34+uyEzXN9kYvofj7
+         zypw==
+X-Gm-Message-State: AAQBX9ez4U/ZjzgF7TOmWNIU4iaC80Kz+O/zZc/wybMfLBUG0TcB55Nu
+        J6weoQvWCibrJUGjcMepzOwKyOg++/Vcq6mSzkcF6i7CNV3utJKY0abOzw==
+X-Google-Smtp-Source: AKy350b2xeDumbZI/sk+mZ3Iqh02vZiQKW45K/czWanvQ2RB7nqZ/s96EkyakZ8ek80+JNlhxEQHIpWFTd/zFdHITFM=
+X-Received: by 2002:a17:907:a042:b0:94e:cbfb:5fab with SMTP id
+ gz2-20020a170907a04200b0094ecbfb5fabmr12155022ejc.75.1682411419899; Tue, 25
+ Apr 2023 01:30:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <494036.1682411430.1@warthog.procyon.org.uk>
+References: <20230413062339.2454616-1-fengli@smartx.com> <20230413063317.2455680-1-fengli@smartx.com>
+ <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me> <E23A9D5C-35CF-412C-AE35-37389242BC71@smartx.com>
+ <03a47920-9165-1d49-1380-fb4c5061df67@grimberg.me>
+In-Reply-To: <03a47920-9165-1d49-1380-fb4c5061df67@grimberg.me>
+From:   Li Feng <fengli@smartx.com>
+Date:   Tue, 25 Apr 2023 16:32:27 +0800
+Message-ID: <CAHckoCzBBmn8kCuD+ssRKApvFYNxedj_RkqsvgDis+iwV8g-oA@mail.gmail.com>
+Subject: Re: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 25 Apr 2023 09:30:30 +0100
-Message-ID: <494037.1682411430@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fabio M. De Francesco <fmdefrancesco@gmail.com> wrote:
+Hi Sagi,
 
-> > -	if (recv) {
-> > -		segment->atomic_mapped =3D true;
-> > -		segment->sg_mapped =3D kmap_atomic(sg_page(sg));
-> > -	} else {
-> > -		segment->atomic_mapped =3D false;
-> > -		/* the xmit path can sleep with the page mapped so use =
+On Wed, Apr 19, 2023 at 5:32=E2=80=AFPM Sagi Grimberg <sagi@grimberg.me> wr=
+ote:
+>
+>
+> >> Hey Li,
+> >>
+> >>> The default worker affinity policy is using all online cpus, e.g. fro=
+m 0
+> >>> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp=
+ will
+> >>> have a bad performance.
+> >>> This patch adds a module parameter to set the cpu affinity for the nv=
+me-tcp
+> >>> socket worker threads.  The parameter is a comma separated list of CP=
+U
+> >>> numbers.  The list is parsed and the resulting cpumask is used to set=
+ the
+> >>> affinity of the socket worker threads.  If the list is empty or the
+> >>> parsing fails, the default affinity is used.
+> >>
+> >> I can see how this may benefit a specific set of workloads, but I have=
+ a
+> >> few issues with this.
+> >>
+> >> - This is exposing a user interface for something that is really
+> >> internal to the driver.
+> >>
+> >> - This is something that can be misleading and could be tricky to get
+> >> right, my concern is that this would only benefit a very niche case.
+> > Our storage products needs this feature~
+> > If the user doesn=E2=80=99t know what this is, they can keep it default=
+, so I thinks this is
+> > not unacceptable.
+>
+> It doesn't work like that. A user interface is not something exposed to
+> a specific consumer.
+>
+> >> - If the setting should exist, it should not be global.
+> > V2 has fixed it.
+> >>
+> >> - I prefer not to introduce new modparams.
+> >>
+> >> - I'd prefer to find a way to support your use-case without introducin=
+g
+> >> a config knob for it.
+> >>
+> > I=E2=80=99m looking forward to it.
+>
+> If you change queue_work_on to queue_work, ignoring the io_cpu, does it
+> address your problem?
+Sorry for the late response, I just got my machine back.
+Replace the queue_work_on to queue_work, looks like it has a little
+good performance.
+The  busy worker is `kworker/56:1H+nvme_tcp_wq`, and fio binds to
+90('cpus_allowed=3D90'),
+I don't know why the worker 56 is selected.
+The performance of 256k read up from 1.15GB/s to 1.35GB/s.
 
-> kmap */
-> > -		segment->sg_mapped =3D kmap(sg_page(sg));
-> > -	}
-> > -
-> > +	segment->atomic_mapped =3D true;
-> > +	segment->sg_mapped =3D kmap_atomic(sg_page(sg));
-> =
+>
+> Not saying that this should be a solution though.
+>
+> How many queues does your controller support that you happen to use
+> queue 0 ?
+Our controller only support one io queue currently.
+>
+> Also, what happens if you don't pin your process to a specific cpu, does
+> that change anything?
+If I don't pin the cpu, the performance has no effect.
 
-> As you probably know, kmap_atomic() is deprecated.
-> =
-
-> I must admit that I'm not an expert of this code, however, it looks like=
- the =
-
-> mapping has no need to rely on the side effects of kmap_atomic() (i.e., =
-
-> pagefault_disable() and preempt_disable() - but I'm not entirely sure ab=
-out =
-
-> the possibility that preemption should be explicitly disabled along with=
- the =
-
-> replacement with kmap_local_page()). =
-
-> =
-
-> Last year I've been working on several conversions from kmap{,_atomic}()=
- to =
-
-> kmap_local_page(), however I'm still not sure to understand what's happe=
-ning =
-
-> here...
-> =
-
-> Am I missing any important details? Can you please explain why we still =
-need =
-
-> that kmap_atomic() instead of kmap_local_page()? =
-
-
-Actually, it might be worth dropping segment->sg_mapped and segment->data =
-and
-only doing the kmap_local when necessary.
-
-And this:
-
-			struct msghdr msg =3D { .msg_flags =3D flags };
-			struct kvec iov =3D {
-				.iov_base =3D segment->data + offset,
-				.iov_len =3D copy
-			};
-
-			r =3D kernel_sendmsg(sk, &msg, &iov, 1, copy);
-
-should really be using struct bvec, not struct kvec - then the mapping isn=
-'t
-necessary.  It looks like this might be the only place the mapping is used=
-,
-but I'm not 100% certain.
-
-David
-
+Thanks,
+Li
