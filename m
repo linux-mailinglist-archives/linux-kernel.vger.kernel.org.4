@@ -2,124 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CD46EE630
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C816EE62D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbjDYQ5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
+        id S234826AbjDYQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbjDYQ5U (ORCPT
+        with ESMTP id S234811AbjDYQ5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:57:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5873213C3B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682441790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QgrFF00z2wCMViqatkmG+CLp0kBJ37AT7atyuO0HEqU=;
-        b=M4uOXzTO+2yf2CI3o0TufyLu+ARkDR/XvGdWYiWmXXFTg4IANV6eKgEXYt1hHv1y9RDZ5u
-        ZvfdcCeVwyIiBPOiyu1dFrqv0XiGG6gQENkogFhYPhxKgkPGrJ7eaJndbG66rSEBYWzuTf
-        jBOmGiVfzpIIs1Htgj85c7LUzVMKQLg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-621-aFb5hHzmOAKsyVlqMk3w3Q-1; Tue, 25 Apr 2023 12:56:29 -0400
-X-MC-Unique: aFb5hHzmOAKsyVlqMk3w3Q-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2fa5d643cd8so1837481f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:56:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682441788; x=1685033788;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QgrFF00z2wCMViqatkmG+CLp0kBJ37AT7atyuO0HEqU=;
-        b=hSV4o13bLU8y+bBKiZ6z2QBGgaVOuknj451jE9cxlPIQlqeet7bBvOlc1PKKwGrol/
-         fpBrM4kL9cd9/zxMl36ZxAKHmfypQfmP254atwZgviNlVRZYSqnKRdom6PGwGf6p0fsE
-         SJFun0cmuWzmi+Ld8o5WpWQxIoO2MkX0UscBa4gccZnpYqmsa+zBld2FQxLtSGLRc9F8
-         trzKa2Ve42pqFn2VpUk3yJ7WDjA5+QEL8AU7la1dkFhAss25zKs5a/kRa2LPk5Mb//Ag
-         wfnH7axZEp7/qvPDbJOyGubtha4lgE1QGIBMfFb+LAOJdNDN7+UYD4kj0hh2N3R+P8Oi
-         ThSA==
-X-Gm-Message-State: AC+VfDyewrLDYUqk4f1A8wcnXL2OzJ3HsJ6YfW4Cy27XwRxDPv1XbBH/
-        CHIcdUA5LfCPmXOGQPMyTHcLfbfLvjicAdYQPVOqRI8ITb9C3ZW+BHgNix9G33ApDgA6jAWpTiq
-        bZEIRNddy4OihTj2xh89mHubK69AFNB45
-X-Received: by 2002:a5d:48ca:0:b0:304:7ff3:9b2 with SMTP id p10-20020a5d48ca000000b003047ff309b2mr3900200wrs.39.1682441787968;
-        Tue, 25 Apr 2023 09:56:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7MeNC8cJ9OH2Zuh38sAFoM69kuwhsPNczCEv8GrTcsCUMsmycijC69SXBl8Qf/CgPBx366KQ==
-X-Received: by 2002:a5d:48ca:0:b0:304:7ff3:9b2 with SMTP id p10-20020a5d48ca000000b003047ff309b2mr3900186wrs.39.1682441787586;
-        Tue, 25 Apr 2023 09:56:27 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id k5-20020adff5c5000000b002f103ca90cdsm13473182wrp.101.2023.04.25.09.56.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 09:56:27 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, deller@gmx.de, arnd@arndb.de,
-        daniel.vetter@ffwll.ch
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH] arch/x86: Include <asm/fb.h> in fbdev source file
-In-Reply-To: <20230424084751.14641-1-tzimmermann@suse.de>
-References: <20230424084751.14641-1-tzimmermann@suse.de>
-Date:   Tue, 25 Apr 2023 18:56:26 +0200
-Message-ID: <87v8hjhpdx.fsf@minerva.mail-host-address-is-not-set>
+        Tue, 25 Apr 2023 12:57:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C003D32E;
+        Tue, 25 Apr 2023 09:57:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2CCC62C34;
+        Tue, 25 Apr 2023 16:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13196C4339C;
+        Tue, 25 Apr 2023 16:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682441823;
+        bh=cUDv7w0pj/dy7GYFDIBt/oc/4E1U2yx8meJnVqD9X/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PYHdqVra8pVt5vIloxWIOlZzNWPHB97kBVaD8zgRIdazyyvvdDc//MVDzgjTsi6qb
+         SR3RNWqiX+8O73EBTrj85JSM+TlenznTLp5se1SYsQFBvMOqtozZDCENNcyOq6xbqf
+         NqfdhgqX8zq+1VsXIeZCM2c6oDtbKx/YTtczx6Ombg8cxkm8YsdVKKKIW2DGnGW+0y
+         0pdnTnx+hrVn7NqzopgkiuqR4uHuDqgUhyqCmId8Lsk+qpwdUcW8UTX75Ve72iaCXn
+         lRDud2C/nI9OQJ9Mz9V008Mxvf7T6PMor/2QdiXoKn9zoZv42fWWQPTWAeUdpd3i+r
+         Eu7TwFD4U3iYA==
+Date:   Tue, 25 Apr 2023 17:56:57 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, vkoul@kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
+Message-ID: <20230425-commotion-prewashed-876247bed4ab@spud>
+References: <20230419-labored-camper-644d51a7ca96@spud>
+ <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
+ <20230424-baffle-punch-ec73098f2b6a@spud>
+ <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
+ <20230425-unquote-eligible-09f743d81981@wendy>
+ <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
+ <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
+ <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
+ <20230425-resale-footrest-de667778c4fe@wendy>
+ <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2jPozkJrlsTQK/jH"
+Content-Disposition: inline
+In-Reply-To: <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
 
-> Move the implementation of fb_pgprotect() to fbdev.c and include
-> <asm/fb.h>. Fixes the following warning:
->
->   ../arch/x86/video/fbdev.c:14:5: warning: no previous prototype for 'fb_is_primary_device' [-Wmissing-prototypes]
->      14 | int fb_is_primary_device(struct fb_info *info)
->         |     ^~~~~~~~~~~~~~~~~~~~
->
-> Just including <asm/fb.h> results in a number of built-in errors
-> about undefined function. Moving fb_pgprotect() to the source file
-> avoids the required include statements in the header. The function
-> is only called occasionally from fb_mmap(), so having it as static
-> inline had no benefit.
->
-> While at it, fix the codying style in fbdev.c.
->
-> Link: https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/video/fbdev/core/fbmem.c#L1404
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
+--2jPozkJrlsTQK/jH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looks good to me.
+On Tue, Apr 25, 2023 at 08:26:35PM +0800, Changhuang Liang wrote:
+> On 2023/4/25 17:35, Conor Dooley wrote:
+> > On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
+> >> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
+> >>> On 25/04/2023 09:57, Changhuang Liang wrote:
+> >>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-a=
+on-syscon".
+> >>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this =
+"aon-pmu" is just=20
+> >>>> a part of "aon-syscon" function, so I think it is inappropriate to m=
+ake "aon-syscon"
+> >>>> to a power domain controller. I think using the child-node descripti=
+on is closer to
+> >>>> JH7110 SoC.=20
+> >>>
+> >>> Unfortunately, I do not see the correlation between these, any
+> >>> connection. Why being a child of syscon block would mean that this
+> >>> should no be power domain controller? Really, why? These are two
+> >>> unrelated things.
+> >>
+> >> Let me summarize what has been discussed above.=20
+> >>
+> >> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x170=
+10000).
+> >> 1. (0x17010000) is power-controller node:
+> >>
+> >> 	aon_pwrc: power-controller@17010000 {
+> >> 		compatible =3D "starfive,jh7110-aon-pmu", "syscon";
+> >> 		reg =3D <0x0 0x17010000 0x0 0x1000>;
+> >> 		#power-domain-cells =3D <1>;
+> >> 	};
+> >>
+> >>
+> >> 2. (0x17010000) is syscon node, power-controller is child-node of sysc=
+on:
+> >>
+> >> 	aon_syscon: syscon@17010000 {
+> >> 		compatible =3D "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
+> >> 		reg =3D <0x0 0x17010000 0x0 0x1000>;
+> >>
+> >> 		aon_pwrc: power-controller {
+> >> 			compatible =3D "starfive,jh7110-aon-pmu";
+> >> 			#power-domain-cells =3D <1>;
+> >> 		};
+> >> 	};
+> >=20
+> > I thought that Rob was suggesting something like this:
+> > 	aon_syscon: syscon@17010000 {
+> > 		compatible =3D "starfive,jh7110-aon-syscon", ...
+> > 		reg =3D <0x0 0x17010000 0x0 0x1000>;
+> > 		#power-domain-cells =3D <1>;
+> > 	};
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> I see the kernel:
+> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediat=
+ek/mt8167.dtsi
+> this file line 42:
+> it's power-controller also has no meaningful properties.
+> What do you think?
 
-[...]
+I'm not sure that I follow. It has a bunch of child-nodes does it not,
+each of which is a domain?
 
-> base-commit: d2639bb054c42db5ff15c56902d1113303f5b655
-> prerequisite-patch-id: 0aa359f6144c4015c140c8a6750be19099c676fb
-> prerequisite-patch-id: c67e5d886a47b7d0266d81100837557fda34cb24
-> prerequisite-patch-id: cbc453ee02fae02af22fbfdce56ab732c7a88c36
-> -- 
+I didn't see such domains in your dts patch, they're defined directly in
+the driver instead AFAIU. Assuming I have understood that correctly,
+your situation is different to that mediatek one?
 
-This is a disadvantage of format.useAutoBase = true. I find that have to
-do `git branch --set-upstream-to=$foo` more often than I would like...
+Cheers,
+Conor.
 
-At least it seems that patchwork ignores these so that's OK.
+--2jPozkJrlsTQK/jH
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Best regards,
+-----BEGIN PGP SIGNATURE-----
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEgGWQAKCRB4tDGHoIJi
+0n5hAQCXOV1SrfD6iA2QcZe3hIYyiXSLArZEvyZM7JlrkXLP+QD/dv8/MQyPmHPt
+hLWQvz3H3XVzqkslQ4ihE4QPcfIn8wI=
+=AfU5
+-----END PGP SIGNATURE-----
 
+--2jPozkJrlsTQK/jH--
