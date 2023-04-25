@@ -2,109 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190956EE7A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004ED6EE7AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbjDYSnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S234601AbjDYSrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbjDYSnn (ORCPT
+        with ESMTP id S233976AbjDYSq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:43:43 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493FA16F30;
-        Tue, 25 Apr 2023 11:43:33 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2472dc49239so5528600a91.1;
-        Tue, 25 Apr 2023 11:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682448213; x=1685040213;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=seaqzbM0T/KT5lN1ikdO/NY3x70xGuSLmb6mU7SK/YM=;
-        b=KJUOKnpyLl12Ao33o+U9l4yG/YF2rQoOGSX8Ru0D3qtPj4GF8E+IZhAqBWCqWrurFF
-         oqaSQskVH8lS6fZFBhk72MqhveAxfMrksTsYEECFL6fl6NlJiDTILsvuCUMC4dk6Iu1O
-         CTJ6SYLuXah5HUGZiahuzPthpXw5rd1Q4uBBy138fSBbV5oCoCJz9f9BDKQAl7n3c8ja
-         g5EIrWT4+j0wrkY6yC6e25ukXTzaEzgJ1j2tnbc2qBqNUVKEolABunj/NtYC6iZxHC8D
-         1AkKSw7NOPAiNeQNMA6gJhoNN6rQUt4KwlYJrvcUaTwPA5jtHtbGzkM/AphoxFDs9KBN
-         TqfA==
+        Tue, 25 Apr 2023 14:46:58 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6966965A9;
+        Tue, 25 Apr 2023 11:46:57 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-187b70ab997so32750024fac.0;
+        Tue, 25 Apr 2023 11:46:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682448213; x=1685040213;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=seaqzbM0T/KT5lN1ikdO/NY3x70xGuSLmb6mU7SK/YM=;
-        b=PGRb/PYditni/xsGx/CzsowvMdNASmzKGS/k2upg/mHiEa2sxH6FDko3Clx1f34gJo
-         cs+BSj1c4wNSZlj+2BUauuT+LiXWlP0jLT3YTH/M5Dofd7sbs67sFiB4QAUg1MiAVnYq
-         Rdq/J+ordc+oBSgTTJT1rz8cuSycj8pKj74tYsCCpPwyWU5wuKFND+T9yDgKkRjghbLN
-         gh+pbBf4rdhogIf4ZXoM/5MCg348opQh4Y2+soY/ZoYXt1/2iIcqnrHp4lF88EvRsmeh
-         d/Adv0uKsU3LmcFw6KV05Ny1ffpUul/rh7ZIVFRYLIBBhq+/y1hUKBZmeDiT/7vpnz+K
-         WZSw==
-X-Gm-Message-State: AAQBX9c90Rt3pBfEoKqAC/D3PS0Hzr1GqevgumHKoCLt3L/jsldjQivK
-        t06TM2hiDTwU3vpv/HOAKE0PtAbtmA9WdA==
-X-Google-Smtp-Source: AKy350bSwSyUk4TsW4BLeOlQheixISlHJlK24ZtPBWlG9l5rQ9DJ9Nj1z/Y5lO4vM6WsXJgNa1OWaA==
-X-Received: by 2002:a17:90a:7783:b0:24b:5a08:5cb6 with SMTP id v3-20020a17090a778300b0024b5a085cb6mr17214810pjk.19.1682448212565;
-        Tue, 25 Apr 2023 11:43:32 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id pw12-20020a17090b278c00b00246ba2b48f3sm11843465pjb.3.2023.04.25.11.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 11:43:31 -0700 (PDT)
-Message-ID: <7b13bdf0-bb18-8f3e-0a4c-064ac47eb45e@gmail.com>
-Date:   Tue, 25 Apr 2023 11:43:24 -0700
+        d=1e100.net; s=20221208; t=1682448416; x=1685040416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KUQiQ/cycrAa4n9iZRt3Zgr4LfG6yW1fRE0hcsRmUfQ=;
+        b=WoQcwEWCWwJYkurfoN5o3Hr75SbTZikgSbisRbGrm70/l/sIK4lGpbj9xrdw2DUTft
+         rFsLrHMiFNH2/nkwj2EDvF17aLNO6Hq9d9x29YSgR73onUKmD8QuyBn4FbjMkdLGPHvV
+         oLsywOWk7tOB5VidrGR+C0KVzDQemLrQY4RkkFQejrUb6EIdML+t1tVcMIWjXmvGtfH+
+         8VdoJpWzdjy1AmU7Mf6ZvcFh80/b4wUEsglAEeLvNtiHa0VsNePUyb79ukjwiWU1gBkj
+         lNacryLIGFRgw7WcHPp0jX3uNcJ+Sfcee/FIzu/8wP5hRS4EC52iMXWkhIrODzfZ82ZL
+         3A1Q==
+X-Gm-Message-State: AAQBX9eLADV8c+aw1Twg35kXb6OUbKnirkxX4N9ll2zsxN3Gvwhv0wdG
+        Rhbj7CWzE5S7sMHqVUvtcA==
+X-Google-Smtp-Source: AKy350a9gR40wr81MPVCWEPH2D/7sm+9b9p11s31OwD5EHu62Pt7kbhb85SbKjjVrnX0z5MDz6Fg4A==
+X-Received: by 2002:a05:6830:130e:b0:6a1:2c80:5a3f with SMTP id p14-20020a056830130e00b006a12c805a3fmr9233595otq.19.1682448416562;
+        Tue, 25 Apr 2023 11:46:56 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p26-20020a9d695a000000b006a13dd5c8a2sm5991901oto.5.2023.04.25.11.46.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 11:46:56 -0700 (PDT)
+Received: (nullmailer pid 2070614 invoked by uid 1000);
+        Tue, 25 Apr 2023 18:46:54 -0000
+Date:   Tue, 25 Apr 2023 13:46:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hao Zhang <quic_hazha@quicinc.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: arm: Add Coresight Dummy Trace
+Message-ID: <20230425184654.GA2063541-robh@kernel.org>
+References: <20230422073714.38844-1-quic_hazha@quicinc.com>
+ <20230422073714.38844-3-quic_hazha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.10 00/68] 5.10.179-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230424131127.653885914@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20230424131127.653885914@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230422073714.38844-3-quic_hazha@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/24/2023 6:17 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.179 release.
-> There are 68 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sat, Apr 22, 2023 at 03:37:13PM +0800, Hao Zhang wrote:
+> Add new coresight-dummy.yaml file describing the bindings required
+> to define coresight dummy trace in the device trees.
 > 
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+> ---
+>  .../bindings/arm/arm,coresight-dummy.yaml     | 101 ++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.179-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> new file mode 100644
+> index 000000000000..48d864aefaaa
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/arm,coresight-dummy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARM Coresight Dummy component
+> +
+> +description: |
+> +  Coresight Dummy Trace Module is for the specific devices that kernel
+> +  don't have permission to access or configure, e.g., CoreSight TPDMs
+> +  on Qualcomm platforms. So there need driver to register dummy devices
+> +  as Coresight devices. It may also be used to define components that
+> +  may not have any programming interfaces (e.g, static links), so that
+> +  paths can be established in the driver. Provide Coresight API for
+> +  dummy device operations, such as enabling and disabling dummy devices.
+> +  Build the Coresight path for dummy sink or dummy source for debugging.
+> +
+> +  The primary use case of the coresight dummy is to build path in kernel
+> +  side for dummy sink and dummy source.
 
+I could imagine the OS wanting to know more information than just 
+'dummy'. Is data from an unknown source useful? Likewise, don't you want 
+to know where you are sending data too?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+> +
+> +maintainers:
+> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> +  - Tao Zhang <quic_taozha@quicinc.com>
+> +  - Hao Zhang <quic_hazha@quicinc.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Don't need oneOf as there is only one entry.
 
+> +          - arm,coresight-dummy-sink
+> +          - arm,coresight-dummy-source
+> +
+> +  out-ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port:
+> +        description: Output connection from the source to Coresight
+> +          Trace bus.
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +  in-ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port:
+> +        description: Input connection from the Coresight Trace bus to
+> +          dummy sink, such as Embedded USB debugger(EUD).
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +required:
+> +  - compatible
+> +
+> +if:
+> +  # If the compatible contains the below value
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: arm,coresight-dummy-sink
+> +
+> +then:
+> +  required:
+> +    - in-ports
+> +
+> +else:
+> +  required:
+> +    - out-ports
+
+This still allows the nodes when they don't make sense. I think this 
+needs to be 2 schema files. The only common part is 'compatible' and 
+that's not even shared.
+
+Rob
