@@ -2,195 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166706EDBB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B176EDBB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbjDYGiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 02:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S233467AbjDYGi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 02:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjDYGiA (ORCPT
+        with ESMTP id S233461AbjDYGiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 02:38:00 -0400
-Received: from pv50p00im-tydg10021701.me.com (pv50p00im-tydg10021701.me.com [17.58.6.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484C0129
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 23:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
-        t=1682404677; bh=AtnDc7pWa0CYdHFbae5uSVEe7HPDyHCYHPe7s+HzyVA=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=Qg4qMYVxAAs7QfO2aRdUElYa9EN+3tKzyg9WkhuNFglQRQPf0hvX4yXKvoAXCZeeq
-         WuUbwNgKn8yiJ0HFA3t4BETYNsOOcvQcs6cp1y6kTCEHtRd20+8uJiUxXicSFewE1v
-         kNzKMWBuETyRXUIXdKA6g06WO7WFTorRAoURcPMr33QA359sXfFJBNPXNw0Ze8dqSi
-         jAS/jHn7lUfL2t59/XH+wf6E+7UxtbVbJHdQfO/v4HTBFOmTOxta3wjPtWqcZLFoR/
-         DKMJIT8D0rF/Ar4HijgjnwHrpoDMGD51LAVvI9JAv3yj9t/laUVQfi1RnHyJWxsYS0
-         4sgmmsz8Nfb9Q==
-Received: from localhost.localdomain (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-tydg10021701.me.com (Postfix) with ESMTPSA id 8D2383A0C0D;
-        Tue, 25 Apr 2023 06:37:53 +0000 (UTC)
-From:   Xueming Feng <kuro@kuroa.me>
-To:     yhs@meta.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuro@kuroa.me,
-        linux-kernel@vger.kernel.org, martin.lau@linux.dev,
-        quentin@isovalent.com, sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for map_of_maps types
-Date:   Tue, 25 Apr 2023 14:37:50 +0800
-Message-Id: <20230425063750.72642-1-kuro@kuroa.me>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <561b0f03-4a3a-89d3-5793-a0d69535ca0f@meta.com>
-References: <561b0f03-4a3a-89d3-5793-a0d69535ca0f@meta.com>
+        Tue, 25 Apr 2023 02:38:25 -0400
+Received: from out-49.mta1.migadu.com (out-49.mta1.migadu.com [95.215.58.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5658A4EF7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 23:38:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 1LvcXIxTfN7FMPf-6mBsy-6lGA08URWM
-X-Proofpoint-GUID: 1LvcXIxTfN7FMPf-6mBsy-6lGA08URWM
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 bulkscore=0
- suspectscore=0 clxscore=1030 adultscore=0 phishscore=0 mlxlogscore=967
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2304250060
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1682404699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G0Sw1HF+tb0ME16TauipdBUqsBMcXzjj7/tJbiHX/1s=;
+        b=Waxpik0MqJXy4sXV9FTSarf+6yE6iLfbA5xW066NmLPSnwiydD2Fo6Bmj1v0lb/pBAGcgI
+        rLzA9EJRZD2KJqeI6HeSp6aQgasrBIU7bx7Tm+8Qhc11S2W7IazEP5JY+nBrydwV4ic13k
+        WhGhE8O4Ia/nEpLKkJps7kSxKYwr7Uo=
+Date:   Tue, 25 Apr 2023 06:38:18 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <c570ff25fbfa38a5aee84a892762da85@linux.dev>
+Subject: Re: [PATCH] mmzone: Introduce for_each_populated_zone_pgdat()
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox" <willy@infradead.org>, david@redhat.com,
+        osalvador@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+In-Reply-To: <875y9kfr0o.fsf@yhuang6-desk2.ccr.corp.intel.com>
+References: <875y9kfr0o.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <20230424030756.1795926-1-yajun.deng@linux.dev>
+ <ZEX8jV/FQm2gL+2j@casper.infradead.org>
+ <20230424145823.b8e8435dd3242614371be6d5@linux-foundation.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 4/24/23 9:10 PM, Xueming Feng wrote:
->>> On 4/24/23 2:09 AM, Xueming Feng wrote:
->>>> When using `bpftool map dump` in plain format, it is usually
->>>> more convenient to show the inner map id instead of raw value.
->>>> Changing this behavior would help with quick debugging with
->>>> `bpftool`, without disrupting scripted behavior. Since user
->>>> could dump the inner map with id, and need to convert value.
->>>>
->>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
->>>> ---
->>>> Changes in v2:
->>>>     - Fix commit message grammar.
->>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
->>>> 	  `n` to `arg_size`.
->>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
->>>> 		and print it as unsigned decimal.
->>>>
->>>> Thanks for the review and suggestions! I have changed my patch accordingly.
->>>> There is a possibility that `arg_size` is larger than `unsigned long`,
->>>> but previous review suggested that it should be up to the caller function to
->>>> set `arg_size` correctly. So I didn't add check for that, should I?
->>>>
->>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
->>>>    tools/bpf/bpftool/main.h |  1 +
->>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
->>>>    3 files changed, 23 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
->>>> index 08d0ac543c67..810c0dc10ecb 100644
->>>> --- a/tools/bpf/bpftool/main.c
->>>> +++ b/tools/bpf/bpftool/main.c
->>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
->>>>    	return 0;
->>>>    }
->>>>    
->>>> +void print_uint(const void *arg, unsigned int arg_size)
->>>> +{
->>>> +	const unsigned char *data = arg;
->>>> +	unsigned long val = 0ul;
->>>> +
->>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->>>> +		memcpy(&val, data, arg_size);
->>>> +	#else
->>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
->>>> +		       data, arg_size);
->>>> +	#endif
->>>> +
->>>> +	fprintf(stdout, "%lu", val);
->>>> +}
->>>> +
->>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
->>>>    {
->>>>    	unsigned char *data = arg;
->>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
->>>> index 0ef373cef4c7..0de671423431 100644
->>>> --- a/tools/bpf/bpftool/main.h
->>>> +++ b/tools/bpf/bpftool/main.h
->>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
->>>>    
->>>>    bool is_prefix(const char *pfx, const char *str);
->>>>    int detect_common_prefix(const char *arg, ...);
->>>> +void print_uint(const void *arg, unsigned int arg_size);
->>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
->>>>    void usage(void) __noreturn;
->>>>    
->>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->>>> index aaeb8939e137..f5be4c0564cf 100644
->>>> --- a/tools/bpf/bpftool/map.c
->>>> +++ b/tools/bpf/bpftool/map.c
->>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->>>>    		}
->>>>    
->>>>    		if (info->value_size) {
->>>> -			printf("value:%c", break_names ? '\n' : ' ');
->>>> -			fprint_hex(stdout, value, info->value_size, " ");
->>>> +			if (map_is_map_of_maps(info->type)) {
->>>> +				printf("id:%c", break_names ? '\n' : ' ');
->>> 1> +				print_uint(value, info->value_size);
->> 
->> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
->>> For all map_in_map types, the inner map value size is 32bit int which
->>> represents a fd (for map creation) and a id (for map info), e.g., in
->>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
->>> 	printf("id: %u", *(unsigned int *)value);
->> 
->> That is true, maybe the "id" could also be changed to "map_id" to follow the
->> convention. Do you think that `print_uint` could be useful in the future?
->> If that is the case, should I keep using it here as an example usage, and to
->> avoid dead code? Or should I just remove it?
-
-On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
-> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
-> element value could be 0, implying "inner_map_id 0", but I think it is
-> okay, people should know a real inner_map_id (or any map_id) should 
-> never be 0.
-> 
-> Function "print_uint" is not needed any more. Please remove it.
-
-Will reflect this in v3.
-
-> 
-> Please add the command line to dump map values triggering the above 
-> change, also the actual dumps with and without this patch.
-
-$ bpftool map dump id 138
-Without patch:
-```
-key:
-fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
-27 16 06 00
-value:
-8b 00 00 00
-Found 1 element
-```
-With patch:
-```
-key:
-fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
-27 16 06 00
-inner_map_id:
-139 
-Found 1 element
-```
-
->> 
->>>> +			} else {
->>>> +				printf("value:%c", break_names ? '\n' : ' ');
->>>> +				fprint_hex(stdout, value, info->value_size, " ");
->>>> +			}
->>>>    		}
->>>>    
->>>>    		printf("\n");
+April 25, 2023 1:51 PM, "Huang, Ying" <ying.huang@intel.com> wrote:=0A=0A=
+> Andrew Morton <akpm@linux-foundation.org> writes:=0A> =0A>> On Mon, 24 =
+Apr 2023 04:50:37 +0100 Matthew Wilcox <willy@infradead.org> wrote:=0A>> =
+=0A>>> On Mon, Apr 24, 2023 at 11:07:56AM +0800, Yajun Deng wrote:=0A>>>>=
+ Instead of define an index and determining if the zone has memory,=0A>>>=
+> introduce for_each_populated_zone_pgdat() helper that can be used=0A>>>=
+> to iterate over each populated zone in pgdat, and convert the most=0A>>=
+>> obvious users to it.=0A>>> =0A>>> I don't think the complexity of the =
+helper justifies the simplification=0A>>> of the users.=0A>> =0A>> Are yo=
+u sure?=0A>> =0A>>>> +++ b/include/linux/mmzone.h=0A>>>> @@ -1580,6 +1580=
+,14 @@ extern struct zone *next_zone(struct zone *zone);=0A>>>> ; /* do n=
+othing */ \=0A>>>> else=0A>>>> =0A>>>> +#define for_each_populated_zone_p=
+gdat(zone, pgdat, max) \=0A>>>> + for (zone =3D pgdat->node_zones; \=0A>>=
+>> + zone < pgdat->node_zones + max; \=0A>>>> + zone++) \=0A>>>> + if (!p=
+opulated_zone(zone)) \=0A>>>> + ; /* do nothing */ \=0A>>>> + else=0A>>>>=
+ +=0A>> =0A>> But each of the call sites is doing this, so at least the c=
+omplexity is=0A>> now seen in only one place.=0A>> =0A>> btw, do we need =
+to do the test that way? Why won't this work?=0A>> =0A>> #define for_each=
+_populated_zone_pgdat(zone, pgdat, max) \=0A>> for (zone =3D pgdat->node_=
+zones; \=0A>> zone < pgdat->node_zones + max; \=0A>> zone++) \=0A>> if (p=
+opulated_zone(zone))=0A>> =0A>> I suspect it was done the original way in=
+ order to save a tabstop,=0A>> which is no longer needed.=0A> =0A> This m=
+ay cause unexpected effect when used with "if" statement. For=0A> example=
+,=0A> =0A> if (something)=0A> for_each_populated_zone_pgdat(zone, pgdat, =
+max)=0A> total +=3D zone->present_pages;=0A> else=0A> pr_info("something =
+is false!\n");=0A> =0A=0AThanks Huang, Ying for the example.=0A=0AYes, th=
+is macros with multiple statements but doesn't have a do - while loop,=0A=
+It needs if and else together.=0A=0A> Best Regards,=0A> Huang, Ying
