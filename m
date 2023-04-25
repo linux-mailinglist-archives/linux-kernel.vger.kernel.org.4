@@ -2,73 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C776EDAA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 05:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C5E6EDAAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 05:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjDYD1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 23:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S233239AbjDYDf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 23:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbjDYD1B (ORCPT
+        with ESMTP id S229637AbjDYDfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 23:27:01 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D22AF17;
-        Mon, 24 Apr 2023 20:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682393211; x=1713929211;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MykIHyOnFBYvjtTNVdllwAiFmLXXR+pbIjotFGUpHJg=;
-  b=STY44/0tER/dmOvP3H/XaGjIEqGGIAmHIYlaFxDRGnzZBdZZnykEJ9ju
-   YD0d9nFVITvjPxoXw5QnlRFnPEO4su409Tyomq2gRuiMxkgN78odi/C0Q
-   CeRpkNeGFHWH2Pvjup8jHYYdxx62EW6imOCvnNR6yzFzlNVQqUK8+++FW
-   Z5V3l1CyOZ9x6N20RrxZdmCb2V+JhUroBxiUw1x5m303l9eUE5S5SheyT
-   DKz/2UKeWKvIx7txPbF1WIweFwNG7sJtYgOfZnaVpBzxTnnmkF5fkRT+K
-   MkLfko4X5vvWCROwQzGEvS8dM9DpoAD57FtJviBx4vWjZl4BmvFaxQ3ey
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="346656800"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="346656800"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 20:26:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="837253766"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="837253766"
-Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.238.0.183]) ([10.238.0.183])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 20:26:47 -0700
-Message-ID: <040a4d50-d25b-c6b9-960a-a85dda30b857@intel.com>
-Date:   Tue, 25 Apr 2023 11:26:34 +0800
+        Mon, 24 Apr 2023 23:35:53 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75FCA8;
+        Mon, 24 Apr 2023 20:35:51 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P0iNpH032338;
+        Tue, 25 Apr 2023 03:32:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=DGby9auyErJ3S+pQP+bBXUg+kA/IANf6mmW/8uCRGWU=;
+ b=f63L6TQWketkjE6wWAlNMzUNLgt/kYuIESMoF443eYwynFoMRzHe7hYDnb4beAlA6yb6
+ 2ph/MYe0mk26xWb5+7gH/j3XcecyyvB+yJ1K6S3ht+b7kP/GMAUEIFuX38cCYCFlZVNc
+ jRqhBiQoLodMg1KVO2mW7gxWUpuH32uohIksZjPIipuR+CwPyegyW7PU8LzInHGBaCuA
+ m5o/MRA+KZBcQCL2n1W03AQOYOkLFElvfdiPOkDjSsM1G4hTuHkBSL6Ibcqy3TGvfLRF
+ sKM6jMNMPVnN3McYH9IEtd+jTMPQ6jc4wdfRrV254dLpldKX7nLcLeAKDk9vVFB4c77g Xw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q46gbmdch-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Apr 2023 03:32:43 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33P261cF006792;
+        Tue, 25 Apr 2023 03:32:42 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3q4615vfbx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Apr 2023 03:32:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hMBxWMJFEfkMlp3kVQ617QF8bCZYCqY7Y0gJNlsopnI7WTKZG9FFQrXOyo4N+UD87j1H6SHrMSI9se6AT8ET49DIDMg5grNNtqKvVdgVnmvOJxCmfXyoVQNXVrMyDPYzjUeQQfjxXonrFtX+N8x48GaqrDs9g0Htyx49xkDeyXH24uaR8Lv6YbOvG9g9yc5jOkoh2nN7/umAclWSCzAP682shmI37zinGZjGHNUtm6s26N0/UsNdClnrQ5fgtzSwJBuZ4xZojHROI46XT8UNVKyNSqGvYOBYlVThHMFyPF/g3g0dGBEiWgG1+ZKwvfCxGgfvgeLwylh25kVHafBqWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DGby9auyErJ3S+pQP+bBXUg+kA/IANf6mmW/8uCRGWU=;
+ b=iLmVXDkEcsjy+OzOO1iPuo0IPSvr4kXIbwUtR20RtuwIvQXmw5aYAFAaHAVEZqi31WkhSIcF7flPsKyusA7e64PRRw5neg6kn3oapVKbPAPrt3qhSG0xkX+/OJhbUSOS73BjzuVHQ/ntjTemNRdoBIjGFPWEoHQ55f2fnnmCbQhehcix/AjQNfRrLhYtteXeVvOd/D/zQ2uhWYs5OoTtPPYsO/8FtjsRy6W7r8NOj0Rs6An5h9CGdi47l8xImpC5ygZaTPnZso4Ch+kZwYwtkxLG10TiYdtqphaDQL1X+hq9m2Axt9d5mvaPmaP5wR93AdY/sBa3wk30YVmxOFgqvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DGby9auyErJ3S+pQP+bBXUg+kA/IANf6mmW/8uCRGWU=;
+ b=MCE8MUt4KjgADLx/Rl0+Oazt2GRFTAr/IQmd3Ksvps47U8y20dD+OX5JR4qF61aiFGVXBy1nmUQMUwCVYM/jvZQIAA+bbiSyxYfrt81N5vvJTRPLjPcuLvX+qo54A6NOUC5GAT5bYX4LR1gOEu1SwxrfHK+Icewq4UGU75vtqzs=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by SN7PR10MB6406.namprd10.prod.outlook.com (2603:10b6:806:26a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Tue, 25 Apr
+ 2023 03:32:39 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::9a52:4c2f:9ec1:5f16]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::9a52:4c2f:9ec1:5f16%6]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
+ 03:32:39 +0000
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     njavali@marvell.com, mrangankar@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Subject: Re: [PATCH v2] scsi: qedi: Fix use after free bug in qedi_remove
+ due to race  condition
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1leigk56d.fsf@ca-mkp.ca.oracle.com>
+References: <20230413033422.28003-1-zyytlz.wz@163.com>
+Date:   Mon, 24 Apr 2023 23:32:32 -0400
+In-Reply-To: <20230413033422.28003-1-zyytlz.wz@163.com> (Zheng Wang's message
+        of "Thu, 13 Apr 2023 11:34:22 +0800")
+Content-Type: text/plain
+X-ClientProxiedBy: AM4P190CA0005.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:200:56::15) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
- violation check
-Content-Language: en-US
-To:     Binbin Wu <binbin.wu@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20230420133724.11398-1-guang.zeng@intel.com>
- <20230420133724.11398-3-guang.zeng@intel.com>
- <735e3259-26d4-33f1-0e59-8171d1e832e9@linux.intel.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <735e3259-26d4-33f1-0e59-8171d1e832e9@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|SN7PR10MB6406:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68ebb904-3d5c-4fa5-b4dc-08db453db7f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nK2C5CSngrLNTTZ7IDXZqEejxnr/Pg/OgqqJW2DX2xBGCMIWwU9rChELdjpP1pmJXASCw4aju+spxYyYDPLt+aWxVq8lhw+MY08JJWT9sUoyLIL0EVFhxdyXDM4ToqmREithaskXvm4CNm4gHQTGloK/aR4hh2F/Ag0UnSxRG1n9DoQYaNKZVnB3l3RmtqNx72kYcht2MFj57zKTxaMjcfAAnztAcCL8zJtByIpKNwfx80niOxjXS/9vOlZz45dgbTx4STrPnPAIF4pf9G/Qr7XX4lzem3JkAzrplB4YzMaNRaDkLrETXgRkaZujKlLgd/b3EqVZekgeVAtfPE9vUFBbeq6a2sLUwk4pymaKlgKqE+BkbE65Fb4S3bSuF8v4mJpw/GoOwIedLR6RSYYJf6DP92v9wQI5klQZJeb8eqgY4gsICYxlvuQZfPBxOdgjWCEh4M+l/cg7TasLywh/sLn5VIF5p2YIHPu90gXns3snBL5y3amjk8fofD3DBLD9hRWKQ/4J20RVJuPxAXRvtYTFcZ38iGuPOs1XJ1tylB/Pd4G6l08r88l6p5rts/F+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(136003)(39860400002)(366004)(346002)(451199021)(4326008)(6916009)(66556008)(316002)(66946007)(478600001)(66476007)(8676002)(8936002)(5660300002)(7416002)(41300700001)(6486002)(36916002)(6666004)(6506007)(26005)(6512007)(186003)(86362001)(2906002)(558084003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SGZUWbro8VF5r/9mxVcRabppRpPWpFRViPc0BtAJaX5EOvuufP6mQ88nt3KW?=
+ =?us-ascii?Q?2fw9Yarmmg3CwcSMEOt4cUGoHnb4B1j9qSpctUiLvV8SYspyWfVZXsdR43kF?=
+ =?us-ascii?Q?WWRt5PhccoeXm91KTJ274iP/luPB7zdaGE4NVqUcs6sUc1M98LtY7/E4yHZ4?=
+ =?us-ascii?Q?sqPOdn48A0o+c0dqinBlH2WwXdIkV/zQMIxJ8dpMV/15eA9xK22uPCzEbOBJ?=
+ =?us-ascii?Q?Q9oLRS5hJ+K3YWJJQ5cWlwI2Okqrx5WQnBbsNUA0mGeAVdKtUuoenOoIFiAL?=
+ =?us-ascii?Q?GWVJh8XxsIKj0C/gdzXIzaz8tKDe7yUxRorSFMbH0u5C8TEPNNVHKb7T0O46?=
+ =?us-ascii?Q?Dax6hdAnf/rbgfWGTv3Nc3JFLRsVVh7jzR0pls827jxAVArkd6W+XJ6vLAPa?=
+ =?us-ascii?Q?EdrS7olRjUD36oP6vw2B89z3HUCoKIrShCF3StsNYM6FCJDx3ZE14YOBr2YA?=
+ =?us-ascii?Q?Qf3eVRN/AToT0wsSfwUL9dQNpOlMlarS0PngDFzwfjAKnmWt0MRGgUvyOIpX?=
+ =?us-ascii?Q?kUC1qcygdXlvGXMD9hiGbUe3Pp3urA3Y/i6TF4hEN/JS6IxrwvoFYnI99ZXM?=
+ =?us-ascii?Q?RaxAbG1Cg5ND4FT5UNRVM5SBAa7ciHMuG6oaKEoUxh7lv2AXwYWxh3hsAgNg?=
+ =?us-ascii?Q?1V6HE35KPvzEJfBo5lqLCstBquv6nZ+KAlL66tfOa+iRPxMPuAIbMISYSfuA?=
+ =?us-ascii?Q?fU+LO7iGmw8mlndZ0YaYtLueKnsLQ2skoLisSULMm0e+InhctLGK0z7yWdAo?=
+ =?us-ascii?Q?vhmt/A8rT35V6gv12WW9bzwPBoB2d02fslcSZiYc01ZFzXgvBwgAjtw34bge?=
+ =?us-ascii?Q?XkiFnsXycnfQ09kMW9tR1f41Ocv9OSLIgMeM0YHGUGGC+7rK2srEC7P3utKo?=
+ =?us-ascii?Q?6bmpaiNNL7itsB7nhOik3pxrfjJALxjUXaQUJNQ6/PYBBd8wT6mmGjpnErxQ?=
+ =?us-ascii?Q?9qqQHUJ4MXHGgch2sFiVHpqLNhXbjYRuqmIPCDR+YDa29x6QEJPzaN4zta53?=
+ =?us-ascii?Q?RH9USAfDAxM85URwmPt9AWMD3jlknmhnvdijGDUQlxGrSRpWIHw4LHlLaheT?=
+ =?us-ascii?Q?dKAaQmuhoPMswHoZD7gNCXTMmdb83H3hEXaQyei8lAhejyG1DFifShpmAM3L?=
+ =?us-ascii?Q?fiM/FrbbZDsZav8uLIpxBkmt6I+CbOZ+FIgPRyknPW15unZPeoMd2BIIod4H?=
+ =?us-ascii?Q?qiqx9wJer4L4t9iQa4SL/rSbE50CkldLsWOW5z7b4I9ezR553TEX9Itn1Q2L?=
+ =?us-ascii?Q?8uyI3g05cgWnn9SuuD6YtH6GbF7+1VN8uK3DAHd3W9p4IFEMFmiF+cwER/RT?=
+ =?us-ascii?Q?XXJoBoMbmOvtXU5UtIt3FkwEkWgOSitx4yZ5QFyC+QFZ7cUFeF1i1e1zlKz8?=
+ =?us-ascii?Q?Gh7b2DOsv/hCDwResXXGgBrYTB93aGILFhEibgz1ev8icdrXAQvs//TbXcDI?=
+ =?us-ascii?Q?z5giraTwigt92tgYn1DcWS3L0lhyyN+z4TB3ODQ66wE9FSVI0Fh9i0jrU7DQ?=
+ =?us-ascii?Q?JMbvl9ZcFIDl9a2p8qJjkKPhFuMXUnjNEAiHTQdge+2jZ5ZRvzZX9+BHp9bc?=
+ =?us-ascii?Q?p0YFmutewBG0ZIcwiX1Rx35NBmGB1fRYyC/TZIyrWQP5FoM+V6YlEzdWfc+U?=
+ =?us-ascii?Q?lw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: lv/RpkGneCquL7vgsM2ej3VYDAVno16MdVSEJ4qtFE/XyC5sUdXEEKJtad6aSZ3q7J3NYmbxv5gWl4t/V3C2mVuQh9gJT2w1vISTnsbqyQVqWFhsehOKKG9FdmO+n3pi2a0BIyCQlt36Ng0rWHO/NczA8b1hgJ68EC5FpEZPySuic5ZfgLTWX1LCwliGxaOAQemr1geva/vzoG8b9jW6Ki89WD8ODv72kBYhzeV7/+csRpRmCya6bilmgbY8T5V0TYwOS2L9NkuPzYHCgvcCOhX6vFNzRFK12LA44Nq9TqJfJB6gsOyDp46tMKAykq6z2hj5Ie/MbAHu+BMlBewHnP5gd0Yki4I+Pb2u/MfZ6lJdBc73FSWB7z58YhVYkqb+5NuSoi8dT6m3jcFyBqza3vvAmD5M2wI6Xu/WjFnzc9cYiWEguE3SivMJsZ+Vv+VCVqip09dzHd1NcL+sLRRzckY6ghByAqWZoVvnifdhyjNax4j+kGqNz/1YsULgnjQ2ufQ81WvH7QaYGT2oCij4Tk+8ZraxG38ygTpWWP/GBZktWYedC041CJDu9G4HOtOOMMmB8C9OsQn8QKcaH1xJIYgjnc/QHnePB8t0fVjgbTKuTr3yCzjK71WG2wmK6h85/ru83HdTPctRYihlgglY+78ZCgyUhGr71hZ5C1mGXIbDOxBF5hik26RBTXJmJRTs6yhTMm7Ol7rkiCJNMNd18Y5vyTL7bL86k3Xh4K9THs5NorLZoU2xpEb1jrpFnHFkgX+noviJunQaA4wQagTliiI/Eq5UNWg8BxAHkpQxfEXzhpTyrtukKJMQK6NcuKv2VCKxKVb7aFPpy8wJMje3qL91twEvgzB5hm+ulVnbQZpjoc3tvPs63BLaIpVEbXL6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68ebb904-3d5c-4fa5-b4dc-08db453db7f2
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 03:32:38.6786
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9jAx9K61CIeFDLgyjAbM5UBBWQD3z+wiA9c7XYR6JPtXmp0DkOCPLHZakE04V65kiOAPHlZXPsGkLGFRc4yn3PHSdfVnrmiQ59FcthQC/+o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6406
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_03,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=522
+ adultscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304250030
+X-Proofpoint-GUID: j4JDHmrkQDQy3klfWbJcDXp1HSt7arp9
+X-Proofpoint-ORIG-GUID: j4JDHmrkQDQy3klfWbJcDXp1HSt7arp9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,184 +152,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 4/24/2023 3:43 PM, Binbin Wu wrote:
->
-> On 4/20/2023 9:37 PM, Zeng Guang wrote:
->> Intel introduce LASS (Linear Address Separation) feature providing
-> /s/introduce/introduces
-OK.
->
->> an independent mechanism to achieve the mode-based protection.
->>
->> LASS partitions 64-bit linear address space into two halves, user-mode
->> address (LA[bit 63]=0) and supervisor-mode address (LA[bit 63]=1). It
->> stops any code execution or data access
->>       1. from user mode to supervisor-mode address space
->>       2. from supervisor mode to user-mode address space
->> and generates LASS violation fault accordingly.
-> IMO, the description of the point 2 may be misleading that LASS stops
-> any data access from supervisor mode to user mode address space,
-> although the description following adds the conditions.
+Zheng,
 
-May change to " It stops any code execution or conditional data access". 
-The condition
-is illustrated in next paragraph.
+> In qedi_probe, it calls __qedi_probe, which bound &qedi->recovery_work
+> with qedi_recovery_handler and bound &qedi->board_disable_work
+> with qedi_board_disable_work.
 
->
->> A supervisor mode data access causes a LASS violation only if supervisor
->> mode access protection is enabled (CR4.SMAP = 1) and either RFLAGS.AC = 0
->> or the access implicitly accesses a system data structure.
->>
->> Following are the rule of LASS violation check on the linear address(LA).
-> /s/rule/rules
-OK.
->> User access to supervisor-mode address space:
->>       LA[bit 63] && (CPL == 3)
->> Supervisor access to user-mode address space:
->>       Instruction fetch: !LA[bit 63] && (CPL < 3)
->>       Data access: !LA[bit 63] && (CR4.SMAP==1) && ((RFLAGS.AC == 0 &&
->> 		 CPL < 3) || Implicit supervisor access)
->>
->> Add new ops in kvm_x86_ops to do LASS violation check.
->>
->> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
->> ---
->>    arch/x86/include/asm/kvm-x86-ops.h |  1 +
->>    arch/x86/include/asm/kvm_host.h    |  5 +++
->>    arch/x86/kvm/vmx/vmx.c             | 55 ++++++++++++++++++++++++++++++
->>    arch/x86/kvm/vmx/vmx.h             |  2 ++
->>    4 files changed, 63 insertions(+)
->>
->> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
->> index abccd51dcfca..f76c07f2674b 100644
->> --- a/arch/x86/include/asm/kvm-x86-ops.h
->> +++ b/arch/x86/include/asm/kvm-x86-ops.h
->> @@ -131,6 +131,7 @@ KVM_X86_OP(msr_filter_changed)
->>    KVM_X86_OP(complete_emulated_msr)
->>    KVM_X86_OP(vcpu_deliver_sipi_vector)
->>    KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
->> +KVM_X86_OP_OPTIONAL_RET0(check_lass);
->>    
->>    #undef KVM_X86_OP
->>    #undef KVM_X86_OP_OPTIONAL
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index 8ff89a52ef66..31fb8699a1ff 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -69,6 +69,9 @@
->>    #define KVM_X86_NOTIFY_VMEXIT_VALID_BITS	(KVM_X86_NOTIFY_VMEXIT_ENABLED | \
->>    						 KVM_X86_NOTIFY_VMEXIT_USER)
->>    
->> +/* x86-specific emulation flags */
->> +#define KVM_X86_EMULFLAG_SKIP_LASS	_BITULL(1)
-> Do you use the flag outside of emulator?
-> For LAM patch, it's planned to move the flags inside emulator.
-IMO, the detailed flag is implementation specific. Is it necessary to 
-bind with emulator
-though it's only used inside emulator ?
->> +
->>    /* x86-specific vcpu->requests bit members */
->>    #define KVM_REQ_MIGRATE_TIMER		KVM_ARCH_REQ(0)
->>    #define KVM_REQ_REPORT_TPR_ACCESS	KVM_ARCH_REQ(1)
->> @@ -1706,6 +1709,8 @@ struct kvm_x86_ops {
->>    	 * Returns vCPU specific APICv inhibit reasons
->>    	 */
->>    	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
->> +
->> +	bool (*check_lass)(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
-> The flags may be dropped if the caller knows to skip it or not.
-Probably I don't get you right. Do you mean it need define another 
-function without flags ?
+Applied to 6.4/scsi-staging, thanks!
 
->>    };
->>    
->>    struct kvm_x86_nested_ops {
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index c923d7599d71..581327ede66a 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -8070,6 +8070,59 @@ static void vmx_vm_destroy(struct kvm *kvm)
->>    	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
->>    }
->>    
->> +/*
->> + * Determine whether an access to the linear address causes a LASS violation.
->> + * LASS protection is only effective in long mode. As a prerequisite, caller
->> + * should make sure VM
-> Should be vCPU？
-Similar meaning, I think. :)
->> running in long mode and invoke this api to do LASS
->> + * violation check.
->> + */
->> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
->> +{
->> +	bool user_mode, user_as, rflags_ac;
->> +
->> +	if (!!(flags & KVM_X86_EMULFLAG_SKIP_LASS) ||
->> +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
->> +		return false;
->> +
->> +	WARN_ON_ONCE(!is_long_mode(vcpu));
->> +
->> +	user_as = !(la >> 63);
->> +
->> +	/*
->> +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
->> +	 * accesses a system data structure. For implicit accesses to system
->> +	 * data structure, the processor acts as if RFLAGS.AC is clear.
->> +	 */
->> +	if (access & PFERR_IMPLICIT_ACCESS) {
->> +		user_mode = false;
->> +		rflags_ac = false;
->> +	} else {
->> +		user_mode = vmx_get_cpl(vcpu) == 3;
->> +		if (!user_mode)
->> +			rflags_ac = !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
->> +	}
->> +
->> +	if (user_mode != user_as) {
->> +		/*
->> +		 * Supervisor-mode _data_ accesses to user address space
->> +		 * cause LASS violations only if SMAP is enabled.
->> +		 */
->> +		if (!user_mode && !(access & PFERR_FETCH_MASK)) {
->> +			return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) &&
->> +			       !rflags_ac;
->> +		} else {
->> +			return true;
->> +		}
->> +	}
->> +
->> +	return false;
->> +}
->> +
->> +static bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
->> +{
->> +	return is_long_mode(vcpu) && __vmx_check_lass(vcpu, access, la, flags);
->> +}
->> +
->>    static struct kvm_x86_ops vmx_x86_ops __initdata = {
->>    	.name = "kvm_intel",
->>    
->> @@ -8207,6 +8260,8 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->>    	.complete_emulated_msr = kvm_complete_insn_gp,
->>    
->>    	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
->> +
->> +	.check_lass = vmx_check_lass,
->>    };
->>    
->>    static unsigned int vmx_handle_intel_pt_intr(void)
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index a3da84f4ea45..6569385a5978 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -433,6 +433,8 @@ void vmx_enable_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr, int type);
->>    u64 vmx_get_l2_tsc_offset(struct kvm_vcpu *vcpu);
->>    u64 vmx_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
->>    
->> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
->> +
->>    static inline void vmx_set_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr,
->>    					     int type, bool value)
->>    {
+-- 
+Martin K. Petersen	Oracle Linux Engineering
