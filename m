@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8A96EE6BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5D26EE6C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234732AbjDYRcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 13:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S234425AbjDYRdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 13:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbjDYRcs (ORCPT
+        with ESMTP id S234607AbjDYRdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:32:48 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDD672A2;
-        Tue, 25 Apr 2023 10:32:46 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-14-243-nat.elisa-mobile.fi [85.76.14.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 25 Apr 2023 13:33:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0837AAD;
+        Tue, 25 Apr 2023 10:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Q5Tbb1zXFz49Q1p;
-        Tue, 25 Apr 2023 20:32:43 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1682443964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=lbrxOnN4RUlQpF+DUNLaZwqcHrQk40EoKmo3esYa/jA=;
-        b=U1KQ948AdfqrPZ7fcQPrqJkibPgm3Hh27BClFMsbmHXbSFN0YhjvSyhbc9PM+On/mOuRG9
-        esUoYinab/eeOC/GSIuAElNvjmYjD9pL+OUE6wlH4EJYW7W++reOcq4NiuzmHuKEw3iJ9a
-        sJCKjLZYkODyuSx5lANzhrj1zVMr5Bj2sjCgRIqN/xhVY/8tpHvHdfR+kFAp/FzXJeJK+T
-        ONOmGA4AdL28sRibkvOpCeoqx+xoofWMkiph3X3pG+n6gVFQpi49QgdHzO71Nu8mLJfC1c
-        s2XgNgzAY4QzjSJV+vaGG/Zc8HJbXY0JBvJ33ePYlTkHDfnOLiwecuMPugXmxA==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1682443964; a=rsa-sha256;
-        cv=none;
-        b=nbr+6nkvzNhF9bpjcjoCKKgredwk0TYz0M4hiJPRHi3HaDWDmBJzdY3N5zZPBjWy11oXGd
-        +N1jArD5Z3I9rJW14NQeDveRIi7A7NpBkc1L0Zwz0bSm7eBTsz9Pd0QB7lPsL3t6YVi0GJ
-        RPHCVSiCHu9xBGLhR1dLZtn5ULgwe+pVSq8dpD5CeqKUNUhIFdD79A1ktB5KfENbakUhIR
-        FbLeCzAXUKFFPK12vcW4O47X3g66Gq17B2zTPMu/MosfQ4zaITzhiLp7xK1u2oHWSyDt6f
-        XmjvzWm9zyx+tT9JGcuF3hvgv3BJq6z+/83oTk83WMjsDVbZmZY+8opjvLBFbw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1682443964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=lbrxOnN4RUlQpF+DUNLaZwqcHrQk40EoKmo3esYa/jA=;
-        b=Xv694WbwM5khTimG9/hw/LL0UCGAwhLbA69rA1ApcmS3Tc7g/Gm5GUGQqNEmvA4eJZn2VI
-        6Diqhl7TpmveruuOGt3Jo1Yk3qDsI4YO1pmiISLLZGHyPlGHtSlEZunEctTQNUo1t0BBT4
-        KQQ0WH/SMF+UDwUOr0gYm/0YoWSO7n5xmqv8WAbkQ2G508J45N5c5QcNv/seSRqn4ffQMD
-        fRWjvzXMz47yrsXbQJo41dpChV8ZkAaaITwdzJZnrB/WRrR5M3Pq/d8DWp3omwgeYKQb50
-        mOW/cl+AybV+DFxk1P2t+q9nYIQNDd4ylrYe3zw5mydn9qNhIzOeYy4ufxHFSA==
-Date:   Tue, 25 Apr 2023 20:32:41 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [BISECTED REGRESSION] OMAP1 GPIO breakage
-Message-ID: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 699F361009;
+        Tue, 25 Apr 2023 17:33:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D622AC433EF;
+        Tue, 25 Apr 2023 17:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682443989;
+        bh=mcnUcuZCsp42gOl0koyvCmjFpEs0zWYiqO16h08PCjA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aMVYvKWDZ4NCuDhOb1y5atMlF1Y0M9iCVAWPsMGKAJrdFeuPJ0gC1F2uxB8nbcSiz
+         dqR13DU+eu0L58BuFuDvnHdjpiAMtLSxQIEGYN3h+2WiiU61WQgz07AD7Q2qVt0eJt
+         jP94kH2s2qdtjDbjOWXmYaGpSR/ZKSc8Ye4mmFBbuM8QO6Q+8zhcY+FtLBXC019Msb
+         j7t4LVSoq62WmLyVDQiFcw4t4Cl0YSbwQopnBQ4f0WFe41aHswhlDQBh5goRQR91Rd
+         rlYvFzwXMr/AxCKV2fIgOAtWmIFeNMxsLjSXq2D1cBTjvfZ2mrD4MRvEESRk9mcVvR
+         uys9mkE0bMcMA==
+Date:   Tue, 25 Apr 2023 18:33:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/4] dt-bindings: sound: Add simple-iio-aux
+Message-ID: <7682a443-7ae2-4bc2-9581-304c7e72942d@sirena.org.uk>
+References: <20230421124122.324820-1-herve.codina@bootlin.com>
+ <20230421124122.324820-2-herve.codina@bootlin.com>
+ <20230425173029.GA1967523-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QVyLAfDfdBkSU7kb"
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230425173029.GA1967523-robh@kernel.org>
+X-Cookie: The meek don't want it.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-It seems GPIOs on OMAP1 boards are somewhat broken after:
+--QVyLAfDfdBkSU7kb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-commit 92bf78b33b0b463b00c6b0203b49aea845daecc8
-Author: Andreas Kemnade <andreas@kemnade.info>
-Date:   Fri Jan 13 21:59:22 2023 +0100
+On Tue, Apr 25, 2023 at 12:30:29PM -0500, Rob Herring wrote:
+> On Fri, Apr 21, 2023 at 02:41:19PM +0200, Herve Codina wrote:
 
-    gpio: omap: use dynamic allocation of base
+> > +    aux {
+> > +        compatible = "simple-iio-aux";
+> > +        io-channels = <&iio 0>, <&iio 1>, <&iio 2>, <&iio 3>;
+> > +        io-channel-names = "CH0", "CH1", "CH2", "CH3";
 
-E.g. on OSK1 the ethernet IRQ cannot (omap_gpio.0) no longer be requested:
+> Not really useful names. Do you have a real example?
 
-[    0.277252] Error requesting gpio 0 for smc91x irq
+I fear those might be real names for channels on an IIO device...
 
-Also the tps65010 (still using static allocation) will now conflict:
+--QVyLAfDfdBkSU7kb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[    0.400726] gpio gpiochip5: Static allocation of GPIO base is deprecated, use dynamic allocation.
-[    0.400848] gpio gpiochip5: (tps65010): GPIO integer space overlap, cannot add chip
-[    0.400970] gpiochip_add_data_with_key: GPIOs 208..214 (tps65010) failed to register, -16
-[    0.401092] tps65010 i2c-tps65010: can't add gpiochip, err -16
+-----BEGIN PGP SIGNATURE-----
 
-I think this change should be reverted until the board files and other
-gpiochips are fixed accordingly.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRIDs4ACgkQJNaLcl1U
+h9B3TAf/cTeNpl+HMeW2P0Vb5nstfBc6zxXBQOKy5lEeUHK8Gl78nKrJyAGI1j2A
+XfAyeEhz4pNgn/xIQ/8bV41cnTMawrGJeZiNiq/+3ns2u2V+2XkUPBv6R1B5i629
+xI2lyb4p5VlnX6sRCzcvnXFyl1aT71+Rw9xOAjuJB+l8Y6k86eHVlV9bDIM2w6/3
+TrJtACmWndoZhtS9PK86WA9WYrMnjBflNG6KmeeKxDHl0k/PsCvbpijSZBb6e3QO
+zg8BcfitzHMyCcmTt643bGufvXRarx+y2OdU2glNckGHXPSeCmXHCU/jUNgnLwqW
+d2OEVBQZOmA3Btwz9T+eAUuggPGb6A==
+=ax2u
+-----END PGP SIGNATURE-----
 
-A.
+--QVyLAfDfdBkSU7kb--
