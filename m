@@ -2,169 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22686EE14B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476476EE14E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjDYLt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S233800AbjDYLv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjDYLty (ORCPT
+        with ESMTP id S232240AbjDYLv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:49:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C94E67
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OenIbESUDMerzpX4WLGSnnomtRylcgFMwwHwo8/lU6I=; b=s62+IAJIig/3R3/hkphcr+OXhS
-        AG+Lbb4N/1fbdn/z4D3LY4zZd800N0vKKp3i+xy//+h2XbF3K26sMzVmPd2x/kIajdBHcLMR7VTdx
-        ZUeaP4PYzNwrlIBn0Op4E/6AnNy49wNq9v2Sw0mkr22FbvrmHKtWb4KFcEOje2MSyh7iUAr0N0D3F
-        wz+yUdzJLq7LOGSjh50PAxqLJ50qf5vEO6e6ifOetjPqeYjmxW+nF9ZybjQwR6bIQqZ5VLnqzaXMb
-        0GBQVkTgMDhalP4QnPv3FmWJ8tBc7gsgeBfTg5LZg76EU6EiumYUcyDt4lvdcb37Wlze98syrTu5p
-        YarPyz4g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1prHAy-001P35-4u; Tue, 25 Apr 2023 11:49:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0414D300380;
-        Tue, 25 Apr 2023 13:49:37 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D5A82241B9569; Tue, 25 Apr 2023 13:49:37 +0200 (CEST)
-Date:   Tue, 25 Apr 2023 13:49:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "bibo, mao" <maobibo@loongson.cn>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
-Message-ID: <20230425114937.GC1335080@hirez.programming.kicks-ass.net>
-References: <ZEKDZEQmKExv0O7Q@lothringen>
- <87leil2r7v.ffs@tglx>
- <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
- <ZEPteS82TbIhMQxe@lothringen>
- <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
- <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
+        Tue, 25 Apr 2023 07:51:27 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2063.outbound.protection.outlook.com [40.107.21.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C62E67;
+        Tue, 25 Apr 2023 04:51:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IsBsi1ACZb9hCJVKLt/jDMrXfSkYrEhUTiyPOjzKKUW68lkKa1dA/LWMwtt/pG/X0BlKtEvOmMHjD66NWYL2C6eVQShCC07aTzSbeQSdzW5DJeDhAiTy0DKmBiYkqZjb5CPiQu6q3b2J5DTgnJhuMz6q6PkFgDwE2757ZMpXsfSB4IYAJzSTh+cz7+pz+kZJhmLtczGvAqMhnD3dmR5YTaW34l4rWDdeTqfrraN1DSUBHeoQLpqOYOnFX8Kjw1xUcw3AUBUmY8+eZQX7vXMybZ3C67MhHYZh7nndWIBY/KnIKRRYLCsKSjb9WpKSiyiBVinnK8UVsL2s6eMw9vqnEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VPTyOIfb1O2zUDAwkV1u45duNt5qAJy7KGiSnpKrFM0=;
+ b=evIE1Ie+BEcYH56WgcQTkCgSFhELANYCPI4pfpqZoxyKV4xSnaQOCzhFpfe4/u7T1FJv821guDykT4KJuJBJz71XV+AJUOcP2wGnVo3REiL61IbgoeX4Gln4mKDMv4pgsoqU7EQYYrE/vQ+fCcjHkPAqHsA+YgZaNzQeY3QIgjkvta7FDGNTK70cktcJR1iL5RpfIGH0HRGkcw/xwKy2jT2tw1D2MYd0uMXTrF1ZFqzgB3KZbTPR0ipMQ+/FmwlEiZOZuD7ned9TJ0s+HePCyM6jNtwGOLe1b+eNglcoovnQOxYPUuU6gOj1DYPcHEwp1erMs3P8O0XwXP62U2BSmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VPTyOIfb1O2zUDAwkV1u45duNt5qAJy7KGiSnpKrFM0=;
+ b=DjfhgHnezzNPY8TuynqPgS4mB+Oy69Bqfer0m1SDw33rnOewDRnzjJZIz5p15muEuG2hCNexFDsZ38050qrBuwNShKdnUDDknLTmFDmQuliN37CUYOrrqbiuCI7yxJLDft9rbtVPumleRk2It1vymk5GymlgWqqV2rLMadywJ9w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by DU2PR08MB10203.eurprd08.prod.outlook.com (2603:10a6:10:491::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
+ 2023 11:51:22 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::6c5a:c28e:206:453]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::6c5a:c28e:206:453%6]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
+ 11:51:22 +0000
+From:   Javier Carrasco <javier.carrasco@wolfvision.net>
+To:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Javier Carrasco <javier.carrasco@wolfvision.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Uwe Kleine-g <u.kleine-koenig@pengutronix.de>,
+        Bastian Hecht <hechtb@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: [RFC v1 0/4] Input: support virtual objects on touchscreens
+Date:   Tue, 25 Apr 2023 13:50:45 +0200
+Message-Id: <20230425115049.870003-1-javier.carrasco@wolfvision.net>
+X-Mailer: git-send-email 2.37.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1P194CA0055.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:803:3c::44) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DU2PR08MB10203:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a38eb9a-cd53-4fcb-bbf7-08db458363bc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QxO3iKAWDLuQ2otuiBX7Fl12JRXwM5Vv9zlDo8Qt5AZcgxdUQ6S6MO7ntgpPFT7Zk69Amw1F0wVfKjMCASUl3Jhv2m2mv49QpW5VuvJR5lpPDUOpcibs2L5t7QDpciTvESC78YBf/2A0e5TaNy7WEaLlRmZo/lm9FHABxD0mTi/YgybuPpHjGIzUF9dF1T/pnO6nP25afAYt3NVNhfZi+7H6xo9aucvaUrF4FBSh8YArsT+W+uSZT71zfL5mw07mfqWuue5kSQQ1puSq6+WRugj9DOE8XKARnn/Ach5lF8FYkmbc/YiucqyNZ/1O158So+v6XlBmuNNZndg3FElBPRLiVkbr6sVvahZkXTkYpj9rfuVkUxFInxMeDJl0LZ3uIqg1UoCSDPKKbjw9lqBGpkQkeFconn7gmTyt6wB21P0Lrl1A9tBTMukjJhznKMsm7lkgpz2ri71jZ+NGWjaTGvqhaVWkenb2ciIFoKk9kdPPg9uqFw1S/af5xEl/WgmkruEVg1QhSoGH22TChiFL9zvurD4yjuyXixv+bpU8uh/xx9NrPLyuEU689dtmW34ca1WjMfgy57u/coqRA9ahFhE+MRO8BVXuS5JtiUeZpRScHtJypP4n7+gvATDGU6rY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39840400004)(366004)(346002)(396003)(136003)(451199021)(38350700002)(36756003)(8676002)(8936002)(54906003)(66899021)(478600001)(66476007)(66556008)(66946007)(4326008)(7416002)(44832011)(316002)(41300700001)(2906002)(38100700002)(5660300002)(2616005)(86362001)(186003)(26005)(6506007)(6512007)(1076003)(107886003)(52116002)(6486002)(6666004)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gfuOMJeRYo9mbltgHF9lOme7eEv1T01sOCeONzRH+UjRj+R405U14dPh13ih?=
+ =?us-ascii?Q?on0LoxcUGwSCwrbVobqjbbtch5L2RlBZlFBvx8kvoIE30kt7HhB5QDYa7PIX?=
+ =?us-ascii?Q?2igpAbfUgzHQYUW+gYauLQiwMtYmlVslDN+wYvuTjxF89fBlPJ9+THIdp9lf?=
+ =?us-ascii?Q?26u308oVsNrR130t9bMfVTaRqXFYmk1bR2mWiyHe336CeKwtYnPnTxoEzWld?=
+ =?us-ascii?Q?gmwvydZVDQMAsAQi6j2xB5MlWwh6NFNQkxlGJhl/jnUM/9sr6LuD4eAeRdHV?=
+ =?us-ascii?Q?GW0WNf/ex35RG9hEG+0VkgKWqCCh8wdsfAQrOemFfsJ5DMqeDdTtOilEE0fv?=
+ =?us-ascii?Q?6mkvLv8bxda3QSbI1lNckcsCcb3u2oHlqH3bB3+2Dwq9v8E4DdrKs3r23jqM?=
+ =?us-ascii?Q?JAeZWTM4mvjPCailWk/3DA436y3r3rf5YEdRe3Mh/JdDFmbGQoBPFSSHVlSM?=
+ =?us-ascii?Q?szBSbx/nrBSYMiPdoyIukpvIUyDAPi3FcZi4BrdXYrIu26aEmC7WBR4ygZWF?=
+ =?us-ascii?Q?KHuevhvhdWe70jcOa1PmXloZmXVkRbERiI4Gqm8q6Yf+OtTaicntN+Rf0vI7?=
+ =?us-ascii?Q?Z9gLNrDseBZz67yO+UR8/0vDBaG7lnJWlR3rSw4fx8u+RYLqfFPmLykitC0j?=
+ =?us-ascii?Q?kklu+GDsFuHt2Upx2M3pTvwQ7j0lePXGALqi0p11sYFaSu8/F4LBlPwCtn8t?=
+ =?us-ascii?Q?2fYiISUEzzgeGswagKNmRguJVfc3fbnh2FZKBUx1wzeLC9AuBE4lofPFnZed?=
+ =?us-ascii?Q?eSr95DBSrGrc8bicu5LgzvI/XvXl0lP68e4hhQByYArGcT+3PFw1V7tShEA6?=
+ =?us-ascii?Q?+Vopzkg2dWoj6iP/d8i+e5z54erV/RsFASis4XJ5AbCnGolY+Z31ndxQJwFy?=
+ =?us-ascii?Q?smRCFY/gD3/bZRHDs+IP9zXtysf5lcpQd/+DugRbYhJ5Zb7qurGqFHPDFAwE?=
+ =?us-ascii?Q?+Dj1r4sPPWswao3DaT8JYSS+HZ9IHGkPoa3o1DCk7e7Zd2A1AhqEfhcoQqg2?=
+ =?us-ascii?Q?EzwOkzC2+CyeSg8WCZxby4kCEfm150FVHBpOsPL+wVeeiQ1BCuVWPvwMDvXa?=
+ =?us-ascii?Q?GI4FXp3doOYBCFwOlh6UuCY9WXUA9oDkQ9AihFrCnoc5exVnVaqVVTIDzDI1?=
+ =?us-ascii?Q?f4druATeDJ4wERArp1ALK39cukn3cF9ND/slwB3i9Y5gsnkiiMnwkLhLVVbR?=
+ =?us-ascii?Q?cQO22RgQqrefpnqJD+4bgcQa72sCLAvEW2qeZOEsBEwxCzOwf712Jc1pe/0T?=
+ =?us-ascii?Q?WUnghRzZySNaW8Xmj4SJWA+mpdPOxJvC4imn02QSrAkrxMEfltYPYRxTdYQT?=
+ =?us-ascii?Q?japqm/pOMmDQFv0AF2Mltxp4fCq4h4yR1kZ4VfAzz7vod0TTVJH/7UhDFyhY?=
+ =?us-ascii?Q?v1686ETTMdwXXqVeKhyD7RGFnkd5FsCdORru2JkZ1/2Pxq8BEtEfkOjrQxTB?=
+ =?us-ascii?Q?5xWwCZaTxdloSgdzW8SzWZdZw28yhe9bLsMT5Cb2LA8nE4FW+mbnsM7boh3Q?=
+ =?us-ascii?Q?4pI8Fg2PeU1+MebOIH9DvdxOjDAx6UL/7ospTQt4TmWdZKEorPy4agPwUhIA?=
+ =?us-ascii?Q?N21/VuFnhEp1LZwcJ6i5mKNgFfzjG2i8nAYwNRIgxoKgbLOJcm3u7dZNTxPh?=
+ =?us-ascii?Q?mA=3D=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a38eb9a-cd53-4fcb-bbf7-08db458363bc
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 11:51:22.1227
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l6wSsk58pRWk7GljHOL6oHqqa6e7yT45zXnpv757UAL+bv0umri2KVmHKEqypG/On4zbu351iECZCdLHCVvjkYLKYQdJXY+NdQoTne0hu1I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10203
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 09:52:49PM +0800, bibo, mao wrote:
+Some touchscreens are shipped with a physical layer on top of them where
+a number of buttons and a resized touchscreen surface might be available.
 
-> > @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
-> >   	ori	t0, t0, 0x1f
-> >   	xori	t0, t0, 0x1f
-> >   	bne	t0, t1, 1f
-> > +	addi.d	t0, t0, 0x20
-> It is more reasonable with this patch, this will jump out of idle function
-> directly after interrupt returns. If so, can we remove checking
-> _TIF_NEED_RESCHED in idle ASM function?
-> 
-> > +	move	t0, CSR_CRMD_IE
-> > +	csrxchg	t0, t0, LOONGARCH_CSR_CRMD
-> -   	LONG_L	t0, tp, TI_FLAGS
-> +	nop
-> >   	nop
-> -	andi	t0, t0, _TIF_NEED_RESCHED
-> -	bnez	t0, 1f
-> +	nop
-> +	nop
-> >   	nop
-> > -	nop
-> > -	nop
-> >   	idle	0
+In order to generate proper key events by overlay buttons and adjust the
+touch events to a clipped surface, these patches offer a documented,
+device-tree-based solution by means of helper functions.
+An implementation for a specific touchscreen driver is also included.
 
-Would not something like the below be a more compact form?
-That is; afaict there is no reason to keep it 32 bytes, we can easily go
-16 and drop 4 nops.
+The functions in ts-virtobj provide a simple workflow to acquire
+physical objects from the device tree, map them into the device driver
+structures as virtual objects and generate events according to
+the object descriptions.
 
-Additionally, instead of truncating to the start, increase to the end by
-doing:
+This solution has been tested with a JT240MHQS-E3 display, which uses
+the st1624 as a touchscreen and provides two overly buttons and a frame
+that clips its effective surface.
 
-	ip |= 0xf;
-	ip++;
+Javier Carrasco (4):
+  Input: ts-virtobj - Add touchsreen virtual object handling to the core
+  dt-bindings: touchscreen: add virtual-touchscreen and virtual-buttons
+    properties
+  Input: st1232 - add virtual touchscreen and buttons handling
+  dt-bindings: input: touchscreen: st1232: add virtual objects to the
+    example
 
-Also; I added a wee comment.
+ .../input/touchscreen/sitronix,st1232.yaml    |  28 ++
+ .../input/touchscreen/touchscreen.yaml        |  54 ++++
+ drivers/input/Makefile                        |   1 +
+ drivers/input/touchscreen/st1232.c            |  41 ++-
+ drivers/input/ts-virtobj.c                    | 305 ++++++++++++++++++
+ include/linux/input/ts-virtobj.h              |  59 ++++
+ 6 files changed, 478 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/input/ts-virtobj.c
+ create mode 100644 include/linux/input/ts-virtobj.h
 
+-- 
+2.37.2
 
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 44ff1ff64260..3c8a6bab98fe 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -18,27 +18,31 @@
- 
- 	.align	5
- SYM_FUNC_START(__arch_cpu_idle)
--	/* start of rollback region */
--	LONG_L	t0, tp, TI_FLAGS
--	nop
--	andi	t0, t0, _TIF_NEED_RESCHED
--	bnez	t0, 1f
--	nop
--	nop
--	nop
-+	/* start of idle interrupt region */
-+	move	t0, CSR_CRMD_IE
-+	csrxchg	t0, t0, LOONGARCH_CSR_CRMD
-+	/*
-+	 * If an interrupt lands here; between enabling interrupts above and
-+	 * going idle on the next instruction, we must *NOT* go idle since the
-+	 * interrupt could have set TIF_NEED_RESCHED or caused an timer to need
-+	 * reprogramming. Fall through -- see handle_vint() below -- and have
-+	 * the idle loop take care of things.
-+	 */
- 	idle	0
--	/* end of rollback region */
--1:	jr	ra
-+	nop
-+	/* end of idle interrupt region */
-+SYM_INNER_LBEL(__arch_cpu_idle_exit, SYM_L_LOCAL)
-+	jr	ra
- SYM_FUNC_END(__arch_cpu_idle)
- 
- SYM_FUNC_START(handle_vint)
- 	BACKUP_T0T1
- 	SAVE_ALL
--	la_abs	t1, __arch_cpu_idle
-+	la_abs	t1, __arch_cpu_idle_exit
- 	LONG_L	t0, sp, PT_ERA
--	/* 32 byte rollback region */
--	ori	t0, t0, 0x1f
--	xori	t0, t0, 0x1f
-+	/* 16 byte idle interrupt region */
-+	ori	t0, t0, 0x0f
-+	addi.d	t0, t0, 1
- 	bne	t0, t1, 1f
- 	LONG_S	t0, sp, PT_ERA
- 1:	move	a0, sp
-diff --git a/arch/loongarch/kernel/idle.c b/arch/loongarch/kernel/idle.c
-index 0b5dd2faeb90..5ba72d229920 100644
---- a/arch/loongarch/kernel/idle.c
-+++ b/arch/loongarch/kernel/idle.c
-@@ -11,7 +11,6 @@
- 
- void __cpuidle arch_cpu_idle(void)
- {
--	raw_local_irq_enable();
- 	__arch_cpu_idle(); /* idle instruction needs irq enabled */
- 	raw_local_irq_disable();
- }
