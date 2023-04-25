@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC7F6EE3D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41A86EE3D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbjDYOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S234401AbjDYOXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbjDYOWv (ORCPT
+        with ESMTP id S233952AbjDYOXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:22:51 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A2014443;
-        Tue, 25 Apr 2023 07:22:48 -0700 (PDT)
+        Tue, 25 Apr 2023 10:23:03 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBACC14F45;
+        Tue, 25 Apr 2023 07:22:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OaF497Q7CmvbwEUDGQtoI/VxZADO2xtLf4JIvzSz3Im3VNT+TMYidxAZ/TRkANbk7lJGdnxgdNVACM6YirLo3xHIG3EsQMYtHFpbrdt+zghQrFqOSiNhSbfFsPupr3qxGD5LEeQ102aCP4xMFNo8YfuOAALFclA4PlitPY/LmR6tMCbbrquoMb1O89kxa2cIScYqnX1n5id4qSC8ze6GlxNoTYgx3THksufgljb9pVL3Uj9yOq2A4C+jEGPW8Cte2e2CGkDvSzjfsDs8gjnk8++NAWUQiF2M20H5eFvYWYO2QhzlOGi+cPB21Wv2u0Rq6MiYJmYL/eFKIfSngXxvDg==
+ b=EncdYgsis/VNTIAlVG53laiQqidGodQJPdoveFUPkAkiFNYUFZiIkMO7GfWUc+1uuA5ZNc3aexGrVdll5csTNzkgmnaL+CWXU0HPCPUxowrDxalrcql1i6uKqg9y309lSxpveIreL/NQNHfSke68vO4nNOMV6aQuhWKxmJfWYOztxZ5az1TqI1t/MvsWshjOur64QYKGZ8lc6jFFLGnNREPLG3BuC1sncrMeLMZ1JN1O/bAptBTIMiHmi/ARbAJLNiUTDQiS53NzXNyjYTOHHNqx4l5HZ2YrabB/Bc6/ZaleClV2TyIKvWrtDQWORGBIRVaFHmTWAojXUvCP60cEqw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VAGlnOKzdndxDoa1ycxmryr0iolteczMs/OOMC+s/6g=;
- b=cpZhE6IzmL8YT/v/BhQwc5W0fdCgjEJAQmnCnnNzR01kJeZy+wOBDPzRxdch1JFtTl2VzFsNf/IeQjaL4PSmhY+a/YhiFY1DkqD+ViCtuaV5DsPtA3pDduRJOlkmbcdvE6dPg1+/HzfFJVBoWKM7trAfg64xfeUr9CFNJtJdN4m36woltQSoARFVKOCWySjf65YBlobyG7e8cTlvy6KuHCRS8PvlnE2HFA+x/PCQrZr45p0i7Obo9hp5YDcnFdCoJmzZ/UZtFC1FXh82vdox0AAfwdWGMQEUfyN4aSPniR9mefte2Vv6+WaCwxquZ4EWgPl2LOD4PMiOxT7fpeuo7g==
+ bh=ENUa4WVdsSyDxj2PLQUxM1UrTaIEriqaav56h+/4/1s=;
+ b=nQ+0K4mKrNNjbeROb8nTrZ1R+kgWa9C/qzxYZKYX4AJYeHq+183FFpzznieha23KxnvjrKvTWltStDjYuojFWrSbyEujrXG4Z40gEjGrXv4nG8pNcX0v12Wu3ugcLYDItjQ68u316ETvHHRb0GCFX7uhub0PN3cFcM+WmSbGeW1f68+ZptAS4n5zsb3dEoDM8mhx7SV7QcIpMyYJHQoDGPqA38LB7yy4hPMVNWS0x9iEyKBA/TFhayRn+ulHDdaG4wHmO7jhgK2egNvhUKptwSJGpExyadT6Dg32QrDV/lWlAiKWO/kaBOfesNdtDCd0l/Aluqtq3vk9cXYDRmHb2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VAGlnOKzdndxDoa1ycxmryr0iolteczMs/OOMC+s/6g=;
- b=3+CHztaQwD1JwIN14F89uHKjtcp/MfytpsgOXBHw9US43xSRA0V65xjyLQAMn0Eyf0fXTgEzSHdFE5/eJ7B7WTOPxpNdHrTYcBrILwE8l935Y39p+pBIbdBQME/s+yOtXBBLWrcHTaDlRJgw2N5Woef1ydPYaMj3nVKkeZOIEQ8=
-Received: from BN8PR03CA0035.namprd03.prod.outlook.com (2603:10b6:408:94::48)
- by CH3PR12MB7761.namprd12.prod.outlook.com (2603:10b6:610:14e::17) with
+ bh=ENUa4WVdsSyDxj2PLQUxM1UrTaIEriqaav56h+/4/1s=;
+ b=lUsBYImuH7EAGJqttqVn6BSYSXK8g77Bf2+QwfUACz22P67P5VrJa81Mv85XKjPWuJ8/CicIzBkK2Imur4mp3oBILu7ZYPxVQh9tMuz7AJVKSy3iYE+eaeIk7ZHXLldhvTff3W5Zy8x5iLkOngTPy9ZYDF989z66Nzw79cqZwJ0=
+Received: from BN9PR03CA0944.namprd03.prod.outlook.com (2603:10b6:408:108::19)
+ by MN6PR12MB8590.namprd12.prod.outlook.com (2603:10b6:208:47c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34; Tue, 25 Apr
- 2023 14:22:46 +0000
-Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::4f) by BN8PR03CA0035.outlook.office365.com
- (2603:10b6:408:94::48) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
+ 2023 14:22:53 +0000
+Received: from BN8NAM11FT071.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::2b) by BN9PR03CA0944.outlook.office365.com
+ (2603:10b6:408:108::19) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34 via Frontend
- Transport; Tue, 25 Apr 2023 14:22:46 +0000
+ Transport; Tue, 25 Apr 2023 14:22:53 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ BN8NAM11FT071.mail.protection.outlook.com (10.13.177.92) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6340.20 via Frontend Transport; Tue, 25 Apr 2023 14:22:45 +0000
+ 15.20.6340.21 via Frontend Transport; Tue, 25 Apr 2023 14:22:53 +0000
 Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 25 Apr
- 2023 09:22:38 -0500
+ 2023 09:22:46 -0500
 From:   Ravi Bangoria <ravi.bangoria@amd.com>
 To:     <peterz@infradead.org>
 CC:     <ravi.bangoria@amd.com>, <namhyung@kernel.org>,
@@ -64,9 +64,9 @@ CC:     <ravi.bangoria@amd.com>, <namhyung@kernel.org>,
         <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
         <santosh.shukla@amd.com>
-Subject: [PATCH v3 1/3] perf/core: Rework forwarding of {task|cpu}-clock events
-Date:   Tue, 25 Apr 2023 19:52:03 +0530
-Message-ID: <20230425142205.762-2-ravi.bangoria@amd.com>
+Subject: [PATCH v3 2/3] perf/ibs: Fix interface via core pmu events
+Date:   Tue, 25 Apr 2023 19:52:04 +0530
+Message-ID: <20230425142205.762-3-ravi.bangoria@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230425142205.762-1-ravi.bangoria@amd.com>
 References: <20230425142205.762-1-ravi.bangoria@amd.com>
@@ -78,23 +78,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT059:EE_|CH3PR12MB7761:EE_
-X-MS-Office365-Filtering-Correlation-Id: e528259f-295b-4792-846e-08db45988a39
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT071:EE_|MN6PR12MB8590:EE_
+X-MS-Office365-Filtering-Correlation-Id: 152c692a-8fc3-4809-4c95-08db45988eb3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kGRdMChUpnRUV4xzu64iwl8Jy1T3rwnJ8Q2SJWsx5XM1eWDKTtGmzotU2/ftOHYk8NTZRo+qgs5Ku6ymwM6WwP7UlXd+6VXHdbST3hbBBHukBfoI+lY1kmzrm125JHJ4iYdfB3D6JwSYge07N/EQyQeNIzvAVPbI8v8aFFwp2dUDx1ZjPF4Vc8XwgWJQ6p6CPMtG1rLg6Ht5utO6T52VEDpUax/sKHeQEo5KVXflWzCAx6wQKlnmpn0ZuJmMJDlzI7z86qlAGHNX7DKAhrpCv8+hGGzHnCWAZ4nULLMoCh6IcmQCCA0j2gJLCuLYr3mkaH1ScGXWMAylT56KSPa5QWKkwLfazTGwVVzk4pz5fJa8Em2zNapgRteOLzRQsep/kWFR7D/cYYxNwxrXpqyssY7FJCLd6idrHZxcXT1X4bp3BSWWaZyvF7ySU/Y40vCOwO68vSrbbRT53xN6S+9iAIQ9Rn97aRGXGSP83wvwaWM9anMDOT7TiJwaS443Hnwsx5JOb+FD1yhVbuD3NOEhTBAyRdY9qcMkKDv+muaGwt+833VtSeuP13ExsxtURovnASEWz/f8AqTKxZsooGvAFWh/NzJcOdhXc0j73RUYsjnPfODSs1oykjjBrocx+KeIyPSLKAV17y5zHXybNHFW49T7yKWA2zwILA5z4Cr/ldL2I3wC+OMI6ChqYVuN9DEEVyfrNWH1G0YO6Cf61v+vr2eXnluxIE/T2CrhZRCkZuk=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199021)(46966006)(40470700004)(36840700001)(16526019)(186003)(40480700001)(40460700003)(54906003)(478600001)(86362001)(36756003)(7696005)(6666004)(82310400005)(2906002)(7416002)(5660300002)(44832011)(8676002)(8936002)(70586007)(70206006)(4326008)(6916009)(81166007)(82740400003)(41300700001)(356005)(316002)(26005)(1076003)(336012)(426003)(2616005)(36860700001)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: xqciOYbLkdzBYA87jVec1sUwclYdMu0JKNZWNYyGzPJoWD8C/PPWSlEnVZFQlCEZR9qA+QvuWnHKisyL9oTxoTG7rnmUxtOny0MmeghFpBb5W6/T5KIsXbGk9OQ+8TLJymNra4TkYkFSQ8eUPL4VsWW91Euon1t1PWGpBe61/ZAzuMPi+RrLqICXjRpHKTl5QLUpwsP3sCtKZeP4bVQIoHK9TsnK4JsTnIWR03aUBhTaIjCnIrY3C7juOJU+yzp0Cf2+ASL5VJzlGhGzN5BDqlK277VyK5R8/s0DOJyP+qctMVBJ9bE2e4ZBmqbMlO2bQQEy+Dm+BHj8djvGozDFME0V45DKbODSuO5vQ2tS+A6AY+WKLkL9pwWi16FXPd3zn7S9Y5tLdZ015/0BUZkRPDoBnhknBj0stLzHH1l+DIZTRXe9g/BjHkb/s/4omE/WHEvCm1DXsvm1zn45qwbP6I1N+ro212fBVCZCQpjwGc1zTX22Ke9MAOX8DdZggHwoWjAPUmMboQMhxSME1a5kSF+1SU1V5wSHCehXjUjNKF/1TS77Xn9arQm5wfupSIXADktQSDA1mRBwM0xt0ka7kzQWRCOhYGYmTPfam9VzZBriPjdiYyXI7199Q/MoOnTqN34x2I5xX46cGrDsHApXlXyrdVLANlXlnv95NOkohQYPdvyt1x1/pZZYR/1RPzkfLJ2tai0FfqK/w7e9+UrlxNdmpZWn7cbBq6LoTgLXE2Q=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199021)(46966006)(40470700004)(36840700001)(6666004)(54906003)(478600001)(83380400001)(2616005)(426003)(336012)(36860700001)(36756003)(40480700001)(26005)(1076003)(47076005)(186003)(16526019)(82740400003)(356005)(81166007)(82310400005)(40460700003)(7696005)(41300700001)(316002)(70206006)(70586007)(6916009)(4326008)(7416002)(2906002)(44832011)(8676002)(8936002)(5660300002)(86362001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 14:22:45.9115
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 14:22:53.4049
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e528259f-295b-4792-846e-08db45988a39
+X-MS-Exchange-CrossTenant-Network-Message-Id: 152c692a-8fc3-4809-4c95-08db45988eb3
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT071.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7761
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8590
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -106,236 +106,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, PERF_TYPE_SOFTWARE is treated specially since task-clock and
-cpu-clock events are interfaced through it but internally gets forwarded
-to their own pmus.
+Although, IBS pmus can be invoked via their own interface, indirect
+IBS invocation via core pmu events is also supported with fixed set
+of events: cpu-cycles:p, r076:p (same as cpu-cycles:p) and r0C1:p
+(micro-ops) for user convenience.
 
-Rework this by overwriting event->attr.type in perf_swevent_init() which
-will cause perf_init_event() to retry with updated type and event will
-automatically get forwarded to right pmu. With the change, SW pmu no
-longer needs to be treated specially and can be included in 'pmu_idr'
-list.
+This indirect IBS invocation is broken since commit 66d258c5b048
+("perf/core: Optimize perf_init_event()"), which added RAW pmu under
+'pmu_idr' list and thus if event_init() fails with RAW pmu, it started
+returning error instead of trying other pmus.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Forward precise events from core pmu to IBS by overwriting 'type' and
+'config' in the kernel copy of perf_event_attr. Overwriting will cause
+perf_init_event() to retry with updated 'type' and 'config', which will
+automatically forward event to IBS pmu.
+
+Without patch:
+  $ sudo ./perf record -C 0 -e r076:p -- sleep 1
+  Error:
+  The r076:p event is not supported.
+
+With patch:
+  $ sudo ./perf record -C 0 -e r076:p -- sleep 1
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.341 MB perf.data (37 samples) ]
+
+Searching for the right pmu by iterating over all pmus is no longer
+required since all pmus now *must* be present in the 'pmu_idr' list.
+So, remove linear searching code.
+
+Fixes: 66d258c5b048 ("perf/core: Optimize perf_init_event()")
+Reported-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 ---
- include/linux/perf_event.h | 11 ++++++
- kernel/events/core.c       | 69 ++++++++++++++++++++------------------
- 2 files changed, 47 insertions(+), 33 deletions(-)
+ arch/x86/events/amd/core.c        |  2 +-
+ arch/x86/events/amd/ibs.c         | 53 +++++++++++++++----------------
+ arch/x86/include/asm/perf_event.h |  2 ++
+ kernel/events/core.c              | 10 ------
+ 4 files changed, 29 insertions(+), 38 deletions(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d5628a7b5eaa..40647d707fb3 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -322,6 +322,9 @@ struct pmu {
- 	/* number of address filters this PMU can do */
- 	unsigned int			nr_addr_filters;
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index bccea57dee81..abadd5f23425 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -374,7 +374,7 @@ static int amd_pmu_hw_config(struct perf_event *event)
  
-+	/* Skip creating pmu device and sysfs interface. */
-+	bool				skip_sysfs_dev;
-+
- 	/*
- 	 * Fully disable/enable this PMU, can be used to protect from the PMI
- 	 * as well as for lazy/batch writing of the MSRs.
-@@ -827,6 +830,14 @@ struct perf_event {
- 	void *security;
- #endif
- 	struct list_head		sb_list;
-+
-+	/*
-+	 * Certain events gets forwarded to another pmu internally by over-
-+	 * writing kernel copy of event->attr.type without user being aware
-+	 * of it. event->orig_type contains original 'type' requested by
-+	 * user.
-+	 */
-+	__u32				orig_type;
- #endif /* CONFIG_PERF_EVENTS */
- };
+ 	/* pass precise event sampling to ibs: */
+ 	if (event->attr.precise_ip && get_ibs_caps())
+-		return -ENOENT;
++		return forward_event_to_ibs(event);
  
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 435815d3be3f..151299940d9a 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6647,7 +6647,7 @@ static void perf_sigtrap(struct perf_event *event)
- 		return;
- 
- 	send_sig_perf((void __user *)event->pending_addr,
--		      event->attr.type, event->attr.sig_data);
-+		      event->orig_type, event->attr.sig_data);
+ 	if (has_branch_stack(event) && !x86_pmu.lbr_nr)
+ 		return -EOPNOTSUPP;
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 64582954b5f6..371014802191 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -190,7 +190,7 @@ static struct perf_ibs *get_ibs_pmu(int type)
  }
  
  /*
-@@ -9951,6 +9951,9 @@ static void sw_perf_event_destroy(struct perf_event *event)
- 	swevent_hlist_put();
+- * Use IBS for precise event sampling:
++ * core pmu config -> IBS config
+  *
+  *  perf record -a -e cpu-cycles:p ...    # use ibs op counting cycle count
+  *  perf record -a -e r076:p ...          # same as -e cpu-cycles:p
+@@ -199,25 +199,9 @@ static struct perf_ibs *get_ibs_pmu(int type)
+  * IbsOpCntCtl (bit 19) of IBS Execution Control Register (IbsOpCtl,
+  * MSRC001_1033) is used to select either cycle or micro-ops counting
+  * mode.
+- *
+- * The rip of IBS samples has skid 0. Thus, IBS supports precise
+- * levels 1 and 2 and the PERF_EFLAGS_EXACT is set. In rare cases the
+- * rip is invalid when IBS was not able to record the rip correctly.
+- * We clear PERF_EFLAGS_EXACT and take the rip from pt_regs then.
+- *
+  */
+-static int perf_ibs_precise_event(struct perf_event *event, u64 *config)
++static int core_pmu_ibs_config(struct perf_event *event, u64 *config)
+ {
+-	switch (event->attr.precise_ip) {
+-	case 0:
+-		return -ENOENT;
+-	case 1:
+-	case 2:
+-		break;
+-	default:
+-		return -EOPNOTSUPP;
+-	}
+-
+ 	switch (event->attr.type) {
+ 	case PERF_TYPE_HARDWARE:
+ 		switch (event->attr.config) {
+@@ -243,22 +227,37 @@ static int perf_ibs_precise_event(struct perf_event *event, u64 *config)
+ 	return -EOPNOTSUPP;
  }
  
-+static struct pmu perf_cpu_clock; /* fwd declaration */
-+static struct pmu perf_task_clock;
++/*
++ * The rip of IBS samples has skid 0. Thus, IBS supports precise
++ * levels 1 and 2 and the PERF_EFLAGS_EXACT is set. In rare cases the
++ * rip is invalid when IBS was not able to record the rip correctly.
++ * We clear PERF_EFLAGS_EXACT and take the rip from pt_regs then.
++ */
++int forward_event_to_ibs(struct perf_event *event)
++{
++	u64 config = 0;
 +
- static int perf_swevent_init(struct perf_event *event)
- {
- 	u64 event_id = event->attr.config;
-@@ -9966,7 +9969,10 @@ static int perf_swevent_init(struct perf_event *event)
- 
- 	switch (event_id) {
- 	case PERF_COUNT_SW_CPU_CLOCK:
-+		event->attr.type = perf_cpu_clock.type;
-+		return -ENOENT;
- 	case PERF_COUNT_SW_TASK_CLOCK:
-+		event->attr.type = perf_task_clock.type;
- 		return -ENOENT;
- 
- 	default:
-@@ -11086,7 +11092,7 @@ static void cpu_clock_event_read(struct perf_event *event)
- 
- static int cpu_clock_event_init(struct perf_event *event)
- {
--	if (event->attr.type != PERF_TYPE_SOFTWARE)
-+	if (event->attr.type != perf_cpu_clock.type)
- 		return -ENOENT;
- 
- 	if (event->attr.config != PERF_COUNT_SW_CPU_CLOCK)
-@@ -11107,6 +11113,7 @@ static struct pmu perf_cpu_clock = {
- 	.task_ctx_nr	= perf_sw_context,
- 
- 	.capabilities	= PERF_PMU_CAP_NO_NMI,
-+	.skip_sysfs_dev	= true,
- 
- 	.event_init	= cpu_clock_event_init,
- 	.add		= cpu_clock_event_add,
-@@ -11167,7 +11174,7 @@ static void task_clock_event_read(struct perf_event *event)
- 
- static int task_clock_event_init(struct perf_event *event)
- {
--	if (event->attr.type != PERF_TYPE_SOFTWARE)
-+	if (event->attr.type != perf_task_clock.type)
- 		return -ENOENT;
- 
- 	if (event->attr.config != PERF_COUNT_SW_TASK_CLOCK)
-@@ -11188,6 +11195,7 @@ static struct pmu perf_task_clock = {
- 	.task_ctx_nr	= perf_sw_context,
- 
- 	.capabilities	= PERF_PMU_CAP_NO_NMI,
-+	.skip_sysfs_dev	= true,
- 
- 	.event_init	= task_clock_event_init,
- 	.add		= task_clock_event_add,
-@@ -11415,31 +11423,31 @@ int perf_pmu_register(struct pmu *pmu, const char *name, int type)
- 		goto unlock;
- 
- 	pmu->type = -1;
--	if (!name)
--		goto skip_type;
-+	if (WARN_ONCE(!name, "Can not register anonymous pmu.\n")) {
-+		ret = -EINVAL;
-+		goto free_pdc;
++	if (!event->attr.precise_ip || event->attr.precise_ip > 2)
++		return -EOPNOTSUPP;
++
++	if (!core_pmu_ibs_config(event, &config)) {
++		event->attr.type = perf_ibs_op.pmu.type;
++		event->attr.config = config;
 +	}
++	return -ENOENT;
++}
 +
- 	pmu->name = name;
+ static int perf_ibs_init(struct perf_event *event)
+ {
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	struct perf_ibs *perf_ibs;
+ 	u64 max_cnt, config;
+-	int ret;
  
--	if (type != PERF_TYPE_SOFTWARE) {
--		if (type >= 0)
--			max = type;
-+	if (type >= 0)
-+		max = type;
- 
--		ret = idr_alloc(&pmu_idr, pmu, max, 0, GFP_KERNEL);
--		if (ret < 0)
--			goto free_pdc;
-+	ret = idr_alloc(&pmu_idr, pmu, max, 0, GFP_KERNEL);
-+	if (ret < 0)
-+		goto free_pdc;
- 
--		WARN_ON(type >= 0 && ret != type);
-+	WARN_ON(type >= 0 && ret != type);
- 
--		type = ret;
+ 	perf_ibs = get_ibs_pmu(event->attr.type);
+-	if (perf_ibs) {
+-		config = event->attr.config;
+-	} else {
+-		perf_ibs = &perf_ibs_op;
+-		ret = perf_ibs_precise_event(event, &config);
+-		if (ret)
+-			return ret;
 -	}
-+	type = ret;
- 	pmu->type = type;
++	if (!perf_ibs)
++		return -ENOENT;
++
++	config = event->attr.config;
  
--	if (pmu_bus_running) {
-+	if (pmu_bus_running && !pmu->skip_sysfs_dev) {
- 		ret = pmu_dev_alloc(pmu);
- 		if (ret)
- 			goto free_idr;
+ 	if (event->pmu != &perf_ibs->pmu)
+ 		return -ENOENT;
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 8fc15ed5e60b..fc86248215e2 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -475,8 +475,10 @@ struct pebs_xmm {
+ 
+ #ifdef CONFIG_X86_LOCAL_APIC
+ extern u32 get_ibs_caps(void);
++extern int forward_event_to_ibs(struct perf_event *event);
+ #else
+ static inline u32 get_ibs_caps(void) { return 0; }
++static inline int forward_event_to_ibs(struct perf_event *event) { return -ENOENT; }
+ #endif
+ 
+ #ifdef CONFIG_PERF_EVENTS
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 151299940d9a..232121a6d1e2 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11648,16 +11648,6 @@ static struct pmu *perf_init_event(struct perf_event *event)
+ 		goto unlock;
  	}
  
--skip_type:
- 	ret = -ENOMEM;
- 	pmu->cpu_pmu_context = alloc_percpu(struct perf_cpu_pmu_context);
- 	if (!pmu->cpu_pmu_context)
-@@ -11481,16 +11489,7 @@ int perf_pmu_register(struct pmu *pmu, const char *name, int type)
- 	if (!pmu->event_idx)
- 		pmu->event_idx = perf_event_idx_default;
- 
--	/*
--	 * Ensure the TYPE_SOFTWARE PMUs are at the head of the list,
--	 * since these cannot be in the IDR. This way the linear search
--	 * is fast, provided a valid software event is provided.
--	 */
--	if (type == PERF_TYPE_SOFTWARE || !name)
--		list_add_rcu(&pmu->entry, &pmus);
--	else
--		list_add_tail_rcu(&pmu->entry, &pmus);
+-	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
+-		ret = perf_try_init_event(pmu, event);
+-		if (!ret)
+-			goto unlock;
 -
-+	list_add_rcu(&pmu->entry, &pmus);
- 	atomic_set(&pmu->exclusive_cnt, 0);
- 	ret = 0;
+-		if (ret != -ENOENT) {
+-			pmu = ERR_PTR(ret);
+-			goto unlock;
+-		}
+-	}
+ fail:
+ 	pmu = ERR_PTR(-ENOENT);
  unlock:
-@@ -11503,8 +11502,7 @@ int perf_pmu_register(struct pmu *pmu, const char *name, int type)
- 	put_device(pmu->dev);
- 
- free_idr:
--	if (pmu->type != PERF_TYPE_SOFTWARE)
--		idr_remove(&pmu_idr, pmu->type);
-+	idr_remove(&pmu_idr, pmu->type);
- 
- free_pdc:
- 	free_percpu(pmu->pmu_disable_count);
-@@ -11525,8 +11523,7 @@ void perf_pmu_unregister(struct pmu *pmu)
- 	synchronize_rcu();
- 
- 	free_percpu(pmu->pmu_disable_count);
--	if (pmu->type != PERF_TYPE_SOFTWARE)
--		idr_remove(&pmu_idr, pmu->type);
-+	idr_remove(&pmu_idr, pmu->type);
- 	if (pmu_bus_running) {
- 		if (pmu->nr_addr_filters)
- 			device_remove_file(pmu->dev, &dev_attr_nr_addr_filters);
-@@ -11601,6 +11598,12 @@ static struct pmu *perf_init_event(struct perf_event *event)
- 
- 	idx = srcu_read_lock(&pmus_srcu);
- 
-+	/*
-+	 * Save original type before calling pmu->event_init() since certain
-+	 * pmus overwrites event->attr.type to forward event to another pmu.
-+	 */
-+	event->orig_type = event->attr.type;
-+
- 	/* Try parent's PMU first: */
- 	if (event->parent && event->parent->pmu) {
- 		pmu = event->parent->pmu;
-@@ -13640,8 +13643,8 @@ void __init perf_event_init(void)
- 	perf_event_init_all_cpus();
- 	init_srcu_struct(&pmus_srcu);
- 	perf_pmu_register(&perf_swevent, "software", PERF_TYPE_SOFTWARE);
--	perf_pmu_register(&perf_cpu_clock, NULL, -1);
--	perf_pmu_register(&perf_task_clock, NULL, -1);
-+	perf_pmu_register(&perf_cpu_clock, "cpu_clock", -1);
-+	perf_pmu_register(&perf_task_clock, "task_clock", -1);
- 	perf_tp_register();
- 	perf_event_init_cpu(smp_processor_id());
- 	register_reboot_notifier(&perf_reboot_notifier);
-@@ -13684,7 +13687,7 @@ static int __init perf_event_sysfs_init(void)
- 		goto unlock;
- 
- 	list_for_each_entry(pmu, &pmus, entry) {
--		if (!pmu->name || pmu->type < 0)
-+		if (pmu->skip_sysfs_dev)
- 			continue;
- 
- 		ret = pmu_dev_alloc(pmu);
 -- 
 2.40.0
 
