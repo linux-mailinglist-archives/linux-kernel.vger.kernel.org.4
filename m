@@ -2,211 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079866EEA7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 01:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C986EEA90
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 01:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236325AbjDYXBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 19:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S236325AbjDYXGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 19:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbjDYXBK (ORCPT
+        with ESMTP id S234826AbjDYXGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 19:01:10 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BA3B215
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 16:01:06 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b99f3aee8e0so7457472276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 16:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682463666; x=1685055666;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCfgX459C+HvVh2FD7e7JZg40F1mOAMJVuhQWLHla/0=;
-        b=C4AljZcb5zSEki65YN1EEhXpKoY2+BQjkZw0lA37fbXw5J94rINcczlcHQKioosXoz
-         QYJO7B3PQHsCBBmLZHmB2bdJerRvszbD8Z0QkB4l66SvwAArYTtc7JH15w/nYT/SE5u5
-         vwm/eMEJk1TY+eEPX82hBLbrKJ9kTJikXcAr57e2kixe1dolatDoyNrc44iwLTBRVolO
-         bfADSu5kj9Pbljxty8CvVBHkrXGW31eBuRDxicojfWBD4NefEdirxSFfQsz+fSqmBEth
-         Qzgwwtz8KWzAJnphFlQcihCJZ0/hpd4K50BVsMO7BpnBpVR4VQKe84Z8OdOHhFvQF7fh
-         tpww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682463666; x=1685055666;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCfgX459C+HvVh2FD7e7JZg40F1mOAMJVuhQWLHla/0=;
-        b=Tu0YOm69ieumwF2x6m3fgm5hYF0FxgB0bs+AT9HjoWaxTzUxxfsRvOkdpPK7olYt9N
-         j9IRpcJFavhrQUURg+B0kfioCwO91eCsG2P4A0eXrs4SLAeWx4X+vybZWL2IGKYJchL5
-         8qthmTlMwyz+BtScaat7KNaf8Tqv9L5FgdVrBTXpocLl0Yb5uNsN48bs1DFdJLSEBEQ0
-         PLk2qOXfIZaKlxty5RY1vJzk9dkXc+7lE5KXqljBqufAS7Cm2rSNColeHw0Qtrwh5Xo8
-         RnO5IZKVfvuTnER4F9J869MkoE215kpQhFNejKrHmOlpaACr4VpQLkk7snDcg3xqy5kW
-         f9Ww==
-X-Gm-Message-State: AC+VfDwU4/E1Yb9Rj/w0+KEv1zCPGzkgMwhgK0v7cRten4KQZhvM6EDS
-        f1plttp1r+DTX89Y+12xL/uKWaimASk=
-X-Google-Smtp-Source: ACHHUZ7zn8PbJQ/UuE69mi5lwaIaGdUdtx9hP2cvpdZFHM9mCc7INsMunl92AGHkpHAOjQl1AWoM2QO/O/0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:986:b0:54c:15ad:11e4 with SMTP id
- ce6-20020a05690c098600b0054c15ad11e4mr342131ywb.0.1682463665939; Tue, 25 Apr
- 2023 16:01:05 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 16:01:04 -0700
-In-Reply-To: <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
-Mime-Version: 1.0
-References: <ZDnAuGKrCO2wgjlG@google.com> <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
-Message-ID: <ZEhbsHqBapHtdrg7@google.com>
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     chao.p.peng@linux.intel.com, xiaoyao.li@intel.com,
-        isaku.yamahata@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
-        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        kirill.shutemov@linux.intel.com, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 25 Apr 2023 19:06:07 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD09B21E;
+        Tue, 25 Apr 2023 16:06:05 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 733321F9B4;
+        Wed, 26 Apr 2023 01:06:01 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH v3 00/21] drm/msm/dpu: Implement tearcheck support on INTF
+ block
+Date:   Wed, 26 Apr 2023 01:05:51 +0200
+Message-Id: <20230411-dpu-intf-te-v3-0-693b17fe6500@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANBcSGQC/2XOQQ6CMBCF4auYrh3SabGgK+9hXCAMMERa0kKjI
+ dxdIHHF8n/JfJlZBPJMQdxOs/AUObCza+jzSZRtYRsCrtYWSiotU0SohgnYjjWMBFSYPK1Rk8y
+ 1WC8GTzV/du3xXLvlMDr/3fGI27o5CpVGhRcpTaIQcyMBoS88dzYJE3cj2XtwfcH2zZYS5xuxY
+ VH9geMjUYEEqjNT5llGr2t2AJZl+QGdXnRT7AAAAA==
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > I agree, a pure alignment check is too restrictive, and not really what I
-> > intended despite past me literally saying that's what I wanted :-)  I think
-> > I may have also inverted the "less alignment" statement, but luckily I
-> > believe that ends up being a moot point.
-> 
-> > The goal is to avoid having to juggle scenarios where KVM wants to create a
-> > hugepage, but restrictedmem can't provide one because of a misaligned file
-> > offset.  I think the rule we want is that the offset must be aligned to the
-> > largest page size allowed by the memslot _size_.  E.g. on x86, if the
-> > memslot size is >=1GiB then the offset must be 1GiB or beter, ditto for
-> > >=2MiB and >=4KiB (ignoring that 4KiB is already a requirement).
-> 
-> > We could loosen that to say the largest size allowed by the memslot, but I
-> > don't think that's worth the effort unless it's trivially easy to implement
-> > in code, e.g. KVM could technically allow a 4KiB aligned offset if the
-> > memslot is 2MiB sized but only 4KiB aligned on the GPA.  I doubt there's a
-> > real use case for such a memslot, so I want to disallow that unless it's
-> > super easy to implement.
-> 
-> Checking my understanding here about why we need this alignment check:
-> 
-> When KVM requests a page from restrictedmem, KVM will provide an offset
-> into the file in terms of 4K pages.
-> 
-> When shmem is configured to use hugepages, shmem_get_folio() will round
-> the requested offset down to the nearest hugepage-aligned boundary in
-> shmem_alloc_hugefolio().
-> 
-> Example of problematic configuration provided to
-> KVM_SET_USER_MEMORY_REGION2:
-> 
-> + shmem configured to use 1GB pages
-> + restrictedmem_offset provided to KVM_SET_USER_MEMORY_REGION2: 0x4000
-> + memory_size provided in KVM_SET_USER_MEMORY_REGION2: 1GB
-> + KVM requests offset (pgoff_t) 0x8, which translates to offset 0x8000
-> 
-> restrictedmem_get_page() and shmem_get_folio() returns the page for
-> offset 0x0 in the file, since rounding down 0x8000 to the nearest 1GB is
-> 0x0. This is allocating outside the range that KVM is supposed to use,
-> since the parameters provided in KVM_SET_USER_MEMORY_REGION2 is only
-> supposed to be offset 0x4000 to (0x4000 + 1GB = 0x40004000) in the file.
-> 
-> IIUC shmem will actually just round down (0x4000 rounded down to nearest
-> 1GB will be 0x0) and allocate without checking bounds, so if offset 0x0
-> to 0x4000 in the file were supposed to be used by something else, there
-> might be issues.
-> 
-> Hence, this alignment check ensures that rounding down of any offsets
-> provided by KVM (based on page size configured in the backing file
-> provided) to restrictedmem_get_page() must not go below the offset
-> provided to KVM_SET_USER_MEMORY_REGION2.
-> 
-> Enforcing alignment of restrictedmem_offset based on the currently-set
-> page size in the backing file (i.e. shmem) may not be effective, since
-> the size of the pages in the backing file can be adjusted to a larger
-> size after KVM_SET_USER_MEMORY_REGION2 succeeds. With that, we may still
-> end up allocating outside the range that KVM was provided with.
-> 
-> Hence, to be safe, we should check alignment to the max page size across
-> all backing filesystems, so the constraint is
-> 
->     rounding down restrictedmem_offset to
->     min(max page size across all backing filesystems,
->         max page size that fits in memory_size) == restrictedmem_offset
-> 
-> which is the same check as
-> 
->     restrictedmem_offset must be aligned to min(max page size across all
->     backing filesystems, max page size that fits in memory_size)
-> 
-> which can safely reduce to
-> 
->     restrictedmem_offset must be aligned to max page size that fits in
->     memory_size
-> 
-> since "max page size that fits in memory_size" is probably <= to "max
-> page size across all backing filesystems", and if it's larger, it'll
-> just be a tighter constraint.
+Since DPU 5.0.0 the TEARCHECK registers and interrupts moved out of the
+PINGPONG block and into the INTF.  Implement the necessary callbacks in
+the INTF block, and use these callbacks together with the INTF_TEAR
+interrupts.  Additionally, disable previous register writes and remove
+unused interrupts in the PINGPONG and MDP_TOP blocks for these newer
+platforms.
 
-Yes?  The alignment check isn't strictly required, KVM _could_ deal with the above
-scenario, it's just a lot simpler and safer for KVM if the file offset needs to
-be sanely aligned.
+With these patches the devices on DPU >= 5.0.0 listed below now update
+their panels at 60fps without tearing (nor sluggishness), and without
+repeated timeouts in dmesg.
 
-> If the above understanding is correct:
-> 
-> + We must enforce this in the KVM_SET_USER_MEMORY_REGION2 handler, since
->   IIUC shmem will just round down and allocate without checking bounds.
-> 
->     + I think this is okay because holes in the restrictedmem file (in
->       terms of offset) made to accommodate this constraint don't cost us
->       anything anyway(?) Are they just arbitrary offsets in a file? In
->       our case, this file is usually a new and empty file.
-> 
->     + In the case of migration of a restrictedmem file between two KVM
->       VMs, this constraint would cause a problem is if the largest
->       possible page size on the destination machine is larger than that
->       of the source machine. In that case, we might have to move the
->       data in the file to a different offset (a separate problem).
+Tested on the following devices with command-mode panels and TE pins:
 
-Hmm, I was thinking this would be a non-issue because the check would be tied to
-the max page _possible_ page size irrespective of hardware support, but that would
-be problematic if KVM ever supports 512GiB pages.  I'm not sure that speculatively
-requiring super huge memslots to be 512GiB aligned is sensible.
+- Sony Xperia XZ3 (sdm845, DPU 4.0.0, cmdmode panel): no regressions on
+  PINGPONG TE;
+- Sony Xperia 5 (sm8150, DPU 5.0.0);
+- Sony Xperia 10 II (sm6125, DPU 5.0.4).
 
-Aha!  If we go with a KVM ioctl(), a clean way around this is tie the alignment
-requirement to the memfd flags, e.g. if userspace requests the memfd to be backed
-by PMD hugepages, then the memslot offset needs to be 2MiB aligned on x86.  That
-will continue to work if (big if) KVM supports 512GiB pages because the "legacy"
-memfd would still be capped at 2MiB pages.
+---
+Changes in v3:
+- Use new commit hashes in Fixes: tags after drm-msm's msm-next was
+  force-pushed;
+- Rename dpu_hw_setup_vsync_source to
+  dpu_hw_setup_vsync_source_and_vsync_sel and drop _v1 suffix from
+  dpu_hw_setup_vsync_source_v1;
+- Refactor dpu_hw_interrupts register offsets to take the block offset
+  as argument and compute the actual register with a base offset and
+  stride, rather than hardcoding the many per-INTF and per-AD4 register
+  offsets with fixed stride manually;
+- Split INTF_TEAR interrupt additions into a core (dpu_hw_interrupts.c)
+  and catalog patch;
+- Add new patch to make DITHER sub-block of SM8[34]50 and SC8280XP V2
+  instead of V1.
 
-Architectures that support variable hugepage sizes might need to do something
-else, but I don't think that possibility affects what x86 can/can't do.
+v2: https://lore.kernel.org/r/20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org
 
-> + On this note, it seems like there is no check for when the range is
->   smaller than the allocated page? Like if the range provided is 4KB in
->   size, but shmem is then configured to use a 1GB page, will we end up
->   allocating past the end of the range?
+Changes in v2:
+- Rebase on -next with all the new SC8280XP and SM8[345]50 support;
+  - Remove duplicate PP_BLK_TE macro now that .features is an argument;
+  - Fix PP_BLK_DIPHER -> DITHER typo that was added recently;
+  - Add INTF_TEAR interrupt blocks for DPU 7.0.0 (moved to different
+    register range);
+  - Describe INTF_TEAR support for the newly added SM8350, SM8450,
+    SM8550 and SC8280XP SoCs;
+  - Remove TE2 subblocks from 8[34]50 and sc8280xp (new patch);
+- Rebase on -next with DPU catalog rework;
+  - Remove dpu_hw_intf_v1_get_status which was inlined in the original
+    dpu_hw_intf_get_status function in e3969eadc8ee ("drm/msm/disp/dpu:
+    get timing engine status from intf status register");
+  - Many changes to move all catalog edits to separate files;
+- Add documentation for DPU_MDP_VSYNC_SEL;
+- Fix sdm8150_mdp typo, should be sm8150_mdp;
+- Move unrelated INTF_INTR offsets out of hwio header (new patch);
+- Remove _reg argument from INTF_BLK, since we now have a third
+  interrupt with a different base register.  To prevent confusion all
+  three interrupts should provide the final value from DPU_IRQ_IDX
+  directly.
+- Only request the new tear_rd_ptr in a new INTF_BLK_DSI_TE macro;
+- Drop stray INTF_MISR_SIGNATURE register definition;
+- Clean up registers in dpu_hw_intf.c (many new patches);
+- merged setup_tearcheck() and enable_tearcheck() callbacks;
+- replaced enable_tearcheck(false) with new disable_tearcheck()
+  callback;
+- Moved dpu_encoder_phys_cmd_enable_te intestines (just autorefresh
+  disablement) to INTF and PP block, replacing 3 callbacks in both
+  blocks with just a single disable_autorefresh() callback.
 
-No, KVM already gracefully handles situations like this.  Well, x86 does, I assume
-other architectures do too :-)
+v1: https://lore.kernel.org/r/20221231215006.211860-1-marijn.suijten@somainline.org
 
-As above, the intent of the extra restriction is so that KVM doen't need even more
-weird code (read: math) to gracefully handle the new edge cases that would come with
-fd-only memslots.
+---
+Konrad Dybcio (1):
+      drm/msm/dpu: Move dpu_hw_{tear_check,pp_vsync_info} to dpu_hw_mdss.h
+
+Marijn Suijten (20):
+      drm/msm/dpu: Remove unused INTF0 interrupt mask from SM6115/QCM2290
+      drm/msm/dpu: Remove TE2 block and feature from DPU >= 7.0.0 hardware
+      drm/msm/dpu: Move non-MDP_TOP INTF_INTR offsets out of hwio header
+      drm/msm/dpu: Reindent REV_7xxx interrupt masks with tabs
+      drm/msm/dpu: Fix PP_BLK_DIPHER -> DITHER typo
+      drm/msm/dpu: Use V2 DITHER PINGPONG sub-block in SM8[34]50/SC8280XP
+      drm/msm/dpu: Remove duplicate register defines from INTF
+      drm/msm/dpu: Remove extraneous register define indentation
+      drm/msm/dpu: Sort INTF registers numerically
+      drm/msm/dpu: Take INTF index as parameter in interrupt register defines
+      drm/msm/dpu: Drop unused poll_timeout_wr_ptr PINGPONG callback
+      drm/msm/dpu: Move autorefresh disable from CMD encoder to pingpong
+      drm/msm/dpu: Disable pingpong TE on DPU 5.0.0 and above
+      drm/msm/dpu: Disable MDP vsync source selection on DPU 5.0.0 and above
+      drm/msm/dpu: Factor out shared interrupt register in INTF_BLK macro
+      drm/msm/dpu: Describe TEAR interrupt registers for DSI interfaces
+      drm/msm/dpu: Add TEAR-READ-pointer interrupt to INTF block
+      drm/msm/dpu: Merge setup_- and enable_tearcheck pingpong callbacks
+      drm/msm/dpu: Implement tearcheck support on INTF block
+      drm/msm/dpu: Remove intr_rdptr from DPU >= 5.0.0 pingpong config
+
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  26 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  26 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h |  40 +--
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  48 ++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h |  40 +--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  16 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  15 +-
+ .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  15 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  40 +--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  22 +-
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  64 +++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  46 ++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  36 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  11 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h   |  10 +-
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   | 210 ++++++++--------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  48 ++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   9 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c  | 183 +++++++-------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h  |   4 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 268 ++++++++++++++++++---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  25 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |  48 ++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |  83 ++++---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    |  64 +----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c         |  50 ++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h           |   3 -
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |   4 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_trace.h          |  14 ++
+ 29 files changed, 978 insertions(+), 490 deletions(-)
+---
+base-commit: f600e0bbde8562a06bee31b3eb1b69d49acac4c5
+change-id: 20230411-dpu-intf-te-ea684f13e083
+
+Best regards,
+-- 
+Marijn Suijten <marijn.suijten@somainline.org>
+
