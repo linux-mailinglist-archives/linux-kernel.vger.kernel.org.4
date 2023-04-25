@@ -2,108 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6146EDCB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF3C6EDCB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbjDYHfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 03:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S233637AbjDYHgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 03:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbjDYHex (ORCPT
+        with ESMTP id S233567AbjDYHfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 03:34:53 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B4EC17A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:34:48 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7F1EC5C00D0;
-        Tue, 25 Apr 2023 03:34:45 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 25 Apr 2023 03:34:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1682408085; x=1682494485; bh=EoZK+Nj8Veym+ct5siLk5lUK0IAvRR+5xh6
-        EbdHJolk=; b=K9C1XHcMxOnp//g0K7gd+W1oBMo99B7Gi8Ejyt2d+1nw3GEOAbq
-        syeADFPw5Ga0+dRl8UnYKXSuiA5+ri7Vj2yE/AfaaaQMpWAubBCYfTb2KZUo66yu
-        Do0Iz8tJV8odk2pFWfWAYTZu3L1+VyLuGQgXr2DUvxkK45DW3L/7qg4TmqeWtMLM
-        xmreLKOnbIK8sJovsqDqpw01fDuHYy7vzTrLwpkl5AzWB1wJw5f1ZdhQUu57bu7I
-        o1AIbFTwvuHYxHNaL20YSGXvU6xePU4l7NTGZzbqbqdI0LSqaIZv5uq4UydUMV71
-        HaAquG/rkPNXYH7CKsQZQq6p5oaL5txunFw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682408085; x=1682494485; bh=EoZK+Nj8Veym+ct5siLk5lUK0IAvRR+5xh6
-        EbdHJolk=; b=Kh2zOHUKmvXrKqa5f+RHrammUAdvKkCUwoCHfh0PxzSN8CCIGn3
-        zXVGjLOJFrJGI8lws3waVjhwzynFdkLS18xBsEamZY+81OUkkdUKe1IE+mpsaqop
-        he/3WYfKpXzmXUvutOj+8srlwoCUqCpV5337LOcJ+Dkxnv/iAq/kvfOq0JYsxbNW
-        JGBxMxSU1pqswhbedbp48R7TzM53lz9Qxp3c682KQ9Z1pmecDeCKu/EFKS240oIe
-        GFgELnYnpBEPDwGx8pT69/u0iThJsnfvlLKfRBx+qK4OtP5GR+ZVFgXYwIqu79Kd
-        FbA9lZfpVFmuvl+cDncT46NdaBhVxaJYPmQ==
-X-ME-Sender: <xms:lIJHZLkJYB--EvnEcEv4ngWxUuaBxtdeQZEJzCKzjfHN9Te7y3UB1w>
-    <xme:lIJHZO11IlH7-rpuSDHITQZn52xqTeqM3W7W9-nHbGrpK-h7Cep2UEdjZZMbKUh8u
-    rI_17v53g1jysNvG9g>
-X-ME-Received: <xmr:lIJHZBp8e7VrfYmfXfVuNzUWisaTIQ6p1qUluu9kgeL80ptIjWrOKgVfXuMCwRJN5R1za5h-ihEE_QEUEhSyN76f9sI3oxM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduuddguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomhepofgr
-    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
-    frrghtthgvrhhnpeelieffgfdvteejjeeujeeiheeuvdetieegheethffhieefgeelkedu
-    keetgeeuffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:lIJHZDmf7m9cVzSL_F-pmKF074qZNQfhiYoSo1LJKs-qRf-dLvQCow>
-    <xmx:lIJHZJ3Fdn65CUfyDWZSnv45ZAY1FN3cjy7omjZ-9Intr-QZ9atD9g>
-    <xmx:lIJHZCvOv2FgRzr7SWTsuADCTJnj5ddsWXXHkpUa-gLf5xPBBL0vFg>
-    <xmx:lYJHZCKfyT5nltzfEWbmmni9HUzyhI9iHXuVZXUE4LmAfSHVvawhqw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 25 Apr 2023 03:34:44 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v3-0-bdd54f66884e@cerno.tech>
-References: <20221207-rpi-hdmi-improvements-v3-0-bdd54f66884e@cerno.tech>
-Subject: Re: [PATCH v3 0/9] drm/vc4: hdmi: Broadcast RGB, BT601, BT2020
-Message-Id: <168240808168.134250.8409328987520507623.b4-ty@cerno.tech>
-Date:   Tue, 25 Apr 2023 09:34:41 +0200
+        Tue, 25 Apr 2023 03:35:24 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78367D30E;
+        Tue, 25 Apr 2023 00:35:19 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 58CFBAB;
+        Tue, 25 Apr 2023 09:35:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1682408107;
+        bh=ipYHM2TMHh8mOltD733No+AnX1CuUoxSHuYan1Ob8hc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HlterMRhxAKE1xBSZDjuQxrK7DSLCnNNXBRpLad3hWl+xQybQFVoh5GXGUOGJvzTg
+         wChVkaQc7H1Dpzw2q9w3B4WOLcTwhBlbQo9KMoOa4rLT5wKm2FwCLE0gOiO+7WkE8B
+         f6t6DYD6QkkYZ6OgamaiSHQVC1ySqI+nuyE/1TsU=
+Message-ID: <1478ab6c-5a2b-6177-d909-925f63383c41@ideasonboard.com>
+Date:   Tue, 25 Apr 2023 10:35:13 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] arm64: dts: ti: Add overlay for OLDI-LCD1EVM Display
+ and touch screen
+To:     Aradhya Bhatia <a-bhatia1@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230425051235.15533-1-a-bhatia1@ti.com>
+ <20230425051235.15533-2-a-bhatia1@ti.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230425051235.15533-2-a-bhatia1@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 11:46:41 +0100, Maxime Ripard wrote:
-> Here's a collection of patches that have been in the downstream tree for a
-> while to add a bunch of new features to the HDMI controller.
+On 25/04/2023 08:12, Aradhya Bhatia wrote:
+> From: Jyri Sarha <jsarha@ti.com>
 > 
-> Let me know what you think,
-> Maxime
+> The OLDI-LCD1EVM add on board has Rocktech RK101II01D-CT panel with
+> integrated touch screen. The integrated touch screen is Goodix GT928.
+> Add DT nodes for these and connect the endpoint nodes with DSS.
 > 
+> This patch was picked from TI's public tree based on 5.10 LTS kernel.
 > 
-> [...]
+> Signed-off-by: Jyri Sarha <jsarha@ti.com>
+> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+> [abhatia1@ti.com: Make syntax changes to support 6.1 DTSO format]
+> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/Makefile               |  2 +
+>   .../dts/ti/k3-am654-evm-oldi-lcd1evm.dtso     | 70 +++++++++++++++++++
+>   2 files changed, 72 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-am654-evm-oldi-lcd1evm.dtso
+> 
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index 6acd12409d59..8956b19e587a 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -26,6 +26,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced.dtb
+>   dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-m2.dtb
+>   dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-pg2.dtb
+>   dtb-$(CONFIG_ARCH_K3) += k3-am654-base-board.dtb
+> +dtb-$(CONFIG_ARCH_K3) += k3-am654-evm-oldi-lcd1evm.dtbo
+>   
+>   # Boards with J7200 SoC
+>   dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+> @@ -45,3 +46,4 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
+>   
+>   # Enable support for device-tree overlays
+>   DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
+> +DTC_FLAGS_k3-am654-base-board += -@
+> diff --git a/arch/arm64/boot/dts/ti/k3-am654-evm-oldi-lcd1evm.dtso b/arch/arm64/boot/dts/ti/k3-am654-evm-oldi-lcd1evm.dtso
+> new file mode 100644
+> index 000000000000..b2c790b314cf
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-am654-evm-oldi-lcd1evm.dtso
+> @@ -0,0 +1,70 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/**
+> + * OLDI-LCD1EVM Rocktech integrated panel and touch DT overlay for AM654-EVM.
+> + *
+> + * Copyright (C) 2023 Texas Instruments Incorporated - http://www.ti.com/
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +#include <dt-bindings/pwm/pwm.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +&{/} {
+> +	display0 {
+> +		compatible = "rocktech,rk101ii01d-ct";
+> +		backlight = <&lcd_bl>;
+> +		enable-gpios = <&pca9555 8 GPIO_ACTIVE_HIGH>;
+> +		port {
+> +			lcd_in0: endpoint {
+> +				remote-endpoint = <&oldi_out0>;
+> +			};
+> +		};
+> +	};
+> +
+> +	lcd_bl: backlight {
+> +		compatible = "pwm-backlight";
+> +		pwms = <&ecap0 0 50000 PWM_POLARITY_INVERTED>;
+> +		brightness-levels =
+> +			<0 32 64 96 128 160 192 224 255>;
+> +		default-brightness-level = <8>;
+> +	};
+> +};
+> +
+> +&dss {
+> +	status = "okay";
+> +};
+> +
+> +&dss_ports {
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	port@0 {
+> +		reg = <0>;
+> +
+> +		oldi_out0: endpoint {
+> +			remote-endpoint = <&lcd_in0>;
+> +		};
+> +	};
+> +};
+> +
+> +&main_i2c1 {
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	gt928: touchscreen@14 {
 
-Applied to drm/drm-misc (drm-misc-next).
+I don't see the 'gt928' label used for anything.
 
-Thanks!
-Maxime
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+
+  Tomi
+
+> +		status = "okay";
+> +		compatible = "goodix,gt928";
+> +		reg = <0x14>;
+> +
+> +		interrupt-parent = <&pca9554>;
+> +		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
+> +		touchscreen-size-x = <1280>;
+> +		touchscreen-size-y = <800>;
+> +
+> +		reset-gpios = <&pca9555 9 GPIO_ACTIVE_HIGH>;
+> +		irq-gpios = <&pca9554 3 GPIO_ACTIVE_HIGH>;
+> +	};
+> +};
 
