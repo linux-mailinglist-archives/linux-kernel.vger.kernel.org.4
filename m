@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198496EDDDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFCF6EDDDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbjDYIWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S233536AbjDYIWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbjDYIW2 (ORCPT
+        with ESMTP id S233407AbjDYIWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:22:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C6D40DF
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682410903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zIIauKKDlxGiywiZSy6POl99LscbO+Z+FWK2Qk7igxw=;
-        b=A4tLUScYrsogBHZPOqtupTVTsBuhNwbvGJ7p04G7sOewzfq6CA2FALbxa/7pmNq4FXRfvh
-        6+eHz67aWMZTnS7PVFs/+FiajfQlBnElTEjmi2caK2KFvKjMhcMSDClafvVZBrdEHlzySz
-        P2J693Yqi6RojqJn5G8IRUFVWqsKimk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-561-Hirq0dIvOrKiu8Ew7yKJew-1; Tue, 25 Apr 2023 04:21:41 -0400
-X-MC-Unique: Hirq0dIvOrKiu8Ew7yKJew-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f1757ebb1eso18857635e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:21:41 -0700 (PDT)
+        Tue, 25 Apr 2023 04:22:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE8D4C13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:22:09 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94f6c285d92so1015036866b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682410928; x=1685002928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a5M63yXC89QfRSmv3dCKp93F3Y3Fbl8p/U1KJ7S4Fng=;
+        b=dlPrks6xdXwghpZwvziO2uRXW4X5ATOV8+w81+Lb/aaWdOw7EJb46Wqm/eiTeLtjcD
+         IUEYf3jqI/y6pMTBQ00ANWUSWyCe68RaRQQqd6t9IenFIRcbidjGTUWutpWJwqgrZAGW
+         CClGulPCJPTG4jdFv3h+S0B1SE/SbdTaA7hx7IzqHM9gtmmYAD6RehXVGRorqcEGRy3Z
+         n4arEpAHAI3IHNRzbQLbADcUGuLK9DfOGE7F+OnlO3pqBIpKExindkfWbW7VEhVISTMZ
+         s/s8oK4C9nHmnTUfv7YsQtHX+x7ojzN+1AnBTHHPhdR/W5AEyPPNGhwa4Ezqs1gu5EAW
+         bxeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682410900; x=1685002900;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zIIauKKDlxGiywiZSy6POl99LscbO+Z+FWK2Qk7igxw=;
-        b=e2ubWgiQRZ9E8fU27s0W8HMmRVo+MbUMN1YfBgV+2sT1RtQqIRjz5lMAEdHC5RVYBC
-         mGY6kuHhRmMoqRvAWiC3FxKeGZH7bV40tEYZGUuTFrEza06AZzNWdUAgDlaNnOhBTVaE
-         mhpOHmTuyj8col7h76L2ryB23wmZZllvQWHtKdp8vjnYJE8EVZwgJ7rOEOhM/DBvd1dZ
-         U43BSljg8w4AWixr145YIxRb3XXxD/c0cwUJAwfaBwF3MJNzp4HIat2jQasNDMyCr7Vf
-         OCoEnm9Dyx+V7aHSvj+QiYzWVOJUdm6FvvIGzo/NA+8jpaOBq/3Dr2yNdmhKFZYuoKN6
-         deuw==
-X-Gm-Message-State: AAQBX9enuqTAbpf1O+8iWM29E90TxlpQ7PMSplNyZiyVeE4Mu5IuHIFq
-        QaM6f/mTh2ShklFA4eeYqV9HXAzc7qeP1Ikx/eZ03PylExTQj1pSbFYaLmtfch0QoOsS9/Vrcou
-        5gWhj6/6j0FyCq1R0KUMa5FxPmql1JGNd
-X-Received: by 2002:a5d:464f:0:b0:2ce:d84d:388f with SMTP id j15-20020a5d464f000000b002ced84d388fmr12417118wrs.40.1682410900610;
-        Tue, 25 Apr 2023 01:21:40 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YQpEqfNv2QOHfCXZ6AcQ5KinFlo+949TgOWtyI/79R2NhWA5GoU5enU8y4wOcGrnVBDnMa9Q==
-X-Received: by 2002:a5d:464f:0:b0:2ce:d84d:388f with SMTP id j15-20020a5d464f000000b002ced84d388fmr12417098wrs.40.1682410900322;
-        Tue, 25 Apr 2023 01:21:40 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e16-20020a5d5950000000b0030490c8ccafsm556130wri.52.2023.04.25.01.21.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 01:21:39 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH v3 1/9] drm/vc4: Switch to container_of_const
-In-Reply-To: <6ckl6zmizxsm52imeau55bicb4hmd3p46btsqih64qaoeptvww@bktsqhuq4lek>
-References: <20221207-rpi-hdmi-improvements-v3-0-bdd54f66884e@cerno.tech>
- <20221207-rpi-hdmi-improvements-v3-1-bdd54f66884e@cerno.tech>
- <87354sij2i.fsf@minerva.mail-host-address-is-not-set>
- <6ckl6zmizxsm52imeau55bicb4hmd3p46btsqih64qaoeptvww@bktsqhuq4lek>
-Date:   Tue, 25 Apr 2023 10:21:38 +0200
-Message-ID: <87pm7sgynh.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1682410928; x=1685002928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5M63yXC89QfRSmv3dCKp93F3Y3Fbl8p/U1KJ7S4Fng=;
+        b=k3iihOr/4VddG8TWkmmgc16OqRo0N2eUlsAM5KYvIHrygncoQZS3jPpjTDiKBxtCcG
+         NmvHsMuA9C0q7CMEpxLnLtZgZmhrtFHrWbAFzr3AKD0Si2+/JwfONhB7s+dbOm1kurwj
+         MWijx9nRezi4stmzoS1al35moaenuq5RX9WfrjOJyp9vgkp/FcCGACt6odDFMdf28Gd+
+         HUbWag//mCeLxr5y+bWkjPQ6OHQjqDWByO1iPWhHwA58FiZHXLZjNwREU1nG3O0k6SCX
+         l9yZxx7h/BGoQ7zF0b2D5XDS/63qVcEHCQYVjlw+zZa4cuO2ruwYQUsLyHU4P61B0OPW
+         YJvw==
+X-Gm-Message-State: AAQBX9cghAlqlmo6AvnmNGtuf1ytz4KGzx4yodEYrZ4Uwf0jr5SIkJXB
+        wcdrdP/BNC2OBmnwIPHrlmTxOg==
+X-Google-Smtp-Source: AKy350YLaW2i01uHETH49mSc7VM59UHdglmwNh5PVhWvo5DVwnmN26hC+CweeGHmTknkrmPXpglo7A==
+X-Received: by 2002:a17:907:168d:b0:92b:f118:ef32 with SMTP id hc13-20020a170907168d00b0092bf118ef32mr13623125ejc.48.1682410928292;
+        Tue, 25 Apr 2023 01:22:08 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa7d394000000b00504803f4071sm5409238edq.44.2023.04.25.01.22.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 01:22:07 -0700 (PDT)
+Message-ID: <fa548aa4-6d17-0981-227a-bed6aedcb34f@linaro.org>
+Date:   Tue, 25 Apr 2023 10:22:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 2/4] arm64: dts: qcom: sa8155p-adp: Make -cells decimal
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230421205512.339850-1-ahalaney@redhat.com>
+ <20230421205512.339850-2-ahalaney@redhat.com>
+ <abd106b1-6650-6a7c-1c8b-3609e47b0161@linaro.org>
+ <20230424143857.373kjvi42c7acsbp@halaney-x13s>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424143857.373kjvi42c7acsbp@halaney-x13s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime Ripard <maxime@cerno.tech> writes:
+On 24/04/2023 16:38, Andrew Halaney wrote:
+> On Mon, Apr 24, 2023 at 09:21:45AM +0200, Krzysztof Kozlowski wrote:
+>> On 21/04/2023 22:55, Andrew Halaney wrote:
+>>> The property logically makes sense in decimal, and is the standard used
+>>> elsewhere.
+>>>
+>>> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+>>> ---
+>>>
+>>> Changes since v2:
+>>>     * Collect tags
+>>> Changes since v1:
+>>>     * New patch (Konrad)
+>>
+>> Doing such changes per one board will be a lot of churn...
+>>
+> 
+> Agreed, are you suggesting I drop this patch (and if we do this sort of
+> cleanup to do it in bulk)? Sorry, not entirely sure I am picking up what
+> that comment is implying.
 
-> Hi Javier,
->
-> On Sat, Apr 22, 2023 at 07:26:13AM +0200, Javier Martinez Canillas wrote:
->> Maxime Ripard <maxime@cerno.tech> writes:
->> > container_of_const() allows to preserve the pointer constness and is
->> > thus more flexible than inline functions.
->> >
->> > Let's switch all our instances of container_of() to
->> > container_of_const().
->> >
->> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->> > ---
->> 
->> [...]
->> 
->> > -static inline struct vc4_dpi *
->> > -to_vc4_dpi(struct drm_encoder *encoder)
->> > -{
->> > -	return container_of(encoder, struct vc4_dpi, encoder.base);
->> > -}
->> > +#define to_vc4_dpi(_encoder)						\
->> > +	container_of_const(_encoder, struct vc4_dpi, encoder.base)
->> >
->> 
->> A disadvantage of this approach though is that the type checking is lost.
->
-> Not entirely, the argument is still type-checked, but yeah, it's true
-> for the returned value.
->
->> Since you already had these, I would probably had changed them to return
->> a const pointer and just replace container_of() for container_of_const().
->> 
->> But I see that there are a lot of patches from Greg all over the kernel
->> that do exactly this, dropping static inline functions in favor of using
->> container_of_const() directly. So it seems the convention is what you do.
->
-> More importantly, container_of_const() isn't always returning a const
-> pointer or always taking a const argument, it's returning the pointer
-> with the same const-ness than the argument.
->
-> This is why it makes sense to remove the inline function entirely,
-> because it removes the main benefit it brings.
->
+Yes, I suggest to fix all Qualcomm arm64 boards with one patch. There
+are just few more occurrences of this. It's also pure cleanup, no
+functional change.
 
-Got it. Thanks for the explanations.
+> 
+> Personally, I'd prefer to keeping that patch as this series is trying to
+> clean up the particular ethernet node.. but if the purpose of the series
+> was just to clean -cells up then I'd go with the bulk approach.
+> 
+> So as is, I'm going to leave it like so unless you have specific advice
+> against doing so.
 
--- 
 Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Krzysztof
 
