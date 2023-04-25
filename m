@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5188A6EE8B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DB26EE83B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbjDYT5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S236147AbjDYT2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbjDYT5O (ORCPT
+        with ESMTP id S235386AbjDYT2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:57:14 -0400
-X-Greylist: delayed 1817 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 12:57:12 PDT
-Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC25C19A2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:57:12 -0700 (PDT)
-X-ASG-Debug-ID: 1682450813-1cf4391215313690001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id UJmp3BejnK1cjIIr; Tue, 25 Apr 2023 15:26:53 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=NKoTw0X5ggn4GP4rCHMZBRbxnmfIguEqeaihKcA5REk=;
-        h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:Content-Language:
-        MIME-Version:Date:Message-ID; b=XjJvQNfRCimTBY0NYTJiqaV9m5jO6rqZsItwTv2jCDwOE
-        avvzTgWVFYvLTXnDb4GXZREDk1+OzndudyR/3Q9FlskrpRtPaFaczQNSQ12HBhOF1DvPeBiMCO0zE
-        njol8uefnZ/keDtObWbQu/fhnYfYYmZHFqIc9bRsxOj06gv4o=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 12590162; Tue, 25 Apr 2023 15:26:53 -0400
-Message-ID: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
-Date:   Tue, 25 Apr 2023 15:26:53 -0400
+        Tue, 25 Apr 2023 15:28:01 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723792D70
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:27:41 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-95678d891d6so1101263666b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682450859; x=1685042859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AiAll7RfuduP0I53YTER9ohVBuZInpNAgveNMxgNuT8=;
+        b=eikwr/vjGm0/7viBcsrJMjWqPjw51ykPahnc3BBTgRc3WG4WxE3HpbmooFpsLb2ifk
+         qVLu0pRFZfoNs2LGxNXGUBhPW7q8f6BcPBGxskWk5uruNIzkFgcVrzgWcVJfzkRaKTPd
+         N6f0beUvTDuTUCMp3W2nkeHOlkuDZ5N0/gRjg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682450859; x=1685042859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AiAll7RfuduP0I53YTER9ohVBuZInpNAgveNMxgNuT8=;
+        b=cZSrmL0Hb9HigiCXxQZke8PNAvi4gtN+Jo6jZSkOZVWNAbTAaQ9obwOBKWKo0XijeG
+         hgoAHGIS1yGIyJ3Y7uK+Ex6nLRWyGTlk6AWIMUAngUebz2Q1isUXcMkVpz1tdT7djF07
+         yaWsaSu1PK4tLPXKMtqdXu2IpKgTi1wYjYKYZZ+71sJTTih3pQC2JhQNceQZP/p5IJPy
+         q1K+Wcj7QhBkHeQNFeMT9ohxbkvuZRD7bnW0HLrJDyAH85Naf4diOGNEqPoSLcLXCvxA
+         F1Y+V4vdufhXSvu8Fy2S00e/jo6+yK9iMUqkwjE75rfvH3rQJB+RtCBMdJNDUhTXJXwg
+         OEDA==
+X-Gm-Message-State: AAQBX9cVeKZJ3bSo6HHkla2lLouqC9AGt8Snlj0wJXnahQ0AKsqE5y8R
+        /P1oYTnHNnG9HbfNtW+JD3ebO0/uR1FrZKCeKPFwAw==
+X-Google-Smtp-Source: AKy350YUxCZYFpD8I721AxFVqAE2bEo+nXxPSiqb4qd60w7NtbttcRKix/yIqmejmFteoHkDjpRnbA==
+X-Received: by 2002:a17:906:63d1:b0:94f:cee:56f2 with SMTP id u17-20020a17090663d100b0094f0cee56f2mr13121914ejk.4.1682450859740;
+        Tue, 25 Apr 2023 12:27:39 -0700 (PDT)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
+        by smtp.gmail.com with ESMTPSA id oz15-20020a1709077d8f00b0095850aef138sm4308002ejc.6.2023.04.25.12.27.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 12:27:38 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-95678d891d6so1101257866b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:27:38 -0700 (PDT)
+X-Received: by 2002:a17:906:b6d1:b0:94e:4c8f:759 with SMTP id
+ ec17-20020a170906b6d100b0094e4c8f0759mr14744661ejb.38.1682450858375; Tue, 25
+ Apr 2023 12:27:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Tony Battersby <tonyb@cybernetics.com>
-Subject: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
-Content-Type: text/plain; charset=UTF-8
-X-ASG-Orig-Subj: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
-Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1682450813
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 1697
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <66184958-d99a-4f64-bc67-50a703f51019@app.fastmail.com>
+In-Reply-To: <66184958-d99a-4f64-bc67-50a703f51019@app.fastmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 25 Apr 2023 12:27:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiwZ4pR=nqhdzPs2kpHPhmL=Dcy_-N4Ly3nvgUJPE-9FQ@mail.gmail.com>
+Message-ID: <CAHk-=wiwZ4pR=nqhdzPs2kpHPhmL=Dcy_-N4Ly3nvgUJPE-9FQ@mail.gmail.com>
+Subject: Re: [GIT PULL] asm-generic updates for 6.4
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Thomas Huth <thuth@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In stop_this_cpu(), make sure the CPUID leaf exists before accessing the
-leaf.  This fixes a lockup on poweroff 50% of the time due to the wrong
-branch being taken randomly on some CPUs (seen on Supermicro X8DTH-6F
-with Intel Xeon X5650).
+On Mon, Apr 24, 2023 at 2:16=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> These are various cleanups, fixing a number of uapi header files to no
+> longer reference CONFIG_* symbols, and one patch that introduces the
+> new CONFIG_HAS_IOPORT symbol for architectures that provide working
+> inb()/outb() macros
 
-Fixes: 08f253ec3767 ("x86/cpu: Clear SME feature flag when not in use")
-Cc: <stable@vger.kernel.org> # 5.18+
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
----
+Strange. I was sure we had this, but you're right, we only had HAS_IOMEM.
 
-NOTE: I don't have any AMD CPUs to test, so I was unable to fully test
-this patch.  Could someone with an AMD CPU that supports SME please test
-this and make sure it calls native_wbinvd()?
+And then we had that HAS_IOPORT_MAP which was kind of related.
 
+Anyway, the new HAS_IOPORT looks like something we should always had
+had, I have no complaints, I was just expressing surprise that it
+wasn't already there ;)
 
- arch/x86/kernel/process.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index b650cde3f64d..26aa32e8f636 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -754,13 +754,15 @@ bool xen_set_default_idle(void)
- 
- void __noreturn stop_this_cpu(void *dummy)
- {
-+	struct cpuinfo_x86 *c = this_cpu_ptr(&cpu_info);
-+
- 	local_irq_disable();
- 	/*
- 	 * Remove this CPU:
- 	 */
- 	set_cpu_online(smp_processor_id(), false);
- 	disable_local_APIC();
--	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
-+	mcheck_cpu_clear(c);
- 
- 	/*
- 	 * Use wbinvd on processors that support SME. This provides support
-@@ -774,7 +776,8 @@ void __noreturn stop_this_cpu(void *dummy)
- 	 * Test the CPUID bit directly because the machine might've cleared
- 	 * X86_FEATURE_SME due to cmdline options.
- 	 */
--	if (cpuid_eax(0x8000001f) & BIT(0))
-+	if (c->extended_cpuid_level >= 0x8000001f &&
-+	    (cpuid_eax(0x8000001f) & BIT(0)))
- 		native_wbinvd();
- 	for (;;) {
- 		/*
--- 
-2.25.1
-
+          Linus
