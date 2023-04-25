@@ -2,147 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE3C6EE093
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6408F6EE08D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbjDYKpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S233834AbjDYKpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbjDYKo7 (ORCPT
+        with ESMTP id S233238AbjDYKo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:44:59 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11hn2229.outbound.protection.outlook.com [52.100.172.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2A7CC1C;
-        Tue, 25 Apr 2023 03:44:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m2XBGsWIa7NuOq3IDpApmbHqN77v3p3fgUHYUHZwhxvnP3Hpo6EM0rwl5fPr4bM/gD+Xu9fEaFM0LIug7lV+DF1Hlb4z9JZj9p1pROBJJpDWE81zf/vpBl+8L5Do17OaNwAq3PPxYVFDK91bWAhOtFzERpijEhZAuqszI3XR2cP38/2kCQBBwAFyn1YRdzkylYxm0jK+h/5+wFCSg3mhYlasXGSt2Ld/TYnElHbAcS8pCX0+LDRMEA7wsTdhWf6QMGAnJVPgBRdHObhEHZMpKx4LDFhTimaBfPnkx0wlsACISclSSzRMCGvLBYb4diXZRKG2eyt84SjhcnPQd6zdxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OXbmmLYU9/RG4+uaGDG8Iuw05onnEm/pyS7/viwAhqI=;
- b=bzZIXYFG+Ozw492n4g0BIfsv9SmXuOhlAv5nY/q/P+9qHygXdN3L1Zq+/aUL1+MuWGCbCnqAawcqqH0y+rRgFibDYDcdXbU7SGlYSB8y0oaC4hOe34QZ2yFkrrGdmVOlGxTbLYxQ9A/aD67X7o8aqdcLMesmfpjYcmAY2N/3m8HwL5olGlOLq+h+uobYWfiF8jccQT3uuVjuPMCWlXkRR+sVjWmUGChZvw0FsbL30q2Gh0dL8CBrNaFjx8qVAWiR/MGc8ksyhfi9jt/b8wCPdUPf2iCm4+3jnB3iWN9DnHNPdzzVdT1ZGNGUZ2Cjtba+h1mGXd9Qa7XNP8rn30rUFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OXbmmLYU9/RG4+uaGDG8Iuw05onnEm/pyS7/viwAhqI=;
- b=laUiUbmbT1pM1UxSjiqtlTnP0eZS25+MYQKz7WkDA5lSIWx9JQB662GGd456QnuE6F2Au0VqzlP5T2Rg8yIsJgiKf8aZxw0CPDtKgkEdfdiNTnkTclF3GYGNZmHvkRe9/PaZd7ptOTFJjGCtH1yh6WeRGwwMd6qlbA0B/ytu/iENwhcyUghp552aJDk4Dt6I2AiHraV1VP969NdYNbGr0bW+l3kyM/mfzN7IWWa1OlJkYHHDhHdYviMnrAVaupf+3tWXvuZQ1GJkIjgo+9FEGJzVFJRrlQ58WOGYKrl2Y7N77zNhDuJn/m7KA5FHWrwAJP0AgrAQe5++8E1NiJgivg==
-Received: from DS7PR03CA0229.namprd03.prod.outlook.com (2603:10b6:5:3ba::24)
- by SA0PR12MB4527.namprd12.prod.outlook.com (2603:10b6:806:73::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
- 2023 10:44:56 +0000
-Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ba:cafe::18) by DS7PR03CA0229.outlook.office365.com
- (2603:10b6:5:3ba::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20 via Frontend
- Transport; Tue, 25 Apr 2023 10:44:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.20 via Frontend Transport; Tue, 25 Apr 2023 10:44:55 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 25 Apr 2023
- 03:44:45 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Tue, 25 Apr 2023 03:44:44 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 25 Apr 2023 03:44:44 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.2 000/110] 6.2.13-rc1 review
-In-Reply-To: <20230424131136.142490414@linuxfoundation.org>
-References: <20230424131136.142490414@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Apr 2023 06:44:56 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DC210C4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:44:54 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a6862e47b1so60515325ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682419493; x=1685011493;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CzaHxOLXT6UXdHCAzhRDOWCLOcaBt/T7Rc5Xxf/XLP0=;
+        b=g1y9ZH0BfsWGsvTRf5fUXv06ZUMOCWWiUxMcg8dEP4dgGndI8cUz1hwl2zoNncqsBg
+         lE/Gpji8fXQLLO3lQbu525EC55AUQ7+UOWpJJtyt58tiIa2eqUOfbCQP8UsUvoXZUkgb
+         OkfN488vsM9MoVNRKB704jplNtADGv1drXNqKqIDwLMydfdEg3GBRnps41UjLInkkhNC
+         J5+J++J0ONM3aCxJPWPLqrEZZFXPWhMwuUYfhA0Ra49ueHoOhZqBjUMIhWjsv822HEeZ
+         M24VxyvIgvX9KWlemkT7P0BTFW7Y75hso1Q19kNX/jb21wEndrdtQRud86/gLbplX81I
+         pi0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682419493; x=1685011493;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CzaHxOLXT6UXdHCAzhRDOWCLOcaBt/T7Rc5Xxf/XLP0=;
+        b=X0C65oHLeoIliTiTq0gm5lnGT7/4a2mFU5itVGXBDbUMEYPPMO5qNTG6QDGWFiw3iu
+         7hJ+9VVgkAOJ8eWp1UbGjFWa3tMFpxOygv5aCO4JAl98orLxbaaK3KcD8j5cI407MQY9
+         ZTbyk+ETe6+DPRJieGPUjTWBK8QTLmGaFRey80mXozOi/kKbOwoIElgzwN/+o2KzGKUV
+         0wWK7NOXysMLScDUIcCIILa1dtSIuoc0unR2kuifBbTDfYfDmUD77npk8tcHqsqPfh9r
+         X3jbHI/6EHwNOAV64uMviVsdYdzFftPaGABL58+iHoYZn8KZq64LOfMydx432O8xrubq
+         w1ZQ==
+X-Gm-Message-State: AAQBX9eRLnNher4UEH6G4DvVmvi/Ds+Ut34jCcimNuI+AfA4lom/Z2tw
+        DjX/knP2em2MZb5osOpOLd4=
+X-Google-Smtp-Source: AKy350a/WiDEAbqLWiTSkS78t3noTMb48XEVewlfRUDjv+0gUOu6QtnqspWB0yEo7H2QhTQmNdP1wQ==
+X-Received: by 2002:a17:903:1c4:b0:1a2:9183:a49c with SMTP id e4-20020a17090301c400b001a29183a49cmr21539098plh.32.1682419493509;
+        Tue, 25 Apr 2023 03:44:53 -0700 (PDT)
+Received: from [10.234.19.237] ([103.19.213.32])
+        by smtp.gmail.com with ESMTPSA id jw11-20020a170903278b00b0019a593e45f1sm8029238plb.261.2023.04.25.03.44.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 03:44:53 -0700 (PDT)
+Message-ID: <0ae37bcc-4398-644b-a295-1245d73e5450@gmail.com>
+Date:   Tue, 25 Apr 2023 16:14:49 +0530
 MIME-Version: 1.0
-Message-ID: <12719e06-c983-458c-b9db-ed87336c7c39@drhqmail203.nvidia.com>
-Date:   Tue, 25 Apr 2023 03:44:44 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT053:EE_|SA0PR12MB4527:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee19cc09-6128-49fd-4ec0-08db457a1bd4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VIh5pCdKHZFo8BKfSPu8SpllDJfC6kfdf1EXTLBH6V0oa5OBpIJmGBlY5XefWqJ3zC2roOCmG82lEGMy21Gj6ip+ADtzl6k9csLLgDxJajYuMrL+cRXdseC5KVA6cD7ixP0cE82PLEjGk84dQTl0RzvNX0RcpUyQuAVpZ/9MAwAyK+/v3KquHJ54w5yLvtdWDjBzIvfKs4ticg4NOui1E9MUhSXZ71bKxZXvhB9WJcXkjJa8919Cg00opqrpDbxHedT0BQkyK2Grm5Q7NBtJNQMl2b+C5r/XR6AptJsjkhzKNv3pFz68kKG6c5OHsPPKgvySPnsqohpCTQh5qEUaj3Zjm6ULXqj9UX6xE/XBTPUySA5xpr/EkUWM0DRwfnqxa4muR4pm/fGh4BYooFa3s4igX8YryhWfjzTWYZlGy0cCRq7E0GGWhMJRzb1jiuXGaR1i7sUoWqW56I34UMkSyVcUaPQcPnepj2rzOMLHa8OEl4R8pbcnXASoCI0RafVqKvMG2JsRclKeHeghPWYso675QT3UqD5nq6LLDWGZpJf0a0Qa6uCWx4qLlsia9ELFWMLNkRHACnK1LVQSRHA6zye9z6tvtbm2Trj51a7xci4v8zp+DhtH3fbmHi+6tXp8GRouHpTKVw8VBYfY9lsAaiIVgY0XJ/h3FXbjwGLqSavhjpdxPdBmQASqfbp6zSZg6eSqNzFoI8l/uqzaOfvCahrCVMG4DyBAECITh7OgSuTpV5lcvhGnoj4mU2IpeLDyR267YWD5X76QmGSccrPb7RZ7vF+ogCbLJwBvbUP9Kl/DUSjjs+d94/f15Zwer0ox
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199021)(5400799015)(40470700004)(36840700001)(46966006)(70206006)(70586007)(82740400003)(2906002)(36860700001)(40480700001)(26005)(82310400005)(316002)(4326008)(6916009)(7416002)(47076005)(7636003)(426003)(356005)(336012)(8676002)(41300700001)(5660300002)(8936002)(31686004)(54906003)(86362001)(40460700003)(478600001)(31696002)(186003)(34020700004)(966005)(12100799030);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 10:44:55.7032
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee19cc09-6128-49fd-4ec0-08db457a1bd4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4527
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 0/7] refactor file signing program
+To:     gregkh@linuxfoundation.org, dhowells@redhat.com,
+        dwmw2@infradead.org
+Cc:     linux-kernel@vger.kernel.org, sshedi@vmware.com
+References: <20230321193341.87997-1-sshedi@vmware.com>
+Content-Language: en-US
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+In-Reply-To: <20230321193341.87997-1-sshedi@vmware.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 15:16:22 +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.13 release.
-> There are 110 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, 22-Mar-2023 01:03, Shreenidhi Shedi wrote:
+> From: Shreenidhi Shedi <yesshedi@gmail.com>
 > 
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
+> This patch series refactors the sign-file program.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
+> Brief of changes in this patch series:
 > 
-> thanks,
+> - Improve argument parsing logic.
+> - Add few more easy to remember arguments.
+> - Add support to sign bunch of modules at once.
+> - Improve the help message with examples.
+> - Few trivial checkpatch reported issue fixes.
 > 
-> greg k-h
+> Version 6 changes:
+> - Fixed commit messages as suggested by Greg and David.
+> 
+> Version 5 changes:
+> - Addressed review comments from David Howells.
+> - Fragmented the patches into further small units.
+> Link:
+> v4: https://lore.kernel.org/all/20230221170804.3267242-1-yesshedi@gmail.com/
+> 
+> Version 1 - Version 4 changes:
+> Did some back and forth changes. Getting familiar with patch submission
+> process, nothing significant happened.
+> 
+> Links:
+> v1: https://lore.kernel.org/all/dc852d8e-816a-0fb2-f50e-ff6c2aa11dd8@gmail.com/
+> v2: https://lore.kernel.org/all/20230213185019.56902-1-yesshedi@gmail.com/
+> v3: https://lore.kernel.org/all/20230213190034.57097-1-yesshedi@gmail.com/
+> 
+> Shreenidhi Shedi (7):
+>    sign-file: use getopt_long_only for parsing input args
+>    sign-file: inntroduce few new flags to make argument processing easy.
+>    sign-file: move file signing logic to its own function
+>    sign-file: add support to sign modules in bulk
+>    sign-file: improve help message
+>    sign-file: use const with a global string constant
+>    sign-file: fix do while styling issue
+> 
+>   scripts/sign-file.c | 292 +++++++++++++++++++++++++++++++-------------
+>   1 file changed, 209 insertions(+), 83 deletions(-)
+> 
+> --
+> 2.39.2
+> 
+>  From mboxrd@z Thu Jan  1 00:00:00 1970
+> Return-Path: <linux-kernel-owner@vger.kernel.org>
+> X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+> 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+> Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+> 	by smtp.lore.kernel.org (Postfix) with ESMTP id 04233C6FD1D
+> 	for <linux-kernel@archiver.kernel.org>; Tue, 21 Mar 2023 19:34:57 +0000 (UTC)
+> Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+>          id S230310AbjCUTez (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+>          Tue, 21 Mar 2023 15:34:55 -0400
+> Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+>          lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+>          with ESMTP id S230287AbjCUTeq (ORCPT
+>          <rfc822;linux-kernel@vger.kernel.org>);
+>          Tue, 21 Mar 2023 15:34:46 -0400
+> Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+>          by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127EC570B5
+>          for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:09 -0700 (PDT)
+> Received: by mail-pf1-x42d.google.com with SMTP id fd25so9747574pfb.1
+>          for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:09 -0700 (PDT)
+> DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+>          d=gmail.com; s=20210112; t=1679427226;
+>          h=content-transfer-encoding:mime-version:references:in-reply-to
+>           :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+>           :message-id:reply-to;
+>          bh=JfE1Pm3xCC/xMjfmbV6dg9bDdIIYNa99PYfAs69HM0w=;
+>          b=lg/FcqI+lffJF0M/bbmFlheKKJUVTXCS5F8jAhnrBAvXyA2IqG/9hmNjzvsDp5ngKk
+>           SDO3W2J+fE6lLOj/TSKcsSfKiFb6PBXyAUEVycnCvhNuN9U4QO10ihmPCnwMX6t+okTd
+>           V7073khKaNF0l7HH0sODuuxEBuR26SC2Sfr3Ejf/A3DwrerYutz/aKdNC06BGtcx9VTd
+>           jOqI5hf/s5xGB8YKp8zGdbn0XnRG5QE7Io2dLaEw2EDU6RVp+0sQBepgBPbMNnM1vGVC
+>           w2gtIizlYIO1WyZAXij+vlqgRARBPm42MVPHtG3mEBeVhkuHvcJl9KuzowBZXUqqcm+P
+>           ELjQ==
+> X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+>          d=1e100.net; s=20210112; t=1679427226;
+>          h=content-transfer-encoding:mime-version:references:in-reply-to
+>           :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+>           :subject:date:message-id:reply-to;
+>          bh=JfE1Pm3xCC/xMjfmbV6dg9bDdIIYNa99PYfAs69HM0w=;
+>          b=EycJZurnMRKaNtbX9dO0lkGbc2874R1xwH37vsERv4GSiRcqjNFXyQNcKfdgoQCLir
+>           C9Y2TX/5Z1RO8h9Q4jLrVKwd4ET+uxWuartUjIxLWn54dRlyT0iQErQ9D1D9u7WlFcL+
+>           Rzb54LhQ8OsPRnq5EL6pWlV9kwz1f+vRdhGSLzr9Yh9SgcdmfC795gVip2Q4AqoJtPy5
+>           qyUK9YLjRALEsrfQ6Dv5qa1YHZgJI0pvT5JGj+mG4ivQA8GohclChNDilLqL4bWjrmMJ
+>           Tsh3y/gU2tvHVzFFclSnR5aLMeyq/YJ0TeQIY2kfY55La4dcKa/vN4zoInzMJtGSauaD
+>           0AyQ==
+> X-Gm-Message-State: AO0yUKXAn7Kq+WcFipmZkubkO6+9cgkbmRpOdXeWo0Ec3Ybm6KP4x9H4
+>          jmstKnTCBbBo/srwNR0LEHc=
+> X-Google-Smtp-Source: AK7set+AIpPB2wg+jmk+XWvuY7jaNO6CT8aybg2knfYtPhrLXe9DgrH3ebZsJ6n8B4fdOysRGySkBA==
+> X-Received: by 2002:a05:6a00:2e1e:b0:626:2bb0:30d4 with SMTP id fc30-20020a056a002e1e00b006262bb030d4mr1076267pfb.8.1679427226423;
+>          Tue, 21 Mar 2023 12:33:46 -0700 (PDT)
+> Received: from f37.eng.vmware.com ([66.170.99.1])
+>          by smtp.googlemail.com with ESMTPSA id k23-20020aa790d7000000b006247123adf1sm8843044pfk.143.2023.03.21.12.33.45
+>          (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+>          Tue, 21 Mar 2023 12:33:46 -0700 (PDT)
+> From:   Shreenidhi Shedi <yesshedi@gmail.com>
+> X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
+> To:     gregkh@linuxfoundation.org, dhowells@redhat.com,
+>          dwmw2@infradead.org
+> Cc:     linux-kernel@vger.kernel.org, sshedi@vmware.com, yesshedi@gmail.com
+> Subject: [PATCH v6 1/7] sign-file: use getopt_long_only for parsing input args
+> Date:   Wed, 22 Mar 2023 01:03:35 +0530
+> Message-Id: <20230321193341.87997-2-sshedi@vmware.com>
+> X-Mailer: git-send-email 2.39.2
+> In-Reply-To: <20230321193341.87997-1-sshedi@vmware.com>
+> References: <20230321193341.87997-1-sshedi@vmware.com>
+> MIME-Version: 1.0
+> Content-Transfer-Encoding: 8bit
+> Precedence: bulk
+> List-ID: <linux-kernel.vger.kernel.org>
+> X-Mailing-List: linux-kernel@vger.kernel.org
+> 
+> From: Shreenidhi Shedi <yesshedi@gmail.com>
+> 
+> - getopt_long_only gives an option to use long names for options, so
+>    using it here to make the app usage easier.
+> 
+> - Use more easy to remember command line argument names
+> 
+> - Introduce cmd_opts structure to ease the handling of command line args
+> 
+> Signed-off-by: Shreenidhi Shedi <yesshedi@gmail.com>
+> ---
+>   scripts/sign-file.c | 97 ++++++++++++++++++++++++++++++++++++---------
+>   1 file changed, 78 insertions(+), 19 deletions(-)
+> 
+> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+> index 598ef5465f82..94228865b6cc 100644
+> --- a/scripts/sign-file.c
+> +++ b/scripts/sign-file.c
+> @@ -213,15 +213,77 @@ static X509 *read_x509(const char *x509_name)
+>   	return x509;
+>   }
+>   
+> +struct cmd_opts {
+> +	char *raw_sig_name;
+> +	bool save_sig;
+> +	bool replace_orig;
+> +	bool raw_sig;
+> +	bool sign_only;
+> +#ifndef USE_PKCS7
+> +	unsigned int use_keyid;
+> +#endif
+> +};
+> +
+> +static void parse_args(int argc, char **argv, struct cmd_opts *opts)
+> +{
+> +	struct option cmd_options[] = {
+> +		{"rawsig",	required_argument,  0,	's'},
+> +		{"savesig",	no_argument,	    0,	'p'},
+> +		{"signonly",	no_argument,	    0,	'd'},
+> +#ifndef USE_PKCS7
+> +		{"usekeyid",	no_argument,	    0,	'k'},
+> +#endif
+> +		{0, 0, 0, 0}
+> +	};
+> +
+> +	int opt;
+> +	int opt_index = 0;
+> +
+> +	do {
+> +#ifndef USE_PKCS7
+> +		opt = getopt_long_only(argc, argv, "pds:",
+> +				cmd_options, &opt_index);
+> +#else
+> +		opt = getopt_long_only(argc, argv, "pdks:",
+> +				cmd_options, &opt_index);
+> +#endif
+> +		switch (opt) {
+> +		case 's':
+> +			opts->raw_sig = true;
+> +			opts->raw_sig_name = optarg;
+> +			break;
+> +
+> +		case 'p':
+> +			opts->save_sig = true;
+> +			break;
+> +
+> +		case 'd':
+> +			opts->sign_only = true;
+> +			opts->save_sig = true;
+> +			break;
+> +
+> +#ifndef USE_PKCS7
+> +		case 'k':
+> +			opts->use_keyid = CMS_USE_KEYID;
+> +			break;
+> +#endif
+> +
+> +		case -1:
+> +			break;
+> +
+> +		default:
+> +			format();
+> +			break;
+> +		}
+> +	} while (opt != -1);
+> +}
+> +
+>   int main(int argc, char **argv)
+>   {
+>   	struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
+>   	char *hash_algo = NULL;
+> -	char *private_key_name = NULL, *raw_sig_name = NULL;
+> +	char *private_key_name = NULL;
+>   	char *x509_name, *module_name, *dest_name;
+> -	bool save_sig = false, replace_orig;
+> -	bool sign_only = false;
+> -	bool raw_sig = false;
+>   	unsigned char buf[4096];
+>   	unsigned long module_size, sig_size;
+>   	unsigned int use_signed_attrs;
+> @@ -229,13 +291,14 @@ int main(int argc, char **argv)
+>   	EVP_PKEY *private_key;
+>   #ifndef USE_PKCS7
+>   	CMS_ContentInfo *cms = NULL;
+> -	unsigned int use_keyid = 0;
+>   #else
+>   	PKCS7 *pkcs7 = NULL;
+>   #endif
+>   	X509 *x509;
+>   	BIO *bd, *bm;
+> -	int opt, n;
+> +	int n;
+> +	struct cmd_opts opts = {};
+> +
+>   	OpenSSL_add_all_algorithms();
+>   	ERR_load_crypto_strings();
+>   	ERR_clear_error();
+> @@ -247,23 +310,19 @@ int main(int argc, char **argv)
+>   #else
+>   	use_signed_attrs = PKCS7_NOATTR;
+>   #endif
+> +	parse_args(argc, argv, &opts);
+> +	argc -= optind;
+> +	argv += optind;
+>   
+> -	do {
+> -		opt = getopt(argc, argv, "sdpk");
+> -		switch (opt) {
+> -		case 's': raw_sig = true; break;
+> -		case 'p': save_sig = true; break;
+> -		case 'd': sign_only = true; save_sig = true; break;
+> +	const char *raw_sig_name = opts.raw_sig_name;
+> +	const bool save_sig = opts.save_sig;
+> +	const bool raw_sig = opts.raw_sig;
+> +	const bool sign_only = opts.sign_only;
+> +	bool replace_orig = opts.replace_orig;
+>   #ifndef USE_PKCS7
+> -		case 'k': use_keyid = CMS_USE_KEYID; break;
+> +	const unsigned int use_keyid = opts.use_keyid;
+>   #endif
+> -		case -1: break;
+> -		default: format();
+> -		}
+> -	} while (opt != -1);
+>   
+> -	argc -= optind;
+> -	argv += optind;
+>   	if (argc < 4 || argc > 5)
+>   		format();
+>   
 
-All tests passing for Tegra ...
+Hi Greg and David,
 
-Test results for stable-v6.2:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+Can you please review the latest patch series? I think I have addressed 
+your concerns. Thanks.
 
-Linux version:	6.2.13-rc1-g9e5d20c13940
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+-- 
+Shedi
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
