@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F271F6EE0D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF006EE0D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjDYLGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S233926AbjDYLGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbjDYLF5 (ORCPT
+        with ESMTP id S233901AbjDYLGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:05:57 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFD87ABF
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:51 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso4700984b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:51 -0700 (PDT)
+        Tue, 25 Apr 2023 07:06:04 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B064B12CA4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:54 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b50a02bffso4706316b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682420751; x=1685012751;
+        d=bytedance.com; s=google; t=1682420754; x=1685012754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/5HiaDQy1gV5OijIvJDqywUjC7+FvWItMLIDy/cp2lo=;
-        b=Jmn8+k2SfFfgMhLQds+Cr0nlYahkoptl1RwDbzAx8AZV4daLWkUna/d9KpjCx2Rfy9
-         rmCt9o71sj3yTlbe6K2B/hk/W22x/AoY5gUneeoO2WZBUgG67nocT5AJKOv91QCs4JN+
-         DZCnL7fxyHriXlCninrD3Zk7URi4nUfnyi5EmbP/3Gha1H6bcYRPYa70gVOJDs6+9d0S
-         qnpA6xJhk/rQJkofq1EEOa8tqw8D0zjeLVXFud06M0NuAFQZVoamUgVTSmw9Qqf/CECK
-         aW9WKvh1ndvQxmuIyREMN2Zd+vYx5GuyPdQSabCRBc2itdPqh0hvHYca5F8MEElf7xn+
-         3LeQ==
+        bh=SdvAl/rsZlyn6jAT/y3p3/RJdLkd5U9SZ/gjDoLgWfw=;
+        b=WZB2irIoBxS6GfGWbmO853Yh/UPd4puaaWuwwy6+RSHHRD9B00WbRPCkiKPVrIbRII
+         1pcfPq9bubluGJJeyOkwLw/XxAmdroXH+PyguDhLNWvGNXvKzmSCKSKO6fYtvqXgbO04
+         iz99DVGSY1h2LtWFUVD+x7fZ0tz+TLSL781orthWvsF2rwarXtXFcU4IV/V5a7zQRQq8
+         wuPrNWCDq6Ow9r9Vn27Ha/PmX//TkDUedK1Mow/rbV9iqKf015dWHpqGcO+uuA500v//
+         WqsfSrj40q7HE8zDHZhcIzZCKsjjFNTglOGyr4KegnKNRbr3XDs9pNjqWtA0TXgPVef1
+         xngQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682420751; x=1685012751;
+        d=1e100.net; s=20221208; t=1682420754; x=1685012754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/5HiaDQy1gV5OijIvJDqywUjC7+FvWItMLIDy/cp2lo=;
-        b=JImxG/15/ZMWVbuUB4mDZm9pAsS8pR01sCQWrZ4vZvEW50TRZH9Is8AjlWZmqdLl1v
-         0yHE+OUc2/2/oHOfI5VV29iExnbugnmCtn/IcUY65dv/VRJwhCZ+W5uGZkSTGdPKG7AC
-         N/dEUMeiIGHob3hPdSnxk7lxrVaiBwxTJXaB6uzpzLukWFNzTH9CDdgAgjyY+m8enkjY
-         bwBeT+OlDZkucKUj2Wak0RyOe7QJ7mq9+YdRdQogfKWyosj3NlEmspYBpigr0ti4Eb2h
-         TjHuzbSSUPNbWJ4uUO6PpPg+20SwEX2PnbOEQpUyY1XhznAopZB/dOCAfkfo9TQMNK9m
-         qvBg==
-X-Gm-Message-State: AAQBX9eRenNvFqdlSv9aZwAPCxpPk9xCj4yv2wJmESS9W+SrUE3z5Evy
-        rxUqf+B7os9FHefnMZKvOnxJ4Gu00uDaZlyYkes=
-X-Google-Smtp-Source: AKy350ZfhQmTsVjWSSkNdrmfeWoP+w6CU2sdxSf+zlZBnBd3DIyE6NNnISJz8v358g87ZS2LcR27eQ==
-X-Received: by 2002:a05:6a00:2d20:b0:634:7ba3:d142 with SMTP id fa32-20020a056a002d2000b006347ba3d142mr24767709pfb.10.1682420750817;
-        Tue, 25 Apr 2023 04:05:50 -0700 (PDT)
+        bh=SdvAl/rsZlyn6jAT/y3p3/RJdLkd5U9SZ/gjDoLgWfw=;
+        b=XIcupWrDYFCFTEM4Ww3q/sQNKQgMbDwP1oPqpxtfzzIaH1nibyNudh4KFuM5TbYMFl
+         0P93kPteUSyjnoUY2fcC6qIsbaNl0xLEMtrvfTqevRYEVBoHaJxCGicjnck/F/jLvKZ1
+         cn1QMg2lckkM/qVG1TtZOvDH4w1bfjlYAYYNoxg8zoG12mtDEWFb+gOECYhPmsulTE25
+         M7HeyftagLJ5JLAXI9lDGwLmpqnSI30I9MRu58T4AH9Xmu93w0eGve1ztXOyFBhEAxP7
+         buC+0irYkJDB/dKp8xk1rPp96NZ3R4p9fuUaMmRmzMkONbYW4HU3eCo5BKnzIY9ZyAoT
+         wqsA==
+X-Gm-Message-State: AAQBX9d36nlaaWn1kDmwsF5LKENUrkfoi6bPPXdEp5+8G1EZ3FrWclRe
+        FUtAA0Kd1nXi+Etco449F9QWaA==
+X-Google-Smtp-Source: AKy350YosWlGcJzLz6lD6ztODg+LACdFQKhZ99bcfSueMS7rUjCsz9/sQVqQTb0SfTKSFkZeLRnrXg==
+X-Received: by 2002:a05:6a21:1014:b0:ec:86a7:4fa5 with SMTP id nk20-20020a056a21101400b000ec86a74fa5mr19512176pzb.30.1682420753957;
+        Tue, 25 Apr 2023 04:05:53 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056a00158300b0063f3aac78b9sm4422169pfk.79.2023.04.25.04.05.48
+        by smtp.gmail.com with ESMTPSA id u3-20020a056a00158300b0063f3aac78b9sm4422169pfk.79.2023.04.25.04.05.51
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 25 Apr 2023 04:05:50 -0700 (PDT)
+        Tue, 25 Apr 2023 04:05:53 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH 8/9] maple_tree: Remove the redundant check of mas->offset in mas_empty_area/area_rev()
-Date:   Tue, 25 Apr 2023 19:05:10 +0800
-Message-Id: <20230425110511.11680-9-zhangpeng.00@bytedance.com>
+Subject: [PATCH 9/9] maple_tree: Move declaration of mas_empty_area_rev() to a better place
+Date:   Tue, 25 Apr 2023 19:05:11 +0800
+Message-Id: <20230425110511.11680-10-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
 References: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
@@ -73,43 +73,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mas_empty_area(), after mas_awalk() returns, if EBUSY is not set,
-then mas->offset must be valid, no need to check. Same in
-mas_empty_area_rev(), so delete it.
+mas_empty_area() and mas_empty_area_rev() are a pair, move
+mas_empty_area_rev() so that their declarations are together.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- lib/maple_tree.c | 7 -------
- 1 file changed, 7 deletions(-)
+ include/linux/maple_tree.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 8bfa837b7b752..964214de2ed18 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5305,13 +5305,9 @@ int mas_empty_area(struct ma_state *mas, unsigned long min,
- 		return xa_err(mas->node);
+diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
+index 1fadb5f5978b6..3130c1f822ddf 100644
+--- a/include/linux/maple_tree.h
++++ b/include/linux/maple_tree.h
+@@ -470,6 +470,12 @@ void *mas_next(struct ma_state *mas, unsigned long max);
  
- 	offset = mas->offset;
--	if (unlikely(offset == MAPLE_NODE_SLOTS))
--		return -EBUSY;
--
- 	mt = mte_node_type(mas->node);
- 	pivots = ma_pivots(mas_mn(mas), mt);
- 	mas->index = max(mas->index, mas_safe_min(mas, pivots, offset));
--
- 	mas->last = mas->index + size - 1;
- 	return 0;
+ int mas_empty_area(struct ma_state *mas, unsigned long min, unsigned long max,
+ 		   unsigned long size);
++/*
++ * This finds an empty area from the highest address to the lowest.
++ * AKA "Topdown" version,
++ */
++int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
++		       unsigned long max, unsigned long size);
+ 
+ static inline void mas_init(struct ma_state *mas, struct maple_tree *tree,
+ 			    unsigned long addr)
+@@ -493,12 +499,6 @@ static inline bool mas_is_paused(struct ma_state *mas)
+ 	return mas->node == MAS_PAUSE;
  }
-@@ -5365,9 +5361,6 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
- 	if (mas_is_err(mas))
- 		return xa_err(mas->node);
  
--	if (unlikely(mas->offset == MAPLE_NODE_SLOTS))
--		return -EBUSY;
--
- 	/* Trim the upper limit to the max. */
- 	if (max < mas->last)
- 		mas->last = max;
+-/*
+- * This finds an empty area from the highest address to the lowest.
+- * AKA "Topdown" version,
+- */
+-int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
+-		       unsigned long max, unsigned long size);
+ /**
+  * mas_reset() - Reset a Maple Tree operation state.
+  * @mas: Maple Tree operation state.
 -- 
 2.20.1
 
