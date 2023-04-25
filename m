@@ -2,191 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115346EE27D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA5A6EE281
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbjDYNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S233959AbjDYNKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjDYNJp (ORCPT
+        with ESMTP id S233082AbjDYNKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:09:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B88C10FE
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682428139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+fKc7C0hTjXYruI3suD5rQvaDU7fCvCV7e+LIaqkh9A=;
-        b=WYQSRiDnIq14pGQp53/vnjFrwMdufCgByUApIlvUfXNZUviJwUFIorhwJQKPJToHqsfWqu
-        RKu/Vw7QVOkOg0ZdL3RDrvN+sT+LKlB9Sx4FgzUB0PR8u7x33nBE76P5ttOwojTlC8uZoU
-        AYtFbi8Indd8/xk2NX9iWMLOriXWd/8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-211-q7O8O4ZJNpmlGJl1RGJGeQ-1; Tue, 25 Apr 2023 09:08:56 -0400
-X-MC-Unique: q7O8O4ZJNpmlGJl1RGJGeQ-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-2f69e5def13so2086107f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:08:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682428135; x=1685020135;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+fKc7C0hTjXYruI3suD5rQvaDU7fCvCV7e+LIaqkh9A=;
-        b=fRWYbtgXCLUBA7n6Kcd7T55RkWZ/VEGrynqll4k4tfquxd0mopVo9CAr6C3t6NiRqm
-         Q3VvLTfHsW2HtUeTwX8mAhKPr4MKMV9Xl38wOo1YAn+eO5ra9qRM48fJHpP/X/doqcev
-         rjD7tP8Vqae5bv4wWw6Hnvx/+Jw7AbN6CWsfDQ/FMlu6t+KwNVZOFX1Do0HgLsJs2NJi
-         EJK18zXuejI+23UOlT3KcvdBwGLT86RI35omwW8LAEuRWS7v0jb4S0LjNxdPTz19dtRo
-         uIhlL2Jv8/dMgbx9PNNYAmuAHNTh9CV5vq++oWwx/BbRJTvwDkeDi0v4acd5OE+HsrbO
-         LlcA==
-X-Gm-Message-State: AAQBX9dXrc3CxuEY1IHA9veZGn+vBCFT8Omc6iG+Szvei5PkDHrP+Ky4
-        3r2t28XkPzVELyr5aT6FGYeNdUOowa1wWrCKBodxSl0n59AqE6P5ysH9sndy8GFwxTZ2kHQo3mY
-        IUoD0jyzyzNh6227XHxoyC1uz
-X-Received: by 2002:a5d:6a85:0:b0:303:a2e4:e652 with SMTP id s5-20020a5d6a85000000b00303a2e4e652mr10068942wru.14.1682428135279;
-        Tue, 25 Apr 2023 06:08:55 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z/5PjVU1BDfVWhe5ZogmeG2QujfzTYbkQm7cIQds9gnOnNL45pBPkNdHk963LSlI0oVKLjJQ==
-X-Received: by 2002:a5d:6a85:0:b0:303:a2e4:e652 with SMTP id s5-20020a5d6a85000000b00303a2e4e652mr10068917wru.14.1682428134946;
-        Tue, 25 Apr 2023 06:08:54 -0700 (PDT)
-Received: from redhat.com ([2.55.17.255])
-        by smtp.gmail.com with ESMTPSA id o4-20020a056000010400b002fa67f77c16sm13024173wrx.57.2023.04.25.06.08.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 06:08:54 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 09:08:50 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] virtio-net: reject small vring sizes
-Message-ID: <20230425090723-mutt-send-email-mst@kernel.org>
-References: <20230417075645-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723FA90465186B5A8A5C001D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230423031308-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47233B680283E892C45430BCD4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230423065132-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47237D46ADE7954289025B66D4669@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230425041352-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723CE2A9B8BFA7963A66A98D4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230425082150-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723E38859953B6C531D3E5CD4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
+        Tue, 25 Apr 2023 09:10:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE812D64;
+        Tue, 25 Apr 2023 06:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682428232; x=1713964232;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rjBDnveYTlgu+7sEbRfwz2mR/VV2dupmzj53Ht6fq5I=;
+  b=NKUEO8DuhVFhAoD+6hOMK5wdMJxc/izqLPJL9D05PvM4ByxoJFxi22hI
+   es4sIlIFYKDJTgjeuCgfrKkbliBRO3TYJp57IYR3RAbPEYyQ54mV7ez8t
+   MOpRV9n7bOUB2/6Zj6YiE4aKUSibZxgTqkPg0v3TXlQGykdOmz8QPZZll
+   R44YUCfUrd8NoM57MoiHGDNr+a/COylq0CBIBmuvXhvUXOr69XxM5d9GA
+   vs4be1pNLpYKfWd0tT7qaKaFOaCvotiK00rnfpGqsk2kRT4GJOnv1SiFr
+   iAXkC2XRA4uhCBmWy8La+xy5mETXNpW93eDWRq2zta7PzMH22H87kr5Mw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="326360145"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="326360145"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 06:10:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="939765044"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="939765044"
+Received: from gchacko-mobl1.gar.corp.intel.com (HELO [10.215.145.52]) ([10.215.145.52])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 06:10:17 -0700
+Message-ID: <fe1a849a-3276-5fad-869b-bad54bc918f6@intel.com>
+Date:   Tue, 25 Apr 2023 06:10:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM0PR04MB4723E38859953B6C531D3E5CD4649@AM0PR04MB4723.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap
+ hooks
+Content-Language: en-US
+To:     Atish Kumar Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
+        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Uladzislau Rezki <urezki@gmail.com>
+References: <20230419221716.3603068-1-atishp@rivosinc.com>
+ <20230419221716.3603068-46-atishp@rivosinc.com>
+ <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com>
+ <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
+ <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com>
+ <CAHBxVyHg7vTaQJWKoVSD8budVZEYSo1eDOyZyZK7gcJApR7SbA@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAHBxVyHg7vTaQJWKoVSD8budVZEYSo1eDOyZyZK7gcJApR7SbA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 01:02:38PM +0000, Alvaro Karsz wrote:
-> > > In the virtnet case, we'll decide which features to block based on the ring size.
-> > > 2 < ring < MAX_FRAGS + 2  -> BLOCK GRO + MRG_RXBUF
-> > > ring < 2  -> BLOCK GRO + MRG_RXBUF + CTRL_VQ
-> > 
-> > why MRG_RXBUF? what does it matter?
-> > 
+On 4/25/23 01:00, Atish Kumar Patra wrote:
+> On Mon, Apr 24, 2023 at 7:18 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>> On 4/21/23 12:24, Atish Kumar Patra wrote:
+>> I'm not _quite_ sure what "guest initiated" means.  But SEV and TDX
+>> don't require an ioremap hook like this.  So, even if they *are* "guest
+>> initiated", the question still remains how they work without this patch,
+>> or what they are missing without it.
 > 
-> You're right, it should be blocked only when ring < 2.
-> Or we should let this pass, and let the device figure out that MRG_RXBUF is meaningless with 1 entry..
+> Maybe I misunderstood your question earlier. Are you concerned about guests
+> invoking any MMIO region specific calls in the ioremap path or passing
+> that information to the host ?
 
-yep, later I think.
+My concern is that I don't know why this patch is here.  There should be
+a very simple answer to the question: Why does RISC-V need this patch
+but x86 does not?
 
-> > > So we'll need a new virtio callback instead of flags.
-> > > Furthermore, other virtio drivers may decide which features to block based on parameters different than ring size (I don't have a good example at the moment).
-> > > So maybe we should leave it to the driver to handle (during probe), and offer a virtio core function to re-negotiate the features?
-> > >
-> > > In the solution I'm working on, I expose a new virtio core function that resets the device and renegotiates the received features.
-> > > + A new virtio_config_ops callback peek_vqs_len to peek at the VQ lengths before calling find_vqs. (The callback must be called after the features negotiation)
-> > >
-> > > So, the flow is something like:
-> > >
-> > > * Super early in virtnet probe, we peek at the VQ lengths and decide if we are
-> > >    using small vrings, if so, we reset and renegotiate the features.
-> > 
-> > Using which APIs? What does peek_vqs_len do and why does it matter that
-> > it is super early?
-> > 
-> 
-> We peek at the lengths using a new virtio_config.h function that calls a transport specific callback.
-> We renegotiate calling the new, exported virtio core function.
-> 
-> peek_vqs_len fills an array of u16 variables with the max length of every VQ.
-> 
-> The idea here is not to fail probe.
-> So we start probe, check if the ring is small, renegotiate the features and then continue with the new features.
-> This needs to be super early because otherwise, some virtio_has_feature calls before re-negotiating may be invalid, meaning a lot of reconfigurations.
-> 
-> > > * We continue normally and create the VQs.
-> > > * We check if the created rings are small.
-> > >    If they are and some blocked features were negotiated anyway (may occur if
-> > >    the re-negotiation fails, or if the transport has no implementation for
-> > >    peek_vqs_len), we fail probe.
-> > >    If the ring is small and the features are ok, we mark the virtnet device as
-> > >    vring_small and fixup some variables.
-> > >
-> > >
-> > > peek_vqs_len is needed because we must know the VQ length before calling init_vqs.
-> > >
-> > > During virtnet_find_vqs we check the following:
-> > > vi->has_cvq
-> > > vi->big_packets
-> > > vi->mergeable_rx_bufs
-> > >
-> > > But these will change if the ring is small..
-> > >
-> > > (Of course, another solution will be to re-negotiate features after init_vqs, but this will make a big mess, tons of things to clean and reconfigure)
-> > >
-> > >
-> > > The 2 < ring < MAX_FRAGS + 2 part is ready, I have tested a few cases and it is working.
-> > >
-> > > I'm considering splitting the effort into 2 series.
-> > > A 2 < ring < MAX_FRAGS + 2  series, and a follow up series with the ring < 2 case.
-> > >
-> > > I'm also thinking about sending the first series as an RFC soon, so it will be more broadly tested.
-> > >
-> > > What do you think?
-> > 
-> > Lots of work spilling over to transports.
-> > 
-> > And I especially don't like that it slows down boot on good path.
-> 
-> Yes, but I don't think that this is really significant.
-> It's just a call to the transport to get the length of the VQs.
+> Earlier, I assumed the former but it seems you are also concerned
+> about the latter as well. Sorry for the confusion in that case.
+> The guest initiation is necessary while the host notification can be
+> made optional.
+> The "guest initiated" means the guest tells the TSM (equivalent of TDX
+> module in RISC-V) the MMIO region details.
+> The TSM keeps a track of this and any page faults that happen in that
+> region are forwarded
+> to the host by the TSM after the instruction decoding. Thus TSM can
+> make sure that only ioremapped regions are
+> considered MMIO regions. Otherwise, all memory outside the guest
+> physical region will be considered as the MMIO region.
 
-With lots of VQs that is lots of exits.
+Ahh, OK, that's a familiar problem.  I see the connection to device
+filtering now.
 
-> If ring is not small, we continue as normal.
-> If ring is small, we renegotiate and continue, without failing probe.
-> 
-> > 
-> > I have the following idea:
-> > - add a blocked features value in virtio_device
-> > - before calling probe, core saves blocked features
-> > - if probe fails, checks blocked features.
-> >   if any were added, reset, negotiate all features
-> >   except blocked ones and do the validate/probe dance again
-> > 
-> > 
-> > This will mean mostly no changes to drivers: just check condition,
-> > block feature and fail probe.
-> > 
-> 
-> I like the idea, will try to implement it.
-> 
-> Thanks,
+Is this functionality in the current set?  I went looking for it and all
+I found was the host notification side.
 
+Is this the only mechanism by which the guest tells the TSM which parts
+of the guest physical address space can be exposed to the host?
+
+For TDX and SEV, that information is inferred from a bit in the page
+tables.  Essentially, there are dedicated guest physical addresses that
+tell the hardware how to treat the mappings: should the secure page
+tables or the host's EPT/NPT be consulted?
+
+If that mechanism is different for RISC-V, it would go a long way to
+explaining why RISC-V needs this patch.
+
+> In the current CoVE implementation, that MMIO region information is also
+> passed to the host to provide additional flexibility. The host may
+> choose to do additional
+> sanity check and bail if the fault address does not belong to
+> requested MMIO regions without
+> going to the userspace. This is purely an optimization and may not be mandatory.
+
+Makes sense, thanks for the explanation.
+
+>>> It can be a subset of the region's host provided the layout. The
+>>> guest device filtering solution is based on this idea as well [1].
+>>>
+>>> [1] https://lore.kernel.org/all/20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+>>
+>> I don't really see the connection.  Even if that series was going
+>> forward (I'm not sure it is) there is no ioremap hook there.  There's
+>> also no guest->host communication in that series.  The guest doesn't
+>> _tell_ the host where the MMIO is, it just declines to run code for
+>> devices that it didn't expect to see.
+> 
+> This is a recent version of the above series from tdx github. This is
+> a WIP as well and has not been posted to
+> the mailing list. Thus, it may be going under revisions as well.
+> As per my understanding the above ioremap changes for TDX mark the
+> ioremapped pages as shared.
+> The guest->host communication happen in the #VE exception handler
+> where the guest converts this to a hypercall by invoking TDG.VP.VMCALL
+> with an EPT violation set. The host would emulate an MMIO address if
+> it gets an VMCALL with EPT violation.
+> Please correct me if I am wrong.
+
+Yeah, TDX does:
+
+1. Guest MMIO access
+2. Guest #VE handler (if the access faults)
+3. Guest hypercall->host
+4. Host fixes the fault
+5. Hypercall returns, guest returns from #VE via IRET
+6. Guest retries MMIO instruction
+
+From what you said, RISC-V appears to do:
+
+1. Guest MMIO access
+2. Host MMIO handler
+3. Host handles the fault, returns
+4. Guest retries MMIO instruction
+
+In other words, this mechanism does the same thing but short-circuits
+the trip through #VE and the hypercall.
+
+What happens if this ioremap() hook is not in place?  Does the hardware
+(or TSM) generate an exception like TDX gets?  If so, it's probably
+possible to move this "notify the TSM" code to that exception handler
+instead of needing an ioremap() hook.
+
+I'm not saying that it's _better_ to do that, but it would allow you to
+get rid of this patch for now and get me to shut up. :)
+
+> As I said above, the objective here is to notify the TSM where the 
+> MMIO is. Notifying the host is just an optimization that we choose to
+> add. In fact, in this series the KVM code doesn't do anything with
+> that information. The commit text probably can be improved to clarify
+> that.
+
+Just to close the loop here, please go take a look at
+pgprot_decrypted().  That's where the x86 guest page table bit gets to
+tell the hardware that the mapping might cause a #VE and is under the
+control of the host.  That's the extent of what x86 does at ioremap() time.
+
+So, to summarize, we have:
+
+x86:
+1. Guest page table bit to mark shared (host) vs. private (guest)
+   control
+2. #VE if there is a fault on a shared mapping to call into the host
+
+RISC-V:
+1. Guest->TSM call to mark MMIO vs. private
+2. Faults in the MMIO area are then transparent to the guest
+
+That design difference would, indeed, help explain why this patch is
+here.  I'm still not 100% convinced that the patch is *required*, but I
+at least understand how we arrived here.
