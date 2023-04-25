@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4156EDB5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890AD6EDB5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbjDYFuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 01:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S232290AbjDYFuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 01:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjDYFuP (ORCPT
+        with ESMTP id S233196AbjDYFum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 01:50:15 -0400
+        Tue, 25 Apr 2023 01:50:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107077AA8;
-        Mon, 24 Apr 2023 22:50:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B2CB455;
+        Mon, 24 Apr 2023 22:50:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87CA4627EB;
-        Tue, 25 Apr 2023 05:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C301FC433D2;
-        Tue, 25 Apr 2023 05:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682401813;
-        bh=i1KJx66tie8E/QmmcYEegruNbhZnQ6ejhZnZzsHL7UA=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=TgbqspZwjxalduzfuBR8kd0JK0l1gycFe69A/YzTLna7sDqyZ3+Z8N3XADPpyiPXb
-         3sVKC98nsmt6lQTxohvDEPttqQM2WVSfxiZtTIWeypVFRApCW0QD/PZlqa/P0X690x
-         qQF9wSNfSdequUg6734WLa/nnWrwzKbyUIlXSher+xmrPzjkuppDLmaUX99R9SKksy
-         pF71T0dMW9NLNsE8KoO7FXywphtpE63UZc02p/8X0GqcXcYvEaOigBeppNKUNsPQMO
-         qX3CrkEvbSj8d7az3WA2pWwPPp847NcYQysrtD3kFv9u+YyXqydoP31eiFaIN90FgQ
-         R7+7l6SGiKbug==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        Peter Seiderer <ps.report@gmx.net>,
-        linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gregg Wonderly <greggwonderly@seqtechllc.com>
-Subject: Re: [PATCH v1] wifi: ath9k: fix AR9003 mac hardware hang check register offset calculation
-References: <20230420204316.30475-1-ps.report@gmx.net>
-        <ZEOf7LXAkdLR0yFI@corigine.com> <87bkjgmd9g.fsf@toke.dk>
-Date:   Tue, 25 Apr 2023 08:50:08 +0300
-In-Reply-To: <87bkjgmd9g.fsf@toke.dk> ("Toke \=\?utf-8\?Q\?H\=C3\=B8iland-J\?\=
- \=\?utf-8\?Q\?\=C3\=B8rgensen\=22's\?\= message of
-        "Sat, 22 Apr 2023 12:18:03 +0200")
-Message-ID: <87a5ywqzn3.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E6CF62B21;
+        Tue, 25 Apr 2023 05:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E6AC4339B;
+        Tue, 25 Apr 2023 05:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682401831;
+        bh=47gVOAES9yb/PSULlzi6EcWoa4i5G7pmHEYyjzJ8u1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UNLpljvyJwnBx1t3AtXnsrZQ4Fp4+d/h/XM/KOf84oQVCJBslw6s+0hi0YOEBM/aH
+         tVtQVEXMv1UT3zFvmJZrSuN9BhMV9AAR9blgE1JElGqD3+71qGWZ8bD/Q5XnAMmkee
+         DaXlKE9AbiJVEY4GVQUvpL7ByRaxhFk3m5AeMBVk=
+Date:   Tue, 25 Apr 2023 07:50:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     ktestrobot@126.com, U201911841@hust.edu.cn, lidaxian@hust.edu.cn,
+        hust-os-kernel-patches@googlegroups.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, balbi@kernel.org, s.shtylyov@omp.ru
+Subject: Re: [PATCH v2] usb: phy: phy-tahvo: fix memory leak in
+ tahvo_usb_probe()
+Message-ID: <ZEdqIz8Vfd09zBFL@kroah.com>
+References: <644741EB.013E97.00008@m126.mail.126.com>
+ <ZEdh-_Jv02qb6K4n@kroah.com>
+ <9c09cb12-05d1-7c50-0d99-945fd384e3a3@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9c09cb12-05d1-7c50-0d99-945fd384e3a3@hust.edu.cn>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
+On Tue, Apr 25, 2023 at 01:32:35PM +0800, Dongliang Mu wrote:
+> 
+> On 2023/4/25 13:15, Greg KH wrote:
+> > On Tue, Apr 25, 2023 at 10:58:51AM +0800, ktestrobot@126.com wrote:
+> > > Hi, Li Yang
+> > > This email is automatically replied by KTestRobot(Beta). Please do not reply to this email.
+> > But I will!
+> > 
+> > > If you have any questions or suggestions about KTestRobot, please contact ZhongYong <U201911841@hust.edu.cn>
+> > First question, why are you responding from an email that is not allowed
+> > to be responded to and forced to have us manually add an address?
+> > That's not very nice or helpful for us who have to see these messages,
+> > please fix that.
+> 
+> Hi greg,
+> 
+> thanks for your feedback.
+> 
+> This robot is only used for our internal patch review. It should not send
+> any email out to Linux kernel mailing list.
 
-> Simon Horman <simon.horman@corigine.com> writes:
->
->>> -	for (i =3D 0; i < NUM_STATUS_READS; i++) {
->>> -		if (queue < 6)
->>> -			dma_dbg_chain =3D REG_READ(ah, AR_DMADBG_4);
->>> -		else
->>> -			dma_dbg_chain =3D REG_READ(ah, AR_DMADBG_5);
->>> +	if (queue < 6) {
->>> +		dbg_reg =3D AR_DMADBG_4;
->>> +		reg_offset =3D i * 5;
->>
->> Hi Peter,
->>
->> unless my eyes are deceiving me, i is not initialised here.
->
-> Nice catch! Hmm, I wonder why my test compile didn't complain about
-> that? Or maybe it did and I overlooked it? Anyway, Kalle, I already
-> delegated this patch to you in patchwork, so please drop it=20
+But it did :(
 
-Ok, will drop.
+> Sorry about this false alarm.
 
-> and I'll try to do better on reviewing the next one :)
+It happened more than once here, so please be more careful with the bot.
 
-No worries, reviewing is hard and things always slip past. But great
-that we now have more people reviewing, thanks Simon for catching this.
+thanks,
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+greg k-h
