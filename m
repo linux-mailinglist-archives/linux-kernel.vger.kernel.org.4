@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C8F6EE160
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEC66EE162
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbjDYLxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
+        id S233945AbjDYLyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbjDYLxw (ORCPT
+        with ESMTP id S234005AbjDYLyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:53:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B742D13F8D;
-        Tue, 25 Apr 2023 04:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RuyX3d7D1azwsn4TOGYEeBa8zDHbPol4DtyJcZjYy1w=; b=YLzLX23gAqE/afcAhQhX/CCgMI
-        c94ZoDFe8oTJK2JSS/FuFGg8KUS5MYESVL9zKBUuFX7pze6a+rQ5PaTvvIeSr87dHaWiZmxJTRf4k
-        ZnYkaXPe9I8mpJ6ZFo6m4WPVvHZUc9bpUolM4kAQW5pfuUzoAT4BSZcvoCfBYgEp055GC/jb8VTv8
-        yBrlzwI/q0hZhcGAjBwsIg3GQ6498b4k6et/MqH9pyecJ+1MLldg1AIA1Viioh+zJ+jpg94WqSC4Y
-        zTgteBn+91FFU6o2Y2N8N4q4l0FvCaHhNqzrDnQH+jP5wtpEGUOET5GiAols0niV9kFXp6T89bCa6
-        n7YxfyQQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1prHER-001PFv-P0; Tue, 25 Apr 2023 11:53:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 968D5300380;
-        Tue, 25 Apr 2023 13:53:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7990C241943F2; Tue, 25 Apr 2023 13:53:13 +0200 (CEST)
-Date:   Tue, 25 Apr 2023 13:53:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-Message-ID: <20230425115313.GD1335080@hirez.programming.kicks-ass.net>
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux>
- <87fs8pzalj.fsf@mail.concordia>
- <20230424151351.GP19790@gate.crashing.org>
- <ZEagN1jJwg+rUzX4@boqun-archlinux>
- <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
- <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
- <CAEXW_YRFZ3zDc0gJRHjJPRuNaBtnmUc+9RxSAHH48jkFw_b34g@mail.gmail.com>
+        Tue, 25 Apr 2023 07:54:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA20013F9C;
+        Tue, 25 Apr 2023 04:53:58 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PBeqv7031308;
+        Tue, 25 Apr 2023 11:53:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=PYQw1s1UJ4ZCRX8T/hOdGvjUGWcyLQTuH++SIg+EMBA=;
+ b=PUSBuMmfHRXh+xpkXntuoqa9ndYyrnPRRSx36solurRrh8yV6R25Jss8Xp14jOg8evO8
+ hQNqgnx0Jrl9Wlo7gAWxsCPCyDTWZKXlB0zkOIHasrA5Y4Qa091qHq+H9e0PCml5U6IQ
+ nmdgbAYXDD/DyhM2pqBzr4wVcaLQ48noJ3FBN39a52TyqY19w7TTABwdkCeHQCgEduWh
+ S15ylVu9DejlX/1+MsBRVI3SnL+fAoKNV7b0ArJrE8haC0DApjSjhU57DhwNf+vsWR0E
+ +t9nvmW89sCuCRADRA7T0tlzEHsSapSySpKVXf0MK3qtVfXOgVEMEGZkquSqkYXbEJmB rA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q6d30u5ub-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 11:53:45 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33P8lJji016566;
+        Tue, 25 Apr 2023 11:53:44 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3q477842sp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 11:53:44 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33PBrgGY27525864
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Apr 2023 11:53:42 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8574B58054;
+        Tue, 25 Apr 2023 11:53:42 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F5DB5804E;
+        Tue, 25 Apr 2023 11:53:41 +0000 (GMT)
+Received: from [9.160.16.18] (unknown [9.160.16.18])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Apr 2023 11:53:41 +0000 (GMT)
+Message-ID: <841ea455-ef41-427c-7ce5-3c9c942abd14@linux.ibm.com>
+Date:   Tue, 25 Apr 2023 06:53:40 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YRFZ3zDc0gJRHjJPRuNaBtnmUc+9RxSAHH48jkFw_b34g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 2/5] Glue code for optmized Chacha20 implementation for
+ ppc64le.
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mpe@ellerman.id.au, ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com
+References: <20230424184726.2091-1-dtsen@linux.ibm.com>
+ <20230424184726.2091-3-dtsen@linux.ibm.com>
+ <ZEdoFv4tS69ELyNo@gondor.apana.org.au>
+From:   Danny Tsen <dtsen@linux.ibm.com>
+In-Reply-To: <ZEdoFv4tS69ELyNo@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zlHphbR6COsD9eRHL4IDo-_c0b1YBhGx
+X-Proofpoint-GUID: zlHphbR6COsD9eRHL4IDo-_c0b1YBhGx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_04,2023-04-25_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 malwarescore=0 bulkscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304250103
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 06:59:29AM -0400, Joel Fernandes wrote:
-> > I'm a little confused; the way I understand the whole stack protector
-> > thing to work is that we push a canary on the stack at call and on
-> > return check it is still valid. Since in general tasks randomly migrate,
-> > the per-cpu validation canary should be the same on all CPUs.
+Got it.  Will fix it.
 
-> AFAICS, the canary is randomly chosen both in the kernel [1]. This
+Thanks.
 
-Yes, at boot, once. But thereafter it should be the same for all CPUs.
+-Danny
 
-> also appears to be the case in glibc. That makes sense because you
-> don't want the canary to be something that the attacker can easily
-> predict and store on the stack to bypass buffer overflow attacks:
-> 
-> [1] kernel :
-> /*
->  * Initialize the stackprotector canary value.
->  *
->  * NOTE: this must only be called from functions that never return,
->  * and it must always be inlined.
->  */
-> static __always_inline void boot_init_stack_canary(void)
-> {
->         unsigned long canary = get_random_canary();
-> 
->         current->stack_canary = canary;
-> #ifdef CONFIG_PPC64
->         get_paca()->canary = canary;
-> #endif
-> }
-> 
-> thanks,
-> 
->  - Joel
+
+On 4/25/23 12:41 AM, Herbert Xu wrote:
+> On Mon, Apr 24, 2023 at 02:47:23PM -0400, Danny Tsen wrote:
+>> +static int chacha_p10_stream_xor(struct skcipher_request *req,
+>> +				 const struct chacha_ctx *ctx, const u8 *iv)
+>> +{
+>> +	struct skcipher_walk walk;
+>> +	u32 state[16];
+>> +	int err;
+>> +
+>> +	err = skcipher_walk_virt(&walk, req, false);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	chacha_init_generic(state, ctx->key, iv);
+>> +
+>> +	while (walk.nbytes > 0) {
+>> +		unsigned int nbytes = walk.nbytes;
+>> +
+>> +		if (nbytes < walk.total)
+>> +			nbytes = rounddown(nbytes, walk.stride);
+>> +
+>> +		if (!static_branch_likely(&have_p10) ||
+> You don't need the static branch in the Crypto API code since
+> the registration is already conditional.
+>
+> Cheers,
