@@ -2,69 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950296EE200
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BCA6EE209
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbjDYMh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S233327AbjDYMmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233764AbjDYMh6 (ORCPT
+        with ESMTP id S233764AbjDYMmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:37:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA6E212B;
-        Tue, 25 Apr 2023 05:37:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC9C1616BD;
-        Tue, 25 Apr 2023 12:37:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03EEC433EF;
-        Tue, 25 Apr 2023 12:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682426276;
-        bh=LeyjP+oas7FQvvYfXiR2Q1XMkCVwl+g1VccTFcIY5hg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ieynPTg5OekckKGpT731LZFnFrwGZAJEAviW2eFQCZCcLJ3yEEGGDHh+oG4fN5wvH
-         mDGtIfoCmxJjJVOqEk90TlQctMClQi7ZVLDvFUUDuv3VlkfJGuQtr3ixkthDMLNbAh
-         OB7BYXcMwwjlBsYEWm6uhlAJHv7DRBkpG2kCFlw9SDn/yb7N+er1zsDSgEVPi54b3w
-         559fETfCFvnUU0mE/yZtbfaHz+reXdD2jW+6BHeZgFGxjCKornuMo8i3Yc7XPBAubF
-         zriGlPFuew+uhIl63SZ1AWN3/zp9XPlhlMWC6Ic6CMxtPGihX2i8Og9lBQpm9OMJfE
-         7Rfexf7tXu43w==
-Date:   Tue, 25 Apr 2023 14:37:51 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] open: fix O_DIRECTORY | O_CREAT
-Message-ID: <20230425-imagination-festmachen-184307771bde@brauner>
-References: <20230421-freimachen-handhaben-7c7a5e83ba0c@brauner>
- <CAHk-=whykVNoCGj3UC=b0O7V0P-MWDaKz_2r+_yGxyXoEMmL8w@mail.gmail.com>
- <874jp5lzb2.fsf@meer.lwn.net>
- <CAHk-=wi2NiwU-SPNnFvuZ9-LNk5J_iW-SvQHJdbSu_spT5Oq_A@mail.gmail.com>
+        Tue, 25 Apr 2023 08:42:40 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98355FDD
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:42:39 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-316d901b2ecso68415ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682426559; x=1685018559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L0R1shJ74GFraG54ZrBarpqRCUuus8sKdN1oUXtaP84=;
+        b=Txr1tOrk3lncYAjQ+XMeFFNMCc+1J+OALg7JKpiQBoGjaklUAoF7naIJRGimpawtAT
+         sBwfNg3ShbonS7fAYTnDKd8acfn0g/kxsYXUTGtlCL1Qy6BR5MBLMh0HlczwgLCPU2UM
+         hxqOojx9hcV2PtMT9EIJLQ0BoQlNx1RJRftyusZek6lsTVIinhBDP/0Zxi1jPHE5QdnY
+         QoEQNPmaJTOFlqVpP3501bAnYvcxZ2DD1GTLGJP/h5vMhnexw+5uaUIRpWAf51qdrBCJ
+         9aLV2IvA5Lwlnxp9mJM1IvB38YgGaO/bvvaTwj9D7rbiJpNsaOyKEFreNarahBZxQ7x9
+         KjiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682426559; x=1685018559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L0R1shJ74GFraG54ZrBarpqRCUuus8sKdN1oUXtaP84=;
+        b=BqEOXFpWazTE6pv0nUz753pqmWbPK7xO3ywR/xfDy7AZDV1ohemRxprej9J68VE9qV
+         VbkH6kq7t+wIIgC6tMfIfpjBjlFkYlvVUnoCfnW6W+LDm9/jjRx37PzrQW4/gx0fk84/
+         n2muxSU4xFvtCi01G2Qm5gC7G8i797QW6RNeg0H6jqrd6knEgJ/bVo7VRMoULRretX29
+         6/Q670SM7l7roRTVhi6ea9wUyAgkyJZV3pO2wGcRF71hzkn/V+bhP0W4dJhARvyfqujj
+         DuREdSeseYbeo1Lx2F7ARFDGURuLXdPNnc6n0Gl5DUlMurkneRDEiJ055HUKBhVMeWal
+         Yuaw==
+X-Gm-Message-State: AC+VfDxccTaUDi/fx3JHde/2c6su+73uZO5Q0GJVuFiy+ccS5wG+nsq1
+        VulirFia0Q7lWlyYVvBWUOe0p9aFyae5Tc9Y0h494g==
+X-Google-Smtp-Source: ACHHUZ4GKysEbVSQRjtwRSfZ4ZLt12ToKr+xCMJTS781tmsqaX3mnDD1C2HU71jSpdl2+drmKJQM6Rb/08AWXEtz4SE=
+X-Received: by 2002:a05:6e02:1aaf:b0:313:93c8:e71f with SMTP id
+ l15-20020a056e021aaf00b0031393c8e71fmr174325ilv.19.1682426558867; Tue, 25 Apr
+ 2023 05:42:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wi2NiwU-SPNnFvuZ9-LNk5J_iW-SvQHJdbSu_spT5Oq_A@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230224-track_gt-v8-0-4b6517e61be6@intel.com> <20230224-track_gt-v8-2-4b6517e61be6@intel.com>
+In-Reply-To: <20230224-track_gt-v8-2-4b6517e61be6@intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 25 Apr 2023 14:42:27 +0200
+Message-ID: <CANn89i+yGztnfz-ZMwcpPTVrQ_bxvmKC5wrJ70WUZvwAAJqJzg@mail.gmail.com>
+Subject: Re: [PATCH v8 2/7] lib/ref_tracker: improve printing stats
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:01:23PM -0700, Linus Torvalds wrote:
-> On Mon, Apr 24, 2023 at 2:56 PM Jonathan Corbet <corbet@lwn.net> wrote:
-> >
-> > The paywall goes away on Thursday, so this is a short-lived problem.
-> 
-> Sounds good, thanks.
+On Tue, Apr 25, 2023 at 12:06=E2=80=AFAM Andrzej Hajda <andrzej.hajda@intel=
+.com> wrote:
+>
+> In case the library is tracking busy subsystem, simply
+> printing stack for every active reference will spam log
+> with long, hard to read, redundant stack traces. To improve
+> readabilty following changes have been made:
+> - reports are printed per stack_handle - log is more compact,
+> - added display name for ref_tracker_dir - it will differentiate
+>   multiple subsystems,
+> - stack trace is printed indented, in the same printk call,
+> - info about dropped references is printed as well.
+>
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
-Yeah, I didn't use the non-subscriber link on purpose because I know
-that Jon's doing it the right way and just opening up all articles after
-a short while. 
+Reviewed-by: Eric Dumazet <edumazet@google.com>
