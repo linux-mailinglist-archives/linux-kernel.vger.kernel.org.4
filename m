@@ -2,119 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6046EE3DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023206EE3DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbjDYO0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S234037AbjDYO1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjDYO0p (ORCPT
+        with ESMTP id S233896AbjDYO1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:26:45 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57D610EB
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:26:43 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-5ef54bcded4so26081326d6.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:26:43 -0700 (PDT)
+        Tue, 25 Apr 2023 10:27:03 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8526D13FBB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:26:57 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b8f549d36e8so10352192276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682432803; x=1685024803;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NzQgQguk3FOOn5Q0sl8SuL93RxV/W/XH0B4cmOPUOrU=;
-        b=yOxoxF62ERjNeWj+CJa/Kah64bkFFMllNsu/eOE1VPjy/CtwcA4FxevLn1O/B4+AY+
-         zfVO2T4iq6YWlUNEovI2VhyRBeqpSobmLFeaPBC790F8WxXVf2FT1xl83r3qVq+EGrsV
-         IXaeU2RXZDlKh5LyQpUjFc140qZ447SZe8eQ3SwWZVC9XwDXAaTs7wXKISggALCPIrYo
-         OMRTE2bLujG0i8qn4lvcsLiNYH1xdiBg/ug9sYv9Mn+NoV+jiCYrQMOv85l7AaIUuVoN
-         +sB4aDdp2H9N9Nu7hdKDXR98TnMR707C/ZsscqiU3PpsaA6nhgtN7PAfb8QEsh+CXdwS
-         JDhA==
+        d=linaro.org; s=google; t=1682432816; x=1685024816;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kbD1oCQK52/WTKujUBAVRhz/h35B5FS7o9GLDaVgvUg=;
+        b=LGMfNC+nTBPrgf5Af4/ohQbKn6AHdljSnvffiECsphEFyX2qT8Hs2n0Gx7F3gWZykf
+         qoFYEV1yL3d6olaNXixbV0ToXH+YiGnkItVrvaUAgVuVEOMMA3b59FZ31O/b1spF5HEr
+         kDnVT6TuLrCVaHerZkdIlH2BxP8CF+RxHQIk1zHiKAbASGrAmQg3aFaObODMbiSf+D3p
+         txoJTRej2XbvfmsWEYM9WCjZx/W05d3b/tdEKIiUMYuMLymdXjKs5mfEQupYxeNm+E9u
+         v22VYQphIBWtpGwWL9GmzD17igHcxbfeKxYaPp57XcSozb8Tiy5dWmHA9WCZLnSt64eK
+         qHlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682432803; x=1685024803;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NzQgQguk3FOOn5Q0sl8SuL93RxV/W/XH0B4cmOPUOrU=;
-        b=B7VFfTVAbGOyePEwg357EH7yzY9U6NO3yo4YF75aXJS53rICEQsN22O3r7+yiHVBq9
-         ylEEle3ybN1V2xwbC3fJijcFEOwfZmML+HVtFY4FlbcsDuhJYWxodC3bv0hbu6y9kCnN
-         Ltw7HOjIqbt4S3L/b2itgZRer38Okzj7lQf2SCpsgTsebyDmssXTp1teLWVyBb4cmB1V
-         UsF7O+BpzKUNbJLqj7fol3GSe+lTLjFDGE2/9Fb7NJIdVhrHoKkFwxIciwVfVuBURFOC
-         RmsmG6yvPGHs7bRanur1RH1kvsGFO2MNLTT1I6iFuWdbihXOk7CLbPSGodwetInt70XE
-         LdbA==
-X-Gm-Message-State: AAQBX9ft7Rd2JMSblkaQk3Z8P5J31CiULK85MNvbOY8n8hSTMQTbkxwG
-        xsALfoXocYKZGOhfFanaoZXBVw==
-X-Google-Smtp-Source: AKy350aVJB8UWDC5ePhBp0/DKlzvTUR/3tZD+AfBmuBDgB9VXbS/x6mF8kc684QsCsAoWpDytYxKqA==
-X-Received: by 2002:a05:6214:1c49:b0:5e6:1723:a7e4 with SMTP id if9-20020a0562141c4900b005e61723a7e4mr31244225qvb.30.1682432802913;
-        Tue, 25 Apr 2023 07:26:42 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:9fc5])
-        by smtp.gmail.com with ESMTPSA id q17-20020a0ce211000000b005f5b71f75f3sm4120360qvl.125.2023.04.25.07.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 07:26:42 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 10:26:41 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 20/26] mm: vmscan: use compaction_suitable() check in
- kswapd
-Message-ID: <20230425142641.GA17132@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-21-hannes@cmpxchg.org>
- <87a5ywfyeb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        d=1e100.net; s=20221208; t=1682432816; x=1685024816;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kbD1oCQK52/WTKujUBAVRhz/h35B5FS7o9GLDaVgvUg=;
+        b=lBaqlZicLbOuGalXEty7c8TVGWy59H61V3eZPoOhmdgVqeUpf21mTrV/ybIFKCtFny
+         OaRiOLpgPFeOc3WEktF1TjWM6y+/DExpWMtdT1X8tDYx6E9cxZZqf3UE3CM+qDvUTt7O
+         j2QXIHos6l6I8BW2/zDXeWrFt3xFgLsaIJzUdZL/C2Q9F/NaQcem/AOp4CBQGM9Kn9E+
+         6AF7HQsVzvHbaCqwmeFWmNadSJ8Kj/V6jyWLeKtgmsU+ltXxKVsw9cqG3EXUSu77xpWQ
+         7Mk1b9cHn2PsaYqhC5zfQFHAeOxuqBsu1ZKm+p3jQgb3yDBcJjN7uRdv0nkF9X53NIU/
+         Lavg==
+X-Gm-Message-State: AAQBX9dP8ttMl1Q05ddqNJbG9MrnSOfBWPTfSStXLsD0NXT8OKF/h6UK
+        0O+Pf6PW9EUzXTSGuKcO01lEsVKyYyzgQ5iz2TytJQ==
+X-Google-Smtp-Source: AKy350aTQoPi8zTpL/bCLMkql0SQ8OHvzQ1OTTg3cKITKDykkBSd009WKdo8gkgJlYdMZLO5iqTwEK2tJwdYiHg9Gxc=
+X-Received: by 2002:a25:aab2:0:b0:b92:32aa:be5c with SMTP id
+ t47-20020a25aab2000000b00b9232aabe5cmr12680159ybi.49.1682432816630; Tue, 25
+ Apr 2023 07:26:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a5ywfyeb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
+ <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
+ <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com> <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
+ <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
+ <c809476f-74bc-0399-08f9-1bf26e7170fa@quicinc.com> <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
+ <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org> <m5z5mv5hbdgpjbfo3mqo5s3egshnlu77nla4b7txddlsbk5fvi@jitwvapbr7wr>
+In-Reply-To: <m5z5mv5hbdgpjbfo3mqo5s3egshnlu77nla4b7txddlsbk5fvi@jitwvapbr7wr>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 25 Apr 2023 17:26:45 +0300
+Message-ID: <CAA8EJpoCeCkucvb=a+1ken_yR=8FvcECrvajOk5MxgO-j2nD6A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
+ RM instead of IDs
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 11:12:28AM +0800, Huang, Ying wrote:
-> Johannes Weiner <hannes@cmpxchg.org> writes:
-> 
-> > Kswapd currently bails on higher-order allocations with an open-coded
-> > check for whether it's reclaimed the compaction gap.
+On Tue, 25 Apr 2023 at 11:55, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
+>
+> On 2023-04-25 10:54:47, Dmitry Baryshkov wrote:
+> > On 25/04/2023 10:16, Marijn Suijten wrote:
+> > > On 2023-04-24 16:23:17, Abhinav Kumar wrote:
+> > >>
+> > >>
+> > >> On 4/24/2023 3:54 PM, Dmitry Baryshkov wrote:
+> > >>> On Tue, 25 Apr 2023 at 01:03, Marijn Suijten
+> > >>> <marijn.suijten@somainline.org> wrote:
+> > >>>>
+> > >>>> On 2023-04-21 16:25:15, Abhinav Kumar wrote:
+> > >>>>>
+> > >>>>>
+> > >>>>> On 4/21/2023 1:53 PM, Marijn Suijten wrote:
+> > >>>>>> The Resource Manager already iterates over all available blocks from the
+> > >>>>>> catalog, only to pass their ID to a dpu_hw_xxx_init() function which
+> > >>>>>> uses an _xxx_offset() helper to search for and find the exact same
+> > >>>>>> catalog pointer again to initialize the block with, fallible error
+> > >>>>>> handling and all.
+> > >>>>>>
+> > >>>>>> Instead, pass const pointers to the catalog entries directly to these
+> > >>>>>> _init functions and drop the for loops entirely, saving on both
+> > >>>>>> readability complexity and unnecessary cycles at boot.
+> > >>>>>>
+> > >>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > >>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > >>>>>
+> > >>>>> Overall, a nice cleanup!
+> > >>>>>
+> > >>>>> One comment below.
+> > >>>>>
+> > >>>>>> ---
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
+> > >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
+> > >>>>>>     23 files changed, 139 insertions(+), 375 deletions(-)
+> > >>>>>>
+> > >>>>>
+> > >>>>> <snipped>
+> > >>>>>
+> > >>>>>> -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
+> > >>>>>> -           void __iomem *addr,
+> > >>>>>> -           const struct dpu_mdss_cfg *m)
+> > >>>>>> +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+> > >>>>>> +           void __iomem *addr)
+> > >>>>>>     {
+> > >>>>>>       struct dpu_hw_intf *c;
+> > >>>>>> -   const struct dpu_intf_cfg *cfg;
+> > >>>>>> +
+> > >>>>>> +   if (cfg->type == INTF_NONE) {
+> > >>>>>> +           pr_err("Cannot create interface hw object for INTF_NONE type\n");
+> > >>>>>> +           return ERR_PTR(-EINVAL);
+> > >>>>>> +   }
+> > >>>>>
+> > >>>>> The caller of dpu_hw_intf_init which is the RM already has protection
+> > >>>>> for INTF_NONE, see below
+> > >>>>>
+> > >>>>>            for (i = 0; i < cat->intf_count; i++) {
+> > >>>>>                    struct dpu_hw_intf *hw;
+> > >>>>>                    const struct dpu_intf_cfg *intf = &cat->intf[i];
+> > >>>>>
+> > >>>>>                    if (intf->type == INTF_NONE) {
+> > >>>>>                            DPU_DEBUG("skip intf %d with type none\n", i);
+> > >>>>>                            continue;
+> > >>>>>                    }
+> > >>>>>                    if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
+> > >>>>>                            DPU_ERROR("skip intf %d with invalid id\n",
+> > >>>>> intf->id);
+> > >>>>>                            continue;
+> > >>>>>                    }
+> > >>>>>                    hw = dpu_hw_intf_init(intf->id, mmio, cat);
+> > >>>>>
+> > >>>>> So this part can be dropped.
+> > >>>>
+> > >>>> I mainly intended to keep original validation where _intf_offset would
+> > >>>> skip INTF_NONE, and error out.  RM init is hence expected to filter out
+> > >>>> INTF_NONE instead of running into that `-EINVAL`, which I maintained
+> > >>>> here.
+> > >>>>
+> > >>>> If you think there won't be another caller of dpu_hw_intf_init, and that
+> > >>>> such validation is hence excessive, I can remove it in a followup v3.
+> > >>>
+> > >>> I'd prefer to see the checks at dpu_rm to be dropped.
+> > >>> dpu_hw_intf_init() (and other dpu_hw_foo_init() functions) should be
+> > >>> self-contained. If they can not init HW block (e.g. because the index
+> > >>> is out of the boundaries), they should return an error.
+> > >>>
+> > >>
+> > >> They already do that today because even without this it will call into
+> > >> _intf_offset() and that will bail out for INTF_NONE.
+> > >>
+> > >> I feel this is a duplicated check because the caller with the loop needs
+> > >> to validate the index before passing it to dpu_hw_intf_init() otherwise
+> > >> the loop will get broken at the first return of the error and rest of
+> > >> the blocks will also not be initialized.
+> > >
+> > > To both: keep in mind that the range-checks we want to remove from
+> > > dpu_rm_init validate the ID (index?) of a block.  This check is for the
+> > > *TYPE* of an INTF block, to skip it gracefully if no hardware is mapped
+> > > there.  As per the first patch of this series SM6115/QCM2290 only have a
+> > > DSI interface which always sits at ID 1, and ID 0 has its TYPE set to
+> > > INTF_NONE and is skipped.
+> > >
+> > > Hence we _should_ keep the graceful TYPE check in dpu_rm_init() to skip
+> > > calling this function _and assigning it to the rm->hw_intf array_.  But
+> > > I can remove the second TYPE check here in dpu_hw_intf_init() if you
+> > > prefer.
 > >
-> > compaction_suitable() is the customary interface to coordinate reclaim
-> > with compaction.
-> >
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > ---
-> >  mm/vmscan.c | 67 ++++++++++++++++++-----------------------------------
-> >  1 file changed, 23 insertions(+), 44 deletions(-)
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index ee8c8ca2e7b5..723705b9e4d9 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -6872,12 +6872,18 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
-> >  		if (!managed_zone(zone))
-> >  			continue;
-> >  
-> > +		/* Allocation can succeed in any zone, done */
-> >  		if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
-> >  			mark = wmark_pages(zone, WMARK_PROMO);
-> >  		else
-> >  			mark = high_wmark_pages(zone);
-> >  		if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
-> >  			return true;
-> > +
-> > +		/* Allocation can't succeed, but enough order-0 to compact */
-> > +		if (compaction_suitable(zone, order,
-> > +					highest_zoneidx) == COMPACT_CONTINUE)
-> > +			return true;
-> 
-> Should we check the following first?
-> 
->         order > 0 && zone_watermark_ok_safe(zone, 0, mark, highest_zoneidx)
+> > We can return NULL from dpu_hw_foo_init(), which would mean that the
+> > block was skipped or is not present.
+>
+> An then replace the `if INTF_NONE continue` logic in dpu_rm_init with a
+> check for NULL that skips, and a check for IS_ERR` that goes to `fail`?
 
-That's what compaction_suitable() does. It checks whether there are
-enough migration targets for compaction (COMPACT_CONTINUE) or whether
-reclaim needs to do some more work (COMPACT_SKIPPED).
+You can just drop the INTF_NONE in dpu_rm. If dpu_hw_intf_init()
+returns NULL, the rest of the code in dpu_rm will work correctly.
+
+>
+> Should I do that in a new or the same patch for v3?
+>
+> Note that there's a similar check for the `pingpong` "id" member of
+> every Layer Mixer.
+>
+> - Marijn
+
+
+
+-- 
+With best wishes
+Dmitry
