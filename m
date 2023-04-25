@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A8F6EE4D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A916EE4D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbjDYPeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 11:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S234529AbjDYPft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 11:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbjDYPeC (ORCPT
+        with ESMTP id S233442AbjDYPfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 11:34:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C806A5F5;
-        Tue, 25 Apr 2023 08:34:01 -0700 (PDT)
+        Tue, 25 Apr 2023 11:35:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A79A5F5;
+        Tue, 25 Apr 2023 08:35:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07C7B62EB3;
-        Tue, 25 Apr 2023 15:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA429C433EF;
-        Tue, 25 Apr 2023 15:33:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EFA462665;
+        Tue, 25 Apr 2023 15:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEE2C433D2;
+        Tue, 25 Apr 2023 15:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682436840;
-        bh=OARleUAyajgwQosFGKsXcoGf5T0vXiZRIsLkdB7bnYE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dJnw5W5IQCT/YQeMxKHb+5Rvzd919/iRVjelMnbeE/qG0QY/xds0rMbpW1YRyVzSM
-         dZYw2mbT1FPz3GuXwPw1U/KBn+nm5DNKAJutlanzC+Y0dUVi/6ImLguEIzhVC/A8RL
-         /8TCaSynE8HzSp/E1LBAEoNGpu2nkmw166V4xCMZ27CEkzp4zNIQOgpS+QnscjiAUQ
-         1BEi5Du+AFr5sYV1Kj7xJjoPkvzauBK06g9GLgg5vk/rhYqQJWWRjTF8zvPdQBFNmD
-         AOpxPGuH4Jdp1DkIe4y3dbulsrc9PCQRgyTka+FUFZRtTQ9On0CRP0ecPKRZCNNiBM
-         xO10sUm1RwnEA==
-Date:   Tue, 25 Apr 2023 18:33:53 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
+        s=k20201202; t=1682436946;
+        bh=hILIa7zfeQHX44WHpp5lx3LYz44LYIo0k8gq7ws9Zcc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AbDep0f8nsEPf7I2neZ1pcGQ28Xvmcbo8BCOjn5/gOuRbHDPHnxOwa4ntawlUOn6k
+         B+trDdCn3xuAVLnqrrJ7U4/M7Pl/xesMF2M1V+o9330bPe3Ful16dpRrH5rB4Wc5g2
+         Bi5k2hX9zvXPAQMH3okBg//H4XeI/5ypSEYav9lu9QE9/bre4Jb9Bq8L5NG2b+/9zk
+         j5hjVvm1+dOT2serxNr6YBU6gcBXwG+CPN7kAH4xGxFDk5G2/c1kiZPg1HLOb6gG5e
+         ruw4X4kGRtdl9f2D1oOkVToEu34xxWBsud4xfyvRb82E3IagO0BU7udfn8uzwYmp95
+         75o6Qrjg1Jmiw==
+Date:   Tue, 25 Apr 2023 08:35:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Alexander Wetzel <alexander@wetzel-home.de>
-Subject: Re: [PATCH v3 1/1] wifi: mac80211: fortify the spinlock against
- deadlock by interrupt
-Message-ID: <20230425153353.GB27649@unreal>
-References: <20230425093547.1131-1-mirsad.todorovac@alu.unizg.hr>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com,
+        =?UTF-8?B?QXI=?= =?UTF-8?B?xLFuw6cgw5xOQUw=?= 
+        <arinc.unal@arinc9.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 00/24] net: dsa: MT7530, MT7531, and MT7988
+ improvements
+Message-ID: <20230425083544.537538ba@kernel.org>
+In-Reply-To: <20230425082933.84654-1-arinc.unal@arinc9.com>
+References: <20230425082933.84654-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425093547.1131-1-mirsad.todorovac@alu.unizg.hr>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,37 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 11:35:48AM +0200, Mirsad Goran Todorovac wrote:
-> In the function ieee80211_tx_dequeue() there is a particular locking
-> sequence:
+On Tue, 25 Apr 2023 11:29:09 +0300 arinc9.unal@gmail.com wrote:
+> This patch series is focused on simplifying the code, and improving the
+> logic of the support for MT7530, MT7531, and MT7988 SoC switches.
 > 
-> begin:
-> 	spin_lock(&local->queue_stop_reason_lock);
-> 	q_stopped = local->queue_stop_reasons[q];
-> 	spin_unlock(&local->queue_stop_reason_lock);
-> 
-> However small the chance (increased by ftracetest), an asynchronous
-> interrupt can occur in between of spin_lock() and spin_unlock(),
-> and the interrupt routine will attempt to lock the same
-> &local->queue_stop_reason_lock again.
-> 
-> This will cause a costly reset of the CPU and the wifi device or an
-> altogether hang in the single CPU and single core scenario.
-> 
-> This is the probable trace of the deadlock:
-> 
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  Possible unsafe locking scenario:
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        CPU0
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        ----
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   lock(&local->queue_stop_reason_lock);
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   <Interrupt>
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:     lock(&local->queue_stop_reason_lock);
-> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:
->                                                  *** DEADLOCK ***
+> There're two fixes. One for fixing the corrupt frames using trgmii on MCM
+> MT7530 with 40 MHz oscillator on certain MT7621 SoCs. The other for fixing
+> the port capabilities of the switch on the MT7988 SoC.
 
-Can you please add to the commit message whole lockdep trace?
+## Form letter - net-next-closed
 
-And please trim "Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel: " line prefix,
-it doesn't add any value.
+The merge window for v6.3 has begun and therefore net-next is closed
+for new drivers, features, code refactoring and optimizations.
+We are currently accepting bug fixes only.
 
-Thanks
+Please repost when net-next reopens after May 8th.
+
+RFC patches sent for review only are obviously welcome at any time.
+-- 
+pw-bot: defer
