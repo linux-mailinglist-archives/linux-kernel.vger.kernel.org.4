@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350DE6EE410
+	by mail.lfdr.de (Postfix) with ESMTP id 802CF6EE411
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjDYOhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S234230AbjDYOhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjDYOhP (ORCPT
+        with ESMTP id S234350AbjDYOh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:37:15 -0400
+        Tue, 25 Apr 2023 10:37:29 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CD15146EA
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:37:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBC661FFC
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:37:14 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 241FA4B3;
-        Tue, 25 Apr 2023 07:37:49 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 997B6FEC;
+        Tue, 25 Apr 2023 07:37:58 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8DD2E3F587;
-        Tue, 25 Apr 2023 07:37:03 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 11DDA3F587;
+        Tue, 25 Apr 2023 07:37:07 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
         mike.leach@linaro.org, suzuki.poulose@arm.com
 Cc:     James Clark <james.clark@arm.com>, Leo Yan <leo.yan@linaro.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 12/13] coresight: Enable and disable helper devices adjacent to the path
-Date:   Tue, 25 Apr 2023 15:35:39 +0100
-Message-Id: <20230425143542.2305069-13-james.clark@arm.com>
+Subject: [PATCH v6 13/13] coresight: Fix CTI module refcount leak by making it a helper device
+Date:   Tue, 25 Apr 2023 15:35:40 +0100
+Message-Id: <20230425143542.2305069-14-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230425143542.2305069-1-james.clark@arm.com>
 References: <20230425143542.2305069-1-james.clark@arm.com>
@@ -46,500 +46,510 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently CATU is the only helper device, and its enable and disable
-calls are hard coded. To allow more helper devices to be added in a
-generic way, remove these hard coded calls and just enable and disable
-all helper devices.
+The CTI module has some hard coded refcounting code that has a leak.
+For example running perf and then trying to unload it fails:
 
-This has to apply to helpers adjacent to the path, because they will
-never be in the path. CATU was already discovered in this way, so
-there is no change there.
+  perf record -e cs_etm// -a -- ls
+  rmmod coresight_cti
 
-One change that is needed is for CATU to call back into ETR to allocate
-the buffer. Because the enable call was previously hard coded, it was
-done at a point where the buffer was already allocated, but this is no
-longer the case.
+  rmmod: ERROR: Module coresight_cti is in use
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+The coresight core already handles references of devices in use, so by
+making CTI a normal helper device, we get working refcounting for free.
+
+Reviewed-by: Mike Leach  <mike.leach@linaro.org>
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- drivers/hwtracing/coresight/coresight-catu.c  |  21 ++-
- drivers/hwtracing/coresight/coresight-core.c  | 161 ++++++++++++++++--
- .../hwtracing/coresight/coresight-etm-perf.c  |   4 +-
- drivers/hwtracing/coresight/coresight-priv.h  |   3 +
- .../hwtracing/coresight/coresight-tmc-etr.c   |  43 +----
- include/linux/coresight.h                     |  11 +-
- 6 files changed, 188 insertions(+), 55 deletions(-)
+ drivers/hwtracing/coresight/coresight-core.c  | 116 +++++++-----------
+ .../hwtracing/coresight/coresight-cti-core.c  |  52 ++++----
+ .../hwtracing/coresight/coresight-cti-sysfs.c |   4 +-
+ drivers/hwtracing/coresight/coresight-cti.h   |   4 +-
+ drivers/hwtracing/coresight/coresight-priv.h  |   4 +-
+ drivers/hwtracing/coresight/coresight-sysfs.c |   4 +
+ include/linux/coresight.h                     |  29 +----
+ 7 files changed, 81 insertions(+), 132 deletions(-)
 
-diff --git a/drivers/hwtracing/coresight/coresight-catu.c b/drivers/hwtracing/coresight/coresight-catu.c
-index bc90a03f478f..3949ded0d4fa 100644
---- a/drivers/hwtracing/coresight/coresight-catu.c
-+++ b/drivers/hwtracing/coresight/coresight-catu.c
-@@ -395,13 +395,18 @@ static inline int catu_wait_for_ready(struct catu_drvdata *drvdata)
- 	return coresight_timeout(csa, CATU_STATUS, CATU_STATUS_READY, 1);
- }
- 
--static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
-+static int catu_enable_hw(struct catu_drvdata *drvdata, enum cs_mode cs_mode,
-+			  void *data)
- {
- 	int rc;
- 	u32 control, mode;
--	struct etr_buf *etr_buf = data;
-+	struct etr_buf *etr_buf = NULL;
- 	struct device *dev = &drvdata->csdev->dev;
- 	struct coresight_device *csdev = drvdata->csdev;
-+	struct coresight_device *etrdev;
-+	union coresight_dev_subtype etr_subtype = {
-+		.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_SYSMEM
-+	};
- 
- 	if (catu_wait_for_ready(drvdata))
- 		dev_warn(dev, "Timeout while waiting for READY\n");
-@@ -416,6 +421,13 @@ static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
- 	if (rc)
- 		return rc;
- 
-+	etrdev = coresight_find_input_type(
-+		csdev->pdata, CORESIGHT_DEV_TYPE_SINK, etr_subtype);
-+	if (etrdev) {
-+		etr_buf = tmc_etr_get_buffer(etrdev, cs_mode, data);
-+		if (IS_ERR(etr_buf))
-+			return PTR_ERR(etr_buf);
-+	}
- 	control |= BIT(CATU_CONTROL_ENABLE);
- 
- 	if (etr_buf && etr_buf->mode == ETR_MODE_CATU) {
-@@ -441,13 +453,14 @@ static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
- 	return 0;
- }
- 
--static int catu_enable(struct coresight_device *csdev, void *data)
-+static int catu_enable(struct coresight_device *csdev, enum cs_mode mode,
-+		       void *data)
- {
- 	int rc;
- 	struct catu_drvdata *catu_drvdata = csdev_to_catu_drvdata(csdev);
- 
- 	CS_UNLOCK(catu_drvdata->base);
--	rc = catu_enable_hw(catu_drvdata, data);
-+	rc = catu_enable_hw(catu_drvdata, mode, data);
- 	CS_LOCK(catu_drvdata->base);
- 	return rc;
- }
 diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-index 939b7fb751b5..1e9a596a15bc 100644
+index 1e9a596a15bc..118fcf27854d 100644
 --- a/drivers/hwtracing/coresight/coresight-core.c
 +++ b/drivers/hwtracing/coresight/coresight-core.c
-@@ -403,8 +403,8 @@ static void coresight_disable_link(struct coresight_device *csdev,
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+  */
+ 
++#include <linux/build_bug.h>
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/types.h>
+@@ -236,60 +237,44 @@ void coresight_disclaim_device(struct coresight_device *csdev)
+ }
+ EXPORT_SYMBOL_GPL(coresight_disclaim_device);
+ 
+-/* enable or disable an associated CTI device of the supplied CS device */
+-static int
+-coresight_control_assoc_ectdev(struct coresight_device *csdev, bool enable)
++/*
++ * Add a helper as an output device. This function takes the @coresight_mutex
++ * because it's assumed that it's called from the helper device, outside of the
++ * core code where the mutex would already be held. Don't add new calls to this
++ * from inside the core code, instead try to add the new helper to the DT and
++ * ACPI where it will be picked up and linked automatically.
++ */
++void coresight_add_helper(struct coresight_device *csdev,
++			  struct coresight_device *helper)
+ {
+-	int ect_ret = 0;
+-	struct coresight_device *ect_csdev = csdev->ect_dev;
+-	struct module *mod;
++	int i;
++	struct coresight_connection conn = {};
++	struct coresight_connection *new_conn;
+ 
+-	if (!ect_csdev)
+-		return 0;
+-	if ((!ect_ops(ect_csdev)->enable) || (!ect_ops(ect_csdev)->disable))
+-		return 0;
++	mutex_lock(&coresight_mutex);
++	conn.dest_fwnode = fwnode_handle_get(dev_fwnode(&helper->dev));
++	conn.dest_dev = helper;
++	conn.dest_port = conn.src_port = -1;
++	conn.src_dev = csdev;
+ 
+-	mod = ect_csdev->dev.parent->driver->owner;
+-	if (enable) {
+-		if (try_module_get(mod)) {
+-			ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
+-			if (ect_ret) {
+-				module_put(mod);
+-			} else {
+-				get_device(ect_csdev->dev.parent);
+-				csdev->ect_enabled = true;
+-			}
+-		} else
+-			ect_ret = -ENODEV;
+-	} else {
+-		if (csdev->ect_enabled) {
+-			ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
+-			put_device(ect_csdev->dev.parent);
+-			module_put(mod);
+-			csdev->ect_enabled = false;
+-		}
+-	}
++	/*
++	 * Check for duplicates because this is called every time a helper
++	 * device is re-loaded. Existing connections will get re-linked
++	 * automatically.
++	 */
++	for (i = 0; i < csdev->pdata->nr_outconns; ++i)
++		if (csdev->pdata->out_conns[i]->dest_fwnode == conn.dest_fwnode)
++			goto unlock;
+ 
+-	/* output warning if ECT enable is preventing trace operation */
+-	if (ect_ret)
+-		dev_info(&csdev->dev, "Associated ECT device (%s) %s failed\n",
+-			 dev_name(&ect_csdev->dev),
+-			 enable ? "enable" : "disable");
+-	return ect_ret;
+-}
++	new_conn = coresight_add_out_conn(csdev->dev.parent, csdev->pdata,
++					  &conn);
++	if (!IS_ERR(new_conn))
++		coresight_add_in_conn(new_conn);
+ 
+-/*
+- * Set the associated ect / cti device while holding the coresight_mutex
+- * to avoid a race with coresight_enable that may try to use this value.
+- */
+-void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
+-				      struct coresight_device *ect_csdev)
+-{
+-	mutex_lock(&coresight_mutex);
+-	csdev->ect_dev = ect_csdev;
++unlock:
+ 	mutex_unlock(&coresight_mutex);
+ }
+-EXPORT_SYMBOL_GPL(coresight_set_assoc_ectdev_mutex);
++EXPORT_SYMBOL_GPL(coresight_add_helper);
+ 
+ static int coresight_enable_sink(struct coresight_device *csdev,
+ 				 enum cs_mode mode, void *data)
+@@ -303,14 +288,10 @@ static int coresight_enable_sink(struct coresight_device *csdev,
+ 	if (!sink_ops(csdev)->enable)
+ 		return -EINVAL;
+ 
+-	ret = coresight_control_assoc_ectdev(csdev, true);
+-	if (ret)
+-		return ret;
+ 	ret = sink_ops(csdev)->enable(csdev, mode, data);
+-	if (ret) {
+-		coresight_control_assoc_ectdev(csdev, false);
++	if (ret)
+ 		return ret;
+-	}
++
+ 	csdev->enable = true;
+ 
+ 	return 0;
+@@ -326,7 +307,6 @@ static void coresight_disable_sink(struct coresight_device *csdev)
+ 	ret = sink_ops(csdev)->disable(csdev);
+ 	if (ret)
+ 		return;
+-	coresight_control_assoc_ectdev(csdev, false);
  	csdev->enable = false;
  }
  
--static int coresight_enable_source(struct coresight_device *csdev,
--				   enum cs_mode mode)
-+int coresight_enable_source(struct coresight_device *csdev, enum cs_mode mode,
-+			    void *data)
- {
- 	int ret;
+@@ -351,17 +331,11 @@ static int coresight_enable_link(struct coresight_device *csdev,
+ 		return PTR_ERR(outconn);
  
-@@ -413,7 +413,7 @@ static int coresight_enable_source(struct coresight_device *csdev,
- 			ret = coresight_control_assoc_ectdev(csdev, true);
- 			if (ret)
- 				return ret;
--			ret = source_ops(csdev)->enable(csdev, NULL, mode);
-+			ret = source_ops(csdev)->enable(csdev, data, mode);
- 			if (ret) {
- 				coresight_control_assoc_ectdev(csdev, false);
- 				return ret;
-@@ -426,25 +426,75 @@ static int coresight_enable_source(struct coresight_device *csdev,
+ 	if (link_ops(csdev)->enable) {
+-		ret = coresight_control_assoc_ectdev(csdev, true);
+-		if (!ret) {
+-			ret = link_ops(csdev)->enable(csdev, inconn, outconn);
+-			if (ret)
+-				coresight_control_assoc_ectdev(csdev, false);
+-		}
++		ret = link_ops(csdev)->enable(csdev, inconn, outconn);
++		if (!ret)
++			csdev->enable = true;
+ 	}
  
- 	return 0;
+-	if (!ret)
+-		csdev->enable = true;
+-
+ 	return ret;
  }
-+EXPORT_SYMBOL_GPL(coresight_enable_source);
-+
-+static bool coresight_is_helper(struct coresight_device *csdev)
-+{
-+	return csdev->type == CORESIGHT_DEV_TYPE_HELPER;
-+}
-+
-+static int coresight_enable_helper(struct coresight_device *csdev,
-+				   enum cs_mode mode, void *data)
-+{
-+	int ret;
-+
-+	if (!helper_ops(csdev)->enable)
-+		return 0;
-+	ret = helper_ops(csdev)->enable(csdev, mode, data);
-+	if (ret)
-+		return ret;
-+
-+	csdev->enable = true;
-+	return 0;
-+}
-+
-+static void coresight_disable_helper(struct coresight_device *csdev)
-+{
-+	int ret;
-+
-+	if (!helper_ops(csdev)->disable)
-+		return;
-+
-+	ret = helper_ops(csdev)->disable(csdev, NULL);
-+	if (ret)
-+		return;
-+	csdev->enable = false;
-+}
-+
-+static void coresight_disable_helpers(struct coresight_device *csdev)
-+{
-+	int i;
-+	struct coresight_device *helper;
-+
-+	for (i = 0; i < csdev->pdata->nr_outconns; ++i) {
-+		helper = csdev->pdata->out_conns[i]->dest_dev;
-+		if (helper && coresight_is_helper(helper))
-+			coresight_disable_helper(helper);
-+	}
-+}
  
- /**
-  *  coresight_disable_source - Drop the reference count by 1 and disable
-  *  the device if there are no users left.
-  *
-  *  @csdev: The coresight device to disable
-+ *  @data: Opaque data to pass on to the disable function of the source device.
-+ *         For example in perf mode this is a pointer to the struct perf_event.
-  *
-  *  Returns true if the device has been disabled.
-  */
--static bool coresight_disable_source(struct coresight_device *csdev)
-+bool coresight_disable_source(struct coresight_device *csdev, void *data)
- {
+@@ -382,7 +356,6 @@ static void coresight_disable_link(struct coresight_device *csdev,
+ 
+ 	if (link_ops(csdev)->disable) {
+ 		link_ops(csdev)->disable(csdev, inconn, outconn);
+-		coresight_control_assoc_ectdev(csdev, false);
+ 	}
+ 
+ 	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+@@ -410,14 +383,9 @@ int coresight_enable_source(struct coresight_device *csdev, enum cs_mode mode,
+ 
+ 	if (!csdev->enable) {
+ 		if (source_ops(csdev)->enable) {
+-			ret = coresight_control_assoc_ectdev(csdev, true);
+-			if (ret)
+-				return ret;
+ 			ret = source_ops(csdev)->enable(csdev, data, mode);
+-			if (ret) {
+-				coresight_control_assoc_ectdev(csdev, false);
++			if (ret)
+ 				return ret;
+-			}
+ 		}
+ 		csdev->enable = true;
+ 	}
+@@ -488,7 +456,6 @@ bool coresight_disable_source(struct coresight_device *csdev, void *data)
  	if (atomic_dec_return(&csdev->refcnt) == 0) {
  		if (source_ops(csdev)->disable)
--			source_ops(csdev)->disable(csdev, NULL);
-+			source_ops(csdev)->disable(csdev, data);
- 		coresight_control_assoc_ectdev(csdev, false);
-+		coresight_disable_helpers(csdev);
+ 			source_ops(csdev)->disable(csdev, data);
+-		coresight_control_assoc_ectdev(csdev, false);
+ 		coresight_disable_helpers(csdev);
  		csdev->enable = false;
  	}
- 	return !csdev->enable;
- }
-+EXPORT_SYMBOL_GPL(coresight_disable_source);
+@@ -1360,11 +1327,10 @@ static struct device_type coresight_dev_type[] = {
+ 	},
+ 	{
+ 		.name = "helper",
+-	},
+-	{
+-		.name = "ect",
+-	},
++	}
+ };
++/* Ensure the enum matches the names and groups */
++static_assert(ARRAY_SIZE(coresight_dev_type) == CORESIGHT_DEV_TYPE_MAX);
  
- /*
-  * coresight_disable_path_from : Disable components in the given path beyond
-@@ -495,6 +545,9 @@ static void coresight_disable_path_from(struct list_head *path,
- 		default:
+ static void coresight_device_release(struct device *dev)
+ {
+diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
+index 277c890a1f1f..7023ff70cc28 100644
+--- a/drivers/hwtracing/coresight/coresight-cti-core.c
++++ b/drivers/hwtracing/coresight/coresight-cti-core.c
+@@ -555,7 +555,10 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
+ 	mutex_lock(&ect_mutex);
+ 
+ 	/* exit if current is an ECT device.*/
+-	if ((csdev->type == CORESIGHT_DEV_TYPE_ECT) || list_empty(&ect_net))
++	if ((csdev->type == CORESIGHT_DEV_TYPE_HELPER &&
++	     csdev->subtype.helper_subtype ==
++		     CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI) ||
++	    list_empty(&ect_net))
+ 		goto cti_add_done;
+ 
+ 	/* if we didn't find the csdev previously we used the fwnode name */
+@@ -571,8 +574,7 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
+ 			 * if we found a matching csdev then update the ECT
+ 			 * association pointer for the device with this CTI.
+ 			 */
+-			coresight_set_assoc_ectdev_mutex(csdev,
+-							 ect_item->csdev);
++			coresight_add_helper(csdev, ect_item->csdev);
  			break;
  		}
-+
-+		/* Disable all helpers adjacent along the path last */
-+		coresight_disable_helpers(csdev);
  	}
- }
+@@ -582,26 +584,30 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
  
-@@ -504,9 +557,28 @@ void coresight_disable_path(struct list_head *path)
- }
- EXPORT_SYMBOL_GPL(coresight_disable_path);
- 
--int coresight_enable_path(struct list_head *path, enum cs_mode mode, void *sink_data)
-+static int coresight_enable_helpers(struct coresight_device *csdev,
-+				    enum cs_mode mode, void *data)
+ /*
+  * Removing the associated devices is easier.
+- * A CTI will not have a value for csdev->ect_dev.
+  */
+ static void cti_remove_assoc_from_csdev(struct coresight_device *csdev)
  {
-+	int i, ret = 0;
-+	struct coresight_device *helper;
+ 	struct cti_drvdata *ctidrv;
+ 	struct cti_trig_con *tc;
+ 	struct cti_device *ctidev;
++	union coresight_dev_subtype cti_subtype = {
++		.helper_subtype = CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI
++	};
++	struct coresight_device *cti_csdev = coresight_find_output_type(
++		csdev->pdata, CORESIGHT_DEV_TYPE_HELPER, cti_subtype);
 +
-+	for (i = 0; i < csdev->pdata->nr_outconns; ++i) {
-+		helper = csdev->pdata->out_conns[i]->dest_dev;
-+		if (!helper || !coresight_is_helper(helper))
-+			continue;
-+
-+		ret = coresight_enable_helper(helper, mode, data);
-+		if (ret)
-+			return ret;
-+	}
++	if (!cti_csdev)
++		return;
  
-+	return 0;
-+}
-+
-+int coresight_enable_path(struct list_head *path, enum cs_mode mode,
-+			  void *sink_data)
-+{
- 	int ret = 0;
- 	u32 type;
- 	struct coresight_node *nd;
-@@ -516,6 +588,10 @@ int coresight_enable_path(struct list_head *path, enum cs_mode mode, void *sink_
- 		csdev = nd->csdev;
- 		type = csdev->type;
- 
-+		/* Enable all helpers adjacent to the path first */
-+		ret = coresight_enable_helpers(csdev, mode, sink_data);
-+		if (ret)
-+			goto err;
- 		/*
- 		 * ETF devices are tricky... They can be a link or a sink,
- 		 * depending on how they are configured.  If an ETF has been
-@@ -710,7 +786,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
- 		struct coresight_device *child;
- 
- 		child = csdev->pdata->out_conns[i]->dest_dev;
--		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
-+		if (child && coresight_is_helper(child))
- 			if (!coresight_get_ref(child))
- 				goto err;
+ 	mutex_lock(&ect_mutex);
+-	if (csdev->ect_dev) {
+-		ctidrv = csdev_to_cti_drvdata(csdev->ect_dev);
+-		ctidev = &ctidrv->ctidev;
+-		list_for_each_entry(tc, &ctidev->trig_cons, node) {
+-			if (tc->con_dev == csdev) {
+-				cti_remove_sysfs_link(ctidrv, tc);
+-				tc->con_dev = NULL;
+-				break;
+-			}
++	ctidrv = csdev_to_cti_drvdata(cti_csdev);
++	ctidev = &ctidrv->ctidev;
++	list_for_each_entry(tc, &ctidev->trig_cons, node) {
++		if (tc->con_dev == csdev) {
++			cti_remove_sysfs_link(ctidrv, tc);
++			tc->con_dev = NULL;
++			break;
+ 		}
+-		csdev->ect_dev = NULL;
  	}
-@@ -721,7 +797,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
- 		struct coresight_device *child;
- 
- 		child = csdev->pdata->out_conns[i]->dest_dev;
--		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
-+		if (child && coresight_is_helper(child))
- 			coresight_put_ref(child);
- 	}
- 	return -ENODEV;
-@@ -740,7 +816,7 @@ static void coresight_drop_device(struct coresight_device *csdev)
- 		struct coresight_device *child;
- 
- 		child = csdev->pdata->out_conns[i]->dest_dev;
--		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
-+		if (child && coresight_is_helper(child))
- 			coresight_put_ref(child);
- 	}
+ 	mutex_unlock(&ect_mutex);
  }
-@@ -1102,7 +1178,7 @@ int coresight_enable(struct coresight_device *csdev)
- 	if (ret)
- 		goto err_path;
+@@ -630,8 +636,8 @@ static void cti_update_conn_xrefs(struct cti_drvdata *drvdata)
+ 			/* if we can set the sysfs link */
+ 			if (cti_add_sysfs_link(drvdata, tc))
+ 				/* set the CTI/csdev association */
+-				coresight_set_assoc_ectdev_mutex(tc->con_dev,
+-							 drvdata->csdev);
++				coresight_add_helper(tc->con_dev,
++						     drvdata->csdev);
+ 			else
+ 				/* otherwise remove reference from CTI */
+ 				tc->con_dev = NULL;
+@@ -646,8 +652,6 @@ static void cti_remove_conn_xrefs(struct cti_drvdata *drvdata)
  
--	ret = coresight_enable_source(csdev, CS_MODE_SYSFS);
-+	ret = coresight_enable_source(csdev, CS_MODE_SYSFS, NULL);
- 	if (ret)
- 		goto err_source;
- 
-@@ -1159,7 +1235,7 @@ void coresight_disable(struct coresight_device *csdev)
- 	if (ret)
- 		goto out;
- 
--	if (!csdev->enable || !coresight_disable_source(csdev))
-+	if (!csdev->enable || !coresight_disable_source(csdev, NULL))
- 		goto out;
- 
- 	switch (csdev->subtype.source_subtype) {
-@@ -1644,6 +1720,69 @@ static inline int coresight_search_device_idx(struct coresight_dev_list *dict,
- 	return -ENOENT;
+ 	list_for_each_entry(tc, &ctidev->trig_cons, node) {
+ 		if (tc->con_dev) {
+-			coresight_set_assoc_ectdev_mutex(tc->con_dev,
+-							 NULL);
+ 			cti_remove_sysfs_link(drvdata, tc);
+ 			tc->con_dev = NULL;
+ 		}
+@@ -795,27 +799,27 @@ static void cti_pm_release(struct cti_drvdata *drvdata)
  }
  
-+static bool coresight_compare_type(enum coresight_dev_type type_a,
-+				   union coresight_dev_subtype subtype_a,
-+				   enum coresight_dev_type type_b,
-+				   union coresight_dev_subtype subtype_b)
-+{
-+	if (type_a != type_b)
-+		return false;
-+
-+	switch (type_a) {
-+	case CORESIGHT_DEV_TYPE_SINK:
-+		return subtype_a.sink_subtype == subtype_b.sink_subtype;
-+	case CORESIGHT_DEV_TYPE_LINK:
-+		return subtype_a.link_subtype == subtype_b.link_subtype;
-+	case CORESIGHT_DEV_TYPE_LINKSINK:
-+		return subtype_a.link_subtype == subtype_b.link_subtype &&
-+		       subtype_a.sink_subtype == subtype_b.sink_subtype;
-+	case CORESIGHT_DEV_TYPE_SOURCE:
-+		return subtype_a.source_subtype == subtype_b.source_subtype;
-+	case CORESIGHT_DEV_TYPE_HELPER:
-+		return subtype_a.helper_subtype == subtype_b.helper_subtype;
-+	default:
-+		return false;
-+	}
-+}
-+
-+struct coresight_device *
-+coresight_find_input_type(struct coresight_platform_data *pdata,
-+			  enum coresight_dev_type type,
-+			  union coresight_dev_subtype subtype)
-+{
-+	int i;
-+	struct coresight_connection *conn;
-+
-+	for (i = 0; i < pdata->nr_inconns; ++i) {
-+		conn = pdata->in_conns[i];
-+		if (conn &&
-+		    coresight_compare_type(type, subtype, conn->src_dev->type,
-+					   conn->src_dev->subtype))
-+			return conn->src_dev;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(coresight_find_input_type);
-+
-+struct coresight_device *
-+coresight_find_output_type(struct coresight_platform_data *pdata,
-+			   enum coresight_dev_type type,
-+			   union coresight_dev_subtype subtype)
-+{
-+	int i;
-+	struct coresight_connection *conn;
-+
-+	for (i = 0; i < pdata->nr_outconns; ++i) {
-+		conn = pdata->out_conns[i];
-+		if (conn->dest_dev &&
-+		    coresight_compare_type(type, subtype, conn->dest_dev->type,
-+					   conn->dest_dev->subtype))
-+			return conn->dest_dev;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(coresight_find_output_type);
-+
- bool coresight_loses_context_with_cpu(struct device *dev)
+ /** cti ect operations **/
+-int cti_enable(struct coresight_device *csdev)
++int cti_enable(struct coresight_device *csdev, enum cs_mode mode, void *data)
  {
- 	return fwnode_property_present(dev_fwnode(dev),
-diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
-index 711f451b6946..a74220604558 100644
---- a/drivers/hwtracing/coresight/coresight-etm-perf.c
-+++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
-@@ -492,7 +492,7 @@ static void etm_event_start(struct perf_event *event, int flags)
- 		goto fail_end_stop;
+ 	struct cti_drvdata *drvdata = csdev_to_cti_drvdata(csdev);
  
- 	/* Finally enable the tracer */
--	if (source_ops(csdev)->enable(csdev, event, CS_MODE_PERF))
-+	if (coresight_enable_source(csdev, CS_MODE_PERF, event))
- 		goto fail_disable_path;
+ 	return cti_enable_hw(drvdata);
+ }
  
- 	/*
-@@ -586,7 +586,7 @@ static void etm_event_stop(struct perf_event *event, int mode)
- 		return;
+-int cti_disable(struct coresight_device *csdev)
++int cti_disable(struct coresight_device *csdev, void *data)
+ {
+ 	struct cti_drvdata *drvdata = csdev_to_cti_drvdata(csdev);
  
- 	/* stop tracer */
--	source_ops(csdev)->disable(csdev, event);
-+	coresight_disable_source(csdev, event);
+ 	return cti_disable_hw(drvdata);
+ }
  
- 	/* tell the core */
- 	event->hw.state = PERF_HES_STOPPED;
+-static const struct coresight_ops_ect cti_ops_ect = {
++static const struct coresight_ops_helper cti_ops_ect = {
+ 	.enable = cti_enable,
+ 	.disable = cti_disable,
+ };
+ 
+ static const struct coresight_ops cti_ops = {
+-	.ect_ops = &cti_ops_ect,
++	.helper_ops = &cti_ops_ect,
+ };
+ 
+ /*
+@@ -922,8 +926,8 @@ static int cti_probe(struct amba_device *adev, const struct amba_id *id)
+ 
+ 	/* set up coresight component description */
+ 	cti_desc.pdata = pdata;
+-	cti_desc.type = CORESIGHT_DEV_TYPE_ECT;
+-	cti_desc.subtype.ect_subtype = CORESIGHT_DEV_SUBTYPE_ECT_CTI;
++	cti_desc.type = CORESIGHT_DEV_TYPE_HELPER;
++	cti_desc.subtype.helper_subtype = CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI;
+ 	cti_desc.ops = &cti_ops;
+ 	cti_desc.groups = drvdata->ctidev.con_groups;
+ 	cti_desc.dev = dev;
+diff --git a/drivers/hwtracing/coresight/coresight-cti-sysfs.c b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+index e528cff9d4e2..d25dd2737b49 100644
+--- a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
++++ b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+@@ -112,11 +112,11 @@ static ssize_t enable_store(struct device *dev,
+ 		ret = pm_runtime_resume_and_get(dev->parent);
+ 		if (ret)
+ 			return ret;
+-		ret = cti_enable(drvdata->csdev);
++		ret = cti_enable(drvdata->csdev, CS_MODE_SYSFS, NULL);
+ 		if (ret)
+ 			pm_runtime_put(dev->parent);
+ 	} else {
+-		ret = cti_disable(drvdata->csdev);
++		ret = cti_disable(drvdata->csdev, NULL);
+ 		if (!ret)
+ 			pm_runtime_put(dev->parent);
+ 	}
+diff --git a/drivers/hwtracing/coresight/coresight-cti.h b/drivers/hwtracing/coresight/coresight-cti.h
+index 8b106b13a244..cb9ee616d01f 100644
+--- a/drivers/hwtracing/coresight/coresight-cti.h
++++ b/drivers/hwtracing/coresight/coresight-cti.h
+@@ -215,8 +215,8 @@ int cti_add_connection_entry(struct device *dev, struct cti_drvdata *drvdata,
+ 			     const char *assoc_dev_name);
+ struct cti_trig_con *cti_allocate_trig_con(struct device *dev, int in_sigs,
+ 					   int out_sigs);
+-int cti_enable(struct coresight_device *csdev);
+-int cti_disable(struct coresight_device *csdev);
++int cti_enable(struct coresight_device *csdev, enum cs_mode mode, void *data);
++int cti_disable(struct coresight_device *csdev, void *data);
+ void cti_write_all_hw_regs(struct cti_drvdata *drvdata);
+ void cti_write_intack(struct device *dev, u32 ackval);
+ void cti_write_single_reg(struct cti_drvdata *drvdata, int offset, u32 value);
 diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
-index 65ae6d161c57..5575014f73e0 100644
+index 5575014f73e0..1801ff4e467b 100644
 --- a/drivers/hwtracing/coresight/coresight-priv.h
 +++ b/drivers/hwtracing/coresight/coresight-priv.h
-@@ -216,5 +216,8 @@ void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
+@@ -211,8 +211,8 @@ void coresight_release_platform_data(struct coresight_device *csdev,
+ 				     struct coresight_platform_data *pdata);
+ struct coresight_device *
+ coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
+-void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
+-				      struct coresight_device *ect_csdev);
++void coresight_add_helper(struct coresight_device *csdev,
++			  struct coresight_device *helper);
  
  void coresight_set_percpu_sink(int cpu, struct coresight_device *csdev);
  struct coresight_device *coresight_get_percpu_sink(int cpu);
-+int coresight_enable_source(struct coresight_device *csdev, enum cs_mode mode,
-+			    void *data);
-+bool coresight_disable_source(struct coresight_device *csdev, void *data);
+diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
+index 464ba5e1343b..dd78e9fcfc4d 100644
+--- a/drivers/hwtracing/coresight/coresight-sysfs.c
++++ b/drivers/hwtracing/coresight/coresight-sysfs.c
+@@ -148,6 +148,10 @@ int coresight_make_links(struct coresight_device *orig,
+ 	char *outs = NULL, *ins = NULL;
+ 	struct coresight_sysfs_link *link = NULL;
  
- #endif
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-index 00a0c2aa8481..37afe8b52760 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-@@ -775,40 +775,19 @@ static const struct etr_buf_operations etr_sg_buf_ops = {
- struct coresight_device *
- tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
- {
--	int i;
--	struct coresight_device *tmp, *etr = drvdata->csdev;
-+	struct coresight_device *etr = drvdata->csdev;
-+	union coresight_dev_subtype catu_subtype = {
-+		.helper_subtype = CORESIGHT_DEV_SUBTYPE_HELPER_CATU
-+	};
- 
- 	if (!IS_ENABLED(CONFIG_CORESIGHT_CATU))
- 		return NULL;
- 
--	for (i = 0; i < etr->pdata->nr_outconns; i++) {
--		tmp = etr->pdata->out_conns[i]->dest_dev;
--		if (tmp && coresight_is_catu_device(tmp))
--			return tmp;
--	}
--
--	return NULL;
-+	return coresight_find_output_type(etr->pdata, CORESIGHT_DEV_TYPE_HELPER,
-+					  catu_subtype);
- }
- EXPORT_SYMBOL_GPL(tmc_etr_get_catu_device);
- 
--static inline int tmc_etr_enable_catu(struct tmc_drvdata *drvdata,
--				      struct etr_buf *etr_buf)
--{
--	struct coresight_device *catu = tmc_etr_get_catu_device(drvdata);
--
--	if (catu && helper_ops(catu)->enable)
--		return helper_ops(catu)->enable(catu, etr_buf);
--	return 0;
--}
--
--static inline void tmc_etr_disable_catu(struct tmc_drvdata *drvdata)
--{
--	struct coresight_device *catu = tmc_etr_get_catu_device(drvdata);
--
--	if (catu && helper_ops(catu)->disable)
--		helper_ops(catu)->disable(catu, drvdata->etr_buf);
--}
--
- static const struct etr_buf_operations *etr_buf_ops[] = {
- 	[ETR_MODE_FLAT] = &etr_flat_buf_ops,
- 	[ETR_MODE_ETR_SG] = &etr_sg_buf_ops,
-@@ -1058,13 +1037,6 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
- 	if (WARN_ON(drvdata->etr_buf))
- 		return -EBUSY;
- 
--	/*
--	 * If this ETR is connected to a CATU, enable it before we turn
--	 * this on.
--	 */
--	rc = tmc_etr_enable_catu(drvdata, etr_buf);
--	if (rc)
--		return rc;
- 	rc = coresight_claim_device(drvdata->csdev);
- 	if (!rc) {
- 		drvdata->etr_buf = etr_buf;
-@@ -1072,7 +1044,6 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
- 		if (rc) {
- 			drvdata->etr_buf = NULL;
- 			coresight_disclaim_device(drvdata->csdev);
--			tmc_etr_disable_catu(drvdata);
- 		}
- 	}
- 
-@@ -1162,8 +1133,6 @@ static void __tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
- void tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
- {
- 	__tmc_etr_disable_hw(drvdata);
--	/* Disable CATU device if this ETR is connected to one */
--	tmc_etr_disable_catu(drvdata);
- 	coresight_disclaim_device(drvdata->csdev);
- 	/* Reset the ETR buf used by hardware */
- 	drvdata->etr_buf = NULL;
++	/* Helper devices aren't shown in sysfs */
++	if (conn->dest_port == -1 && conn->src_port == -1)
++		return 0;
++
+ 	do {
+ 		outs = devm_kasprintf(&orig->dev, GFP_KERNEL,
+ 				      "out:%d", conn->src_port);
 diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-index b97edd24f3ec..61dfbab5fa98 100644
+index 61dfbab5fa98..949aa24f46bd 100644
 --- a/include/linux/coresight.h
 +++ b/include/linux/coresight.h
-@@ -375,7 +375,8 @@ struct coresight_ops_source {
-  * @disable	: Disable the device
+@@ -41,7 +41,7 @@ enum coresight_dev_type {
+ 	CORESIGHT_DEV_TYPE_LINKSINK,
+ 	CORESIGHT_DEV_TYPE_SOURCE,
+ 	CORESIGHT_DEV_TYPE_HELPER,
+-	CORESIGHT_DEV_TYPE_ECT,
++	CORESIGHT_DEV_TYPE_MAX
+ };
+ 
+ enum coresight_dev_subtype_sink {
+@@ -66,12 +66,7 @@ enum coresight_dev_subtype_source {
+ 
+ enum coresight_dev_subtype_helper {
+ 	CORESIGHT_DEV_SUBTYPE_HELPER_CATU,
+-};
+-
+-/* Embedded Cross Trigger (ECT) sub-types */
+-enum coresight_dev_subtype_ect {
+-	CORESIGHT_DEV_SUBTYPE_ECT_NONE,
+-	CORESIGHT_DEV_SUBTYPE_ECT_CTI,
++	CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI
+ };
+ 
+ /**
+@@ -84,8 +79,6 @@ enum coresight_dev_subtype_ect {
+  *			by @coresight_dev_subtype_source.
+  * @helper_subtype:	type of helper this component is, as defined
+  *			by @coresight_dev_subtype_helper.
+- * @ect_subtype:        type of cross trigger this component is, as
+- *			defined by @coresight_dev_subtype_ect
   */
- struct coresight_ops_helper {
--	int (*enable)(struct coresight_device *csdev, void *data);
-+	int (*enable)(struct coresight_device *csdev, enum cs_mode mode,
-+		      void *data);
+ union coresight_dev_subtype {
+ 	/* We have some devices which acts as LINK and SINK */
+@@ -95,7 +88,6 @@ union coresight_dev_subtype {
+ 	};
+ 	enum coresight_dev_subtype_source source_subtype;
+ 	enum coresight_dev_subtype_helper helper_subtype;
+-	enum coresight_dev_subtype_ect ect_subtype;
+ };
+ 
+ /**
+@@ -239,8 +231,6 @@ struct coresight_sysfs_link {
+  *		from source to that sink.
+  * @ea:		Device attribute for sink representation under PMU directory.
+  * @def_sink:	cached reference to default sink found for this device.
+- * @ect_dev:	Associated cross trigger device. Not part of the trace data
+- *		path or connections.
+  * @nr_links:   number of sysfs links created to other components from this
+  *		device. These will appear in the "connections" group.
+  * @has_conns_grp: Have added a "connections" group for sysfs links.
+@@ -263,12 +253,9 @@ struct coresight_device {
+ 	bool activated;	/* true only if a sink is part of a path */
+ 	struct dev_ext_attribute *ea;
+ 	struct coresight_device *def_sink;
+-	/* cross trigger handling */
+-	struct coresight_device *ect_dev;
+ 	/* sysfs links between components */
+ 	int nr_links;
+ 	bool has_conns_grp;
+-	bool ect_enabled; /* true only if associated ect device is enabled */
+ 	/* system configuration and feature lists */
+ 	struct list_head feature_csdev_list;
+ 	struct list_head config_csdev_list;
+@@ -380,23 +367,11 @@ struct coresight_ops_helper {
  	int (*disable)(struct coresight_device *csdev, void *data);
  };
  
-@@ -646,5 +647,13 @@ coresight_add_out_conn(struct device *dev,
- 		       struct coresight_platform_data *pdata,
- 		       const struct coresight_connection *new_conn);
- int coresight_add_in_conn(struct coresight_connection *conn);
-+struct coresight_device *
-+coresight_find_input_type(struct coresight_platform_data *pdata,
-+			  enum coresight_dev_type type,
-+			  union coresight_dev_subtype subtype);
-+struct coresight_device *
-+coresight_find_output_type(struct coresight_platform_data *pdata,
-+			   enum coresight_dev_type type,
-+			   union coresight_dev_subtype subtype);
+-/**
+- * struct coresight_ops_ect - Ops for an embedded cross trigger device
+- *
+- * @enable	: Enable the device
+- * @disable	: Disable the device
+- */
+-struct coresight_ops_ect {
+-	int (*enable)(struct coresight_device *csdev);
+-	int (*disable)(struct coresight_device *csdev);
+-};
+-
+ struct coresight_ops {
+ 	const struct coresight_ops_sink *sink_ops;
+ 	const struct coresight_ops_link *link_ops;
+ 	const struct coresight_ops_source *source_ops;
+ 	const struct coresight_ops_helper *helper_ops;
+-	const struct coresight_ops_ect *ect_ops;
+ };
  
- #endif		/* _LINUX_COREISGHT_H */
+ #if IS_ENABLED(CONFIG_CORESIGHT)
 -- 
 2.34.1
 
