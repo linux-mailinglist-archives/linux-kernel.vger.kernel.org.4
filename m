@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704416EE67C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F246EE67F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbjDYRS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 13:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
+        id S234620AbjDYRTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 13:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjDYRS0 (ORCPT
+        with ESMTP id S234924AbjDYRSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:18:26 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9464E5F;
-        Tue, 25 Apr 2023 10:18:25 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so6124300a12.2;
-        Tue, 25 Apr 2023 10:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682443105; x=1685035105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/17J/S6eU+FZeHfmVQyUAEEmZwYeCmiWS2BcpDMa1Qs=;
-        b=gEZ8m2oXwCMFlbevdc/pxoJPcoUIqerxocj8c5fqEivuz/FlNRia9YA5Bggdq8Kf3B
-         g5LYNsOH/KzOgWvaHCw0o/OIk+kN7IZMSj0mYIhqZoGka3RK1txklhCQ1Ci8lXZV9Ri9
-         Hy00Ul+0TaX1sOHpgTyU8N6V0sqXe4XBnusJkrCJdesCbOtRQwbIcW91HXOKO9nay+eR
-         PiF6rl/taWgKcTfGJkEYP5ot8sQ/eh4SDOatE7S1ZpXqeTJNOd65+iTO4CxwNV6g6g6p
-         dMSOVTiegGqBeqnBKY4Ll3V/H+BWcrvpQ3OqfvKcxBjVecgD58/o0vnvbYlh7YHzbbkX
-         TzWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682443105; x=1685035105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/17J/S6eU+FZeHfmVQyUAEEmZwYeCmiWS2BcpDMa1Qs=;
-        b=TLTxkOWAZ8sz0c5sL99DenQ7Vswz+n+6M9szeuHCqgbboJsIHvnYKvzCE1eHkN/c+m
-         LHCI3sWjQe0bE5pKb07N1Pd/+o+P49DzEAHZus9xx5WYVUDJaZ6y+0yGO9jg0g/OpZOU
-         pK8DaGToK6VRrbSwDHUG4877vOhgIjz6CcOJzUorf5y1gUSykxGkmJ0EeRq2h8NXKNWS
-         HPFL3WNIH5NBpeK53EugBdjLzbNmIZ0lalMSxt3ADvUVqM0JjYpcE9/sKUTfvGfk+i18
-         5qk/A8MdHmObWKSF+fsEbY1mVGHiG+GEU569BTud2zLwIvPTVPTdHdljshn86v6zKRO6
-         UU2w==
-X-Gm-Message-State: AAQBX9e9WKabsh/hd5KWXhxuG+KlHt5f2l5T5AKmxc043iq+pnY5K+na
-        ONT/KqKw+bJ9L3l0Uvc69kWIn7kPkQlII6njrj/BxpZ/VHgyr0Oe
-X-Google-Smtp-Source: AKy350Y6vIHyXSBx8rUF1ctIPirpYIG+UI+Vb/yjuDkAwQ4kXDuvG7sRdQmsGyIMqdPIZtOQBSz3ehn3Nf5o4tXYQCQ=
-X-Received: by 2002:a17:90b:fc1:b0:247:101b:b532 with SMTP id
- gd1-20020a17090b0fc100b00247101bb532mr17338130pjb.28.1682443104942; Tue, 25
- Apr 2023 10:18:24 -0700 (PDT)
+        Tue, 25 Apr 2023 13:18:54 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE13CC27;
+        Tue, 25 Apr 2023 10:18:46 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PHIMgc093146;
+        Tue, 25 Apr 2023 12:18:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682443102;
+        bh=8UWEHdzwym7D2TJjdzjZDDZMXCWez9fzFsKRaVXXaTk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ptMS8rr2tUkkNzoEL2BE3fjKxpIgNRGOqhyglMx767ne6zjKBbPKhNFDqDQ3aFOqm
+         2KgrL8RGpshIhbqFGKC6DnYhDzJvXssgYBML8J17kZ3nIDMBNVEI9w9/FeQQVTl4pI
+         UDPwVN9U8w+dSfuFiblTyKfhNsAIx+liQhKRWsco=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PHIMtS087348
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 12:18:22 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 12:18:21 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 12:18:21 -0500
+Received: from [10.250.150.138] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PHIGaj024841;
+        Tue, 25 Apr 2023 12:18:17 -0500
+Message-ID: <602392dc-de1f-90bf-3deb-cb5cee81e41c@ti.com>
+Date:   Tue, 25 Apr 2023 22:48:16 +0530
 MIME-Version: 1.0
-References: <20230412171441.18958-1-zyytlz.wz@163.com> <2bd0143cf0e638c88f57409f854c0529a1b12b6b.camel@linux.intel.com>
-In-Reply-To: <2bd0143cf0e638c88f57409f854c0529a1b12b6b.camel@linux.intel.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Wed, 26 Apr 2023 01:18:12 +0800
-Message-ID: <CAJedcCzptvdgk8vMO5F==NS79gTZdWaL1id8GcbUn2UsbQr8Xg@mail.gmail.com>
-Subject: Re: [PATCH] HID: intel-ish-hid: pci-ish: Fix use after free bug in
- ish_remove due to race condition
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, rafael@kernel.org,
-        hdegoede@redhat.com, gregkh@linuxfoundation.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
+ compilation
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Mark Brown <broonie@kernel.org>,
+        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
+References: <20230420121615.967487-1-d-gole@ti.com>
+ <8edb48ee-55a3-4cc2-9c81-514ec867b35c@roeck-us.net>
+From:   "Gole, Dhruva" <d-gole@ti.com>
+Organization: Texas Instruments Incorporated
+In-Reply-To: <8edb48ee-55a3-4cc2-9c81-514ec867b35c@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-srinivas pandruvada <srinivas.pandruvada@linux.intel.com> =E4=BA=8E2023=E5=
-=B9=B44=E6=9C=8825=E6=97=A5=E5=91=A8=E4=BA=8C 23:55=E5=86=99=E9=81=93=EF=BC=
-=9A
->
-> On Thu, 2023-04-13 at 01:14 +0800, Zheng Wang wrote:
-> > In ish_probe, it calls ish_dev_init to init the device. In this
-> > function,
-> > ishtp_device_init is called and &dev->bh_hbm_work is bound with
-> > bh_hbm_work_fn. recv_hbm may be called to start the timer work.
-> >
-> > If we remove the module which will call ish_remove to make cleanup,
-> > there may be an unfinished work. The possible sequence is as follows:
-> >
-> > Fix it by canceling the work before cleanup in
-> > ishtp_bus_remove_all_clients
-> >
-> > CPU0                  CPUc1
-> >
-> >                     |bh_hbm_work_fn
-> > ish_remove      |
-> > ishtp_bus_remove_all_clients  |
-> > kfree(ishtp_dev->fw_clients); |
-> >                     |
-> >                     |&dev->fw_clients[...]
-> >                     |   //use
-> >
-> > Fixes: 3703f53b99e4 ("HID: intel_ish-hid: ISH Transport layer")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->
-> It is a extremely rare case, so it is OK to not mark for stable.
+Hi,
 
-Got it, thanks!
+On 4/25/2023 8:38 PM, Guenter Roeck wrote:
+> On Thu, Apr 20, 2023 at 05:46:15PM +0530, Dhruva Gole wrote:
+>> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
+>> it may introduce build issues with certain configs where it maybe disabled
+>> This is because if above config is not enabled the suspend-resume
+>> functions are never part of the code but the bcm63xx_spi_pm_ops struct
+>> still inits them to non-existent suspend-resume functions.
+>>
+>> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
+>>
+>> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> This patch results in:
+>
+> drivers/spi/spi-bcm63xx.c:632:12: error: 'bcm63xx_spi_resume' defined but not used [-Werror=unused-function]
+>   632 | static int bcm63xx_spi_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~
+> drivers/spi/spi-bcm63xx.c:620:12: error: 'bcm63xx_spi_suspend' defined but not used [-Werror=unused-function]
+>   620 | static int bcm63xx_spi_suspend(struct device *dev)
+>
+> on architectures with no PM support (alpha, csky, m68k, openrisc, parisc,
+> riscv, s390).
 
-Best regards,
-Zheng
+Thanks for pointing this out.
+
+I could send a patch to address this as pointed here [0]
+
+by adding a __maybe_unused.
+
+However, do you think my other patch [1] could address this issue without the need for above?
+
+I think it would because DEFINE_SIMPLE_DEV_PM_OPS doesn't seem to be under any conditional CONFIG_PM.
+
+However, I may have missed something, please do let me know what's the best way to fix.
+
+[0] https://lore.kernel.org/all/24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com/
+
+[1] https://lore.kernel.org/all/20230424102546.1604484-1-d-gole@ti.com/
 
 >
-> > ---
-> >  drivers/hid/intel-ish-hid/ishtp/bus.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/hid/intel-ish-hid/ishtp/bus.c
-> > b/drivers/hid/intel-ish-hid/ishtp/bus.c
-> > index 81385ab37fa9..ada7cd08dbeb 100644
-> > --- a/drivers/hid/intel-ish-hid/ishtp/bus.c
-> > +++ b/drivers/hid/intel-ish-hid/ishtp/bus.c
-> > @@ -744,6 +744,7 @@ void ishtp_bus_remove_all_clients(struct
-> > ishtp_device *ishtp_dev,
-> >                  */
-> >         }
-> >         spin_unlock_irqrestore(&ishtp_dev->cl_list_lock, flags);
-> > +       cancel_work_sync(&ishtp_dev->bh_hbm_work);
-> >
-> >         /* Release DMA buffers for client messages */
-> >         ishtp_cl_free_dma_buf(ishtp_dev);
->
+> Guenter
+
+-- 
+Regards,
+Dhruva Gole <d-gole@ti.com>
+
