@@ -2,92 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB7D6EE13E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22686EE14B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbjDYLrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S233706AbjDYLt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbjDYLri (ORCPT
+        with ESMTP id S232240AbjDYLty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:47:38 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75233BB97
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:47:35 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-2efbaad9d76so5119591f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682423254; x=1685015254;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JiuIRKs9PjicPVCiI7+t45e05sE/xszCru50zXxeVEY=;
-        b=ALjxPtORpNCAYZeu6DgdQlxj7NFa6BnSD70Wnc+hZR0VXLFPGlr7Ne5ajzsnIpVxFD
-         7iXjWLORbfbNICGERP1w2eL0pnpd0pZtgL5fereqLjzo75BgGbe5jJtRYg3o9z2JIn8c
-         Y7bfX/vVq1AQ/gUH5KjoWINEEgZlhoKBp3MXesyB69LziMgb6kM1owXyPAl1bFKutu5l
-         5kzqIzI7PqXkr+M1l6zbwfMaMmTlyeUnze/0csHt4lJxVHZ8KAWBr+ShF3T7EYm9Zstz
-         CmeFEKvCW2EZkyPGkKEIpCw1YXh3fiKnpxqMDxz7pIpJUV4ZdryvPaEDeghBzEwhIW2L
-         3odQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682423254; x=1685015254;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JiuIRKs9PjicPVCiI7+t45e05sE/xszCru50zXxeVEY=;
-        b=XizaMxB6Y4PhF58dRiQIGCj5B59vZGPAlv9qT7FNPnA46dwItYUGeCt3yEZ3A4YMSM
-         wJYdGSI3WJj4myyYhUpU430z1M4DO+cQliEyNRtqSulsbcbDEhi5lboeXO8slxnbkZQz
-         qb+KAv1Zm4QsBPpyZ9JpLI0+DrverDywtWwanJFi8F9P3raOdS8lhVSSacXFCAStB5E8
-         bZuMOZYl569E8z6WAfK7xmU0S9yD86MOq/l75+qw8JtLfxb3RNMQrbNFldvONO/69B5d
-         W3jFc2Vi2C2BhHoi2is+9U/nEA21Q2s/ORMJI7BTTBGuUQIA11DiDbMiAa/sIOg0cHsN
-         CF5A==
-X-Gm-Message-State: AAQBX9eQlJTlyCrOGswHNEivMa5K72tbIzBh9W55B8lVl5jPH6xPNAKf
-        sExcZfcGOSSj3s7EbCUl2uEC7w==
-X-Google-Smtp-Source: AKy350aTPKhEURErKvzC5tUu15uUXe3txxCHawCF48VkO2ZBI2xz2AV7K/6E6w8KpCtXd4vFAgJrwQ==
-X-Received: by 2002:adf:fe83:0:b0:2ff:7311:6e74 with SMTP id l3-20020adffe83000000b002ff73116e74mr11502057wrr.26.1682423253790;
-        Tue, 25 Apr 2023 04:47:33 -0700 (PDT)
-Received: from [10.101.1.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id n3-20020a7bcbc3000000b003f175b360e5sm14904856wmi.0.2023.04.25.04.47.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 04:47:33 -0700 (PDT)
-Message-ID: <e69e5c5c-033b-e932-a64c-25c00837fc65@baylibre.com>
-Date:   Tue, 25 Apr 2023 13:47:32 +0200
+        Tue, 25 Apr 2023 07:49:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C94E67
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OenIbESUDMerzpX4WLGSnnomtRylcgFMwwHwo8/lU6I=; b=s62+IAJIig/3R3/hkphcr+OXhS
+        AG+Lbb4N/1fbdn/z4D3LY4zZd800N0vKKp3i+xy//+h2XbF3K26sMzVmPd2x/kIajdBHcLMR7VTdx
+        ZUeaP4PYzNwrlIBn0Op4E/6AnNy49wNq9v2Sw0mkr22FbvrmHKtWb4KFcEOje2MSyh7iUAr0N0D3F
+        wz+yUdzJLq7LOGSjh50PAxqLJ50qf5vEO6e6ifOetjPqeYjmxW+nF9ZybjQwR6bIQqZ5VLnqzaXMb
+        0GBQVkTgMDhalP4QnPv3FmWJ8tBc7gsgeBfTg5LZg76EU6EiumYUcyDt4lvdcb37Wlze98syrTu5p
+        YarPyz4g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1prHAy-001P35-4u; Tue, 25 Apr 2023 11:49:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0414D300380;
+        Tue, 25 Apr 2023 13:49:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D5A82241B9569; Tue, 25 Apr 2023 13:49:37 +0200 (CEST)
+Date:   Tue, 25 Apr 2023 13:49:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "bibo, mao" <maobibo@loongson.cn>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+Message-ID: <20230425114937.GC1335080@hirez.programming.kicks-ass.net>
+References: <ZEKDZEQmKExv0O7Q@lothringen>
+ <87leil2r7v.ffs@tglx>
+ <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
+ <ZEPteS82TbIhMQxe@lothringen>
+ <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
+ <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: mediatek: mt8195: Assign dp-intf
- aliases
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230424112523.1436926-1-angelogioacchino.delregno@collabora.com>
- <20230424112523.1436926-3-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230424112523.1436926-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 13:25, AngeloGioacchino Del Regno wrote:
-> Assign aliases for the primary and secondary dp-intf IP to properly
-> and reliably enable DisplayPort functionality.
+On Sun, Apr 23, 2023 at 09:52:49PM +0800, bibo, mao wrote:
+
+> > @@ -40,6 +40,7 @@ SYM_FUNC_START(handle_vint)
+> >   	ori	t0, t0, 0x1f
+> >   	xori	t0, t0, 0x1f
+> >   	bne	t0, t1, 1f
+> > +	addi.d	t0, t0, 0x20
+> It is more reasonable with this patch, this will jump out of idle function
+> directly after interrupt returns. If so, can we remove checking
+> _TIF_NEED_RESCHED in idle ASM function?
 > 
-> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
+> > +	move	t0, CSR_CRMD_IE
+> > +	csrxchg	t0, t0, LOONGARCH_CSR_CRMD
+> -   	LONG_L	t0, tp, TI_FLAGS
+> +	nop
+> >   	nop
+> -	andi	t0, t0, _TIF_NEED_RESCHED
+> -	bnez	t0, 1f
+> +	nop
+> +	nop
+> >   	nop
+> > -	nop
+> > -	nop
+> >   	idle	0
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Would not something like the below be a more compact form?
+That is; afaict there is no reason to keep it 32 bytes, we can easily go
+16 and drop 4 nops.
 
-Regards,
-Alexandre
+Additionally, instead of truncating to the start, increase to the end by
+doing:
 
+	ip |= 0xf;
+	ip++;
+
+Also; I added a wee comment.
+
+
+diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+index 44ff1ff64260..3c8a6bab98fe 100644
+--- a/arch/loongarch/kernel/genex.S
++++ b/arch/loongarch/kernel/genex.S
+@@ -18,27 +18,31 @@
+ 
+ 	.align	5
+ SYM_FUNC_START(__arch_cpu_idle)
+-	/* start of rollback region */
+-	LONG_L	t0, tp, TI_FLAGS
+-	nop
+-	andi	t0, t0, _TIF_NEED_RESCHED
+-	bnez	t0, 1f
+-	nop
+-	nop
+-	nop
++	/* start of idle interrupt region */
++	move	t0, CSR_CRMD_IE
++	csrxchg	t0, t0, LOONGARCH_CSR_CRMD
++	/*
++	 * If an interrupt lands here; between enabling interrupts above and
++	 * going idle on the next instruction, we must *NOT* go idle since the
++	 * interrupt could have set TIF_NEED_RESCHED or caused an timer to need
++	 * reprogramming. Fall through -- see handle_vint() below -- and have
++	 * the idle loop take care of things.
++	 */
+ 	idle	0
+-	/* end of rollback region */
+-1:	jr	ra
++	nop
++	/* end of idle interrupt region */
++SYM_INNER_LBEL(__arch_cpu_idle_exit, SYM_L_LOCAL)
++	jr	ra
+ SYM_FUNC_END(__arch_cpu_idle)
+ 
+ SYM_FUNC_START(handle_vint)
+ 	BACKUP_T0T1
+ 	SAVE_ALL
+-	la_abs	t1, __arch_cpu_idle
++	la_abs	t1, __arch_cpu_idle_exit
+ 	LONG_L	t0, sp, PT_ERA
+-	/* 32 byte rollback region */
+-	ori	t0, t0, 0x1f
+-	xori	t0, t0, 0x1f
++	/* 16 byte idle interrupt region */
++	ori	t0, t0, 0x0f
++	addi.d	t0, t0, 1
+ 	bne	t0, t1, 1f
+ 	LONG_S	t0, sp, PT_ERA
+ 1:	move	a0, sp
+diff --git a/arch/loongarch/kernel/idle.c b/arch/loongarch/kernel/idle.c
+index 0b5dd2faeb90..5ba72d229920 100644
+--- a/arch/loongarch/kernel/idle.c
++++ b/arch/loongarch/kernel/idle.c
+@@ -11,7 +11,6 @@
+ 
+ void __cpuidle arch_cpu_idle(void)
+ {
+-	raw_local_irq_enable();
+ 	__arch_cpu_idle(); /* idle instruction needs irq enabled */
+ 	raw_local_irq_disable();
+ }
