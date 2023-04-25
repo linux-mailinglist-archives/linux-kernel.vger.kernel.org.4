@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E975C6EE291
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842566EE294
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjDYNPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S234017AbjDYNPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjDYNPG (ORCPT
+        with ESMTP id S234024AbjDYNPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:15:06 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3313C1A;
-        Tue, 25 Apr 2023 06:15:04 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-440403d34a4so2070344e0c.0;
-        Tue, 25 Apr 2023 06:15:04 -0700 (PDT)
+        Tue, 25 Apr 2023 09:15:18 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F412913FB6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:15:11 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f109b1808so1079251666b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682428503; x=1685020503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wqv8r/KFOBnoNWbUFUiDZTpYWxmph2Y+u4MhHtRun0M=;
-        b=ctzWSSvCj4vVhD0Ybx0qlOxNqi9C5x7m7v/8XFMMh9Es8CtzsbZ1zqBQi3LBduNHZg
-         sUusmouGhQJLLIcVoQYK27s1UZWgfu+K7Jrrdn3K6qFA1hIb1vtlpus2ZjCKSzW+r8Nn
-         +pjxutdbxj6cZFtWfE6ILgKqpOUIh0banzxMPqR72qQ1bGSFJ7/0nnATmOA4kwzBMODQ
-         FfPHoVA+jAHaK+TgCZJuLKhxw2C1hlV95n525LxdKY+QC/8EVs42fURaJ6GTK30/Q4Qy
-         y4Pg2DTxOR+BnufXAPk+AD/WcPPcpkqmZWAvdqcrCG+ZfaNM49pIO4UEwKtlLyNYGaz+
-         XnHg==
+        d=linaro.org; s=google; t=1682428510; x=1685020510;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=S3BikuggXhWs1OPUQPTsPuMkYRDNlCEeDeec0U2qCGU=;
+        b=npeWsqFvrxdDEjHJ40Ljy4HgJG2I6Qag8a8pP//WROOGC4bMMXJXG3NUbeC2rI+Agm
+         zM9WBSRzLcIEKfcvxacDUawYlNSrP0XYjoBLYQGI6uUElAthC5524feJDJUWQ+PehVdc
+         22poIpMVGBO5EQJrClH4W5BuJtjELXcdAgYPtFQAD9z5BOd9XCCXF+MvEBJ3A6ef5SXB
+         4pHezttks4lY4jLY79TrMulHjKlLvwIpKISxTo7x1l5cUonXCI4y1LUOAyfSiS0LeiIT
+         jQ83HGi1AWY3Utj5K0L0cnNQlqX/oqhs2cOYsjyRCbRG/N4b7Tw9S7bca+7qjcYjynjM
+         fDlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682428503; x=1685020503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wqv8r/KFOBnoNWbUFUiDZTpYWxmph2Y+u4MhHtRun0M=;
-        b=YMILMFGQPtqfXTz0JLoNwXmDZCTlLvlv7gJjiTwoOJPnIYHAgYOiAhnNuqytY9iLqp
-         HaHAcYub9tAISAqZoSnGeYSKB7YVjcXdpmxzL+XO5ba0g8aprh/P9OFwkqj6K0cGa+lm
-         7wxPylD0BQqkEmm/eZHMAOVK8BmuwBivdOIhb+pxo56//oNTgdjJeQkZzY3iF5nzk5Qa
-         AgAX3+rBWzY2sujIpi8KuxdCvLnbi+C9zs3EkoQO33hN4LHTP5l4OozwHiPMytaEBmho
-         Ih9YKZGDQ+Ct+cXBamrNLB2weQ3qD4MNSbpu4o7KZ/fvFNK7h4IrXV1yF8CRJewMabUb
-         YLXw==
-X-Gm-Message-State: AAQBX9crboL8EM7cFK+GwJAYhiHvD86cdNy/YXP/EssGv5LmG8MDR2id
-        J5LA6Ns8DgEgTygxAb0K81RI2pVVTJOq79dfQQEo/6nyXOnOIA==
-X-Google-Smtp-Source: AKy350aanME0nMTNiM5fr4DFHHkaaB3EACxyhrJA3uB0MY8jl99vfng8dUxqcDxlYYiue3Q6E7DZYBnfyNJxlG5eh68=
-X-Received: by 2002:a1f:c506:0:b0:43f:9aa5:a15b with SMTP id
- v6-20020a1fc506000000b0043f9aa5a15bmr4311156vkf.9.1682428503125; Tue, 25 Apr
- 2023 06:15:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682428510; x=1685020510;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S3BikuggXhWs1OPUQPTsPuMkYRDNlCEeDeec0U2qCGU=;
+        b=heKJ+XhO0iRZuXj/vmqfDWUYLqX1qxloA4G8ks5XHrE/eaFmW+RhpebhO4dRtkdk5T
+         1XGXnBmyx3iabNrH88n2teBLAwxnHfDnhj47Cyn8+WuMH5c0uoteJtgm64wkAxBtWGsc
+         5IJXgozlwt2ebBw2eb68mDVj+qPO+bGt9cB6W5B1lVc4PwgZMYfudzqCjIx+M28SOYEE
+         J3vHKTLkvLhJoWbFrd/IOjf+TtiSf2ESod2rPvf511vqhezbGAdM7miQAknCw3ZEDRUY
+         +gW5hc45LYBNDOb+UrBVAM/V+vvBsEN15wY9RDjLuTw30/1EYNqoElp/PeBNXp+s6owa
+         /whg==
+X-Gm-Message-State: AAQBX9eZNK+Vo/NtoVZupa9Kh5ohfWXH01NuaChsId0G8/l2erIw1bgT
+        TkcjtSTLcprgfOWFeF272XJNdw==
+X-Google-Smtp-Source: AKy350Ykr4gtdZ1ZSW54CjRQJltXgFAHvYw5B1VZUVrxe/v1FVbbmrQbyexNMdoBYd1tjbR3rUIt/w==
+X-Received: by 2002:a17:906:40f:b0:94f:a8fd:b69f with SMTP id d15-20020a170906040f00b0094fa8fdb69fmr14098617eja.18.1682428510422;
+        Tue, 25 Apr 2023 06:15:10 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id ox6-20020a170907100600b008f89953b761sm6753105ejb.3.2023.04.25.06.15.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 06:15:09 -0700 (PDT)
+Message-ID: <7ee3eec8-b5b4-2591-adcd-1831bf7de02b@linaro.org>
+Date:   Tue, 25 Apr 2023 15:15:08 +0200
 MIME-Version: 1.0
-References: <80bae984fd5ca49b691bb35f2fd8f345f8bb67f1.1682405206.git.christophe.jaillet@wanadoo.fr>
- <ZEd8d7W6HnHE_66m@codewreck.org>
-In-Reply-To: <ZEd8d7W6HnHE_66m@codewreck.org>
-From:   Dan Carpenter <error27@gmail.com>
-Date:   Tue, 25 Apr 2023 14:14:52 +0100
-Message-ID: <CA+_b7DK1s87y-_-D3sQxteqJ+78uvKza-vgWGv9SmGm-tqz7DA@mail.gmail.com>
-Subject: Re: [PATCH] fs/9p: Fix a datatype used with V9FS_DIRECT_IO
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        v9fs@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/4] ARM: dts: aspeed: mtmitchell: Add I2C Fan
+To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230425065715.21871-1-chanh@os.amperecomputing.com>
+ <20230425065715.21871-3-chanh@os.amperecomputing.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230425065715.21871-3-chanh@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 8:12=E2=80=AFAM Dominique Martinet
-<asmadeus@codewreck.org> wrote:
->
-> Christophe JAILLET wrote on Tue, Apr 25, 2023 at 08:47:27AM +0200:
-> > Fixes: 6deffc8924b5 ("fs/9p: Add new mount modes")
->
-> (Not a problem per se: but note this commit hasn't been merged yet, so
-> using commit IDs is a bit dangerous. Might want to remark this in the
-> free comment section so Eric pays attention to not break that when applyi=
-ng)
+On 25/04/2023 08:57, Chanh Nguyen wrote:
+> Add the MAX31790 node as a Fan I2C controller. It controls the
+> TACH and PWM for Fan Mt.Mitchell system.
+> 
+> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
+> index e79f56208b89..6455cf80da0e 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
+> @@ -477,6 +477,18 @@
+>  			line-name = "bmc-ocp0-en-n";
+>  		};
+>  	};
+> +
+> +	max31790@20 {
 
-This is fine.
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-The hash is constant unless Eric does a rebase.  When a maintainer rebases
-then updating the fixes tags is just part of the process.  Often they end u=
-p
-folding the fix into the original patch at that point so the Fixes tag is n=
-ot
-required.  If a maintainer doesn't update the tags then the linux-next
-maintainers
-will notice and complain.
+> +		compatible = "maxim,max31790";
 
-#GitMagic
+Unfortunately the compatible is undocumented.
 
-regards,
-dan carpenter
+Please run scripts/checkpatch.pl and fix reported warnings.
+
+Best regards,
+Krzysztof
+
