@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913906EE7E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BE96EE7EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbjDYS4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S235071AbjDYS6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbjDYS4P (ORCPT
+        with ESMTP id S234774AbjDYS6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:56:15 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEB218B9F;
-        Tue, 25 Apr 2023 11:55:52 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-187fc21f6acso2242955fac.2;
-        Tue, 25 Apr 2023 11:55:52 -0700 (PDT)
+        Tue, 25 Apr 2023 14:58:51 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA69916F3D;
+        Tue, 25 Apr 2023 11:58:38 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-187b70ab997so32816765fac.0;
+        Tue, 25 Apr 2023 11:58:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682448951; x=1685040951;
+        d=1e100.net; s=20221208; t=1682449118; x=1685041118;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZOYO9VcZmL3OuUTiqSJiXINw03Ze8xYqi62GLai31bU=;
-        b=Uvq+RUL3H7M/gO0x0v8e1ii741DkCwXcmrU0VEeeNiq5EP7498cMfrngnZk0X5tTv1
-         QvBkgSMj7tAY2PVfHqjyyNMEqVtKflCJu0GyqpzWuLzagLeu7cVtBMavXuXCtHbVh4+9
-         dGisVtPwR039iZat/cKSP6TgO+DnL2Aft0BQ9yL5oBTIspW2me+IOBr7gsWXMTrV3QCa
-         FM0GTA6qLUKW97V1lO6FrOnij3EzIsnVU3qwDiy7rM7ECqSrl/1Evo7bLc+8lZ8uIs4m
-         v/cqwyoZkgl9vmUjxVvviCdK16PiJopNzGFDpx5WkHJESnxOL8NscEYtQT9+GSB679Ie
-         k4Ow==
-X-Gm-Message-State: AC+VfDzLQ7AJFZFAe9H+M4IqaXNePGxf5tWAJtmlQ9JS8uVt3/Sddbw2
-        K8+Zl1R+eyVSHTOmjANcxQ==
-X-Google-Smtp-Source: AKy350ZFzcrzJb63mNKNH0YEsQQiHvjn8FXThu1xVj9+IaSO0IdB0kkzpV7zE31AxJ15OFZoudPEIA==
-X-Received: by 2002:a05:6870:1699:b0:18e:bbfc:4ee2 with SMTP id j25-20020a056870169900b0018ebbfc4ee2mr3428485oae.41.1682448951528;
-        Tue, 25 Apr 2023 11:55:51 -0700 (PDT)
+        bh=UCPUjU42PRIffLcz9TbBJOAbKvwZwWa3dQczE6gwtwg=;
+        b=eJdqcNUp33TIJmAvNSods4wLBgPZBN7e/mJPOEMnT4ao8fyQcSvcU5LXUAOLh7/1Rr
+         GvwD1Y0l/GyNt5MNInNeCaHOw58gI0oQcwMDk05rLBhehZiqhLG8R5kFWJLO/cZrFwb3
+         MW1Av+GynVfOcxomXow5LTeyral1S9/DJxBNXTtzyclvflVKCVUVBwuclWHEsZjQ9ktX
+         ZFS7GHwriCxMEHiosT4xcFDdhcWCmtPtHSjWS/zOECNtk5E+VgqHGwVRuRcq7Dv8grqf
+         yQSSi9LklGfLaRTfo8Se04Qpl6ypouaFApcG4zoyqjlp4H/lodvg0ByRQGFmSxJi2gG4
+         rCXw==
+X-Gm-Message-State: AAQBX9cEFX/La0ITbadoTM8e3fnaq4TAbqWJ+FMtKJ1T0VC4oxyOCgp1
+        V9ORljWMbsXdItevTkCv1YpujKiWnw==
+X-Google-Smtp-Source: AKy350bVDkDMdeLblHdVNzD9BQfck4ZUsL4yNpzgQj1n/n4pupILFLzx+5zjoco+7TdvhHSqedp9LA==
+X-Received: by 2002:a05:6870:e416:b0:187:fc1c:c1a9 with SMTP id n22-20020a056870e41600b00187fc1cc1a9mr9584459oag.6.1682449117979;
+        Tue, 25 Apr 2023 11:58:37 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w2-20020a9d6382000000b006a41ab165dfsm6042065otk.34.2023.04.25.11.55.50
+        by smtp.gmail.com with ESMTPSA id i4-20020a056870864400b0018e996a507esm2629684oal.31.2023.04.25.11.58.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 11:55:51 -0700 (PDT)
-Received: (nullmailer pid 2080853 invoked by uid 1000);
-        Tue, 25 Apr 2023 18:55:50 -0000
-Date:   Tue, 25 Apr 2023 13:55:50 -0500
+        Tue, 25 Apr 2023 11:58:37 -0700 (PDT)
+Received: (nullmailer pid 2083974 invoked by uid 1000);
+        Tue, 25 Apr 2023 18:58:36 -0000
+Date:   Tue, 25 Apr 2023 13:58:36 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: leds: Drop redundant cpus enum match
-Message-ID: <168244894963.2080814.13396719387956216399.robh@kernel.org>
-References: <20230424151437.256073-1-nm@ti.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Add
+ ports and orientation-switch
+Message-ID: <20230425185836.GA2081377-robh@kernel.org>
+References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+ <20230425034010.3789376-2-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424151437.256073-1-nm@ti.com>
+In-Reply-To: <20230425034010.3789376-2-quic_bjorande@quicinc.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -71,68 +71,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 24 Apr 2023 10:14:37 -0500, Nishanth Menon wrote:
-> Commit e91a4d5deb96 ("dt-bindings: leds: Document commonly used
-> LED triggers") introduced a enum match for cpu, while a pattern
-> '^cpu[0-9]*$' already exists.
+On Mon, Apr 24, 2023 at 08:40:04PM -0700, Bjorn Andersson wrote:
+> The QMP combo phy can be connected to a TCPM, a USB controller and a
+> DisplayPort controller for handling USB Type-C orientation switching
+> and propagating HPD signals.
 > 
-> This causes linux,default-trigger = "cpu" to have more than one match
-> and generates the following dtbs_check warning:
+> Extend the binding to allow these connections to be described.
 > 
-> arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dtb: leds: led-2:linux,default-trigger: More than one condition true in oneOf schema:
-> 	{'$ref': '/schemas/types.yaml#/definitions/string',
-> 	 'oneOf': [{'items': [{'enum': ['backlight',
-> 	                                'default-on',
-> 	                                'heartbeat',
-> 	                                'disk-activity',
-> 	                                'disk-read',
-> 	                                'disk-write',
-> 	                                'timer',
-> 	                                'pattern',
-> 	                                'audio-micmute',
-> 	                                'audio-mute',
-> 	                                'bluetooth-power',
-> 	                                'cpu',
-> 	                                'flash',
-> 	                                'kbd-capslock',
-> 	                                'mtd',
-> 	                                'nand-disk',
-> 	                                'none',
-> 	                                'torch',
-> 	                                'usb-gadget',
-> 	                                'usb-host',
-> 	                                'usbport']}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^cpu[0-9]*$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^hci[0-9]+-power$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^mmc[0-9]+$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^phy[0-9]+tx$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'}]}
-> 
-> Drop the explicit match against cpu since the pattern match already
-> covers the same.
-> 
-> Fixes: e91a4d5deb96 ("dt-bindings: leds: Document commonly used LED triggers")
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/leds/common.yaml | 2 --
->  1 file changed, 2 deletions(-)
+>  .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+> index 3cd5fc3e8fab..c037ac90ce7f 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+> @@ -60,6 +60,26 @@ properties:
+>      description:
+>        See include/dt-bindings/dt-bindings/phy/phy-qcom-qmp.h
+>  
+> +  orientation-switch:
+> +    description:
+> +      Flag the PHY as possible handler of USB Type-C orientation switching
+> +    type: boolean
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Output endpoint of the PHY
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
 
-Acked-by: Rob Herring <robh@kernel.org>
+'port-base' means you have extra properties to add. Where are they? It 
+also needs 'unevaluatedProperties: false'.
 
+> +        description: Incoming endpoint from the USB controller
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: Incoming endpoint from the DisplayPort controller
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -98,6 +118,37 @@ examples:
+>        vdda-phy-supply = <&vreg_l9d>;
+>        vdda-pll-supply = <&vreg_l4d>;
+>  
+> +      orientation-switch;
+> +
+>        #clock-cells = <1>;
+>        #phy-cells = <1>;
+> +
+> +      ports {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          port@0 {
+> +              reg = <0>;
+> +
+> +              endpoint {
+> +                  remote-endpoint = <&typec_connector_ss>;
+> +              };
+> +          };
+> +
+> +          port@1 {
+> +              reg = <1>;
+> +
+> +              endpoint {
+> +                  remote-endpoint = <&dwc3_ss_out>;
+> +              };
+> +          };
+> +
+> +          port@2 {
+> +              reg = <2>;
+> +
+> +              endpoint {
+> +                  remote-endpoint = <&mdss_dp_out>;
+> +              };
+> +          };
+> +      };
+>      };
+> -- 
+> 2.39.2
+> 
