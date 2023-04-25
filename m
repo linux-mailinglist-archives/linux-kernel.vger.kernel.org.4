@@ -2,176 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27706EDAC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 05:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB696EDACC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 05:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjDYDk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 23:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S233013AbjDYDmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 23:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233284AbjDYDk1 (ORCPT
+        with ESMTP id S232801AbjDYDmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 23:40:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7697AA8;
-        Mon, 24 Apr 2023 20:40:25 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P3Pj6A000756;
-        Tue, 25 Apr 2023 03:40:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=ZLYPvSeQr3Tg2IaIDunQUSVRvAmXPI3fsbmQUToA1V8=;
- b=MEmToFlqHwZglNNDqUJGdOcgy3ORrx3xKyP2zYNj3SEJ0K2+u5LQUOAWOqt0y8Mdh0yq
- vOpFFvJBqUrM2cpwPrR9X+P1cBe8EPpXVsNe4AIORQPfX+cu+naikqQDphiNsZi2zVJO
- CcrweNUXQV5DgEMrKHDxXsL6s8UbxuLoHwYeUXwuBTvr6zXOLrLPrmZFhczOK6VTybDJ
- 9SBjLqxNNZMz99xyyG8jB/fnqQWTygNUWMZt+1E0qoXPdCe6Iu/G/fZLb8ngywRglf2z
- EeYYVUJ756/Yeg4sbZBD20rU6Llm/JXrcfAgJsC9A7DhGpy0tutldluPoE2rjurr4NkZ YQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5uwj1d7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 03:40:18 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33P3eI0J028539
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 03:40:18 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 24 Apr 2023 20:40:17 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Johan Hovold <johan@kernel.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 7/7] arm64: dts: qcom: sc8280xp-x13s: Add QMP to SuperSpeed graph
-Date:   Mon, 24 Apr 2023 20:40:10 -0700
-Message-ID: <20230425034010.3789376-8-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+        Mon, 24 Apr 2023 23:42:50 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A08CAF39;
+        Mon, 24 Apr 2023 20:42:09 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 00C7C7FFD;
+        Tue, 25 Apr 2023 11:41:40 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
+ 2023 11:41:40 +0800
+Received: from [192.168.125.106] (113.72.145.137) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Apr
+ 2023 11:41:39 +0800
+Message-ID: <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
+Date:   Tue, 25 Apr 2023 11:41:38 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fqcO8NGRT-IF1vzzOgL8aH3iBx-f8XFL
-X-Proofpoint-GUID: fqcO8NGRT-IF1vzzOgL8aH3iBx-f8XFL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_03,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250032
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
+To:     Conor Dooley <conor@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
+        <linux-phy@lists.infradead.org>
+References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
+ <20230419035646.43702-2-changhuang.liang@starfivetech.com>
+ <20230419-labored-camper-644d51a7ca96@spud>
+ <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
+ <20230424-baffle-punch-ec73098f2b6a@spud>
+Content-Language: en-US
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230424-baffle-punch-ec73098f2b6a@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.137]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the CRD, connect the two QMP phys inbetween the USB Type-C
-connectors and the DisplayPort controller, to handle orientation
-switching.
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 28 ++++++++++++++++---
- 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index 5ef3f4c07d75..382f27946468 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -106,7 +106,7 @@ port@1 {
- 					reg = <1>;
- 
- 					pmic_glink_con0_ss: endpoint {
--						remote-endpoint = <&mdss0_dp0_out>;
-+						remote-endpoint = <&usb_0_qmpphy_out>;
- 					};
- 				};
- 
-@@ -141,7 +141,7 @@ port@1 {
- 					reg = <1>;
- 
- 					pmic_glink_con1_ss: endpoint {
--						remote-endpoint = <&mdss0_dp1_out>;
-+						remote-endpoint = <&usb_1_qmpphy_out>;
- 					};
- 				};
- 
-@@ -554,7 +554,7 @@ &mdss0_dp0 {
- 
- &mdss0_dp0_out {
- 	data-lanes = <0 1>;
--	remote-endpoint = <&pmic_glink_con0_ss>;
-+	remote-endpoint = <&usb_0_qmpphy_dp_in>;
- };
- 
- &mdss0_dp1 {
-@@ -563,7 +563,7 @@ &mdss0_dp1 {
- 
- &mdss0_dp1_out {
- 	data-lanes = <0 1>;
--	remote-endpoint = <&pmic_glink_con1_ss>;
-+	remote-endpoint = <&usb_1_qmpphy_dp_in>;
- };
- 
- &mdss0_dp3 {
-@@ -1140,9 +1140,19 @@ &usb_0_qmpphy {
- 	vdda-phy-supply = <&vreg_l9d>;
- 	vdda-pll-supply = <&vreg_l4d>;
- 
-+	orientation-switch;
-+
- 	status = "okay";
- };
- 
-+&usb_0_qmpphy_dp_in {
-+	remote-endpoint = <&mdss0_dp0_out>;
-+};
-+
-+&usb_0_qmpphy_out {
-+	remote-endpoint = <&pmic_glink_con0_ss>;
-+};
-+
- &usb_0_role_switch {
- 	remote-endpoint = <&pmic_glink_con0_hs>;
- };
-@@ -1167,9 +1177,19 @@ &usb_1_qmpphy {
- 	vdda-phy-supply = <&vreg_l4b>;
- 	vdda-pll-supply = <&vreg_l3b>;
- 
-+	orientation-switch;
-+
- 	status = "okay";
- };
- 
-+&usb_1_qmpphy_dp_in {
-+	remote-endpoint = <&mdss0_dp1_out>;
-+};
-+
-+&usb_1_qmpphy_out {
-+	remote-endpoint = <&pmic_glink_con1_ss>;
-+};
-+
- &usb_1_role_switch {
- 	remote-endpoint = <&pmic_glink_con1_hs>;
- };
--- 
-2.39.2
+On 2023/4/25 0:52, Conor Dooley wrote:
+> Hey Changhuang,
+> 
+> On Thu, Apr 20, 2023 at 03:00:10PM +0800, Changhuang Liang wrote:
+>> On 2023/4/20 2:29, Conor Dooley wrote:
+>>> On Tue, Apr 18, 2023 at 08:56:41PM -0700, Changhuang Liang wrote:
+>>>> Add AON PMU for StarFive JH7110 SoC, it can be used to turn on/off DPHY
+>>>> rx/tx power switch, and it don't need the properties of reg and
+>>>> interrupts.
+>>>
+>>> Putting this here since the DT guys are more likely to see it this way..
+>>> Given how the implementation of the code driving this new
+>>> power-controller and the code driving the existing one are rather
+>>> different (you've basically re-written the entire driver in this series),
+>>> should the dphy driver implement its own power-controller?
+>>>
+>>> I know originally Changuang had tried something along those lines:
+>>> https://lore.kernel.org/linux-riscv/5dc4ddc2-9d15-ebb2-38bc-8a544ca67e0d@starfivetech.com/
+>>>
+>>> I see that that was shut down pretty much, partly due to the
+>>> non-standard property, hence this series adding the dphy power domain to
+>>> the existing driver.
+>>>
+>>> If it was done by looking up the pmu with a
+>>> of_find_compatible_node(NULL, "power-controller", "starfive,jh7110-aon-pmu")
+>>> type thing, would that make sense? Although, maybe that is not a
+>>> question for you, and this series may actually have been better entirely
+>>> bundled with the dphy series so the whole thing can be reviewed as a
+>>> unit. I've added 
+>>>
+>>> IOW, don't change this patch, or the dts patch, but move all of the
+>>> code back into the phy driver..
+>>>
+>>
+>> Maybe this way can not do that? power domain is binding before driver probe,
+>> if I use "of_find_compatible_node" it phy(DPHY rx) probe. Maybe I can only operate 
+>> this power switch in my phy(DPHY rx) driver, so the all patch of this series isn't 
+>> make sense.
+> 
+> I'm a wee bit lost here, as I unfortunately know little about how Linux
+> handles this power-domain stuff. If the DPHY tries to probe and some
+> pre-requisite does not yet exist, you can return -EPROBE_DEFER right?
+> 
+> But I don't think that's what you are asking, as using
+> of_find_compatible_node() doesn't depend on there being a driver AFAIU.
+> 
+>> In my opinion, We will also submit DPHY TX module later which use this series.
+>> Maybe this series should independent?
+> 
+> Is the DPHY tx module a different driver to the rx one?> If yes, does it have a different bit you must set in the syscon?
+> 
 
+Yes, DPHY tx module is a different driver to the DPHY rx. And I have do a
+different bit in PATCH 1:
+
+#define JH7110_PD_DPHY_TX	0
+#define JH7110_PD_DPHY_RX	1
+
+also in PATCH 5:
+
+static const struct jh71xx_domain_info jh7110_aon_power_domains[] = {
+	[JH7110_PD_DPHY_TX] = {
+		.name = "DPHY-TX",
+		.bit = 30,
+	},
+	[JH7110_PD_DPHY_RX] = {
+		.name = "DPHY-RX",
+		.bit = 31,
+	},
+};
+
+> +CC Walker, do you have a register map for the jh7110? My TRM only says
+> what the registers are, but not the bits in them. Would make life easier
+> if I had that info.
+> 
+> I'm fine with taking this code, I just want to make sure that the soc
+> driver doing this is the right thing to do.
+> I was kinda hoping that combining with the DPHY-rx series might allow
+> the PHY folk to spot if you are doing something here with the power
+> domains that doesn't make sense.
+> 
+
+I asked about our soc colleagues. This syscon register,
+offset 0x00:
+bit[31] ---> dphy rx power switch
+bit[30] ---> dphy tx power switch 
+other bits ---> Reserved
+
+>>> Sorry for not asking this sooner Changhuang,
+>>> Conor.
+>>>
+>>> (hopefully this didn't get sent twice, mutt complained of a bad email
+>>> addr during sending the first time)
+>>>
+>>
+>> I'm sorry for that, I will notice later.
+> 
+> No, this was my mail client doing things that I was unsure of. You
+> didn't do anything wrong.
+> 
+[...]
+>>>>    - Walker Chen <walker.chen@starfivetech.com>
+>>>> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+>>>>  
+>>>>  description: |
+>>>>    StarFive JH7110 SoC includes support for multiple power domains which can be
+>>>> @@ -17,6 +18,7 @@ properties:
+>>>>    compatible:
+>>>>      enum:
+>>>>        - starfive,jh7110-pmu
+>>>> +      - starfive,jh7110-aon-pmu
+> 
+> I was speaking to Rob about this over the weekend, he asked:
+> 'Why isn't "starfive,jh7110-aon-syscon" just the power-domain provider
+> itself?'
+
+Maybe not, this syscon only offset "0x00" configure power switch.
+other offset configure other functions, maybe not power, so this
+"starfive,jh7110-aon-syscon" not the power-domain itself.
+
+> Do we actually need to add a new binding for this at all?
+> 
+> Cheers,
+> Conor.
+> 
+
+Maybe this patch do that.
+https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech.com/
+
+>>>>  
+>>>>    reg:
+>>>>      maxItems: 1
+>>>> @@ -29,10 +31,19 @@ properties:
+>>>>  
