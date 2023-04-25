@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CDA6EDCB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A196EDCB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbjDYHd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 03:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S233264AbjDYHfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 03:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbjDYHct (ORCPT
+        with ESMTP id S233284AbjDYHec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 03:32:49 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5409213C2A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:31:56 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-32addcf3a73so201686805ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:31:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682407915; x=1684999915;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xq/1X6dim9yVpm4WmSrDKdpjZQ76TBH7JXRh02wzjPs=;
-        b=Wfo39xoc88w/A0tjfulZ3Ct3nNT0/xDiwYjOFu/IsBKTOYpV75SVe7BWOvJVAkm0k+
-         238I3a49AWZ/tt1Q6aCcLS2GyqUSWDW01nlq5eQv9K0PcOFPwmCWby+7JFNguCYH/PeG
-         VWW5gAnyEfWhAaK+q2j3AmVxcmu2WGDMBqmP8eTw1729fJv8+ExL3SUFG45g8QwzOIc4
-         T2gDTOmBYwjQpHhvzcdzKRlKo794U4YxbMB6O2GjYu/MG2n9j/3RjaKpTtaglmaSziDC
-         TGJ4/4ALtTwIaZD3A2wxS/OuwMyABr745b6Ry1PcxlHux0mBSme5y+Qu5kmP5VzXvPTE
-         Geyw==
-X-Gm-Message-State: AAQBX9coa9pAcuxLGexjAyyBnIZEaeID9iaZwZDHNpXHvjULK6VE3gGq
-        skVGC5ncau3FqXFL884u7INO7BzMLsqOQ2TE5jekph7mpB9Z
-X-Google-Smtp-Source: AKy350bVP4a0j5Jjfd1rDnCB8SnbLt2iwfQAy1MD+D79iTTFbvKVrfLH8oyOFXmTksC/rLXk/Uam81B+LvOeBsCtDQA/Z2npr3Tj
+        Tue, 25 Apr 2023 03:34:32 -0400
+X-Greylist: delayed 1684 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 00:33:43 PDT
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C796C144;
+        Tue, 25 Apr 2023 00:33:43 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id EF7EC1251;
+        Tue, 25 Apr 2023 09:33:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1682408021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddDLRyBIIJJ/sPLSSjrl5uf8T1R/yy7tZgKr85AjjK0=;
+        b=hjVbLJXBuXhpGpawTLxqydZsLxSWHiwy2j6hFZF3F/c3WCILQjyb4VnFKLZkjiYnQ8q6zi
+        JeBMfScQL4poIQym/SVlcLckCVs9GTgw0j20Ffw/7825teShfcdp/2vcwN/z3Yf9hmpZRq
+        HbDQq3NhN9NQjOJ3+PmWbAOJBwBxSzrJOoqEVb5vc0Vg7SIxf/+18PTs7TcC2LV96SRerz
+        61ExytYFL2fOiKFy2LkYf/tab16LbHR1NvtY59Sakv9gYDrg0B7jNU/FetkKP0ToM9acbA
+        /NeWERflRf4cZN32C53435auzmFaGBqowK1xtpgV3TdGETIGyq95kCBGMtlViQ==
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:12c6:b0:40f:9f56:2bfc with SMTP id
- v6-20020a05663812c600b0040f9f562bfcmr11295818jas.3.1682407915588; Tue, 25 Apr
- 2023 00:31:55 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 00:31:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002d14f305fa241e67@google.com>
-Subject: [syzbot] [bpf?] KCSAN: data-race in __bpf_lru_list_rotate /
- __htab_lru_percpu_map_update_elem (5)
-From:   syzbot <syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, sdf@google.com, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Date:   Tue, 25 Apr 2023 09:33:40 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     "Vaibhaav Ram T.L" <vaibhaavram.tl@microchip.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        kumaravel.thiagarajan@microchip.com,
+        tharunkumar.pasumarthi@microchip.com, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v10 char-misc-next 1/2] misc: microchip: pci1xxxx: Add
+ support to read and write into PCI1XXXX OTP via NVMEM sysfs
+In-Reply-To: <20230421142643.1784-2-vaibhaavram.tl@microchip.com>
+References: <20230421142643.1784-1-vaibhaavram.tl@microchip.com>
+ <20230421142643.1784-2-vaibhaavram.tl@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <2265a7467850190ec99ac9ab0aaa7905@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+> +static int pci1xxxx_otp_read(void *priv_t, unsigned int off,
+> +			     void *buf_t, size_t count)
+> +{
+> +	struct pci1xxxx_otp_eeprom_device *priv = priv_t;
+> +	void __iomem *rb = priv->reg_base;
+> +	char *buf = buf_t;
+> +	u32 regval;
+> +	u32 byte;
+> +	int ret;
+> +	u8 data;
+> +
+> +	if (off >= priv->nvmem_config_otp.size)
+> +		return -EFAULT;
+> +
+> +	if ((off + count) > priv->nvmem_config_otp.size)
+> +		count = priv->nvmem_config_otp.size - off;
+> +
+> +	ret = set_sys_lock(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (byte = 0; byte < count; byte++) {
+> +		otp_device_set_address(priv, (u16)(off + byte));
+> +		data = readl(rb + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
+> +		writel(data | OTP_FUNC_RD_BIT,
+> +		       rb + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
+> +		data = readl(rb + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
+> +		writel(data | OTP_CMD_GO_BIT,
+> +		       rb + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
+> +
+> +		ret = read_poll_timeout(readl, regval,
+> +					!(regval & OTP_STATUS_BUSY_BIT),
+> +					STATUS_READ_DELAY_US,
+> +					STATUS_READ_TIMEOUT_US, true,
+> +					rb + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
+> +
+> +		data = readl(rb + MMAP_OTP_OFFSET(OTP_PASS_FAIL_OFFSET));
+> +		if (ret < 0 || data & OTP_FAIL_BIT)
+> +			return -EIO;
 
-HEAD commit:    6a66fdd29ea1 Merge tag 'rust-fixes-6.3' of https://github...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=160d8948280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa4baf7c6b35b5d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=ebe648a84e8784763f82
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+Don't you need to release the lock?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> +
+> +		buf[byte] = readl(rb + MMAP_OTP_OFFSET(OTP_RD_DATA_OFFSET));
+> +	}
+> +	release_sys_lock(priv);
+> +
+> +	return byte;
+> +}
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/78937867b23a/disk-6a66fdd2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/dfd6c176adff/vmlinux-6a66fdd2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/51509bf47166/bzImage-6a66fdd2.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KCSAN: data-race in __bpf_lru_list_rotate / __htab_lru_percpu_map_update_elem
-
-write to 0xffff888137038deb of 1 bytes by task 11240 on cpu 1:
- __bpf_lru_node_move kernel/bpf/bpf_lru_list.c:113 [inline]
- __bpf_lru_list_rotate_active kernel/bpf/bpf_lru_list.c:149 [inline]
- __bpf_lru_list_rotate+0x1bf/0x750 kernel/bpf/bpf_lru_list.c:240
- bpf_lru_list_pop_free_to_local kernel/bpf/bpf_lru_list.c:329 [inline]
- bpf_common_lru_pop_free kernel/bpf/bpf_lru_list.c:447 [inline]
- bpf_lru_pop_free+0x638/0xe20 kernel/bpf/bpf_lru_list.c:499
- prealloc_lru_pop kernel/bpf/hashtab.c:290 [inline]
- __htab_lru_percpu_map_update_elem+0xe7/0x820 kernel/bpf/hashtab.c:1316
- bpf_percpu_hash_update+0x5e/0x90 kernel/bpf/hashtab.c:2313
- bpf_map_update_value+0x2a9/0x370 kernel/bpf/syscall.c:200
- generic_map_update_batch+0x3ae/0x4f0 kernel/bpf/syscall.c:1687
- bpf_map_do_batch+0x2d9/0x3d0 kernel/bpf/syscall.c:4534
- __sys_bpf+0x338/0x810
- __do_sys_bpf kernel/bpf/syscall.c:5096 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5094 [inline]
- __x64_sys_bpf+0x43/0x50 kernel/bpf/syscall.c:5094
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-read to 0xffff888137038deb of 1 bytes by task 11241 on cpu 0:
- bpf_lru_node_set_ref kernel/bpf/bpf_lru_list.h:70 [inline]
- __htab_lru_percpu_map_update_elem+0x2f1/0x820 kernel/bpf/hashtab.c:1332
- bpf_percpu_hash_update+0x5e/0x90 kernel/bpf/hashtab.c:2313
- bpf_map_update_value+0x2a9/0x370 kernel/bpf/syscall.c:200
- generic_map_update_batch+0x3ae/0x4f0 kernel/bpf/syscall.c:1687
- bpf_map_do_batch+0x2d9/0x3d0 kernel/bpf/syscall.c:4534
- __sys_bpf+0x338/0x810
- __do_sys_bpf kernel/bpf/syscall.c:5096 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5094 [inline]
- __x64_sys_bpf+0x43/0x50 kernel/bpf/syscall.c:5094
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0x01 -> 0x00
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 11241 Comm: syz-executor.3 Not tainted 6.3.0-rc7-syzkaller-00136-g6a66fdd29ea1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
