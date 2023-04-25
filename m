@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D556EE76D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565476EE781
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbjDYSOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S232927AbjDYS1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbjDYSOS (ORCPT
+        with ESMTP id S231337AbjDYS1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:14:18 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B882D70
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:14:17 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a66b9bd7dfso64988005ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682446456; x=1685038456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S29jD9asq8GIhNQQpmkJfSN08f/B/+N3c1+vpXFLXzU=;
-        b=iSOOO/lFlDg/Q0UDXbM97TusZYsL7T9b4g+P3bJXaWVlQ1fXuH8ymssdTd89l210O1
-         hQZjt0Fm3QDpw2qa2ygoH3aOhZHmW8rhud8kSC5MXg25IlK8Gxr9lUAzdu7FfLI17fLn
-         7jRFmw5c/Ci/tIwjdvPezRh8XdHWuDUXnjP/I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682446456; x=1685038456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S29jD9asq8GIhNQQpmkJfSN08f/B/+N3c1+vpXFLXzU=;
-        b=cdvum8H092LiMoBr3hQZG5HUEy63OUU4g7iaCMYar8tgGx8RgVL36la10/Y8sgnLOe
-         Wj7E8uEjaT0EzSOXeY0VXn3o4j3W5pwmnN7fk8eYsrscLNikCDj4ageE0rrYgKOhGBuZ
-         vI6bQzwIx7jbtUG7DPsfswj4WmoyE4jeHx5/7Btg3VRn7iFk398pH5owKHJXRUnHiINV
-         YiIJ2VaXXDTowiZydSzCCU+MR8kJQXxDMRLA4foB4crzGYIUrhqvRyxyXAvUUEPP/1Rd
-         L0l7Dp6nMUMOYn7eW1dybfJFf8TFr495u9+5F5cWVtaAdz0K2VKKwFOB4ZrO50ZRF+K7
-         pWgA==
-X-Gm-Message-State: AAQBX9c/uI3Sc7qt07oXHLHMjDlNJ0ozy5f3GEBxkWGx4hjNI/nlSq3m
-        vYkg9GNmOQAFgoOgeVXN6bBF1A==
-X-Google-Smtp-Source: AKy350bBKSRyeKYxPnCoHGmQ52eFx1f3KiJmb5Jz9UAUMPiw7Ej7tb/MymZFjaYRtjvbLyQ+MSgnYA==
-X-Received: by 2002:a17:902:d501:b0:1a6:c67f:4ed with SMTP id b1-20020a170902d50100b001a6c67f04edmr22884799plg.9.1682446456654;
-        Tue, 25 Apr 2023 11:14:16 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:802a:e8a4:2d43:e3a1])
-        by smtp.gmail.com with ESMTPSA id z12-20020a1709028f8c00b001a27e5ee634sm8608147plo.33.2023.04.25.11.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 11:14:15 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 11:14:13 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 10/22] wifi: mwifiex: Use alloc_ordered_workqueue() to
- create ordered workqueues
-Message-ID: <ZEgYdSOYaojJBoPP@google.com>
-References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-11-tj@kernel.org>
+        Tue, 25 Apr 2023 14:27:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DA58A5A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TEh7JnhuVuuTnUG+hm/DecBEi8WL/KaovpCpd2tiDHI=; b=HkAf0GrUku1bE3kLD0TZFNsA7B
+        R9Lrqqq5MKMsjabWsKrP0nVnC325SdUphN8XqM8bDyNGtRgjRNqSNmApVAj+VufJURnuSrNUk/9Ra
+        +V8QVw0uOytFMSHjSB6SSMc3zfDrm4sSyhK0SieIr0+tmECO/tphVHCm4U63sjO9fiEqWc/GBiu3i
+        q5La2F/f/PV6eZ+WiCxFB9lJ9Bi3MibSQAV8smsbVd2Fxz9685zdUS66wyD+Xp8OPzp0pijoeOoKn
+        Nmsj0BdO+X5dhIODc1zS0Q99ufXF8j6c9gEh5CJhyhoSO1WTKX4CU1guwQ7RmaK2ILrEdURD9gb4K
+        4e0utL7Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1prNNy-001wm4-2h;
+        Tue, 25 Apr 2023 18:27:30 +0000
+Date:   Tue, 25 Apr 2023 11:27:30 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Carpenter <error27@gmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: Re: [PATCH RESEND v4 1/1] test_firmware: fix some memory leaks and
+ racing conditions
+Message-ID: <ZEgbkoSjHcVLcCcp@bombadil.infradead.org>
+References: <20230421185205.28743-1-mirsad.todorovac@alu.unizg.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421025046.4008499-11-tj@kernel.org>
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230421185205.28743-1-mirsad.todorovac@alu.unizg.hr>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 04:50:34PM -1000, Tejun Heo wrote:
-> The conversions are from
+On Fri, Apr 21, 2023 at 08:52:06PM +0200, Mirsad Goran Todorovac wrote:
+> Some functions were called both from locked and unlocked context, so
+> the lock was dropped prematurely, introducing a race condition when
+> deadlock was avoided.
 > 
->   alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
+> Having two locks wouldn't assure a race-proof mutual exclusion.
 > 
-> to
+> __test_dev_config_update_bool(), __test_dev_config_update_u8() and
+> __test_dev_config_update_size_t() unlocked versions of the functions
+> were introduced to be called from the locked contexts as a workaround
+> without releasing the main driver's lock and causing a race condition.
 > 
->   alloc_ordered_workqueue(flags, args...)
+> This should guarantee mutual exclusion and prevent any race conditions.
 > 
-> which don't cause any functional changes. If you know that fully ordered
-> execution is not ncessary, please let me know. I'll drop the conversion and
-> instead add a comment noting the fact to reduce confusion while conversion
-> is in progress.
+> Locked versions simply allow for mutual exclusion and call the unlocked
+> counterparts, to avoid duplication of code.
 > 
-> If you aren't fully sure, it's completely fine to let the conversion
-> through. The behavior will stay exactly the same and we can always
-> reconsider later.
+> trigger_batched_requests_store() and trigger_batched_requests_async_store()
+> now return -EBUSY if called with test_fw_config->reqs already allocated,
+> so the memory leak is prevented.
 > 
-> As there are follow-up workqueue core changes, I'd really appreciate if the
-> patch can be routed through the workqueue tree w/ your acks. Thanks.
+> The same functions now keep track of the allocated buf for firmware in
+> req->fw_buf as release_firmware() will not deallocate this storage for us.
 > 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: Amitkumar Karwar <amitkarwar@gmail.com>
-> Cc: Ganapathi Bhat <ganapathi017@gmail.com>
-> Cc: Sharvari Harisangam <sharvari.harisangam@nxp.com>
-> Cc: Xinming Hu <huxinming820@gmail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  .../net/wireless/marvell/mwifiex/cfg80211.c   | 13 +++++------
->  drivers/net/wireless/marvell/mwifiex/main.c   | 22 +++++++++----------
->  2 files changed, 16 insertions(+), 19 deletions(-)
+> Additionally, in __test_release_all_firmware(), req->fw_buf is released
+> before calling release_firmware(req->fw),
+> foreach test_fw_config->reqs[i], i = 0 .. test_fw_config->num_requests-1
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
+> Cc: Luis Chamberlain <mcgrof@kernel.org> 
+> Cc: Russ Weight <russell.h.weight@intel.com> 
+> Cc: Tianfei zhang <tianfei.zhang@intel.com> 
+> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr> 
+> Cc: Zhengchao Shao <shaozhengchao@huawei.com> 
+> Cc: Colin Ian King <colin.i.king@gmail.com> 
+> Cc: linux-kernel@vger.kernel.org 
+> Cc: Takashi Iwai <tiwai@suse.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: Luis R. Rodriguez <mcgrof@kernel.org>
+> Suggested-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-These work queues only ever get a single work item on them, so
-"ordering" can't really matter. This could go either way -- a comment or
-the current patch; so:
+Mirad, thanks for this work, good stuff! So the patch just needs to be
+adjust with:
 
-Reviewed-by: Brian Norris <briannorris@chromium.org>
+Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf"
+Cc: stable@vger.kernel.org # v5.4
+
+Then, can you split the patch in two, one which fixes the memory leaks
+and another that deals with the mutexes. The second patch might be a fix
+for the original code but I can't tell until I see the changes split out.
+
+The commit log should account for the memory leak and be clear how it
+happens. The other commit log for the second patch should clarify what
+it fixes and why as well.
+
+  Luis
