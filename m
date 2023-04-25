@@ -2,113 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE556EDFAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F046EDF11
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbjDYJs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 05:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S233482AbjDYJVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 05:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbjDYJsq (ORCPT
+        with ESMTP id S231276AbjDYJU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:48:46 -0400
-X-Greylist: delayed 1776 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 02:48:21 PDT
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1C712CAD;
-        Tue, 25 Apr 2023 02:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=BHW6lOjF2/MreJruUAvsHwDdg1hNEm0hYuqgSYNZ7rU=; b=QUX1v0aEYSHcAuCErNP/NsH6Zu
-        OdQ8annen0W4z5oS4TbLmKIdNMEffyzuWY+661xeEOsUsEVkT4M1POGHTgDHAH2ZaE86X3oZY/ewW
-        9AUxge9cp54U/J8CWCB9F0OFQ2RTMg8X/o/jalfWDTSgjOr+H4vb4RQ+fLqUcd2rIUHp8LfD/Wbke
-        Q+iOsYy06AmdZWSheK/KEI9iJSBEzIVOYaDquz1aSyx1WDfFi++iVtmPVqlDr+PkKqPO8wrcC+xC1
-        IOrA6xMvLXZmPPrkxP1LLZOK3cj90RNsXvmmzBSgeSM3oMYtZ3o8wN+t/VVlPcA3iREIYb2xZyExR
-        sCqEeC2vxSuC/0WQeO7rtCE6ZX//xG+X9/Uh8FSIUrQOZSmnJYCh+3aVbmxYHNElqL4lgG/ABGQLZ
-        V9mTSYcwfeRs3No47N0QxVjjcLcUuhd9GuAtoUfT/9vT7ZwMJ0p7twyMqgKuNWGjnXvt2+u338UoB
-        UCHK4ntPBn3LSGVze0rAlIzrUHoi+u49+bx9KoumTaNyILIqyGmBkMDX6qVywYOthAnR+L5kMLtsF
-        xHwj1pvQ0xMonhBwuyOUI7Qt6t7kWJYKNToBQpzonqP0WDAhVZV1YeU8LRYSby+AwIky463GyjR5p
-        mc2BK8SNERlDBxVa538t8/mcKpdvrr2gm7CIdQ4F4=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        v9fs@lists.linux.dev
-Subject: Re: [PATCH] fs/9p: Fix a datatype used with V9FS_DIRECT_IO
-Date:   Tue, 25 Apr 2023 11:18:37 +0200
-Message-ID: <2755033.v0V8SJffbf@silver>
-In-Reply-To: <ZEd8d7W6HnHE_66m@codewreck.org>
-References: <80bae984fd5ca49b691bb35f2fd8f345f8bb67f1.1682405206.git.christophe.jaillet@wanadoo.fr>
- <ZEd8d7W6HnHE_66m@codewreck.org>
+        Tue, 25 Apr 2023 05:20:56 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C3B10EB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-956ff2399c9so947608966b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682414449; x=1685006449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
+        b=wOvkX2oC5ZHyFMdylx8IkrryNZeg23DU/Ch9AChLKbcB/sx0DFV8Yb/H7vUSsHm/ay
+         6vKeAhZHqi4KvKzBL9RsojhjUK4oU8lb+V+mupjRsr3d4Ozv9ezhvySx+DHEhqR+hjMA
+         gaiJOqLYT51c8eBo6o+cG8x82KOH/6WDLxVffZqZup0JrvMaRV4XDFiPQxHmTy81GMpM
+         QIfjcv/pPcyMi1TiLUVU+h31xU2FfOzqmTSR6PnZ45uP7vvaFC3j0EA3bBbvXBOdzaR3
+         fHRbyuMSy1Dp046zUXSSm/0Gjosdxp/aEC/NPYM4X7lNjpFDITb7o57bkR9W209v9XtR
+         w4rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682414449; x=1685006449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
+        b=iSV82KqRMhJ9Ymoao6oM5XlXkT1xip+20lii54AqV98qP1XI6PiWuwwZj0oXbv1VhS
+         Q8xuI7h02j2N9t3NjsVv1PSBhtAnoRFYNu3vqeGTgNx15UK+AE6F/E0SfW9mbkl55QEZ
+         tEoqoVG4V+nAZQIODNlenQLGS1Wt7/7FMJq+KCAQip0sXgcLuRRtXDH7I0ICEVlNbtDU
+         fh0TvqVjardbkFUqBGHS94YJQ3JCQClBcWxRuayjSGCVipnuO10UMqj4mTT5OVPjNHBF
+         N4oK8kJUkhPnVOCdFl86euYvj7jnksjIGCEzOyUWRNVw56FhCE2Lg2MPM33CYitGdgpD
+         GElg==
+X-Gm-Message-State: AAQBX9fp/P7BDZKGjQazVlyTdB+whc6p2XWzdnPOn0Q4F8EqVQqhEtay
+        yck5fgfD7Oapfl6cdrKURgRHYw==
+X-Google-Smtp-Source: AKy350YuXymrw7So4UOjZjef+iEPyi/CshywTQ5AjTJZJr/4WaSMcccmVMSSXrgcRBO0CsBCTlwDVg==
+X-Received: by 2002:a17:907:b9d9:b0:94f:1a23:2f1c with SMTP id xa25-20020a170907b9d900b0094f1a232f1cmr14815686ejc.50.1682414449568;
+        Tue, 25 Apr 2023 02:20:49 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170906828b00b0094f23480619sm6620286ejx.172.2023.04.25.02.20.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 02:20:48 -0700 (PDT)
+Message-ID: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
+Date:   Tue, 25 Apr 2023 11:20:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Brian Norris <briannorris@chromium.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        soc@kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
+ <20230424152933.48b2ede1@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424152933.48b2ede1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, April 25, 2023 9:08:39 AM CEST Dominique Martinet wrote:
-> Christophe JAILLET wrote on Tue, Apr 25, 2023 at 08:47:27AM +0200:
-> > The commit in Fixes has introduced some "enum p9_session_flags" values
-> > larger than a char.
-> > Such values are stored in "v9fs_session_info->flags" which is a char only.
-> > 
-> > Turn it into an int so that the "enum p9_session_flags" values can fit in
-> > it.
+On 25/04/2023 00:29, Jakub Kicinski wrote:
+> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
+>> Thanks a lot for your continued work. I can't merge any of this at
+>> the moment since the upstream merge window just opened, but I'm
+>> happy to take this all through the soc tree for 6.5, provided we
+>> get the sufficient Acks from the subsystem maintainers. Merging
+>> it through each individual tree would take a lot longer, so I
+>> hope we can avoid that.
 > 
-> Good catch, thanks!
+> Is there a dependency between the patches?
 
-Indeed!
+I didn't get entire patchset and cover letter does not mention
+dependencies, but usually there shouldn't be such. Maybe for the next
+versions this should be split per subsystem?
 
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-
-> I'm surprised W=1 doesn't catch this... and now I'm checking higher
-> (noisy) W=, or even clang doesn't seem to print anything about e.g.
-> 'v9ses->flags & V9FS_DIRECT_IO is never true' or other warnings I'd have
-> expected to come up -- out of curiosity how did you find this?
-
-Both gcc and clang only trigger an implicit conversion warning if the value of
-the expression can be evaluated at compile time (i.e. all operands are
-constant), then compiler realizes that the compile-time evaluated constant
-value is too big for the assignment destination and triggers the warning.
-
-However as soon as any variable is involved in the expression, like in this
-code, then the final value of the expression cannot be evaluated at compile-
-time. Small operands (e.g. `char` types) in the expression are auto-promoted
-to `int`, hence no warning at this stage, and finally you have an assignment
-with unknown `int` value.
-
-This could certainly be improved by carrying along the information that an
-expression evaluates to at least x bits at runtime (when the compiler reduces
-the expression).
-
-> Would probably be interesting to run some form of the same in our
-> automation.
-
-If there is any ATM? I als tried this issue with clang's undefined behaviour
-sanitizer and with the clang static analyzer. Both did not detect it.
-
-> 
-> > Fixes: 6deffc8924b5 ("fs/9p: Add new mount modes")
-> 
-> (Not a problem per se: but note this commit hasn't been merged yet, so
-> using commit IDs is a bit dangerous. Might want to remark this in the
-> free comment section so Eric pays attention to not break that when applying)
-> 
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> 
-> Reviewed-by: Dominique Martinet <asmadeus@codewreck.org>
-> 
-> 
-
-
+Best regards,
+Krzysztof
 
