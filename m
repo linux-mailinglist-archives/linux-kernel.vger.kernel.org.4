@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED966EE713
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B456EE717
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 19:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjDYRp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 13:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S234775AbjDYRsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 13:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjDYRpY (ORCPT
+        with ESMTP id S230429AbjDYRsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:45:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9239022;
-        Tue, 25 Apr 2023 10:45:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08B4D616EA;
-        Tue, 25 Apr 2023 17:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086B6C433EF;
-        Tue, 25 Apr 2023 17:45:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682444722;
-        bh=UetGMwdP/tJrV8Yar8w3RMh5cMJTojk25/r7z2kcvRU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=HvLIP+2XBMjvYn4QXFyN8ilV9wqrHd8tSi2COur0+kfILmSIGtIutF9kne4MM5yjY
-         G5hUsYOpqizVtkL9O9FT3G8B1OGIe8ep4V3SfdGBLLEkEmgYUSedAc81RFyFbryW3c
-         f5z+iilG2EcmnGH6LaChNt21Wm8OlGjUw8J1P5JcowZAZjVi8wF1czTA8JxvXsoDSM
-         XZt+K3PB/fgOG7oktH+1iCZrVeOazyhiekMbfQkA7NWiovV4ugbexbSHZ88n7acfWl
-         KC4Y5PvwicwYLcAbql/jy0qtE34PWuU9tiyDRD/OWzCEjHIJTz2DFzg+Axj3tkl0fv
-         V7nFvWGdknCSQ==
-Message-ID: <aa60b0fa23c1d582cfad0da5b771d427d00c4316.camel@kernel.org>
-Subject: Re: [PATCH v2 1/3] fs: add infrastructure for multigrain inode
- i_m/ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org
-Date:   Tue, 25 Apr 2023 13:45:19 -0400
-In-Reply-To: <168237601955.24821.11999779095797667429@noble.neil.brown.name>
-References: <20230424151104.175456-1-jlayton@kernel.org>
-        , <20230424151104.175456-2-jlayton@kernel.org>
-        , <168237287734.24821.11016713590413362200@noble.neil.brown.name>
-        , <404a9a8066b0735c9f355214d4eadf0d975b3188.camel@kernel.org>
-         <168237601955.24821.11999779095797667429@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.0 (3.48.0-1.fc38) 
+        Tue, 25 Apr 2023 13:48:11 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C03AD0F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 10:48:10 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so45695578a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 10:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682444888; x=1685036888;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WcxFO2xTMg36i/5Q7JJH9AJ6hiZ7aJBXinwK6USz+U8=;
+        b=C+hC2vLGnqrjt5SK8tv5gRii/6G+4ON+BWBn3I7OgJtyc5iOGqVCLwciwDPWgAkQVZ
+         WWSrszk2b7YsCbgx6m0IpcqPc0VUrVcIOOiKcmR5iL3hIqAd5shI03nDWeigC9X4OMlO
+         Lw0iIC20hKARS04Tvaa4VSoi73dN47mvEBETc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682444888; x=1685036888;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WcxFO2xTMg36i/5Q7JJH9AJ6hiZ7aJBXinwK6USz+U8=;
+        b=evYLmmZ60yZimnbEZkq7b/DguIaZUcmUGvvWGw8SUZGX9zOZte1A2I3EPZsUN707sV
+         v/i9pCTmelIncN/W3ttNY8ySSjfAPFY2dpqiXMBG+5HcKt2s2b5+jH2ri88l94VfG7a7
+         74ng0YkDjRhXeF/xIX1Kp3BXX85e1p2V08uH2g/M30nV97zSlTpuD4juYGvqRV2HnwrV
+         Lbki99zx25AGJ7jt5cItKcxUo6sp45XKviKgwksvfYkJrnbYHHvaWF4DVQ2+aIn5qlCO
+         QpOhXo8qkYthA8G/3DIQaQoFUyB6ltdDunh83Oetku+e9QGqVMf7fwpnWanHP3fCCoVY
+         5TTg==
+X-Gm-Message-State: AAQBX9f6fVYbdpPNSxIbPtYloyw/uVhNJerVlRxs1H9Ag+ZB+e+8wZVP
+        Se7onniMnSNhlFdeSDUs3JJ1xhSSpOUUvDfrh3KN0Q==
+X-Google-Smtp-Source: AKy350bLC+UXyA5tG78neKsa82EPX06trZv1cIZwZ0UFkFDehq8098elmzgHF/IDq/mLEfmCh+oyog==
+X-Received: by 2002:a17:906:90c2:b0:953:838a:ed61 with SMTP id v2-20020a17090690c200b00953838aed61mr12680864ejw.30.1682444888178;
+        Tue, 25 Apr 2023 10:48:08 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id s21-20020a170906779500b0094eef800850sm7041339ejm.204.2023.04.25.10.48.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 10:48:07 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so45695330a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 10:48:07 -0700 (PDT)
+X-Received: by 2002:aa7:c50a:0:b0:504:81d4:118d with SMTP id
+ o10-20020aa7c50a000000b0050481d4118dmr16059608edq.3.1682444887178; Tue, 25
+ Apr 2023 10:48:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230424072836.GAZEYvpDGrV3bXx690@fat_crate.local>
+ <CAHk-=wgrN-uPnNTamBwrxMgibBH9N9zX57nbDW7_hLdi4SstQw@mail.gmail.com> <20230425173520.GDZEgPWMmi7ZXrTLs2@fat_crate.local>
+In-Reply-To: <20230425173520.GDZEgPWMmi7ZXrTLs2@fat_crate.local>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 25 Apr 2023 10:47:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiNnK--B_K7DHvU28PKX00fUpb9oUmSq9OpkOLPDrMkUQ@mail.gmail.com>
+Message-ID: <CAHk-=wiNnK--B_K7DHvU28PKX00fUpb9oUmSq9OpkOLPDrMkUQ@mail.gmail.com>
+Subject: Re: [GIT PULL] EDAC updates for v6.4
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-25 at 08:40 +1000, NeilBrown wrote:
-> On Tue, 25 Apr 2023, Jeff Layton wrote:
-> > On Tue, 2023-04-25 at 07:47 +1000, NeilBrown wrote:
-> > > On Tue, 25 Apr 2023, Jeff Layton wrote:
-> > > > +	/*
-> > > > +	 * Warn if someone sets SB_MULTIGRAIN_TS, but doesn't turn down t=
-he ts
-> > > > +	 * granularity.
-> > > > +	 */
-> > > > +	return (sb->s_flags & SB_MULTIGRAIN_TS) &&
-> > > > +		!WARN_ON_ONCE(sb->s_time_gran =3D=3D 1);
-> > >=20
-> > >  Maybe=20
-> > > 		!WARN_ON_ONCE(sb->s_time_gran & SB_MULTIGRAIN_TS);
-> > >  ??
-> > >=20
-> >=20
-> > I'm not sure I understand what you mean here.
->=20
-> That's fair, as what I wrote didn't make any sense.
-> I meant to write:
->=20
->  		!WARN_ON_ONCE(sb->s_time_gran & I_CTIME_QUERIED);
->=20
-> to make it explicit that s_time_gran must leave space for
-> I_CTIME_QUERIED to be set (as you write below).  Specifically that
-> s_time_gran mustn't be odd.=20
->  =20
+On Tue, Apr 25, 2023 at 10:35=E2=80=AFAM Borislav Petkov <bp@alien8.de> wro=
+te:
+>
+> While we're on the topic: when we send you tip urgent fixes, we base
+> each branch off of the current -rc, put the urgent fixes ontop, test,
+> ... and send them to you in a week's time, roughly.
+>
+> Now, after you've pulled, we could fast-forward the urgent branch to the
+> next -rc where new fixes come - and I do that most of the time - or we
+> could not do that because of, as you say, if there's no really good
+> reason to fast-forward (important other fix, new functionality from the
+> newest -rc a patch needs, yadda yadda) then those urgent branches do not
+> necessarily have to be fast-forwarded but simply get more fixes applied
+> ontop.
 
-Erm...it may be an unpopular opinion, but I find that more confusing
-than just ensuring that the s_time_gran > 1. I keep wondering if we
-might want to carve out other low-order bits too for some later purpose,
-at which point trying to check this using flags wouldn't work right. I
-think I might just stick with what I have here, at least for now.
+That sounds right. Do the fast-forward thing if you want to update to
+a newer rc for some other reason, but if there's no major other thing
+going on, you can easily just continue on top of your existing fixes
+branch.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+There's no reason to actively seek a new base if you already had a
+stable base that you were on.
+
+So whatever works best for you.
+
+(Of course, at some point "that base is just _really_ old" becomes a
+reason in itself, and then fast-forwarding to have a newer base to do
+your fixes on top just becomes a convenience)
+
+> Oh, and I'm sure if a branch is based on what looks like a random point
+> but there's a good explanation accompanying it why it is based on that
+> random point, then I guess that's perfectly fine too.
+
+Absolutely. Things that look wrong when I look at the pull request
+result may have good reasons for them. If you know there's something
+odd going on but you had a particular reason to do it that way, just
+mention it.
+
+For example - I can get quite upset when I see that all the commits
+are very recent and have clearly not had a lot of testing. But if that
+isn't your usual pattern, and you had a clear *reason* for the commits
+all being shiny and new ("I had to rebase to remove a completely
+broken commit"), please mention it.
+
+Of course, if that particular reason keeps on happening, and there' sa
+continual stream of "I know I did things wrong, but it was because of
+X", then maybe that "X" is a huge problem and should be fixed?
+
+So the occasional oddity with explanations is perfectly fine. But a
+consistent _pattern_ of oddities is a problem, explanations
+notwithstanding.
+
+              Linus
