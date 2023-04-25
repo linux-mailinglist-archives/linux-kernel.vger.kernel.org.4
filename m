@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCB66EE73C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67176EE73E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234719AbjDYSAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S234973AbjDYSA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjDYSAa (ORCPT
+        with ESMTP id S234968AbjDYSA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:00:30 -0400
+        Tue, 25 Apr 2023 14:00:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47651720;
-        Tue, 25 Apr 2023 11:00:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2CECC2C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:00:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4931563085;
-        Tue, 25 Apr 2023 18:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A05C433D2;
-        Tue, 25 Apr 2023 18:00:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF89863086
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 18:00:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3CA25C433D2;
+        Tue, 25 Apr 2023 18:00:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682445628;
-        bh=x80D28o18e/C/P9T+DcQ5fd7ID5U6WPNI6OKMlgG70o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dm7bd7ynWhuvuKSBn3hLmfewfDOtWDlhTv80eQDM5mXWUoFh2EgB4r269ms8cWHyD
-         QmhdgsJ1lqGjyTr1ayGBPSKrbU3++r/NYZ0qaF1s4RByQ0ZvDSf70oUFAdP4W8PEpZ
-         y0magV7PPFOubxWv4JvK+YG8jFkAnk/kjsAgNqDQk+5GGFKnN0v7b4MSrHMn3SbuOc
-         FBsBBXakREPxRlcPHJtgxyC19vTdS6qCk68YjK8wKrDz9/uZzXEKuICFq5xX2S2HBh
-         JOkCdWjbfqLmIp1Gyo2wN+x8CzWpDswAoiLWIqV63qyvd0RSAi/IhAWx3by5edhZjL
-         bX+3uZoSGrbjg==
-Date:   Tue, 25 Apr 2023 19:00:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Gole, Dhruva" <d-gole@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
-Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
- compilation
-Message-ID: <e67e0804-78a8-4326-92ca-6214825f0ceb@sirena.org.uk>
-References: <20230420121615.967487-1-d-gole@ti.com>
- <8edb48ee-55a3-4cc2-9c81-514ec867b35c@roeck-us.net>
- <602392dc-de1f-90bf-3deb-cb5cee81e41c@ti.com>
- <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sKtAIKhfZi5laQLY"
-Content-Disposition: inline
-In-Reply-To: <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
-X-Cookie: The meek don't want it.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        s=k20201202; t=1682445650;
+        bh=yoIMSX1bFo4pd+DAjC6STjJ/pBDD+d/FkHyoWytAqNs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=f4+y5Ms/IDTmrnlqT8PKjS67Ot//rv6CA9bh3sqk21k4vb4TLbT/MMNBHfSFuoNPR
+         7bYWn33A+Tua+GYXg5v84kk3klGHReyQV2YZfbLD6dXLxOq9VJAcOca6U56Adm9KtO
+         fcDB+7rZNR2zjDcohad/N7IpGyrhXPylxDCNxqzCMp2xcT60DuLPI22bLNhN6BFkDB
+         +2yu3CpT+c/PRFZb1uqSTocJiUZzk/4foypSblfgryvBw3JZSbE2e8HkbGK8y+73Sf
+         WInjkRCqtPSw9neliklFvB2UqMYzVWmEjwUV6iNGmlp20y0RRYEytK7kFLjj4wRe5h
+         HC+tVrBg/zv0g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2AD67E5FFC6;
+        Tue, 25 Apr 2023 18:00:50 +0000 (UTC)
+Subject: Re: [GIT PULL] m68k updates for v6.4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230424094816.2034583-1-geert@linux-m68k.org>
+References: <20230424094816.2034583-1-geert@linux-m68k.org>
+X-PR-Tracked-List-Id: <linux-m68k.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230424094816.2034583-1-geert@linux-m68k.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git m68k-for-v6.4-tag1
+X-PR-Tracked-Commit-Id: aaee8c7f2a17d2dd015dc97c113c9ea0cc97272a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f7301270a29fb3b5b2f3ab73ef63a208e21f783a
+Message-Id: <168244565016.10431.15587054641692673832.pr-tracker-bot@kernel.org>
+Date:   Tue, 25 Apr 2023 18:00:50 +0000
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Mon, 24 Apr 2023 11:48:16 +0200:
 
---sKtAIKhfZi5laQLY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git m68k-for-v6.4-tag1
 
-On Tue, Apr 25, 2023 at 10:37:24AM -0700, Guenter Roeck wrote:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f7301270a29fb3b5b2f3ab73ef63a208e21f783a
 
-> Personally I would go for [0] as the least invasive solution, but I really
-> have no idea, sorry. I just hope that your (broken) patch doesn't make it
-> as-is into the upstream kernel.
+Thank you!
 
-I've applied the SIMPLE_DEV_PM_OPS patch which seems to fix the issue
-for riscv.
-
---sKtAIKhfZi5laQLY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRIFTMACgkQJNaLcl1U
-h9A8gAf+ILotP0s7fUSCAalc6Ml3HPKN8u5NbT2dXOipDAa7Jl1L9J6UBjac/tEK
-0Bf+0aAqXymtgPThoGWQ6LRBy2yoRUuGpyKBqEH4WaiwJU6F5r6bhETZbrH6/EG9
-UhC+v0OU6yZrQ6XVo0sD4D81+MCAO95xkfPMCwR9GrLwXLWcsPSnVGqht9j1EgmK
-+Oxrcu5yByYxYTPpcMRAOZ9OMBD7khDf8O9HDwAZiErLNZrMWviS5uj0/4gy8ZgU
-3rHq+WBteVJ2hwgiGMO9lA4Lhu5LD+/50wyimINkxkwmAGVIjwmHKbpVVVoO+yzm
-DvUpy6c0NM+lOgRAaGWPon+eCUF3mQ==
-=qDn6
------END PGP SIGNATURE-----
-
---sKtAIKhfZi5laQLY--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
